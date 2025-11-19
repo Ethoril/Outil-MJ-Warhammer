@@ -22,7 +22,6 @@
   </header>
 
   <main class="wrap">
-    <!-- Réserve -->
     <section id="panel-reserve" class="panel is-active" role="region" aria-labelledby="tab-reserve">
       <h2>Réserve (source de vérité)</h2>
       <div class="grid-2">
@@ -67,7 +66,6 @@
       </div>
     </section>
 
-    <!-- Combat -->
     <section id="panel-combat" class="panel" role="region" aria-labelledby="tab-combat">
       <h2>Combat (ordre = Initiative décroissante)</h2>
 
@@ -80,6 +78,7 @@
         <div class="row">
           <button id="btn-start">Démarrer</button>
           <button id="btn-next">Tour suivant</button>
+          <button id="btn-d100" class="ghost">Lancer d100</button>
           <button id="btn-reset" class="danger">Reset combat</button>
         </div>
       </div>
@@ -94,7 +93,6 @@
       </div>
 
       <div class="grid-2">
-        <!-- Participants -->
         <div class="card">
           <div class="row">
             <h3>Participants</h3>
@@ -104,14 +102,12 @@
           <ul id="combat-list" class="actors" aria-live="polite"></ul>
         </div>
 
-        <!-- Journal -->
         <div class="card">
           <div class="row"><h3>Journal</h3><div class="spacer"></div><button id="btn-clear-log" class="ghost">Effacer</button></div>
           <div id="log" class="log"></div>
         </div>
       </div>
 
-      <!-- Jet instantané -->
       <section class="card dice">
         <h3>🎲 Jet instantané (d100)</h3>
         <div class="row">
@@ -143,7 +139,6 @@
         <div id="dicei-result" class="dice-result"></div>
       </section>
 
-      <!-- Lignes préparées -->
       <section class="card dice">
         <div class="row">
           <h3>🎛️ Lignes préparées</h3>
@@ -155,7 +150,6 @@
         <div id="dice-prep-results" class="dice-result-stream"></div>
       </section>
 
-      <!-- Jets rapides (depuis cartouches) -->
       <section class="card dice">
         <h3>⚡ Jets rapides</h3>
         <div id="dice-quick-results" class="dice-result-stream"></div>
@@ -182,7 +176,6 @@
     </li>
   </template>
 
-  <!-- Modale import -->
   <dialog id="dlg-import">
     <form method="dialog" class="card">
       <h3>Importer depuis la Réserve</h3>

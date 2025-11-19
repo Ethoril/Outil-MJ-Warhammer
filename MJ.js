@@ -45,10 +45,15 @@
     }
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
-  class DiceLine { constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='' }={}) { Object.assign(this, {id,participantId,attr,base,mod:Number(mod)||0,note}); } }
+  
+  // Fusion: On garde la version Refactor qui ajoute targetId
+  class DiceLine { constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetId='' }={}) { Object.assign(this, {id,participantId,attr,base,mod:Number(mod)||0,note,targetId}); } }
 
   // ---------- Store + Persistence ----------
-  // Gère l'état de l'application et la persistance des données dans le localStorage
+  /**
+   * Le Store gère l'état global de l'application.
+   * Il utilise le localStorage pour la persistance des données.
+   */
   const KEY = { RESERVE:'wfrp.reserve.v1', COMBAT:'wfrp.combat.v1', LOG:'wfrp.log.v1', DICE:'wfrp.dice.v1' };
   const Store = (() => {
     let reserve = new Map();
@@ -146,7 +151,9 @@
   })();
 
   // ---------- Combat engine ----------
-  // Gère la logique du déroulement du combat (tours et rounds)
+  /**
+   * Le moteur de combat gère la logique de progression du combat.
+   */
   const Combat = (() => {
     function actorAtTurn(){ const st = Store.getState().combat; const id = st.order[st.turnIndex]; return id ? st.participants.get(id) : null; }
     function start(){ const st = Store.getState().combat; if(st.order.length===0) return; if(st.round===0) st.round=1; if(st.turnIndex===-1) st.turnIndex=0; Store.log(`Combat démarré. Round ${st.round}. Tour: ${actorAtTurn()?.name ?? '—'}`); Store.setRoundTurn(st.round, st.turnIndex); }
@@ -155,55 +162,94 @@
   })();
 
   // ---------- DOM refs ----------
-  const els = {
-    panels:{ reserve: qs('#panel-reserve'), combat: qs('#panel-combat') },
+  // Stocke les références aux éléments DOM fréquemment utilisés
+  // FUSION: Adoption de la structure DOM du Refactor, mais ajout des éléments 'instant' et 'quick' du Main.
+  const DOM = {
+    // Tabs and panels
     tabs: qsa('.tab'),
-    reserveList: qs('#reserve-list'),
-    searchReserve: qs('#search-reserve'),
-    formAdd: qs('#form-add'),
-    seedReserve: qs('#seed-reserve'),
-    clearReserve: qs('#clear-reserve'),
+    panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat') },
+
+    // Reserve
+    reserve: {
+      list: qs('#reserve-list'),
+      search: qs('#search-reserve'),
+      form: qs('#form-add'),
+      seed: qs('#seed-reserve'),
+      clear: qs('#clear-reserve'),
+    },
+
     // Combat
-    combatList: qs('#combat-list'),
-    searchCombat: qs('#search-combat'),
-    pillRound: qs('#pill-round'), pillTurn: qs('#pill-turn'), pillSub: qs('#pill-sub'),
-    btnImport: qs('#btn-import'), btnExport: qs('#btn-export'),
-    btnStart: qs('#btn-start'), btnNext: qs('#btn-next'), btnReset: qs('#btn-reset'),
-    btnNewSub: qs('#btn-new-sub'),
-    dlgImport: qs('#dlg-import'), importList: qs('#import-list'), selSub: qs('#sel-sub'), confirmImport: qs('#confirm-import'),
-    log: qs('#log'), btnClearLog: qs('#btn-clear-log'),
+    combat: {
+      list: qs('#combat-list'),
+      search: qs('#search-combat'),
+      pillRound: qs('#pill-round'),
+      pillTurn: qs('#pill-turn'),
+      pillSub: qs('#pill-sub'),
+      btnImport: qs('#btn-import'),
+      btnExport: qs('#btn-export'),
+      btnStart: qs('#btn-start'),
+      btnNext: qs('#btn-next'),
+      btnReset: qs('#btn-reset'),
+      btnD100: qs('#btn-d100'),
+      btnNewSub: qs('#btn-new-sub'),
+      log: qs('#log'),
+      btnClearLog: qs('#btn-clear-log'),
+    },
 
-    // Jet instantané
-    diPart: qs('#dicei-participant'), diAttr: qs('#dicei-attr'), diBaseWrap: qs('#dicei-base-wrap'),
-    diBase: qs('#dicei-base'), diMod: qs('#dicei-mod'), diNote: qs('#dicei-note'),
-    diAuto: qs('#dicei-auto'), diTarget: qs('#dicei-target'), diRoll: qs('#dicei-roll'), diResult: qs('#dicei-result'),
+    // Jet instantané (Récupéré depuis Main et intégré dans la structure DOM)
+    instant: {
+        part: qs('#dicei-participant'), attr: qs('#dicei-attr'), baseWrap: qs('#dicei-base-wrap'),
+        base: qs('#dicei-base'), mod: qs('#dicei-mod'), note: qs('#dicei-note'),
+        auto: qs('#dicei-auto'), target: qs('#dicei-target'), roll: qs('#dicei-roll'), result: qs('#dicei-result'),
+    },
 
-    // Lignes préparées
-    diceLines: qs('#dice-lines'), diceAdd: qs('#dice-add'), diceRollAll: qs('#dice-roll-all'), dicePrepResults: qs('#dice-prep-results'),
+    // Jets rapides (Récupéré depuis Main)
+    quick: {
+        results: qs('#dice-quick-results'),
+    },
 
-    // Jets rapides
-    quickResults: qs('#dice-quick-results'),
+    // Import Modal
+    importModal: {
+      dialog: qs('#dlg-import'),
+      list: qs('#import-list'),
+      subSelect: qs('#sel-sub'),
+      confirm: qs('#confirm-import'),
+    },
+
+    // Dice Lines
+    dice: {
+      lines: qs('#dice-lines'),
+      add: qs('#dice-add'),
+      rollAll: qs('#dice-roll-all'),
+      results: qs('#dice-prep-results'),
+    },
 
     // Templates
-    tplActor: qs('#tpl-actor')
+    tplActor: qs('#tpl-actor'),
   };
 
   // ---------- Tabs ----------
-  els.tabs.forEach(t => t.addEventListener('click', () => {
-    els.tabs.forEach(x => x.classList.remove('is-active'));
+  DOM.tabs.forEach(t => t.addEventListener('click', () => {
+    DOM.tabs.forEach(x => x.classList.remove('is-active'));
     t.classList.add('is-active');
     const k = t.dataset.tab;
-    Object.values(els.panels).forEach(p => p.classList.remove('is-active'));
-    (k==='reserve' ? els.panels.reserve : els.panels.combat).classList.add('is-active');
+    Object.values(DOM.panels).forEach(p => p.classList.remove('is-active'));
+    (k==='reserve' ? DOM.panels.reserve : DOM.panels.combat).classList.add('is-active');
   }));
 
-  // ---------- Reserve render ----------
+  // ---------- Rendering ----------
+
+  // Helper générique pour rendre une liste filtrée
+  function renderFilteredList(inputEl, listEl, sourceFn, renderItemFn) {
+    const term = (inputEl.value || '').toLowerCase();
+    const items = sourceFn().filter(item => item.name.toLowerCase().includes(term));
+    listEl.replaceChildren(...items.map(renderItemFn));
+  }
+
   function renderReserve(){
-    const term = (els.searchReserve.value || '').toLowerCase();
-    const list = Store.listProfiles().filter(p => p.name.toLowerCase().includes(term));
-    els.reserveList.replaceChildren(...list.map(p => renderReserveItem(p)));
+    renderFilteredList(DOM.reserve.search, DOM.reserve.list, Store.listProfiles, renderReserveItem);
     renderDiceLines();
-    renderInstantParticipants();
+    renderInstantParticipants(); // Ajouté depuis Main pour maintenir la synchro
   }
   function renderReserveItem(p){
     const div = document.createElement('div'); div.className='item';
@@ -219,16 +265,16 @@
   }
 
   // Add profile
-  els.formAdd.addEventListener('submit', (e)=>{
+  DOM.reserve.form.addEventListener('submit', (e)=>{
     e.preventDefault();
-    const fd = new FormData(els.formAdd);
+    const fd = new FormData(DOM.reserve.form);
     const caracs = {}; ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc'].forEach(k => {
       const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; }
     });
     const prof = new Profile({ name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative')||0), hp: Number(fd.get('hp')||0), caracs });
-    Store.addProfile(prof); els.formAdd.reset(); Store.log(`Réserve: ajouté ${prof.name}`);
+    Store.addProfile(prof); DOM.reserve.form.reset(); Store.log(`Réserve: ajouté ${prof.name}`);
   });
-  els.seedReserve.addEventListener('click', ()=>{
+  DOM.reserve.seed.addEventListener('click', ()=>{
     [ new Profile({name:'Renaut de Volargent', kind:'PJ', initiative:41, hp:14, caracs:{CC:52, Ag:41}}),
       new Profile({name:'Saskia la Noire', kind:'PJ', initiative:52, hp:12, caracs:{CC:45, Ag:52}}),
       new Profile({name:'Gobelins (2)', kind:'Créature', initiative:28, hp:9, caracs:{CC:35}}),
@@ -236,25 +282,25 @@
     ].forEach(Store.addProfile);
     Store.log('Seed Réserve: 4 profils');
   });
-  els.clearReserve.addEventListener('click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
-  els.searchReserve.addEventListener('input', renderReserve);
+  DOM.reserve.clear.addEventListener('click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
+  DOM.reserve.search.addEventListener('input', renderReserve);
 
   // ---------- Import modal ----------
-  els.btnImport.addEventListener('click', ()=>{
-    const subs = Store.listSubs(); els.selSub.replaceChildren(...subs.map(s => opt(s.id, s.name)));
-    const profs = Store.listProfiles(); els.importList.replaceChildren(...profs.map(p => importRow(p)));
-    els.dlgImport.showModal();
+  DOM.combat.btnImport.addEventListener('click', ()=>{
+    const subs = Store.listSubs(); DOM.importModal.subSelect.replaceChildren(...subs.map(s => opt(s.id, s.name)));
+    const profs = Store.listProfiles(); DOM.importModal.list.replaceChildren(...profs.map(p => importRow(p)));
+    DOM.importModal.dialog.showModal();
   });
-  els.confirmImport.addEventListener('click', (e)=>{
+  DOM.importModal.confirm.addEventListener('click', (e)=>{
     e.preventDefault();
-    const ids = Array.from(els.importList.querySelectorAll('input[type=checkbox]:checked')).map(ch => ch.value);
-    const subId = els.selSub.value || 'global';
+    const ids = Array.from(DOM.importModal.list.querySelectorAll('input[type=checkbox]:checked')).map(ch => ch.value);
+    const subId = DOM.importModal.subSelect.value || 'global';
     Store.importFromReserve(ids, subId);
-    els.dlgImport.close();
+    DOM.importModal.dialog.close();
   });
 
   // Export back
-  els.btnExport.addEventListener('click', ()=>{ if(confirm('Appliquer PV aux profils correspondants ?')) Store.exportToReserve(); });
+  DOM.combat.btnExport.addEventListener('click', ()=>{ if(confirm('Appliquer PV aux profils correspondants ?')) Store.exportToReserve(); });
 
   function importRow(p){
     const row = document.createElement('div'); row.className='item';
@@ -270,24 +316,16 @@
   // ---------- Combat rendering ----------
   function renderCombat(){
     const { combat } = Store.getState();
-    els.pillRound.textContent = `Round: ${combat.round}`;
-    els.pillTurn.textContent  = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
-    els.pillSub.textContent   = `Sous-combat: ${combat.subs.find(s=>s.id===currentSub())?.name||'global'}`;
-
-    const term = (els.searchCombat.value || '').toLowerCase();
-    const frag = document.createDocumentFragment();
-    Store.listParticipants().forEach(p=>{
-      if(term && !p.name.toLowerCase().includes(term)) return;
-      frag.append(renderParticipant(p));
-    });
-    els.combatList.replaceChildren(frag);
-
+    DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
+    DOM.combat.pillTurn.textContent  = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
+    DOM.combat.pillSub.textContent   = `Sous-combat: ${combat.subs.find(s=>s.id===currentSub())?.name||'global'}`;
+    renderFilteredList(DOM.combat.search, DOM.combat.list, Store.listParticipants, renderParticipant);
     renderDiceLines();
-    renderInstantParticipants();
+    renderInstantParticipants(); // Restauré depuis Main
   }
 
   function renderParticipant(p){
-    const li = els.tplActor.content.firstElementChild.cloneNode(true);
+    const li = DOM.tplActor.content.firstElementChild.cloneNode(true);
     if(Combat.actorAtTurn()?.id===p.id) li.classList.add('turn');
     li.dataset.id = p.id;
     li.querySelector('.name').textContent = p.name + (p.subId!=='global'? ` [${getSubName(p.subId)}]` : '');
@@ -309,13 +347,12 @@
 
     const states = li.querySelector('.states'); p.states.forEach(s => states.append(badge(s,'warn')));
     li.querySelector('.btn-adv-plus').addEventListener('click',()=> setAdv(p.id, p.advantage+1));
-    // plus de clamp à 0 : AV peut être négatif
     li.querySelector('.btn-adv-minus').addEventListener('click',()=> setAdv(p.id, p.advantage-1));
     li.querySelector('.btn-hp-minus').addEventListener('click',()=> setHP(p.id, p.hp-1));
     li.querySelector('.btn-hp-plus').addEventListener('click',()=> setHP(p.id, p.hp+1));
     li.querySelector('.btn-state').addEventListener('click',()=> toggleState(p.id,'Blessé'));
 
-    // 🎲 Jet rapide — popover non bloquant
+    // 🎲 Jet rapide (Récupéré depuis Main, fonctionnalité importante)
     li.querySelector('.btn-quick-roll').addEventListener('click', (ev)=> openQuickRollPopover(li, p.id, p.name, ev));
 
     li.querySelector('.btn-remove').addEventListener('click',()=>{ Store.removeParticipant(p.id); Store.log(`Combat: retiré ${p.name}`); });
@@ -323,6 +360,7 @@
   }
 
   // Actions
+  // Fusion: Mise à jour de l'avantage déclenche aussi la mise à jour de l'affichage instantané (Main)
   function setAdv(id, val){ const p=getP(id); if(!p) return; const prev=p.advantage; Store.updateParticipant(id,{advantage:val}); Store.log(`${p.name}: AV ${prev} → ${val}`); renderInstantParticipants(); }
   function setHP(id, val){ const p=getP(id); if(!p) return; const prev=p.hp; Store.updateParticipant(id,{hp:val}); Store.log(`${p.name}: PV ${prev} → ${val}`); }
   function toggleState(id, label){ const p=getP(id); if(!p) return; const has=p.states.includes(label); const ns=has? p.states.filter(x=>x!==label) : [...p.states,label]; Store.updateParticipant(id,{states:ns}); Store.log(`${p.name}: ${has?'−':'+'}État « ${label} »`); }
@@ -331,30 +369,36 @@
   // Sub-combats
   function currentSub(){ return 'global'; }
   function getSubName(id){ return Store.listSubs().find(s=>s.id===id)?.name || 'global'; }
-  els.btnNewSub.addEventListener('click',()=>{ const name = prompt('Nom du sous-combat ?'); if(!name) return; const s = Store.addSub(name); Store.log(`Sous-combat créé: ${s.name}`); });
+  DOM.combat.btnNewSub.addEventListener('click',()=>{ const name = prompt('Nom du sous-combat ?'); if(!name) return; const s = Store.addSub(name); Store.log(`Sous-combat créé: ${s.name}`); });
 
   // Log
-  els.btnClearLog.addEventListener('click',()=> Store.clearLog());
-  Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); els.log.replaceChildren(frag); });
+  DOM.combat.btnClearLog.addEventListener('click',()=> Store.clearLog());
+  Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
 
-  // ---------- Jet instantané ----------
+  // d100 simple
+  DOM.combat.btnD100.addEventListener('click', ()=>{
+    const roll = d100();
+    Store.log(`🎲 Jet de d100 → ${roll}`);
+  });
+
+  // ---------- Jet instantané (Restauré depuis Main avec syntaxe DOM) ----------
   function renderInstantParticipants(){
-    const cur = els.diPart.value;
+    const cur = DOM.instant.part.value;
     const opts = [opt('','— Libre —')];
     Store.listParticipantsRaw().forEach(p => opts.push(opt(p.id, p.name + (p.profileId?'':' (ad hoc)'))));
-    els.diPart.replaceChildren(...opts);
-    if([...els.diPart.options].some(o=>o.value===cur)) els.diPart.value = cur;
+    DOM.instant.part.replaceChildren(...opts);
+    if([...DOM.instant.part.options].some(o=>o.value===cur)) DOM.instant.part.value = cur;
     recomputeInstantTarget();
   }
-  // Calcule la cible pour un jet de dés instantané
+  
   function recomputeInstantTarget(){
-    const pid = els.diPart.value;
-    const attr = els.diAttr.value;
-    els.diBaseWrap.style.display = (attr==='Custom' ? '' : 'none');
+    const pid = DOM.instant.part.value;
+    const attr = DOM.instant.attr.value;
+    DOM.instant.baseWrap.style.display = (attr==='Custom' ? '' : 'none');
 
     let base = null;
     if(attr==='Custom'){
-      base = clampInt(els.diBase.value, 0);
+      base = clampInt(DOM.instant.base.value, 0);
     } else {
       const p = pid ? Store.listParticipantsRaw().find(x=>x.id===pid) : null;
       if(attr==='initiative') base = p ? Number(p.initiative||0) : null;
@@ -364,23 +408,24 @@
         if(!Number.isFinite(base)) base=null;
       }
     }
-    const modManual = clampInt(els.diMod.value, 0);
+    const modManual = clampInt(DOM.instant.mod.value, 0);
     const modAuto = autoModForParticipant(pid);
-    els.diAuto.textContent = `${modAuto>=0?'+':''}${modAuto} (AV)`;
+    DOM.instant.auto.textContent = `${modAuto>=0?'+':''}${modAuto} (AV)`;
     const tgt = Number.isFinite(base) ? base + (modManual + modAuto) : null;
-    els.diTarget.textContent = Number.isFinite(tgt) ? String(tgt) : '—';
+    DOM.instant.target.textContent = Number.isFinite(tgt) ? String(tgt) : '—';
     return { base, modManual, modAuto, tgt };
   }
-  els.diPart.addEventListener('change', recomputeInstantTarget);
-  els.diAttr.addEventListener('change', recomputeInstantTarget);
-  els.diBase.addEventListener('input', recomputeInstantTarget);
-  els.diMod.addEventListener('input', recomputeInstantTarget);
+  
+  DOM.instant.part.addEventListener('change', recomputeInstantTarget);
+  DOM.instant.attr.addEventListener('change', recomputeInstantTarget);
+  DOM.instant.base.addEventListener('input', recomputeInstantTarget);
+  DOM.instant.mod.addEventListener('input', recomputeInstantTarget);
 
-  els.diRoll.addEventListener('click', ()=>{
+  DOM.instant.roll.addEventListener('click', ()=>{
     const { tgt, modManual, modAuto } = recomputeInstantTarget();
-    const who = els.diPart.value ? (Store.listParticipantsRaw().find(x=>x.id===els.diPart.value)?.name||'—') : '—';
-    const attr = els.diAttr.value;
-    const note = (els.diNote.value||'').trim();
+    const who = DOM.instant.part.value ? (Store.listParticipantsRaw().find(x=>x.id===DOM.instant.part.value)?.name||'—') : '—';
+    const attr = DOM.instant.attr.value;
+    const note = (DOM.instant.note.value||'').trim();
 
     const roll = d100();
     const success = Number.isFinite(tgt) && roll <= tgt;
@@ -401,7 +446,7 @@
       ${note ? `<span class="badge warn">${escapeHtml(note)}</span>` : ''}
       ${crit ? `<span class="badge ${success?'good':'bad'}">${crit}</span>` : ''}
     `;
-    els.diResult.replaceChildren(res);
+    DOM.instant.result.replaceChildren(res);
 
     const head = note ? note : `Jet ${attr==='Custom'?'personnalisé':attr}`;
     const tgtTxt = Number.isFinite(tgt) ? ` | Cible ${tgt}` : '';
@@ -411,9 +456,10 @@
     Store.log(`🎲 ${head}${who!=='—'?` (${who})`:''}${tgtTxt} → d100=${roll}${Number.isFinite(tgt)?` • ${success?'Réussite':'Échec'} • SL ${sl>=0?'+':''}${sl}`:''}${extras.length?` • ${extras.join(' • ')}`:''}`);
   });
 
+
   // ---------- Lignes préparées ----------
-  els.diceAdd.addEventListener('click', ()=> Store.addDiceLine(new DiceLine()));
-  els.diceRollAll.addEventListener('click', ()=>{
+  DOM.dice.add.addEventListener('click', ()=> Store.addDiceLine(new DiceLine()));
+  DOM.dice.rollAll.addEventListener('click', ()=>{
     const { diceLines } = Store.getState();
     diceLines.forEach(dl => runDiceLine(dl.id));
   });
@@ -422,7 +468,7 @@
     const { diceLines } = Store.getState();
     const frag = document.createDocumentFragment();
     diceLines.forEach(dl => frag.append(renderDiceLine(dl)));
-    els.diceLines.replaceChildren(frag);
+    DOM.dice.lines.replaceChildren(frag);
   }
 
   function renderDiceLine(dl){
@@ -444,6 +490,15 @@
     const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod ?? 0;
     const labM = labelWrap('Modificateur', inMod);
 
+    const spanAuto = document.createElement('span');
+    spanAuto.className = 'readonly';
+    const labAuto = labelWrap('Avantage', spanAuto);
+
+    const selT = document.createElement('select');
+    selT.append(opt('','— Cible —'), ...Store.listParticipantsRaw().map(p=>opt(p.id, p.name + (p.profileId?'':' (ad hoc)'))));
+    selT.value = dl.targetId || '';
+    const labT = labelWrap('Cible', selT);
+
     const inNote = document.createElement('input'); inNote.placeholder="Note"; inNote.value = dl.note||'';
     const labN = labelWrap('Note', inNote);
 
@@ -453,26 +508,40 @@
     const bDel  = btn('Supprimer', ()=> Store.removeDiceLine(dl.id));
     act.append(bRoll, bDup, bDel);
 
-    wrap.append(labP, labA, labM, labN, act);
+    wrap.append(labP, labA, labM, labAuto, labT, labN, act);
     if(selA.value==='Custom') wrap.insertBefore(labB, labM);
+
+    function updateAutoMod(){
+      const mod = autoModForParticipant(selP.value);
+      spanAuto.textContent = `${mod>=0?'+':''}${mod} (AV)`;
+    }
 
     function save(){ Store.updateDiceLine(dl.id, {
       participantId: selP.value, attr: selA.value,
       base: selA.value==='Custom' ? clampInt(inBase.value, 0) : '',
       mod: clampInt(inMod.value, 0),
-      note: inNote.value
+      note: inNote.value,
+      targetId: selT.value
     }); }
 
-    selP.addEventListener('change', save);
+    selP.addEventListener('change', ()=>{
+      save();
+      updateAutoMod();
+    });
     selA.addEventListener('change', ()=>{ if(selA.value==='Custom' && !wrap.contains(labB)) wrap.insertBefore(labB, labM); if(selA.value!=='Custom' && wrap.contains(labB)) wrap.removeChild(labB); save(); });
     inBase.addEventListener('input', save);
     inMod.addEventListener('input', save);
     inNote.addEventListener('input', save);
+    selT.addEventListener('change', save);
+
+    updateAutoMod();
 
     return wrap;
   }
 
-  // Exécute un lancer de dés pour une ligne préparée
+  /**
+   * Exécute un jet de dés pour une ligne de dé préparée.
+   */
   function runDiceLine(id){
     const st = Store.getState();
     const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
@@ -498,31 +567,35 @@
     const dbl = isDouble(roll);
     const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
 
+    const targetName = dl.targetId ? st.combat.participants.get(dl.targetId)?.name : null;
+
     const res = document.createElement('div'); res.className='dice-result';
     res.innerHTML = `
       <span class="dice-rollvalue">1d100 = ${roll}</span>
       ${Number.isFinite(target)? `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span>
                                   <span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>` : `<span class="result-warn">Sans cible</span>`}
       ${dl.participantId ? `<span class="badge">${escapeHtml(st.combat.participants.get(dl.participantId)?.name||'?')}</span>` : ''}
+      ${targetName ? `<span class="badge warn">→ ${escapeHtml(targetName)}</span>` : ''}
       ${(dl.attr && dl.attr!=='Custom') ? `<span class="badge">${escapeHtml(dl.attr==='initiative'?'Initiative':dl.attr)}</span>` : ''}
       ${modManual ? `<span class="badge ${modManual>=0?'good':'bad'}">Mod ${modManual>=0?'+':''}${modManual}</span>` : ''}
       ${modAuto ? `<span class="badge ${modAuto>=0?'good':'bad'}">Auto ${modAuto>=0?'+':''}${modAuto} (AV)</span>` : ''}
       ${dl.note ? `<span class="badge warn">${escapeHtml(dl.note)}</span>` : ''}
       ${crit ? `<span class="badge ${success?'good':'bad'}">${crit}</span>` : ''}
     `;
-    els.dicePrepResults.prepend(res);
+    DOM.dice.results.prepend(res);
 
     const who = dl.participantId ? ` (${st.combat.participants.get(dl.participantId)?.name||'?'})` : '';
     const head = dl.note ? dl.note : `Jet ${dl.attr==='Custom'?'personnalisé':dl.attr}`;
     const tgtTxt = Number.isFinite(target) ? ` | Cible ${target}` : '';
     const extras = [];
+    if (targetName) extras.push(`→ ${targetName}`);
     if(crit) extras.push(crit);
     if(modManual) extras.push(`Mod ${modManual>=0?'+':''}${modManual}`);
     if(modAuto) extras.push(`Auto ${modAuto>=0?'+':''}${modAuto} (AV)`);
     Store.log(`🎲 ${head}${who}${tgtTxt} → d100=${roll}${Number.isFinite(target)?` • ${success?'Réussite':'Échec'} • SL ${sl>=0?'+':''}${sl}`:''}${extras.length?` • ${extras.join(' • ')}`:''}`);
   }
 
-  // ---------- Quick Roll popover (non bloquant) ----------
+  // ---------- Quick Roll popover (non bloquant, restauré depuis Main) ----------
   let openPopover = null;
   function openQuickRollPopover(cardEl, pid, name, event){
     closePopover(); // un seul à la fois
@@ -606,7 +679,7 @@
         ${modAuto ? `<span class="badge ${modAuto>=0?'good':'bad'}">Auto ${modAuto>=0?'+':''}${modAuto} (AV)</span>` : ''}
         ${crit ? `<span class="badge ${success?'good':'bad'}">${crit}</span>` : ''}
       `;
-      els.quickResults.prepend(res);
+      DOM.quick.results.prepend(res);
 
       const head = `Jet rapide ${attr==='Custom'?'(custom)':attr}`;
       const tgtTxt = Number.isFinite(tgt) ? ` | Cible ${tgt}` : '';
