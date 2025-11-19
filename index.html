@@ -22,7 +22,6 @@
   </header>
 
   <main class="wrap">
-    <!-- Réserve -->
     <section id="panel-reserve" class="panel is-active" role="region" aria-labelledby="tab-reserve">
       <h2>Réserve (source de vérité)</h2>
       <div class="grid-2">
@@ -67,7 +66,6 @@
       </div>
     </section>
 
-    <!-- Combat -->
     <section id="panel-combat" class="panel" role="region" aria-labelledby="tab-combat">
       <h2>Combat (ordre = Initiative décroissante)</h2>
 
@@ -95,7 +93,6 @@
       </div>
 
       <div class="grid-2">
-        <!-- Participants -->
         <div class="card">
           <div class="row">
             <h3>Participants</h3>
@@ -105,14 +102,43 @@
           <ul id="combat-list" class="actors" aria-live="polite"></ul>
         </div>
 
-        <!-- Journal -->
         <div class="card">
           <div class="row"><h3>Journal</h3><div class="spacer"></div><button id="btn-clear-log" class="ghost">Effacer</button></div>
           <div id="log" class="log"></div>
         </div>
       </div>
 
-      <!-- Lignes préparées -->
+      <section class="card dice">
+        <h3>🎲 Jet instantané (d100)</h3>
+        <div class="row">
+          <label>Participant
+            <select id="dicei-participant"></select>
+          </label>
+          <label>Caractéristique
+            <select id="dicei-attr">
+              <option value="Custom">Custom</option>
+              <option value="CC">CC</option><option value="CT">CT</option><option value="F">F</option><option value="E">E</option>
+              <option value="I">I</option><option value="Ag">Ag</option><option value="Dex">Dex</option><option value="Int">Int</option>
+              <option value="FM">FM</option><option value="Soc">Soc</option><option value="initiative">Initiative</option>
+            </select>
+          </label>
+          <label id="dicei-base-wrap">Base (Custom)
+            <input id="dicei-base" type="number" placeholder="ex. 45">
+          </label>
+          <label>Modificateur
+            <input id="dicei-mod" type="number" value="0">
+          </label>
+          <span class="pill">Auto <span id="dicei-auto" class="readonly">+0 (AV)</span></span>
+          <label>Note
+            <input id="dicei-note" placeholder="Ex: Attaque à l'épée">
+          </label>
+          <div class="pill">Cible <span id="dicei-target" class="readonly">—</span></div>
+          <div class="spacer"></div>
+          <button id="dicei-roll">Lancer d100</button>
+        </div>
+        <div id="dicei-result" class="dice-result"></div>
+      </section>
+
       <section class="card dice">
         <div class="row">
           <h3>🎛️ Lignes préparées</h3>
@@ -122,6 +148,11 @@
         </div>
         <div id="dice-lines" class="dice-lines"></div>
         <div id="dice-prep-results" class="dice-result-stream"></div>
+      </section>
+
+      <section class="card dice">
+        <h3>⚡ Jets rapides</h3>
+        <div id="dice-quick-results" class="dice-result-stream"></div>
       </section>
     </section>
   </main>
@@ -145,7 +176,6 @@
     </li>
   </template>
 
-  <!-- Modale import -->
   <dialog id="dlg-import">
     <form method="dialog" class="card">
       <h3>Importer depuis la Réserve</h3>

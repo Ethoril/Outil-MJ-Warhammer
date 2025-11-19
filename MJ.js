@@ -45,19 +45,14 @@
     }
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
+  
+  // Fusion: On garde la version Refactor qui ajoute targetId
   class DiceLine { constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetId='' }={}) { Object.assign(this, {id,participantId,attr,base,mod:Number(mod)||0,note,targetId}); } }
 
   // ---------- Store + Persistence ----------
   /**
    * Le Store gère l'état global de l'application.
    * Il utilise le localStorage pour la persistance des données.
-   * L'état est divisé en quatre parties :
-   * - `reserve`: Une Map des profils de personnages (la "source de vérité").
-   * - `combat`: L'état actuel du combat (participants, ordre, etc.).
-   * - `log`: Un tableau d'entrées de journal.
-   * - `diceLines`: Une collection de jets de dés préparés.
-   * Le Store expose une API pour interagir avec les données et utilise un EventBus
-   * pour notifier les autres parties de l'application des changements.
    */
   const KEY = { RESERVE:'wfrp.reserve.v1', COMBAT:'wfrp.combat.v1', LOG:'wfrp.log.v1', DICE:'wfrp.dice.v1' };
   const Store = (() => {
@@ -158,10 +153,6 @@
   // ---------- Combat engine ----------
   /**
    * Le moteur de combat gère la logique de progression du combat.
-   * Il détermine qui agit à chaque tour et gère le passage des tours et des rounds.
-   * `actorAtTurn()`: Renvoie le participant dont c'est le tour.
-   * `start()`: Démarre le combat s'il n'est pas déjà commencé.
-   * `next()`: Passe au tour suivant, ou au round suivant si nécessaire.
    */
   const Combat = (() => {
     function actorAtTurn(){ const st = Store.getState().combat; const id = st.order[st.turnIndex]; return id ? st.participants.get(id) : null; }
@@ -172,6 +163,7 @@
 
   // ---------- DOM refs ----------
   // Stocke les références aux éléments DOM fréquemment utilisés
+  // FUSION: Adoption de la structure DOM du Refactor, mais ajout des éléments 'instant' et 'quick' du Main.
   const DOM = {
     // Tabs and panels
     tabs: qsa('.tab'),
@@ -202,6 +194,18 @@
       btnNewSub: qs('#btn-new-sub'),
       log: qs('#log'),
       btnClearLog: qs('#btn-clear-log'),
+    },
+
+    // Jet instantané (Récupéré depuis Main et intégré dans la structure DOM)
+    instant: {
+        part: qs('#dicei-participant'), attr: qs('#dicei-attr'), baseWrap: qs('#dicei-base-wrap'),
+        base: qs('#dicei-base'), mod: qs('#dicei-mod'), note: qs('#dicei-note'),
+        auto: qs('#dicei-auto'), target: qs('#dicei-target'), roll: qs('#dicei-roll'), result: qs('#dicei-result'),
+    },
+
+    // Jets rapides (Récupéré depuis Main)
+    quick: {
+        results: qs('#dice-quick-results'),
     },
 
     // Import Modal
@@ -244,7 +248,8 @@
 
   function renderReserve(){
     renderFilteredList(DOM.reserve.search, DOM.reserve.list, Store.listProfiles, renderReserveItem);
-    renderDiceLines(); // Assurez-vous que les lignes de dés sont à jour
+    renderDiceLines();
+    renderInstantParticipants(); // Ajouté depuis Main pour maintenir la synchro
   }
   function renderReserveItem(p){
     const div = document.createElement('div'); div.className='item';
@@ -316,6 +321,7 @@
     DOM.combat.pillSub.textContent   = `Sous-combat: ${combat.subs.find(s=>s.id===currentSub())?.name||'global'}`;
     renderFilteredList(DOM.combat.search, DOM.combat.list, Store.listParticipants, renderParticipant);
     renderDiceLines();
+    renderInstantParticipants(); // Restauré depuis Main
   }
 
   function renderParticipant(p){
@@ -341,18 +347,21 @@
 
     const states = li.querySelector('.states'); p.states.forEach(s => states.append(badge(s,'warn')));
     li.querySelector('.btn-adv-plus').addEventListener('click',()=> setAdv(p.id, p.advantage+1));
-    // plus de clamp à 0 : AV peut être négatif
     li.querySelector('.btn-adv-minus').addEventListener('click',()=> setAdv(p.id, p.advantage-1));
     li.querySelector('.btn-hp-minus').addEventListener('click',()=> setHP(p.id, p.hp-1));
     li.querySelector('.btn-hp-plus').addEventListener('click',()=> setHP(p.id, p.hp+1));
     li.querySelector('.btn-state').addEventListener('click',()=> toggleState(p.id,'Blessé'));
+
+    // 🎲 Jet rapide (Récupéré depuis Main, fonctionnalité importante)
+    li.querySelector('.btn-quick-roll').addEventListener('click', (ev)=> openQuickRollPopover(li, p.id, p.name, ev));
 
     li.querySelector('.btn-remove').addEventListener('click',()=>{ Store.removeParticipant(p.id); Store.log(`Combat: retiré ${p.name}`); });
     return li;
   }
 
   // Actions
-  function setAdv(id, val){ const p=getP(id); if(!p) return; const prev=p.advantage; Store.updateParticipant(id,{advantage:val}); Store.log(`${p.name}: AV ${prev} → ${val}`); }
+  // Fusion: Mise à jour de l'avantage déclenche aussi la mise à jour de l'affichage instantané (Main)
+  function setAdv(id, val){ const p=getP(id); if(!p) return; const prev=p.advantage; Store.updateParticipant(id,{advantage:val}); Store.log(`${p.name}: AV ${prev} → ${val}`); renderInstantParticipants(); }
   function setHP(id, val){ const p=getP(id); if(!p) return; const prev=p.hp; Store.updateParticipant(id,{hp:val}); Store.log(`${p.name}: PV ${prev} → ${val}`); }
   function toggleState(id, label){ const p=getP(id); if(!p) return; const has=p.states.includes(label); const ns=has? p.states.filter(x=>x!==label) : [...p.states,label]; Store.updateParticipant(id,{states:ns}); Store.log(`${p.name}: ${has?'−':'+'}État « ${label} »`); }
   function getP(id){ return Store.getState().combat.participants.get(id); }
@@ -371,6 +380,82 @@
     const roll = d100();
     Store.log(`🎲 Jet de d100 → ${roll}`);
   });
+
+  // ---------- Jet instantané (Restauré depuis Main avec syntaxe DOM) ----------
+  function renderInstantParticipants(){
+    const cur = DOM.instant.part.value;
+    const opts = [opt('','— Libre —')];
+    Store.listParticipantsRaw().forEach(p => opts.push(opt(p.id, p.name + (p.profileId?'':' (ad hoc)'))));
+    DOM.instant.part.replaceChildren(...opts);
+    if([...DOM.instant.part.options].some(o=>o.value===cur)) DOM.instant.part.value = cur;
+    recomputeInstantTarget();
+  }
+  
+  function recomputeInstantTarget(){
+    const pid = DOM.instant.part.value;
+    const attr = DOM.instant.attr.value;
+    DOM.instant.baseWrap.style.display = (attr==='Custom' ? '' : 'none');
+
+    let base = null;
+    if(attr==='Custom'){
+      base = clampInt(DOM.instant.base.value, 0);
+    } else {
+      const p = pid ? Store.listParticipantsRaw().find(x=>x.id===pid) : null;
+      if(attr==='initiative') base = p ? Number(p.initiative||0) : null;
+      else if(p?.profileId){
+        const prof = Store.getProfile(p.profileId);
+        base = Number(prof?.caracs?.[attr] ?? NaN);
+        if(!Number.isFinite(base)) base=null;
+      }
+    }
+    const modManual = clampInt(DOM.instant.mod.value, 0);
+    const modAuto = autoModForParticipant(pid);
+    DOM.instant.auto.textContent = `${modAuto>=0?'+':''}${modAuto} (AV)`;
+    const tgt = Number.isFinite(base) ? base + (modManual + modAuto) : null;
+    DOM.instant.target.textContent = Number.isFinite(tgt) ? String(tgt) : '—';
+    return { base, modManual, modAuto, tgt };
+  }
+  
+  DOM.instant.part.addEventListener('change', recomputeInstantTarget);
+  DOM.instant.attr.addEventListener('change', recomputeInstantTarget);
+  DOM.instant.base.addEventListener('input', recomputeInstantTarget);
+  DOM.instant.mod.addEventListener('input', recomputeInstantTarget);
+
+  DOM.instant.roll.addEventListener('click', ()=>{
+    const { tgt, modManual, modAuto } = recomputeInstantTarget();
+    const who = DOM.instant.part.value ? (Store.listParticipantsRaw().find(x=>x.id===DOM.instant.part.value)?.name||'—') : '—';
+    const attr = DOM.instant.attr.value;
+    const note = (DOM.instant.note.value||'').trim();
+
+    const roll = d100();
+    const success = Number.isFinite(tgt) && roll <= tgt;
+    const sl = Number.isFinite(tgt) ? SL(tgt, roll) : null;
+    const dbl = isDouble(roll);
+    const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
+
+    const res = document.createElement('div');
+    res.className='dice-result';
+    res.innerHTML = `
+      <span class="dice-rollvalue">1d100 = ${roll}</span>
+      ${Number.isFinite(tgt)? `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span>
+                                <span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>` : `<span class="result-warn">Sans cible</span>`}
+      ${who!=='—' ? `<span class="badge">${escapeHtml(who)}</span>` : ''}
+      ${attr && attr!=='Custom' ? `<span class="badge">${escapeHtml(attr)}</span>` : ''}
+      ${modManual ? `<span class="badge ${modManual>=0?'good':'bad'}">Mod ${modManual>=0?'+':''}${modManual}</span>` : ''}
+      ${modAuto ? `<span class="badge ${modAuto>=0?'good':'bad'}">Auto ${modAuto>=0?'+':''}${modAuto} (AV)</span>` : ''}
+      ${note ? `<span class="badge warn">${escapeHtml(note)}</span>` : ''}
+      ${crit ? `<span class="badge ${success?'good':'bad'}">${crit}</span>` : ''}
+    `;
+    DOM.instant.result.replaceChildren(res);
+
+    const head = note ? note : `Jet ${attr==='Custom'?'personnalisé':attr}`;
+    const tgtTxt = Number.isFinite(tgt) ? ` | Cible ${tgt}` : '';
+    const extras = []; if(crit) extras.push(crit);
+    if(modManual) extras.push(`Mod ${modManual>=0?'+':''}${modManual}`);
+    if(modAuto) extras.push(`Auto ${modAuto>=0?'+':''}${modAuto} (AV)`);
+    Store.log(`🎲 ${head}${who!=='—'?` (${who})`:''}${tgtTxt} → d100=${roll}${Number.isFinite(tgt)?` • ${success?'Réussite':'Échec'} • SL ${sl>=0?'+':''}${sl}`:''}${extras.length?` • ${extras.join(' • ')}`:''}`);
+  });
+
 
   // ---------- Lignes préparées ----------
   DOM.dice.add.addEventListener('click', ()=> Store.addDiceLine(new DiceLine()));
@@ -456,11 +541,6 @@
 
   /**
    * Exécute un jet de dés pour une ligne de dé préparée.
-   * Cette fonction récupère les données de la ligne de dé, calcule la cible
-   * en fonction des caractéristiques du participant, des modificateurs et de l'avantage,
-   * puis effectue un lancer de d100. Le résultat est affiché dans le stream de résultats
-   * et consigné dans le journal.
-   * @param {string} id - L'ID de la ligne de dé à exécuter.
    */
   function runDiceLine(id){
     const st = Store.getState();
@@ -513,6 +593,122 @@
     if(modManual) extras.push(`Mod ${modManual>=0?'+':''}${modManual}`);
     if(modAuto) extras.push(`Auto ${modAuto>=0?'+':''}${modAuto} (AV)`);
     Store.log(`🎲 ${head}${who}${tgtTxt} → d100=${roll}${Number.isFinite(target)?` • ${success?'Réussite':'Échec'} • SL ${sl>=0?'+':''}${sl}`:''}${extras.length?` • ${extras.join(' • ')}`:''}`);
+  }
+
+  // ---------- Quick Roll popover (non bloquant, restauré depuis Main) ----------
+  let openPopover = null;
+  function openQuickRollPopover(cardEl, pid, name, event){
+    closePopover(); // un seul à la fois
+    const pop = document.createElement('div');
+    pop.className='popover';
+    pop.innerHTML = `
+      <button class="close" title="Fermer">✕</button>
+      <div class="row"><strong>${escapeHtml(name)}</strong></div>
+      <label>Caractéristique
+        <select class="qr-attr">
+          <option value="Custom">Custom</option>
+          <option value="CC">CC</option><option value="CT">CT</option><option value="F">F</option><option value="E">E</option>
+          <option value="I">I</option><option value="Ag">Ag</option><option value="Dex">Dex</option><option value="Int">Int</option>
+          <option value="FM">FM</option><option value="Soc">Soc</option><option value="initiative">Initiative</option>
+        </select>
+      </label>
+      <label class="qr-base-wrap">Base (Custom)
+        <input class="qr-base" type="number" value="0">
+      </label>
+      <label>Modificateur
+        <input class="qr-mod" type="number" value="0">
+      </label>
+      <div class="row">
+        <span class="pill">Auto <span class="qr-auto readonly">+0 (AV)</span></span>
+        <span class="pill">Cible <span class="qr-target readonly">—</span></span>
+      </div>
+      <div class="row">
+        <button class="qr-roll">Lancer d100</button>
+      </div>
+    `;
+    cardEl.appendChild(pop);
+    openPopover = pop;
+
+    const selA = pop.querySelector('.qr-attr');
+    const baseWrap = pop.querySelector('.qr-base-wrap');
+    const inBase = pop.querySelector('.qr-base');
+    const inMod = pop.querySelector('.qr-mod');
+    const lblAuto = pop.querySelector('.qr-auto');
+    const lblTarget = pop.querySelector('.qr-target');
+
+    function recompute(){
+      const attr = selA.value;
+      baseWrap.style.display = (attr==='Custom') ? '' : 'none';
+
+      let base = null;
+      const st = Store.getState();
+      const p = st.combat.participants.get(pid);
+      if(attr==='Custom') base = clampInt(inBase.value, 0);
+      else if(attr==='initiative') base = Number(p?.initiative||0);
+      else if(p?.profileId){
+        const prof = Store.getProfile(p.profileId);
+        base = Number(prof?.caracs?.[attr] ?? NaN);
+        if(!Number.isFinite(base)) base=null;
+      }
+
+      const modManual = clampInt(inMod.value, 0);
+      const modAuto = autoModForParticipant(pid);
+      lblAuto.textContent = `${modAuto>=0?'+':''}${modAuto} (AV)`;
+
+      const tgt = Number.isFinite(base) ? base + (modManual + modAuto) : null;
+      lblTarget.textContent = Number.isFinite(tgt) ? String(tgt) : '—';
+      return { attr, base, modManual, modAuto, tgt };
+    }
+
+    pop.querySelector('.qr-roll').addEventListener('click', ()=>{
+      const { attr, tgt, modManual, modAuto } = recompute();
+      const roll = d100();
+      const success = Number.isFinite(tgt) && roll <= tgt;
+      const sl = Number.isFinite(tgt) ? SL(tgt, roll) : null;
+      const dbl = isDouble(roll);
+      const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
+
+      const res = document.createElement('div'); res.className='dice-result';
+      res.innerHTML = `
+        <span class="dice-rollvalue">1d100 = ${roll}</span>
+        ${Number.isFinite(tgt)? `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span>
+                                  <span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>` : `<span class="result-warn">Sans cible</span>`}
+        <span class="badge">${escapeHtml(name)}</span>
+        ${attr && attr!=='Custom' ? `<span class="badge">${escapeHtml(attr)}</span>` : ''}
+        ${modManual ? `<span class="badge ${modManual>=0?'good':'bad'}">Mod ${modManual>=0?'+':''}${modManual}</span>` : ''}
+        ${modAuto ? `<span class="badge ${modAuto>=0?'good':'bad'}">Auto ${modAuto>=0?'+':''}${modAuto} (AV)</span>` : ''}
+        ${crit ? `<span class="badge ${success?'good':'bad'}">${crit}</span>` : ''}
+      `;
+      DOM.quick.results.prepend(res);
+
+      const head = `Jet rapide ${attr==='Custom'?'(custom)':attr}`;
+      const tgtTxt = Number.isFinite(tgt) ? ` | Cible ${tgt}` : '';
+      const extras=[]; if(crit) extras.push(crit);
+      if(modManual) extras.push(`Mod ${modManual>=0?'+':''}${modManual}`);
+      if(modAuto) extras.push(`Auto ${modAuto>=0?'+':''}${modAuto} (AV)`);
+      Store.log(`🎲 ${head} (${name})${tgtTxt} → d100=${roll}${Number.isFinite(tgt)?` • ${success?'Réussite':'Échec'} • SL ${sl>=0?'+':''}${sl}`:''}${extras.length?` • ${extras.join(' • ')}`:''}`);
+
+      closePopover();
+    });
+
+    selA.addEventListener('change', recompute);
+    inBase.addEventListener('input', recompute);
+    inMod.addEventListener('input', recompute);
+    pop.querySelector('.close').addEventListener('click', closePopover);
+
+    // close on outside click
+    setTimeout(()=> {
+      const handler = (e) => {
+        if(!pop.contains(e.target)) closePopover();
+      };
+      document.addEventListener('mousedown', handler, { once:true });
+    }, 0);
+
+    recompute();
+  }
+  function closePopover(){
+    if(openPopover && openPopover.parentElement){ openPopover.parentElement.removeChild(openPopover); }
+    openPopover = null;
   }
 
   // ---------- Helpers ----------
