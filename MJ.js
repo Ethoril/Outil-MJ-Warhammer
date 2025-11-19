@@ -1,5 +1,6 @@
 (() => {
   // ---------- Utils ----------
+  // Fonctions utilitaires génériques
   const uid = () => Math.random().toString(36).slice(2, 10);
   const now = () => new Date().toLocaleTimeString();
   const qs = (s) => document.querySelector(s);
@@ -8,12 +9,14 @@
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
 
   // Dice utils
+  // Fonctions utilitaires pour les lancers de dés
   const d100 = () => Math.floor(Math.random()*100) + 1; // 1..100
-  const isDouble = (n) => n<=99 && n%11===0;
-  const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
+  const isDouble = (n) => n<=99 && n%11===0; // Vérifie si un nombre est un double (ex: 11, 22, 33)
+  const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10); // Calcule le niveau de succès
 
   // Advantage rule (WFRP-like): ±10 per AV step
   const ADV_STEP = 10;
+  // Calcule le modificateur automatique basé sur l'avantage du participant
   const autoModForParticipant = (pid) => {
     if(!pid) return 0;
     const p = Store.getState().combat.participants.get(pid);
@@ -23,9 +26,11 @@
   };
 
   // ---------- EventBus ----------
+  // Système de publication/abonnement simple pour la communication entre les composants
   const Bus = { _h:new Map(), on(e,f){ (this._h.get(e)||this._h.set(e,new Set()).get(e)).add(f); }, off(e,f){ this._h.get(e)?.delete(f); }, emit(e,p){ this._h.get(e)?.forEach(fn=>fn(p)); } };
 
   // ---------- Models ----------
+  // Classes pour structurer les données de l'application
   class Profile {
     constructor({ id=uid(), name, kind='PJ', initiative=30, hp=10, caracs={} } = {}) {
       this.id=id; this.name=(name||'Sans-nom').trim(); this.kind=kind;
@@ -43,6 +48,7 @@
   class DiceLine { constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='' }={}) { Object.assign(this, {id,participantId,attr,base,mod:Number(mod)||0,note}); } }
 
   // ---------- Store + Persistence ----------
+  // Gère l'état de l'application et la persistance des données dans le localStorage
   const KEY = { RESERVE:'wfrp.reserve.v1', COMBAT:'wfrp.combat.v1', LOG:'wfrp.log.v1', DICE:'wfrp.dice.v1' };
   const Store = (() => {
     let reserve = new Map();
@@ -50,6 +56,7 @@
     let log = [];
     let diceLines = [];
 
+    // Sauvegarde l'état actuel dans le localStorage
     function save() {
       localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
       const cObj = { round:combat.round, turnIndex:combat.turnIndex, order:combat.order, subs:combat.subs, participants:Array.from(combat.participants.values()) };
@@ -57,6 +64,8 @@
       localStorage.setItem(KEY.LOG, JSON.stringify(log));
       localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
     }
+
+    // Charge l'état depuis le localStorage
     function load() {
       try {
         const r = JSON.parse(localStorage.getItem(KEY.RESERVE) || '[]');
@@ -75,6 +84,8 @@
         diceLines = (Array.isArray(d)?d:[]).map(x=>new DiceLine(x));
       } catch (e) { console.warn('Load error', e); }
     }
+
+    // Trie les participants par ordre d'initiative
     function setOrderByInitiative() {
       const arr = Array.from(combat.participants.values());
       arr.sort((a,b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
@@ -82,6 +93,7 @@
     }
 
     const api = {
+      // API pour interagir avec le Store
       // Reserve
       addProfile(p){ reserve.set(p.id,p); save(); Bus.emit('reserve'); },
       removeProfile(id){ reserve.delete(id); save(); Bus.emit('reserve'); },
@@ -134,6 +146,7 @@
   })();
 
   // ---------- Combat engine ----------
+  // Gère la logique du déroulement du combat (tours et rounds)
   const Combat = (() => {
     function actorAtTurn(){ const st = Store.getState().combat; const id = st.order[st.turnIndex]; return id ? st.participants.get(id) : null; }
     function start(){ const st = Store.getState().combat; if(st.order.length===0) return; if(st.round===0) st.round=1; if(st.turnIndex===-1) st.turnIndex=0; Store.log(`Combat démarré. Round ${st.round}. Tour: ${actorAtTurn()?.name ?? '—'}`); Store.setRoundTurn(st.round, st.turnIndex); }
@@ -169,7 +182,10 @@
     diceLines: qs('#dice-lines'), diceAdd: qs('#dice-add'), diceRollAll: qs('#dice-roll-all'), dicePrepResults: qs('#dice-prep-results'),
 
     // Jets rapides
-    quickResults: qs('#dice-quick-results')
+    quickResults: qs('#dice-quick-results'),
+
+    // Templates
+    tplActor: qs('#tpl-actor')
   };
 
   // ---------- Tabs ----------
@@ -203,14 +219,14 @@
   }
 
   // Add profile
-  qs('#form-add').addEventListener('submit', (e)=>{
+  els.formAdd.addEventListener('submit', (e)=>{
     e.preventDefault();
-    const fd = new FormData(qs('#form-add'));
+    const fd = new FormData(els.formAdd);
     const caracs = {}; ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc'].forEach(k => {
       const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; }
     });
     const prof = new Profile({ name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative')||0), hp: Number(fd.get('hp')||0), caracs });
-    Store.addProfile(prof); qs('#form-add').reset(); Store.log(`Réserve: ajouté ${prof.name}`);
+    Store.addProfile(prof); els.formAdd.reset(); Store.log(`Réserve: ajouté ${prof.name}`);
   });
   els.seedReserve.addEventListener('click', ()=>{
     [ new Profile({name:'Renaut de Volargent', kind:'PJ', initiative:41, hp:14, caracs:{CC:52, Ag:41}}),
@@ -271,8 +287,7 @@
   }
 
   function renderParticipant(p){
-    const t = document.querySelector('#tpl-actor');
-    const li = t.content.firstElementChild.cloneNode(true);
+    const li = els.tplActor.content.firstElementChild.cloneNode(true);
     if(Combat.actorAtTurn()?.id===p.id) li.classList.add('turn');
     li.dataset.id = p.id;
     li.querySelector('.name').textContent = p.name + (p.subId!=='global'? ` [${getSubName(p.subId)}]` : '');
@@ -331,6 +346,7 @@
     if([...els.diPart.options].some(o=>o.value===cur)) els.diPart.value = cur;
     recomputeInstantTarget();
   }
+  // Calcule la cible pour un jet de dés instantané
   function recomputeInstantTarget(){
     const pid = els.diPart.value;
     const attr = els.diAttr.value;
@@ -456,6 +472,7 @@
     return wrap;
   }
 
+  // Exécute un lancer de dés pour une ligne préparée
   function runDiceLine(id){
     const st = Store.getState();
     const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
@@ -630,7 +647,6 @@
   Bus.on('reserve', renderReserve);
   Bus.on('combat', renderCombat);
   Bus.on('dice', renderDiceLines);
-  Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); els.log.replaceChildren(frag); });
 
   // ---------- Init ----------
   renderReserve(); renderCombat();
