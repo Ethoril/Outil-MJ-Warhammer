@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WFRP – Gestionnaire de combat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="MJ.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1>⚔️ WFRP – Gestionnaire</h1>
+      <div class="spacer"></div>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab is-active" data-tab="reserve" aria-selected="true">Réserve</button>
+        <button class="tab" data-tab="combat" aria-selected="false">Combat</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Réserve -->
+    <section id="panel-reserve" class="panel is-active" role="region" aria-labelledby="tab-reserve">
+      <h2>Réserve (source de vérité)</h2>
+      <div class="grid-2">
+        <form id="form-add" class="card">
+          <h3>Nouveau profil</h3>
+          <div class="grid-2">
+            <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
+            <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
+            <label>Initiative (I) <small class="muted">valeur de caractéristique</small><input type="number" name="initiative" value="30"></label>
+            <label>PV<input type="number" name="hp" value="12"></label>
+          </div>
+          <details>
+            <summary>Caracs (optionnel)</summary>
+            <div class="grid-3">
+              <label>CC<input type="number" name="CC"></label>
+              <label>CT<input type="number" name="CT"></label>
+              <label>F<input type="number" name="F"></label>
+              <label>E<input type="number" name="E"></label>
+              <label>I<input type="number" name="I"></label>
+              <label>Ag<input type="number" name="Ag"></label>
+              <label>Dex<input type="number" name="Dex"></label>
+              <label>Int<input type="number" name="Int"></label>
+              <label>FM<input type="number" name="FM"></label>
+              <label>Soc<input type="number" name="Soc"></label>
+            </div>
+          </details>
+          <div class="actions">
+            <button type="submit">Ajouter</button>
+            <button type="button" id="seed-reserve" class="ghost">Seed exemple</button>
+            <button type="button" id="clear-reserve" class="danger ghost">Vider</button>
+          </div>
+        </form>
+
+        <div class="card">
+          <div class="row">
+            <h3>Liste</h3>
+            <div class="spacer"></div>
+            <input id="search-reserve" placeholder="Filtrer…" />
+          </div>
+          <div id="reserve-list" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Combat -->
+    <section id="panel-combat" class="panel" role="region" aria-labelledby="tab-combat">
+      <h2>Combat (ordre = Initiative décroissante)</h2>
+
+      <div class="controls row card">
+        <div class="row">
+          <button id="btn-import">Importer depuis Réserve</button>
+          <button id="btn-export" class="ghost" title="Appliquer PV vers la Réserve (optionnel)">Exporter vers Réserve</button>
+        </div>
+        <div class="spacer"></div>
+        <div class="row">
+          <button id="btn-start">Démarrer</button>
+          <button id="btn-next">Tour suivant</button>
+          <button id="btn-d100" class="ghost">Lancer d100</button>
+          <button id="btn-reset" class="danger">Reset combat</button>
+        </div>
+      </div>
+
+      <div class="row meta card">
+        <span class="pill" id="pill-round">Round: 0</span>
+        <span class="pill" id="pill-turn">Tour: –</span>
+        <span class="pill" id="pill-sub">Sous-combat: global</span>
+        <div class="spacer"></div>
+        <span class="muted">Astuce : clique sur <strong>Init</strong> d’un participant pour la modifier.</span>
+        <button id="btn-new-sub" class="ghost">+ Sous-combat</button>
+      </div>
+
+      <div class="grid-2">
+        <!-- Participants -->
+        <div class="card">
+          <div class="row">
+            <h3>Participants</h3>
+            <div class="spacer"></div>
+            <label class="pill">Filtrer <input id="search-combat" placeholder="Tapez…"></label>
+          </div>
+          <ul id="combat-list" class="actors" aria-live="polite"></ul>
+        </div>
+
+        <!-- Journal -->
+        <div class="card">
+          <div class="row"><h3>Journal</h3><div class="spacer"></div><button id="btn-clear-log" class="ghost">Effacer</button></div>
+          <div id="log" class="log"></div>
+        </div>
+      </div>
+
+      <!-- Lignes préparées -->
+      <section class="card dice">
+        <div class="row">
+          <h3>🎛️ Lignes préparées</h3>
+          <div class="spacer"></div>
+          <button id="dice-add" class="ghost">+ Ligne</button>
+          <button id="dice-roll-all">Tout lancer</button>
+        </div>
+        <div id="dice-lines" class="dice-lines"></div>
+        <div id="dice-prep-results" class="dice-result-stream"></div>
+      </section>
+    </section>
+  </main>
+
+  <template id="tpl-actor">
+    <li class="actor">
+      <div class="left">
+        <div class="name"></div>
+        <div class="chips"></div>
+        <div class="states"></div>
+      </div>
+      <div class="right row">
+        <button class="btn-adv-plus">+AV</button>
+        <button class="btn-adv-minus">−AV</button>
+        <button class="btn-hp-minus">−PV</button>
+        <button class="btn-hp-plus">+PV</button>
+        <button class="btn-state">Blessé</button>
+        <button class="btn-quick-roll" title="Jet rapide (d100)">🎲</button>
+        <button class="btn-remove danger ghost">Retirer</button>
+      </div>
+    </li>
+  </template>
+
+  <!-- Modale import -->
+  <dialog id="dlg-import">
+    <form method="dialog" class="card">
+      <h3>Importer depuis la Réserve</h3>
+      <div id="import-list" class="list"></div>
+      <div class="row actions">
+        <div class="row">
+          <label class="pill">Sous-combat <select id="sel-sub"></select></label>
+        </div>
+        <div class="spacer"></div>
+        <button value="cancel" class="ghost">Annuler</button>
+        <button id="confirm-import">Importer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="MJ.js"></script>
+</body>
+</html>
