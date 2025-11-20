@@ -10,6 +10,7 @@
   // Dice utils
   const d100 = () => Math.floor(Math.random()*100) + 1;
   const isDouble = (n) => n<=99 && n%11===0;
+  // Calcul SL standard : Dizaines de la compétence - Dizaines du dé
   const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
 
   // Advantage rule (WFRP-like): ±10 per AV step
@@ -41,8 +42,12 @@
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
   
-  // DiceLine avec TargetId et logique d'avantage intégrée plus loin
-  class DiceLine { constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetId='' }={}) { Object.assign(this, {id,participantId,attr,base,mod:Number(mod)||0,note,targetId}); } }
+  // DiceLine améliorée : supporte cible fixe ou personnage + attribut cible + score opposé manuel
+  class DiceLine {
+    constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
+      Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
+    }
+  }
 
   // ---------- Store + Persistence ----------
   const KEY = { RESERVE:'wfrp.reserve.v1', COMBAT:'wfrp.combat.v1', LOG:'wfrp.log.v1', DICE:'wfrp.dice.v1' };
@@ -135,49 +140,24 @@
   const Combat = (() => {
     function actorAtTurn(){ const st = Store.getState().combat; const id = st.order[st.turnIndex]; return id ? st.participants.get(id) : null; }
     function start(){ const st = Store.getState().combat; if(st.order.length===0) return; if(st.round===0) st.round=1; if(st.turnIndex===-1) st.turnIndex=0; Store.log(`Combat démarré. Round ${st.round}. Tour: ${actorAtTurn()?.name ?? '—'}`); Store.setRoundTurn(st.round, st.turnIndex); }
-    function next(){ const st = Store.getState().combat; if(st.order.length===0) return; if(st.turnIndex===-1){ start(); return; } let ti = st.turnIndex + 1, rd = st.round; if(ti >= st.order.length){ ti = 0; rd++; Store.log(`→ Nouveau round ${rd}`); } Store.setRoundTurn(rd, ti); Store.log(`Tour: ${actorAtTurn()?.name ?? '—'}`); }
-    return { actorAtTurn, start, next };
+    return { actorAtTurn, start };
   })();
 
   // ---------- DOM refs ----------
   const DOM = {
     tabs: qsa('.tab'),
     panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat') },
-    reserve: {
-      list: qs('#reserve-list'),
-      search: qs('#search-reserve'),
-      form: qs('#form-add'),
-      seed: qs('#seed-reserve'),
-      clear: qs('#clear-reserve'),
-    },
+    reserve: { list: qs('#reserve-list'), search: qs('#search-reserve'), form: qs('#form-add'), seed: qs('#seed-reserve'), clear: qs('#clear-reserve') },
     combat: {
-      list: qs('#combat-list'),
-      search: qs('#search-combat'),
-      pillRound: qs('#pill-round'),
-      pillTurn: qs('#pill-turn'),
-      pillSub: qs('#pill-sub'),
-      btnImport: qs('#btn-import'),
-      btnExport: qs('#btn-export'),
-      btnStart: qs('#btn-start'),
-      btnNext: qs('#btn-next'),
-      btnReset: qs('#btn-reset'),
-      btnD100: qs('#btn-d100'),
+      list: qs('#combat-list'), search: qs('#search-combat'),
+      pillRound: qs('#pill-round'), pillTurn: qs('#pill-turn'), pillSub: qs('#pill-sub'),
+      btnImport: qs('#btn-import'), btnExport: qs('#btn-export'),
+      btnStart: qs('#btn-start'), btnReset: qs('#btn-reset'), btnD100: qs('#btn-d100'),
       btnNewSub: qs('#btn-new-sub'),
-      log: qs('#log'),
-      btnClearLog: qs('#btn-clear-log'),
+      log: qs('#log'), btnClearLog: qs('#btn-clear-log'),
     },
-    importModal: {
-      dialog: qs('#dlg-import'),
-      list: qs('#import-list'),
-      subSelect: qs('#sel-sub'),
-      confirm: qs('#confirm-import'),
-    },
-    dice: {
-      lines: qs('#dice-lines'),
-      add: qs('#dice-add'),
-      rollAll: qs('#dice-roll-all'),
-      results: qs('#dice-prep-results'),
-    },
+    importModal: { dialog: qs('#dlg-import'), list: qs('#import-list'), subSelect: qs('#sel-sub'), confirm: qs('#confirm-import') },
+    dice: { lines: qs('#dice-lines'), add: qs('#dice-add'), rollAll: qs('#dice-roll-all'), results: qs('#dice-prep-results') },
     tplActor: qs('#tpl-actor'),
   };
 
@@ -197,21 +177,15 @@
     listEl.replaceChildren(...items.map(renderItemFn));
   }
 
-  function renderReserve(){
-    renderFilteredList(DOM.reserve.search, DOM.reserve.list, Store.listProfiles, renderReserveItem);
-    renderDiceLines(); // Mise à jour des listes déroulantes dans les lignes
-  }
+  function renderReserve(){ renderFilteredList(DOM.reserve.search, DOM.reserve.list, Store.listProfiles, renderReserveItem); renderDiceLines(); }
   function renderReserveItem(p){
     const div = document.createElement('div'); div.className='item';
     const left = document.createElement('div');
     const right = document.createElement('div'); right.className='row';
-    left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="meta">(${p.kind})</span></div>
-                      <div class="meta">Init ${p.initiative} • PV ${p.hp}</div>`;
+    left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="meta">(${p.kind})</span></div><div class="meta">Init ${p.initiative} • PV ${p.hp}</div>`;
     const btnDel = btn('Suppr', ()=>{ Store.removeProfile(p.id); Store.log(`Réserve: supprimé ${p.name}`); });
     btnDel.classList.add('danger','ghost');
-    right.append(btnDel);
-    div.append(left,right);
-    return div;
+    right.append(btnDel); div.append(left,right); return div;
   }
 
   // Add profile
@@ -229,13 +203,12 @@
       new Profile({name:'Saskia la Noire', kind:'PJ', initiative:52, hp:12, caracs:{CC:45, Ag:52}}),
       new Profile({name:'Gobelins (2)', kind:'Créature', initiative:28, hp:9, caracs:{CC:35}}),
       new Profile({name:'Chien de guerre', kind:'Créature', initiative:36, hp:10, caracs:{CC:40}})
-    ].forEach(Store.addProfile);
-    Store.log('Seed Réserve: 4 profils');
+    ].forEach(Store.addProfile); Store.log('Seed Réserve: 4 profils');
   });
   DOM.reserve.clear.addEventListener('click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
   DOM.reserve.search.addEventListener('input', renderReserve);
 
-  // ---------- Import modal ----------
+  // Import/Export
   DOM.combat.btnImport.addEventListener('click', ()=>{
     const subs = Store.listSubs(); DOM.importModal.subSelect.replaceChildren(...subs.map(s => opt(s.id, s.name)));
     const profs = Store.listProfiles(); DOM.importModal.list.replaceChildren(...profs.map(p => importRow(p)));
@@ -248,7 +221,6 @@
     Store.importFromReserve(ids, subId);
     DOM.importModal.dialog.close();
   });
-
   DOM.combat.btnExport.addEventListener('click', ()=>{ if(confirm('Appliquer PV aux profils correspondants ?')) Store.exportToReserve(); });
 
   function importRow(p){
@@ -257,12 +229,11 @@
     left.innerHTML = `<strong>${escapeHtml(p.name)}</strong> <span class="meta">(${p.kind})</span> <span class="meta">Init ${p.initiative} • PV ${p.hp}</span>`;
     const right = document.createElement('div'); right.className='row';
     const chk = document.createElement('input'); chk.type='checkbox'; chk.value=p.id; right.append(chk);
-    row.append(left,right);
-    return row;
+    row.append(left,right); return row;
   }
   function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
 
-  // ---------- Combat rendering ----------
+  // Combat Rendering
   function renderCombat(){
     const { combat } = Store.getState();
     DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
@@ -271,138 +242,118 @@
     renderFilteredList(DOM.combat.search, DOM.combat.list, Store.listParticipants, renderParticipant);
     renderDiceLines();
   }
-
   function renderParticipant(p){
     const li = DOM.tplActor.content.firstElementChild.cloneNode(true);
     if(Combat.actorAtTurn()?.id===p.id) li.classList.add('turn');
     li.dataset.id = p.id;
     li.querySelector('.name').textContent = p.name + (p.subId!=='global'? ` [${getSubName(p.subId)}]` : '');
-
     const chips = li.querySelector('.chips');
     const initBadge = badge(`Init ${p.initiative}`, 'clickable');
     initBadge.title = 'Cliquer pour modifier l’Initiative';
     initBadge.addEventListener('click', ()=>{
-      const v = prompt('Nouvelle valeur d’Initiative ?', p.initiative);
-      if(v===null) return;
-      const nv = Number(v);
-      if(!Number.isFinite(nv)) return alert('Valeur invalide');
-      const prev = p.initiative;
+      const v = prompt('Nouvelle valeur d’Initiative ?', p.initiative); if(v===null) return;
+      const nv = Number(v); if(!Number.isFinite(nv)) return alert('Valeur invalide');
       Store.updateParticipant(p.id, { initiative: nv });
-      Store.log(`${p.name}: Initiative ${prev} → ${nv}`);
     });
-
     chips.append(initBadge, badge(`PV ${p.hp}`), badge(`AV ${p.advantage}`));
-
     const states = li.querySelector('.states'); p.states.forEach(s => states.append(badge(s,'warn')));
     li.querySelector('.btn-adv-plus').addEventListener('click',()=> setAdv(p.id, p.advantage+1));
     li.querySelector('.btn-adv-minus').addEventListener('click',()=> setAdv(p.id, p.advantage-1));
     li.querySelector('.btn-hp-minus').addEventListener('click',()=> setHP(p.id, p.hp-1));
     li.querySelector('.btn-hp-plus').addEventListener('click',()=> setHP(p.id, p.hp+1));
     li.querySelector('.btn-state').addEventListener('click',()=> toggleState(p.id,'Blessé'));
-
     li.querySelector('.btn-remove').addEventListener('click',()=>{ Store.removeParticipant(p.id); Store.log(`Combat: retiré ${p.name}`); });
     return li;
   }
 
-  function setAdv(id, val){ const p=getP(id); if(!p) return; const prev=p.advantage; Store.updateParticipant(id,{advantage:val}); Store.log(`${p.name}: AV ${prev} → ${val}`); }
-  function setHP(id, val){ const p=getP(id); if(!p) return; const prev=p.hp; Store.updateParticipant(id,{hp:val}); Store.log(`${p.name}: PV ${prev} → ${val}`); }
-  function toggleState(id, label){ const p=getP(id); if(!p) return; const has=p.states.includes(label); const ns=has? p.states.filter(x=>x!==label) : [...p.states,label]; Store.updateParticipant(id,{states:ns}); Store.log(`${p.name}: ${has?'−':'+'}État « ${label} »`); }
+  function setAdv(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{advantage:val}); renderDiceLines(); } // AV update trigger renderDiceLines for AutoMod
+  function setHP(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{hp:val}); }
+  function toggleState(id, label){ const p=getP(id); if(!p) return; const has=p.states.includes(label); const ns=has? p.states.filter(x=>x!==label) : [...p.states,label]; Store.updateParticipant(id,{states:ns}); }
   function getP(id){ return Store.getState().combat.participants.get(id); }
-
   function currentSub(){ return 'global'; }
   function getSubName(id){ return Store.listSubs().find(s=>s.id===id)?.name || 'global'; }
-  DOM.combat.btnNewSub.addEventListener('click',()=>{ const name = prompt('Nom du sous-combat ?'); if(!name) return; const s = Store.addSub(name); Store.log(`Sous-combat créé: ${s.name}`); });
-
+  DOM.combat.btnNewSub.addEventListener('click',()=>{ const name = prompt('Nom du sous-combat ?'); if(!name) return; Store.addSub(name); });
   DOM.combat.btnClearLog.addEventListener('click',()=> Store.clearLog());
   Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
+  DOM.combat.btnD100.addEventListener('click', ()=>{ const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); });
 
-  // d100 simple (Condition 1: Préservé)
-  DOM.combat.btnD100.addEventListener('click', ()=>{
-    const roll = d100();
-    Store.log(`🎲 Jet de d100 → ${roll}`);
-  });
-
-  // ---------- Lignes préparées (Condition 4) ----------
+  // ---------- Lignes préparées Avancées ----------
   DOM.dice.add.addEventListener('click', ()=> Store.addDiceLine(new DiceLine()));
-  DOM.dice.rollAll.addEventListener('click', ()=>{
-    const { diceLines } = Store.getState();
-    diceLines.forEach(dl => runDiceLine(dl.id));
-  });
-
-  function renderDiceLines(){
-    const { diceLines } = Store.getState();
-    const frag = document.createDocumentFragment();
-    diceLines.forEach(dl => frag.append(renderDiceLine(dl)));
-    DOM.dice.lines.replaceChildren(frag);
-  }
+  DOM.dice.rollAll.addEventListener('click', ()=>{ const { diceLines } = Store.getState(); diceLines.forEach(dl => runDiceLine(dl.id)); });
+  function renderDiceLines(){ const { diceLines } = Store.getState(); const frag = document.createDocumentFragment(); diceLines.forEach(dl => frag.append(renderDiceLine(dl))); DOM.dice.lines.replaceChildren(frag); }
 
   function renderDiceLine(dl){
     const wrap = document.createElement('div'); wrap.className='dice-line'; wrap.dataset.id = dl.id;
-
+    
+    // 1. Actor
     const selP = document.createElement('select');
     selP.append(opt('','— Libre —'), ...Store.listParticipantsRaw().map(p=>opt(p.id, p.name + (p.profileId?'':' (ad hoc)'))));
     selP.value = dl.participantId || '';
-    const labP = labelWrap('Participant', selP);
-
+    
+    // 2. Attr
     const selA = document.createElement('select');
-    ['Custom','CC','CT','F','E','I','Ag','Dex','Int','FM','Soc','initiative'].forEach(a=> selA.append(opt(a, a==='initiative'?'Initiative':a)));
+    ['Custom','CC','CT','F','E','I','Ag','Dex','Int','FM','Soc','initiative'].forEach(a=> selA.append(opt(a, a==='initiative'?'Init':a)));
     selA.value = dl.attr || 'Custom';
-    const labA = labelWrap('Caractéristique', selA);
-
-    const inBase = document.createElement('input'); inBase.type='number'; inBase.value = dl.base ?? '';
-    const labB = labelWrap('Base (Custom)', inBase);
-
+    
+    // 3. Base/Mod
+    const inBase = document.createElement('input'); inBase.type='number'; inBase.value = dl.base ?? ''; inBase.placeholder="Base";
     const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod ?? 0;
-    const labM = labelWrap('Modificateur', inMod);
+    
+    // 4. Auto Advantage
+    const spanAuto = document.createElement('span'); spanAuto.className = 'readonly';
+    
+    // 5. Target Type Select
+    const selTarget = document.createElement('select');
+    selTarget.append(opt('none', '— Sans Cible —'), opt('fixed', 'Cible Fixe'));
+    Store.listParticipantsRaw().forEach(p => selTarget.append(opt(p.id, 'Vs ' + p.name)));
+    selTarget.value = dl.targetType || 'none';
 
-    // Affichage automatique de l'avantage (Condition 4)
-    const spanAuto = document.createElement('span');
-    spanAuto.className = 'readonly';
-    const labAuto = labelWrap('Avantage', spanAuto);
-
-    // Sélection de la Cible (Condition 4)
-    const selT = document.createElement('select');
-    selT.append(opt('','— Cible —'), ...Store.listParticipantsRaw().map(p=>opt(p.id, p.name + (p.profileId?'':' (ad hoc)'))));
-    selT.value = dl.targetId || '';
-    const labT = labelWrap('Cible', selT);
-
-    const inNote = document.createElement('input'); inNote.placeholder="Note"; inNote.value = dl.note||'';
-    const labN = labelWrap('Note', inNote);
-
-    const act = document.createElement('div'); act.className='actions';
-    const bRoll = btn('Lancer', ()=> runDiceLine(dl.id));
-    const bDup  = btn('Dupliquer', ()=> Store.duplicateDiceLine(dl.id));
-    const bDel  = btn('Supprimer', ()=> Store.removeDiceLine(dl.id));
-    act.append(bRoll, bDup, bDel);
-
-    wrap.append(labP, labA, labM, labAuto, labT, labN, act);
-    if(selA.value==='Custom') wrap.insertBefore(labB, labM);
-
-    function updateAutoMod(){
-      const mod = autoModForParticipant(selP.value);
-      spanAuto.textContent = `${mod>=0?'+':''}${mod} (AV)`;
+    // 6. Target Details (Dynamic)
+    const targetContainer = document.createElement('div'); targetContainer.className = 'target-details';
+    // Si Cible Fixe : Input Valeur
+    if(selTarget.value === 'fixed'){
+        const inVal = document.createElement('input'); inVal.type='number'; inVal.placeholder="Seuil"; inVal.value = dl.targetValue;
+        inVal.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {targetValue: inVal.value}));
+        targetContainer.append(inVal);
+    } 
+    // Si Personnage : Select Attr + Input Roll Opposé
+    else if(selTarget.value !== 'none'){
+        const selTAttr = document.createElement('select');
+        ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc','initiative'].forEach(a=> selTAttr.append(opt(a, a)));
+        selTAttr.value = dl.targetAttr || 'CC';
+        selTAttr.addEventListener('change', ()=> Store.updateDiceLine(dl.id, {targetAttr: selTAttr.value}));
+        
+        const inOpp = document.createElement('input'); inOpp.type='number'; inOpp.placeholder="Score Opp"; inOpp.title="Score du dé du défenseur"; inOpp.value = dl.opponentRoll;
+        inOpp.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {opponentRoll: inOpp.value}));
+        
+        targetContainer.append(selTAttr, inOpp);
     }
 
-    function save(){ Store.updateDiceLine(dl.id, {
-      participantId: selP.value, attr: selA.value,
-      base: selA.value==='Custom' ? clampInt(inBase.value, 0) : '',
-      mod: clampInt(inMod.value, 0),
-      note: inNote.value,
-      targetId: selT.value
-    }); }
+    // Note & Actions
+    const inNote = document.createElement('input'); inNote.placeholder="Note"; inNote.value = dl.note||'';
+    const act = document.createElement('div'); act.className='actions';
+    act.append(btn('Lancer', ()=> runDiceLine(dl.id)), btn('Dupliq.', ()=> Store.duplicateDiceLine(dl.id)), btn('X', ()=> Store.removeDiceLine(dl.id)));
 
-    selP.addEventListener('change', ()=>{
-      save();
-      updateAutoMod();
-    });
-    selA.addEventListener('change', ()=>{ if(selA.value==='Custom' && !wrap.contains(labB)) wrap.insertBefore(labB, labM); if(selA.value!=='Custom' && wrap.contains(labB)) wrap.removeChild(labB); save(); });
-    inBase.addEventListener('input', save);
-    inMod.addEventListener('input', save);
-    inNote.addEventListener('input', save);
-    selT.addEventListener('change', save);
+    wrap.append(
+        labelWrap('Qui ?', selP), 
+        labelWrap('Quoi ?', selA), 
+        selA.value==='Custom' ? labelWrap('Base', inBase) : labelWrap('Mod', inMod),
+        labelWrap('Av.', spanAuto),
+        labelWrap('Cible', selTarget),
+        labelWrap('Détails Cible', targetContainer),
+        labelWrap('Note', inNote), 
+        act
+    );
 
+    function updateAutoMod(){ const mod = autoModForParticipant(selP.value); spanAuto.textContent = `${mod>=0?'+':''}${mod}`; }
+    function save(){ Store.updateDiceLine(dl.id, { participantId: selP.value, attr: selA.value, base: selA.value==='Custom' ? clampInt(inBase.value, 0) : '', mod: clampInt(inMod.value, 0), note: inNote.value, targetType: selTarget.value }); }
+
+    selP.addEventListener('change', ()=>{ save(); updateAutoMod(); });
+    selA.addEventListener('change', ()=>{ if(selA.value==='Custom' && !wrap.contains(inBase)) /*logic simplified*/; save(); renderDiceLines(); }); // Re-render simplifies DOM manip
+    inBase.addEventListener('input', save); inMod.addEventListener('input', save); inNote.addEventListener('input', save);
+    selTarget.addEventListener('change', save); // Trigger re-render to show correct fields
+    
     updateAutoMod();
-
     return wrap;
   }
 
@@ -410,6 +361,7 @@
     const st = Store.getState();
     const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
 
+    // 1. Calculate Attacker Target & SL
     let base=null;
     if(dl.attr==='Custom'){ base = clampInt(dl.base, 0); }
     else{
@@ -422,7 +374,6 @@
       }
     }
     const modManual = clampInt(dl.mod, 0);
-    // Prise en compte automatique de l'avantage dans le calcul
     const modAuto = autoModForParticipant(dl.participantId);
     const target = Number.isFinite(base) ? base + (modManual + modAuto) : null;
 
@@ -432,44 +383,75 @@
     const dbl = isDouble(roll);
     const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
 
-    const targetName = dl.targetId ? st.combat.participants.get(dl.targetId)?.name : null;
+    // 2. Handle Target Logic
+    let targetInfo = "";
+    let slDiff = null;
 
+    // Cible Fixe (Simple Test vs Threshold?) - Pour l'instant on l'affiche juste.
+    if(dl.targetType === 'fixed' && dl.targetValue){
+        targetInfo = ` | vs Seuil ${dl.targetValue}`;
+        // Optionnel: Calcul réussite si seuil est Target Number? 
+        // Pour l'instant WFRP : SL suffit.
+    }
+    // Personnage (Test Opposé)
+    else if(dl.targetType !== 'none' && dl.targetType !== 'fixed'){
+        const defender = st.combat.participants.get(dl.targetType);
+        if(defender && dl.targetAttr && dl.opponentRoll){
+             // Get Defender Skill Base
+             let defBase = 0;
+             if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0);
+             else if(defender.profileId) {
+                 const dProf = Store.getProfile(defender.profileId);
+                 defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0);
+             }
+             const defRoll = Number(dl.opponentRoll);
+             if(Number.isFinite(defBase) && Number.isFinite(defRoll)){
+                 const slDef = SL(defBase, defRoll);
+                 // SL Différentiel (Attaquant - Défenseur)
+                 if(sl !== null) {
+                     slDiff = sl - slDef;
+                     targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`;
+                 }
+             }
+        } else if(defender) {
+            targetInfo = ` | vs ${defender.name} (En attente score...)`;
+        }
+    }
+
+    // 3. Render Result
     const res = document.createElement('div'); res.className='dice-result';
-    res.innerHTML = `
-      <span class="dice-rollvalue">1d100 = ${roll}</span>
-      ${Number.isFinite(target)? `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span>
-                                  <span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>` : `<span class="result-warn">Sans cible</span>`}
-      ${dl.participantId ? `<span class="badge">${escapeHtml(st.combat.participants.get(dl.participantId)?.name||'?')}</span>` : ''}
-      ${targetName ? `<span class="badge warn">→ ${escapeHtml(targetName)}</span>` : ''}
-      ${(dl.attr && dl.attr!=='Custom') ? `<span class="badge">${escapeHtml(dl.attr==='initiative'?'Initiative':dl.attr)}</span>` : ''}
-      ${modManual ? `<span class="badge ${modManual>=0?'good':'bad'}">Mod ${modManual>=0?'+':''}${modManual}</span>` : ''}
-      ${modAuto ? `<span class="badge ${modAuto>=0?'good':'bad'}">Auto ${modAuto>=0?'+':''}${modAuto} (AV)</span>` : ''}
-      ${dl.note ? `<span class="badge warn">${escapeHtml(dl.note)}</span>` : ''}
-      ${crit ? `<span class="badge ${success?'good':'bad'}">${crit}</span>` : ''}
-    `;
+    let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
+    
+    if(Number.isFinite(target)){
+        resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span>
+                    <span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`;
+    } else {
+        resHTML += `<span class="result-warn">Sans cible (attaquant)</span>`;
+    }
+
+    if(slDiff !== null) {
+        resHTML += `<span class="badge ${slDiff>=0?'good':'bad'}" style="margin-left:8px; font-size:1.1em;">MARGE: ${slDiff>=0?'+':''}${slDiff}</span>`;
+    }
+
+    const who = dl.participantId ? st.combat.participants.get(dl.participantId)?.name||'?' : '?';
+    resHTML += `<span class="badge">${escapeHtml(who)}</span>`;
+    if(dl.attr!=='Custom') resHTML += `<span class="badge">${dl.attr}</span>`;
+    if(modManual) resHTML += `<span class="badge">Mod ${modManual}</span>`;
+    if(modAuto) resHTML += `<span class="badge good">Auto ${modAuto}</span>`;
+    if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
+    if(dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
+
+    res.innerHTML = resHTML;
     DOM.dice.results.prepend(res);
 
-    const who = dl.participantId ? ` (${st.combat.participants.get(dl.participantId)?.name||'?'})` : '';
-    const head = dl.note ? dl.note : `Jet ${dl.attr==='Custom'?'personnalisé':dl.attr}`;
-    const tgtTxt = Number.isFinite(target) ? ` | Cible ${target}` : '';
-    const extras = [];
-    if (targetName) extras.push(`→ ${targetName}`);
-    if(crit) extras.push(crit);
-    if(modManual) extras.push(`Mod ${modManual>=0?'+':''}${modManual}`);
-    if(modAuto) extras.push(`Auto ${modAuto>=0?'+':''}${modAuto} (AV)`);
-    Store.log(`🎲 ${head}${who}${tgtTxt} → d100=${roll}${Number.isFinite(target)?` • ${success?'Réussite':'Échec'} • SL ${sl>=0?'+':''}${sl}`:''}${extras.length?` • ${extras.join(' • ')}`:''}`);
+    // Log
+    Store.log(`🎲 ${who} (Roll ${roll})${targetInfo}`);
   }
 
-  // ---------- Helpers ----------
   function labelWrap(text, el){ const w=document.createElement('label'); w.textContent=text; w.appendChild(el); return w; }
   function badge(text, kind){ const s=document.createElement('span'); s.className='badge'+(kind?` ${kind}`:''); s.textContent=text; return s; }
   function btn(text, on){ const b=document.createElement('button'); b.textContent=text; b.addEventListener('click', on); return b; }
 
-  // ---------- Reactions ----------
-  Bus.on('reserve', renderReserve);
-  Bus.on('combat', renderCombat);
-  Bus.on('dice', renderDiceLines);
-
-  // ---------- Init ----------
+  Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); Bus.on('dice', renderDiceLines);
   renderReserve(); renderCombat();
 })();
