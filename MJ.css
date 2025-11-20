@@ -6,7 +6,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: var(--font-body); background: var(--bg); color: var(--text); background-image: url('https://www.transparenttextures.com/patterns/old-paper.png'); }
 h1, h2, h3 { font-family: var(--font-title); font-weight: 700; color: #5a1d1d; margin: 0; }
-.wrap { max-width: 1400px; margin: 0 auto; padding: 0 16px; } /* Élargi un peu pour les lignes de dés */
+.wrap { max-width: 1400px; margin: 0 auto; padding: 0 16px; } /* Plus large pour les lignes complexes */
 
 .topbar { position: sticky; top: 0; z-index: 10; background: rgba(245, 229, 199, 0.85); backdrop-filter: blur(6px); border-bottom: 2px solid #5a1d1d; }
 .topbar .wrap { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
@@ -17,7 +17,7 @@ h1, h2, h3 { font-family: var(--font-title); font-weight: 700; color: #5a1d1d; m
 .panel { display: none; margin: 18px 0; } .panel.is-active { display: block; }
 .card { background: var(--panel); border: 1px solid #5a1d1d; border-radius: var(--radius); padding: 14px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
 .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; } /* Plus de place à droite pour les dés */
+.grid-2 { display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
 input, select, button { color: var(--text); background: var(--bg); border: 1px solid #5a1d1d; border-radius: var(--radius); padding: 8px 10px; font-family: var(--font-body); }
@@ -43,7 +43,6 @@ button.ghost { background: transparent; border-color: transparent; }
   border: 1px dashed #5a1d1d; padding: 10px; border-radius: 12px;
 }
 .dice-line label { min-width: unset; }
-/* Fix widths for clean layout */
 .dice-line > label:nth-child(1) { flex: 2; min-width: 140px; } /* Participant */
 .dice-line > label:nth-child(2) { width: 70px; } /* Attr */
 .dice-line > label:nth-child(3) { width: 60px; } /* Mod/Base */
