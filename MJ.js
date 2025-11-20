@@ -42,7 +42,7 @@
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
   
-  // DiceLine améliorée : supporte cible fixe ou personnage + attribut cible + score opposé manuel
+  // DiceLine améliorée
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -108,7 +108,14 @@
       getState(){ return { reserve, combat, log, diceLines }; },
 
       addDiceLine(dl){ diceLines.push(new DiceLine(dl)); save(); Bus.emit('dice'); },
-      updateDiceLine(id, patch){ const i=diceLines.findIndex(x=>x.id===id); if(i<0) return; Object.assign(diceLines[i], patch); save(); Bus.emit('dice'); },
+      // Modification ici : ajout du paramètre noRender pour éviter le refresh brutal
+      updateDiceLine(id, patch, noRender=false){ 
+        const i=diceLines.findIndex(x=>x.id===id); 
+        if(i<0) return; 
+        Object.assign(diceLines[i], patch); 
+        save(); 
+        if(!noRender) Bus.emit('dice'); 
+      },
       removeDiceLine(id){ diceLines = diceLines.filter(x=>x.id!==id); save(); Bus.emit('dice'); },
       duplicateDiceLine(id){ const src=diceLines.find(x=>x.id===id); if(!src) return; diceLines.push(new DiceLine({...src, id:uid()})); save(); Bus.emit('dice'); },
 
@@ -313,7 +320,7 @@
     // Si Cible Fixe : Input Valeur
     if(selTarget.value === 'fixed'){
         const inVal = document.createElement('input'); inVal.type='number'; inVal.placeholder="Seuil"; inVal.value = dl.targetValue;
-        inVal.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {targetValue: inVal.value}));
+        inVal.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {targetValue: inVal.value}, true)); // true = noRender
         targetContainer.append(inVal);
     } 
     // Si Personnage : Select Attr + Input Roll Opposé
@@ -324,7 +331,7 @@
         selTAttr.addEventListener('change', ()=> Store.updateDiceLine(dl.id, {targetAttr: selTAttr.value}));
         
         const inOpp = document.createElement('input'); inOpp.type='number'; inOpp.placeholder="Score Opp"; inOpp.title="Score du dé du défenseur"; inOpp.value = dl.opponentRoll;
-        inOpp.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {opponentRoll: inOpp.value}));
+        inOpp.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {opponentRoll: inOpp.value}, true)); // true = noRender
         
         targetContainer.append(selTAttr, inOpp);
     }
@@ -346,12 +353,18 @@
     );
 
     function updateAutoMod(){ const mod = autoModForParticipant(selP.value); spanAuto.textContent = `${mod>=0?'+':''}${mod}`; }
-    function save(){ Store.updateDiceLine(dl.id, { participantId: selP.value, attr: selA.value, base: selA.value==='Custom' ? clampInt(inBase.value, 0) : '', mod: clampInt(inMod.value, 0), note: inNote.value, targetType: selTarget.value }); }
+    // Fonction save avec option noRender pour les inputs texte
+    function save(noRender=false){ Store.updateDiceLine(dl.id, { participantId: selP.value, attr: selA.value, base: selA.value==='Custom' ? clampInt(inBase.value, 0) : '', mod: clampInt(inMod.value, 0), note: inNote.value, targetType: selTarget.value }, noRender); }
 
     selP.addEventListener('change', ()=>{ save(); updateAutoMod(); });
-    selA.addEventListener('change', ()=>{ if(selA.value==='Custom' && !wrap.contains(inBase)) /*logic simplified*/; save(); renderDiceLines(); }); // Re-render simplifies DOM manip
-    inBase.addEventListener('input', save); inMod.addEventListener('input', save); inNote.addEventListener('input', save);
-    selTarget.addEventListener('change', save); // Trigger re-render to show correct fields
+    selA.addEventListener('change', ()=>{ if(selA.value==='Custom' && !wrap.contains(inBase)) /*...*/; save(); renderDiceLines(); }); 
+    
+    // Utilisation de save(true) pour ne pas redessiner pendant la frappe
+    inBase.addEventListener('input', ()=> save(true)); 
+    inMod.addEventListener('input', ()=> save(true)); 
+    inNote.addEventListener('input', ()=> save(true));
+    
+    selTarget.addEventListener('change', save); 
     
     updateAutoMod();
     return wrap;
@@ -387,11 +400,9 @@
     let targetInfo = "";
     let slDiff = null;
 
-    // Cible Fixe (Simple Test vs Threshold?) - Pour l'instant on l'affiche juste.
+    // Cible Fixe (Simple Test vs Threshold?)
     if(dl.targetType === 'fixed' && dl.targetValue){
         targetInfo = ` | vs Seuil ${dl.targetValue}`;
-        // Optionnel: Calcul réussite si seuil est Target Number? 
-        // Pour l'instant WFRP : SL suffit.
     }
     // Personnage (Test Opposé)
     else if(dl.targetType !== 'none' && dl.targetType !== 'fixed'){
