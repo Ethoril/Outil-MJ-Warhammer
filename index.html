@@ -77,8 +77,7 @@
         <div class="spacer"></div>
         <div class="row">
           <button id="btn-start">Démarrer</button>
-          <button id="btn-next">Tour suivant</button>
-          <button id="btn-d100" class="ghost">Lancer d100</button>
+          <button id="btn-d100">Lancer d100</button>
           <button id="btn-reset" class="danger">Reset combat</button>
         </div>
       </div>
@@ -92,7 +91,10 @@
         <button id="btn-new-sub" class="ghost">+ Sous-combat</button>
       </div>
 
+      <div id="dice-prep-results" class="dice-result-stream card" style="min-height: 60px; margin-bottom: 16px;"></div>
+
       <div class="grid-2">
+        
         <div class="card">
           <div class="row">
             <h3>Participants</h3>
@@ -102,24 +104,29 @@
           <ul id="combat-list" class="actors" aria-live="polite"></ul>
         </div>
 
-        <div class="card">
-          <div class="row"><h3>Journal</h3><div class="spacer"></div><button id="btn-clear-log" class="ghost">Effacer</button></div>
-          <div id="log" class="log"></div>
-        </div>
+        <section class="card dice">
+          <div class="row">
+            <h3>🎛️ Lignes préparées</h3>
+            <div class="spacer"></div>
+            <button id="dice-add" class="ghost">+ Ligne</button>
+            <button id="dice-roll-all">Tout lancer</button>
+          </div>
+          <div id="dice-lines" class="dice-lines"></div>
+        </section>
       </div>
 
-      <section class="card dice">
-        <div class="row">
-          <h3>🎛️ Lignes préparées</h3>
-          <div class="spacer"></div>
-          <button id="dice-add" class="ghost">+ Ligne</button>
-          <button id="dice-roll-all">Tout lancer</button>
+      <details class="card" style="margin-top: 16px;">
+        <summary class="row" style="cursor:pointer; font-weight:bold; color:#5a1d1d; padding:4px 0;">
+          📜 Journal (Cliquer pour afficher/masquer)
+        </summary>
+        <div class="row" style="margin-top:10px; border-bottom:1px solid #ccc; padding-bottom:8px;">
+            <div class="spacer"></div>
+            <button id="btn-clear-log" class="ghost">Effacer l'historique</button>
         </div>
-        <div id="dice-lines" class="dice-lines"></div>
-        <div id="dice-prep-results" class="dice-result-stream"></div>
-      </section>
+        <div id="log" class="log"></div>
+      </details>
 
-      </section>
+    </section>
   </main>
 
   <template id="tpl-actor">
