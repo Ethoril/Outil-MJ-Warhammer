@@ -71,8 +71,14 @@
 
       <div class="controls row card">
         <div class="row">
-          <button id="btn-import">Importer depuis Réserve</button>
-          <button id="btn-export" class="ghost" title="Appliquer PV vers la Réserve (optionnel)">Exporter vers Réserve</button>
+            <button id="btn-save-file" style="border-color:#3e2e22;">💾 Sauvegarder</button>
+            <button id="btn-load-file" class="ghost">📂 Charger</button>
+            <input type="file" id="file-input" accept=".json" style="display:none;" />
+        </div>
+        <div class="spacer"></div>
+        <div class="row">
+            <button id="btn-import" class="ghost" title="Importer depuis Réserve vers Combat">Imp. Réserve</button>
+            <button id="btn-export" class="ghost" title="Appliquer PV vers la Réserve (optionnel)">Exp. Réserve</button>
         </div>
         <div class="spacer"></div>
         <div class="row">
