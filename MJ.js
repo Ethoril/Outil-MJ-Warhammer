@@ -42,7 +42,7 @@
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
   
-  // DiceLine améliorée
+  // DiceLine améliorée : supporte les cibles et jets opposés
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -108,7 +108,7 @@
       getState(){ return { reserve, combat, log, diceLines }; },
 
       addDiceLine(dl){ diceLines.push(new DiceLine(dl)); save(); Bus.emit('dice'); },
-      // Modification ici : ajout du paramètre noRender pour éviter le refresh brutal
+      // CORRECTIF ICI : paramètre noRender
       updateDiceLine(id, patch, noRender=false){ 
         const i=diceLines.findIndex(x=>x.id===id); 
         if(i<0) return; 
@@ -273,7 +273,7 @@
     return li;
   }
 
-  function setAdv(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{advantage:val}); renderDiceLines(); } // AV update trigger renderDiceLines for AutoMod
+  function setAdv(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{advantage:val}); renderDiceLines(); } 
   function setHP(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{hp:val}); }
   function toggleState(id, label){ const p=getP(id); if(!p) return; const has=p.states.includes(label); const ns=has? p.states.filter(x=>x!==label) : [...p.states,label]; Store.updateParticipant(id,{states:ns}); }
   function getP(id){ return Store.getState().combat.participants.get(id); }
@@ -317,10 +317,12 @@
 
     // 6. Target Details (Dynamic)
     const targetContainer = document.createElement('div'); targetContainer.className = 'target-details';
+    
     // Si Cible Fixe : Input Valeur
     if(selTarget.value === 'fixed'){
         const inVal = document.createElement('input'); inVal.type='number'; inVal.placeholder="Seuil"; inVal.value = dl.targetValue;
-        inVal.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {targetValue: inVal.value}, true)); // true = noRender
+        // CORRECTIF: noRender = true
+        inVal.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {targetValue: inVal.value}, true));
         targetContainer.append(inVal);
     } 
     // Si Personnage : Select Attr + Input Roll Opposé
@@ -328,10 +330,11 @@
         const selTAttr = document.createElement('select');
         ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc','initiative'].forEach(a=> selTAttr.append(opt(a, a)));
         selTAttr.value = dl.targetAttr || 'CC';
-        selTAttr.addEventListener('change', ()=> Store.updateDiceLine(dl.id, {targetAttr: selTAttr.value}));
+        selTAttr.addEventListener('change', ()=> Store.updateDiceLine(dl.id, {targetAttr: selTAttr.value})); // On render ici pour maj du label si besoin
         
         const inOpp = document.createElement('input'); inOpp.type='number'; inOpp.placeholder="Score Opp"; inOpp.title="Score du dé du défenseur"; inOpp.value = dl.opponentRoll;
-        inOpp.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {opponentRoll: inOpp.value}, true)); // true = noRender
+        // CORRECTIF: noRender = true
+        inOpp.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {opponentRoll: inOpp.value}, true));
         
         targetContainer.append(selTAttr, inOpp);
     }
@@ -353,13 +356,13 @@
     );
 
     function updateAutoMod(){ const mod = autoModForParticipant(selP.value); spanAuto.textContent = `${mod>=0?'+':''}${mod}`; }
-    // Fonction save avec option noRender pour les inputs texte
+    // Fonction save avec option noRender
     function save(noRender=false){ Store.updateDiceLine(dl.id, { participantId: selP.value, attr: selA.value, base: selA.value==='Custom' ? clampInt(inBase.value, 0) : '', mod: clampInt(inMod.value, 0), note: inNote.value, targetType: selTarget.value }, noRender); }
 
     selP.addEventListener('change', ()=>{ save(); updateAutoMod(); });
     selA.addEventListener('change', ()=>{ if(selA.value==='Custom' && !wrap.contains(inBase)) /*...*/; save(); renderDiceLines(); }); 
     
-    // Utilisation de save(true) pour ne pas redessiner pendant la frappe
+    // CORRECTIF: Utilisation de save(true)
     inBase.addEventListener('input', ()=> save(true)); 
     inMod.addEventListener('input', ()=> save(true)); 
     inNote.addEventListener('input', ()=> save(true));
@@ -400,7 +403,7 @@
     let targetInfo = "";
     let slDiff = null;
 
-    // Cible Fixe (Simple Test vs Threshold?)
+    // Cible Fixe
     if(dl.targetType === 'fixed' && dl.targetValue){
         targetInfo = ` | vs Seuil ${dl.targetValue}`;
     }
@@ -418,7 +421,7 @@
              const defRoll = Number(dl.opponentRoll);
              if(Number.isFinite(defBase) && Number.isFinite(defRoll)){
                  const slDef = SL(defBase, defRoll);
-                 // SL Différentiel (Attaquant - Défenseur)
+                 // SL Différentiel
                  if(sl !== null) {
                      slDiff = sl - slDef;
                      targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`;
