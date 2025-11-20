@@ -10,7 +10,6 @@
   // Dice utils
   const d100 = () => Math.floor(Math.random()*100) + 1;
   const isDouble = (n) => n<=99 && n%11===0;
-  // Calcul SL standard : Dizaines de la compétence - Dizaines du dé
   const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
 
   // Advantage rule (WFRP-like): ±10 per AV step
@@ -42,7 +41,6 @@
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
   
-  // DiceLine améliorée : supporte les cibles et jets opposés
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -108,7 +106,6 @@
       getState(){ return { reserve, combat, log, diceLines }; },
 
       addDiceLine(dl){ diceLines.push(new DiceLine(dl)); save(); Bus.emit('dice'); },
-      // CORRECTIF ICI : paramètre noRender
       updateDiceLine(id, patch, noRender=false){ 
         const i=diceLines.findIndex(x=>x.id===id); 
         if(i<0) return; 
@@ -134,8 +131,56 @@
 
       log(line){ log.unshift(`[${now()}] ${line}`); save(); Bus.emit('log'); },
       clearLog(){ log=[]; save(); Bus.emit('log'); },
+      resetCombat(){ combat = { round:0, turnIndex:-1, order:[], participants:new Map(), subs:[ new SubFight({id:'global', name:'Global'}) ] }; save(); Bus.emit('combat'); },
 
-      resetCombat(){ combat = { round:0, turnIndex:-1, order:[], participants:new Map(), subs:[ new SubFight({id:'global', name:'Global'}) ] }; save(); Bus.emit('combat'); }
+      // NOUVEAU : Export/Import Fichier JSON
+      getFullJSON(){
+        const data = {
+          timestamp: new Date().toISOString(),
+          reserve: Array.from(reserve.values()),
+          combat: {
+            round: combat.round,
+            turnIndex: combat.turnIndex,
+            order: combat.order,
+            subs: combat.subs,
+            participants: Array.from(combat.participants.values())
+          },
+          log: log,
+          diceLines: diceLines
+        };
+        return JSON.stringify(data, null, 2);
+      },
+      loadFromJSON(jsonStr){
+        try {
+          const data = JSON.parse(jsonStr);
+          if(!data.reserve || !data.combat) throw new Error('Format invalide');
+          
+          // Restore Reserve
+          reserve = new Map((data.reserve||[]).map(o => [o.id, new Profile(o)]));
+          
+          // Restore Combat
+          const c = data.combat;
+          combat.round = c.round || 0;
+          combat.turnIndex = c.turnIndex ?? -1;
+          combat.order = c.order || [];
+          combat.subs = (c.subs || []).map(s => new SubFight(s));
+          combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
+          
+          log = data.log || [];
+          diceLines = (data.diceLines || []).map(x => new DiceLine(x));
+
+          save(); // Persist immediately
+          Bus.emit('reserve');
+          Bus.emit('combat');
+          Bus.emit('dice');
+          Bus.emit('log');
+          this.log('📂 Données chargées depuis le fichier.');
+          alert('Chargement réussi !');
+        } catch(e){
+          console.error(e);
+          alert('Erreur lors du chargement du fichier : ' + e.message);
+        }
+      }
     };
 
     load();
@@ -162,6 +207,8 @@
       btnStart: qs('#btn-start'), btnReset: qs('#btn-reset'), btnD100: qs('#btn-d100'),
       btnNewSub: qs('#btn-new-sub'),
       log: qs('#log'), btnClearLog: qs('#btn-clear-log'),
+      // NOUVEAU : Refs boutons fichiers
+      btnSaveFile: qs('#btn-save-file'), btnLoadFile: qs('#btn-load-file'), fileInput: qs('#file-input')
     },
     importModal: { dialog: qs('#dlg-import'), list: qs('#import-list'), subSelect: qs('#sel-sub'), confirm: qs('#confirm-import') },
     dice: { lines: qs('#dice-lines'), add: qs('#dice-add'), rollAll: qs('#dice-roll-all'), results: qs('#dice-prep-results') },
@@ -215,7 +262,7 @@
   DOM.reserve.clear.addEventListener('click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
   DOM.reserve.search.addEventListener('input', renderReserve);
 
-  // Import/Export
+  // Import/Export Interne
   DOM.combat.btnImport.addEventListener('click', ()=>{
     const subs = Store.listSubs(); DOM.importModal.subSelect.replaceChildren(...subs.map(s => opt(s.id, s.name)));
     const profs = Store.listProfiles(); DOM.importModal.list.replaceChildren(...profs.map(p => importRow(p)));
@@ -229,6 +276,32 @@
     DOM.importModal.dialog.close();
   });
   DOM.combat.btnExport.addEventListener('click', ()=>{ if(confirm('Appliquer PV aux profils correspondants ?')) Store.exportToReserve(); });
+
+  // NOUVEAU : Gestion Fichier (Save/Load)
+  DOM.combat.btnSaveFile.addEventListener('click', ()=>{
+    const json = Store.getFullJSON();
+    const blob = new Blob([json], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateStr = new Date().toISOString().split('T')[0];
+    a.href = url;
+    a.download = `wfrp-save-${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  DOM.combat.btnLoadFile.addEventListener('click', ()=> DOM.combat.fileInput.click());
+  DOM.combat.fileInput.addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => Store.loadFromJSON(ev.target.result);
+    reader.readAsText(file);
+    e.target.value = ''; // reset pour permettre de recharger le même fichier si besoin
+  });
+
 
   function importRow(p){
     const row = document.createElement('div'); row.className='item';
@@ -321,7 +394,6 @@
     // Si Cible Fixe : Input Valeur
     if(selTarget.value === 'fixed'){
         const inVal = document.createElement('input'); inVal.type='number'; inVal.placeholder="Seuil"; inVal.value = dl.targetValue;
-        // CORRECTIF: noRender = true
         inVal.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {targetValue: inVal.value}, true));
         targetContainer.append(inVal);
     } 
@@ -333,7 +405,6 @@
         selTAttr.addEventListener('change', ()=> Store.updateDiceLine(dl.id, {targetAttr: selTAttr.value})); // On render ici pour maj du label si besoin
         
         const inOpp = document.createElement('input'); inOpp.type='number'; inOpp.placeholder="Score Opp"; inOpp.title="Score du dé du défenseur"; inOpp.value = dl.opponentRoll;
-        // CORRECTIF: noRender = true
         inOpp.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {opponentRoll: inOpp.value}, true));
         
         targetContainer.append(selTAttr, inOpp);
@@ -356,17 +427,13 @@
     );
 
     function updateAutoMod(){ const mod = autoModForParticipant(selP.value); spanAuto.textContent = `${mod>=0?'+':''}${mod}`; }
-    // Fonction save avec option noRender
     function save(noRender=false){ Store.updateDiceLine(dl.id, { participantId: selP.value, attr: selA.value, base: selA.value==='Custom' ? clampInt(inBase.value, 0) : '', mod: clampInt(inMod.value, 0), note: inNote.value, targetType: selTarget.value }, noRender); }
 
     selP.addEventListener('change', ()=>{ save(); updateAutoMod(); });
     selA.addEventListener('change', ()=>{ if(selA.value==='Custom' && !wrap.contains(inBase)) /*...*/; save(); renderDiceLines(); }); 
-    
-    // CORRECTIF: Utilisation de save(true)
     inBase.addEventListener('input', ()=> save(true)); 
     inMod.addEventListener('input', ()=> save(true)); 
     inNote.addEventListener('input', ()=> save(true));
-    
     selTarget.addEventListener('change', save); 
     
     updateAutoMod();
