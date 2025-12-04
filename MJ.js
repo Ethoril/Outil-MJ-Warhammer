@@ -26,16 +26,19 @@
 
   // ---------- Models ----------
   class Profile {
-    constructor({ id=uid(), name, kind='PJ', initiative=30, hp=10, caracs={} } = {}) {
+    constructor({ id=uid(), name, kind='PJ', initiative=30, hp=10, caracs={}, armor={head:0, body:0, arms:0, legs:0} } = {}) {
       this.id=id; this.name=(name||'Sans-nom').trim(); this.kind=kind;
-      this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; this.caracs={...caracs};
+      this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; 
+      this.caracs={...caracs};
+      this.armor={...armor}; // Nouvelle propriété Armure
     }
   }
   class Participant {
-    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], subId='global' } = {}) {
+    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], subId='global', armor={head:0, body:0, arms:0, legs:0} } = {}) {
       this.id=id; this.profileId=profileId||null; this.name=name||'—'; this.kind=kind||'Créature';
       this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; this.advantage=Number(advantage)||0;
       this.states=[...states]; this.subId=subId;
+      this.armor={...armor};
     }
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
@@ -89,34 +92,48 @@
 
     const api = {
       addProfile(p){ reserve.set(p.id,p); save(); Bus.emit('reserve'); },
-      removeProfile(id){ reserve.delete(id); save(); Bus.emit('reserve'); },
       
-      // NOUVELLE FONCTION DE DUPLICATION INTELLIGENTE
-      duplicateProfile(id){
+      // MISE A JOUR + SYNCHRO COMBAT
+      updateProfile(id, patch){
         const p = reserve.get(id);
         if(!p) return;
+        Object.assign(p, patch);
         
-        // 1. Déterminer le nom de base (ex: "Gobelin 2" -> "Gobelin")
-        let baseName = p.name;
-        const match = p.name.match(/^(.*?)(\s\d+)?$/);
-        if (match && match[2]) { baseName = match[1]; }
-
-        // 2. Trouver le prochain numéro disponible
-        let maxNum = 0;
-        // On vérifie le nom de base lui-même (compte comme 1 s'il existe)
-        for (const other of reserve.values()) {
-            if (other.name === baseName) {
-                maxNum = Math.max(maxNum, 1);
-            } else if (other.name.startsWith(baseName + " ")) {
-                const suffix = other.name.substring(baseName.length + 1);
-                if (!isNaN(suffix)) {
-                    maxNum = Math.max(maxNum, parseInt(suffix));
-                }
+        // Propagation aux combattants liés
+        for(const part of combat.participants.values()){
+            if(part.profileId === id){
+                part.name = p.name;
+                part.kind = p.kind;
+                // On ne touche pas aux HP actuels ni à l'Initiative roulée, mais on met à jour le reste
+                part.caracs = {...p.caracs};
+                part.armor = {...p.armor};
             }
         }
         
+        save();
+        Bus.emit('reserve');
+        Bus.emit('combat'); // Force le rafraichissement du combat
+      },
+
+      removeProfile(id){ reserve.delete(id); save(); Bus.emit('reserve'); },
+      
+      duplicateProfile(id){
+        const p = reserve.get(id);
+        if(!p) return;
+        let baseName = p.name;
+        const match = p.name.match(/^(.*?)(\s\d+)?$/);
+        if (match && match[2]) { baseName = match[1]; }
+        let maxNum = 0;
+        for (const other of reserve.values()) {
+            if (other.name === baseName) maxNum = Math.max(maxNum, 1);
+            else if (other.name.startsWith(baseName + " ")) {
+                const suffix = other.name.substring(baseName.length + 1);
+                if (!isNaN(suffix)) maxNum = Math.max(maxNum, parseInt(suffix));
+            }
+        }
         const newName = `${baseName} ${maxNum + 1}`;
-        const newProfile = new Profile({ ...p, id: uid(), name: newName });
+        // Clone avec nouvelle armure et ID
+        const newProfile = new Profile({ ...p, id: uid(), name: newName, armor: {...p.armor}, caracs: {...p.caracs} });
         this.addProfile(newProfile);
         this.log(`Réserve: Dupliqué ${p.name} → ${newName}`);
       },
@@ -136,19 +153,18 @@
       getState(){ return { reserve, combat, log, diceLines }; },
 
       addDiceLine(dl){ diceLines.push(new DiceLine(dl)); save(); Bus.emit('dice'); },
-      updateDiceLine(id, patch, noRender=false){ 
-        const i=diceLines.findIndex(x=>x.id===id); if(i<0) return; 
-        Object.assign(diceLines[i], patch); 
-        save(); 
-        if(!noRender) Bus.emit('dice'); 
-      },
+      updateDiceLine(id, patch, noRender=false){ const i=diceLines.findIndex(x=>x.id===id); if(i<0) return; Object.assign(diceLines[i], patch); save(); if(!noRender) Bus.emit('dice'); },
       removeDiceLine(id){ diceLines = diceLines.filter(x=>x.id!==id); save(); Bus.emit('dice'); },
       duplicateDiceLine(id){ const src=diceLines.find(x=>x.id===id); if(!src) return; diceLines.push(new DiceLine({...src, id:uid()})); save(); Bus.emit('dice'); },
 
       importFromReserve(ids, subId){
         ids.forEach(id => {
           const prof = reserve.get(id); if(!prof) return;
-          const p = new Participant({ profileId: prof.id, name: prof.name, kind: prof.kind, initiative: prof.initiative, hp: prof.hp, subId });
+          const p = new Participant({ 
+              profileId: prof.id, name: prof.name, kind: prof.kind, 
+              initiative: prof.initiative, hp: prof.hp, subId, 
+              armor: {...prof.armor} // Copie de l'armure
+          });
           this.addParticipant(p);
         });
         this.log(`Import: ${ids.length} participant(s) → ${subId}`);
@@ -167,8 +183,7 @@
           timestamp: new Date().toISOString(),
           reserve: Array.from(reserve.values()),
           combat: { round: combat.round, turnIndex: combat.turnIndex, order: combat.order, subs: combat.subs, participants: Array.from(combat.participants.values()) },
-          log: log,
-          diceLines: diceLines
+          log: log, diceLines: diceLines
         };
         return JSON.stringify(data, null, 2);
       },
@@ -241,40 +256,101 @@
   }
 
   function renderReserve(){ renderFilteredList(DOM.reserve.search, DOM.reserve.list, Store.listProfiles, renderReserveItem); renderDiceLines(); }
-  
-  // MODIFIÉ : Ajout du bouton Dupliquer
   function renderReserveItem(p){
     const div = document.createElement('div'); div.className='item';
     const left = document.createElement('div');
     const right = document.createElement('div'); right.className='row';
     left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="meta">(${p.kind})</span></div><div class="meta">Init ${p.initiative} • PV ${p.hp}</div>`;
     
-    // Bouton Dupliquer
+    // Actions Réserve
+    const btnEdit = document.createElement('button'); btnEdit.textContent='Éditer';
+    btnEdit.classList.add('ghost');
+    btnEdit.addEventListener('click', () => loadProfileIntoForm(p));
+
     const btnDup = document.createElement('button'); btnDup.textContent='Dupliq.';
-    btnDup.classList.add('ghost'); // Style discret
+    btnDup.classList.add('ghost');
     btnDup.addEventListener('click', () => Store.duplicateProfile(p.id));
 
-    // Bouton Supprimer
     const btnDel = document.createElement('button'); btnDel.textContent='Suppr'; 
     btnDel.classList.add('danger','ghost');
     btnDel.addEventListener('click', ()=>{ Store.removeProfile(p.id); Store.log(`Réserve: supprimé ${p.name}`); });
     
-    right.append(btnDup, btnDel); 
+    right.append(btnEdit, btnDup, btnDel); 
     div.append(left,right); return div;
   }
 
-  // Add profile
+  // --- Gestion du Formulaire (Ajout / Édition) ---
+  const formTitle = qs('#form-title');
+  const btnSubmit = qs('#btn-submit-form');
+  const btnCancel = qs('#btn-cancel-edit');
+
+  function loadProfileIntoForm(p){
+    const f = DOM.reserve.form;
+    f.querySelector('[name=id]').value = p.id;
+    f.querySelector('[name=name]').value = p.name;
+    f.querySelector('[name=kind]').value = p.kind;
+    f.querySelector('[name=initiative]').value = p.initiative;
+    f.querySelector('[name=hp]').value = p.hp;
+    // Armor
+    f.querySelector('[name=armor_head]').value = p.armor?.head || 0;
+    f.querySelector('[name=armor_body]').value = p.armor?.body || 0;
+    f.querySelector('[name=armor_arms]').value = p.armor?.arms || 0;
+    f.querySelector('[name=armor_legs]').value = p.armor?.legs || 0;
+    // Caracs
+    ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc'].forEach(k => {
+        f.querySelector(`[name=${k}]`).value = p.caracs[k] || '';
+    });
+
+    formTitle.textContent = "Modifier le profil";
+    btnSubmit.textContent = "Modifier";
+    btnCancel.style.display = 'inline-block';
+    f.scrollIntoView({behavior: "smooth"});
+  }
+
+  function resetForm(){
+    DOM.reserve.form.reset();
+    DOM.reserve.form.querySelector('[name=id]').value = '';
+    formTitle.textContent = "Nouveau profil";
+    btnSubmit.textContent = "Ajouter";
+    btnCancel.style.display = 'none';
+  }
+
+  on(btnCancel, 'click', resetForm);
+
   on(DOM.reserve.form, 'submit', (e)=>{
     e.preventDefault();
     const fd = new FormData(DOM.reserve.form);
     const caracs = {}; ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc'].forEach(k => {
       const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; }
     });
-    const prof = new Profile({ name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative')||0), hp: Number(fd.get('hp')||0), caracs });
-    Store.addProfile(prof); DOM.reserve.form.reset(); Store.log(`Réserve: ajouté ${prof.name}`);
+    const armor = {
+        head: Number(fd.get('armor_head')||0),
+        body: Number(fd.get('armor_body')||0),
+        arms: Number(fd.get('armor_arms')||0),
+        legs: Number(fd.get('armor_legs')||0)
+    };
+
+    const id = fd.get('id');
+    const data = { 
+        name: fd.get('name'), 
+        kind: fd.get('kind'), 
+        initiative: Number(fd.get('initiative')||0), 
+        hp: Number(fd.get('hp')||0), 
+        caracs, armor 
+    };
+
+    if(id){
+        Store.updateProfile(id, data);
+        Store.log(`Réserve: modifié ${data.name}`);
+    } else {
+        Store.addProfile(new Profile(data));
+        Store.log(`Réserve: ajouté ${data.name}`);
+    }
+    resetForm();
   });
+
   on(DOM.reserve.seed, 'click', ()=>{
-    [ new Profile({name:'Renaut de Volargent', kind:'PJ', initiative:41, hp:14, caracs:{CC:52, Ag:41}}),
+    [ new Profile({name:'Renaut de Volargent', kind:'PJ', initiative:41, hp:14, caracs:{CC:52, Ag:41}, armor:{head:2, body:2, arms:0, legs:0}}),
       new Profile({name:'Saskia la Noire', kind:'PJ', initiative:52, hp:12, caracs:{CC:45, Ag:52}}),
       new Profile({name:'Gobelins (2)', kind:'Créature', initiative:28, hp:9, caracs:{CC:35}}),
       new Profile({name:'Chien de guerre', kind:'Créature', initiative:36, hp:10, caracs:{CC:40}})
@@ -337,6 +413,15 @@
     if(Combat.actorAtTurn()?.id===p.id) li.classList.add('turn');
     li.dataset.id = p.id;
     li.querySelector('.name').textContent = p.name + (p.subId!=='global'? ` [${getSubName(p.subId)}]` : '');
+    
+    // Affichage Armure
+    const armDiv = li.querySelector('.armor-display');
+    if(p.armor && (p.armor.head || p.armor.body || p.armor.arms || p.armor.legs)){
+        armDiv.textContent = `🛡️ T${p.armor.head} C${p.armor.body} B${p.armor.arms} J${p.armor.legs}`;
+    } else {
+        armDiv.textContent = '';
+    }
+
     const chips = li.querySelector('.chips');
     const initBadge = badge(`Init ${p.initiative}`, 'clickable');
     initBadge.title = 'Cliquer pour modifier l’Initiative';
@@ -379,7 +464,7 @@
   
   Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
 
-  // ---------- Lignes préparées ----------
+  // ---------- Lignes préparées Avancées ----------
   on(DOM.dice.add, 'click', ()=> Store.addDiceLine(new DiceLine()));
   on(DOM.dice.rollAll, 'click', ()=>{ const { diceLines } = Store.getState(); diceLines.forEach(dl => runDiceLine(dl.id)); });
   function renderDiceLines(){ const { diceLines } = Store.getState(); const frag = document.createDocumentFragment(); diceLines.forEach(dl => frag.append(renderDiceLine(dl))); DOM.dice.lines.replaceChildren(frag); }
@@ -395,14 +480,11 @@
     const inBase = document.createElement('input'); inBase.type='number'; inBase.value = dl.base ?? ''; inBase.placeholder="Base";
     const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod ?? 0;
     const spanAuto = document.createElement('span'); spanAuto.className = 'readonly';
-    
-    // Target logic
     const selTarget = document.createElement('select');
     selTarget.append(opt('none', '— Sans Cible —'), opt('fixed', 'Cible Fixe'));
     Store.listParticipantsRaw().forEach(p => selTarget.append(opt(p.id, 'Vs ' + p.name)));
     selTarget.value = dl.targetType || 'none';
     const targetContainer = document.createElement('div'); targetContainer.className = 'target-details';
-    
     if(selTarget.value === 'fixed'){
         const inVal = document.createElement('input'); inVal.type='number'; inVal.placeholder="Seuil"; inVal.value = dl.targetValue;
         inVal.addEventListener('input', ()=> Store.updateDiceLine(dl.id, {targetValue: inVal.value}, true));
@@ -419,8 +501,6 @@
     }
     const inNote = document.createElement('input'); inNote.placeholder="Note"; inNote.value = dl.note||'';
     const act = document.createElement('div'); act.className='actions';
-    
-    // Boutons Actions
     const btnRoll = document.createElement('button'); btnRoll.textContent='Lancer'; btnRoll.addEventListener('click', ()=>runDiceLine(dl.id));
     const btnDup = document.createElement('button'); btnDup.textContent='Dupliq.'; btnDup.addEventListener('click', ()=>Store.duplicateDiceLine(dl.id));
     const btnDel = document.createElement('button'); btnDel.textContent='X'; btnDel.addEventListener('click', ()=>Store.removeDiceLine(dl.id));
