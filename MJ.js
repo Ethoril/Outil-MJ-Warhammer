@@ -6,7 +6,6 @@
   const qsa = (s) => Array.from(document.querySelectorAll(s));
   const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
-  // Helper sécurisé pour les événements (évite le crash si un bouton manque)
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
 
   // Dice utils
@@ -41,14 +40,9 @@
   }
   class SubFight { constructor({ id=uid(), name } = {}) { this.id=id; this.name=name||'Sous-combat'; } }
   
-  // DiceLine avec migration pour éviter la perte de données
   class DiceLine {
-    constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='', targetId=null }={}) {
-      // Si on récupère une vieille ligne avec targetId, on la convertit
-      let finalTargetType = targetType;
-      if(targetType === 'none' && targetId){ finalTargetType = targetId; }
-      
-      Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType: finalTargetType, targetValue, targetAttr, opponentRoll });
+    constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
+      Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
     }
   }
 
@@ -96,6 +90,37 @@
     const api = {
       addProfile(p){ reserve.set(p.id,p); save(); Bus.emit('reserve'); },
       removeProfile(id){ reserve.delete(id); save(); Bus.emit('reserve'); },
+      
+      // NOUVELLE FONCTION DE DUPLICATION INTELLIGENTE
+      duplicateProfile(id){
+        const p = reserve.get(id);
+        if(!p) return;
+        
+        // 1. Déterminer le nom de base (ex: "Gobelin 2" -> "Gobelin")
+        let baseName = p.name;
+        const match = p.name.match(/^(.*?)(\s\d+)?$/);
+        if (match && match[2]) { baseName = match[1]; }
+
+        // 2. Trouver le prochain numéro disponible
+        let maxNum = 0;
+        // On vérifie le nom de base lui-même (compte comme 1 s'il existe)
+        for (const other of reserve.values()) {
+            if (other.name === baseName) {
+                maxNum = Math.max(maxNum, 1);
+            } else if (other.name.startsWith(baseName + " ")) {
+                const suffix = other.name.substring(baseName.length + 1);
+                if (!isNaN(suffix)) {
+                    maxNum = Math.max(maxNum, parseInt(suffix));
+                }
+            }
+        }
+        
+        const newName = `${baseName} ${maxNum + 1}`;
+        const newProfile = new Profile({ ...p, id: uid(), name: newName });
+        this.addProfile(newProfile);
+        this.log(`Réserve: Dupliqué ${p.name} → ${newName}`);
+      },
+
       listProfiles(){ return Array.from(reserve.values()); },
       getProfile(id){ return reserve.get(id) || null; },
 
@@ -216,15 +241,26 @@
   }
 
   function renderReserve(){ renderFilteredList(DOM.reserve.search, DOM.reserve.list, Store.listProfiles, renderReserveItem); renderDiceLines(); }
+  
+  // MODIFIÉ : Ajout du bouton Dupliquer
   function renderReserveItem(p){
     const div = document.createElement('div'); div.className='item';
     const left = document.createElement('div');
     const right = document.createElement('div'); right.className='row';
     left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="meta">(${p.kind})</span></div><div class="meta">Init ${p.initiative} • PV ${p.hp}</div>`;
+    
+    // Bouton Dupliquer
+    const btnDup = document.createElement('button'); btnDup.textContent='Dupliq.';
+    btnDup.classList.add('ghost'); // Style discret
+    btnDup.addEventListener('click', () => Store.duplicateProfile(p.id));
+
+    // Bouton Supprimer
     const btnDel = document.createElement('button'); btnDel.textContent='Suppr'; 
     btnDel.classList.add('danger','ghost');
     btnDel.addEventListener('click', ()=>{ Store.removeProfile(p.id); Store.log(`Réserve: supprimé ${p.name}`); });
-    right.append(btnDel); div.append(left,right); return div;
+    
+    right.append(btnDup, btnDel); 
+    div.append(left,right); return div;
   }
 
   // Add profile
@@ -463,6 +499,7 @@
 
   function labelWrap(text, el){ const w=document.createElement('label'); w.textContent=text; w.appendChild(el); return w; }
   function badge(text, kind){ const s=document.createElement('span'); s.className='badge'+(kind?` ${kind}`:''); s.textContent=text; return s; }
+  function btn(text, on){ const b=document.createElement('button'); b.textContent=text; b.addEventListener('click', on); return b; }
 
   Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); Bus.on('dice', renderDiceLines);
   renderReserve(); renderCombat();
