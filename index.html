@@ -25,14 +25,27 @@
     <section id="panel-reserve" class="panel is-active" role="region" aria-labelledby="tab-reserve">
       <h2>Réserve (source de vérité)</h2>
       <div class="grid-2">
+        
         <form id="form-add" class="card">
-          <h3>Nouveau profil</h3>
+          <input type="hidden" name="id" value=""> <h3 id="form-title">Nouveau profil</h3>
+          
           <div class="grid-2">
             <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
             <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
-            <label>Initiative (I) <small class="muted">valeur de caractéristique</small><input type="number" name="initiative" value="30"></label>
-            <label>PV<input type="number" name="hp" value="12"></label>
+            <label>Initiative (I) <small class="muted">Score de caractéristique</small><input type="number" name="initiative" value="30"></label>
+            <label>PV (Max)<input type="number" name="hp" value="12"></label>
           </div>
+
+          <div class="armor-section" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px;">
+            <span class="muted" style="font-size: 0.9em; font-weight: bold;">Points d'Armure</span>
+            <div class="grid-4" style="margin-top: 6px;">
+              <label>Tête<input type="number" name="armor_head" value="0"></label>
+              <label>Corps<input type="number" name="armor_body" value="0"></label>
+              <label>Bras<input type="number" name="armor_arms" value="0"></label>
+              <label>Jambes<input type="number" name="armor_legs" value="0"></label>
+            </div>
+          </div>
+
           <details>
             <summary>Caracs (optionnel)</summary>
             <div class="grid-3">
@@ -48,10 +61,13 @@
               <label>Soc<input type="number" name="Soc"></label>
             </div>
           </details>
+
           <div class="actions">
-            <button type="submit">Ajouter</button>
-            <button type="button" id="seed-reserve" class="ghost">Seed exemple</button>
-            <button type="button" id="clear-reserve" class="danger ghost">Vider</button>
+            <button type="submit" id="btn-submit-form">Ajouter</button>
+            <button type="button" id="btn-cancel-edit" class="ghost" style="display:none;">Annuler</button>
+            <div class="spacer"></div>
+            <button type="button" id="seed-reserve" class="ghost small">Exemple</button>
+            <button type="button" id="clear-reserve" class="danger ghost small">Vider</button>
           </div>
         </form>
 
@@ -100,7 +116,6 @@
       <div id="dice-prep-results" class="dice-result-stream card" style="min-height: 60px; margin-bottom: 16px;"></div>
 
       <div class="grid-2">
-        
         <div class="card">
           <div class="row">
             <h3>Participants</h3>
@@ -141,6 +156,7 @@
         <div class="name"></div>
         <div class="chips"></div>
         <div class="states"></div>
+        <div class="armor-display" style="font-size: 0.85em; color: var(--muted); margin-top: 4px;"></div>
       </div>
       <div class="right row">
         <button class="btn-adv-plus">+AV</button>
