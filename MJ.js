@@ -287,6 +287,10 @@
     div.querySelector('.hp-badge').textContent = `PV ${p.hp}`;
     div.querySelector('.adv-badge').textContent = `AV ${p.advantage}`;
     
+    // -- States (CORRECTION BADGES) --
+    const statesDiv = div.querySelector('.states');
+    p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
+
     // -- Armor --
     const armDiv = div.querySelector('.actor-armor');
     if(p.armor && (p.armor.head||p.armor.body||p.armor.arms||p.armor.legs)) armDiv.textContent = `🛡️ T${p.armor.head} C${p.armor.body} B${p.armor.arms} J${p.armor.legs}`;
@@ -337,7 +341,7 @@
     const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod; inMod.placeholder="Mod"; inMod.title = "Modificateur";
     inMod.addEventListener('input', ()=> save(true));
 
-    // NOTE INPUT AJOUTÉ
+    // NOTE INPUT
     const inNote = document.createElement('input'); inNote.type='text'; inNote.value = dl.note||''; inNote.placeholder="Note"; inNote.className = 'note-input';
     inNote.title = "Note";
     inNote.addEventListener('input', ()=> save(true));
