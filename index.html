@@ -141,7 +141,7 @@
         
         <div class="card rule-block">
             <details>
-                <summary>Localisation des dégâts & Critiques</summary>
+                <summary>Localisation des dégâts & Tables Critiques</summary>
                 <div class="rule-content">
                     <p>D'après le <em>Livre de base de Warhammer Fantasy le Jeu de Rôle (4e édition)</em> :</p>
                     
@@ -169,12 +169,6 @@
                         <li>Vous lancez un <strong>second 1d100</strong> pour déterminer la gravité de la blessure sur le Tableau des Critiques correspondant à cette localisation (voir ci-dessous).</li>
                     </ul>
 
-                    <h4>4. Cas particuliers</h4>
-                    <ul>
-                        <li><strong>Créatures non-humanoïdes :</strong> Pour les quadrupèdes, on remplace généralement les bras par les pattes avant et les jambes par les pattes arrière.</li>
-                        <li><strong>Viser :</strong> Il est possible de viser une localisation précise, mais cela impose un malus de <strong>-20</strong> au test d'attaque.</li>
-                    </ul>
-
                     <h3 style="margin-top:30px; border-top:2px solid #5a1d1d; padding-top:10px;">Tableaux des Coups Critiques</h3>
                     <p class="muted">Générés automatiquement par le système :</p>
                     
@@ -197,6 +191,71 @@
                         <summary>🦵 Critiques à la Jambe</summary>
                         <div id="table-leg-crit"></div>
                     </details>
+                </div>
+            </details>
+        </div>
+
+        <div class="card rule-block">
+            <details>
+                <summary>Santé, Critiques et Survie</summary>
+                <div class="rule-content">
+                    <h4>1. Les Blessures et l'État de Santé</h4>
+                    <p>Vos Points de Blessures (B) représentent votre capacité à encaisser la douleur et la fatigue.</p>
+                    <ul>
+                        <li><strong>Subir des Dégâts :</strong> Dégâts de l'arme + DR – (Bonus d'Endurance + Points d'Armure) = Blessures perdues.</li>
+                        <li><strong>Tomber à 0 Blessures :</strong>
+                            <ul>
+                                <li>Vous gagnez immédiatement l'État <strong>À Terre</strong>.</li>
+                                <li>Si vous n'êtes pas soigné (au moins 1 B) en un nombre de Rounds égal à votre <strong>Bonus d'Endurance</strong>, vous gagnez l'État <strong>Inconscient</strong>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Le Symptôme « Blessé » :</strong> Attention, ce terme désigne un symptôme spécifique de maladie (plaie infectée). Il empêche la récupération de Points de Blessures tant qu'il n'est pas traité.</li>
+                    </ul>
+
+                    <h4>2. Les Coups Critiques</h4>
+                    <p>Une Blessure Critique est une atteinte grave (os brisé, hémorragie, amputation) qui applique des malus et peut tuer.</p>
+                    <p><strong>Quand subit-on un Critique ?</strong></p>
+                    <ol>
+                        <li><strong>Le Double :</strong> L'attaquant réussit son Test avec un double (ex: 22, 44).<br><em>Note : La victime subit le Critique ET les dégâts normaux.</em></li>
+                        <li><strong>L'Acharnement (0 PV) :</strong> Si la cible est réduite à 0 Blessures (ou l'est déjà), tout coup porté inflige automatiquement un Critique.</li>
+                    </ol>
+                    <p><strong>Résolution d'un Critique :</strong></p>
+                    <ul>
+                        <li><strong>Localisation :</strong> Ne pas inverser les dés. Lancer 1d100 sur le tableau de localisation pour savoir où le coup porte.</li>
+                        <li><strong>Gravité :</strong> Lancer 1d100 sur le tableau des Blessures Critiques de la localisation concernée.</li>
+                        <li><strong>Règle du +10 :</strong> Si la cible est à 0 Blessures, ajoutez +10 au jet de gravité pour chaque point de dégât qui a dépassé 0 (ou pour chaque point infligé si elle était déjà à 0).</li>
+                    </ul>
+
+                    <h4>3. La Mort</h4>
+                    <p>La mort d'un Personnage survient dans deux cas précis :</p>
+                    <ol>
+                        <li><strong>Résultat Mortel :</strong> Le jet sur le tableau des Critiques indique « Mort » (généralement sur un résultat de 90-100+).</li>
+                        <li><strong>Accumulation de Critiques :</strong> Si un Personnage est Inconscient avec 0 Blessures et que le nombre total de Blessures Critiques actives (non soignées) dépasse son <strong>Bonus d'Endurance</strong>, il meurt à la fin du Round.<br><em>Note : Les blessures critiques notées « T » (Triviales/Mineures) ne comptent pas dans ce total.</em></li>
+                    </ol>
+
+                    <h4>4. Comment Éviter ou Atténuer un Critique</h4>
+                    <p>Même si le jet d'attaque indique un critique, le défenseur a plusieurs options pour sauver sa peau.</p>
+                    
+                    <strong>A. L'Équipement et l'Armure</strong>
+                    <ul>
+                        <li><strong>Déviation Critique (Sacrifice d'Armure) :</strong> Si la localisation touchée est protégée par une armure, vous pouvez choisir de sacrifier 1 Point d'Armure (l'endommageant jusqu'à réparation) pour ignorer la Blessure Critique. Vous subissez tout de même les dégâts normaux.</li>
+                        <li><strong>Qualité Impénétrable :</strong> (Armures de plaques) Permet d'ignorer les Critiques causés par des jets d'attaque impairs (ex: 11, 33, 55).</li>
+                        <li><strong>Armure de Gromril :</strong> (Nains) Immunise aux Critiques (deviennent des coups normaux), sauf si dégâts infligés alors que déjà à 0 Blessures.</li>
+                    </ul>
+
+                    <strong>B. Les Points de Destin et de Résilience</strong>
+                    <ul>
+                        <li><strong>Point de Destin (Meurs un autre jour) :</strong> Vous évitez la mort in extremis. Vous êtes hors de combat, mais survivez. Vos Blessures ne descendent pas sous 0.</li>
+                        <li><strong>Point de Résilience (Je ne faillirai pas !) :</strong> Vous pouvez choisir le résultat d'un dé. Par exemple, décider que l'attaque ennemie est un échec, ou choisir un jet de localisation sur votre armure la plus solide.</li>
+                    </ul>
+
+                    <strong>C. Talents et Magie</strong>
+                    <ul>
+                        <li><strong>Esquive / Parade :</strong> Gagner le test opposé annule l'attaque, donc le critique.</li>
+                        <li><strong>Trait Protection (Ward) :</strong> (Créatures/Objets magiques) Lancez 1d10 ; si >= indice, le coup et le critique sont ignorés.</li>
+                        <li><strong>Bénédiction de Vigueur :</strong> Augmente l'Endurance (aide contre l'accumulation de critiques).</li>
+                        <li><strong>Chirurgie :</strong> Nécessaire pour soigner les critiques les plus graves.</li>
+                    </ul>
                 </div>
             </details>
         </div>
@@ -261,6 +320,6 @@
     </form>
   </dialog>
 
-  <script src="MJ.js?v=3"></script>
+  <script src="MJ.js?v=4"></script>
 </body>
 </html>
