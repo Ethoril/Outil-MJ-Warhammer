@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "1.7 - Tables Magie";
+  const APP_VERSION = "1.8 - Fix Frise Init";
   // ==========================================
 
   // ---------- Utils ----------
@@ -12,6 +12,7 @@
   const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
+  
   function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
 
   // Dice utils
@@ -426,14 +427,18 @@
   on(DOM.reserve.clear, 'click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
   on(DOM.reserve.search, 'input', renderReserve);
 
-  // --- Combat Rendering ---
+  // --- Combat Rendering (The New Paradigm) ---
   function renderCombat(){
     const { combat } = Store.getState();
     if(DOM.combat.pillRound) DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
     if(DOM.combat.pillTurn) DOM.combat.pillTurn.textContent  = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
     
+    // --- RENDER FRISE INITIATIVE (ACTIVE ONLY) ---
     DOM.combat.initTracker.innerHTML = '';
-    const activeParticipants = Store.listParticipants().filter(p => p.zone === 'active');
+    // CORRECTION DEMANDÉE : On force le tri par Initiative pour la frise
+    let activeParticipants = Store.listParticipants().filter(p => p.zone === 'active');
+    // Sort copy for tracker
+    activeParticipants = [...activeParticipants].sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
     
     if(activeParticipants.length === 0) {
         DOM.combat.initTracker.innerHTML = '<span class="muted">Aucun combattant actif...</span>';
@@ -448,15 +453,20 @@
         });
     }
 
+    // Clear Zones
     DOM.combat.zoneActive.innerHTML = ''; 
     DOM.combat.zoneBench.innerHTML = '';
     
     let activeCount = 0;
 
+    // Render Cards in Order (Keep D&D order)
     Store.listParticipants().forEach(p => {
         try {
             const card = renderParticipantCard(p);
-            if(p.zone === 'active') { DOM.combat.zoneActive.appendChild(card); activeCount++; }
+            if(p.zone === 'active') {
+                DOM.combat.zoneActive.appendChild(card);
+                activeCount++;
+            }
             else DOM.combat.zoneBench.appendChild(card);
         } catch (err) { console.error("Erreur lors du rendu de la carte participant:", p.name, err); }
     });
@@ -483,6 +493,7 @@
     p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
 
     const armDiv = div.querySelector('.actor-armor');
+    // CALCUL BE
     const BE = Math.floor((p.caracs?.E || 0) / 10);
     let armText = `<span style="font-weight:bold; color:#5a1d1d;">🛡️ BE ${BE}</span>`;
     if(p.armor && (p.armor.head||p.armor.body||p.armor.arms||p.armor.legs)) {
