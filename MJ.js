@@ -1,8 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  // Change ce numéro à chaque modification pour vérifier que tout est à jour !
-  const APP_VERSION = "1.1 - Frise Active Only";
+  const APP_VERSION = "1.2 - Règles Ajoutées";
   // ==========================================
 
   // ---------- Utils ----------
@@ -191,7 +190,11 @@
   // ---------- DOM refs ----------
   const DOM = {
     tabs: qsa('.tab'),
-    panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat') },
+    panels: { 
+        reserve: qs('#panel-reserve'), 
+        combat: qs('#panel-combat'),
+        rules: qs('#panel-rules') // NOUVEAU
+    },
     reserve: { list: qs('#reserve-list'), search: qs('#search-reserve'), form: qs('#form-add'), seed: qs('#seed-reserve'), clear: qs('#clear-reserve') },
     combat: {
       initTracker: qs('#init-tracker'),
@@ -205,7 +208,6 @@
     },
     importModal: { dialog: qs('#dlg-import'), list: qs('#import-list'), confirm: qs('#confirm-import') },
     tplActor: qs('#tpl-actor'),
-    // Ref version btn
     btnVersion: qs('#btn-version')
   };
 
@@ -219,7 +221,9 @@
   DOM.tabs.forEach(t => t.addEventListener('click', () => {
     DOM.tabs.forEach(x => x.classList.remove('is-active')); t.classList.add('is-active');
     Object.values(DOM.panels).forEach(p => p.classList.remove('is-active'));
-    (t.dataset.tab==='reserve' ? DOM.panels.reserve : DOM.panels.combat).classList.add('is-active');
+    // Sélecteur dynamique d'onglet
+    const targetPanel = DOM.panels[t.dataset.tab];
+    if(targetPanel) targetPanel.classList.add('is-active');
   }));
 
   function renderReserve(){ 
@@ -277,9 +281,8 @@
     if(DOM.combat.pillRound) DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
     if(DOM.combat.pillTurn) DOM.combat.pillTurn.textContent  = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
     
-    // --- RENDER FRISE INITIATIVE (CORRECTION: ACTIVE ONLY) ---
+    // --- RENDER FRISE INITIATIVE (ACTIVE ONLY) ---
     DOM.combat.initTracker.innerHTML = '';
-    // FILTER: Only display participants currently in 'active' zone
     const activeParticipants = Store.listParticipants().filter(p => p.zone === 'active');
     
     if(activeParticipants.length === 0) {
