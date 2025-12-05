@@ -30,12 +30,18 @@
         <form id="form-add" class="card">
           <input type="hidden" name="id" value="">
           <h3 id="form-title">Nouveau profil</h3>
-          <div class="grid-2">
+          
+          <div class="grid-2" style="margin-bottom:10px;">
             <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
             <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
-            <label>Initiative (I) <small class="muted">Score de caractéristique</small><input type="number" name="initiative" value="30"></label>
-            <label>PV (Max)<input type="number" name="hp" value="12"></label>
           </div>
+
+          <div class="grid-3" style="margin-bottom:10px;">
+            <label>Initiative (I)<input type="number" name="initiative" value="30" title="Utilisé pour l'ordre du tour"></label>
+            <label>PV (Max)<input type="number" name="hp" value="12"></label>
+            <label style="color:#5a1d1d; font-weight:bold;">Endurance (E)<input type="number" name="E" value="30" title="Détermine le Bonus d'Endurance (BE)"></label>
+          </div>
+
           <div class="armor-section" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px;">
             <span class="muted" style="font-size: 0.9em; font-weight: bold;">Points d'Armure</span>
             <div class="grid-4" style="margin-top: 6px;">
@@ -45,14 +51,14 @@
               <label>Jambes<input type="number" name="armor_legs" value="0"></label>
             </div>
           </div>
+
           <details>
-            <summary>Caracs (optionnel)</summary>
+            <summary>Autres Caracs (CC, CT, F...)</summary>
             <div class="grid-3">
               <label>CC<input type="number" name="CC"></label>
               <label>CT<input type="number" name="CT"></label>
               <label>F<input type="number" name="F"></label>
-              <label>E<input type="number" name="E"></label>
-              <label>I<input type="number" name="I"></label>
+              <label>I (Autre)<input type="number" name="I" placeholder="Idem Init"></label>
               <label>Ag<input type="number" name="Ag"></label>
               <label>Dex<input type="number" name="Dex"></label>
               <label>Int<input type="number" name="Int"></label>
@@ -60,6 +66,7 @@
               <label>Soc<input type="number" name="Soc"></label>
             </div>
           </details>
+
           <div class="actions">
             <button type="submit" id="btn-submit-form">Ajouter</button>
             <button type="button" id="btn-cancel-edit" class="ghost" style="display:none;">Annuler</button>
@@ -325,6 +332,6 @@
     </form>
   </dialog>
 
-  <script src="MJ.js?v=6"></script>
+  <script src="MJ.js?v=7"></script>
 </body>
 </html>
