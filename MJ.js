@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "1.9 - Fix Drag & Drop";
+  const APP_VERSION = "2.1 - Fix Endurance";
   // ==========================================
 
   // ---------- Utils ----------
@@ -12,7 +12,6 @@
   const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
-  
   function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
 
   // Dice utils
@@ -20,7 +19,6 @@
   const isDouble = (n) => n<=99 && n%11===0;
   const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
 
-  // LOGIQUE DE LOCALISATION WFRP
   const getReverseRoll = (roll) => {
       const s = roll.toString().padStart(2, '0');
       const revS = s.split('').reverse().join('');
@@ -39,7 +37,7 @@
       return table.find(e => roll <= e.max);
   };
 
-  // ---------- DATA: TABLES ----------
+  // ---------- DATA ----------
   const CRIT_DATA = {
     HEAD: [
       {max:10, name:"Blessure spectaculaire", eff:"+1 Blessure, 1 Hémorragie. Cicatrice (+1 DR Social)."},
@@ -281,16 +279,7 @@
 
       addParticipant(p){ combat.participants.set(p.id,p); this.rebuildOrder(); save(); Bus.emit('combat'); },
       removeParticipant(id){ combat.participants.delete(id); combat.order = combat.order.filter(x=>x!==id); save(); Bus.emit('combat'); },
-      
-      // CORRECTIF MAJEUR : Plus de rebuildOrder ici !
-      updateParticipant(id, patch){ 
-          const p = combat.participants.get(id); 
-          if(!p) return; 
-          Object.assign(p, patch); 
-          // this.rebuildOrder(); <--- SUPPRIMÉ POUR GARDER LE DRAG & DROP
-          save(); 
-          Bus.emit('combat'); 
-      },
+      updateParticipant(id, patch){ const p = combat.participants.get(id); if(!p) return; Object.assign(p, patch); save(); Bus.emit('combat'); },
       
       setOrder(newOrderIds){ combat.order = newOrderIds; save(); },
 
@@ -409,9 +398,13 @@
     const f = DOM.reserve.form;
     f.querySelector('[name=id]').value = p.id; f.querySelector('[name=name]').value = p.name;
     f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
+    // Load E (outside details)
+    const inputE = f.querySelector('[name=E]');
+    if(inputE) inputE.value = p.caracs?.E || 0;
+
     f.querySelector('[name=armor_head]').value = p.armor?.head || 0; f.querySelector('[name=armor_body]').value = p.armor?.body || 0;
     f.querySelector('[name=armor_arms]').value = p.armor?.arms || 0; f.querySelector('[name=armor_legs]').value = p.armor?.legs || 0;
-    ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc'].forEach(k => { f.querySelector(`[name=${k}]`).value = p.caracs[k] || ''; });
+    ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { f.querySelector(`[name=${k}]`).value = p.caracs[k] || ''; });
     formTitle.textContent = "Modifier le profil"; btnSubmit.textContent = "Modifier"; btnCancel.style.display = 'inline-block';
     f.scrollIntoView({behavior: "smooth"});
   }
@@ -419,7 +412,11 @@
   on(btnCancel, 'click', resetForm);
   on(DOM.reserve.form, 'submit', (e)=>{
     e.preventDefault(); const fd = new FormData(DOM.reserve.form);
-    const caracs = {}; ['CC','CT','F','E','I','Ag','Dex','Int','FM','Soc'].forEach(k => { const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; } });
+    const caracs = {}; 
+    // Manual get E from main section
+    caracs['E'] = Number(fd.get('E') || 0);
+
+    ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; } });
     const armor = { head: Number(fd.get('armor_head')||0), body: Number(fd.get('armor_body')||0), arms: Number(fd.get('armor_arms')||0), legs: Number(fd.get('armor_legs')||0) };
     const id = fd.get('id');
     const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative')||0), hp: Number(fd.get('hp')||0), caracs, armor };
@@ -427,10 +424,10 @@
     resetForm();
   });
   on(DOM.reserve.seed, 'click', ()=>{
-    [ new Profile({name:'Renaut de Volargent', kind:'PJ', initiative:41, hp:14, caracs:{CC:52, Ag:41}, armor:{head:2, body:2, arms:0, legs:0}}),
-      new Profile({name:'Saskia la Noire', kind:'PJ', initiative:52, hp:12, caracs:{CC:45, Ag:52}}),
-      new Profile({name:'Gobelins (2)', kind:'Créature', initiative:28, hp:9, caracs:{CC:35}}),
-      new Profile({name:'Chien de guerre', kind:'Créature', initiative:36, hp:10, caracs:{CC:40}})
+    [ new Profile({name:'Renaut de Volargent', kind:'PJ', initiative:41, hp:14, caracs:{CC:52, Ag:41, E:35}, armor:{head:2, body:2, arms:0, legs:0}}),
+      new Profile({name:'Saskia la Noire', kind:'PJ', initiative:52, hp:12, caracs:{CC:45, Ag:52, E:40}}),
+      new Profile({name:'Gobelins (2)', kind:'Créature', initiative:28, hp:9, caracs:{CC:35, E:30}}),
+      new Profile({name:'Chien de guerre', kind:'Créature', initiative:36, hp:10, caracs:{CC:40, E:30}})
     ].forEach(Store.addProfile); Store.log('Seed Réserve: 4 profils');
   });
   on(DOM.reserve.clear, 'click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
@@ -444,7 +441,6 @@
     
     DOM.combat.initTracker.innerHTML = '';
     let activeParticipants = Store.listParticipants().filter(p => p.zone === 'active');
-    // Sort copy for tracker by Init (but preserve drag order in zones)
     activeParticipants = [...activeParticipants].sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
     
     if(activeParticipants.length === 0) {
@@ -621,27 +617,12 @@
   // --- NEW RENDER REF TABLES (AUTO) ---
   function renderReferenceTables(){
       if(qs('#table-head-crit')) {
-          const makeCritTable = (data) => {
-              let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
-              let prevMax = 0;
-              data.forEach(row => { html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`; prevMax = row.max; });
-              html += `</tbody></table>`; return html;
-          };
-          qs('#table-head-crit').innerHTML = makeCritTable(CRIT_DATA.HEAD);
-          qs('#table-arm-crit').innerHTML = makeCritTable(CRIT_DATA.ARM);
-          qs('#table-body-crit').innerHTML = makeCritTable(CRIT_DATA.BODY);
-          qs('#table-leg-crit').innerHTML = makeCritTable(CRIT_DATA.LEG);
+          const makeCritTable = (data) => { let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`; let prevMax = 0; data.forEach(row => { html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`; prevMax = row.max; }); html += `</tbody></table>`; return html; };
+          qs('#table-head-crit').innerHTML = makeCritTable(CRIT_DATA.HEAD); qs('#table-arm-crit').innerHTML = makeCritTable(CRIT_DATA.ARM); qs('#table-body-crit').innerHTML = makeCritTable(CRIT_DATA.BODY); qs('#table-leg-crit').innerHTML = makeCritTable(CRIT_DATA.LEG);
       }
-      
       if(qs('#table-magic-minor')) {
-          const makeMagicTable = (data) => {
-              let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
-              let prevMax = 0;
-              data.forEach(row => { html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`; prevMax = row.max; });
-              html += `</tbody></table>`; return html;
-          };
-          qs('#table-magic-minor').innerHTML = makeMagicTable(MAGIC_DATA.MINOR);
-          qs('#table-magic-major').innerHTML = makeMagicTable(MAGIC_DATA.MAJOR);
+          const makeMagicTable = (data) => { let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`; let prevMax = 0; data.forEach(row => { html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`; prevMax = row.max; }); html += `</tbody></table>`; return html; };
+          qs('#table-magic-minor').innerHTML = makeMagicTable(MAGIC_DATA.MINOR); qs('#table-magic-major').innerHTML = makeMagicTable(MAGIC_DATA.MAJOR);
       }
   }
 
