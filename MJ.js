@@ -452,7 +452,11 @@
   on(DOM.combat.btnNewSub, 'click', ()=>{ const name = prompt('Nom du sous-combat ?'); if(!name) return; Store.addSub(name); });
   on(DOM.combat.btnClearLog, 'click', ()=> Store.clearLog());
   on(DOM.combat.btnStart, 'click', () => Combat.start());
-  on(DOM.combat.btnReset, 'click', () => { if(confirm('Réinitialiser tout le combat ?')) Store.resetCombat(); });
+  on(DOM.combat.btnReset, 'click', () => { 
+    if(confirm('Effacer les résultats de dés affichés ?')) {
+        DOM.dice.results.replaceChildren(); // Vide la zone de résultats
+    }
+  });
   
   on(DOM.combat.btnD100, 'click', ()=>{ 
     const roll = d100(); 
