@@ -1,8 +1,39 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "1.4 - Règles Santé & BE";
+  const APP_VERSION = "1.5 - Correctif Affichage";
   // ==========================================
+
+  // ---------- Utils ----------
+  const uid = () => Math.random().toString(36).slice(2, 10);
+  const now = () => new Date().toLocaleTimeString();
+  const qs = (s) => document.querySelector(s);
+  const qsa = (s) => Array.from(document.querySelectorAll(s));
+  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
+  const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
+  
+  // Fonction utilitaire pour créer des options de select (Globale au scope)
+  function opt(v, t){ 
+      const o=document.createElement('option'); 
+      o.value=v; 
+      o.textContent=t; 
+      return o; 
+  }
+
+  // Dice utils
+  const d100 = () => Math.floor(Math.random()*100) + 1;
+  const isDouble = (n) => n<=99 && n%11===0;
+  const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
+
+  // LOGIQUE DE LOCALISATION WFRP
+  const getReverseRoll = (roll) => {
+      const s = roll.toString().padStart(2, '0');
+      const revS = s.split('').reverse().join('');
+      let val = parseInt(revS);
+      if(val === 0) val = 100; 
+      return val;
+  };
 
   // ---------- DATA: CRITICAL TABLES ----------
   const CRIT_DATA = {
@@ -96,31 +127,6 @@
     ]
   };
 
-  // ---------- Utils ----------
-  const uid = () => Math.random().toString(36).slice(2, 10);
-  const now = () => new Date().toLocaleTimeString();
-  const qs = (s) => document.querySelector(s);
-  const qsa = (s) => Array.from(document.querySelectorAll(s));
-  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
-  const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
-  
-  function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
-
-  // Dice utils
-  const d100 = () => Math.floor(Math.random()*100) + 1;
-  const isDouble = (n) => n<=99 && n%11===0;
-  const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
-
-  // LOGIQUE DE LOCALISATION WFRP
-  const getReverseRoll = (roll) => {
-      const s = roll.toString().padStart(2, '0');
-      const revS = s.split('').reverse().join('');
-      let val = parseInt(revS);
-      if(val === 0) val = 100; // 00 maps to 100
-      return val;
-  };
-
   const getLocationName = (roll) => {
       if(roll <= 9) return {name: 'Tête', key:'HEAD'};
       if(roll <= 24) return {name: 'Bras Gauche', key:'ARM'};
@@ -164,6 +170,7 @@
       this.armor={...armor};
     }
   }
+  
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -413,14 +420,18 @@
     
     let activeCount = 0;
 
-    // Render Cards in Order
+    // Render Cards in Order with ERROR HANDLING
     Store.listParticipants().forEach(p => {
-        const card = renderParticipantCard(p);
-        if(p.zone === 'active') {
-            DOM.combat.zoneActive.appendChild(card);
-            activeCount++;
+        try {
+            const card = renderParticipantCard(p);
+            if(p.zone === 'active') {
+                DOM.combat.zoneActive.appendChild(card);
+                activeCount++;
+            }
+            else DOM.combat.zoneBench.appendChild(card);
+        } catch (err) {
+            console.error("Erreur lors du rendu de la carte participant:", p.name, err);
         }
-        else DOM.combat.zoneBench.appendChild(card);
     });
 
     if(activeCount === 0) DOM.combat.zoneActive.innerHTML = '<div class="placeholder">Glissez les combattants actifs ici...</div>';
@@ -445,11 +456,9 @@
     p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
 
     const armDiv = div.querySelector('.actor-armor');
-    // CALCUL DU BONUS D'ENDURANCE (BE)
-    const BE = Math.floor((p.caracs.E || 0) / 10);
-    // On affiche BE et Armure
+    // CALCUL BE
+    const BE = Math.floor((p.caracs?.E || 0) / 10);
     let armText = `<span style="font-weight:bold; color:#5a1d1d;">🛡️ BE ${BE}</span>`;
-    
     if(p.armor && (p.armor.head||p.armor.body||p.armor.arms||p.armor.legs)) {
         armText += ` | T${p.armor.head} C${p.armor.body} B${p.armor.arms} J${p.armor.legs}`;
     }
