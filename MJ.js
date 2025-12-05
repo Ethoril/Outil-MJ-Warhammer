@@ -1,8 +1,100 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "1.2 - Règles Ajoutées";
+  const APP_VERSION = "1.3 - Critiques & Localisation";
   // ==========================================
+
+  // ---------- DATA: CRITICAL TABLES (Transcription des images) ----------
+  const CRIT_DATA = {
+    HEAD: [
+      {max:10, name:"Blessure spectaculaire", eff:"+1 Blessure, 1 Hémorragie. Cicatrice (+1 DR Social)."},
+      {max:20, name:"Coupure mineure", eff:"+1 Blessure, 1 Hémorragie."},
+      {max:25, name:"Coup à l’œil", eff:"+1 Blessure, 1 Aveuglé."},
+      {max:30, name:"Frappe à l’oreille", eff:"+1 Blessure, 1 Assourdi."},
+      {max:35, name:"Coup percutant", eff:"+2 Blessures, 1 Sonné."},
+      {max:40, name:"Œil au beurre noir", eff:"+2 Blessures, 2 Aveuglé."},
+      {max:45, name:"Oreille tranchée", eff:"+2 Blessures, 2 Assourdi, 1 Hémorragie."},
+      {max:50, name:"En plein front", eff:"+2 Blessures, 2 Hémorragie, 1 Aveuglé (persistant)."},
+      {max:55, name:"Mâchoire fracturée", eff:"+3 Blessures, 2 Sonné, Fracture (Mineure)."},
+      {max:60, name:"Blessure majeure à l’œil", eff:"+3 Blessures, 1 Hémorragie, 1 Aveuglé (persistant)."},
+      {max:65, name:"Blessure majeure à l’oreille", eff:"+3 Blessures, Perte auditive permanente (-20 tests)."},
+      {max:70, name:"Nez cassé", eff:"+3 Blessures, 2 Hémorragie, Test Résistance ou Sonné."},
+      {max:75, name:"Mâchoire cassée", eff:"+4 Blessures, 3 Sonné, Test Résistance ou Inconscient, Fracture (Majeure)."},
+      {max:80, name:"Commotion cérébrale", eff:"+4 Blessures, 1 Assourdi, 2 Hémorragie, 1d10 Sonné, Exténué (1d10j)."},
+      {max:85, name:"Bouche explosée", eff:"+4 Blessures, 2 Hémorragie, Perte 1d10 dents."},
+      {max:90, name:"Oreille mutilée", eff:"+4 Blessures, 3 Assourdi, 2 Hémorragie, Perte oreille."},
+      {max:93, name:"Œil crevé", eff:"+5 Blessures, 3 Aveuglé, 2 Hémorragie, 1 Sonné, Perte œil."},
+      {max:96, name:"Coup défigurant", eff:"+5 Blessures, 3 Hémorragie, 3 Aveuglé, 2 Sonné, Perte œil et nez."},
+      {max:99, name:"Mâchoire mutilée", eff:"+5 Blessures, 4 Hémorragie, 3 Sonné, Fracture (Majeure), Perte langue."},
+      {max:100, name:"Décapitation", eff:"Mort instantanée."}
+    ],
+    ARM: [
+      {max:10, name:"Choc au bras", eff:"+1 Blessure, lâchez l’objet."},
+      {max:20, name:"Coupure mineure", eff:"+1 Blessure, 1 Hémorragie."},
+      {max:25, name:"Torsion", eff:"+1 Blessure, Déchirure musculaire (Mineure)."},
+      {max:30, name:"Choc violent", eff:"+2 Blessures, lâchez l’objet, main inutilisable 1d10-BE rounds."},
+      {max:35, name:"Déchirure musculaire", eff:"+2 Blessures, 1 Hémorragie, Déchirure (Mineure)."},
+      {max:40, name:"Main ensanglantée", eff:"+2 Blessures, 1 Hémorragie, Test Dex pour tenir objets."},
+      {max:45, name:"Clef de bras", eff:"+2 Blessures, lâchez l’objet, bras inutilisable 1d10 rounds."},
+      {max:50, name:"Blessure béante", eff:"+3 Blessures, 2 Hémorragie (risque réouverture)."},
+      {max:55, name:"Cassure nette", eff:"+3 Blessures, lâchez l’objet, Fracture (Mineure), Test Résistance ou Sonné."},
+      {max:60, name:"Ligament rompu", eff:"+3 Blessures, lâchez l’objet, Déchirure (Majeure)."},
+      {max:65, name:"Coupure profonde", eff:"+3 Blessures, 2 Hémorragie, 1 Sonné, Déchirure (Mineure), Test Rés. ou Inconscient."},
+      {max:70, name:"Artère endommagée", eff:"+4 Blessures, 4 Hémorragie (risque réouverture)."},
+      {max:75, name:"Coude fracassé", eff:"+4 Blessures, lâchez l’objet, Fracture (Majeure)."},
+      {max:80, name:"Épaule luxée", eff:"+4 Blessures, Test Rés. ou Sonné et À Terre, lâchez objet, bras inutilisable."},
+      {max:85, name:"Doigt sectionné", eff:"+4 Blessures, 1 Hémorragie, Perte d'un doigt."},
+      {max:90, name:"Main ouverte", eff:"+5 Blessures, Perte 1 doigt/round, 2 Hémorragie, 1 Sonné."},
+      {max:93, name:"Biceps déchiqueté", eff:"+5 Blessures, lâchez objet, Déchirure (Majeure), 2 Hémorragie, 1 Sonné."},
+      {max:94, name:"Main mutilée", eff:"+5 Blessures, Perte main, 2 Hémorragie, Test Rés. ou Sonné et À Terre."},
+      {max:99, name:"Tendons coupés", eff:"+5 Blessures, Bras inutilisable, 3 Hémorragie, 1 À Terre, 1 Sonné."},
+      {max:100, name:"Démembrement", eff:"Mort instantanée."}
+    ],
+    BODY: [
+      {max:10, name:"Égratignure", eff:"+1 Blessure, 1 Hémorragie."},
+      {max:20, name:"Coup au ventre", eff:"+1 Blessure, 1 Sonné. Test Rés. ou vomissement et À Terre."},
+      {max:25, name:"Coup bas", eff:"+1 Blessure, Test Rés. ou 3 États Sonné."},
+      {max:30, name:"Torsion du dos", eff:"+1 Blessure, Déchirure (Mineure)."},
+      {max:35, name:"Souffle coupé", eff:"+2 Blessures, 1 Sonné. Test Rés. ou À Terre. Mvt réduit."},
+      {max:40, name:"Bleus aux côtes", eff:"+2 Blessures, Malus -10 Agilité (1d10 jours)."},
+      {max:45, name:"Clavicule tordue", eff:"+2 Blessures, un bras inutilisable 1d10 rounds."},
+      {max:50, name:"Chairs déchirées", eff:"+2 Blessures, 2 Hémorragie."},
+      {max:55, name:"Côtes fracturées", eff:"+3 Blessures, 1 Sonné, Fracture (Mineure)."},
+      {max:60, name:"Blessure béante", eff:"+3 Blessures, 3 Hémorragie (risque réouverture)."},
+      {max:65, name:"Entaille douloureuse", eff:"+3 Blessures, 2 Hémorragie, 1 Sonné. Test Rés. ou Inconscient."},
+      {max:70, name:"Dégâts artériels", eff:"+3 Blessures, 4 Hémorragie (risque réouverture)."},
+      {max:75, name:"Dos froissé", eff:"+4 Blessures, Déchirure (Majeure)."},
+      {max:80, name:"Hanche fracturée", eff:"+4 Blessures, 1 Sonné, Test Rés. ou À Terre, Fracture (Mineure)."},
+      {max:85, name:"Blessure majeure", eff:"+4 Blessures, 4 Hémorragie (risque réouverture)."},
+      {max:90, name:"Blessure au ventre", eff:"+4 Blessures, 2 Hémorragie, Blessure Purulente."},
+      {max:93, name:"Organe touché", eff:"+5 Blessures, 3 Hémorragie, 1d10 Sonné, Exténué (perm)."},
+      {max:96, name:"Hémorragie interne", eff:"+5 Blessures, Hémorragie interne (difficile à soigner)."},
+      {max:99, name:"Cœur touché", eff:"+5 Blessures, Mort en 1d10 rounds si pas soigné."},
+      {max:100, name:"Éviscération", eff:"Mort instantanée."}
+    ],
+    LEG: [
+      {max:10, name:"Orteil contusionné", eff:"+1 Blessure, Test Rés. ou -10 Ag (1 tour)."},
+      {max:20, name:"Cheville tordue", eff:"+1 Blessure, -10 Ag (1d10 rounds)."},
+      {max:25, name:"Coupure mineure", eff:"+1 Blessure, 1 Hémorragie."},
+      {max:30, name:"Perte d’équilibre", eff:"+1 Blessure, Test Rés. ou À Terre."},
+      {max:35, name:"Coup à la cuisse", eff:"+2 Blessures, 1 Hémorragie, Test Rés. ou À Terre."},
+      {max:40, name:"Cheville foulée", eff:"+2 Blessures, Déchirure (Mineure)."},
+      {max:45, name:"Genou tordu", eff:"+2 Blessures, -20 Ag (1d10 rounds)."},
+      {max:50, name:"Coupure à l’orteil", eff:"+2 Blessures, 1 Hémorragie, risque perte orteil."},
+      {max:55, name:"Mauvaise coupure", eff:"+3 Blessures, 2 Hémorragie, Test Rés. ou À Terre."},
+      {max:60, name:"Genou tordu (grave)", eff:"+3 Blessures, Déchirure (Majeure)."},
+      {max:65, name:"Jambe charcutée", eff:"+3 Blessures, 2 Hémorragie, 1 À Terre, Fracture (Mineure), risque Sonné."},
+      {max:70, name:"Cuisse lacérée", eff:"+3 Blessures, 3 Hémorragie, Test Rés. ou À Terre."},
+      {max:75, name:"Tendon rompu", eff:"+4 Blessures, À Terre et Sonné, Test Rés. ou Inconscient, Jambe inutilisable."},
+      {max:80, name:"Entaille au tibia", eff:"+4 Blessures, Sonné et À Terre, Déchirure (Maj), Fracture (Maj)."},
+      {max:85, name:"Genou cassé", eff:"+4 Blessures, 1 Sonné, 1 À Terre, Fracture (Majeure)."},
+      {max:90, name:"Genou démis", eff:"+4 Blessures, À Terre, risque Sonné, Mvt réduit."},
+      {max:93, name:"Pied écrasé", eff:"+5 Blessures, Test Rés. ou À Terre et perte orteils, 2 Hémorragie."},
+      {max:96, name:"Pied sectionné", eff:"+5 Blessures, Perte du pied, 3 Hémorragie, 2 Sonné, 1 À Terre."},
+      {max:99, name:"Tendon coupé", eff:"+5 Blessures, 2 Hémorragie, 2 Sonné, 1 À Terre, Perte usage jambe."},
+      {max:100, name:"Bassin fracassé", eff:"Mort instantanée."}
+    ]
+  };
 
   // ---------- Utils ----------
   const uid = () => Math.random().toString(36).slice(2, 10);
@@ -19,6 +111,32 @@
   const d100 = () => Math.floor(Math.random()*100) + 1;
   const isDouble = (n) => n<=99 && n%11===0;
   const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
+
+  // LOGIQUE DE LOCALISATION WFRP
+  const getReverseRoll = (roll) => {
+      // Ex: 23 -> 32, 04 -> 40, 10 -> 01, 100 -> 00(100)
+      const s = roll.toString().padStart(2, '0'); // "04"
+      const revS = s.split('').reverse().join(''); // "40"
+      let val = parseInt(revS);
+      if(val === 0) val = 100; // 00 maps to 100 in table logic
+      return val;
+  };
+
+  const getLocationName = (roll) => {
+      if(roll <= 9) return {name: 'Tête', key:'HEAD'};
+      if(roll <= 24) return {name: 'Bras Gauche', key:'ARM'};
+      if(roll <= 44) return {name: 'Bras Droit', key:'ARM'};
+      if(roll <= 79) return {name: 'Corps', key:'BODY'};
+      if(roll <= 89) return {name: 'Jambe Gauche', key:'LEG'};
+      return {name: 'Jambe Droite', key:'LEG'};
+  };
+
+  const getCritEffect = (key, roll) => {
+      const table = CRIT_DATA[key];
+      if(!table) return null;
+      // Trouve l'entrée correspondante (max >= roll)
+      return table.find(e => roll <= e.max);
+  };
 
   const ADV_STEP = 10;
   const autoModForParticipant = (pid) => {
@@ -48,7 +166,6 @@
       this.armor={...armor};
     }
   }
-  
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -190,11 +307,7 @@
   // ---------- DOM refs ----------
   const DOM = {
     tabs: qsa('.tab'),
-    panels: { 
-        reserve: qs('#panel-reserve'), 
-        combat: qs('#panel-combat'),
-        rules: qs('#panel-rules') // NOUVEAU
-    },
+    panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat'), rules: qs('#panel-rules') },
     reserve: { list: qs('#reserve-list'), search: qs('#search-reserve'), form: qs('#form-add'), seed: qs('#seed-reserve'), clear: qs('#clear-reserve') },
     combat: {
       initTracker: qs('#init-tracker'),
@@ -211,7 +324,6 @@
     btnVersion: qs('#btn-version')
   };
 
-  // ---------- AFFICHER VERSION ----------
   if(DOM.btnVersion) {
       DOM.btnVersion.textContent = `Version: ${APP_VERSION}`;
       DOM.btnVersion.addEventListener('click', () => alert(`Version chargée :\n${APP_VERSION}\n\nSi ce n'est pas la bonne, essayez CTRL+F5 !`));
@@ -221,7 +333,6 @@
   DOM.tabs.forEach(t => t.addEventListener('click', () => {
     DOM.tabs.forEach(x => x.classList.remove('is-active')); t.classList.add('is-active');
     Object.values(DOM.panels).forEach(p => p.classList.remove('is-active'));
-    // Sélecteur dynamique d'onglet
     const targetPanel = DOM.panels[t.dataset.tab];
     if(targetPanel) targetPanel.classList.add('is-active');
   }));
@@ -275,7 +386,7 @@
   on(DOM.reserve.clear, 'click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
   on(DOM.reserve.search, 'input', renderReserve);
 
-  // --- Combat Rendering (The New Paradigm) ---
+  // --- Combat Rendering ---
   function renderCombat(){
     const { combat } = Store.getState();
     if(DOM.combat.pillRound) DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
@@ -433,16 +544,64 @@
   on(DOM.combat.btnD100, 'click', ()=>{ const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); const res = document.createElement('div'); res.className='dice-result'; res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`; DOM.combat.results.prepend(res); });
   Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
 
+  // -- MAIN DICE FUNCTION (MODIFIED) --
   function runDiceLine(id){
     const st = Store.getState(); const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
     let base=null; const p = st.combat.participants.get(dl.participantId);
     if(dl.attr==='Custom'){ base = clampInt(dl.base, 0); } else if(dl.attr==='initiative') base = p ? Number(p.initiative||0) : null; else if(p?.profileId){ const prof = Store.getProfile(p.profileId); base = Number(prof?.caracs?.[dl.attr] ?? NaN); if(!Number.isFinite(base)) base=null; }
-    const modManual = clampInt(dl.mod, 0); const modAuto = autoModForParticipant(dl.participantId); const target = Number.isFinite(base) ? base + (modManual + modAuto) : null;
-    const roll = d100(); const success = Number.isFinite(target) && roll <= target; const sl = Number.isFinite(target) ? SL(target, roll) : null; const dbl = isDouble(roll); const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
+    
+    const modManual = clampInt(dl.mod, 0); const modAuto = autoModForParticipant(dl.participantId);
+    const target = Number.isFinite(base) ? base + (modManual + modAuto) : null;
+    const roll = d100();
+    const success = Number.isFinite(target) && roll <= target;
+    const sl = Number.isFinite(target) ? SL(target, roll) : null;
+    const dbl = isDouble(roll); 
+    // Crit: double AND success
+    const crit = (dbl && success) ? 'Critique' : (dbl ? 'Maladresse' : null);
+
+    let extraInfo = ""; 
+    let critInfo = "";
+
+    // GESTION CRITIQUE & LOCALISATION
+    if(success) {
+        const revRoll = getReverseRoll(roll);
+        const loc = getLocationName(revRoll);
+        extraInfo += ` | Touche : ${loc.name} (${revRoll})`;
+
+        // Si Critique : Roll Crit Loc + Effect
+        if(crit === 'Critique'){
+            const critLocRoll = d100();
+            const critLoc = getLocationName(critLocRoll);
+            const critEffectRoll = d100();
+            const effectData = getCritEffect(critLoc.key, critEffectRoll);
+            
+            critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;">
+                <strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll})<br>
+                <span style="color:#b33a3a;">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}
+            </div>`;
+        }
+    }
+
     let targetInfo = ""; let slDiff = null;
-    if(dl.targetType === 'fixed' && dl.targetValue){ targetInfo = ` | vs Seuil ${dl.targetValue}`; } else if(dl.targetType !== 'none'){ const defender = st.combat.participants.get(dl.targetType); if(defender && dl.targetAttr && dl.opponentRoll){ let defBase = 0; if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0); else if(defender.profileId) { const dProf = Store.getProfile(defender.profileId); defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0); } const defRoll = Number(dl.opponentRoll); if(Number.isFinite(defBase) && Number.isFinite(defRoll)){ const slDef = SL(defBase, defRoll); if(sl !== null) { slDiff = sl - slDef; targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`; } } } }
-    const res = document.createElement('div'); res.className='dice-result'; let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
-    if(Number.isFinite(target)){ resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span><span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`; } else { resHTML += `<span class="result-warn">Sans cible (attaquant)</span>`; }
+    if(dl.targetType === 'fixed' && dl.targetValue){ targetInfo = ` | vs Seuil ${dl.targetValue}`; }
+    else if(dl.targetType !== 'none'){
+        const defender = st.combat.participants.get(dl.targetType);
+        if(defender && dl.targetAttr && dl.opponentRoll){
+             let defBase = 0;
+             if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0);
+             else if(defender.profileId) { const dProf = Store.getProfile(defender.profileId); defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0); }
+             const defRoll = Number(dl.opponentRoll);
+             if(Number.isFinite(defBase) && Number.isFinite(defRoll)){
+                 const slDef = SL(defBase, defRoll);
+                 if(sl !== null) { slDiff = sl - slDef; targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`; }
+             }
+        }
+    }
+
+    const res = document.createElement('div'); res.className='dice-result';
+    let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
+    if(Number.isFinite(target)){ resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span><span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`; } 
+    else { resHTML += `<span class="result-warn">Sans cible (attaquant)</span>`; }
     if(slDiff !== null) { resHTML += `<span class="badge ${slDiff>=0?'good':'bad'}" style="margin-left:8px; font-size:1.1em;">MARGE: ${slDiff>=0?'+':''}${slDiff}</span>`; }
     resHTML += `<span class="badge">${escapeHtml(p?.name||'?')}</span>`;
     if(dl.attr!=='Custom') resHTML += `<span class="badge">${dl.attr}</span>`;
@@ -450,7 +609,15 @@
     if(modAuto) resHTML += `<span class="badge good">Auto ${modAuto}</span>`;
     if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
     if(dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
-    res.innerHTML = resHTML; DOM.combat.results.prepend(res); Store.log(`🎲 ${p?.name} (Roll ${roll})${targetInfo}`);
+    
+    // Add Loc info
+    if(extraInfo) resHTML += `<span class="badge" style="background:#e3f6fd; color:#333;">${extraInfo}</span>`;
+    
+    // Add Crit info block
+    if(critInfo) resHTML += critInfo;
+
+    res.innerHTML = resHTML; DOM.combat.results.prepend(res); 
+    Store.log(`🎲 ${p?.name} (Roll ${roll})${extraInfo}${critInfo.replace(/<[^>]*>/g, '')}${targetInfo}`);
   }
 
   Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); renderReserve(); renderCombat();
