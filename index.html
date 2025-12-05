@@ -25,17 +25,15 @@
     <section id="panel-reserve" class="panel is-active" role="region" aria-labelledby="tab-reserve">
       <h2>Réserve (source de vérité)</h2>
       <div class="grid-2">
-        
         <form id="form-add" class="card">
-          <input type="hidden" name="id" value=""> <h3 id="form-title">Nouveau profil</h3>
-          
+          <input type="hidden" name="id" value="">
+          <h3 id="form-title">Nouveau profil</h3>
           <div class="grid-2">
             <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
             <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
             <label>Initiative (I) <small class="muted">Score de caractéristique</small><input type="number" name="initiative" value="30"></label>
             <label>PV (Max)<input type="number" name="hp" value="12"></label>
           </div>
-
           <div class="armor-section" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px;">
             <span class="muted" style="font-size: 0.9em; font-weight: bold;">Points d'Armure</span>
             <div class="grid-4" style="margin-top: 6px;">
@@ -45,7 +43,6 @@
               <label>Jambes<input type="number" name="armor_legs" value="0"></label>
             </div>
           </div>
-
           <details>
             <summary>Caracs (optionnel)</summary>
             <div class="grid-3">
@@ -61,7 +58,6 @@
               <label>Soc<input type="number" name="Soc"></label>
             </div>
           </details>
-
           <div class="actions">
             <button type="submit" id="btn-submit-form">Ajouter</button>
             <button type="button" id="btn-cancel-edit" class="ghost" style="display:none;">Annuler</button>
@@ -70,7 +66,6 @@
             <button type="button" id="clear-reserve" class="danger ghost small">Vider</button>
           </div>
         </form>
-
         <div class="card">
           <div class="row">
             <h3>Liste</h3>
@@ -83,8 +78,7 @@
     </section>
 
     <section id="panel-combat" class="panel" role="region" aria-labelledby="tab-combat">
-      <h2>Combat (ordre = Initiative décroissante)</h2>
-
+      
       <div class="controls row card">
         <div class="row">
             <button id="btn-save-file" style="border-color:#3e2e22;">💾 Sauvegarder</button>
@@ -93,8 +87,8 @@
         </div>
         <div class="spacer"></div>
         <div class="row">
-            <button id="btn-import" class="ghost" title="Importer depuis Réserve vers Combat">Imp. Réserve</button>
-            <button id="btn-export" class="ghost" title="Appliquer PV vers la Réserve (optionnel)">Exp. Réserve</button>
+            <button id="btn-import" class="ghost">Imp. Réserve</button>
+            <button id="btn-export" class="ghost">Exp. Réserve</button>
         </div>
         <div class="spacer"></div>
         <div class="row">
@@ -107,33 +101,22 @@
       <div class="row meta card">
         <span class="pill" id="pill-round">Round: 0</span>
         <span class="pill" id="pill-turn">Tour: –</span>
-        <span class="pill" id="pill-sub">Sous-combat: global</span>
         <div class="spacer"></div>
-        <span class="muted">Astuce : clique sur <strong>Init</strong> d’un participant pour la modifier.</span>
-        <button id="btn-new-sub" class="ghost">+ Sous-combat</button>
+        <span class="muted">Glissez-déposez les cartes entre les zones</span>
       </div>
 
       <div id="dice-prep-results" class="dice-result-stream card" style="min-height: 60px; margin-bottom: 16px;"></div>
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="row">
-            <h3>Participants</h3>
-            <div class="spacer"></div>
-            <label class="pill">Filtrer <input id="search-combat" placeholder="Tapez…"></label>
-          </div>
-          <ul id="combat-list" class="actors" aria-live="polite"></ul>
+      <div class="zone-container active-container">
+        <h3>🔥 Zone Active (Au cœur de l'action)</h3>
+        <div id="zone-active" class="drop-zone" data-zone="active">
+            <div class="placeholder">Glissez les combattants actifs ici...</div>
         </div>
+      </div>
 
-        <section class="card dice">
-          <div class="row">
-            <h3>🎛️ Lignes préparées</h3>
-            <div class="spacer"></div>
-            <button id="dice-add" class="ghost">+ Ligne</button>
-            <button id="dice-roll-all">Tout lancer</button>
-          </div>
-          <div id="dice-lines" class="dice-lines"></div>
-        </section>
+      <div class="zone-container bench-container">
+        <h3>💤 En attente / Réserve tactique</h3>
+        <div id="zone-bench" class="drop-zone" data-zone="bench"></div>
       </div>
 
       <details class="card" style="margin-top: 16px;">
@@ -151,22 +134,37 @@
   </main>
 
   <template id="tpl-actor">
-    <li class="actor">
-      <div class="left">
-        <div class="name"></div>
-        <div class="chips"></div>
-        <div class="states"></div>
-        <div class="armor-display" style="font-size: 0.85em; color: var(--muted); margin-top: 4px;"></div>
+    <div class="actor-card" draggable="true">
+      <div class="actor-header row">
+        <div class="actor-info">
+            <strong class="name">Nom</strong>
+            <div class="sub-info">
+                <span class="badge clickable init-badge">Init 0</span>
+                <span class="badge hp-badge">PV 0</span>
+                <span class="badge adv-badge">AV 0</span>
+            </div>
+        </div>
+        <div class="actor-actions">
+            <button class="icon-btn btn-state" title="Blessé">🩸</button>
+            <button class="icon-btn danger btn-remove" title="Retirer">✕</button>
+        </div>
       </div>
-      <div class="right row">
-        <button class="btn-adv-plus">+AV</button>
-        <button class="btn-adv-minus">−AV</button>
-        <button class="btn-hp-minus">−PV</button>
-        <button class="btn-hp-plus">+PV</button>
-        <button class="btn-state">Blessé</button>
-        <button class="btn-remove danger ghost">Retirer</button>
+      
+      <div class="actor-controls row">
+        <button class="tiny btn-hp-minus">−PV</button>
+        <button class="tiny btn-hp-plus">+PV</button>
+        <div class="spacer"></div>
+        <button class="tiny btn-adv-minus">−AV</button>
+        <button class="tiny btn-adv-plus">+AV</button>
       </div>
-    </li>
+
+      <div class="actor-armor muted"></div>
+
+      <div class="actor-dice-section">
+        <div class="dice-list"></div>
+        <button class="btn-add-dice full-width ghost small">+ Ajouter un jet</button>
+      </div>
+    </div>
   </template>
 
   <dialog id="dlg-import">
@@ -174,9 +172,6 @@
       <h3>Importer depuis la Réserve</h3>
       <div id="import-list" class="list"></div>
       <div class="row actions">
-        <div class="row">
-          <label class="pill">Sous-combat <select id="sel-sub"></select></label>
-        </div>
         <div class="spacer"></div>
         <button value="cancel" class="ghost">Annuler</button>
         <button id="confirm-import">Importer</button>
