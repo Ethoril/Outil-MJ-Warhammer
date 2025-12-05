@@ -7,11 +7,15 @@
   const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
+  
+  // CORRECTIF : La fonction opt est déplacée ici pour être accessible partout
+  function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
 
   // Dice utils
   const d100 = () => Math.floor(Math.random()*100) + 1;
   const isDouble = (n) => n<=99 && n%11===0;
   const SL = (target, roll) => Math.floor((target||0)/10) - Math.floor(roll/10);
+
   const ADV_STEP = 10;
   const autoModForParticipant = (pid) => {
     if(!pid) return 0;
@@ -31,7 +35,6 @@
       this.caracs={...caracs}; this.armor={...armor};
     }
   }
-  // NOUVEAU: Propriété 'zone' ('active' ou 'bench')
   class Participant {
     constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], zone='bench', armor={head:0, body:0, arms:0, legs:0} } = {}) {
       this.id=id; this.profileId=profileId||null; this.name=name||'—'; this.kind=kind||'Créature';
@@ -51,7 +54,7 @@
   const KEY = { RESERVE:'wfrp.reserve.v1', COMBAT:'wfrp.combat.v1', LOG:'wfrp.log.v1', DICE:'wfrp.dice.v1' };
   const Store = (() => {
     let reserve = new Map();
-    let combat  = { round:0, turnIndex:-1, order:[], participants:new Map() }; // Removed SubFights logic for simplification in this paradigm
+    let combat  = { round:0, turnIndex:-1, order:[], participants:new Map() };
     let log = [];
     let diceLines = [];
 
@@ -123,7 +126,7 @@
       rebuildOrder(){ setOrderByInitiative(); },
       getState(){ return { reserve, combat, log, diceLines }; },
 
-      addDiceLine(dl){ diceLines.push(new DiceLine(dl)); save(); Bus.emit('combat'); }, // Emit combat because dice are now inside cards
+      addDiceLine(dl){ diceLines.push(new DiceLine(dl)); save(); Bus.emit('combat'); },
       updateDiceLine(id, patch, noRender=false){ 
         const i=diceLines.findIndex(x=>x.id===id); if(i<0) return; 
         Object.assign(diceLines[i], patch); save(); 
