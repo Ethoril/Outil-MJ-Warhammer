@@ -102,10 +102,13 @@
         <span class="pill" id="pill-round">Round: 0</span>
         <span class="pill" id="pill-turn">Tour: –</span>
         <div class="spacer"></div>
-        <span class="muted">Glissez-déposez les cartes entre les zones</span>
+        <span class="muted">Glissez-déposez les cartes pour organiser l'ordre</span>
       </div>
 
       <div id="dice-prep-results" class="dice-result-stream card" style="min-height: 60px; margin-bottom: 16px;"></div>
+
+      <div id="init-tracker" class="init-tracker card row">
+          </div>
 
       <div class="zone-container active-container">
         <h3>🔥 Zone Active (Au cœur de l'action)</h3>
@@ -133,7 +136,7 @@
     </section>
   </main>
 
-<template id="tpl-actor">
+  <template id="tpl-actor">
     <div class="actor-card" draggable="true">
       <div class="actor-header row">
         <div class="actor-info">
@@ -146,11 +149,21 @@
             <div class="states" style="margin-top:4px; display:flex; gap:4px; flex-wrap:wrap;"></div>
         </div>
         <div class="actor-actions">
+            <button class="icon-btn btn-color" title="Couleur">🎨</button>
             <button class="icon-btn btn-state" title="Blessé">🩸</button>
             <button class="icon-btn danger btn-remove" title="Retirer">✕</button>
         </div>
       </div>
       
+      <div class="color-palette hidden">
+          <div class="color-swatch" style="background:var(--card-bg-default);" data-c="default" title="Défaut"></div>
+          <div class="color-swatch" style="background:var(--card-bg-red);" data-c="red" title="Ennemi"></div>
+          <div class="color-swatch" style="background:var(--card-bg-green);" data-c="green" title="Allié"></div>
+          <div class="color-swatch" style="background:var(--card-bg-blue);" data-c="blue" title="Magie"></div>
+          <div class="color-swatch" style="background:var(--card-bg-purple);" data-c="purple" title="Chaos"></div>
+          <div class="color-swatch" style="background:var(--card-bg-orange);" data-c="orange" title="Boss"></div>
+      </div>
+
       <div class="actor-controls row">
         <button class="tiny btn-hp-minus">−PV</button>
         <button class="tiny btn-hp-plus">+PV</button>
