@@ -241,20 +241,25 @@
 
                     <h4>Cas Spéciaux</h4>
                     <ul>
-                        <li><strong>Interruption :</strong> Si interrompu pendant une Focalisation étendue (dégâts, bruit...), faire un Test de <strong>Calme Difficile (-20)</strong>. Si échec : perte de tous les succès accumulés et jet sur la table des <em>Incantations Imparfaites Mineures</em>.</li>
-                        <li><strong>Réussite Critique :</strong> (Focalisation ou Langue Magik) Effet positif au choix du MJ + jet sur table Mineure.</li>
-                        <li><strong>Maladresse (Focalisation) :</strong> Jet sur table <em>Incantations Imparfaites Majeures</em>.</li>
-                        <li><strong>Maladresse (Langue Magik) :</strong> Echec du sort + Jet sur table Mineure.</li>
-                        <li><strong>Magie Sombre :</strong> Un dé qui tombe sur un <strong>8</strong> (dizaine ou unité) entraîne un jet sur la table Mineure.</li>
+                        <li><strong>Interruption :</strong> Si interrompu pendant une Focalisation étendue, faire un Test de <strong>Calme Difficile (-20)</strong>. Si échec : perte de succès et jet sur <em>Incantations Imparfaites Mineures</em>.</li>
+                        <li><strong>Réussite Critique :</strong> (Focalisation ou Langue Magik) Effet positif + jet sur table Mineure.</li>
+                        <li><strong>Maladresse (Focalisation) :</strong> Jet sur table <em>Majeure</em>.</li>
+                        <li><strong>Maladresse (Langue Magik) :</strong> Echec + Jet sur table Mineure.</li>
+                        <li><strong>Magie Sombre :</strong> Un dé sur un <strong>8</strong> (dizaine ou unité) = Jet sur table Mineure.</li>
                     </ul>
 
-                    <h4>Glossaire</h4>
-                    <ul>
-                        <li><strong>SR (Seuil de Réussite) :</strong> Dizaine de la compétence - Dizaine du dé.</li>
-                        <li><strong>NI (Niveau d'Incantation) :</strong> La difficulté du sort.</li>
-                        <li><strong>Bonus Force Mentale :</strong> Chiffre des dizaines de la FM.</li>
-                        <li><strong>Maladresse :</strong> Double ou chiffre rond (ex: 60, 70, 88) sur un échec.</li>
-                    </ul>
+                    <h3 style="margin-top:30px; border-top:2px solid #5a1d1d; padding-top:10px;">Tableaux des Incantations Imparfaites</h3>
+                    <p class="muted">Générés automatiquement par le système :</p>
+                    
+                    <details class="nested-details">
+                        <summary>✨ Table Mineure</summary>
+                        <div id="table-magic-minor"></div>
+                    </details>
+                    
+                    <details class="nested-details">
+                        <summary>🔥 Table Majeure</summary>
+                        <div id="table-magic-major"></div>
+                    </details>
                 </div>
             </details>
         </div>
@@ -320,6 +325,6 @@
     </form>
   </dialog>
 
-  <script src="MJ.js?v=4"></script>
+  <script src="MJ.js?v=6"></script>
 </body>
 </html>
