@@ -17,6 +17,7 @@
       <nav class="tabs" role="tablist" aria-label="Sections">
         <button class="tab is-active" data-tab="reserve" aria-selected="true">Réserve</button>
         <button class="tab" data-tab="combat" aria-selected="false">Combat</button>
+        <button class="tab" data-tab="rules" aria-selected="false">Règles</button>
       </nav>
       <button id="btn-version" class="ghost small" style="margin-left:10px; opacity:0.6;">v?</button>
     </div>
@@ -134,6 +135,47 @@
       </details>
 
     </section>
+
+    <section id="panel-rules" class="panel" role="region" aria-labelledby="tab-rules">
+        <h2>Aides de Jeu & Règles</h2>
+        
+        <div class="card rule-block">
+            <details>
+                <summary>Localisation des dégâts</summary>
+                <div class="rule-content">
+                    <p>D'après le <em>Livre de base de Warhammer Fantasy le Jeu de Rôle (4e édition)</em> :</p>
+                    
+                    <h4>1. La Règle de base : Inverser les dés</h4>
+                    <p>Pour déterminer où un coup atterrit après un Test de Corps à corps ou de Projectiles réussi, vous devez simplement <strong>inverser le résultat des dés</strong> de votre jet d'attaque.</p>
+                    <p class="example"><em>Exemple :</em> Si vous réussissez avec un jet de <strong>23</strong>, la localisation est <strong>32</strong>. Si vous obtenez <strong>04</strong>, c'est <strong>40</strong>. Si vous obtenez <strong>10</strong>, c'est <strong>01</strong>.</p>
+
+                    <h4>2. Le Tableau de Localisation</h4>
+                    <ul>
+                        <li><strong>01 – 09 :</strong> Tête</li>
+                        <li><strong>10 – 24 :</strong> Bras gauche (ou secondaire)</li>
+                        <li><strong>25 – 44 :</strong> Bras droit (ou principal)</li>
+                        <li><strong>45 – 79 :</strong> Corps</li>
+                        <li><strong>80 – 89 :</strong> Jambe gauche</li>
+                        <li><strong>90 – 00 :</strong> Jambe droite</li>
+                    </ul>
+
+                    <h4>3. Exception pour les Coups Critiques</h4>
+                    <p>Si votre jet d'attaque est un <strong>Coup Critique</strong> (succès sur un double, ex: 11, 22...), <strong>n'inversez pas</strong> le jet.</p>
+                    <ul>
+                        <li>Lancez un <strong>nouveau 1d100</strong> pour déterminer la localisation (voir tableau ci-dessus).</li>
+                        <li>Lancez un <strong>second 1d100</strong> pour déterminer la gravité sur le Tableau des Critiques correspondant.</li>
+                    </ul>
+
+                    <h4>4. Cas particuliers</h4>
+                    <ul>
+                        <li><strong>Créatures non-humanoïdes :</strong> Bras → Pattes avant, Jambes → Pattes arrière.</li>
+                        <li><strong>Viser :</strong> Possible de choisir une localisation, mais impose un <strong>malus de -20</strong> au test d'attaque.</li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+    </section>
+
   </main>
 
   <template id="tpl-actor">
@@ -193,6 +235,6 @@
     </form>
   </dialog>
 
-  <script src="MJ.js?v=1"></script>
+  <script src="MJ.js?v=2"></script>
 </body>
 </html>
