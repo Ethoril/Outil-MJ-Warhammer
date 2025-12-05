@@ -9,6 +9,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: 'Lora', serif; background: var(--bg); color: var(--text); background-image: url('https://www.transparenttextures.com/patterns/old-paper.png'); }
 h1, h2, h3 { font-family: 'Cinzel', serif; font-weight: 700; color: #5a1d1d; margin: 0; }
+h4 { font-family: 'Cinzel', serif; color: var(--accent); margin: 12px 0 6px 0; }
 .wrap { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
 
 .topbar { position: sticky; top: 0; z-index: 10; background: rgba(245, 229, 199, 0.85); backdrop-filter: blur(6px); border-bottom: 2px solid #5a1d1d; }
@@ -37,35 +38,33 @@ button.tiny { padding: 2px 6px; font-size: 0.75em; }
 .list { display: grid; gap: 10px; }
 .item { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; border: 1px dashed #5a1d1d; padding: 10px; border-radius: var(--radius); }
 
+/* --- RÈGLES STYLES --- */
+.rule-block { margin-bottom: 10px; }
+details summary { cursor: pointer; font-weight: bold; font-family: 'Cinzel', serif; color: #3e2e22; padding: 4px 0; }
+details summary:hover { color: var(--accent); }
+.rule-content { padding: 8px 16px; border-top: 1px dashed rgba(0,0,0,0.1); margin-top: 8px; font-size: 0.95em; line-height: 1.5; }
+.example { background: rgba(0,0,0,0.05); padding: 8px; border-left: 3px solid var(--accent); font-style: italic; margin: 8px 0; border-radius: 4px; }
+
 /* --- NEW INIT TRACKER --- */
-.init-tracker {
-    min-height: 50px; margin-bottom: 16px; overflow-x: auto; flex-wrap: nowrap; 
-    padding: 8px 12px; gap: 8px; background: var(--panel-2);
-}
-.init-token {
-    flex: 0 0 auto; background: var(--bg); border: 1px solid #5a1d1d; border-radius: 4px;
-    padding: 4px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center;
-    min-width: 80px; opacity: 0.7;
-}
+.init-tracker { min-height: 50px; margin-bottom: 16px; overflow-x: auto; flex-wrap: nowrap; padding: 8px 12px; gap: 8px; background: var(--panel-2); }
+.init-token { flex: 0 0 auto; background: var(--bg); border: 1px solid #5a1d1d; border-radius: 4px; padding: 4px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center; min-width: 80px; opacity: 0.7; }
 .init-token.current { opacity: 1; border-color: var(--accent); background: #fff; box-shadow: 0 0 5px rgba(138, 7, 7, 0.4); transform: scale(1.05); font-weight: bold; }
 .init-token.color-red { background-color: var(--card-bg-red); }
 .init-token.color-green { background-color: var(--card-bg-green); }
-/* etc for token colors if desired */
+.init-token.color-blue { background-color: var(--card-bg-blue); }
+.init-token.color-purple { background-color: var(--card-bg-purple); }
+.init-token.color-orange { background-color: var(--card-bg-orange); }
 
 /* --- ZONES --- */
 .zone-container { margin-top: 20px; }
-.drop-zone {
-    min-height: 120px; background: var(--panel); border: 2px dashed #5a1d1d; border-radius: 12px; padding: 16px; display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; transition: background 0.2s;
-}
+.drop-zone { min-height: 120px; background: var(--panel); border: 2px dashed #5a1d1d; border-radius: 12px; padding: 16px; display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; transition: background 0.2s; }
 .drop-zone.drag-over { background: rgba(138, 7, 7, 0.1); border-style: solid; }
 #zone-active { background: var(--active-zone-bg); }
 #zone-bench { background: var(--bench-zone-bg); opacity: 0.8; }
 .placeholder { width: 100%; text-align: center; color: var(--muted); font-style: italic; padding: 20px; }
 
 /* ACTOR CARD */
-.actor-card {
-    background: var(--card-bg-default); border: 1px solid #5a1d1d; border-radius: 8px; width: 300px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: grab; display: flex; flex-direction: column; gap: 8px; position: relative; transition: background-color 0.2s;
-}
+.actor-card { background: var(--card-bg-default); border: 1px solid #5a1d1d; border-radius: 8px; width: 300px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: grab; display: flex; flex-direction: column; gap: 8px; position: relative; transition: background-color 0.2s; }
 .actor-card.color-red { background-color: var(--card-bg-red); }
 .actor-card.color-green { background-color: var(--card-bg-green); }
 .actor-card.color-blue { background-color: var(--card-bg-blue); }
