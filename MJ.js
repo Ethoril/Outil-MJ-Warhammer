@@ -1,10 +1,10 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "1.3 - Critiques & Localisation";
+  const APP_VERSION = "1.3b - Critiques & Tables";
   // ==========================================
 
-  // ---------- DATA: CRITICAL TABLES (Transcription des images) ----------
+  // ---------- DATA: CRITICAL TABLES ----------
   const CRIT_DATA = {
     HEAD: [
       {max:10, name:"Blessure spectaculaire", eff:"+1 Blessure, 1 Hémorragie. Cicatrice (+1 DR Social)."},
@@ -114,11 +114,10 @@
 
   // LOGIQUE DE LOCALISATION WFRP
   const getReverseRoll = (roll) => {
-      // Ex: 23 -> 32, 04 -> 40, 10 -> 01, 100 -> 00(100)
-      const s = roll.toString().padStart(2, '0'); // "04"
-      const revS = s.split('').reverse().join(''); // "40"
+      const s = roll.toString().padStart(2, '0');
+      const revS = s.split('').reverse().join('');
       let val = parseInt(revS);
-      if(val === 0) val = 100; // 00 maps to 100 in table logic
+      if(val === 0) val = 100; // 00 maps to 100
       return val;
   };
 
@@ -134,7 +133,6 @@
   const getCritEffect = (key, roll) => {
       const table = CRIT_DATA[key];
       if(!table) return null;
-      // Trouve l'entrée correspondante (max >= roll)
       return table.find(e => roll <= e.max);
   };
 
@@ -166,6 +164,7 @@
       this.armor={...armor};
     }
   }
+  
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -620,5 +619,27 @@
     Store.log(`🎲 ${p?.name} (Roll ${roll})${extraInfo}${critInfo.replace(/<[^>]*>/g, '')}${targetInfo}`);
   }
 
-  Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); renderReserve(); renderCombat();
+  // --- NEW RENDER CRIT TABLES (AUTO) ---
+  function renderCritTables(){
+      if(!qs('#table-head-crit')) return;
+      
+      const makeTable = (data) => {
+          let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
+          let prevMax = 0;
+          data.forEach(row => {
+              html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`;
+              prevMax = row.max;
+          });
+          html += `</tbody></table>`;
+          return html;
+      };
+
+      qs('#table-head-crit').innerHTML = makeTable(CRIT_DATA.HEAD);
+      qs('#table-arm-crit').innerHTML = makeTable(CRIT_DATA.ARM);
+      qs('#table-body-crit').innerHTML = makeTable(CRIT_DATA.BODY);
+      qs('#table-leg-crit').innerHTML = makeTable(CRIT_DATA.LEG);
+  }
+
+  Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); 
+  renderReserve(); renderCombat(); renderCritTables();
 })();
