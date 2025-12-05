@@ -8,7 +8,6 @@
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
   
-  // CORRECTIF : La fonction opt est déplacée ici pour être accessible partout
   function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
 
   // Dice utils
@@ -338,27 +337,24 @@
     const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod; inMod.placeholder="Mod"; inMod.title = "Modificateur";
     inMod.addEventListener('input', ()=> save(true));
 
-    const btnRoll = document.createElement('button'); btnRoll.textContent = '🎲'; btnRoll.className = 'action-btn';
-    btnRoll.title = "Lancer";
-    btnRoll.addEventListener('click', ()=> runDiceLine(dl.id));
+    // NOTE INPUT AJOUTÉ
+    const inNote = document.createElement('input'); inNote.type='text'; inNote.value = dl.note||''; inNote.placeholder="Note"; inNote.className = 'note-input';
+    inNote.title = "Note";
+    inNote.addEventListener('input', ()=> save(true));
 
-    const btnDel = document.createElement('button'); btnDel.textContent = '×'; btnDel.className = 'action-btn danger';
-    btnDel.title = "Supprimer ligne";
-    btnDel.addEventListener('click', ()=> Store.removeDiceLine(dl.id));
-
-    // Target (Optional mini select)
+    // Target
     const selTarget = document.createElement('select'); selTarget.className = 'target-select';
     selTarget.append(opt('none', '—'), opt('fixed', 'Fixe'));
     Store.listParticipantsRaw().forEach(pt => { if(pt.id!==p.id) selTarget.append(opt(pt.id, pt.name)); });
     selTarget.value = dl.targetType || 'none';
     selTarget.title = "Cible";
-    selTarget.addEventListener('change', ()=> save(true)); // re-render to show input if needed
+    selTarget.addEventListener('change', ()=> save(true)); 
 
-    // Specific logic for Target input (Opposed roll value)
+    // Target Details
     let extraInput = null;
     if(dl.targetType !== 'none'){
         extraInput = document.createElement('input'); extraInput.type='number'; 
-        extraInput.placeholder = dl.targetType==='fixed' ? 'Seuil' : 'Score Opp';
+        extraInput.placeholder = dl.targetType==='fixed' ? 'Seuil' : 'Opp';
         extraInput.value = dl.targetType==='fixed' ? dl.targetValue : dl.opponentRoll;
         extraInput.className = 'extra-input';
         extraInput.title = dl.targetType==='fixed' ? 'Seuil de difficulté' : 'Score du jet opposé';
@@ -368,11 +364,19 @@
         });
     }
 
+    const btnRoll = document.createElement('button'); btnRoll.textContent = '🎲'; btnRoll.className = 'action-btn';
+    btnRoll.title = "Lancer";
+    btnRoll.addEventListener('click', ()=> runDiceLine(dl.id));
+
+    const btnDel = document.createElement('button'); btnDel.textContent = '×'; btnDel.className = 'action-btn danger';
+    btnDel.title = "Supprimer ligne";
+    btnDel.addEventListener('click', ()=> Store.removeDiceLine(dl.id));
+
     function save(noRender=false){
-        Store.updateDiceLine(dl.id, { attr: selA.value, mod: clampInt(inMod.value), targetType: selTarget.value }, noRender);
+        Store.updateDiceLine(dl.id, { attr: selA.value, mod: clampInt(inMod.value), note: inNote.value, targetType: selTarget.value }, noRender);
     }
 
-    row.append(selA, inMod, selTarget);
+    row.append(selA, inMod, inNote, selTarget); // Ajout inNote dans le flux
     if(extraInput) row.append(extraInput);
     row.append(btnRoll, btnDel);
     return row;
@@ -469,6 +473,7 @@
     if(modManual) resHTML += `<span class="badge">Mod ${modManual}</span>`;
     if(modAuto) resHTML += `<span class="badge good">Auto ${modAuto}</span>`;
     if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
+    if(dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
     res.innerHTML = resHTML; DOM.combat.results.prepend(res);
     Store.log(`🎲 ${p?.name} (Roll ${roll})${targetInfo}`);
   }
