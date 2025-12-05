@@ -2,7 +2,7 @@
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
   // Change ce numéro à chaque modification pour vérifier que tout est à jour !
-  const APP_VERSION = "1.0 - Cartes & Frise";
+  const APP_VERSION = "1.1 - Frise Active Only";
   // ==========================================
 
   // ---------- Utils ----------
@@ -277,13 +277,15 @@
     if(DOM.combat.pillRound) DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
     if(DOM.combat.pillTurn) DOM.combat.pillTurn.textContent  = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
     
-    // --- RENDER FRISE INITIATIVE ---
+    // --- RENDER FRISE INITIATIVE (CORRECTION: ACTIVE ONLY) ---
     DOM.combat.initTracker.innerHTML = '';
-    const ordered = Store.listParticipants();
-    if(ordered.length === 0) {
-        DOM.combat.initTracker.innerHTML = '<span class="muted">Aucun participant...</span>';
+    // FILTER: Only display participants currently in 'active' zone
+    const activeParticipants = Store.listParticipants().filter(p => p.zone === 'active');
+    
+    if(activeParticipants.length === 0) {
+        DOM.combat.initTracker.innerHTML = '<span class="muted">Aucun combattant actif...</span>';
     } else {
-        ordered.forEach(p => {
+        activeParticipants.forEach(p => {
             const el = document.createElement('div');
             el.className = 'init-token';
             if(p.color && p.color!=='default') el.classList.add('color-'+p.color);
