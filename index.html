@@ -1,35 +1,266 @@
-<section id="panel-rules" class="panel" role="region" aria-labelledby="tab-rules">
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WFRP – Gestionnaire de combat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="MJ.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1>⚔️ WFRP – Gestionnaire</h1>
+      <div class="spacer"></div>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab is-active" data-tab="reserve" aria-selected="true">Réserve</button>
+        <button class="tab" data-tab="combat" aria-selected="false">Combat</button>
+        <button class="tab" data-tab="rules" aria-selected="false">Règles</button>
+      </nav>
+      <button id="btn-version" class="ghost small" style="margin-left:10px; opacity:0.6;">v?</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="panel-reserve" class="panel is-active" role="region" aria-labelledby="tab-reserve">
+      <h2>Réserve (source de vérité)</h2>
+      <div class="grid-2">
+        <form id="form-add" class="card">
+          <input type="hidden" name="id" value="">
+          <h3 id="form-title">Nouveau profil</h3>
+          <div class="grid-2">
+            <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
+            <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
+            <label>Initiative (I) <small class="muted">Score de caractéristique</small><input type="number" name="initiative" value="30"></label>
+            <label>PV (Max)<input type="number" name="hp" value="12"></label>
+          </div>
+          <div class="armor-section" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px;">
+            <span class="muted" style="font-size: 0.9em; font-weight: bold;">Points d'Armure</span>
+            <div class="grid-4" style="margin-top: 6px;">
+              <label>Tête<input type="number" name="armor_head" value="0"></label>
+              <label>Corps<input type="number" name="armor_body" value="0"></label>
+              <label>Bras<input type="number" name="armor_arms" value="0"></label>
+              <label>Jambes<input type="number" name="armor_legs" value="0"></label>
+            </div>
+          </div>
+          <details>
+            <summary>Caracs (optionnel)</summary>
+            <div class="grid-3">
+              <label>CC<input type="number" name="CC"></label>
+              <label>CT<input type="number" name="CT"></label>
+              <label>F<input type="number" name="F"></label>
+              <label>E<input type="number" name="E"></label>
+              <label>I<input type="number" name="I"></label>
+              <label>Ag<input type="number" name="Ag"></label>
+              <label>Dex<input type="number" name="Dex"></label>
+              <label>Int<input type="number" name="Int"></label>
+              <label>FM<input type="number" name="FM"></label>
+              <label>Soc<input type="number" name="Soc"></label>
+            </div>
+          </details>
+          <div class="actions">
+            <button type="submit" id="btn-submit-form">Ajouter</button>
+            <button type="button" id="btn-cancel-edit" class="ghost" style="display:none;">Annuler</button>
+            <div class="spacer"></div>
+            <button type="button" id="seed-reserve" class="ghost small">Exemple</button>
+            <button type="button" id="clear-reserve" class="danger ghost small">Vider</button>
+          </div>
+        </form>
+        <div class="card">
+          <div class="row">
+            <h3>Liste</h3>
+            <div class="spacer"></div>
+            <input id="search-reserve" placeholder="Filtrer…" />
+          </div>
+          <div id="reserve-list" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-combat" class="panel" role="region" aria-labelledby="tab-combat">
+      
+      <div class="controls row card">
+        <div class="row">
+            <button id="btn-save-file" style="border-color:#3e2e22;">💾 Sauvegarder</button>
+            <button id="btn-load-file" class="ghost">📂 Charger</button>
+            <input type="file" id="file-input" accept=".json" style="display:none;" />
+        </div>
+        <div class="spacer"></div>
+        <div class="row">
+            <button id="btn-import" class="ghost">Imp. Réserve</button>
+            <button id="btn-export" class="ghost">Exp. Réserve</button>
+        </div>
+        <div class="spacer"></div>
+        <div class="row">
+          <button id="btn-start">Démarrer</button>
+          <button id="btn-d100">Lancer d100</button>
+          <button id="btn-reset" class="ghost" style="border-color:#b36e3a; color:#b36e3a;">Nettoyer Piste</button>
+        </div>
+      </div>
+
+      <div class="row meta card">
+        <span class="pill" id="pill-round">Round: 0</span>
+        <span class="pill" id="pill-turn">Tour: –</span>
+        <div class="spacer"></div>
+        <span class="muted">Glissez-déposez les cartes pour organiser l'ordre</span>
+      </div>
+
+      <div id="dice-prep-results" class="dice-result-stream card" style="min-height: 60px; margin-bottom: 16px;"></div>
+
+      <div id="init-tracker" class="init-tracker card row"></div>
+
+      <div class="zone-container active-container">
+        <h3>🔥 Zone Active (Au cœur de l'action)</h3>
+        <div id="zone-active" class="drop-zone" data-zone="active">
+            <div class="placeholder">Glissez les combattants actifs ici...</div>
+        </div>
+      </div>
+
+      <div class="zone-container bench-container">
+        <h3>💤 En attente / Réserve tactique</h3>
+        <div id="zone-bench" class="drop-zone" data-zone="bench"></div>
+      </div>
+
+      <details class="card" style="margin-top: 16px;">
+        <summary class="row" style="cursor:pointer; font-weight:bold; color:#5a1d1d; padding:4px 0;">
+          📜 Journal (Cliquer pour afficher/masquer)
+        </summary>
+        <div class="row" style="margin-top:10px; border-bottom:1px solid #ccc; padding-bottom:8px;">
+            <div class="spacer"></div>
+            <button id="btn-clear-log" class="ghost">Effacer l'historique</button>
+        </div>
+        <div id="log" class="log"></div>
+      </details>
+
+    </section>
+
+    <section id="panel-rules" class="panel" role="region" aria-labelledby="tab-rules">
         <h2>Aides de Jeu & Règles</h2>
         
         <div class="card rule-block">
             <details>
                 <summary>Localisation des dégâts & Critiques</summary>
                 <div class="rule-content">
-                    <p>D'après le <em>Livre de base WFRP 4</em> :</p>
-                    <h4>1. Localisation (Inversion)</h4>
-                    <p>Inversez le résultat du dé d'attaque (ex: 23 → 32). Si Critique : relancez 1d100.</p>
+                    <p>D'après le <em>Livre de base de Warhammer Fantasy le Jeu de Rôle (4e édition)</em> :</p>
+                    
+                    <h4>1. La Règle de base : Inverser les dés</h4>
+                    <p>Pour déterminer où un coup atterrit après un Test de Corps à corps ou de Projectiles réussi, vous devez simplement <strong>inverser le résultat des dés</strong> de votre jet d'attaque.</p>
+                    <p class="example"><em>Exemple :</em> Si vous réussissez votre attaque avec un jet de <strong>23</strong>, vous inversez les chiffres pour obtenir <strong>32</strong>. Si vous obtenez <strong>04</strong>, la localisation est <strong>40</strong>. Si vous obtenez <strong>10</strong> (le 10 comptant pour 0 sur le dé des unités), l'inverse est <strong>01</strong>.</p>
+
+                    <h4>2. Le Tableau de Localisation</h4>
                     <table class="wfrp-table">
                         <thead><tr><th>Jet</th><th>Localisation</th></tr></thead>
                         <tbody>
-                            <tr><td>01–09</td><td>Tête</td></tr>
-                            <tr><td>10–24</td><td>Bras Gauche</td></tr>
-                            <tr><td>25–44</td><td>Bras Droit</td></tr>
-                            <tr><td>45–79</td><td>Corps</td></tr>
-                            <tr><td>80–89</td><td>Jambe Gauche</td></tr>
-                            <tr><td>90–00</td><td>Jambe Droite</td></tr>
+                            <tr><td>01 – 09</td><td>Tête</td></tr>
+                            <tr><td>10 – 24</td><td>Bras gauche (ou bras secondaire)</td></tr>
+                            <tr><td>25 – 44</td><td>Bras droit (ou bras principal)</td></tr>
+                            <tr><td>45 – 79</td><td>Corps</td></tr>
+                            <tr><td>80 – 89</td><td>Jambe gauche</td></tr>
+                            <tr><td>90 – 00</td><td>Jambe droite</td></tr>
                         </tbody>
                     </table>
 
-                    <h4>2. Tables des Coups Critiques</h4>
-                    <details class="nested-details"><summary>💀 Tête</summary><img src="" alt="Voir Code JS pour détails ou livre" /><p><em>(Intégré dans le calcul automatique)</em></p></details>
-                    <details class="nested-details"><summary>💪 Bras</summary><p><em>(Intégré dans le calcul automatique)</em></p></details>
-                    <details class="nested-details"><summary>👕 Corps</summary><p><em>(Intégré dans le calcul automatique)</em></p></details>
-                    <details class="nested-details"><summary>🦵 Jambes</summary><p><em>(Intégré dans le calcul automatique)</em></p></details>
+                    <h4>3. Exception pour les Coups Critiques</h4>
+                    <p>Si votre jet d'attaque est un <strong>Coup Critique</strong> (un succès sur un double, par exemple 11, 22, 33...), la procédure change. Vous n'inversez pas le jet d'attaque. À la place :</p>
+                    <ul>
+                        <li>Vous lancez un <strong>nouveau 1d100</strong> pour déterminer la localisation (en consultant le tableau ci-dessus).</li>
+                        <li>Vous lancez un <strong>second 1d100</strong> pour déterminer la gravité de la blessure sur le Tableau des Critiques correspondant à cette localisation (voir ci-dessous).</li>
+                    </ul>
+
+                    <h4>4. Cas particuliers</h4>
+                    <ul>
+                        <li><strong>Créatures non-humanoïdes :</strong> Pour les quadrupèdes, on remplace généralement les bras par les pattes avant et les jambes par les pattes arrière.</li>
+                        <li><strong>Viser :</strong> Il est possible de viser une localisation précise, mais cela impose un malus de <strong>-20</strong> au test d'attaque.</li>
+                    </ul>
+
+                    <h3 style="margin-top:30px; border-top:2px solid #5a1d1d; padding-top:10px;">Tableaux des Coups Critiques</h3>
+                    <p class="muted">Générés automatiquement par le système :</p>
+                    
+                    <details class="nested-details">
+                        <summary>💀 Critiques à la Tête</summary>
+                        <div id="table-head-crit"></div>
+                    </details>
+                    
+                    <details class="nested-details">
+                        <summary>💪 Critiques au Bras</summary>
+                        <div id="table-arm-crit"></div>
+                    </details>
+                    
+                    <details class="nested-details">
+                        <summary>👕 Critiques au Corps</summary>
+                        <div id="table-body-crit"></div>
+                    </details>
+                    
+                    <details class="nested-details">
+                        <summary>🦵 Critiques à la Jambe</summary>
+                        <div id="table-leg-crit"></div>
+                    </details>
                 </div>
             </details>
         </div>
     </section>
 
-<script src="MJ.js?v=3"></script>
+  </main>
+
+  <template id="tpl-actor">
+    <div class="actor-card" draggable="true">
+      <div class="actor-header row">
+        <div class="actor-info">
+            <strong class="name">Nom</strong>
+            <div class="sub-info">
+                <span class="badge clickable init-badge">Init 0</span>
+                <span class="badge hp-badge">PV 0</span>
+                <span class="badge adv-badge">AV 0</span>
+            </div>
+            <div class="states" style="margin-top:4px; display:flex; gap:4px; flex-wrap:wrap;"></div>
+        </div>
+        <div class="actor-actions">
+            <button class="icon-btn btn-color" title="Couleur">🎨</button>
+            <button class="icon-btn btn-state" title="Blessé">🩸</button>
+            <button class="icon-btn danger btn-remove" title="Retirer">✕</button>
+        </div>
+      </div>
+      
+      <div class="color-palette hidden">
+          <div class="color-swatch" style="background:var(--card-bg-default);" data-c="default" title="Défaut"></div>
+          <div class="color-swatch" style="background:var(--card-bg-red);" data-c="red" title="Ennemi"></div>
+          <div class="color-swatch" style="background:var(--card-bg-green);" data-c="green" title="Allié"></div>
+          <div class="color-swatch" style="background:var(--card-bg-blue);" data-c="blue" title="Magie"></div>
+          <div class="color-swatch" style="background:var(--card-bg-purple);" data-c="purple" title="Chaos"></div>
+          <div class="color-swatch" style="background:var(--card-bg-orange);" data-c="orange" title="Boss"></div>
+      </div>
+
+      <div class="actor-controls row">
+        <button class="tiny btn-hp-minus">−PV</button>
+        <button class="tiny btn-hp-plus">+PV</button>
+        <div class="spacer"></div>
+        <button class="tiny btn-adv-minus">−AV</button>
+        <button class="tiny btn-adv-plus">+AV</button>
+      </div>
+
+      <div class="actor-armor muted"></div>
+
+      <div class="actor-dice-section">
+        <div class="dice-list"></div>
+        <button class="btn-add-dice full-width ghost small">+ Ajouter un jet</button>
+      </div>
+    </div>
+  </template>
+
+  <dialog id="dlg-import">
+    <form method="dialog" class="card">
+      <h3>Importer depuis la Réserve</h3>
+      <div id="import-list" class="list"></div>
+      <div class="row actions">
+        <div class="spacer"></div>
+        <button value="cancel" class="ghost">Annuler</button>
+        <button id="confirm-import">Importer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="MJ.js?v=3"></script>
 </body>
 </html>
