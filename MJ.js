@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "1.5 - Correctif Affichage";
+  const APP_VERSION = "1.7 - Tables Magie";
   // ==========================================
 
   // ---------- Utils ----------
@@ -12,14 +12,7 @@
   const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
-  
-  // Fonction utilitaire pour créer des options de select (Globale au scope)
-  function opt(v, t){ 
-      const o=document.createElement('option'); 
-      o.value=v; 
-      o.textContent=t; 
-      return o; 
-  }
+  function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
 
   // Dice utils
   const d100 = () => Math.floor(Math.random()*100) + 1;
@@ -30,12 +23,22 @@
   const getReverseRoll = (roll) => {
       const s = roll.toString().padStart(2, '0');
       const revS = s.split('').reverse().join('');
-      let val = parseInt(revS);
-      if(val === 0) val = 100; 
-      return val;
+      let val = parseInt(revS); if(val === 0) val = 100; return val;
+  };
+  const getLocationName = (roll) => {
+      if(roll <= 9) return {name: 'Tête', key:'HEAD'};
+      if(roll <= 24) return {name: 'Bras Gauche', key:'ARM'};
+      if(roll <= 44) return {name: 'Bras Droit', key:'ARM'};
+      if(roll <= 79) return {name: 'Corps', key:'BODY'};
+      if(roll <= 89) return {name: 'Jambe Gauche', key:'LEG'};
+      return {name: 'Jambe Droite', key:'LEG'};
+  };
+  const getCritEffect = (key, roll) => {
+      const table = CRIT_DATA[key]; if(!table) return null;
+      return table.find(e => roll <= e.max);
   };
 
-  // ---------- DATA: CRITICAL TABLES ----------
+  // ---------- DATA: TABLES ----------
   const CRIT_DATA = {
     HEAD: [
       {max:10, name:"Blessure spectaculaire", eff:"+1 Blessure, 1 Hémorragie. Cicatrice (+1 DR Social)."},
@@ -127,19 +130,51 @@
     ]
   };
 
-  const getLocationName = (roll) => {
-      if(roll <= 9) return {name: 'Tête', key:'HEAD'};
-      if(roll <= 24) return {name: 'Bras Gauche', key:'ARM'};
-      if(roll <= 44) return {name: 'Bras Droit', key:'ARM'};
-      if(roll <= 79) return {name: 'Corps', key:'BODY'};
-      if(roll <= 89) return {name: 'Jambe Gauche', key:'LEG'};
-      return {name: 'Jambe Droite', key:'LEG'};
-  };
-
-  const getCritEffect = (key, roll) => {
-      const table = CRIT_DATA[key];
-      if(!table) return null;
-      return table.find(e => roll <= e.max);
+  const MAGIC_DATA = {
+    MINOR: [
+      {max:5, name:"Signe de Sorcière", eff:"La prochaine créature vivante à naître dans un rayon de 1 km mute."},
+      {max:10, name:"Lait caillé", eff:"Tout le lait dans un rayon de 1d100 mètres tourne instantanément."},
+      {max:15, name:"Mildiou", eff:"Les récoltes pourrissent dans un rayon de (Bonus de FM) kilomètres."},
+      {max:20, name:"Cérumen", eff:"Vos oreilles se bouchent. Gagnez 1 État Assourdi jusqu'à nettoyage (Test Guérison)."},
+      {max:25, name:"Lueur occulte", eff:"Vous brillez d'une lueur sinistre (grand bûcher) pendant 1d10 Rounds."},
+      {max:30, name:"Murmures mortels", eff:"Réussissez un Test de FM Accessible (+20) ou gagnez 1 Point de Corruption."},
+      {max:35, name:"Rupture", eff:"Vous saignez du nez, des yeux et des oreilles. Gagnez 1d10 États Hémorragique."},
+      {max:40, name:"Secousse spirituelle", eff:"Gagnez l'État À Terre."},
+      {max:45, name:"Délié", eff:"Toutes vos boucles et lacets se détachent, risquant de faire tomber votre équipement."},
+      {max:50, name:"Tenue indisciplinée", eff:"Vos vêtements vous serrent. Recevez 1 État Enchevêtré (Force de 1d10 x 5)."},
+      {max:55, name:"Malédiction de la sobriété", eff:"Tout l'alcool à 100m s'évente et devient infect."},
+      {max:60, name:"Drain de l'âme", eff:"Gagnez 1 État Exténué pour 1d10 heures."},
+      {max:65, name:"Distraction", eff:"Si engagé, gagnez Surpris. Sinon, vous êtes décontenancé."},
+      {max:70, name:"Visions impies", eff:"Recevez l'État Aveuglé. Test de Calme Intermédiaire (+0) ou gagnez-en un autre."},
+      {max:75, name:"Langue maladroite", eff:"Pénalité de -10 à tous les Tests de Langue pendant 1d10 Rounds."},
+      {max:80, name:"L'horreur !", eff:"Test de Calme Difficile (-20) ou gagnez 1 État Brisé."},
+      {max:85, name:"Malédiction de corruption", eff:"Gagnez 1 Point de Corruption."},
+      {max:90, name:"Double problème", eff:"L'effet du Sort se produit ailleurs dans un rayon de 1d10 kilomètres."},
+      {max:95, name:"Multiplication d'infortune", eff:"Effectuez deux lancers sur cette table (relancez les 91-00)."},
+      {max:100, name:"Chaos en cascade", eff:"Effectuez un lancer sur le Tableau des Incantations Imparfaites Majeures."}
+    ],
+    MAJOR: [
+      {max:5, name:"Voix fantomatiques", eff:"Murmures envoûtants (FM mètres). Créatures font Calme Accessible (+20) ou 1 Corruption."},
+      {max:10, name:"Regard maudit", eff:"Yeux changent de couleur. 1 État Aveuglé permanent pendant 1d10 heures."},
+      {max:15, name:"Choc aethyrique", eff:"Subissez 1d10 Blessures (ignorant BE/PA). Test Résistance Accessible (+20) ou 1 État Sonné."},
+      {max:20, name:"Marche de la mort", eff:"Les plantes meurent sur votre passage pendant 1d10 heures."},
+      {max:25, name:"Rébellion intestinale", eff:"Vous vous souillez. Gagnez 1 État Exténué jusqu'à ce que vous vous nettoyiez."},
+      {max:30, name:"Feu de l'âme", eff:"Gagnez 1 État Enflammé (flammes impies)."},
+      {max:35, name:"Propos ésotériques", eff:"Vous jacassez de façon inintelligible pendant 1d10 Rounds (incapable d'incanter)."},
+      {max:40, name:"Essaim", eff:"Vous êtes engagé par une nuée (rats, araignées...) qui attaque pendant 1d10 Rounds."},
+      {max:45, name:"Poupée de chiffon", eff:"Projeté à 1d10 mètres en l'air. Subissez 1d10 Blessures à l'atterrissage et l'État À Terre."},
+      {max:50, name:"Membre gelé", eff:"Un membre aléatoire gèle et devient inutile pendant 1d10 heures."},
+      {max:55, name:"Vue assombrie", eff:"Perdez le talent Seconde vue et subissez -20 en Focalisation pendant 1d10 heures."},
+      {max:60, name:"Clairvoyance chaotique", eff:"Gagnez 1d10 Points de Chance bonus. Chaque dépense donne 1 Point de Corruption."},
+      {max:65, name:"Lévitation", eff:"Vous flottez à 1d10 mètres du sol pendant 1d10 minutes."},
+      {max:70, name:"Régurgitation", eff:"Vous vomissez de façon incontrôlable. Gagnez l'État Sonné pour 1d10 Rounds."},
+      {max:75, name:"Secousse du Chaos", eff:"Toutes créatures à 100m: Test Athlétisme Accessible (+20) ou État À Terre."},
+      {max:80, name:"Cœur de traître", eff:"Si vous attaquez/trahissez un allié, regagnez Chance. Si perte destin allié, gagnez +1 Destin."},
+      {max:85, name:"Terrible affaiblissement", eff:"Gagnez 1 Point de Corruption, 1 État À Terre et 1 État Exténué."},
+      {max:90, name:"Puanteur infernale", eff:"Vous gagnez le Trait de Créature Perturbant pour 1d10 heures."},
+      {max:95, name:"Drain de puissance", eff:"Incapable d'utiliser le Talent Magie des Arcanes pendant 1d10 minutes."},
+      {max:100, name:"Contre-réaction aethyrique", eff:"Tout le monde (rayon Bonus FM mètres) subit 1d10 Blessures (ignorant BE/PA) + 1 À Terre."}
+    ]
   };
 
   const ADV_STEP = 10;
@@ -397,7 +432,6 @@
     if(DOM.combat.pillRound) DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
     if(DOM.combat.pillTurn) DOM.combat.pillTurn.textContent  = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
     
-    // --- RENDER FRISE INITIATIVE (ACTIVE ONLY) ---
     DOM.combat.initTracker.innerHTML = '';
     const activeParticipants = Store.listParticipants().filter(p => p.zone === 'active');
     
@@ -414,24 +448,17 @@
         });
     }
 
-    // Clear Zones
     DOM.combat.zoneActive.innerHTML = ''; 
     DOM.combat.zoneBench.innerHTML = '';
     
     let activeCount = 0;
 
-    // Render Cards in Order with ERROR HANDLING
     Store.listParticipants().forEach(p => {
         try {
             const card = renderParticipantCard(p);
-            if(p.zone === 'active') {
-                DOM.combat.zoneActive.appendChild(card);
-                activeCount++;
-            }
+            if(p.zone === 'active') { DOM.combat.zoneActive.appendChild(card); activeCount++; }
             else DOM.combat.zoneBench.appendChild(card);
-        } catch (err) {
-            console.error("Erreur lors du rendu de la carte participant:", p.name, err);
-        }
+        } catch (err) { console.error("Erreur lors du rendu de la carte participant:", p.name, err); }
     });
 
     if(activeCount === 0) DOM.combat.zoneActive.innerHTML = '<div class="placeholder">Glissez les combattants actifs ici...</div>';
@@ -456,7 +483,6 @@
     p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
 
     const armDiv = div.querySelector('.actor-armor');
-    // CALCUL BE
     const BE = Math.floor((p.caracs?.E || 0) / 10);
     let armText = `<span style="font-weight:bold; color:#5a1d1d;">🛡️ BE ${BE}</span>`;
     if(p.armor && (p.armor.head||p.armor.body||p.armor.arms||p.armor.legs)) {
@@ -558,7 +584,7 @@
   on(DOM.combat.btnD100, 'click', ()=>{ const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); const res = document.createElement('div'); res.className='dice-result'; res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`; DOM.combat.results.prepend(res); });
   Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
 
-  // -- MAIN DICE FUNCTION (MODIFIED) --
+  // -- MAIN DICE FUNCTION --
   function runDiceLine(id){
     const st = Store.getState(); const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
     let base=null; const p = st.combat.participants.get(dl.participantId);
@@ -570,29 +596,19 @@
     const success = Number.isFinite(target) && roll <= target;
     const sl = Number.isFinite(target) ? SL(target, roll) : null;
     const dbl = isDouble(roll); 
-    // Crit: double AND success
     const crit = (dbl && success) ? 'Critique' : (dbl ? 'Maladresse' : null);
 
-    let extraInfo = ""; 
-    let critInfo = "";
-
-    // GESTION CRITIQUE & LOCALISATION
+    let extraInfo = ""; let critInfo = "";
     if(success) {
         const revRoll = getReverseRoll(roll);
         const loc = getLocationName(revRoll);
         extraInfo += ` | Touche : ${loc.name} (${revRoll})`;
-
-        // Si Critique : Roll Crit Loc + Effect
         if(crit === 'Critique'){
             const critLocRoll = d100();
             const critLoc = getLocationName(critLocRoll);
             const critEffectRoll = d100();
             const effectData = getCritEffect(critLoc.key, critEffectRoll);
-            
-            critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;">
-                <strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll})<br>
-                <span style="color:#b33a3a;">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}
-            </div>`;
+            critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;"><strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll})<br><span style="color:#b33a3a;">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}</div>`;
         }
     }
 
@@ -623,38 +639,40 @@
     if(modAuto) resHTML += `<span class="badge good">Auto ${modAuto}</span>`;
     if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
     if(dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
-    
-    // Add Loc info
     if(extraInfo) resHTML += `<span class="badge" style="background:#e3f6fd; color:#333;">${extraInfo}</span>`;
-    
-    // Add Crit info block
     if(critInfo) resHTML += critInfo;
 
     res.innerHTML = resHTML; DOM.combat.results.prepend(res); 
     Store.log(`🎲 ${p?.name} (Roll ${roll})${extraInfo}${critInfo.replace(/<[^>]*>/g, '')}${targetInfo}`);
   }
 
-  // --- NEW RENDER CRIT TABLES (AUTO) ---
-  function renderCritTables(){
-      if(!qs('#table-head-crit')) return;
+  // --- NEW RENDER REF TABLES (AUTO) ---
+  function renderReferenceTables(){
+      if(qs('#table-head-crit')) {
+          const makeCritTable = (data) => {
+              let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
+              let prevMax = 0;
+              data.forEach(row => { html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`; prevMax = row.max; });
+              html += `</tbody></table>`; return html;
+          };
+          qs('#table-head-crit').innerHTML = makeCritTable(CRIT_DATA.HEAD);
+          qs('#table-arm-crit').innerHTML = makeCritTable(CRIT_DATA.ARM);
+          qs('#table-body-crit').innerHTML = makeCritTable(CRIT_DATA.BODY);
+          qs('#table-leg-crit').innerHTML = makeCritTable(CRIT_DATA.LEG);
+      }
       
-      const makeTable = (data) => {
-          let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
-          let prevMax = 0;
-          data.forEach(row => {
-              html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`;
-              prevMax = row.max;
-          });
-          html += `</tbody></table>`;
-          return html;
-      };
-
-      qs('#table-head-crit').innerHTML = makeTable(CRIT_DATA.HEAD);
-      qs('#table-arm-crit').innerHTML = makeTable(CRIT_DATA.ARM);
-      qs('#table-body-crit').innerHTML = makeTable(CRIT_DATA.BODY);
-      qs('#table-leg-crit').innerHTML = makeTable(CRIT_DATA.LEG);
+      if(qs('#table-magic-minor')) {
+          const makeMagicTable = (data) => {
+              let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
+              let prevMax = 0;
+              data.forEach(row => { html += `<tr><td>${prevMax+1}–${row.max}</td><td><strong>${row.name}</strong></td><td>${row.eff}</td></tr>`; prevMax = row.max; });
+              html += `</tbody></table>`; return html;
+          };
+          qs('#table-magic-minor').innerHTML = makeMagicTable(MAGIC_DATA.MINOR);
+          qs('#table-magic-major').innerHTML = makeMagicTable(MAGIC_DATA.MAJOR);
+      }
   }
 
   Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); 
-  renderReserve(); renderCombat(); renderCritTables();
+  renderReserve(); renderCombat(); renderReferenceTables();
 })();
