@@ -1,4 +1,10 @@
 (() => {
+  // ==========================================
+  // 🚀 VERSION DU LOGICIEL
+  // Change ce numéro à chaque modification pour vérifier que tout est à jour !
+  const APP_VERSION = "1.0 - Cartes & Frise";
+  // ==========================================
+
   // ---------- Utils ----------
   const uid = () => Math.random().toString(36).slice(2, 10);
   const now = () => new Date().toLocaleTimeString();
@@ -188,7 +194,7 @@
     panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat') },
     reserve: { list: qs('#reserve-list'), search: qs('#search-reserve'), form: qs('#form-add'), seed: qs('#seed-reserve'), clear: qs('#clear-reserve') },
     combat: {
-      initTracker: qs('#init-tracker'), // NOUVEAU
+      initTracker: qs('#init-tracker'),
       zoneActive: qs('#zone-active'), zoneBench: qs('#zone-bench'),
       pillRound: qs('#pill-round'), pillTurn: qs('#pill-turn'),
       btnImport: qs('#btn-import'), btnExport: qs('#btn-export'),
@@ -199,7 +205,15 @@
     },
     importModal: { dialog: qs('#dlg-import'), list: qs('#import-list'), confirm: qs('#confirm-import') },
     tplActor: qs('#tpl-actor'),
+    // Ref version btn
+    btnVersion: qs('#btn-version')
   };
+
+  // ---------- AFFICHER VERSION ----------
+  if(DOM.btnVersion) {
+      DOM.btnVersion.textContent = `Version: ${APP_VERSION}`;
+      DOM.btnVersion.addEventListener('click', () => alert(`Version chargée :\n${APP_VERSION}\n\nSi ce n'est pas la bonne, essayez CTRL+F5 !`));
+  }
 
   // ---------- Logic ----------
   DOM.tabs.forEach(t => t.addEventListener('click', () => {
