@@ -109,3 +109,8 @@ details summary:hover { color: var(--accent); }
 details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; }
 
 @media (max-width: 600px) { .actor-card { width: 100%; } }
+/* Ajoute ça à la fin */
+.wfrp-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9em; }
+.wfrp-table th, .wfrp-table td { border: 1px solid #5a1d1d; padding: 4px 8px; text-align: left; }
+.wfrp-table th { background: var(--panel-2); color: #5a1d1d; }
+.nested-details { margin-left: 10px; margin-top: 5px; border-left: 2px solid var(--accent); padding-left: 8px; }
