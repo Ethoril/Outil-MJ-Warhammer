@@ -35,10 +35,11 @@
     }
   }
   class Participant {
-    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], zone='bench', armor={head:0, body:0, arms:0, legs:0} } = {}) {
+    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], zone='bench', color='default', armor={head:0, body:0, arms:0, legs:0} } = {}) {
       this.id=id; this.profileId=profileId||null; this.name=name||'—'; this.kind=kind||'Créature';
       this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; this.advantage=Number(advantage)||0;
-      this.states=[...states]; this.zone=zone; // 'active' | 'bench'
+      this.states=[...states]; this.zone=zone; 
+      this.color=color; 
       this.armor={...armor};
     }
   }
@@ -118,6 +119,9 @@
       addParticipant(p){ combat.participants.set(p.id,p); this.rebuildOrder(); save(); Bus.emit('combat'); },
       removeParticipant(id){ combat.participants.delete(id); combat.order = combat.order.filter(x=>x!==id); save(); Bus.emit('combat'); },
       updateParticipant(id, patch){ const p = combat.participants.get(id); if(!p) return; Object.assign(p, patch); this.rebuildOrder(); save(); Bus.emit('combat'); },
+      
+      setOrder(newOrderIds){ combat.order = newOrderIds; save(); },
+
       listParticipants(){ return combat.order.map(id=>combat.participants.get(id)).filter(Boolean); },
       listParticipantsRaw(){ return Array.from(combat.participants.values()); },
       
@@ -166,7 +170,9 @@
         } catch(e){ alert('Erreur : ' + e.message); }
       }
     };
-    load(); api.rebuildOrder(); return api;
+    load();
+    if(api.getState().combat.order.length === 0 && api.getState().combat.participants.size > 0){ api.rebuildOrder(); }
+    return api;
   })();
 
   // ---------- Combat engine ----------
@@ -182,6 +188,7 @@
     panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat') },
     reserve: { list: qs('#reserve-list'), search: qs('#search-reserve'), form: qs('#form-add'), seed: qs('#seed-reserve'), clear: qs('#clear-reserve') },
     combat: {
+      initTracker: qs('#init-tracker'), // NOUVEAU
       zoneActive: qs('#zone-active'), zoneBench: qs('#zone-bench'),
       pillRound: qs('#pill-round'), pillTurn: qs('#pill-turn'),
       btnImport: qs('#btn-import'), btnExport: qs('#btn-export'),
@@ -256,21 +263,39 @@
     if(DOM.combat.pillRound) DOM.combat.pillRound.textContent = `Round: ${combat.round}`;
     if(DOM.combat.pillTurn) DOM.combat.pillTurn.textContent  = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
     
+    // --- RENDER FRISE INITIATIVE ---
+    DOM.combat.initTracker.innerHTML = '';
+    const ordered = Store.listParticipants();
+    if(ordered.length === 0) {
+        DOM.combat.initTracker.innerHTML = '<span class="muted">Aucun participant...</span>';
+    } else {
+        ordered.forEach(p => {
+            const el = document.createElement('div');
+            el.className = 'init-token';
+            if(p.color && p.color!=='default') el.classList.add('color-'+p.color);
+            if(Combat.actorAtTurn()?.id === p.id) el.classList.add('current');
+            el.innerHTML = `<strong>${escapeHtml(p.name)}</strong><small>${p.initiative}</small>`;
+            DOM.combat.initTracker.appendChild(el);
+        });
+    }
+
     // Clear Zones
     DOM.combat.zoneActive.innerHTML = ''; 
     DOM.combat.zoneBench.innerHTML = '';
     
-    // Placeholder if active empty
-    if(!Store.listParticipantsRaw().some(p => p.zone === 'active')){
-        DOM.combat.zoneActive.innerHTML = '<div class="placeholder">Glissez les combattants actifs ici...</div>';
-    }
+    let activeCount = 0;
 
-    // Render Cards
+    // Render Cards in Order
     Store.listParticipants().forEach(p => {
         const card = renderParticipantCard(p);
-        if(p.zone === 'active') DOM.combat.zoneActive.appendChild(card);
+        if(p.zone === 'active') {
+            DOM.combat.zoneActive.appendChild(card);
+            activeCount++;
+        }
         else DOM.combat.zoneBench.appendChild(card);
     });
+
+    if(activeCount === 0) DOM.combat.zoneActive.innerHTML = '<div class="placeholder">Glissez les combattants actifs ici...</div>';
   }
 
   function renderParticipantCard(p){
@@ -278,7 +303,8 @@
     div.dataset.id = p.id;
     if(Combat.actorAtTurn()?.id===p.id) div.classList.add('turn');
     
-    // -- Header Info --
+    if(p.color && p.color !== 'default') div.classList.add('color-' + p.color);
+
     div.querySelector('.name').textContent = p.name;
     const initBadge = div.querySelector('.init-badge'); initBadge.textContent = `Init ${p.initiative}`;
     initBadge.addEventListener('click', ()=>{
@@ -287,16 +313,13 @@
     div.querySelector('.hp-badge').textContent = `PV ${p.hp}`;
     div.querySelector('.adv-badge').textContent = `AV ${p.advantage}`;
     
-    // -- States (CORRECTION BADGES) --
     const statesDiv = div.querySelector('.states');
     p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
 
-    // -- Armor --
     const armDiv = div.querySelector('.actor-armor');
     if(p.armor && (p.armor.head||p.armor.body||p.armor.arms||p.armor.legs)) armDiv.textContent = `🛡️ T${p.armor.head} C${p.armor.body} B${p.armor.arms} J${p.armor.legs}`;
     else armDiv.style.display = 'none';
 
-    // -- Actions Buttons --
     div.querySelector('.btn-state').addEventListener('click', ()=> toggleState(p.id, 'Blessé'));
     div.querySelector('.btn-remove').addEventListener('click', ()=> { Store.removeParticipant(p.id); Store.log(`Combat: retiré ${p.name}`); });
     div.querySelector('.btn-hp-minus').addEventListener('click', ()=> setHP(p.id, p.hp-1));
@@ -304,173 +327,103 @@
     div.querySelector('.btn-adv-minus').addEventListener('click', ()=> setAdv(p.id, p.advantage-1));
     div.querySelector('.btn-adv-plus').addEventListener('click', ()=> setAdv(p.id, p.advantage+1));
 
-    // -- Dice Lines Section --
+    const btnColor = div.querySelector('.btn-color');
+    const palette = div.querySelector('.color-palette');
+    btnColor.addEventListener('click', (e) => { e.stopPropagation(); palette.classList.toggle('hidden'); });
+    palette.querySelectorAll('.color-swatch').forEach(swatch => {
+        swatch.addEventListener('click', (e) => { e.stopPropagation(); const c = swatch.dataset.c; Store.updateParticipant(p.id, {color: c}); palette.classList.add('hidden'); });
+    });
+    div.addEventListener('mouseleave', () => palette.classList.add('hidden'));
+
     const diceContainer = div.querySelector('.dice-list');
     const myDice = Store.getState().diceLines.filter(dl => dl.participantId === p.id);
-    
-    myDice.forEach(dl => {
-        const lineEl = renderMiniDiceLine(dl, p);
-        diceContainer.appendChild(lineEl);
-    });
+    myDice.forEach(dl => { const lineEl = renderMiniDiceLine(dl, p); diceContainer.appendChild(lineEl); });
 
-    div.querySelector('.btn-add-dice').addEventListener('click', () => {
-        Store.addDiceLine(new DiceLine({participantId: p.id}));
-    });
+    div.querySelector('.btn-add-dice').addEventListener('click', () => { Store.addDiceLine(new DiceLine({participantId: p.id})); });
 
-    // -- Drag & Drop --
     div.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', p.id);
-        e.dataTransfer.effectAllowed = 'move';
-        div.style.opacity = '0.5';
+        e.dataTransfer.setData('text/plain', p.id); e.dataTransfer.effectAllowed = 'move';
+        div.classList.add('dragging'); setTimeout(() => div.style.opacity = '0.5', 0);
     });
-    div.addEventListener('dragend', () => div.style.opacity = '1');
+    div.addEventListener('dragend', () => { div.classList.remove('dragging'); div.style.opacity = '1'; });
 
     return div;
   }
 
-  // Mini Dice Line (inside card)
   function renderMiniDiceLine(dl, p){
     const row = document.createElement('div'); row.className = 'mini-dice-line';
-    
     const selA = document.createElement('select');
     ['Custom','CC','CT','F','E','I','Ag','Dex','Int','FM','Soc','initiative'].forEach(a=> selA.append(opt(a, a==='initiative'?'Init':a)));
-    selA.value = dl.attr;
-    selA.title = "Caractéristique";
-    selA.addEventListener('change', ()=> save(true));
-
-    const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod; inMod.placeholder="Mod"; inMod.title = "Modificateur";
-    inMod.addEventListener('input', ()=> save(true));
-
-    // NOTE INPUT
-    const inNote = document.createElement('input'); inNote.type='text'; inNote.value = dl.note||''; inNote.placeholder="Note"; inNote.className = 'note-input';
-    inNote.title = "Note";
-    inNote.addEventListener('input', ()=> save(true));
-
-    // Target
+    selA.value = dl.attr; selA.title = "Caractéristique"; selA.addEventListener('change', ()=> save(true));
+    const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod; inMod.placeholder="Mod"; inMod.title = "Modificateur"; inMod.addEventListener('input', ()=> save(true));
+    const inNote = document.createElement('input'); inNote.type='text'; inNote.value = dl.note||''; inNote.placeholder="Note"; inNote.className = 'note-input'; inNote.title = dl.note || "Note"; 
+    inNote.addEventListener('input', (e)=> { save(true); e.target.title = e.target.value || "Note"; });
     const selTarget = document.createElement('select'); selTarget.className = 'target-select';
     selTarget.append(opt('none', '—'), opt('fixed', 'Fixe'));
     Store.listParticipantsRaw().forEach(pt => { if(pt.id!==p.id) selTarget.append(opt(pt.id, pt.name)); });
-    selTarget.value = dl.targetType || 'none';
-    selTarget.title = "Cible";
-    selTarget.addEventListener('change', ()=> save(true)); 
-
-    // Target Details
+    selTarget.value = dl.targetType || 'none'; selTarget.title = "Cible"; selTarget.addEventListener('change', ()=> save(true)); 
     let extraInput = null;
     if(dl.targetType !== 'none'){
-        extraInput = document.createElement('input'); extraInput.type='number'; 
-        extraInput.placeholder = dl.targetType==='fixed' ? 'Seuil' : 'Opp';
-        extraInput.value = dl.targetType==='fixed' ? dl.targetValue : dl.opponentRoll;
-        extraInput.className = 'extra-input';
-        extraInput.title = dl.targetType==='fixed' ? 'Seuil de difficulté' : 'Score du jet opposé';
-        extraInput.addEventListener('input', (e) => {
-            if(dl.targetType==='fixed') Store.updateDiceLine(dl.id, {targetValue:e.target.value}, true);
-            else Store.updateDiceLine(dl.id, {opponentRoll:e.target.value}, true);
-        });
+        extraInput = document.createElement('input'); extraInput.type='number'; extraInput.placeholder = dl.targetType==='fixed' ? 'Seuil' : 'Opp'; extraInput.value = dl.targetType==='fixed' ? dl.targetValue : dl.opponentRoll; extraInput.className = 'extra-input'; extraInput.title = dl.targetType==='fixed' ? 'Seuil de difficulté' : 'Score du jet opposé';
+        extraInput.addEventListener('input', (e) => { if(dl.targetType==='fixed') Store.updateDiceLine(dl.id, {targetValue:e.target.value}, true); else Store.updateDiceLine(dl.id, {opponentRoll:e.target.value}, true); });
     }
-
-    const btnRoll = document.createElement('button'); btnRoll.textContent = '🎲'; btnRoll.className = 'action-btn';
-    btnRoll.title = "Lancer";
-    btnRoll.addEventListener('click', ()=> runDiceLine(dl.id));
-
-    const btnDel = document.createElement('button'); btnDel.textContent = '×'; btnDel.className = 'action-btn danger';
-    btnDel.title = "Supprimer ligne";
-    btnDel.addEventListener('click', ()=> Store.removeDiceLine(dl.id));
-
-    function save(noRender=false){
-        Store.updateDiceLine(dl.id, { attr: selA.value, mod: clampInt(inMod.value), note: inNote.value, targetType: selTarget.value }, noRender);
-    }
-
-    row.append(selA, inMod, inNote, selTarget); // Ajout inNote dans le flux
-    if(extraInput) row.append(extraInput);
-    row.append(btnRoll, btnDel);
+    const btnRoll = document.createElement('button'); btnRoll.textContent = '🎲'; btnRoll.className = 'action-btn'; btnRoll.title = "Lancer"; btnRoll.addEventListener('click', ()=> runDiceLine(dl.id));
+    const btnDel = document.createElement('button'); btnDel.textContent = '×'; btnDel.className = 'action-btn danger'; btnDel.title = "Supprimer ligne"; btnDel.addEventListener('click', ()=> Store.removeDiceLine(dl.id));
+    function save(noRender=false){ Store.updateDiceLine(dl.id, { attr: selA.value, mod: clampInt(inMod.value), note: inNote.value, targetType: selTarget.value }, noRender); }
+    row.append(selA, inMod, inNote, selTarget); if(extraInput) row.append(extraInput); row.append(btnRoll, btnDel);
     return row;
   }
 
-  // -- Drag & Drop Handlers on Zones --
   function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; this.classList.add('drag-over'); }
   function handleDragLeave(e) { this.classList.remove('drag-over'); }
+  function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.actor-card:not(.dragging)')];
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect(); const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) { return { offset: offset, element: child }; } else { return closest; }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
   function handleDrop(e) {
     e.preventDefault(); this.classList.remove('drag-over');
-    const id = e.dataTransfer.getData('text/plain');
-    const newZone = this.dataset.zone; // 'active' or 'bench'
-    if(id && newZone){
-        Store.updateParticipant(id, {zone: newZone});
-    }
+    const id = e.dataTransfer.getData('text/plain'); if(!id) return;
+    const container = this; const targetZone = container.dataset.zone;
+    const afterElement = getDragAfterElement(container, e.clientY);
+    Store.updateParticipant(id, {zone: targetZone}); 
+    const activeIds = [...DOM.combat.zoneActive.querySelectorAll('.actor-card')].map(el => el.dataset.id).filter(x => x !== id);
+    const benchIds = [...DOM.combat.zoneBench.querySelectorAll('.actor-card')].map(el => el.dataset.id).filter(x => x !== id);
+    if(targetZone === 'active'){ if(afterElement) { const idx = activeIds.indexOf(afterElement.dataset.id); activeIds.splice(idx, 0, id); } else { activeIds.push(id); } } 
+    else { if(afterElement) { const idx = benchIds.indexOf(afterElement.dataset.id); benchIds.splice(idx, 0, id); } else { benchIds.push(id); } }
+    const newGlobalOrder = [...activeIds, ...benchIds];
+    Store.setOrder(newGlobalOrder);
   }
+  [DOM.combat.zoneActive, DOM.combat.zoneBench].forEach(zone => { zone.addEventListener('dragover', handleDragOver); zone.addEventListener('dragleave', handleDragLeave); zone.addEventListener('drop', handleDrop); });
 
-  [DOM.combat.zoneActive, DOM.combat.zoneBench].forEach(zone => {
-    zone.addEventListener('dragover', handleDragOver);
-    zone.addEventListener('dragleave', handleDragLeave);
-    zone.addEventListener('drop', handleDrop);
-  });
-
-  // -- Helpers & Utils --
   function setAdv(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{advantage:val}); } 
   function setHP(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{hp:val}); }
   function toggleState(id, label){ const p=getP(id); if(!p) return; const has=p.states.includes(label); const ns=has? p.states.filter(x=>x!==label) : [...p.states,label]; Store.updateParticipant(id,{states:ns}); }
   function getP(id){ return Store.getState().combat.participants.get(id); }
   
-  // Safe bindings
-  on(DOM.combat.btnImport, 'click', ()=>{
-    const profs = Store.listProfiles(); DOM.importModal.list.replaceChildren(...profs.map(p => importRow(p)));
-    DOM.importModal.dialog.showModal();
-  });
-  on(DOM.importModal.confirm, 'click', (e)=>{
-    e.preventDefault(); const ids = Array.from(DOM.importModal.list.querySelectorAll('input[type=checkbox]:checked')).map(ch => ch.value);
-    Store.importFromReserve(ids); DOM.importModal.dialog.close();
-  });
+  on(DOM.combat.btnImport, 'click', ()=>{ const profs = Store.listProfiles(); DOM.importModal.list.replaceChildren(...profs.map(p => importRow(p))); DOM.importModal.dialog.showModal(); });
+  on(DOM.importModal.confirm, 'click', (e)=>{ e.preventDefault(); const ids = Array.from(DOM.importModal.list.querySelectorAll('input[type=checkbox]:checked')).map(ch => ch.value); Store.importFromReserve(ids); DOM.importModal.dialog.close(); });
   on(DOM.combat.btnExport, 'click', ()=>{ if(confirm('Appliquer PV aux profils correspondants ?')) Store.exportToReserve(); });
-  on(DOM.combat.btnSaveFile, 'click', ()=>{
-    const json = Store.getFullJSON(); const blob = new Blob([json], {type: "application/json"}); const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `wfrp-save-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-  });
+  on(DOM.combat.btnSaveFile, 'click', ()=>{ const json = Store.getFullJSON(); const blob = new Blob([json], {type: "application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `wfrp-save-${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); });
   on(DOM.combat.btnLoadFile, 'click', ()=> { if(DOM.combat.fileInput) DOM.combat.fileInput.click(); });
   on(DOM.combat.fileInput, 'change', (e)=>{ const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (ev) => Store.loadFromJSON(ev.target.result); reader.readAsText(file); e.target.value = ''; });
   on(DOM.combat.btnStart, 'click', () => Combat.start());
   on(DOM.combat.btnReset, 'click', () => { if(confirm('Effacer les résultats de dés affichés ?')) DOM.combat.results.replaceChildren(); });
-  on(DOM.combat.btnD100, 'click', ()=>{ 
-    const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`);
-    const res = document.createElement('div'); res.className='dice-result';
-    res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`;
-    DOM.combat.results.prepend(res);
-  });
+  on(DOM.combat.btnD100, 'click', ()=>{ const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); const res = document.createElement('div'); res.className='dice-result'; res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`; DOM.combat.results.prepend(res); });
   Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
 
-  // -- Dice Running Logic --
   function runDiceLine(id){
     const st = Store.getState(); const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
     let base=null; const p = st.combat.participants.get(dl.participantId);
-    if(dl.attr==='Custom'){ base = clampInt(dl.base, 0); }
-    else if(dl.attr==='initiative') base = p ? Number(p.initiative||0) : null;
-    else if(p?.profileId){ const prof = Store.getProfile(p.profileId); base = Number(prof?.caracs?.[dl.attr] ?? NaN); if(!Number.isFinite(base)) base=null; }
-    
-    const modManual = clampInt(dl.mod, 0); const modAuto = autoModForParticipant(dl.participantId);
-    const target = Number.isFinite(base) ? base + (modManual + modAuto) : null;
-    const roll = d100();
-    const success = Number.isFinite(target) && roll <= target;
-    const sl = Number.isFinite(target) ? SL(target, roll) : null;
-    const dbl = isDouble(roll); const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
-
+    if(dl.attr==='Custom'){ base = clampInt(dl.base, 0); } else if(dl.attr==='initiative') base = p ? Number(p.initiative||0) : null; else if(p?.profileId){ const prof = Store.getProfile(p.profileId); base = Number(prof?.caracs?.[dl.attr] ?? NaN); if(!Number.isFinite(base)) base=null; }
+    const modManual = clampInt(dl.mod, 0); const modAuto = autoModForParticipant(dl.participantId); const target = Number.isFinite(base) ? base + (modManual + modAuto) : null;
+    const roll = d100(); const success = Number.isFinite(target) && roll <= target; const sl = Number.isFinite(target) ? SL(target, roll) : null; const dbl = isDouble(roll); const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
     let targetInfo = ""; let slDiff = null;
-    if(dl.targetType === 'fixed' && dl.targetValue){ targetInfo = ` | vs Seuil ${dl.targetValue}`; }
-    else if(dl.targetType !== 'none'){
-        const defender = st.combat.participants.get(dl.targetType);
-        if(defender && dl.targetAttr && dl.opponentRoll){
-             let defBase = 0;
-             if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0);
-             else if(defender.profileId) { const dProf = Store.getProfile(defender.profileId); defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0); }
-             const defRoll = Number(dl.opponentRoll);
-             if(Number.isFinite(defBase) && Number.isFinite(defRoll)){
-                 const slDef = SL(defBase, defRoll);
-                 if(sl !== null) { slDiff = sl - slDef; targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`; }
-             }
-        }
-    }
-    const res = document.createElement('div'); res.className='dice-result';
-    let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
-    if(Number.isFinite(target)){ resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span><span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`; } 
-    else { resHTML += `<span class="result-warn">Sans cible (attaquant)</span>`; }
+    if(dl.targetType === 'fixed' && dl.targetValue){ targetInfo = ` | vs Seuil ${dl.targetValue}`; } else if(dl.targetType !== 'none'){ const defender = st.combat.participants.get(dl.targetType); if(defender && dl.targetAttr && dl.opponentRoll){ let defBase = 0; if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0); else if(defender.profileId) { const dProf = Store.getProfile(defender.profileId); defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0); } const defRoll = Number(dl.opponentRoll); if(Number.isFinite(defBase) && Number.isFinite(defRoll)){ const slDef = SL(defBase, defRoll); if(sl !== null) { slDiff = sl - slDef; targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`; } } } }
+    const res = document.createElement('div'); res.className='dice-result'; let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
+    if(Number.isFinite(target)){ resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span><span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`; } else { resHTML += `<span class="result-warn">Sans cible (attaquant)</span>`; }
     if(slDiff !== null) { resHTML += `<span class="badge ${slDiff>=0?'good':'bad'}" style="margin-left:8px; font-size:1.1em;">MARGE: ${slDiff>=0?'+':''}${slDiff}</span>`; }
     resHTML += `<span class="badge">${escapeHtml(p?.name||'?')}</span>`;
     if(dl.attr!=='Custom') resHTML += `<span class="badge">${dl.attr}</span>`;
@@ -478,10 +431,8 @@
     if(modAuto) resHTML += `<span class="badge good">Auto ${modAuto}</span>`;
     if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
     if(dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
-    res.innerHTML = resHTML; DOM.combat.results.prepend(res);
-    Store.log(`🎲 ${p?.name} (Roll ${roll})${targetInfo}`);
+    res.innerHTML = resHTML; DOM.combat.results.prepend(res); Store.log(`🎲 ${p?.name} (Roll ${roll})${targetInfo}`);
   }
 
-  Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); 
-  renderReserve(); renderCombat();
+  Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); renderReserve(); renderCombat();
 })();
