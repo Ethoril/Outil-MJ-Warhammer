@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "1.3b - Critiques & Tables";
+  const APP_VERSION = "1.4 - Règles Santé & BE";
   // ==========================================
 
   // ---------- DATA: CRITICAL TABLES ----------
@@ -164,7 +164,6 @@
       this.armor={...armor};
     }
   }
-  
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -446,8 +445,15 @@
     p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
 
     const armDiv = div.querySelector('.actor-armor');
-    if(p.armor && (p.armor.head||p.armor.body||p.armor.arms||p.armor.legs)) armDiv.textContent = `🛡️ T${p.armor.head} C${p.armor.body} B${p.armor.arms} J${p.armor.legs}`;
-    else armDiv.style.display = 'none';
+    // CALCUL DU BONUS D'ENDURANCE (BE)
+    const BE = Math.floor((p.caracs.E || 0) / 10);
+    // On affiche BE et Armure
+    let armText = `<span style="font-weight:bold; color:#5a1d1d;">🛡️ BE ${BE}</span>`;
+    
+    if(p.armor && (p.armor.head||p.armor.body||p.armor.arms||p.armor.legs)) {
+        armText += ` | T${p.armor.head} C${p.armor.body} B${p.armor.arms} J${p.armor.legs}`;
+    }
+    armDiv.innerHTML = armText;
 
     div.querySelector('.btn-state').addEventListener('click', ()=> toggleState(p.id, 'Blessé'));
     div.querySelector('.btn-remove').addEventListener('click', ()=> { Store.removeParticipant(p.id); Store.log(`Combat: retiré ${p.name}`); });
