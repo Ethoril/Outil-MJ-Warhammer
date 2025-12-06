@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.1 - Fix Endurance";
+  const APP_VERSION = "2.2 - Auto-Repair & Fix Stats";
   // ==========================================
 
   // ---------- Utils ----------
@@ -196,15 +196,15 @@
     }
   }
   class Participant {
-    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], zone='bench', color='default', armor={head:0, body:0, arms:0, legs:0} } = {}) {
+    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], zone='bench', color='default', armor={head:0, body:0, arms:0, legs:0}, caracs={} } = {}) {
       this.id=id; this.profileId=profileId||null; this.name=name||'—'; this.kind=kind||'Créature';
       this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; this.advantage=Number(advantage)||0;
       this.states=[...states]; this.zone=zone; 
       this.color=color; 
       this.armor={...armor};
+      this.caracs={...caracs}; // IMPORTANT FIX: Caracs in participant
     }
   }
-  
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
@@ -237,6 +237,24 @@
           combat.turnIndex = c.turnIndex ?? -1;
           combat.order = Array.isArray(c.order) ? c.order : [];
           combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
+          
+          // --- AUTO-REPAIR SCRIPT ---
+          // Fix missing caracs in participants by looking up profile
+          let repairedCount = 0;
+          combat.participants.forEach(p => {
+             if((!p.caracs || Object.keys(p.caracs).length === 0) && p.profileId){
+                 const prof = reserve.get(p.profileId);
+                 if(prof && prof.caracs){
+                     p.caracs = {...prof.caracs};
+                     repairedCount++;
+                 }
+             }
+          });
+          if(repairedCount > 0) {
+              console.log(`[Auto-Repair] ${repairedCount} combattants réparés.`);
+              save();
+          }
+          // --------------------------
         }
         log = JSON.parse(localStorage.getItem(KEY.LOG) || '[]');
         const d = JSON.parse(localStorage.getItem(KEY.DICE) || '[]');
@@ -302,7 +320,12 @@
       importFromReserve(ids){
         ids.forEach(id => {
           const prof = reserve.get(id); if(!prof) return;
-          const p = new Participant({ profileId: prof.id, name: prof.name, kind: prof.kind, initiative: prof.initiative, hp: prof.hp, armor: {...prof.armor}, zone: 'bench' });
+          // FIX: Add Caracs copy on import!
+          const p = new Participant({ 
+              profileId: prof.id, name: prof.name, kind: prof.kind, 
+              initiative: prof.initiative, hp: prof.hp, 
+              armor: {...prof.armor}, caracs: {...prof.caracs}, zone: 'bench' 
+          });
           this.addParticipant(p);
         });
         this.log(`Import: ${ids.length} participant(s)`);
@@ -398,12 +421,10 @@
     const f = DOM.reserve.form;
     f.querySelector('[name=id]').value = p.id; f.querySelector('[name=name]').value = p.name;
     f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
-    // Load E (outside details)
-    const inputE = f.querySelector('[name=E]');
-    if(inputE) inputE.value = p.caracs?.E || 0;
-
     f.querySelector('[name=armor_head]').value = p.armor?.head || 0; f.querySelector('[name=armor_body]').value = p.armor?.body || 0;
     f.querySelector('[name=armor_arms]').value = p.armor?.arms || 0; f.querySelector('[name=armor_legs]').value = p.armor?.legs || 0;
+    // Load E specially
+    const inputE = f.querySelector('[name=E]'); if(inputE) inputE.value = p.caracs?.E || 0;
     ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { f.querySelector(`[name=${k}]`).value = p.caracs[k] || ''; });
     formTitle.textContent = "Modifier le profil"; btnSubmit.textContent = "Modifier"; btnCancel.style.display = 'inline-block';
     f.scrollIntoView({behavior: "smooth"});
@@ -413,9 +434,7 @@
   on(DOM.reserve.form, 'submit', (e)=>{
     e.preventDefault(); const fd = new FormData(DOM.reserve.form);
     const caracs = {}; 
-    // Manual get E from main section
-    caracs['E'] = Number(fd.get('E') || 0);
-
+    caracs['E'] = Number(fd.get('E') || 0); // Get E from main inputs
     ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; } });
     const armor = { head: Number(fd.get('armor_head')||0), body: Number(fd.get('armor_body')||0), arms: Number(fd.get('armor_arms')||0), legs: Number(fd.get('armor_legs')||0) };
     const id = fd.get('id');
@@ -498,18 +517,38 @@
     }
     armDiv.innerHTML = armText;
 
-    div.querySelector('.btn-state').addEventListener('click', ()=> toggleState(p.id, 'Blessé'));
-    div.querySelector('.btn-remove').addEventListener('click', ()=> { Store.removeParticipant(p.id); Store.log(`Combat: retiré ${p.name}`); });
-    div.querySelector('.btn-hp-minus').addEventListener('click', ()=> setHP(p.id, p.hp-1));
-    div.querySelector('.btn-hp-plus').addEventListener('click', ()=> setHP(p.id, p.hp+1));
-    div.querySelector('.btn-adv-minus').addEventListener('click', ()=> setAdv(p.id, p.advantage-1));
-    div.querySelector('.btn-adv-plus').addEventListener('click', ()=> setAdv(p.id, p.advantage+1));
+    // PROTECTION DES CLICS (preventDefault sur mousedown)
+    const btnState = div.querySelector('.btn-state');
+    btnState.addEventListener('click', (e)=> { e.stopPropagation(); toggleState(p.id, 'Blessé'); });
+    btnState.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
+
+    const btnRemove = div.querySelector('.btn-remove');
+    btnRemove.addEventListener('click', (e)=> { e.stopPropagation(); Store.removeParticipant(p.id); Store.log(`Combat: retiré ${p.name}`); });
+    btnRemove.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
+
+    const btnHPM = div.querySelector('.btn-hp-minus');
+    btnHPM.addEventListener('click', (e)=> { e.stopPropagation(); setHP(p.id, p.hp-1); });
+    btnHPM.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
+
+    const btnHPP = div.querySelector('.btn-hp-plus');
+    btnHPP.addEventListener('click', (e)=> { e.stopPropagation(); setHP(p.id, p.hp+1); });
+    btnHPP.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
+
+    const btnAdvM = div.querySelector('.btn-adv-minus');
+    btnAdvM.addEventListener('click', (e)=> { e.stopPropagation(); setAdv(p.id, p.advantage-1); });
+    btnAdvM.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
+
+    const btnAdvP = div.querySelector('.btn-adv-plus');
+    btnAdvP.addEventListener('click', (e)=> { e.stopPropagation(); setAdv(p.id, p.advantage+1); });
+    btnAdvP.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
 
     const btnColor = div.querySelector('.btn-color');
     const palette = div.querySelector('.color-palette');
     btnColor.addEventListener('click', (e) => { e.stopPropagation(); palette.classList.toggle('hidden'); });
+    btnColor.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
     palette.querySelectorAll('.color-swatch').forEach(swatch => {
         swatch.addEventListener('click', (e) => { e.stopPropagation(); const c = swatch.dataset.c; Store.updateParticipant(p.id, {color: c}); palette.classList.add('hidden'); });
+        swatch.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
     });
     div.addEventListener('mouseleave', () => palette.classList.add('hidden'));
 
@@ -517,7 +556,9 @@
     const myDice = Store.getState().diceLines.filter(dl => dl.participantId === p.id);
     myDice.forEach(dl => { const lineEl = renderMiniDiceLine(dl, p); diceContainer.appendChild(lineEl); });
 
-    div.querySelector('.btn-add-dice').addEventListener('click', () => { Store.addDiceLine(new DiceLine({participantId: p.id})); });
+    const btnAddDice = div.querySelector('.btn-add-dice');
+    btnAddDice.addEventListener('click', (e) => { e.stopPropagation(); Store.addDiceLine(new DiceLine({participantId: p.id})); });
+    btnAddDice.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
 
     div.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', p.id); e.dataTransfer.effectAllowed = 'move';
@@ -533,25 +574,46 @@
     const selA = document.createElement('select');
     ['Custom','CC','CT','F','E','I','Ag','Dex','Int','FM','Soc','initiative'].forEach(a=> selA.append(opt(a, a==='initiative'?'Init':a)));
     selA.value = dl.attr; selA.title = "Caractéristique"; selA.addEventListener('change', ()=> save(true));
+    selA.addEventListener('click', (e)=> e.stopPropagation());
+    selA.addEventListener('mousedown', (e)=> e.stopPropagation());
+
     const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod; inMod.placeholder="Mod"; inMod.title = "Modificateur"; inMod.addEventListener('input', ()=> save(true));
+    inMod.addEventListener('click', (e)=> e.stopPropagation());
+    inMod.addEventListener('mousedown', (e)=> e.stopPropagation());
+
     const inNote = document.createElement('input'); inNote.type='text'; inNote.value = dl.note||''; inNote.placeholder="Note"; inNote.className = 'note-input'; inNote.title = dl.note || "Note"; 
     inNote.addEventListener('input', (e)=> { save(true); e.target.title = e.target.value || "Note"; });
+    inNote.addEventListener('click', (e)=> e.stopPropagation());
+    inNote.addEventListener('mousedown', (e)=> e.stopPropagation());
+
     const selTarget = document.createElement('select'); selTarget.className = 'target-select';
     selTarget.append(opt('none', '—'), opt('fixed', 'Fixe'));
     Store.listParticipantsRaw().forEach(pt => { if(pt.id!==p.id) selTarget.append(opt(pt.id, pt.name)); });
     selTarget.value = dl.targetType || 'none'; selTarget.title = "Cible"; selTarget.addEventListener('change', ()=> save(true)); 
+    selTarget.addEventListener('click', (e)=> e.stopPropagation());
+    selTarget.addEventListener('mousedown', (e)=> e.stopPropagation());
+
     let extraInput = null;
     if(dl.targetType !== 'none'){
         extraInput = document.createElement('input'); extraInput.type='number'; extraInput.placeholder = dl.targetType==='fixed' ? 'Seuil' : 'Opp'; extraInput.value = dl.targetType==='fixed' ? dl.targetValue : dl.opponentRoll; extraInput.className = 'extra-input'; extraInput.title = dl.targetType==='fixed' ? 'Seuil de difficulté' : 'Score du jet opposé';
         extraInput.addEventListener('input', (e) => { if(dl.targetType==='fixed') Store.updateDiceLine(dl.id, {targetValue:e.target.value}, true); else Store.updateDiceLine(dl.id, {opponentRoll:e.target.value}, true); });
+        extraInput.addEventListener('click', (e)=> e.stopPropagation());
+        extraInput.addEventListener('mousedown', (e)=> e.stopPropagation());
     }
-    const btnRoll = document.createElement('button'); btnRoll.textContent = '🎲'; btnRoll.className = 'action-btn'; btnRoll.title = "Lancer"; btnRoll.addEventListener('click', ()=> runDiceLine(dl.id));
-    const btnDel = document.createElement('button'); btnDel.textContent = '×'; btnDel.className = 'action-btn danger'; btnDel.title = "Supprimer ligne"; btnDel.addEventListener('click', ()=> Store.removeDiceLine(dl.id));
+    const btnRoll = document.createElement('button'); btnRoll.textContent = '🎲'; btnRoll.className = 'action-btn'; btnRoll.title = "Lancer"; 
+    btnRoll.addEventListener('click', (e)=> { e.stopPropagation(); runDiceLine(dl.id); });
+    btnRoll.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
+
+    const btnDel = document.createElement('button'); btnDel.textContent = '×'; btnDel.className = 'action-btn danger'; btnDel.title = "Supprimer ligne"; 
+    btnDel.addEventListener('click', (e)=> { e.stopPropagation(); Store.removeDiceLine(dl.id); });
+    btnDel.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
+
     function save(noRender=false){ Store.updateDiceLine(dl.id, { attr: selA.value, mod: clampInt(inMod.value), note: inNote.value, targetType: selTarget.value }, noRender); }
     row.append(selA, inMod, inNote, selTarget); if(extraInput) row.append(extraInput); row.append(btnRoll, btnDel);
     return row;
   }
 
+  // Drag & Drop
   function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; this.classList.add('drag-over'); }
   function handleDragLeave(e) { this.classList.remove('drag-over'); }
   function getDragAfterElement(container, y) {
@@ -598,8 +660,19 @@
     if(dl.attr==='Custom'){ base = clampInt(dl.base, 0); } else if(dl.attr==='initiative') base = p ? Number(p.initiative||0) : null; else if(p?.profileId){ const prof = Store.getProfile(p.profileId); base = Number(prof?.caracs?.[dl.attr] ?? NaN); if(!Number.isFinite(base)) base=null; }
     const modManual = clampInt(dl.mod, 0); const modAuto = autoModForParticipant(dl.participantId); const target = Number.isFinite(base) ? base + (modManual + modAuto) : null;
     const roll = d100(); const success = Number.isFinite(target) && roll <= target; const sl = Number.isFinite(target) ? SL(target, roll) : null; const dbl = isDouble(roll); const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
-    let targetInfo = ""; let slDiff = null;
-    if(dl.targetType === 'fixed' && dl.targetValue){ targetInfo = ` | vs Seuil ${dl.targetValue}`; } else if(dl.targetType !== 'none'){ const defender = st.combat.participants.get(dl.targetType); if(defender && dl.targetAttr && dl.opponentRoll){ let defBase = 0; if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0); else if(defender.profileId) { const dProf = Store.getProfile(defender.profileId); defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0); } const defRoll = Number(dl.opponentRoll); if(Number.isFinite(defBase) && Number.isFinite(defRoll)){ const slDef = SL(defBase, defRoll); if(sl !== null) { slDiff = sl - slDef; targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`; } } } }
+    let targetInfo = ""; let slDiff = null; let extraInfo = ""; let critInfo = "";
+
+    if(success) {
+        const revRoll = getReverseRoll(roll); const loc = getLocationName(revRoll); extraInfo += ` | Touche : ${loc.name} (${revRoll})`;
+        if(crit === 'Critique'){
+            const critLocRoll = d100(); const critLoc = getLocationName(critLocRoll); const critEffectRoll = d100(); const effectData = getCritEffect(critLoc.key, critEffectRoll);
+            critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;"><strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll})<br><span style="color:#b33a3a;">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}</div>`;
+        }
+    }
+
+    if(dl.targetType === 'fixed' && dl.targetValue){ targetInfo = ` | vs Seuil ${dl.targetValue}`; } 
+    else if(dl.targetType !== 'none'){ const defender = st.combat.participants.get(dl.targetType); if(defender && dl.targetAttr && dl.opponentRoll){ let defBase = 0; if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0); else if(defender.profileId) { const dProf = Store.getProfile(defender.profileId); defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0); } const defRoll = Number(dl.opponentRoll); if(Number.isFinite(defBase) && Number.isFinite(defRoll)){ const slDef = SL(defBase, defRoll); if(sl !== null) { slDiff = sl - slDef; targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`; } } } }
+    
     const res = document.createElement('div'); res.className='dice-result'; let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
     if(Number.isFinite(target)){ resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span><span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`; } else { resHTML += `<span class="result-warn">Sans cible (attaquant)</span>`; }
     if(slDiff !== null) { resHTML += `<span class="badge ${slDiff>=0?'good':'bad'}" style="margin-left:8px; font-size:1.1em;">MARGE: ${slDiff>=0?'+':''}${slDiff}</span>`; }
