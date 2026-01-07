@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.3 - Simplified Rolling";
+  const APP_VERSION = "2.4 - Fix Missing Badge";
   // ==========================================
 
   // ---------- Utils ----------
@@ -13,6 +13,14 @@
   const clampInt = (v, def=0)=> Number.isFinite(Number(v)) ? Number(v) : def;
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
   function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
+  
+  // LA FONCTION QUI MANQUAIT :
+  function badge(text, cls=''){ 
+      const el = document.createElement('span'); 
+      el.className = `badge ${cls}`; 
+      el.textContent = text; 
+      return el; 
+  }
 
   // Dice utils
   const d100 = () => Math.floor(Math.random()*100) + 1;
