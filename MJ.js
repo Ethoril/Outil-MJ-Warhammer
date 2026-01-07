@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.2 - Auto-Repair & Fix Stats";
+  const APP_VERSION = "2.3 - Simplified Rolling";
   // ==========================================
 
   // ---------- Utils ----------
@@ -207,6 +207,7 @@
   }
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
+      // NOTE (v2.3): attr, mod, targetType, etc. are kept for legacy but simplified UI only uses 'base' (score) and 'note'.
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
     }
   }
@@ -239,7 +240,6 @@
           combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
           
           // --- AUTO-REPAIR SCRIPT ---
-          // Fix missing caracs in participants by looking up profile
           let repairedCount = 0;
           combat.participants.forEach(p => {
              if((!p.caracs || Object.keys(p.caracs).length === 0) && p.profileId){
@@ -320,7 +320,6 @@
       importFromReserve(ids){
         ids.forEach(id => {
           const prof = reserve.get(id); if(!prof) return;
-          // FIX: Add Caracs copy on import!
           const p = new Participant({ 
               profileId: prof.id, name: prof.name, kind: prof.kind, 
               initiative: prof.initiative, hp: prof.hp, 
@@ -423,7 +422,6 @@
     f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
     f.querySelector('[name=armor_head]').value = p.armor?.head || 0; f.querySelector('[name=armor_body]').value = p.armor?.body || 0;
     f.querySelector('[name=armor_arms]').value = p.armor?.arms || 0; f.querySelector('[name=armor_legs]').value = p.armor?.legs || 0;
-    // Load E specially
     const inputE = f.querySelector('[name=E]'); if(inputE) inputE.value = p.caracs?.E || 0;
     ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { f.querySelector(`[name=${k}]`).value = p.caracs[k] || ''; });
     formTitle.textContent = "Modifier le profil"; btnSubmit.textContent = "Modifier"; btnCancel.style.display = 'inline-block';
@@ -434,7 +432,7 @@
   on(DOM.reserve.form, 'submit', (e)=>{
     e.preventDefault(); const fd = new FormData(DOM.reserve.form);
     const caracs = {}; 
-    caracs['E'] = Number(fd.get('E') || 0); // Get E from main inputs
+    caracs['E'] = Number(fd.get('E') || 0); 
     ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; } });
     const armor = { head: Number(fd.get('armor_head')||0), body: Number(fd.get('armor_body')||0), arms: Number(fd.get('armor_arms')||0), legs: Number(fd.get('armor_legs')||0) };
     const id = fd.get('id');
@@ -517,7 +515,6 @@
     }
     armDiv.innerHTML = armText;
 
-    // PROTECTION DES CLICS (preventDefault sur mousedown)
     const btnState = div.querySelector('.btn-state');
     btnState.addEventListener('click', (e)=> { e.stopPropagation(); toggleState(p.id, 'Blessé'); });
     btnState.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
@@ -569,47 +566,50 @@
     return div;
   }
 
+  // --- NEW SIMPLIFIED DICE LINE RENDER ---
   function renderMiniDiceLine(dl, p){
     const row = document.createElement('div'); row.className = 'mini-dice-line';
-    const selA = document.createElement('select');
-    ['Custom','CC','CT','F','E','I','Ag','Dex','Int','FM','Soc','initiative'].forEach(a=> selA.append(opt(a, a==='initiative'?'Init':a)));
-    selA.value = dl.attr; selA.title = "Caractéristique"; selA.addEventListener('change', ()=> save(true));
-    selA.addEventListener('click', (e)=> e.stopPropagation());
-    selA.addEventListener('mousedown', (e)=> e.stopPropagation());
 
-    const inMod = document.createElement('input'); inMod.type='number'; inMod.value = dl.mod; inMod.placeholder="Mod"; inMod.title = "Modificateur"; inMod.addEventListener('input', ()=> save(true));
-    inMod.addEventListener('click', (e)=> e.stopPropagation());
-    inMod.addEventListener('mousedown', (e)=> e.stopPropagation());
+    // 1. Valeur (Score de compétence)
+    // On utilise dl.base pour stocker le score direct
+    const inValue = document.createElement('input'); 
+    inValue.type='number'; 
+    inValue.value = dl.base || ''; 
+    inValue.placeholder="Score"; 
+    inValue.title = "Compétence Totale";
+    inValue.style.width = '60px';
+    inValue.addEventListener('input', (e)=> Store.updateDiceLine(dl.id, {base: e.target.value}, true));
+    inValue.addEventListener('click', (e)=> e.stopPropagation());
+    inValue.addEventListener('mousedown', (e)=> e.stopPropagation());
 
-    const inNote = document.createElement('input'); inNote.type='text'; inNote.value = dl.note||''; inNote.placeholder="Note"; inNote.className = 'note-input'; inNote.title = dl.note || "Note"; 
-    inNote.addEventListener('input', (e)=> { save(true); e.target.title = e.target.value || "Note"; });
+    // 2. Note (Label)
+    const inNote = document.createElement('input'); 
+    inNote.type='text'; 
+    inNote.value = dl.note||''; 
+    inNote.placeholder="Note (ex: Épée)"; 
+    inNote.className = 'note-input'; 
+    inNote.title = dl.note || "Note"; 
+    inNote.addEventListener('input', (e)=> { Store.updateDiceLine(dl.id, {note: e.target.value}, true); e.target.title = e.target.value; });
     inNote.addEventListener('click', (e)=> e.stopPropagation());
     inNote.addEventListener('mousedown', (e)=> e.stopPropagation());
 
-    const selTarget = document.createElement('select'); selTarget.className = 'target-select';
-    selTarget.append(opt('none', '—'), opt('fixed', 'Fixe'));
-    Store.listParticipantsRaw().forEach(pt => { if(pt.id!==p.id) selTarget.append(opt(pt.id, pt.name)); });
-    selTarget.value = dl.targetType || 'none'; selTarget.title = "Cible"; selTarget.addEventListener('change', ()=> save(true)); 
-    selTarget.addEventListener('click', (e)=> e.stopPropagation());
-    selTarget.addEventListener('mousedown', (e)=> e.stopPropagation());
-
-    let extraInput = null;
-    if(dl.targetType !== 'none'){
-        extraInput = document.createElement('input'); extraInput.type='number'; extraInput.placeholder = dl.targetType==='fixed' ? 'Seuil' : 'Opp'; extraInput.value = dl.targetType==='fixed' ? dl.targetValue : dl.opponentRoll; extraInput.className = 'extra-input'; extraInput.title = dl.targetType==='fixed' ? 'Seuil de difficulté' : 'Score du jet opposé';
-        extraInput.addEventListener('input', (e) => { if(dl.targetType==='fixed') Store.updateDiceLine(dl.id, {targetValue:e.target.value}, true); else Store.updateDiceLine(dl.id, {opponentRoll:e.target.value}, true); });
-        extraInput.addEventListener('click', (e)=> e.stopPropagation());
-        extraInput.addEventListener('mousedown', (e)=> e.stopPropagation());
-    }
-    const btnRoll = document.createElement('button'); btnRoll.textContent = '🎲'; btnRoll.className = 'action-btn'; btnRoll.title = "Lancer"; 
+    // 3. Bouton Lancer
+    const btnRoll = document.createElement('button'); 
+    btnRoll.textContent = '🎲'; 
+    btnRoll.className = 'action-btn'; 
+    btnRoll.title = "Lancer"; 
     btnRoll.addEventListener('click', (e)=> { e.stopPropagation(); runDiceLine(dl.id); });
     btnRoll.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
 
-    const btnDel = document.createElement('button'); btnDel.textContent = '×'; btnDel.className = 'action-btn danger'; btnDel.title = "Supprimer ligne"; 
+    // 4. Bouton Supprimer
+    const btnDel = document.createElement('button'); 
+    btnDel.textContent = '×'; 
+    btnDel.className = 'action-btn danger'; 
+    btnDel.title = "Supprimer ligne"; 
     btnDel.addEventListener('click', (e)=> { e.stopPropagation(); Store.removeDiceLine(dl.id); });
     btnDel.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
 
-    function save(noRender=false){ Store.updateDiceLine(dl.id, { attr: selA.value, mod: clampInt(inMod.value), note: inNote.value, targetType: selTarget.value }, noRender); }
-    row.append(selA, inMod, inNote, selTarget); if(extraInput) row.append(extraInput); row.append(btnRoll, btnDel);
+    row.append(inValue, inNote, btnRoll, btnDel);
     return row;
   }
 
@@ -654,37 +654,69 @@
   on(DOM.combat.btnD100, 'click', ()=>{ const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); const res = document.createElement('div'); res.className='dice-result'; res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`; DOM.combat.results.prepend(res); });
   Bus.on('log', ()=>{ const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line=>{ const div=document.createElement('div'); div.className='entry'; div.textContent=line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
 
+  // --- NEW SIMPLIFIED RUN LOGIC ---
   function runDiceLine(id){
-    const st = Store.getState(); const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
-    let base=null; const p = st.combat.participants.get(dl.participantId);
-    if(dl.attr==='Custom'){ base = clampInt(dl.base, 0); } else if(dl.attr==='initiative') base = p ? Number(p.initiative||0) : null; else if(p?.profileId){ const prof = Store.getProfile(p.profileId); base = Number(prof?.caracs?.[dl.attr] ?? NaN); if(!Number.isFinite(base)) base=null; }
-    const modManual = clampInt(dl.mod, 0); const modAuto = autoModForParticipant(dl.participantId); const target = Number.isFinite(base) ? base + (modManual + modAuto) : null;
-    const roll = d100(); const success = Number.isFinite(target) && roll <= target; const sl = Number.isFinite(target) ? SL(target, roll) : null; const dbl = isDouble(roll); const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
-    let targetInfo = ""; let slDiff = null; let extraInfo = ""; let critInfo = "";
+    const st = Store.getState(); 
+    const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
+    const p = st.combat.participants.get(dl.participantId);
+
+    // 1. Récupération de la Valeur (Base) et des Avantages
+    const baseVal = parseInt(dl.base) || 0;
+    const modAuto = autoModForParticipant(dl.participantId); // Avantages * 10
+    const target = baseVal + modAuto;
+
+    // 2. Le Jet
+    const roll = d100(); 
+    const success = roll <= target; 
+    const sl = SL(target, roll); 
+    const dbl = isDouble(roll); 
+    const crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
+
+    let extraInfo = ""; 
+    let critInfo = "";
 
     if(success) {
-        const revRoll = getReverseRoll(roll); const loc = getLocationName(revRoll); extraInfo += ` | Touche : ${loc.name} (${revRoll})`;
+        const revRoll = getReverseRoll(roll); const loc = getLocationName(revRoll); 
+        extraInfo += ` | Touche : ${loc.name} (${revRoll})`;
+        
         if(crit === 'Critique'){
-            const critLocRoll = d100(); const critLoc = getLocationName(critLocRoll); const critEffectRoll = d100(); const effectData = getCritEffect(critLoc.key, critEffectRoll);
+            const critLocRoll = d100(); const critLoc = getLocationName(critLocRoll); 
+            const critEffectRoll = d100(); const effectData = getCritEffect(critLoc.key, critEffectRoll);
             critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;"><strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll})<br><span style="color:#b33a3a;">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}</div>`;
         }
     }
 
-    if(dl.targetType === 'fixed' && dl.targetValue){ targetInfo = ` | vs Seuil ${dl.targetValue}`; } 
-    else if(dl.targetType !== 'none'){ const defender = st.combat.participants.get(dl.targetType); if(defender && dl.targetAttr && dl.opponentRoll){ let defBase = 0; if(dl.targetAttr === 'initiative') defBase = Number(defender.initiative||0); else if(defender.profileId) { const dProf = Store.getProfile(defender.profileId); defBase = Number(dProf?.caracs?.[dl.targetAttr] ?? 0); } const defRoll = Number(dl.opponentRoll); if(Number.isFinite(defBase) && Number.isFinite(defRoll)){ const slDef = SL(defBase, defRoll); if(sl !== null) { slDiff = sl - slDef; targetInfo = ` | vs ${defender.name} (${dl.targetAttr} ${defBase}, Roll ${defRoll} → SL ${slDef}) | ⚔️ SL Diff: ${slDiff>=0?'+':''}${slDiff}`; } } } }
+    // 3. Construction du Résultat HTML
+    const res = document.createElement('div'); 
+    res.className='dice-result'; 
     
-    const res = document.createElement('div'); res.className='dice-result'; let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
-    if(Number.isFinite(target)){ resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span><span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`; } else { resHTML += `<span class="result-warn">Sans cible (attaquant)</span>`; }
-    if(slDiff !== null) { resHTML += `<span class="badge ${slDiff>=0?'good':'bad'}" style="margin-left:8px; font-size:1.1em;">MARGE: ${slDiff>=0?'+':''}${slDiff}</span>`; }
+    let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
+    
+    // Affichage Réussite / Echec + SL
+    resHTML += `<span class="${success?'result-good':'result-bad'}">${success?'Réussite':'Échec'}</span>`;
+    resHTML += `<span class="${sl>=0?'result-good':'result-bad'}">SL ${sl>=0?'+':''}${sl}</span>`;
+    
+    // Badges d'infos
     resHTML += `<span class="badge">${escapeHtml(p?.name||'?')}</span>`;
-    if(dl.attr!=='Custom') resHTML += `<span class="badge">${dl.attr}</span>`;
-    if(modManual) resHTML += `<span class="badge">Mod ${modManual}</span>`;
-    if(modAuto) resHTML += `<span class="badge good">Auto ${modAuto}</span>`;
-    if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
+    
+    // Note perso
     if(dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
+
+    // Détail du calcul (Score final utilisé)
+    resHTML += `<span class="badge" title="Base ${baseVal} + Avantages ${modAuto}">Score ${target}</span>`;
+
+    // Critique
+    if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
+    
+    // Info Touche
     if(extraInfo) resHTML += `<span class="badge" style="background:#e3f6fd; color:#333;">${extraInfo}</span>`;
+    
+    // Info Critique Textuelle
     if(critInfo) resHTML += critInfo;
-    res.innerHTML = resHTML; DOM.combat.results.prepend(res); Store.log(`🎲 ${p?.name} (Roll ${roll})${extraInfo}${critInfo.replace(/<[^>]*>/g, '')}${targetInfo}`);
+
+    res.innerHTML = resHTML; 
+    DOM.combat.results.prepend(res); 
+    Store.log(`🎲 ${p?.name} (Roll ${roll} vs ${target}) SL${sl} ${dl.note ? '['+dl.note+']' : ''}`);
   }
 
   // --- NEW RENDER REF TABLES (AUTO) ---
