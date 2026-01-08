@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.5 - Reserve Dice Templates";
+  const APP_VERSION = "2.6 - Default Creature Type";
   // ==========================================
 
   // ---------- Utils ----------
@@ -196,7 +196,7 @@
 
   // ---------- Models ----------
   class Profile {
-    constructor({ id=uid(), name, kind='PJ', initiative=30, hp=10, caracs={}, armor={head:0, body:0, arms:0, legs:0}, diceLines=[] } = {}) {
+    constructor({ id=uid(), name, kind='Créature', initiative=30, hp=10, caracs={}, armor={head:0, body:0, arms:0, legs:0}, diceLines=[] } = {}) {
       this.id=id; this.name=(name||'Sans-nom').trim(); this.kind=kind;
       this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; 
       this.caracs={...caracs}; this.armor={...armor};
@@ -469,7 +469,9 @@
   }
 
   function resetForm(){ 
-      DOM.reserve.form.reset(); DOM.reserve.form.querySelector('[name=id]').value = ''; 
+      DOM.reserve.form.reset(); 
+      DOM.reserve.form.querySelector('[name=id]').value = ''; 
+      DOM.reserve.form.querySelector('[name=kind]').value = 'Créature'; // <--- FIX DEFAULT SELECTION
       if(qs('#form-dice-list')) qs('#form-dice-list').innerHTML = '';
       formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none'; 
   }
@@ -790,4 +792,7 @@
 
   Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); 
   renderReserve(); renderCombat(); renderReferenceTables();
+  
+  // INIT DEFAULTS (v2.6 Fix)
+  resetForm(); 
 })();
