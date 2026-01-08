@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.4 - Fix Missing Badge";
+  const APP_VERSION = "2.5 - Reserve Dice Templates";
   // ==========================================
 
   // ---------- Utils ----------
@@ -14,7 +14,6 @@
   const on = (el, evt, fn) => { if(el){ el.addEventListener(evt, fn); } };
   function opt(v, t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
   
-  // LA FONCTION QUI MANQUAIT :
   function badge(text, cls=''){ 
       const el = document.createElement('span'); 
       el.className = `badge ${cls}`; 
@@ -197,10 +196,11 @@
 
   // ---------- Models ----------
   class Profile {
-    constructor({ id=uid(), name, kind='PJ', initiative=30, hp=10, caracs={}, armor={head:0, body:0, arms:0, legs:0} } = {}) {
+    constructor({ id=uid(), name, kind='PJ', initiative=30, hp=10, caracs={}, armor={head:0, body:0, arms:0, legs:0}, diceLines=[] } = {}) {
       this.id=id; this.name=(name||'Sans-nom').trim(); this.kind=kind;
       this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; 
       this.caracs={...caracs}; this.armor={...armor};
+      this.diceLines = [...(diceLines||[])]; // Stores templates {base, note}
     }
   }
   class Participant {
@@ -210,12 +210,11 @@
       this.states=[...states]; this.zone=zone; 
       this.color=color; 
       this.armor={...armor};
-      this.caracs={...caracs}; // IMPORTANT FIX: Caracs in participant
+      this.caracs={...caracs};
     }
   }
   class DiceLine {
     constructor({ id=uid(), participantId='', attr='Custom', base='', mod=0, note='', targetType='none', targetValue='', targetAttr='CC', opponentRoll='' }={}) {
-      // NOTE (v2.3): attr, mod, targetType, etc. are kept for legacy but simplified UI only uses 'base' (score) and 'note'.
       Object.assign(this, { id, participantId, attr, base, mod:Number(mod)||0, note, targetType, targetValue, targetAttr, opponentRoll });
     }
   }
@@ -247,7 +246,6 @@
           combat.order = Array.isArray(c.order) ? c.order : [];
           combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
           
-          // --- AUTO-REPAIR SCRIPT ---
           let repairedCount = 0;
           combat.participants.forEach(p => {
              if((!p.caracs || Object.keys(p.caracs).length === 0) && p.profileId){
@@ -262,7 +260,6 @@
               console.log(`[Auto-Repair] ${repairedCount} combattants réparés.`);
               save();
           }
-          // --------------------------
         }
         log = JSON.parse(localStorage.getItem(KEY.LOG) || '[]');
         const d = JSON.parse(localStorage.getItem(KEY.DICE) || '[]');
@@ -281,6 +278,7 @@
       updateProfile(id, patch){
         const p = reserve.get(id); if(!p) return;
         Object.assign(p, patch);
+        // Dice lines update is handled within p object
         for(const part of combat.participants.values()){
             if(part.profileId === id){
                 part.name = p.name; part.kind = p.kind; part.caracs = {...p.caracs}; part.armor = {...p.armor};
@@ -297,7 +295,8 @@
             if (other.name === baseName) maxNum = Math.max(maxNum, 1);
             else if (other.name.startsWith(baseName + " ")) { const s = other.name.substring(baseName.length + 1); if (!isNaN(s)) maxNum = Math.max(maxNum, parseInt(s)); }
         }
-        const newProfile = new Profile({ ...p, id: uid(), name: `${baseName} ${maxNum + 1}`, armor:{...p.armor}, caracs:{...p.caracs} });
+        // DiceLines are copied via Profile constructor copy of ...p properties (and deep array copy in constructor)
+        const newProfile = new Profile({ ...p, id: uid(), name: `${baseName} ${maxNum + 1}`, armor:{...p.armor}, caracs:{...p.caracs}, diceLines: p.diceLines });
         this.addProfile(newProfile);
       },
       listProfiles(){ return Array.from(reserve.values()); },
@@ -334,6 +333,17 @@
               armor: {...prof.armor}, caracs: {...prof.caracs}, zone: 'bench' 
           });
           this.addParticipant(p);
+          
+          // IMPORT DICE LINES
+          if(prof.diceLines && Array.isArray(prof.diceLines)){
+              prof.diceLines.forEach(tpl => {
+                  this.addDiceLine(new DiceLine({
+                      participantId: p.id,
+                      base: tpl.base,
+                      note: tpl.note
+                  }));
+              });
+          }
         });
         this.log(`Import: ${ids.length} participant(s)`);
       },
@@ -422,8 +432,24 @@
     right.append(btnEdit, btnDup, btnDel); div.append(left,right); return div;
   }
 
-  // --- Reserve Form ---
+  // --- Reserve Form (Updated v2.5) ---
   const formTitle = qs('#form-title'); const btnSubmit = qs('#btn-submit-form'); const btnCancel = qs('#btn-cancel-edit');
+  
+  function ensureDiceSectionExists() {
+      if(qs('#form-dice-lines')) return;
+      const sect = document.createElement('div');
+      sect.id = 'form-dice-lines'; sect.style.margin = '10px 0'; sect.style.padding = '10px'; sect.style.background = 'rgba(0,0,0,0.05)'; sect.style.borderRadius = '6px';
+      sect.innerHTML = `<strong>Jets pré-configurés (Attaques, etc.)</strong><div id="form-dice-list" style="margin-top:6px;"></div><button type="button" class="ghost small" style="margin-top:6px;" id="btn-add-tpl">+ Ajouter un jet</button>`;
+      const actions = DOM.reserve.form.querySelector('.actions');
+      DOM.reserve.form.insertBefore(sect, actions);
+      qs('#btn-add-tpl').addEventListener('click', ()=> addProfileDiceRow());
+  }
+  function addProfileDiceRow({base='', note=''}={}){
+      const row = document.createElement('div'); row.className='row'; row.style.marginBottom='6px';
+      row.innerHTML = `<input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:70px;"><input type="text" placeholder="Label (ex: Hache)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><button type="button" class="danger tiny" onclick="this.parentElement.remove()">×</button>`;
+      qs('#form-dice-list').appendChild(row);
+  }
+
   function loadProfileIntoForm(p){
     const f = DOM.reserve.form;
     f.querySelector('[name=id]').value = p.id; f.querySelector('[name=name]').value = p.name;
@@ -432,27 +458,50 @@
     f.querySelector('[name=armor_arms]').value = p.armor?.arms || 0; f.querySelector('[name=armor_legs]').value = p.armor?.legs || 0;
     const inputE = f.querySelector('[name=E]'); if(inputE) inputE.value = p.caracs?.E || 0;
     ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { f.querySelector(`[name=${k}]`).value = p.caracs[k] || ''; });
+    
+    // Dice templates
+    ensureDiceSectionExists();
+    qs('#form-dice-list').innerHTML = '';
+    (p.diceLines || []).forEach(dl => addProfileDiceRow(dl));
+
     formTitle.textContent = "Modifier le profil"; btnSubmit.textContent = "Modifier"; btnCancel.style.display = 'inline-block';
     f.scrollIntoView({behavior: "smooth"});
   }
-  function resetForm(){ DOM.reserve.form.reset(); DOM.reserve.form.querySelector('[name=id]').value = ''; formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none'; }
+
+  function resetForm(){ 
+      DOM.reserve.form.reset(); DOM.reserve.form.querySelector('[name=id]').value = ''; 
+      if(qs('#form-dice-list')) qs('#form-dice-list').innerHTML = '';
+      formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none'; 
+  }
   on(btnCancel, 'click', resetForm);
+  
   on(DOM.reserve.form, 'submit', (e)=>{
     e.preventDefault(); const fd = new FormData(DOM.reserve.form);
     const caracs = {}; 
     caracs['E'] = Number(fd.get('E') || 0); 
     ['CC','CT','F','I','Ag','Dex','Int','FM','Soc'].forEach(k => { const raw = fd.get(k); if(raw!==null && raw!==''){ const v = Number(raw); if(Number.isFinite(v)) caracs[k]=v; } });
     const armor = { head: Number(fd.get('armor_head')||0), body: Number(fd.get('armor_body')||0), arms: Number(fd.get('armor_arms')||0), legs: Number(fd.get('armor_legs')||0) };
+    
+    // Dice templates gathering
+    const diceLines = [];
+    if(qs('#form-dice-list')){
+        qsa('#form-dice-list .row').forEach(row => {
+            const b = row.querySelector('.pf-dice-base').value; const n = row.querySelector('.pf-dice-note').value;
+            if(b) diceLines.push({base: parseInt(b), note: n});
+        });
+    }
+
     const id = fd.get('id');
-    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative')||0), hp: Number(fd.get('hp')||0), caracs, armor };
+    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative')||0), hp: Number(fd.get('hp')||0), caracs, armor, diceLines };
     if(id){ Store.updateProfile(id, data); Store.log(`Réserve: modifié ${data.name}`); } else { Store.addProfile(new Profile(data)); Store.log(`Réserve: ajouté ${data.name}`); }
     resetForm();
   });
+
   on(DOM.reserve.seed, 'click', ()=>{
     [ new Profile({name:'Renaut de Volargent', kind:'PJ', initiative:41, hp:14, caracs:{CC:52, Ag:41, E:35}, armor:{head:2, body:2, arms:0, legs:0}}),
       new Profile({name:'Saskia la Noire', kind:'PJ', initiative:52, hp:12, caracs:{CC:45, Ag:52, E:40}}),
-      new Profile({name:'Gobelins (2)', kind:'Créature', initiative:28, hp:9, caracs:{CC:35, E:30}}),
-      new Profile({name:'Chien de guerre', kind:'Créature', initiative:36, hp:10, caracs:{CC:40, E:30}})
+      new Profile({name:'Gobelins (2)', kind:'Créature', initiative:28, hp:9, caracs:{CC:35, E:30}, diceLines:[{base:35, note:"Lance"}, {base:30, note:"Esquive"}]}),
+      new Profile({name:'Chien de guerre', kind:'Créature', initiative:36, hp:10, caracs:{CC:40, E:30}, diceLines:[{base:40, note:"Morsure"}]})
     ].forEach(Store.addProfile); Store.log('Seed Réserve: 4 profils');
   });
   on(DOM.reserve.clear, 'click', ()=>{ if(confirm('Vider toute la Réserve ?')){ localStorage.removeItem(KEY.RESERVE); location.reload(); } });
