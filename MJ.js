@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.6 - Default Creature Type";
+  const APP_VERSION = "2.7 - Fix Dice UI Init";
   // ==========================================
 
   // ---------- Utils ----------
@@ -432,7 +432,7 @@
     right.append(btnEdit, btnDup, btnDel); div.append(left,right); return div;
   }
 
-  // --- Reserve Form (Updated v2.5) ---
+  // --- Reserve Form (Updated v2.7 Fix) ---
   const formTitle = qs('#form-title'); const btnSubmit = qs('#btn-submit-form'); const btnCancel = qs('#btn-cancel-edit');
   
   function ensureDiceSectionExists() {
@@ -471,7 +471,7 @@
   function resetForm(){ 
       DOM.reserve.form.reset(); 
       DOM.reserve.form.querySelector('[name=id]').value = ''; 
-      DOM.reserve.form.querySelector('[name=kind]').value = 'Créature'; // <--- FIX DEFAULT SELECTION
+      DOM.reserve.form.querySelector('[name=kind]').value = 'Créature';
       if(qs('#form-dice-list')) qs('#form-dice-list').innerHTML = '';
       formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none'; 
   }
@@ -792,6 +792,8 @@
 
   Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); 
   renderReserve(); renderCombat(); renderReferenceTables();
+  
+  ensureDiceSectionExists(); // <--- FIX: On s'assure que la section est là dès le début
   
   // INIT DEFAULTS (v2.6 Fix)
   resetForm(); 
