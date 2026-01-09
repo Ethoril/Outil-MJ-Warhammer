@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.7 - Fix Dice UI Init";
+  const APP_VERSION = "2.8 - HOTFIX Import";
   // ==========================================
 
   // ---------- Utils ----------
@@ -670,6 +670,14 @@
 
     row.append(inValue, inNote, btnRoll, btnDel);
     return row;
+  }
+
+  function importRow(p){
+    const label = document.createElement('label');
+    label.className = 'row';
+    label.style.justifyContent = 'flex-start'; 
+    label.innerHTML = `<input type="checkbox" value="${p.id}"> <strong>${escapeHtml(p.name)}</strong> <span class="muted" style="margin-left:auto;">${p.kind}</span>`;
+    return label;
   }
 
   // Drag & Drop
