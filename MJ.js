@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.8 - HOTFIX Import";
+  const APP_VERSION = "2.9 - No Advantage System";
   // ==========================================
 
   // ---------- Utils ----------
@@ -183,14 +183,6 @@
     ]
   };
 
-  const ADV_STEP = 10;
-  const autoModForParticipant = (pid) => {
-    if(!pid) return 0;
-    const p = Store.getState().combat.participants.get(pid);
-    const av = Number(p?.advantage || 0);
-    return Number.isFinite(av) ? av * ADV_STEP : 0;
-  };
-
   // ---------- EventBus ----------
   const Bus = { _h:new Map(), on(e,f){ (this._h.get(e)||this._h.set(e,new Set()).get(e)).add(f); }, off(e,f){ this._h.get(e)?.delete(f); }, emit(e,p){ this._h.get(e)?.forEach(fn=>fn(p)); } };
 
@@ -204,9 +196,9 @@
     }
   }
   class Participant {
-    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, advantage=0, states=[], zone='bench', color='default', armor={head:0, body:0, arms:0, legs:0}, caracs={} } = {}) {
+    constructor({ id=uid(), profileId, name, kind, initiative=0, hp=10, states=[], zone='bench', color='default', armor={head:0, body:0, arms:0, legs:0}, caracs={} } = {}) {
       this.id=id; this.profileId=profileId||null; this.name=name||'—'; this.kind=kind||'Créature';
-      this.initiative=Number(initiative)||0; this.hp=Number(hp)||0; this.advantage=Number(advantage)||0;
+      this.initiative=Number(initiative)||0; this.hp=Number(hp)||0;
       this.states=[...states]; this.zone=zone; 
       this.color=color; 
       this.armor={...armor};
@@ -561,7 +553,7 @@
         const v = prompt('Nouvelle Initiative ?', p.initiative); if(v!==null && !isNaN(v)) Store.updateParticipant(p.id, {initiative: Number(v)});
     });
     div.querySelector('.hp-badge').textContent = `PV ${p.hp}`;
-    div.querySelector('.adv-badge').textContent = `AV ${p.advantage}`;
+    // REMOVED ADVANTAGE BADGE LOGIC
     
     const statesDiv = div.querySelector('.states');
     p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
@@ -590,14 +582,8 @@
     btnHPP.addEventListener('click', (e)=> { e.stopPropagation(); setHP(p.id, p.hp+1); });
     btnHPP.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
 
-    const btnAdvM = div.querySelector('.btn-adv-minus');
-    btnAdvM.addEventListener('click', (e)=> { e.stopPropagation(); setAdv(p.id, p.advantage-1); });
-    btnAdvM.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
-
-    const btnAdvP = div.querySelector('.btn-adv-plus');
-    btnAdvP.addEventListener('click', (e)=> { e.stopPropagation(); setAdv(p.id, p.advantage+1); });
-    btnAdvP.addEventListener('mousedown', (e)=> { e.stopPropagation(); e.preventDefault(); });
-
+    // REMOVED ADV BUTTONS LOGIC
+    
     const btnColor = div.querySelector('.btn-color');
     const palette = div.querySelector('.color-palette');
     btnColor.addEventListener('click', (e) => { e.stopPropagation(); palette.classList.toggle('hidden'); });
@@ -705,7 +691,6 @@
   }
   [DOM.combat.zoneActive, DOM.combat.zoneBench].forEach(zone => { zone.addEventListener('dragover', handleDragOver); zone.addEventListener('dragleave', handleDragLeave); zone.addEventListener('drop', handleDrop); });
 
-  function setAdv(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{advantage:val}); } 
   function setHP(id, val){ const p=getP(id); if(!p) return; Store.updateParticipant(id,{hp:val}); }
   function toggleState(id, label){ const p=getP(id); if(!p) return; const has=p.states.includes(label); const ns=has? p.states.filter(x=>x!==label) : [...p.states,label]; Store.updateParticipant(id,{states:ns}); }
   function getP(id){ return Store.getState().combat.participants.get(id); }
@@ -727,10 +712,8 @@
     const dl = st.diceLines.find(x=>x.id===id); if(!dl) return;
     const p = st.combat.participants.get(dl.participantId);
 
-    // 1. Récupération de la Valeur (Base) et des Avantages
-    const baseVal = parseInt(dl.base) || 0;
-    const modAuto = autoModForParticipant(dl.participantId); // Avantages * 10
-    const target = baseVal + modAuto;
+    // 1. Récupération de la Valeur (Base) - PLUS D'AVANTAGE ICI
+    const target = parseInt(dl.base) || 0;
 
     // 2. Le Jet
     const roll = d100(); 
@@ -770,7 +753,7 @@
     if(dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
 
     // Détail du calcul (Score final utilisé)
-    resHTML += `<span class="badge" title="Base ${baseVal} + Avantages ${modAuto}">Score ${target}</span>`;
+    resHTML += `<span class="badge" title="Base ${target}">Score ${target}</span>`;
 
     // Critique
     if(crit) resHTML += `<span class="badge ${success?'good':'bad'}">${crit}</span>`;
@@ -801,7 +784,7 @@
   Bus.on('reserve', renderReserve); Bus.on('combat', renderCombat); 
   renderReserve(); renderCombat(); renderReferenceTables();
   
-  ensureDiceSectionExists(); // <--- FIX: On s'assure que la section est là dès le début
+  ensureDiceSectionExists(); 
   
   // INIT DEFAULTS (v2.6 Fix)
   resetForm(); 
