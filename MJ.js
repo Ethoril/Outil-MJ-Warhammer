@@ -222,14 +222,8 @@ const SYNC = (() => {
     return null;
   }
 
-  const USER_KEY = 'wfrp.firebase.userId';
-  let userId = localStorage.getItem(USER_KEY);
-  if (!userId) {
-    userId = uid();
-    localStorage.setItem(USER_KEY, userId);
-    console.log('🆔 Nouvel ID Firebase:', userId);
-  }
-
+  // ✅ Utilise l'UID de l'utilisateur connecté
+  const userId = fb.userId;
   const path = `wfrp-sessions/${userId}/current`;
   const dbRef = fb.ref(fb.db, path);
 
@@ -241,6 +235,7 @@ const SYNC = (() => {
     onValue: fb.onValue
   };
 })();
+
 // ========== FIN FIREBASE SYNC ==========
 // 🔥 LISTENER FIREBASE (import automatique)
 if (SYNC) {
