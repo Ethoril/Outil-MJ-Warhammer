@@ -418,30 +418,29 @@
     </form>
   </dialog>
 
-  <!-- 🔥 FIREBASE D'ABORD -->
-  <!-- TEMPORAIREMENT DÉSACTIVÉ
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+<!-- 🔥 FIREBASE D'ABORD -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD5f_ngBZ3OCXJCjT5M45BqbhkzI_QObLc",
-  authDomain: "outil-mj-warhammer.firebaseapp.com",
-  projectId: "outil-mj-warhammer",
-  storageBucket: "outil-mj-warhammer.firebasestorage.app",
-  messagingSenderId: "830494961787",
-  appId: "1:830494961787:web:99a9da41da23dd32dc72de"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyD5f_ngBZ3OCXJCjT5M45BqbhkzI_QObLc",
+    authDomain: "outil-mj-warhammer.firebaseapp.com",
+    databaseURL: "https://outil-mj-warhammer-default-rtdb.europe-west1.firebasedatabase.app",  // ✅ LIGNE IMPORTANTE
+    projectId: "outil-mj-warhammer",
+    storageBucket: "outil-mj-warhammer.firebasestorage.app",
+    messagingSenderId: "830494961787",
+    appId: "1:830494961787:web:99a9da41da23dd32dc72de"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
 
-    window.__WFRP_FIREBASE__ = { db, ref, onValue, set };
-  </script>
-  -->
+  window.__WFRP_FIREBASE__ = { db, ref, onValue, set };
+  console.log('✅ Firebase initialisé');
+</script>
 
-  <!-- ⚔️ MJ.JS ENSUITE -->
-  <script src="MJ.js?v=10"></script>
-
+<!-- ⚔️ MJ.JS ENSUITE -->
+<script src="MJ.js?v=10"></script>
 </body>
 </html>
