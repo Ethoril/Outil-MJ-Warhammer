@@ -418,7 +418,7 @@
     </form>
   </dialog>
 
-<!-- 🔥 FIREBASE D'ABORD -->
+<!-- 🔥 FIREBASE QUI CHARGE MJ.JS -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
@@ -439,11 +439,11 @@
   window.__WFRP_FIREBASE__ = { db, ref, onValue, set };
   console.log('✅ Firebase initialisé');
   
-  // ✅ NOUVEAU : Déclenche un événement pour dire "Firebase est prêt"
-  window.dispatchEvent(new Event('firebase-ready'));
+  // ✅ Maintenant on charge MJ.js
+  const script = document.createElement('script');
+  script.src = 'MJ.js?v=12';
+  document.body.appendChild(script);
 </script>
 
-<!-- ⚔️ MJ.JS ENSUITE (il attendra Firebase) -->
-<script src="MJ.js?v=11"></script>
 </body>
 </html>
