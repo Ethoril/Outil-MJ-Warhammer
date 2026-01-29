@@ -515,7 +515,11 @@ function save() {
   }
   function addProfileDiceRow({base='', note=''}={}){
       const row = document.createElement('div'); row.className='row'; row.style.marginBottom='6px';
-      row.innerHTML = `<input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:70px;"><input type="text" placeholder="Label (ex: Hache)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><button type="button" class="danger tiny" onclick="this.parentElement.remove()">×</button>`;
+row.innerHTML = `<input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:70px;"><input type="text" placeholder="Label (ex: Hache)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><button type="button" class="danger tiny btn-remove-dice">×</button>`;
+
+// Ajoute juste après
+const btnRemoveDice = row.querySelector('.btn-remove-dice');
+btnRemoveDice.addEventListener('click', () => row.remove());
       qs('#form-dice-list').appendChild(row);
   }
 
