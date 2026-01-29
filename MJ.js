@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "2.9 - No Advantage System";
+  const APP_VERSION = "3.0 - Portage Firebase";
   // ==========================================
 
   // ---------- Utils ----------
@@ -214,18 +214,95 @@
   // ---------- Store + Persistence ----------
   const KEY = { RESERVE:'wfrp.reserve.v1', COMBAT:'wfrp.combat.v1', LOG:'wfrp.log.v1', DICE:'wfrp.dice.v1' };
   const Store = (() => {
+    // ========== FIREBASE SYNC ==========
+const SYNC = (() => {
+  const fb = window.__WFRP_FIREBASE__;
+  if (!fb) {
+    console.log('⚠️ Firebase non disponible (localStorage uniquement)');
+    return null;
+  }
+
+  const USER_KEY = 'wfrp.firebase.userId';
+  let userId = localStorage.getItem(USER_KEY);
+  if (!userId) {
+    userId = uid();
+    localStorage.setItem(USER_KEY, userId);
+    console.log('🆔 Nouvel ID Firebase:', userId);
+  }
+
+  const path = `wfrp-sessions/${userId}/current`;
+  const dbRef = fb.ref(fb.db, path);
+
+  console.log(`🔥 Sync Firebase activé sur: ${path}`);
+
+  return {
+    dbRef,
+    set: fb.set,
+    onValue: fb.onValue
+  };
+})();
+// ========== FIN FIREBASE SYNC ==========
+// 🔥 LISTENER FIREBASE (import automatique)
+if (SYNC) {
+  SYNC.onValue(SYNC.dbRef, (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+
+    try {
+      reserve = new Map((data.reserve || []).map(o => [o.id, new Profile(o)]));
+      const c = data.combat || {};
+      combat.round       = c.round || 0;
+      combat.turnIndex   = c.turnIndex ?? -1;
+      combat.order       = c.order || [];
+      combat.participants= new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
+      log                = data.log || [];
+      diceLines          = (data.diceLines || []).map(x => new DiceLine(x));
+
+      localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
+      localStorage.setItem(KEY.COMBAT, JSON.stringify({round: combat.round, turnIndex: combat.turnIndex, order: combat.order, participants: Array.from(combat.participants.values())}));
+      localStorage.setItem(KEY.LOG, JSON.stringify(log));
+      localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
+
+      Bus.emit('reserve');
+      Bus.emit('combat');
+      Bus.emit('log');
+      console.log('🔄 Sync Firebase → Local');
+    } catch (e) {
+      console.error('❌ Erreur sync Firebase → Local:', e);
+    }
+  });
+}
+
     let reserve = new Map();
     let combat  = { round:0, turnIndex:-1, order:[], participants:new Map() };
     let log = [];
     let diceLines = [];
 
-    function save() {
-      localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
-      const cObj = { round:combat.round, turnIndex:combat.turnIndex, order:combat.order, participants:Array.from(combat.participants.values()) };
-      localStorage.setItem(KEY.COMBAT, JSON.stringify(cObj));
-      localStorage.setItem(KEY.LOG, JSON.stringify(log));
-      localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
-    }
+function save() {
+  localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
+  const cObj = {
+    round: combat.round,
+    turnIndex: combat.turnIndex,
+    order: combat.order,
+    participants: Array.from(combat.participants.values())
+  };
+  localStorage.setItem(KEY.COMBAT, JSON.stringify(cObj));
+  localStorage.setItem(KEY.LOG, JSON.stringify(log));
+  localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
+
+  // 🔥 FIREBASE SYNC
+  if (SYNC) {
+    const payload = {
+      timestamp: new Date().toISOString(),
+      reserve: Array.from(reserve.values()),
+      combat: cObj,
+      log,
+      diceLines
+    };
+    SYNC.set(SYNC.dbRef, payload).catch(e => console.error('❌ Erreur sync → Firebase:', e));
+  }
+}
+
 
     function load() {
       try {
