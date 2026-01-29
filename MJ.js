@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "3.0 - Portage Firebase";
+  const APP_VERSION = "3.1 - Controle evol";
   // ==========================================
 
   // ---------- Utils ----------
