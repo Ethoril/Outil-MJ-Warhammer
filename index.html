@@ -10,6 +10,20 @@
   <link rel="stylesheet" href="MJ.css" />
 </head>
 <body>
+  <div id="login-screen" style="display:flex; justify-content:center; align-items:center; height:100vh; background:linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%); position:fixed; top:0; left:0; right:0; bottom:0; z-index:9999;">
+  <div style="text-align:center; background:rgba(255,255,255,0.05); padding:40px; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+    <h1 style="color:#d4a574; margin-bottom:20px;">⚔️ Outil MJ Warhammer</h1>
+    <p style="color:#ccc; margin-bottom:30px;">Connectez-vous pour accéder à vos données</p>
+    <button onclick="loginWithGoogle()" style="padding:12px 24px; font-size:16px; background:#4285f4; color:white; border:none; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:10px; margin:0 auto;">
+      <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9.003 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.96v2.332C2.44 15.983 5.485 18 9.003 18z" fill="#34A853"/><path d="M3.964 10.712c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.96H.957C.347 6.175 0 7.55 0 9.002c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.426 0 9.003 0 5.485 0 2.44 2.017.96 4.958L3.967 7.29c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"/></svg>
+      Se connecter avec Google
+    </button>
+  </div>
+</div>
+
+<!-- 📦 CONTENU PRINCIPAL (caché au départ) -->
+<div id="app-content" style="display:none;">
+  <div id="user-info" style="position:fixed; top:10px; right:10px; color:#d4a574; font-size:14px; z-index:1000; background:rgba(0,0,0,0.7); padding:8px 12px; border-radius:6px;"></div>
   <header class="topbar">
     <div class="wrap">
       <h1>⚔️ WFRP – Gestionnaire</h1>
@@ -418,10 +432,11 @@
     </form>
   </dialog>
 
-<!-- 🔥 FIREBASE QUI CHARGE MJ.JS -->
+<!-- 🔥 FIREBASE + AUTH GOOGLE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyD5f_ngBZ3OCXJCjT5M45BqbhkzI_QObLc",
@@ -434,15 +449,65 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-  window.__WFRP_FIREBASE__ = { db, ref, onValue, set };
   console.log('✅ Firebase initialisé');
-  
-  // ✅ Maintenant on charge MJ.js
-  const script = document.createElement('script');
-  script.src = 'MJ.js?v=12';
-  document.body.appendChild(script);
+
+  // Fonction de connexion Google
+  window.loginWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log('✅ Connecté:', result.user.displayName);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-content').style.display = 'block';
+      })
+      .catch((error) => {
+        console.error('❌ Erreur connexion:', error);
+        alert('Erreur de connexion: ' + error.message);
+      });
+  };
+
+  // Fonction de déconnexion
+  window.logoutUser = () => {
+    signOut(auth).then(() => {
+      console.log('👋 Déconnecté');
+      location.reload();
+    });
+  };
+
+  // Écoute l'état de connexion
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log('👤 Utilisateur:', user.displayName, '(' + user.uid + ')');
+      
+      // ✅ Utilise l'UID de l'utilisateur pour Firebase
+      window.__WFRP_FIREBASE__ = { db, ref, onValue, set, userId: user.uid };
+      
+      // Charge MJ.js seulement si connecté
+      if (!document.getElementById('mj-script')) {
+        const script = document.createElement('script');
+        script.id = 'mj-script';
+        script.src = 'MJ.js?v=13';
+        document.body.appendChild(script);
+      }
+      
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app-content').style.display = 'block';
+      
+      // Affiche le nom de l'utilisateur
+      const userInfo = document.getElementById('user-info');
+      if (userInfo) {
+        userInfo.innerHTML = `👤 ${user.displayName} <button onclick="logoutUser()" class="ghost" style="margin-left:10px;">Déconnexion</button>`;
+      }
+    } else {
+      console.log('❌ Non connecté');
+      window.__WFRP_FIREBASE__ = null;
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('app-content').style.display = 'none';
+    }
+  });
 </script>
 
 </body>
