@@ -813,20 +813,6 @@
     const statesDiv = div.querySelector('.states');
     p.states.forEach(s => statesDiv.append(makeStateBadge(s)));
 
-    const stateSelect = div.querySelector('.state-select');
-    if (stateSelect) {
-      stateSelect.addEventListener('change', () => {
-        const name = stateSelect.value; if (!name) return;
-        const turnsInput = div.querySelector('.state-turns');
-        const turns = turnsInput ? parseInt(turnsInput.value) || null : null;
-        const encoded = turns ? `${name}|${turns}` : name;
-        if (!p.states.some(s => parseState(s).name === name)) {
-          Store.updateParticipant(p.id, { states: [...p.states, encoded] });
-          if (turnsInput) turnsInput.value = '';
-        }
-        stateSelect.value = '';
-      });
-    }
 
     const armDiv = div.querySelector('.actor-armor');
     const BE = Math.floor((p.caracs?.E || 0) / 10);
@@ -875,6 +861,22 @@
     if (e.target.matches('.btn-hp-plus')) {
       e.preventDefault();
       setHP(id, p.hp + 1);
+      return;
+    }
+
+    // Bouton "+" → ajouter l'état sélectionné avec durée optionnelle
+    if (e.target.matches('.btn-add-state')) {
+      e.preventDefault();
+      const sel = card.querySelector('.state-select');
+      const name = sel?.value; if (!name) return;
+      const turnsInput = card.querySelector('.state-turns');
+      const turns = turnsInput ? parseInt(turnsInput.value) || null : null;
+      const encoded = turns ? `${name}|${turns}` : name;
+      if (!p.states.some(s => parseState(s).name === name)) {
+        Store.updateParticipant(id, { states: [...p.states, encoded] });
+        if (turnsInput) turnsInput.value = '';
+      }
+      if (sel) sel.value = '';
       return;
     }
 
@@ -1132,15 +1134,23 @@
   on(DOM.combat.btnStart, 'click', () => Combat.start());
   on(DOM.combat.btnNextTurn, 'click', () => {
     const st = Store.getState().combat;
-    if (st.order.length === 0 || st.round === 0) return;
+    if (st.round === 0) return;
+    // Ordre de tour = participants actifs triés par initiative, indépendamment du drag-drop
+    const activeTurnOrder = Array.from(st.participants.values())
+      .filter(p => p.zone === 'active')
+      .sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
+    if (activeTurnOrder.length === 0) return;
     const current = Combat.actorAtTurn();
     if (current) decrementStates(current.id);
-    let newIndex = st.turnIndex + 1;
+    const curInitIdx = activeTurnOrder.findIndex(p => p.id === current?.id);
+    let nextInitIdx = curInitIdx + 1;
     let newRound = st.round;
-    if (newIndex >= st.order.length) { newIndex = 0; newRound++; }
-    Store.setRoundTurn(newRound, newIndex);
-    const next = Combat.actorAtTurn();
-    Store.log(`▶ ${newIndex === 0 ? `Round ${newRound} — ` : ''}Tour de ${next?.name ?? '—'}`);
+    if (nextInitIdx >= activeTurnOrder.length) { nextInitIdx = 0; newRound++; }
+    const nextActor = activeTurnOrder[nextInitIdx];
+    // Mettre à jour turnIndex pour que actorAtTurn() reste cohérent
+    const newOrderIdx = st.order.indexOf(nextActor.id);
+    Store.setRoundTurn(newRound, newOrderIdx >= 0 ? newOrderIdx : 0);
+    Store.log(`▶ ${nextInitIdx === 0 ? `Round ${newRound} — ` : ''}Tour de ${nextActor.name}`);
   });
   on(DOM.combat.btnReset, 'click', () => { if (confirm('Effacer les résultats de dés affichés ?')) DOM.combat.results.replaceChildren(); });
   on(DOM.combat.btnD100, 'click', () => { const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); const res = document.createElement('div'); res.className = 'dice-result'; res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`; DOM.combat.results.prepend(res); });

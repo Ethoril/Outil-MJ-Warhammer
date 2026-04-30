@@ -415,8 +415,9 @@
         <button class="tiny btn-hp-minus">−PV</button>
         <button class="tiny btn-hp-plus">+PV</button>
         <div class="spacer"></div>
+        <input type="number" class="state-turns" min="1" max="99" placeholder="∞" title="Tours (vide = infini)">
         <select class="state-select">
-          <option value="">+ État…</option>
+          <option value="">État…</option>
           <option value="Blessé">Blessé</option>
           <option value="À Terre">À Terre</option>
           <option value="Sonné">Sonné</option>
@@ -430,7 +431,7 @@
           <option value="Enflammé">Enflammé</option>
           <option value="Brisé">Brisé</option>
         </select>
-        <input type="number" class="state-turns" min="1" max="99" placeholder="∞" title="Nombre de tours (vide = infini)">
+        <button type="button" class="tiny btn-add-state" title="Ajouter l'état">+</button>
       </div>
 
       <div class="actor-armor muted"></div>
@@ -512,7 +513,7 @@
       if (!document.getElementById('mj-script')) {
         const script = document.createElement('script');
         script.id = 'mj-script';
-        script.src = 'MJ.js?v=16';
+        script.src = 'MJ.js?v=17';
         document.body.appendChild(script);
       }
       
