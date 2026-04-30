@@ -94,7 +94,11 @@ details summary:hover { color: var(--accent); }
 .color-swatch { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #ccc; cursor: pointer; }
 .color-swatch:hover { transform: scale(1.1); border-color: #000; }
 
-.actor-controls { margin-top: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
+.actor-controls { margin-top: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; flex-wrap: nowrap; }
+.state-select { font-size: 0.78em; padding: 2px 4px; max-width: 90px; }
+.state-turns { width: 36px; font-size: 0.78em; padding: 2px 4px; }
+.state-badge { cursor: pointer; }
+.state-badge:hover { background: #8a0707; color: #fff; border-color: #8a0707; }
 .actor-armor { font-size: 0.8em; color: var(--muted); text-align: center; background: rgba(0,0,0,0.03); border-radius: 4px; padding: 2px; }
 
 .actor-dice-section { display: flex; flex-direction: column; gap: 6px; }

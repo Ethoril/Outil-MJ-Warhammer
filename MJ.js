@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "3.3 - Groupes Réserve";
+  const APP_VERSION = "3.4 - Tour suivant & États chrono";
   // ==========================================
 
   // ============================================================
@@ -234,6 +234,22 @@
       zone: ['active', 'bench'].includes(o.zone) ? o.zone : 'bench',
       color: ['default', 'red', 'green', 'blue', 'purple', 'orange'].includes(o.color) ? o.color : 'default'
     };
+  }
+
+  // ---------- State helpers ----------
+  function parseState(s) {
+    const idx = s.indexOf('|');
+    if (idx === -1) return { name: s, turns: null };
+    return { name: s.slice(0, idx), turns: parseInt(s.slice(idx + 1)) || null };
+  }
+  function makeStateBadge(rawState) {
+    const { name, turns } = parseState(rawState);
+    const el = document.createElement('span');
+    el.className = 'badge warn state-badge';
+    el.title = 'Cliquer pour retirer';
+    el.dataset.raw = rawState;
+    el.textContent = turns ? `${name} ×${turns}` : name;
+    return el;
   }
 
   // ============================================================
@@ -545,7 +561,7 @@
       zoneActive: qs('#zone-active'), zoneBench: qs('#zone-bench'),
       pillRound: qs('#pill-round'), pillTurn: qs('#pill-turn'),
       btnImport: qs('#btn-import'), btnExport: qs('#btn-export'),
-      btnStart: qs('#btn-start'), btnReset: qs('#btn-reset'), btnD100: qs('#btn-d100'),
+      btnStart: qs('#btn-start'), btnNextTurn: qs('#btn-next-turn'), btnReset: qs('#btn-reset'), btnD100: qs('#btn-d100'),
       log: qs('#log'), btnClearLog: qs('#btn-clear-log'),
       btnSaveFile: qs('#btn-save-file'), btnLoadFile: qs('#btn-load-file'), fileInput: qs('#file-input'),
       results: qs('#dice-prep-results')
@@ -770,7 +786,7 @@
       const statesDiv = card.querySelector('.states');
       if (statesDiv) {
         statesDiv.innerHTML = '';
-        changes.states.forEach(s => statesDiv.append(badge(s, 'warn')));
+        changes.states.forEach(s => statesDiv.append(makeStateBadge(s)));
       }
     }
     if ('color' in changes) {
@@ -795,7 +811,22 @@
     div.querySelector('.hp-badge').textContent = `PV ${p.hp}`;
 
     const statesDiv = div.querySelector('.states');
-    p.states.forEach(s => statesDiv.append(badge(s, 'warn')));
+    p.states.forEach(s => statesDiv.append(makeStateBadge(s)));
+
+    const stateSelect = div.querySelector('.state-select');
+    if (stateSelect) {
+      stateSelect.addEventListener('change', () => {
+        const name = stateSelect.value; if (!name) return;
+        const turnsInput = div.querySelector('.state-turns');
+        const turns = turnsInput ? parseInt(turnsInput.value) || null : null;
+        const encoded = turns ? `${name}|${turns}` : name;
+        if (!p.states.some(s => parseState(s).name === name)) {
+          Store.updateParticipant(p.id, { states: [...p.states, encoded] });
+          if (turnsInput) turnsInput.value = '';
+        }
+        stateSelect.value = '';
+      });
+    }
 
     const armDiv = div.querySelector('.actor-armor');
     const BE = Math.floor((p.caracs?.E || 0) / 10);
@@ -847,10 +878,10 @@
       return;
     }
 
-    // State toggle (Blessé)
-    if (e.target.matches('.btn-state')) {
-      e.preventDefault();
-      toggleState(id, 'Blessé');
+    // State badge click → retirer l'état
+    if (e.target.matches('.state-badge')) {
+      const raw = e.target.dataset.raw;
+      Store.updateParticipant(id, { states: p.states.filter(s => s !== raw) });
       return;
     }
 
@@ -1076,7 +1107,19 @@
   });
 
   function setHP(id, val) { const p = getP(id); if (!p) return; Store.updateParticipant(id, { hp: val }); }
-  function toggleState(id, label) { const p = getP(id); if (!p) return; const has = p.states.includes(label); const ns = has ? p.states.filter(x => x !== label) : [...p.states, label]; Store.updateParticipant(id, { states: ns }); }
+
+  function decrementStates(id) {
+    const p = getP(id);
+    if (!p || !p.states.length) return;
+    const next = []; let changed = false;
+    p.states.forEach(s => {
+      const { name, turns } = parseState(s);
+      if (turns === null) { next.push(s); return; }
+      if (turns <= 1) { changed = true; Store.log(`⏱ ${p.name} : état "${name}" expiré.`); return; }
+      next.push(`${name}|${turns - 1}`); changed = true;
+    });
+    if (changed) Store.updateParticipant(id, { states: next });
+  }
   function getP(id) { return Store.getState().combat.participants.get(id); }
 
   on(DOM.combat.btnImport, 'click', () => { const fi = qs('#import-filter'); if (fi) fi.value = ''; renderImportModal(); DOM.importModal.dialog.showModal(); });
@@ -1087,6 +1130,18 @@
   on(DOM.combat.btnLoadFile, 'click', () => { if (DOM.combat.fileInput) DOM.combat.fileInput.click(); });
   on(DOM.combat.fileInput, 'change', (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => Store.loadFromJSON(ev.target.result); reader.readAsText(file); e.target.value = ''; });
   on(DOM.combat.btnStart, 'click', () => Combat.start());
+  on(DOM.combat.btnNextTurn, 'click', () => {
+    const st = Store.getState().combat;
+    if (st.order.length === 0 || st.round === 0) return;
+    const current = Combat.actorAtTurn();
+    if (current) decrementStates(current.id);
+    let newIndex = st.turnIndex + 1;
+    let newRound = st.round;
+    if (newIndex >= st.order.length) { newIndex = 0; newRound++; }
+    Store.setRoundTurn(newRound, newIndex);
+    const next = Combat.actorAtTurn();
+    Store.log(`▶ ${newIndex === 0 ? `Round ${newRound} — ` : ''}Tour de ${next?.name ?? '—'}`);
+  });
   on(DOM.combat.btnReset, 'click', () => { if (confirm('Effacer les résultats de dés affichés ?')) DOM.combat.results.replaceChildren(); });
   on(DOM.combat.btnD100, 'click', () => { const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); const res = document.createElement('div'); res.className = 'dice-result'; res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`; DOM.combat.results.prepend(res); });
   Bus.on('log', () => { const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line => { const div = document.createElement('div'); div.className = 'entry'; div.textContent = line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });

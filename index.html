@@ -122,6 +122,7 @@
         <div class="spacer"></div>
         <div class="row">
           <button id="btn-start">Démarrer</button>
+          <button id="btn-next-turn" class="ghost">Tour suivant ▶</button>
           <button id="btn-d100">Lancer d100</button>
           <button id="btn-reset" class="ghost" style="border-color:#b36e3a; color:#b36e3a;">Nettoyer Piste</button>
         </div>
@@ -397,7 +398,6 @@
         </div>
         <div class="actor-actions">
             <button class="icon-btn btn-color" title="Couleur">🎨</button>
-            <button class="icon-btn btn-state" title="Blessé">🩸</button>
             <button class="icon-btn danger btn-remove" title="Retirer">✕</button>
         </div>
       </div>
@@ -415,6 +415,22 @@
         <button class="tiny btn-hp-minus">−PV</button>
         <button class="tiny btn-hp-plus">+PV</button>
         <div class="spacer"></div>
+        <select class="state-select">
+          <option value="">+ État…</option>
+          <option value="Blessé">Blessé</option>
+          <option value="À Terre">À Terre</option>
+          <option value="Sonné">Sonné</option>
+          <option value="Inconscient">Inconscient</option>
+          <option value="Aveuglé">Aveuglé</option>
+          <option value="Assourdi">Assourdi</option>
+          <option value="Exténué">Exténué</option>
+          <option value="Hémorragique">Hémorragique</option>
+          <option value="Surpris">Surpris</option>
+          <option value="Enchevêtré">Enchevêtré</option>
+          <option value="Enflammé">Enflammé</option>
+          <option value="Brisé">Brisé</option>
+        </select>
+        <input type="number" class="state-turns" min="1" max="99" placeholder="∞" title="Nombre de tours (vide = infini)">
       </div>
 
       <div class="actor-armor muted"></div>
@@ -496,7 +512,7 @@
       if (!document.getElementById('mj-script')) {
         const script = document.createElement('script');
         script.id = 'mj-script';
-        script.src = 'MJ.js?v=15';
+        script.src = 'MJ.js?v=16';
         document.body.appendChild(script);
       }
       
