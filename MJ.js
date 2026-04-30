@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "3.4 - Tour suivant & États chrono";
+  const APP_VERSION = "3.5 - Effets d'états automatiques";
   // ==========================================
 
   // ============================================================
@@ -1113,14 +1113,46 @@
   function decrementStates(id) {
     const p = getP(id);
     if (!p || !p.states.length) return;
+    let hpDelta = 0;
+
+    // Hémorragique : -1 PV par niveau
+    const hemorLevels = p.states.filter(s => parseState(s).name === 'Hémorragique').length;
+    if (hemorLevels > 0) {
+      hpDelta -= hemorLevels;
+      Store.log(`🩸 ${p.name} : -${hemorLevels} PV (Hémorragie)`);
+    }
+
+    // Enflammé : 1d10 − BE − armure la plus faible + niveaux
+    const flameLevels = p.states.filter(s => parseState(s).name === 'Enflammé').length;
+    if (flameLevels > 0) {
+      const be = Math.floor((p.caracs?.E || 0) / 10);
+      const lowestArmor = Math.min(p.armor?.head||0, p.armor?.body||0, p.armor?.arms||0, p.armor?.legs||0);
+      const fireDmg = Math.max(0, (d100() % 10 + 1) - be - lowestArmor + flameLevels);
+      hpDelta -= fireDmg;
+      Store.log(`🔥 ${p.name} : ${fireDmg} dégâts de feu (Enflammé ×${flameLevels})`);
+    }
+
+    // Durée des états + Surpris auto-dissipation
     const next = []; let changed = false;
     p.states.forEach(s => {
       const { name, turns } = parseState(s);
+      if (name === 'Surpris') { changed = true; Store.log(`✓ ${p.name} : "Surpris" dissipé.`); return; }
       if (turns === null) { next.push(s); return; }
-      if (turns <= 1) { changed = true; Store.log(`⏱ ${p.name} : état "${name}" expiré.`); return; }
+      if (turns <= 1) { changed = true; Store.log(`⏱ ${p.name} : "${name}" expiré.`); return; }
       next.push(`${name}|${turns - 1}`); changed = true;
     });
-    if (changed) Store.updateParticipant(id, { states: next });
+
+    // Inconscient si PV tombent à 0 suite à Hémorragie ou Enflammé
+    const newHp = p.hp + hpDelta;
+    if (hpDelta < 0 && newHp <= 0 && !next.some(s => parseState(s).name === 'Inconscient')) {
+      next.push('Inconscient'); changed = true;
+      Store.log(`💀 ${p.name} → Inconscient (PV à 0)`);
+    }
+
+    const patch = {};
+    if (changed) patch.states = next;
+    if (hpDelta !== 0) { patch.hp = newHp; Store.log(`${p.name} : PV ${p.hp} → ${newHp}`); }
+    if (Object.keys(patch).length) Store.updateParticipant(id, patch);
   }
   function getP(id) { return Store.getState().combat.participants.get(id); }
 
@@ -1162,8 +1194,16 @@
     const dl = st.diceLines.find(x => x.id === id); if (!dl) return;
     const p = st.combat.participants.get(dl.participantId);
 
-    // 1. Récupération de la Valeur (Base) - PLUS D'AVANTAGE ICI
-    const target = parseInt(dl.base) || 0;
+    // 1. Cible de base + malus d'états
+    const base = parseInt(dl.base) || 0;
+    const stateNames = p ? new Set(p.states.map(s => parseState(s).name)) : new Set();
+    const penaltyLabels = [];
+    if (stateNames.has('Sonné'))   penaltyLabels.push('Sonné');
+    if (stateNames.has('Aveuglé')) penaltyLabels.push('Aveuglé');
+    if (stateNames.has('Exténué')) penaltyLabels.push('Exténué');
+    if (stateNames.has('Brisé'))   penaltyLabels.push('Brisé');
+    const statePenalty = penaltyLabels.length * 10;
+    const target = Math.max(0, base - statePenalty);
 
     // 2. Le Jet
     const roll = d100();
@@ -1203,7 +1243,8 @@
     if (dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
 
     // Détail du calcul (Score final utilisé)
-    resHTML += `<span class="badge" title="Base ${target}">Score ${target}</span>`;
+    resHTML += `<span class="badge" title="Base ${base}">Score ${target}</span>`;
+    if (statePenalty) resHTML += `<span class="badge" style="background:#fdd;color:#8a0707;">−${statePenalty} (${penaltyLabels.join(', ')})</span>`;
 
     // Critique
     if (crit) resHTML += `<span class="badge ${success ? 'good' : 'bad'}">${crit}</span>`;
@@ -1216,7 +1257,7 @@
 
     res.innerHTML = resHTML;
     DOM.combat.results.prepend(res);
-    Store.log(`🎲 ${p?.name} (Roll ${roll} vs ${target}) SL${sl} ${dl.note ? '[' + dl.note + ']' : ''}`);
+    Store.log(`🎲 ${p?.name} (Roll ${roll} vs ${target}${statePenalty ? ` base ${base}-${statePenalty}` : ''}) SL${sl} ${dl.note ? '[' + dl.note + ']' : ''}`);
   }
 
   // --- NEW RENDER REF TABLES (AUTO) ---
