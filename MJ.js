@@ -968,8 +968,13 @@
 
   function importRow(p) {
     const label = document.createElement('label');
-    label.className = 'import-row row';
-    label.innerHTML = `<input type="checkbox" value="${p.id}"> <strong>${escapeHtml(p.name)}</strong> <span class="muted" style="margin-left:auto;">${p.kind} • Init ${p.initiative} • PV ${p.hp}</span>`;
+    label.className = 'import-tile';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.value = p.id;
+    const span = document.createElement('span');
+    span.textContent = p.name;
+    label.append(cb, span);
+    cb.addEventListener('change', () => label.classList.toggle('selected', cb.checked));
     return label;
   }
 

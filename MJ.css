@@ -126,8 +126,10 @@ dialog .card { min-width: 480px; max-width: 600px; max-height: 80vh; overflow-y:
 .import-group { border: 1px dashed #5a1d1d; border-radius: var(--radius); margin-bottom: 8px; }
 .import-group-summary { padding: 8px 12px; background: var(--panel-2); cursor: pointer; font-family: 'Cinzel', serif; font-size: 0.9em; color: #5a1d1d; }
 .import-group-summary:hover { background: var(--chip); }
-.import-group-body { display: grid; gap: 6px; padding: 8px; }
-.import-row { padding: 6px 8px; border-radius: 4px; gap: 8px; }
-.import-row:hover { background: rgba(0,0,0,0.04); }
+.import-group-body { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; }
+.import-tile { display: inline-flex; align-items: center; justify-content: center; padding: 7px 12px; border-radius: var(--radius); border: 1px solid #5a1d1d; background: var(--bg); cursor: pointer; font-size: 0.88em; text-align: center; transition: background 0.15s, border-color 0.15s; }
+.import-tile input[type=checkbox] { display: none; }
+.import-tile:hover { border-color: var(--accent); background: var(--panel-2); }
+.import-tile.selected { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: bold; }
 
 @media (max-width: 600px) { .actor-card { width: 100%; } dialog .card { min-width: unset; width: 95vw; } }
