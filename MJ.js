@@ -4,7 +4,9 @@
   const APP_VERSION = "3.2 - Optimisations";
   // ==========================================
 
-  // ---------- Utils ----------
+  // ============================================================
+  // UTILS — Fonctions utilitaires communes
+  // ============================================================
   const uid = () => Math.random().toString(36).slice(2, 10);
   const now = () => new Date().toLocaleTimeString();
   const qs = (s) => document.querySelector(s);
@@ -53,7 +55,9 @@
     return table.find(e => roll <= e.max);
   };
 
-  // ---------- DATA ----------
+  // ============================================================
+  // DATA — Tables statiques (critiques, magie)
+  // ============================================================
   const CRIT_DATA = {
     HEAD: [
       { max: 10, name: "Blessure spectaculaire", eff: "+1 Blessure, 1 Hémorragie. Cicatrice (+1 DR Social)." },
@@ -192,10 +196,48 @@
     ]
   };
 
-  // ---------- EventBus ----------
+  // ============================================================
+  // EVENTBUS — Communication inter-composants
+  // ============================================================
   const Bus = { _h: new Map(), on(e, f) { (this._h.get(e) || this._h.set(e, new Set()).get(e)).add(f); }, off(e, f) { this._h.get(e)?.delete(f); }, emit(e, p) { this._h.get(e)?.forEach(fn => fn(p)); } };
 
-  // ---------- Models ----------
+  // ============================================================
+  // SANITIZERS — Validation des données entrantes
+  // ============================================================
+  function sanitizeArray(val) {
+    if (Array.isArray(val)) return val;
+    // Firebase peut stocker les tableaux comme objets {0:a, 1:b} si des éléments ont été supprimés
+    if (val && typeof val === 'object') return Object.values(val);
+    return [];
+  }
+  function sanitizeProfile(o) {
+    if (!o || typeof o !== 'object' || !o.id || typeof o.id !== 'string') return null;
+    return {
+      id: String(o.id),
+      name: (typeof o.name === 'string' && o.name.trim()) ? o.name.trim() : 'Sans-nom',
+      kind: ['PJ', 'Créature'].includes(o.kind) ? o.kind : 'Créature',
+      initiative: Number(o.initiative) || 0,
+      hp: Number(o.hp) || 0,
+      caracs: (o.caracs && typeof o.caracs === 'object') ? o.caracs : {},
+      armor: (o.armor && typeof o.armor === 'object') ? o.armor : { head: 0, body: 0, arms: 0, legs: 0 },
+      diceLines: sanitizeArray(o.diceLines)
+    };
+  }
+  function sanitizeParticipant(o) {
+    const base = sanitizeProfile(o);
+    if (!base) return null;
+    return {
+      ...base,
+      profileId: o.profileId || null,
+      states: Array.isArray(o.states) ? o.states.filter(s => typeof s === 'string') : [],
+      zone: ['active', 'bench'].includes(o.zone) ? o.zone : 'bench',
+      color: ['default', 'red', 'green', 'blue', 'purple', 'orange'].includes(o.color) ? o.color : 'default'
+    };
+  }
+
+  // ============================================================
+  // MODELS — Classes de données
+  // ============================================================
   class Profile {
     constructor({ id = uid(), name, kind = 'Créature', initiative = 30, hp = 10, caracs = {}, armor = { head: 0, body: 0, arms: 0, legs: 0 }, diceLines = [] } = {}) {
       this.id = id; this.name = (name || 'Sans-nom').trim(); this.kind = kind;
@@ -220,7 +262,9 @@
     }
   }
 
-  // ---------- Store + Persistence ----------
+  // ============================================================
+  // STORE — Persistance locale et synchronisation Firebase
+  // ============================================================
   const KEY = { RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1' };
   const Store = (() => {
     // ========== FIREBASE SYNC ==========
@@ -251,22 +295,12 @@
       SYNC.onValue(SYNC.dbRef, (snapshot) => {
         const data = snapshot.val();
         if (!data) return;
-
         try {
-          reserve = new Map((data.reserve || []).map(o => [o.id, new Profile(o)]));
-          const c = data.combat || {};
-          combat.round = c.round || 0;
-          combat.turnIndex = c.turnIndex ?? -1;
-          combat.order = c.order || [];
-          combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
-          log = data.log || [];
-          diceLines = (data.diceLines || []).map(x => new DiceLine(x));
-
+          applyDataToState(data);
           localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
           localStorage.setItem(KEY.COMBAT, JSON.stringify({ round: combat.round, turnIndex: combat.turnIndex, order: combat.order, participants: Array.from(combat.participants.values()) }));
           localStorage.setItem(KEY.LOG, JSON.stringify(log));
           localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
-
           Bus.emit('reserve');
           Bus.emit('combat');
           Bus.emit('log');
@@ -281,6 +315,28 @@
     let combat = { round: 0, turnIndex: -1, order: [], participants: new Map() };
     let log = [];
     let diceLines = [];
+
+    function applyDataToState(data) {
+      const rawReserve = sanitizeArray(data.reserve);
+      const validProfiles = rawReserve.map(sanitizeProfile).filter(Boolean);
+      if (rawReserve.length !== validProfiles.length)
+        console.warn(`[Sync] ${rawReserve.length - validProfiles.length} profil(s) rejeté(s) (schéma invalide)`);
+      reserve = new Map(validProfiles.map(o => [o.id, new Profile(o)]));
+
+      const c = data.combat || {};
+      combat.round = Number(c.round) || 0;
+      combat.turnIndex = c.turnIndex !== undefined ? Number(c.turnIndex) : -1;
+
+      const rawParts = sanitizeArray(c.participants);
+      const validParts = rawParts.map(sanitizeParticipant).filter(Boolean);
+      combat.participants = new Map(validParts.map(p => [p.id, new Participant(p)]));
+
+      const validIds = new Set(combat.participants.keys());
+      combat.order = sanitizeArray(c.order).filter(id => typeof id === 'string' && validIds.has(id));
+
+      log = sanitizeArray(data.log).filter(s => typeof s === 'string');
+      diceLines = sanitizeArray(data.diceLines).map(x => new DiceLine(x));
+    }
 
     // Debounced Firebase sync to reduce API calls
     const syncFirebaseDebounced = debounce((payload) => {
@@ -454,11 +510,9 @@
       },
       loadFromJSON(jsonStr) {
         try {
-          const data = JSON.parse(jsonStr); if (!data.reserve || !data.combat) throw new Error('Format invalide');
-          reserve = new Map((data.reserve || []).map(o => [o.id, new Profile(o)]));
-          const c = data.combat; combat.round = c.round || 0; combat.turnIndex = c.turnIndex ?? -1; combat.order = c.order || [];
-          combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
-          log = data.log || []; diceLines = (data.diceLines || []).map(x => new DiceLine(x));
+          const data = JSON.parse(jsonStr);
+          if (!data || !data.reserve || !data.combat) throw new Error('Format invalide');
+          applyDataToState(data);
           save(); Bus.emit('reserve'); Bus.emit('combat'); Bus.emit('log'); this.log('📂 Données chargées.'); alert('Chargement réussi !');
         } catch (e) { alert('Erreur : ' + e.message); }
       }
@@ -468,14 +522,18 @@
     return api;
   })();
 
-  // ---------- Combat engine ----------
+  // ============================================================
+  // COMBAT ENGINE — Logique de tour et d'initiative
+  // ============================================================
   const Combat = (() => {
     function actorAtTurn() { const st = Store.getState().combat; const id = st.order[st.turnIndex]; return id ? st.participants.get(id) : null; }
     function start() { const st = Store.getState().combat; if (st.order.length === 0) return; if (st.round === 0) st.round = 1; if (st.turnIndex === -1) st.turnIndex = 0; Store.log(`Combat démarré. Round ${st.round}. Tour: ${actorAtTurn()?.name ?? '—'}`); Store.setRoundTurn(st.round, st.turnIndex); }
     return { actorAtTurn, start };
   })();
 
-  // ---------- DOM refs ----------
+  // ============================================================
+  // DOM REFS — Références aux éléments d'interface
+  // ============================================================
   const DOM = {
     tabs: qsa('.tab'),
     panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat'), rules: qs('#panel-rules') },
