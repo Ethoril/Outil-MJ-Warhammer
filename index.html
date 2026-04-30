@@ -49,6 +49,12 @@
             <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
             <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
           </div>
+          <div style="margin-bottom:10px;">
+            <label>Groupe <small class="muted">(facultatif — ex : PJs, Skaven…)</small>
+              <input name="group" list="group-suggestions" placeholder="ex : PJs, Skaven…">
+              <datalist id="group-suggestions"></datalist>
+            </label>
+          </div>
 
           <div class="grid-3" style="margin-bottom:10px;">
             <label>Initiative (I)<input type="number" name="initiative" value="30" title="Utilisé pour l'ordre du tour"></label>
@@ -423,8 +429,9 @@
   <dialog id="dlg-import">
     <form method="dialog" class="card">
       <h3>Importer depuis la Réserve</h3>
-      <div id="import-list" class="list"></div>
-      <div class="row actions">
+      <input id="import-filter" placeholder="Filtrer par nom ou groupe…" style="width:100%; margin-bottom:10px;">
+      <div id="import-list"></div>
+      <div class="row actions" style="margin-top:10px;">
         <div class="spacer"></div>
         <button value="cancel" class="ghost">Annuler</button>
         <button id="confirm-import">Importer</button>
@@ -489,7 +496,7 @@
       if (!document.getElementById('mj-script')) {
         const script = document.createElement('script');
         script.id = 'mj-script';
-        script.src = 'MJ.js?v=14';
+        script.src = 'MJ.js?v=15';
         document.body.appendChild(script);
       }
       

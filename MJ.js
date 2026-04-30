@@ -1,7 +1,7 @@
 (() => {
   // ==========================================
   // 🚀 VERSION DU LOGICIEL
-  const APP_VERSION = "3.2 - Optimisations";
+  const APP_VERSION = "3.3 - Groupes Réserve";
   // ==========================================
 
   // ============================================================
@@ -220,7 +220,8 @@
       hp: Number(o.hp) || 0,
       caracs: (o.caracs && typeof o.caracs === 'object') ? o.caracs : {},
       armor: (o.armor && typeof o.armor === 'object') ? o.armor : { head: 0, body: 0, arms: 0, legs: 0 },
-      diceLines: sanitizeArray(o.diceLines)
+      diceLines: sanitizeArray(o.diceLines),
+      group: typeof o.group === 'string' ? o.group.trim() : ''
     };
   }
   function sanitizeParticipant(o) {
@@ -239,11 +240,12 @@
   // MODELS — Classes de données
   // ============================================================
   class Profile {
-    constructor({ id = uid(), name, kind = 'Créature', initiative = 30, hp = 10, caracs = {}, armor = { head: 0, body: 0, arms: 0, legs: 0 }, diceLines = [] } = {}) {
+    constructor({ id = uid(), name, kind = 'Créature', initiative = 30, hp = 10, caracs = {}, armor = { head: 0, body: 0, arms: 0, legs: 0 }, diceLines = [], group = '' } = {}) {
       this.id = id; this.name = (name || 'Sans-nom').trim(); this.kind = kind;
       this.initiative = Number(initiative) || 0; this.hp = Number(hp) || 0;
       this.caracs = { ...caracs }; this.armor = { ...armor };
-      this.diceLines = [...(diceLines || [])]; // Stores templates {base, note}
+      this.diceLines = [...(diceLines || [])];
+      this.group = (group || '').trim();
     }
   }
   class Participant {
@@ -568,14 +570,61 @@
 
   function renderReserve() {
     const term = (DOM.reserve.search.value || '').toLowerCase();
-    const items = Store.listProfiles().filter(p => p.name.toLowerCase().includes(term));
-    DOM.reserve.list.replaceChildren(...items.map(renderReserveItem));
+    const all = Store.listProfiles();
+    const filtered = all.filter(p =>
+      p.name.toLowerCase().includes(term) || (p.group || '').toLowerCase().includes(term)
+    );
+
+    // Mise à jour de l'autocomplétion du champ groupe
+    const datalist = qs('#group-suggestions');
+    if (datalist) {
+      const groups = [...new Set(all.map(p => p.group).filter(Boolean))].sort();
+      datalist.replaceChildren(...groups.map(g => { const o = document.createElement('option'); o.value = g; return o; }));
+    }
+
+    const groups = new Map();
+    const ungrouped = [];
+    filtered.forEach(p => {
+      if (p.group) {
+        if (!groups.has(p.group)) groups.set(p.group, []);
+        groups.get(p.group).push(p);
+      } else {
+        ungrouped.push(p);
+      }
+    });
+
+    const children = [];
+    [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0])).forEach(([name, profiles]) => {
+      children.push(renderReserveGroup(name, profiles));
+    });
+    if (ungrouped.length > 0) children.push(renderReserveGroup('Sans groupe', ungrouped));
+    if (children.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'muted'; empty.style.padding = '10px';
+      empty.textContent = 'Aucun profil.';
+      children.push(empty);
+    }
+    DOM.reserve.list.replaceChildren(...children);
   }
+
+  function renderReserveGroup(groupName, profiles) {
+    const details = document.createElement('details');
+    details.open = true;
+    details.className = 'reserve-group';
+    const summary = document.createElement('summary');
+    summary.innerHTML = `${escapeHtml(groupName)} <span class="muted">(${profiles.length})</span>`;
+    const body = document.createElement('div');
+    body.className = 'reserve-group-body';
+    body.append(...profiles.slice().sort((a, b) => a.name.localeCompare(b.name)).map(renderReserveItem));
+    details.append(summary, body);
+    return details;
+  }
+
   function renderReserveItem(p) {
     const div = document.createElement('div'); div.className = 'item';
     const left = document.createElement('div');
     const right = document.createElement('div'); right.className = 'row';
-    left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="meta">(${p.kind})</span></div><div class="meta">Init ${p.initiative} • PV ${p.hp}</div>`;
+    left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="muted">(${p.kind})</span></div><div class="muted" style="font-size:0.85em;">Init ${p.initiative} • PV ${p.hp}</div>`;
     const btnEdit = document.createElement('button'); btnEdit.textContent = 'Éditer'; btnEdit.classList.add('ghost'); btnEdit.addEventListener('click', () => loadProfileIntoForm(p));
     const btnDup = document.createElement('button'); btnDup.textContent = 'Dupliq.'; btnDup.classList.add('ghost'); btnDup.addEventListener('click', () => Store.duplicateProfile(p.id));
     const btnDel = document.createElement('button'); btnDel.textContent = 'Suppr'; btnDel.classList.add('danger', 'ghost'); btnDel.addEventListener('click', () => { Store.removeProfile(p.id); Store.log(`Réserve: supprimé ${p.name}`); });
@@ -608,6 +657,7 @@
     const f = DOM.reserve.form;
     f.querySelector('[name=id]').value = p.id; f.querySelector('[name=name]').value = p.name;
     f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
+    f.querySelector('[name=group]').value = p.group || '';
     f.querySelector('[name=armor_head]').value = p.armor?.head || 0; f.querySelector('[name=armor_body]').value = p.armor?.body || 0;
     f.querySelector('[name=armor_arms]').value = p.armor?.arms || 0; f.querySelector('[name=armor_legs]').value = p.armor?.legs || 0;
     const inputE = f.querySelector('[name=E]'); if (inputE) inputE.value = p.caracs?.E || 0;
@@ -626,6 +676,7 @@
     DOM.reserve.form.reset();
     DOM.reserve.form.querySelector('[name=id]').value = '';
     DOM.reserve.form.querySelector('[name=kind]').value = 'Créature';
+    DOM.reserve.form.querySelector('[name=group]').value = '';
     if (qs('#form-dice-list')) qs('#form-dice-list').innerHTML = '';
     formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none';
   }
@@ -648,16 +699,16 @@
     }
 
     const id = fd.get('id');
-    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), caracs, armor, diceLines };
+    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), caracs, armor, diceLines };
     if (id) { Store.updateProfile(id, data); Store.log(`Réserve: modifié ${data.name}`); } else { Store.addProfile(new Profile(data)); Store.log(`Réserve: ajouté ${data.name}`); }
     resetForm();
   });
 
   on(DOM.reserve.seed, 'click', () => {
-    [new Profile({ name: 'Renaut de Volargent', kind: 'PJ', initiative: 41, hp: 14, caracs: { CC: 52, Ag: 41, E: 35 }, armor: { head: 2, body: 2, arms: 0, legs: 0 } }),
-    new Profile({ name: 'Saskia la Noire', kind: 'PJ', initiative: 52, hp: 12, caracs: { CC: 45, Ag: 52, E: 40 } }),
-    new Profile({ name: 'Gobelins (2)', kind: 'Créature', initiative: 28, hp: 9, caracs: { CC: 35, E: 30 }, diceLines: [{ base: 35, note: "Lance" }, { base: 30, note: "Esquive" }] }),
-    new Profile({ name: 'Chien de guerre', kind: 'Créature', initiative: 36, hp: 10, caracs: { CC: 40, E: 30 }, diceLines: [{ base: 40, note: "Morsure" }] })
+    [new Profile({ name: 'Renaut de Volargent', kind: 'PJ', initiative: 41, hp: 14, group: 'PJs', caracs: { CC: 52, Ag: 41, E: 35 }, armor: { head: 2, body: 2, arms: 0, legs: 0 } }),
+    new Profile({ name: 'Saskia la Noire', kind: 'PJ', initiative: 52, hp: 12, group: 'PJs', caracs: { CC: 45, Ag: 52, E: 40 } }),
+    new Profile({ name: 'Gobelins (2)', kind: 'Créature', initiative: 28, hp: 9, group: 'Gobelins', caracs: { CC: 35, E: 30 }, diceLines: [{ base: 35, note: "Lance" }, { base: 30, note: "Esquive" }] }),
+    new Profile({ name: 'Chien de guerre', kind: 'Créature', initiative: 36, hp: 10, group: 'Gobelins', caracs: { CC: 40, E: 30 }, diceLines: [{ base: 40, note: "Morsure" }] })
     ].forEach(Store.addProfile); Store.log('Seed Réserve: 4 profils');
   });
   on(DOM.reserve.clear, 'click', () => { if (confirm('Vider toute la Réserve ?')) { localStorage.removeItem(KEY.RESERVE); location.reload(); } });
@@ -917,10 +968,74 @@
 
   function importRow(p) {
     const label = document.createElement('label');
-    label.className = 'row';
-    label.style.justifyContent = 'flex-start';
-    label.innerHTML = `<input type="checkbox" value="${p.id}"> <strong>${escapeHtml(p.name)}</strong> <span class="muted" style="margin-left:auto;">${p.kind}</span>`;
+    label.className = 'import-row row';
+    label.innerHTML = `<input type="checkbox" value="${p.id}"> <strong>${escapeHtml(p.name)}</strong> <span class="muted" style="margin-left:auto;">${p.kind} • Init ${p.initiative} • PV ${p.hp}</span>`;
     return label;
+  }
+
+  function renderImportModal() {
+    const term = (qs('#import-filter')?.value || '').toLowerCase();
+    const all = Store.listProfiles();
+    const filtered = all.filter(p =>
+      p.name.toLowerCase().includes(term) || (p.group || '').toLowerCase().includes(term)
+    );
+
+    const groups = new Map();
+    const ungrouped = [];
+    filtered.forEach(p => {
+      if (p.group) {
+        if (!groups.has(p.group)) groups.set(p.group, []);
+        groups.get(p.group).push(p);
+      } else {
+        ungrouped.push(p);
+      }
+    });
+
+    const children = [];
+    [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0])).forEach(([name, profiles]) => {
+      children.push(renderImportGroup(name, profiles, true));
+    });
+    if (ungrouped.length > 0) children.push(renderImportGroup('Sans groupe', ungrouped, false));
+    if (children.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'muted'; empty.style.padding = '8px';
+      empty.textContent = 'Aucun profil trouvé.';
+      children.push(empty);
+    }
+    DOM.importModal.list.replaceChildren(...children);
+  }
+
+  function renderImportGroup(groupName, profiles, collapsed) {
+    const details = document.createElement('details');
+    details.className = 'import-group';
+    if (!collapsed) details.open = true;
+
+    const summary = document.createElement('summary');
+    summary.className = 'import-group-summary row';
+
+    const titleSpan = document.createElement('span');
+    titleSpan.innerHTML = `${escapeHtml(groupName)} <span class="muted">(${profiles.length})</span>`;
+
+    const spacer = document.createElement('div'); spacer.className = 'spacer';
+
+    const btnAll = document.createElement('button');
+    btnAll.type = 'button'; btnAll.className = 'ghost small';
+    btnAll.textContent = 'Tout';
+    btnAll.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const cbs = [...body.querySelectorAll('input[type=checkbox]')];
+      const allChecked = cbs.every(cb => cb.checked);
+      cbs.forEach(cb => cb.checked = !allChecked);
+    });
+
+    summary.append(titleSpan, spacer, btnAll);
+
+    const body = document.createElement('div');
+    body.className = 'import-group-body';
+    body.append(...profiles.slice().sort((a, b) => a.name.localeCompare(b.name)).map(importRow));
+
+    details.append(summary, body);
+    return details;
   }
 
   // Drag & Drop
@@ -959,7 +1074,8 @@
   function toggleState(id, label) { const p = getP(id); if (!p) return; const has = p.states.includes(label); const ns = has ? p.states.filter(x => x !== label) : [...p.states, label]; Store.updateParticipant(id, { states: ns }); }
   function getP(id) { return Store.getState().combat.participants.get(id); }
 
-  on(DOM.combat.btnImport, 'click', () => { const profs = Store.listProfiles(); DOM.importModal.list.replaceChildren(...profs.map(p => importRow(p))); DOM.importModal.dialog.showModal(); });
+  on(DOM.combat.btnImport, 'click', () => { const fi = qs('#import-filter'); if (fi) fi.value = ''; renderImportModal(); DOM.importModal.dialog.showModal(); });
+  on(qs('#import-filter'), 'input', renderImportModal);
   on(DOM.importModal.confirm, 'click', (e) => { e.preventDefault(); const ids = Array.from(DOM.importModal.list.querySelectorAll('input[type=checkbox]:checked')).map(ch => ch.value); Store.importFromReserve(ids); DOM.importModal.dialog.close(); });
   on(DOM.combat.btnExport, 'click', () => { if (confirm('Appliquer PV aux profils correspondants ?')) Store.exportToReserve(); });
   on(DOM.combat.btnSaveFile, 'click', () => { const json = Store.getFullJSON(); const blob = new Blob([json], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `wfrp-save-${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); });

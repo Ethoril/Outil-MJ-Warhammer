@@ -115,4 +115,19 @@ details summary:hover { color: var(--accent); }
 .log .entry { padding: 6px 8px; border-bottom: 1px dashed #5a1d1d; font-size: 12px; }
 details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; }
 
-@media (max-width: 600px) { .actor-card { width: 100%; } }
+/* --- GROUPES RÉSERVE --- */
+.reserve-group { border: 1px dashed #5a1d1d; border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+.reserve-group > summary { padding: 8px 12px; background: var(--panel-2); cursor: pointer; font-family: 'Cinzel', serif; font-size: 0.9em; color: #5a1d1d; display: flex; align-items: center; gap: 6px; }
+.reserve-group > summary:hover { background: var(--chip); }
+.reserve-group-body { display: grid; gap: 8px; padding: 8px; }
+
+/* --- GROUPES IMPORT MODAL --- */
+dialog .card { min-width: 480px; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+.import-group { border: 1px dashed #5a1d1d; border-radius: var(--radius); margin-bottom: 8px; }
+.import-group-summary { padding: 8px 12px; background: var(--panel-2); cursor: pointer; font-family: 'Cinzel', serif; font-size: 0.9em; color: #5a1d1d; }
+.import-group-summary:hover { background: var(--chip); }
+.import-group-body { display: grid; gap: 6px; padding: 8px; }
+.import-row { padding: 6px 8px; border-radius: 4px; gap: 8px; }
+.import-row:hover { background: rgba(0,0,0,0.04); }
+
+@media (max-width: 600px) { .actor-card { width: 100%; } dialog .card { min-width: unset; width: 95vw; } }
