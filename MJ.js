@@ -1127,9 +1127,10 @@
     if (flameLevels > 0) {
       const be = Math.floor((p.caracs?.E || 0) / 10);
       const lowestArmor = Math.min(p.armor?.head||0, p.armor?.body||0, p.armor?.arms||0, p.armor?.legs||0);
-      const fireDmg = Math.max(0, (d100() % 10 + 1) - be - lowestArmor + flameLevels);
+      const d10Roll = d100() % 10 + 1;
+      const fireDmg = Math.max(0, d10Roll - be - lowestArmor + flameLevels);
       hpDelta -= fireDmg;
-      Store.log(`🔥 ${p.name} : ${fireDmg} dégâts de feu (Enflammé ×${flameLevels})`);
+      Store.log(`🔥 ${p.name} Enflammé ×${flameLevels} : 1d10(${d10Roll}) − BE(${be}) − armure(${lowestArmor}) + niveaux(${flameLevels}) = ${fireDmg} dégât(s)`);
     }
 
     // Durée des états + Surpris auto-dissipation
