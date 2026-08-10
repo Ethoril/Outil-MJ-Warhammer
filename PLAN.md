@@ -42,8 +42,9 @@ Conséquences, à appliquer partout :
    - constats traités (par identifiant, ex. `A-02`),
    - écarts par rapport au plan et leur justification,
    - ce qui n'a pas pu être fait.
-4. La relecture, la correction et le commit sont assurés séparément. **Le lot suivant ne
-   démarre qu'une fois le lot courant commité.**
+4. La relecture, la correction, le commit **et la poussée** sont assurés séparément, lot par
+   lot. **Le lot suivant ne démarre qu'une fois le lot courant poussé sur `origin/main`.**
+   Chaque lot donne donc exactement un commit sur GitHub — pas de gros bloc accumulé.
 
 ### Notation des constats
 
@@ -525,15 +526,14 @@ Ces trois-là sont trop liées au déplacement pour être différées.
 
 ### 6.6 — `A-13` : deux approximations sur les règles de dés
 
-**Décisions à confirmer par le MJ avant codage.** Valeurs par défaut retenues :
+**Décisions arrêtées par le MJ.** À coder telles quelles.
 
-| Point | Comportement actuel | Défaut retenu |
+| Point | Comportement actuel | Comportement attendu |
 |---|---|---|
 | `getReverseRoll(100)` | `"100".padStart(2,'0')` reste `"100"` → inversé `"001"` → 1 → « Tête » | Traiter 100 comme `00` : l'inversion vaut 100 → « Jambe droite ». Peu atteignable (100 est toujours un échec) mais faux en l'état. |
-| `isDouble(100)` | `false` (garde `n <= 99`) | `true` — le « 00 » compte comme un double. |
+| `isDouble(100)` | `false` (garde `n <= 99`) | **`true` — le « 00 » compte comme un double.** |
 
-Coder les deux valeurs par défaut, **et les couvrir par un test** pour que le choix soit visible
-et réversible en une ligne.
+Couvrir les deux par un test, pour que le choix reste visible et modifiable en une ligne.
 
 ### 6.7 — Tests (`C-02`)
 
@@ -602,11 +602,26 @@ vestiges d'une première tentative et ne sont plus lus nulle part.
 Sur `DiceLine` :
 - **supprimer** `targetType`, `targetValue`, `targetAttr`, `opponentRoll` (avec migration
   silencieuse : les ignorer à la lecture) ;
-- **ajouter** `damage` (nombre, dégâts de base de l'arme) et `targetId` (identifiant du
-  participant visé, ou `null`).
+- **ajouter** `damage` (nombre, dégâts de base de l'arme), `targetId` (identifiant du
+  participant visé, ou `null`) et `qualities` (tableau de chaînes).
 
 `targetId` est persisté : au cours d'un round, on attaque souvent la même cible. Le nettoyer
 quand le participant visé est retiré du combat.
+
+**`qualities`** porte les qualités et défauts d'arme. Un tableau plutôt qu'un booléen : le
+domaine en compte une dizaine (Percutante, Pénétrante, Imprécise, Épuisante…) et il faut
+pouvoir en ajouter sans nouvelle migration de modèle. Déclarer l'énumération dans
+`core/damage.js` :
+
+```js
+export const QUALITIES = {
+  inoffensive: { label: 'Inoffensive', hint: "Une touche entièrement absorbée n'inflige aucune blessure" },
+};
+```
+
+**Une seule qualité est honorée au lot 7 : `inoffensive`.** Les valeurs inconnues sont
+**conservées à la lecture et à l'écriture mais ignorées au calcul** — c'est ce qui permettra
+d'en implémenter d'autres plus tard sans casser les données existantes.
 
 ### 7.2 — Interface de la ligne de jet
 
@@ -619,24 +634,40 @@ si nécessaire, passer la ligne sur deux rangées.
 | `Note` | existant — libellé (« Épée », « Morsure ») |
 | `Dég.` | **nouveau** — dégâts de base de l'arme, numérique étroit |
 | `Cible` | **nouveau** — `<select>` des participants en zone active, hors soi-même. Option vide = « aucune cible » |
+| `Inof.` | **nouveau** — bascule compacte pour la qualité `inoffensive`, allumée quand active, `title` explicatif |
 | `🎲` | existant |
 | `×` | existant |
 
+La bascule `Inof.` est un bouton à deux états, pas une case à cocher : à cette taille, une case
+avec son libellé mange trop de place. Prévoir un état visuel actif net (fond accentué), pas
+seulement une nuance de bordure.
+
 ### 7.3 — Formule
 
+**Décision arrêtée par le MJ :** une touche réussie inflige **au moins 1 blessure**, même si
+l'Endurance et l'armure absorbent tout — **sauf** si l'arme porte la qualité **Inoffensive**,
+qui seule autorise un résultat de 0.
+
 ```
-dégâts infligés = max(0, dégâtsArme + DR − (BE_cible + PA_localisation))
+brut       = dégâtsArme + DR
+absorption = BE_cible + PA_localisation
+net        = brut − absorption
+
+dégâts = net > 0
+           ? net
+           : (arme Inoffensive ? 0 : 1)
 ```
 
-- `DR` : les degrés de réussite du jet, déjà calculés (`SL`).
+- `DR` : les degrés de réussite du jet, déjà calculés (`SL`). Peut être négatif sur une
+  réussite marginale — ne pas le borner, c'est le plancher final qui protège.
 - `BE_cible` : `Math.floor(cible.caracs.E / 10)`, déjà calculé pour l'affichage de la carte.
 - `PA_localisation` : le point d'armure correspondant à la localisation touchée —
   `head` / `body` / `arms` / `legs`. La table de localisation distingue bras gauche et droit,
   jambe gauche et droite ; les deux retombent respectivement sur `arms` et `legs`.
 
-**[À CONFIRMER]** Plancher à **0** (l'armure peut absorber entièrement un coup). Si la
-préférence de table est « une touche fait toujours au moins 1 », c'est un seul `Math.max(1, …)`
-à changer — le rendre visible et commenté.
+Le plancher doit vivre dans **une seule expression nommée et commentée** (pas un `Math.max`
+noyé dans le calcul) : c'est une règle de table, donc le point du code le plus susceptible
+d'être ajusté.
 
 Le calcul n'a lieu que si : le jet est **réussi**, une **cible** est sélectionnée, et
 `damage` est renseigné. Sinon, le résultat s'affiche comme aujourd'hui, sans bloc dégâts.
@@ -647,6 +678,14 @@ Dans le bloc de résultat, sous la ligne existante, ajouter :
 
 ```
 Dégâts  6 + DR 2 − (BE 3 + PA 2) = 3        [ Appliquer −3 PV à Gorbag ]
+```
+
+Quand le plancher s'applique, le dire explicitement plutôt que d'afficher un total qui ne
+découle pas visiblement du calcul :
+
+```
+Dégâts  4 + DR 1 − (BE 3 + PA 4) = −2 → 1 minimum   [ Appliquer −1 PV à Gorbag ]
+Dégâts  4 + DR 1 − (BE 3 + PA 4) = −2 → 0 (Inoffensive)
 ```
 
 - Le détail du calcul est **toujours visible** : le MJ doit pouvoir arbitrer, pas subir.
@@ -673,14 +712,31 @@ Dégâts  6 + DR 2 − (BE 3 + PA 2) = 3        [ Appliquer −3 PV à Gorbag ]
 d'armure, les points de Destin et de Résilience, les armes à qualité spéciale
 (Percutante, Pénétrante…).
 
-### 7.6 — Tests
+### 7.6 — Aller-retour avec les modèles de la Réserve
+
+**Piège à ne pas manquer.** Les jets pré-configurés d'un profil ne portent aujourd'hui que
+`base` et `note`, et `importFromReserve` ne recopie que ces deux champs. Si on ajoute `damage`
+et `qualities` sans toucher à ce chemin, ils seront systématiquement perdus à l'import — le
+MJ configurerait ses armes dans la Réserve pour rien.
+
+**À faire :**
+- ajouter les colonnes `Dég.` et la bascule `Inof.` aux lignes de jet du **formulaire de
+  profil** (`addProfileDiceRow`), au même titre que `Score` et `Label` ;
+- les collecter à la soumission du formulaire ;
+- les recopier dans `importFromReserve` ;
+- `targetId` n'est **pas** un attribut de profil : il reste vide à l'import.
+
+### 7.7 — Tests
 
 `tests/damage.test.js`, sur une fonction pure
-`computeDamage({ weaponDamage, sl, targetToughnessBonus, targetArmour })` :
+`computeDamage({ weaponDamage, sl, targetToughnessBonus, targetArmour, qualities })` :
 
 - cas nominal ;
-- armure supérieure aux dégâts → 0 (ou 1 selon la décision de 7.3) ;
+- absorption totale, arme normale → **1** ;
+- absorption totale, arme `inoffensive` → **0** ;
+- absorption exactement égale au brut (net = 0) → 1, et 0 si `inoffensive` ;
 - DR négatif sur une réussite marginale ;
+- qualité inconnue présente dans `qualities` → ignorée, résultat identique à `qualities: []` ;
 - localisation bras gauche et bras droit → même valeur d'armure ;
 - cible sans caractéristique `E` → BE de 0, pas de plantage ;
 - cible sans armure définie → PA de 0, pas de plantage.
@@ -691,6 +747,12 @@ d'armure, les points de Destin et de Résilience, les armes à qualité spécial
   réussi avec 2 DR touchant le corps : le bloc affiche `6 + 2 − (3 + 2) = 3`.
 - Cliquer « Appliquer » : les PV de la cible baissent de 3, le journal l'enregistre, le bouton
   se grise.
+- Même créature, armure `Corps 6` : le bloc affiche le calcul négatif puis `→ 1 minimum`, et
+  applique bien 1 PV.
+- Activer `Inof.` sur la même ligne et relancer : le bloc affiche `→ 0 (Inoffensive)`, et le
+  bouton « Appliquer » est absent ou inactif.
+- Configurer un jet avec dégâts et `Inof.` sur un profil de la **Réserve**, l'importer en
+  combat : les deux réglages sont bien arrivés sur la carte.
 - Amener une cible à 0 PV, la frapper à nouveau : le critique se déclenche sans double, le jet
   de gravité est bien majoré de 10, et l'état « À Terre » apparaît.
 - Retirer du combat un participant sélectionné comme cible : les lignes de jet qui le visaient
@@ -755,7 +817,7 @@ que les tables de critiques et de magie du même panneau sont générées depuis
 `save()` envoie systématiquement l'objet complet à Firebase : réserve, combat, journal, lignes
 de dés. Realtime Database est justement conçu pour l'écriture par chemin.
 
-### À faire
+### 9.1 — Écriture ciblée
 
 - Remplacer le `set()` global par des mises à jour ciblées via `update()` sur des chemins :
   ```
@@ -763,8 +825,8 @@ de dés. Realtime Database est justement conçu pour l'écriture par chemin.
   wfrp-sessions/{uid}/current/combat/participants/{participantId}
   wfrp-sessions/{uid}/current/combat/meta        (round, currentActorId, order)
   wfrp-sessions/{uid}/current/diceLines/{lineId}
-  wfrp-sessions/{uid}/current/log
   ```
+  (plus de nœud `log` — voir 9.2)
 - Le Store accumule un ensemble de chemins « sales » entre deux flushs (le débounce de 300 ms
   reste), et n'envoie que ceux-là. Le mode `batch()` du lot 4 est le point d'accroche naturel.
 - Une suppression écrit `null` sur le chemin concerné.
@@ -772,10 +834,30 @@ de dés. Realtime Database est justement conçu pour l'écriture par chemin.
   conserver l'écoute racine mais n'appliquer qu'un diff. **Le plus simple d'abord** : garder
   l'écoute racine et le filtre `writer` du lot 3, et ne gagner que sur l'écriture. Ne passer aux
   écoutes granulaires que si le bénéfice se mesure.
-- Le journal, écrit en bloc, est le poste le plus lourd : le plafond de 300 entrées du lot 4 le
-  borne, mais envisager de ne pousser que les N dernières entrées, ou de le sortir de la
-  synchronisation (il est déjà en `localStorage`). **Décision à prendre à ce moment-là**, en
-  mesurant.
+
+### 9.2 — Le journal sort de la synchronisation
+
+**Décision arrêtée.** Le journal n'est plus poussé vers Firebase ni lu depuis Firebase. Il
+reste intégralement dans `localStorage`, plafonné à 300 entrées (lot 4).
+
+Pourquoi : c'est de loin le poste le plus lourd du payload, écrit en bloc à chaque frappe, et
+c'est le seul dont la valeur ne justifie pas le coût. Ce n'est pas de l'état partagé — c'est un
+historique narratif, sur un poste unique. Le supprimer du chemin d'écriture chaud est
+l'essentiel du gain de ce lot, et ça simplifie franchement le reste.
+
+Ce qu'il faut faire pour que ça ne se retourne pas contre nous :
+
+- **Retirer `log` de la lecture aussi.** `applyDataToState` lit aujourd'hui `data.log` ; s'il
+  continue de le lire alors qu'on ne l'écrit plus, la première synchronisation écrasera le
+  journal local par la version serveur périmée. Le journal local devient autoritaire, point.
+- **Le garder dans l'export JSON.** « 💾 Sauvegarder » et « 📂 Charger » continuent de porter
+  le journal — c'est le chemin de sauvegarde durable et de transfert entre machines. Cette
+  décision ne concerne que Firebase.
+- **Purger l'ancien nœud** `wfrp-sessions/{uid}/current/log` côté serveur au premier flush,
+  pour ne pas laisser traîner un vestige que quelqu'un relira dans six mois.
+
+Si un jour l'historique doit vraiment suivre entre machines, ça se rajoutera comme une branche
+séparée, écrite par lots et jamais dans le chemin chaud. Ce n'est pas le besoin aujourd'hui.
 
 ### Recette
 
@@ -1041,13 +1123,14 @@ indépendants entre eux une fois le 6 acquis, à l'exception du 9 qui gagne à p
 
 ---
 
-## Décisions en attente
+## Décisions arrêtées
 
-À trancher avant le lot concerné. Les valeurs par défaut sont déjà écrites dans le plan et
-codables telles quelles.
+Plus rien en attente. Ces trois points sont tranchés et intégrés au plan.
 
-| # | Question | Défaut retenu | Lot |
+| # | Question | Décision | Où |
 |---|---|---|---|
-| 1 | Le « 00 » (100) compte-t-il comme un double ? | Oui | 6 |
-| 2 | Une touche dont l'armure absorbe tout inflige-t-elle 0 ou 1 blessure ? | 0 | 7 |
-| 3 | Le journal doit-il rester synchronisé sur Firebase, ou rester purement local ? | À mesurer au lot 9 | 9 |
+| 1 | Le « 00 » (100) compte-t-il comme un double ? | **Oui.** | §6.6 |
+| 2 | Une touche dont Endurance et armure absorbent tout inflige-t-elle 0 ou 1 blessure ? | **1 minimum**, sauf arme **Inoffensive** qui autorise 0. Introduit `qualities` sur `DiceLine`. | §7.1, §7.3 |
+| 3 | Le journal reste-t-il synchronisé sur Firebase ? | **Non** — purement local et plafonné, mais conservé dans l'export JSON. | §9.2 |
+
+Décidé par le MJ pour 1 et 2 ; 3 tranché en interne, sur le raisonnement exposé en §9.2.
