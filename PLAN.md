@@ -32,6 +32,22 @@ Conséquences, à appliquer partout :
 | **Identité visuelle préservée** | Le thème parchemin (Cinzel / Lora, `--bg: #f5e5c7`, rouge `#8a0707`) est un choix assumé. Ne pas le remplacer. Le lot 11 ajoute un thème sombre **à côté**, pas à la place. |
 | **Pas de refactor opportuniste** | Chaque lot ne touche que ce qu'il déclare toucher. Une amélioration repérée hors périmètre se signale dans le compte rendu, elle ne se code pas. |
 
+### ⚠ Deux règles acquises, valables pour tous les lots suivants
+
+Issues des lots 3 et 4. Les enfreindre ne produit **aucune erreur visible** — c'est ce qui les
+rend dangereuses.
+
+**1. Dans le Store, on émet avec `emitBus()`, jamais avec `Bus.emit()`.**
+C'est ce qui permet à `batch()` de regrouper les rendus. Une nouvelle méthode du Store qui
+appellerait `Bus.emit()` directement casserait le groupage en silence. Seule exception : le
+gestionnaire `onValue`, asynchrone, qui ne peut jamais s'exécuter pendant un lot — JavaScript
+étant mono-thread et `batch()` synchrone.
+
+**2. Dans l'initialiseur du Store, on référence `api`, jamais `Store`.**
+La constante `Store` n'est assignée qu'à la sortie de son propre IIFE. Y faire référence depuis
+l'intérieur ne fonctionne que grâce à l'asynchronisme du callback : c'est une zone morte
+temporelle déguisée, exactement le défaut que `A-11` visait à supprimer.
+
 ### Protocole de livraison
 
 1. Gemini traite **un seul lot à la fois**, dans l'ordre.
@@ -286,24 +302,10 @@ Le gestionnaire `onValue` réécrit aujourd'hui manuellement les quatre clés `l
 `applyDataToState`, en dupliquant le corps de `save()`. Remplacer par un appel à une fonction
 `persistLocal()` extraite de `save()`, utilisée par les deux chemins.
 
-> ### ⚠ Le lot 4 est passé avant le lot 3 — deux conséquences
->
-> **1. `save()` a changé de forme.** Il commence désormais par une garde de lot
-> (`if (batchDepth > 0) { savePending = true; return; }`), construit `rObj`/`cObj` **hors** du
-> `try`, puis enveloppe les quatre `setItem` dans un `try/catch` qui journalise l'échec de quota.
-> Le `persistLocal()` à extraire est **exactement ce bloc `try/catch`** — ni la garde de lot, qui
-> doit rester dans `save()`, ni la construction des objets, que le payload Firebase réutilise.
-> Appelé depuis `onValue`, `persistLocal()` doit s'exécuter inconditionnellement : il ne passe
-> pas par la garde de lot.
->
-> **2. Toute émission depuis le Store passe par `emitBus()`, plus jamais par `Bus.emit()`.**
-> C'est ce qui permet au mode `batch()` de coalescer les rendus. Une nouvelle méthode du Store
-> qui appellerait `Bus.emit()` directement casserait le groupage **en silence**, sans erreur ni
-> symptôme visible. Cela concerne notamment `clearReserve()` (§3.3), qui doit émettre
-> `emitBus('reserve')`.
->
-> Seule exception légitime : le gestionnaire `onValue` lui-même, qui est asynchrone et ne peut
-> donc jamais s'exécuter pendant un lot — JavaScript étant mono-thread et `batch()` synchrone.
+> **Fait.** Le lot 4 étant passé avant le lot 3, `persistLocal()` a été extrait du `try/catch`
+> de `save()` — la garde de lot restant dans `save()`, et la construction de `rObj`/`cObj` étant
+> partagée avec le payload Firebase. Appelé depuis `onValue`, `persistLocal()` s'exécute
+> inconditionnellement, sans passer par la garde de lot.
 
 ### Recette
 
@@ -1368,10 +1370,7 @@ mauvaise.
 
 **Écartés :** `E-03` (tactile), `E-09` (mobile) — sans objet sur Chrome/macOS.
 
-**Avancement réel : 1, 2, 4 faits. Le lot 3 reste à faire** — voir l'encadré du §3.5, le lot 4
-ayant modifié `save()` entre-temps. C'est le lot qui porte les bugs les plus gênants en séance
-(perte de focus à la frappe, « Vider la Réserve » inopérant, écrasement du travail local au
-retour de connexion) : à reprendre en priorité.
+**Avancement : lots 1 à 4 faits et poussés** (dans l'ordre 1, 2, 4, 3). Prochain : **lot 5**.
 
 Les lots 1, 2 et 3 sont indépendants entre eux et peuvent être traités dans n'importe quel
 ordre. À partir du lot 6, la chaîne est strictement séquentielle. Les lots 7 à 12 sont

@@ -283,8 +283,10 @@
   // ============================================================
   // STORE — Persistance locale et synchronisation Firebase
   // ============================================================
-  const KEY = { RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1' };
+  const KEY = { RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
   const Store = (() => {
+    const CLIENT_ID = crypto.randomUUID();
+
     // ========== FIREBASE SYNC ==========
     const SYNC = (() => {
       const fb = window.__WFRP_FIREBASE__;
@@ -307,36 +309,24 @@
       };
     })();
 
-    // ========== FIN FIREBASE SYNC ==========
-    // 🔥 LISTENER FIREBASE (import automatique)
-    if (SYNC) {
-      SYNC.onValue(SYNC.dbRef, (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
-        try {
-          applyDataToState(data);
-          localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
-          localStorage.setItem(KEY.COMBAT, JSON.stringify({ round: combat.round, currentActorId: combat.currentActorId, order: combat.order, participants: Array.from(combat.participants.values()) }));
-          localStorage.setItem(KEY.LOG, JSON.stringify(log));
-          localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
-          Bus.emit('reserve');
-          Bus.emit('combat');
-          Bus.emit('log');
-          console.log('🔄 Sync Firebase → Local');
-        } catch (e) {
-          console.error('❌ Erreur sync Firebase → Local:', e);
-        }
-      });
-    }
-
     let reserve = new Map();
     let combat = { round: 0, currentActorId: null, order: [], participants: new Map() };
     let log = [];
     let diceLines = [];
+    let lastAppliedTimestamp = 0;
 
     let batchDepth = 0;
     let savePending = false;
     const pendingEvents = new Set();
+
+    function parseTimestamp(ts) {
+      if (typeof ts === 'number') return ts;
+      if (typeof ts === 'string') {
+        const parsed = Date.parse(ts);
+        if (!isNaN(parsed)) return parsed;
+      }
+      return 0;
+    }
 
     function emitBus(event, payload) {
       if (batchDepth > 0) {
@@ -388,12 +378,7 @@
       }
     }, 300);
 
-    function save() {
-      if (batchDepth > 0) {
-        savePending = true;
-        return;
-      }
-      // Construits hors du try : réutilisés par le payload Firebase plus bas
+    function persistLocal() {
       const rObj = Array.from(reserve.values());
       const cObj = {
         round: combat.round,
@@ -407,15 +392,32 @@
         localStorage.setItem(KEY.COMBAT, JSON.stringify(cObj));
         localStorage.setItem(KEY.LOG, JSON.stringify(log));
         localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
+        if (lastAppliedTimestamp) {
+          localStorage.setItem(KEY.TS, String(lastAppliedTimestamp));
+        }
       } catch (e) {
         console.error('❌ Erreur de sauvegarde localStorage:', e);
         log.unshift(`[${now()}] ⚠️ Erreur de sauvegarde locale (quota dépassé ?)`);
         if (log.length > 300) log.length = 300;
       }
 
+      return { rObj, cObj };
+    }
+
+    function save() {
+      if (batchDepth > 0) {
+        savePending = true;
+        return;
+      }
+
+      const ts = Date.now();
+      lastAppliedTimestamp = ts;
+      const { rObj, cObj } = persistLocal();
+
       // 🔥 FIREBASE SYNC (debounced - 300ms)
       const payload = {
-        timestamp: new Date().toISOString(),
+        writer: CLIENT_ID,
+        timestamp: ts,
         reserve: rObj,
         combat: cObj,
         log,
@@ -466,6 +468,7 @@
         if (log.length > 300) log.length = 300;
         const d = JSON.parse(localStorage.getItem(KEY.DICE) || '[]');
         diceLines = (Array.isArray(d) ? d : []).map(x => new DiceLine(x));
+        lastAppliedTimestamp = Number(localStorage.getItem(KEY.TS) || '0') || 0;
       } catch (e) { console.warn('Load error', e); }
     }
 
@@ -512,6 +515,13 @@
         save(); emitBus('reserve'); emitBus('combat');
       },
       removeProfile(id) { reserve.delete(id); save(); emitBus('reserve'); },
+      clearReserve() {
+        const count = reserve.size;
+        reserve.clear();
+        save();
+        emitBus('reserve');
+        this.log(`Réserve: supprimé ${count} profil(s)`);
+      },
       duplicateProfile(id) {
         const p = reserve.get(id); if (!p) return;
         let baseName = p.name; const match = p.name.match(/^(.*?)(\s\d+)?$/); if (match && match[2]) baseName = match[1];
@@ -642,6 +652,38 @@
     };
     load();
     if (api.getState().combat.order.length === 0 && api.getState().combat.participants.size > 0) { api.rebuildOrder(); }
+
+    if (SYNC) {
+      SYNC.onValue(SYNC.dbRef, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+        if (data.writer === CLIENT_ID) return;
+
+        const incomingTs = parseTimestamp(data.timestamp);
+        if (incomingTs && lastAppliedTimestamp && incomingTs < lastAppliedTimestamp) {
+          console.warn('⚠️ Données serveur plus anciennes que l\'état local — ignorées');
+          // api, pas Store : on est encore dans l'initialiseur de Store (cf. A-11)
+          api.log('⚠️ Données serveur plus anciennes que l\'état local — réalignement serveur');
+          save(); // repousse l'état local pour réaligner le serveur
+          return;
+        }
+
+        try {
+          applyDataToState(data);
+          if (incomingTs) {
+            lastAppliedTimestamp = incomingTs;
+          }
+          persistLocal();
+          Bus.emit('reserve');
+          Bus.emit('combat');
+          Bus.emit('log');
+          console.log('🔄 Sync Firebase → Local');
+        } catch (e) {
+          console.error('❌ Erreur sync Firebase → Local:', e);
+        }
+      });
+    }
+
     return api;
   })();
 
@@ -853,7 +895,13 @@
       Store.log('Seed Réserve: 4 profils');
     });
   });
-  on(DOM.reserve.clear, 'click', () => { if (confirm('Vider toute la Réserve ?')) { localStorage.removeItem(KEY.RESERVE); location.reload(); } });
+  on(DOM.reserve.clear, 'click', () => {
+    const count = Store.listProfiles().length;
+    if (count === 0) return;
+    if (confirm(`Supprimer les ${count} profil(s) de la Réserve ? Cette action est irréversible.`)) {
+      Store.clearReserve();
+    }
+  });
   on(DOM.reserve.search, 'input', renderReserve);
 
   // --- Combat Rendering ---
