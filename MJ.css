@@ -147,3 +147,35 @@ dialog .card { min-width: 480px; max-width: 600px; max-height: 80vh; overflow-y:
 .import-tile.selected { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: bold; }
 
 @media (max-width: 600px) { .actor-card { width: 100%; } dialog .card { min-width: unset; width: 95vw; } }
+
+/* Lot 7 — Styles Lignes de dés & bouton Inoffensive */
+.mini-dice-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  padding: 2px 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+.btn-inoffensive {
+  padding: 1px 6px;
+  font-size: 0.75em;
+  font-weight: bold;
+  background: #eee;
+  color: #666;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-inoffensive.active {
+  background: #5a1d1d;
+  color: #fff;
+  border-color: #3b1212;
+}
+.target-select {
+  max-width: 110px;
+  font-size: 0.8em;
+  padding: 1px 3px;
+}

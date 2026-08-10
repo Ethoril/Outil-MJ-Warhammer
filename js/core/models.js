@@ -32,8 +32,16 @@ export class Participant {
 }
 
 export class DiceLine {
-  constructor({ id = uid(), participantId = '', attr = 'Custom', base = '', mod = 0, note = '', targetType = 'none', targetValue = '', targetAttr = 'CC', opponentRoll = '' } = {}) {
-    Object.assign(this, { id, participantId, attr, base, mod: Number(mod) || 0, note, targetType, targetValue, targetAttr, opponentRoll });
+  constructor({ id = uid(), participantId = '', attr = 'Custom', base = '', mod = 0, note = '', damage = 0, targetId = null, qualities = [] } = {}) {
+    this.id = id;
+    this.participantId = participantId;
+    this.attr = attr;
+    this.base = base;
+    this.mod = Number(mod) || 0;
+    this.note = note;
+    this.damage = Number(damage) || 0;
+    this.targetId = targetId || null;
+    this.qualities = Array.isArray(qualities) ? qualities : [];
   }
 }
 

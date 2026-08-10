@@ -255,6 +255,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       combat.participants.delete(id);
       combat.order = combat.order.filter(x => x !== id);
       if (combat.currentActorId === id) combat.currentActorId = null;
+      diceLines.forEach(dl => {
+        if (dl.targetId === id) dl.targetId = null;
+      });
       save();
       emitBus('combat');
     },
@@ -327,7 +330,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
               this.addDiceLine(new DiceLine({
                 participantId: p.id,
                 base: tpl.base,
-                note: tpl.note
+                note: tpl.note,
+                damage: tpl.damage || 0,
+                qualities: tpl.qualities || []
               }));
             });
           }
