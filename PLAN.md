@@ -1234,6 +1234,43 @@ s'ajouteront ceux d'armures. Il faut que l'outil les connaisse, les affiche, en 
 mécaniquement ceux qui peuvent l'être — et que la base reste modifiable **sans toucher au
 code ni redéployer**.
 
+### 13.0 — État du code à l'attaque du lot
+
+Ce cahier des charges a été rédigé **avant** les lots 6 à 12. Ce qui a changé depuis, et
+qu'il faut prendre en compte :
+
+**Déjà acquis, rien à refaire :**
+- `qualities` porte déjà la forme définitive `[{ id, rating? }]` (lot 7) — **aucune migration
+  de modèle n'est nécessaire**, c'était le but de l'avoir figée si tôt.
+- `js/data/` existe, les modules ES sont en place, et `core/damage.js` expose déjà
+  `computeDamage({ …, qualities })` qui lit `inoffensive`. Brancher un moteur
+  supplémentaire consiste à étendre cette fonction, pas à en créer une.
+- La bascule `Inof.` existe en **deux endroits** : la ligne de jet (`js/ui/dice-line.js`) et le
+  formulaire de profil (`js/ui/reserve.js`). Le sélecteur multiple du §13.7 doit remplacer les
+  deux, et l'aller-retour à l'import (§7.6) doit continuer de transporter `qualities`.
+
+**Trois pièges créés par les lots récents :**
+
+1. **`sw.js` ne traite pas `docs.google.com`.** Son gestionnaire `fetch` ne fait une exception
+   `network-first` que pour `firebase` et `gstatic` : le CSV du Sheet tomberait donc en
+   *cache-first*. Le MJ éditerait sa base, cliquerait « Recharger depuis le Sheet », et
+   recevrait la copie mise en cache. **Ajouter `docs.google.com` à cette exception** — c'est
+   précisément ce qu'exige le §13.2, et le test `tests/sw.test.js` vérifie que l'exception
+   passe avant la stratégie cache-first.
+
+2. **Les nouveaux fichiers de données doivent entrer dans `ASSETS_TO_CACHE`.**
+   `js/data/keywords-fallback.json` et `js/data/keyword-engines.js` en font partie, sinon la
+   couche 1 du §13.2 n'existe pas hors ligne. `tests/sw.test.js` échouera si on l'oublie — il
+   couvre `js/**/*.{js,json}`.
+
+3. **Toute méthode ajoutée au Store doit émettre par `emitBus()` et marquer ses chemins par
+   `markDirty()`** (§0 et §9.1). Une méthode qui appellerait `Bus.emit()` casserait le
+   groupage, et une qui oublierait `markDirty()` déclencherait un instantané complet à chaque
+   appel. Les deux échouent en silence.
+
+**Vérifié au moment d'écrire ces lignes :** le Sheet répond en HTTP 200, 31 mots-clés, et
+l'onglet ne contient **toujours aucun mot-clé d'armure**. Le §13.6 reste donc d'actualité.
+
 ### 13.1 — Oui, le Sheet est lisible directement
 
 Vérifié sur pièce. L'endpoint `gviz` de Google Sheets renvoie du CSV en `fetch()` direct,
@@ -1455,7 +1492,7 @@ mauvaise.
 
 **Écartés :** `E-03` (tactile), `E-09` (mobile) — sans objet sur Chrome/macOS.
 
-**Avancement : lots 1 à 4 faits et poussés** (dans l'ordre 1, 2, 4, 3). Prochain : **lot 5**.
+**Avancement : lots 1 à 12 faits et poussés.** Reste le **lot 13**, non prioritaire — voir son §13.0 pour ce qui a dérivé depuis sa rédaction.
 
 Les lots 1, 2 et 3 sont indépendants entre eux et peuvent être traités dans n'importe quel
 ordre. À partir du lot 6, la chaîne est strictement séquentielle. Les lots 7 à 12 sont

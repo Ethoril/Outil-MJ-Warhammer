@@ -14,12 +14,14 @@ const sw = readFileSync(join(racine, 'sw.js'), 'utf8');
 
 const listés = [...sw.matchAll(/'\.\/([^']*)'/g)].map(m => m[1]).filter(Boolean);
 
+// .json compris : le lot 13 ajoutera un instantané de mots-clés sous js/data/,
+// qui doit être mis en cache comme le reste de la coquille.
 function modulesDuDisque(rel) {
   const abs = join(racine, rel);
   return readdirSync(abs).flatMap(nom => {
     const chemin = join(abs, nom);
     if (statSync(chemin).isDirectory()) return modulesDuDisque(`${rel}/${nom}`);
-    return nom.endsWith('.js') ? [`${rel}/${nom}`] : [];
+    return /\.(js|json)$/.test(nom) ? [`${rel}/${nom}`] : [];
   });
 }
 
