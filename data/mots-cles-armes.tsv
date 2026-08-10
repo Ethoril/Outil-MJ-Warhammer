@@ -1,0 +1,32 @@
+Mot Clé	Effet
+A enroulement	L'adversaire a une pénalité d'1 DR à son jet de défense
+Assommante	Si tête touchée, jet opposé Force / Résistance, si échec, 1 état Sonné
+Croche-Pied	Après avoir touché un adversaire, vous pouvez dépenser 2 points d'Avantage pour initier un Test opposé de Force contre son Athlétisme. Si vous gagnez, la cible reçoit l'État À Terre (un cavalier subit d'abord une chute de 2 mètres)
+Dangereuse	Tout test raté incluant un 9 entraine une Maladresse
+Défensive	+1 DR à test au corps à corps pour s'opposer à une attaque
+Déséquilibrée	Impose une pénalité de -1 DR à votre test de défense lorsque vous utilisez cette arme pour tenter de parer
+Dévastatrice	Lors d'une attaque réussie, les Dégâts utilisent le résultat le plus haut entre le dé des unités de votre jet pour toucher ou votre Degré de Réussite (DR)
+Empaleuse	coup critique sur tout nombre divisible par 10 ou tout double, si obtenus sur réussite du test de combat. Si projectile, nécessite un guérisseur (flèche ou carreau) ou un chirurgien (balle) pour être retiré
+Entrave	Adversaire gagne un état Empêtré avec une Force égale à votre force
+Epuisante	Percutante et dévastatrice ne marchent qu'un tour où on charge
+Explosion X	Tous les personnages situés à X mètres de la cible subissent DR+Dégats d'armes + tous les effets infligés par l'arme
+Immobilisante	Adversaire gagne un état Empêtré avec une Force égale à votre force
+Impact	Sur une touche réussie, ajouter le résultat du dé d'unités de l'attaque aux dégâts
+Imprécise	-1 DR au tests d'attaque
+Inoffensive	Tous les PA sont doublés. De plus, vous n’infligez pas automatiquement le minimum de 1 Blessure sur une touche réussie en combat.
+Lent	Frappe toujours en dernier quelque soit l'initiative. L'adversaire a +1 DR à sa défense
+Pénétrante	Les armures non métalliques sont ignorées. Le premier point des armures métalliques est ignoré
+Percutante	Sur une touche réussie, ajouter le résultat du dé d'unités de l'attaque aux dégâts
+Perforante	Les armures non métalliques sont ignorées. Le premier point des armures métalliques est ignoré
+Perturbante	Au lieu de causer des dégats, une attaque réussie peut forcer un adversaire à reculer de DR au test opposé mètres
+Piège-lame	Certaines armes sont conçues pour piéger d'autres armes, et parfois même les briser. Si vous obtenez un Critique quand vous vous défendez contre une attaque provenant d'une arme possédant une lame, vous pouvez choisir de la piéger plutôt que de causer un Coup Critique. Si vous choisissez cela, effectuez un Test opposé de Force, en ajoutant votre DR obtenu au précédent Test de Corps à corps. Si vous l'emportez, votre adversaire laisse tomber la lame qui lui est arrachée. Si vous obtenez un Succès Stupéfiant, vous ne désarmez pas seulement votre adversaire, mais la force de votre manoeuvre brise la lame à moins qu'elle ne possède l'Atout Incassable. Si vous échouez au Test, votre adversaire libère sa lame et peut combattre normalement.
+Pistolet	Cette arme marche en combat rapproché
+Pointue	+1 au DR en attaquant avec cette arme
+Poudre Noire	La personne attaquée doit faire Calme +20 ou gagner un état brisé, même si le tir rate
+Précise	+10 à n'importe quel test avec cette arme
+Protectrice X	Rajoute X de PA à toutes les zones du corps quand utilisée pour défendre
+Rapide	Permet d'attaquer en dehors de l'ordre d'initiative. Les tests de CC pour se défendre contre une arme rapide ont -10
+Recharge X	Il faut faire un test étendu de la compétence de l'arme pour recharger, et obtenir X succès. Si interruption, recommencer à 0
+Répétition X	L'arme contient X munitions, automatiquement recharchées après chaque tir. Une fois épuisées il faut recharger normalement
+Taille X	Endommage 1PA d'armure ou de bouclier à chaque touche (1 par défaut, sinon X)
+Tranche	Endommage 1PA d'armure ou de bouclier à chaque touche (1 par défaut, sinon X)

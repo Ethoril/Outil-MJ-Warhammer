@@ -608,20 +608,24 @@ Sur `DiceLine` :
 `targetId` est persisté : au cours d'un round, on attaque souvent la même cible. Le nettoyer
 quand le participant visé est retiré du combat.
 
-**`qualities`** porte les qualités et défauts d'arme. Un tableau plutôt qu'un booléen : le
-domaine en compte une dizaine (Percutante, Pénétrante, Imprécise, Épuisante…) et il faut
-pouvoir en ajouter sans nouvelle migration de modèle. Déclarer l'énumération dans
-`core/damage.js` :
+**`qualities`** porte les qualités et défauts d'arme. Le MJ dispose d'une base d'une trentaine
+de mots-clés (voir **lot 13**) ; certains prennent une valeur numérique (Explosion X,
+Taille X, Recharge X…). La forme doit donc être définitive **dès maintenant**, pour ne pas
+imposer une migration entre le lot 7 et le lot 13 :
 
 ```js
-export const QUALITIES = {
-  inoffensive: { label: 'Inoffensive', hint: "Une touche entièrement absorbée n'inflige aucune blessure" },
-};
+qualities: [ { id: 'inoffensive' }, { id: 'explosion', rating: 3 } ]
 ```
 
-**Une seule qualité est honorée au lot 7 : `inoffensive`.** Les valeurs inconnues sont
-**conservées à la lecture et à l'écriture mais ignorées au calcul** — c'est ce qui permettra
-d'en implémenter d'autres plus tard sans casser les données existantes.
+- `id` : slug stable, minuscules sans accent (`inoffensive`, `penetrante`, `poudre-noire`).
+- `rating` : facultatif, uniquement pour les mots-clés qui prennent un X.
+
+**Ne pas** réutiliser l'encodage par `|` employé pour la durée des états (`"Sonné|3"`) : c'est
+un raccourci hérité qu'il ne faut pas propager à un nouveau champ.
+
+**Une seule qualité est honorée au calcul du lot 7 : `inoffensive`.** Les autres `id` sont
+**conservés à la lecture et à l'écriture mais ignorés au calcul**. Le lot 13 apporte la table
+complète et branche les suivants.
 
 ### 7.2 — Interface de la ligne de jet
 
@@ -644,18 +648,20 @@ seulement une nuance de bordure.
 
 ### 7.3 — Formule
 
-**Décision arrêtée par le MJ :** une touche réussie inflige **au moins 1 blessure**, même si
-l'Endurance et l'armure absorbent tout — **sauf** si l'arme porte la qualité **Inoffensive**,
-qui seule autorise un résultat de 0.
+**Décisions arrêtées par le MJ.** Une touche réussie inflige **au moins 1 blessure**, même si
+l'Endurance et l'armure absorbent tout.
+
+**Inoffensive a deux effets, cumulatifs :**
+1. les points d'armure de la localisation touchée sont **doublés** ;
+2. le **plancher de 1 tombe à 0** — c'est la seule qualité qui autorise une touche à ne rien
+   infliger du tout.
 
 ```
-brut       = dégâtsArme + DR
-absorption = BE_cible + PA_localisation
-net        = brut − absorption
+paEffectif = PA_localisation × (Inoffensive ? FACTEUR_INOFFENSIVE : 1)
+absorption = BE_cible + paEffectif
+net        = dégâtsArme + DR − absorption
 
-dégâts = net > 0
-           ? net
-           : (arme Inoffensive ? 0 : 1)
+dégâts = net > 0 ? net : (Inoffensive ? 0 : PLANCHER_TOUCHE)
 ```
 
 - `DR` : les degrés de réussite du jet, déjà calculés (`SL`). Peut être négatif sur une
@@ -665,9 +671,17 @@ dégâts = net > 0
   `head` / `body` / `arms` / `legs`. La table de localisation distingue bras gauche et droit,
   jambe gauche et droite ; les deux retombent respectivement sur `arms` et `legs`.
 
-Le plancher doit vivre dans **une seule expression nommée et commentée** (pas un `Math.max`
-noyé dans le calcul) : c'est une règle de table, donc le point du code le plus susceptible
-d'être ajusté.
+**Deux constantes nommées, commentées, en tête de `core/damage.js`** — ce sont des règles de
+table, donc les points du code les plus susceptibles d'être ajustés. Ne pas les noyer dans un
+`Math.max` en ligne :
+
+```js
+export const PLANCHER_TOUCHE = 1;      // une touche réussie inflige toujours au moins ceci
+export const FACTEUR_INOFFENSIVE = 2;  // multiplicateur de PA de la qualité Inoffensive
+```
+
+Confirmé par le MJ : Inoffensive porte bien les deux effets. La base de mots-clés
+(`data/mots-cles-armes.tsv`) a été mise à jour en conséquence.
 
 Le calcul n'a lieu que si : le jet est **réussi**, une **cible** est sélectionnée, et
 `damage` est renseigné. Sinon, le résultat s'affiche comme aujourd'hui, sans bloc dégâts.
@@ -680,12 +694,12 @@ Dans le bloc de résultat, sous la ligne existante, ajouter :
 Dégâts  6 + DR 2 − (BE 3 + PA 2) = 3        [ Appliquer −3 PV à Gorbag ]
 ```
 
-Quand le plancher s'applique, le dire explicitement plutôt que d'afficher un total qui ne
-découle pas visiblement du calcul :
+Quand le plancher s'applique, ou quand une qualité modifie l'absorption, le dire explicitement
+plutôt que d'afficher un total qui ne découle pas visiblement du calcul :
 
 ```
-Dégâts  4 + DR 1 − (BE 3 + PA 4) = −2 → 1 minimum   [ Appliquer −1 PV à Gorbag ]
-Dégâts  4 + DR 1 − (BE 3 + PA 4) = −2 → 0 (Inoffensive)
+Dégâts  4 + DR 1 − (BE 3 + PA 4) = −2 → 1 minimum       [ Appliquer −1 PV à Gorbag ]
+Dégâts  6 + DR 2 − (BE 3 + PA 2×2) = 1  Inoffensive     [ Appliquer −1 PV à Gorbag ]
 ```
 
 - Le détail du calcul est **toujours visible** : le MJ doit pouvoir arbitrer, pas subir.
@@ -732,11 +746,13 @@ MJ configurerait ses armes dans la Réserve pour rien.
 `computeDamage({ weaponDamage, sl, targetToughnessBonus, targetArmour, qualities })` :
 
 - cas nominal ;
-- absorption totale, arme normale → **1** ;
-- absorption totale, arme `inoffensive` → **0** ;
-- absorption exactement égale au brut (net = 0) → 1, et 0 si `inoffensive` ;
+- absorption totale → **1** (plancher) ;
+- absorption exactement égale au brut (net = 0) → 1 ;
+- `inoffensive` → les PA comptent double, et le plancher s'applique toujours ;
+- `inoffensive` sur une cible sans armure → aucun effet (2 × 0 = 0) ;
 - DR négatif sur une réussite marginale ;
-- qualité inconnue présente dans `qualities` → ignorée, résultat identique à `qualities: []` ;
+- qualité inconnue dans `qualities` → ignorée, résultat identique à `qualities: []` ;
+- qualité avec `rating` inconnue → ignorée sans plantage ;
 - localisation bras gauche et bras droit → même valeur d'armure ;
 - cible sans caractéristique `E` → BE de 0, pas de plantage ;
 - cible sans armure définie → PA de 0, pas de plantage.
@@ -749,8 +765,8 @@ MJ configurerait ses armes dans la Réserve pour rien.
   se grise.
 - Même créature, armure `Corps 6` : le bloc affiche le calcul négatif puis `→ 1 minimum`, et
   applique bien 1 PV.
-- Activer `Inof.` sur la même ligne et relancer : le bloc affiche `→ 0 (Inoffensive)`, et le
-  bouton « Appliquer » est absent ou inactif.
+- Activer `Inof.` sur la même ligne (armure `Corps 2` de nouveau) : le bloc affiche `PA 2×2`
+  et le total baisse de 2 par rapport au même jet sans la qualité.
 - Configurer un jet avec dégâts et `Inof.` sur un profil de la **Réserve**, l'importer en
   combat : les deux réglages sont bien arrivés sur la carte.
 - Amener une cible à 0 PV, la frapper à nouveau : le critique se déclenche sans double, le jet
@@ -1098,6 +1114,221 @@ navigateur cible.
 
 ---
 
+## Lot 13 — Mots-clés d'armes et d'armures
+
+**Constat :** nouveau (hors audit initial)
+**Fichiers :** `js/core/keywords.js`, `js/data/keywords-fallback.json`,
+`js/data/keyword-engines.js`, `js/core/damage.js`, `js/ui/dice-line.js`, `js/ui/rules-view.js`
+**Ampleur :** moyenne. **Non prioritaire** — à traiter après le lot 7 dont il étend le moteur.
+
+### Objectif
+
+Le MJ maintient une base d'une trentaine de mots-clés d'armes dans Google Sheets, à laquelle
+s'ajouteront ceux d'armures. Il faut que l'outil les connaisse, les affiche, en applique
+mécaniquement ceux qui peuvent l'être — et que la base reste modifiable **sans toucher au
+code ni redéployer**.
+
+### 13.1 — Oui, le Sheet est lisible directement
+
+Vérifié sur pièce. L'endpoint `gviz` de Google Sheets renvoie du CSV en `fetch()` direct,
+sans clé API, sans proxy CORS, sans authentification. Le seul prérequis est que le classeur
+soit partagé « tous les utilisateurs disposant du lien peuvent consulter ».
+
+```
+https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={ONGLET_URLENCODE}
+```
+
+Le dépôt voisin **`Ethoril/ennemi-interieur-wfrp4`** utilise déjà exactement ce mécanisme
+(`js/sheets.js`), sur le **même classeur** et le **même onglet** :
+
+| | |
+|---|---|
+| `SHEET_ID` | `1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs` |
+| Onglet | `Mots Clés Armes et Armures` → `Mots%20Cl%C3%A9s%20Armes%20et%20Armures` |
+| Colonnes | `Mot Clé`, `Effet` |
+
+**Reprendre le code éprouvé plutôt que le réécrire.** `js/sheets.js` et son `parseCSV` de
+`js/utils.js` sont déjà en production sur ce classeur ; ils gèrent notamment deux pièges réels
+constatés sur cet onglet : les **colonnes vides de remplissage** (le CSV en renvoie 13 pour
+2 colonnes utiles) et les **retours à la ligne dans les cellules fusionnées**. Ne pas
+redécouvrir ces cas.
+
+### 13.2 — Architecture : trois couches, jamais de point de rupture
+
+Le lot 12 promet une application qui démarre et fonctionne sans réseau. Un `fetch` bloquant
+vers Google casserait cette promesse — et le pire moment pour perdre la table des mots-clés,
+c'est en plein combat. D'où trois couches, résolues dans cet ordre :
+
+| Couche | Rôle | Toujours disponible |
+|---|---|---|
+| 1. `js/data/keywords-fallback.json` | Instantané versionné dans le dépôt | **Oui**, par construction |
+| 2. `localStorage` (`wfrp.keywords.v1`) | Dernier téléchargement réussi | Après la première session en ligne |
+| 3. `fetch` du Sheet | Rafraîchissement | Seulement en ligne |
+
+Comportement au démarrage — *stale-while-revalidate* :
+
+1. Résoudre immédiatement et **sans attendre le réseau** : cache `localStorage` s'il existe,
+   sinon l'instantané du dépôt. L'application est utilisable dès cet instant.
+2. Lancer le `fetch` **en arrière-plan**, sans bloquer quoi que ce soit.
+3. En cas de succès : écrire le cache, remplacer la table en mémoire, rafraîchir les vues
+   concernées.
+4. En cas d'échec : ne rien casser, ne pas alerter. Un simple indicateur discret.
+
+Afficher dans le panneau Règles la provenance et la fraîcheur :
+« Mots-clés : Google Sheets, mis à jour le 10/08/2026 » ou « Mots-clés : instantané local
+(hors ligne) », plus un bouton **« Recharger depuis le Sheet »** pour forcer le
+rafraîchissement en séance.
+
+Le service worker du lot 12 doit traiter l'URL `docs.google.com` en *network-first* et ne
+**jamais** la servir depuis son cache : la couche 2 gère déjà la persistance, et un doublon de
+cache produirait des incohérences pénibles à diagnostiquer.
+
+### 13.3 — Le contrat de données : le Sheet dit le texte, le dépôt dit la mécanique
+
+C'est le point structurant du lot.
+
+- **Le Sheet est autoritaire sur le libellé et le texte de l'effet.** Le MJ écrit de la prose,
+  jamais du technique. Aucune colonne à ajouter, aucune convention à respecter.
+- **Le dépôt est autoritaire sur le branchement mécanique.** `js/data/keyword-engines.js`
+  associe un slug à une fonction de calcul et à ses paramètres.
+- **La jonction se fait sur un slug** dérivé du libellé : minuscules, accents retirés,
+  ponctuation et espaces en tirets, suffixe ` X` retiré et converti en `rating: true`.
+  `Poudre Noire` → `poudre-noire`, `Explosion X` → `explosion` + `rating`.
+
+```js
+// js/data/keyword-engines.js — maintenu à la main, jamais généré
+export const ENGINES = {
+  inoffensive:  { tier: 1, engine: 'armour-multiplier', params: { factor: 2, noMinimum: true } },
+  percutante:   { tier: 1, engine: 'add-units-die', aliases: ['impact'] },
+  devastatrice: { tier: 1, engine: 'best-of-units-or-sl' },
+  penetrante:   { tier: 2, engine: 'armour-pierce', aliases: ['perforante'] },
+  // …
+};
+```
+
+Trois conséquences à respecter scrupuleusement :
+
+- **Un mot-clé présent dans le Sheet mais absent de `ENGINES` reste pleinement utile** : il
+  s'affiche, il est sélectionnable sur une ligne de jet, son texte apparaît en infobulle et
+  dans le résultat. Il n'est simplement pas calculé. **C'est le cas majoritaire et c'est
+  normal.** Ne jamais masquer ni rejeter un mot-clé inconnu.
+- **Un slug présent dans `ENGINES` mais absent du Sheet** signale une désynchronisation :
+  journaliser un avertissement en console, sans casser.
+- **Ne jamais faire dépendre le calcul du texte de l'effet.** Le texte est de la prose destinée
+  à un humain ; il changera. Le slug est le contrat.
+
+### 13.4 — Ce qui est automatisable, et ce qui ne l'est pas
+
+Les 31 mots-clés ne sont pas du même ordre de difficulté. Trois paliers.
+
+**Palier 1 — se branche dans la formule du lot 7, aucune extension de modèle.**
+
+| Mot-clé | X | Branchement |
+|---|---|---|
+| Inoffensive | | PA × 2, et plancher de touche ramené à 0 |
+| Percutante *(= Impact)* | | ajoute le dé d'unités du jet d'attaque aux dégâts |
+| Dévastatrice | | dégâts = `max(dé d'unités, DR)` au lieu du DR |
+| Pointue | | +1 DR |
+| Imprécise | | −1 DR |
+| Précise | | +10 au score cible du jet |
+| Empaleuse | | critique élargi : tout multiple de 10 ou tout double, sur réussite |
+| Dangereuse | | maladresse si un test raté contient un 9 (dizaine ou unité) |
+
+**Palier 2 — demande une petite extension de modèle, à chiffrer avant de s'engager.**
+
+| Mot-clé | X | Ce qui manque aujourd'hui |
+|---|---|---|
+| Pénétrante *(= Perforante)* | | un indicateur **métallique / non métallique** par localisation d'armure |
+| Taille X *(= Tranche)* | ✓ | la **dégradation des PA** de la cible à chaque touche |
+| Entrave *(= Immobilisante)* | | un état **porteur d'une valeur de Force** (les états ne portent qu'une durée) |
+| Assommante | | un helper de **jet opposé**, déclenché sur touche à la tête |
+| Poudre Noire | | un jet de Calme +20 déclenché **même sur un échec** de l'attaque |
+| Epuisante | | un indicateur **« charge »** sur le jet, qui conditionne Percutante et Dévastatrice |
+
+**Palier 3 — informatif seulement : le sous-système n'existe pas dans l'outil.**
+
+| Mot-clés | Sous-système absent |
+|---|---|
+| A enroulement, Défensive, Déséquilibrée, Lent, Rapide, Protectrice X, Piège-lame | **aucun jet de défense** — l'outil ne modélise que l'attaquant |
+| Croche-Pied | aucun système d'**Avantage** |
+| Explosion X | aucun **positionnement** ni distance |
+| Recharge X, Répétition X | aucun suivi de **munitions** |
+| Perturbante | arbitrage MJ, pas de règle déterministe |
+| Pistolet | purement descriptif |
+
+Ces treize-là **s'affichent et ne se calculent pas**, et c'est très bien : le MJ a le texte sous
+les yeux au moment du jet, ce qui est déjà l'essentiel du service.
+
+### 13.5 — Doublons à arbitrer (côté Sheet, pas côté code)
+
+Quatre paires portent un texte d'effet rigoureusement identique :
+
+| Paire | Canonique proposé | Motif |
+|---|---|---|
+| Percutante / Impact | **Percutante** | c'est le nom que le Sheet emploie lui-même dans l'effet d'`Epuisante` |
+| Pénétrante / Perforante | **Pénétrante** | à confirmer par le MJ, aucun indice interne |
+| Entrave / Immobilisante | **Entrave** | à confirmer par le MJ, aucun indice interne |
+| Taille X / Tranche | **Taille X** | `Tranche` n'a pas le `X` dans son libellé alors que son effet le mentionne |
+
+**Ce n'est pas bloquant.** Le mécanisme d'`aliases` fait pointer les deux slugs vers le même
+moteur, donc le code fonctionne quel que soit l'arbitrage. Le nettoyage se fait dans le Sheet,
+quand le MJ le décide.
+
+Signalé au passage, à corriger à la source quand l'occasion se présente : `Epuisante` sans
+accent, « recharchées » pour « rechargées », « entraine » pour « entraîne », et des apostrophes
+mélangées (droites `'` et courbes `’`) selon les lignes. Le slug et la recherche doivent donc
+**normaliser accents et apostrophes** plutôt que compter sur une saisie propre.
+
+### 13.6 — Portée armes / armures
+
+L'onglet s'appelle déjà « Mots Clés Armes et Armures » mais ne contient à ce jour que les
+31 mots-clés d'armes. Quand ceux d'armures arriveront, ils seront vraisemblablement ajoutés
+**au même onglet**, sans colonne distinctive.
+
+**Ne pas demander au MJ d'ajouter une colonne « Portée ».** Porter l'information dans
+`ENGINES` (`scope: 'weapon' | 'armour' | 'both'`), et pour les mots-clés non annotés, les
+proposer partout. Un mot-clé mal rangé est un désagrément mineur ; une contrainte de structure
+imposée au Sheet est une source permanente de friction.
+
+### 13.7 — Interface
+
+- **Sur la ligne de jet** : la bascule `Inof.` du lot 7 devient un sélecteur multiple compact
+  (un bouton « Mots-clés » ouvrant une liste cochable, avec champ de saisie du `X` quand le
+  mot-clé en prend un). Les mots-clés actifs s'affichent en pastilles sous la ligne.
+- **Dans le résultat de jet** : les mots-clés ayant modifié le calcul apparaissent dans le
+  détail (`PA 2×2 Inoffensive`). Ceux du palier 3 s'affichent en rappel textuel, pour que le MJ
+  arbitre sans consulter autre chose.
+- **Dans le panneau Règles** : un bloc « Mots-clés » listant tout, avec recherche — c'est la
+  même mécanique de filtre que le lot 8, à mutualiser.
+- **Sur le profil de la Réserve** : mêmes contrôles que sur la ligne de jet, avec le même
+  aller-retour à l'import que celui verrouillé en §7.6.
+
+### 13.8 — Périmètre de ce lot
+
+Livrer **le palier 1 en entier, plus toute l'infrastructure**. Le palier 2 fera l'objet d'un lot
+ultérieur, chiffré à ce moment-là ; le palier 3 n'est pas destiné à être codé.
+
+Autrement dit, ce lot doit rendre l'ajout d'un mot-clé du palier 2 aussi simple que : écrire son
+moteur, l'inscrire dans `ENGINES`. Si ce n'est pas le cas à la fin du lot, l'abstraction est
+mauvaise.
+
+### Recette
+
+- Couper le réseau, vider `localStorage`, charger l'application : les mots-clés sont là
+  (instantané du dépôt), le panneau Règles indique « hors ligne », rien ne bloque au démarrage.
+- Rétablir le réseau, recharger : la table se met à jour, la date de fraîcheur avance.
+- Modifier une ligne dans le Sheet, cliquer « Recharger depuis le Sheet » : le changement
+  apparaît sans redéploiement.
+- Ajouter dans le Sheet un mot-clé inventé : il apparaît dans la liste, sélectionnable, son
+  texte s'affiche, il n'est pas calculé, aucune erreur en console.
+- Retirer `inoffensive` du Sheet sans toucher à `ENGINES` : avertissement en console,
+  application intacte.
+- Jet réussi avec Percutante : le dé d'unités est bien ajouté, et le détail du calcul le montre.
+- Sélectionner `Impact` plutôt que `Percutante` : résultat identique (alias).
+- Jet avec un mot-clé du palier 3 : son texte apparaît en rappel, aucun calcul n'est tenté.
+
+---
+
 ## Récapitulatif
 
 | Lot | Objet | Constats | Dépend de |
@@ -1114,12 +1345,17 @@ navigateur cible.
 | 10 | Confort d'usage | `E-04` `E-07` `E-10` `E-11` `E-12` `E-13` | 6 |
 | 11 | Thème sombre & accessibilité | `E-05` `E-06` `E-08` | 6 |
 | 12 | Hors-ligne & déploiement | `D-01` `D-03` `D-05` | 6 |
+| 13 | Mots-clés d'armes et d'armures | — *(nouveau)* | 7, 12 |
 
 **Écartés :** `E-03` (tactile), `E-09` (mobile) — sans objet sur Chrome/macOS.
 
 Les lots 1, 2 et 3 sont indépendants entre eux et peuvent être traités dans n'importe quel
 ordre. À partir du lot 6, la chaîne est strictement séquentielle. Les lots 7 à 12 sont
 indépendants entre eux une fois le 6 acquis, à l'exception du 9 qui gagne à passer après le 4.
+
+Le **lot 13** est explicitement **non prioritaire** : il étend le moteur du lot 7 et s'appuie sur
+le service worker du lot 12. Il peut passer avant le 12 si l'envie prend, au prix d'un
+`fetch` sans filet hors-ligne le temps que le 12 arrive.
 
 ---
 
@@ -1130,7 +1366,11 @@ Plus rien en attente. Ces trois points sont tranchés et intégrés au plan.
 | # | Question | Décision | Où |
 |---|---|---|---|
 | 1 | Le « 00 » (100) compte-t-il comme un double ? | **Oui.** | §6.6 |
-| 2 | Une touche dont Endurance et armure absorbent tout inflige-t-elle 0 ou 1 blessure ? | **1 minimum**, sauf arme **Inoffensive** qui autorise 0. Introduit `qualities` sur `DiceLine`. | §7.1, §7.3 |
+| 2 | Une touche dont Endurance et armure absorbent tout inflige-t-elle 0 ou 1 blessure ? | **1 minimum.** Inoffensive fait exception et a **deux** effets : PA doublés **et** plancher à 0. | §7.1, §7.3 |
 | 3 | Le journal reste-t-il synchronisé sur Firebase ? | **Non** — purement local et plafonné, mais conservé dans l'export JSON. | §9.2 |
+| 4 | Peut-on lire la base de mots-clés directement depuis Google Drive ? | **Oui**, vérifié : `gviz/tq?tqx=out:csv` en `fetch()` direct, sans clé ni proxy. Mécanisme déjà en production dans `ennemi-interieur-wfrp4`. | §13.1 |
 
-Décidé par le MJ pour 1 et 2 ; 3 tranché en interne, sur le raisonnement exposé en §9.2.
+Décidé par le MJ pour 1 et 2 ; 3 tranché en interne (§9.2) ; 4 vérifié sur pièce.
+
+**Reste à arbitrer, sans urgence :** les quatre paires de doublons du §13.5. Non bloquant — le
+mécanisme d'alias fonctionne quel que soit le choix, et le nettoyage se fait dans le Sheet.
