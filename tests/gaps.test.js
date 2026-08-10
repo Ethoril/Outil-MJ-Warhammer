@@ -16,13 +16,47 @@ const mkStorage = (init = {}) => {
 };
 const mkBus = () => { const e = []; return { emit: ev => e.push(ev), events: e, clear: () => (e.length = 0) }; };
 const mkSync = () => {
-  const s = { cb: null, pushes: [], dbRef: 'ref' };
-  s.onValue = (ref, cb) => { s.cb = cb; };
+  const s = { cb: null, pushes: [], dbRef: 'ref', onValueCalls: 0 };
+  s.onValue = (ref, cb) => { s.onValueCalls++; s.cb = cb; };
   s.set = (ref, data) => { s.pushes.push(data); return Promise.resolve(); };
   return s;
 };
 const snap = o => ({ val: () => o });
 const wait = () => new Promise(r => setTimeout(r, 360));
+
+// ─────────── amorçage : la synchro arrive APRÈS la construction du Store ───────────
+// L'authentification Firebase est asynchrone. Si le handle n'est pas rattachable,
+// l'application tourne en localStorage seul — sans erreur ni symptôme visible.
+
+test('amorçage — attachSync() branche le listener et pousse l\'état local', async () => {
+  const sync = mkSync();
+  const store = createStore({ storage: mkStorage(), sync: null }); // comme main.js
+  store.addProfile(new Profile({ id: 'avant', name: 'Avant connexion', hp: 10 }));
+  await wait();
+  assert.equal(sync.pushes.length, 0, 'rien ne part tant que la synchro n\'est pas attachée');
+  assert.equal(sync.cb, null, 'et aucun listener n\'est enregistré');
+
+  store.attachSync(sync);
+  await wait();
+  assert.ok(sync.cb, 'attachSync doit enregistrer le listener onValue');
+  assert.equal(sync.pushes.length, 1, 'et repousser l\'état local vers Firebase');
+  assert.ok(sync.pushes[0].reserve.some(p => p.id === 'avant'),
+    'le travail fait avant la connexion doit être poussé');
+
+  // le listener est bien vivant
+  sync.cb(snap({ writer: 'autre', timestamp: Date.now() + 60000, reserve: [{ id: 'distant', name: 'D' }] }));
+  assert.equal(store.getReserve().has('distant'), true, 'le listener doit appliquer les données distantes');
+});
+
+test('amorçage — attachSync() est idempotent', async () => {
+  const sync = mkSync();
+  const store = createStore({ storage: mkStorage(), sync: null });
+  store.attachSync(sync);
+  store.attachSync(sync);
+  store.attachSync(null);
+  await wait();
+  assert.equal(sync.onValueCalls, 1, 'un seul enregistrement de listener');
+});
 
 // ─────────────────────── A-03 / A-04 : synchronisation ───────────────────────
 

@@ -2,7 +2,7 @@ import { APP_VERSION } from './version.js';
 import { Bus } from './ui/bus.js';
 import { DOM, qs, on } from './ui/dom.js';
 import { createStore } from './core/store.js';
-import { initFirebase } from './core/sync.js';
+import { initFirebaseSync } from './core/sync.js';
 import { createCombatEngine } from './core/combat.js';
 import { d100 } from './core/dice.js';
 import { initReserveUI } from './ui/reserve.js';
@@ -14,12 +14,16 @@ import { renderReferenceTables } from './ui/rules-view.js';
 import { renderLog } from './ui/log-view.js';
 
 // Init Store & Engine
-const firebaseSync = initFirebase();
 export const Store = createStore({
   storage: typeof localStorage !== 'undefined' ? localStorage : null,
-  sync: firebaseSync,
+  sync: null, // Sera injecté lors de la connexion Firebase
   bus: Bus
 });
+
+// Le Store démarre sans synchro : l'authentification n'est pas encore résolue.
+// Le handle lui est attaché dès la connexion, ce qui enregistre le listener onValue
+// et repousse l'état local vers Firebase.
+initFirebaseSync((syncHandle) => Store.attachSync(syncHandle));
 
 export const Combat = createCombatEngine(Store);
 
@@ -80,33 +84,7 @@ on(DOM.combat.fileInput, 'change', (e) => {
   e.target.value = '';
 });
 on(DOM.combat.btnStart, 'click', () => Combat.start());
-on(DOM.combat.btnNextTurn, 'click', () => {
-  const st = Store.getCombat();
-  if (st.round === 0) return;
-  const activeParticipants = Array.from(st.participants.values())
-    .filter(p => p.zone === 'active')
-    .sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
-  if (activeParticipants.length === 0) return;
-
-  const currentActor = Combat.actorAtTurn();
-  if (currentActor) Combat.decrementStates(currentActor.id);
-
-  const curIdx = activeParticipants.findIndex(p => p.id === st.currentActorId);
-  let nextIdx;
-  let newRound = st.round;
-  if (curIdx < 0) {
-    nextIdx = 0;
-  } else {
-    nextIdx = curIdx + 1;
-    if (nextIdx >= activeParticipants.length) {
-      nextIdx = 0;
-      newRound++;
-    }
-  }
-  const nextActor = activeParticipants[nextIdx];
-  Store.setRoundTurn(newRound, nextActor.id);
-  Store.log(`▶ ${nextIdx === 0 && curIdx >= 0 ? `Round ${newRound} — ` : ''}Tour de ${nextActor.name}`);
-});
+on(DOM.combat.btnNextTurn, 'click', () => Combat.nextTurn());
 on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
 if (DOM.combat.btnEndCombat) {
   on(DOM.combat.btnEndCombat, 'click', () => {

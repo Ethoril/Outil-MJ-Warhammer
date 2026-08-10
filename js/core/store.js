@@ -301,7 +301,6 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     getReserve() { return reserve; },
     getDiceLines() { return diceLines; },
     getLog() { return log; },
-    getState() { return { reserve, combat, log, diceLines }; },
 
     addDiceLine(dl) { diceLines.push(new DiceLine(dl)); save(); emitBus('combat'); },
     updateDiceLine(id, patch, noRender = false) {
@@ -367,7 +366,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   load();
   if (combat.order.length === 0 && combat.participants.size > 0) { setOrderByInitiative(); }
 
-  if (sync && sync.onValue && sync.dbRef) {
+  let syncListenerStarted = false;
+
+  function startSyncListener() {
+    if (syncListenerStarted) return;
+    if (!(sync && sync.onValue && sync.dbRef)) return;
+    syncListenerStarted = true;
+
     sync.onValue(sync.dbRef, (snapshot) => {
       const data = snapshot.val();
       if (!data) return;
@@ -398,6 +403,19 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }
     });
   }
+
+  // L'authentification Firebase est asynchrone : le handle de synchro n'existe pas
+  // encore quand main.js construit le Store. Sans ce point d'attache, sync resterait
+  // null pour toujours et l'application tournerait en localStorage seul, sans erreur
+  // ni symptôme visible.
+  api.attachSync = (handle) => {
+    if (!handle || syncListenerStarted) return;
+    sync = handle;
+    startSyncListener();
+    save(); // pousse l'état local dès la connexion, l'arbitrage d'horodatage tranchera
+  };
+
+  startSyncListener();
 
   return api;
 }

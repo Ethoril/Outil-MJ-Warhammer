@@ -40,9 +40,8 @@ export function renderMiniDiceLine(dl, p, Store) {
 }
 
 export function runDiceLine(id, Store) {
-  const st = Store.getState ? Store.getState() : { diceLines: Store.getDiceLines(), combat: Store.getCombat() };
-  const diceLines = Store.getDiceLines ? Store.getDiceLines() : st.diceLines;
-  const combat = Store.getCombat ? Store.getCombat() : st.combat;
+  const diceLines = Store.getDiceLines();
+  const combat = Store.getCombat();
 
   const dl = diceLines.find(x => x.id === id);
   if (!dl) return;

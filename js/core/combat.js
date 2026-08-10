@@ -82,5 +82,33 @@ export function createCombatEngine(Store) {
     if (Object.keys(patch).length) Store.updateParticipant(id, patch);
   }
 
-  return { actorAtTurn, start, decrementStates };
+  function nextTurn() {
+    const st = Store.getCombat();
+    if (st.round === 0) return;
+    const activeParticipants = Array.from(st.participants.values())
+      .filter(p => p.zone === 'active')
+      .sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
+    if (activeParticipants.length === 0) return;
+
+    const currentActor = actorAtTurn();
+    if (currentActor) decrementStates(currentActor.id);
+
+    const curIdx = activeParticipants.findIndex(p => p.id === st.currentActorId);
+    let nextIdx;
+    let newRound = st.round;
+    if (curIdx < 0) {
+      nextIdx = 0;
+    } else {
+      nextIdx = curIdx + 1;
+      if (nextIdx >= activeParticipants.length) {
+        nextIdx = 0;
+        newRound++;
+      }
+    }
+    const nextActor = activeParticipants[nextIdx];
+    Store.setRoundTurn(newRound, nextActor.id);
+    Store.log(`▶ ${nextIdx === 0 && curIdx >= 0 ? `Round ${newRound} — ` : ''}Tour de ${nextActor.name}`);
+  }
+
+  return { actorAtTurn, start, nextTurn, decrementStates };
 }

@@ -84,27 +84,70 @@ test('Store — Migration du tour (A-02) [9 cas]', () => {
   assert.equal(storeSync.getCombat().currentActorId, 'p2');
 });
 
-test('Store & Combat — Avancement du tour (A-05, A-06)', () => {
+test('Store & Combat — Avancement du tour avec nextTurn() (A-05, A-06)', () => {
   const bus = createMockBus();
   const store = createStore({ storage: createMockStorage(), bus });
   const combatEngine = createCombatEngine(store);
 
-  // Ajouter participants
-  store.addParticipant(new Participant({ id: 'active1', name: 'A1', initiative: 50, zone: 'active' }));
-  store.addParticipant(new Participant({ id: 'active2', name: 'A2', initiative: 30, zone: 'active' }));
-  store.addParticipant(new Participant({ id: 'bench1', name: 'B1', initiative: 99, zone: 'bench' })); // banc à init 99
+  // 1. Démarrage à round 0 -> passage à round 1 et sélection du plus fort init actif (p1: 50)
+  store.addParticipant(new Participant({ id: 'p1', name: 'A1', initiative: 50, zone: 'active' }));
+  store.addParticipant(new Participant({ id: 'p2', name: 'A2', initiative: 30, zone: 'active' }));
+  store.addParticipant(new Participant({ id: 'p3', name: 'A3', initiative: 10, zone: 'active' }));
+  store.addParticipant(new Participant({ id: 'bench1', name: 'B1', initiative: 99, zone: 'bench' }));
 
-  // Démarrer combat -> round 1, tour au plus haut init actif (active1: 50)
   combatEngine.start();
   assert.equal(store.getCombat().round, 1);
-  assert.equal(store.getCombat().currentActorId, 'active1');
+  assert.equal(store.getCombat().currentActorId, 'p1');
 
-  // Banc à 99 ignoré
+  // 2. Avancement normal -> p2
+  combatEngine.nextTurn();
+  assert.equal(store.getCombat().currentActorId, 'p2');
+  assert.equal(store.getCombat().round, 1);
+
+  // 3. Avancement à p3
+  combatEngine.nextTurn();
+  assert.equal(store.getCombat().currentActorId, 'p3');
+  assert.equal(store.getCombat().round, 1);
+
+  // 4. Bouclage -> retour à p1 et round 2
+  combatEngine.nextTurn();
+  assert.equal(store.getCombat().currentActorId, 'p1');
+  assert.equal(store.getCombat().round, 2);
+
+  // 5. Ignorer le banc (bench1 init 99)
   assert.notEqual(store.getCombat().currentActorId, 'bench1');
 
-  // Retirer l'acteur courant -> tour se réinitialise sans planter
-  store.removeParticipant('active1');
-  assert.equal(store.getCombat().currentActorId, null);
+  // 6. Acteur courant supprimé -> premier actif sans incrémenter le round
+  store.removeParticipant('p1');
+  combatEngine.nextTurn();
+  assert.equal(store.getCombat().currentActorId, 'p2');
+  assert.equal(store.getCombat().round, 2);
+
+  // 7. Combattant unique
+  const storeSingle = createStore({ storage: createMockStorage() });
+  const engineSingle = createCombatEngine(storeSingle);
+  storeSingle.addParticipant(new Participant({ id: 'solo', name: 'Solo', initiative: 20, zone: 'active' }));
+  engineSingle.start();
+  assert.equal(storeSingle.getCombat().round, 1);
+  assert.equal(storeSingle.getCombat().currentActorId, 'solo');
+  engineSingle.nextTurn();
+  assert.equal(storeSingle.getCombat().round, 2);
+  assert.equal(storeSingle.getCombat().currentActorId, 'solo');
+
+  // 8. Aucun combattant actif -> nextTurn() ne plante pas
+  const storeEmpty = createStore({ storage: createMockStorage() });
+  const engineEmpty = createCombatEngine(storeEmpty);
+  assert.doesNotThrow(() => engineEmpty.nextTurn());
+
+  // 9. Chargement d'une ancienne sauvegarde avec turnIndex: 1
+  const storageOld = createMockStorage({
+    'wfrp.combat.v1': JSON.stringify({ round: 1, turnIndex: 1, order: ['x1', 'x2', 'x3'], participants: [{ id: 'x1', name: 'X1', initiative: 40, zone: 'active' }, { id: 'x2', name: 'X2', initiative: 30, zone: 'active' }, { id: 'x3', name: 'X3', initiative: 20, zone: 'active' }] })
+  });
+  const storeOld = createStore({ storage: storageOld });
+  const engineOld = createCombatEngine(storeOld);
+  assert.equal(storeOld.getCombat().currentActorId, 'x2');
+  engineOld.nextTurn();
+  assert.equal(storeOld.getCombat().currentActorId, 'x3');
 });
 
 test('Store — Groupage transactionnel batch() [14 cas] (A-08)', () => {
