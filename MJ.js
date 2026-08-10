@@ -334,6 +334,22 @@
     let log = [];
     let diceLines = [];
 
+    let batchDepth = 0;
+    let savePending = false;
+    const pendingEvents = new Set();
+
+    function emitBus(event, payload) {
+      if (batchDepth > 0) {
+        if (event === 'combat:update') {
+          pendingEvents.add('combat');
+        } else {
+          pendingEvents.add(event);
+        }
+      } else {
+        Bus.emit(event, payload);
+      }
+    }
+
     function applyDataToState(data) {
       const rawReserve = sanitizeArray(data.reserve);
       const validProfiles = rawReserve.map(sanitizeProfile).filter(Boolean);
@@ -361,6 +377,7 @@
       }
 
       log = sanitizeArray(data.log).filter(s => typeof s === 'string');
+      if (log.length > 300) log.length = 300;
       diceLines = sanitizeArray(data.diceLines).map(x => new DiceLine(x));
     }
 
@@ -372,22 +389,34 @@
     }, 300);
 
     function save() {
-      // Immediate localStorage save (never lose data)
-      localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
+      if (batchDepth > 0) {
+        savePending = true;
+        return;
+      }
+      // Construits hors du try : réutilisés par le payload Firebase plus bas
+      const rObj = Array.from(reserve.values());
       const cObj = {
         round: combat.round,
         currentActorId: combat.currentActorId,
         order: combat.order,
         participants: Array.from(combat.participants.values())
       };
-      localStorage.setItem(KEY.COMBAT, JSON.stringify(cObj));
-      localStorage.setItem(KEY.LOG, JSON.stringify(log));
-      localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
+
+      try {
+        localStorage.setItem(KEY.RESERVE, JSON.stringify(rObj));
+        localStorage.setItem(KEY.COMBAT, JSON.stringify(cObj));
+        localStorage.setItem(KEY.LOG, JSON.stringify(log));
+        localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
+      } catch (e) {
+        console.error('❌ Erreur de sauvegarde localStorage:', e);
+        log.unshift(`[${now()}] ⚠️ Erreur de sauvegarde locale (quota dépassé ?)`);
+        if (log.length > 300) log.length = 300;
+      }
 
       // 🔥 FIREBASE SYNC (debounced - 300ms)
       const payload = {
         timestamp: new Date().toISOString(),
-        reserve: Array.from(reserve.values()),
+        reserve: rObj,
         combat: cObj,
         log,
         diceLines
@@ -433,6 +462,8 @@
           }
         }
         log = JSON.parse(localStorage.getItem(KEY.LOG) || '[]');
+        if (!Array.isArray(log)) log = [];
+        if (log.length > 300) log.length = 300;
         const d = JSON.parse(localStorage.getItem(KEY.DICE) || '[]');
         diceLines = (Array.isArray(d) ? d : []).map(x => new DiceLine(x));
       } catch (e) { console.warn('Load error', e); }
@@ -445,19 +476,42 @@
     }
 
     const api = {
-      addProfile(p) { reserve.set(p.id, p); save(); Bus.emit('reserve'); },
+      batch(fn) {
+        batchDepth++;
+        try {
+          fn();
+        } finally {
+          batchDepth--;
+          if (batchDepth === 0) {
+            if (savePending) {
+              savePending = false;
+              save();
+            }
+            const events = Array.from(pendingEvents);
+            pendingEvents.clear();
+            events.forEach(e => Bus.emit(e));
+          }
+        }
+      },
+
+      addProfile(p) { reserve.set(p.id, p); save(); emitBus('reserve'); },
       updateProfile(id, patch) {
         const p = reserve.get(id); if (!p) return;
         Object.assign(p, patch);
         // Dice lines update is handled within p object
         for (const part of combat.participants.values()) {
           if (part.profileId === id) {
-            part.name = p.name; part.kind = p.kind; part.caracs = { ...p.caracs }; part.armor = { ...p.armor };
+            part.name = p.name;
+            part.kind = p.kind;
+            part.initiative = p.initiative; // Propager l'initiative (A-09)
+            part.caracs = { ...p.caracs };
+            part.armor = { ...p.armor };
+            // NE PAS propager hp : les PV d'un participant sont sa valeur courante en combat, pas son maximum
           }
         }
-        save(); Bus.emit('reserve'); Bus.emit('combat');
+        save(); emitBus('reserve'); emitBus('combat');
       },
-      removeProfile(id) { reserve.delete(id); save(); Bus.emit('reserve'); },
+      removeProfile(id) { reserve.delete(id); save(); emitBus('reserve'); },
       duplicateProfile(id) {
         const p = reserve.get(id); if (!p) return;
         let baseName = p.name; const match = p.name.match(/^(.*?)(\s\d+)?$/); if (match && match[2]) baseName = match[1];
@@ -473,13 +527,13 @@
       listProfiles() { return Array.from(reserve.values()); },
       getProfile(id) { return reserve.get(id) || null; },
 
-      addParticipant(p) { combat.participants.set(p.id, p); this.rebuildOrder(); save(); Bus.emit('combat'); },
+      addParticipant(p) { combat.participants.set(p.id, p); this.rebuildOrder(); save(); emitBus('combat'); },
       removeParticipant(id) {
         combat.participants.delete(id);
         combat.order = combat.order.filter(x => x !== id);
         if (combat.currentActorId === id) combat.currentActorId = null;
         save();
-        Bus.emit('combat');
+        emitBus('combat');
       },
       updateParticipant(id, patch) {
         const p = combat.participants.get(id);
@@ -489,10 +543,10 @@
         // Optimization 3: Try targeted update first, fallback to full render
         if ('zone' in patch) {
           // Zone change requires full re-render
-          Bus.emit('combat');
+          emitBus('combat');
         } else {
           // Try targeted update
-          Bus.emit('combat:update', { id, patch });
+          emitBus('combat:update', { id, patch });
         }
       },
 
@@ -515,56 +569,63 @@
 
         combat.order = [...activeOrder, ...benchOrder];
         save();
-        Bus.emit('combat');
+        emitBus('combat');
       },
 
       listParticipants() { return combat.order.map(id => combat.participants.get(id)).filter(Boolean); },
       listParticipantsRaw() { return Array.from(combat.participants.values()); },
 
-      setRoundTurn(round, currentActorId) { combat.round = round; combat.currentActorId = currentActorId; save(); Bus.emit('combat'); },
+      setRoundTurn(round, currentActorId) { combat.round = round; combat.currentActorId = currentActorId; save(); emitBus('combat'); },
       rebuildOrder() { setOrderByInitiative(); },
       getState() { return { reserve, combat, log, diceLines }; },
 
-      addDiceLine(dl) { diceLines.push(new DiceLine(dl)); save(); Bus.emit('combat'); },
+      addDiceLine(dl) { diceLines.push(new DiceLine(dl)); save(); emitBus('combat'); },
       updateDiceLine(id, patch, noRender = false) {
         const i = diceLines.findIndex(x => x.id === id); if (i < 0) return;
         Object.assign(diceLines[i], patch); save();
-        if (!noRender) Bus.emit('combat');
+        if (!noRender) emitBus('combat');
       },
-      removeDiceLine(id) { diceLines = diceLines.filter(x => x.id !== id); save(); Bus.emit('combat'); },
-      duplicateDiceLine(id) { const src = diceLines.find(x => x.id === id); if (!src) return; diceLines.push(new DiceLine({ ...src, id: uid() })); save(); Bus.emit('combat'); },
+      removeDiceLine(id) { diceLines = diceLines.filter(x => x.id !== id); save(); emitBus('combat'); },
+      duplicateDiceLine(id) { const src = diceLines.find(x => x.id === id); if (!src) return; diceLines.push(new DiceLine({ ...src, id: uid() })); save(); emitBus('combat'); },
 
       importFromReserve(ids) {
-        ids.forEach(id => {
-          const prof = reserve.get(id); if (!prof) return;
-          const p = new Participant({
-            profileId: prof.id, name: prof.name, kind: prof.kind,
-            initiative: prof.initiative, hp: prof.hp,
-            armor: { ...prof.armor }, caracs: { ...prof.caracs }, zone: 'bench'
-          });
-          this.addParticipant(p);
-
-          // IMPORT DICE LINES
-          if (prof.diceLines && Array.isArray(prof.diceLines)) {
-            prof.diceLines.forEach(tpl => {
-              this.addDiceLine(new DiceLine({
-                participantId: p.id,
-                base: tpl.base,
-                note: tpl.note
-              }));
+        this.batch(() => {
+          ids.forEach(id => {
+            const prof = reserve.get(id); if (!prof) return;
+            const p = new Participant({
+              profileId: prof.id, name: prof.name, kind: prof.kind,
+              initiative: prof.initiative, hp: prof.hp,
+              armor: { ...prof.armor }, caracs: { ...prof.caracs }, zone: 'bench'
             });
-          }
+            this.addParticipant(p);
+
+            // IMPORT DICE LINES
+            if (prof.diceLines && Array.isArray(prof.diceLines)) {
+              prof.diceLines.forEach(tpl => {
+                this.addDiceLine(new DiceLine({
+                  participantId: p.id,
+                  base: tpl.base,
+                  note: tpl.note
+                }));
+              });
+            }
+          });
+          this.log(`Import: ${ids.length} participant(s)`);
         });
-        this.log(`Import: ${ids.length} participant(s)`);
       },
       exportToReserve() {
         let n = 0; combat.participants.forEach(p => { if (!p.profileId) return; const prof = reserve.get(p.profileId); if (!prof) return; prof.hp = p.hp; n++; });
-        save(); this.log(`Export → Réserve: ${n} profil(s) mis à jour`); Bus.emit('reserve');
+        save(); this.log(`Export → Réserve: ${n} profil(s) mis à jour`); emitBus('reserve');
       },
 
-      log(line) { log.unshift(`[${now()}] ${line}`); save(); Bus.emit('log'); },
-      clearLog() { log = []; save(); Bus.emit('log'); },
-      resetCombat() { combat = { round: 0, currentActorId: null, order: [], participants: new Map() }; save(); this.log('Combat terminé.'); Bus.emit('combat'); },
+      log(line) {
+        log.unshift(`[${now()}] ${line}`);
+        if (log.length > 300) log.length = 300;
+        save();
+        emitBus('log');
+      },
+      clearLog() { log = []; save(); emitBus('log'); },
+      resetCombat() { combat = { round: 0, currentActorId: null, order: [], participants: new Map() }; save(); this.log('Combat terminé.'); emitBus('combat'); },
 
       getFullJSON() {
         const data = { timestamp: new Date().toISOString(), reserve: Array.from(reserve.values()), combat: { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, participants: Array.from(combat.participants.values()) }, log, diceLines };
@@ -575,7 +636,7 @@
           const data = JSON.parse(jsonStr);
           if (!data || !data.reserve || !data.combat) throw new Error('Format invalide');
           applyDataToState(data);
-          save(); Bus.emit('reserve'); Bus.emit('combat'); Bus.emit('log'); this.log('📂 Données chargées.'); alert('Chargement réussi !');
+          save(); emitBus('reserve'); emitBus('combat'); emitBus('log'); this.log('📂 Données chargées.'); alert('Chargement réussi !');
         } catch (e) { alert('Erreur : ' + e.message); }
       }
     };
@@ -783,11 +844,14 @@
   });
 
   on(DOM.reserve.seed, 'click', () => {
-    [new Profile({ name: 'Renaut de Volargent', kind: 'PJ', initiative: 41, hp: 14, group: 'PJs', caracs: { CC: 52, Ag: 41, E: 35 }, armor: { head: 2, body: 2, arms: 0, legs: 0 } }),
-    new Profile({ name: 'Saskia la Noire', kind: 'PJ', initiative: 52, hp: 12, group: 'PJs', caracs: { CC: 45, Ag: 52, E: 40 } }),
-    new Profile({ name: 'Gobelins (2)', kind: 'Créature', initiative: 28, hp: 9, group: 'Gobelins', caracs: { CC: 35, E: 30 }, diceLines: [{ base: 35, note: "Lance" }, { base: 30, note: "Esquive" }] }),
-    new Profile({ name: 'Chien de guerre', kind: 'Créature', initiative: 36, hp: 10, group: 'Gobelins', caracs: { CC: 40, E: 30 }, diceLines: [{ base: 40, note: "Morsure" }] })
-    ].forEach(Store.addProfile); Store.log('Seed Réserve: 4 profils');
+    Store.batch(() => {
+      [new Profile({ name: 'Renaut de Volargent', kind: 'PJ', initiative: 41, hp: 14, group: 'PJs', caracs: { CC: 52, Ag: 41, E: 35 }, armor: { head: 2, body: 2, arms: 0, legs: 0 } }),
+      new Profile({ name: 'Saskia la Noire', kind: 'PJ', initiative: 52, hp: 12, group: 'PJs', caracs: { CC: 45, Ag: 52, E: 40 } }),
+      new Profile({ name: 'Gobelins (2)', kind: 'Créature', initiative: 28, hp: 9, group: 'Gobelins', caracs: { CC: 35, E: 30 }, diceLines: [{ base: 35, note: "Lance" }, { base: 30, note: "Esquive" }] }),
+      new Profile({ name: 'Chien de guerre', kind: 'Créature', initiative: 36, hp: 10, group: 'Gobelins', caracs: { CC: 40, E: 30 }, diceLines: [{ base: 40, note: "Morsure" }] })
+      ].forEach(p => Store.addProfile(p));
+      Store.log('Seed Réserve: 4 profils');
+    });
   });
   on(DOM.reserve.clear, 'click', () => { if (confirm('Vider toute la Réserve ?')) { localStorage.removeItem(KEY.RESERVE); location.reload(); } });
   on(DOM.reserve.search, 'input', renderReserve);

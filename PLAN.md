@@ -286,6 +286,25 @@ Le gestionnaire `onValue` réécrit aujourd'hui manuellement les quatre clés `l
 `applyDataToState`, en dupliquant le corps de `save()`. Remplacer par un appel à une fonction
 `persistLocal()` extraite de `save()`, utilisée par les deux chemins.
 
+> ### ⚠ Le lot 4 est passé avant le lot 3 — deux conséquences
+>
+> **1. `save()` a changé de forme.** Il commence désormais par une garde de lot
+> (`if (batchDepth > 0) { savePending = true; return; }`), construit `rObj`/`cObj` **hors** du
+> `try`, puis enveloppe les quatre `setItem` dans un `try/catch` qui journalise l'échec de quota.
+> Le `persistLocal()` à extraire est **exactement ce bloc `try/catch`** — ni la garde de lot, qui
+> doit rester dans `save()`, ni la construction des objets, que le payload Firebase réutilise.
+> Appelé depuis `onValue`, `persistLocal()` doit s'exécuter inconditionnellement : il ne passe
+> pas par la garde de lot.
+>
+> **2. Toute émission depuis le Store passe par `emitBus()`, plus jamais par `Bus.emit()`.**
+> C'est ce qui permet au mode `batch()` de coalescer les rendus. Une nouvelle méthode du Store
+> qui appellerait `Bus.emit()` directement casserait le groupage **en silence**, sans erreur ni
+> symptôme visible. Cela concerne notamment `clearReserve()` (§3.3), qui doit émettre
+> `emitBus('reserve')`.
+>
+> Seule exception légitime : le gestionnaire `onValue` lui-même, qui est asynchrone et ne peut
+> donc jamais s'exécuter pendant un lot — JavaScript étant mono-thread et `batch()` synchrone.
+
 ### Recette
 
 - Ouvrir deux onglets sur l'app. Taper une longue note dans un champ de jet **sans faire de
@@ -1348,6 +1367,11 @@ mauvaise.
 | 13 | Mots-clés d'armes et d'armures | — *(nouveau)* | 7, 12 |
 
 **Écartés :** `E-03` (tactile), `E-09` (mobile) — sans objet sur Chrome/macOS.
+
+**Avancement réel : 1, 2, 4 faits. Le lot 3 reste à faire** — voir l'encadré du §3.5, le lot 4
+ayant modifié `save()` entre-temps. C'est le lot qui porte les bugs les plus gênants en séance
+(perte de focus à la frappe, « Vider la Réserve » inopérant, écrasement du travail local au
+retour de connexion) : à reprendre en priorité.
 
 Les lots 1, 2 et 3 sont indépendants entre eux et peuvent être traités dans n'importe quel
 ordre. À partir du lot 6, la chaîne est strictement séquentielle. Les lots 7 à 12 sont
