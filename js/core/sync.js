@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -78,7 +78,7 @@ export function initFirebaseSync(onUserConnected) {
 
       const path = `wfrp-sessions/${user.uid}/current`;
       const dbRef = ref(db, path);
-      syncHandle = { dbRef, set, onValue };
+      syncHandle = { dbRef, set, update, onValue };
 
       if (onUserConnected) onUserConnected(syncHandle);
     } else {

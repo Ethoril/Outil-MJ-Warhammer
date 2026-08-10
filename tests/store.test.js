@@ -220,6 +220,10 @@ test('Store — Synchronisation Firebase (A-03, A-04)', async () => {
     set(ref, data) {
       firebasePushedData = data;
       return Promise.resolve();
+    },
+    update(ref, data) {
+      firebasePushedData = data;
+      return Promise.resolve();
     }
   };
 
@@ -252,14 +256,61 @@ test('Store — Migration maxHp (E-01)', () => {
 
   const storage = createMockStorage({
     'wfrp.reserve.v1': JSON.stringify(reserveProfiles),
-    'wfrp.combat.v1': JSON.stringify({ round: 1, order: ['part1', 'part2', 'part3', 'part4'], participants: legacyParticipants })
+    'wfrp.combat.v1': JSON.stringify({ round: 1, currentActorId: 'part1', order: ['part1', 'part2', 'part3', 'part4'], participants: legacyParticipants })
   });
 
   const store = createStore({ storage });
-  const parts = store.getCombat().participants;
+  const parts = store.listParticipants();
 
-  assert.equal(parts.get('part1').maxHp, 15);
-  assert.equal(parts.get('part2').maxHp, 8);
-  assert.equal(parts.get('part3').maxHp, 20);
-  assert.equal(parts.get('part4').maxHp, 0);
+  assert.equal(parts.find(p => p.id === 'part1').maxHp, 15);
+  assert.equal(parts.find(p => p.id === 'part2').maxHp, 8);
+  assert.equal(parts.find(p => p.id === 'part3').maxHp, 20);
+  assert.equal(parts.find(p => p.id === 'part4').maxHp, 0);
+});
+
+test('Store — Synchronisation par chemin & isolation du journal (Lot 9)', async () => {
+  let updatesSent = null;
+
+  const mockSync = {
+    dbRef: 'ref',
+    onValue() {},
+    update(ref, data) {
+      updatesSent = data;
+      return Promise.resolve();
+    }
+  };
+
+  const storage = createMockStorage();
+  const store = createStore({ storage, sync: mockSync });
+
+  // 1. Premier flush -> log: null est présent pour purger l'ancien nœud serveur (§9.2)
+  store.addProfile(new Profile({ id: 'prof1', name: 'Orc', hp: 12 }));
+  await new Promise(r => setTimeout(r, 350));
+  assert.equal(updatesSent['log'], null);
+  assert.ok(updatesSent['reserve/prof1']);
+
+  // 2. Deuxième flush sur modification -> écriture ciblée sans log
+  updatesSent = null;
+  store.addParticipant(new Participant({ id: 'part1', name: 'Gobelin', hp: 8, zone: 'active' }));
+  await new Promise(r => setTimeout(r, 350));
+
+  assert.equal('log' in updatesSent, false); // Log hors du payload Firebase
+  assert.ok(updatesSent['combat/participants/part1']); // Participant ciblé
+  assert.ok(updatesSent['combat/meta']); // Méta ciblée
+
+  // 3. Suppression -> écriture de null sur la clé ciblée (§9.1)
+  updatesSent = null;
+  store.removeProfile('prof1');
+  await new Promise(r => setTimeout(r, 350));
+
+  assert.equal(updatesSent['reserve/prof1'], null);
+
+  // 4. Le journal local reste intact après réception de snapshot Firebase sans journal (§9.2)
+  let syncCB = null;
+  const mockSyncReceive = { dbRef: 'ref', onValue(ref, cb) { syncCB = cb; } };
+  const storeReceive = createStore({ storage: createMockStorage(), sync: mockSyncReceive });
+  storeReceive.log('Entrée locale unique');
+
+  syncCB({ val: () => ({ writer: 'other_user', timestamp: Date.now() + 100, reserve: [] }) });
+  assert.ok(storeReceive.getLog().some(l => l.includes('Entrée locale unique')));
 });

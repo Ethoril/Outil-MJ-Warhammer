@@ -19,8 +19,11 @@ const mkSync = () => {
   const s = { cb: null, pushes: [], dbRef: 'ref', onValueCalls: 0 };
   s.onValue = (ref, cb) => { s.onValueCalls++; s.cb = cb; };
   s.set = (ref, data) => { s.pushes.push(data); return Promise.resolve(); };
+  s.update = (ref, data) => { s.pushes.push(data); return Promise.resolve(); };
   return s;
 };
+// depuis le lot 9, reserve/participants/diceLines voyagent en objets indexés par id
+const idsDe = obj => Object.keys(obj || {});
 const snap = o => ({ val: () => o });
 const wait = () => new Promise(r => setTimeout(r, 360));
 
@@ -40,7 +43,7 @@ test('amorçage — attachSync() branche le listener et pousse l\'état local', 
   await wait();
   assert.ok(sync.cb, 'attachSync doit enregistrer le listener onValue');
   assert.equal(sync.pushes.length, 1, 'et repousser l\'état local vers Firebase');
-  assert.ok(sync.pushes[0].reserve.some(p => p.id === 'avant'),
+  assert.ok(idsDe(sync.pushes[0].reserve).includes('avant'),
     'le travail fait avant la connexion doit être poussé');
 
   // le listener est bien vivant
@@ -56,6 +59,78 @@ test('amorçage — attachSync() est idempotent', async () => {
   store.attachSync(null);
   await wait();
   assert.equal(sync.onValueCalls, 1, 'un seul enregistrement de listener');
+});
+
+// ─────────────────── D-02 : l'écriture doit rester ciblée ───────────────────
+// Store.log() sauvegarde sans rien marquer comme sale, et il est appelé à chaque jet,
+// chaque PV, chaque tour. Si un lot vide retombe sur l'instantané complet, le bénéfice
+// de l'écriture par chemin est annulé en usage réel.
+
+test('écriture ciblée — un seul participant modifié ne pousse que lui', async () => {
+  const sync = mkSync();
+  const store = createStore({ storage: mkStorage(), sync });
+  store.batch(() => {
+    for (let i = 0; i < 10; i++) store.addProfile(new Profile({ name: `P${i}`, hp: 10 }));
+    for (let i = 0; i < 5; i++) store.addParticipant(new Participant({ id: `c${i}`, name: `C${i}`, hp: 10 }));
+  });
+  await wait();
+  sync.pushes.length = 0;
+
+  store.updateParticipant('c2', { hp: 7 });
+  await wait();
+  const cles = Object.keys(sync.pushes[0]);
+  assert.ok(cles.includes('combat/participants/c2'), 'le chemin du participant doit être poussé');
+  assert.ok(!cles.includes('reserve'), 'la réserve entière ne doit pas repartir');
+  assert.ok(!cles.includes('diceLines'), 'les lignes de jet non plus');
+});
+
+test('écriture ciblée — une entrée de journal ne pousse pas tout le document', async () => {
+  const sync = mkSync();
+  const store = createStore({ storage: mkStorage(), sync });
+  store.batch(() => { for (let i = 0; i < 10; i++) store.addProfile(new Profile({ name: `P${i}`, hp: 10 })); });
+  await wait();
+  sync.pushes.length = 0;
+
+  store.log('🎲 un jet de dé');
+  await wait();
+  const cles = Object.keys(sync.pushes[0]);
+  assert.deepEqual(cles.sort(), ['timestamp', 'writer'],
+    'le journal n\'étant plus synchronisé, seul l\'horodatage doit partir');
+});
+
+test('écriture ciblée — repli sur l\'instantané complet sans update()', async () => {
+  const sync = mkSync();
+  delete sync.update; // handle dépourvu d'écriture par chemin
+  const store = createStore({ storage: mkStorage(), sync });
+  store.addProfile(new Profile({ id: 'seul', name: 'Seul', hp: 10 }));
+  await wait();
+  const cles = Object.keys(sync.pushes.at(-1));
+  assert.ok(cles.includes('reserve'), 'sans update(), on repasse en document complet');
+  assert.ok(!cles.some(k => k.includes('/')), 'et jamais de clé à chemin, invalide dans un set()');
+});
+
+test('journal — sorti de Firebase, mais conservé dans les fichiers (§9.2)', () => {
+  const sync = mkSync();
+  const store = createStore({ storage: mkStorage(), sync });
+  store.log('entrée locale');
+
+  // le chemin Firebase ne doit plus apporter de journal
+  sync.cb(snap({ writer: 'autre', timestamp: Date.now(), reserve: [], log: ['venu du serveur'] }));
+  assert.ok(!store.getLog().some(l => l.includes('venu du serveur')),
+    'le journal ne doit plus être lu depuis Firebase');
+  assert.ok(store.getLog().some(l => l.includes('entrée locale')),
+    'et le journal local ne doit pas être écrasé');
+
+  // le chemin fichier, lui, doit le restaurer
+  globalThis.alert = () => {};
+  store.loadFromJSON(JSON.stringify({
+    reserve: [{ id: 'p1', name: 'R', hp: 14 }],
+    combat: { round: 1, order: [], participants: [] },
+    log: ['[20:00:00] venu du fichier'],
+    diceLines: [],
+  }));
+  assert.ok(store.getLog().some(l => l.includes('venu du fichier')),
+    'charger une sauvegarde doit restaurer son journal');
 });
 
 // ─────────────────────── A-03 / A-04 : synchronisation ───────────────────────
