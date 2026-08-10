@@ -316,7 +316,7 @@
         try {
           applyDataToState(data);
           localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
-          localStorage.setItem(KEY.COMBAT, JSON.stringify({ round: combat.round, turnIndex: combat.turnIndex, order: combat.order, participants: Array.from(combat.participants.values()) }));
+          localStorage.setItem(KEY.COMBAT, JSON.stringify({ round: combat.round, currentActorId: combat.currentActorId, order: combat.order, participants: Array.from(combat.participants.values()) }));
           localStorage.setItem(KEY.LOG, JSON.stringify(log));
           localStorage.setItem(KEY.DICE, JSON.stringify(diceLines));
           Bus.emit('reserve');
@@ -330,7 +330,7 @@
     }
 
     let reserve = new Map();
-    let combat = { round: 0, turnIndex: -1, order: [], participants: new Map() };
+    let combat = { round: 0, currentActorId: null, order: [], participants: new Map() };
     let log = [];
     let diceLines = [];
 
@@ -343,14 +343,22 @@
 
       const c = data.combat || {};
       combat.round = Number(c.round) || 0;
-      combat.turnIndex = c.turnIndex !== undefined ? Number(c.turnIndex) : -1;
 
       const rawParts = sanitizeArray(c.participants);
       const validParts = rawParts.map(sanitizeParticipant).filter(Boolean);
       combat.participants = new Map(validParts.map(p => [p.id, new Participant(p)]));
 
       const validIds = new Set(combat.participants.keys());
-      combat.order = sanitizeArray(c.order).filter(id => typeof id === 'string' && validIds.has(id));
+      const rawOrder = sanitizeArray(c.order).filter(id => typeof id === 'string' && validIds.has(id));
+      combat.order = rawOrder;
+
+      if (c.currentActorId !== undefined) {
+        combat.currentActorId = (typeof c.currentActorId === 'string' && validIds.has(c.currentActorId)) ? c.currentActorId : null;
+      } else if (c.turnIndex !== undefined && Number(c.turnIndex) >= 0 && Number(c.turnIndex) < rawOrder.length) {
+        combat.currentActorId = rawOrder[Number(c.turnIndex)] || null;
+      } else {
+        combat.currentActorId = null;
+      }
 
       log = sanitizeArray(data.log).filter(s => typeof s === 'string');
       diceLines = sanitizeArray(data.diceLines).map(x => new DiceLine(x));
@@ -368,7 +376,7 @@
       localStorage.setItem(KEY.RESERVE, JSON.stringify(Array.from(reserve.values())));
       const cObj = {
         round: combat.round,
-        turnIndex: combat.turnIndex,
+        currentActorId: combat.currentActorId,
         order: combat.order,
         participants: Array.from(combat.participants.values())
       };
@@ -395,9 +403,19 @@
         const c = JSON.parse(localStorage.getItem(KEY.COMBAT) || 'null');
         if (c) {
           combat.round = c.round || 0;
-          combat.turnIndex = c.turnIndex ?? -1;
           combat.order = Array.isArray(c.order) ? c.order : [];
           combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
+
+          const validIds = new Set(combat.participants.keys());
+          if (c.currentActorId !== undefined) {
+            combat.currentActorId = (typeof c.currentActorId === 'string' && validIds.has(c.currentActorId)) ? c.currentActorId : null;
+          } else if (c.turnIndex !== undefined && Number(c.turnIndex) >= 0 && Number(c.turnIndex) < combat.order.length) {
+            // combat.order n'est pas filtré ici (contrairement à applyDataToState) : valider l'id migré
+            const migrated = combat.order[Number(c.turnIndex)];
+            combat.currentActorId = validIds.has(migrated) ? migrated : null;
+          } else {
+            combat.currentActorId = null;
+          }
 
           let repairedCount = 0;
           combat.participants.forEach(p => {
@@ -456,7 +474,13 @@
       getProfile(id) { return reserve.get(id) || null; },
 
       addParticipant(p) { combat.participants.set(p.id, p); this.rebuildOrder(); save(); Bus.emit('combat'); },
-      removeParticipant(id) { combat.participants.delete(id); combat.order = combat.order.filter(x => x !== id); save(); Bus.emit('combat'); },
+      removeParticipant(id) {
+        combat.participants.delete(id);
+        combat.order = combat.order.filter(x => x !== id);
+        if (combat.currentActorId === id) combat.currentActorId = null;
+        save();
+        Bus.emit('combat');
+      },
       updateParticipant(id, patch) {
         const p = combat.participants.get(id);
         if (!p) return;
@@ -472,12 +496,32 @@
         }
       },
 
-      setOrder(newOrderIds) { combat.order = newOrderIds; save(); },
+      moveParticipant(id, zone, beforeId = null) {
+        const p = combat.participants.get(id);
+        if (!p) return;
+        p.zone = zone;
+
+        const remainingOrder = combat.order.filter(xId => xId !== id);
+        const activeOrder = remainingOrder.filter(xId => combat.participants.get(xId)?.zone === 'active');
+        const benchOrder = remainingOrder.filter(xId => combat.participants.get(xId)?.zone === 'bench');
+
+        const targetArr = zone === 'active' ? activeOrder : benchOrder;
+        if (beforeId && targetArr.includes(beforeId)) {
+          const idx = targetArr.indexOf(beforeId);
+          targetArr.splice(idx, 0, id);
+        } else {
+          targetArr.push(id);
+        }
+
+        combat.order = [...activeOrder, ...benchOrder];
+        save();
+        Bus.emit('combat');
+      },
 
       listParticipants() { return combat.order.map(id => combat.participants.get(id)).filter(Boolean); },
       listParticipantsRaw() { return Array.from(combat.participants.values()); },
 
-      setRoundTurn(round, turnIndex) { combat.round = round; combat.turnIndex = turnIndex; save(); Bus.emit('combat'); },
+      setRoundTurn(round, currentActorId) { combat.round = round; combat.currentActorId = currentActorId; save(); Bus.emit('combat'); },
       rebuildOrder() { setOrderByInitiative(); },
       getState() { return { reserve, combat, log, diceLines }; },
 
@@ -520,10 +564,10 @@
 
       log(line) { log.unshift(`[${now()}] ${line}`); save(); Bus.emit('log'); },
       clearLog() { log = []; save(); Bus.emit('log'); },
-      resetCombat() { combat = { round: 0, turnIndex: -1, order: [], participants: new Map() }; save(); Bus.emit('combat'); },
+      resetCombat() { combat = { round: 0, currentActorId: null, order: [], participants: new Map() }; save(); this.log('Combat terminé.'); Bus.emit('combat'); },
 
       getFullJSON() {
-        const data = { timestamp: new Date().toISOString(), reserve: Array.from(reserve.values()), combat: { round: combat.round, turnIndex: combat.turnIndex, order: combat.order, participants: Array.from(combat.participants.values()) }, log, diceLines };
+        const data = { timestamp: new Date().toISOString(), reserve: Array.from(reserve.values()), combat: { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, participants: Array.from(combat.participants.values()) }, log, diceLines };
         return JSON.stringify(data, null, 2);
       },
       loadFromJSON(jsonStr) {
@@ -544,8 +588,26 @@
   // COMBAT ENGINE — Logique de tour et d'initiative
   // ============================================================
   const Combat = (() => {
-    function actorAtTurn() { const st = Store.getState().combat; const id = st.order[st.turnIndex]; return id ? st.participants.get(id) : null; }
-    function start() { const st = Store.getState().combat; if (st.order.length === 0) return; if (st.round === 0) st.round = 1; if (st.turnIndex === -1) st.turnIndex = 0; Store.log(`Combat démarré. Round ${st.round}. Tour: ${actorAtTurn()?.name ?? '—'}`); Store.setRoundTurn(st.round, st.turnIndex); }
+    function actorAtTurn() {
+      const st = Store.getState().combat;
+      return st.currentActorId ? (st.participants.get(st.currentActorId) ?? null) : null;
+    }
+    function start() {
+      const st = Store.getState().combat;
+      const activeParticipants = Array.from(st.participants.values())
+        .filter(p => p.zone === 'active')
+        .sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
+
+      if (activeParticipants.length === 0) {
+        Store.log('Aucun combattant en zone active');
+        return;
+      }
+
+      const round = st.round === 0 ? 1 : st.round;
+      const firstActor = activeParticipants[0];
+      Store.setRoundTurn(round, firstActor.id);
+      Store.log(`Combat démarré. Round ${round}. Tour: ${firstActor.name}`);
+    }
     return { actorAtTurn, start };
   })();
 
@@ -561,7 +623,7 @@
       zoneActive: qs('#zone-active'), zoneBench: qs('#zone-bench'),
       pillRound: qs('#pill-round'), pillTurn: qs('#pill-turn'),
       btnImport: qs('#btn-import'), btnExport: qs('#btn-export'),
-      btnStart: qs('#btn-start'), btnNextTurn: qs('#btn-next-turn'), btnReset: qs('#btn-reset'), btnD100: qs('#btn-d100'),
+      btnStart: qs('#btn-start'), btnNextTurn: qs('#btn-next-turn'), btnReset: qs('#btn-reset'), btnEndCombat: qs('#btn-end-combat'), btnD100: qs('#btn-d100'),
       log: qs('#log'), btnClearLog: qs('#btn-clear-log'),
       btnSaveFile: qs('#btn-save-file'), btnLoadFile: qs('#btn-load-file'), fileInput: qs('#file-input'),
       results: qs('#dice-prep-results')
@@ -1091,13 +1153,8 @@
     const id = e.dataTransfer.getData('text/plain'); if (!id) return;
     const container = this; const targetZone = container.dataset.zone;
     const afterElement = getDragAfterElement(container, e.clientY);
-    Store.updateParticipant(id, { zone: targetZone });
-    const activeIds = [...DOM.combat.zoneActive.querySelectorAll('.actor-card')].map(el => el.dataset.id).filter(x => x !== id);
-    const benchIds = [...DOM.combat.zoneBench.querySelectorAll('.actor-card')].map(el => el.dataset.id).filter(x => x !== id);
-    if (targetZone === 'active') { if (afterElement) { const idx = activeIds.indexOf(afterElement.dataset.id); activeIds.splice(idx, 0, id); } else { activeIds.push(id); } }
-    else { if (afterElement) { const idx = benchIds.indexOf(afterElement.dataset.id); benchIds.splice(idx, 0, id); } else { benchIds.push(id); } }
-    const newGlobalOrder = [...activeIds, ...benchIds];
-    Store.setOrder(newGlobalOrder);
+    const beforeId = afterElement ? afterElement.dataset.id : null;
+    Store.moveParticipant(id, targetZone, beforeId);
   }
   [DOM.combat.zoneActive, DOM.combat.zoneBench].forEach(zone => {
     zone.addEventListener('dragover', handleDragOver);
@@ -1168,24 +1225,36 @@
   on(DOM.combat.btnNextTurn, 'click', () => {
     const st = Store.getState().combat;
     if (st.round === 0) return;
-    // Ordre de tour = participants actifs triés par initiative, indépendamment du drag-drop
-    const activeTurnOrder = Array.from(st.participants.values())
+    const activeParticipants = Array.from(st.participants.values())
       .filter(p => p.zone === 'active')
       .sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
-    if (activeTurnOrder.length === 0) return;
-    const current = Combat.actorAtTurn();
-    if (current) decrementStates(current.id);
-    const curInitIdx = activeTurnOrder.findIndex(p => p.id === current?.id);
-    let nextInitIdx = curInitIdx + 1;
+    if (activeParticipants.length === 0) return;
+    const currentActor = Combat.actorAtTurn();
+    if (currentActor) decrementStates(currentActor.id);
+    const curIdx = activeParticipants.findIndex(p => p.id === st.currentActorId);
+    let nextIdx;
     let newRound = st.round;
-    if (nextInitIdx >= activeTurnOrder.length) { nextInitIdx = 0; newRound++; }
-    const nextActor = activeTurnOrder[nextInitIdx];
-    // Mettre à jour turnIndex pour que actorAtTurn() reste cohérent
-    const newOrderIdx = st.order.indexOf(nextActor.id);
-    Store.setRoundTurn(newRound, newOrderIdx >= 0 ? newOrderIdx : 0);
-    Store.log(`▶ ${nextInitIdx === 0 ? `Round ${newRound} — ` : ''}Tour de ${nextActor.name}`);
+    if (curIdx < 0) {
+      nextIdx = 0;
+    } else {
+      nextIdx = curIdx + 1;
+      if (nextIdx >= activeParticipants.length) {
+        nextIdx = 0;
+        newRound++;
+      }
+    }
+    const nextActor = activeParticipants[nextIdx];
+    Store.setRoundTurn(newRound, nextActor.id);
+    Store.log(`▶ ${nextIdx === 0 && curIdx >= 0 ? `Round ${newRound} — ` : ''}Tour de ${nextActor.name}`);
   });
-  on(DOM.combat.btnReset, 'click', () => { if (confirm('Effacer les résultats de dés affichés ?')) DOM.combat.results.replaceChildren(); });
+  on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
+  if (DOM.combat.btnEndCombat) {
+    on(DOM.combat.btnEndCombat, 'click', () => {
+      if (confirm('Retirer tous les combattants et remettre le round à zéro ?')) {
+        Store.resetCombat();
+      }
+    });
+  }
   on(DOM.combat.btnD100, 'click', () => { const roll = d100(); Store.log(`🎲 Jet de d100 → ${roll}`); const res = document.createElement('div'); res.className = 'dice-result'; res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`; DOM.combat.results.prepend(res); });
   Bus.on('log', () => { const arr = Store.getState().log; const frag = document.createDocumentFragment(); arr.forEach(line => { const div = document.createElement('div'); div.className = 'entry'; div.textContent = line; frag.append(div); }); DOM.combat.log.replaceChildren(frag); });
 
