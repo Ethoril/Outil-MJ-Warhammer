@@ -14,6 +14,7 @@ import { renderReferenceTables } from './ui/rules-view.js';
 import { renderLog, initLogViewUI } from './ui/log-view.js';
 import { showToast } from './ui/toast.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
+import { initThemeManager } from './ui/theme.js';
 
 // Init Store & Engine
 export const Store = createStore({
@@ -26,6 +27,9 @@ initFirebaseSync((syncHandle) => Store.attachSync(syncHandle));
 
 export const Combat = createCombatEngine(Store);
 
+// Theme Manager (Lot 11.2)
+initThemeManager();
+
 // Version (Lot 10.6 : v3.5 court dans le bouton, titre complet au survol)
 if (DOM.btnVersion) {
   DOM.btnVersion.textContent = `v${APP_VERSION}`;
@@ -36,19 +40,35 @@ if (DOM.btnVersion) {
   });
 }
 
-// Navigation par onglets
+// Navigation par onglets ARIA (Lot 11.3)
 function switchTab(tabName) {
   DOM.tabs.forEach(x => {
     const active = x.dataset.tab === tabName;
     x.classList.toggle('is-active', active);
-    x.setAttribute('aria-selected', active);
+    x.setAttribute('aria-selected', String(active));
+    x.setAttribute('tabindex', active ? '0' : '-1');
   });
   Object.entries(DOM.panels).forEach(([key, panel]) => {
     if (panel) panel.classList.toggle('is-active', key === tabName);
   });
 }
 
-DOM.tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+const tabArray = Array.from(DOM.tabs);
+tabArray.forEach((t, idx) => {
+  t.addEventListener('click', () => switchTab(t.dataset.tab));
+  t.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const dir = e.key === 'ArrowRight' ? 1 : -1;
+      const nextIdx = (idx + dir + tabArray.length) % tabArray.length;
+      const nextTab = tabArray[nextIdx];
+      if (nextTab && nextTab.dataset.tab) {
+        switchTab(nextTab.dataset.tab);
+        nextTab.focus();
+      }
+    }
+  });
+});
 
 // Init Sub-modules UI
 const reserveUI = initReserveUI(Store);

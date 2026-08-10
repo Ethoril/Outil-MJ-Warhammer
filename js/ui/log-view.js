@@ -64,7 +64,7 @@ export function renderLog(Store) {
         } else {
           detailHtml = escapeHtml(String(entry.detail));
         }
-        textHtml += `<details class="log-detail" style="margin-top:2px; font-size:0.85em; opacity:0.9;"><summary style="cursor:pointer; color:#d4a574;">Détails du jet</summary><div style="padding:4px 8px; background:rgba(0,0,0,0.25); border-radius:4px; margin-top:2px;">${detailHtml}</div></details>`;
+        textHtml += `<details class="log-detail" style="margin-top:2px; font-size:0.85em; opacity:0.9;"><summary style="cursor:pointer; color:var(--info-fg);">Détails du jet</summary><div style="padding:4px 8px; background:rgba(0,0,0,0.25); border-radius:4px; margin-top:2px;">${detailHtml}</div></details>`;
       }
 
       div.innerHTML = textHtml;

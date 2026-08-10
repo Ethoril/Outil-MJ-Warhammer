@@ -12,7 +12,7 @@
 <body>
   <div id="login-screen" style="display:flex; justify-content:center; align-items:center; height:100vh; background:linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%); position:fixed; top:0; left:0; right:0; bottom:0; z-index:9999;">
   <div style="text-align:center; background:rgba(255,255,255,0.05); padding:40px; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
-    <h1 style="color:#d4a574; margin-bottom:20px;">⚔️ Outil MJ Warhammer</h1>
+    <h1 style="color:var(--info-fg); margin-bottom:20px;">⚔️ Outil MJ Warhammer</h1>
     <p style="color:#ccc; margin-bottom:30px;">Connectez-vous pour accéder à vos données</p>
     <button id="btn-google-login" style="padding:12px 24px; font-size:16px; background:#4285f4; color:white; border:none; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:10px; margin:0 auto;">
       <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9.003 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.96v2.332C2.44 15.983 5.485 18 9.003 18z" fill="#34A853"/><path d="M3.964 10.712c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.96H.957C.347 6.175 0 7.55 0 9.002c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.426 0 9.003 0 5.485 0 2.44 2.017.96 4.958L3.967 7.29c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"/></svg>
@@ -28,17 +28,18 @@
       <h1>⚔️ WFRP – Gestionnaire</h1>
       <div class="spacer"></div>
       <nav class="tabs" role="tablist" aria-label="Sections">
-        <button class="tab is-active" data-tab="reserve" aria-selected="true">Réserve</button>
-        <button class="tab" data-tab="combat" aria-selected="false">Combat</button>
-        <button class="tab" data-tab="rules" aria-selected="false">Règles</button>
+        <button id="tab-reserve" class="tab is-active" data-tab="reserve" role="tab" aria-selected="true" aria-controls="panel-reserve" tabindex="0">Réserve</button>
+        <button id="tab-combat" class="tab" data-tab="combat" role="tab" aria-selected="false" aria-controls="panel-combat" tabindex="-1">Combat</button>
+        <button id="tab-rules" class="tab" data-tab="rules" role="tab" aria-selected="false" aria-controls="panel-rules" tabindex="-1">Règles</button>
       </nav>
-      <button id="btn-version" class="ghost small" style="margin-left:10px; opacity:0.7;" title="Version 3.5.0 - WFRP 4e Outil MJ">v3.5</button>
-      <div id="user-info" style="margin-left:12px; font-size:13px; color:#d4a574;"></div>
+      <button id="btn-theme-toggle" class="ghost small" style="margin-left:8px;" title="Thème (Clair / Sombre / Système)">💻</button>
+      <button id="btn-version" class="ghost small" style="margin-left:4px; opacity:0.7;" title="Version 3.5.0 - WFRP 4e Outil MJ">v3.5</button>
+      <div id="user-info" style="margin-left:12px; font-size:13px; color:var(--info-fg);"></div>
     </div>
   </header>
 
   <main class="wrap">
-    <section id="panel-reserve" class="panel is-active" role="region" aria-labelledby="tab-reserve">
+    <section id="panel-reserve" class="panel is-active" role="tabpanel" aria-labelledby="tab-reserve">
       <h2>Réserve (source de vérité)</h2>
       <div class="grid-2">
         <form id="form-add" class="card">
@@ -73,11 +74,11 @@
       </div>
     </section>
 
-    <section id="panel-combat" class="panel" role="region" aria-labelledby="tab-combat">
+    <section id="panel-combat" class="panel" role="tabpanel" aria-labelledby="tab-combat">
       
       <div class="controls row card">
         <div class="row">
-            <button id="btn-save-file" style="border-color:#3e2e22;">💾 Sauvegarder</button>
+            <button id="btn-save-file" style="border-color:var(--border);">💾 Sauvegarder</button>
             <button id="btn-load-file" class="ghost">📂 Charger</button>
             <input type="file" id="file-input" accept=".json" style="display:none;" />
         </div>
@@ -120,7 +121,7 @@
       </div>
 
       <details class="card" style="margin-top: 16px;">
-        <summary class="row" style="cursor:pointer; font-weight:bold; color:#5a1d1d; padding:4px 0;">
+        <summary class="row" style="cursor:pointer; font-weight:bold; color:var(--heading-color); padding:4px 0;">
           📜 Journal (Cliquer pour afficher/masquer)
         </summary>
         <div class="row" style="margin-top:10px; border-bottom:1px solid #ccc; padding-bottom:8px;">

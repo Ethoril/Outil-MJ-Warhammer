@@ -145,7 +145,7 @@ export function runDiceLine(id, Store) {
       // Gravité majorée de +10 si cible à 0 PV ou moins (§7.5)
       const critEffectRoll = isAcharnement ? Math.min(100, critEffectRollBase + 10) : critEffectRollBase;
       const effectData = getCritEffect(critLoc.key, critEffectRoll);
-      critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;"><strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll}${isAcharnement ? ' [+10 Acharnement]' : ''})<br><span style="color:#b33a3a;">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}</div>`;
+      critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;"><strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll}${isAcharnement ? ' [+10 Acharnement]' : ''})<br><span style="color:var(--danger);">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}</div>`;
     }
 
     // Calcul des Dégâts (§7.3, §7.4)

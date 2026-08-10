@@ -164,7 +164,7 @@ export function initCardUI(Store, Combat) {
 
     const armDiv = div.querySelector('.actor-armor');
     const BE = Math.floor((p.caracs?.E || 0) / 10);
-    let armText = `<span style="font-weight:bold; color:#5a1d1d;">🛡️ BE ${BE}</span>`;
+    let armText = `<span style="font-weight:bold; color:var(--heading-color);">🛡️ BE ${BE}</span>`;
     if (p.armor && (p.armor.head || p.armor.body || p.armor.arms || p.armor.legs)) {
       armText += ` | T${p.armor.head} C${p.armor.body} B${p.armor.arms} J${p.armor.legs}`;
     }
