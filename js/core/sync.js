@@ -53,7 +53,38 @@ export function logoutUser() {
 }
 
 export function initFirebaseSync(onUserConnected) {
-  if (!auth) return null;
+  // Détection des événements réseau globaux
+  if (typeof window !== 'undefined') {
+    window.addEventListener('online', () => {
+      console.log('🌐 Réseau rétabli');
+      const banner = document.getElementById('offline-banner');
+      if (banner) banner.remove();
+    });
+    window.addEventListener('offline', () => {
+      console.warn('📡 Mode hors-ligne détecté');
+      showOfflineBanner();
+    });
+  }
+
+  function showOfflineBanner() {
+    if (document.getElementById('offline-banner')) return;
+    const banner = document.createElement('div');
+    banner.id = 'offline-banner';
+    banner.style.cssText = 'position:fixed; bottom:0; left:0; right:0; background:#9c5a28; color:#fff; text-align:center; padding:6px 12px; font-size:0.85em; font-weight:bold; z-index:9999; box-shadow:0 -2px 6px rgba(0,0,0,0.3);';
+    banner.textContent = '📡 Hors-ligne — Vos modifications sont enregistrées localement et seront synchronisées à la reconnexion.';
+    document.body.appendChild(banner);
+  }
+
+  // Démarrage dégradé si hors-ligne ou si Firebase est indisponible
+  if (!navigator.onLine || !auth) {
+    console.warn('📡 Démarrage en mode hors-ligne (Firebase non connecté)');
+    const loginScreen = document.getElementById('login-screen');
+    const appContent = document.getElementById('app-content');
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (appContent) appContent.style.display = 'block';
+    showOfflineBanner();
+    return null;
+  }
 
   const btnLogin = document.getElementById('btn-google-login');
   if (btnLogin) {

@@ -1,0 +1,17 @@
+{
+  "name": "WFRP 4e - Outil MJ",
+  "short_name": "WFRP MJ",
+  "description": "Assistant de gestion de combat et de règles pour Warhammer Fantasy Roleplay 4e",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5e5c7",
+  "theme_color": "#8a0707",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64 192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

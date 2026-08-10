@@ -1,6 +1,30 @@
+/* Polices embarquées — l'application doit s'afficher sans réseau (PLAN.md §12.1).
+   Licence SIL OFL : voir assets/fonts/LICENSE.md. Ne pas repasser à un CDN. */
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400 700;   /* police variable : un seul fichier couvre la plage */
+  font-display: swap;
+  src: url('assets/fonts/cinzel-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('assets/fonts/lora-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('assets/fonts/lora-italic.woff2') format('woff2');
+}
+
 :root {
   --bg: #f5e5c7;
-  --bg-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+  --bg-image: url('assets/images/old-paper.svg');
   --panel: #e8d8b8;
   --panel-2: #d1c0a0;
   --text: #3e2e22;
