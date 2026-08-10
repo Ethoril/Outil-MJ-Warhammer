@@ -62,6 +62,18 @@ temporelle déguisée, exactement le défaut que `A-11` visait à supprimer.
    lot. **Le lot suivant ne démarre qu'une fois le lot courant poussé sur `origin/main`.**
    Chaque lot donne donc exactement un commit sur GitHub — pas de gros bloc accumulé.
 
+### Recette
+
+Chaque lot porte ses propres critères de recette, à vérifier à la livraison. La **recette
+manuelle de fin de projet** est rassemblée à part dans [`TESTS.md`](TESTS.md) : 147
+vérifications numérotées, organisées selon un usage naturel de l'outil plutôt que par lot, avec
+un jeu d'essai aux valeurs choisies pour que les calculs de dégâts tombent juste.
+
+`tests/fixtures/ancien-format.json` est le **seul témoin** d'une sauvegarde antérieure au lot 2
+(tour stocké en `turnIndex`). Il sert à vérifier la migration du §2.1 une fois qu'il n'existera
+plus aucune sauvegarde réelle à cet ancien format. **Ne jamais le régénérer avec
+l'application** : elle y écrirait `currentActorId` et le témoin perdrait tout objet.
+
 ### Notation des constats
 
 Les identifiants (`A-01`, `E-02`…) renvoient à l'audit. Chaque lot les liste explicitement.

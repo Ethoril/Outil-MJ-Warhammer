@@ -230,6 +230,7 @@
     return {
       ...base,
       profileId: o.profileId || null,
+      maxHp: o.maxHp !== undefined ? Number(o.maxHp) : (o.hp !== undefined ? Number(o.hp) : 0),
       states: Array.isArray(o.states) ? o.states.filter(s => typeof s === 'string') : [],
       zone: ['active', 'bench'].includes(o.zone) ? o.zone : 'bench',
       color: ['default', 'red', 'green', 'blue', 'purple', 'orange'].includes(o.color) ? o.color : 'default'
@@ -265,9 +266,10 @@
     }
   }
   class Participant {
-    constructor({ id = uid(), profileId, name, kind, initiative = 0, hp = 10, states = [], zone = 'bench', color = 'default', armor = { head: 0, body: 0, arms: 0, legs: 0 }, caracs = {} } = {}) {
+    constructor({ id = uid(), profileId, name, kind, initiative = 0, hp = 10, maxHp, states = [], zone = 'bench', color = 'default', armor = { head: 0, body: 0, arms: 0, legs: 0 }, caracs = {} } = {}) {
       this.id = id; this.profileId = profileId || null; this.name = name || '—'; this.kind = kind || 'Créature';
       this.initiative = Number(initiative) || 0; this.hp = Number(hp) || 0;
+      this.maxHp = maxHp !== undefined ? Number(maxHp) : Number(hp) || 0;
       this.states = [...states]; this.zone = zone;
       this.color = color;
       this.armor = { ...armor };
@@ -450,6 +452,10 @@
 
           let repairedCount = 0;
           combat.participants.forEach(p => {
+            if (p.maxHp === undefined || p.maxHp === null) {
+              const prof = p.profileId ? reserve.get(p.profileId) : null;
+              p.maxHp = prof ? Number(prof.hp) : Number(p.hp);
+            }
             if ((!p.caracs || Object.keys(p.caracs).length === 0) && p.profileId) {
               const prof = reserve.get(p.profileId);
               if (prof && prof.caracs) {
@@ -507,6 +513,7 @@
             part.name = p.name;
             part.kind = p.kind;
             part.initiative = p.initiative; // Propager l'initiative (A-09)
+            part.maxHp = p.hp; // Propager maxHp depuis Profile.hp (A-09 / Lot 5)
             part.caracs = { ...p.caracs };
             part.armor = { ...p.armor };
             // NE PAS propager hp : les PV d'un participant sont sa valeur courante en combat, pas son maximum
@@ -604,7 +611,7 @@
             const prof = reserve.get(id); if (!prof) return;
             const p = new Participant({
               profileId: prof.id, name: prof.name, kind: prof.kind,
-              initiative: prof.initiative, hp: prof.hp,
+              initiative: prof.initiative, hp: prof.hp, maxHp: prof.hp,
               armor: { ...prof.armor }, caracs: { ...prof.caracs }, zone: 'bench'
             });
             this.addParticipant(p);
@@ -943,14 +950,118 @@
     if (activeCount === 0) DOM.combat.zoneActive.innerHTML = '<div class="placeholder">Glissez les combattants actifs ici...</div>';
   }
 
+  function updateHpBadgeElement(el, hp, maxHp) {
+    if (!el) return;
+    el.textContent = (maxHp !== undefined && maxHp !== null) ? `PV ${hp} / ${maxHp}` : `PV ${hp}`;
+    el.classList.remove('low', 'down');
+    if (hp <= 0) {
+      el.classList.add('down');
+    } else if (maxHp && hp <= maxHp / 4) {
+      el.classList.add('low');
+    }
+  }
+
+  function applyHPDelta(id, deltaVal, isAddition, inputEl) {
+    const p = getP(id);
+    if (!p) return;
+
+    let amount = Math.abs(parseInt(deltaVal));
+    if (isNaN(amount) || amount === 0) {
+      amount = 1;
+    }
+
+    const change = isAddition ? amount : -amount;
+    let newHp = p.hp + change;
+
+    if (p.maxHp !== undefined && p.maxHp !== null && newHp > p.maxHp) {
+      newHp = p.maxHp;
+    }
+
+    const oldHp = p.hp;
+    const actualDelta = newHp - oldHp;
+    if (actualDelta === 0) {
+      if (inputEl) { inputEl.value = ''; inputEl.focus(); }
+      return;
+    }
+
+    const signStr = actualDelta > 0 ? `+${actualDelta}` : `${actualDelta}`;
+    Store.updateParticipant(id, { hp: newHp });
+    Store.log(`⚔️ ${p.name} : ${oldHp} → ${newHp} PV (${signStr})`);
+
+    if (inputEl) {
+      inputEl.value = '';
+      inputEl.focus();
+    }
+  }
+
+  function startInlineHPEdit(badgeEl, p) {
+    if (badgeEl.querySelector('input')) return;
+    badgeEl.textContent = '';
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.className = 'hp-inline-input';
+    input.value = p.hp;
+    input.style.width = '60px';
+    input.style.fontSize = '0.85em';
+    input.style.padding = '1px 3px';
+    badgeEl.appendChild(input);
+    input.focus();
+    input.select();
+
+    function commit() {
+      const raw = input.value.trim();
+      if (raw !== '') {
+        const val = parseInt(raw);
+        if (!isNaN(val)) {
+          let newHp = val;
+          if (p.maxHp !== undefined && p.maxHp !== null && newHp > p.maxHp) {
+            newHp = p.maxHp;
+          }
+          if (newHp !== p.hp) {
+            const oldHp = p.hp;
+            const delta = newHp - oldHp;
+            const signStr = delta > 0 ? `+${delta}` : `${delta}`;
+            Store.updateParticipant(p.id, { hp: newHp });
+            Store.log(`⚔️ ${p.name} : ${oldHp} → ${newHp} PV (${signStr})`);
+            return;
+          }
+        }
+      }
+      updateHpBadgeElement(badgeEl, p.hp, p.maxHp);
+    }
+
+    function cancel() {
+      updateHpBadgeElement(badgeEl, p.hp, p.maxHp);
+    }
+
+    input.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        ev.stopPropagation();
+        commit();
+      } else if (ev.key === 'Escape') {
+        ev.preventDefault();
+        ev.stopPropagation();
+        cancel();
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      commit();
+    });
+  }
+
   // --- TARGETED DOM UPDATE (Optimization 3) ---
   function updateCardUI(id, changes) {
     const card = document.querySelector(`.actor-card[data-id="${id}"]`);
     if (!card) return false; // Card not found, need full render
 
-    if ('hp' in changes) {
+    if ('hp' in changes || 'maxHp' in changes) {
+      const p = getP(id);
+      const hp = 'hp' in changes ? changes.hp : p?.hp;
+      const maxHp = 'maxHp' in changes ? changes.maxHp : p?.maxHp;
       const hpBadge = card.querySelector('.hp-badge');
-      if (hpBadge) hpBadge.textContent = `PV ${changes.hp}`;
+      if (hpBadge) updateHpBadgeElement(hpBadge, hp, maxHp);
     }
     if ('initiative' in changes) {
       const initBadge = card.querySelector('.init-badge');
@@ -982,7 +1093,8 @@
 
     div.querySelector('.name').textContent = p.name;
     div.querySelector('.init-badge').textContent = `Init ${p.initiative}`;
-    div.querySelector('.hp-badge').textContent = `PV ${p.hp}`;
+    const hpBadge = div.querySelector('.hp-badge');
+    updateHpBadgeElement(hpBadge, p.hp, p.maxHp);
 
     const statesDiv = div.querySelector('.states');
     p.states.forEach(s => statesDiv.append(makeStateBadge(s)));
@@ -1029,12 +1141,21 @@
     // HP buttons
     if (e.target.matches('.btn-hp-minus')) {
       e.preventDefault();
-      setHP(id, p.hp - 1);
+      const deltaInput = card.querySelector('.hp-delta');
+      applyHPDelta(id, deltaInput?.value, false, deltaInput);
       return;
     }
     if (e.target.matches('.btn-hp-plus')) {
       e.preventDefault();
-      setHP(id, p.hp + 1);
+      const deltaInput = card.querySelector('.hp-delta');
+      applyHPDelta(id, deltaInput?.value, true, deltaInput);
+      return;
+    }
+
+    // HP badge click → édition en ligne
+    if (e.target.matches('.hp-badge')) {
+      e.preventDefault();
+      startInlineHPEdit(e.target, p);
       return;
     }
 
@@ -1268,12 +1389,24 @@
     const beforeId = afterElement ? afterElement.dataset.id : null;
     Store.moveParticipant(id, targetZone, beforeId);
   }
+  function handleZoneKeyDown(e) {
+    if (e.target.matches('.hp-delta') && e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      const card = e.target.closest('.actor-card');
+      if (!card) return;
+      const id = card.dataset.id;
+      applyHPDelta(id, e.target.value, false, e.target);
+    }
+  }
+
   [DOM.combat.zoneActive, DOM.combat.zoneBench].forEach(zone => {
     zone.addEventListener('dragover', handleDragOver);
     zone.addEventListener('dragleave', handleDragLeave);
     zone.addEventListener('drop', handleDrop);
     // Event delegation for all card button clicks (Optimization 1)
     zone.addEventListener('click', handleZoneClick);
+    zone.addEventListener('keydown', handleZoneKeyDown);
     zone.addEventListener('mouseleave', handleZoneMouseOver);
   });
 

@@ -95,6 +95,8 @@ details summary:hover { color: var(--accent); }
 .badge.warn { background: #b36e3a; color: #fff; }
 .badge.good { background: #3a7a44; color: #fff; border-color: #2c5c34; }
 .badge.bad  { background: #b33a3a; color: #fff; border-color: #8a0707; }
+.badge.hp-badge.low { background: #b33a3a; color: #fff; border-color: #8a0707; }
+.badge.hp-badge.down { background: #2e241d; color: #e8d8b8; border-color: #000; }
 
 .color-palette { position: absolute; top: 35px; right: 10px; background: #fff; border: 1px solid #5a1d1d; border-radius: 6px; padding: 6px; display: flex; gap: 4px; z-index: 50; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 .color-palette.hidden { display: none; }
@@ -102,6 +104,7 @@ details summary:hover { color: var(--accent); }
 .color-swatch:hover { transform: scale(1.1); border-color: #000; }
 
 .actor-controls { margin-top: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; flex-wrap: nowrap; }
+.hp-delta { width: 44px; padding: 2px 4px; font-size: 0.85em; text-align: center; }
 .state-select { font-size: 0.78em; padding: 2px 4px; max-width: 90px; }
 .state-turns { width: 36px; font-size: 0.78em; padding: 2px 4px; }
 .state-badge { cursor: pointer; }

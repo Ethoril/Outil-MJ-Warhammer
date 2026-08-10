@@ -393,7 +393,7 @@
             <strong class="name">Nom</strong>
             <div class="sub-info">
                 <span class="badge clickable init-badge">Init 0</span>
-                <span class="badge hp-badge">PV 0</span>
+                <span class="badge clickable hp-badge">PV 0</span>
             </div>
             <div class="states" style="margin-top:4px; display:flex; gap:4px; flex-wrap:wrap;"></div>
         </div>
@@ -413,8 +413,9 @@
       </div>
 
       <div class="actor-controls row">
-        <button class="tiny btn-hp-minus">−PV</button>
-        <button class="tiny btn-hp-plus">+PV</button>
+        <button type="button" class="tiny btn-hp-minus" title="Retirer PV">−</button>
+        <input type="number" class="hp-delta" placeholder="1" title="Valeur PV à retirer/ajouter">
+        <button type="button" class="tiny btn-hp-plus" title="Ajouter PV">+</button>
         <div class="spacer"></div>
         <input type="number" class="state-turns" min="1" max="99" placeholder="∞" title="Tours (vide = infini)">
         <select class="state-select">

@@ -1,0 +1,142 @@
+{
+  "_commentaire": "Sauvegarde au format ANTÉRIEUR au lot 2 : le tour courant y est stocké en turnIndex (index dans combat.order) et non en currentActorId. Sert à vérifier la migration décrite au PLAN.md §2.1. turnIndex vaut 1, l'ordre est [saskia, renaut, gobelin-1] : après chargement, le tour doit être sur RENAUT. Ne pas régénérer ce fichier avec l'application : il perdrait justement le format qu'il sert à tester.",
+  "timestamp": "2026-07-04T21:12:44.310Z",
+  "reserve": [
+    {
+      "id": "prof-renaut",
+      "name": "Renaut de Volargent",
+      "kind": "PJ",
+      "initiative": 41,
+      "hp": 14,
+      "caracs": { "E": 35, "CC": 52, "Ag": 41, "F": 38 },
+      "armor": { "head": 2, "body": 2, "arms": 0, "legs": 0 },
+      "diceLines": [{ "base": 52, "note": "Épée" }],
+      "group": "PJs"
+    },
+    {
+      "id": "prof-saskia",
+      "name": "Saskia la Noire",
+      "kind": "PJ",
+      "initiative": 52,
+      "hp": 12,
+      "caracs": { "E": 40, "CC": 45, "Ag": 52, "F": 31 },
+      "armor": { "head": 0, "body": 0, "arms": 0, "legs": 0 },
+      "diceLines": [{ "base": 45, "note": "Dague" }],
+      "group": "PJs"
+    },
+    {
+      "id": "prof-gobelin",
+      "name": "Gobelin",
+      "kind": "Créature",
+      "initiative": 28,
+      "hp": 9,
+      "caracs": { "E": 30, "CC": 35, "F": 27 },
+      "armor": { "head": 0, "body": 1, "arms": 0, "legs": 0 },
+      "diceLines": [{ "base": 35, "note": "Lance" }],
+      "group": "Peaux-Vertes"
+    }
+  ],
+  "combat": {
+    "round": 3,
+    "turnIndex": 1,
+    "order": ["part-saskia", "part-renaut", "part-gobelin-1"],
+    "participants": [
+      {
+        "id": "part-saskia",
+        "profileId": "prof-saskia",
+        "name": "Saskia la Noire",
+        "kind": "PJ",
+        "initiative": 52,
+        "hp": 12,
+        "states": [],
+        "zone": "active",
+        "color": "green",
+        "armor": { "head": 0, "body": 0, "arms": 0, "legs": 0 },
+        "caracs": { "E": 40, "CC": 45, "Ag": 52, "F": 31 }
+      },
+      {
+        "id": "part-renaut",
+        "profileId": "prof-renaut",
+        "name": "Renaut de Volargent",
+        "kind": "PJ",
+        "initiative": 41,
+        "hp": 9,
+        "states": ["Hémorragique", "Sonné|2"],
+        "zone": "active",
+        "color": "green",
+        "armor": { "head": 2, "body": 2, "arms": 0, "legs": 0 },
+        "caracs": { "E": 35, "CC": 52, "Ag": 41, "F": 38 }
+      },
+      {
+        "id": "part-gobelin-1",
+        "profileId": "prof-gobelin",
+        "name": "Gobelin 1",
+        "kind": "Créature",
+        "initiative": 28,
+        "hp": 4,
+        "states": ["Enflammé"],
+        "zone": "active",
+        "color": "red",
+        "armor": { "head": 0, "body": 1, "arms": 0, "legs": 0 },
+        "caracs": { "E": 30, "CC": 35, "F": 27 }
+      },
+      {
+        "id": "part-gobelin-2",
+        "profileId": "prof-gobelin",
+        "name": "Gobelin 2",
+        "kind": "Créature",
+        "initiative": 28,
+        "hp": 9,
+        "states": [],
+        "zone": "bench",
+        "color": "red",
+        "armor": { "head": 0, "body": 1, "arms": 0, "legs": 0 },
+        "caracs": { "E": 30, "CC": 35, "F": 27 }
+      }
+    ]
+  },
+  "log": [
+    "[21:12:40] ▶ Tour de Renaut de Volargent",
+    "[21:12:31] 🎲 Saskia la Noire (Roll 22 vs 45) SL2 [Dague]",
+    "[21:12:04] Combat démarré. Round 1. Tour: Saskia la Noire",
+    "[21:11:50] Import: 4 participant(s)"
+  ],
+  "diceLines": [
+    {
+      "id": "dl-saskia-1",
+      "participantId": "part-saskia",
+      "attr": "Custom",
+      "base": 45,
+      "mod": 0,
+      "note": "Dague",
+      "targetType": "none",
+      "targetValue": "",
+      "targetAttr": "CC",
+      "opponentRoll": ""
+    },
+    {
+      "id": "dl-renaut-1",
+      "participantId": "part-renaut",
+      "attr": "Custom",
+      "base": 52,
+      "mod": 0,
+      "note": "Épée",
+      "targetType": "none",
+      "targetValue": "",
+      "targetAttr": "CC",
+      "opponentRoll": ""
+    },
+    {
+      "id": "dl-gob1-1",
+      "participantId": "part-gobelin-1",
+      "attr": "Custom",
+      "base": 35,
+      "mod": 0,
+      "note": "Lance",
+      "targetType": "none",
+      "targetValue": "",
+      "targetAttr": "CC",
+      "opponentRoll": ""
+    }
+  ]
+}
