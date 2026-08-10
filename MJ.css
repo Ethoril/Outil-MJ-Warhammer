@@ -21,6 +21,9 @@ h4 { font-family: 'Cinzel', serif; color: var(--accent); margin: 12px 0 6px 0; }
 .panel { display: none; margin: 18px 0; } .panel.is-active { display: block; }
 .card { background: var(--panel); border: 1px solid #5a1d1d; border-radius: var(--radius); padding: 14px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
 .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.full-width { width: 100%; }
+.muted { color: var(--muted); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
@@ -32,6 +35,8 @@ button:hover { border-color: #8a0707; }
 button.ghost { background: transparent; border-color: transparent; }
 button.small { padding: 4px 8px; font-size: 0.8em; }
 button.tiny { padding: 2px 6px; font-size: 0.75em; }
+button.danger { color: #b33a3a; border-color: #b33a3a; }
+button.danger:hover { background: #b33a3a; color: #fff; border-color: #b33a3a; }
 .icon-btn { padding: 4px; line-height: 1; background: transparent; border: none; font-size: 1.2em; cursor: pointer; }
 
 .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: var(--panel-2); border: 1px solid #5a1d1d; font-size: 12px; }
@@ -88,6 +93,8 @@ details summary:hover { color: var(--accent); }
 .badge { background: var(--chip); color: var(--chip-text); padding: 2px 6px; border-radius: 4px; font-size: 0.8em; border: 1px solid #5a1d1d; }
 .badge.clickable { cursor: pointer; } .badge.clickable:hover { border-color: #8a0707; }
 .badge.warn { background: #b36e3a; color: #fff; }
+.badge.good { background: #3a7a44; color: #fff; border-color: #2c5c34; }
+.badge.bad  { background: #b33a3a; color: #fff; border-color: #8a0707; }
 
 .color-palette { position: absolute; top: 35px; right: 10px; background: #fff; border: 1px solid #5a1d1d; border-radius: 6px; padding: 6px; display: flex; gap: 4px; z-index: 50; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 .color-palette.hidden { display: none; }
