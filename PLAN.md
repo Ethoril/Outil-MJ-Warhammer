@@ -497,6 +497,9 @@ js/
 tests/
   dice.test.js
   states.test.js
+  store.test.js        migrations, groupage, quota, synchronisation — cf. §6.9
+  fixtures/
+    ancien-format.json déjà présent : témoin d'une sauvegarde antérieure au lot 2
 package.json           { "type": "module", "scripts": { "test": "node --test tests/" } }
 .gitignore
 ```
@@ -588,7 +591,71 @@ Couvrir **uniquement les fonctions pures** — ne pas chercher à tester le DOM 
   `computeEndOfTurn(participant, roll)` qui prend le jet en paramètre plutôt que d'appeler
   `d100()` — et laisser l'appelant fournir le hasard.
 
-### 6.8 — `.gitignore`
+### 6.8 — Le Store doit être importable hors navigateur
+
+**Contrainte de conception, pas une préférence.** Les comportements les plus délicats des lots 2
+à 5 vivent dans le Store, pas dans les fonctions pures : migration du tour, migration de `maxHp`,
+groupage transactionnel, arbitrage d'horodatage. Ils ont été validés jusqu'ici par extraction de
+code à coups de `sed` — un procédé qui ne survivra pas à la modularisation. **Si le Store n'est
+pas testable après le lot 6, ce filet disparaît définitivement, et il disparaît exactement au
+moment où on déplace 1400 lignes.**
+
+`js/core/store.js` doit donc exporter une **fabrique** plutôt qu'un singleton :
+
+```js
+export function createStore({ storage, sync, bus, now }) { … }
+```
+
+- `storage` — interface `{ getItem, setItem }`. En production : `localStorage`. En test : un
+  objet simple, qui permet aussi de **simuler un quota dépassé**.
+- `sync` — `null` accepté et signifiant « pas de Firebase ». Le module ne doit **jamais**
+  importer le SDK au chargement : `js/core/sync.js` reste importé par `main.js`, qui injecte.
+- `bus`, `now` — injectés pour rendre les émissions et les horodatages observables.
+
+`js/main.js` compose le tout et expose le singleton pour le reste de l'interface. Le
+comportement en production est identique — c'est une couture, pas un changement.
+
+### 6.9 — Cas de test obligatoires sur le Store
+
+`tests/store.test.js`. Ces cas correspondent aux bugs réellement corrigés aux lots 2 à 5 ; ils
+sont la recette du lot 6 lui-même. **Si l'un d'eux échoue, le déplacement a changé un
+comportement**, ce qui est précisément ce que la règle d'or interdit.
+
+**Migration du tour (`A-02`)** — 9 cas : `turnIndex: 1` sur trois participants → deuxième de
+l'ordre ; sentinelle `-1` → aucun tour ; index hors bornes → `null` ; `currentActorId` honoré ;
+id fantôme → `null` ; clé absente (Firebase omet les `null`) → `null` ; `currentActorId` prime
+sur `turnIndex` ; id filtré de l'ordre. Vérifier les **deux** chemins, `load()` et
+`applyDataToState()`.
+
+**Avancement du tour (`A-05`, `A-06`)** — 9 cas : avance normale ; bouclage sur le round
+suivant ; **un combattant au banc à initiative 99 reste hors du tour** ; acteur courant disparu
+→ premier actif **sans** incrémenter le round ; combattant unique ; aucun actif ; round 0.
+
+**Groupage (`A-08`)** — 14 cas : hors lot, une opération = une sauvegarde ; un lot de 15
+opérations = **une** sauvegarde et **un** rendu ; événements dédoublonnés ; `combat:update`
+fusionné en `combat` ; lots imbriqués ne vidant qu'à la sortie du plus externe ; **une exception
+dans un lot flush quand même et ne laisse pas le Store bloqué**.
+
+**Quota et journal (`A-07`)** — quota dépassé : aucune exception propagée, avertissement
+journalisé, Firebase tenté malgré tout ; journal plafonné à 300 y compris sur le chemin d'erreur.
+
+**Synchronisation (`A-03`, `A-04`)** — 17 cas : écho propre ignoré **avant toute autre
+logique** ; snapshot vide ; client neuf (`lastAppliedTimestamp` à 0) acceptant le serveur ;
+serveur plus récent appliqué ; **serveur périmé → rien appliqué, état local repoussé, aucun
+rendu parasite** ; horodatage ISO hérité comparé correctement dans les deux sens ; horodatage
+absent ou illisible → appliqué plutôt que bloqué ; horodatage égal → appliqué.
+
+**Migration `maxHp` (`E-01`)** — 7 cas : blessé à 4 PV avec profil à 14 → maximum **14** sur les
+deux chemins ; sans profil source → repli sur les PV courants ; profil introuvable → idem ;
+`maxHp` déjà présent préservé, y compris à travers `sanitizeParticipant` ; **`maxHp` valant
+explicitement 0 conservé** — c'est une valeur, pas une absence.
+
+> `repairMaxHp()` est aujourd'hui partagé par `load()` et `applyDataToState()`. Ces deux chemins
+> ont divergé **trois fois** (`turnIndex` au lot 2, `maxHp` au lot 5, filtrage de l'ordre au
+> lot 2). Après modularisation, toute réparation de données doit rester **appelée depuis un seul
+> endroit**.
+
+### 6.10 — `.gitignore`
 
 Le dépôt n'en a pas. Contenu minimal, contexte macOS :
 
@@ -603,12 +670,18 @@ node_modules/
 ### Recette
 
 - `npm test` (ou `node --test tests/`) passe intégralement, sans installation préalable.
+- **Les cas du §6.9 sont tous couverts et passent** — c'est la vraie recette de ce lot. Un lot
+  qui se contenterait des fonctions pures (`dice`, `states`) n'aurait rien vérifié du
+  déplacement lui-même.
+- `js/core/store.js` s'importe dans Node **sans navigateur et sans réseau** : le SDK Firebase
+  ne doit pas être chargé à l'import (§6.8).
 - L'application démarre, se connecte, et **toutes** les fonctions du lot 1 à 5 se comportent
   exactement comme avant. Passer en revue : création de profil, import, glisser-déposer, tour
   suivant, jet de dé, critique, sauvegarde fichier, chargement fichier, journal.
 - La console est vide de toute erreur au démarrage.
 - `window.__WFRP_FIREBASE__` est `undefined` dans la console.
-- Un fichier JSON sauvegardé avant ce lot se recharge correctement.
+- Charger `tests/fixtures/ancien-format.json` : tour sur **Renaut**, round **3**, badge
+  **`PV 9 / 14`**. Les trois migrations (tour, `maxHp`, caracs) survivent au déplacement.
 
 ---
 
