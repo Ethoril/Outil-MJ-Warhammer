@@ -23,9 +23,8 @@
 
 <!-- 📦 CONTENU PRINCIPAL (caché au départ) -->
 <div id="app-content" style="display:none;">
-  <div id="user-info" style="position:fixed; top:10px; right:10px; color:#d4a574; font-size:14px; z-index:1000; background:rgba(0,0,0,0.7); padding:8px 12px; border-radius:6px;"></div>
   <header class="topbar">
-    <div class="wrap">
+    <div class="wrap" style="display:flex; align-items:center;">
       <h1>⚔️ WFRP – Gestionnaire</h1>
       <div class="spacer"></div>
       <nav class="tabs" role="tablist" aria-label="Sections">
@@ -33,7 +32,8 @@
         <button class="tab" data-tab="combat" aria-selected="false">Combat</button>
         <button class="tab" data-tab="rules" aria-selected="false">Règles</button>
       </nav>
-      <button id="btn-version" class="ghost small" style="margin-left:10px; opacity:0.6;">v?</button>
+      <button id="btn-version" class="ghost small" style="margin-left:10px; opacity:0.7;" title="Version 3.5.0 - WFRP 4e Outil MJ">v3.5</button>
+      <div id="user-info" style="margin-left:12px; font-size:13px; color:#d4a574;"></div>
     </div>
   </header>
 
@@ -49,39 +49,6 @@
             <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
             <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
           </div>
-          <div style="margin-bottom:10px;">
-            <label>Groupe <small class="muted">(facultatif — ex : PJs, Skaven…)</small>
-              <input name="group" list="group-suggestions" placeholder="ex : PJs, Skaven…">
-              <datalist id="group-suggestions"></datalist>
-            </label>
-          </div>
-
-          <div class="grid-3" style="margin-bottom:10px;">
-            <label>Initiative (I)<input type="number" name="initiative" value="30" title="Utilisé pour l'ordre du tour"></label>
-            <label>PV (Max)<input type="number" name="hp" value="12"></label>
-            <label style="color:#5a1d1d; font-weight:bold;">Endurance (E)<input type="number" name="E" value="30" title="Détermine le Bonus d'Endurance (BE)"></label>
-          </div>
-
-          <div class="armor-section" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px;">
-            <span class="muted" style="font-size: 0.9em; font-weight: bold;">Points d'Armure</span>
-            <div class="grid-4" style="margin-top: 6px;">
-              <label>Tête<input type="number" name="armor_head" value="0"></label>
-              <label>Corps<input type="number" name="armor_body" value="0"></label>
-              <label>Bras<input type="number" name="armor_arms" value="0"></label>
-              <label>Jambes<input type="number" name="armor_legs" value="0"></label>
-            </div>
-          </div>
-
-          <details>
-            <summary>Autres Caracs (CC, CT, F...)</summary>
-            <div class="grid-3">
-              <label>CC<input type="number" name="CC"></label>
-              <label>CT<input type="number" name="CT"></label>
-              <label>F<input type="number" name="F"></label>
-              <label>I (Autre)<input type="number" name="I" placeholder="Idem Init"></label>
-              <label>Ag<input type="number" name="Ag"></label>
-              <label>Dex<input type="number" name="Dex"></label>
-              <label>Int<input type="number" name="Int"></label>
               <label>FM<input type="number" name="FM"></label>
               <label>Soc<input type="number" name="Soc"></label>
             </div>
@@ -187,12 +154,12 @@
       </div>
       
       <div class="color-palette hidden">
-          <div class="color-swatch" style="background:var(--card-bg-default);" data-c="default" title="Défaut"></div>
-          <div class="color-swatch" style="background:var(--card-bg-red);" data-c="red" title="Ennemi"></div>
-          <div class="color-swatch" style="background:var(--card-bg-green);" data-c="green" title="Allié"></div>
-          <div class="color-swatch" style="background:var(--card-bg-blue);" data-c="blue" title="Magie"></div>
-          <div class="color-swatch" style="background:var(--card-bg-purple);" data-c="purple" title="Chaos"></div>
-          <div class="color-swatch" style="background:var(--card-bg-orange);" data-c="orange" title="Boss"></div>
+          <div class="color-option" data-c="default"><span class="color-swatch" style="background:var(--card-bg-default);"></span> Défaut</div>
+          <div class="color-option" data-c="red"><span class="color-swatch" style="background:var(--card-bg-red);"></span> Ennemi</div>
+          <div class="color-option" data-c="green"><span class="color-swatch" style="background:var(--card-bg-green);"></span> Allié</div>
+          <div class="color-option" data-c="blue"><span class="color-swatch" style="background:var(--card-bg-blue);"></span> Magie</div>
+          <div class="color-option" data-c="purple"><span class="color-swatch" style="background:var(--card-bg-purple);"></span> Chaos</div>
+          <div class="color-option" data-c="orange"><span class="color-swatch" style="background:var(--card-bg-orange);"></span> Boss</div>
       </div>
 
       <div class="actor-controls row">

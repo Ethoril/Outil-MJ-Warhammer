@@ -25,6 +25,8 @@ const mkSync = () => {
 // depuis le lot 9, reserve/participants/diceLines voyagent en objets indexés par id
 const idsDe = obj => Object.keys(obj || {});
 const snap = o => ({ val: () => o });
+// depuis le lot 10, le journal contient des objets { kind, text, … } et non des chaînes
+const texteJournal = store => store.getLog().map(e => (typeof e === 'string' ? e : (e && e.text) || '')).join(' | ');
 const wait = () => new Promise(r => setTimeout(r, 360));
 
 // ─────────── amorçage : la synchro arrive APRÈS la construction du Store ───────────
@@ -116,9 +118,9 @@ test('journal — sorti de Firebase, mais conservé dans les fichiers (§9.2)', 
 
   // le chemin Firebase ne doit plus apporter de journal
   sync.cb(snap({ writer: 'autre', timestamp: Date.now(), reserve: [], log: ['venu du serveur'] }));
-  assert.ok(!store.getLog().some(l => l.includes('venu du serveur')),
+  assert.ok(!texteJournal(store).includes('venu du serveur'),
     'le journal ne doit plus être lu depuis Firebase');
-  assert.ok(store.getLog().some(l => l.includes('entrée locale')),
+  assert.ok(texteJournal(store).includes('entrée locale'),
     'et le journal local ne doit pas être écrasé');
 
   // le chemin fichier, lui, doit le restaurer
@@ -129,8 +131,49 @@ test('journal — sorti de Firebase, mais conservé dans les fichiers (§9.2)', 
     log: ['[20:00:00] venu du fichier'],
     diceLines: [],
   }));
-  assert.ok(store.getLog().some(l => l.includes('venu du fichier')),
+  assert.ok(texteJournal(store).includes('venu du fichier'),
     'charger une sauvegarde doit restaurer son journal');
+});
+
+// ─────────────────────── lot 10 : annuler et journal ───────────────────────
+
+test('undo — l\'instantané est isolé des modifications postérieures (E-04)', () => {
+  const store = createStore({ storage: mkStorage() });
+  store.addProfile(new Profile({ id: 'a', name: 'Nom initial', hp: 10 }));
+  store.addProfile(new Profile({ id: 'b', name: 'Autre', hp: 10 }));
+
+  store.removeProfile('b');                        // action destructive → instantané
+  store.updateProfile('a', { name: 'Nom MODIFIÉ' }); // mutation en place, après l'instantané
+  store.undo();
+
+  assert.equal(store.getReserve().has('b'), true, 'le profil supprimé doit revenir');
+  assert.equal(store.getReserve().get('a').name, 'Nom initial',
+    'et la modification postérieure à l\'instantané doit être annulée elle aussi');
+});
+
+test('journal — l\'avertissement de quota est une entrée normalisée (A-07)', () => {
+  const storage = mkStorage();
+  const store = createStore({ storage });
+  storage.boom(true);
+  store.addProfile(new Profile({ name: 'Q', hp: 10 }));
+  storage.boom(false);
+
+  const entree = store.getLog().find(e => JSON.stringify(e).includes('quota'));
+  assert.ok(entree, 'l\'avertissement doit être journalisé');
+  assert.equal(typeof entree, 'object', 'sous forme d\'objet, pas de chaîne brute');
+  assert.ok(entree.text && entree.text.includes('quota'), 'avec un champ text renseigné');
+  assert.ok(entree.kind, 'et un kind, sans quoi le rendu et les filtres l\'ignorent');
+});
+
+test('journal — les anciennes entrées en chaîne sont acceptées (kind: legacy)', () => {
+  const storage = mkStorage({
+    'wfrp.log.v1': JSON.stringify(['[20:00:00] ancienne entrée texte']),
+  });
+  const store = createStore({ storage });
+  const e = store.getLog()[0];
+  assert.equal(typeof e, 'object', 'normalisée en objet au chargement');
+  assert.equal(e.kind, 'legacy');
+  assert.ok(e.text.includes('ancienne entrée texte'));
 });
 
 // ─────────────────────── A-03 / A-04 : synchronisation ───────────────────────

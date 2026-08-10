@@ -258,9 +258,64 @@ export function initCardUI(Store, Combat) {
       return;
     }
 
+  function startInlineInitEdit(badgeEl, p) {
+    if (badgeEl.querySelector('input')) return;
+    badgeEl.textContent = '';
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.className = 'hp-inline-input';
+    input.value = p.initiative;
+    input.style.width = '50px';
+    input.style.fontSize = '0.85em';
+    input.style.padding = '1px 3px';
+    badgeEl.appendChild(input);
+    input.focus();
+    input.select();
+
+    let settled = false;
+
+    function commit() {
+      if (settled) return;
+      settled = true;
+      const raw = input.value.trim();
+      if (raw !== '') {
+        const val = parseInt(raw);
+        if (!isNaN(val) && val !== p.initiative) {
+          Store.updateParticipant(p.id, { initiative: val });
+          Store.rebuildOrder();
+          Store.log(`⚔️ ${p.name} : Initiative modifiée à ${val}`);
+          return;
+        }
+      }
+      badgeEl.textContent = `Init ${p.initiative}`;
+    }
+
+    function cancel() {
+      if (settled) return;
+      settled = true;
+      badgeEl.textContent = `Init ${p.initiative}`;
+    }
+
+    input.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        ev.stopPropagation();
+        commit();
+      } else if (ev.key === 'Escape') {
+        ev.preventDefault();
+        ev.stopPropagation();
+        cancel();
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      commit();
+    });
+  }
+
     if (e.target.matches('.init-badge')) {
-      const v = prompt('Nouvelle Initiative ?', p.initiative);
-      if (v !== null && !isNaN(v)) Store.updateParticipant(id, { initiative: Number(v) });
+      e.preventDefault();
+      startInlineInitEdit(e.target, p);
       return;
     }
 

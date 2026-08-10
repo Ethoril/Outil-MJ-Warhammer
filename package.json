@@ -3,6 +3,6 @@
   "version": "3.5.0",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/dice.test.js tests/states.test.js tests/store.test.js tests/gaps.test.js tests/damage.test.js tests/rules.test.js"
+    "test": "node --test"
   }
 }

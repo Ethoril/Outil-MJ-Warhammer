@@ -205,8 +205,10 @@ test('Store — Quota et journal (A-07)', () => {
     store.addProfile(new Profile({ name: 'QuotaTest', hp: 10 }));
   });
 
+  // Depuis le lot 10 le journal ne contient que des objets { kind, text, … }
   const logs = store.getLog();
-  assert.ok(logs.some(l => l.includes('Erreur de sauvegarde locale')));
+  assert.ok(logs.every(l => l && typeof l === 'object'), 'aucune chaîne brute dans le journal');
+  assert.ok(logs.some(l => (l.text || '').includes('Erreur de sauvegarde locale')));
   assert.ok(logs.length <= 300);
 });
 
@@ -312,5 +314,5 @@ test('Store — Synchronisation par chemin & isolation du journal (Lot 9)', asyn
   storeReceive.log('Entrée locale unique');
 
   syncCB({ val: () => ({ writer: 'other_user', timestamp: Date.now() + 100, reserve: [] }) });
-  assert.ok(storeReceive.getLog().some(l => l.includes('Entrée locale unique')));
+  assert.ok(storeReceive.getLog().some(l => (typeof l === 'string' ? l : l.text).includes('Entrée locale unique')));
 });

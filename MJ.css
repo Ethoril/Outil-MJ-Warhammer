@@ -98,10 +98,11 @@ details summary:hover { color: var(--accent); }
 .badge.hp-badge.low { background: #b33a3a; color: #fff; border-color: #8a0707; }
 .badge.hp-badge.down { background: #2e241d; color: #e8d8b8; border-color: #000; }
 
-.color-palette { position: absolute; top: 35px; right: 10px; background: #fff; border: 1px solid #5a1d1d; border-radius: 6px; padding: 6px; display: flex; gap: 4px; z-index: 50; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+.color-palette { position: absolute; top: 35px; right: 10px; background: #2a2421; border: 1px solid #5a1d1d; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 2px; z-index: 50; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 .color-palette.hidden { display: none; }
-.color-swatch { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #ccc; cursor: pointer; }
-.color-swatch:hover { transform: scale(1.1); border-color: #000; }
+.color-option { display: flex; align-items: center; gap: 6px; padding: 3px 6px; border-radius: 4px; cursor: pointer; font-size: 0.85em; color: #e0d8c3; }
+.color-option:hover { background: rgba(255,255,255,0.1); }
+.color-swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.3); display: inline-block; }
 
 .actor-controls { margin-top: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; flex-wrap: nowrap; }
 .hp-delta { width: 44px; padding: 2px 4px; font-size: 0.85em; text-align: center; }

@@ -62,6 +62,41 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     dirtyPaths.set(path, val);
   }
 
+  // Le journal ne contient que des objets depuis le lot 10. Les entrées écrites avant
+  // sont des chaînes : les accepter en les étiquetant 'legacy' plutôt que les jeter.
+  // Appelée depuis load() ET loadFromJSON() — ces deux chemins ont divergé quatre fois.
+  function normalizeLogEntries(list) {
+    if (!Array.isArray(list)) return [];
+    const out = list.map(item => {
+      if (typeof item === 'string') return { id: uid(), ts: 0, time: '', kind: 'legacy', text: item };
+      return (item && typeof item === 'object') ? item : null;
+    }).filter(Boolean);
+    if (out.length > 300) out.length = 300;
+    return out;
+  }
+
+  let lastSnapshot = null;
+
+  function recordSnapshot() {
+    // Tout est cloné en profondeur, y compris la réserve et les participants.
+    // Array.from(map.values()) ne rendrait que des références vivantes : une modification
+    // en place postérieure à l'instantané (Object.assign dans updateProfile ou
+    // updateParticipant) le contaminerait, et undo() restaurerait un état incohérent —
+    // les éléments supprimés reviendraient, mais les champs modifiés depuis resteraient.
+    lastSnapshot = JSON.parse(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      reserve: Array.from(reserve.values()),
+      combat: {
+        round: combat.round,
+        currentActorId: combat.currentActorId,
+        order: combat.order,
+        participants: Array.from(combat.participants.values())
+      },
+      log,
+      diceLines
+    }));
+  }
+
   function applyDataToState(data) {
     const rawReserve = sanitizeArray(data.reserve);
     const validProfiles = rawReserve.map(sanitizeProfile).filter(Boolean);
@@ -124,7 +159,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         }
       } catch (e) {
         console.error('❌ Erreur de sauvegarde localStorage:', e);
-        log.unshift(`[${now()}] ⚠️ Erreur de sauvegarde locale (quota dépassé ?)`);
+        // Entrée normalisée, pas une chaîne brute : depuis le lot 10 le journal ne contient
+        // que des objets, et une chaîne insérée ici ne serait pas rendue — l'avertissement
+        // deviendrait invisible précisément quand il compte.
+        log.unshift({
+          id: uid(), ts: Date.now(), time: now(), kind: 'management',
+          actorId: null, targetId: null,
+          text: '⚠️ Erreur de sauvegarde locale (quota dépassé ?)', detail: null
+        });
         if (log.length > 300) log.length = 300;
       }
     }
@@ -220,9 +262,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           save();
         }
       }
-      log = JSON.parse(storage.getItem(KEY.LOG) || '[]');
-      if (!Array.isArray(log)) log = [];
-      if (log.length > 300) log.length = 300;
+      log = normalizeLogEntries(JSON.parse(storage.getItem(KEY.LOG) || '[]'));
       const d = JSON.parse(storage.getItem(KEY.DICE) || '[]');
       diceLines = (Array.isArray(d) ? d : []).map(x => new DiceLine(x));
       lastAppliedTimestamp = Number(storage.getItem(KEY.TS) || '0') || 0;
@@ -278,12 +318,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       save(); emitBus('reserve'); emitBus('combat');
     },
     removeProfile(id) {
+      recordSnapshot();
       reserve.delete(id);
       markDirty(`reserve/${id}`, null);
       save();
       emitBus('reserve');
     },
     clearReserve() {
+      recordSnapshot();
       const count = reserve.size;
       reserve.clear();
       markDirty('reserve', null);
@@ -313,6 +355,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       emitBus('combat');
     },
     removeParticipant(id) {
+      recordSnapshot();
       combat.participants.delete(id);
       combat.order = combat.order.filter(x => x !== id);
       if (combat.currentActorId === id) combat.currentActorId = null;
@@ -398,6 +441,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!noRender) emitBus('combat');
     },
     removeDiceLine(id) {
+      recordSnapshot();
       diceLines = diceLines.filter(x => x.id !== id);
       markDirty(`diceLines/${id}`, null);
       save();
@@ -445,14 +489,50 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       save(); this.log(`Export → Réserve: ${n} profil(s) mis à jour`); emitBus('reserve');
     },
 
-    log(line) {
-      log.unshift(`[${now()}] ${line}`);
+    canUndo() { return Boolean(lastSnapshot); },
+    captureSnapshot() { recordSnapshot(); },
+    undo() {
+      if (!lastSnapshot) return false;
+      const snap = lastSnapshot;
+      lastSnapshot = null;
+      applyDataToState(snap);
+      if (Array.isArray(snap.log)) {
+        log = snap.log;
+      }
+      save(true);
+      emitBus('reserve');
+      emitBus('combat');
+      emitBus('log');
+      this.log('⏪ Action annulée.');
+      return true;
+    },
+
+    log(entry) {
+      let item;
+      if (typeof entry === 'string') {
+        item = { id: uid(), ts: Date.now(), time: now(), kind: 'management', text: entry };
+      } else if (entry && typeof entry === 'object') {
+        item = {
+          id: entry.id || uid(),
+          ts: entry.ts || Date.now(),
+          time: entry.time || now(),
+          kind: entry.kind || 'management',
+          actorId: entry.actorId || null,
+          targetId: entry.targetId || null,
+          text: entry.text || '',
+          detail: entry.detail || null
+        };
+      } else {
+        return;
+      }
+      log.unshift(item);
       if (log.length > 300) log.length = 300;
       save();
       emitBus('log');
     },
-    clearLog() { log = []; save(); emitBus('log'); },
+    clearLog() { recordSnapshot(); log = []; save(); emitBus('log'); },
     resetCombat() {
+      recordSnapshot();
       combat = { round: 0, currentActorId: null, order: [], participants: new Map() };
       markDirty('combat', { meta: { round: 0, currentActorId: null, order: [] }, participants: null });
       save(); this.log('Combat terminé.'); emitBus('combat');
@@ -466,16 +546,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       try {
         const data = JSON.parse(jsonStr);
         if (!data || !data.reserve || !data.combat) throw new Error('Format invalide');
+        recordSnapshot();
         applyDataToState(data);
-        // applyDataToState sert le chemin Firebase, d'où le journal n'arrive plus (§9.2).
-        // Un fichier de sauvegarde, lui, le porte toujours : c'est le seul moyen de
-        // transporter l'historique d'une machine à l'autre. On le restaure donc ici.
-        if (Array.isArray(data.log)) {
-          log = data.log.filter(s => typeof s === 'string');
-          if (log.length > 300) log.length = 300;
-        }
-        save(true); emitBus('reserve'); emitBus('combat'); emitBus('log'); this.log('📂 Données chargées.'); alert('Chargement réussi !');
-      } catch (e) { alert('Erreur : ' + e.message); }
+        if (Array.isArray(data.log)) log = normalizeLogEntries(data.log);
+        save(true); emitBus('reserve'); emitBus('combat'); emitBus('log'); this.log('📂 Données chargées.');
+      } catch (e) {
+        console.error('Erreur chargement:', e);
+        throw e;
+      }
     }
   };
 

@@ -11,7 +11,9 @@ import { initCardUI } from './ui/card.js';
 import { initCombatViewUI } from './ui/combat-view.js';
 import { runDiceLine } from './ui/dice-line.js';
 import { renderReferenceTables } from './ui/rules-view.js';
-import { renderLog } from './ui/log-view.js';
+import { renderLog, initLogViewUI } from './ui/log-view.js';
+import { showToast } from './ui/toast.js';
+import { initKeyboardShortcuts } from './ui/keyboard.js';
 
 // Init Store & Engine
 export const Store = createStore({
@@ -20,34 +22,42 @@ export const Store = createStore({
   bus: Bus
 });
 
-// Le Store démarre sans synchro : l'authentification n'est pas encore résolue.
-// Le handle lui est attaché dès la connexion, ce qui enregistre le listener onValue
-// et repousse l'état local vers Firebase.
 initFirebaseSync((syncHandle) => Store.attachSync(syncHandle));
 
 export const Combat = createCombatEngine(Store);
 
-// Version (Lot 6.3 : journal au clic, plus d'alert)
+// Version (Lot 10.6 : v3.5 court dans le bouton, titre complet au survol)
 if (DOM.btnVersion) {
-  DOM.btnVersion.textContent = `Version: ${APP_VERSION}`;
+  DOM.btnVersion.textContent = `v${APP_VERSION}`;
+  DOM.btnVersion.title = `Version ${APP_VERSION} - WFRP 4e Outil MJ`;
   DOM.btnVersion.addEventListener('click', () => {
     Store.log(`ℹ️ Application en version ${APP_VERSION}`);
+    showToast(`Version ${APP_VERSION} active`, 'info');
   });
 }
 
 // Navigation par onglets
-DOM.tabs.forEach(t => t.addEventListener('click', () => {
-  DOM.tabs.forEach(x => x.classList.remove('is-active')); t.classList.add('is-active');
-  Object.values(DOM.panels).forEach(p => p.classList.remove('is-active'));
-  const targetPanel = DOM.panels[t.dataset.tab];
-  if (targetPanel) targetPanel.classList.add('is-active');
-}));
+function switchTab(tabName) {
+  DOM.tabs.forEach(x => {
+    const active = x.dataset.tab === tabName;
+    x.classList.toggle('is-active', active);
+    x.setAttribute('aria-selected', active);
+  });
+  Object.entries(DOM.panels).forEach(([key, panel]) => {
+    if (panel) panel.classList.toggle('is-active', key === tabName);
+  });
+}
+
+DOM.tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 
 // Init Sub-modules UI
 const reserveUI = initReserveUI(Store);
 const importModalUI = initImportModalUI(Store);
 const cardUI = initCardUI(Store, Combat);
 const combatViewUI = initCombatViewUI(Store, Combat, cardUI, (id) => runDiceLine(id, Store));
+
+initLogViewUI(Store);
+initKeyboardShortcuts(Store, Combat, switchTab);
 
 // Boutons de combat globaux
 on(DOM.combat.btnImport, 'click', () => {
@@ -61,8 +71,14 @@ on(DOM.importModal.confirm, 'click', (e) => {
   const ids = Array.from(DOM.importModal.list.querySelectorAll('input[type=checkbox]:checked')).map(ch => ch.value);
   Store.importFromReserve(ids);
   DOM.importModal.dialog.close();
+  showToast(`${ids.length} profil(s) importé(s) en combat`, 'success');
 });
-on(DOM.combat.btnExport, 'click', () => { if (confirm('Appliquer PV aux profils correspondants ?')) Store.exportToReserve(); });
+on(DOM.combat.btnExport, 'click', () => {
+  if (confirm('Appliquer PV aux profils correspondants ?')) {
+    Store.exportToReserve();
+    showToast('Profils de la réserve mis à jour', 'success');
+  }
+});
 on(DOM.combat.btnSaveFile, 'click', () => {
   const json = Store.getFullJSON();
   const blob = new Blob([json], { type: "application/json" });
@@ -74,12 +90,20 @@ on(DOM.combat.btnSaveFile, 'click', () => {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+  showToast('💾 Fichier de sauvegarde téléchargé', 'success');
 });
 on(DOM.combat.btnLoadFile, 'click', () => { if (DOM.combat.fileInput) DOM.combat.fileInput.click(); });
 on(DOM.combat.fileInput, 'change', (e) => {
   const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => Store.loadFromJSON(ev.target.result);
+  reader.onload = (ev) => {
+    try {
+      Store.loadFromJSON(ev.target.result);
+      showToast('📂 Sauvegarde chargée avec succès', 'success', { label: 'Annuler', onClick: () => Store.undo() });
+    } catch (err) {
+      showToast('Erreur de chargement: ' + err.message, 'error');
+    }
+  };
   reader.readAsText(file);
   e.target.value = '';
 });
@@ -90,16 +114,14 @@ if (DOM.combat.btnEndCombat) {
   on(DOM.combat.btnEndCombat, 'click', () => {
     if (confirm('Retirer tous les combattants et remettre le round à zéro ?')) {
       Store.resetCombat();
+      showToast('Combat réinitialisé', 'warning', { label: 'Annuler', onClick: () => Store.undo() });
     }
   });
 }
 on(DOM.combat.btnD100, 'click', () => {
   const roll = d100();
-  Store.log(`🎲 Jet de d100 → ${roll}`);
-  const res = document.createElement('div');
-  res.className = 'dice-result';
-  res.innerHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span><span class="badge">Jet simple</span>`;
-  DOM.combat.results.prepend(res);
+  Store.log({ kind: 'roll', text: `🎲 Jet de d100 simple → ${roll}`, detail: { Jet: roll } });
+  showToast(`🎲 d100 = ${roll}`, 'info');
 });
 
 // Abonnements Bus
