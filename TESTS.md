@@ -269,6 +269,7 @@ Cible : **Renaut**, BE 3, armure Corps 2. Régler la ligne de jet sur `Dég. 6`,
 | 7.6 | Regarder la pilule « Tour » | **Renaut de Volargent** — le fichier a `turnIndex: 1` et l'ordre `[Saskia, Renaut, Gobelin 1]` (`A-02`) |
 | 7.7 | Vérifier le round | **3** |
 | 7.8 | Vérifier les états | Renaut : « Hémorragique » et « Sonné ×2 » ; Gobelin 1 : « Enflammé » |
+| 7.8b | `L5` Regarder le badge PV de Renaut | **`PV 9 / 14`** — le fichier ne contient aucun `maxHp` ; le maximum doit être retrouvé sur le **profil source**, pas recopié des PV courants |
 | 7.9 | Vérifier les zones et couleurs | Gobelin 2 au banc ; PJs en vert, gobelins en rouge |
 | 7.10 | Cliquer « Tour suivant » | Passe au Gobelin 1 (initiative 28, après Renaut 41) |
 

@@ -230,7 +230,8 @@
     return {
       ...base,
       profileId: o.profileId || null,
-      maxHp: o.maxHp !== undefined ? Number(o.maxHp) : (o.hp !== undefined ? Number(o.hp) : 0),
+      // volontairement laissé indéfini si absent : repairMaxHp() a besoin du signal
+      maxHp: o.maxHp !== undefined ? Number(o.maxHp) : undefined,
       states: Array.isArray(o.states) ? o.states.filter(s => typeof s === 'string') : [],
       zone: ['active', 'bench'].includes(o.zone) ? o.zone : 'bench',
       color: ['default', 'red', 'green', 'blue', 'purple', 'orange'].includes(o.color) ? o.color : 'default'
@@ -342,6 +343,20 @@
       }
     }
 
+    // Migration maxHp — les participants antérieurs au lot 5 n'ont pas ce champ.
+    // À appliquer sur les objets BRUTS, avant construction : le constructeur
+    // Participant remplace maxHp par hp, ce qui effacerait le signal d'absence
+    // et figerait le maximum d'un blessé sur ses PV courants.
+    function repairMaxHp(list) {
+      list.forEach(p => {
+        if (p.maxHp === undefined || p.maxHp === null) {
+          const prof = p.profileId ? reserve.get(p.profileId) : null;
+          p.maxHp = prof ? Number(prof.hp) : Number(p.hp);
+        }
+      });
+      return list;
+    }
+
     function applyDataToState(data) {
       const rawReserve = sanitizeArray(data.reserve);
       const validProfiles = rawReserve.map(sanitizeProfile).filter(Boolean);
@@ -353,7 +368,7 @@
       combat.round = Number(c.round) || 0;
 
       const rawParts = sanitizeArray(c.participants);
-      const validParts = rawParts.map(sanitizeParticipant).filter(Boolean);
+      const validParts = repairMaxHp(rawParts.map(sanitizeParticipant).filter(Boolean));
       combat.participants = new Map(validParts.map(p => [p.id, new Participant(p)]));
 
       const validIds = new Set(combat.participants.keys());
@@ -437,7 +452,7 @@
         if (c) {
           combat.round = c.round || 0;
           combat.order = Array.isArray(c.order) ? c.order : [];
-          combat.participants = new Map((c.participants || []).map(p => [p.id, new Participant(p)]));
+          combat.participants = new Map(repairMaxHp(c.participants || []).map(p => [p.id, new Participant(p)]));
 
           const validIds = new Set(combat.participants.keys());
           if (c.currentActorId !== undefined) {
@@ -452,10 +467,6 @@
 
           let repairedCount = 0;
           combat.participants.forEach(p => {
-            if (p.maxHp === undefined || p.maxHp === null) {
-              const prof = p.profileId ? reserve.get(p.profileId) : null;
-              p.maxHp = prof ? Number(prof.hp) : Number(p.hp);
-            }
             if ((!p.caracs || Object.keys(p.caracs).length === 0) && p.profileId) {
               const prof = reserve.get(p.profileId);
               if (prof && prof.caracs) {
@@ -1008,7 +1019,14 @@
     input.focus();
     input.select();
 
+    // Garde d'unicité : commit() et cancel() réécrivent le textContent du badge,
+    // ce qui retire l'input du DOM — et Chrome émet alors un blur, qui rappellerait
+    // commit(). Sans ce verrou, Échap enregistrerait la valeur au lieu de l'annuler.
+    let settled = false;
+
     function commit() {
+      if (settled) return;
+      settled = true;
       const raw = input.value.trim();
       if (raw !== '') {
         const val = parseInt(raw);
@@ -1031,6 +1049,8 @@
     }
 
     function cancel() {
+      if (settled) return;
+      settled = true;
       updateHpBadgeElement(badgeEl, p.hp, p.maxHp);
     }
 
@@ -1410,7 +1430,6 @@
     zone.addEventListener('mouseleave', handleZoneMouseOver);
   });
 
-  function setHP(id, val) { const p = getP(id); if (!p) return; Store.updateParticipant(id, { hp: val }); }
 
   function decrementStates(id) {
     const p = getP(id);
