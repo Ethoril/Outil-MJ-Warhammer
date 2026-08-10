@@ -511,11 +511,12 @@
       // ✅ Utilise l'UID de l'utilisateur pour Firebase
       window.__WFRP_FIREBASE__ = { db, ref, onValue, set, userId: user.uid };
       
-      // Charge MJ.js seulement si connecté
+      // Charge js/main.js (ES module) seulement si connecté
       if (!document.getElementById('mj-script')) {
         const script = document.createElement('script');
         script.id = 'mj-script';
-        script.src = 'MJ.js?v=18';
+        script.type = 'module';
+        script.src = 'js/main.js';
         document.body.appendChild(script);
       }
       
