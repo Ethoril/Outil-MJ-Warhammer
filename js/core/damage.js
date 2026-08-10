@@ -1,13 +1,50 @@
-export const PLANCHER_TOUCHE = 1;      // une touche réussie inflige toujours au moins ceci
-export const FACTEUR_INOFFENSIVE = 2;  // multiplicateur de PA de la qualité Inoffensive
+import { ENGINES } from '../data/keyword-engines.js';
+import { slugify } from './keywords.js';
 
-export function computeDamage({ weaponDamage = 0, sl = 0, targetToughnessBonus = 0, targetArmour = 0, qualities = [] } = {}) {
-  const isInoffensive = Array.isArray(qualities) && qualities.some(q => q && q.id === 'inoffensive');
+export const PLANCHER_TOUCHE = 1;
+export const FACTEUR_INOFFENSIVE = 2;
+
+export function computeDamage({ weaponDamage = 0, sl = 0, roll = 0, targetToughnessBonus = 0, targetArmour = 0, qualities = [] } = {}) {
+  const normQualities = Array.isArray(qualities)
+    ? qualities.map(q => typeof q === 'string' ? { id: slugify(q) } : { ...q, id: slugify(q.id || q.name) })
+    : [];
+
+  const activeEngines = [];
+  normQualities.forEach(q => {
+    const engineDef = ENGINES[q.id];
+    if (engineDef) {
+      activeEngines.push({ quality: q, engine: engineDef });
+    }
+  });
+
+  // 1. Modificateurs de dégâts bruts (Pointue: +1, Imprécise: -1)
+  let baseDamage = Number(weaponDamage) || 0;
+  activeEngines.forEach(ae => {
+    if (ae.engine.engine === 'modify-damage' && ae.engine.params?.bonus) {
+      baseDamage += ae.engine.params.bonus;
+    }
+  });
+
+  // 2. Percutante / Impact : ajoute le dé d'unités du jet
+  const unitsDie = Number(roll) > 0 ? (Number(roll) % 10 || 10) : 0;
+  const isPercutante = activeEngines.some(ae => ae.engine.engine === 'add-units-die');
+  const bonusPercutante = isPercutante ? unitsDie : 0;
+
+  // 3. Dévastatrice : utilise max(unitsDie, SL) pour les SL de dégâts
+  const isDevastatrice = activeEngines.some(ae => ae.engine.engine === 'best-of-units-or-sl');
+  let effectiveSL = Number(sl) || 0;
+  if (isDevastatrice && unitsDie > effectiveSL) {
+    effectiveSL = unitsDie;
+  }
+
+  // 4. Inoffensive : PA x 2, pas de plancher
+  const isInoffensive = activeEngines.some(ae => ae.quality.id === 'inoffensive');
   const paEffectif = (Number(targetArmour) || 0) * (isInoffensive ? FACTEUR_INOFFENSIVE : 1);
   const be = Number(targetToughnessBonus) || 0;
   const absorption = be + paEffectif;
-  const dmgBase = Number(weaponDamage) || 0;
-  const net = dmgBase + Number(sl) - absorption;
+
+  const totalRaw = baseDamage + effectiveSL + bonusPercutante;
+  const net = totalRaw - absorption;
 
   let finalDamage = net;
   let isPlancher = false;
@@ -22,8 +59,9 @@ export function computeDamage({ weaponDamage = 0, sl = 0, targetToughnessBonus =
   }
 
   return {
-    weaponDamage: dmgBase,
-    sl: Number(sl) || 0,
+    weaponDamage: baseDamage,
+    sl: effectiveSL,
+    bonusPercutante,
     be,
     targetArmour: Number(targetArmour) || 0,
     paEffectif,
@@ -31,6 +69,7 @@ export function computeDamage({ weaponDamage = 0, sl = 0, targetToughnessBonus =
     net,
     finalDamage,
     isInoffensive,
-    isPlancher
+    isPlancher,
+    activeQualities: normQualities
   };
 }

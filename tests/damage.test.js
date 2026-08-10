@@ -55,13 +55,15 @@ test('computeDamage — SL négatif sur réussite marginale', () => {
 test('computeDamage — Qualité inconnue ignorée', () => {
   const resNominal = computeDamage({ weaponDamage: 6, sl: 2, targetToughnessBonus: 3, targetArmour: 2, qualities: [] });
   const resUnknown = computeDamage({ weaponDamage: 6, sl: 2, targetToughnessBonus: 3, targetArmour: 2, qualities: [{ id: 'magique' }] });
-  assert.deepEqual(resNominal, resUnknown);
+  assert.equal(resNominal.finalDamage, resUnknown.finalDamage);
+  assert.equal(resNominal.net, resUnknown.net);
 });
 
 test('computeDamage — Qualité avec rating inconnue ignorée', () => {
   const resNominal = computeDamage({ weaponDamage: 6, sl: 2, targetToughnessBonus: 3, targetArmour: 2, qualities: [] });
   const resUnknownRating = computeDamage({ weaponDamage: 6, sl: 2, targetToughnessBonus: 3, targetArmour: 2, qualities: [{ id: 'explosion', rating: 3 }] });
-  assert.deepEqual(resNominal, resUnknownRating);
+  assert.equal(resNominal.finalDamage, resUnknownRating.finalDamage);
+  assert.equal(resNominal.net, resUnknownRating.net);
 });
 
 test('computeDamage — Cible sans E ou sans armure (pas de crash)', () => {

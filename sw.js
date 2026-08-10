@@ -19,6 +19,10 @@ const ASSETS_TO_CACHE = [
   './js/core/models.js',
   './js/core/sync.js',
   './js/core/sanitize.js',
+  './js/core/keywords.js',
+  './js/core/roll-qualities.js',
+  './js/data/keywords-fallback.json',
+  './js/data/keyword-engines.js',
   './js/data/rules.js',
   './js/data/crits.js',
   './js/data/magic.js',
@@ -58,8 +62,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Pour Firebase et gstatic, network-first avec fallback
-  if (url.hostname.includes('firebase') || url.hostname.includes('gstatic')) {
+  // Pour Firebase, gstatic et Google Sheets, network-first avec fallback
+  if (url.hostname.includes('firebase') || url.hostname.includes('gstatic') || url.hostname.includes('docs.google.com')) {
     event.respondWith(
       fetch(event.request).catch(() => caches.match(event.request))
     );

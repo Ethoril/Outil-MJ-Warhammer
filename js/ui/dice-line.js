@@ -2,6 +2,8 @@ import { DOM, escapeHtml } from './dom.js';
 import { d100, isDouble, SL, getReverseRoll, getLocationName, getCritEffect } from '../core/dice.js';
 import { parseState } from '../core/sanitize.js';
 import { computeDamage } from '../core/damage.js';
+import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from '../core/roll-qualities.js';
+import { getKeywordList } from '../core/keywords.js';
 
 export function renderMiniDiceLine(dl, p, Store) {
   const row = document.createElement('div');
@@ -38,7 +40,7 @@ export function renderMiniDiceLine(dl, p, Store) {
   inDamage.addEventListener('input', (e) => Store.updateDiceLine(dl.id, { damage: Number(e.target.value) || 0 }, true));
   inDamage.addEventListener('click', (e) => e.stopPropagation());
 
-  // 4. Cible (Select des participants actifs hors soi-même)
+  // 4. Cible
   const selTarget = document.createElement('select');
   selTarget.className = 'target-select';
   selTarget.title = "Cible visée";
@@ -62,21 +64,31 @@ export function renderMiniDiceLine(dl, p, Store) {
   });
   selTarget.addEventListener('click', (e) => e.stopPropagation());
 
-  // 5. Bascule Inoffensive (Inof.)
-  const isInoffensive = Array.isArray(dl.qualities) && dl.qualities.some(q => q && q.id === 'inoffensive');
-  const btnInof = document.createElement('button');
-  btnInof.type = 'button';
-  btnInof.className = `btn-inoffensive ${isInoffensive ? 'active' : ''}`;
-  btnInof.textContent = "Inof.";
-  btnInof.title = "Arme inoffensive (PA cibles ×2, plancher de dégâts = 0)";
-  btnInof.addEventListener('click', (e) => {
+  // 5. Bouton & Popover Mots-clés (§13.7)
+  const kwContainer = document.createElement('div');
+  kwContainer.style.position = 'relative';
+  kwContainer.style.display = 'inline-block';
+
+  const activeCount = Array.isArray(dl.qualities) ? dl.qualities.length : 0;
+  const btnKw = document.createElement('button');
+  btnKw.type = 'button';
+  btnKw.className = `btn-inoffensive ${activeCount > 0 ? 'active' : ''}`;
+  btnKw.textContent = activeCount > 0 ? `Mots-clés (${activeCount})` : "Mots-clés";
+  btnKw.title = "Ajouter / Retirer des mots-clés d'armes";
+
+  const popover = document.createElement('div');
+  popover.className = 'color-palette hidden';
+  popover.style.cssText = 'position:absolute; top:28px; left:0; width:220px; max-height:220px; overflow-y:auto; background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:6px; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.4);';
+
+  btnKw.addEventListener('click', (e) => {
     e.stopPropagation();
-    const hasInof = Array.isArray(dl.qualities) && dl.qualities.some(q => q && q.id === 'inoffensive');
-    const newQualities = hasInof
-      ? dl.qualities.filter(q => q && q.id !== 'inoffensive')
-      : [...(dl.qualities || []), { id: 'inoffensive' }];
-    Store.updateDiceLine(dl.id, { qualities: newQualities });
+    popover.classList.toggle('hidden');
+    if (!popover.classList.contains('hidden')) {
+      renderKeywordsPopover(popover, dl, Store);
+    }
   });
+
+  kwContainer.append(btnKw, popover);
 
   // 6. Bouton Lancer
   const btnRoll = document.createElement('button');
@@ -90,8 +102,59 @@ export function renderMiniDiceLine(dl, p, Store) {
   btnDel.className = 'action-btn danger btn-del-dice';
   btnDel.title = "Supprimer ligne";
 
-  row.append(inValue, inNote, inDamage, selTarget, btnInof, btnRoll, btnDel);
+  row.append(inValue, inNote, inDamage, selTarget, kwContainer, btnRoll, btnDel);
   return row;
+}
+
+function renderKeywordsPopover(container, dl, Store) {
+  container.innerHTML = '';
+  const currentQualities = Array.isArray(dl.qualities) ? dl.qualities : [];
+  const allKeywords = getKeywordList();
+
+  allKeywords.forEach(kw => {
+    const item = document.createElement('label');
+    item.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.82em; padding:2px 4px; cursor:pointer; color:var(--text); flex-direction:row;';
+
+    const chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.style.margin = '0';
+    const activeObj = currentQualities.find(q => q && (q.id === kw.slug || q.name === kw.name));
+    chk.checked = Boolean(activeObj);
+
+    chk.addEventListener('change', () => {
+      let updated = [...currentQualities];
+      if (chk.checked) {
+        if (!updated.some(q => q && (q.id === kw.slug || q.name === kw.name))) {
+          updated.push({ id: kw.slug, name: kw.name, rating: kw.hasRating ? 1 : undefined });
+        }
+      } else {
+        updated = updated.filter(q => q && q.id !== kw.slug && q.name !== kw.name);
+      }
+      Store.updateDiceLine(dl.id, { qualities: updated });
+    });
+
+    const labelSpan = document.createElement('span');
+    labelSpan.textContent = kw.name;
+    labelSpan.title = kw.effect;
+
+    item.append(chk, labelSpan);
+
+    if (kw.hasRating && activeObj) {
+      const ratingIn = document.createElement('input');
+      ratingIn.type = 'number';
+      ratingIn.min = '1';
+      ratingIn.value = activeObj.rating || 1;
+      ratingIn.style.cssText = 'width:36px; padding:1px 2px; font-size:0.8em; margin-left:auto;';
+      ratingIn.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value) || 1;
+        const updated = currentQualities.map(q => (q.id === kw.slug || q.name === kw.name) ? { ...q, rating: val } : q);
+        Store.updateDiceLine(dl.id, { qualities: updated });
+      });
+      item.appendChild(ratingIn);
+    }
+
+    container.appendChild(item);
+  });
 }
 
 export function runDiceLine(id, Store) {
@@ -110,7 +173,11 @@ export function runDiceLine(id, Store) {
   if (stateNames.has('Exténué')) penaltyLabels.push('Exténué');
   if (stateNames.has('Brisé'))   penaltyLabels.push('Brisé');
   const statePenalty = penaltyLabels.length * 10;
-  const target = Math.max(0, base - statePenalty);
+  // Précise : bonus au score cible, appliqué après les malus d'états (§13.4, palier 1)
+  const { target, bonus: qualityBonus } = applyTargetBonus(
+    Math.max(0, base - statePenalty),
+    dl.qualities
+  );
 
   const roll = d100();
   const success = roll <= target;
@@ -120,7 +187,15 @@ export function runDiceLine(id, Store) {
   const targetParticipant = dl.targetId ? combat.participants.get(dl.targetId) : null;
   const isAcharnement = success && targetParticipant && targetParticipant.hp <= 0;
 
-  let crit = dbl ? (success ? 'Critique' : 'Maladresse') : null;
+  // Empaleuse élargit le critique aux multiples de 10 ; Dangereuse élargit la
+  // maladresse à tout jet raté comportant un 9.
+  const critRes = isCriticalRoll(roll, dbl, dl.qualities);
+  const fumbleRes = isFumbleRoll(roll, dbl, dl.qualities);
+
+  let crit = null;
+  let critÉlargi = false;
+  if (success && critRes.critique) { crit = 'Critique'; critÉlargi = critRes.élargi; }
+  else if (!success && fumbleRes.maladresse) { crit = 'Maladresse'; critÉlargi = fumbleRes.élargi; }
   if (isAcharnement && !crit) {
     crit = 'Critique';
   }
@@ -142,13 +217,12 @@ export function runDiceLine(id, Store) {
       const critLocRoll = d100();
       const critLoc = getLocationName(critLocRoll);
       const critEffectRollBase = d100();
-      // Gravité majorée de +10 si cible à 0 PV ou moins (§7.5)
       const critEffectRoll = isAcharnement ? Math.min(100, critEffectRollBase + 10) : critEffectRollBase;
       const effectData = getCritEffect(critLoc.key, critEffectRoll);
-      critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed #5a1d1d; padding-top:4px;"><strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll}${isAcharnement ? ' [+10 Acharnement]' : ''})<br><span style="color:var(--danger);">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}</div>`;
+      critInfo = `<div style="width:100%; margin-top:4px; font-size:0.9em; border-top:1px dashed var(--border); padding-top:4px;"><strong>⚠️ CRITIQUE !</strong> (Loc: ${critLocRoll} ${critLoc.name} / Effet: ${critEffectRoll}${isAcharnement ? ' [+10 Acharnement]' : ''})<br><span style="color:var(--accent);">${effectData ? effectData.name : 'Inconnu'}</span> : ${effectData ? effectData.eff : ''}</div>`;
     }
 
-    // Calcul des Dégâts (§7.3, §7.4)
+    // Calcul des Dégâts avec Mots-clés (§13.4, §13.7)
     if (targetParticipant && (dl.damage || dl.damage === 0)) {
       const targetBE = Math.floor((targetParticipant.caracs?.E || 0) / 10);
       const armObj = targetParticipant.armor || {};
@@ -161,31 +235,24 @@ export function runDiceLine(id, Store) {
       const dmgRes = computeDamage({
         weaponDamage: dl.damage,
         sl,
+        roll,
         targetToughnessBonus: targetBE,
         targetArmour: targetPA,
         qualities: dl.qualities
       });
 
       const dmgNode = document.createElement('div');
-      dmgNode.style.width = '100%';
-      dmgNode.style.marginTop = '6px';
-      dmgNode.style.fontSize = '0.9em';
-      dmgNode.style.background = 'rgba(0,0,0,0.04)';
-      dmgNode.style.padding = '4px 8px';
-      dmgNode.style.borderRadius = '4px';
-      dmgNode.style.display = 'flex';
-      dmgNode.style.alignItems = 'center';
-      dmgNode.style.justifyContent = 'space-between';
-      dmgNode.style.flexWrap = 'wrap';
-      dmgNode.style.gap = '6px';
+      dmgNode.style.cssText = 'width:100%; margin-top:6px; font-size:0.9em; background:rgba(0,0,0,0.04); padding:4px 8px; border-radius:4px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;';
 
       const paStr = dmgRes.isInoffensive ? `PA ${dmgRes.targetArmour}×2` : `PA ${dmgRes.targetArmour}`;
       const slStr = dmgRes.sl >= 0 ? `+ DR ${dmgRes.sl}` : `− DR ${Math.abs(dmgRes.sl)}`;
-      let calcStr = `Dégâts ${dmgRes.weaponDamage} ${slStr} − (BE ${dmgRes.be} + ${paStr}) = ${dmgRes.net}`;
+      const percutStr = dmgRes.bonusPercutante ? ` + Percutante(${dmgRes.bonusPercutante})` : '';
+
+      let calcStr = `Dégâts ${dmgRes.weaponDamage}${percutStr} ${slStr} − (BE ${dmgRes.be} + ${paStr}) = ${dmgRes.net}`;
       if (dmgRes.isPlancher) {
-        calcStr += ` → ${PLANCHER_TOUCHE} minimum`;
+        calcStr += ` → ${1} minimum`;
       } else if (dmgRes.isInoffensive) {
-        calcStr += ` Inoffensive`;
+        calcStr += ` (Inoffensive)`;
       }
 
       const textSpan = document.createElement('span');
@@ -206,12 +273,11 @@ export function runDiceLine(id, Store) {
         const newHp = oldHp - dmgRes.finalDamage;
 
         Store.updateParticipant(currentTarget.id, { hp: newHp });
-        Store.log(`⚔️ ${currentTarget.name} : ${oldHp} → ${newHp} PV (−${dmgRes.finalDamage})`);
+        Store.log({ kind: 'damage', actorId: p?.id, targetId: currentTarget.id, text: `⚔️ ${currentTarget.name} : ${oldHp} → ${newHp} PV (−${dmgRes.finalDamage})` });
 
-        // Passage à Terre (§7.5)
         if (newHp <= 0 && !currentTarget.states.some(s => parseState(s).name === 'À Terre')) {
           Store.updateParticipant(currentTarget.id, { states: [...currentTarget.states, 'À Terre'] });
-          Store.log(`💀 ${currentTarget.name} → À Terre (PV à 0)`);
+          Store.log({ kind: 'state', actorId: currentTarget.id, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` });
         }
 
         btnApply.disabled = true;
@@ -233,10 +299,22 @@ export function runDiceLine(id, Store) {
   resHTML += `<span class="badge">${escapeHtml(p?.name || '?')}</span>`;
 
   if (dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
+  
+  // Affichage des mots-clés actifs sur le jet (§13.7)
+  if (Array.isArray(dl.qualities) && dl.qualities.length > 0) {
+    const kwBadges = dl.qualities.map(q => {
+      const name = typeof q === 'string' ? q : (q.name || q.id);
+      const r = q.rating ? ` ${q.rating}` : '';
+      return `<span class="badge" style="background:var(--chip); color:var(--text);">${escapeHtml(name + r)}</span>`;
+    }).join(' ');
+    resHTML += kwBadges;
+  }
+
   resHTML += `<span class="badge" title="Base ${base}">Score ${target}</span>`;
+  if (qualityBonus) resHTML += `<span class="badge" style="background:var(--card-bg-green);">+${qualityBonus} (mots-clés)</span>`;
   if (statePenalty) resHTML += `<span class="badge" style="background:#fdd;color:#8a0707;">−${statePenalty} (${penaltyLabels.join(', ')})</span>`;
-  if (crit) resHTML += `<span class="badge ${success ? 'good' : 'bad'}">${crit}</span>`;
-  if (extraInfo) resHTML += `<span class="badge" style="background:#e3f6fd; color:#333;">${extraInfo}</span>`;
+  if (crit) resHTML += `<span class="badge ${success ? 'good' : 'bad'}">${crit}${critÉlargi ? ' (mot-clé)' : ''}</span>`;
+  if (extraInfo) resHTML += `<span class="badge" style="background:var(--card-bg-blue); color:var(--text);">${extraInfo}</span>`;
   if (critInfo) resHTML += critInfo;
 
   res.innerHTML = resHTML;
@@ -245,5 +323,11 @@ export function runDiceLine(id, Store) {
   }
 
   DOM.combat.results.prepend(res);
-  Store.log(`🎲 ${p?.name} (Roll ${roll} vs ${target}${statePenalty ? ` base ${base}-${statePenalty}` : ''}) SL${sl} ${dl.note ? '[' + dl.note + ']' : ''}`);
+  Store.log({
+    kind: 'roll',
+    actorId: p?.id,
+    targetId: dl.targetId,
+    text: `🎲 ${p?.name} (Roll ${roll} vs ${target}${statePenalty ? ` base ${base}-${statePenalty}` : ''}) SL${sl} ${dl.note ? '[' + dl.note + ']' : ''}`,
+    detail: { Jet: roll, Cible: target, SL: sl, MotsClés: (dl.qualities || []).map(q => typeof q === 'string' ? q : q.id).join(', ') }
+  });
 }

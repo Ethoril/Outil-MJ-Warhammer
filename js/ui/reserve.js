@@ -71,12 +71,25 @@ export function initReserveUI(Store) {
 
   function addProfileDiceRow({ base = '', note = '', damage = '', qualities = [] } = {}) {
     const row = document.createElement('div'); row.className = 'row'; row.style.marginBottom = '6px'; row.style.gap = '4px';
-    const isInoffensive = Array.isArray(qualities) && qualities.some(q => q && q.id === 'inoffensive');
+    const currentQualities = Array.isArray(qualities) ? qualities : [];
 
-    row.innerHTML = `<input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:60px;"><input type="text" placeholder="Label (ex: Épée)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><input type="number" placeholder="Dég." value="${damage !== undefined && damage !== null ? damage : ''}" class="pf-dice-damage" style="width:50px;"><button type="button" class="btn-inoffensive ${isInoffensive ? 'active' : ''} pf-dice-inof" title="Arme inoffensive (PA cibles ×2, plancher = 0)">Inof.</button><button type="button" class="danger tiny btn-remove-dice">×</button>`;
+    row.innerHTML = `<input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:60px;"><input type="text" placeholder="Label (ex: Épée)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><input type="number" placeholder="Dég." value="${damage !== undefined && damage !== null ? damage : ''}" class="pf-dice-damage" style="width:50px;"><button type="button" class="btn-inoffensive ${currentQualities.length > 0 ? 'active' : ''} pf-dice-kw" title="Mots-clés">${currentQualities.length > 0 ? `Mots-clés (${currentQualities.length})` : 'Mots-clés'}</button><button type="button" class="danger tiny btn-remove-dice">×</button>`;
 
-    const btnInof = row.querySelector('.pf-dice-inof');
-    btnInof.addEventListener('click', () => btnInof.classList.toggle('active'));
+    row._qualities = [...currentQualities];
+
+    const btnKw = row.querySelector('.pf-dice-kw');
+    btnKw.addEventListener('click', () => {
+      const hasInof = row._qualities.some(q => q && (q.id === 'inoffensive' || q.name === 'Inoffensive'));
+      if (hasInof) {
+        row._qualities = row._qualities.filter(q => q && q.id !== 'inoffensive' && q.name !== 'Inoffensive');
+        btnKw.classList.remove('active');
+        btnKw.textContent = 'Mots-clés';
+      } else {
+        row._qualities.push({ id: 'inoffensive', name: 'Inoffensive' });
+        btnKw.classList.add('active');
+        btnKw.textContent = 'Mots-clés (1)';
+      }
+    });
 
     const btnRemoveDice = row.querySelector('.btn-remove-dice');
     btnRemoveDice.addEventListener('click', () => row.remove());
@@ -125,13 +138,12 @@ export function initReserveUI(Store) {
         const b = row.querySelector('.pf-dice-base').value;
         const n = row.querySelector('.pf-dice-note').value;
         const d = row.querySelector('.pf-dice-damage')?.value;
-        const isInof = row.querySelector('.pf-dice-inof')?.classList.contains('active');
         if (b) {
           diceLines.push({
             base: parseInt(b),
             note: n,
             damage: d !== undefined && d !== '' ? Number(d) : 0,
-            qualities: isInof ? [{ id: 'inoffensive' }] : []
+            qualities: row._qualities || []
           });
         }
       });
