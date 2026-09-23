@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { indexedDB } from 'fake-indexeddb';
 import { createPersistence } from '../js/core/persistence.js';
 import { applyOperation } from '../js/core/sync-protocol.js';
+import { createSyncDocument } from '../js/core/sync-protocol.js';
 import { createSyncSession } from '../js/core/sync-session.js';
 import { createStore } from '../js/core/store.js';
 
@@ -173,4 +174,61 @@ test('E05 revue — aller-retour compte A / invité / compte B garde trois espac
   await store.switchContext('account:b');
   assert.equal(store.getProfile('account-b').name, 'account-b');
   assert.equal(store.getProfile('account-a'), null);
+});
+
+test('E05 sécurité import — un compte v2 synchronisé ne propose jamais le brouillon invité obsolète', async () => {
+  const dbName = `e05-guest-import-safety-${Date.now()}`;
+  const openPersistence = contextId => createPersistence({ indexedDB, dbName, contextId });
+  const guestPersistence = openPersistence('guest');
+  const openedPersistences = [guestPersistence];
+  const persistenceFactory = contextId => {
+    const persistence = openPersistence(contextId);
+    openedPersistences.push(persistence);
+    return persistence;
+  };
+  const emitted = [];
+  const bus = { emit: (event, payload) => emitted.push({ event, payload }) };
+  let resolveSynced;
+  const synced = new Promise(resolve => { resolveSynced = resolve; });
+  const store = createStore({
+    storage: null,
+    persistence: guestPersistence,
+    persistenceFactory,
+    contextId: 'guest',
+    bus,
+    onSyncStatus: status => { if (status === 'synced') resolveSynced(); }
+  });
+  await store.ready;
+  await store.addProfile({ id: 'stale-draft', name: 'Brouillon invité obsolète', hp: 10, initiative: 30 });
+
+  const remoteRoot = createSyncDocument({
+    schemaVersion: 2,
+    reserve: [{ id: 'restored-profile', name: 'Sauvegarde restaurée' }],
+    combat: { round: 0, order: [], participants: [] },
+    diceLines: []
+  }, { revision: 9 });
+  const transport = {
+    async read() { return remoteRoot; },
+    async transaction() { throw new Error('un compte déjà synchronisé ne doit pas être réécrit'); },
+    subscribe() { return () => {}; }
+  };
+
+  store.attachSync({
+    contextId: 'account:restored',
+    createSession: options => createSyncSession({ ...options, transport, deviceId: 'guest-import-safety-device' })
+  });
+  let timeout;
+  await Promise.race([
+    synced,
+    new Promise((_, reject) => { timeout = setTimeout(() => reject(new Error('Synchronisation distante non terminée')), 5000); })
+  ]);
+  clearTimeout(timeout);
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  assert.equal(store.getProfile('restored-profile')?.name, 'Sauvegarde restaurée');
+  assert.equal(store.getProfile('stale-draft'), null);
+  assert.equal(emitted.some(item => item.event === 'sync:guest-import-available'), false);
+  await store.whenIdle();
+  store.detachSync();
+  openedPersistences.forEach(persistence => persistence.close());
 });

@@ -2198,6 +2198,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         .then(result => {
             if (attachEpoch !== syncAttachEpoch) return result;
             syncSessionReady = result.status === 'synced' || result.status === 'pending';
+            // Only offer the guest snapshot when reconciliation found an
+            // empty remote root and there is no account-local work to publish.
+            // Keep this decision from the initial read: flush() can retain
+            // remoteAvailable=false after creating the first remote root.
+            const guestImportEligible = result.status === 'pending'
+              && result.remoteAvailable === false
+              && !pendingProtocolState
+              && (!Array.isArray(result.outbox) || result.outbox.length === 0);
             const readyState = currentEnvelope();
             const replay = pendingProtocolState && (result.status === 'pending' || result.status === 'synced')
               ? syncSession.enqueue({ state: readyState, localState: readyState })
@@ -2227,8 +2235,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
                   console.warn('⚠️ Migration distante legacy indisponible:', error);
                 }
               }
-              if (guestImportCandidate && attachEpoch === syncAttachEpoch && bus?.emit) {
-                bus.emit('sync:guest-import-available', { snapshot: guestImportCandidate, contextId: requestedContext });
+              if (guestImportCandidate && attachEpoch === syncAttachEpoch) {
+                // A guest draft is only offered when the account has no v2
+                // document and the read completed online. Never surface an
+                // import action beside an already-synced account: importing
+                // it replaces the account state with this older snapshot.
+                if (guestImportEligible && bus?.emit) {
+                  bus.emit('sync:guest-import-available', { snapshot: guestImportCandidate, contextId: requestedContext });
+                }
                 guestImportCandidate = null;
               }
               if (legacyImportCandidate && attachEpoch === syncAttachEpoch && bus?.emit) {

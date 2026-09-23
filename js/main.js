@@ -1081,7 +1081,7 @@ Bus.on('sync:conflict', () => {
 });
 Bus.on('sync:guest-import-available', ({ snapshot, contextId, kind } = {}) => {
   const source = kind === 'legacy' ? 'Ancienne sauvegarde distante' : 'Données invitées';
-  showToast(`${source} disponible pour ${contextId || 'ce compte'} (aperçu avant import).`, 'info', {
+  showToast(`${source} disponible pour ${contextId || 'ce compte'} (non importée automatiquement).`, 'info', {
     label: 'Importer explicitement',
     onClick: () => Promise.resolve(Store.importGuestSnapshot(snapshot))
       .then(result => { if (result?.ok === false) throw result.error || new Error('Import impossible.'); return result; })

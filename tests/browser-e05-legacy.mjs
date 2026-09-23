@@ -127,7 +127,7 @@ async function main() {
 
     const toast = page.locator('#toast-container .toast').filter({ hasText: 'Ancienne sauvegarde distante' });
     await expect(toast).toBeVisible({ timeout: 10000 });
-    await expect(toast).toContainText('aperçu avant import');
+    await expect(toast).toContainText('non importée automatiquement');
     await expect(toast.getByRole('button', { name: 'Importer explicitement' })).toBeVisible();
     assert.equal(await page.evaluate(() => window.__e05Legacy.v2Root), null);
     assert.equal(await page.evaluate(() => window.__e05Legacy.v1Writes), 0);

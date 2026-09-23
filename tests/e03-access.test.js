@@ -54,7 +54,7 @@ test('E03 — chargement distant différé et mise à jour PWA restent non bloqu
   assert.match(sync, /initialized = false/);
   assert.doesNotMatch(sw, /\.then\(\(\) => self\.skipWaiting\(\)\)/);
   assert.match(sw, /wfrp-activate-update/);
-  assert.match(sw, /wfrp-cache-v3\.6\.2/);
+  assert.match(sw, /wfrp-cache-v3\.6\.3/);
   assert.match(sw, /if \(cachedResponse\) \{\s*return cachedResponse;\s*\}/);
   assert.doesNotMatch(sw, /Mise à jour silencieuse/);
 });
