@@ -1,6 +1,6 @@
 # Suivi des lots d’évolution
 
-État consolidé au `23/09/2026`, version `3.6.2`. Les validations applicatives ci-dessous portent sur l’arbre local partagé. Les règles Firebase de production ont été publiées et relues dans la console le `23/09/2026` ; une sauvegarde serveur a été exportée le même jour. Les règles isolent les espaces v1 et v2 par UID et ne modifient pas les données. Le site GitHub Pages est distribué depuis la branche `main`. Aucun test utilisateur réel de synchronisation n’est revendiqué.
+État consolidé au `23/09/2026`, version `3.6.2`. Les validations applicatives ci-dessous portent sur l’arbre local partagé. Les règles Firebase de production ont été publiées et relues dans la console le `23/09/2026` ; une sauvegarde serveur a été exportée le même jour. Depuis la bascule, v1 est en lecture seule pour son UID propriétaire et v2 limite lecture et écriture à son UID propriétaire. Les règles n’ont pas modifié les données. Le site GitHub Pages est distribué depuis la branche `main`. Aucun test utilisateur réel de synchronisation n’est revendiqué.
 
 | Lot | État | Preuves finales |
 |---|---|---|
@@ -35,7 +35,7 @@ Les lots ont ajouté une enveloppe v2 migrable, un stockage IndexedDB transactio
 
 ## Limites et périmètre
 
-- Les règles Firebase v1/v2 sont publiées en production et isolent les lectures et écritures par UID. Les tests simulateur ont confirmé le refus d’un invité, l’accès de son propre UID et le refus d’un autre UID. Les règles n’ont changé aucune donnée ; une sauvegarde serveur a été exportée le `23/09/2026`.
-- Aucun test utilisateur réel de synchronisation n’a été effectué. Le site GitHub Pages reste à publier après le commit.
+- Les règles Firebase v1/v2 sont publiées en production : v1 est en lecture seule par UID et v2 autorise lecture/écriture uniquement par UID propriétaire. Les tests simulateur ont confirmé le refus d’un invité, l’accès de son propre UID et le refus d’un autre UID. Les règles n’ont changé aucune donnée ; une sauvegarde serveur a été exportée le `23/09/2026`.
+- Aucun test utilisateur réel de synchronisation n’a été effectué. Le commit `a34f301` a été publié et vérifié sur GitHub Pages.
 - La comparaison E16 vérifie l’application d’un choix unique et l’effet visible sur une cible ; les détails algorithmiques complémentaires restent couverts par les tests cœur.
 - La restauration E04 est exercée par export/chargement réel dans le navigateur local ; elle vérifie l’aperçu, la confirmation, la persistance et le rechargement, sans prétendre valider un incident de production.

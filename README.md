@@ -94,7 +94,7 @@ La configuration Firebase (`firebaseConfig`) dans `js/core/sync.js` est **public
 
 La sécurité est assurée par les **Firebase Security Rules** sur Realtime Database.
 
-Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). La règle v1 reste accessible uniquement au compte propriétaire pour les anciens clients et la migration. Les nouvelles versions utilisent `wfrp-sessions-v2/$uid/current`, également isolé par compte, avec validation de la structure et de la révision.
+Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). Après la bascule, la branche v1 reste lisible uniquement par le compte propriétaire pour permettre la migration, mais les écritures v1 sont bloquées afin d’éviter qu’un ancien client ne remplace un état plus récent. Les nouvelles versions utilisent `wfrp-sessions-v2/$uid/current`, isolé par compte, avec validation de la structure et de la révision.
 
 Pour déployer uniquement ces règles sur le projet Firebase configuré :
 
@@ -104,7 +104,7 @@ npx firebase-tools deploy --only database --project outil-mj-warhammer
 
 Cette commande publie les règles de Realtime Database; elle n'écrit ni ne migre les données. Vérifier ensuite dans Firebase Console que la version active correspond à `firebase.database.rules.json`. La fixture `firebase.database.rules.v2.test.json` est réservée aux tests et n'est pas la source de déploiement.
 
-Avant la transition, les règles v1 étaient permissives. Après déploiement, chaque compte ne peut lire et écrire que son espace v1; les écritures v2 ne sont possibles que dans son propre espace et avec une révision valide et non décroissante. Les données v1 restent lisibles afin que l'application puisse proposer leur migration vers v2.
+Avant la transition, les règles v1 étaient permissives. Après déploiement, v1 est en lecture seule pour son UID propriétaire, tandis que v2 autorise les lectures et écritures uniquement dans l’espace du propriétaire avec une révision valide et non décroissante. Les données v1 restent lisibles afin que l’application puisse proposer leur migration vers v2.
 
 ---
 

@@ -7,7 +7,7 @@ const rules = JSON.parse(readFileSync(new URL('../firebase.database.rules.json',
 test('règles de production isolent v1 et v2 par UID et valident les enveloppes v2', () => {
   const v1 = rules['wfrp-sessions'].$uid;
   assert.match(v1['.read'], /auth != null && auth\.uid === \$uid/);
-  assert.match(v1['.write'], /auth != null && auth\.uid === \$uid/);
+  assert.equal(v1['.write'], false);
 
   const v2 = rules['wfrp-sessions-v2'].$uid.current;
   assert.match(v2['.read'], /auth != null && auth\.uid === \$uid/);
