@@ -1,9 +1,12 @@
 import { DOM, escapeHtml } from './dom.js';
-import { makeStateBadge, parseState } from '../core/sanitize.js';
+import { makeStateBadge } from '../core/sanitize.js';
+import { normalizeEffects, normalizeState } from '../core/effects.js';
 import { DiceLine } from '../core/models.js';
 import { renderMiniDiceLine } from './dice-line.js';
+import { showToast } from './toast.js';
 
 export function initCardUI(Store, Combat) {
+  const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(`${label} impossible : ${error.message}`, 'error'));
   function getP(id) {
     return Store.getCombat().participants.get(id);
   }
@@ -17,6 +20,67 @@ export function initCardUI(Store, Combat) {
     } else if (maxHp && hp <= maxHp / 4) {
       el.classList.add('low');
     }
+  }
+
+  function appendStateEditor(statesDiv, rawState, index, participantId) {
+    const state = normalizeState(rawState, index);
+    const row = document.createElement('span');
+    row.className = 'state-editor';
+    row.style.cssText = 'display:inline-flex; align-items:center; gap:2px;';
+    row.append(makeStateBadge(state, index));
+
+    const field = (name, value, title, min, max) => {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.className = `state-${name}`;
+      input.min = String(min);
+      input.max = String(max);
+      input.value = value === null ? '' : String(value);
+      input.placeholder = name === 'level' ? 'Niv.' : '∞';
+      input.title = title;
+      input.setAttribute('aria-label', title);
+      input.style.cssText = 'width:34px; padding:1px 2px; font-size:0.75em;';
+      input.addEventListener('change', () => {
+        const participant = getP(participantId);
+        if (!participant) return;
+        const parsed = input.value.trim() === '' ? null : parseInt(input.value, 10);
+        const nextValue = name === 'level'
+          ? (Number.isFinite(parsed) && parsed > 0 ? parsed : 1)
+          : (Number.isFinite(parsed) && parsed > 0 ? parsed : null);
+        const nextStates = participant.states.map((entry, entryIndex) => {
+          const current = normalizeState(entry, entryIndex);
+          return current.id === state.id ? { ...current, [name === 'level' ? 'level' : 'duration']: nextValue } : entry;
+        });
+        observe(Store.updateParticipant(participantId, { states: normalizeEffects(nextStates) }), 'État');
+      });
+      return input;
+    };
+
+    row.append(field('level', state.level, 'Niveau de l’état', 1, 99));
+    row.append(field('duration', state.duration, 'Durée restante (tours)', 1, 99));
+    statesDiv.append(row);
+  }
+
+  // Les gestes qui modifient une valeur et écrivent une trace forment une
+  // seule commande.  Cela évite un journal orphelin si la transaction IDB de
+  // la valeur est refusée, et conserve la façade Store historique en secours.
+  function commitParticipantChange(id, patch, logEntry = null, type = 'participant-update') {
+    if (typeof Store.executeCommand !== 'function') {
+      const result = Store.updateParticipant(id, patch);
+      if (logEntry) Store.log(logEntry);
+      return observe(result, type);
+    }
+    const result = Store.executeCommand(type, draft => ({
+      ...draft,
+      combat: {
+        ...draft.combat,
+        participants: (draft.combat?.participants || []).map(participant => participant.id === id
+          ? { ...participant, ...JSON.parse(JSON.stringify(patch)) }
+          : participant)
+      },
+      ...(logEntry ? { log: [JSON.parse(JSON.stringify(logEntry)), ...(draft.log || [])].slice(0, 300) } : {})
+    }));
+    return observe(result, type);
   }
 
   function applyHPDelta(id, deltaVal, isAddition, inputEl) {
@@ -43,8 +107,7 @@ export function initCardUI(Store, Combat) {
     }
 
     const signStr = actualDelta > 0 ? `+${actualDelta}` : `${actualDelta}`;
-    Store.updateParticipant(id, { hp: newHp });
-    Store.log(`⚔️ ${p.name} : ${oldHp} → ${newHp} PV (${signStr})`);
+    commitParticipantChange(id, { hp: newHp }, { kind: 'damage', actorId: id, actorName: p.name, text: `⚔️ ${p.name} : ${oldHp} → ${newHp} PV (${signStr})` }, 'adjust-hp');
 
     if (inputEl) {
       inputEl.value = '';
@@ -83,8 +146,7 @@ export function initCardUI(Store, Combat) {
             const oldHp = p.hp;
             const delta = newHp - oldHp;
             const signStr = delta > 0 ? `+${delta}` : `${delta}`;
-            Store.updateParticipant(p.id, { hp: newHp });
-            Store.log(`⚔️ ${p.name} : ${oldHp} → ${newHp} PV (${signStr})`);
+            commitParticipantChange(p.id, { hp: newHp }, { kind: 'damage', actorId: p.id, actorName: p.name, text: `⚔️ ${p.name} : ${oldHp} → ${newHp} PV (${signStr})` }, 'set-hp');
             return;
           }
         }
@@ -134,7 +196,7 @@ export function initCardUI(Store, Combat) {
       const statesDiv = card.querySelector('.states');
       if (statesDiv) {
         statesDiv.innerHTML = '';
-        changes.states.forEach(s => statesDiv.append(makeStateBadge(s)));
+        changes.states.forEach((s, index) => appendStateEditor(statesDiv, s, index, id));
       }
     }
     if ('color' in changes) {
@@ -160,7 +222,21 @@ export function initCardUI(Store, Combat) {
     updateHpBadgeElement(hpBadge, p.hp, p.maxHp);
 
     const statesDiv = div.querySelector('.states');
-    p.states.forEach(s => statesDiv.append(makeStateBadge(s)));
+    p.states.forEach((s, index) => appendStateEditor(statesDiv, s, index, p.id));
+
+    const turnsInput = div.querySelector('.state-turns');
+    if (turnsInput && !div.querySelector('.state-add-level')) {
+      const levelInput = document.createElement('input');
+      levelInput.type = 'number';
+      levelInput.className = 'state-add-level';
+      levelInput.min = '1';
+      levelInput.max = '99';
+      levelInput.value = '1';
+      levelInput.placeholder = 'Niv.';
+      levelInput.title = 'Niveau de l’état';
+      levelInput.style.cssText = 'width:40px; padding:2px 3px;';
+      turnsInput.parentNode.insertBefore(levelInput, turnsInput);
+    }
 
     const armDiv = div.querySelector('.actor-armor');
     const BE = Math.floor((p.caracs?.E || 0) / 10);
@@ -220,25 +296,29 @@ export function initCardUI(Store, Combat) {
       const name = sel?.value; if (!name) return;
       const turnsInput = card.querySelector('.state-turns');
       const turns = turnsInput ? parseInt(turnsInput.value) || null : null;
-      const encoded = turns ? `${name}|${turns}` : name;
-      if (!p.states.some(s => parseState(s).name === name)) {
-        Store.updateParticipant(id, { states: [...p.states, encoded] });
-        if (turnsInput) turnsInput.value = '';
-      }
+      const levelInput = card.querySelector('.state-add-level');
+      const level = levelInput ? Math.max(1, parseInt(levelInput.value, 10) || 1) : 1;
+      const state = normalizeState({ name, level, duration: turns, source: { kind: 'manual' } }, p.states.length);
+      observe(Store.updateParticipant(id, { states: normalizeEffects([...p.states, state]) }), 'État');
+      if (turnsInput) turnsInput.value = '';
+      if (levelInput) levelInput.value = '1';
       if (sel) sel.value = '';
       return;
     }
 
     if (e.target.matches('.state-badge')) {
-      const raw = e.target.dataset.raw;
-      Store.updateParticipant(id, { states: p.states.filter(s => s !== raw) });
+      const stateId = e.target.dataset.stateId;
+      const nextStates = p.states.filter((state, index) => normalizeState(state, index).id !== stateId);
+      observe(Store.updateParticipant(id, { states: normalizeEffects(nextStates) }), 'État');
       return;
     }
 
     if (e.target.matches('.btn-remove')) {
       e.preventDefault();
-      Store.removeParticipant(id);
-      Store.log(`Combat: retiré ${p.name}`);
+      observe(Store.removeParticipant(id), 'Retrait');
+      if (typeof Store.executeCommand !== 'function') {
+        Store.log({ kind: 'management', actorId: id, actorName: p.name, text: `Combat: retiré ${p.name}` });
+      }
       return;
     }
 
@@ -249,10 +329,12 @@ export function initCardUI(Store, Combat) {
       return;
     }
 
-    if (e.target.matches('.color-swatch')) {
+    const colorOption = e.target.closest('.color-option');
+    if (colorOption) {
       e.preventDefault();
-      const c = e.target.dataset.c;
-      Store.updateParticipant(id, { color: c });
+      const c = colorOption.dataset.c;
+      if (!c) return;
+      observe(Store.updateParticipant(id, { color: c }), 'Couleur');
       const palette = card.querySelector('.color-palette');
       if (palette) palette.classList.add('hidden');
       return;
@@ -281,9 +363,8 @@ export function initCardUI(Store, Combat) {
       if (raw !== '') {
         const val = parseInt(raw);
         if (!isNaN(val) && val !== p.initiative) {
-          Store.updateParticipant(p.id, { initiative: val });
-          Store.rebuildOrder();
-          Store.log(`⚔️ ${p.name} : Initiative modifiée à ${val}`);
+          commitParticipantChange(p.id, { initiative: val }, { kind: 'management', actorId: p.id, actorName: p.name, text: `⚔️ ${p.name} : Initiative modifiée à ${val}` }, 'set-initiative');
+          if (typeof Store.executeCommand !== 'function') Store.rebuildOrder();
           return;
         }
       }
@@ -321,7 +402,7 @@ export function initCardUI(Store, Combat) {
 
     if (e.target.matches('.btn-add-dice')) {
       e.preventDefault();
-      Store.addDiceLine(new DiceLine({ participantId: id }));
+      observe(Store.addDiceLine(new DiceLine({ participantId: id })), 'Ajout du jet');
       return;
     }
 
@@ -339,7 +420,7 @@ export function initCardUI(Store, Combat) {
       const diceRow = e.target.closest('.mini-dice-line');
       if (diceRow) {
         const diceId = diceRow.dataset.diceId;
-        if (diceId) Store.removeDiceLine(diceId);
+        if (diceId) observe(Store.removeDiceLine(diceId), 'Suppression du jet');
       }
       return;
     }

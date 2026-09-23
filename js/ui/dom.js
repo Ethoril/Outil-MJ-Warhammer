@@ -5,7 +5,7 @@ export const on = (el, evt, fn) => { if (el) { el.addEventListener(evt, fn); } }
 
 export const DOM = {
   tabs: qsa('.tab'),
-  panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat'), rules: qs('#panel-rules') },
+  panels: { reserve: qs('#panel-reserve'), combat: qs('#panel-combat'), workspace: qs('#panel-workspace'), rules: qs('#panel-rules') },
   reserve: { list: qs('#reserve-list'), search: qs('#search-reserve'), form: qs('#form-add'), seed: qs('#seed-reserve'), clear: qs('#clear-reserve') },
   combat: {
     initTracker: qs('#init-tracker'),

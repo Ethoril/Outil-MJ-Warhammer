@@ -7,8 +7,10 @@ export function initCombatViewUI(Store, Combat, cardUI, onRunDiceLine) {
     if (DOM.combat.pillTurn) DOM.combat.pillTurn.textContent = `Tour: ${Combat.actorAtTurn()?.name ?? '–'}`;
 
     DOM.combat.initTracker.innerHTML = '';
-    let activeParticipants = Store.listParticipants().filter(p => p.zone === 'active');
-    activeParticipants = [...activeParticipants].sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
+    const participantsById = new Map(Store.listParticipants().map(p => [p.id, p]));
+    const effectiveIds = Store.getEffectiveOrder?.() || Store.listParticipants()
+      .filter(p => p.zone === 'active').sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name)).map(p => p.id);
+    const activeParticipants = effectiveIds.map(id => participantsById.get(id)).filter(Boolean);
 
     if (activeParticipants.length === 0) {
       DOM.combat.initTracker.innerHTML = '<span class="muted">Aucun combattant actif...</span>';

@@ -13,6 +13,11 @@ export function initKeyboardShortcuts(Store, CombatEngine, switchTab) {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
       if (isInput) return;
       e.preventDefault();
+      if (e.shiftKey) {
+        const ok = Store.redo?.();
+        if (ok) showToast('↷ Action rétablie (⌘⇧Z)', 'info');
+        return;
+      }
       if (Store.canUndo()) {
         const ok = Store.undo();
         if (ok) showToast('⏪ Action annulée (⌘Z)', 'info');
@@ -34,9 +39,10 @@ export function initKeyboardShortcuts(Store, CombatEngine, switchTab) {
     if (isInput) return;
 
     const key = e.key.toLowerCase();
+    const activeSpace = document.querySelector('.tab.is-active')?.dataset.workspaceSpace || 'prepare';
 
     // N ou Espace -> Tour suivant
-    if (key === 'n' || e.code === 'Space') {
+    if ((key === 'n' || e.code === 'Space') && activeSpace === 'play') {
       e.preventDefault();
       CombatEngine.nextTurn();
       return;
@@ -45,7 +51,7 @@ export function initKeyboardShortcuts(Store, CombatEngine, switchTab) {
     // D -> Focus sur le premier jet de dé
     if (key === 'd') {
       e.preventDefault();
-      switchTab('combat');
+      switchTab('workspace', 'play');
       const firstRollBtn = document.querySelector('.btn-roll');
       if (firstRollBtn) {
         firstRollBtn.focus();
@@ -57,19 +63,19 @@ export function initKeyboardShortcuts(Store, CombatEngine, switchTab) {
     // 1, 2, 3 -> Navigation par onglets
     if (key === '1') {
       e.preventDefault();
-      switchTab('reserve');
+      switchTab('workspace', 'prepare');
       return;
     }
 
     if (key === '2') {
       e.preventDefault();
-      switchTab('combat');
+      switchTab('workspace', 'play');
       return;
     }
 
     if (key === '3') {
       e.preventDefault();
-      switchTab('rules');
+      switchTab('workspace', 'library');
       return;
     }
   });

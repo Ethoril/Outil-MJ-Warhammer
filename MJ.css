@@ -302,6 +302,14 @@ dialog .card { min-width: 480px; max-width: 600px; max-height: 80vh; overflow-y:
   padding: 1px 3px;
 }
 
+.prepare-saved-encounters, .prepare-persistent-characters { margin: 12px 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel-2); }
+.workspace-launchpad { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel-2); }
+.workspace-launchpad-item { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; }
+.prepare-saved-encounters .row, .prepare-persistent-characters .row { justify-content: space-between; border-top: 1px solid var(--border); padding: 7px 0; }
+.simulation-preview { white-space: pre-line; line-height: 1.55; padding: 12px; border-left: 4px solid var(--accent); background: var(--panel-2); border-radius: var(--radius); margin-top: 12px; }
+.simulation-preview details { margin-top: 12px; white-space: normal; }
+.simulation-preview pre { overflow: auto; font-size: .78rem; }
+
 /* Lot 11.4 — Breakpoint Laptop @media 900px */
 @media (max-width: 900px) {
   .grid-2 { grid-template-columns: 1fr; }

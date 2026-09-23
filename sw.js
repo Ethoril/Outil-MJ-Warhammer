@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.5.0';
+const CACHE_NAME = 'wfrp-cache-v3.6.2';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -17,7 +17,23 @@ const ASSETS_TO_CACHE = [
   './js/core/dice.js',
   './js/core/damage.js',
   './js/core/models.js',
+  './js/core/migrations.js',
+  './js/core/persistence.js',
   './js/core/sync.js',
+  './js/core/sync-protocol.js',
+  './js/core/sync-session.js',
+  './js/core/effects.js',
+  './js/core/quality-normalization.js',
+  './js/core/commands.js',
+  './js/core/history.js',
+  './js/core/reminders.js',
+  './js/core/resolution.js',
+  './js/core/scene-events.js',
+  './js/core/closure.js',
+  './js/core/encounters.js',
+  './js/core/simulation.js',
+  './js/core/text-profile-import.js',
+  './js/core/turn-order.js',
   './js/core/sanitize.js',
   './js/core/keywords.js',
   './js/core/roll-qualities.js',
@@ -33,20 +49,36 @@ const ASSETS_TO_CACHE = [
   './js/ui/dice-line.js',
   './js/ui/dom.js',
   './js/ui/import-modal.js',
+  './js/ui/action-editor.js',
   './js/ui/keyboard.js',
   './js/ui/log-view.js',
   './js/ui/reserve.js',
   './js/ui/rules-view.js',
   './js/ui/theme.js',
-  './js/ui/toast.js'
+  './js/ui/toast.js',
+  './js/ui/workspace-view.js',
+  './js/ui/closure-view.js',
+  './js/ui/import-text-view.js',
+  './js/ui/prepare-view.js',
+  './js/ui/simulation-view.js',
+  './js/ui/workspace.css',
+  './vendor/firebase/firebase-app.js',
+  './vendor/firebase/firebase-auth.js',
+  './vendor/firebase/firebase-database.js'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+    }).then(() => self.clients.matchAll().then(clients => {
+      clients.forEach(client => client.postMessage({ type: 'wfrp-update-ready', version: CACHE_NAME }));
+    }))
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'wfrp-activate-update') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -74,13 +106,6 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Mise à jour silencieuse du cache en arrière-plan
-        fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
-          }
-        }).catch(() => {});
-
         return cachedResponse;
       }
 

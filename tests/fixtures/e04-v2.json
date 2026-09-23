@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 2,
+  "appVersion": "3.6.0",
+  "exportedAt": "2026-09-05T10:00:00.000Z",
+  "contextId": "guest",
+  "extensions": { "campaign": { "name": "Fixture E04" } },
+  "reserve": [
+    {
+      "id": "fixture-profile",
+      "name": "Profil fixture E04",
+      "kind": "PJ",
+      "initiative": 42,
+      "hp": 15,
+      "maxHp": 15,
+      "group": "Recette",
+      "caracs": { "E": 35 },
+      "armor": { "head": 1, "body": 2, "arms": 0, "legs": 0 },
+      "extensions": { "portrait": "fixture://portrait" }
+    }
+  ],
+  "combat": {
+    "round": 2,
+    "currentActorId": "fixture-participant",
+    "order": ["fixture-participant"],
+    "participants": [
+      {
+        "id": "fixture-participant",
+        "profileId": "fixture-profile",
+        "name": "Profil fixture E04",
+        "kind": "PJ",
+        "initiative": 42,
+        "hp": 9,
+        "maxHp": 15,
+        "states": ["Hémorragique|2"],
+        "zone": "active",
+        "extensions": { "token": "fixture-token" }
+      }
+    ]
+  },
+  "log": [],
+  "diceLines": []
+}

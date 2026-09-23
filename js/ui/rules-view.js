@@ -1,9 +1,22 @@
 import { qs, escapeHtml } from './dom.js';
+import { normalizeSearchText } from '../core/sanitize.js';
 import { RULES } from '../data/rules.js';
 import { CRIT_DATA } from '../data/crits.js';
 import { MAGIC_DATA } from '../data/magic.js';
 import { fetchKeywords, getKeywordList, getKeywordsStatus } from '../core/keywords.js';
 import { showToast } from './toast.js';
+
+const FAVORITES_KEY = 'wfrp.rules.favorites.v1';
+function readRuleFavorites() {
+  try {
+    const value = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+    return new Set(Array.isArray(value) ? value.filter(item => typeof item === 'string') : []);
+  } catch { return new Set(); }
+}
+function writeRuleFavorites(favorites) {
+  try { localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites])); } catch { /* stockage facultatif */ }
+}
+function favoriteKey(value) { return normalizeSearchText(value).replace(/[^a-z0-9]+/g, '-'); }
 
 export function renderD100Table(data) {
   let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
@@ -32,7 +45,7 @@ function extractTextFromBlock(block) {
       }
     });
   }
-  return text.toLowerCase();
+  return normalizeSearchText(text);
 }
 
 function renderSection(sec) {
@@ -77,11 +90,12 @@ function renderSection(sec) {
   return html;
 }
 
-export function renderReferenceTables(filterTerm = '') {
+export function renderReferenceTables(filterTerm = '', target = null) {
   const panel = qs('#panel-rules');
-  if (!panel) return;
+  const root = target || panel;
+  if (!root) return;
 
-  const term = (filterTerm || '').trim().toLowerCase();
+  const term = normalizeSearchText(filterTerm || '').trim();
 
   let html = `<h2>Aides de Jeu & Règles</h2>`;
 
@@ -92,31 +106,32 @@ export function renderReferenceTables(filterTerm = '') {
     <div id="rules-list"></div>
   `;
 
-  panel.innerHTML = html;
+  root.innerHTML = html;
 
-  const searchInput = qs('#rules-search');
+  const searchInput = root.querySelector('#rules-search');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       const val = e.target.value;
-      updateRulesList(val);
+      updateRulesList(val, root);
     });
   }
 
-  updateRulesList(term);
+  updateRulesList(term, root);
 }
 
-function updateRulesList(term) {
-  const listContainer = qs('#rules-list');
+function updateRulesList(term, root = qs('#panel-rules')) {
+  const listContainer = root?.querySelector('#rules-list');
   if (!listContainer) return;
 
-  const cleanTerm = term.trim().toLowerCase();
+  const cleanTerm = normalizeSearchText(term).trim();
+  const favorites = readRuleFavorites();
   let matchCount = 0;
   let html = '';
 
   // 1. BLOC MOTS-CLÉS D'ARMES ET D'ARMURES (§13.2, §13.7)
   const keywords = getKeywordList();
   const status = getKeywordsStatus();
-  const matchedKeywords = keywords.filter(k => !cleanTerm || k.name.toLowerCase().includes(cleanTerm) || k.effect.toLowerCase().includes(cleanTerm));
+  const matchedKeywords = keywords.filter(k => !cleanTerm || normalizeSearchText(`${k.name} ${k.effect}`).includes(cleanTerm));
 
   if (matchedKeywords.length > 0) {
     matchCount += matchedKeywords.length;
@@ -135,7 +150,8 @@ function updateRulesList(term) {
 
     html += `<table class="wfrp-table"><thead><tr><th style="width:25%;">Mot-clé</th><th>Effet</th></tr></thead><tbody>`;
     matchedKeywords.forEach(k => {
-      html += `<tr><td><strong>${escapeHtml(k.name)}</strong></td><td>${escapeHtml(k.effect)}</td></tr>`;
+      const key = `keyword:${favoriteKey(k.slug || k.name)}`;
+      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(k.name)}</strong></td><td>${escapeHtml(k.effect)}</td></tr>`;
     });
     html += `</tbody></table></div></details></div>`;
   }
@@ -151,7 +167,8 @@ function updateRulesList(term) {
 
       html += `<div class="card rule-block">`;
       html += `<details ${isOpen ? 'open' : ''}>`;
-      html += `<summary>${escapeHtml(block.title)}</summary>`;
+      const key = `rule:${favoriteKey(block.title)}`;
+      html += `<summary class="row"><span>${escapeHtml(block.title)}</span><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button></summary>`;
       html += `<div class="rule-content">`;
 
       if (block.intro) html += `<p>${escapeHtml(block.intro)}</p>`;
@@ -192,7 +209,19 @@ function updateRulesList(term) {
 
   listContainer.innerHTML = html;
 
-  const btnReload = qs('#btn-reload-keywords');
+  listContainer.querySelectorAll('.rule-favorite').forEach(button => {
+    button.addEventListener('click', event => {
+      event.preventDefault(); event.stopPropagation();
+      const key = button.dataset.favoriteKey;
+      if (!key) return;
+      const next = readRuleFavorites();
+      if (next.has(key)) next.delete(key); else next.add(key);
+      writeRuleFavorites(next);
+      button.textContent = next.has(key) ? '★' : '☆';
+    });
+  });
+
+  const btnReload = root?.querySelector('#btn-reload-keywords');
   if (btnReload) {
     btnReload.addEventListener('click', async () => {
       btnReload.disabled = true;
@@ -200,7 +229,7 @@ function updateRulesList(term) {
       try {
         await fetchKeywords(true);
         showToast('Mots-clés mis à jour depuis Google Sheets', 'success');
-        updateRulesList(term);
+        updateRulesList(term, root);
       } catch (err) {
         showToast('Erreur lors du chargement des mots-clés: ' + err.message, 'error');
         btnReload.disabled = false;

@@ -27,7 +27,7 @@ function ensureContainer() {
  * Affiche un toast informatif, de succès, d'avertissement ou d'erreur.
  * @param {string} message - Contenu du message
  * @param {'info'|'success'|'warning'|'error'} [type='info'] - Type de notification
- * @param {{ label: string, onClick: Function }} [action=null] - Action optionnelle (ex: Annuler)
+ * @param {{ label: string, onClick: Function, actions?: Array }} [action=null] - Action optionnelle (ex: Annuler)
  * @param {number} [duration=5000] - Durée d'affichage en ms
  */
 export function showToast(message, type = 'info', action = null, duration = 5000) {
@@ -59,21 +59,24 @@ export function showToast(message, type = 'info', action = null, duration = 5000
   textSpan.textContent = message;
   toast.appendChild(textSpan);
 
-  if (action && action.label && typeof action.onClick === 'function') {
+  const actions = Array.isArray(action?.actions)
+    ? action.actions
+    : (action && action.label ? [action] : []);
+  actions.filter(item => item && item.label && typeof item.onClick === 'function').forEach(item => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'tiny ghost';
-    btn.textContent = action.label;
+    btn.textContent = item.label;
     btn.style.marginLeft = '8px';
     btn.style.cursor = 'pointer';
     btn.style.color = '#e6c887';
     btn.style.borderColor = '#e6c887';
     btn.addEventListener('click', () => {
-      action.onClick();
+      item.onClick();
       toast.remove();
     });
     toast.appendChild(btn);
-  }
+  });
 
   const closeBtn = document.createElement('span');
   closeBtn.innerHTML = '&times;';

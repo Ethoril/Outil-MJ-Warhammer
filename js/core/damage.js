@@ -1,13 +1,11 @@
 import { ENGINES } from '../data/keyword-engines.js';
-import { slugify } from './keywords.js';
+import { normalizeQualities } from './quality-normalization.js';
 
 export const PLANCHER_TOUCHE = 1;
 export const FACTEUR_INOFFENSIVE = 2;
 
 export function computeDamage({ weaponDamage = 0, sl = 0, roll = 0, targetToughnessBonus = 0, targetArmour = 0, qualities = [] } = {}) {
-  const normQualities = Array.isArray(qualities)
-    ? qualities.map(q => typeof q === 'string' ? { id: slugify(q) } : { ...q, id: slugify(q.id || q.name) })
-    : [];
+  const normQualities = normalizeQualities(qualities);
 
   const activeEngines = [];
   normQualities.forEach(q => {

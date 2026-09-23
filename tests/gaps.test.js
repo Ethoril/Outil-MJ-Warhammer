@@ -95,9 +95,8 @@ test('écriture ciblée — une entrée de journal ne pousse pas tout le documen
 
   store.log('🎲 un jet de dé');
   await wait();
-  const cles = Object.keys(sync.pushes[0]);
-  assert.deepEqual(cles.sort(), ['timestamp', 'writer'],
-    'le journal n\'étant plus synchronisé, seul l\'horodatage doit partir');
+  assert.equal(sync.pushes.length, 0,
+    'le journal local ne doit ni remplacer ni déclencher un lot partagé');
 });
 
 test('écriture ciblée — repli sur l\'instantané complet sans update()', async () => {

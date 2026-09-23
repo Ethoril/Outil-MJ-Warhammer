@@ -4,17 +4,14 @@
 // c'est ce qui manquait aux trois moteurs concernés (Précise, Empaleuse, Dangereuse),
 // déclarés dans ENGINES mais consommés nulle part.
 import { ENGINES } from '../data/keyword-engines.js';
-import { slugify } from './keywords.js';
+import { normalizeQualities } from './quality-normalization.js';
 
 /** Moteurs actifs pour une liste de qualités, dédoublonnés par slug. */
 export function activeEngines(qualities = []) {
   if (!Array.isArray(qualities)) return [];
-  const vus = new Set();
   const out = [];
-  for (const q of qualities) {
-    const id = slugify(typeof q === 'string' ? q : (q?.id || q?.name || ''));
-    if (!id || vus.has(id)) continue;
-    vus.add(id);
+  for (const q of normalizeQualities(qualities)) {
+    const id = q.id;
     const def = ENGINES[id];
     if (def) out.push({ id, ...def });
   }

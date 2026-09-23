@@ -37,7 +37,7 @@ test('computeEndOfTurn — Dissipation de Surpris et décrémentation des durée
     states: ['Surpris', 'Sonné|2', 'Aveuglé|1', 'Inconscient']
   };
   const res = computeEndOfTurn(p, 1);
-  assert.deepEqual(res.nextStates, ['Sonné|1', 'Inconscient']);
+  assert.deepEqual(res.nextStates.map(s => [s.name, s.duration]), [['Sonné', 1], ['Inconscient', null]]);
 });
 
 test('computeEndOfTurn — Passage à Inconscient si PV tombent à 0', () => {
@@ -47,5 +47,5 @@ test('computeEndOfTurn — Passage à Inconscient si PV tombent à 0', () => {
   };
   const res = computeEndOfTurn(p, 1);
   assert.equal(res.newHp, 0);
-  assert.ok(res.nextStates.includes('Inconscient'));
+  assert.ok(res.nextStates.some(s => s.name === 'Inconscient'));
 });

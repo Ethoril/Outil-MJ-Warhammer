@@ -3,7 +3,7 @@ import { d100, isDouble, SL, getReverseRoll, getLocationName, getCritEffect } fr
 import { parseState } from '../core/sanitize.js';
 import { computeDamage } from '../core/damage.js';
 import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from '../core/roll-qualities.js';
-import { getKeywordList } from '../core/keywords.js';
+import { createQualityPicker } from './action-editor.js';
 
 export function renderMiniDiceLine(dl, p, Store) {
   const row = document.createElement('div');
@@ -40,6 +40,18 @@ export function renderMiniDiceLine(dl, p, Store) {
   inDamage.addEventListener('input', (e) => Store.updateDiceLine(dl.id, { damage: Number(e.target.value) || 0 }, true));
   inDamage.addEventListener('click', (e) => e.stopPropagation());
 
+  const inValuesX = document.createElement('input');
+  inValuesX.type = 'number'; inValuesX.className = 'values-x-input'; inValuesX.value = dl.valuesX ?? '';
+  inValuesX.placeholder = 'X'; inValuesX.title = 'Valeur X'; inValuesX.style.width = '42px';
+  inValuesX.addEventListener('change', (e) => Store.updateDiceLine(dl.id, { valuesX: e.target.value || null }, true));
+  inValuesX.addEventListener('click', (e) => e.stopPropagation());
+
+  const inCapacity = document.createElement('input');
+  inCapacity.type = 'number'; inCapacity.className = 'capacity-input'; inCapacity.value = dl.capacity ?? '';
+  inCapacity.placeholder = 'Cap.'; inCapacity.title = 'Capacité / munitions'; inCapacity.style.width = '48px';
+  inCapacity.addEventListener('change', (e) => Store.updateDiceLine(dl.id, { capacity: e.target.value || null }, true));
+  inCapacity.addEventListener('click', (e) => e.stopPropagation());
+
   // 4. Cible
   const selTarget = document.createElement('select');
   selTarget.className = 'target-select';
@@ -64,31 +76,13 @@ export function renderMiniDiceLine(dl, p, Store) {
   });
   selTarget.addEventListener('click', (e) => e.stopPropagation());
 
-  // 5. Bouton & Popover Mots-clés (§13.7)
+  // 5. Sélecteur partagé de mots-clés (§13.7)
   const kwContainer = document.createElement('div');
-  kwContainer.style.position = 'relative';
-  kwContainer.style.display = 'inline-block';
-
-  const activeCount = Array.isArray(dl.qualities) ? dl.qualities.length : 0;
-  const btnKw = document.createElement('button');
-  btnKw.type = 'button';
-  btnKw.className = `btn-inoffensive ${activeCount > 0 ? 'active' : ''}`;
-  btnKw.textContent = activeCount > 0 ? `Mots-clés (${activeCount})` : "Mots-clés";
-  btnKw.title = "Ajouter / Retirer des mots-clés d'armes";
-
-  const popover = document.createElement('div');
-  popover.className = 'color-palette hidden';
-  popover.style.cssText = 'position:absolute; top:28px; left:0; width:220px; max-height:220px; overflow-y:auto; background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:6px; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.4);';
-
-  btnKw.addEventListener('click', (e) => {
-    e.stopPropagation();
-    popover.classList.toggle('hidden');
-    if (!popover.classList.contains('hidden')) {
-      renderKeywordsPopover(popover, dl, Store);
-    }
+  createQualityPicker({
+    container: kwContainer,
+    qualities: dl.qualities,
+    onChange: qualities => Store.updateDiceLine(dl.id, { qualities })
   });
-
-  kwContainer.append(btnKw, popover);
 
   // 6. Bouton Lancer
   const btnRoll = document.createElement('button');
@@ -102,59 +96,8 @@ export function renderMiniDiceLine(dl, p, Store) {
   btnDel.className = 'action-btn danger btn-del-dice';
   btnDel.title = "Supprimer ligne";
 
-  row.append(inValue, inNote, inDamage, selTarget, kwContainer, btnRoll, btnDel);
+  row.append(inValue, inNote, inDamage, inValuesX, inCapacity, selTarget, kwContainer, btnRoll, btnDel);
   return row;
-}
-
-function renderKeywordsPopover(container, dl, Store) {
-  container.innerHTML = '';
-  const currentQualities = Array.isArray(dl.qualities) ? dl.qualities : [];
-  const allKeywords = getKeywordList();
-
-  allKeywords.forEach(kw => {
-    const item = document.createElement('label');
-    item.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.82em; padding:2px 4px; cursor:pointer; color:var(--text); flex-direction:row;';
-
-    const chk = document.createElement('input');
-    chk.type = 'checkbox';
-    chk.style.margin = '0';
-    const activeObj = currentQualities.find(q => q && (q.id === kw.slug || q.name === kw.name));
-    chk.checked = Boolean(activeObj);
-
-    chk.addEventListener('change', () => {
-      let updated = [...currentQualities];
-      if (chk.checked) {
-        if (!updated.some(q => q && (q.id === kw.slug || q.name === kw.name))) {
-          updated.push({ id: kw.slug, name: kw.name, rating: kw.hasRating ? 1 : undefined });
-        }
-      } else {
-        updated = updated.filter(q => q && q.id !== kw.slug && q.name !== kw.name);
-      }
-      Store.updateDiceLine(dl.id, { qualities: updated });
-    });
-
-    const labelSpan = document.createElement('span');
-    labelSpan.textContent = kw.name;
-    labelSpan.title = kw.effect;
-
-    item.append(chk, labelSpan);
-
-    if (kw.hasRating && activeObj) {
-      const ratingIn = document.createElement('input');
-      ratingIn.type = 'number';
-      ratingIn.min = '1';
-      ratingIn.value = activeObj.rating || 1;
-      ratingIn.style.cssText = 'width:36px; padding:1px 2px; font-size:0.8em; margin-left:auto;';
-      ratingIn.addEventListener('input', (e) => {
-        const val = parseInt(e.target.value) || 1;
-        const updated = currentQualities.map(q => (q.id === kw.slug || q.name === kw.name) ? { ...q, rating: val } : q);
-        Store.updateDiceLine(dl.id, { qualities: updated });
-      });
-      item.appendChild(ratingIn);
-    }
-
-    container.appendChild(item);
-  });
 }
 
 export function runDiceLine(id, Store) {
@@ -272,17 +215,45 @@ export function runDiceLine(id, Store) {
         const oldHp = currentTarget.hp;
         const newHp = oldHp - dmgRes.finalDamage;
 
-        Store.updateParticipant(currentTarget.id, { hp: newHp });
-        Store.log({ kind: 'damage', actorId: p?.id, targetId: currentTarget.id, text: `⚔️ ${currentTarget.name} : ${oldHp} → ${newHp} PV (−${dmgRes.finalDamage})` });
+        const knockedDown = newHp <= 0 && !currentTarget.states.some(s => parseState(s).name === 'À Terre');
+        const damageText = `⚔️ ${currentTarget.name} : ${oldHp} → ${newHp} PV (−${dmgRes.finalDamage})`;
+        const run = Store.executeCommand ? Store.executeCommand('apply-damage', draft => {
+          const states = [...(currentTarget.states || [])];
+          if (knockedDown) states.push({ name: 'À Terre', level: 1, duration: null, source: { kind: 'combat' } });
+          return {
+            ...draft,
+            combat: {
+              ...draft.combat,
+              participants: (draft.combat?.participants || []).map(participant => participant.id === currentTarget.id
+                ? { ...participant, hp: newHp, states }
+                : participant)
+            },
+            log: [
+              ...(knockedDown ? [{ kind: 'state', actorId: currentTarget.id, actorName: currentTarget.name, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` }] : []),
+              { kind: 'damage', actorId: p?.id || null, actorName: p?.name || null, targetId: currentTarget.id, targetName: currentTarget.name, text: damageText },
+              ...(draft.log || [])
+            ].slice(0, 300)
+          };
+        }) : (() => {
+          Store.updateParticipant(currentTarget.id, { hp: newHp });
+          Store.log({ kind: 'damage', actorId: p?.id, targetId: currentTarget.id, text: damageText });
+          if (knockedDown) {
+            Store.updateParticipant(currentTarget.id, { states: [...currentTarget.states, { name: 'À Terre', level: 1, duration: null, source: { kind: 'combat' } }] });
+            Store.log({ kind: 'state', actorId: currentTarget.id, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` });
+          }
+          return true;
+        })();
 
-        if (newHp <= 0 && !currentTarget.states.some(s => parseState(s).name === 'À Terre')) {
-          Store.updateParticipant(currentTarget.id, { states: [...currentTarget.states, 'À Terre'] });
-          Store.log({ kind: 'state', actorId: currentTarget.id, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` });
-        }
-
-        btnApply.disabled = true;
-        btnApply.style.opacity = '0.5';
-        btnApply.textContent = 'Appliqué';
+        Promise.resolve(run).then(result => {
+          if (result?.ok === false) throw result.error || new Error('Dégâts non sauvegardés');
+          btnApply.disabled = true;
+          btnApply.style.opacity = '0.5';
+          btnApply.textContent = 'Appliqué';
+        }).catch(error => {
+          console.error('Application des dégâts refusée:', error);
+          btnApply.disabled = false;
+          btnApply.textContent = 'Réessayer';
+        });
       });
 
       dmgNode.append(textSpan, btnApply);

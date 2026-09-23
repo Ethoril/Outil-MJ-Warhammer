@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "wfrp-sessions": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "wfrp-sessions-v2": {
+      "$uid": {
+        "current": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid && newData.hasChildren(['revision', 'state', 'receipts']) && newData.child('revision').isNumber() && (!data.exists() || newData.child('revision').val() >= data.child('revision').val())"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # Plan de refonte — Outil MJ Warhammer
 
+> **Évolutions à venir :** voir [PLAN_EVOLUTION.md](PLAN_EVOLUTION.md), établi le 5 septembre 2026. Ce document conserve l’historique de la refonte précédente ; le nouveau programme utilise les lots E01 à E17 et exclut l’écran destiné aux joueurs.
+
 > Document de travail. Établi à partir de l'audit du commit `24d7056` (v3.5).
 > Destiné à être exécuté **lot par lot**, dans l'ordre.
 

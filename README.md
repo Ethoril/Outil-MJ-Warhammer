@@ -1,6 +1,8 @@
-# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.5)
+# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.6.2)
 
 Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhammer Fantasy Roleplay 4e édition**.
+
+📋 **Plan d’évolution** : [fonctionnement, interface et fonctionnalités](PLAN_EVOLUTION.md) — programme par étapes, critères de validation et migrations ; écran destiné aux joueurs hors périmètre.
 
 🔗 **Application en ligne** : [https://ethoril.github.io/Outil-MJ-Warhammer/](https://ethoril.github.io/Outil-MJ-Warhammer/)
 
@@ -92,20 +94,17 @@ La configuration Firebase (`firebaseConfig`) dans `js/core/sync.js` est **public
 
 La sécurité est assurée par les **Firebase Security Rules** sur Realtime Database.
 
-**Règle vérifiée en console le 10 août 2026 :**
+Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). La règle v1 reste accessible uniquement au compte propriétaire pour les anciens clients et la migration. Les nouvelles versions utilisent `wfrp-sessions-v2/$uid/current`, également isolé par compte, avec validation de la structure et de la révision.
 
-```json
-{
-  "rules": {
-    "wfrp-sessions": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    }
-  }
-}
+Pour déployer uniquement ces règles sur le projet Firebase configuré :
+
+```bash
+npx firebase-tools deploy --only database --project outil-mj-warhammer
 ```
+
+Cette commande publie les règles de Realtime Database; elle n'écrit ni ne migre les données. Vérifier ensuite dans Firebase Console que la version active correspond à `firebase.database.rules.json`. La fixture `firebase.database.rules.v2.test.json` est réservée aux tests et n'est pas la source de déploiement.
+
+Avant la transition, les règles v1 étaient permissives. Après déploiement, chaque compte ne peut lire et écrire que son espace v1; les écritures v2 ne sont possibles que dans son propre espace et avec une révision valide et non décroissante. Les données v1 restent lisibles afin que l'application puisse proposer leur migration vers v2.
 
 ---
 

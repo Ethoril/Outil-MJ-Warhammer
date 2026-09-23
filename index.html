@@ -6,6 +6,7 @@
   <title>WFRP – Gestionnaire de combat</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="js/ui/workspace.css" />
   <meta name="theme-color" content="#8a0707" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#1c1815" media="(prefers-color-scheme: dark)" />  <link rel="stylesheet" href="MJ.css" />
   <script>
@@ -21,7 +22,7 @@
   <div style="text-align:center; background:rgba(255,255,255,0.05); padding:40px; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
     <h1 style="color:var(--info-fg); margin-bottom:20px;">⚔️ Outil MJ Warhammer</h1>
     <p style="color:#ccc; margin-bottom:30px;">Connectez-vous pour accéder à vos données</p>
-    <button id="btn-google-login" style="padding:12px 24px; font-size:16px; background:#4285f4; color:white; border:none; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:10px; margin:0 auto;">
+    <button id="btn-google-login-screen" data-google-login style="padding:12px 24px; font-size:16px; background:#4285f4; color:white; border:none; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:10px; margin:0 auto;">
       <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9.003 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.96v2.332C2.44 15.983 5.485 18 9.003 18z" fill="#34A853"/><path d="M3.964 10.712c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.96H.957C.347 6.175 0 7.55 0 9.002c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.426 0 9.003 0 5.485 0 2.44 2.017.96 4.958L3.967 7.29c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"/></svg>
       Se connecter avec Google
     </button>
@@ -35,12 +36,17 @@
       <h1>⚔️ WFRP – Gestionnaire</h1>
       <div class="spacer"></div>
       <nav class="tabs" role="tablist" aria-label="Sections">
-        <button id="tab-reserve" class="tab is-active" data-tab="reserve" role="tab" aria-selected="true" aria-controls="panel-reserve" tabindex="0">Réserve</button>
-        <button id="tab-combat" class="tab" data-tab="combat" role="tab" aria-selected="false" aria-controls="panel-combat" tabindex="-1">Combat</button>
-        <button id="tab-rules" class="tab" data-tab="rules" role="tab" aria-selected="false" aria-controls="panel-rules" tabindex="-1">Règles</button>
+        <button id="tab-prepare" class="tab is-active" data-tab="workspace" data-workspace-space="prepare" role="tab" aria-selected="true" aria-controls="panel-workspace" tabindex="0">Préparer</button>
+        <button id="tab-combat" class="tab" data-tab="workspace" data-workspace-space="play" role="tab" aria-selected="false" aria-controls="panel-workspace" tabindex="-1">Jouer</button>
+        <button id="tab-library" class="tab" data-tab="workspace" data-workspace-space="library" role="tab" aria-selected="false" aria-controls="panel-workspace" tabindex="-1">Bibliothèque</button>
       </nav>
       <button id="btn-theme-toggle" class="ghost small" style="margin-left:8px;" title="Thème (Clair / Sombre / Système)">💻</button>
-      <button id="btn-version" class="ghost small" style="margin-left:4px; opacity:0.7;" title="Version 3.5.0 - WFRP 4e Outil MJ">v3.5</button>
+      <button id="btn-version" class="ghost small" style="margin-left:4px; opacity:0.7;" title="Version 3.6.2 - WFRP 4e Outil MJ">v3.6.2</button>
+      <span id="local-status" class="muted" style="margin-left:10px; font-size:12px;" aria-live="polite" data-status="loading">Local : vérification…</span>
+      <span id="sync-status" class="muted" style="margin-left:10px; font-size:12px;" aria-live="polite">Distant : invité</span>
+      <button id="btn-undo" class="ghost small" style="margin-left:8px;" title="Annuler (⌘Z)" disabled>↶</button>
+      <button id="btn-redo" class="ghost small" title="Rétablir (⌘⇧Z)" disabled>↷</button>
+      <button id="btn-google-login" data-google-login class="ghost small" style="margin-left:8px;">Connexion Google</button>
       <div id="user-info" style="margin-left:12px; font-size:13px; color:var(--info-fg);"></div>
     </div>
   </header>
@@ -57,6 +63,40 @@
             <label>Nom<input name="name" placeholder="Saskia la Noire" required></label>
             <label>Type<select name="kind"><option value="PJ">PJ</option><option value="Créature">Créature</option></select></label>
           </div>
+
+          <div style="margin-bottom:10px;">
+            <label>Groupe <small class="muted">(facultatif — ex : PJs, Skaven…)</small>
+              <input name="group" list="group-suggestions" placeholder="ex : PJs, Skaven…">
+              <datalist id="group-suggestions"></datalist>
+            </label>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:10px;">
+            <label>Initiative (I)<input type="number" name="initiative" value="30" title="Utilisé pour l'ordre du tour"></label>
+            <label>PV (Max)<input type="number" name="hp" value="12"></label>
+            <label style="color:var(--heading-color); font-weight:bold;">Endurance (E)<input type="number" name="E" value="30" title="Détermine le Bonus d'Endurance (BE)"></label>
+          </div>
+
+          <div class="armor-section" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px;">
+            <span class="muted" style="font-size: 0.9em; font-weight: bold;">Points d'Armure</span>
+            <div class="grid-4" style="margin-top: 6px;">
+              <label>Tête<input type="number" name="armor_head" value="0"></label>
+              <label>Corps<input type="number" name="armor_body" value="0"></label>
+              <label>Bras<input type="number" name="armor_arms" value="0"></label>
+              <label>Jambes<input type="number" name="armor_legs" value="0"></label>
+            </div>
+          </div>
+
+          <details>
+            <summary>Autres Caracs (CC, CT, F...)</summary>
+            <div class="grid-3">
+              <label>CC<input type="number" name="CC"></label>
+              <label>CT<input type="number" name="CT"></label>
+              <label>F<input type="number" name="F"></label>
+              <label>I (Autre)<input type="number" name="I" placeholder="Idem Init"></label>
+              <label>Ag<input type="number" name="Ag"></label>
+              <label>Dex<input type="number" name="Dex"></label>
+              <label>Int<input type="number" name="Int"></label>
               <label>FM<input type="number" name="FM"></label>
               <label>Soc<input type="number" name="Soc"></label>
             </div>
@@ -132,6 +172,21 @@
           📜 Journal (Cliquer pour afficher/masquer)
         </summary>
         <div class="row" style="margin-top:10px; border-bottom:1px solid #ccc; padding-bottom:8px;">
+            <label class="muted">Type
+              <select id="log-filter-kind" aria-label="Filtrer le journal par type">
+                <option value="">Tous les événements</option>
+                <option value="management">Gestion</option>
+                <option value="roll">Jets</option>
+                <option value="damage">Dégâts</option>
+                <option value="state">États</option>
+                <option value="legacy">Anciennes entrées</option>
+              </select>
+            </label>
+            <label class="muted">Combattant
+              <select id="log-filter-actor" aria-label="Filtrer le journal par combattant">
+                <option value="">Tous les combattants</option>
+              </select>
+            </label>
             <div class="spacer"></div>
             <button id="btn-clear-log" class="ghost">Effacer l'historique</button>
         </div>
@@ -141,6 +196,24 @@
     </section>
 
     <section id="panel-rules" class="panel" role="region" aria-labelledby="tab-rules"></section>
+
+    <section id="panel-workspace" class="panel" role="tabpanel" aria-labelledby="tab-workspace" hidden>
+      <div id="workspace-launchpad" class="workspace-launchpad" aria-label="Accès rapides de séance"></div>
+      <div id="workspace-root"></div>
+      <div id="workspace-tools" class="card row" aria-label="Outils de séance">
+        <strong>Outils de séance</strong>
+        <div class="spacer"></div>
+        <button id="workspace-save" type="button" class="ghost">Sauvegarder</button>
+        <button id="workspace-load" type="button" class="ghost">Charger</button>
+        <button id="workspace-restores" type="button" class="ghost">Restaurations</button>
+        <button id="workspace-simulate" type="button" class="ghost">Et si…</button>
+        <button id="workspace-reminders" type="button" class="ghost">Rappels</button>
+        <button id="workspace-events" type="button" class="ghost">Événements</button>
+        <button id="workspace-archives" type="button" class="ghost">Archives</button>
+        <button id="workspace-import-text" type="button" class="ghost">Importer du texte</button>
+        <button id="workspace-close-scene" type="button" class="danger ghost">Clôturer la séance</button>
+      </div>
+    </section>
 
   </main>
 

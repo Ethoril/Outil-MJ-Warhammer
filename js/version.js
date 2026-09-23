@@ -1,1 +1,1 @@
-export const APP_VERSION = "3.5 - Effets d'états automatiques";
+export const APP_VERSION = "3.6.2";
