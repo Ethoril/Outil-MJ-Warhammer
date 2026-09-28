@@ -3,7 +3,8 @@
  * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
  * par `handlers`, et la vue reste propriétaire de l'état entre deux rendus.
  */
-import { formatDamageFormula, damageBreakdown } from '../core/resolution.js';
+import { formatDamageFormula, damageBreakdown, describeWeaponDamage } from '../core/resolution.js';
+import { actionHasDamage } from '../core/damage.js';
 import { qualityLabel } from '../core/quality-normalization.js';
 
 export const ACTION_TYPES = Object.freeze([
@@ -144,6 +145,12 @@ function renderResult(preview, target) {
       hp.append(node('span', 'combatant-name', target.name), ` : PV ${minusSigned(target.hp)} → `, node('strong', 'workspace-result-hp', minusSigned(after)));
       result.appendChild(hp);
     }
+  } else if (preview.weapon?.status === 'manual') {
+    const { reason, text } = preview.weapon;
+    const name = preview.input?.actor?.name || 'l’attaquant';
+    result.appendChild(node('p', 'workspace-result-line workspace-damage-manual', reason === 'force-inconnue'
+      ? `Dégâts à arbitrer : ${text} demande la Force de ${name} (F inconnue).`
+      : `Dégâts à arbitrer : « ${text} » n’est pas calculable automatiquement.`));
   }
   return result;
 }
@@ -152,7 +159,8 @@ function renderResult(preview, target) {
 function comparisonText({ name, hp, preview }) {
   const damage = preview.damage;
   const outcome = preview.hit ? 'touché' : 'pas de touche';
-  return `${name} : ${outcome}${damage ? ` · ${damage.finalDamage} dégâts · PV ${minusSigned(hp)} → ${minusSigned((Number(hp) || 0) - damage.finalDamage)}` : ''}`;
+  const manual = preview.hit && preview.weapon?.status === 'manual' ? ' · dégâts à arbitrer' : '';
+  return `${name} : ${outcome}${manual}${damage ? ` · ${damage.finalDamage} dégâts · PV ${minusSigned(hp)} → ${minusSigned((Number(hp) || 0) - damage.finalDamage)}` : ''}`;
 }
 
 function renderComparison(entries, handlers, busy) {
@@ -207,6 +215,7 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
     const qualities = qualityNames(action);
     const item = chip('', { pressed: key === selectedKey, key: `action-${key}`, attrs: { 'data-action-key': key } });
     item.append(node('span', '', actionLabel(action)));
+    if (actionHasDamage(action)) item.append(node('span', 'workspace-chip-note', ` · dégâts ${describeWeaponDamage(action, actor.caracs)}`));
     if (qualities.length) item.append(node('span', 'workspace-chip-note', ` · ${qualities.join(', ')}`));
     item.addEventListener('click', () => handlers.select({ actionKey: key }));
     actionChips.appendChild(item);
@@ -330,7 +339,7 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
     const needsTarget = preview.attack && !preview.targetId;
     const label = preview.damage && target
       ? `Appliquer ${preview.damage.finalDamage} dégâts à ${target.name}`
-      : 'Enregistrer le résultat';
+      : preview.weapon?.status === 'manual' ? 'Enregistrer sans dégâts' : 'Enregistrer le résultat';
     const primary = button(label, 'workspace-primary', { 'data-focus-key': 'apply' });
     primary.disabled = draft.busy || !canApply || needsTarget;
     if (needsTarget) primary.title = 'Choisissez une cible pour appliquer une attaque';

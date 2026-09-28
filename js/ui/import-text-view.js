@@ -1,4 +1,5 @@
 import { parseProfileText } from '../core/text-profile-import.js';
+import { describeWeaponDamage } from '../core/resolution.js';
 import { qualityLabel } from '../core/quality-normalization.js';
 import { userMessage } from './messages.js';
 
@@ -68,7 +69,7 @@ function profilePreview(profile) {
       const item = document.createElement('li');
       item.textContent = [
         `${action.name}${action.base !== undefined ? ` ${shown(action.base)}` : ''}`,
-        action.damage !== undefined ? `dégâts ${action.damage}` : '',
+        action.damage !== undefined ? `dégâts ${describeWeaponDamage(action, profile.caracs)}` : '',
         ...(action.qualities || []).map(quality => qualityLabel(quality))
       ].filter(Boolean).join(' · ');
       actions.appendChild(item);

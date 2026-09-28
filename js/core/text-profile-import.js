@@ -2,6 +2,7 @@
 import { ENGINES } from '../data/keyword-engines.js';
 import { canonicalQualityId, normalizeQualities } from './quality-normalization.js';
 import { canonicalCaracKey } from './models.js';
+import { normalizeDamageFields } from './damage.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const stripAccents = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -48,7 +49,13 @@ function parseAction(value, line, errors, unknownQualities) {
     const key = keyText(part.slice(0, separator));
     const raw = part.slice(separator + 1).trim();
     if (key === 'base' || key === 'mod' || key === 'valeur' || key === 'valeurs') action[key === 'valeur' ? 'base' : key] = parseInteger(raw, key, errors, line);
-    else if (key === 'degats' || key === 'damage') action.damage = raw;
+    else if (key === 'degats' || key === 'damage') {
+      // `BF+4` or `1d10` keep their text; the engine evaluates them at resolution.
+      const { damage, damageFormula } = normalizeDamageFields({ damage: raw });
+      action.damage = damage;
+      if (damageFormula) action.damageFormula = damageFormula;
+      else delete action.damageFormula;
+    }
     else if (key === 'qualites' || key === 'qualities') {
       const rawQualities = raw.split(',').map(item => item.trim()).filter(Boolean);
       action.qualities = normalizeQualities(rawQualities.map(name => ({ name })));

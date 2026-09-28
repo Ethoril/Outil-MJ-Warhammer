@@ -1,5 +1,5 @@
 import { DOM, qs, escapeHtml } from './dom.js';
-import { formatDamageFormula } from '../core/resolution.js';
+import { formatDamageFormula, formatWeaponDamage } from '../core/resolution.js';
 
 const signed = value => { const number = Number(value) || 0; return number < 0 ? `−${Math.abs(number)}` : `+${number}`; };
 
@@ -12,6 +12,7 @@ function readableDetail(key, value, detail) {
     const hit = 'hit' in detail ? ` · ${detail.hit ? 'touché' : 'pas de touche'}` : '';
     return `défense ${label} ${score} (d100 ${roll}) · DR net ${signed(value.netSl)}${hit}`;
   }
+  if (key === 'weapon') return value?.status === 'manual' ? formatWeaponDamage(value) : null;
   if (key === 'damage') return formatDamageFormula(value) || null;
   return null;
 }

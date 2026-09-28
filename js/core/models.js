@@ -1,5 +1,6 @@
 import { normalizeEffects } from './effects.js';
 import { normalizeQualities } from './quality-normalization.js';
+import { normalizeDamageFields } from './damage.js';
 
 export const uid = () => Math.random().toString(36).slice(2, 10);
 
@@ -76,19 +77,25 @@ export function normalizeAction(raw = {}) {
   const valuesX = input.valuesX ?? input.xValues ?? input.valueX ?? null;
   const capacity = input.capacity === undefined || input.capacity === null || input.capacity === ''
     ? null : (Number.isFinite(Number(input.capacity)) ? Number(input.capacity) : null);
-  return {
+  // `damage` stays a number; a formula (`BF+4`, `1d10`) keeps its text in
+  // `damageFormula`, which exists only for such actions.
+  const { damage, damageFormula } = normalizeDamageFields(input);
+  const action = {
     ...input,
     id: typeof input.id === 'string' && input.id ? input.id : uid(),
     base,
     mod: Number(input.mod) || 0,
     note: typeof input.note === 'string' ? input.note : '',
-    damage: Number(input.damage) || 0,
+    damage,
     targetId: input.targetId || null,
     qualities: normalizeQualities(input.qualities),
     valuesX,
     capacity,
     extensions: isRecord(input.extensions) ? cloneValue(input.extensions) : {}
   };
+  if (damageFormula) action.damageFormula = damageFormula;
+  else delete action.damageFormula;
+  return action;
 }
 
 export class Profile {
@@ -146,8 +153,8 @@ export class Participant {
 }
 
 export class DiceLine {
-  constructor({ id = uid(), participantId = '', type = 'test', attr = 'Custom', base = '', mod = 0, note = '', damage = 0, targetId = null, qualities = [], valuesX = null, xValues = null, capacity = null, extensions = {} } = {}) {
-    const action = normalizeAction({ id, participantId, type, attr, base, mod, note, damage, targetId, qualities, valuesX: valuesX ?? xValues, capacity, extensions });
+  constructor({ id = uid(), participantId = '', type = 'test', attr = 'Custom', base = '', mod = 0, note = '', damage = 0, damageFormula = null, targetId = null, qualities = [], valuesX = null, xValues = null, capacity = null, extensions = {} } = {}) {
+    const action = normalizeAction({ id, participantId, type, attr, base, mod, note, damage, damageFormula, targetId, qualities, valuesX: valuesX ?? xValues, capacity, extensions });
     this.id = action.id;
     this.participantId = action.participantId;
     this.type = action.type;
@@ -156,6 +163,7 @@ export class DiceLine {
     this.mod = action.mod;
     this.note = action.note;
     this.damage = action.damage;
+    if (action.damageFormula) this.damageFormula = action.damageFormula;
     this.targetId = action.targetId;
     // Les alias (Impact/Percutante) ne doivent jamais activer deux fois le même moteur.
     this.qualities = action.qualities;

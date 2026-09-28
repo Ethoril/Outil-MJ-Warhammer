@@ -106,10 +106,10 @@ async function main() {
     await page.locator('#app-menu').getByRole('button', { name: 'Importer du texte' }).click();
     const readyOverlay = page.getByRole('dialog');
     await readyOverlay.getByRole('textbox', { name: 'Texte des profils' }).fill(
-      'Nom: Garde importé\nPV: 12\nInitiative: 30\nAction: Attaque | type=attack | base=40 | dégâts=1d10\n---\nNom: Éclaireur importé\nPV: 8\nInitiative: 40\nAction: Attaque | type=attack | base=40 | dégâts=1d10'
+      'Nom: Garde importé\nPV: 12\nInitiative: 30\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4\n---\nNom: Éclaireur importé\nPV: 8\nInitiative: 40\nF: 35\nAction: Attaque | type=attack | base=40 | dégâts=BF+4'
     );
     await readyOverlay.getByRole('button', { name: 'Analyser le texte' }).click();
-    await expect(readyOverlay.locator('.import-text-profile').first()).toContainText('Attaque 40 · dégâts 1d10');
+    await expect(readyOverlay.locator('.import-text-profile').first()).toContainText('Attaque 40 · dégâts BF+4 = 7');
     const readyImportButton = readyOverlay.getByRole('button', { name: 'Importer 2 profils' });
     await expect(readyImportButton).toBeEnabled();
     await readyImportButton.click();
@@ -189,7 +189,7 @@ async function main() {
     assert.equal(await page.locator('.workspace-track').textContent(), trackBeforeApply, 'calculer ne doit modifier aucun PV');
     await resolution.getByRole('button', { name: /^Appliquer \d+ dégâts à Garde importé$/ }).click();
     await expect(page.locator('#toast-container')).toContainText(/\d+ dégâts appliqués à Garde importé/);
-    await expect(page.locator('[data-workspace-select]').filter({ hasText: 'Garde importé' })).toContainText('PV 10/12');
+    await expect(page.locator('[data-workspace-select]').filter({ hasText: 'Garde importé' })).toContainText('PV 3/12');
     await expect(resolution.locator('.workspace-result')).toHaveCount(0);
 
     // Contextual rules must show real reference content and remain reachable
@@ -269,7 +269,7 @@ async function main() {
     await page.locator('#tab-prepare').click();
     const galleryProfiles = Array.from({ length: 15 }, (_, index) => {
       const number = String(index + 1).padStart(2, '0');
-      return `Nom: Participant de démonstration ${number} · Action préparée\nPV: ${10 + (index % 4)}\nInitiative: ${60 - index}\nAction: Attaque ${number} | type=attack | base=${35 + index} | dégâts=1d10`;
+      return `Nom: Participant de démonstration ${number} · Action préparée\nPV: ${10 + (index % 4)}\nInitiative: ${60 - index}\nF: 30\nAction: Attaque ${number} | type=attack | base=${35 + index} | dégâts=BF+4`;
     });
     await openAppMenu(page);
     await page.locator('#app-menu').getByRole('button', { name: 'Importer du texte' }).click();

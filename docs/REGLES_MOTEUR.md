@@ -102,12 +102,15 @@ sont donc **à vérifier** avant automatisation.
 
 ## Dégâts
 
-`computeDamage()` dans `js/core/damage.js` reçoit : `weaponDamage`, `sl` (DR), `roll`,
-`targetToughnessBonus` (BE), `targetArmour` (PA de la localisation) et `qualities`.
+`computeDamage()` dans `js/core/damage.js` reçoit : `weaponDamage` (nombre ou formule),
+`strengthBonus` (BF de l'attaquant), `sl` (DR), `roll`, `targetToughnessBonus` (BE),
+`targetArmour` (PA de la localisation) et `qualities`. Il renvoie `null` quand les dégâts
+de l'arme ne sont pas calculables automatiquement (voir ci-dessous).
 Le calcul actuel est :
 
 ```text
-base = dégâts de l'arme + Pointue(1) + Imprécise(-1)
+arme = nombre saisi, ou BF + n pour une formule BF±n (BF = floor(F / 10) de l'attaquant)
+base = arme + Pointue(1) + Imprécise(-1)
 déUnités = roll % 10, avec 0 → 10
 DR_effectif = max(déUnités, DR) si Dévastatrice, sinon DR
 bonusPercutante = déUnités si Percutante ou Impact
@@ -123,6 +126,30 @@ code conformément à la convention arrêtée dans `PLAN.md` §7.3. Exemples cou
 brute/absorption → 1 ; Inoffensive PA 2→4 et, avec 4 − (3+4) = −3, 0 ; DR −1 conservé ;
 cible sans E/armure tolérée. `tests/keywords.test.js` ajoute roll 35 (dé d'unités 5),
 Percutante et Dévastatrice.
+
+### Formules de dégâts d'arme
+
+La plupart des armes de mêlée infligent « BF + n ». Formes reconnues par
+`parseWeaponDamage()` : un entier (`4`, `+9`), `BF`, `BF+n`, `BF−n`, avec `+` initial
+facultatif, espaces, casse et variantes du signe moins indifférents, `SB` accepté. Les dés
+(`1d10`) ne s'appliquent pas aux armes en 4e : comme toute autre expression, ils ne sont
+jamais convertis en nombre.
+
+Stockage : `damage` reste un nombre. Une saisie non numérique garde son texte d'origine dans
+`damageFormula` (clé absente sinon) et `damage` vaut alors son terme constant (`BF+4` → 4,
+expression inconnue → 0) : les sauvegardes existantes et les versions antérieures lisent
+toujours un nombre, et les actions numériques ne changent pas. Une chaîne dans `damage` est
+une saisie et remplace la formule ; si `damage` diffère du terme constant de la formule
+stockée, il vient d'un écrivain qui ignore les formules et l'emporte
+(`normalizeDamageFields()`, appliqué par `normalizeAction`, l'import texte et la migration
+des lignes de dés).
+
+À la résolution, `previewResolution()` lit le BF de l'attaquant (`caracs.F`, à défaut
+`caracs.BF`) et renvoie `weapon`, l'évaluation de l'arme. Une expression inconnue ou une F
+absente donne `weapon.status === 'manual'` (« à arbitrer ») et `damage === null` :
+l'application enregistre le jet sans toucher aux PV, et le journal note « dégâts à
+arbitrer ». La décomposition affiche le BF à part : `BF 3 + 4 arme + 2 DR − 3 BE − 1 PA = 5`.
+Couverture : `tests/e19-damage-formulas.test.js`.
 
 Dans l'interface, le calcul ne s'affiche que sur une réussite avec une cible sélectionnée et
 une ligne possédant `damage` (le modèle donne actuellement 0 par défaut, donc le test de
@@ -220,6 +247,7 @@ ils restent **à vérifier**.
 | Localisation ordinaire | **Automatique** | Inversion puis table existante | Toutes bornes + 100 ; exemples validés par le MJ |
 | Localisation/gravité critique | **Automatique + rappel** | Deux jets séparés ; Acharnement +10 | Critique normal, Acharnement, tables bornes ; effets non appliqués automatiquement |
 | Dégâts et Inoffensive | **Automatique + validation MJ** | Formule et bouton d'application | `tests/damage.test.js`, qualité inconnue, DR négatif, 0 PV, application unique |
+| Dégâts d'arme en formule (`BF+n`) | **Automatique ; sinon à arbitrer** | BF de l'attaquant ; expression inconnue ou F absente → aucun dégât automatique | `tests/e19-damage-formulas.test.js` |
 | Qualités sans moteur | **Rappel** | Afficher libellé/texte, ne pas calculer | Mot-clé inconnu lisible et sans mutation |
 | Aliases de qualités | **Automatique après canonisation E06** | Seul `impact` est relié effectivement | Paires et répétitions appliquées une seule fois |
 | États périodiques | **Automatique borné** | Fin de tour pure sur chaînes historiques | niveaux multiples, durées distinctes, expiration et migration atomique |

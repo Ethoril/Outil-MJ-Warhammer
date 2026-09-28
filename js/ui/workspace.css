@@ -234,6 +234,8 @@
 .workspace-outcome.is-failure { color: var(--muted); }
 .workspace-outcome.is-critical { color: var(--accent-text); }
 .workspace-result-line { font-family: var(--font-ui); font-size: 15px; }
+.workspace-damage-manual { color: var(--accent-text); font-weight: 700; }
+.action-damage-value { font-size: 0.85em; color: var(--muted); }
 .workspace-formula { font-family: var(--font-ui); font-size: 16px; }
 .workspace-formula-total,
 .workspace-result-hp { color: var(--accent-text); font-size: 20px; }

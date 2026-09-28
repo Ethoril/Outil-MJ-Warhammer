@@ -1,5 +1,6 @@
 import { DOM, qs, qsa, on, escapeHtml } from './dom.js';
 import { Profile, groupProfiles, normalizeAction, normalizeTags } from '../core/models.js';
+import { normalizeDamageFields } from '../core/damage.js';
 import { normalizeSearchText } from '../core/sanitize.js';
 import { createQualityPicker } from './action-editor.js';
 import { showToast } from './toast.js';
@@ -89,11 +90,11 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     sect.querySelector('#btn-add-tpl').addEventListener('click', () => addProfileDiceRow());
   }
 
-  function addProfileDiceRow({ base = '', mod = 0, type = '', note = '', damage = '', qualities = [], valuesX = null, capacity = null } = {}) {
+  function addProfileDiceRow({ base = '', mod = 0, type = '', note = '', damage = '', damageFormula = '', qualities = [], valuesX = null, capacity = null } = {}) {
     const row = document.createElement('div'); row.className = 'row'; row.style.marginBottom = '6px'; row.style.gap = '4px';
     const currentQualities = Array.isArray(qualities) ? qualities : [];
 
-    row.innerHTML = `<select class="pf-dice-type" title="Type d'action"><option value="">Type…</option><option value="attack">Attaque</option><option value="skill">Compétence</option><option value="defense">Défense</option><option value="opposition">Opposition</option></select><input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:60px;"><input type="number" placeholder="Mod." value="${mod ?? 0}" class="pf-dice-mod" style="width:52px;"><input type="text" placeholder="Label (ex: Épée)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><input type="number" placeholder="Dég." value="${damage !== undefined && damage !== null ? damage : ''}" class="pf-dice-damage" style="width:50px;"><input type="number" placeholder="X" value="${valuesX ?? ''}" class="pf-dice-x" style="width:42px;"><input type="number" placeholder="Cap." value="${capacity ?? ''}" class="pf-dice-capacity" style="width:48px;"><span class="pf-dice-quality-picker"></span><button type="button" class="danger tiny btn-remove-dice">×</button>`;
+    row.innerHTML = `<select class="pf-dice-type" title="Type d'action"><option value="">Type…</option><option value="attack">Attaque</option><option value="skill">Compétence</option><option value="defense">Défense</option><option value="opposition">Opposition</option></select><input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:60px;"><input type="number" placeholder="Mod." value="${mod ?? 0}" class="pf-dice-mod" style="width:52px;"><input type="text" placeholder="Label (ex: Épée)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><input type="text" placeholder="Dég." title="Dégâts : nombre (4) ou formule (BF+4)" value="${escapeHtml(String(damageFormula || (damage !== undefined && damage !== null ? damage : '')))}" class="pf-dice-damage" style="width:64px;"><input type="number" placeholder="X" value="${valuesX ?? ''}" class="pf-dice-x" style="width:42px;"><input type="number" placeholder="Cap." value="${capacity ?? ''}" class="pf-dice-capacity" style="width:48px;"><span class="pf-dice-quality-picker"></span><button type="button" class="danger tiny btn-remove-dice">×</button>`;
     row.querySelector('.pf-dice-type').value = type || '';
 
     const normalized = normalizeAction({ qualities: currentQualities });
@@ -162,14 +163,16 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
       diceList.querySelectorAll('.row').forEach(row => {
         const b = row.querySelector('.pf-dice-base').value;
         const n = row.querySelector('.pf-dice-note').value;
-        const d = row.querySelector('.pf-dice-damage')?.value;
+        // `BF+4` garde son texte ; un nombre reste un nombre.
+        const { damage, damageFormula } = normalizeDamageFields({ damage: row.querySelector('.pf-dice-damage')?.value ?? '' });
         if (b) {
           diceLines.push({
             base: parseInt(b),
             mod: Number(row.querySelector('.pf-dice-mod')?.value) || 0,
             type: row.querySelector('.pf-dice-type')?.value || '',
             note: n,
-            damage: d !== undefined && d !== '' ? Number(d) : 0,
+            damage,
+            ...(damageFormula ? { damageFormula } : {}),
             qualities: row._qualities || [],
             valuesX: row.querySelector('.pf-dice-x')?.value || null,
             capacity: row.querySelector('.pf-dice-capacity')?.value || null

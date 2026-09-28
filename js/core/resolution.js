@@ -3,10 +3,10 @@ import {
   SL, getCritEffect, getLocationName, getReverseRoll, isDouble
 } from './dice.js';
 import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
-import { computeDamage } from './damage.js';
+import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 
-export { damageBreakdown, formatDamageFormula } from './damage.js';
+export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -144,10 +144,7 @@ export function inferActionType(action) {
   if (SKILL_TYPES.has(type)) return 'skill';
   if (DEFENSE_TYPES.has(type)) return 'defense';
   if (OPPOSITION_TYPES.has(type)) return 'opposition';
-  // normalizeAction stores a missing damage as 0, so 0 counts as « no damage ».
-  const damage = action?.damage;
-  const hasDamage = damage !== undefined && damage !== null && !['', '0'].includes(String(damage).trim());
-  return hasDamage ? 'attack' : 'skill';
+  return actionHasDamage(action) ? 'attack' : 'skill';
 }
 
 function locationSide(name) {
@@ -227,14 +224,22 @@ export function previewResolution(input) {
   })() : null;
   const critical = kind === 'Critique' ? criticalDetails(normalized, { kind, acharnement }) : null;
   let damage = null;
-  if (hit && attackType(action.type) && target && hasOwn(action, 'damage')) {
+  // Weapon damage of a landed attack (`BF+4` read with the attacker's F). A
+  // `manual` status (unknown expression, F missing) means no automatic damage:
+  // the MJ arbitrates instead of silently getting 0.
+  let weapon = null;
+  if (hit && attackType(action.type) && target && (hasOwn(action, 'damage') || hasOwn(action, 'damageFormula'))) {
+    const weaponDamage = actionWeaponDamage(action);
+    const strengthBonus = strengthBonusOf(actor?.caracs);
+    weapon = evaluateWeaponDamage(weaponDamage, strengthBonus);
     const armour = target.armor || {};
     const targetArmour = location?.key === 'HEAD' ? armour.head
       : location?.key === 'ARM' ? armour.arms
         : location?.key === 'BODY' ? armour.body
           : location?.key === 'LEG' ? armour.legs : 0;
     damage = computeDamage({
-      weaponDamage: action.damage,
+      weaponDamage,
+      strengthBonus,
       sl: opposed ? opposed.netSl : sl,
       roll,
       targetToughnessBonus: Math.floor((Number(target.caracs?.E) || 0) / 10),
@@ -261,6 +266,7 @@ export function previewResolution(input) {
     location,
     targetId: target?.id || null,
     damage,
+    weapon,
     opposition: opposed
       || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
@@ -282,7 +288,8 @@ export function applyResolution(preview, currentState) {
   if (currentState.revision !== preview.baseRevision) {
     return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
   }
-  if (preview.attack && preview.input.action.damage !== undefined && !preview.targetId) {
+  const carriesDamage = preview.input.action.damage !== undefined || preview.input.action.damageFormula !== undefined;
+  if (preview.attack && carriesDamage && !preview.targetId) {
     return { status: 'manual', reason: 'cible-requise-pour-les-dégâts', state: clone(currentState), resolution: clone(preview) };
   }
   const nextState = clone(currentState);

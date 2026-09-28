@@ -6,6 +6,7 @@
  * storage or execute extension fields.
  */
 import { normalizeCaracs } from './models.js';
+import { normalizeDamageFields } from './damage.js';
 
 export const CURRENT_SCHEMA_VERSION = 2;
 
@@ -154,7 +155,7 @@ function itemId(entry, path, report) {
 
 const PROFILE_KEYS = ['id', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'caracs', 'armor', 'diceLines', 'actions', 'group', 'tags', 'notes', 'favorite'];
 const PARTICIPANT_KEYS = ['id', 'profileId', 'persistentCharacterId', 'improvised', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'states', 'zone', 'camp', 'color', 'armor', 'caracs', 'actions', 'tags', 'notes', 'source'];
-const DICE_KEYS = ['id', 'participantId', 'type', 'attr', 'base', 'mod', 'note', 'damage', 'targetId', 'qualities', 'valuesX', 'capacity'];
+const DICE_KEYS = ['id', 'participantId', 'type', 'attr', 'base', 'mod', 'note', 'damage', 'damageFormula', 'targetId', 'qualities', 'valuesX', 'capacity'];
 const COMBAT_KEYS = ['round', 'currentActorId', 'order', 'participants', 'meta', 'orderMode', 'extensions'];
 
 function migrateProfiles(raw, report) {
@@ -229,6 +230,15 @@ function migrateDiceLines(raw, participantIds, report) {
         });
         item[field] = null;
       }
+    }
+    // A damage expression (`BF+4`) is a formula, not a broken number.
+    if (typeof item.damage === 'string' && !Number.isFinite(Number(item.damage))) {
+      const from = item.damage;
+      const { damage, damageFormula } = normalizeDamageFields(item);
+      item.damage = damage;
+      if (damageFormula) item.damageFormula = damageFormula;
+      else delete item.damageFormula;
+      pushReport(report, 'migrated', 'diceLines/' + id + '/damage', { from, to: damageFormula ? { damage, damageFormula } : damage });
     }
     validateFiniteNumbers(item, ['mod', 'damage', 'valuesX', 'capacity'], 'diceLines/' + id, report);
     out.push(withExtensions(item, DICE_KEYS, 'diceLines/' + id, report));

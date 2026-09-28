@@ -1,7 +1,7 @@
 import { DOM, escapeHtml } from './dom.js';
 import { d100, isDouble, SL, getReverseRoll, getLocationName, getCritEffect } from '../core/dice.js';
 import { parseState } from '../core/sanitize.js';
-import { computeDamage } from '../core/damage.js';
+import { actionWeaponDamage, computeDamage, normalizeDamageFields, strengthBonusOf } from '../core/damage.js';
 import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from '../core/roll-qualities.js';
 import { createQualityPicker } from './action-editor.js';
 
@@ -32,12 +32,12 @@ export function renderMiniDiceLine(dl, p, Store) {
 
   // 3. Dégâts (Dég.)
   const inDamage = document.createElement('input');
-  inDamage.type = 'number';
-  inDamage.value = dl.damage !== undefined && dl.damage !== null ? dl.damage : '';
+  inDamage.type = 'text';
+  inDamage.value = dl.damageFormula || (dl.damage !== undefined && dl.damage !== null ? dl.damage : '');
   inDamage.placeholder = "Dég.";
-  inDamage.title = "Dégâts de base de l'arme";
+  inDamage.title = 'Dégâts : nombre (4) ou formule (BF+4)';
   inDamage.style.width = '50px';
-  inDamage.addEventListener('input', (e) => Store.updateDiceLine(dl.id, { damage: Number(e.target.value) || 0 }, true));
+  inDamage.addEventListener('input', (e) => Store.updateDiceLine(dl.id, normalizeDamageFields({ damage: e.target.value }), true));
   inDamage.addEventListener('click', (e) => e.stopPropagation());
 
   const inValuesX = document.createElement('input');
@@ -166,7 +166,7 @@ export function runDiceLine(id, Store) {
     }
 
     // Calcul des Dégâts avec Mots-clés (§13.4, §13.7)
-    if (targetParticipant && (dl.damage || dl.damage === 0)) {
+    if (targetParticipant && (dl.damage || dl.damage === 0 || dl.damageFormula)) {
       const targetBE = Math.floor((targetParticipant.caracs?.E || 0) / 10);
       const armObj = targetParticipant.armor || {};
       let targetPA = 0;
@@ -176,7 +176,8 @@ export function runDiceLine(id, Store) {
       else if (loc.key === 'LEG') targetPA = armObj.legs || 0;
 
       const dmgRes = computeDamage({
-        weaponDamage: dl.damage,
+        weaponDamage: actionWeaponDamage(dl),
+        strengthBonus: strengthBonusOf(p?.caracs),
         sl,
         roll,
         targetToughnessBonus: targetBE,
@@ -184,80 +185,88 @@ export function runDiceLine(id, Store) {
         qualities: dl.qualities
       });
 
-      const dmgNode = document.createElement('div');
-      dmgNode.style.cssText = 'width:100%; margin-top:6px; font-size:0.9em; background:rgba(0,0,0,0.04); padding:4px 8px; border-radius:4px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;';
+      if (!dmgRes) {
+        const manualNode = document.createElement('div');
+        manualNode.style.cssText = 'width:100%; margin-top:6px; font-size:0.9em; padding:4px 8px;';
+        manualNode.textContent = `Dégâts à arbitrer : « ${actionWeaponDamage(dl)} »`;
+        damageInfoNode = manualNode;
+      } else {
+        const dmgNode = document.createElement('div');
+        dmgNode.style.cssText = 'width:100%; margin-top:6px; font-size:0.9em; background:rgba(0,0,0,0.04); padding:4px 8px; border-radius:4px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;';
 
-      const paStr = dmgRes.isInoffensive ? `PA ${dmgRes.targetArmour}×2` : `PA ${dmgRes.targetArmour}`;
-      const slStr = dmgRes.sl >= 0 ? `+ DR ${dmgRes.sl}` : `− DR ${Math.abs(dmgRes.sl)}`;
-      const percutStr = dmgRes.bonusPercutante ? ` + Percutante(${dmgRes.bonusPercutante})` : '';
+        const paStr = dmgRes.isInoffensive ? `PA ${dmgRes.targetArmour}×2` : `PA ${dmgRes.targetArmour}`;
+        const slStr = dmgRes.sl >= 0 ? `+ DR ${dmgRes.sl}` : `− DR ${Math.abs(dmgRes.sl)}`;
+        const percutStr = dmgRes.bonusPercutante ? ` + Percutante(${dmgRes.bonusPercutante})` : '';
 
-      let calcStr = `Dégâts ${dmgRes.weaponDamage}${percutStr} ${slStr} − (BE ${dmgRes.be} + ${paStr}) = ${dmgRes.net}`;
-      if (dmgRes.isPlancher) {
-        calcStr += ` → ${1} minimum`;
-      } else if (dmgRes.isInoffensive) {
-        calcStr += ` (Inoffensive)`;
-      }
+        const strengthStr = dmgRes.strengthBonus !== undefined ? ` (BF ${dmgRes.strengthBonus} ${dmgRes.weaponDamage - dmgRes.strengthBonus < 0 ? '−' : '+'} ${Math.abs(dmgRes.weaponDamage - dmgRes.strengthBonus)})` : '';
+        let calcStr = `Dégâts ${dmgRes.weaponDamage}${strengthStr}${percutStr} ${slStr} − (BE ${dmgRes.be} + ${paStr}) = ${dmgRes.net}`;
+        if (dmgRes.isPlancher) {
+          calcStr += ` → ${1} minimum`;
+        } else if (dmgRes.isInoffensive) {
+          calcStr += ` (Inoffensive)`;
+        }
 
-      const textSpan = document.createElement('span');
-      textSpan.innerHTML = `<strong>💥 ${calcStr}</strong>`;
+        const textSpan = document.createElement('span');
+        textSpan.innerHTML = `<strong>💥 ${calcStr}</strong>`;
 
-      const btnApply = document.createElement('button');
-      btnApply.type = 'button';
-      btnApply.className = 'danger small';
-      btnApply.style.padding = '2px 8px';
-      btnApply.textContent = `Appliquer −${dmgRes.finalDamage} PV à ${targetParticipant.name}`;
+        const btnApply = document.createElement('button');
+        btnApply.type = 'button';
+        btnApply.className = 'danger small';
+        btnApply.style.padding = '2px 8px';
+        btnApply.textContent = `Appliquer −${dmgRes.finalDamage} PV à ${targetParticipant.name}`;
 
-      btnApply.addEventListener('click', () => {
-        if (btnApply.disabled) return;
-        const currentTarget = Store.getCombat().participants.get(targetParticipant.id);
-        if (!currentTarget) return;
+        btnApply.addEventListener('click', () => {
+          if (btnApply.disabled) return;
+          const currentTarget = Store.getCombat().participants.get(targetParticipant.id);
+          if (!currentTarget) return;
 
-        const oldHp = currentTarget.hp;
-        const newHp = oldHp - dmgRes.finalDamage;
+          const oldHp = currentTarget.hp;
+          const newHp = oldHp - dmgRes.finalDamage;
 
-        const knockedDown = newHp <= 0 && !currentTarget.states.some(s => parseState(s).name === 'À Terre');
-        const damageText = `⚔️ ${currentTarget.name} : ${oldHp} → ${newHp} PV (−${dmgRes.finalDamage})`;
-        const run = Store.executeCommand ? Store.executeCommand('apply-damage', draft => {
-          const states = [...(currentTarget.states || [])];
-          if (knockedDown) states.push({ name: 'À Terre', level: 1, duration: null, source: { kind: 'combat' } });
-          return {
-            ...draft,
-            combat: {
-              ...draft.combat,
-              participants: (draft.combat?.participants || []).map(participant => participant.id === currentTarget.id
-                ? { ...participant, hp: newHp, states }
-                : participant)
-            },
-            log: [
-              ...(knockedDown ? [{ kind: 'state', actorId: currentTarget.id, actorName: currentTarget.name, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` }] : []),
-              { kind: 'damage', actorId: p?.id || null, actorName: p?.name || null, targetId: currentTarget.id, targetName: currentTarget.name, text: damageText },
-              ...(draft.log || [])
-            ].slice(0, 300)
-          };
-        }) : (() => {
-          Store.updateParticipant(currentTarget.id, { hp: newHp });
-          Store.log({ kind: 'damage', actorId: p?.id, targetId: currentTarget.id, text: damageText });
-          if (knockedDown) {
-            Store.updateParticipant(currentTarget.id, { states: [...currentTarget.states, { name: 'À Terre', level: 1, duration: null, source: { kind: 'combat' } }] });
-            Store.log({ kind: 'state', actorId: currentTarget.id, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` });
-          }
-          return true;
-        })();
+          const knockedDown = newHp <= 0 && !currentTarget.states.some(s => parseState(s).name === 'À Terre');
+          const damageText = `⚔️ ${currentTarget.name} : ${oldHp} → ${newHp} PV (−${dmgRes.finalDamage})`;
+          const run = Store.executeCommand ? Store.executeCommand('apply-damage', draft => {
+            const states = [...(currentTarget.states || [])];
+            if (knockedDown) states.push({ name: 'À Terre', level: 1, duration: null, source: { kind: 'combat' } });
+            return {
+              ...draft,
+              combat: {
+                ...draft.combat,
+                participants: (draft.combat?.participants || []).map(participant => participant.id === currentTarget.id
+                  ? { ...participant, hp: newHp, states }
+                  : participant)
+              },
+              log: [
+                ...(knockedDown ? [{ kind: 'state', actorId: currentTarget.id, actorName: currentTarget.name, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` }] : []),
+                { kind: 'damage', actorId: p?.id || null, actorName: p?.name || null, targetId: currentTarget.id, targetName: currentTarget.name, text: damageText },
+                ...(draft.log || [])
+              ].slice(0, 300)
+            };
+          }) : (() => {
+            Store.updateParticipant(currentTarget.id, { hp: newHp });
+            Store.log({ kind: 'damage', actorId: p?.id, targetId: currentTarget.id, text: damageText });
+            if (knockedDown) {
+              Store.updateParticipant(currentTarget.id, { states: [...currentTarget.states, { name: 'À Terre', level: 1, duration: null, source: { kind: 'combat' } }] });
+              Store.log({ kind: 'state', actorId: currentTarget.id, text: `💀 ${currentTarget.name} → À Terre (PV à 0)` });
+            }
+            return true;
+          })();
 
-        Promise.resolve(run).then(result => {
-          if (result?.ok === false) throw result.error || new Error('Dégâts non sauvegardés');
-          btnApply.disabled = true;
-          btnApply.style.opacity = '0.5';
-          btnApply.textContent = 'Appliqué';
-        }).catch(error => {
-          console.error('Application des dégâts refusée:', error);
-          btnApply.disabled = false;
-          btnApply.textContent = 'Réessayer';
+          Promise.resolve(run).then(result => {
+            if (result?.ok === false) throw result.error || new Error('Dégâts non sauvegardés');
+            btnApply.disabled = true;
+            btnApply.style.opacity = '0.5';
+            btnApply.textContent = 'Appliqué';
+          }).catch(error => {
+            console.error('Application des dégâts refusée:', error);
+            btnApply.disabled = false;
+            btnApply.textContent = 'Réessayer';
+          });
         });
-      });
 
-      dmgNode.append(textSpan, btnApply);
-      damageInfoNode = dmgNode;
+        dmgNode.append(textSpan, btnApply);
+        damageInfoNode = dmgNode;
+      }
     }
   }
 

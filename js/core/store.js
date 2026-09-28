@@ -492,12 +492,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     const defenseText = opposed
       ? ` ; défense ${opposed.defender.label} ${opposed.defender.score} (d100 ${opposed.defender.roll}), DR net ${opposed.netSl} — ${preview.hit ? 'touché' : 'pas de touche'}`
       : '';
+    const weaponText = preview?.weapon?.status === 'manual' ? ` ; dégâts à arbitrer (${preview.weapon.text})` : '';
     return {
       id: uid(), ts: Date.now(), kind: 'resolution',
       actorId: actor.id || input.actorId || null,
       targetId: target.id || preview?.targetId || null,
       actorName: actor.name || null, targetName: target.name || null,
-      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${outcome} sur ${targetLabel} (d100 ${preview?.roll ?? '?'})${defenseText}`,
+      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${outcome} sur ${targetLabel} (d100 ${preview?.roll ?? '?'})${defenseText}${weaponText}`,
       detail: {
         ...(opposed ? { hit: Boolean(preview.hit), opposition: opposed } : {}),
         resolutionId: preview?.resolutionId || null,
@@ -506,6 +507,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         targetScore: preview?.score?.target ?? null,
         sl: preview?.sl ?? null,
         damage: preview?.damage || null,
+        ...(preview?.weapon ? { weapon: preview.weapon } : {}),
         critical: preview?.critical || null,
         fumble: preview?.fumble || null,
         application: resolution?.application || null
@@ -1358,6 +1360,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
                 base: tpl.base,
                 note: tpl.note,
                 damage: tpl.damage || 0,
+                damageFormula: tpl.damageFormula ?? null,
                 qualities: tpl.qualities || []
               }));
             });

@@ -981,7 +981,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Retirer cette action'; remove.addEventListener('click', () => { actionsTouched = true; actionValues.splice(index, 1); renderActions(); });
             const header = document.createElement('div'); header.className = 'row'; header.append(document.createElement('strong'), remove); header.firstChild.textContent = action.note || `Action ${index + 1}`;
             container.appendChild(header);
-            createActionEditor({ container, action, onChange: next => { actionsTouched = true; actionValues[index] = { ...next, id: action.id }; header.firstChild.textContent = next.note || `Action ${index + 1}`; } });
+            createActionEditor({ container, action, caracs: participant.caracs, onChange: next => { actionsTouched = true; actionValues[index] = { ...next, id: action.id }; header.firstChild.textContent = next.note || `Action ${index + 1}`; } });
             actionMount.appendChild(container);
           });
         };
@@ -1047,7 +1047,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     applyResolution: async preview => {
       const result = await awaitStore(requireStoreApi('applyResolution')(preview), 'Résolution');
       const target = preview.input?.target;
-      if (result?.status === 'applied') showToast(preview.damage && target ? `${preview.damage.finalDamage} dégâts appliqués à ${target.name}` : 'Résultat enregistré', 'success');
+      if (result?.status === 'applied') showToast(preview.damage && target ? `${preview.damage.finalDamage} dégâts appliqués à ${target.name}` : preview.weapon?.status === 'manual' ? 'Résultat enregistré — dégâts à arbitrer' : 'Résultat enregistré', 'success');
       else if (result?.status === 'duplicate') showToast('Résultat déjà appliqué', 'info');
       else if (result?.status !== 'stale') throw new Error(result?.reason || 'Résolution non appliquée.');
       return result;

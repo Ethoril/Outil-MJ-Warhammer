@@ -1,4 +1,5 @@
 import { getKeywordList } from '../core/keywords.js';
+import { evaluateWeaponDamage, normalizeDamageFields, strengthBonusOf } from '../core/damage.js';
 import { canonicalQualityId, normalizeQualities } from '../core/quality-normalization.js';
 
 /**
@@ -88,7 +89,7 @@ export function createQualityPicker({ container, qualities = [], onChange = () =
   };
 }
 
-export function createActionEditor({ container, action = {}, onChange = () => {} } = {}) {
+export function createActionEditor({ container, action = {}, caracs, onChange = () => {} } = {}) {
   if (!container) throw new TypeError('Conteneur d’action manquant');
   let state = { ...action, qualities: normalizeQualities(action.qualities) };
   const root = document.createElement('div');
@@ -103,11 +104,26 @@ export function createActionEditor({ container, action = {}, onChange = () => {}
   root.append(input('action-base', 'number', state.base, 'Score', 'Score de base'));
   root.append(input('action-mod', 'number', state.mod || 0, 'Mod.', 'Modificateur'));
   root.append(input('action-note', 'text', state.note, 'Action / arme', 'Nom ou note de l’action'));
-  root.append(input('action-damage', 'number', state.damage, 'Dég.', 'Dégâts de base'));
+  const damageInput = input('action-damage', 'text', state.damageFormula || state.damage, 'Dég. (BF+4)', 'Dégâts : nombre (4) ou formule (BF+4)');
+  const damageValue = document.createElement('output');
+  damageValue.className = 'action-damage-value';
+  const refreshDamageValue = () => {
+    const evaluation = evaluateWeaponDamage(damageInput.value.trim(), strengthBonusOf(caracs));
+    damageValue.textContent = evaluation.status === 'manual'
+      ? (evaluation.reason === 'force-inconnue' ? 'F inconnue' : 'à arbitrer')
+      : evaluation.kind === 'strength' ? `= ${String(evaluation.value).replace('-', '−')}` : '';
+  };
+  damageInput.addEventListener('input', refreshDamageValue);
+  refreshDamageValue();
+  root.append(damageInput, damageValue);
   root.append(input('action-values-x', 'number', state.valuesX, 'X', 'Valeur X du mot-clé'));
   root.append(input('action-capacity', 'number', state.capacity, 'Cap.', 'Capacité ou munitions'));
   const qualityContainer = document.createElement('span');
-  const readValue = () => ({ ...state, type: root.querySelector('.action-type')?.value || '', base: root.querySelector('.action-base')?.value ?? '', mod: Number(root.querySelector('.action-mod')?.value) || 0, note: root.querySelector('.action-note')?.value ?? '', damage: Number(root.querySelector('.action-damage')?.value) || 0, valuesX: root.querySelector('.action-values-x')?.value || null, capacity: root.querySelector('.action-capacity')?.value || null, qualities: picker.getQualities() });
+  const readValue = () => {
+    const { damageFormula, ...rest } = state;
+    const damage = normalizeDamageFields({ damage: root.querySelector('.action-damage')?.value ?? '' });
+    return { ...rest, type: root.querySelector('.action-type')?.value || '', base: root.querySelector('.action-base')?.value ?? '', mod: Number(root.querySelector('.action-mod')?.value) || 0, note: root.querySelector('.action-note')?.value ?? '', damage: damage.damage, ...(damage.damageFormula ? { damageFormula: damage.damageFormula } : {}), valuesX: root.querySelector('.action-values-x')?.value || null, capacity: root.querySelector('.action-capacity')?.value || null, qualities: picker.getQualities() };
+  };
   const picker = createQualityPicker({ container: qualityContainer, qualities: state.qualities, onChange: qualities => { state = { ...readValue(), qualities }; onChange({ ...state }); } });
   root.append(qualityContainer);
   container.append(root);
