@@ -46,7 +46,7 @@ test('E19 parseWeaponDamage — valeurs fixes', () => {
 });
 
 test('E19 parseWeaponDamage — expressions inconnues et entrées vides', () => {
-  for (const input of ['1d10', 'BF+1d10', 'BF+99999999999999999999']) {
+  for (const input of ['1d10', 'BF+1d10', 'BF+99999999999999999999', '++2', '+-2', '-BF']) {
     assert.deepEqual({ kind: parseWeaponDamage(input).kind }, { kind: 'unknown' }, input);
   }
   for (const input of ['', '  ', null, undefined, NaN]) {
@@ -75,6 +75,9 @@ test('E19 normalizeAction — dégâts numériques : pas de clé damageFormula',
     assert.equal(action.damage, expected, JSON.stringify(input));
     assert.equal('damageFormula' in action, false, JSON.stringify(input));
   }
+  // `Number('-0') || 0` valait 0 : pas de zéro négatif.
+  assert.ok(Object.is(normalizeAction({ damage: '-0' }).damage, 0));
+  assert.ok(Object.is(parseWeaponDamage('BF-0').bonus, 0));
 });
 
 test('E19 normalizeAction — formule stockée : conservation, arbitrage et effacement', () => {

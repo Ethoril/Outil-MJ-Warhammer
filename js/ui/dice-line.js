@@ -37,7 +37,12 @@ export function renderMiniDiceLine(dl, p, Store) {
   inDamage.placeholder = "Dég.";
   inDamage.title = 'Dégâts : nombre (4) ou formule (BF+4)';
   inDamage.style.width = '50px';
-  inDamage.addEventListener('input', (e) => Store.updateDiceLine(dl.id, normalizeDamageFields({ damage: e.target.value }), true));
+  inDamage.addEventListener('input', (e) => {
+    const { damage, damageFormula } = normalizeDamageFields({ damage: e.target.value });
+    // `damageFormula: null` only to clear a stored formula: numeric lines keep their shape.
+    const stored = Store.getDiceLines().find(line => line.id === dl.id);
+    Store.updateDiceLine(dl.id, damageFormula || stored?.damageFormula ? { damage, damageFormula } : { damage }, true);
+  });
   inDamage.addEventListener('click', (e) => e.stopPropagation());
 
   const inValuesX = document.createElement('input');

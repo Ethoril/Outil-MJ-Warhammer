@@ -1,5 +1,5 @@
 import { getKeywordList } from '../core/keywords.js';
-import { evaluateWeaponDamage, normalizeDamageFields, strengthBonusOf } from '../core/damage.js';
+import { actionWeaponDamage, evaluateWeaponDamage, normalizeDamageFields, strengthBonusOf } from '../core/damage.js';
 import { canonicalQualityId, normalizeQualities } from '../core/quality-normalization.js';
 
 /**
@@ -108,7 +108,8 @@ export function createActionEditor({ container, action = {}, caracs, onChange = 
   const damageValue = document.createElement('output');
   damageValue.className = 'action-damage-value';
   const refreshDamageValue = () => {
-    const evaluation = evaluateWeaponDamage(damageInput.value.trim(), strengthBonusOf(caracs));
+    // Evaluate what will be saved (`4.5` stays a number), not the raw text.
+    const evaluation = evaluateWeaponDamage(actionWeaponDamage(normalizeDamageFields({ damage: damageInput.value })), strengthBonusOf(caracs));
     damageValue.textContent = evaluation.status === 'manual'
       ? (evaluation.reason === 'force-inconnue' ? 'F inconnue' : 'à arbitrer')
       : evaluation.kind === 'strength' ? `= ${String(evaluation.value).replace('-', '−')}` : '';

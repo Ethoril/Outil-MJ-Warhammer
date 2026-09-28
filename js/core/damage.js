@@ -7,7 +7,7 @@ export const FACTEUR_INOFFENSIVE = 2;
 const MINUS = '−';
 const MINUS_VARIANTS = /[\u2010-\u2015\u2212\uFE63\uFF0D]/g;
 // `BF+4`, `+BF+4`, `BF`, `BF-1` (English `SB+4` too), or a plain integer (`4`, `+9`).
-const WEAPON_DAMAGE_PATTERN = /^\+?(?:(?:BF|SB)(?:([+-])(\d+))?|([+-]?\d+))$/;
+const WEAPON_DAMAGE_PATTERN = /^(?:\+?(?:BF|SB)(?:([+-])(\d+))?|([+-]?\d+))$/;
 
 const finiteNumber = value => {
   if (value === null || value === undefined || value === '' || typeof value === 'boolean') return null;
@@ -32,7 +32,7 @@ export function parseWeaponDamage(value) {
   const match = text.replace(MINUS_VARIANTS, '-').replace(/\s+/g, '').toUpperCase().match(WEAPON_DAMAGE_PATTERN);
   if (!match) return { kind: 'unknown', text };
   const [, sign, digits, integer] = match;
-  const bonus = integer !== undefined ? Number(integer) : (digits === undefined ? 0 : Number(digits) * (sign === '-' ? -1 : 1));
+  const bonus = (integer !== undefined ? Number(integer) : (digits === undefined ? 0 : Number(digits) * (sign === '-' ? -1 : 1))) || 0;
   if (!Number.isSafeInteger(bonus)) return { kind: 'unknown', text };
   return { kind: integer !== undefined ? 'fixed' : 'strength', bonus, text };
 }
@@ -50,7 +50,7 @@ export function parseWeaponDamage(value) {
 export function normalizeDamageFields({ damage, damageFormula } = {}) {
   if (typeof damage === 'string') {
     const number = Number(damage);
-    if (Number.isFinite(number)) return { damage: number, damageFormula: null };
+    if (Number.isFinite(number)) return { damage: number || 0, damageFormula: null };
     const parsed = parseWeaponDamage(damage);
     if (parsed.kind === 'fixed') return { damage: parsed.bonus, damageFormula: null };
     return { damage: parsed.kind === 'strength' ? parsed.bonus : 0, damageFormula: parsed.text };
