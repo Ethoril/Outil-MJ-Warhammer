@@ -282,6 +282,8 @@ async function main() {
         const card = () => page.locator('#workspace-library .workspace-profile-card').filter({ hasText: 'Garde action' });
         await card().getByRole('button', { name: 'Modifier' }).click();
         await expect(page.locator('dialog #form-dice-list .pf-dice-base').first()).toHaveValue('40');
+        await expect(page.locator('dialog #form-dice-list .pf-dice-note').first()).toHaveValue('Hache ancienne');
+        await page.locator('dialog #form-dice-list .pf-dice-note').first().fill('Hache neuve');
         await page.locator('dialog #form-dice-list .pf-dice-base').first().fill('55');
         await page.locator('dialog #btn-submit-form').click();
         await expect(page.locator('#local-status')).toHaveAttribute('data-status', 'saved');
@@ -291,6 +293,7 @@ async function main() {
         await card().getByRole('button', { name: 'Modifier' }).click();
         await expect(page.locator('dialog #form-dice-list .pf-dice-base')).toHaveCount(1);
         await expect(page.locator('dialog #form-dice-list .pf-dice-base').first()).toHaveValue('55');
+        await expect(page.locator('dialog #form-dice-list .pf-dice-note').first()).toHaveValue('Hache neuve');
       } finally {
         await context.close();
       }

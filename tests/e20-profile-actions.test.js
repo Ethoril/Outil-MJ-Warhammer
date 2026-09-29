@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../js/core/store.js';
-import { Profile } from '../js/core/models.js';
+import { Profile, normalizeAction } from '../js/core/models.js';
 import { migrateSnapshot } from '../js/core/migrations.js';
 import { parseProfileText } from '../js/core/text-profile-import.js';
 
@@ -95,4 +95,19 @@ test('E20 migration — diceLines vide à côté d’actions remplies (ancien sa
   // Vider ensuite les actions reste possible : le patch fait foi, même vide.
   await store.updateProfile('p', { diceLines: [] });
   assert.deepEqual((await reload(persistence)).getProfile('p').diceLines, []);
+});
+
+test('E20 normalizeAction reprend `name` dans `note` quand `note` est vide, sans écraser une note existante', () => {
+  const legacy = normalizeAction({ name: 'Hache ancienne', base: 40 });
+  assert.equal(legacy.note, 'Hache ancienne');
+  assert.equal(legacy.name, 'Hache ancienne');
+  assert.equal(normalizeAction({ name: 'Ancien', note: 'Nouveau' }).note, 'Nouveau');
+  assert.equal(normalizeAction({ base: 40 }).note, '');
+});
+
+test('E20 import texte — le libellé de l’action est aussi dans `note`', () => {
+  const [profile] = parseProfileText('Nom: Orc\nPV: 12\nAction: Hache ancienne | base=40 | note=lourde\nAction: Coup | 45\n').profiles;
+  assert.equal(profile.actions[0].name, 'Hache ancienne');
+  assert.equal(profile.actions[0].note, 'Hache ancienne ; lourde');
+  assert.equal(profile.actions[1].note, 'Coup ; 45');
 });

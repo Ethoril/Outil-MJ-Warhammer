@@ -42,7 +42,9 @@ function addField(fields, field, value, line) {
 
 function parseAction(value, line, errors, unknownQualities) {
   const parts = String(value).split('|').map(part => part.trim()).filter(Boolean);
-  const action = { name: parts.shift() || `Action ligne ${line}`, qualities: [] };
+  const label = parts.shift() || `Action ligne ${line}`;
+  // `note` est le libellé canonique (formulaire) ; `name` reste pour les anciens affichages.
+  const action = { name: label, note: label, qualities: [] };
   for (const part of parts) {
     const separator = part.indexOf('=');
     if (separator < 0) { action.note = action.note ? `${action.note} ; ${part}` : part; continue; }
@@ -60,7 +62,7 @@ function parseAction(value, line, errors, unknownQualities) {
       const rawQualities = raw.split(',').map(item => item.trim()).filter(Boolean);
       action.qualities = normalizeQualities(rawQualities.map(name => ({ name })));
       rawQualities.forEach(item => { if (!ENGINES[canonicalQualityId(item)]) unknownQualities.push({ value: item, line, action: action.name }); });
-    } else if (key === 'note' || key === 'texte') action.note = raw;
+    } else if (key === 'note' || key === 'texte') action.note = `${action.note} ; ${raw}`;
     else action[key.replace(/\s+/g, '')] = raw;
   }
   return action;

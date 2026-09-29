@@ -85,7 +85,7 @@ export function normalizeAction(raw = {}) {
     id: typeof input.id === 'string' && input.id ? input.id : uid(),
     base,
     mod: Number(input.mod) || 0,
-    note: typeof input.note === 'string' ? input.note : '',
+    note: typeof input.note === 'string' && input.note ? input.note : (typeof input.name === 'string' ? input.name : ''),
     damage,
     targetId: input.targetId || null,
     qualities: normalizeQualities(input.qualities),

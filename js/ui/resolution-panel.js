@@ -48,7 +48,7 @@ export function actionKey(action, index) {
 }
 
 export function actionLabel(action = {}) {
-  return `${action.name || action.note || action.attr || 'Action'} · ${action.base ?? '—'}`;
+  return `${action.note || action.name || action.attr || 'Action'} · ${action.base ?? '—'}`;
 }
 
 function qualityNames(action = {}) {
