@@ -3,12 +3,13 @@ import { Profile, groupProfiles, normalizeAction, normalizeTags } from '../core/
 import { normalizeSearchText } from '../core/sanitize.js';
 import { createQualityPicker } from './action-editor.js';
 import { showToast } from './toast.js';
+import { contextMessage } from './messages.js';
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   const formTitle = qs('#form-title');
   const btnSubmit = qs('#btn-submit-form');
   const btnCancel = qs('#btn-cancel-edit');
-  const settle = (operation, label = 'Opération') => Promise.resolve(operation).then(result => { if (result === false || result?.ok === false) throw result?.error || new Error(`${label} impossible.`); return result; }).catch(error => showToast(`${label} impossible : ${error.message}`, 'error'));
+  const settle = (operation, label = 'Opération') => Promise.resolve(operation).then(result => { if (result === false || result?.ok === false) throw result?.error || new Error(`${label} impossible.`); return result; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
 
   function ensureProfileFields() {
     const kind = DOM.reserve.form?.querySelector('[name=kind]');
@@ -147,7 +148,10 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   on(DOM.reserve.form, 'submit', async (e) => {
     e.preventDefault(); const submit = btnSubmit; if (submit) submit.disabled = true; const fd = new FormData(DOM.reserve.form);
     const editorToken = DOM.reserve.form.dataset.editorToken || null;
-    const caracs = {};
+    // Les caractéristiques que le formulaire n'expose pas (M, A, B, BF…) sont conservées.
+    const formCaracs = ['E', 'CC', 'CT', 'F', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
+    const existingCaracs = fd.get('id') ? Store.getProfile(fd.get('id'))?.caracs || {} : {};
+    const caracs = Object.fromEntries(Object.entries(existingCaracs).filter(([k]) => !formCaracs.includes(k)));
     caracs['E'] = Number(fd.get('E') || 0);
     ['CC', 'CT', 'F', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'].forEach(k => { const raw = fd.get(k); if (raw !== null && raw !== '') { const v = Number(raw); if (Number.isFinite(v)) caracs[k] = v; } });
     const armor = { head: Number(fd.get('armor_head') || 0), body: Number(fd.get('armor_body') || 0), arms: Number(fd.get('armor_arms') || 0), legs: Number(fd.get('armor_legs') || 0) };
@@ -191,7 +195,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
       // is finishing. Never reset that newer editor's draft.
       if (!editorToken || DOM.reserve.form.dataset.editorToken === editorToken) resetForm();
       onSaved({ id: id || null, name: data.name, mode: id ? 'update' : 'create', editorToken });
-    } catch (error) { showToast(`Profil non enregistré : ${error.message}`, 'error'); }
+    } catch (error) { showToast(contextMessage('Profil non enregistré', error, 'vérifiez le nom et les PV, puis réessayez.'), 'error'); }
     finally { if (submit) submit.disabled = false; }
   });
 

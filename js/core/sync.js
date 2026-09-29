@@ -45,7 +45,7 @@ export function loginWithGoogle() {
     })
     .catch((error) => {
       console.error('❌ Erreur connexion:', error);
-      alert('Erreur de connexion: ' + error.message);
+      alert('Connexion impossible : vérifiez votre réseau, autorisez la fenêtre de connexion, puis réessayez.');
     });
 }
 

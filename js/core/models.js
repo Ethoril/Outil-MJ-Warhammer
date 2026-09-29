@@ -5,6 +5,55 @@ export const uid = () => Math.random().toString(36).slice(2, 10);
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
+// Canonical characteristic keys, as written by the profile form and read by the engine.
+export const CARAC_KEYS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
+// Secondary keys already recognised by the text import; kept so no value is lost.
+export const EXTRA_CARAC_KEYS = Object.freeze(['M', 'A', 'B', 'BF']);
+
+const CANONICAL_CARACS = new Set([...CARAC_KEYS, ...EXTRA_CARAC_KEYS]);
+const CARAC_ALIASES = new Map([
+  ['cc', 'CC'], ['ct', 'CT'], ['f', 'F'], ['e', 'E'], ['i', 'I'], ['ag', 'Ag'], ['agi', 'Ag'],
+  ['dex', 'Dex'], ['int', 'Int'], ['fm', 'FM'], ['soc', 'Soc'],
+  ['m', 'M'], ['a', 'A'], ['b', 'B'], ['bf', 'BF']
+]);
+
+function finiteCarac(value) {
+  if (value === null || value === undefined || value === '' || typeof value === 'boolean') return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+/** Canonical key for a label (`agi` → `Ag`), or null when it is not a characteristic. */
+export function canonicalCaracKey(key) {
+  const raw = String(key ?? '').trim();
+  if (CANONICAL_CARACS.has(raw)) return raw;
+  return CARAC_ALIASES.get(raw.toLocaleLowerCase()) || null;
+}
+
+/**
+ * Convert aliases to canonical keys and keep only finite numbers. A canonical
+ * key wins over an alias of the same characteristic; unknown keys are kept.
+ * Idempotent.
+ */
+export function normalizeCaracs(caracs) {
+  const out = {};
+  if (!isRecord(caracs)) return out;
+  const entries = Object.entries(caracs);
+  const put = (key, value) => Object.defineProperty(out, key, { value, enumerable: true, writable: true, configurable: true });
+  // Canonical keys first so that an alias can never overwrite them.
+  for (const [key, value] of entries) {
+    const number = finiteCarac(value);
+    if (number !== null && CANONICAL_CARACS.has(key)) put(key, number);
+  }
+  for (const [key, value] of entries) {
+    if (CANONICAL_CARACS.has(key)) continue;
+    const number = finiteCarac(value);
+    const target = canonicalCaracKey(key) || key;
+    if (number !== null && !Object.prototype.hasOwnProperty.call(out, target)) put(target, number);
+  }
+  return out;
+}
+
 export function cloneValue(value) {
   if (value === null || typeof value !== 'object') return value;
   if (Array.isArray(value)) return value.map(cloneValue);
@@ -49,7 +98,7 @@ export class Profile {
     this.kind = ['PJ', 'PNJ', 'Créature'].includes(kind) ? kind : 'Créature';
     this.initiative = Number(initiative) || 0;
     this.hp = Number(hp) || 0;
-    this.caracs = isRecord(caracs) ? cloneValue(caracs) : {};
+    this.caracs = normalizeCaracs(caracs);
     this.armor = isRecord(armor) ? cloneValue(armor) : {};
     const actionSource = Array.isArray(actions) ? actions : (Array.isArray(diceLines) ? diceLines : []);
     this.diceLines = actionSource.map(normalizeAction);
@@ -87,7 +136,7 @@ export class Participant {
     this.camp = typeof camp === 'string' && camp.trim() ? camp : 'neutre';
     this.color = color;
     this.armor = isRecord(armor) ? cloneValue(armor) : {};
-    this.caracs = isRecord(caracs) ? cloneValue(caracs) : {};
+    this.caracs = normalizeCaracs(caracs);
     this.actions = Array.isArray(actions) ? actions.map(normalizeAction) : [];
     this.tags = normalizeTags(tags);
     this.notes = typeof notes === 'string' ? notes : '';

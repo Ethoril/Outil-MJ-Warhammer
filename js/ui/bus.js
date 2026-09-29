@@ -3,6 +3,9 @@ export const Bus = {
   on(e, f) {
     (this._h.get(e) || this._h.set(e, new Set()).get(e)).add(f);
   },
+  off(e, f) {
+    this._h.get(e)?.delete(f);
+  },
   emit(e, p) {
     this._h.get(e)?.forEach(fn => fn(p));
   }

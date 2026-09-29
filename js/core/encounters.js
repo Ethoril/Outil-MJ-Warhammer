@@ -1,9 +1,26 @@
 /** Pure E11 encounter and scene lifecycle operations. */
-import { cloneValue, normalizeAction, normalizeTags, uid } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, uid } from './models.js';
 import { normalizeEffects } from './effects.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const statuses = new Set(['prepared', 'active', 'suspended', 'closed']);
+
+export const CAMP_LABELS = Object.freeze({ pj: 'PJ', allie: 'Allié', ennemi: 'Ennemi', neutre: 'Neutre' });
+const CAMP_ALIASES = new Map([
+  ['pj', 'pj'], ['pjs', 'pj'], ['joueur', 'pj'], ['joueurs', 'pj'],
+  ['allie', 'allie'], ['allies', 'allie'],
+  ['ennemi', 'ennemi'], ['ennemis', 'ennemi'], ['hostile', 'ennemi'], ['adversaire', 'ennemi']
+]);
+
+/** Canonical camp (`pj`, `allie`, `ennemi`, `neutre`) from free text; a PJ without a camp is `pj`. */
+export function normalizeCamp(value, kind) {
+  const text = typeof value === 'string'
+    ? value.trim().toLocaleLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    : '';
+  const camp = CAMP_ALIASES.get(text) || 'neutre';
+  if (camp === 'neutre' && (!text || text === 'neutre') && kind === 'PJ') return 'pj';
+  return camp;
+}
 
 function requiredText(value, fallback) {
   return typeof value === 'string' && value.trim() ? value.trim() : fallback;
@@ -28,7 +45,7 @@ function cloneParticipant(profile, options, idFactory) {
     camp: requiredText(options.camp, 'neutre'),
     color: options.color || 'default',
     armor: cloneValue(profile.armor || {}),
-    caracs: cloneValue(profile.caracs || {}),
+    caracs: normalizeCaracs(profile.caracs),
     tags: normalizeTags(profile.tags),
     notes: typeof profile.notes === 'string' ? profile.notes : '',
     actions: (profile.actions || profile.diceLines || []).map(normalizeAction),
@@ -100,12 +117,22 @@ export function launchEncounter(encounter, { profiles = [], persistentCharacters
   const profileMap = new Map((Array.isArray(profiles) ? profiles : []).filter(profile => profile?.id).map(profile => [profile.id, profile]));
   const persistentMap = new Map((Array.isArray(persistentCharacters) ? persistentCharacters : []).filter(character => character?.id).map(character => [character.id, character]));
   const participants = [];
+  // Sans préfixe, les exemplaires d'un même profil sont numérotés en continu sur
+  // toute la rencontre (plusieurs lignes : actifs puis en attente, par exemple).
+  const profileTotals = new Map();
+  model.entries.filter(entry => !entry.namePrefix).forEach(entry => profileTotals.set(entry.profileId, (profileTotals.get(entry.profileId) || 0) + entry.quantity));
+  const profileCounters = new Map();
   for (const entry of model.entries) {
     const profile = profileMap.get(entry.profileId);
     if (!profile) throw new Error(`Profil introuvable pour l’entrée ${entry.id}`);
     for (let index = 0; index < entry.quantity; index++) {
       const persistent = index === 0 && entry.persistentCharacterId ? persistentMap.get(entry.persistentCharacterId) : null;
-      const name = entry.namePrefix ? `${entry.namePrefix} ${index + 1}` : (entry.quantity > 1 ? `${profile.name} ${index + 1}` : profile.name);
+      let name = entry.namePrefix ? `${entry.namePrefix} ${index + 1}` : profile.name;
+      if (!entry.namePrefix && profileTotals.get(entry.profileId) > 1) {
+        const number = (profileCounters.get(entry.profileId) || 0) + 1;
+        profileCounters.set(entry.profileId, number);
+        name = `${profile.name} ${number}`;
+      }
       participants.push(cloneParticipant(profile, { ...entry, name, persistentCharacter: persistent, entryId: entry.id }, idFactory));
     }
   }
@@ -133,7 +160,7 @@ export function addImprovisedParticipant(scene, participant = {}, idFactory = ui
     name: requiredText(participant.name, 'Profil improvisé'), kind: requiredText(participant.kind, 'PNJ'),
     initiative: Number(participant.initiative) || 0, hp, maxHp: Number(participant.maxHp ?? hp) || 0,
     states: normalizeEffects(participant.states), zone: participant.zone === 'active' ? 'active' : 'bench',
-    camp: requiredText(participant.camp, 'neutre'), armor: cloneValue(participant.armor || {}), caracs: cloneValue(participant.caracs || {}),
+    camp: requiredText(participant.camp, 'neutre'), armor: cloneValue(participant.armor || {}), caracs: normalizeCaracs(participant.caracs),
     tags: normalizeTags(participant.tags), notes: typeof participant.notes === 'string' ? participant.notes : '', actions: [], source: { improvised: true }
   });
   return next;

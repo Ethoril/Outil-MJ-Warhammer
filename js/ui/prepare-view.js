@@ -1,6 +1,10 @@
-import { createEncounter, normalizeEncounter, removeEncounterEntry, setEncounterEntry, duplicateEncounter } from '../core/encounters.js';
+import { createEncounter, normalizeEncounter, removeEncounterEntry, setEncounterEntry, duplicateEncounter, normalizeCamp, CAMP_LABELS } from '../core/encounters.js';
+import { userMessage } from './messages.js';
 
 const noop = () => {};
+// Camp proposé selon le type du profil (Créature et types inconnus : ennemi).
+const KIND_CAMPS = { PJ: 'pj', 'Créature': 'ennemi', PNJ: 'neutre' };
+const ENCOUNTER_STATUS_LABELS ={ prepared: 'préparée', active: 'en cours', suspended: 'suspendue', closed: 'clôturée' };
 
 function makeField(label, value, type = 'text') {
   const wrapper = document.createElement('label'); wrapper.textContent = label;
@@ -9,14 +13,21 @@ function makeField(label, value, type = 'text') {
   input.value = value ?? ''; wrapper.appendChild(input); return { wrapper, input };
 }
 
-/** E11 preparation view. All mutations leave through callbacks supplied by main. */
-export function initPrepareView({ mount, Store = null, encounter = null, savedEncounters = [], persistentCharacters = [], callbacks = {} } = {}) {
+function makeSelect(label, options, value) {
+  const wrapper = document.createElement('label'); wrapper.textContent = label;
+  const input = document.createElement('select');
+  options.forEach(([optionValue, text]) => input.append(new Option(text, optionValue)));
+  input.value = value; wrapper.appendChild(input); return { wrapper, input };
+}
+
+/** E11 preparation view. All mutations leave through callbacks supplied by main. `hosted` : la fenêtre porte déjà le titre. */
+export function initPrepareView({ mount, hosted = false, Store = null, encounter = null, savedEncounters = [], persistentCharacters = [], callbacks = {} } = {}) {
   if (!mount || typeof mount.replaceChildren !== 'function') throw new TypeError('prepare-view nécessite un mount');
   const state = { draft: normalizeEncounter(encounter || createEncounter({ title: 'Nouvelle rencontre' })), error: '' };
   const onDraftChange = callbacks.onDraftChange || noop;
   const profiles = () => typeof callbacks.getProfiles === 'function' ? callbacks.getProfiles() : (typeof Store?.listProfiles === 'function' ? Store.listProfiles() : []);
 
-  function fail(error) { state.error = error?.message || String(error); state.busy = false; render(); }
+  function fail(error, fallback = 'La rencontre n’a pas pu être modifiée : réessayez.') { state.error = userMessage(error, fallback); state.busy = false; render(); }
   async function emit() {
     state.error = '';
     try { await onDraftChange(state.draft); }
@@ -26,7 +37,7 @@ export function initPrepareView({ mount, Store = null, encounter = null, savedEn
   function render() {
     mount.replaceChildren();
     const root = document.createElement('section'); root.className = 'prepare-view'; root.setAttribute('aria-label', 'Préparer une rencontre');
-    const title = document.createElement('h2'); title.textContent = 'Préparer une rencontre'; root.appendChild(title);
+    if (!hosted) { const title = document.createElement('h2'); title.textContent = 'Préparer une rencontre'; root.appendChild(title); }
     if (state.error) { const error = document.createElement('p'); error.className = 'error'; error.setAttribute('role', 'alert'); error.textContent = state.error; root.appendChild(error); }
     const saved = typeof Store?.listEncounters === 'function' ? Store.listEncounters() : savedEncounters;
     const savedBox = document.createElement('details'); savedBox.className = 'prepare-saved-encounters'; savedBox.open = saved.length > 0;
@@ -34,13 +45,13 @@ export function initPrepareView({ mount, Store = null, encounter = null, savedEn
     if (!saved.length) savedBox.appendChild(document.createTextNode('Aucune rencontre enregistrée.'));
     saved.forEach(item => {
       const row = document.createElement('div'); row.className = 'row';
-      const label = document.createElement('span'); label.textContent = `${item.title} · ${item.entries?.length || 0} composition(s) · ${item.status || 'préparée'}`;
+      const label = document.createElement('span'); const count = (item.entries || []).reduce((sum, entry) => sum + (Number(entry.quantity) || 1), 0); label.textContent = `${item.title} · ${count} combattant${count > 1 ? 's' : ''} · ${ENCOUNTER_STATUS_LABELS[item.status] || 'préparée'}`;
       const select = document.createElement('button'); select.type = 'button'; select.className = 'ghost small'; select.textContent = 'Charger';
       select.addEventListener('click', () => callbacks.onSelectEncounter?.(item));
       row.append(label, select);
       if (typeof callbacks.onDeleteEncounter === 'function') {
         const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Supprimer';
-        remove.addEventListener('click', async () => { remove.disabled = true; try { await callbacks.onDeleteEncounter(item.id); render(); } catch (cause) { fail(cause); } }); row.appendChild(remove);
+        remove.addEventListener('click', async () => { remove.disabled = true; try { await callbacks.onDeleteEncounter(item.id); render(); } catch (cause) { fail(cause, 'Rencontre non supprimée : réessayez.'); } }); row.appendChild(remove);
       }
       savedBox.appendChild(row);
     });
@@ -54,19 +65,27 @@ export function initPrepareView({ mount, Store = null, encounter = null, savedEn
     select.append(new Option('Ajouter un profil…', ''));
     profiles().forEach(profile => select.append(new Option(`${profile.name} (${profile.kind || 'Créature'})`, profile.id)));
     const quantity = makeField('Quantité', 1, 'number'); quantity.input.min = '1'; quantity.input.max = '99';
-    const camp = makeField('Camp', 'neutre'); const zone = document.createElement('select'); zone.append(new Option('Banc', 'bench'), new Option('Actif', 'active'));
+    const camp = makeSelect('Camp', Object.entries(CAMP_LABELS), 'neutre');
+    const zone = makeSelect('Zone', [['bench', 'En attente'], ['active', 'Actif']], 'bench');
+    // Le camp suit le type du profil choisi, sauf s'il a été choisi à la main.
+    let campChosen = false;
+    camp.input.addEventListener('change', () => { campChosen = true; });
+    select.addEventListener('change', () => {
+      const profile = profiles().find(candidate => candidate.id === select.value);
+      if (profile && !campChosen) camp.input.value = KIND_CAMPS[profile.kind] || 'ennemi';
+    });
     const addButton = document.createElement('button'); addButton.type = 'button'; addButton.textContent = 'Ajouter';
     addButton.addEventListener('click', () => {
-      try { state.draft = setEncounterEntry(state.draft, select.value, { quantity: quantity.input.value, camp: camp.input.value, zone: zone.value }); void emit(); render(); }
-      catch (error) { fail(error); }
+      try { state.draft = setEncounterEntry(state.draft, select.value, { quantity: quantity.input.value, camp: camp.input.value, zone: zone.input.value }); void emit(); render(); }
+      catch (error) { fail(error, select.value ? 'Profil non ajouté : réessayez.' : 'Choisissez un profil à ajouter.'); }
     });
-    add.append(select, quantity.wrapper, camp.wrapper, zone, addButton); root.appendChild(add);
+    add.append(select, quantity.wrapper, camp.wrapper, zone.wrapper, addButton); root.appendChild(add);
 
     const list = document.createElement('ul'); list.className = 'encounter-composition';
     state.draft.entries.forEach(entry => {
       const item = document.createElement('li');
       const profile = profiles().find(candidate => candidate.id === entry.profileId);
-      item.textContent = `${profile?.name || entry.profileId || 'Profil supprimé'} ×${entry.quantity} · ${entry.camp} · ${entry.zone === 'active' ? 'actif' : 'banc'}`;
+      item.textContent = `${profile?.name || 'Profil supprimé'} ×${entry.quantity} · ${CAMP_LABELS[normalizeCamp(entry.camp, profile?.kind)]} · ${entry.zone === 'active' ? 'actif' : 'en attente'}`;
       const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Retirer'; remove.addEventListener('click', () => { state.draft = removeEncounterEntry(state.draft, entry.id); void emit(); render(); });
       item.append(' ', remove); list.appendChild(item);
     });
@@ -78,13 +97,13 @@ export function initPrepareView({ mount, Store = null, encounter = null, savedEn
     characters.forEach(character => {
       const row = document.createElement('div'); row.className = 'row';
       row.append(document.createTextNode(`${character.name || character.id} · PV ${character.hp ?? 0}`));
-      if (typeof callbacks.onDeletePersistentCharacter === 'function') { const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Supprimer'; remove.addEventListener('click', async () => { remove.disabled = true; try { await callbacks.onDeletePersistentCharacter(character.id); render(); } catch (cause) { fail(cause); } }); row.appendChild(remove); }
+      if (typeof callbacks.onDeletePersistentCharacter === 'function') { const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Supprimer'; remove.addEventListener('click', async () => { remove.disabled = true; try { await callbacks.onDeletePersistentCharacter(character.id); render(); } catch (cause) { fail(cause, 'Personnage non supprimé : réessayez.'); } }); row.appendChild(remove); }
       people.appendChild(row);
     });
     if (typeof callbacks.onSavePersistentCharacter === 'function') {
       const personForm = document.createElement('form'); personForm.className = 'row';
       personForm.innerHTML = '<input name="name" placeholder="Nom du personnage" required><input name="hp" type="number" min="0" placeholder="PV" required><button type="submit" class="ghost small">Ajouter un personnage</button>';
-      personForm.addEventListener('submit', async event => { event.preventDefault(); const submit = personForm.querySelector('button'); submit.disabled = true; try { await callbacks.onSavePersistentCharacter({ name: personForm.elements.name.value.trim(), hp: Number(personForm.elements.hp.value), states: [] }); render(); } catch (cause) { fail(cause); } });
+      personForm.addEventListener('submit', async event => { event.preventDefault(); const submit = personForm.querySelector('button'); submit.disabled = true; try { await callbacks.onSavePersistentCharacter({ name: personForm.elements.name.value.trim(), hp: Number(personForm.elements.hp.value), states: [] }); render(); } catch (cause) { fail(cause, 'Personnage non ajouté : vérifiez le nom et les PV, puis réessayez.'); } });
       people.appendChild(personForm);
     }
     root.appendChild(people);

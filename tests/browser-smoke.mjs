@@ -96,6 +96,13 @@ async function openWorkspaceProfileEditor(page, name) {
   return { card, dialog, form };
 }
 
+// Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
+async function openAppMenu(page) {
+  const menu = page.locator('#app-menu');
+  if (!(await menu.evaluate(element => element.matches(':popover-open')))) await page.locator('#btn-menu').click();
+  await expect(menu).toBeVisible();
+}
+
 async function main() {
   const { server, port } = await startStaticServer();
   const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH
@@ -154,6 +161,13 @@ async function main() {
     await addProfileDice(page, { base: 48, note: 'Épée de recette', damage: 1 });
     await form.locator('#btn-submit-form').click();
     await expect(page.locator('#reserve-list')).toContainText('Aline du Test');
+    // Caractéristiques absentes du formulaire (M, A, B, BF) : posées par le Store,
+    // elles doivent survivre à un enregistrement du formulaire de profil.
+    await page.evaluate(async () => {
+      const { Store } = await import('/js/main.js');
+      const profile = Store.listProfiles().find(item => item.name === 'Aline du Test');
+      await Store.updateProfile(profile.id, { caracs: { ...profile.caracs, M: 4, A: 1, B: 12, BF: 3 } });
+    });
 
     // Edit, then cancel a second edit to verify both paths leave the form coherent.
     const { dialog: editDialog, form: editForm } = await openWorkspaceProfileEditor(page, 'Aline du Test');
@@ -180,6 +194,13 @@ async function main() {
     await edited.form.locator('#btn-submit-form').click();
     await expect(page.locator('.workspace-space-library')).toContainText('Aline modifiée');
     await expect(page.locator('.workspace-space-library')).not.toContainText('Aline du Test');
+    // Deux ouvertures de l'éditeur ne laissent aucun paragraphe d'aperçu dans le formulaire.
+    await expect(page.locator('#form-add > p.muted')).toHaveCount(0);
+    const savedCaracs = await page.evaluate(async () => {
+      const { Store } = await import('/js/main.js');
+      return Store.listProfiles().find(item => item.name === 'Aline modifiée').caracs;
+    });
+    assert.deepEqual({ M: savedCaracs.M, A: savedCaracs.A, B: savedCaracs.B, BF: savedCaracs.BF, CC: savedCaracs.CC, E: savedCaracs.E }, { M: 4, A: 1, B: 12, BF: 3, CC: 48, E: 35 });
 
     const modifiedCard = await workspaceProfileCard(page, 'Aline modifiée');
     await modifiedCard.getByRole('button', { name: 'Dupliquer' }).click();
@@ -209,45 +230,125 @@ async function main() {
     assert.equal(profileOptions.length, 2, 'la réserve doit proposer les deux profils de la rencontre');
     const [firstProfile, secondProfile] = profileOptions;
     const secondName = secondProfile.label.replace(/\s+\(.+\)$/, '');
+    const campSelect = prepareOverlay.getByRole('combobox', { name: 'Camp' });
     await profileSelect.selectOption(firstProfile.value);
+    // Camp proposé selon le type du profil (PJ → PJ).
+    await expect(campSelect).toHaveValue('pj');
     await prepareOverlay.getByRole('button', { name: 'Ajouter' }).click();
+    // Un camp choisi à la main n'est pas remplacé au changement de profil.
+    await campSelect.selectOption('allie');
     await profileSelect.selectOption(secondProfile.value);
+    await expect(campSelect).toHaveValue('allie');
+    await campSelect.selectOption('pj');
     await zoneSelect.selectOption('active');
     await prepareOverlay.getByRole('button', { name: 'Ajouter' }).click();
     await prepareOverlay.getByRole('button', { name: 'Lancer la rencontre' }).last().click();
     await expect(prepareOverlay).toBeHidden();
     await openWorkspaceSpace(page, 'play');
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(2);
-    await page.getByRole('button', { name: 'Démarrer' }).click();
-    await expect(page.locator('.workspace-round')).toContainText('Round 1');
+    // Aucun rappel de tour tant que le combat n'a pas commencé.
+    await expect(page.locator('#workspace-play')).not.toContainText('Fin du tour');
+    await page.locator('#combat-banner').getByRole('button', { name: 'Commencer le combat' }).click();
+    await expect(page.locator('#combat-banner')).toContainText('Round 1');
 
-    const action = page.getByRole('button', { name: /Épée de recette.*48|48.*Épée de recette/ }).first();
-    await expect(action).toBeVisible();
-    await action.click();
-    const resolution = page.getByRole('dialog');
-    await resolution.locator('select[name="type"]').selectOption('attack');
-    await resolution.locator('select[name="target"]').selectOption({ index: 1 });
-    await resolution.locator('input[name="roll"]').fill('42');
-    await resolution.getByRole('button', { name: 'Prévisualiser' }).click();
-    await expect(resolution).toContainText('DR');
-    await resolution.getByRole('button', { name: 'Appliquer les conséquences' }).click();
-    await expect(resolution).toBeHidden();
-    await expect(page.locator('#toast-container')).toContainText('Conséquences appliquées');
+    // Integrated resolution: the prepared physical action is preselected and
+    // resolved in place, without a modal.
+    const resolution = page.locator('.workspace-resolution');
+    const action = resolution.getByRole('button', { name: /Épée de recette.*48/ }).first();
+    await expect(action).toHaveAttribute('aria-pressed', 'true');
+    await expect(resolution.getByRole('combobox', { name: 'Type d’action' })).toHaveValue('attack');
+    await resolution.locator('[data-roll-input="attack"]').fill('42');
+    await resolution.getByRole('button', { name: 'Calculer' }).click();
+    await expect(resolution.locator('.workspace-result')).toContainText('DR');
+    await resolution.getByRole('button', { name: /^Appliquer \d+ dégâts à / }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.locator('#toast-container')).toContainText(/dégâts appliqués à/);
     await expect(page.locator('.workspace-track')).toContainText('PV 13/14');
 
     // A manual PV change is one command: undo and redo must restore the same
     // deterministic value in the actor sheet.
-    await page.getByRole('button', { name: /\+1 PV pour/ }).click();
-    await expect(page.locator('.workspace-actor-sheet')).toContainText('PV 15/14');
-    await page.locator('#workspace-play').getByRole('button', { name: 'Annuler' }).click();
-    await expect(page.locator('.workspace-actor-sheet')).toContainText('PV 14/14');
+    const actorSheet = page.locator('.workspace-sheet-actor');
+    await actorSheet.getByRole('button', { name: /\+1 PV pour/ }).click();
+    await expect(actorSheet).toContainText('PV 15/14');
+    await page.locator('#btn-undo').click();
+    await expect(actorSheet).toContainText('PV 14/14');
+    await openAppMenu(page);
     await page.locator('#btn-redo').click();
-    await expect(page.locator('.workspace-actor-sheet')).toContainText('PV 15/14');
+    await expect(actorSheet).toContainText('PV 15/14');
+    // Sans caractéristique I, la grille affiche l'initiative.
+    await expect(actorSheet.locator('.workspace-carac').filter({ hasText: /^I/ }).locator('dd')).toHaveText(/^\d+$/);
+
+    // Journal lisible : type traduit, résumés à la place des objets bruts.
+    const side = page.locator('.workspace-side');
+    await side.getByRole('tab', { name: 'Journal' }).click();
+    const sideLog = page.locator('#workspace-side-panel-log');
+    await expect(sideLog).toContainText('Attaque — réussite');
+    await expect(sideLog).toContainText(/damage:\s*\d+ arme/);
+    await expect(sideLog).not.toContainText('[object Object]');
+
+    // Espace dans le texte des règles fait défiler, sans passer au tour suivant ;
+    // N reste actif hors des champs de saisie.
+    await side.getByRole('tab', { name: 'Règles' }).click();
+    const rulesPanel = page.locator('#workspace-side-panel-rules');
+    await expect(rulesPanel.locator('.rules-title')).toBeHidden();
+    await rulesPanel.click({ position: { x: 4, y: 4 } });
+    await expect(rulesPanel).toBeFocused();
+    const bannerBefore = await page.locator('#combat-banner').textContent();
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(150);
+    assert.equal(await page.locator('#combat-banner').textContent(), bannerBefore, 'Espace hors bouton ne doit pas avancer le tour');
+    await page.keyboard.press('n');
+    await expect.poll(() => page.locator('#combat-banner').textContent()).not.toBe(bannerBefore);
+
+    // Éditeur de combattant non modal : PV et états changés sur la fiche pendant
+    // qu'il est ouvert ne sont pas écrasés à l'enregistrement.
+    const actorName = (await actorSheet.locator('.workspace-sheet-name').textContent()).trim();
+    const actorEdit = () => actorSheet.getByRole('button', { name: `Modifier ${actorName}`, exact: true });
+    await actorEdit().click();
+    let editor = page.getByRole('dialog');
+    await expect(editor.locator('.participant-state-list')).toBeEmpty();
+    const hpField = editor.locator('[name=hp]');
+    const hpBefore = Number(await hpField.inputValue());
+    await actorSheet.getByRole('button', { name: `−1 PV pour ${actorName}` }).click();
+    await expect(hpField).toHaveValue(String(hpBefore - 1));
+    await actorSheet.getByRole('button', { name: `Ajouter un état à ${actorName}` }).click();
+    await actorSheet.getByRole('button', { name: 'Ajouter', exact: true }).click();
+    await expect(editor.locator('.state-edit-row')).toHaveCount(1);
+    await editor.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+    await expect(editor).toBeHidden();
+    await expect(actorSheet).toContainText(`PV ${hpBefore - 1}/`);
+    await expect(actorSheet.locator('.workspace-state-chip')).toHaveCount(1);
+    // Le bouton d'origine, recréé par le re-rendu, reprend le focus.
+    await expect(actorEdit()).toBeFocused();
+    await actorEdit().click();
+    editor = page.getByRole('dialog');
+    await actorSheet.getByRole('button', { name: new RegExp(`^Retirer .+ de ${actorName}$`) }).click();
+    await expect(editor.locator('.state-edit-row')).toHaveCount(0);
+    // Échap pendant une saisie hors de la fenêtre ne la ferme pas ; dans la fenêtre, si.
+    await page.locator('[data-roll-input="attack"]').focus();
+    await page.keyboard.press('Escape');
+    await expect(editor).toBeVisible();
+    await editor.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+    await expect(editor).toBeHidden();
+    await expect(actorSheet.locator('.workspace-state-chip')).toHaveCount(0);
+    await actorEdit().click();
+    editor = page.getByRole('dialog');
+    await editor.locator('[name=name]').focus();
+    await page.keyboard.press('Escape');
+    await expect(editor).toBeHidden();
+    await expect(actorEdit()).toBeFocused();
 
     // Edit the second live participant and remove only that instance.
-    await page.getByRole('button', { name: `Consulter ${secondName}` }).click();
-    await page.locator('.workspace-actor-sheet').getByRole('button', { name: 'Modifier la fiche' }).click();
-    const participantDialog = page.getByRole('dialog');
+    // The participant editor is a non-modal tool window with its own camp list.
+    await page.getByRole('button', { name: `Modifier ${secondName}`, exact: true }).click();
+    let participantDialog = page.getByRole('dialog');
+    await expect(participantDialog.getByRole('heading', { level: 2 })).toHaveText(`Modifier ${secondName}`);
+    await participantDialog.getByRole('combobox', { name: 'Camp' }).selectOption('allie');
+    await participantDialog.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+    await expect(participantDialog).toBeHidden();
+    await page.getByRole('button', { name: `Modifier ${secondName}`, exact: true }).click();
+    participantDialog = page.getByRole('dialog');
+    await expect(participantDialog.getByRole('combobox', { name: 'Camp' })).toHaveValue('allie');
     await participantDialog.getByRole('button', { name: 'Retirer du combat' }).click();
     await expect(participantDialog).toBeHidden();
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(1);
@@ -262,9 +363,10 @@ async function main() {
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(1);
     await expect(page.locator('.workspace-track')).toContainText('PV 15/14');
 
+    await openAppMenu(page);
     await page.locator('#workspace-close-scene').click();
     const closure = page.getByRole('dialog');
-    await closure.getByRole('button', { name: 'Prévisualiser le report' }).click();
+    await closure.getByRole('button', { name: 'Voir le report' }).click();
     await closure.getByRole('button', { name: 'Clôturer et archiver' }).click();
     await expect(closure).toBeHidden();
     await expect(page.locator('#toast-container')).toContainText('clôturée');

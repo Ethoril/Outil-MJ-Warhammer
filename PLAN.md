@@ -31,7 +31,7 @@ Conséquences, à appliquer partout :
 | **Aucune dépendance d'exécution** | Rien à installer pour faire tourner l'app. Firebase reste chargé depuis `gstatic` (jusqu'au lot 12). Pas de framework, pas de bundler, pas d'étape de build. |
 | **Le site reste servi statiquement** | GitHub Pages sert le dépôt tel quel. Tout fichier référencé doit exister à la racine du dépôt ou dans un sous-dossier. |
 | **Langue de l'interface : français** | Tout libellé, message, `title`, `placeholder` et texte de journal est en français. Les identifiants, noms de fonctions, de variables et de fichiers restent en anglais. |
-| **Identité visuelle préservée** | Le thème parchemin (Cinzel / Lora, `--bg: #f5e5c7`, rouge `#8a0707`) est un choix assumé. Ne pas le remplacer. Le lot 11 ajoute un thème sombre **à côté**, pas à la place. |
+| **Identité visuelle préservée** | Le thème parchemin (`--bg: #f5e5c7`, rouge `#8a0707`, texture `old-paper.svg`) est un choix assumé. Ne pas le remplacer. Typographie depuis la refonte de l’interface : Grenze Gotisch (titres, noms de combattants), Alegreya (texte), Alegreya Sans (interface, chiffres tabulaires). Le lot 11 ajoute un thème sombre **à côté**, pas à la place. |
 | **Pas de refactor opportuniste** | Chaque lot ne touche que ce qu'il déclare toucher. Une amélioration repérée hors périmètre se signale dans le compte rendu, elle ne se code pas. |
 
 ### ⚠ Deux règles acquises, valables pour tous les lots suivants
@@ -1171,7 +1171,8 @@ connexion reste bloqué. Et le pire moment pour perdre le wifi, c'est en pleine 
 **À faire.**
 
 1. **Héberger les ressources dans le dépôt.**
-   - Cinzel (400, 700) et Lora (400, 400 italique) en `.woff2` dans `assets/fonts/`,
+   - Grenze Gotisch (variable 400–800), Alegreya (variable 400–800, romain et italique) et
+     Alegreya Sans (400, 500, 700) en `.woff2` dans `assets/fonts/`,
      déclarés en `@font-face` avec `font-display: swap`. Chrome sur Mac : `woff2` seul suffit,
      pas de format de repli.
    - La texture `old-paper.png` dans `assets/`. Vérifier sa licence avant de la vendorer ;

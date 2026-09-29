@@ -37,6 +37,13 @@ function startStaticServer() {
   });
 }
 
+// Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
+async function openAppMenu(page) {
+  const menu = page.locator('#app-menu');
+  if (!(await menu.evaluate(element => element.matches(':popover-open')))) await page.locator('#btn-menu').click();
+  await expect(menu).toBeVisible();
+}
+
 async function isolateNetwork(context, port) {
   await context.route('**/*', route => {
     if (route.request().url().startsWith(`http://127.0.0.1:${port}/`)) return route.continue();
@@ -99,8 +106,9 @@ async function loadFixture(page, file, { accept = true } = {}) {
     : null;
   await page.locator('#tab-combat').click();
   // The current workspace keeps the legacy combat panel hidden. Use the
-  // visible session tool, which delegates to the same file input and import
+  // session command of the ⋯ menu, which delegates to the same file input and import
   // confirmation path.
+  await openAppMenu(page);
   await page.locator('#workspace-load').click();
   await page.locator('#file-input').setInputFiles(file);
   if (dialog) await dialog;
@@ -144,7 +152,7 @@ async function main() {
         await fillProfile(page, 'Profil avant import invalide');
         const before = await readPersistence(page);
         await loadFixture(page, { name: 'e04-invalid.json', mimeType: 'application/json', buffer: Buffer.from(invalidFixture) }, { accept: false });
-        await expect(page.locator('#toast-container .toast')).toContainText('Erreur de chargement');
+        await expect(page.locator('#toast-container .toast')).toContainText('Sauvegarde non chargée : ce fichier n’est pas une sauvegarde de l’outil MJ.');
         const after = await readPersistence(page);
         assert.deepEqual(after.contexts, before.contexts);
         assert.deepEqual(after.outbox, before.outbox);
@@ -216,6 +224,7 @@ async function main() {
         await expect(page.locator('#workspace-library')).toContainText('Profil avant export');
         await page.locator('#tab-combat').click();
         const download = page.waitForEvent('download');
+        await openAppMenu(page);
         await page.locator('#workspace-save').click();
         const exported = await readDownload(await download);
         assert.deepEqual(exported.extensions.campaign, { name: 'Fixture E04' });
@@ -241,6 +250,7 @@ async function main() {
         await expect(page.locator('#reserve-list')).toContainText('Profil avant export');
         await expect(page.locator('#reserve-list')).not.toContainText('Profil après export');
         const roundTrip = page.waitForEvent('download');
+        await openAppMenu(page);
         await page.locator('#workspace-save').click();
         const reimported = await readDownload(await roundTrip);
         assert.deepEqual(reimported.extensions.campaign, { name: 'Fixture E04' });

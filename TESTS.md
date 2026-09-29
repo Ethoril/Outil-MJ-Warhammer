@@ -340,7 +340,7 @@ Cible : **Renaut**, BE 3, armure Corps 2. Régler la ligne de jet sur `Dég. 6`,
 | # | Action | Attendu |
 |---|---|---|
 | 12.1 | Charger l'application une fois **en ligne**, puis passer **Offline** et recharger | Elle **démarre**, affiche les données locales et un bandeau hors-ligne (`D-01`) |
-| 12.2 | Hors ligne : vérifier polices et texture de fond | Cinzel et Lora s'affichent, la texture est là — tout est servi localement |
+| 12.2 | Hors ligne : vérifier polices et texture de fond | Grenze Gotisch, Alegreya et Alegreya Sans s'affichent, la texture est là — tout est servi localement |
 | 12.3 | Repasser en ligne | La synchronisation repart, rien n'est perdu |
 | 12.4 | DevTools → Application → Manifest | Aucune erreur, icônes présentes (`D-03`) |
 | 12.5 | Regarder l'onglet du navigateur | Le favicon s'affiche |

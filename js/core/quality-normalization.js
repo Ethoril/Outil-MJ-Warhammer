@@ -1,5 +1,5 @@
 /** Canonical quality/alias handling for E06, before any mechanical engine. */
-import { slugify } from './keywords.js';
+import { getKeywordBySlug, slugify } from './keywords.js';
 import { ENGINES } from '../data/keyword-engines.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -58,3 +58,10 @@ export function normalizeQualities(qualities = [], { registry = ENGINES } = {}) 
 }
 
 export const dedupeQualities = normalizeQualities;
+
+/** Libellé affichable d'une qualité (« Percutante ») : nom du registre de mots-clés, sinon le texte saisi. */
+export function qualityLabel(quality, registry = ENGINES) {
+  const id = canonicalQualityId(quality, registry);
+  const text = (id && getKeywordBySlug(id)?.name) || (isRecord(quality) ? quality.name : '') || rawQualityId(quality) || id;
+  return text ? text.charAt(0).toLocaleUpperCase('fr-FR') + text.slice(1) : '';
+}

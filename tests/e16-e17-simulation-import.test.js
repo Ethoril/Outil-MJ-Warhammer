@@ -34,7 +34,7 @@ test('E17 import texte — bloc complet, accents, qualités canonisées et conte
   const result = parseProfileText(`[Profil]\nNom: <b>Garde</b>\nType PNJ: PNJ\nPV: 12\nInitiative: 30\nCaractéristique E: 35\nArmure tête: 2\nAction: Attaque | base=40 | dégâts=1d10 | qualités=Impact, Percutante, Météore\n---\nNom: Éclaireur\nPV: 8`);
   assert.equal(result.profiles.length, 2);
   assert.equal(result.profiles[0].name, '<b>Garde</b>');
-  assert.deepEqual(result.profiles[0].caracs, { e: 35 });
+  assert.deepEqual(result.profiles[0].caracs, { E: 35 });
   assert.equal(result.profiles[0].armor.head, 2);
   assert.deepEqual(result.profiles[0].actions[0].qualities.map(item => item.id), ['percutante', 'meteore']);
   assert.deepEqual(result.unknownQualities.map(item => item.value), ['Météore']);

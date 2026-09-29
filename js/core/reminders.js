@@ -44,13 +44,22 @@ function stateKey(state) {
   return String(name).toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
+// Display text only: reminder ids never depend on it.
+function turnLabel(snapshot, transition) {
+  const participants = Array.isArray(snapshot.participants) ? snapshot.participants : [];
+  const name = keyPart(transition.actorName, '')
+    || keyPart(participants.find(item => item?.id && item.id === transition.actorId)?.name, '');
+  const base = transition.type === 'endTurn' ? 'Fin du tour' : 'Début du tour';
+  return name ? `${base} de ${name}` : base;
+}
+
 /** Derive current reminders; rendering/reloading this result has no side effect. */
 export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
   const sceneId = keyPart(snapshot.sceneId || transition.sceneId, 'scene');
   const transitionId = keyPart(transition.id || transition.type, 'transition');
   const candidates = [];
   if (transition.type === 'startTurn' || transition.type === 'endTurn') {
-    candidates.push({ kind: transition.type, effectId: transition.actorId || 'turn', text: transition.text || `Transition ${transition.type}`, mode: 'reminder' });
+    candidates.push({ kind: transition.type, effectId: transition.actorId || 'turn', text: transition.text || turnLabel(snapshot, transition), mode: 'reminder' });
   }
   const states = Array.isArray(snapshot.states) ? snapshot.states : [];
   for (const state of states) {

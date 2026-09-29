@@ -1,5 +1,5 @@
 import { normalizeEffects, normalizeState, resolveEffectCapability } from './effects.js';
-import { cloneValue, normalizeAction, normalizeTags } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags } from './models.js';
 
 export function normalizeSearchText(value) {
   return String(value ?? '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -19,7 +19,7 @@ export function sanitizeProfile(o) {
     kind: ['PJ', 'PNJ', 'Créature'].includes(o.kind) ? o.kind : 'Créature',
     initiative: Number(o.initiative) || 0,
     hp: Number(o.hp) || 0,
-    caracs: (o.caracs && typeof o.caracs === 'object') ? cloneValue(o.caracs) : {},
+    caracs: normalizeCaracs(o.caracs),
     armor: (o.armor && typeof o.armor === 'object') ? cloneValue(o.armor) : { head: 0, body: 0, arms: 0, legs: 0 },
     diceLines: sanitizeArray(o.diceLines).map(normalizeAction),
     group: typeof o.group === 'string' ? o.group.trim() : '',

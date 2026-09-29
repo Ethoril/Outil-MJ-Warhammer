@@ -1,7 +1,8 @@
 import { exportArchive, previewClosure } from '../core/closure.js';
+import { userMessage } from './messages.js';
 
-/** E13 review view: selection is explicit and all writes are delegated. */
-export function initClosureView({ mount, scene = null, persistentCharacters = [], callbacks = {} } = {}) {
+/** E13 review view: selection is explicit and all writes are delegated. `hosted` : la fenêtre porte déjà le titre. */
+export function initClosureView({ mount, hosted = false, scene = null, persistentCharacters = [], callbacks = {} } = {}) {
   if (!mount || typeof mount.replaceChildren !== 'function') throw new TypeError('closure-view nécessite un mount');
   let currentScene = scene;
   let lastPreview = null;
@@ -12,7 +13,8 @@ export function initClosureView({ mount, scene = null, persistentCharacters = []
   function render() {
     mount.replaceChildren();
     const root = document.createElement('section'); root.className = 'closure-view'; root.setAttribute('aria-label', 'Clôturer la séance');
-    const title = document.createElement('h2'); title.textContent = `Bilan — ${currentScene?.title || 'Séance'}`; root.appendChild(title);
+    if (hosted) { const subject = document.createElement('p'); subject.className = 'muted'; subject.textContent = `Bilan de « ${currentScene?.title || 'Séance'} »`; root.appendChild(subject); }
+    else { const title = document.createElement('h2'); title.textContent = `Bilan — ${currentScene?.title || 'Séance'}`; root.appendChild(title); }
     if (error) { const alert = document.createElement('p'); alert.className = 'error'; alert.setAttribute('role', 'alert'); alert.textContent = error; root.appendChild(alert); }
     const list = document.createElement('div'); list.className = 'closure-participants';
     const selected = selections;
@@ -39,9 +41,9 @@ export function initClosureView({ mount, scene = null, persistentCharacters = []
       if (participantIds.length < 2) continue;
       const character = persistentCharacters.find(item => item.id === characterId);
       const authorityLabel = document.createElement('label');
-      authorityLabel.textContent = `Autorité pour ${character?.name || characterId}`;
+      authorityLabel.textContent = `Version à garder pour ${character?.name || characterId}`;
       const authority = document.createElement('select');
-      authority.setAttribute('aria-label', `Autorité pour ${character?.name || characterId}`);
+      authority.setAttribute('aria-label', `Version à garder pour ${character?.name || characterId}`);
       participantIds.forEach(participantId => {
         const participant = (currentScene?.participants || []).find(item => item.id === participantId);
         authority.append(new Option(participant?.name || participantId, participantId));
@@ -54,8 +56,8 @@ export function initClosureView({ mount, scene = null, persistentCharacters = []
       root.appendChild(authorityLabel);
     }
     const actions = document.createElement('div'); actions.className = 'actions';
-    const previewButton = document.createElement('button'); previewButton.type = 'button'; previewButton.textContent = 'Prévisualiser le report';
-    previewButton.addEventListener('click', () => { try { lastPreview = previewClosure(currentScene, { persistentCharacters, selections: Object.fromEntries(selected), authorities: Object.fromEntries(authorities) }); error = ''; callbacks.onPreview?.(lastPreview); render(); } catch (cause) { error = cause.message; render(); } });
+    const previewButton = document.createElement('button'); previewButton.type = 'button'; previewButton.textContent = 'Voir le report';
+    previewButton.addEventListener('click', () => { try { lastPreview = previewClosure(currentScene, { persistentCharacters, selections: Object.fromEntries(selected), authorities: Object.fromEntries(authorities) }); error = ''; callbacks.onPreview?.(lastPreview); render(); } catch (cause) { error = userMessage(cause, 'Report impossible à prévisualiser : vérifiez les personnages choisis.'); render(); } });
     actions.appendChild(previewButton);
     const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Clôturer et archiver';
     apply.disabled = typeof callbacks.onApply !== 'function';
@@ -65,7 +67,7 @@ export function initClosureView({ mount, scene = null, persistentCharacters = []
       if (typeof callbacks.onApply !== 'function') return;
       apply.disabled = true;
       try { await callbacks.onApply(lastPreview, { selections: Object.fromEntries(selections), authorities: Object.fromEntries(authorities) }); }
-      catch (cause) { error = cause?.message || String(cause); apply.disabled = false; render(); }
+      catch (cause) { error = userMessage(cause, 'Séance non clôturée : affichez à nouveau le report, puis réessayez.'); apply.disabled = false; render(); }
     });
     actions.appendChild(apply);
     const cancel = document.createElement('button'); cancel.type = 'button'; cancel.className = 'ghost'; cancel.textContent = 'Annuler'; cancel.addEventListener('click', () => callbacks.onCancel?.()); actions.appendChild(cancel);

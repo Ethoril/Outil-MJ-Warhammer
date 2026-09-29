@@ -1,0 +1,347 @@
+/**
+ * Résolution intégrée de Jouer (sans modale). Ce module ne fait que construire
+ * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
+ * par `handlers`, et la vue reste propriétaire de l'état entre deux rendus.
+ */
+import { formatDamageFormula, damageBreakdown } from '../core/resolution.js';
+import { qualityLabel } from '../core/quality-normalization.js';
+
+export const ACTION_TYPES = Object.freeze([
+  ['attack', 'Attaque'],
+  ['skill', 'Compétence'],
+  ['defense', 'Défense / esquive'],
+  ['opposition', 'Opposition']
+]);
+const ROLL_LABELS = Object.freeze({ attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' });
+export const DEFENSE_STATS = Object.freeze(['CC', 'Ag', 'Autre']);
+const MINUS = '−';
+
+function node(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+
+function button(label, className, attrs = {}) {
+  const element = node('button', className, label);
+  element.type = 'button';
+  Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+  return element;
+}
+
+/** Nombre sans signe « + », négatif en U+2212 (PV sous zéro). */
+export const minusSigned = value => {
+  const number = Number(value) || 0;
+  return number < 0 ? `${MINUS}${Math.abs(number)}` : String(number);
+};
+
+export const signed = value => {
+  const number = Number(value) || 0;
+  return number < 0 ? `${MINUS}${Math.abs(number)}` : `+${number}`;
+};
+
+/** Stable key of an action within the actor's list (dice lines may lack an id). */
+export function actionKey(action, index) {
+  return action?.id ? String(action.id) : `index-${index}`;
+}
+
+export function actionLabel(action = {}) {
+  return `${action.name || action.note || action.attr || 'Action'} · ${action.base ?? '—'}`;
+}
+
+function qualityNames(action = {}) {
+  return (action.qualities || []).map(quality => qualityLabel(quality)).filter(Boolean);
+}
+
+function rubric(text) {
+  return node('h4', 'workspace-rubric', text);
+}
+
+function chip(label, { pressed = false, key, attrs = {} } = {}) {
+  const element = button(label, 'workspace-chip', { 'aria-pressed': String(pressed), 'data-focus-key': key, ...attrs });
+  return element;
+}
+
+function rollField({ field, label, value, error, handlers, disabled }) {
+  const wrapper = node('div', 'workspace-roll');
+  const id = `workspace-roll-${field}`;
+  const caption = node('label', 'workspace-roll-label', label);
+  caption.htmlFor = id;
+  const row = node('div', 'workspace-roll-row');
+  const input = document.createElement('input');
+  input.id = id;
+  input.className = 'workspace-roll-input num';
+  input.inputMode = 'numeric';
+  input.autocomplete = 'off';
+  input.placeholder = '01–00';
+  input.maxLength = 3;
+  input.value = value;
+  input.dataset.rollInput = field;
+  input.dataset.focusKey = `roll-${field}`;
+  input.disabled = disabled;
+  if (error) {
+    input.setAttribute('aria-invalid', 'true');
+    input.setAttribute('aria-describedby', `${id}-error`);
+  }
+  input.addEventListener('input', () => handlers.input(field === 'attack' ? 'attackRoll' : 'defenseRoll', input.value));
+  input.addEventListener('keydown', event => {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    handlers.calculate();
+  });
+  const roll = button('Lancer', 'workspace-secondary', { 'aria-label': `Lancer le d100 : ${label}`, 'data-focus-key': `roll-${field}-dice` });
+  roll.disabled = disabled;
+  roll.addEventListener('click', () => handlers.roll(field));
+  row.append(input, roll);
+  wrapper.append(caption, row);
+  if (error) {
+    const alert = node('p', 'workspace-field-error', error);
+    alert.id = `${id}-error`;
+    alert.setAttribute('role', 'alert');
+    wrapper.appendChild(alert);
+  }
+  return wrapper;
+}
+
+function outcomePill(label, success, sl) {
+  return node('span', `workspace-outcome ${success ? 'is-success' : 'is-failure'}`, `${label} : ${success ? 'Réussite' : 'Échec'} · DR ${signed(sl)}`);
+}
+
+function renderResult(preview, target) {
+  const result = node('div', 'workspace-result');
+  const pills = node('div', 'workspace-result-pills');
+  const opposed = preview.opposition?.mode === 'opposed' ? preview.opposition : null;
+  pills.appendChild(outcomePill(ROLL_LABELS[preview.actionType] || 'Jet', preview.success, preview.sl));
+  if (opposed) pills.appendChild(outcomePill('Défense', opposed.defender.success, opposed.defender.sl));
+  if (preview.critical?.kind === 'Critique') pills.appendChild(node('span', 'workspace-outcome is-critical', 'Coup critique'));
+  if (preview.fumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse'));
+  result.appendChild(pills);
+
+  if (opposed) {
+    result.appendChild(node('p', 'workspace-result-line num', `DR net ${signed(opposed.netSl)} · ${preview.hit ? 'touché' : 'pas de touche'}`));
+  } else if (preview.attack && !preview.hit) {
+    result.appendChild(node('p', 'workspace-result-line', 'Pas de touche'));
+  }
+  if (preview.location) {
+    result.appendChild(node('p', 'workspace-result-line num', `${preview.location.roll} → ${String(preview.location.name).toLocaleLowerCase()}`));
+  }
+  if (preview.damage) {
+    const formula = formatDamageFormula(preview.damage);
+    const split = formula.lastIndexOf(' = ');
+    const line = node('p', 'workspace-formula num');
+    if (split < 0) line.textContent = formula;
+    else {
+      const [total, ...rest] = formula.slice(split + 3).split(' ');
+      line.append(formula.slice(0, split + 3), node('strong', 'workspace-formula-total', total), rest.length ? ` ${rest.join(' ')}` : '');
+    }
+    result.appendChild(line);
+    const { notes } = damageBreakdown(preview.damage);
+    if (notes.length) result.appendChild(node('p', 'workspace-formula-notes workspace-muted', notes.join(' · ')));
+    if (target) {
+      const after = (Number(target.hp) || 0) - preview.damage.finalDamage;
+      const hp = node('p', 'workspace-result-line num');
+      hp.append(node('span', 'combatant-name', target.name), ` : PV ${minusSigned(target.hp)} → `, node('strong', 'workspace-result-hp', minusSigned(after)));
+      result.appendChild(hp);
+    }
+  }
+  return result;
+}
+
+// Une ligne par cible : « Saskia : touché · 12 dégâts · PV 14 → 2 ».
+function comparisonText({ name, hp, preview }) {
+  const damage = preview.damage;
+  const outcome = preview.hit ? 'touché' : 'pas de touche';
+  return `${name} : ${outcome}${damage ? ` · ${damage.finalDamage} dégâts · PV ${minusSigned(hp)} → ${minusSigned((Number(hp) || 0) - damage.finalDamage)}` : ''}`;
+}
+
+function renderComparison(entries, handlers, busy) {
+  const block = node('div', 'workspace-comparison');
+  block.appendChild(rubric('Comparaison des cibles'));
+  const list = node('ul', 'workspace-comparison-list');
+  entries.forEach(entry => {
+    const item = node('li', 'workspace-comparison-item');
+    item.dataset.targetId = entry.targetId;
+    const choose = button('Choisir', 'workspace-ghost', { 'aria-label': `Choisir ${entry.name}`, 'data-focus-key': `compare-choose-${entry.targetId}` });
+    choose.disabled = busy;
+    choose.addEventListener('click', () => handlers.choose(entry.targetId));
+    item.append(node('span', 'num', comparisonText(entry)), choose);
+    list.appendChild(item);
+  });
+  block.appendChild(list);
+  return block;
+}
+
+/**
+ * @param {object} options
+ * @param {object} options.draft brouillon de la vue (jets, défense, aperçu, erreurs)
+ * @param {object|null} options.actor participant qui agit
+ * @param {Array} options.actions actions de celui qui agit
+ * @param {string|null} options.actionKey clé de l'action retenue
+ * @param {string|null} options.type type retenu
+ * @param {object|null} options.target cible effective
+ * @param {{ adversaries: Array, allies: Array }} options.groups cibles possibles
+ * @param {boolean} options.canCalculate
+ * @param {boolean} options.canApply
+ * @param {object} options.handlers select, input, roll, calculate, compare, choose, apply, cancel
+ */
+export function renderResolutionPanel({ draft, actor, actions, actionKey: selectedKey, type, target, groups, canCalculate, canApply, handlers }) {
+  const section = node('section', 'workspace-resolution workspace-card');
+  section.setAttribute('aria-labelledby', 'workspace-resolution-title');
+  const title = node('h3', 'workspace-rubric', 'Résolution');
+  title.id = 'workspace-resolution-title';
+  section.appendChild(title);
+
+  if (!actor) {
+    section.appendChild(node('p', 'workspace-muted', 'Aucun combattant en jeu : faites entrer un combattant pour résoudre une action.'));
+    return section;
+  }
+
+  // Action
+  const actionBlock = node('div', 'workspace-resolution-row');
+  actionBlock.appendChild(rubric('Action'));
+  const actionChips = node('div', 'workspace-chip-list');
+  if (!actions.length) actionChips.appendChild(node('p', 'workspace-muted', 'Aucune action préparée : ajoutez-en une avec « Modifier ».'));
+  actions.forEach((action, index) => {
+    const key = actionKey(action, index);
+    const qualities = qualityNames(action);
+    const item = chip('', { pressed: key === selectedKey, key: `action-${key}`, attrs: { 'data-action-key': key } });
+    item.append(node('span', '', actionLabel(action)));
+    if (qualities.length) item.append(node('span', 'workspace-chip-note', ` · ${qualities.join(', ')}`));
+    item.addEventListener('click', () => handlers.select({ actionKey: key }));
+    actionChips.appendChild(item);
+  });
+  actionBlock.appendChild(actionChips);
+  if (actions.length) {
+    const typeLabel = node('label', 'workspace-type');
+    typeLabel.append('Type');
+    const select = document.createElement('select');
+    select.dataset.focusKey = 'action-type';
+    select.setAttribute('aria-label', 'Type d’action');
+    ACTION_TYPES.forEach(([value, label]) => select.appendChild(new Option(label, value)));
+    select.value = type || 'skill';
+    select.addEventListener('change', () => handlers.select({ type: select.value }));
+    typeLabel.appendChild(select);
+    actionBlock.appendChild(typeLabel);
+  }
+  section.appendChild(actionBlock);
+
+  // Cible
+  const targetBlock = node('div', 'workspace-resolution-row');
+  targetBlock.appendChild(rubric('Cible'));
+  const targetChips = node('div', 'workspace-chip-list');
+  [['Adversaires', groups.adversaries], ['Alliés', groups.allies]].forEach(([label, list]) => {
+    if (!list.length) return;
+    const group = node('div', 'workspace-chip-group');
+    group.setAttribute('role', 'group');
+    group.setAttribute('aria-label', label);
+    group.appendChild(node('span', 'workspace-chip-group-label', label));
+    list.forEach(participant => {
+      const item = chip(participant.name, { pressed: participant.id === target?.id, key: `target-${participant.id}` });
+      item.classList.add('combatant-name');
+      item.addEventListener('click', () => handlers.select({ targetId: participant.id }));
+      group.appendChild(item);
+    });
+    targetChips.appendChild(group);
+  });
+  const none = chip('Aucune cible', { pressed: !target, key: 'target-none' });
+  none.addEventListener('click', () => handlers.select({ targetId: 'none' }));
+  targetChips.appendChild(none);
+  targetBlock.appendChild(targetChips);
+  section.appendChild(targetBlock);
+
+  if (!actions.length) return section;
+  const action = actions.find((item, index) => actionKey(item, index) === selectedKey) || actions[0];
+
+  // Jets
+  const rolls = node('div', 'workspace-resolution-rolls');
+  const attr = action.attr && action.attr !== 'Custom' ? `${action.attr} ` : '';
+  const mod = Number(action.mod) || 0;
+  rolls.appendChild(rollField({
+    field: 'attack',
+    label: `${ROLL_LABELS[type] || 'Jet'} (${attr}${action.base ?? '—'}${mod ? ` ${signed(mod)}` : ''})`,
+    value: draft.attackRoll,
+    error: draft.error?.field === 'attack' ? draft.error.message : '',
+    handlers,
+    disabled: draft.busy
+  }));
+  if (type === 'attack' && target) {
+    const defense = node('div', 'workspace-defense');
+    const legend = node('p', 'workspace-roll-label');
+    legend.append('Défense de ', node('span', 'combatant-name', target.name), ' (facultative)');
+    defense.appendChild(legend);
+    const row = node('div', 'workspace-roll-row');
+    const stat = document.createElement('select');
+    stat.setAttribute('aria-label', `Caractéristique de défense de ${target.name}`);
+    stat.dataset.focusKey = 'defense-stat';
+    DEFENSE_STATS.forEach(value => stat.appendChild(new Option(value, value)));
+    stat.value = draft.defenseStat;
+    stat.disabled = draft.busy;
+    stat.addEventListener('change', () => handlers.select({ defenseStat: stat.value, defenseBase: null }));
+    const base = document.createElement('input');
+    base.type = 'number';
+    base.className = 'workspace-defense-base';
+    base.setAttribute('aria-label', `Valeur de défense de ${target.name}`);
+    base.dataset.focusKey = 'defense-base';
+    base.value = draft.defenseBase ?? '';
+    base.disabled = draft.busy;
+    base.addEventListener('input', () => handlers.input('defenseBase', base.value));
+    row.append(stat, base);
+    defense.appendChild(row);
+    defense.appendChild(rollField({
+      field: 'defense',
+      label: `Jet de défense (${draft.defenseStat === 'Autre' ? 'valeur' : draft.defenseStat} ${draft.defenseBase || '—'})`,
+      value: draft.defenseRoll,
+      error: draft.error?.field === 'defense' ? draft.error.message : '',
+      handlers,
+      disabled: draft.busy
+    }));
+    rolls.appendChild(defense);
+  }
+  section.appendChild(rolls);
+
+  const commands = node('div', 'workspace-inline-actions workspace-resolution-commands');
+  const calculate = button('Calculer', 'workspace-secondary', { 'data-focus-key': 'calculate' });
+  calculate.disabled = draft.busy || !canCalculate;
+  if (!canCalculate) calculate.title = 'Action indisponible';
+  calculate.addEventListener('click', () => handlers.calculate());
+  commands.appendChild(calculate);
+  // « Et si… » : mêmes jets sur chaque cible possible, sans rien appliquer.
+  if (type === 'attack' && groups.adversaries.length + groups.allies.length > 1) {
+    const compare = button('Comparer les cibles', 'workspace-secondary', { 'data-focus-key': 'compare' });
+    compare.disabled = draft.busy || !canCalculate;
+    compare.addEventListener('click', () => handlers.compare());
+    commands.appendChild(compare);
+  }
+  section.appendChild(commands);
+
+  const live = node('div', 'workspace-result-live');
+  live.setAttribute('aria-live', 'polite');
+  if (draft.error?.field === 'apply' || draft.error?.field === 'general') {
+    const alert = node('p', 'workspace-field-error', draft.error.message);
+    alert.setAttribute('role', 'alert');
+    live.appendChild(alert);
+  }
+  if (draft.comparison) live.appendChild(renderComparison(draft.comparison, handlers, draft.busy));
+  const preview = draft.preview;
+  if (preview) {
+    live.appendChild(renderResult(preview, target));
+    const apply = node('div', 'workspace-inline-actions workspace-resolution-commands');
+    const needsTarget = preview.attack && !preview.targetId;
+    const label = preview.damage && target
+      ? `Appliquer ${preview.damage.finalDamage} dégâts à ${target.name}`
+      : 'Enregistrer le résultat';
+    const primary = button(label, 'workspace-primary', { 'data-focus-key': 'apply' });
+    primary.disabled = draft.busy || !canApply || needsTarget;
+    if (needsTarget) primary.title = 'Choisissez une cible pour appliquer une attaque';
+    primary.addEventListener('click', () => handlers.apply());
+    const cancel = button('Annuler', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
+    cancel.disabled = draft.busy;
+    cancel.addEventListener('click', () => handlers.cancel());
+    apply.append(primary, cancel);
+    if (needsTarget) apply.appendChild(node('span', 'workspace-muted', 'Choisissez une cible pour appliquer une attaque.'));
+    live.appendChild(apply);
+  }
+  section.appendChild(live);
+  return section;
+}

@@ -6,10 +6,14 @@ import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from './roll-qualities
 import { computeDamage } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 
+export { damageBreakdown, formatDamageFormula } from './damage.js';
+
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const ATTACK_TYPES = new Set(['attack', 'attaque']);
 const OPPOSITION_TYPES = new Set(['opposition', 'opposed']);
+const SKILL_TYPES = new Set(['skill']);
+const DEFENSE_TYPES = new Set(['defense']);
 const PENALTY_STATES = new Set(['sonne', 'aveugle', 'extenue', 'brise']);
 export const MAX_APPLIED_RESOLUTION_IDS = 500;
 
@@ -107,6 +111,14 @@ export function normalizeResolutionInput(input = {}) {
   const qualities = normalizeQualities(action.qualities || input.qualities || []);
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
+  // Optional defender side of an opposed attack; absent means the historic
+  // attacker-only resolution, byte for byte.
+  const defense = isRecord(input.defense) ? {
+    roll: parseRoll(input.defense.roll),
+    base: parseInteger(input.defense.base, 0),
+    mod: parseInteger(input.defense.mod, 0),
+    label: typeof input.defense.label === 'string' && input.defense.label.trim() ? input.defense.label.trim() : 'CC'
+  } : null;
   return {
     resolutionId,
     baseRevision,
@@ -120,8 +132,42 @@ export function normalizeResolutionInput(input = {}) {
     },
     target,
     roll,
-    criticalRolls: isRecord(input.criticalRolls) ? clone(input.criticalRolls) : null
+    criticalRolls: isRecord(input.criticalRolls) ? clone(input.criticalRolls) : null,
+    ...(defense ? { defense } : {})
   };
+}
+
+/** Action type for the UI: explicit known type, else attack when it carries damage, else skill. */
+export function inferActionType(action) {
+  const type = String(action?.type || '').trim().toLocaleLowerCase();
+  if (ATTACK_TYPES.has(type)) return 'attack';
+  if (SKILL_TYPES.has(type)) return 'skill';
+  if (DEFENSE_TYPES.has(type)) return 'defense';
+  if (OPPOSITION_TYPES.has(type)) return 'opposition';
+  // normalizeAction stores a missing damage as 0, so 0 counts as « no damage ».
+  const damage = action?.damage;
+  const hasDamage = damage !== undefined && damage !== null && !['', '0'].includes(String(damage).trim());
+  return hasDamage ? 'attack' : 'skill';
+}
+
+function locationSide(name) {
+  if (/gauche/i.test(name)) return 'left';
+  if (/droit/i.test(name)) return 'right';
+  return null;
+}
+
+/** WFRP opposed test: higher SL wins, then the higher score; a perfect tie is no hit. */
+function opposedOutcome(attacker, defense, target) {
+  const penalties = statePenalty(target?.states);
+  const score = Math.max(0, defense.base + defense.mod - penalties.value);
+  const defender = {
+    label: defense.label, base: defense.base, mod: defense.mod, statePenalty: penalties.value,
+    score, roll: defense.roll, success: defense.roll <= score, sl: SL(score, defense.roll)
+  };
+  const netSl = attacker.sl - defender.sl;
+  const winner = netSl > 0 ? 'attacker' : netSl < 0 ? 'defender'
+    : attacker.score > defender.score ? 'attacker' : attacker.score < defender.score ? 'defender' : 'tie';
+  return { mode: 'opposed', attacker, defender, netSl, winner };
 }
 
 function criticalDetails(input, result) {
@@ -156,10 +202,15 @@ export function previewResolution(input) {
   const doubled = isDouble(roll);
   const criticalClassification = isCriticalRoll(roll, doubled, action.qualities);
   const fumbleClassification = isFumbleRoll(roll, doubled, action.qualities);
-  const acharnement = attackType(action.type) && success && Number(target?.hp) <= 0;
+  // With a defense, an attack lands when the attacker wins the opposed test,
+  // even on a failed own roll; without one, hitting is succeeding.
+  const opposed = attackType(action.type) && normalized.defense
+    ? opposedOutcome({ score: targetScore, roll, success, sl }, normalized.defense, target) : null;
+  const hit = opposed ? opposed.winner === 'attacker' : success;
+  const acharnement = attackType(action.type) && success && hit && Number(target?.hp) <= 0;
   let kind = null;
   let expanded = false;
-  if (success && criticalClassification.critique) {
+  if (success && hit && criticalClassification.critique) {
     kind = 'Critique';
     expanded = criticalClassification.élargi;
   } else if (!success && fumbleClassification.maladresse) {
@@ -169,13 +220,14 @@ export function previewResolution(input) {
     kind = 'Critique';
   }
 
-  const location = success ? (() => {
+  const location = hit ? (() => {
     const reversed = getReverseRoll(roll);
-    return { roll: reversed, ...getLocationName(reversed) };
+    const named = getLocationName(reversed);
+    return { roll: reversed, ...named, side: locationSide(named.name) };
   })() : null;
   const critical = kind === 'Critique' ? criticalDetails(normalized, { kind, acharnement }) : null;
   let damage = null;
-  if (success && attackType(action.type) && target && hasOwn(action, 'damage')) {
+  if (hit && attackType(action.type) && target && hasOwn(action, 'damage')) {
     const armour = target.armor || {};
     const targetArmour = location?.key === 'HEAD' ? armour.head
       : location?.key === 'ARM' ? armour.arms
@@ -183,7 +235,7 @@ export function previewResolution(input) {
           : location?.key === 'LEG' ? armour.legs : 0;
     damage = computeDamage({
       weaponDamage: action.damage,
-      sl,
+      sl: opposed ? opposed.netSl : sl,
       roll,
       targetToughnessBonus: Math.floor((Number(target.caracs?.E) || 0) / 10),
       targetArmour,
@@ -201,6 +253,7 @@ export function previewResolution(input) {
     score: { base: action.base, mod: action.mod, statePenalty: penalties.value, penaltyStates: penalties.names, target: targetScore },
     roll,
     success,
+    hit,
     sl,
     double: doubled,
     critical: kind ? { kind, expanded, acharnement, details: critical } : null,
@@ -208,7 +261,8 @@ export function previewResolution(input) {
     location,
     targetId: target?.id || null,
     damage,
-    opposition: OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null,
+    opposition: opposed
+      || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
   };
 }

@@ -5,6 +5,7 @@ import { CRIT_DATA } from '../data/crits.js';
 import { MAGIC_DATA } from '../data/magic.js';
 import { fetchKeywords, getKeywordList, getKeywordsStatus } from '../core/keywords.js';
 import { showToast } from './toast.js';
+import { contextMessage } from './messages.js';
 
 const FAVORITES_KEY = 'wfrp.rules.favorites.v1';
 function readRuleFavorites() {
@@ -97,18 +98,18 @@ export function renderReferenceTables(filterTerm = '', target = null) {
 
   const term = normalizeSearchText(filterTerm || '').trim();
 
-  let html = `<h2>Aides de Jeu & Règles</h2>`;
+  let html = `<h2 class="rules-title">Aides de Jeu & Règles</h2>`;
 
   html += `
     <div class="card" style="margin-bottom: 16px;">
-      <input type="search" id="rules-search" placeholder="🔍 Rechercher dans les règles et mots-clés (ex: Percutante, Brisé, Localisation...)" value="${escapeHtml(filterTerm)}" style="width:100%; padding:8px 12px; font-size:0.95em;">
+      <input type="search" class="rules-search" aria-label="Rechercher dans les règles" placeholder="🔍 Rechercher dans les règles et mots-clés (ex: Percutante, Brisé, Localisation...)" value="${escapeHtml(filterTerm)}" style="width:100%; padding:8px 12px; font-size:0.95em;">
     </div>
-    <div id="rules-list"></div>
+    <div class="rules-list"></div>
   `;
 
   root.innerHTML = html;
 
-  const searchInput = root.querySelector('#rules-search');
+  const searchInput = root.querySelector('.rules-search');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       const val = e.target.value;
@@ -120,7 +121,7 @@ export function renderReferenceTables(filterTerm = '', target = null) {
 }
 
 function updateRulesList(term, root = qs('#panel-rules')) {
-  const listContainer = root?.querySelector('#rules-list');
+  const listContainer = root?.querySelector('.rules-list');
   if (!listContainer) return;
 
   const cleanTerm = normalizeSearchText(term).trim();
@@ -145,7 +146,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
     html += `<div class="row" style="margin-bottom:12px; font-size:0.85em; background:rgba(0,0,0,0.05); padding:6px 10px; border-radius:6px;">`;
     html += `<span class="muted">Provenance : <strong>${escapeHtml(statusText)}</strong></span>`;
     html += `<div class="spacer"></div>`;
-    html += `<button id="btn-reload-keywords" class="ghost small">🔄 Recharger depuis le Sheet</button>`;
+    html += `<button type="button" class="btn-reload-keywords ghost small">🔄 Recharger depuis le Sheet</button>`;
     html += `</div>`;
 
     html += `<table class="wfrp-table"><thead><tr><th style="width:25%;">Mot-clé</th><th>Effet</th></tr></thead><tbody>`;
@@ -194,7 +195,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
           }
           html += `<details class="nested-details" ${isOpen ? 'open' : ''}>`;
           html += `<summary>${escapeHtml(nt.title)}</summary>`;
-          html += `<div id="${escapeHtml(nt.id)}">${tableHtml}</div>`;
+          html += `<div data-table-id="${escapeHtml(nt.id)}">${tableHtml}</div>`;
           html += `</details>`;
         });
       }
@@ -221,7 +222,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
     });
   });
 
-  const btnReload = root?.querySelector('#btn-reload-keywords');
+  const btnReload = root?.querySelector('.btn-reload-keywords');
   if (btnReload) {
     btnReload.addEventListener('click', async () => {
       btnReload.disabled = true;
@@ -231,7 +232,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
         showToast('Mots-clés mis à jour depuis Google Sheets', 'success');
         updateRulesList(term, root);
       } catch (err) {
-        showToast('Erreur lors du chargement des mots-clés: ' + err.message, 'error');
+        showToast(contextMessage('Mots-clés non rechargés', err, 'vérifiez la connexion ; la liste locale reste utilisée.'), 'error');
         btnReload.disabled = false;
         btnReload.textContent = '🔄 Recharger depuis le Sheet';
       }

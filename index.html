@@ -32,22 +32,54 @@
 <!-- 📦 CONTENU PRINCIPAL (caché au départ) -->
 <div id="app-content" style="display:none;">
   <header class="topbar">
-    <div class="wrap" style="display:flex; align-items:center;">
-      <h1>⚔️ WFRP – Gestionnaire</h1>
-      <div class="spacer"></div>
+    <div class="wrap topbar-main">
+      <h1 class="topbar-title">WFRP · MJ</h1>
       <nav class="tabs" role="tablist" aria-label="Sections">
         <button id="tab-prepare" class="tab is-active" data-tab="workspace" data-workspace-space="prepare" role="tab" aria-selected="true" aria-controls="panel-workspace" tabindex="0">Préparer</button>
         <button id="tab-combat" class="tab" data-tab="workspace" data-workspace-space="play" role="tab" aria-selected="false" aria-controls="panel-workspace" tabindex="-1">Jouer</button>
         <button id="tab-library" class="tab" data-tab="workspace" data-workspace-space="library" role="tab" aria-selected="false" aria-controls="panel-workspace" tabindex="-1">Bibliothèque</button>
       </nav>
-      <button id="btn-theme-toggle" class="ghost small" style="margin-left:8px;" title="Thème (Clair / Sombre / Système)">💻</button>
-      <button id="btn-version" class="ghost small" style="margin-left:4px; opacity:0.7;" title="Version 3.6.3 - WFRP 4e Outil MJ">v3.6.3</button>
-      <span id="local-status" class="muted" style="margin-left:10px; font-size:12px;" aria-live="polite" data-status="loading">Local : vérification…</span>
-      <span id="sync-status" class="muted" style="margin-left:10px; font-size:12px;" aria-live="polite">Distant : invité</span>
-      <button id="btn-undo" class="ghost small" style="margin-left:8px;" title="Annuler (⌘Z)" disabled>↶</button>
-      <button id="btn-redo" class="ghost small" title="Rétablir (⌘⇧Z)" disabled>↷</button>
-      <button id="btn-google-login" data-google-login class="ghost small" style="margin-left:8px;">Connexion Google</button>
-      <div id="user-info" style="margin-left:12px; font-size:13px; color:var(--info-fg);"></div>
+      <div class="spacer"></div>
+      <span id="status-indicator" class="status-indicator" data-tone="neutral" aria-live="polite" title="Local : vérification… · Distant : invité"><span class="status-dot" aria-hidden="true"></span><span class="status-label">Vérification…</span></span>
+      <button id="btn-undo" type="button" class="ghost topbar-icon" aria-label="Annuler" aria-keyshortcuts="Meta+Z" title="Annuler (⌘Z)" disabled>↶</button>
+      <button id="btn-menu" type="button" class="ghost topbar-icon" popovertarget="app-menu" aria-label="Menu" aria-haspopup="dialog" aria-controls="app-menu" aria-expanded="false">⋯</button>
+    </div>
+    <div id="combat-banner" class="combat-banner" role="region" aria-label="Combat en cours" hidden></div>
+    <div id="app-menu" class="app-menu" popover="auto" role="dialog" aria-label="Menu de l’application">
+      <div class="app-menu-group" role="group" aria-labelledby="app-menu-h-session">
+        <div id="app-menu-h-session" class="app-menu-heading">Séance</div>
+        <button id="workspace-save" type="button">Sauvegarder dans un fichier</button>
+        <button id="workspace-load" type="button">Charger un fichier</button>
+        <button id="workspace-restores" type="button">Versions précédentes</button>
+        <button id="workspace-import-text" type="button">Importer du texte</button>
+        <button id="workspace-reminders" type="button">Rappels</button>
+        <button id="workspace-events" type="button">Événements structurés</button>
+        <button id="workspace-archives" type="button">Archives</button>
+        <div id="app-menu-resume" class="app-menu-dynamic"></div>
+        <button id="workspace-close-scene" type="button" class="danger" hidden>Clôturer la séance</button>
+      </div>
+      <div class="app-menu-group" role="group" aria-labelledby="app-menu-h-history">
+        <div id="app-menu-h-history" class="app-menu-heading">Historique</div>
+        <button id="btn-redo" type="button" aria-keyshortcuts="Meta+Shift+Z" disabled><span>Rétablir</span><kbd class="app-menu-kbd">⌘⇧Z</kbd></button>
+      </div>
+      <div class="app-menu-group" role="group" aria-labelledby="app-menu-h-display">
+        <div id="app-menu-h-display" class="app-menu-heading">Affichage</div>
+        <button id="btn-theme-toggle" type="button" data-keep-open>Thème : Système</button>
+      </div>
+      <div class="app-menu-group" role="group" aria-labelledby="app-menu-h-account">
+        <div id="app-menu-h-account" class="app-menu-heading">Compte</div>
+        <button id="btn-google-login" type="button" data-google-login>Connexion Google</button>
+        <div id="user-info" class="app-menu-text"></div>
+      </div>
+      <div class="app-menu-group" role="group" aria-labelledby="app-menu-h-state">
+        <div id="app-menu-h-state" class="app-menu-heading">État</div>
+        <span id="local-status" class="app-menu-text" data-status="loading">Local : vérification…</span>
+        <span id="sync-status" class="app-menu-text">Distant : invité</span>
+      </div>
+      <div class="app-menu-group" role="group" aria-labelledby="app-menu-h-about">
+        <div id="app-menu-h-about" class="app-menu-heading">À propos</div>
+        <button id="btn-version" type="button">Version 3.7.0</button>
+      </div>
     </div>
   </header>
 
@@ -198,21 +230,7 @@
     <section id="panel-rules" class="panel" role="region" aria-labelledby="tab-rules"></section>
 
     <section id="panel-workspace" class="panel" role="tabpanel" aria-labelledby="tab-workspace" hidden>
-      <div id="workspace-launchpad" class="workspace-launchpad" aria-label="Accès rapides de séance"></div>
       <div id="workspace-root"></div>
-      <div id="workspace-tools" class="card row" aria-label="Outils de séance">
-        <strong>Outils de séance</strong>
-        <div class="spacer"></div>
-        <button id="workspace-save" type="button" class="ghost">Sauvegarder</button>
-        <button id="workspace-load" type="button" class="ghost">Charger</button>
-        <button id="workspace-restores" type="button" class="ghost">Restaurations</button>
-        <button id="workspace-simulate" type="button" class="ghost">Et si…</button>
-        <button id="workspace-reminders" type="button" class="ghost">Rappels</button>
-        <button id="workspace-events" type="button" class="ghost">Événements</button>
-        <button id="workspace-archives" type="button" class="ghost">Archives</button>
-        <button id="workspace-import-text" type="button" class="ghost">Importer du texte</button>
-        <button id="workspace-close-scene" type="button" class="danger ghost">Clôturer la séance</button>
-      </div>
     </section>
 
   </main>

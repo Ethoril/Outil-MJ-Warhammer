@@ -1,4 +1,20 @@
 import { DOM, qs, escapeHtml } from './dom.js';
+import { formatDamageFormula } from '../core/resolution.js';
+
+const signed = value => { const number = Number(value) || 0; return number < 0 ? `−${Math.abs(number)}` : `+${number}`; };
+
+// Détail d'une entrée en texte lisible : les objets connus sont résumés, les
+// autres ignorés (null) plutôt qu'affichés « [object Object] ».
+function readableDetail(key, value, detail) {
+  if (value === null || typeof value !== 'object') return String(value);
+  if (key === 'opposition' && value.defender) {
+    const { label, score, roll } = value.defender;
+    const hit = 'hit' in detail ? ` · ${detail.hit ? 'touché' : 'pas de touche'}` : '';
+    return `défense ${label} ${score} (d100 ${roll}) · DR net ${signed(value.netSl)}${hit}`;
+  }
+  if (key === 'damage') return formatDamageFormula(value) || null;
+  return null;
+}
 
 export function renderLog(Store, target = DOM.combat.log, { contextual = target !== DOM.combat.log } = {}) {
   let container = contextual ? (target?.querySelector('[data-context-log-list]') || target) : target;
@@ -90,7 +106,9 @@ export function renderLog(Store, target = DOM.combat.log, { contextual = target 
         let detailHtml = '';
         if (typeof entry.detail === 'object') {
           detailHtml = Object.entries(entry.detail)
-            .map(([k, v]) => `<strong>${escapeHtml(k)}:</strong> ${escapeHtml(String(v))}`)
+            .map(([k, v]) => [k, readableDetail(k, v, entry.detail)])
+            .filter(([, v]) => v !== null)
+            .map(([k, v]) => `<strong>${escapeHtml(k)}:</strong> ${escapeHtml(v)}`)
             .join(' | ');
         } else {
           detailHtml = escapeHtml(String(entry.detail));

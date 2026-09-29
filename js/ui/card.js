@@ -4,9 +4,10 @@ import { normalizeEffects, normalizeState } from '../core/effects.js';
 import { DiceLine } from '../core/models.js';
 import { renderMiniDiceLine } from './dice-line.js';
 import { showToast } from './toast.js';
+import { contextMessage } from './messages.js';
 
 export function initCardUI(Store, Combat) {
-  const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(`${label} impossible : ${error.message}`, 'error'));
+  const observe = (result, label = 'Modification') => Promise.resolve(result).then(value => { if (value === false || value?.ok === false) throw value?.error || new Error(`${label} impossible.`); return value; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
   function getP(id) {
     return Store.getCombat().participants.get(id);
   }

@@ -54,7 +54,8 @@ test('E03 — chargement distant différé et mise à jour PWA restent non bloqu
   assert.match(sync, /initialized = false/);
   assert.doesNotMatch(sw, /\.then\(\(\) => self\.skipWaiting\(\)\)/);
   assert.match(sw, /wfrp-activate-update/);
-  assert.match(sw, /wfrp-cache-v3\.6\.3/);
+  const version = readFileSync(new URL('../js/version.js', import.meta.url), 'utf8').match(/APP_VERSION = "([^"]+)"/)[1];
+  assert.ok(sw.includes(`'wfrp-cache-v${version}'`), 'le cache du service worker suit la version de l’application');
   assert.match(sw, /if \(cachedResponse\) \{\s*return cachedResponse;\s*\}/);
   assert.doesNotMatch(sw, /Mise à jour silencieuse/);
 });

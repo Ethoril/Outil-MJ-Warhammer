@@ -1,4 +1,4 @@
-import { Profile, Participant, DiceLine, uid, cloneValue } from './models.js';
+import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs } from './models.js';
 import { sanitizeArray, sanitizeProfile, sanitizeParticipant } from './sanitize.js';
 import { migrateSnapshot, migrateLegacyStorage } from './migrations.js';
 import { createStateCommand } from './commands.js';
@@ -216,14 +216,26 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     if (persistence) pendingRestore = { id: uid(), reason, state: lastSnapshot };
   }
 
+  // Older saves (text import before canonical keys) stored `e`, `cc`… in every
+  // projection; scenes and persistent characters bypass sanitizeParticipant.
+  function withCanonicalCaracs(item) {
+    return item && typeof item === 'object' && item.caracs && typeof item.caracs === 'object'
+      ? { ...item, caracs: normalizeCaracs(item.caracs) } : item;
+  }
+
+  function withCanonicalSceneCaracs(scene) {
+    return scene && typeof scene === 'object' && Array.isArray(scene.participants)
+      ? { ...scene, participants: scene.participants.map(withCanonicalCaracs) } : scene;
+  }
+
   function applyDataToState(data, { includeLog = false, includeHistory = true } = {}) {
     stateExtensions = data.extensions && typeof data.extensions === 'object' && !Array.isArray(data.extensions)
       ? JSON.parse(JSON.stringify(data.extensions)) : {};
     encounters = Array.isArray(data.encounters) ? cloneValue(data.encounters) : [];
-    persistentCharacters = Array.isArray(data.persistentCharacters) ? cloneValue(data.persistentCharacters) : [];
+    persistentCharacters = Array.isArray(data.persistentCharacters) ? cloneValue(data.persistentCharacters).map(withCanonicalCaracs) : [];
     archives = Array.isArray(data.archives) ? cloneValue(data.archives) : [];
-    activeScene = data.activeScene && typeof data.activeScene === 'object' ? cloneValue(data.activeScene) : null;
-    suspendedScenes = Array.isArray(data.suspendedScenes) ? cloneValue(data.suspendedScenes) : [];
+    activeScene = data.activeScene && typeof data.activeScene === 'object' ? withCanonicalSceneCaracs(cloneValue(data.activeScene)) : null;
+    suspendedScenes = Array.isArray(data.suspendedScenes) ? cloneValue(data.suspendedScenes).map(withCanonicalSceneCaracs) : [];
     reminderChoices = Array.isArray(data.reminderChoices) ? cloneValue(data.reminderChoices) : [];
     appliedResolutionIds = Array.isArray(data.appliedResolutionIds) ? [...data.appliedResolutionIds] : [];
     pendingProtocolState = Boolean(data.syncPending);
@@ -467,6 +479,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     };
   }
 
+  const RESOLUTION_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
+
   function resolutionLogEntry(preview, resolution) {
     const input = preview?.input || {};
     const actor = input.actor || {};
@@ -474,13 +488,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     const actionType = preview?.actionType || input.action?.type || 'action';
     const targetLabel = target.name || preview?.targetId || 'cible';
     const outcome = preview?.success ? 'réussite' : 'échec';
+    const opposed = preview?.opposition?.mode === 'opposed' ? preview.opposition : null;
+    const defenseText = opposed
+      ? ` ; défense ${opposed.defender.label} ${opposed.defender.score} (d100 ${opposed.defender.roll}), DR net ${opposed.netSl} — ${preview.hit ? 'touché' : 'pas de touche'}`
+      : '';
     return {
       id: uid(), ts: Date.now(), kind: 'resolution',
       actorId: actor.id || input.actorId || null,
       targetId: target.id || preview?.targetId || null,
       actorName: actor.name || null, targetName: target.name || null,
-      text: `${actionType} — ${outcome} sur ${targetLabel} (d100 ${preview?.roll ?? '?'})`,
+      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${outcome} sur ${targetLabel} (d100 ${preview?.roll ?? '?'})${defenseText}`,
       detail: {
+        ...(opposed ? { hit: Boolean(preview.hit), opposition: opposed } : {}),
         resolutionId: preview?.resolutionId || null,
         actionType,
         roll: preview?.roll ?? null,
@@ -801,6 +820,49 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     }
   }
 
+  function byInitiative(a, b) {
+    return (Number(b.initiative) || 0) - (Number(a.initiative) || 0) || String(a.name || '').localeCompare(String(b.name || ''));
+  }
+
+  // Position of `id` in an initiative-sorted list of ids (automatic order mode).
+  function initiativeIndex(ids, id, participants) {
+    const byId = new Map(participants.map(p => [p.id, p]));
+    const moved = byId.get(id);
+    const index = ids.findIndex(other => byId.has(other) && byInitiative(moved, byId.get(other)) < 0);
+    return index < 0 ? ids.length : index;
+  }
+
+  // Participant copy of a reserve profile, as serialised in a command draft.
+  function participantFromProfile(prof, overrides = {}) {
+    return {
+      id: uid(), profileId: prof.id, name: prof.name, kind: prof.kind,
+      initiative: prof.initiative, hp: prof.hp, maxHp: prof.hp,
+      armor: JSON.parse(JSON.stringify(prof.armor || {})),
+      caracs: JSON.parse(JSON.stringify(prof.caracs || {})),
+      actions: JSON.parse(JSON.stringify(prof.actions || [])),
+      tags: JSON.parse(JSON.stringify(prof.tags || [])),
+      notes: prof.notes || '', zone: 'bench', states: [],
+      ...overrides
+    };
+  }
+
+  function diceLinesFromProfile(prof, participantId) {
+    return (Array.isArray(prof.diceLines) ? prof.diceLines : [])
+      .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId }));
+  }
+
+  // Same numbering as duplicateProfile: « Gobelin », « Gobelin 2 », « Gobelin 3 »…
+  function uniqueName(name, usedNames) {
+    if (!usedNames.has(name)) return name;
+    let baseName = name; const match = name.match(/^(.*?)(\s\d+)?$/); if (match && match[2]) baseName = match[1];
+    let maxNum = 0;
+    for (const other of usedNames) {
+      if (other === baseName) maxNum = Math.max(maxNum, 1);
+      else if (other.startsWith(baseName + ' ')) { const s = other.substring(baseName.length + 1); if (/^\d+$/.test(s)) maxNum = Math.max(maxNum, parseInt(s)); }
+    }
+    return `${baseName} ${maxNum + 1}`;
+  }
+
   function setOrderByInitiative() {
     const arr = Array.from(combat.participants.values());
     arr.sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
@@ -1103,7 +1165,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const active = remaining.filter(item => participants.find(p => p.id === item)?.zone === 'active');
         const bench = remaining.filter(item => participants.find(p => p.id === item)?.zone === 'bench');
         const target = zone === 'active' ? active : bench;
-        target.splice(beforeId && target.includes(beforeId) ? target.indexOf(beforeId) : target.length, 0, id);
+        const automatic = (draft.combat?.orderMode || orderMode) !== ORDER_MODES.MANUAL;
+        const position = beforeId && target.includes(beforeId) ? target.indexOf(beforeId)
+          : (zone === 'active' && beforeId === null && automatic ? initiativeIndex(target, id, participants) : target.length);
+        target.splice(position, 0, id);
         return { ...draft, combat: { ...draft.combat, participants, order: [...active, ...bench], orderMode: zone === 'active' && beforeId !== null ? ORDER_MODES.MANUAL : orderMode } };
       });
       p.zone = zone; if (zone === 'active' && beforeId !== null) orderMode = ORDER_MODES.MANUAL;
@@ -1111,12 +1176,21 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const activeOrder = remainingOrder.filter(xId => combat.participants.get(xId)?.zone === 'active');
       const benchOrder = remainingOrder.filter(xId => combat.participants.get(xId)?.zone === 'bench');
       const targetArr = zone === 'active' ? activeOrder : benchOrder;
-      if (beforeId && targetArr.includes(beforeId)) targetArr.splice(targetArr.indexOf(beforeId), 0, id); else targetArr.push(id);
+      if (beforeId && targetArr.includes(beforeId)) targetArr.splice(targetArr.indexOf(beforeId), 0, id);
+      else if (zone === 'active' && beforeId === null && orderMode !== ORDER_MODES.MANUAL) targetArr.splice(initiativeIndex(targetArr, id, Array.from(combat.participants.values())), 0, id);
+      else targetArr.push(id);
       combat.order = [...activeOrder, ...benchOrder];
       markDirty(`combat/participants/${id}`, p); markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode }); save(); emitBus('combat');
     },
 
-    listParticipants() { return combat.order.map(id => combat.participants.get(id)).filter(Boolean); },
+    // Ordered participants first, then those outside the order (bench after a
+    // launch), which never take a turn but must stay visible.
+    listParticipants() {
+      const ordered = combat.order.map(id => combat.participants.get(id)).filter(Boolean);
+      const inOrder = new Set(ordered.map(p => p.id));
+      const outside = Array.from(combat.participants.values()).filter(p => !inOrder.has(p.id)).sort(byInitiative);
+      return [...ordered, ...outside];
+    },
 
     setRoundTurn(round, currentActorId) {
       if (!canMutate()) return false;
@@ -1254,19 +1328,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const lines = [...(draft.diceLines || [])];
         for (const id of selectedIds) {
           const prof = profiles.get(id); if (!prof) continue;
-          const participant = {
-            id: uid(), profileId: prof.id, name: prof.name, kind: prof.kind,
-            initiative: prof.initiative, hp: prof.hp, maxHp: prof.hp,
-            armor: JSON.parse(JSON.stringify(prof.armor || {})),
-            caracs: JSON.parse(JSON.stringify(prof.caracs || {})),
-            actions: JSON.parse(JSON.stringify(prof.actions || [])),
-            tags: JSON.parse(JSON.stringify(prof.tags || [])),
-            notes: prof.notes || '', zone: 'bench', states: []
-          };
+          const participant = participantFromProfile(prof);
           participants.push(participant);
-          for (const template of Array.isArray(prof.diceLines) ? prof.diceLines : []) {
-            lines.push({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId: participant.id });
-          }
+          lines.push(...diceLinesFromProfile(prof, participant.id));
         }
         const order = participants.slice().sort((a, b) => Number(b.initiative) - Number(a.initiative) || String(a.name).localeCompare(String(b.name))).map(item => item.id);
         return {
@@ -1300,6 +1364,45 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           }
         });
         this.log(`Import: ${selectedIds.length} participant(s)`);
+      });
+    },
+    /**
+     * Library « Ajouter au combat »: one participant per profile id (repeat an id
+     * to add several copies). Bench participants stay out of the turn order, as
+     * after a launch; with an active scene the combat edit is mirrored into it.
+     */
+    addProfilesToCombat(profileIds, { zone = 'bench' } = {}) {
+      const selectedIds = (Array.isArray(profileIds) ? profileIds : [profileIds]).filter(id => reserve.has(id));
+      if (!selectedIds.length) throw new Error('Aucun profil à ajouter');
+      const targetZone = zone === 'active' ? 'active' : 'bench';
+      return api.executeCommand('add-profiles-to-combat', draft => {
+        const profiles = new Map((draft.reserve || []).map(profile => [profile.id, profile]));
+        const participants = [...(draft.combat?.participants || [])];
+        const lines = [...(draft.diceLines || [])];
+        const usedNames = new Set(participants.map(item => item.name));
+        const zoneOf = new Map(participants.map(item => [item.id, item.zone]));
+        const active = (draft.combat?.order || []).filter(id => zoneOf.get(id) === 'active');
+        const rest = (draft.combat?.order || []).filter(id => zoneOf.get(id) !== 'active');
+        const automatic = (draft.combat?.orderMode || orderMode) !== ORDER_MODES.MANUAL;
+        const added = [];
+        for (const id of selectedIds) {
+          const prof = profiles.get(id);
+          // Profil supprimé entre le contrôle et l'exécution de la commande en file.
+          if (!prof) continue;
+          const participant = participantFromProfile(prof, { name: uniqueName(prof.name, usedNames), zone: targetZone });
+          usedNames.add(participant.name);
+          participants.push(participant);
+          lines.push(...diceLinesFromProfile(prof, participant.id));
+          if (targetZone === 'active') active.splice(automatic ? initiativeIndex(active, participant.id, participants) : active.length, 0, participant.id);
+          added.push(participant.name);
+        }
+        if (!added.length) throw new Error('Aucun profil à ajouter');
+        return {
+          ...draft,
+          combat: { ...draft.combat, participants, order: [...active, ...rest] },
+          diceLines: lines,
+          log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Combat: ajouté ${added.join(', ')} (${targetZone === 'active' ? 'en jeu' : 'en attente'})` }, ...(draft.log || [])].slice(0, 300)
+        };
       });
     },
     exportToReserve() {
@@ -1717,7 +1820,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         consequences: activeScene.consequences || [],
         reinforcements: activeScene.reinforcements || []
       };
-      return pendingReminders(deriveReminders(snapshot, transition, reminderChoices));
+      // The name only feeds the displayed text; reminder ids stay unchanged.
+      const named = actor?.name && !transition.actorName ? { ...transition, actorName: actor.name } : transition;
+      return pendingReminders(deriveReminders(snapshot, named, reminderChoices));
     },
     listReminderChoices() { return cloneValue(reminderChoices); },
     resolveReminder(id, decision, details = {}) {
@@ -1805,7 +1910,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     importParsedProfiles(profiles = []) {
       const captured = cloneValue(profiles);
-      return api.executeCommand('import-text-profiles', draft => ({ ...draft, reserve: [...(draft.reserve || []), ...captured.map(profile => ({ ...profile, id: profile.id || uid() }))] }));
+      return api.executeCommand('import-text-profiles', draft => ({ ...draft, reserve: [...(draft.reserve || []), ...captured.map(profile => ({ ...profile, id: profile.id || uid(), caracs: normalizeCaracs(profile.caracs) }))] }));
     },
 
     getFullJSON() {

@@ -1,6 +1,7 @@
 /** E17 local profile parser. Input is inert text; no HTML, code or network is evaluated. */
 import { ENGINES } from '../data/keyword-engines.js';
 import { canonicalQualityId, normalizeQualities } from './quality-normalization.js';
+import { canonicalCaracKey } from './models.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const stripAccents = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -12,7 +13,6 @@ const FIELD_ALIASES = new Map([
   ['groupe', 'group'], ['pv', 'hp'], ['points de vie', 'hp'], ['initiative', 'initiative'],
   ['notes', 'notes'], ['tags', 'tags'], ['mots cles', 'tags']
 ]);
-const CARAC_NAMES = new Set(['cc', 'ct', 'f', 'e', 'agi', 'dex', 'int', 'fm', 'soc', 'm', 'a', 'bf', 'b']);
 const ARMOR_NAMES = new Map([['tete', 'head'], ['tête', 'head'], ['corps', 'body'], ['body', 'body'], ['bras', 'arms'], ['jambes', 'legs'], ['head', 'head'], ['arms', 'arms'], ['legs', 'legs']]);
 
 function splitBlocks(text) {
@@ -51,7 +51,7 @@ function parseAction(value, line, errors, unknownQualities) {
     else if (key === 'degats' || key === 'damage') action.damage = raw;
     else if (key === 'qualites' || key === 'qualities') {
       const rawQualities = raw.split(',').map(item => item.trim()).filter(Boolean);
-      action.qualities = normalizeQualities(rawQualities);
+      action.qualities = normalizeQualities(rawQualities.map(name => ({ name })));
       rawQualities.forEach(item => { if (!ENGINES[canonicalQualityId(item)]) unknownQualities.push({ value: item, line, action: action.name }); });
     } else if (key === 'note' || key === 'texte') action.note = raw;
     else action[key.replace(/\s+/g, '')] = raw;
@@ -82,11 +82,12 @@ function parseBlock(block, blockIndex) {
       addField(fields, field, parsed, line);
       return;
     }
-    const caracLabel = label.replace(/^caracteristique[s]?\s+/, '');
-    if (CARAC_NAMES.has(caracLabel)) {
-      const valueNumber = parseInteger(value, `caracs.${caracLabel}`, errors, line);
-      if (caracs[caracLabel] !== undefined && caracs[caracLabel] !== valueNumber) ambiguities.push({ field: `caracs.${caracLabel}`, line, reason: 'valeurs-concurrentes' });
-      caracs[caracLabel] = valueNumber; return;
+    // Canonical keys (`E`, `CC`, `Ag`…) are the ones read by the engine.
+    const caracKey = canonicalCaracKey(label.replace(/^caracteristique[s]?\s+/, ''));
+    if (caracKey) {
+      const valueNumber = parseInteger(value, `caracs.${caracKey}`, errors, line);
+      if (caracs[caracKey] !== undefined && caracs[caracKey] !== valueNumber) ambiguities.push({ field: `caracs.${caracKey}`, line, reason: 'valeurs-concurrentes' });
+      caracs[caracKey] = valueNumber; return;
     }
     const armorMatch = label.match(/^(?:armure\s+)?(.+)$/);
     const armorKey = ARMOR_NAMES.get(armorMatch?.[1]);

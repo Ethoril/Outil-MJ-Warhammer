@@ -19,14 +19,42 @@ import { initThemeManager } from './ui/theme.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initClosureView } from './ui/closure-view.js';
-import { initSimulationView } from './ui/simulation-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
 import { createActionEditor } from './ui/action-editor.js';
-import { createEncounter, normalizeEncounter } from './core/encounters.js';
+import { createEncounter, normalizeEncounter, normalizeCamp, CAMP_LABELS } from './core/encounters.js';
+import { userError, userMessage, contextMessage } from './ui/messages.js';
 import { deriveReminders, pendingReminders, resolveReminder, REMINDER_DECISIONS } from './core/reminders.js';
 import { createScene, proposeSceneEvent } from './core/scene-events.js';
 import { normalizeEffects, normalizeState } from './core/effects.js';
-import { compareSimulationTargets } from './core/simulation.js';
+import { initCombatBanner } from './ui/combat-banner.js';
+
+// Indicateur unique de la barre du haut : il résume les deux statuts détaillés
+// (#local-status, #sync-status), qui restent lisibles dans la section « État » du menu.
+const SYNC_BUSY = ['sending', 'pending', 'connecting', 'transition'];
+const SYNC_OK = ['synced', 'connected', 'ready'];
+function statusSummary(local, sync) {
+  if (sync === 'conflict') return { label: 'Conflit à résoudre', tone: 'danger' };
+  if (local === 'error' || local === 'unavailable') return { label: 'Enregistrement local en échec', tone: 'danger' };
+  if (sync === 'error') return { label: 'Erreur de synchronisation', tone: 'warn' };
+  if (sync === 'offline') return { label: 'Hors ligne', tone: 'warn' };
+  if (SYNC_BUSY.includes(sync)) return { label: 'Synchronisation…', tone: 'neutral' };
+  if (local === 'saving') return { label: 'Enregistrement…', tone: 'neutral' };
+  if (SYNC_OK.includes(sync)) return { label: 'Synchronisé', tone: 'ok' };
+  if (sync === 'signedOut' && local === 'saved') return { label: 'Enregistré sur cet appareil', tone: 'ok' };
+  return { label: 'Vérification…', tone: 'neutral' };
+}
+
+function renderStatusIndicator() {
+  const indicator = qs('#status-indicator');
+  if (!indicator) return;
+  const localEl = qs('#local-status');
+  const syncEl = qs('#sync-status');
+  const { label, tone } = statusSummary(localEl?.dataset.status, syncEl?.dataset.status);
+  const labelEl = indicator.querySelector('.status-label');
+  if (labelEl && labelEl.textContent !== label) labelEl.textContent = label;
+  indicator.dataset.tone = tone;
+  indicator.title = `${localEl?.textContent || 'Local : —'} · Distant : ${syncEl?.textContent || '—'}`;
+}
 
 function updateLocalStatus(status) {
   const el = qs('#local-status');
@@ -41,6 +69,7 @@ function updateLocalStatus(status) {
     el.textContent = labels[status] || status;
     el.dataset.status = status;
   }
+  renderStatusIndicator();
 }
 
 function updateSyncStatus(status) {
@@ -62,6 +91,7 @@ function updateSyncStatus(status) {
     el.textContent = labels[status] || status;
     el.dataset.status = status;
   }
+  renderStatusIndicator();
 }
 
 let appPersistence = null;
@@ -116,11 +146,11 @@ if (storeReady?.ok === false) {
       if (retry?.ok) {
         if (appContent) delete appContent.dataset.recovery;
         updateLocalStatus('saved');
-        showToast('Lecture locale rétablie.', 'success');
+        showToast('Lecture locale rétablie', 'success');
         Bus.emit('reserve'); Bus.emit('combat'); Bus.emit('log');
       } else {
         updateLocalStatus('error');
-        showToast('Le stockage local reste indisponible.', 'error');
+        showToast('Le stockage local reste indisponible : exportez ce qui reste en mémoire', 'error');
       }
     }
   });
@@ -202,9 +232,9 @@ export const Combat = createCombatEngine(Store);
 // Theme Manager (Lot 11.2)
 initThemeManager();
 
-// Version (Lot 10.6 : v3.5 court dans le bouton, titre complet au survol)
+// Version (Lot 10.6 : numéro dans le menu, titre complet au survol)
 if (DOM.btnVersion) {
-  DOM.btnVersion.textContent = `v${APP_VERSION}`;
+  DOM.btnVersion.textContent = `Version ${APP_VERSION}`;
   DOM.btnVersion.title = `Version ${APP_VERSION} - WFRP 4e Outil MJ`;
   DOM.btnVersion.addEventListener('click', () => {
     Store.log(`ℹ️ Application en version ${APP_VERSION}`);
@@ -229,14 +259,17 @@ function switchTab(tabName, workspaceSpace = null) {
 }
 
 const tabArray = Array.from(DOM.tabs);
-const activateWorkspaceTab = tab => {
-  switchTab(tab.dataset.tab || 'workspace', tab.dataset.workspaceSpace || null);
-  if (tab.dataset.workspaceSpace) workspaceView?.setSpace(tab.dataset.workspaceSpace);
-  setWorkspaceToolsVisibility(tab.dataset.workspaceSpace || 'prepare');
-  renderLaunchpad(tab.dataset.workspaceSpace || 'prepare');
-};
+let combatBanner = null;
+// Seul point d'entrée pour changer d'espace : onglet actif, panneau, vue de
+// travail et bandeau de combat restent ainsi toujours d'accord.
+function goToSpace(space) {
+  switchTab('workspace', space);
+  workspaceView?.setSpace(space);
+  combatBanner?.render(space);
+}
+const activeSpace = () => document.querySelector('.tab.is-active')?.dataset.workspaceSpace || 'prepare';
 tabArray.forEach((t, idx) => {
-  t.addEventListener('click', () => activateWorkspaceTab(t));
+  t.addEventListener('click', () => goToSpace(t.dataset.workspaceSpace || 'prepare'));
   t.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
       e.preventDefault();
@@ -244,7 +277,7 @@ tabArray.forEach((t, idx) => {
       const nextIdx = (idx + dir + tabArray.length) % tabArray.length;
       const nextTab = tabArray[nextIdx];
       if (nextTab && nextTab.dataset.tab) {
-        activateWorkspaceTab(nextTab);
+        goToSpace(nextTab.dataset.workspaceSpace || 'prepare');
         nextTab.focus();
       }
     }
@@ -263,7 +296,18 @@ const cardUI = initCardUI(Store, Combat);
 const combatViewUI = initCombatViewUI(Store, Combat, cardUI, (id) => runDiceLine(id, Store));
 
 initLogViewUI(Store);
-initKeyboardShortcuts(Store, Combat, switchTab);
+
+// Avance d'un tour, ou démarre le combat s'il n'a pas commencé. Partagé par le
+// bandeau, le raccourci N / Espace et la commande « Terminer le tour » de Jouer.
+function advanceTurn() {
+  const combat = Store.getCombat();
+  return combat.round > 0 ? Combat.nextTurn() : Combat.start();
+}
+
+initKeyboardShortcuts(Store, Combat, goToSpace, {
+  advanceTurn,
+  isCombatVisible: () => Boolean(combatBanner?.isVisible())
+});
 
 // E09–E17 workspace integration. The pure modules remain behind callbacks so
 // Store stays the only owner of live combat and reserve mutations.
@@ -292,7 +336,12 @@ function readableReminder(item) {
 }
 const sceneConditionLabels = { manual: 'À la demande', roundAtLeast: 'À partir du round', hpBelow: 'Quand les PV passent sous le seuil', participantDown: 'Quand le participant tombe à 0 PV', previousResolved: 'Après résolution d’un événement' };
 const sceneConsequenceLabels = { note: 'annoncer une note', addState: 'ajouter un état', reinforcement: 'faire entrer un renfort', advanceClock: 'avancer une jauge' };
+const sceneStatusLabels = { proposed: 'Conséquence proposée', 'not-eligible': 'Condition non remplie', 'already-resolved': 'Déjà résolu', duplicate: 'Déjà appliqué', applied: 'Appliqué', error: 'Erreur' };
 function readableSceneEvent(event, scene = {}) {
+  const { conditionText, consequenceText } = sceneEventParts(event, scene);
+  return `${conditionText} : ${consequenceText}`;
+}
+function sceneEventParts(event, scene = {}) {
   const condition = event?.condition || {}; const consequence = event?.consequence || {};
   const participantName = id => (scene.participants || []).find(item => item.id === id)?.name || 'le participant sélectionné';
   const conditionText = condition.type === 'roundAtLeast' ? `${sceneConditionLabels.roundAtLeast} ${condition.round}`
@@ -303,10 +352,10 @@ function readableSceneEvent(event, scene = {}) {
     : consequence.type === 'reinforcement' ? `${sceneConsequenceLabels.reinforcement} (${participantName(consequence.participantId)})`
       : consequence.type === 'advanceClock' ? `${sceneConsequenceLabels.advanceClock} « ${consequence.clockId || 'jauge'} »`
         : consequence.type === 'note' ? `${sceneConsequenceLabels.note} « ${consequence.text || ''} »` : 'appliquer une conséquence';
-  return `${conditionText} : ${consequenceText}`;
+  return { conditionText, consequenceText };
 }
 const restoreReasonLabels = { 'restore-before': 'Avant restauration', 'import-before': 'Avant import', 'import-replace': 'Import remplacé', manual: 'Sauvegarde manuelle' };
-const readableRestoreReason = reason => restoreReasonLabels[reason] || 'Point de restauration';
+const readableRestoreReason = reason => restoreReasonLabels[reason] || 'Version précédente';
 const restoreSourceLabels = { 'legacy-localStorage': 'Ancienne sauvegarde locale', 'snapshot-v2': 'Sauvegarde courante' };
 const readableRestoreSource = source => restoreSourceLabels[source] || 'Sauvegarde locale';
 function readableRestoreDate(value) {
@@ -318,20 +367,81 @@ function storedScene() {
   return requireStoreApi('getActiveScene')();
 }
 
+// Fenêtres d'outils : panneau docké à droite, non modal (onglets, bandeau et
+// piste restent utilisables), une seule à la fois. `close()` émet `close` de
+// façon synchrone, pour qu'une fenêtre remplacée rende ses éléments empruntés
+// (formulaire de profil) avant que la suivante ne les prenne.
+const FOCUSABLE = 'input:not([type=hidden]), select, textarea, button, summary, [href], [tabindex]:not([tabindex="-1"])';
+let openSheet = null;
+const topbar = qs('.topbar');
+if (topbar && typeof ResizeObserver === 'function') {
+  new ResizeObserver(() => document.documentElement.style.setProperty('--header-h', `${Math.round(topbar.getBoundingClientRect().height)}px`)).observe(topbar);
+}
+
+// Le bouton d'origine est souvent recréé par un re-rendu pendant que la fenêtre est
+// ouverte : on le retrouve par sa clé de focus ou son id, à défaut par le titre de
+// la zone qui le contenait.
+function focusMemo(element) {
+  if (!element || element === document.body) return null;
+  const ancestors = [];
+  for (let parent = element.parentElement; parent && parent !== document.body; parent = parent.parentElement) ancestors.push(parent);
+  return { element, key: element.dataset?.focusKey || null, id: element.id || null, ancestors };
+}
+
+function focusFromMemo(memo) {
+  if (!memo) return;
+  const visible = item => item && item.isConnected && !item.disabled && item.checkVisibility?.();
+  if (memo.element.closest?.('#app-menu')) { qs('#btn-menu')?.focus(); return; }
+  const found = [memo.element,
+    ...(memo.key ? Array.from(document.querySelectorAll(`[data-focus-key="${CSS.escape(memo.key)}"]`)) : []),
+    memo.id ? document.getElementById(memo.id) : null].find(visible);
+  if (found) { found.focus(); return; }
+  const zone = memo.ancestors.find(item => item.isConnected && item.checkVisibility?.());
+  const heading = Array.from(zone?.querySelectorAll('h1, h2, h3') || []).find(visible);
+  if (!heading) return;
+  if (!heading.hasAttribute('tabindex')) heading.tabIndex = -1;
+  heading.focus();
+}
+
 function openOverlay(title, build) {
+  const previous = openSheet;
+  const active = document.activeElement;
+  const opener = previous && (!active || previous.contains(active)) ? previous.returnFocus : focusMemo(active);
+  previous?.close({ restoreFocus: false });
+
   const dialog = document.createElement('dialog');
-  dialog.className = 'card';
-  dialog.style.cssText = 'max-width:min(1100px,94vw); width:94vw; max-height:90vh; overflow:auto;';
-  const heading = document.createElement('div'); heading.className = 'row';
-  const label = document.createElement('h2'); label.textContent = title;
+  dialog.className = 'tool-sheet';
+  dialog.setAttribute('aria-labelledby', `tool-sheet-title-${uid()}`);
+  const heading = document.createElement('div'); heading.className = 'tool-sheet-header';
+  const label = document.createElement('h2'); label.id = dialog.getAttribute('aria-labelledby'); label.textContent = title;
   const close = document.createElement('button'); close.type = 'button'; close.className = 'ghost'; close.textContent = 'Fermer';
   heading.append(label, close); dialog.appendChild(heading);
-  const mount = document.createElement('div'); dialog.appendChild(mount);
+  const mount = document.createElement('div'); mount.className = 'tool-sheet-body'; dialog.appendChild(mount);
+  dialog.returnFocus = opener;
+
+  let closed = false;
+  let restoreFocus = true;
+  // Le `close` natif (mis en file par le navigateur) arrive après le nôtre : il est ignoré.
+  dialog.addEventListener('close', event => { if (event.isTrusted) event.stopImmediatePropagation(); }, { capture: true });
+  dialog.close = ({ restoreFocus: restore = true } = {}) => {
+    if (closed) return;
+    closed = true; restoreFocus = restore;
+    HTMLDialogElement.prototype.close.call(dialog);
+    dialog.dispatchEvent(new Event('close'));
+  };
   close.addEventListener('click', () => dialog.close());
   document.body.appendChild(dialog);
-  build(mount, dialog);
-  if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
-  dialog.addEventListener('close', () => dialog.remove(), { once: true });
+  openSheet = dialog;
+  try { build(mount, dialog); } catch (error) { dialog.remove(); openSheet = null; throw error; }
+  dialog.show();
+  (mount.querySelector('[autofocus]') || Array.from(mount.querySelectorAll(FOCUSABLE)).find(item => !item.disabled && item.checkVisibility()) || close).focus();
+  dialog.addEventListener('close', () => {
+    dialog.remove();
+    if (openSheet === dialog) openSheet = null;
+    if (!restoreFocus) return;
+    // Une commande du menu ⋯ n'est plus visible : le focus revient au bouton du menu.
+    focusFromMemo(opener);
+  }, { once: true });
   return dialog;
 }
 
@@ -342,29 +452,29 @@ function persistentCharacters() {
 function openPrepareView() {
   return openOverlay('Préparer une rencontre', (mount, dialog) => {
     const view = initPrepareView({
-      mount, Store, encounter: currentEncounter,
+      mount, hosted: true, Store, encounter: currentEncounter,
       savedEncounters: Store.listEncounters?.() || [],
       persistentCharacters: persistentCharacters(),
       callbacks: {
         getProfiles: () => Store.listProfiles(),
         onDraftChange: draft => { currentEncounter = normalizeEncounter(draft); },
         onSelectEncounter: encounter => { currentEncounter = normalizeEncounter(encounter); view.setDraft(currentEncounter); },
-        onSave: async draft => { currentEncounter = normalizeEncounter(draft); await awaitStore(requireStoreApi('saveEncounter')(currentEncounter), 'Rencontre'); showToast('Rencontre enregistrée.', 'success'); },
-        onDuplicate: async draft => { await awaitStore(requireStoreApi('saveEncounter')(normalizeEncounter(draft)), 'Rencontre'); currentEncounter = normalizeEncounter(draft); showToast('Rencontre dupliquée.', 'success'); },
-        onDeleteEncounter: async id => { await awaitStore(requireStoreApi('deleteEncounter')(id), 'Suppression'); showToast('Rencontre supprimée.', 'success'); },
-        onSavePersistentCharacter: async character => { await awaitStore(requireStoreApi('savePersistentCharacter')(character), 'Personnage'); showToast('Personnage persistant enregistré.', 'success'); },
-        onDeletePersistentCharacter: async id => { await awaitStore(requireStoreApi('deletePersistentCharacter')(id), 'Suppression'); showToast('Personnage persistant supprimé.', 'success'); },
+        onSave: async draft => { currentEncounter = normalizeEncounter(draft); await awaitStore(requireStoreApi('saveEncounter')(currentEncounter), 'Rencontre'); showToast('Rencontre enregistrée', 'success'); },
+        onDuplicate: async draft => { await awaitStore(requireStoreApi('saveEncounter')(normalizeEncounter(draft)), 'Rencontre'); currentEncounter = normalizeEncounter(draft); showToast('Rencontre dupliquée', 'success'); },
+        onDeleteEncounter: async id => { await awaitStore(requireStoreApi('deleteEncounter')(id), 'Suppression'); showToast('Rencontre supprimée', 'success'); },
+        onSavePersistentCharacter: async character => { await awaitStore(requireStoreApi('savePersistentCharacter')(character), 'Personnage'); showToast('Personnage persistant ajouté', 'success'); },
+        onDeletePersistentCharacter: async id => { await awaitStore(requireStoreApi('deletePersistentCharacter')(id), 'Suppression'); showToast('Personnage persistant supprimé', 'success'); },
         onLaunch: async draft => {
-          if (!draft.entries.length) throw new Error('Ajoutez au moins un profil à la composition avant de lancer.');
+          if (!draft.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
           await awaitStore(requireStoreApi('saveEncounter')(normalizeEncounter(draft)), 'Rencontre');
           await awaitStore(requireStoreApi('launchEncounter')(normalizeEncounter(draft)), 'Lancement');
           currentEncounter = normalizeEncounter(draft);
           dialog.close();
-          switchTab('workspace', 'play'); workspaceView?.setSpace('play');
-          showToast('Rencontre lancée dans la piste de séance.', 'success');
+          goToSpace('play');
+          showToast('Rencontre lancée', 'success');
         },
-        onResume: async id => { await awaitStore(requireStoreApi('resumeScene')(id), 'Reprise'); showToast('Séance reprise.', 'info'); },
-        onSuspend: async () => { await awaitStore(requireStoreApi('suspendActiveScene')(), 'Suspension'); showToast('Séance suspendue.', 'info'); }
+        onResume: async id => { await awaitStore(requireStoreApi('resumeScene')(id), 'Reprise'); showToast('Séance reprise', 'info'); },
+        onSuspend: async () => { await awaitStore(requireStoreApi('suspendActiveScene')(), 'Suspension'); showToast('Séance suspendue', 'info'); }
       }
     });
     view.render();
@@ -387,26 +497,58 @@ function openCreateProfileView() {
   });
 }
 
-function renderLaunchpad(space = 'prepare') {
-  const mount = qs('#workspace-launchpad');
-  if (!mount) return;
-  mount.replaceChildren(); mount.hidden = space !== 'prepare';
-  if (mount.hidden) return;
-  const title = document.createElement('strong'); title.textContent = 'Séance'; mount.appendChild(title);
-  const newProfile = document.createElement('button'); newProfile.type = 'button'; newProfile.className = 'small'; newProfile.textContent = 'Nouveau profil'; newProfile.addEventListener('click', openCreateProfileView); mount.appendChild(newProfile);
-  const active = Store.getActiveScene?.(); const suspended = Store.listSuspendedScenes?.() || []; const encounters = Store.listEncounters?.() || [];
-  if (active) { const status = document.createElement('span'); status.className = 'muted'; status.textContent = `Scène active : ${active.title}`; mount.appendChild(status); }
-  suspended.forEach(scene => { const resume = document.createElement('button'); resume.type = 'button'; resume.className = 'ghost small'; resume.textContent = `Reprendre ${scene.title}`; resume.disabled = Boolean(active); resume.addEventListener('click', async () => { resume.disabled = true; try { await awaitStore(requireStoreApi('resumeScene')(scene.id), 'Reprise'); workspaceView?.setSpace('play'); switchTab('workspace', 'play'); setWorkspaceToolsVisibility('play'); renderLaunchpad('play'); } catch (error) { resume.disabled = false; showToast(error.message, 'error'); } }); mount.appendChild(resume); });
-  encounters.forEach(encounter => { const row = document.createElement('span'); row.className = 'workspace-launchpad-item'; row.textContent = `${encounter.title} · ${encounter.status || 'préparée'}`; const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'ghost small'; edit.textContent = 'Préparer'; edit.addEventListener('click', () => { currentEncounter = normalizeEncounter(encounter); openPrepareView(); }); const launch = document.createElement('button'); launch.type = 'button'; launch.className = 'small'; launch.textContent = 'Lancer'; launch.disabled = Boolean(active || encounter.status === 'active'); launch.addEventListener('click', async () => { launch.disabled = true; try { await awaitStore(requireStoreApi('launchEncounter')(encounter.id), 'Lancement'); workspaceView?.setSpace('play'); switchTab('workspace', 'play'); setWorkspaceToolsVisibility('play'); } catch (error) { launch.disabled = false; showToast(error.message, 'error'); } }); row.append(edit, launch); mount.appendChild(row); });
-  const load = document.createElement('button'); load.type = 'button'; load.className = 'ghost small'; load.textContent = 'Charger une sauvegarde'; load.addEventListener('click', () => DOM.combat.btnLoadFile?.click()); mount.appendChild(load);
+// Menu ⋯ : les commandes de séance suivent la scène active et les scènes suspendues.
+function renderAppMenu() {
+  const active = Store.getActiveScene?.();
+  const running = active?.status === 'active';
+  ['workspace-reminders', 'workspace-events'].forEach(id => { const button = qs(`#${id}`); if (button) button.disabled = !running; });
+  const close = qs('#workspace-close-scene'); if (close) close.hidden = !active;
+  const mount = qs('#app-menu-resume'); if (!mount) return;
+  mount.replaceChildren();
+  (Store.listSuspendedScenes?.() || []).forEach(scene => {
+    const resume = document.createElement('button'); resume.type = 'button';
+    resume.textContent = `Reprendre « ${scene.title || 'Séance'} »`; resume.disabled = Boolean(active);
+    resume.addEventListener('click', async () => { resume.disabled = true; try { await awaitStore(requireStoreApi('resumeScene')(scene.id), 'Reprise'); goToSpace('play'); } catch (error) { resume.disabled = false; showToast(contextMessage('Séance non reprise', error, 'réessayez.'), 'error'); } });
+    mount.appendChild(resume);
+  });
 }
 
-function setWorkspaceToolsVisibility(space) {
-  const tools = qs('#workspace-tools'); if (!tools) return;
-  const play = space === 'play'; const scene = Store.getActiveScene?.(); tools.hidden = false;
-  ['workspace-simulate', 'workspace-reminders', 'workspace-events', 'workspace-archives'].forEach(id => { const button = qs(`#${id}`); if (button) button.hidden = !play; });
-  const close = qs('#workspace-close-scene'); if (close) close.hidden = !play || !scene;
-  const importer = qs('#workspace-import-text'); if (importer) importer.hidden = play;
+// Panneau non modal (role="dialog", boutons ordinaires : il contient aussi l'état
+// et le compte, qui ne sont pas des commandes). Échap et clic extérieur sont gérés par le navigateur
+// (popover="auto") ; on ajoute le placement, le focus et la navigation ↑/↓.
+function initAppMenu() {
+  const menu = qs('#app-menu'); const trigger = qs('#btn-menu');
+  if (!menu || !trigger || typeof menu.showPopover !== 'function') return;
+  const items = () => Array.from(menu.querySelectorAll('button')).filter(button => !button.disabled && button.checkVisibility());
+  const place = () => {
+    const rect = trigger.getBoundingClientRect();
+    menu.style.top = `${Math.round(rect.bottom + 6)}px`;
+    menu.style.right = `${Math.max(8, Math.round(document.documentElement.clientWidth - rect.right))}px`;
+  };
+  menu.addEventListener('beforetoggle', event => { if (event.newState === 'open') { renderAppMenu(); place(); } });
+  menu.addEventListener('toggle', event => {
+    const open = event.newState === 'open';
+    trigger.setAttribute('aria-expanded', String(open));
+    if (open) { items()[0]?.focus(); return; }
+    const focused = document.activeElement;
+    if (!focused || focused === document.body || menu.contains(focused)) trigger.focus();
+  });
+  menu.addEventListener('click', event => {
+    const item = event.target.closest('button');
+    if (!item || item.hasAttribute('data-keep-open')) return;
+    if (menu.matches(':popover-open')) menu.hidePopover();
+  });
+  menu.addEventListener('keydown', event => {
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+    const list = items(); if (!list.length) return;
+    event.preventDefault();
+    const index = list.indexOf(document.activeElement);
+    const next = event.key === 'Home' ? 0
+      : event.key === 'End' ? list.length - 1
+        : event.key === 'ArrowDown' ? (index + 1) % list.length : (index - 1 + list.length) % list.length;
+    list[next].focus();
+  });
+  window.addEventListener('resize', () => { if (menu.matches(':popover-open')) place(); });
 }
 
 function sceneFromStore() {
@@ -423,15 +565,15 @@ function openClosureView() {
   const characters = persistentCharacters();
   return openOverlay('Clôturer la séance', (mount, dialog) => {
     const view = initClosureView({
-      mount, scene, persistentCharacters: characters,
+      mount, hosted: true, scene, persistentCharacters: characters,
       callbacks: {
-        onPreview: preview => { if (!preview.ready) showToast('Choisissez une autorité pour chaque doublon.', 'warning'); },
+        onPreview: preview => { if (!preview.ready) showToast('Un même personnage existe en deux versions : choisissez celle à garder', 'warning'); },
         onApply: async (preview, options = {}) => {
           const result = await awaitStore(requireStoreApi('closeScene')({ preview, selections: options.selections, authorities: options.authorities }), 'Clôture');
-          if (result?.status === 'stale') throw new Error('La scène a changé : prévisualisez à nouveau le report.');
-          if (result?.status === 'conflict') throw new Error('Le report contient une ambiguïté non résolue.');
+          if (result?.status === 'stale') throw userError('La séance a changé : affichez à nouveau le report.');
+          if (result?.status === 'conflict') throw userError('Un même personnage existe en deux versions : choisissez celle à garder.');
           dialog.close();
-          showToast('Séance clôturée et report archivé localement.', 'success');
+          showToast('Séance clôturée et archivée', 'success');
         },
         onCancel: () => dialog.close(),
         onExport: text => downloadText(`wfrp-seance-${new Date().toISOString().slice(0, 10)}.md`, text, 'text/markdown;charset=utf-8')
@@ -441,75 +583,16 @@ function openClosureView() {
   });
 }
 
-function openSimulationView() {
-  const combat = Store.getCombat();
-  const participants = Store.listParticipants();
-  const actor = participants.find(item => item.id === combat.currentActorId) || participants[0];
-  if (!actor) throw new Error('Aucun acteur disponible pour la simulation.');
-  const state = { revision: requireStoreApi('getLocalRevision')(), participants, appliedResolutionIds: [] };
-  const actions = actor.actions || Store.getDiceLines().filter(line => line.participantId === actor.id);
-  const targets = participants.filter(participant => participant.id !== actor.id);
-  return openOverlay('Mode « et si… »', (mount, dialog) => {
-    const view = initSimulationView({
-      mount, state, actor, actions, targets,
-      callbacks: {
-        onPreview: () => {},
-        onCompare: async ({ actor: compareActor, action, targets: compareTargets, roll }) => {
-          const input = { actor: compareActor, action, roll, baseRevision: state.revision };
-          if (typeof Store.compareSimulationTargets === 'function') return await Store.compareSimulationTargets({ ...input, targets: compareTargets }, compareTargets);
-          return compareSimulationTargets({ revision: state.revision, participants }, input, compareTargets);
-        },
-        onApply: async simulation => {
-          const result = await awaitStore(requireStoreApi('applySimulation')(simulation), 'Simulation');
-          if (!result || result.status !== 'applied') return result;
-          dialog.close(); showToast('Résultat de simulation appliqué.', 'success');
-          return result;
-        },
-        onDiscard: () => dialog.close()
-      }
-    });
-    view.render();
-  });
-}
-
-function openResolutionView(participantId, actionId) {
-  const actor = Store.getCombat().participants.get(participantId);
-  const action = actor?.actions?.find(item => item.id === actionId) || Store.getDiceLines().find(item => item.id === actionId);
-  if (!actor || !action) throw new Error('Action introuvable.');
-  const targets = Store.listParticipants().filter(item => item.id !== actor.id);
-  return openOverlay(`Résoudre : ${action.note || 'Action'}`, (mount, dialog) => {
-    const form = document.createElement('form'); form.className = 'card';
-    form.innerHTML = '<label>Type d’action<select name="type" required><option value="">Choisir…</option><option value="attack">Attaque</option><option value="skill">Compétence</option><option value="defense">Défense / esquive</option><option value="opposition">Opposition</option></select></label><label>Cible<select name="target"><option value="">Aucune cible</option></select></label><label>Jet d100<input name="roll" inputmode="numeric" placeholder="01–00" required></label><button type="submit">Prévisualiser</button><button type="button" class="ghost" name="virtual">Lancer d100</button>';
-    const target = form.elements.target; targets.forEach(item => target.append(new Option(item.name, item.id)));
-    const type = form.elements.type; if (['attack', 'skill', 'defense', 'opposition'].includes(action.type)) type.value = action.type;
-    const virtual = form.elements.virtual; virtual.addEventListener('click', () => { form.elements.roll.value = String(d100()); form.requestSubmit(); });
-    const previewBox = document.createElement('div'); mount.append(form, previewBox);
-    let preview = null;
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      try {
-        if (!type.value) throw new Error('Choisissez le type d’action.');
-        preview = requireStoreApi('previewResolution')({ actor, action: { ...action, type: type.value }, targetId: target.value || null, roll: form.elements.roll.value });
-        previewBox.replaceChildren();
-        const result = document.createElement('div'); result.className = 'card';
-        const targetValue = preview.input?.target; const damage = preview.damage;
-        result.textContent = [`${preview.success ? 'Réussite' : 'Échec'} · Jet ${preview.roll} · DR ${preview.sl}`, `Score : ${preview.score?.base ?? '—'} ${Number(preview.score?.mod || 0) >= 0 ? '+' : ''}${preview.score?.mod || 0} − ${preview.score?.statePenalty || 0} = ${preview.score?.target ?? '—'}`, targetValue ? `Cible : ${targetValue.name} · PV ${targetValue.hp}${damage ? ` → ${targetValue.hp - damage.finalDamage}` : ''}` : 'Aucune cible', preview.location ? `Localisation : ${preview.location.name}` : '', damage ? `Dégâts : ${damage.finalDamage}` : '', preview.critical?.kind || preview.fumble ? (preview.critical?.kind || 'Maladresse') : ''].filter(Boolean).join('\n');
-        const details = document.createElement('details'); const summary = document.createElement('summary'); summary.textContent = 'Détails de la formule'; const raw = document.createElement('pre'); raw.textContent = JSON.stringify(preview, null, 2); details.append(summary, raw); result.appendChild(details);
-        const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Appliquer les conséquences'; apply.addEventListener('click', async () => { apply.disabled = true; try { const applied = await awaitStore(requireStoreApi('applyResolution')(preview), 'Résolution'); if (!applied || !['applied', 'duplicate'].includes(applied.status)) throw new Error(applied?.status === 'stale' ? 'La partie a changé : prévisualisez à nouveau.' : 'Résolution non appliquée.'); dialog.close(); showToast(applied.status === 'duplicate' ? 'Résultat déjà appliqué.' : 'Conséquences appliquées.', 'success'); } catch (error) { apply.disabled = false; showToast(error.message, 'error'); } }); result.appendChild(apply); previewBox.appendChild(result);
-      } catch (error) { previewBox.textContent = error.message; }
-    });
-  });
-}
-
 function openTextImportView() {
   return openOverlay('Importer des profils depuis du texte', (mount, dialog) => {
     const view = initTextImportView({
-      mount,
+      mount, hosted: true,
       callbacks: {
         onImport: async (parsed, { confirmed = false } = {}) => {
-          if (parsed.status !== 'ready' && !confirmed) throw new Error('Confirmez les champs absents ou ambigus avant import.');
+          if (parsed.status !== 'ready' && !confirmed) throw userError('Confirmez les champs absents ou ambigus avant import.');
           await awaitStore(requireStoreApi('importParsedProfiles')(parsed.profiles), 'Import');
-          dialog.close(); showToast(`${parsed.profiles.length} profil(s) importé(s).`, 'success');
+          const count = parsed.profiles.length;
+          dialog.close(); showToast(count > 1 ? `${count} profils importés` : `${count} profil importé`, 'success');
         },
         onCancel: () => dialog.close()
       }
@@ -533,7 +616,7 @@ function openArchivesView() {
         const json = document.createElement('button'); json.type = 'button'; json.className = 'ghost small'; json.textContent = 'Exporter JSON';
         json.addEventListener('click', () => downloadText(`wfrp-archive-${archive.id}.json`, requireStoreApi('exportArchive')(archive.id, 'json'), 'application/json'));
         const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Supprimer';
-        remove.addEventListener('click', async () => { remove.disabled = true; try { await awaitStore(requireStoreApi('deleteArchive')(archive.id), 'Suppression'); render(); } catch (error) { remove.disabled = false; showToast(`Archive non supprimée : ${error.message}`, 'error'); } });
+        remove.addEventListener('click', async () => { remove.disabled = true; try { await awaitStore(requireStoreApi('deleteArchive')(archive.id), 'Suppression'); render(); } catch (error) { remove.disabled = false; showToast(contextMessage('Archive non supprimée', error, 'réessayez.'), 'error'); } });
         row.append(title, meta, markdown, json, remove); mount.appendChild(row);
       });
     };
@@ -542,20 +625,20 @@ function openArchivesView() {
 }
 
 function openRestoresView() {
-  return openOverlay('Points de restauration', (mount, dialog) => {
+  return openOverlay('Versions précédentes', (mount, dialog) => {
     const status = document.createElement('p'); status.className = 'muted'; status.textContent = 'Chargement…'; mount.appendChild(status);
     const list = document.createElement('div'); mount.appendChild(list);
     const render = async () => {
       list.replaceChildren();
       try {
         const points = await requireStoreApi('listRestorePoints')();
-        status.textContent = points.length ? `${points.length} point(s) disponible(s).` : 'Aucun point de restauration disponible.';
+        status.textContent = points.length ? `${points.length} version${points.length > 1 ? 's' : ''} disponible${points.length > 1 ? 's' : ''}` : 'Aucune version précédente disponible.';
         for (const point of points) {
           const row = document.createElement('article'); row.className = 'card';
           const heading = document.createElement('h3'); heading.textContent = `${readableRestoreReason(point.reason)} · ${readableRestoreDate(point.createdAt)}`;
           const meta = document.createElement('p'); meta.className = 'muted'; meta.textContent = `${readableRestoreSource(point.sourceFormat || 'snapshot-v2')} · révision ${point.localRevision ?? '—'}`;
           const actions = document.createElement('div'); actions.className = 'row';
-          const previewButton = document.createElement('button'); previewButton.type = 'button'; previewButton.className = 'ghost small'; previewButton.textContent = 'Prévisualiser';
+          const previewButton = document.createElement('button'); previewButton.type = 'button'; previewButton.className = 'ghost small'; previewButton.textContent = 'Voir le contenu';
           const restoreButton = document.createElement('button'); restoreButton.type = 'button'; restoreButton.className = 'danger ghost small'; restoreButton.textContent = 'Restaurer';
           const details = document.createElement('div'); details.className = 'muted';
           let preview = null; let previewRevision = Store.getLocalRevision?.();
@@ -566,23 +649,23 @@ function openRestoresView() {
               preview = await requireStoreApi('previewRestorePoint')(point.id);
               details.textContent = `${preview.counts?.profiles || 0} profil(s), ${preview.counts?.participants || 0} participant(s), ${preview.counts?.rejected || 0} rejet(s) · source ${readableRestoreSource(preview.sourceFormat || point.sourceFormat || 'snapshot-v2')}`;
               restoreButton.disabled = false;
-            } catch (error) { details.textContent = `Aperçu impossible : ${error.message}`; }
+            } catch (error) { details.textContent = contextMessage('Contenu illisible', error, 'cette version ne peut pas être restaurée.'); }
             finally { previewButton.disabled = false; }
           });
           restoreButton.disabled = true;
           restoreButton.addEventListener('click', async () => {
-            if (!preview) { details.textContent = 'Prévisualisez ce point avant restauration.'; return; }
-            if (!window.confirm(`Restaurer le point « ${readableRestoreReason(point.reason)} » ? La partie courante sera remplacée.`)) return;
+            if (!preview) { details.textContent = 'Affichez le contenu de cette version avant de la restaurer.'; return; }
+            if (!window.confirm(`Restaurer la version « ${readableRestoreReason(point.reason)} » ? La partie courante sera remplacée.`)) return;
             restoreButton.disabled = true;
             try {
               const result = await awaitStore(requireStoreApi('restorePoint')(point.id, { expectedRevision: previewRevision, expectedPointRevision: preview.data?.localRevision }), 'Restauration');
-              if (result?.status !== 'restored') throw new Error(result?.status === 'stale' ? 'La partie a changé : prévisualisez à nouveau.' : 'Restauration non appliquée.');
-              showToast('Point de restauration chargé.', 'success'); dialog.close();
-            } catch (error) { restoreButton.disabled = false; details.textContent = `Restauration impossible : ${error.message}`; }
+              if (result?.status !== 'restored') throw result?.status === 'stale' ? userError('La partie a changé : affichez à nouveau le contenu de cette version.') : new Error('Restauration non appliquée.');
+              showToast('Version précédente restaurée', 'success'); dialog.close();
+            } catch (error) { restoreButton.disabled = false; details.textContent = contextMessage('Restauration impossible', error, 'réessayez, ou chargez une sauvegarde depuis un fichier.'); }
           });
           actions.append(previewButton, restoreButton); row.append(heading, meta, actions, details); list.appendChild(row);
         }
-      } catch (error) { status.textContent = `Points indisponibles : ${error.message}`; }
+      } catch (error) { status.textContent = contextMessage('Versions précédentes indisponibles', error, 'le stockage local ne les conserve pas sur cet appareil.'); }
     };
     void render();
   });
@@ -608,7 +691,7 @@ function openRemindersView() {
             button.disabled = true;
             try {
               await awaitStore(requireStoreApi('resolveReminder')(item.id, decision), 'Rappel'); reminders = requireStoreApi('getReminders')(transition); render();
-            } catch (error) { button.disabled = false; showToast(`Rappel non enregistré : ${error.message}`, 'error'); }
+            } catch (error) { button.disabled = false; showToast(contextMessage('Rappel non enregistré', error, 'réessayez.'), 'error'); }
           }); row.appendChild(button);
         });
         mount.appendChild(row);
@@ -618,25 +701,61 @@ function openRemindersView() {
   });
 }
 
+// « À traiter » de Jouer : rappels en attente et événements proposés, rien sinon.
+// L'aperçu d'un événement survit aux re-rendus de la vue (clé : id de l'événement).
+const sceneEventPreviews = new Map();
+const TURN_REMINDER_KINDS = ['endTurn', 'startTurn'];
 function renderWorkspaceOverview(content) {
   if (!content) return;
   content.replaceChildren();
   const scene = Store.getActiveScene?.();
-  if (!scene) { content.textContent = 'Aucune séance active.'; return; }
+  if (!scene) return;
   const combat = Store.getCombat(); const actor = combat.currentActorId ? combat.participants.get(combat.currentActorId) : null;
   const transition = { id: `round-${combat.round || 0}`, type: 'endTurn', actorId: actor?.id || null, round: combat.round || 0 };
-  const reminders = Store.getReminders?.(transition) || [];
-  const heading = document.createElement('h3'); heading.textContent = 'Rappels courants'; content.appendChild(heading);
-  if (!reminders.length) content.appendChild(document.createElement('p')).textContent = 'Aucun rappel en attente.';
+  // Pas de rappel de tour tant que personne n'a la main (combat pas commencé).
+  const reminders = (Store.getReminders?.(transition) || []).filter(item => item.status === 'pending' && (actor || !TURN_REMINDER_KINDS.includes(item.kind)));
+  const smallButton = (label, onClick) => {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'ghost small'; button.textContent = label;
+    button.addEventListener('click', async () => { button.disabled = true; try { await onClick(); } catch (error) { button.disabled = false; showToast(userMessage(error, 'Action non enregistrée : réessayez.'), 'error'); } });
+    return button;
+  };
   reminders.forEach(item => {
-    const row = document.createElement('div'); row.className = 'card'; const label = document.createElement('span'); label.textContent = readableReminder(item); row.appendChild(label);
-    if (item.status === 'pending') ['resolve', 'ignore', 'snooze'].forEach(decision => { const button = document.createElement('button'); button.type = 'button'; button.className = 'ghost small'; button.textContent = decision === 'resolve' ? 'Résoudre' : decision === 'ignore' ? 'Ignorer' : 'Reporter'; button.addEventListener('click', async () => { button.disabled = true; try { await awaitStore(Store.resolveReminder(item.id, decision), 'Rappel'); renderWorkspaceOverview(content); } catch (error) { button.disabled = false; showToast(`Rappel non enregistré : ${error.message}`, 'error'); } }); row.appendChild(button); });
+    const row = document.createElement('div'); row.className = 'workspace-pending-row';
+    const label = document.createElement('span'); label.textContent = `${item.text || 'Rappel'} · ${reminderStatusLabels[item.status] || 'À traiter'}`;
+    row.appendChild(label);
+    [['resolve', 'Résoudre'], ['ignore', 'Ignorer'], ['snooze', 'Reporter']].forEach(([decision, text]) => row.appendChild(smallButton(text, async () => {
+      try { await awaitStore(Store.resolveReminder(item.id, decision), 'Rappel'); } catch (error) { throw userError(contextMessage('Rappel non enregistré', error, 'réessayez.')); }
+      renderWorkspaceOverview(content);
+    })));
     content.appendChild(row);
   });
-  const events = Array.isArray(scene.events) ? scene.events : []; const eventHeading = document.createElement('h3'); eventHeading.textContent = 'Événements proposés'; content.appendChild(eventHeading);
-  if (!events.length) { const emptyEvents = document.createElement('p'); emptyEvents.className = 'muted'; emptyEvents.textContent = 'Aucun événement structuré dans cette séance.'; content.appendChild(emptyEvents); }
-  events.forEach(event => { const proposal = Store.previewSceneEvent?.(event, { manual: true }) || Store.proposeSceneEvent?.(event, { manual: true }); if (proposal?.status !== 'proposed') return; const row = document.createElement('div'); row.className = 'card'; const label = document.createElement('span'); label.textContent = `${event.id} · ${readableSceneEvent(event, scene)}`; const previewButton = document.createElement('button'); previewButton.type = 'button'; previewButton.className = 'ghost small'; previewButton.textContent = 'Prévisualiser'; previewButton.addEventListener('click', async () => { previewButton.disabled = true; try { const preview = Store.previewSceneEvent ? await Store.previewSceneEvent(event, { manual: true }) : proposal; const summary = document.createElement('p'); summary.className = 'muted'; summary.textContent = `${readableSceneEvent(event, scene)} · aperçu proposé, aucune conséquence appliquée.`; const apply = document.createElement('button'); apply.type = 'button'; apply.className = 'ghost small'; apply.textContent = 'Appliquer la conséquence'; apply.addEventListener('click', async () => { apply.disabled = true; try { const result = await awaitStore(Store.applySceneEvent(event, { baseRevision: preview.baseRevision, sceneRevision: preview.sceneRevision, confirmed: true }), 'Événement'); if (result?.status !== 'applied') throw new Error(result?.reason || 'Conséquence non appliquée.'); renderWorkspaceOverview(content); } catch (error) { apply.disabled = false; showToast(`Événement non appliqué : ${error.message}`, 'error'); } }); row.replaceChildren(label, summary, apply); } catch (error) { showToast(`Aperçu impossible : ${error.message}`, 'error'); } finally { previewButton.disabled = false; } }); row.append(label, previewButton); content.appendChild(row); });
-  if (scene.intentions?.length) { const intentionHeading = document.createElement('h3'); intentionHeading.textContent = 'Intentions'; content.appendChild(intentionHeading); scene.intentions.forEach(intention => { const row = document.createElement('p'); row.textContent = `${intention.id} : ${intention.objective || intention.motivation || 'À arbitrer'}`; content.appendChild(row); }); }
+  const events = Array.isArray(scene.events) ? scene.events : [];
+  events.forEach(event => {
+    const proposal = Store.previewSceneEvent?.(event, { manual: true });
+    if (proposal?.status !== 'proposed') return;
+    const row = document.createElement('div'); row.className = 'workspace-pending-row';
+    const label = document.createElement('span'); label.textContent = readableSceneEvent(event, scene); row.appendChild(label);
+    const preview = sceneEventPreviews.get(event.id);
+    if (!preview) {
+      row.appendChild(smallButton('Voir la conséquence', async () => {
+        sceneEventPreviews.set(event.id, await Store.previewSceneEvent(event, { manual: true }));
+        renderWorkspaceOverview(content);
+      }));
+    } else {
+      const summary = document.createElement('p'); summary.className = 'muted';
+      summary.textContent = `Conséquence proposée : ${readableSceneEvent(event, scene).split(' : ').slice(1).join(' : ') || 'appliquer une conséquence'}. Rien n’est appliqué avant confirmation.`;
+      row.append(summary, smallButton('Appliquer la conséquence', async () => {
+        let result;
+        try { result = await awaitStore(Store.applySceneEvent(event, { baseRevision: preview.baseRevision, sceneRevision: preview.sceneRevision, confirmed: true }), 'Événement'); }
+        catch (error) { sceneEventPreviews.delete(event.id); renderWorkspaceOverview(content); throw userError(contextMessage('Événement non appliqué', error, 'affichez à nouveau la conséquence.')); }
+        sceneEventPreviews.delete(event.id);
+        if (result?.status !== 'applied') throw userError('Événement non appliqué : la condition n’est plus remplie.');
+        showToast('Conséquence appliquée', 'success');
+        renderWorkspaceOverview(content);
+      }));
+    }
+    content.appendChild(row);
+  });
 }
 
 function openEventsView() {
@@ -688,12 +807,14 @@ function openEventsView() {
     const showPreview = (eventModel, preview) => {
       previewMount.replaceChildren();
       const box = document.createElement('div'); box.className = 'card';
-      box.appendChild(Object.assign(document.createElement('strong'), { textContent: `${eventModel.id} · ${preview.status === 'proposed' ? 'conséquence proposée' : preview.status}` }));
-      const summary = document.createElement('p'); summary.textContent = readableSceneEvent(eventModel, scene); box.appendChild(summary);
-      const details = document.createElement('details'); const caption = document.createElement('summary'); caption.textContent = 'Détails de l’aperçu'; const raw = document.createElement('pre'); raw.textContent = JSON.stringify(preview, null, 2); details.append(caption, raw); box.appendChild(details);
+      box.appendChild(Object.assign(document.createElement('strong'), { textContent: eventModel.id }));
+      const { conditionText, consequenceText } = sceneEventParts(eventModel, scene);
+      const summary = document.createElement('dl'); summary.className = 'scene-event-summary';
+      [['Condition', conditionText], ['Conséquence', consequenceText], ['Statut', sceneStatusLabels[preview.status] || 'À vérifier']].forEach(([term, text]) => summary.append(Object.assign(document.createElement('dt'), { textContent: term }), Object.assign(document.createElement('dd'), { textContent: text })));
+      box.appendChild(summary);
       if (preview.status === 'proposed') {
         const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Appliquer la conséquence';
-        apply.addEventListener('click', async () => { apply.disabled = true; try { const result = await awaitStore(requireStoreApi('applySceneEvent')(eventModel, { baseRevision: preview.baseRevision, sceneRevision: preview.sceneRevision, confirmed: true }), 'Événement'); if (result?.status !== 'applied') throw new Error(result?.reason || 'Conséquence non appliquée.'); showToast('Conséquence appliquée.', 'success'); previewMount.replaceChildren(); } catch (error) { apply.disabled = false; showToast(error.message, 'error'); } }); box.appendChild(apply);
+        apply.addEventListener('click', async () => { apply.disabled = true; try { const result = await awaitStore(requireStoreApi('applySceneEvent')(eventModel, { baseRevision: preview.baseRevision, sceneRevision: preview.sceneRevision, confirmed: true }), 'Événement'); if (result?.status !== 'applied') throw new Error(result?.reason || 'Conséquence non appliquée.'); showToast('Conséquence appliquée', 'success'); previewMount.replaceChildren(); } catch (error) { apply.disabled = false; showToast(contextMessage('Conséquence non appliquée', error, 'enregistrez et prévisualisez à nouveau l’événement.'), 'error'); } }); box.appendChild(apply);
       }
       previewMount.appendChild(box);
     };
@@ -713,8 +834,8 @@ function openEventsView() {
           : awaitStore(requireStoreApi('executeCommand')('create-scene-event', draft => ({ ...draft, activeScene: { ...draft.activeScene, events: [...(draft.activeScene?.events || []), eventModel] } })), 'Événement');
         await saved;
         const preview = await requireStoreApi('previewSceneEvent')(eventModel, { manual: true });
-        showPreview(eventModel, preview); showToast('Événement enregistré : examinez l’aperçu avant application.', 'info');
-      } catch (error) { showToast(`Événement non enregistré : ${error.message}`, 'error'); } finally { submit.disabled = false; }
+        showPreview(eventModel, preview); showToast('Événement enregistré : vérifiez l’aperçu avant de l’appliquer', 'info');
+      } catch (error) { showToast(contextMessage('Événement non enregistré', error, 'vérifiez l’identifiant, la condition et la cible.'), 'error'); } finally { submit.disabled = false; }
     });
     mount.append(form, previewMount);
     const intentionForm = document.createElement('form'); intentionForm.className = 'card';
@@ -722,29 +843,29 @@ function openEventsView() {
     const participantSelect = intentionForm.elements.participant; Store.listParticipants().forEach(participant => participantSelect.append(new Option(participant.name, participant.id)));
     intentionForm.addEventListener('submit', async event => {
       event.preventDefault(); const submit = intentionForm.querySelector('button'); submit.disabled = true;
-      try { await awaitStore(requireStoreApi('createIntention')({ id: intentionForm.elements.id.value.trim(), participantId: participantSelect.value || null, motivation: intentionForm.elements.motivation.value, objective: intentionForm.elements.objective.value, retreatCondition: intentionForm.elements.retreat.value }), 'Intention'); showToast('Intention enregistrée.', 'success'); intentionForm.reset(); }
-      catch (error) { submit.disabled = false; showToast(`Intention non enregistrée : ${error.message}`, 'error'); }
+      try { await awaitStore(requireStoreApi('createIntention')({ id: intentionForm.elements.id.value.trim(), participantId: participantSelect.value || null, motivation: intentionForm.elements.motivation.value, objective: intentionForm.elements.objective.value, retreatCondition: intentionForm.elements.retreat.value }), 'Intention'); showToast('Intention enregistrée', 'success'); intentionForm.reset(); }
+      catch (error) { submit.disabled = false; showToast(contextMessage('Intention non enregistrée', error, 'vérifiez l’identifiant, puis réessayez.'), 'error'); }
     });
     mount.appendChild(intentionForm);
     const clockForm = document.createElement('form'); clockForm.className = 'card';
     clockForm.innerHTML = '<strong>Jauge manuelle</strong><label>Identifiant<input name="id" required></label><label>Valeur<input name="value" type="number" value="0"></label><label>Maximum<input name="max" type="number" min="1" value="6"></label><button type="submit">Créer la jauge</button>';
     clockForm.addEventListener('submit', async event => {
       event.preventDefault(); const submit = clockForm.querySelector('button'); submit.disabled = true;
-      try { await awaitStore(requireStoreApi('executeCommand')('create-scene-clock', draft => ({ ...draft, activeScene: { ...draft.activeScene, clocks: [...(draft.activeScene?.clocks || []), { id: clockForm.elements.id.value.trim(), value: Number(clockForm.elements.value.value) || 0, max: Number(clockForm.elements.max.value) || null }] } })), 'Jauge'); showToast('Jauge créée.', 'success'); }
-      catch (error) { submit.disabled = false; showToast(`Jauge non créée : ${error.message}`, 'error'); }
+      try { await awaitStore(requireStoreApi('executeCommand')('create-scene-clock', draft => ({ ...draft, activeScene: { ...draft.activeScene, clocks: [...(draft.activeScene?.clocks || []), { id: clockForm.elements.id.value.trim(), value: Number(clockForm.elements.value.value) || 0, max: Number(clockForm.elements.max.value) || null }] } })), 'Jauge'); showToast('Jauge créée', 'success'); }
+      catch (error) { submit.disabled = false; showToast(contextMessage('Jauge non créée', error, 'vérifiez l’identifiant et le maximum.'), 'error'); }
     });
     mount.appendChild(clockForm);
     (scene.clocks || []).forEach(clock => {
       const row = document.createElement('div'); row.className = 'card row'; row.append(document.createTextNode(`${clock.id} · ${clock.value}/${clock.max ?? '∞'}`));
       const advance = document.createElement('button'); advance.type = 'button'; advance.className = 'ghost small'; advance.textContent = '+1';
-      advance.addEventListener('click', async () => { advance.disabled = true; try { await awaitStore(requireStoreApi('advanceSceneClock')(clock.id, 1), 'Jauge'); showToast(`Jauge ${clock.id} avancée.`, 'success'); } catch (error) { advance.disabled = false; showToast(`Jauge non avancée : ${error.message}`, 'error'); } }); row.appendChild(advance); mount.appendChild(row);
+      advance.addEventListener('click', async () => { advance.disabled = true; try { await awaitStore(requireStoreApi('advanceSceneClock')(clock.id, 1), 'Jauge'); showToast(`Jauge ${clock.id} avancée`, 'success'); } catch (error) { advance.disabled = false; showToast(contextMessage('Jauge non avancée', error, 'réessayez.'), 'error'); } }); row.appendChild(advance); mount.appendChild(row);
     });
     if (!scene.events.length) { const empty = document.createElement('p'); empty.textContent = 'Aucun événement structuré dans cette séance.'; mount.appendChild(empty); return; }
     scene.events.forEach(event => {
       const proposal = proposeSceneEvent(scene, event, { manual: event.condition?.type === 'manual' });
       const row = document.createElement('div'); row.className = 'card';
-      const label = document.createElement('p'); label.textContent = `${event.id} · ${proposal.status}`; row.appendChild(label);
-      if (proposal.status === 'proposed') { const resolve = document.createElement('button'); resolve.type = 'button'; resolve.textContent = 'Prévisualiser la conséquence'; resolve.addEventListener('click', async () => { resolve.disabled = true; try { const preview = await requireStoreApi('previewSceneEvent')(event, { manual: true }); showPreview(event, preview); } catch (error) { showToast(`Aperçu impossible : ${error.message}`, 'error'); } finally { resolve.disabled = false; } }); row.appendChild(resolve); }
+      const label = document.createElement('p'); label.textContent = `${event.id} · ${sceneStatusLabels[proposal.status] || 'À vérifier'}`; row.appendChild(label);
+      if (proposal.status === 'proposed') { const resolve = document.createElement('button'); resolve.type = 'button'; resolve.textContent = 'Voir la conséquence'; resolve.addEventListener('click', async () => { resolve.disabled = true; try { const preview = await requireStoreApi('previewSceneEvent')(event, { manual: true }); showPreview(event, preview); } catch (error) { showToast(contextMessage('Aperçu impossible', error, 'réessayez.'), 'error'); } finally { resolve.disabled = false; } }); row.appendChild(resolve); }
       mount.appendChild(row);
     });
   });
@@ -757,11 +878,6 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     createProfile: openCreateProfileView,
     duplicateProfile: id => awaitStore(Store.duplicateProfile(id), 'Duplication'),
     removeProfile: id => awaitStore(Store.removeProfile(id), 'Suppression'),
-    endTurn: () => {
-      const combat = Store.getCombat();
-      return combat.round > 0 ? Combat.nextTurn() : Combat.start();
-    },
-    undo: () => Store.undo(),
     editProfile: id => {
       const profile = Store.getProfile(id);
       if (!profile) throw new Error('Profil introuvable.');
@@ -781,14 +897,14 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         };
         form.prepend(preview); form.querySelector('[name=propagate]')?.addEventListener('change', updatePreview); updatePreview();
         profileSavedHandler = { token: editorToken, fn: () => dialog.close() };
-        const restore = () => { if (profileSavedHandler?.token === editorToken) profileSavedHandler = null; delete form.dataset.editorToken; if (placeholder.parentNode) placeholder.replaceWith(form); form.classList.remove('card'); reserveUI.resetForm?.(); };
+        const restore = () => { preview.remove(); form.querySelector('[name=propagate]')?.removeEventListener('change', updatePreview); if (profileSavedHandler?.token === editorToken) profileSavedHandler = null; delete form.dataset.editorToken; if (placeholder.parentNode) placeholder.replaceWith(form); form.classList.remove('card'); reserveUI.resetForm?.(); };
         dialog.addEventListener('close', restore, { once: true });
       });
     },
     editParticipant: id => {
       const participant = Store.getCombat().participants.get(id);
       if (!participant) return;
-      openOverlay(`Modifier ${participant.name}`, mount => {
+      openOverlay(`Modifier ${participant.name}`, (mount, dialog) => {
         const form = document.createElement('form'); form.className = 'card';
         form.dataset.participantEditor = id;
         form.innerHTML = `
@@ -797,7 +913,10 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             <label>PV actuels<input name="hp" type="number"></label>
             <label>Initiative<input name="initiative" type="number" step="1"></label>
             <label>Zone
-              <select name="zone"><option value="active">Actif</option><option value="bench">Banc / en attente</option></select>
+              <select name="zone"><option value="active">Actif</option><option value="bench">En attente</option></select>
+            </label>
+            <label>Camp
+              <select name="camp">${Object.entries(CAMP_LABELS).map(([value, label]) => `<option value="${value}">${label}</option>`).join('')}</select>
             </label>
           </div>
           <section class="participant-state-edit card">
@@ -814,6 +933,13 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         form.elements.name.value = participant.name; form.elements.hp.value = participant.hp;
         form.elements.initiative.value = Number(participant.initiative) || 0;
         form.elements.zone.value = participant.zone === 'active' ? 'active' : 'bench';
+        form.elements.camp.value = normalizeCamp(participant.camp, participant.kind);
+        // Fenêtre non modale : seuls les champs modifiés ici sont envoyés, pour ne pas
+        // écraser les PV ou les états changés entre-temps par la fiche ou le tour suivant.
+        const fields = ['name', 'hp', 'initiative', 'zone', 'camp'];
+        const baseline = Object.fromEntries(fields.map(field => [field, form.elements[field].value]));
+        const fieldChanged = field => form.elements[field].value !== baseline[field];
+        let actionsTouched = false;
 
         const alertError = message => {
           form.querySelector('[role="alert"]')?.remove();
@@ -822,11 +948,12 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         const setBusy = busy => form.querySelectorAll('button').forEach(button => { button.disabled = busy; });
 
         const stateValues = normalizeEffects(participant.states || []).map(state => ({ ...state }));
+        baseline.states = JSON.stringify(normalizeEffects(stateValues));
+        const statesChanged = () => JSON.stringify(normalizeEffects(stateValues)) !== baseline.states;
         const stateMount = form.querySelector('.participant-state-list');
         const stateNames = ['Blessé', 'À Terre', 'Sonné', 'Inconscient', 'Aveuglé', 'Assourdi', 'Exténué', 'Hémorragique', 'Surpris', 'Enchevêtré', 'Enflammé', 'Brisé'];
         const renderStates = () => {
           stateMount.replaceChildren();
-          if (!stateValues.length) { const empty = document.createElement('p'); empty.className = 'muted'; empty.textContent = 'Aucun état.'; stateMount.appendChild(empty); }
           stateValues.forEach((state, index) => {
             const row = document.createElement('div'); row.className = 'row state-edit-row';
             const name = document.createElement('input'); name.className = 'state-name'; name.value = state.name || ''; name.placeholder = 'État'; name.setAttribute('list', 'participant-state-names');
@@ -851,53 +978,83 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
           if (!actionValues.length) { const empty = document.createElement('p'); empty.className = 'muted'; empty.textContent = 'Aucune action préparée. Ajoutez une action improvisée ou préparée.'; actionMount.appendChild(empty); }
           actionValues.forEach((action, index) => {
             const container = document.createElement('div'); container.className = 'card';
-            const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Retirer cette action'; remove.addEventListener('click', () => { actionValues.splice(index, 1); renderActions(); });
+            const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Retirer cette action'; remove.addEventListener('click', () => { actionsTouched = true; actionValues.splice(index, 1); renderActions(); });
             const header = document.createElement('div'); header.className = 'row'; header.append(document.createElement('strong'), remove); header.firstChild.textContent = action.note || `Action ${index + 1}`;
             container.appendChild(header);
-            createActionEditor({ container, action, onChange: next => { actionValues[index] = { ...next, id: action.id }; header.firstChild.textContent = next.note || `Action ${index + 1}`; } });
+            createActionEditor({ container, action, onChange: next => { actionsTouched = true; actionValues[index] = { ...next, id: action.id }; header.firstChild.textContent = next.note || `Action ${index + 1}`; } });
             actionMount.appendChild(container);
           });
         };
         renderActions();
-        form.querySelector('[data-add-action]').addEventListener('click', () => { actionValues.push({ id: uid(), type: '', base: '', mod: 0, note: 'Action improvisée', damage: 0, qualities: [] }); renderActions(); actionMount.lastElementChild?.querySelector('.action-note')?.focus(); });
+        form.querySelector('[data-add-action]').addEventListener('click', () => { actionsTouched = true; actionValues.push({ id: uid(), type: '', base: '', mod: 0, note: 'Action improvisée', damage: 0, qualities: [] }); renderActions(); actionMount.lastElementChild?.querySelector('.action-note')?.focus(); });
 
         const reorder = async direction => {
           try {
             const order = (Store.getEffectiveOrder?.() || Store.getCombat().order || []).filter(Boolean);
-            const index = order.indexOf(id); if (index < 0) throw new Error('Le participant doit être actif pour être réordonné.');
+            const index = order.indexOf(id); if (index < 0) throw userError('Faites entrer ce combattant en jeu avant de changer sa place.');
             const beforeId = direction === 'up' ? order[index - 1] || null : direction === 'down' ? (order[index + 2] || null) : null;
             await awaitStore(direction === 'initiative' ? Store.rebuildOrder() : Store.moveInOrder(id, beforeId), 'Ordre');
-          } catch (error) { alertError(error.message); }
+          } catch (error) { alertError(contextMessage('Ordre non modifié', error, 'réessayez.')); }
         };
         form.querySelectorAll('[data-order]').forEach(button => button.addEventListener('click', () => reorder(button.dataset.order)));
         form.querySelector('[data-remove-participant]').addEventListener('click', async () => {
-          setBusy(true); try { await awaitStore(Store.removeParticipant(id), 'Retrait'); form.closest('dialog')?.close(); } catch (error) { setBusy(false); alertError(error.message); }
+          setBusy(true); try { await awaitStore(Store.removeParticipant(id), 'Retrait'); form.closest('dialog')?.close(); } catch (error) { setBusy(false); alertError(contextMessage('Combattant non retiré', error, 'réessayez.')); }
         });
         form.addEventListener('submit', async event => {
           event.preventDefault(); const save = form.querySelector('button[type="submit"]'); setBusy(true);
           try {
             const zone = form.elements.zone.value === 'active' ? 'active' : 'bench';
-            await awaitStore(Store.updateParticipant(id, { name: form.elements.name.value.trim() || participant.name, hp: Number(form.elements.hp.value) || 0, initiative: Number(form.elements.initiative.value) || 0, states: normalizeEffects(stateValues), actions: actionValues }), 'Participant');
-            if (zone !== participant.zone) await awaitStore(Store.moveParticipant(id, zone), 'Zone');
+            const patch = {};
+            if (fieldChanged('name')) patch.name = form.elements.name.value.trim() || participant.name;
+            if (fieldChanged('hp')) patch.hp = Number(form.elements.hp.value) || 0;
+            if (fieldChanged('initiative')) patch.initiative = Number(form.elements.initiative.value) || 0;
+            if (fieldChanged('camp')) patch.camp = form.elements.camp.value;
+            if (statesChanged()) patch.states = normalizeEffects(stateValues);
+            if (actionsTouched) patch.actions = actionValues;
+            if (Object.keys(patch).length) await awaitStore(Store.updateParticipant(id, patch), 'Participant');
+            if (fieldChanged('zone') && zone !== Store.getCombat().participants.get(id)?.zone) await awaitStore(Store.moveParticipant(id, zone), 'Zone');
             form.closest('dialog')?.close();
-          } catch (error) { setBusy(false); alertError(error.message); }
+          } catch (error) { setBusy(false); alertError(contextMessage('Combattant non enregistré', error, 'vérifiez les champs, puis réessayez.')); }
         });
+        // PV et états non touchés ici suivent la partie ; un champ en cours d'édition n'est jamais écrasé.
+        const refreshLive = () => {
+          const live = Store.getCombat().participants.get(id);
+          if (!live) return;
+          const hpInput = form.elements.hp;
+          if (!fieldChanged('hp') && document.activeElement !== hpInput) {
+            hpInput.value = live.hp; baseline.hp = hpInput.value;
+          }
+          if (!statesChanged() && !stateMount.contains(document.activeElement)) {
+            const fresh = normalizeEffects(live.states || []).map(state => ({ ...state }));
+            stateValues.splice(0, stateValues.length, ...fresh);
+            baseline.states = JSON.stringify(normalizeEffects(stateValues));
+            renderStates();
+          }
+        };
+        ['combat', 'combat:update'].forEach(event => Bus.on(event, refreshLive));
+        dialog.addEventListener('close', () => ['combat', 'combat:update'].forEach(event => Bus.off(event, refreshLive)), { once: true });
         mount.appendChild(form);
       });
     },
-    openRules: () => { workspaceView?.openContext('rules'); },
-    openLog: () => { switchTab('workspace', 'play'); workspaceView?.setSpace('play'); workspaceView?.openContext('log'); renderLog(Store); },
+    enterParticipant: id => awaitStore(Store.moveParticipant(id, 'active'), 'Entrée en jeu').catch(error => showToast(contextMessage('Entrée en jeu impossible', error, 'réessayez.'), 'error')),
+    setStates: (id, states) => awaitStore(Store.updateParticipant(id, { states: normalizeEffects(states) }), 'États'),
+    addProfileToCombat: async id => {
+      try {
+        await awaitStore(Store.addProfilesToCombat([id]), 'Ajout au combat');
+        showToast(`${Store.getProfile(id)?.name || 'Profil'} ajouté en attente`, 'success');
+      } catch (error) { showToast(contextMessage('Profil non ajouté au combat', error, 'réessayez.'), 'error'); }
+    },
+    applyResolution: async preview => {
+      const result = await awaitStore(requireStoreApi('applyResolution')(preview), 'Résolution');
+      const target = preview.input?.target;
+      if (result?.status === 'applied') showToast(preview.damage && target ? `${preview.damage.finalDamage} dégâts appliqués à ${target.name}` : 'Résultat enregistré', 'success');
+      else if (result?.status === 'duplicate') showToast('Résultat déjà appliqué', 'info');
+      else if (result?.status !== 'stale') throw new Error(result?.reason || 'Résolution non appliquée.');
+      return result;
+    },
     renderRules: content => { renderReferenceTables('', content); },
     renderOverview: renderWorkspaceOverview,
     renderLog: content => { renderLog(Store, content, { contextual: true }); },
-    runAction: ({ participantId, diceLineId }) => { if (!diceLineId) throw new Error('Cette action ne possède pas de jet enregistré.'); openResolutionView(participantId, diceLineId); },
-    renderActionPanel: participant => {
-      const box = document.createElement('div');
-      const actions = (participant.actions || []).length ? participant.actions : Store.getDiceLines().filter(line => line.participantId === participant.id);
-      if (!actions.length) { box.textContent = 'Aucune action préparée.'; return box; }
-      actions.forEach(action => { const run = document.createElement('button'); run.type = 'button'; run.className = 'workspace-secondary'; run.textContent = `${action.note || action.attr || 'Action'} · ${action.base ?? '—'}`; run.dataset.workspaceAction = 'run-action'; run.dataset.participantId = participant.id; run.dataset.diceLineId = action.id; box.appendChild(run); });
-      return box;
-    },
     adjustHp: ({ participantId, delta }) => {
       if (typeof Store.executeCommand === 'function') {
         return awaitStore(Store.executeCommand('adjust-hp', draft => {
@@ -914,11 +1071,12 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
   }
 }) : null;
 
-setWorkspaceToolsVisibility('prepare');
-renderLaunchpad('prepare');
+combatBanner = initCombatBanner({ Store, mount: qs('#combat-banner'), onAdvance: advanceTurn, onGoToPlay: () => goToSpace('play') });
+combatBanner.render(activeSpace());
+initAppMenu();
+renderAppMenu();
 
-const safeOpen = operation => { try { operation(); } catch (error) { showToast(error.message, 'error'); } };
-on(qs('#workspace-simulate'), 'click', () => safeOpen(openSimulationView));
+const safeOpen = operation => { try { operation(); } catch (error) { showToast(userMessage(error, 'Cette fenêtre n’a pas pu s’ouvrir : rechargez la page.'), 'error'); } };
 on(qs('#workspace-reminders'), 'click', () => safeOpen(openRemindersView));
 on(qs('#workspace-events'), 'click', () => safeOpen(openEventsView));
 on(qs('#workspace-archives'), 'click', () => safeOpen(openArchivesView));
@@ -939,14 +1097,14 @@ on(DOM.importModal.confirm, 'click', async (e) => {
   e.preventDefault();
   const ids = importModalUI.getSelectedIds?.() || [];
   DOM.importModal.confirm.disabled = true;
-  try { await awaitStore(Store.importFromReserve(ids), 'Import'); importModalUI.clearSelection?.(); DOM.importModal.dialog.close(); showToast(`${ids.length} profil(s) importé(s) en combat`, 'success'); }
-  catch (error) { showToast(`Import impossible : ${error.message}`, 'error'); }
+  try { await awaitStore(Store.importFromReserve(ids), 'Import'); importModalUI.clearSelection?.(); DOM.importModal.dialog.close(); showToast(ids.length > 1 ? `${ids.length} profils importés en combat` : `${ids.length} profil importé en combat`, 'success'); }
+  catch (error) { showToast(contextMessage('Import impossible', error, 'réessayez.'), 'error'); }
   finally { DOM.importModal.confirm.disabled = false; }
 });
 on(DOM.combat.btnExport, 'click', async () => {
   if (confirm('Appliquer PV aux profils correspondants ?')) {
     try { await awaitStore(Store.exportToReserve(), 'Export'); showToast('Profils de la réserve mis à jour', 'success'); }
-    catch (error) { showToast(`Export impossible : ${error.message}`, 'error'); }
+    catch (error) { showToast(contextMessage('Export impossible', error, 'réessayez.'), 'error'); }
   }
 });
 on(DOM.combat.btnSaveFile, 'click', () => {
@@ -977,7 +1135,7 @@ on(DOM.combat.fileInput, 'change', (e) => {
       await awaitStore(Store.loadFromJSON(ev.target.result), 'Chargement');
       showToast('📂 Sauvegarde chargée avec succès', 'success', { label: 'Annuler', onClick: () => Store.undo() });
     } catch (err) {
-      showToast('Erreur de chargement: ' + err.message, 'error');
+      showToast(contextMessage('Sauvegarde non chargée', err, 'Ce fichier n’est pas une sauvegarde de l’outil MJ.'), 'error');
     }
   };
   reader.readAsText(file);
@@ -1009,7 +1167,8 @@ on(DOM.combat.btnD100, 'click', () => {
 // Abonnements Bus
 Bus.on('reserve', reserveUI.renderReserve);
 Bus.on('combat', combatViewUI.renderCombat);
-Bus.on('combat', () => { const space = document.querySelector('.tab.is-active')?.dataset.workspaceSpace || 'prepare'; setWorkspaceToolsVisibility(space); renderLaunchpad(space); });
+Bus.on('combat', renderAppMenu);
+['combat', 'combat:update', 'reserve'].forEach(event => Bus.on(event, () => combatBanner?.render(activeSpace())));
 Bus.on('combat:update', ({ id, patch }) => {
   if (!cardUI.updateCardUI(id, patch)) {
     combatViewUI.renderCombat();
@@ -1027,12 +1186,12 @@ Bus.on('sync:conflict', () => {
       renderLog(Store);
       showToast(message, 'success');
     })
-    .catch(error => showToast(`Résolution impossible : ${error.message}`, 'error'));
+    .catch(error => showToast(contextMessage('Conflit non résolu', error, 'exportez les deux versions, puis réessayez.'), 'error'));
 
   const exportBoth = () => {
     let json;
     try { json = Store.exportSyncConflict?.() || Store.getFullJSON(); }
-    catch (error) { showToast(`Aperçu impossible : ${error.message}`, 'error'); return; }
+    catch (error) { showToast(contextMessage('Export impossible', error, 'réessayez.'), 'error'); return; }
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -1040,13 +1199,13 @@ Bus.on('sync:conflict', () => {
     link.download = `wfrp-conflit-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
-    showToast('Les versions locale et distante ont été exportées.', 'info');
+    showToast('Versions locale et distante exportées', 'info');
   };
 
   const preview = () => {
     let json;
     try { json = Store.exportSyncConflict?.() || Store.getFullJSON(); }
-    catch (error) { showToast(`Aperçu impossible : ${error.message}`, 'error'); return; }
+    catch (error) { showToast(contextMessage('Aperçu impossible', error, 'réessayez.'), 'error'); return; }
     let previewData;
     try { previewData = JSON.parse(json); } catch { previewData = { export: json }; }
     const modal = document.createElement('div');
@@ -1072,8 +1231,8 @@ Bus.on('sync:conflict', () => {
 
   showToast('Conflit distant : choisissez une version avant de reprendre l’envoi.', 'warning', {
     actions: [
-      { label: 'Garder local', onClick: () => resolve(() => Store.resolveSyncLocal(), 'Version locale conservée et renvoyée.') },
-      { label: 'Prendre distant', onClick: () => resolve(() => Store.resolveSyncRemote(), 'Version distante appliquée localement.') },
+      { label: 'Garder local', onClick: () => resolve(() => Store.resolveSyncLocal(), 'Version locale conservée et renvoyée') },
+      { label: 'Prendre distant', onClick: () => resolve(() => Store.resolveSyncRemote(), 'Version distante appliquée') },
       { label: 'Aperçu / exporter', onClick: preview },
       { label: 'Sauvegarder les deux', onClick: exportBoth }
     ]
@@ -1085,8 +1244,8 @@ Bus.on('sync:guest-import-available', ({ snapshot, contextId, kind } = {}) => {
     label: 'Importer explicitement',
     onClick: () => Promise.resolve(Store.importGuestSnapshot(snapshot))
       .then(result => { if (result?.ok === false) throw result.error || new Error('Import impossible.'); return result; })
-      .then(() => showToast(`${source} importée dans le compte.`, 'success'))
-      .catch(error => showToast(`Import invité impossible : ${error.message}`, 'error'))
+      .then(() => showToast(`${source} importée dans le compte`, 'success'))
+      .catch(error => showToast(contextMessage('Import impossible', error, 'réessayez.'), 'error'))
   }, 0);
 });
 

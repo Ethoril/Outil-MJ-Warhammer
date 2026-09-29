@@ -5,6 +5,8 @@
  * a schema v2 envelope without mutating the input. It deliberately does not write
  * storage or execute extension fields.
  */
+import { normalizeCaracs } from './models.js';
+
 export const CURRENT_SCHEMA_VERSION = 2;
 
 export class MigrationError extends Error {
@@ -169,6 +171,7 @@ function migrateProfiles(raw, report) {
     const item = { ...entry.item, id };
     validateFiniteNumbers(item, ['initiative', 'hp', 'maxHp'], 'reserve/' + id, report);
     sanitizeNumericMap(item, 'caracs', 'reserve/' + id, report);
+    if (isObject(item.caracs)) item.caracs = normalizeCaracs(item.caracs);
     sanitizeNumericMap(item, 'armor', 'reserve/' + id, report);
     out.push(withExtensions(item, PROFILE_KEYS, 'reserve/' + id, report));
   }
@@ -196,6 +199,7 @@ function migrateParticipants(raw, profiles, report) {
     }
     validateFiniteNumbers(item, ['initiative', 'hp', 'maxHp'], 'combat/participants/' + id, report);
     sanitizeNumericMap(item, 'caracs', 'combat/participants/' + id, report);
+    if (isObject(item.caracs)) item.caracs = normalizeCaracs(item.caracs);
     sanitizeNumericMap(item, 'armor', 'combat/participants/' + id, report);
     out.push(withExtensions(item, PARTICIPANT_KEYS, 'combat/participants/' + id, report));
   }

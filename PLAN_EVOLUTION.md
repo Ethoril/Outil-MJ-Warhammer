@@ -14,7 +14,7 @@ Le critère principal de réussite est la réduction des interruptions du MJ. La
 
 - Chrome sur macOS, ordinateur, usage par un seul MJ. Plusieurs onglets ou appareils du même MJ restent possibles, avec gestion explicite des conflits.
 - Application statique sur GitHub Pages, modules ES natifs, sans framework ni étape de compilation obligatoire.
-- Polices et ressources visuelles embarquées ; identité parchemin, Cinzel/Lora et rouge sombre conservée. Les chiffres et commandes denses pourront utiliser une police système pour améliorer leur lecture.
+- Polices et ressources visuelles embarquées ; identité parchemin et rouge sombre conservée ; typographie Grenze Gotisch (titres), Alegreya (texte) et Alegreya Sans (interface, chiffres tabulaires).
 - Interface entièrement en français ; « DR » dans les libellés utilisateur, quelle que soit la convention interne.
 - Accès local immédiat. La connexion Google sert à synchroniser ; elle ne conditionne plus l’accès à l’application.
 - Trois espaces : **Préparer**, **Jouer**, **Bibliothèque**. Le détail des parcours figure au §4.

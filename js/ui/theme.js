@@ -15,16 +15,16 @@ export function initThemeManager() {
 
     if (theme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
-      btn.textContent = '🌙';
-      btn.title = 'Thème sombre actif (cliquer pour passer en mode Système)';
+      btn.textContent = 'Thème : Sombre';
+      btn.title = 'Cliquer pour suivre le thème du système';
     } else if (theme === 'light') {
       document.documentElement.setAttribute('data-theme', 'light');
-      btn.textContent = '☀️';
-      btn.title = 'Thème clair actif (cliquer pour passer en mode Sombre)';
+      btn.textContent = 'Thème : Clair';
+      btn.title = 'Cliquer pour passer au thème sombre';
     } else {
       document.documentElement.removeAttribute('data-theme');
-      btn.textContent = '💻';
-      btn.title = 'Thème système (cliquer pour passer en mode Clair)';
+      btn.textContent = 'Thème : Système';
+      btn.title = 'Cliquer pour passer au thème clair';
     }
   }
 
