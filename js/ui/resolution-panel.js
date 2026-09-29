@@ -3,7 +3,7 @@
  * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
  * par `handlers`, et la vue reste propriétaire de l'état entre deux rendus.
  */
-import { formatDamageFormula, damageBreakdown, describeWeaponDamage } from '../core/resolution.js';
+import { formatDamageFormula, damageBreakdown, describeWeaponDamage, previewHpLoss } from '../core/resolution.js';
 import { actionHasDamage } from '../core/damage.js';
 import { qualityLabel } from '../core/quality-normalization.js';
 
@@ -64,7 +64,10 @@ function chip(label, { pressed = false, key, attrs = {} } = {}) {
   return element;
 }
 
-function rollField({ field, label, value, error, handlers, disabled }) {
+// Champs de jet du critique : clé du brouillon de workspace-view. Saisir ou cocher ne vide jamais l'aperçu.
+const CRITICAL_ROLL_KEYS = Object.freeze({ location: 'criticalLocationRoll', effect: 'criticalEffectRoll', second: 'criticalSecondRoll' });
+
+function rollField({ field, label, value, error, handlers, disabled, critical = null }) {
   const wrapper = node('div', 'workspace-roll');
   const id = `workspace-roll-${field}`;
   const caption = node('label', 'workspace-roll-label', label);
@@ -75,17 +78,19 @@ function rollField({ field, label, value, error, handlers, disabled }) {
   input.className = 'workspace-roll-input num';
   input.inputMode = 'numeric';
   input.autocomplete = 'off';
-  input.placeholder = '01–00';
+  input.placeholder = 'Saisir';
+  input.title = 'Tapez le d100 lancé à la table (01 à 00), puis Entrée';
   input.maxLength = 3;
   input.value = value;
   input.dataset.rollInput = field;
   input.dataset.focusKey = `roll-${field}`;
   input.disabled = disabled;
-  if (error) {
-    input.setAttribute('aria-invalid', 'true');
-    input.setAttribute('aria-describedby', `${id}-error`);
-  }
-  input.addEventListener('input', () => handlers.input(field === 'attack' ? 'attackRoll' : 'defenseRoll', input.value));
+  input.setAttribute('aria-describedby', error ? `workspace-roll-hint ${id}-error` : 'workspace-roll-hint');
+  if (error) input.setAttribute('aria-invalid', 'true');
+  input.addEventListener('input', () => (critical
+    ? handlers.criticalInput(CRITICAL_ROLL_KEYS[critical], input.value)
+    : handlers.input(field === 'attack' ? 'attackRoll' : 'defenseRoll', input.value)));
+  if (critical) input.addEventListener('change', () => handlers.criticalChange());
   input.addEventListener('keydown', event => {
     if (event.key !== 'Enter') return;
     event.preventDefault();
@@ -93,7 +98,7 @@ function rollField({ field, label, value, error, handlers, disabled }) {
   });
   const roll = button('Lancer', 'workspace-secondary', { 'aria-label': `Lancer le d100 : ${label}`, 'data-focus-key': `roll-${field}-dice` });
   roll.disabled = disabled;
-  roll.addEventListener('click', () => handlers.roll(field));
+  roll.addEventListener('click', () => (critical ? handlers.criticalRoll(CRITICAL_ROLL_KEYS[critical]) : handlers.roll(field)));
   row.append(input, roll);
   wrapper.append(caption, row);
   if (error) {
@@ -109,13 +114,85 @@ function outcomePill(label, success, sl) {
   return node('span', `workspace-outcome ${success ? 'is-success' : 'is-failure'}`, `${label} : ${success ? 'Réussite' : 'Échec'} · DR ${signed(sl)}`);
 }
 
-function renderResult(preview, target) {
+const zoneName = location => String(location.name).toLocaleLowerCase();
+
+function criticalEffectLine(part) {
+  const base = part.effectRollBase;
+  const roll = part.bonus ? `${base} + ${part.bonus} = ${part.effectRoll}` : String(part.effectRoll);
+  const line = node('p', 'workspace-result-line workspace-critical-effect');
+  line.append(node('span', 'num', `${roll} → `), node('strong', '', `« ${part.effect.name} »`), ` : ${part.effect.eff}`);
+  return line;
+}
+
+function criticalItemBox(item, handlers, busy) {
+  const label = node('label', 'workspace-critical-item');
+  const box = document.createElement('input');
+  box.type = 'checkbox';
+  box.checked = item.applied;
+  box.disabled = busy;
+  box.dataset.focusKey = `critical-item-${item.id}`;
+  box.addEventListener('change', () => handlers.criticalToggle(item.id, box.checked));
+  label.append(box, node('span', '', item.label));
+  return label;
+}
+
+// Gravité (d100), effet lu, cases à cocher, rappels : commun au critique et au second critique.
+function criticalSeverity(part, crit, { field, label, value, error }, preview, draft, handlers) {
+  const nodes = [rollField({ field, label, value, error, handlers, disabled: draft.busy, critical: crit === 'first' ? 'effect' : 'second' })];
+  if (part.effect) nodes.push(criticalEffectLine(part));
+  const items = preview.critical.items.filter(item => item.crit === crit);
+  if (items.length) {
+    const list = node('div', 'workspace-critical-items');
+    list.setAttribute('role', 'group');
+    list.setAttribute('aria-label', crit === 'first' ? 'Effets du critique' : 'Effets du second critique');
+    items.forEach(item => list.appendChild(criticalItemBox(item, handlers, draft.busy)));
+    nodes.push(list);
+  }
+  if (part.parsed?.reminders.length) nodes.push(node('p', 'workspace-formula-notes workspace-muted', `À arbitrer : ${part.parsed.reminders.join(' ; ')}`));
+  if (part.parsed?.death) nodes.push(node('p', 'workspace-critical-death', 'Mort instantanée'));
+  return nodes;
+}
+
+function renderCritical(preview, draft, handlers) {
+  const { details, second, secondHint, acharnement } = preview.critical;
+  const errors = draft.criticalErrors || {};
+  const block = node('div', 'workspace-critical');
+  block.setAttribute('role', 'group');
+  block.setAttribute('aria-label', 'Coup critique');
+  block.appendChild(rubric('Coup critique'));
+  if (acharnement) block.appendChild(node('p', 'workspace-formula-notes workspace-muted', `Acharnement : cible à ${minusSigned(preview.input.target?.hp)} PV, gravité +10`));
+  block.appendChild(rollField({
+    field: 'critical-location', label: 'Localisation du critique (nouveau d100)', value: draft.criticalLocationRoll,
+    error: errors.location || '', handlers, disabled: draft.busy, critical: 'location'
+  }));
+  if (details.location) {
+    block.appendChild(node('p', 'workspace-result-line num', `${details.locationRoll} → ${zoneName(details.location)}`));
+    block.append(...criticalSeverity(details, 'first', {
+      field: 'critical-effect', label: 'Gravité (d100)', value: draft.criticalEffectRoll, error: errors.effect || ''
+    }, preview, draft, handlers));
+  }
+  if (second) {
+    const follow = node('div', 'workspace-critical is-second');
+    follow.setAttribute('role', 'group');
+    follow.setAttribute('aria-label', 'Second critique');
+    follow.appendChild(rubric(`Second critique — PV sous zéro · ${zoneName(second.location)} (jet inversé ${second.locationRoll})`));
+    follow.append(...criticalSeverity(second, 'second', {
+      field: 'critical-second', label: 'Gravité du second critique (d100)', value: draft.criticalSecondRoll, error: errors.secondEffect || ''
+    }, preview, draft, handlers));
+    block.appendChild(follow);
+  } else if (secondHint) {
+    block.appendChild(node('p', 'workspace-formula-notes workspace-muted', `Si les dégâts font passer la cible sous 0 PV : second critique au ${zoneName(secondHint.location)} (jet inversé ${secondHint.locationRoll}).`));
+  }
+  return block;
+}
+
+function renderResult(preview, target, draft, handlers) {
   const result = node('div', 'workspace-result');
   const pills = node('div', 'workspace-result-pills');
   const opposed = preview.opposition?.mode === 'opposed' ? preview.opposition : null;
   pills.appendChild(outcomePill(ROLL_LABELS[preview.actionType] || 'Jet', preview.success, preview.sl));
   if (opposed) pills.appendChild(outcomePill('Défense', opposed.defender.success, opposed.defender.sl));
-  if (preview.critical?.kind === 'Critique') pills.appendChild(node('span', 'workspace-outcome is-critical', 'Coup critique'));
+  if (preview.critical?.kind === 'Critique') pills.appendChild(node('span', 'workspace-outcome is-critical', preview.attack ? 'Coup critique' : 'Réussite critique'));
   if (preview.fumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse'));
   result.appendChild(pills);
 
@@ -124,8 +201,14 @@ function renderResult(preview, target) {
   } else if (preview.attack && !preview.hit) {
     result.appendChild(node('p', 'workspace-result-line', 'Pas de touche'));
   }
-  if (preview.location) {
-    result.appendChild(node('p', 'workspace-result-line num', `${preview.location.roll} → ${String(preview.location.name).toLocaleLowerCase()}`));
+  const criticalAttack = preview.attack && preview.critical?.details;
+  // Le critique affiche sa propre localisation dans son bloc.
+  if (preview.location && !criticalAttack) {
+    result.appendChild(node('p', 'workspace-result-line num', `${preview.location.roll} → ${zoneName(preview.location)}`));
+  }
+  // Arme « à arbitrer » : sa propre ligne suffit, la localisation n'y changerait rien.
+  if (criticalAttack?.needsLocation && target && actionHasDamage(preview.input.action) && preview.weapon?.status !== 'manual') {
+    result.appendChild(node('p', 'workspace-result-line workspace-damage-manual', 'Dégâts : lancez d’abord la localisation du critique.'));
   }
   if (preview.damage) {
     const formula = formatDamageFormula(preview.damage);
@@ -139,18 +222,19 @@ function renderResult(preview, target) {
     result.appendChild(line);
     const { notes } = damageBreakdown(preview.damage);
     if (notes.length) result.appendChild(node('p', 'workspace-formula-notes workspace-muted', notes.join(' · ')));
-    if (target) {
-      const after = (Number(target.hp) || 0) - preview.damage.finalDamage;
-      const hp = node('p', 'workspace-result-line num');
-      hp.append(node('span', 'combatant-name', target.name), ` : PV ${minusSigned(target.hp)} → `, node('strong', 'workspace-result-hp', minusSigned(after)));
-      result.appendChild(hp);
-    }
   } else if (preview.weapon?.status === 'manual') {
     const { reason, text } = preview.weapon;
     const name = preview.input?.actor?.name || 'l’attaquant';
     result.appendChild(node('p', 'workspace-result-line workspace-damage-manual', reason === 'force-inconnue'
       ? `Dégâts à arbitrer : ${text} demande la Force de ${name} (F inconnue).`
       : `Dégâts à arbitrer : « ${text} » n’est pas calculable automatiquement.`));
+  }
+  if (criticalAttack) result.appendChild(renderCritical(preview, draft, handlers));
+  if (target && (preview.damage || preview.critical?.application?.extraWounds)) {
+    const after = (Number(target.hp) || 0) - previewHpLoss(preview);
+    const hp = node('p', 'workspace-result-line num');
+    hp.append(node('span', 'combatant-name', target.name), ` : PV ${minusSigned(target.hp)} → `, node('strong', 'workspace-result-hp', minusSigned(after)));
+    result.appendChild(hp);
   }
   return result;
 }
@@ -160,7 +244,9 @@ function comparisonText({ name, hp, preview }) {
   const damage = preview.damage;
   const outcome = preview.hit ? 'touché' : 'pas de touche';
   const manual = preview.hit && preview.weapon?.status === 'manual' ? ' · dégâts à arbitrer' : '';
-  return `${name} : ${outcome}${manual}${damage ? ` · ${damage.finalDamage} dégâts · PV ${minusSigned(hp)} → ${minusSigned((Number(hp) || 0) - damage.finalDamage)}` : ''}`;
+  const pending = preview.critical?.details?.needsLocation ? ' · coup critique (localisation à lancer)' : '';
+  const loss = previewHpLoss(preview);
+  return `${name} : ${outcome}${manual}${pending}${damage ? ` · ${loss} dégâts · PV ${minusSigned(hp)} → ${minusSigned((Number(hp) || 0) - loss)}` : ''}`;
 }
 
 function renderComparison(entries, handlers, busy) {
@@ -307,7 +393,8 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
     }));
     rolls.appendChild(defense);
   }
-  section.appendChild(rolls);
+  section.append(rolls, node('p', 'workspace-roll-hint', 'Dés lancés à la table : tapez le résultat dans la case, puis Entrée.'));
+  section.lastChild.id = 'workspace-roll-hint';
 
   const commands = node('div', 'workspace-inline-actions workspace-resolution-commands');
   const calculate = button('Calculer', 'workspace-secondary', { 'data-focus-key': 'calculate' });
@@ -334,15 +421,22 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
   if (draft.comparison) live.appendChild(renderComparison(draft.comparison, handlers, draft.busy));
   const preview = draft.preview;
   if (preview) {
-    live.appendChild(renderResult(preview, target));
+    live.appendChild(renderResult(preview, target, draft, handlers));
     const apply = node('div', 'workspace-inline-actions workspace-resolution-commands');
     const needsTarget = preview.attack && !preview.targetId;
-    const label = preview.damage && target
-      ? `Appliquer ${preview.damage.finalDamage} dégâts à ${target.name}`
-      : preview.weapon?.status === 'manual' ? 'Enregistrer sans dégâts' : 'Enregistrer le résultat';
+    const needsLocation = Boolean(preview.attack && preview.critical?.details?.needsLocation);
+    const invalidCritical = Object.keys(draft.criticalErrors || {}).length > 0;
+    const effects = preview.critical?.application;
+    const manual = preview.weapon?.status === 'manual';
+    const label = needsLocation && target ? (manual ? `Appliquer le critique à ${target.name}` : `Appliquer les dégâts à ${target.name}`)
+      : preview.damage && target ? `Appliquer ${previewHpLoss(preview)} dégâts à ${target.name}`
+        : target && effects && (effects.extraWounds || effects.states.length) ? `Appliquer le critique à ${target.name}`
+          : manual ? 'Enregistrer sans dégâts' : 'Enregistrer le résultat';
     const primary = button(label, 'workspace-primary', { 'data-focus-key': 'apply' });
-    primary.disabled = draft.busy || !canApply || needsTarget;
+    primary.disabled = draft.busy || !canApply || needsTarget || needsLocation || invalidCritical;
     if (needsTarget) primary.title = 'Choisissez une cible pour appliquer une attaque';
+    else if (needsLocation) primary.title = 'Lancez d’abord la localisation du critique';
+    else if (invalidCritical) primary.title = 'Corrigez le jet de critique';
     primary.addEventListener('click', () => handlers.apply());
     const cancel = button('Annuler', 'workspace-ghost', { 'data-focus-key': 'cancel-preview', 'aria-label': 'Annuler le résultat calculé' });
     cancel.disabled = draft.busy;

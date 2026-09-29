@@ -93,12 +93,25 @@ latéralisée.
 
 ### Critique
 
-Pour un critique, `runDiceLine()` lance un d100 indépendant de localisation, puis un second
-d100 indépendant de gravité (`getCritEffect`). Pour Acharnement, seul le second jet reçoit
-+10. Les effets `eff` de `js/data/crits.js` restent du texte à arbitrer ; les tests connus
-vérifient seulement la première et la dernière ligne HEAD et une clé absente
-(`tests/dice.test.js`). L'effet exact de chaque ligne, sa source et ses tests secondaires
-sont donc **à vérifier** avant automatisation.
+Dans la résolution intégrée de Jouer, une attaque qui touche sur un critique (réussite sur un
+double ou Empaleuse, ou Acharnement) n'inverse pas le jet d'attaque : un nouveau d100 saisi (ou
+lancé) donne la localisation (`getLocationName`). Cette localisation sert aussi aux dégâts
+normaux (armure de la zone) ; sans elle, aucun dégât n'est calculé et l'application est refusée
+(`localisation-du-critique-requise`). Un second d100 de gravité lit la table de la zone
+(`getCritEffect`) ; Acharnement (cible à 0 PV ou moins avant le coup) ajoute +10, plafonné à
+100. Si PV avant ≥ 0 et PV avant − dégâts normaux (`finalDamage`, Blessures du critique
+exclues) < 0, la cible subit un second critique à la localisation du jet inversé
+(`getReverseRoll`), avec son propre d100 de gravité (+10 aussi en cas d'Acharnement) ; si les
+dégâts ne sont pas calculables (arme « à arbitrer »), seul un rappel est affiché. Un coup non
+critique qui passe sous zéro ne déclenche rien de plus. Un critique hors attaque (compétence…)
+reste une « Réussite critique » sans localisation ni table.
+
+`parseCriticalEffect()` (`js/core/criticals.js`) lit le texte `eff` de chaque ligne : les
+Blessures en plus (« +N Blessures ») et les états simples (Hémorragie → Hémorragique, Sonné,
+Aveuglé, Assourdi, À Terre, Exténué, avec leur niveau) sont **proposés** avec une case cochée
+par défaut ; les segments conditionnels ou aléatoires (Test, ou, risque, si, dé), les notes entre
+parenthèses et tout le reste (fractures, pertes, mouvement…) restent en rappel « À arbitrer ».
+« Mort instantanée » est signalée sans rien appliquer. Couverture : `tests/e22-criticals.test.js`.
 
 ## Dégâts
 
@@ -154,8 +167,9 @@ Couverture : `tests/e19-damage-formulas.test.js`.
 Dans l'interface, le calcul ne s'affiche que sur une réussite avec une cible sélectionnée et
 une ligne possédant `damage` (le modèle donne actuellement 0 par défaut, donc le test de
 présence est presque toujours vrai). Le bouton d'application soustrait les PV, écrit au journal
-et ajoute `À Terre` si les PV passent à 0 ou moins. Il ne déclenche pas les effets du tableau
-critique et ne fusionne pas encore la mutation dégâts + états en une commande atomique.
+et ajoute `À Terre` si les PV passent à 0 ou moins. Pour un critique, il applique dans le
+même clic (une seule commande) dégâts + Blessures en plus cochées, puis fusionne les états cochés
+(même état déjà présent : niveau augmenté, durée conservée ; « À Terre » jamais en double).
 
 La formule et le plancher sont des conventions explicitement arrêtées ; leur référence
 officielle n'est pas fournie. `BE = floor(caracs.E / 10)` et la réduction des bras/jambes
@@ -245,13 +259,13 @@ ils restent **à vérifier**.
 | d100, score, DR, malus d'états | **Automatique** | Fonctions pures et test simple conservés | `tests/dice.test.js` + résultat identique jet saisi/tiré dans E12 |
 | Double/100, Empaleuse, Dangereuse | **Automatique borné** | Automatiser selon helpers ; vérifier réussite/échec dans le résultat | 00, 01, 10, 99, 100, doublons et limites de score |
 | Localisation ordinaire | **Automatique** | Inversion puis table existante | Toutes bornes + 100 ; exemples validés par le MJ |
-| Localisation/gravité critique | **Automatique + rappel** | Deux jets séparés ; Acharnement +10 | Critique normal, Acharnement, tables bornes ; effets non appliqués automatiquement |
+| Localisation/gravité critique | **Automatique + rappel** | Nouveau d100 de localisation (armure de cette zone), d100 de gravité ; Acharnement +10 ; second critique au jet inversé sous 0 PV | `tests/e22-criticals.test.js` : localisation, Acharnement, plafond 100, second critique |
 | Dégâts et Inoffensive | **Automatique + validation MJ** | Formule et bouton d'application | `tests/damage.test.js`, qualité inconnue, DR négatif, 0 PV, application unique |
 | Dégâts d'arme en formule (`BF+n`) | **Automatique ; sinon à arbitrer** | BF de l'attaquant ; expression inconnue ou F absente → aucun dégât automatique | `tests/e19-damage-formulas.test.js` |
 | Qualités sans moteur | **Rappel** | Afficher libellé/texte, ne pas calculer | Mot-clé inconnu lisible et sans mutation |
 | Aliases de qualités | **Automatique après canonisation E06** | Seul `impact` est relié effectivement | Paires et répétitions appliquées une seule fois |
 | États périodiques | **Automatique borné** | Fin de tour pure sur chaînes historiques | niveaux multiples, durées distinctes, expiration et migration atomique |
-| États critiques et effets secondaires | **Rappel / manuel** | Le texte critique est affiché | Aucun effet narratif automatique sans contrat |
+| États critiques et effets secondaires | **Proposé à cocher + rappel** | Blessures en plus et états simples appliqués avec les dégâts s'ils restent cochés ; conditionnels et reste en « À arbitrer » ; mort instantanée signalée | `parseCriticalEffect` sur les 80 lignes, fusion des niveaux, À Terre unique |
 | Test opposé et égalité | **Manuel** | Aucun calcul actuel | E12 : saisir les deux résultats et arbitrer selon contrat E06 |
 | Avantages et défense | **Manuel** | Aucune donnée ni bonus par défaut | Ne pas activer avant choix de convention et tests de groupe/individuel |
 

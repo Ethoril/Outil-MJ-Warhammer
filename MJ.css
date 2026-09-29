@@ -406,8 +406,8 @@ dialog .card { min-width: 480px; max-width: 600px; max-height: 80vh; overflow-y:
   padding: 1px 3px;
 }
 
-.prepare-saved-encounters, .prepare-persistent-characters { margin: 12px 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel-2); }
-.prepare-saved-encounters .row, .prepare-persistent-characters .row { justify-content: space-between; border-top: 1px solid var(--border); padding: 7px 0; }
+.prepare-persistent-characters { margin: 12px 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel-2); }
+.prepare-persistent-characters .row { justify-content: space-between; border-top: 1px solid var(--border); padding: 7px 0; }
 
 /* Fenêtres d'outils : panneau non modal docké à droite, sous l'en-tête collant
    (--header-h est tenu à jour par main.js), au-dessus du contenu, sous les toasts. */

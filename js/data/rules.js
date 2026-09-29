@@ -25,7 +25,9 @@ export const RULES = [
         p: 'Si votre jet d\'attaque est un Coup Critique (un succès sur un double, par exemple 11, 22, 33...), la procédure change. Vous n\'inversez pas le jet d\'attaque. À la place :',
         ul: [
           'Vous lancez un nouveau 1d100 pour déterminer la localisation (en consultant le tableau ci-dessus).',
-          'Vous lancez un second 1d100 pour déterminer la gravité de la blessure sur le Tableau des Critiques correspondant à cette localisation (voir ci-dessous).'
+          'Vous lancez un second 1d100 pour déterminer la gravité de la blessure sur le Tableau des Critiques correspondant à cette localisation (voir ci-dessous).',
+          'Cette nouvelle localisation sert aussi aux dégâts normaux de l\'attaque : c\'est l\'armure de cette zone qui compte.',
+          'Si l\'attaque critique fait passer la cible sous zéro Point de Vie, elle subit un second critique, à la localisation du jet d\'attaque inversé (voir ci-dessus), avec son propre 1d100 de gravité.'
         ]
       },
       {

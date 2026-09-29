@@ -221,7 +221,7 @@ async function main() {
     await modifiedCard.getByRole('button', { name: 'Dupliquer' }).click();
     await expect(page.locator('.workspace-space-library .workspace-profile-card')).toHaveCount(2);
     await page.locator('#tab-prepare').click();
-    await page.locator('#workspace-prepare').getByRole('button', { name: 'Lancer la rencontre' }).click();
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
     const prepareOverlay = page.getByRole('dialog');
     const profileSelect = prepareOverlay.getByRole('combobox', { name: 'Profil' });
     const zoneSelect = prepareOverlay.locator('select').last();

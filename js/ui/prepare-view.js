@@ -4,7 +4,6 @@ import { userMessage } from './messages.js';
 const noop = () => {};
 // Camp proposé selon le type du profil (Créature et types inconnus : ennemi).
 const KIND_CAMPS = { PJ: 'pj', 'Créature': 'ennemi', PNJ: 'neutre' };
-const ENCOUNTER_STATUS_LABELS ={ prepared: 'préparée', active: 'en cours', suspended: 'suspendue', closed: 'clôturée' };
 
 function makeField(label, value, type = 'text') {
   const wrapper = document.createElement('label'); wrapper.textContent = label;
@@ -21,17 +20,26 @@ function makeSelect(label, options, value) {
 }
 
 /** E11 preparation view. All mutations leave through callbacks supplied by main. `hosted` : la fenêtre porte déjà le titre. */
-export function initPrepareView({ mount, hosted = false, Store = null, encounter = null, savedEncounters = [], persistentCharacters = [], callbacks = {} } = {}) {
+export function initPrepareView({ mount, hosted = false, Store = null, encounter = null, persistentCharacters = [], callbacks = {} } = {}) {
   if (!mount || typeof mount.replaceChildren !== 'function') throw new TypeError('prepare-view nécessite un mount');
   const state = { draft: normalizeEncounter(encounter || createEncounter({ title: 'Nouvelle rencontre' })), error: '' };
   const onDraftChange = callbacks.onDraftChange || noop;
   const profiles = () => typeof callbacks.getProfiles === 'function' ? callbacks.getProfiles() : (typeof Store?.listProfiles === 'function' ? Store.listProfiles() : []);
 
   function fail(error, fallback = 'La rencontre n’a pas pu être modifiée : réessayez.') { state.error = userMessage(error, fallback); state.busy = false; render(); }
-  async function emit() {
+  // Titre ou notes tapés mais pas encore enregistrés : `change` n'arrive qu'à la sortie du champ.
+  let typing = false;
+  // Dernier enregistrement lancé : la fermeture l'attend s'il est encore en cours.
+  let lastSave = Promise.resolve(true);
+  // Chaque modification est enregistrée par main ; renvoie false si l'enregistrement a échoué.
+  function emit() {
+    typing = false;
     state.error = '';
-    try { await onDraftChange(state.draft); }
-    catch (error) { fail(error); }
+    lastSave = (async () => {
+      try { await onDraftChange(state.draft); return true; }
+      catch (error) { fail(error); return false; }
+    })();
+    return lastSave;
   }
 
   function render() {
@@ -39,25 +47,13 @@ export function initPrepareView({ mount, hosted = false, Store = null, encounter
     const root = document.createElement('section'); root.className = 'prepare-view'; root.setAttribute('aria-label', 'Préparer une rencontre');
     if (!hosted) { const title = document.createElement('h2'); title.textContent = 'Préparer une rencontre'; root.appendChild(title); }
     if (state.error) { const error = document.createElement('p'); error.className = 'error'; error.setAttribute('role', 'alert'); error.textContent = state.error; root.appendChild(error); }
-    const saved = typeof Store?.listEncounters === 'function' ? Store.listEncounters() : savedEncounters;
-    const savedBox = document.createElement('details'); savedBox.className = 'prepare-saved-encounters'; savedBox.open = saved.length > 0;
-    const savedSummary = document.createElement('summary'); savedSummary.textContent = `Rencontres enregistrées (${saved.length})`; savedBox.appendChild(savedSummary);
-    if (!saved.length) savedBox.appendChild(document.createTextNode('Aucune rencontre enregistrée.'));
-    saved.forEach(item => {
-      const row = document.createElement('div'); row.className = 'row';
-      const label = document.createElement('span'); const count = (item.entries || []).reduce((sum, entry) => sum + (Number(entry.quantity) || 1), 0); label.textContent = `${item.title} · ${count} combattant${count > 1 ? 's' : ''} · ${ENCOUNTER_STATUS_LABELS[item.status] || 'préparée'}`;
-      const select = document.createElement('button'); select.type = 'button'; select.className = 'ghost small'; select.textContent = 'Charger';
-      select.addEventListener('click', () => callbacks.onSelectEncounter?.(item));
-      row.append(label, select);
-      if (typeof callbacks.onDeleteEncounter === 'function') {
-        const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Supprimer';
-        remove.addEventListener('click', async () => { remove.disabled = true; try { await callbacks.onDeleteEncounter(item.id); render(); } catch (cause) { fail(cause, 'Rencontre non supprimée : réessayez.'); } }); row.appendChild(remove);
-      }
-      savedBox.appendChild(row);
-    });
-    root.appendChild(savedBox);
-    const titleField = makeField('Titre', state.draft.title); titleField.input.addEventListener('change', () => { state.draft.title = titleField.input.value.trim() || 'Rencontre sans titre'; void emit(); });
-    const notesField = makeField('Notes', state.draft.notes, 'textarea'); notesField.input.addEventListener('change', () => { state.draft.notes = notesField.input.value; void emit(); });
+    const titleField = makeField('Titre', state.draft.title);
+    const readTitle = () => { state.draft.title = titleField.input.value.trim() || 'Rencontre sans titre'; };
+    titleField.input.addEventListener('input', () => { readTitle(); typing = true; });
+    titleField.input.addEventListener('change', () => { readTitle(); void emit(); });
+    const notesField = makeField('Notes', state.draft.notes, 'textarea');
+    notesField.input.addEventListener('input', () => { state.draft.notes = notesField.input.value; typing = true; });
+    notesField.input.addEventListener('change', () => { state.draft.notes = notesField.input.value; void emit(); });
     root.append(titleField.wrapper, notesField.wrapper);
 
     const add = document.createElement('div'); add.className = 'encounter-add-entry';
@@ -124,16 +120,16 @@ export function initPrepareView({ mount, hosted = false, Store = null, encounter
       });
       actions.appendChild(button);
     };
-    action('Enregistrer', 'onSave', draft => callbacks.onSave(normalizeEncounter(draft)));
-    action('Dupliquer', 'onDuplicate', async draft => { state.draft = duplicateEncounter(draft); await emit(); callbacks.onDuplicate(state.draft); });
+    action('Dupliquer', 'onDuplicate', async draft => { state.draft = duplicateEncounter(draft); if (await emit()) callbacks.onDuplicate(state.draft); });
     action('Lancer la rencontre', 'onLaunch', draft => callbacks.onLaunch(normalizeEncounter(draft)));
-    const suspended = typeof Store?.listSuspendedScenes === 'function' ? Store.listSuspendedScenes() : [];
-    const activeScene = typeof Store?.getActiveScene === 'function' ? Store.getActiveScene() : null;
-    action('Reprendre', 'onResume', () => callbacks.onResume(suspended[0]?.id), suspended.length > 0);
-    action('Suspendre', 'onSuspend', () => callbacks.onSuspend(), Boolean(activeScene));
-    root.appendChild(actions);
+    root.append(actions, Object.assign(document.createElement('p'), { className: 'muted', textContent: 'Modifications enregistrées automatiquement.' }));
     mount.appendChild(root);
   }
 
-  return { render, getDraft: () => normalizeEncounter(state.draft), setDraft(next) { state.draft = normalizeEncounter(next); state.error = ''; render(); } };
+  return {
+    render, getDraft: () => normalizeEncounter(state.draft), setDraft(next) { state.draft = normalizeEncounter(next); state.error = ''; render(); },
+    // À la fermeture de la fenêtre (Échap ferme sans faire sortir du champ) : enregistre la saisie
+    // en cours, ou attend l'enregistrement encore en vol.
+    flush: () => (typing ? emit() : lastSave)
+  };
 }

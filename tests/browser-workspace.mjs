@@ -71,7 +71,18 @@ async function main() {
       const combat = { round: 3, currentActorId: 'actor-1', participants: new Map(participants.map(actor => [actor.id, actor])) };
       const handlers = new Map();
       const calls = [];
+      // Rencontres enregistrées et scènes vivantes du faux Store (liste de Préparer).
+      const encounters = [
+        { id: 'enc-closed', title: 'Vieille embuscade', status: 'closed', notes: '', entries: [{ id: 'x', profileId: 'actor-1', quantity: 1 }] },
+        { id: 'enc-empty', title: 'Rencontre vide', status: 'prepared', notes: '', entries: [] },
+        { id: 'enc-1', title: 'Embuscade au gué', status: 'prepared', notes: '\nLe pont est piégé.\nDeuxième ligne', entries: [{ id: 'a', profileId: 'actor-1', quantity: 3 }, { id: 'b', profileId: 'actor-2', quantity: 1 }, { id: 'c', profileId: 'perdu', quantity: 1 }] }
+      ];
+      const scenes = { active: null, suspended: [] };
+      const encounterCalls = [];
       const Store = {
+        listEncounters: () => encounters,
+        getActiveScene: () => scenes.active,
+        listSuspendedScenes: () => scenes.suspended,
         listProfiles: () => profiles,
         listParticipants: () => Array.from(combat.participants.values()),
         getCombat: () => combat,
@@ -86,10 +97,17 @@ async function main() {
         actions: {
           renderOverview(content) { content.textContent = 'Rappel courant'; },
           adjustHp(payload) { calls.push({ type: 'adjustHp', payload }); },
-          enterParticipant(id) { calls.push({ type: 'enter', id }); }
+          enterParticipant(id) { calls.push({ type: 'enter', id }); },
+          beginEncounter() { encounterCalls.push({ type: 'begin' }); },
+          editEncounter(id) { encounterCalls.push({ type: 'edit', id }); },
+          launchEncounter(id) { encounterCalls.push({ type: 'launch', id }); },
+          deleteEncounter(id) { encounterCalls.push({ type: 'delete', id }); },
+          resumeScene(id) { encounterCalls.push({ type: 'resume', id }); },
+          suspendScene() { encounterCalls.push({ type: 'suspend' }); },
+          showPlay() { encounterCalls.push({ type: 'showPlay' }); }
         }
       });
-      window.workspaceTestData = { combat, handlers, calls, diceLines };
+      window.workspaceTestData = { combat, handlers, calls, diceLines, scenes, encounters, encounterCalls };
       window.spaceReachedDocument = 0;
       document.addEventListener('keydown', event => { if (event.code === 'Space') window.spaceReachedDocument += 1; });
     }, {
@@ -107,6 +125,74 @@ async function main() {
     await expect(page.getByRole('tab', { name: 'Bibliothèque' })).toBeVisible();
     await expect(page.locator('#workspace-prepare')).toBeVisible();
 
+    // Liste des rencontres de Préparer : statut, composition, notes, boutons.
+    const prepare = page.locator('#workspace-prepare');
+    const cards = prepare.locator('.workspace-encounter-card');
+    await expect(prepare.getByRole('button', { name: 'Nouvelle rencontre', exact: true })).toBeEnabled();
+    await expect(cards).toHaveCount(3);
+    await expect(cards.nth(0)).toHaveAttribute('data-encounter-id', 'enc-empty');
+    await expect(cards.nth(2)).toContainText('Clôturée');
+    const card = prepare.locator('[data-encounter-id="enc-1"].workspace-encounter-card');
+    await expect(card.getByRole('heading', { name: 'Embuscade au gué' })).toBeVisible();
+    await expect(card.locator('.workspace-encounter-status.is-prepared')).toHaveText('Préparée');
+    await expect(card).toContainText('5 combattants · Combattant 1 ×3, Combattant 2, Profil supprimé');
+    await expect(card.locator('.workspace-encounter-notes')).toHaveText('Le pont est piégé.');
+    await expect(card.getByRole('button', { name: 'Lancer « Embuscade au gué »' })).toBeEnabled();
+    await expect(prepare.getByRole('button', { name: 'Lancer « Rencontre vide »' })).toBeDisabled();
+    await expect(prepare.getByRole('button', { name: 'Lancer « Rencontre vide »' })).toHaveAttribute('title', 'Ajoutez au moins un combattant');
+    await card.getByRole('button', { name: 'Modifier « Embuscade au gué »' }).click();
+    await card.getByRole('button', { name: 'Lancer « Embuscade au gué »' }).click();
+    await card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' }).click();
+    // Avec une scène active : la carte passe « En cours », les autres « Lancer » sont bloqués.
+    await page.evaluate(() => { window.workspaceTestData.scenes.active = { id: 'scene-1', title: 'Embuscade au gué', status: 'active', encounterId: 'enc-1' }; });
+    await rerender();
+    await expect(card.locator('.workspace-encounter-status.is-active')).toHaveText('En cours');
+    await expect(cards.first()).toHaveAttribute('data-encounter-id', 'enc-1');
+    await expect(prepare).toContainText('Combat en cours : « Embuscade au gué ». Suspendez-le ou clôturez-le (menu ⋯) pour lancer une autre rencontre.');
+    await expect(prepare.getByRole('button', { name: 'Lancer « Vieille embuscade »' })).toBeDisabled();
+    await expect(prepare.getByRole('button', { name: 'Lancer « Vieille embuscade »' })).toHaveAttribute('title', /Un combat est en cours/);
+    await expect(card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' })).toBeDisabled();
+    await expect(card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' })).toHaveAttribute('title', 'Clôturez d’abord la séance (menu ⋯)');
+    await card.getByRole('button', { name: 'Revenir au combat « Embuscade au gué »' }).click();
+    await card.getByRole('button', { name: 'Suspendre « Embuscade au gué »' }).click();
+    // Suspendue : « Reprendre » reste bloqué tant qu'une autre scène est active.
+    await page.evaluate(() => {
+      const { scenes } = window.workspaceTestData;
+      scenes.suspended = [{ id: 'scene-2', status: 'suspended', encounterId: 'enc-closed' }];
+      scenes.active = null;
+    });
+    await rerender();
+    await expect(prepare.locator('.workspace-encounter-card[data-encounter-id="enc-closed"]')).toContainText('Suspendue');
+    await expect(prepare.getByRole('button', { name: 'Supprimer « Vieille embuscade »' })).toBeDisabled();
+    await prepare.getByRole('button', { name: 'Reprendre « Vieille embuscade »' }).click();
+    await page.evaluate(() => { window.workspaceTestData.scenes.active = { id: 'scene-3', title: 'Autre', status: 'active', encounterId: 'enc-empty' }; });
+    await rerender();
+    await expect(prepare.getByRole('button', { name: 'Reprendre « Vieille embuscade »' })).toBeDisabled();
+    assert.deepEqual(await page.evaluate(() => window.workspaceTestData.encounterCalls), [
+      { type: 'edit', id: 'enc-1' }, { type: 'launch', id: 'enc-1' }, { type: 'delete', id: 'enc-1' },
+      { type: 'showPlay' }, { type: 'suspend' }, { type: 'resume', id: 'scene-2' }
+    ]);
+    // Sans aucune carte (rencontre supprimée pendant le combat), la note du combat en cours reste.
+    await page.evaluate(() => { const data = window.workspaceTestData; data.removed = data.encounters.splice(0); });
+    await rerender();
+    await expect(prepare.locator('.workspace-encounter-card')).toHaveCount(0);
+    await expect(prepare).toContainText('Combat en cours : « Autre »');
+    await expect(prepare).toContainText('Aucune rencontre préparée');
+    await page.evaluate(() => { const data = window.workspaceTestData; data.encounters.push(...data.removed); });
+    await page.evaluate(() => { const { scenes } = window.workspaceTestData; scenes.active = null; scenes.suspended = []; });
+    await rerender();
+    // Jouer sans combat : rencontres préparées en version compacte.
+    await page.evaluate(() => { const { combat } = window.workspaceTestData; window.workspaceTestData.saved = Array.from(combat.participants); combat.participants.clear(); });
+    await page.getByRole('tab', { name: 'Jouer' }).click();
+    const compact = page.locator('.workspace-play-empty ~ .workspace-encounter-list .workspace-encounter-card');
+    await expect(page.locator('#workspace-play')).toContainText('Rencontres préparées');
+    await expect(compact).toHaveCount(3);
+    await expect(compact.first().getByRole('button')).toHaveCount(1);
+    await compact.filter({ hasText: 'Embuscade au gué' }).getByRole('button', { name: 'Lancer « Embuscade au gué »' }).click();
+    assert.deepEqual((await page.evaluate(() => window.workspaceTestData.encounterCalls)).slice(-1), [{ type: 'launch', id: 'enc-1' }]);
+    await page.evaluate(() => { const { combat, saved } = window.workspaceTestData; saved.forEach(([id, actor]) => combat.participants.set(id, actor)); });
+    await rerender();
+    await page.getByRole('tab', { name: 'Préparer' }).click();
     await page.getByRole('tab', { name: 'Jouer' }).click();
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(12);
     await expect(page.locator('.workspace-track')).toContainText('Un nom de combattant très long');
@@ -163,6 +249,13 @@ async function main() {
     await expect(result).toContainText('Attaque : Réussite · DR +2');
     await expect(result).toContainText('Défense : Échec · DR −4');
     await expect(result).toContainText('DR net +6 · touché');
+    // 23 n'est pas un double, mais la cible est à −2 PV : Acharnement, donc critique. Sans sa localisation, pas de dégâts.
+    await expect(result).toContainText('Acharnement : cible à −2 PV, gravité +10');
+    await expect(result).toContainText('Dégâts : lancez d’abord la localisation du critique.');
+    await expect(page.getByRole('button', { name: 'Appliquer les dégâts à Combattant 2' })).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Appliquer les dégâts à Combattant 2' })).toHaveAttribute('title', 'Lancez d’abord la localisation du critique');
+    await page.locator('[data-roll-input="critical-location"]').fill('32');
+    await page.locator('[data-roll-input="critical-location"]').press('Enter');
     await expect(result).toContainText('32 → bras droit');
     await expect(result).toContainText('8 arme + 6 DR − 3 BE − 1 PA = 10');
     await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveAttribute('data-zone', 'arm-right');
@@ -176,7 +269,9 @@ async function main() {
     await page.evaluate(() => { window.workspaceTestData.diceLines[0].qualities = ['Inoffensive']; });
     await rerender();
     await page.locator('[data-roll-input="defense"]').press('Enter');
-    await expect(result.locator('.workspace-formula-notes')).toHaveText('Inoffensive : PA ×2, pas de minimum');
+    await page.locator('[data-roll-input="critical-location"]').fill('32');
+    await page.locator('[data-roll-input="critical-location"]').press('Enter');
+    await expect(result.locator('.workspace-formula-notes').filter({ hasText: 'Inoffensive' })).toHaveText('Inoffensive : PA ×2, pas de minimum');
     await page.evaluate(() => { delete window.workspaceTestData.diceLines[0].qualities; });
     await page.getByRole('button', { name: 'Annuler le résultat calculé' }).click();
 
@@ -184,7 +279,8 @@ async function main() {
     await page.getByRole('button', { name: 'Comparer les cibles' }).click();
     const comparison = page.locator('.workspace-comparison-item');
     await expect(comparison).toHaveCount(11);
-    await expect(comparison.first()).toContainText('Combattant 2 : touché · 10 dégâts · PV −2 → −12');
+    await expect(comparison.first()).toContainText('Combattant 2 : touché · coup critique (localisation à lancer)');
+    await expect(comparison.nth(1)).toContainText('Combattant 4 : touché · 10 dégâts · PV 10 → 0');
     await expect(page.locator('.workspace-comparison')).toContainText('Combattant 5 : ');
     await page.getByRole('button', { name: 'Choisir Combattant 4' }).click();
     await expect(comparison).toHaveCount(0);
@@ -196,6 +292,82 @@ async function main() {
     await attack.fill('0');
     await attack.press('Enter');
     await expect(page.locator('.workspace-resolution [role="alert"]')).toContainText('Le jet doit être un nombre de 1 à 100 (00 = 100).');
+
+    // Coup critique sur un double : localisation, gravité, cases à cocher, second critique.
+    await page.locator('[data-roll-input="defense"]').fill('');
+    await page.evaluate(() => { window.workspaceTestData.combat.participants.get('actor-4').hp = 3; });
+    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 4', exact: true }).click();
+    await attack.fill('22');
+    await attack.press('Enter');
+    const critical = page.locator('.workspace-critical').first();
+    await expect(result).toContainText('Coup critique');
+    await expect(result).not.toContainText('Acharnement');
+    await expect(critical.locator('.workspace-roll-label').first()).toHaveText('Localisation du critique (nouveau d100)');
+    await expect(page.locator('[data-roll-input="critical-effect"]')).toHaveCount(0);
+    await expect(result).toContainText('Dégâts : lancez d’abord la localisation du critique.');
+    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveCount(0);
+    // Un jet invalide s'affiche sous son champ sans effacer le bloc.
+    const criticalLocation = page.locator('[data-roll-input="critical-location"]');
+    await criticalLocation.fill('abc');
+    await criticalLocation.press('Enter');
+    await expect(critical.locator('[role="alert"]')).toHaveText('Le jet doit être un nombre de 1 à 100 (00 = 100).');
+    await expect(criticalLocation).toHaveAttribute('aria-invalid', 'true');
+    // Taper ne perd aucun caractère malgré un rendu du Bus ; « Lancer » recalcule aussitôt.
+    await criticalLocation.fill('');
+    await criticalLocation.pressSequentially('5');
+    await rerender();
+    await expect(criticalLocation).toBeFocused();
+    await criticalLocation.pressSequentially('7');
+    await criticalLocation.press('Enter');
+    await expect(result).toContainText('57 → corps');
+    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveAttribute('data-zone', 'body');
+    await expect(result).toContainText('8 arme + 2 DR − 3 BE − 2 PA = 5');
+    await expect(result).toContainText('PV 3 → −2');
+    await expect(result).toContainText('Second critique — PV sous zéro · bras gauche (jet inversé 22)');
+    await expect(page.locator('.workspace-critical.is-second [data-roll-input="critical-second"]')).toBeVisible();
+    // Gravité 43 (corps) : +2 Blessures, rappels ; les deux cases sont cochées par défaut.
+    await page.locator('[data-roll-input="critical-effect"]').fill('43');
+    await page.locator('[data-roll-input="critical-effect"]').press('Enter');
+    await expect(result).toContainText('43 → « Clavicule tordue » : +2 Blessures, un bras inutilisable 1d10 rounds.');
+    await expect(result).toContainText('À arbitrer : un bras inutilisable 1d10 rounds');
+    const wounds = page.getByRole('checkbox', { name: '+2 Blessures' });
+    await expect(wounds).toBeChecked();
+    await expect(result).toContainText('PV 3 → −4');
+    await expect(page.getByRole('button', { name: 'Appliquer 7 dégâts à Combattant 4' })).toBeVisible();
+    await wounds.uncheck();
+    await expect(wounds).toBeFocused();
+    await expect(wounds).not.toBeChecked();
+    await expect(result).toContainText('PV 3 → −2');
+    await expect(page.locator('[data-roll-input="critical-effect"]')).toHaveValue('43');
+    await wounds.check();
+    // Gravité du second critique (Bras Gauche, 60) : +3 Blessures en plus, coche indépendante.
+    await page.locator('[data-roll-input="critical-second"]').fill('60');
+    await page.locator('[data-roll-input="critical-second"]').press('Enter');
+    await expect(result).toContainText('60 → « Ligament rompu »');
+    await expect(page.getByRole('checkbox', { name: '+3 Blessures' })).toBeChecked();
+    await expect(result).toContainText('PV 3 → −7');
+    await page.getByRole('checkbox', { name: '+3 Blessures' }).uncheck();
+    await expect(result).toContainText('PV 3 → −4');
+    // Un changement de jet d'attaque remet les jets de critique à zéro.
+    await attack.fill('33');
+    await expect(criticalLocation).toHaveCount(0);
+    await attack.press('Enter');
+    await expect(page.locator('[data-roll-input="critical-location"]')).toHaveValue('');
+    await page.getByRole('button', { name: 'Annuler le résultat calculé' }).click();
+    // Comparer les cibles : critique en attente de localisation ; comparer puis choisir remet
+    // à zéro les jets de critique de l'aperçu remplacé.
+    await attack.fill('22');
+    await attack.press('Enter');
+    await page.locator('[data-roll-input="critical-location"]').fill('57');
+    await page.locator('[data-roll-input="critical-location"]').press('Enter');
+    await page.getByRole('button', { name: 'Comparer les cibles' }).click();
+    await expect(page.locator('.workspace-comparison-item').first()).toContainText('touché · coup critique (localisation à lancer)');
+    await page.locator('.workspace-comparison-item').first().getByRole('button').click();
+    await expect(page.locator('[data-roll-input="critical-location"]')).toHaveValue('');
+    await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toHaveAttribute('title', 'Lancez d’abord la localisation du critique');
+    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await attack.fill('0');
+    await attack.press('Enter');
 
     // Manual PV stay on the sheet; the amount field feeds the button.
     await page.getByRole('textbox', { name: 'Quantité de PV pour Combattant 3' }).or(page.getByRole('spinbutton', { name: 'Quantité de PV pour Combattant 3' })).fill('2');

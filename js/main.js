@@ -26,6 +26,7 @@ import { userError, userMessage, contextMessage } from './ui/messages.js';
 import { deriveReminders, pendingReminders, resolveReminder, REMINDER_DECISIONS } from './core/reminders.js';
 import { createScene, proposeSceneEvent } from './core/scene-events.js';
 import { normalizeEffects, normalizeState } from './core/effects.js';
+import { previewHpLoss } from './core/resolution.js';
 import { initCombatBanner } from './ui/combat-banner.js';
 
 // Indicateur unique de la barre du haut : il résume les deux statuts détaillés
@@ -311,7 +312,10 @@ initKeyboardShortcuts(Store, Combat, goToSpace, {
 
 // E09–E17 workspace integration. The pure modules remain behind callbacks so
 // Store stays the only owner of live combat and reserve mutations.
-let currentEncounter = Store.listEncounters?.()[0] || createEncounter({ title: 'Nouvelle rencontre' });
+// Fenêtre « Préparer une rencontre » ouverte : sa boîte et la rencontre qu'elle édite (null tant que le brouillon neuf n'est pas enregistré).
+let prepareWindow = null;
+let launchingEncounter = false;
+const deletingEncounters = new Set();
 
 function requireStoreApi(name) {
   if (typeof Store[name] !== 'function') throw new Error(`Fonction Store indisponible : ${name}`);
@@ -449,37 +453,114 @@ function persistentCharacters() {
   return requireStoreApi('listPersistentCharacters')();
 }
 
-function openPrepareView() {
-  return openOverlay('Préparer une rencontre', (mount, dialog) => {
+// Enregistrement silencieux d'une rencontre : le statut stocké est conservé, sauf « clôturée » qui redevient préparée dès qu'on la modifie.
+async function persistEncounter(draft) {
+  const model = normalizeEncounter(draft);
+  const stored = Store.listEncounters?.().find(item => item.id === model.id);
+  model.status = stored && stored.status !== 'closed' ? stored.status : 'prepared';
+  if (prepareWindow) prepareWindow.encounterId = model.id;
+  await awaitStore(requireStoreApi('saveEncounter')(model), 'Rencontre');
+  return model;
+}
+
+function openPrepareView(encounterId = null) {
+  const saved = encounterId ? Store.listEncounters?.().find(item => item.id === encounterId) : null;
+  if (encounterId && !saved) throw new Error('Rencontre introuvable.');
+  const encounter = saved ? normalizeEncounter(saved) : createEncounter({ title: 'Nouvelle rencontre' });
+  return openOverlay(saved ? `Modifier « ${saved.title} »` : 'Préparer une rencontre', (mount, dialog) => {
     const view = initPrepareView({
-      mount, hosted: true, Store, encounter: currentEncounter,
-      savedEncounters: Store.listEncounters?.() || [],
+      mount, hosted: true, Store, encounter,
       persistentCharacters: persistentCharacters(),
       callbacks: {
         getProfiles: () => Store.listProfiles(),
-        onDraftChange: draft => { currentEncounter = normalizeEncounter(draft); },
-        onSelectEncounter: encounter => { currentEncounter = normalizeEncounter(encounter); view.setDraft(currentEncounter); },
-        onSave: async draft => { currentEncounter = normalizeEncounter(draft); await awaitStore(requireStoreApi('saveEncounter')(currentEncounter), 'Rencontre'); showToast('Rencontre enregistrée', 'success'); },
-        onDuplicate: async draft => { await awaitStore(requireStoreApi('saveEncounter')(normalizeEncounter(draft)), 'Rencontre'); currentEncounter = normalizeEncounter(draft); showToast('Rencontre dupliquée', 'success'); },
-        onDeleteEncounter: async id => { await awaitStore(requireStoreApi('deleteEncounter')(id), 'Suppression'); showToast('Rencontre supprimée', 'success'); },
+        onDraftChange: draft => persistEncounter(draft),
+        onDuplicate: () => { showToast('Rencontre dupliquée', 'success'); },
         onSavePersistentCharacter: async character => { await awaitStore(requireStoreApi('savePersistentCharacter')(character), 'Personnage'); showToast('Personnage persistant ajouté', 'success'); },
         onDeletePersistentCharacter: async id => { await awaitStore(requireStoreApi('deletePersistentCharacter')(id), 'Suppression'); showToast('Personnage persistant supprimé', 'success'); },
         onLaunch: async draft => {
           if (!draft.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
-          await awaitStore(requireStoreApi('saveEncounter')(normalizeEncounter(draft)), 'Rencontre');
-          await awaitStore(requireStoreApi('launchEncounter')(normalizeEncounter(draft)), 'Lancement');
-          currentEncounter = normalizeEncounter(draft);
+          const model = await persistEncounter(draft);
+          await awaitStore(requireStoreApi('launchEncounter')(model), 'Lancement');
           dialog.close();
           goToSpace('play');
           showToast('Rencontre lancée', 'success');
-        },
-        onResume: async id => { await awaitStore(requireStoreApi('resumeScene')(id), 'Reprise'); showToast('Séance reprise', 'info'); },
-        onSuspend: async () => { await awaitStore(requireStoreApi('suspendActiveScene')(), 'Suspension'); showToast('Séance suspendue', 'info'); }
+        }
       }
     });
+    const windowState = { dialog, encounterId: saved?.id || null, saving: Promise.resolve(true) };
+    prepareWindow = windowState;
+    // Toute fermeture (Fermer, Échap, autre fenêtre, lancement) enregistre la saisie en cours.
+    dialog.addEventListener('close', () => {
+      windowState.saving = view.flush();
+      windowState.saving.then(done => { if (!done) showToast('Rencontre : la dernière modification n’a pas été enregistrée.', 'error'); });
+      if (prepareWindow === windowState) prepareWindow = null;
+    }, { once: true });
     view.render();
   });
 }
+
+// Actions de la liste des rencontres (espaces Préparer et Jouer) : chacune montre ses erreurs en toast
+// et renvoie true si elle a abouti (la vue déplace alors le focus).
+const encounterListActions = {
+  beginEncounter: () => { try { openPrepareView(); } catch (error) { showToast(contextMessage('Préparation impossible', error, 'réessayez.'), 'error'); } },
+  editEncounter: id => { try { openPrepareView(id); } catch (error) { showToast(contextMessage('Rencontre non ouverte', error, 'réessayez.'), 'error'); } },
+  launchEncounter: async id => {
+    if (launchingEncounter) return false;
+    launchingEncounter = true;
+    try {
+      // La fenêtre qui édite cette rencontre se ferme d'abord : sa saisie en cours est enregistrée avant le lancement.
+      const editing = prepareWindow?.encounterId === id ? prepareWindow : null;
+      // Échec signalé par la fermeture : ne pas lancer une composition périmée.
+      if (editing) { editing.dialog.close(); if (!(await editing.saving)) return false; }
+      const encounter = Store.listEncounters?.().find(item => item.id === id);
+      if (!encounter) throw new Error('Rencontre introuvable.');
+      if (!encounter.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
+      await awaitStore(requireStoreApi('launchEncounter')(id), 'Lancement');
+      prepareWindow?.dialog.close();
+      goToSpace('play');
+      showToast('Rencontre lancée', 'success');
+      return true;
+    } catch (error) { showToast(contextMessage('Rencontre non lancée', error, 'réessayez.'), 'error'); return false; }
+    finally { launchingEncounter = false; }
+  },
+  deleteEncounter: async id => {
+    // Double clic : la rencontre est déjà supprimée, ou en train de l'être.
+    if (deletingEncounters.has(id) || !Store.listEncounters?.().some(item => item.id === id)) return false;
+    deletingEncounters.add(id);
+    try {
+      // La fenêtre qui l'édite se ferme d'abord : sa saisie en cours est enregistrée avant la suppression, pas après.
+      const editing = prepareWindow?.encounterId === id ? prepareWindow : null;
+      if (editing) { editing.dialog.close(); await editing.saving; }
+      const encounter = Store.listEncounters().find(item => item.id === id);
+      if (!encounter) return false;
+      await awaitStore(requireStoreApi('deleteEncounter')(id), 'Suppression');
+      // « Annuler » rétablit cette rencontre-là, et non la dernière action de l'historique.
+      const restore = async () => {
+        try { await awaitStore(requireStoreApi('saveEncounter')(encounter), 'Rencontre'); showToast(`Rencontre « ${encounter.title} » rétablie`, 'success'); }
+        catch (error) { showToast(contextMessage('Rencontre non rétablie', error, 'réessayez.'), 'error'); }
+      };
+      showToast(`Rencontre « ${encounter.title} » supprimée`, 'success', { label: 'Annuler', onClick: restore });
+      return true;
+    } catch (error) { showToast(contextMessage('Rencontre non supprimée', error, 'réessayez.'), 'error'); return false; }
+    finally { deletingEncounters.delete(id); }
+  },
+  resumeScene: async sceneId => {
+    try {
+      await awaitStore(requireStoreApi('resumeScene')(sceneId), 'Reprise');
+      goToSpace('play');
+      showToast('Séance reprise', 'info');
+      return true;
+    } catch (error) { showToast(contextMessage('Séance non reprise', error, 'réessayez.'), 'error'); return false; }
+  },
+  suspendScene: async () => {
+    try {
+      await awaitStore(requireStoreApi('suspendActiveScene')(), 'Suspension');
+      showToast('Séance suspendue', 'info');
+      return true;
+    } catch (error) { showToast(contextMessage('Séance non suspendue', error, 'réessayez.'), 'error'); return false; }
+  },
+  showPlay: () => goToSpace('play')
+};
 
 function openCreateProfileView() {
   return openOverlay('Nouveau profil', (mount, dialog) => {
@@ -874,7 +955,7 @@ function openEventsView() {
 const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorkspaceView({
   Store, Combat, Bus, mount: qs('#workspace-root'), showNavigation: false,
   actions: {
-    beginEncounter: openPrepareView,
+    ...encounterListActions,
     createProfile: openCreateProfileView,
     duplicateProfile: id => awaitStore(Store.duplicateProfile(id), 'Duplication'),
     removeProfile: id => awaitStore(Store.removeProfile(id), 'Suppression'),
@@ -1047,7 +1128,13 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     applyResolution: async preview => {
       const result = await awaitStore(requireStoreApi('applyResolution')(preview), 'Résolution');
       const target = preview.input?.target;
-      if (result?.status === 'applied') showToast(preview.damage && target ? `${preview.damage.finalDamage} dégâts appliqués à ${target.name}` : preview.weapon?.status === 'manual' ? 'Résultat enregistré — dégâts à arbitrer' : 'Résultat enregistré', 'success');
+      // Perte de PV réelle : dégâts de l'arme + Blessures du critique cochées.
+      const critical = preview.critical?.application;
+      const criticalApplied = Boolean(critical?.extraWounds || critical?.states?.length);
+      const manual = preview.weapon?.status === 'manual';
+      if (result?.status === 'applied') showToast(preview.damage && target ? `${previewHpLoss(preview)} dégâts appliqués à ${target.name}`
+        : target && criticalApplied ? `Critique appliqué à ${target.name}${manual ? ' — dégâts de l’arme à arbitrer' : ''}`
+          : manual ? 'Résultat enregistré — dégâts à arbitrer' : 'Résultat enregistré', 'success');
       else if (result?.status === 'duplicate') showToast('Résultat déjà appliqué', 'info');
       else if (result?.status !== 'stale') throw new Error(result?.reason || 'Résolution non appliquée.');
       return result;

@@ -493,12 +493,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       ? ` ; défense ${opposed.defender.label} ${opposed.defender.score} (d100 ${opposed.defender.roll}), DR net ${opposed.netSl} — ${preview.hit ? 'touché' : 'pas de touche'}`
       : '';
     const weaponText = preview?.weapon?.status === 'manual' ? ` ; dégâts à arbitrer (${preview.weapon.text})` : '';
+    const criticalPart = (label, part) => part?.location ? ` ; ${label} ${part.location.name}${part.effect ? ` « ${part.effect.name} »` : ''}` : '';
+    const criticalText = criticalPart('critique', preview?.critical?.details) + criticalPart('second critique', preview?.critical?.second);
     return {
       id: uid(), ts: Date.now(), kind: 'resolution',
       actorId: actor.id || input.actorId || null,
       targetId: target.id || preview?.targetId || null,
       actorName: actor.name || null, targetName: target.name || null,
-      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${outcome} sur ${targetLabel} (d100 ${preview?.roll ?? '?'})${defenseText}${weaponText}`,
+      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${outcome} sur ${targetLabel} (d100 ${preview?.roll ?? '?'})${defenseText}${weaponText}${criticalText}`,
       detail: {
         ...(opposed ? { hit: Boolean(preview.hit), opposition: opposed } : {}),
         resolutionId: preview?.resolutionId || null,

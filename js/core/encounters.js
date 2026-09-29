@@ -181,3 +181,37 @@ export function closeScene(scene) {
   if (!isRecord(scene) || !['active', 'suspended'].includes(scene.status)) throw new Error('Scène active ou suspendue requise');
   return { ...cloneValue(scene), status: 'closed', closedAt: new Date().toISOString() };
 }
+
+export const ENCOUNTER_STATUS_LABELS = Object.freeze({ active: 'En cours', suspended: 'Suspendue', prepared: 'Préparée', closed: 'Clôturée' });
+const STATUS_ORDER = ['active', 'suspended', 'prepared', 'closed'];
+
+/** Statut affiché d'une rencontre, déduit des scènes vivantes (le `status` stocké peut être en retard). */
+export function encounterDisplayStatus(encounter, { activeScene = null, suspendedScenes = [] } = {}) {
+  const id = encounter?.id;
+  const result = (key, sceneId = null) => ({ key, label: ENCOUNTER_STATUS_LABELS[key], sceneId });
+  if (activeScene?.status === 'active' && activeScene.encounterId === id) return result('active', activeScene.id);
+  const suspended = (Array.isArray(suspendedScenes) ? suspendedScenes : []).find(scene => scene?.encounterId === id);
+  if (suspended) return result('suspended', suspended.id);
+  return result(encounter?.status === 'closed' ? 'closed' : 'prepared');
+}
+
+/** Nombre de combattants et composition lisible : « Gobelin ×3, Chef gobelin ». */
+export function encounterSummary(encounter, profiles = []) {
+  const names = new Map((Array.isArray(profiles) ? profiles : []).filter(profile => profile?.id).map(profile => [profile.id, profile.name]));
+  const groups = new Map();
+  let count = 0;
+  for (const entry of Array.isArray(encounter?.entries) ? encounter.entries : []) {
+    const quantity = Math.max(1, Math.floor(Number(entry?.quantity) || 1));
+    count += quantity;
+    groups.set(entry?.profileId, (groups.get(entry?.profileId) || 0) + quantity);
+  }
+  const text = [...groups].map(([profileId, quantity]) => `${names.get(profileId) || 'Profil supprimé'}${quantity > 1 ? ` ×${quantity}` : ''}`).join(', ');
+  return { count, text };
+}
+
+/** En cours, suspendues, préparées, puis clôturées ; ordre d'origine conservé dans chaque groupe. */
+export function sortEncountersForDisplay(encounters, scenes = {}) {
+  const rank = encounter => STATUS_ORDER.indexOf(encounterDisplayStatus(encounter, scenes).key);
+  return (Array.isArray(encounters) ? encounters : []).map((encounter, index) => ({ encounter, index, rank: rank(encounter) }))
+    .sort((a, b) => a.rank - b.rank || a.index - b.index).map(item => item.encounter);
+}

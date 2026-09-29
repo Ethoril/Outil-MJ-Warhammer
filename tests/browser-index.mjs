@@ -125,9 +125,55 @@ async function main() {
     await expect(page.locator('#workspace-library .rules-title')).toBeVisible();
     await page.locator('#tab-prepare').click();
 
+    // Rencontres préparées à l'avance : enregistrement automatique, brouillon
+    // vierge, rechargement par « Modifier » et ménage par « Supprimer ».
+    const encounterCards = page.locator('#workspace-prepare .workspace-encounter-card');
+    await expect(page.locator('#workspace-prepare')).toContainText('Aucune rencontre préparée');
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
+    const draftOverlay = page.getByRole('dialog');
+    await expect(draftOverlay.getByRole('heading', { name: 'Préparer une rencontre' })).toHaveCount(1);
+    await expect(draftOverlay.locator('.encounter-composition > li')).toHaveCount(0);
+    await expect(draftOverlay).toContainText('Modifications enregistrées automatiquement.');
+    await draftOverlay.getByRole('textbox', { name: 'Titre' }).fill('Embuscade');
+    await draftOverlay.getByRole('textbox', { name: 'Titre' }).press('Tab');
+    await draftOverlay.getByRole('combobox', { name: 'Profil' }).selectOption({ label: 'Garde importé (Créature)' });
+    await draftOverlay.getByRole('button', { name: 'Ajouter' }).click();
+    await draftOverlay.getByRole('button', { name: 'Fermer' }).click();
+    await expect(draftOverlay).toBeHidden();
+    await expect(encounterCards).toHaveCount(1);
+    await expect(encounterCards.first()).toContainText('Embuscade');
+    await expect(encounterCards.first()).toContainText('Préparée');
+    await expect(encounterCards.first()).toContainText('1 combattant · Garde importé');
+    // « Nouvelle rencontre » ne rouvre pas la précédente et n'enregistre rien tant qu'on n'y touche pas.
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
+    const blankOverlay = page.getByRole('dialog');
+    await expect(blankOverlay.getByRole('textbox', { name: 'Titre' })).toHaveValue('Nouvelle rencontre');
+    await expect(blankOverlay.locator('.encounter-composition > li')).toHaveCount(0);
+    await blankOverlay.getByRole('button', { name: 'Fermer' }).click();
+    await expect(encounterCards).toHaveCount(1);
+    await encounterCards.first().getByRole('button', { name: 'Modifier « Embuscade »' }).click();
+    const editOverlay = page.getByRole('dialog');
+    await expect(editOverlay.getByRole('heading', { name: 'Modifier « Embuscade »' })).toBeVisible();
+    await expect(editOverlay.getByRole('textbox', { name: 'Titre' })).toHaveValue('Embuscade');
+    await expect(editOverlay.locator('.encounter-composition')).toContainText('Garde importé ×1');
+    // Échap ferme la fenêtre sans quitter le champ : la saisie en cours est tout de même enregistrée.
+    await editOverlay.getByRole('textbox', { name: 'Notes' }).fill('Le pont est piégé.');
+    await editOverlay.getByRole('textbox', { name: 'Notes' }).press('Escape');
+    await expect(editOverlay).toBeHidden();
+    await expect(encounterCards.first().locator('.workspace-encounter-notes')).toHaveText('Le pont est piégé.');
+    await encounterCards.first().getByRole('button', { name: 'Supprimer « Embuscade »' }).click();
+    await expect(encounterCards).toHaveCount(0);
+    await expect(page.locator('#toast-container')).toContainText('Rencontre « Embuscade » supprimée');
+    await expect.poll(() => page.evaluate(() => document.activeElement?.dataset.focusKey)).toBe('new-encounter');
+    // « Annuler » du toast rend la rencontre ; elle est de nouveau supprimée pour la suite.
+    await page.locator('#toast-container .toast').filter({ hasText: 'Rencontre « Embuscade » supprimée' }).getByRole('button', { name: 'Annuler' }).click();
+    await expect(encounterCards).toHaveCount(1);
+    await encounterCards.first().getByRole('button', { name: 'Supprimer « Embuscade »' }).click();
+    await expect(encounterCards).toHaveCount(0);
+
     // E11 through the actual preparation flow: compose two profiles and
     // launch an independent scene before taking the play-space captures.
-    await page.getByRole('button', { name: 'Lancer la rencontre' }).first().click();
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
     const prepareOverlay = page.getByRole('dialog');
     await expect(prepareOverlay).toBeVisible();
     // Fenêtre d'outil non modale : un seul titre, focus à l'intérieur, et les
@@ -168,6 +214,15 @@ async function main() {
     await expect(page.getByRole('dialog')).toHaveCount(0);
     await resolution.locator('[data-roll-input="attack"]').fill('23');
     await resolution.getByRole('button', { name: 'Calculer' }).click();
+    await expect(resolution.locator('.workspace-result')).toContainText('DR +2');
+    // Jet fait à la table : la case invite à saisir, Entrée calcule.
+    await expect(resolution.locator('[data-roll-input="attack"]')).toHaveAttribute('placeholder', 'Saisir');
+    await expect(resolution.locator('#workspace-roll-hint')).toContainText('tapez le résultat dans la case');
+    await resolution.locator('[data-roll-input="attack"]').fill('34');
+    await resolution.locator('[data-roll-input="attack"]').press('Enter');
+    await expect(resolution.locator('.workspace-result')).toContainText('DR +1');
+    await resolution.locator('[data-roll-input="attack"]').fill('23');
+    await resolution.locator('[data-roll-input="attack"]').press('Enter');
     await expect(resolution.locator('.workspace-result')).toContainText('DR +2');
     await page.screenshot({ path: '/private/tmp/mj-index-play-1440.png', fullPage: true });
     await page.setViewportSize({ width: 900, height: 900 });
@@ -221,13 +276,20 @@ async function main() {
     await expect(page.locator('#workspace-prepare')).toContainText('Éclaireur importé');
     await expect(page.locator('#workspace-prepare')).toContainText('PV 8');
 
-    // E11 suspend/resume is exposed by the preparation overlay and survives
+    // E11 suspend/resume is exposed by the encounter card and survives
     // a reload through the local scene record.
-    await page.locator('#workspace-prepare').getByRole('button', { name: 'Lancer la rencontre' }).click();
-    const suspendOverlay = page.getByRole('dialog');
-    await expect(suspendOverlay).toBeVisible();
-    await suspendOverlay.getByRole('button', { name: 'Suspendre' }).click();
+    await expect(encounterCards).toHaveCount(1);
+    await expect(encounterCards.first()).toContainText('En cours');
+    await expect(encounterCards.first().getByRole('button', { name: /^Revenir au combat/ })).toBeVisible();
+    await expect(encounterCards.first().getByRole('button', { name: /^Lancer/ })).toHaveCount(0);
+    // Une rencontre en jeu ne se supprime pas : sa séance perdrait sa carte.
+    await expect(encounterCards.first().getByRole('button', { name: /^Supprimer/ })).toBeDisabled();
+    await encounterCards.first().getByRole('button', { name: /^Suspendre/ }).click();
     await expect(page.locator('#toast-container')).toContainText('Séance suspendue');
+    await expect(encounterCards.first()).toContainText('Suspendue');
+    // Le focus passe de « Suspendre » à « Reprendre », sur la même carte.
+    await expect.poll(() => page.evaluate(() => document.activeElement?.dataset.focusKey || '')).toMatch(/^resume-scene-/);
+    await expect(encounterCards.first().getByRole('button', { name: /^Supprimer/ })).toBeDisabled();
     await page.reload();
     await page.locator('#tab-prepare').click();
     await openAppMenu(page);
@@ -240,7 +302,7 @@ async function main() {
     // Add a persistent character through the same preparation overlay, then
     // close the resumed scene only after an explicit closure preview.
     await page.locator('#tab-prepare').click();
-    await page.locator('#workspace-prepare').getByRole('button', { name: 'Lancer la rencontre' }).click();
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
     const characterOverlay = page.getByRole('dialog');
     const characters = characterOverlay.locator('.prepare-persistent-characters');
     await characters.locator('summary').click();
@@ -278,8 +340,10 @@ async function main() {
     await galleryImport.getByRole('button', { name: 'Analyser le texte' }).click();
     await galleryImport.getByRole('button', { name: 'Importer 15 profils' }).click();
     await expect(galleryImport).toBeHidden();
-    await page.locator('#workspace-prepare').getByRole('button', { name: 'Lancer la rencontre' }).click();
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
     const galleryPrepare = page.getByRole('dialog');
+    await galleryPrepare.getByRole('textbox', { name: 'Titre' }).fill('Galerie');
+    await galleryPrepare.getByRole('textbox', { name: 'Titre' }).press('Tab');
     const gallerySelect = galleryPrepare.getByRole('combobox', { name: 'Profil' });
     const galleryZone = galleryPrepare.locator('select').last();
     const existingEntries = galleryPrepare.locator('.encounter-composition > li');
@@ -295,8 +359,11 @@ async function main() {
       await galleryZone.selectOption('active');
       await galleryPrepare.getByRole('button', { name: 'Ajouter' }).click();
     }
-    await galleryPrepare.getByRole('button', { name: 'Lancer la rencontre' }).last().click();
+    // Lancement depuis la carte de la liste (la fenêtre est fermée sans autre clic).
+    await galleryPrepare.getByRole('button', { name: 'Fermer' }).click();
     await expect(galleryPrepare).toBeHidden();
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Lancer « Galerie »' }).click();
+    await expect(page.locator('#toast-container')).toContainText('Rencontre lancée');
     await page.locator('#tab-combat').click();
     await page.locator('#combat-banner').getByRole('button', { name: 'Commencer le combat' }).click();
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(15);
@@ -394,6 +461,55 @@ async function main() {
     await expect(galleryResolution.locator('[role="alert"]')).toHaveText('La partie a changé depuis le calcul : recalculez.');
     await page.waitForTimeout(200);
     assert.deepEqual(await trackTexts(), trackBeforeStale, 'un aperçu périmé ne doit rien appliquer');
+
+    // Coup critique réel : localisation puis gravité saisies, PV − dégâts − Blessures cochées,
+    // état ajouté puis fusionné au critique suivant, journal lisible.
+    await page.locator('[data-workspace-select]').filter({ hasText: 'Participant de démonstration 03' }).click();
+    const gallerySheet = page.locator('.workspace-sheet-target');
+    const galleryHp = async () => Number((await gallerySheet.locator('.workspace-sheet-hp').textContent()).match(/PV\s*(−?\d+)/)[1].replace('−', '-'));
+    // Scénario déterministe : 1er coup à 1 PV (sans Acharnement), 2e coup sous zéro (Acharnement, +10).
+    const strikeCritical = async (roll, { directApply = false, severity } = {}) => {
+      await galleryResolution.locator('[data-roll-input="attack"]').fill(roll);
+      await galleryResolution.locator('[data-roll-input="attack"]').press('Enter');
+      await galleryResolution.locator('[data-roll-input="critical-location"]').fill('57');
+      await galleryResolution.locator('[data-roll-input="critical-location"]').press('Enter');
+      await galleryResolution.locator('[data-roll-input="critical-effect"]').fill('55');
+      const button = galleryResolution.locator('[data-focus-key="apply"]');
+      if (directApply) {
+        // Gravité tapée sans Entrée puis clic direct : ce premier clic recalcule et montre
+        // le critique, il n'applique rien avec l'ancien aperçu.
+        const untouched = await galleryHp();
+        await button.click();
+        await page.waitForTimeout(300);
+        assert.equal(await galleryHp(), untouched, 'un jet de critique tapé ne doit pas être ignoré par « Appliquer »');
+      } else {
+        await galleryResolution.locator('[data-roll-input="critical-effect"]').press('Enter');
+      }
+      await expect(galleryResolution.locator('.workspace-result')).toContainText(severity);
+      const loss = Number((await button.textContent()).match(/Appliquer (\d+) dégâts/)[1]);
+      await expect(galleryResolution.getByRole('checkbox', { name: '+3 Blessures' })).toBeChecked();
+      const before = await galleryHp();
+      await button.click();
+      // Le toast annonce la même perte que le bouton : dégâts + Blessures du critique.
+      await expect(page.locator('#toast-container')).toContainText(`${loss} dégâts appliqués à Participant de démonstration 03`);
+      await expect.poll(galleryHp).toBe(before - loss);
+      assert.ok(loss >= 3, 'les 3 Blessures du critique sont comptées dans la perte de PV');
+    };
+    await strikeCritical('11', { severity: '55 → « Côtes fracturées »' });
+    await expect(gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Sonné' })).toHaveCount(1);
+    await strikeCritical('22', { directApply: true, severity: '55 + 10 = 65 → « Entaille douloureuse »' });
+    // Même état déjà présent : un seul jeton, niveau augmenté.
+    await expect(gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Sonné' })).toHaveCount(1);
+    await expect(gallerySheet.locator('.workspace-state-chip').filter({ hasText: 'Sonné' })).toContainText('Sonné 2');
+    await page.locator('.workspace-side').getByRole('tab', { name: 'Journal' }).click();
+    const criticalLog = page.locator('#workspace-side-panel-log');
+    await expect(criticalLog).toContainText('Critique : localisation 57 → Corps · gravité 55 → Côtes fracturées');
+    await expect(criticalLog).toContainText('Critique : localisation 57 → Corps · gravité 55 + 10 = 65 → Entaille douloureuse');
+    await expect(criticalLog).toContainText('Effets appliqués : +3 Blessures, Sonné 1');
+    await expect(criticalLog).toContainText('Effets appliqués : +3 Blessures, Hémorragique 2, Sonné 1');
+    await expect(criticalLog).toContainText('À arbitrer : Fracture (Mineure)');
+    await expect(criticalLog).toContainText('À arbitrer : Test Rés ou Inconscient');
+    await expect(criticalLog).not.toContainText('[object Object]');
 
     await openAppMenu(page);
     await page.locator('#btn-theme-toggle').click();

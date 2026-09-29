@@ -5,12 +5,53 @@ import {
 import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
+import { normalizeState } from './effects.js';
+import { parseCriticalEffect } from './criticals.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const signedValue = value => { const number = Number(value) || 0; return number < 0 ? `−${Math.abs(number)}` : `+${number}`; };
 const DETAIL_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
+
+/** « gravité 43 + 10 = 53 → Côtes fracturées » ; « gravité non tirée » tant que le d100 manque. */
+function describeSeverity(part) {
+  const base = part.effectRollBase ?? part.effectRoll;
+  if (base === null || base === undefined) return 'gravité non tirée';
+  const roll = part.bonus ? `${base} + ${part.bonus} = ${part.effectRoll}` : `${part.effectRoll}`;
+  return `gravité ${roll}${part.effect?.name ? ` → ${part.effect.name}` : ''}`;
+}
+
+/** Phrases du journal pour un critique ; les anciennes entrées (sans localisation) restent « Coup critique ». */
+function describeCritical(detail) {
+  const critical = detail.critical;
+  if (!critical) return [];
+  const first = critical.details;
+  if (!isRecord(first) || !isRecord(first.location) || first.locationRoll === null || first.locationRoll === undefined) {
+    return [detail.actionType && detail.actionType !== 'attack' ? 'Réussite critique' : 'Coup critique'];
+  }
+  const parts = [`Critique : localisation ${first.locationRoll} → ${first.location.name} · ${describeSeverity(first)}`];
+  const second = critical.second;
+  if (isRecord(second) && isRecord(second.location)) {
+    parts.push(`Second critique (PV sous zéro) : ${second.location.name} · ${describeSeverity(second)}`);
+  }
+  const application = critical.application;
+  if (isRecord(application)) {
+    const applied = [
+      ...(application.extraWounds ? [`+${application.extraWounds} Blessure${application.extraWounds > 1 ? 's' : ''}`] : []),
+      ...(Array.isArray(application.states) ? application.states.map(state => state.key === 'a-terre' ? state.name : `${state.name} ${state.level}`) : [])
+    ];
+    if (applied.length) parts.push(`Effets appliqués : ${applied.join(', ')}`);
+  }
+  const parsed = [first, second].map(part => part?.parsed).filter(isRecord);
+  const reminders = parsed.flatMap(item => Array.isArray(item.reminders) ? item.reminders : []);
+  if (reminders.length) parts.push(`À arbitrer : ${reminders.join(' ; ')}`);
+  if (parsed.some(item => item.death)) parts.push('Mort instantanée');
+  if (isRecord(critical.secondHint) && isRecord(critical.secondHint.location)) {
+    parts.push(`Second critique possible au ${critical.secondHint.location.name} (jet inversé ${critical.secondHint.locationRoll})`);
+  }
+  return parts;
+}
 
 /**
  * Détail d'une entrée de journal de résolution en phrases courtes, sans clé
@@ -30,12 +71,14 @@ export function describeResolutionDetail(detail) {
     const hit = present(detail.hit) ? ` · ${detail.hit ? 'touché' : 'pas de touche'}` : '';
     parts.push(`Opposition : défense ${label} ${score} (d100 ${roll}) · DR net ${signedValue(opposition.netSl)}${hit}`);
   } else if (present(detail.hit)) parts.push(detail.hit ? 'Touché' : 'Pas de touche');
-  if (isRecord(detail.location) && present(detail.location.roll) && detail.location.name) parts.push(`Localisation : ${detail.location.roll} → ${detail.location.name}`);
+  // La localisation du critique remplace la ligne « Localisation » (c'est la même zone).
+  const criticalLocated = isRecord(detail.critical?.details) && isRecord(detail.critical.details.location) && present(detail.critical.details.locationRoll);
+  if (!criticalLocated && isRecord(detail.location) && present(detail.location.roll) && detail.location.name) parts.push(`Localisation : ${detail.location.roll} → ${detail.location.name}`);
   const damage = isRecord(detail.damage) ? formatDamageFormula(detail.damage) : '';
   if (damage) parts.push(`Dégâts : ${damage}`);
   const weapon = isRecord(detail.weapon) && detail.weapon.status === 'manual' ? formatWeaponDamage(detail.weapon) : '';
   if (weapon) parts.push(`Arme : ${weapon}`);
-  if (detail.critical) parts.push('Coup critique');
+  parts.push(...describeCritical(detail));
   if (detail.fumble) parts.push('Maladresse');
   return parts;
 }
@@ -162,9 +205,24 @@ export function normalizeResolutionInput(input = {}) {
     },
     target,
     roll,
-    criticalRolls: isRecord(input.criticalRolls) ? clone(input.criticalRolls) : null,
+    criticalRolls: normalizeCriticalRolls(input.criticalRolls),
+    criticalDeclined: Array.isArray(input.criticalDeclined) ? input.criticalDeclined.map(String) : [],
     ...(defense ? { defense } : {})
   };
+}
+
+/** Jets de critique saisis : `location`, `effect` (gravité), `secondEffect` (gravité du second critique). */
+function normalizeCriticalRolls(raw) {
+  if (!isRecord(raw)) return null;
+  const out = {};
+  const read = (name, ...keys) => {
+    const key = keys.find(item => raw[item] !== undefined && raw[item] !== null);
+    if (key) out[name] = parseRoll(raw[key]);
+  };
+  read('location', 'location', 'locationRoll');
+  read('effect', 'effect', 'effectRoll');
+  read('secondEffect', 'secondEffect');
+  return out;
 }
 
 /** Action type for the UI: explicit known type, else attack when it carries damage, else skill. */
@@ -197,23 +255,74 @@ function opposedOutcome(attacker, defense, target) {
   return { mode: 'opposed', attacker, defender, netSl, winner };
 }
 
-function criticalDetails(input, result) {
-  if (result.kind !== 'Critique') return null;
-  const rawLocation = input.criticalRolls?.location ?? input.criticalRolls?.locationRoll;
-  const rawEffect = input.criticalRolls?.effect ?? input.criticalRolls?.effectRoll;
-  const locationRoll = rawLocation === undefined ? null : parseRoll(rawLocation);
-  const effectRollBase = rawEffect === undefined ? null : parseRoll(rawEffect);
-  const effectRoll = effectRollBase === null ? null
-    : Math.min(100, result.acharnement ? effectRollBase + 10 : effectRollBase);
-  const location = locationRoll === null ? null : getLocationName(locationRoll);
-  const effect = location && effectRoll !== null ? getCritEffect(location.key, effectRoll) : null;
+function locationOf(roll) {
+  const named = getLocationName(roll);
+  return { roll, ...named, side: locationSide(named.name) };
+}
+
+/** Gravité d'un critique : d100 saisi (+10 Acharnement, plafonné à 100) lu sur la table de la zone. */
+function criticalSeverity(location, base, acharnement) {
+  const bonus = acharnement ? 10 : 0;
+  const effectRollBase = base ?? null;
+  const effectRoll = effectRollBase === null ? null : Math.min(100, effectRollBase + bonus);
+  const found = location && effectRoll !== null ? getCritEffect(location.key, effectRoll) : null;
+  const effect = found ? clone(found) : null;
+  return { effectRollBase, bonus, effectRoll, effect, parsed: effect ? parseCriticalEffect(effect.eff) : null };
+}
+
+function criticalDetails(rolls, location, acharnement) {
+  const severity = criticalSeverity(location, rolls?.effect, acharnement);
   return {
-    pending: locationRoll === null || effectRoll === null,
-    locationRoll,
+    pending: !location || severity.effectRoll === null,
+    needsLocation: !location,
+    locationRoll: location?.roll ?? null,
     location,
-    effectRoll,
-    effect: effect ? clone(effect) : null
+    ...severity
   };
+}
+
+/** Second critique : cible qui passe sous zéro, à la localisation du jet d'attaque inversé. */
+function secondCritical(reversed, rolls, acharnement) {
+  const location = locationOf(reversed);
+  const severity = criticalSeverity(location, rolls?.secondEffect, acharnement);
+  return { locationRoll: location.roll, location, ...severity, pending: severity.effectRoll === null };
+}
+
+const criticalItemLabel = (key, name, level) => key === 'a-terre' ? name : `${name} ${level}`;
+
+/** Effets proposés (Blessures en plus, états simples) de chaque critique, cochés sauf s'ils sont déclinés. */
+function criticalItems(first, second, declined) {
+  const items = [];
+  [['first', first], ['second', second]].forEach(([crit, part]) => {
+    const parsed = part?.parsed;
+    if (!parsed) return;
+    const push = item => items.push({ ...item, crit, applied: !declined.includes(item.id) });
+    if (parsed.extraWounds > 0) {
+      const amount = parsed.extraWounds;
+      push({ id: `${crit}-wounds`, kind: 'wounds', label: `+${amount} Blessure${amount > 1 ? 's' : ''}`, amount });
+    }
+    parsed.states.forEach(({ key, name, level }) => push({
+      id: `${crit}-state-${key}`, kind: 'state', label: criticalItemLabel(key, name, level), level, key, name
+    }));
+  });
+  return items;
+}
+
+/** Somme des items appliqués : `{ extraWounds, states: [{ key, name, level }] }`. */
+function criticalApplication(items) {
+  const application = { extraWounds: 0, states: [] };
+  items.filter(item => item.applied).forEach(item => {
+    if (item.kind === 'wounds') { application.extraWounds += item.amount; return; }
+    const known = application.states.find(state => state.key === item.key);
+    if (!known) application.states.push({ key: item.key, name: item.name, level: item.level });
+    else if (item.key !== 'a-terre') known.level += item.level;
+  });
+  return application;
+}
+
+/** Perte de PV proposée par un aperçu : dégâts de l'arme + Blessures en plus des critiques cochés. */
+export function previewHpLoss(preview) {
+  return (Number(preview?.damage?.finalDamage) || 0) + (Number(preview?.critical?.application?.extraWounds) || 0);
 }
 
 /** Preview one action, preserving the exact supplied d100 and any critical dice. */
@@ -247,21 +356,25 @@ export function previewResolution(input) {
     kind = 'Critique';
   }
 
-  const location = hit ? (() => {
-    const reversed = getReverseRoll(roll);
-    const named = getLocationName(reversed);
-    return { roll: reversed, ...named, side: locationSide(named.name) };
-  })() : null;
-  const critical = kind === 'Critique' ? criticalDetails(normalized, { kind, acharnement }) : null;
+  // Coup critique d'une attaque : la localisation vient d'un nouveau d100, pas du jet inversé.
+  const criticalAttack = kind === 'Critique' && attackType(action.type);
+  const criticalLocationRoll = normalized.criticalRolls?.location;
+  const location = !hit ? null
+    : criticalAttack ? (criticalLocationRoll === undefined ? null : locationOf(criticalLocationRoll))
+      : locationOf(getReverseRoll(roll));
+  const criticalFirst = criticalAttack ? criticalDetails(normalized.criticalRolls, location, acharnement) : null;
   let damage = null;
   // Weapon damage of a landed attack (`BF+4` read with the attacker's F). A
   // `manual` status (unknown expression, F missing) means no automatic damage:
   // the MJ arbitrates instead of silently getting 0.
   let weapon = null;
+  const weaponDamage = actionWeaponDamage(action);
+  const strengthBonus = strengthBonusOf(actor?.caracs);
   if (hit && attackType(action.type) && target && (hasOwn(action, 'damage') || hasOwn(action, 'damageFormula'))) {
-    const weaponDamage = actionWeaponDamage(action);
-    const strengthBonus = strengthBonusOf(actor?.caracs);
     weapon = evaluateWeaponDamage(weaponDamage, strengthBonus);
+  }
+  // Sans localisation du critique, l'armure de la zone est inconnue : pas de dégâts calculés.
+  if (weapon && !criticalFirst?.needsLocation) {
     const armour = target.armor || {};
     const targetArmour = location?.key === 'HEAD' ? armour.head
       : location?.key === 'ARM' ? armour.arms
@@ -278,6 +391,25 @@ export function previewResolution(input) {
     });
   }
 
+  let criticalBlock = kind === 'Critique' ? { kind, expanded, acharnement, details: criticalFirst } : null;
+  if (criticalAttack) {
+    // Second critique : PV avant le coup ≥ 0 et PV avant − dégâts normaux < 0 (Blessures du critique exclues).
+    const hpBefore = Number(target?.hp);
+    const reversed = getReverseRoll(roll);
+    const second = damage && hpBefore >= 0 && hpBefore - damage.finalDamage < 0
+      ? secondCritical(reversed, normalized.criticalRolls, acharnement) : null;
+    const items = criticalItems(criticalFirst, second, normalized.criticalDeclined);
+    criticalBlock = {
+      ...criticalBlock,
+      ...(second ? { second } : {}),
+      // Dégâts non calculables : pas de table pour le second critique, seulement son rappel
+      // (cible encore à 0 PV ou plus : déjà sous zéro, elle ne peut plus y passer).
+      ...(weapon?.status === 'manual' && location && hpBefore >= 0 ? { secondHint: { locationRoll: reversed, location: locationOf(reversed) } } : {}),
+      items,
+      application: criticalApplication(items)
+    };
+  }
+
   return {
     resolutionId: normalized.resolutionId,
     baseRevision: normalized.baseRevision,
@@ -291,7 +423,7 @@ export function previewResolution(input) {
     hit,
     sl,
     double: doubled,
-    critical: kind ? { kind, expanded, acharnement, details: critical } : null,
+    critical: criticalBlock,
     fumble: kind === 'Maladresse' ? { expanded } : null,
     location,
     targetId: target?.id || null,
@@ -322,23 +454,35 @@ export function applyResolution(preview, currentState) {
   if (preview.attack && carriesDamage && !preview.targetId) {
     return { status: 'manual', reason: 'cible-requise-pour-les-dégâts', state: clone(currentState), resolution: clone(preview) };
   }
+  if (preview.attack && preview.critical?.details?.needsLocation) {
+    return { status: 'manual', reason: 'localisation-du-critique-requise', state: clone(currentState), resolution: clone(preview) };
+  }
   const nextState = clone(currentState);
   const target = participantById(currentState, preview.targetId);
-  if (preview.attack && preview.damage && preview.targetId) {
+  const criticalEffects = preview.critical?.application || { extraWounds: 0, states: [] };
+  if (preview.attack && preview.targetId && (preview.damage || criticalEffects.extraWounds || criticalEffects.states.length)) {
     if (!target) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     if (JSON.stringify(target) !== JSON.stringify(preview.input.target)) {
       return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     }
     const updated = clone(target);
     const oldHp = Number(updated.hp) || 0;
-    updated.hp = oldHp - preview.damage.finalDamage;
-    if (updated.hp <= 0) {
-      const states = Array.isArray(updated.states) ? [...updated.states] : [];
-      if (!states.some(state => stateKey(state).replace(/-/g, ' ') === 'a terre')) {
-        states.push({ name: 'À Terre', key: 'a-terre', level: 1, duration: null, source: { kind: 'resolution', resolutionId: preview.resolutionId } });
+    updated.hp = oldHp - previewHpLoss(preview);
+    const states = Array.isArray(updated.states) ? [...updated.states] : [];
+    const findState = key => states.findIndex(state => stateKey(state).replace(/-/g, ' ') === key.replace(/-/g, ' '));
+    // Même état déjà présent : niveau augmenté, durée conservée ; « À Terre » ne double jamais.
+    for (const { key, name, level } of criticalEffects.states) {
+      const at = findState(key);
+      if (at < 0) states.push(normalizeState({ name, level, duration: null, source: { kind: 'critical', resolutionId: preview.resolutionId } }, states.length));
+      else if (key !== 'a-terre') {
+        const known = typeof states[at] === 'string' ? normalizeState(states[at], at) : states[at];
+        states[at] = { ...known, level: (Number(known.level) || 1) + level };
       }
-      updated.states = states;
     }
+    if (updated.hp <= 0 && findState('a-terre') < 0) {
+      states.push({ name: 'À Terre', key: 'a-terre', level: 1, duration: null, source: { kind: 'resolution', resolutionId: preview.resolutionId } });
+    }
+    if (states.length || Array.isArray(updated.states)) updated.states = states;
     nextState.participants = participantListWithUpdate(currentState, preview.targetId, updated);
   }
   nextState.revision = currentState.revision + 1;

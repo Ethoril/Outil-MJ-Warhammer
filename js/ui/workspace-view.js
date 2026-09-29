@@ -7,10 +7,10 @@
  * Seul l'aperçu de résolution (lecture seule) est demandé directement au Store.
  */
 import { d100 } from '../core/dice.js';
-import { inferActionType, ResolutionError } from '../core/resolution.js';
+import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage } from './messages.js';
 import { normalizeEffects } from '../core/effects.js';
-import { CAMP_LABELS, normalizeCamp } from '../core/encounters.js';
+import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
 import { uid } from '../core/models.js';
 import { renderSilhouette } from './silhouette.js';
 import { renderResolutionPanel, actionKey, minusSigned } from './resolution-panel.js';
@@ -42,6 +42,17 @@ function button(label, className = '', attrs = {}) {
 
 function readProfiles(Store) {
   return typeof Store?.listProfiles === 'function' ? Store.listProfiles() : [];
+}
+
+function readEncounters(Store) {
+  return typeof Store?.listEncounters === 'function' ? Store.listEncounters() : [];
+}
+
+function readScenes(Store) {
+  return {
+    activeScene: typeof Store?.getActiveScene === 'function' ? Store.getActiveScene() : null,
+    suspendedScenes: typeof Store?.listSuspendedScenes === 'function' ? Store.listSuspendedScenes() : []
+  };
 }
 
 function readParticipants(Store) {
@@ -91,10 +102,25 @@ function hpBar(participant) {
   return bar;
 }
 
+// Clé du brouillon → nom du jet attendu par le moteur (criticalRolls).
+const CRITICAL_ERROR_FIELDS = Object.freeze({ criticalLocationRoll: 'location', criticalEffectRoll: 'effect', criticalSecondRoll: 'secondEffect' });
+const criticalRollError = () => userMessage(new ResolutionError('Jet invalide', 'INVALID_ROLL'), 'Jet invalide.');
+
 function validRoll(value) {
   const text = String(value ?? '').trim();
   const roll = Number(text);
   return text === '00' || (Number.isInteger(roll) && roll >= 1 && roll <= 100);
+}
+
+// Jet de critique tapé mais absent de l'aperçu affiché (ou invalide) : il faut recalculer avant d'appliquer.
+function criticalRollsChanged(draft) {
+  const shown = draft.preview?.input?.criticalRolls || {};
+  return Object.entries(CRITICAL_ERROR_FIELDS).some(([key, name]) => {
+    const raw = String(draft[key] ?? '').trim();
+    if (raw && !validRoll(raw)) return true;
+    const typed = raw ? (raw === '00' ? 100 : Number(raw)) : null;
+    return typed !== (shown[name] ?? null);
+  });
 }
 
 function profileSearchText(profile = {}) {
@@ -220,10 +246,48 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     resolution: emptyResolution(null)
   };
   function emptyResolution(actorId) {
-    return { actorId, actionKey: null, type: null, attackRoll: '', defenseStat: 'CC', defenseBase: null, defenseRoll: '', preview: null, comparison: null, error: null, busy: false };
+    return {
+      actorId, actionKey: null, type: null, attackRoll: '', defenseStat: 'CC', defenseBase: null, defenseRoll: '',
+      // Critique : jets saisis, effets décochés et erreurs de saisie par champ (l'aperçu reste affiché).
+      criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalDeclined: [], criticalErrors: {},
+      preview: null, comparison: null, error: null, busy: false
+    };
   }
+  // Un nouvel aperçu (autre action, type, cible ou jet) repart de zéro côté critique.
+  function resetCritical(draft) {
+    Object.assign(draft, { criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalDeclined: [], criticalErrors: {} });
+  }
+  // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
+  // La localisation change aussi les dégâts, donc l'existence du second critique.
+  function forgetDeclined(draft, field) {
+    const prefixes = field === 'criticalLocationRoll' ? ['first-', 'second-'] : field === 'criticalEffectRoll' ? ['first-'] : ['second-'];
+    draft.criticalDeclined = draft.criticalDeclined.filter(id => !prefixes.some(prefix => id.startsWith(prefix)));
+  }
+  function recalculateCritical() {
+    const draft = state.resolution;
+    if (draft.preview && !draft.busy) resolutionHandlers.calculate();
+  }
+  // Appui en cours (souris ou doigt) : le recalcul qui suit la sortie d'un champ de critique attend
+  // le relâchement, pour que le clic atteigne le bouton visé avant qu'il soit reconstruit.
+  const press = { active: false, waiting: false };
+  const pressDocument = mount.ownerDocument || document;
+  const release = () => {
+    press.active = false;
+    if (!press.waiting) return;
+    press.waiting = false;
+    setTimeout(recalculateCritical);
+  };
+  pressDocument.addEventListener('pointerdown', () => { press.active = true; }, true);
+  pressDocument.addEventListener('pointerup', release, true);
+  pressDocument.addEventListener('pointercancel', release, true);
   const callbacks = {
     beginEncounter: typeof actions.beginEncounter === 'function' ? actions.beginEncounter : null,
+    editEncounter: typeof actions.editEncounter === 'function' ? actions.editEncounter : null,
+    launchEncounter: typeof actions.launchEncounter === 'function' ? actions.launchEncounter : null,
+    deleteEncounter: typeof actions.deleteEncounter === 'function' ? actions.deleteEncounter : null,
+    resumeScene: typeof actions.resumeScene === 'function' ? actions.resumeScene : null,
+    suspendScene: typeof actions.suspendScene === 'function' ? actions.suspendScene : null,
+    showPlay: typeof actions.showPlay === 'function' ? actions.showPlay : null,
     createProfile: typeof actions.createProfile === 'function' ? actions.createProfile : null,
     duplicateProfile: typeof actions.duplicateProfile === 'function' ? actions.duplicateProfile : null,
     removeProfile: typeof actions.removeProfile === 'function' ? actions.removeProfile : null,
@@ -280,7 +344,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     let target = null;
     if (state.targetChoice && state.targetChoice !== 'none') target = others.find(participant => participant.id === state.targetChoice) || null;
     if (!target && state.targetChoice !== 'none' && type !== 'skill') target = groups.adversaries[0] || others[0] || null;
-    if (draft.preview && draft.preview.targetId !== (target?.id || null)) draft.preview = null;
+    if (draft.preview && draft.preview.targetId !== (target?.id || null)) { draft.preview = null; resetCritical(draft); }
     if (type === 'attack' && target && draft.defenseBase === null && draft.defenseStat !== 'Autre') {
       const value = target.caracs?.[draft.defenseStat];
       draft.defenseBase = Number.isFinite(Number(value)) && value !== null && value !== '' ? String(value) : null;
@@ -310,13 +374,20 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     create.disabled = state.actionBusy || !callbacks.createProfile;
     if (!callbacks.createProfile) create.title = 'Action indisponible';
     header.appendChild(create);
-    const launch = button('Lancer la rencontre', 'workspace-primary');
+    const launch = button('Nouvelle rencontre', 'workspace-primary', { 'data-focus-key': 'new-encounter' });
     launch.dataset.workspaceAction = 'begin-encounter';
     launch.disabled = state.actionBusy || !callbacks.beginEncounter;
     if (!callbacks.beginEncounter) launch.title = 'Action indisponible';
     header.appendChild(launch);
     refs.prepare.appendChild(header);
 
+    refs.prepare.appendChild(rubric('Rencontres'));
+    const encounters = encounterList({ compact: false });
+    if (encounters.note) refs.prepare.appendChild(encounters.note);
+    if (encounters.list) refs.prepare.appendChild(encounters.list);
+    else refs.prepare.appendChild(node('p', 'workspace-muted', 'Aucune rencontre préparée : « Nouvelle rencontre » pour en composer une à l’avance.'));
+
+    refs.prepare.appendChild(rubric('Profils'));
     const profiles = readProfiles(Store);
     if (!profiles.length) {
       const empty = node('div', 'workspace-empty workspace-card');
@@ -337,6 +408,69 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       onRemove: callbacks.removeProfile
     })));
     refs.prepare.appendChild(list);
+  }
+
+  // Cartes des rencontres enregistrées. `compact` (Jouer, sans combat) : titre,
+  // statut, composition et le seul bouton principal, sans les rencontres en cours.
+  function encounterList({ compact }) {
+    const scenes = readScenes(Store);
+    const profiles = readProfiles(Store);
+    const running = scenes.activeScene?.status === 'active';
+    let encounters = sortEncountersForDisplay(readEncounters(Store), scenes);
+    if (compact) encounters = encounters.filter(encounter => encounterDisplayStatus(encounter, scenes).key !== 'active');
+    // Aussi sans carte : le combat en cours peut venir d'une rencontre supprimée depuis.
+    const note = !compact && running
+      ? node('p', 'workspace-muted workspace-encounter-note', `Combat en cours : « ${scenes.activeScene.title || 'Séance'} ». Suspendez-le ou clôturez-le (menu ⋯) pour lancer une autre rencontre.`)
+      : null;
+    if (!encounters.length) return { list: null, note };
+    const list = node('div', 'workspace-encounter-list');
+    encounters.forEach(encounter => list.appendChild(encounterCard(encounter, {
+      status: encounterDisplayStatus(encounter, scenes), summary: encounterSummary(encounter, profiles), running, compact
+    })));
+    return { list, note };
+  }
+
+  function encounterCard(encounter, { status, summary, running, compact }) {
+    const name = encounter.title || 'Rencontre sans titre';
+    const card = node('article', `workspace-encounter-card${compact ? ' is-compact' : ''}`);
+    card.dataset.encounterId = encounter.id;
+    const head = node('div', 'workspace-encounter-head');
+    head.append(node(compact ? 'h4' : 'h3', '', name), node('span', `workspace-encounter-status is-${status.key}`, status.label));
+    card.appendChild(head);
+    card.appendChild(node('p', 'workspace-encounter-meta', `${summary.count} combattant${summary.count > 1 ? 's' : ''}${summary.text ? ` · ${summary.text}` : ''}`));
+    const firstNote = (encounter.notes || '').split('\n').map(line => line.trim()).find(Boolean);
+    if (firstNote && !compact) card.appendChild(node('p', 'workspace-encounter-notes', firstNote));
+    const command = (label, className, action, callback, { disabled = false, title = '', scene = false } = {}) => {
+      const element = button(label, className, { 'aria-label': `${label} « ${name} »`, 'data-focus-key': `${action}-${encounter.id}` });
+      element.dataset.workspaceAction = action;
+      element.dataset.encounterId = encounter.id;
+      if (scene) element.dataset.sceneId = status.sceneId;
+      element.disabled = state.actionBusy || !callback || disabled;
+      if (!callback) element.title = 'Action indisponible';
+      else if (disabled) element.title = title;
+      return element;
+    };
+    const busyTitle = 'Un combat est en cours : suspendez-le ou clôturez-le d’abord';
+    const actions = node('div', 'workspace-inline-actions');
+    if (status.key === 'active') {
+      actions.appendChild(command('Revenir au combat', 'workspace-primary', 'show-play', callbacks.showPlay));
+      if (!compact) actions.appendChild(command('Suspendre', 'workspace-secondary', 'suspend-scene', callbacks.suspendScene));
+    } else if (status.key === 'suspended') {
+      actions.appendChild(command('Reprendre', 'workspace-primary', 'resume-scene', callbacks.resumeScene, { disabled: running, title: busyTitle, scene: true }));
+    } else {
+      actions.appendChild(command('Lancer', 'workspace-primary', 'launch-encounter', callbacks.launchEncounter, { disabled: running || summary.count === 0, title: running ? busyTitle : 'Ajoutez au moins un combattant' }));
+    }
+    if (!compact) {
+      actions.appendChild(command('Modifier', 'workspace-secondary', 'edit-encounter', callbacks.editEncounter));
+      // Une rencontre en jeu garde sa carte : sinon sa séance suspendue n'aurait plus que le menu ⋯.
+      const inPlay = status.key === 'active' || status.key === 'suspended';
+      actions.appendChild(command('Supprimer', 'workspace-secondary', 'delete-encounter', callbacks.deleteEncounter, {
+        disabled: inPlay,
+        title: status.key === 'active' ? 'Clôturez d’abord la séance (menu ⋯)' : 'Reprenez puis clôturez d’abord la séance'
+      }));
+    }
+    card.appendChild(actions);
+    return card;
   }
 
   function rubric(text, tag = 'h3') {
@@ -464,7 +598,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     identity.appendChild(nameRow);
     const hp = node('p', 'workspace-sheet-hp num');
     hp.append(node('span', 'workspace-sheet-hp-label', 'PV'), ' ', hpText(participant));
-    if (hit?.damage) hp.appendChild(node('span', 'workspace-sheet-hp-after', ` → ${minusSigned((Number(participant.hp) || 0) - hit.damage.finalDamage)}`));
+    if (hit?.damage || hit?.critical?.application?.extraWounds) hp.appendChild(node('span', 'workspace-sheet-hp-after', ` → ${minusSigned((Number(participant.hp) || 0) - previewHpLoss(hit))}`));
     heading.append(identity, hp);
     sheet.append(heading, hpBar(participant));
 
@@ -578,6 +712,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.actionKey = patch.actionKey; draft.type = null; }
       if ('type' in patch) draft.type = patch.type;
       if ('defenseStat' in patch) { draft.defenseStat = patch.defenseStat; draft.defenseBase = null; }
+      resetCritical(draft);
       draft.preview = null;
       draft.comparison = null;
       draft.error = null;
@@ -589,6 +724,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       // Only the first keystroke after a result re-renders; the others just
       // feed the draft, so no character can be lost.
       if (draft.preview || draft.comparison || draft.error) {
+        resetCritical(draft);
         draft.preview = null;
         draft.comparison = null;
         draft.error = null;
@@ -598,12 +734,44 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     roll(field) {
       const draft = state.resolution;
       draft[field === 'attack' ? 'attackRoll' : 'defenseRoll'] = String(d100());
+      resetCritical(draft);
       draft.preview = null;
       draft.comparison = null;
       draft.error = null;
       render();
     },
-    calculate() {
+    // Saisie d'un jet de critique : alimente le brouillon sans vider l'aperçu ni re-rendre
+    // (aucune frappe perdue) ; seule une erreur affichée sous le champ est retirée.
+    criticalInput(field, value) {
+      const draft = state.resolution;
+      if (draft[field] !== value) forgetDeclined(draft, field);
+      draft[field] = value;
+      const name = CRITICAL_ERROR_FIELDS[field];
+      if (draft.criticalErrors[name]) {
+        delete draft.criticalErrors[name];
+        render();
+      }
+    },
+    criticalRoll(field) {
+      forgetDeclined(state.resolution, field);
+      state.resolution[field] = String(d100());
+      resolutionHandlers.calculate();
+    },
+    // Sortie d'un champ : recalcul différé, pour ne pas remplacer le bouton visé pendant le clic ;
+    // un appui encore en cours (clic long) fait attendre le relâchement.
+    criticalChange() {
+      setTimeout(() => {
+        if (press.active) press.waiting = true;
+        else recalculateCritical();
+      }, 200);
+    },
+    criticalToggle(id, checked) {
+      const draft = state.resolution;
+      draft.criticalDeclined = draft.criticalDeclined.filter(item => item !== id);
+      if (!checked) draft.criticalDeclined.push(id);
+      resolutionHandlers.calculate(`critical-item-${id}`);
+    },
+    calculate(focusKey = null) {
       const context = playContext();
       const draft = state.resolution;
       if (!context.actor || !context.action || typeof Store.previewResolution !== 'function' || draft.busy) return;
@@ -616,6 +784,17 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (context.type === 'attack' && context.target && String(draft.defenseRoll).trim()) {
         input.defense = { roll: String(draft.defenseRoll).trim(), base: draft.defenseBase ?? 0, label: draft.defenseStat };
       }
+      // Seuls les jets de critique valides partent au moteur ; les autres montrent l'erreur sous leur champ.
+      const criticalRolls = {};
+      draft.criticalErrors = {};
+      Object.entries(CRITICAL_ERROR_FIELDS).forEach(([key, name]) => {
+        const raw = String(draft[key]).trim();
+        if (!raw) return;
+        if (validRoll(raw)) criticalRolls[name] = raw;
+        else draft.criticalErrors[name] = criticalRollError();
+      });
+      if (Object.keys(criticalRolls).length) input.criticalRolls = criticalRolls;
+      if (draft.criticalDeclined.length) input.criticalDeclined = [...draft.criticalDeclined];
       draft.error = null;
       draft.comparison = null;
       try {
@@ -624,7 +803,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.preview = null;
         draft.error = calculationError(error);
       }
-      render(draft.error && draft.error.field !== 'general' ? `roll-${draft.error.field}` : null);
+      render(draft.error && draft.error.field !== 'general' ? `roll-${draft.error.field}` : focusKey);
     },
     // Mêmes jets pour chaque cible possible (adversaires puis alliés), sans rien
     // appliquer. Le jet de défense, s'il est saisi, est opposé à la valeur de
@@ -636,6 +815,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const roll = String(draft.attackRoll).trim();
       const defenseRoll = String(draft.defenseRoll).trim();
       draft.preview = null;
+      // Les jets de critique visaient l'aperçu remplacé par la comparaison.
+      resetCritical(draft);
       draft.error = null;
       try {
         draft.comparison = [...context.groups.adversaries, ...context.groups.allies].map(target => {
@@ -663,6 +844,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     async apply() {
       const draft = state.resolution;
       if (!draft.preview || !callbacks.applyResolution || draft.busy) return;
+      // Clic direct sur « Appliquer » après avoir tapé un jet de critique : l'aperçu est
+      // d'abord recalculé et montré, rien n'est appliqué avec l'ancien.
+      if (criticalRollsChanged(draft)) { resolutionHandlers.calculate('apply'); return; }
       draft.busy = true;
       render();
       let focusKey = 'apply';
@@ -677,6 +861,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           focusKey = 'roll-attack';
         }
         draft.preview = null;
+        if (result?.status !== 'stale') resetCritical(draft);
       } catch (error) {
         draft.error = { field: 'apply', message: userMessage(error, 'Résultat non appliqué : recalculez, puis réessayez.') };
       } finally {
@@ -685,6 +870,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
     },
     cancel() {
+      resetCritical(state.resolution);
       state.resolution.preview = null;
       state.resolution.comparison = null;
       state.resolution.error = null;
@@ -704,6 +890,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (!callbacks.beginEncounter) prepare.title = 'Action indisponible';
       empty.append(prepare, node('p', 'workspace-muted', 'ou ajoutez un profil depuis le panneau Profils'));
       center.appendChild(empty);
+      const prepared = encounterList({ compact: true });
+      if (prepared.list) center.append(rubric('Rencontres préparées'), prepared.list);
       return;
     }
     const duel = node('div', 'workspace-duel');
@@ -941,6 +1129,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (id !== state.resolution.actorId) {
         state.targetChoice = id;
         state.resolution.defenseBase = null;
+        resetCritical(state.resolution);
         state.resolution.preview = null;
         state.resolution.error = null;
       }
@@ -959,6 +1148,20 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const participant = participantId ? readParticipants(Store).find(item => item.id === participantId) : null;
     switch (action) {
       case 'begin-encounter': callbacks.beginEncounter(); break;
+      case 'edit-encounter': callbacks.editEncounter?.(target.dataset.encounterId); break;
+      case 'launch-encounter': callbacks.launchEncounter?.(target.dataset.encounterId); break;
+      case 'delete-encounter':
+        // Le bouton cliqué disparaît avec la carte : le focus revient à « Nouvelle rencontre ».
+        Promise.resolve(callbacks.deleteEncounter?.(target.dataset.encounterId)).then(done => { if (done) render('new-encounter'); }, noop);
+        break;
+      case 'resume-scene': callbacks.resumeScene?.(target.dataset.sceneId); break;
+      case 'suspend-scene': {
+        // « Suspendre » laisse place à « Reprendre » sur la même carte.
+        const id = target.dataset.encounterId;
+        Promise.resolve(callbacks.suspendScene?.()).then(done => { if (done) render(`resume-scene-${id}`); }, noop);
+        break;
+      }
+      case 'show-play': callbacks.showPlay?.(); break;
       case 'create-profile': callbacks.createProfile?.(); break;
       case 'edit-profile': callbacks.editProfile(target.dataset.profileId); break;
       case 'duplicate-profile': callbacks.duplicateProfile?.(target.dataset.profileId); break;
@@ -1030,6 +1233,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     selectTarget(id) {
       state.targetChoice = id || 'none';
       state.resolution.defenseBase = null;
+      resetCritical(state.resolution);
       state.resolution.preview = null;
       render();
     },
