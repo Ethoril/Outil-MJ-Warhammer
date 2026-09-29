@@ -5,7 +5,7 @@
  * a schema v2 envelope without mutating the input. It deliberately does not write
  * storage or execute extension fields.
  */
-import { normalizeCaracs } from './models.js';
+import { normalizeCaracs, profileActionSource } from './models.js';
 import { normalizeDamageFields } from './damage.js';
 
 export const CURRENT_SCHEMA_VERSION = 2;
@@ -174,6 +174,15 @@ function migrateProfiles(raw, report) {
     sanitizeNumericMap(item, 'caracs', 'reserve/' + id, report);
     if (isObject(item.caracs)) item.caracs = normalizeCaracs(item.caracs);
     sanitizeNumericMap(item, 'armor', 'reserve/' + id, report);
+    if (Array.isArray(item.actions)) {
+      // `diceLines` fait foi, sauf s'il est vide à côté d'actions remplies ;
+      // `actions` n'est qu'un ancien alias (import texte, sauvegardes d'avant 3.7.1).
+      if (Array.isArray(item.diceLines) && JSON.stringify(profileActionSource(item)) !== JSON.stringify(item.actions)) {
+        pushReport(report, 'repaired', 'reserve/' + id + '/actions', { reason: 'actions-divergentes-ignorees' });
+      }
+      item.diceLines = profileActionSource(item);
+      delete item.actions;
+    }
     out.push(withExtensions(item, PROFILE_KEYS, 'reserve/' + id, report));
   }
   return out;

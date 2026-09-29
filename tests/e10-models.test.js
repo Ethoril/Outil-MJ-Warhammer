@@ -51,6 +51,6 @@ test('E10 migration — champs profil/action traversent export et réimport', ()
   });
   assert.equal(data.reserve[0].kind, 'PNJ');
   assert.deepEqual(data.reserve[0].tags, ['chef']);
-  assert.equal(data.reserve[0].actions[0].valuesX, 3);
-  assert.equal(data.reserve[0].actions[0].qualities[0].id, 'Impact');
+  assert.equal(data.reserve[0].diceLines[0].valuesX, 3);
+  assert.equal(data.reserve[0].diceLines[0].qualities[0].id, 'Impact');
 });

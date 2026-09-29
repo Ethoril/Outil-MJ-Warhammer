@@ -98,6 +98,29 @@ export function normalizeAction(raw = {}) {
   return action;
 }
 
+/**
+ * Actions d'un profil brut chargé : `diceLines` est la source de vérité (champ
+ * écrit par le formulaire), `actions` n'est lu qu'en repli. Un `diceLines` vide
+ * à côté d'un `actions` rempli vient des anciennes versions (sanitizeProfile
+ * produisait `diceLines: []` pour un import texte) : on garde alors `actions`,
+ * c'est-à-dire ce que ces versions affichaient, plutôt que de perdre des actions.
+ * Les écritures, elles, passent par le patch qui fait foi (voir updateProfile).
+ */
+export function profileActionSource(raw) {
+  const lines = Array.isArray(raw?.diceLines) ? raw.diceLines : null;
+  const actions = Array.isArray(raw?.actions) ? raw.actions : null;
+  if (lines && (lines.length > 0 || !actions?.length)) return lines;
+  return actions || lines || [];
+}
+
+/** Copie d'un profil brut ou d'un patch avec une seule collection : `diceLines`. */
+export function canonicalizeProfileFields(raw) {
+  if (!isRecord(raw)) return raw;
+  const { actions, ...rest } = raw;
+  if (Array.isArray(raw.diceLines) || Array.isArray(actions)) rest.diceLines = profileActionSource(raw);
+  return rest;
+}
+
 export class Profile {
   constructor({ id = uid(), name, kind = 'Créature', initiative = 30, hp = 10, caracs = {}, armor = { head: 0, body: 0, arms: 0, legs: 0 }, diceLines, actions, group = '', tags = [], notes = '', favorite = false, extensions = {} } = {}) {
     this.id = id;
@@ -107,12 +130,11 @@ export class Profile {
     this.hp = Number(hp) || 0;
     this.caracs = normalizeCaracs(caracs);
     this.armor = isRecord(armor) ? cloneValue(armor) : {};
-    const actionSource = Array.isArray(actions) ? actions : (Array.isArray(diceLines) ? diceLines : []);
-    this.diceLines = actionSource.map(normalizeAction);
+    this.diceLines = profileActionSource({ diceLines, actions }).map(normalizeAction);
     // Une seule collection évite qu’une modification du formulaire ne laisse
     // une copie obsolète derrière `actions`.
     Object.defineProperty(this, 'actions', {
-      enumerable: true,
+      enumerable: false,
       configurable: true,
       get: () => this.diceLines,
       set: value => { this.diceLines = Array.isArray(value) ? value.map(normalizeAction) : []; }

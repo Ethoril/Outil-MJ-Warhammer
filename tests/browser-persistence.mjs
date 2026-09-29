@@ -260,6 +260,41 @@ async function main() {
         await context.close();
       }
     }, results);
+
+    await runScenario('profil importé par texte : la base d’action modifiée dans la Bibliothèque survit au rechargement', async () => {
+      const context = await browser.newContext({ serviceWorkers: 'block' });
+      try {
+        await isolateNetwork(context, port);
+        const page = await context.newPage();
+        await page.goto(`${origin}/index.html`);
+        await waitForApp(page);
+        await openAppMenu(page);
+        await page.locator('#app-menu').getByRole('button', { name: 'Importer du texte' }).click();
+        const overlay = page.getByRole('dialog');
+        await overlay.getByRole('textbox', { name: 'Texte des profils' }).fill(
+          'Nom: Garde action\nPV: 12\nInitiative: 30\nF: 35\nAction: Hache ancienne | type=attack | base=40 | dégâts=BF+4'
+        );
+        await overlay.getByRole('button', { name: 'Analyser le texte' }).click();
+        await overlay.getByRole('button', { name: 'Importer 1 profil' }).click();
+        await expect(overlay).toBeHidden();
+        await expect(page.locator('#local-status')).toHaveAttribute('data-status', 'saved');
+        await page.locator('#tab-library').click();
+        const card = () => page.locator('#workspace-library .workspace-profile-card').filter({ hasText: 'Garde action' });
+        await card().getByRole('button', { name: 'Modifier' }).click();
+        await expect(page.locator('dialog #form-dice-list .pf-dice-base').first()).toHaveValue('40');
+        await page.locator('dialog #form-dice-list .pf-dice-base').first().fill('55');
+        await page.locator('dialog #btn-submit-form').click();
+        await expect(page.locator('#local-status')).toHaveAttribute('data-status', 'saved');
+        await page.reload();
+        await waitForApp(page);
+        await page.locator('#tab-library').click();
+        await card().getByRole('button', { name: 'Modifier' }).click();
+        await expect(page.locator('dialog #form-dice-list .pf-dice-base')).toHaveCount(1);
+        await expect(page.locator('dialog #form-dice-list .pf-dice-base').first()).toHaveValue('55');
+      } finally {
+        await context.close();
+      }
+    }, results);
   } finally {
     await browser.close();
     server.close();

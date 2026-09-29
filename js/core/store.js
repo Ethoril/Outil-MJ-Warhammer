@@ -1,4 +1,4 @@
-import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs } from './models.js';
+import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields } from './models.js';
 import { sanitizeArray, sanitizeProfile, sanitizeParticipant } from './sanitize.js';
 import { migrateSnapshot, migrateLegacyStorage } from './migrations.js';
 import { createStateCommand } from './commands.js';
@@ -1030,7 +1030,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     addProfile(p) {
       if (!canMutate()) return false;
       if (persistence) {
-        const captured = JSON.parse(JSON.stringify(p));
+        const captured = canonicalizeProfileFields(JSON.parse(JSON.stringify(p)));
         return api.executeCommand('add-profile', draft => ({ ...draft, reserve: [...(draft.reserve || []), captured] }));
       }
       beginCommand('add-profile');
@@ -1043,9 +1043,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!canMutate()) return false;
       const p = reserve.get(id); if (!p) return;
       if (persistence) {
-        const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
+        const capturedPatch = canonicalizeProfileFields(JSON.parse(JSON.stringify(patch || {})));
         return api.executeCommand('update-profile', draft => {
-        const profiles = (draft.reserve || []).map(item => item.id === id ? { ...item, ...capturedPatch } : item);
+        // Le profil stocké est d'abord ramené à une seule collection, puis le
+        // patch s'applique par-dessus : ses `diceLines` font foi, même vides.
+        const profiles = (draft.reserve || []).map(item => item.id === id ? { ...canonicalizeProfileFields(item), ...capturedPatch } : item);
         const participants = propagate ? (draft.combat?.participants || []).map(item => item.profileId !== id ? item : {
           ...item,
           name: capturedPatch.name ?? item.name,
@@ -1054,13 +1056,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           maxHp: capturedPatch.hp ?? item.maxHp,
           ...(capturedPatch.caracs ? { caracs: cloneValue(capturedPatch.caracs) } : {}),
           ...(capturedPatch.armor ? { armor: cloneValue(capturedPatch.armor) } : {}),
-          ...(capturedPatch.actions ? { actions: cloneValue(capturedPatch.actions) } : {})
+          ...(capturedPatch.diceLines ? { actions: cloneValue(capturedPatch.diceLines) } : {})
         }) : draft.combat?.participants;
         return { ...draft, reserve: profiles, ...(propagate ? { combat: { ...draft.combat, participants } } : {}) };
         });
       }
       beginCommand('update-profile');
-      Object.assign(p, patch);
+      Object.assign(p, canonicalizeProfileFields(patch));
       markDirty(`reserve/${id}`, p);
       // Profiles are reusable templates; active participant copies are frozen
       // at import/launch time. Propagation is available only through the
@@ -1914,7 +1916,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     importParsedProfiles(profiles = []) {
       const captured = cloneValue(profiles);
-      return api.executeCommand('import-text-profiles', draft => ({ ...draft, reserve: [...(draft.reserve || []), ...captured.map(profile => ({ ...profile, id: profile.id || uid(), caracs: normalizeCaracs(profile.caracs) }))] }));
+      return api.executeCommand('import-text-profiles', draft => ({ ...draft, reserve: [...(draft.reserve || []), ...captured.map(profile => ({ ...canonicalizeProfileFields(profile), id: profile.id || uid(), caracs: normalizeCaracs(profile.caracs) }))] }));
     },
 
     getFullJSON() {

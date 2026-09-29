@@ -285,7 +285,7 @@ test('E19 store — la formule importée survit à la sauvegarde et au rechargem
   await store.importParsedProfiles(parseProfileText(ORC).profiles);
   assert.equal(store.listProfiles()[0].actions[0].damageFormula, 'BF+4');
   const saved = persistence.peek();
-  assert.equal(saved.reserve[0].actions[0].damageFormula, 'BF+4');
+  assert.equal(saved.reserve[0].diceLines[0].damageFormula, 'BF+4');
   const reloaded = createStore({ persistence: memoryPersistence(saved) });
   await reloaded.ready;
   assert.equal(reloaded.listProfiles()[0].actions[0].damageFormula, 'BF+4');

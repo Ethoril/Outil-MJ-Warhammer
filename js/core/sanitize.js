@@ -1,5 +1,5 @@
 import { normalizeEffects, normalizeState, resolveEffectCapability } from './effects.js';
-import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, profileActionSource } from './models.js';
 
 export function normalizeSearchText(value) {
   return String(value ?? '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -13,7 +13,7 @@ export function sanitizeArray(val) {
 
 export function sanitizeProfile(o) {
   if (!o || typeof o !== 'object' || !o.id || typeof o.id !== 'string') return null;
-  return {
+  const profile = {
     id: String(o.id),
     name: (typeof o.name === 'string' && o.name.trim()) ? o.name.trim() : 'Sans-nom',
     kind: ['PJ', 'PNJ', 'Créature'].includes(o.kind) ? o.kind : 'Créature',
@@ -21,14 +21,16 @@ export function sanitizeProfile(o) {
     hp: Number(o.hp) || 0,
     caracs: normalizeCaracs(o.caracs),
     armor: (o.armor && typeof o.armor === 'object') ? cloneValue(o.armor) : { head: 0, body: 0, arms: 0, legs: 0 },
-    diceLines: sanitizeArray(o.diceLines).map(normalizeAction),
+    diceLines: sanitizeArray(profileActionSource(o)).map(normalizeAction),
     group: typeof o.group === 'string' ? o.group.trim() : '',
     tags: normalizeTags(o.tags),
     notes: typeof o.notes === 'string' ? o.notes : '',
     favorite: Boolean(o.favorite),
-    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {},
-    ...(Array.isArray(o.actions) ? { actions: o.actions.map(normalizeAction) } : {})
+    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {}
   };
+  // `actions` reste lisible mais n'est jamais une seconde copie énumérable.
+  Object.defineProperty(profile, 'actions', { enumerable: false, configurable: true, get: () => profile.diceLines });
+  return profile;
 }
 
 export function sanitizeParticipant(o) {
@@ -36,6 +38,7 @@ export function sanitizeParticipant(o) {
   if (!base) return null;
   return {
     ...base,
+    actions: Array.isArray(o.actions) ? o.actions.map(normalizeAction) : [],
     profileId: o.profileId || null,
     persistentCharacterId: o.persistentCharacterId || null,
     improvised: Boolean(o.improvised),
