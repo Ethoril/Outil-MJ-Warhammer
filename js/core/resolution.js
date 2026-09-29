@@ -3,12 +3,42 @@ import {
   SL, getCritEffect, getLocationName, getReverseRoll, isDouble
 } from './dice.js';
 import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
-import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, strengthBonusOf } from './damage.js';
+import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
+const signedValue = value => { const number = Number(value) || 0; return number < 0 ? `−${Math.abs(number)}` : `+${number}`; };
+const DETAIL_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
+
+/**
+ * Détail d'une entrée de journal de résolution en phrases courtes, sans clé
+ * technique : les valeurs vides et les objets non reconnus sont omis.
+ */
+export function describeResolutionDetail(detail) {
+  if (!isRecord(detail)) return [];
+  const parts = [];
+  const present = value => value !== null && value !== undefined;
+  if (present(detail.actionType)) parts.push(`Type : ${DETAIL_TYPE_LABELS[detail.actionType] || detail.actionType}`);
+  if (present(detail.roll)) parts.push(`Jet : ${detail.roll}`);
+  if (present(detail.targetScore)) parts.push(`Seuil : ${detail.targetScore}`);
+  if (present(detail.sl)) parts.push(`DR : ${signedValue(detail.sl)}`);
+  const opposition = isRecord(detail.opposition) && isRecord(detail.opposition.defender) ? detail.opposition : null;
+  if (opposition) {
+    const { label, score, roll } = opposition.defender;
+    const hit = present(detail.hit) ? ` · ${detail.hit ? 'touché' : 'pas de touche'}` : '';
+    parts.push(`Opposition : défense ${label} ${score} (d100 ${roll}) · DR net ${signedValue(opposition.netSl)}${hit}`);
+  } else if (present(detail.hit)) parts.push(detail.hit ? 'Touché' : 'Pas de touche');
+  if (isRecord(detail.location) && present(detail.location.roll) && detail.location.name) parts.push(`Localisation : ${detail.location.roll} → ${detail.location.name}`);
+  const damage = isRecord(detail.damage) ? formatDamageFormula(detail.damage) : '';
+  if (damage) parts.push(`Dégâts : ${damage}`);
+  const weapon = isRecord(detail.weapon) && detail.weapon.status === 'manual' ? formatWeaponDamage(detail.weapon) : '';
+  if (weapon) parts.push(`Arme : ${weapon}`);
+  if (detail.critical) parts.push('Coup critique');
+  if (detail.fumble) parts.push('Maladresse');
+  return parts;
+}
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const ATTACK_TYPES = new Set(['attack', 'attaque']);
 const OPPOSITION_TYPES = new Set(['opposition', 'opposed']);

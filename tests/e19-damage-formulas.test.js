@@ -308,3 +308,24 @@ test('E19 store — résolution BF+4 puis expression à arbitrer journalisée', 
   assert.match(entry.text, /dégâts à arbitrer \(1d10\)/);
   assert.equal(entry.detail.weapon.status, 'manual');
 });
+
+test('le détail d\'une résolution du journal est lisible en français', async () => {
+  const { describeResolutionDetail } = await import('../js/core/resolution.js');
+  const store = createStore({ persistence: memoryPersistence() });
+  await store.ready;
+  await store.addParticipant({ id: 'actor', name: 'Orc', hp: 10, caracs: { F: 35 }, zone: 'active' });
+  await store.addParticipant({ id: 'target', name: 'Cible', hp: 10, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, zone: 'active' });
+  const preview = store.previewResolution({ actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: 23 });
+  await store.applyResolution(preview);
+  const lines = describeResolutionDetail(store.getLog()[0].detail);
+  assert.equal(lines[0], 'Type : Attaque');
+  assert.equal(lines[1], 'Jet : 23');
+  assert.equal(lines[2], 'Seuil : 60');
+  assert.match(lines[3], /^DR : [+−]\d+$/);
+  assert.ok(lines.some(line => line.startsWith('Localisation : 32 → ')));
+  assert.ok(lines.some(line => line.startsWith('Dégâts : ') && line.includes('BF 3')));
+  const text = lines.join(' | ');
+  assert.doesNotMatch(text, /resolutionId|null|undefined|\[object/);
+  assert.deepEqual(describeResolutionDetail({ hit: false, sl: -2, critical: null, fumble: {}, resolutionId: 'x', application: {} }), ['DR : −2', 'Pas de touche', 'Maladresse']);
+  assert.deepEqual(describeResolutionDetail(null), []);
+});

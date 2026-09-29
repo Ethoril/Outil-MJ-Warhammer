@@ -163,7 +163,8 @@ function profileSummary(profile, {
   const meta = node('p', 'workspace-muted', `${profile.kind || 'Créature'} · Init ${profile.initiative ?? 0} · PV ${profile.hp ?? 0}${profile.favorite ? ' · ★ Favori' : ''}`);
   const group = profile.group ? node('p', 'workspace-tag', profile.group) : null;
   const actions = node('div', 'workspace-inline-actions');
-  const edit = button('Modifier', 'workspace-secondary');
+  const profileName = profile.name || 'Sans-nom';
+  const edit = button('Modifier', 'workspace-secondary', { 'aria-label': `Modifier ${profileName}`, 'data-focus-key': `edit-profile-${profile.id}` });
   edit.dataset.workspaceAction = 'edit-profile';
   edit.dataset.profileId = profile.id;
   edit.disabled = !canEdit;
@@ -172,14 +173,14 @@ function profileSummary(profile, {
   // The controller may omit editing when the current Store is read-only.
   actions.appendChild(edit);
   if (canDuplicate) {
-    const duplicate = button('Dupliquer', 'workspace-secondary');
+    const duplicate = button('Dupliquer', 'workspace-secondary', { 'aria-label': `Dupliquer ${profileName}`, 'data-focus-key': `duplicate-profile-${profile.id}` });
     duplicate.dataset.workspaceAction = 'duplicate-profile';
     duplicate.dataset.profileId = profile.id;
     if (onDuplicate) duplicate.addEventListener('click', event => { event.stopPropagation(); onDuplicate(profile.id); });
     actions.appendChild(duplicate);
   }
   if (canRemove) {
-    const remove = button('Supprimer', 'workspace-secondary');
+    const remove = button('Supprimer', 'workspace-secondary', { 'aria-label': `Supprimer ${profileName}`, 'data-focus-key': `remove-profile-${profile.id}` });
     remove.dataset.workspaceAction = 'remove-profile';
     remove.dataset.profileId = profile.id;
     if (onRemove) remove.addEventListener('click', event => { event.stopPropagation(); onRemove(profile.id); });

@@ -194,6 +194,8 @@ async function main() {
     await edited.form.locator('#btn-submit-form').click();
     await expect(page.locator('.workspace-space-library')).toContainText('Aline modifiée');
     await expect(page.locator('.workspace-space-library')).not.toContainText('Aline du Test');
+    // Le bouton recréé de la bonne carte reprend le focus, avec un nom propre à la carte.
+    await expect(page.getByRole('button', { name: 'Modifier Aline modifiée', exact: true })).toBeFocused();
     // Deux ouvertures de l'éditeur ne laissent aucun paragraphe d'aperçu dans le formulaire.
     await expect(page.locator('#form-add > p.muted')).toHaveCount(0);
     const savedCaracs = await page.evaluate(async () => {
@@ -283,7 +285,9 @@ async function main() {
     await side.getByRole('tab', { name: 'Journal' }).click();
     const sideLog = page.locator('#workspace-side-panel-log');
     await expect(sideLog).toContainText('Attaque — réussite');
-    await expect(sideLog).toContainText(/damage:\s*\d+ arme/);
+    await expect(sideLog).toContainText(/Dégâts : \d+ arme/);
+    await expect(sideLog).toContainText('Type : Attaque');
+    await expect(sideLog).not.toContainText(/resolutionId|actionType|targetScore/);
     await expect(sideLog).not.toContainText('[object Object]');
 
     // Espace dans le texte des règles fait défiler, sans passer au tour suivant ;
