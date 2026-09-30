@@ -2,7 +2,7 @@ import { DOM, qs, qsa, on, escapeHtml } from './dom.js';
 import { Profile, groupProfiles, normalizeAction, normalizeTags } from '../core/models.js';
 import { normalizeDamageFields } from '../core/damage.js';
 import { normalizeSearchText } from '../core/sanitize.js';
-import { createQualityPicker } from './action-editor.js';
+import { ACTION_FIELD_HELP, createQualityPicker } from './action-editor.js';
 import { showToast } from './toast.js';
 import { contextMessage } from './messages.js';
 
@@ -93,9 +93,13 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   function addProfileDiceRow({ base = '', mod = 0, type = '', note = '', damage = '', damageFormula = '', qualities = [], valuesX = null, capacity = null } = {}) {
     const row = document.createElement('div'); row.className = 'row'; row.style.marginBottom = '6px'; row.style.gap = '4px';
     const currentQualities = Array.isArray(qualities) ? qualities : [];
+    // Nom accessible court et infobulle d'aide pour chaque case.
+    const help = (label, tip) => `aria-label="${escapeHtml(label)}" title="${escapeHtml(tip)}"`;
 
-    row.innerHTML = `<select class="pf-dice-type" title="Type d'action"><option value="">Type…</option><option value="attack">Attaque</option><option value="skill">Compétence</option><option value="defense">Défense</option><option value="opposition">Opposition</option></select><input type="number" placeholder="Score" value="${base}" class="pf-dice-base" style="width:60px;"><input type="number" placeholder="Mod." value="${mod ?? 0}" class="pf-dice-mod" style="width:52px;"><input type="text" placeholder="Label (ex: Épée)" value="${escapeHtml(note)}" class="pf-dice-note" style="flex:1;"><input type="text" placeholder="Dég." title="Dégâts : nombre (4) ou formule (BF+4)" value="${escapeHtml(String(damageFormula || (damage !== undefined && damage !== null ? damage : '')))}" class="pf-dice-damage" style="width:64px;"><input type="number" placeholder="X" value="${valuesX ?? ''}" class="pf-dice-x" style="width:42px;"><input type="number" placeholder="Cap." value="${capacity ?? ''}" class="pf-dice-capacity" style="width:48px;"><span class="pf-dice-quality-picker"></span><button type="button" class="danger tiny btn-remove-dice">×</button>`;
+    row.innerHTML = `<select class="pf-dice-type" ${help('Type du jet', ACTION_FIELD_HELP.type)}><option value="">Type…</option><option value="attack">Attaque</option><option value="skill">Compétence</option><option value="defense">Défense</option><option value="opposition">Opposition</option></select><input type="number" placeholder="Score" value="${base}" class="pf-dice-base" ${help('Score', ACTION_FIELD_HELP.base)} style="width:60px;"><input type="number" placeholder="Mod." value="${mod ?? 0}" class="pf-dice-mod" ${help('Modificateur', ACTION_FIELD_HELP.mod)} style="width:52px;"><input type="text" placeholder="Nom (ex : Épée)" value="${escapeHtml(note)}" class="pf-dice-note" ${help('Nom du jet', ACTION_FIELD_HELP.note)} style="flex:1;"><input type="text" placeholder="Dég." ${help('Dégâts', ACTION_FIELD_HELP.damage)} value="${escapeHtml(String(damageFormula || (damage !== undefined && damage !== null ? damage : '')))}" class="pf-dice-damage" style="width:64px;"><span class="pf-dice-quality-picker"></span><button type="button" class="danger tiny btn-remove-dice" ${help('Retirer ce jet', ACTION_FIELD_HELP.remove)}>×</button>`;
     row.querySelector('.pf-dice-type').value = type || '';
+    // Anciennes cases X et Cap. (le moteur ne s'en sert pas) : plus affichées, leurs valeurs restent enregistrées.
+    row._kept = { valuesX, capacity };
 
     const normalized = normalizeAction({ qualities: currentQualities });
     row._qualities = normalized.qualities;
@@ -174,8 +178,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
             damage,
             ...(damageFormula ? { damageFormula } : {}),
             qualities: row._qualities || [],
-            valuesX: row.querySelector('.pf-dice-x')?.value || null,
-            capacity: row.querySelector('.pf-dice-capacity')?.value || null
+            valuesX: row._kept?.valuesX ?? null,
+            capacity: row._kept?.capacity ?? null
           });
         }
       });

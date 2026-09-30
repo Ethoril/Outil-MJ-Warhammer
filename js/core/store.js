@@ -1658,6 +1658,45 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         encounters: (draft.encounters || []).map(item => item.id === encounter.id ? { ...item, status: 'active' } : item)
       }));
     },
+    // Remet le combat à son départ en une commande annulable : relance de la rencontre d'origine
+    // (scène active), ou PV au maximum et états vidés (combat monté sans rencontre).
+    restartCombat() {
+      const scene = activeScene?.status === 'active' ? activeScene : null;
+      const missing = () => new Error('Rencontre d’origine introuvable : clôturez la séance, puis relancez une rencontre.');
+      const empty = () => new Error('La rencontre n’a plus aucun combattant : complétez sa composition avant de recommencer.');
+      const source = scene ? encounters.find(item => item.id === scene.encounterId) : null;
+      if (scene && !source) throw missing();
+      if (scene && !(source.entries || []).length) throw empty();
+      if (!scene && !combat.participants.size) throw new Error('Aucun combat à recommencer');
+      return api.executeCommand('restart-combat', draft => {
+        const current = draft.activeScene?.status === 'active' ? draft.activeScene : null;
+        if (!current) {
+          return {
+            ...draft,
+            combat: {
+              ...draft.combat, round: 0, currentActorId: null,
+              participants: (draft.combat?.participants || []).map(item => ({ ...item, hp: item.maxHp ?? item.hp, states: [] }))
+            },
+            log: [{ id: uid(), ts: Date.now(), kind: 'management', text: 'Combat recommencé : PV remis au maximum.' }, ...(draft.log || [])].slice(0, 300)
+          };
+        }
+        const encounter = (draft.encounters || []).find(item => item.id === current.encounterId);
+        if (!encounter) throw missing();
+        if (!(encounter.entries || []).length) throw empty();
+        const launched = launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: null });
+        const nextScene = { ...launched, id: current.id, startedAt: current.startedAt };
+        const oldIds = new Set((current.participants || []).map(item => item?.id).filter(Boolean));
+        return {
+          ...draft,
+          activeScene: nextScene,
+          // Départ : ordre d'initiative, donc mode automatique même si la piste avait été réordonnée à la main.
+          combat: { ...draft.combat, round: 0, currentActorId: null, order: [...nextScene.order], participants: cloneValue(nextScene.participants), orderMode: ORDER_MODES.AUTOMATIC },
+          diceLines: (draft.diceLines || []).filter(line => !oldIds.has(line.participantId)).map(line => oldIds.has(line.targetId) ? { ...line, targetId: null } : line),
+          reminderChoices: (draft.reminderChoices || []).filter(choice => !String(choice.id || '').startsWith(`${current.id}:`)),
+          log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Combat « ${nextScene.title} » recommencé : retour au lancement.` }, ...(draft.log || [])].slice(0, 300)
+        };
+      });
+    },
     addImprovisedParticipant(participant) {
       if (!activeScene) throw new Error('Aucune scène active');
       return api.executeCommand('add-improvised-participant', draft => ({ ...draft, activeScene: addImprovisedParticipant(draft.activeScene, participant) }));

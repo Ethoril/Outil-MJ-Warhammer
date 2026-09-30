@@ -388,7 +388,7 @@ async function main() {
     await page.locator('#combat-banner').getByRole('button', { name: 'Tour suivant' }).click();
     await expect.poll(() => page.locator('#combat-banner').textContent()).not.toBe(roundBefore);
     await expect(eventsOverlay).toBeVisible();
-    await page.locator('[data-workspace-select]').filter({ hasText: 'Participant de démonstration 04' }).click();
+    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 04' }).click();
     await expect(page.locator('.workspace-sheet-target')).toContainText('Participant de démonstration 04');
     await expect(eventsOverlay).toBeVisible();
     // Une seule fenêtre à la fois ; Échap ferme et rend le focus au menu ⋯.
@@ -422,7 +422,7 @@ async function main() {
     // E16 : choisir une cible parmi les quinze dans la piste, calculer sans
     // appliquer (aucun PV ne bouge), puis appliquer exactement ce résultat.
     const trackTexts = () => page.locator('.workspace-track .workspace-track-item').evaluateAll(items => items.map(item => item.textContent));
-    await page.locator('[data-workspace-select]').filter({ hasText: 'Participant de démonstration 03' }).click();
+    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 03' }).click();
     await expect(page.locator('.workspace-sheet-target')).toContainText('Participant de démonstration 03');
     const galleryResolution = page.locator('.workspace-resolution');
     await galleryResolution.locator('[data-roll-input="attack"]').fill('1');
@@ -464,7 +464,7 @@ async function main() {
 
     // Coup critique réel : localisation puis gravité saisies, PV − dégâts − Blessures cochées,
     // état ajouté puis fusionné au critique suivant, journal lisible.
-    await page.locator('[data-workspace-select]').filter({ hasText: 'Participant de démonstration 03' }).click();
+    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 03' }).click();
     const gallerySheet = page.locator('.workspace-sheet-target');
     const galleryHp = async () => Number((await gallerySheet.locator('.workspace-sheet-hp').textContent()).match(/PV\s*(−?\d+)/)[1].replace('−', '-'));
     // Scénario déterministe : 1er coup à 1 PV (sans Acharnement), 2e coup sous zéro (Acharnement, +10).
@@ -563,6 +563,43 @@ async function main() {
     const restoredEvents = page.getByRole('dialog');
     await expect(restoredEvents).not.toContainText('horloge-recette');
     await restoredEvents.getByRole('button', { name: 'Fermer' }).click();
+
+    // Création d'un profil en collant du JSON : l'exemple est relu puis créé, et le formulaire d'édition montre ses valeurs.
+    await page.locator('#tab-prepare').click();
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouveau profil', exact: true }).click();
+    const jsonOverlay = page.getByRole('dialog');
+    await expect(jsonOverlay.locator('[name=name]')).toBeFocused();
+    await jsonOverlay.getByText('Créer depuis un JSON').click();
+    await jsonOverlay.getByRole('button', { name: 'Insérer un exemple' }).click();
+    await expect(jsonOverlay.getByRole('textbox', { name: 'JSON du profil' })).toHaveValue(/"nom": "Garde du pont"/);
+    await jsonOverlay.getByRole('button', { name: 'Vérifier le JSON' }).click();
+    await expect(jsonOverlay.locator('.import-text-profile')).toContainText('Garde du pont');
+    await expect(jsonOverlay.locator('.import-text-profile')).toContainText('Hallebarde 45 · dégâts BF+4 = 7');
+    // Texte modifié après la vérification : « Créer » attend une nouvelle vérification.
+    const jsonText = jsonOverlay.getByRole('textbox', { name: 'JSON du profil' });
+    await jsonText.press('Control+End');
+    await jsonText.pressSequentially(' ');
+    await expect(jsonOverlay.getByRole('button', { name: 'Créer 1 profil' })).toBeDisabled();
+    await expect(jsonOverlay).toContainText('JSON modifié depuis la vérification');
+    await jsonText.press('Backspace');
+    await expect(jsonOverlay.getByRole('button', { name: 'Créer 1 profil' })).toBeEnabled();
+    await jsonOverlay.getByRole('button', { name: 'Créer 1 profil' }).click();
+    await expect(jsonOverlay).toBeHidden();
+    await expect(page.locator('#toast-container')).toContainText('Profil créé');
+    await expect(page.locator('#workspace-prepare')).toContainText('Garde du pont');
+    await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Garde du pont' }).click();
+    const jsonEdit = page.getByRole('dialog');
+    await expect(jsonEdit.locator('[name=CC]')).toHaveValue('45');
+    await expect(jsonEdit.locator('[name=armor_body]')).toHaveValue('2');
+    await expect(jsonEdit.locator('#form-dice-list .row')).toHaveCount(4);
+    await expect(jsonEdit.locator('.pf-dice-damage').first()).toHaveValue('BF+4');
+    // Cases d'un jet : une infobulle chacune ; les anciennes cases X et Cap. ont disparu.
+    await expect(jsonEdit.getByRole('spinbutton', { name: 'Score' }).first()).toHaveAttribute('title', /Score à atteindre/);
+    await expect(jsonEdit.getByRole('textbox', { name: 'Dégâts' }).first()).toHaveAttribute('title', /Bonus de Force/);
+    await expect(jsonEdit.locator('.pf-dice-type').first()).toHaveAttribute('title', /Vide : attaque s’il y a des dégâts/);
+    await expect(jsonEdit.locator('.pf-dice-x, .pf-dice-capacity')).toHaveCount(0);
+    await jsonEdit.getByRole('button', { name: 'Fermer' }).click();
+    await expect(jsonEdit).toBeHidden();
     assert.deepEqual(errors, [], `exceptions navigateur: ${errors.join('\n')}`);
     await context.close();
     console.log('PASS — index réel : navigation Préparer/Jouer/Bibliothèque et captures 1440/900');

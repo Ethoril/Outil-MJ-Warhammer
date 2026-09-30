@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.8.0';
+const CACHE_NAME = 'wfrp-cache-v3.9.0';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -37,6 +37,7 @@ const ASSETS_TO_CACHE = [
   './js/core/encounters.js',
   './js/core/simulation.js',
   './js/core/text-profile-import.js',
+  './js/core/json-profile-import.js',
   './js/core/turn-order.js',
   './js/core/sanitize.js',
   './js/core/keywords.js',

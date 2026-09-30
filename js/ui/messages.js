@@ -16,6 +16,9 @@ const KNOWN_ERRORS = [
   [error => /Une autre scène est déjà active ou suspendue/.test(error?.message || ''), 'Une rencontre est déjà en cours ou suspendue : clôturez-la ou reprenez-la d’abord.'],
   [error => /^(Scène active requise|Aucune scène active)/.test(error?.message || ''), 'Lancez une rencontre d’abord.'],
   [error => /^Aucun profil à ajouter/.test(error?.message || ''), 'Ce profil n’existe plus dans la bibliothèque.'],
+  [error => /^Rencontre d’origine introuvable/.test(error?.message || ''), 'La rencontre d’origine n’existe plus : clôturez la séance, puis relancez une rencontre.'],
+  [error => /^La rencontre n’a plus aucun combattant/.test(error?.message || ''), 'La rencontre n’a plus aucun combattant : complétez sa composition avant de recommencer.'],
+  [error => /^Aucun combat à recommencer/.test(error?.message || ''), 'Aucun combat en cours à recommencer.'],
   [error => error?.name === 'QuotaExceededError' || /QuotaExceeded|IndexedDB indisponible|Persistance non prête/i.test(error?.message || ''), 'Stockage du navigateur plein ou bloqué : exportez une sauvegarde, puis libérez de l’espace.'],
   [error => error?.name === 'MigrationError' && /future/i.test(error.message || ''), 'Cette sauvegarde vient d’une version plus récente de l’outil : mettez l’application à jour.'],
   [error => error?.name === 'MigrationError' || error instanceof SyntaxError, FILE_INVALID]

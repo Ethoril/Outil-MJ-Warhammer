@@ -180,6 +180,9 @@ async function main() {
     await expect(page.locator('#app-content')).toBeVisible();
     await expect(page.locator('#reserve-list')).toContainText('Remote seulement');
     await expect(page.locator('#reserve-list')).not.toContainText('Profil à abandonner');
+    // La session relit la racine distante après le rechargement : le second appareil n'écrit qu'ensuite,
+    // sinon la lecture initiale récupère déjà sa révision et l'écriture locale suivante ne peut pas entrer en conflit.
+    await expect(page.locator('#sync-status')).toHaveText('Synchronisé', { timeout: 10000 });
 
     await page.evaluate(() => window.__e05Remote.forceExternal());
     await addProfile(page, 'Profil à conserver');

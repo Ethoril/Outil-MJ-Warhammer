@@ -13,7 +13,7 @@ import { normalizeEffects } from '../core/effects.js';
 import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
 import { uid } from '../core/models.js';
 import { renderSilhouette } from './silhouette.js';
-import { renderResolutionPanel, actionKey, minusSigned } from './resolution-panel.js';
+import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 
 export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'library']);
@@ -64,6 +64,9 @@ function readCombat(Store) {
     ? Store.getCombat()
     : { round: 0, currentActorId: null, participants: new Map() };
 }
+
+// Clé du tour en cours : change au tour suivant, au début du combat ou s'il est recommencé.
+const turnKey = combat => `${Number(combat.round) || 0}:${combat.currentActorId || ''}`;
 
 export const STATE_NAMES = Object.freeze(['Blessé', 'À Terre', 'Sonné', 'Inconscient', 'Aveuglé', 'Assourdi', 'Exténué', 'Hémorragique', 'Surpris', 'Enchevêtré', 'Enflammé', 'Brisé']);
 // Level matters for these every turn, so it stays visible even at 1.
@@ -233,6 +236,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     space: 'prepare',
     // Explicit target for the current actor: null = default, 'none' or an id.
     targetChoice: null,
+    // Personnage actif choisi dans la piste : null = celui du tour, sinon { id, turn } (valable pour ce tour seulement).
+    actorChoice: null,
     libraryQuery: '',
     librarySection: 'profiles',
     sideQuery: '',
@@ -247,7 +252,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   };
   function emptyResolution(actorId) {
     return {
-      actorId, actionKey: null, type: null, attackRoll: '', defenseStat: 'CC', defenseBase: null, defenseRoll: '',
+      actorId, actionKey: null, type: null, attackRoll: '', defenseStat: null, defenseBase: null, defenseSource: null, defenseRoll: '',
       // Critique : jets saisis, effets décochés et erreurs de saisie par champ (l'aperçu reste affiché).
       criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalDeclined: [], criticalErrors: {},
       preview: null, comparison: null, error: null, busy: false
@@ -287,6 +292,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     deleteEncounter: typeof actions.deleteEncounter === 'function' ? actions.deleteEncounter : null,
     resumeScene: typeof actions.resumeScene === 'function' ? actions.resumeScene : null,
     suspendScene: typeof actions.suspendScene === 'function' ? actions.suspendScene : null,
+    restartCombat: typeof actions.restartCombat === 'function' ? actions.restartCombat : null,
     showPlay: typeof actions.showPlay === 'function' ? actions.showPlay : null,
     createProfile: typeof actions.createProfile === 'function' ? actions.createProfile : null,
     duplicateProfile: typeof actions.duplicateProfile === 'function' ? actions.duplicateProfile : null,
@@ -322,7 +328,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const active = orderIds.map(id => byId.get(id)).filter(participant => participant?.zone === 'active');
     participants.forEach(participant => { if (participant.zone === 'active' && !active.includes(participant)) active.push(participant); });
     const bench = participants.filter(participant => participant.zone !== 'active');
-    const actor = active.find(participant => participant.id === combat.currentActorId) || active[0] || null;
+    // Le choix de la piste ne vaut que pour le tour où il a été fait.
+    const turn = turnKey(combat);
+    if (state.actorChoice && state.actorChoice.turn !== turn) state.actorChoice = null;
+    const turnActor = active.find(participant => participant.id === combat.currentActorId) || null;
+    const chosen = state.actorChoice ? active.find(participant => participant.id === state.actorChoice.id) : null;
+    if (state.actorChoice && !chosen) state.actorChoice = null;
+    const actor = chosen || turnActor || active[0] || null;
+    const started = Number(combat.round) > 0 && Boolean(turnActor);
 
     if (state.resolution.actorId !== (actor?.id || null)) {
       state.resolution = emptyResolution(actor?.id || null);
@@ -345,11 +358,26 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (state.targetChoice && state.targetChoice !== 'none') target = others.find(participant => participant.id === state.targetChoice) || null;
     if (!target && state.targetChoice !== 'none' && type !== 'skill') target = groups.adversaries[0] || others[0] || null;
     if (draft.preview && draft.preview.targetId !== (target?.id || null)) { draft.preview = null; resetCritical(draft); }
-    if (type === 'attack' && target && draft.defenseBase === null && draft.defenseStat !== 'Autre') {
-      const value = target.caracs?.[draft.defenseStat];
-      draft.defenseBase = Number.isFinite(Number(value)) && value !== null && value !== '' ? String(value) : null;
+    const defense = type === 'attack' && target ? defenseChoice(target) : null;
+    if (defense) {
+      // Valeur pré-remplie pour une cible, une option et sa valeur : une autre combinaison (jet disparu,
+      // autre cible, CC modifiée) repart de sa propre valeur, une saisie à la main sur la même reste. « Autre » garde la saisie.
+      const source = defense.option.value === 'Autre' ? 'Autre' : `${target.id}|${defense.option.value}|${defense.option.base}`;
+      if (draft.defenseSource !== source) {
+        draft.defenseSource = source;
+        if (source !== 'Autre') draft.defenseBase = null;
+      }
+      if (draft.defenseBase === null && source !== 'Autre') draft.defenseBase = defense.option.base === null ? null : String(defense.option.base);
     }
-    return { participants, combat, active, bench, actor, actions, action, type, target, groups, camp };
+    return { participants, combat, active, bench, actor, turnActor, started, actions, action, type, target, groups, defense, camp };
+  }
+
+  // Options de défense d'une cible et choix effectif : celui du brouillon s'il existe chez elle, sinon son défaut.
+  function defenseChoice(target) {
+    const options = defenseOptions(target, actorActions(target));
+    const wanted = state.resolution.defenseStat;
+    const option = options.find(item => item.value === wanted) || options.find(item => item.value === defaultDefenseValue(options));
+    return { options, value: option.value, option };
   }
 
   function renderTabs() {
@@ -455,6 +483,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (status.key === 'active') {
       actions.appendChild(command('Revenir au combat', 'workspace-primary', 'show-play', callbacks.showPlay));
       if (!compact) actions.appendChild(command('Suspendre', 'workspace-secondary', 'suspend-scene', callbacks.suspendScene));
+      if (!compact) actions.appendChild(command('Recommencer', 'workspace-secondary', 'restart-combat', callbacks.restartCombat));
     } else if (status.key === 'suspended') {
       actions.appendChild(command('Reprendre', 'workspace-primary', 'resume-scene', callbacks.resumeScene, { disabled: running, title: busyTitle, scene: true }));
     } else {
@@ -491,22 +520,25 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     context.active.forEach(participant => {
       const isActor = participant.id === context.actor?.id;
       const isCurrent = participant.id === context.combat.currentActorId;
+      const isTurn = context.started && isCurrent;
+      const isTarget = participant.id === context.target?.id;
       // Pas d'aria-label : le contenu (nom, PV, BE, PA, états) forme le nom accessible.
       const item = button('', `workspace-track-item is-camp-${context.camp(participant)}`, {
-        'aria-pressed': String(participant.id === context.target?.id),
+        'aria-pressed': String(isActor),
         'data-focus-key': `select-${participant.id}`
       });
       item.dataset.workspaceSelect = participant.id;
-      item.classList.toggle('is-current', isActor);
-      item.classList.toggle('is-selected', participant.id === context.target?.id);
-      if (isCurrent) item.setAttribute('aria-current', 'step');
+      item.classList.toggle('is-actor', isActor);
+      item.classList.toggle('is-turn', isTurn);
+      item.classList.toggle('is-target', isTarget);
+      // Comme le ▶ : pas de « tour » annoncé tant que le combat n'a pas commencé.
+      if (isTurn) item.setAttribute('aria-current', 'step');
       const top = node('span', 'workspace-track-top');
-      top.append(
-        node('span', 'workspace-track-marker', isActor ? '▶' : ''),
-        node('strong', 'workspace-track-name combatant-name', participant.name),
-        node('span', 'workspace-track-hp num', hpText(participant))
-      );
-      top.lastChild.prepend(node('span', 'workspace-sr', 'PV '));
+      top.append(node('span', 'workspace-track-marker', isTurn ? '▶' : ''), node('strong', 'workspace-track-name combatant-name', participant.name));
+      if (isTarget) top.appendChild(node('span', 'workspace-track-role', 'cible'));
+      const hp = node('span', 'workspace-track-hp num', hpText(participant));
+      hp.prepend(node('span', 'workspace-sr', 'PV '));
+      top.appendChild(hp);
       item.append(top, hpBar(participant),
         node('span', 'workspace-track-meta num', `BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor)}`));
       const states = normalizeEffects(participant.states);
@@ -579,11 +611,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const sheet = node('article', `workspace-actor-sheet workspace-card workspace-sheet-${role}`);
     sheet.dataset.sheetRole = role;
     const heading = node('div', 'workspace-sheet-heading');
-    const roleLabel = rubric(isTarget ? 'Cible' : 'Au tour de', 'p');
+    const actorLabel = !context.started ? 'Personnage actif' : participant?.id === context.turnActor?.id ? 'Au tour de' : 'Agit hors tour';
+    const roleLabel = rubric(isTarget ? 'Cible' : actorLabel, 'p');
     if (!participant) {
       sheet.classList.add('is-empty');
       sheet.append(roleLabel, node('p', 'workspace-muted', isTarget
-        ? 'Aucune cible : sélectionnez un combattant dans la piste.'
+        ? 'Aucune cible : choisissez-la sous « Cible » dans Résolution.'
         : 'Aucun combattant en jeu.'));
       return sheet;
     }
@@ -695,13 +728,6 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return { field, message: userMessage(error, 'Calcul impossible : vérifiez l’action et les jets saisis.') };
   }
 
-  function defenseValue(target) {
-    const draft = state.resolution;
-    if (draft.defenseStat === 'Autre') return draft.defenseBase;
-    const value = target.caracs?.[draft.defenseStat];
-    return Number.isFinite(Number(value)) && value !== null && value !== '' ? String(value) : null;
-  }
-
   const resolutionHandlers = {
     select(patch) {
       const draft = state.resolution;
@@ -782,7 +808,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         roll: String(draft.attackRoll).trim()
       };
       if (context.type === 'attack' && context.target && String(draft.defenseRoll).trim()) {
-        input.defense = { roll: String(draft.defenseRoll).trim(), base: draft.defenseBase ?? 0, label: draft.defenseStat };
+        input.defense = { roll: String(draft.defenseRoll).trim(), base: draft.defenseBase ?? 0, label: context.defense.option.statLabel };
       }
       // Seuls les jets de critique valides partent au moteur ; les autres montrent l'erreur sous leur champ.
       const criticalRolls = {};
@@ -821,7 +847,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       try {
         draft.comparison = [...context.groups.adversaries, ...context.groups.allies].map(target => {
           const input = { actor: context.actor, action: { ...context.action, type: context.type }, targetId: target.id, roll };
-          if (context.type === 'attack' && defenseRoll) input.defense = { roll: defenseRoll, base: defenseValue(target) ?? 0, label: draft.defenseStat };
+          if (context.type === 'attack' && defenseRoll) {
+            // Même choix que pour la cible courante s'il existe chez elle, sinon son défaut ; la cible
+            // courante garde la valeur affichée (saisie à la main comprise), comme pour « Calculer ».
+            const { option } = defenseChoice(target);
+            const shown = option.value === 'Autre' || target.id === context.target?.id ? draft.defenseBase : null;
+            input.defense = { roll: defenseRoll, base: (shown ?? option.base) ?? 0, label: option.statLabel };
+          }
           return { targetId: target.id, name: target.name, hp: target.hp, preview: Store.previewResolution(input) };
         });
       } catch (error) {
@@ -907,6 +939,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       type: context.type,
       target: context.target,
       groups: context.groups,
+      defense: context.defense,
       canCalculate: typeof Store.previewResolution === 'function',
       canApply: Boolean(callbacks.applyResolution),
       handlers: resolutionHandlers
@@ -1098,6 +1131,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     restoreFocusKey(saved);
   }
 
+  function selectActor(id) {
+    state.actorChoice = { id, turn: turnKey(readCombat(Store)) };
+    render();
+  }
+
   function rememberFocus(target) {
     state.lastFocus = target;
     state.lastFocusSpace = target?.dataset.workspaceSpace || null;
@@ -1123,17 +1161,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       return;
     }
     if (target.dataset.workspaceSelect) {
-      // The acting combatant stays on the left; any other row becomes the target.
-      const id = target.dataset.workspaceSelect;
+      // Une ligne de la piste désigne le personnage actif (fiche de gauche, actions) ; la cible se choisit dans Résolution.
       state.space = 'play';
-      if (id !== state.resolution.actorId) {
-        state.targetChoice = id;
-        state.resolution.defenseBase = null;
-        resetCritical(state.resolution);
-        state.resolution.preview = null;
-        state.resolution.error = null;
-      }
-      render();
+      selectActor(target.dataset.workspaceSelect);
       return;
     }
     if (target.dataset.librarySection) {
@@ -1161,6 +1191,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         Promise.resolve(callbacks.suspendScene?.()).then(done => { if (done) render(`resume-scene-${id}`); }, noop);
         break;
       }
+      case 'restart-combat':
+        Promise.resolve(callbacks.restartCombat?.()).then(done => { if (done) render(`restart-combat-${target.dataset.encounterId}`); }, noop);
+        break;
       case 'show-play': callbacks.showPlay?.(); break;
       case 'create-profile': callbacks.createProfile?.(); break;
       case 'edit-profile': callbacks.editProfile(target.dataset.profileId); break;
@@ -1230,6 +1263,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       state.space = space;
       render();
     },
+    selectActor,
     selectTarget(id) {
       state.targetChoice = id || 'none';
       state.resolution.defenseBase = null;

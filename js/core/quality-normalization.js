@@ -59,9 +59,17 @@ export function normalizeQualities(qualities = [], { registry = ENGINES } = {}) 
 
 export const dedupeQualities = normalizeQualities;
 
-/** Libellé affichable d'une qualité (« Percutante ») : nom du registre de mots-clés, sinon le texte saisi. */
+/** Qualité du registre des mots-clés ou dotée d'un moteur local ; sinon elle est signalée « inconnue » à l'import. */
+export function isKnownQuality(quality, registry = ENGINES) {
+  const id = canonicalQualityId(quality, registry);
+  return Boolean(id) && (Object.hasOwn(registry, id) || Boolean(getKeywordBySlug(id)));
+}
+
+/** Libellé affichable d'une qualité (« Percutante ») : nom du registre de mots-clés, sinon le texte saisi. Un mot-clé à X montre sa valeur (« Recharge 2 »). */
 export function qualityLabel(quality, registry = ENGINES) {
   const id = canonicalQualityId(quality, registry);
-  const text = (id && getKeywordBySlug(id)?.name) || (isRecord(quality) ? quality.name : '') || rawQualityId(quality) || id;
+  const name = (id && getKeywordBySlug(id)?.name) || (isRecord(quality) ? quality.name : '') || rawQualityId(quality) || id;
+  const rating = isRecord(quality) && quality.rating !== null && quality.rating !== '' && Number.isFinite(Number(quality.rating)) ? Number(quality.rating) : null;
+  const text = rating !== null && /\sX$/i.test(name || '') ? name.replace(/\sX$/i, ` ${rating}`) : name;
   return text ? text.charAt(0).toLocaleUpperCase('fr-FR') + text.slice(1) : '';
 }

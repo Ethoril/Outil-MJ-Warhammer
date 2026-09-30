@@ -104,6 +104,7 @@ async function main() {
           deleteEncounter(id) { encounterCalls.push({ type: 'delete', id }); },
           resumeScene(id) { encounterCalls.push({ type: 'resume', id }); },
           suspendScene() { encounterCalls.push({ type: 'suspend' }); },
+          restartCombat() { encounterCalls.push({ type: 'restart' }); return true; },
           showPlay() { encounterCalls.push({ type: 'showPlay' }); }
         }
       });
@@ -154,6 +155,7 @@ async function main() {
     await expect(card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' })).toBeDisabled();
     await expect(card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' })).toHaveAttribute('title', 'Clôturez d’abord la séance (menu ⋯)');
     await card.getByRole('button', { name: 'Revenir au combat « Embuscade au gué »' }).click();
+    await card.getByRole('button', { name: 'Recommencer « Embuscade au gué »' }).click();
     await card.getByRole('button', { name: 'Suspendre « Embuscade au gué »' }).click();
     // Suspendue : « Reprendre » reste bloqué tant qu'une autre scène est active.
     await page.evaluate(() => {
@@ -170,7 +172,7 @@ async function main() {
     await expect(prepare.getByRole('button', { name: 'Reprendre « Vieille embuscade »' })).toBeDisabled();
     assert.deepEqual(await page.evaluate(() => window.workspaceTestData.encounterCalls), [
       { type: 'edit', id: 'enc-1' }, { type: 'launch', id: 'enc-1' }, { type: 'delete', id: 'enc-1' },
-      { type: 'showPlay' }, { type: 'suspend' }, { type: 'resume', id: 'scene-2' }
+      { type: 'showPlay' }, { type: 'restart' }, { type: 'suspend' }, { type: 'resume', id: 'scene-2' }
     ]);
     // Sans aucune carte (rencontre supprimée pendant le combat), la note du combat en cours reste.
     await page.evaluate(() => { const data = window.workspaceTestData; data.removed = data.encounters.splice(0); });
@@ -190,6 +192,8 @@ async function main() {
     await expect(compact.first().getByRole('button')).toHaveCount(1);
     await compact.filter({ hasText: 'Embuscade au gué' }).getByRole('button', { name: 'Lancer « Embuscade au gué »' }).click();
     assert.deepEqual((await page.evaluate(() => window.workspaceTestData.encounterCalls)).slice(-1), [{ type: 'launch', id: 'enc-1' }]);
+    // « Recommencer » est réservé aux cartes de Préparer : aucune carte compacte de Jouer ne le propose.
+    await expect(compact.getByRole('button', { name: /^Recommencer/ })).toHaveCount(0);
     await page.evaluate(() => { const { combat, saved } = window.workspaceTestData; saved.forEach(([id, actor]) => combat.participants.set(id, actor)); });
     await rerender();
     await page.getByRole('tab', { name: 'Préparer' }).click();
@@ -199,15 +203,22 @@ async function main() {
     await expect(page.locator('.workspace-track')).not.toContainText('Aucun état');
     await expect(page.locator('[data-workspace-select="actor-1"]')).toContainText('BE 3 · PA C2 B1');
     await expect(page.locator('[data-workspace-select="actor-1"]')).toContainText('Sonné · 2 t');
-    // Ligne de piste : le contenu forme le nom accessible (PV, BE, PA, états), la cible est pressée.
+    // Ligne de piste : le contenu forme le nom accessible (PV, BE, PA, états), le personnage actif est pressé.
     await expect(page.locator('[data-workspace-select="actor-1"]')).not.toHaveAttribute('aria-label', /./);
     await expect(page.getByRole('button', { name: /Combattant 1 PV 10\/12 BE 3 · PA C2 B1 Sonné · 2 t/ })).toBeVisible();
-    await expect(page.locator('[data-workspace-select="actor-2"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-workspace-select="actor-1"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-workspace-select="actor-2"]')).toHaveAttribute('aria-pressed', 'false');
     await expect(page.locator('[data-workspace-select="actor-2"]')).toContainText('−2/12');
     await expect(actorSheet).toContainText('Combattant 1');
+    await expect(actorSheet).toContainText('Au tour de');
     await expect(actorSheet).toContainText('E · BE');
     // Default target: the first combatant of another camp in the order.
     await expect(targetSheet).toContainText('Combattant 2');
+    // La cible par défaut porte l’étiquette « cible » dans la piste ; le tour, le marqueur ▶.
+    await expect(page.locator('.workspace-track-role')).toHaveCount(1);
+    await expect(page.locator('[data-workspace-select="actor-2"] .workspace-track-role')).toHaveText('cible');
+    await expect(page.locator('.workspace-track-item.is-turn')).toHaveCount(1);
+    await expect(page.locator('[data-workspace-select="actor-1"] .workspace-track-marker')).toHaveText('▶');
     await expect(page.locator('.workspace-pending')).toContainText('Rappel courant');
 
     // The bench stays visible, each waiting combatant with « Faire entrer ».
@@ -220,12 +231,52 @@ async function main() {
     await expect(actorSheet).toContainText('Combattant 3');
     await expect(page.locator('[data-workspace-select="actor-3"]')).toHaveAttribute('aria-current', 'step');
 
-    // Selecting a row makes it the target; the acting row changes nothing.
+    await expect(actorSheet).toContainText('Au tour de');
+    await expect(page.locator('[data-workspace-select="actor-3"] .workspace-track-marker')).toHaveText('▶');
+
+    // Selecting a row makes it the active character (sheet + actions), not the target; the turn marker stays.
     await page.locator('[data-workspace-select="actor-5"]').click();
-    await expect(targetSheet).toContainText('Combattant 5');
+    await expect(actorSheet).toContainText('Combattant 5');
+    await expect(actorSheet).toContainText('Agit hors tour');
+    await expect(page.locator('[data-workspace-select="actor-5"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-workspace-select="actor-3"]')).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('[data-workspace-select="actor-3"] .workspace-track-marker')).toHaveText('▶');
+    await expect(page.locator('[data-workspace-select="actor-5"] .workspace-track-marker')).toHaveText('');
+    await expect(page.locator('[data-workspace-select="actor-3"]')).toHaveAttribute('aria-current', 'step');
+    await rerender();
+    await expect(actorSheet).toContainText('Combattant 5');
+    // Le combattant du tour redevient « Au tour de ».
     await page.locator('[data-workspace-select="actor-3"]').click();
     await expect(actorSheet).toContainText('Combattant 3');
+    await expect(actorSheet).toContainText('Au tour de');
+    // Un autre tour (Store) fait oublier le choix.
+    await page.locator('[data-workspace-select="actor-5"]').click();
+    await page.evaluate(() => { window.workspaceTestData.combat.currentActorId = 'actor-4'; });
+    await rerender();
+    await expect(actorSheet).toContainText('Combattant 4');
+    await expect(actorSheet).toContainText('Au tour de');
+    await page.evaluate(() => { window.workspaceTestData.combat.currentActorId = 'actor-3'; });
+    await rerender();
+    // Combat non commencé : « Personnage actif », aucun marqueur.
+    await page.evaluate(() => { window.workspaceTestData.combat.round = 0; });
+    await rerender();
+    await expect(actorSheet).toContainText('Personnage actif');
+    await expect(page.locator('.workspace-track-item.is-turn')).toHaveCount(0);
+    // Pas de tour annoncé aux lecteurs d'écran non plus.
+    await expect(page.locator('.workspace-track [aria-current="step"]')).toHaveCount(0);
+    await page.locator('[data-workspace-select="actor-6"]').click();
+    await expect(actorSheet).toContainText('Combattant 6');
+    await expect(actorSheet).toContainText('Personnage actif');
+    await page.evaluate(() => { window.workspaceTestData.combat.round = 3; });
+    await rerender();
+    await expect(actorSheet).toContainText('Combattant 3');
+
+    // La cible se choisit dans Résolution, et la piste l’étiquette « cible ».
+    await page.locator('.workspace-resolution').getByRole('group', { name: 'Alliés' }).getByRole('button', { name: 'Combattant 5', exact: true }).click();
     await expect(targetSheet).toContainText('Combattant 5');
+    await expect(actorSheet).toContainText('Combattant 3');
+    await expect(page.locator('[data-workspace-select="actor-5"] .workspace-track-role')).toHaveText('cible');
+    await expect(page.locator('.workspace-track-role')).toHaveCount(1);
     await rerender();
     await expect(targetSheet).toContainText('Combattant 5');
     await expect(page.locator('.workspace-resolution')).toContainText('Épée longue · 45');
@@ -288,6 +339,57 @@ async function main() {
     await expect(page.getByRole('button', { name: /^Appliquer \d+ dégâts à Combattant 4$/ })).toBeVisible();
     await page.getByRole('button', { name: 'Annuler le résultat calculé' }).click();
     await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('41');
+
+    // Défense : les jets enregistrés de la cible rejoignent le choix ; le jet défensif est proposé d’office.
+    await page.evaluate(() => {
+      window.workspaceTestData.diceLines.push(
+        { participantId: 'actor-2', note: 'Épée rouillée', base: 30, type: 'attack', damage: 5 },
+        { participantId: 'actor-2', note: 'Esquive', base: 38, type: 'defense' }
+      );
+    });
+    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    const defenseSelect = page.getByRole('combobox', { name: 'Défense de Combattant 2 : caractéristique ou jet' });
+    await expect(defenseSelect.locator('option:checked')).toHaveText('Esquive · 38');
+    await expect(defenseSelect.locator('optgroup[label="Jets enregistrés"] option')).toHaveText(['Épée rouillée · 30', 'Esquive · 38']);
+    await expect(defenseSelect.locator('optgroup[label="Caractéristiques"] option')).toHaveText(['CC · 41', 'Ag · 33']);
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('38');
+    await expect(page.locator('.workspace-defense .workspace-roll-label').last()).toHaveText('Jet de défense (Esquive 38)');
+    await page.locator('[data-roll-input="defense"]').fill('88');
+    await page.locator('[data-roll-input="defense"]').press('Enter');
+    await expect(result).toContainText('Défense : Échec · DR −5');
+    await expect(result).toContainText('DR net +7 · touché');
+    await page.getByRole('button', { name: 'Comparer les cibles' }).click();
+    await expect(page.locator('.workspace-comparison-item').first()).toContainText('Combattant 2 : touché');
+    await defenseSelect.selectOption('CC');
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('41');
+    // Un jet choisi à la main le reste en revenant sur cette cible ; une cible sans ce jet prend son propre défaut.
+    const adversaries = page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' });
+    await defenseSelect.selectOption({ label: 'Épée rouillée · 30' });
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('30');
+    await adversaries.getByRole('button', { name: 'Combattant 4', exact: true }).click();
+    await expect(page.getByRole('combobox', { name: 'Défense de Combattant 4 : caractéristique ou jet' }).locator('option:checked')).toHaveText('CC · 43');
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('43');
+    await adversaries.getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await expect(defenseSelect.locator('option:checked')).toHaveText('Épée rouillée · 30');
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('30');
+    // Le jet disparaît de la cible : le choix retombe sur la CC, valeur comprise.
+    await page.evaluate(() => { window.workspaceTestData.diceLines.length = 2; });
+    await rerender();
+    await expect(defenseSelect.locator('option:checked')).toHaveText('CC · 41');
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('41');
+    // Valeur saisie à la main : gardée d'un rendu à l'autre ; « Autre » garde aussi sa valeur libre.
+    await page.locator('.workspace-defense-base').fill('55');
+    await rerender();
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('55');
+    await expect(page.locator('.workspace-defense .workspace-roll-label').last()).toHaveText('Jet de défense (CC 55)');
+    await defenseSelect.selectOption('Autre');
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('');
+    await page.locator('.workspace-defense-base').fill('60');
+    await rerender();
+    await expect(page.locator('.workspace-defense-base')).toHaveValue('60');
+    await expect(page.locator('.workspace-defense .workspace-roll-label').last()).toHaveText('Jet de défense (valeur 60)');
+    await defenseSelect.selectOption('CC');
     await expect(page.locator('.workspace-defense-base')).toHaveValue('41');
     await attack.fill('0');
     await attack.press('Enter');
@@ -403,7 +505,8 @@ async function main() {
     await expect(side.getByRole('tab', { name: 'Règles' })).toHaveAttribute('aria-selected', 'true');
 
     await page.locator('[data-workspace-select="actor-12"]').click();
-    await expect(targetSheet).toContainText('Un nom de combattant très long');
+    await expect(actorSheet).toContainText('Un nom de combattant très long');
+    await expect(actorSheet).toContainText('Agit hors tour');
 
     await page.screenshot({ path: '/private/tmp/mj-workspace-1440.png', fullPage: true });
     await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
@@ -419,7 +522,7 @@ async function main() {
     await expect(page.locator('.workspace-space-library')).toBeVisible();
     await page.setViewportSize({ width: 1440, height: 900 });
     await context.close();
-    console.log('PASS — workspace navigation, duel et cible, résolution intégrée sans frappe perdue, panneau latéral, focus/Espace, 15 acteurs et responsive 1440/900');
+    console.log('PASS — workspace navigation, duel, personnage actif et cible, résolution intégrée sans frappe perdue, panneau latéral, focus/Espace, 15 acteurs et responsive 1440/900');
   } finally {
     await browser.close();
     server.close();

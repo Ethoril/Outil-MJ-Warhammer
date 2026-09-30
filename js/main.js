@@ -20,6 +20,7 @@ import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initClosureView } from './ui/closure-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
+import { parseProfileJson, parseProfileInput, PROFILE_JSON_EXAMPLE } from './core/json-profile-import.js';
 import { createActionEditor } from './ui/action-editor.js';
 import { createEncounter, normalizeEncounter, normalizeCamp, CAMP_LABELS } from './core/encounters.js';
 import { userError, userMessage, contextMessage } from './ui/messages.js';
@@ -499,6 +500,23 @@ function openPrepareView(encounterId = null) {
   });
 }
 
+// Recommence le combat (scène active : retour au lancement ; sinon PV et états remis à zéro). Confirmation d'abord : l'action efface des saisies.
+async function restartCombat() {
+  const scene = Store.getActiveScene?.();
+  const running = scene?.status === 'active';
+  const extra = running && ((scene.events || []).length || (scene.clocks || []).length || (scene.intentions || []).length)
+    ? '\nLes événements, jauges et intentions créés pendant la séance seront effacés.' : '';
+  const message = running
+    ? `Recommencer « ${scene.title || 'Séance'} » depuis son lancement ?\nPV, états, tours et combattants reviennent à la composition de la rencontre ; les ajouts faits pendant le combat sont retirés.${extra}`
+    : 'Recommencer le combat ?\nPV remis au maximum, états retirés, round remis à zéro.';
+  if (!window.confirm(message)) return false;
+  try {
+    await awaitStore(requireStoreApi('restartCombat')(), 'Recommencer');
+    showToast('Combat recommencé', 'success', { label: 'Annuler', onClick: () => Store.undo() });
+    return true;
+  } catch (error) { showToast(contextMessage('Combat non recommencé', error, 'réessayez.'), 'error'); return false; }
+}
+
 // Actions de la liste des rencontres (espaces Préparer et Jouer) : chacune montre ses erreurs en toast
 // et renvoie true si elle a abouti (la vue déplace alors le focus).
 const encounterListActions = {
@@ -559,6 +577,7 @@ const encounterListActions = {
       return true;
     } catch (error) { showToast(contextMessage('Séance non suspendue', error, 'réessayez.'), 'error'); return false; }
   },
+  restartCombat: () => restartCombat(),
   showPlay: () => goToSpace('play')
 };
 
@@ -566,15 +585,41 @@ function openCreateProfileView() {
   return openOverlay('Nouveau profil', (mount, dialog) => {
     const form = DOM.reserve.form;
     if (!form) throw new Error('Éditeur de profil indisponible.');
+    // Création par collage de JSON : repliée, au-dessus du formulaire manuel. Construite avant
+    // d'emprunter le formulaire, pour qu'une erreur ici ne le laisse pas hors de la page.
+    const jsonImport = document.createElement('details'); jsonImport.className = 'card';
+    const jsonSummary = document.createElement('summary'); jsonSummary.textContent = 'Créer depuis un JSON';
+    const jsonMount = document.createElement('div'); jsonImport.append(jsonSummary, jsonMount);
+    const jsonView = initTextImportView({
+      mount: jsonMount, hosted: true, parser: parseProfileJson,
+      texts: {
+        title: 'Créer des profils depuis du JSON', help: 'Collez un profil JSON, ou une liste de profils.', inputLabel: 'JSON du profil',
+        previewLabel: 'Vérifier le JSON', example: PROFILE_JSON_EXAMPLE, importLabel: count => `Créer ${count} profil${count > 1 ? 's' : ''}`,
+        fallback: 'JSON illisible : vérifiez les virgules, guillemets et accolades.',
+        stale: 'JSON modifié depuis la vérification : vérifiez-le à nouveau avant de créer.'
+      },
+      callbacks: {
+        onImport: async (parsed, { confirmed = false } = {}) => {
+          const count = await storeParsedProfiles(parsed, confirmed);
+          dialog.close(); showToast(count > 1 ? `${count} profils créés` : 'Profil créé', 'success');
+        },
+        // L'aperçu se referme ; le JSON collé reste là pour être corrigé.
+        onCancel: () => jsonView.resetPreview()
+      }
+    });
+    jsonView.render();
     const placeholder = document.createComment('form-add-placeholder');
     form.replaceWith(placeholder);
     reserveUI.resetForm?.();
     const editorToken = uid(); form.dataset.editorToken = editorToken;
-    form.classList.add('card'); mount.appendChild(form);
+    form.classList.add('card');
+    mount.append(jsonImport, form);
+    // `openOverlay` focalise [autofocus] d'abord : sans lui, le résumé ci-dessus prendrait le focus.
+    const nameField = form.querySelector('[name=name]'); nameField?.setAttribute('autofocus', '');
     profileSavedHandler = { token: editorToken, fn: () => dialog.close() };
-    const finish = () => { if (profileSavedHandler?.token === editorToken) profileSavedHandler = null; delete form.dataset.editorToken; if (placeholder.parentNode) placeholder.replaceWith(form); form.classList.remove('card'); reserveUI.resetForm?.(); };
+    const finish = () => { nameField?.removeAttribute('autofocus'); if (profileSavedHandler?.token === editorToken) profileSavedHandler = null; delete form.dataset.editorToken; if (placeholder.parentNode) placeholder.replaceWith(form); form.classList.remove('card'); reserveUI.resetForm?.(); };
     dialog.addEventListener('close', finish, { once: true });
-    form.querySelector('[name=name]')?.focus();
+    nameField?.focus();
   });
 }
 
@@ -584,6 +629,7 @@ function renderAppMenu() {
   const running = active?.status === 'active';
   ['workspace-reminders', 'workspace-events'].forEach(id => { const button = qs(`#${id}`); if (button) button.disabled = !running; });
   const close = qs('#workspace-close-scene'); if (close) close.hidden = !active;
+  const restart = qs('#workspace-restart-combat'); if (restart) restart.hidden = !(running || Store.getCombat?.().participants?.size > 0);
   const mount = qs('#app-menu-resume'); if (!mount) return;
   mount.replaceChildren();
   (Store.listSuspendedScenes?.() || []).forEach(scene => {
@@ -664,15 +710,21 @@ function openClosureView() {
   });
 }
 
+// Import de profils analysés (texte ou JSON) : refusé tant que les points à vérifier ne sont pas confirmés.
+async function storeParsedProfiles(parsed, confirmed) {
+  if (parsed.status !== 'ready' && !confirmed) throw userError('Confirmez les champs absents ou ambigus avant import.');
+  await awaitStore(requireStoreApi('importParsedProfiles')(parsed.profiles), 'Import');
+  return parsed.profiles.length;
+}
+
 function openTextImportView() {
   return openOverlay('Importer des profils depuis du texte', (mount, dialog) => {
     const view = initTextImportView({
-      mount, hosted: true,
+      mount, hosted: true, parser: parseProfileInput,
+      texts: { help: 'Texte : un bloc par profil, séparés par une ligne ---. JSON : un profil ou une liste de profils.' },
       callbacks: {
         onImport: async (parsed, { confirmed = false } = {}) => {
-          if (parsed.status !== 'ready' && !confirmed) throw userError('Confirmez les champs absents ou ambigus avant import.');
-          await awaitStore(requireStoreApi('importParsedProfiles')(parsed.profiles), 'Import');
-          const count = parsed.profiles.length;
+          const count = await storeParsedProfiles(parsed, confirmed);
           dialog.close(); showToast(count > 1 ? `${count} profils importés` : `${count} profil importé`, 'success');
         },
         onCancel: () => dialog.close()
@@ -1169,6 +1221,7 @@ on(qs('#workspace-events'), 'click', () => safeOpen(openEventsView));
 on(qs('#workspace-archives'), 'click', () => safeOpen(openArchivesView));
 on(qs('#workspace-import-text'), 'click', () => safeOpen(openTextImportView));
 on(qs('#workspace-close-scene'), 'click', () => safeOpen(openClosureView));
+on(qs('#workspace-restart-combat'), 'click', () => { restartCombat(); });
 on(qs('#workspace-save'), 'click', () => DOM.combat.btnSaveFile?.click());
 on(qs('#workspace-load'), 'click', () => DOM.combat.btnLoadFile?.click());
 on(qs('#workspace-restores'), 'click', () => safeOpen(openRestoresView));

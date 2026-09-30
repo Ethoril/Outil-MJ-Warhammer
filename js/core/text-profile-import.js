@@ -1,6 +1,5 @@
 /** E17 local profile parser. Input is inert text; no HTML, code or network is evaluated. */
-import { ENGINES } from '../data/keyword-engines.js';
-import { canonicalQualityId, normalizeQualities } from './quality-normalization.js';
+import { isKnownQuality, normalizeQualities } from './quality-normalization.js';
 import { canonicalCaracKey } from './models.js';
 import { normalizeDamageFields } from './damage.js';
 
@@ -61,7 +60,7 @@ function parseAction(value, line, errors, unknownQualities) {
     else if (key === 'qualites' || key === 'qualities') {
       const rawQualities = raw.split(',').map(item => item.trim()).filter(Boolean);
       action.qualities = normalizeQualities(rawQualities.map(name => ({ name })));
-      rawQualities.forEach(item => { if (!ENGINES[canonicalQualityId(item)]) unknownQualities.push({ value: item, line, action: action.name }); });
+      rawQualities.forEach(item => { if (!isKnownQuality(item)) unknownQualities.push({ value: item, line, action: action.name }); });
     } else if (key === 'note' || key === 'texte') action.note = `${action.note} ; ${raw}`;
     else action[key.replace(/\s+/g, '')] = raw;
   }

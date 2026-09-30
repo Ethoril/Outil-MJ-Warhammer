@@ -2,6 +2,17 @@ import { getKeywordList } from '../core/keywords.js';
 import { actionWeaponDamage, evaluateWeaponDamage, normalizeDamageFields, strengthBonusOf } from '../core/damage.js';
 import { canonicalQualityId, normalizeQualities } from '../core/quality-normalization.js';
 
+/** Aide des cases d'un jet, en infobulle : formulaire de profil et édition d'un combattant. */
+export const ACTION_FIELD_HELP = Object.freeze({
+  type: 'Type du jet : Attaque (dégâts, défense de la cible), Compétence, Défense ou Opposition. Vide : attaque s’il y a des dégâts, sinon compétence.',
+  base: 'Score à atteindre au d100 (compétence ou caractéristique), par exemple 45.',
+  mod: 'Modificateur ajouté au score à chaque jet, par exemple 10 ou −10.',
+  note: 'Nom du jet, affiché dans Jouer et proposé quand ce personnage se défend (Épée, Esquive…).',
+  damage: 'Dégâts de l’arme : un nombre (7) ou une formule avec le Bonus de Force (BF+4). Vide : aucun dégât.',
+  qualities: 'Mots-clés de l’arme (Percutante, Précise…). Un mot-clé à X (Recharge X…) se règle ici avec sa valeur.',
+  remove: 'Retirer ce jet'
+});
+
 /**
  * Petit éditeur partagé de qualités. Il conserve les libellés inconnus et
  * renvoie toujours une liste canonisée au moteur.
@@ -12,7 +23,7 @@ export function createQualityPicker({ container, qualities = [], onChange = () =
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'btn-inoffensive';
-  button.title = 'Ajouter ou modifier les qualités';
+  button.title = ACTION_FIELD_HELP.qualities;
   const popover = document.createElement('div');
   popover.className = 'color-palette hidden';
   popover.style.cssText = 'position:absolute; top:28px; left:0; width:240px; max-height:260px; overflow-y:auto; background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:6px; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.4);';
@@ -94,17 +105,18 @@ export function createActionEditor({ container, action = {}, caracs, onChange = 
   let state = { ...action, qualities: normalizeQualities(action.qualities) };
   const root = document.createElement('div');
   root.className = 'action-editor';
-  const input = (className, type, value, placeholder, title) => {
+  const input = (className, type, value, placeholder, label, title) => {
     const node = document.createElement('input');
     node.className = className; node.type = type; node.value = value ?? ''; node.placeholder = placeholder; node.title = title;
+    node.setAttribute('aria-label', label);
     node.addEventListener('change', () => { state = readValue(); onChange({ ...state }); });
     return node;
   };
-  const typeSelect = document.createElement('select'); typeSelect.className = 'action-type'; typeSelect.title = 'Type d’action'; typeSelect.append(new Option('Type…', ''), new Option('Attaque', 'attack'), new Option('Compétence', 'skill'), new Option('Défense', 'defense'), new Option('Opposition', 'opposition')); typeSelect.value = state.type || ''; typeSelect.addEventListener('change', () => { state = readValue(); onChange({ ...state }); }); root.append(typeSelect);
-  root.append(input('action-base', 'number', state.base, 'Score', 'Score de base'));
-  root.append(input('action-mod', 'number', state.mod || 0, 'Mod.', 'Modificateur'));
-  root.append(input('action-note', 'text', state.note, 'Action / arme', 'Nom ou note de l’action'));
-  const damageInput = input('action-damage', 'text', state.damageFormula || state.damage, 'Dég. (BF+4)', 'Dégâts : nombre (4) ou formule (BF+4)');
+  const typeSelect = document.createElement('select'); typeSelect.className = 'action-type'; typeSelect.title = ACTION_FIELD_HELP.type; typeSelect.setAttribute('aria-label', 'Type du jet'); typeSelect.append(new Option('Type…', ''), new Option('Attaque', 'attack'), new Option('Compétence', 'skill'), new Option('Défense', 'defense'), new Option('Opposition', 'opposition')); typeSelect.value = state.type || ''; typeSelect.addEventListener('change', () => { state = readValue(); onChange({ ...state }); }); root.append(typeSelect);
+  root.append(input('action-base', 'number', state.base, 'Score', 'Score', ACTION_FIELD_HELP.base));
+  root.append(input('action-mod', 'number', state.mod || 0, 'Mod.', 'Modificateur', ACTION_FIELD_HELP.mod));
+  root.append(input('action-note', 'text', state.note, 'Action / arme', 'Nom du jet', ACTION_FIELD_HELP.note));
+  const damageInput = input('action-damage', 'text', state.damageFormula || state.damage, 'Dég. (BF+4)', 'Dégâts', ACTION_FIELD_HELP.damage);
   const damageValue = document.createElement('output');
   damageValue.className = 'action-damage-value';
   const refreshDamageValue = () => {
@@ -117,13 +129,12 @@ export function createActionEditor({ container, action = {}, caracs, onChange = 
   damageInput.addEventListener('input', refreshDamageValue);
   refreshDamageValue();
   root.append(damageInput, damageValue);
-  root.append(input('action-values-x', 'number', state.valuesX, 'X', 'Valeur X du mot-clé'));
-  root.append(input('action-capacity', 'number', state.capacity, 'Cap.', 'Capacité ou munitions'));
   const qualityContainer = document.createElement('span');
+  // Les anciennes cases X et Cap. ne sont plus affichées : `...rest` garde leurs valeurs telles quelles.
   const readValue = () => {
     const { damageFormula, ...rest } = state;
     const damage = normalizeDamageFields({ damage: root.querySelector('.action-damage')?.value ?? '' });
-    return { ...rest, type: root.querySelector('.action-type')?.value || '', base: root.querySelector('.action-base')?.value ?? '', mod: Number(root.querySelector('.action-mod')?.value) || 0, note: root.querySelector('.action-note')?.value ?? '', damage: damage.damage, ...(damage.damageFormula ? { damageFormula: damage.damageFormula } : {}), valuesX: root.querySelector('.action-values-x')?.value || null, capacity: root.querySelector('.action-capacity')?.value || null, qualities: picker.getQualities() };
+    return { ...rest, type: root.querySelector('.action-type')?.value || '', base: root.querySelector('.action-base')?.value ?? '', mod: Number(root.querySelector('.action-mod')?.value) || 0, note: root.querySelector('.action-note')?.value ?? '', damage: damage.damage, ...(damage.damageFormula ? { damageFormula: damage.damageFormula } : {}), qualities: picker.getQualities() };
   };
   const picker = createQualityPicker({ container: qualityContainer, qualities: state.qualities, onChange: qualities => { state = { ...readValue(), qualities }; onChange({ ...state }); } });
   root.append(qualityContainer);

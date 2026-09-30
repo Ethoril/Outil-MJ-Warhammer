@@ -3,7 +3,7 @@
  * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
  * par `handlers`, et la vue reste propriétaire de l'état entre deux rendus.
  */
-import { formatDamageFormula, damageBreakdown, describeWeaponDamage, previewHpLoss } from '../core/resolution.js';
+import { formatDamageFormula, damageBreakdown, describeWeaponDamage, inferActionType, previewHpLoss } from '../core/resolution.js';
 import { actionHasDamage } from '../core/damage.js';
 import { qualityLabel } from '../core/quality-normalization.js';
 
@@ -14,7 +14,6 @@ export const ACTION_TYPES = Object.freeze([
   ['opposition', 'Opposition']
 ]);
 const ROLL_LABELS = Object.freeze({ attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' });
-export const DEFENSE_STATS = Object.freeze(['CC', 'Ag', 'Autre']);
 const MINUS = '−';
 
 function node(tag, className, text) {
@@ -45,6 +44,33 @@ export const signed = value => {
 /** Stable key of an action within the actor's list (dice lines may lack an id). */
 export function actionKey(action, index) {
   return action?.id ? String(action.id) : `index-${index}`;
+}
+
+const finiteBase = value => (value !== null && value !== '' && value !== undefined && Number.isFinite(Number(value)) ? Number(value) : null);
+
+/**
+ * Choix de défense d'une cible : CC, Ag, ses jets enregistrés à base numérique, puis « Autre ».
+ * `actions` est la liste complète de la cible (l'index fait la clé `jet:`).
+ */
+export function defenseOptions(target, actions = []) {
+  const caracs = ['CC', 'Ag'].map(stat => {
+    const base = finiteBase(target?.caracs?.[stat]);
+    return { value: stat, label: `${stat} · ${base ?? '—'}`, statLabel: stat, group: 'caracs', base };
+  });
+  const jets = [];
+  actions.forEach((action, index) => {
+    const raw = finiteBase(action?.base);
+    if (raw === null) return;
+    const base = raw + (Number(action.mod) || 0);
+    const statLabel = action.note || action.name || 'Jet';
+    jets.push({ value: `jet:${actionKey(action, index)}`, label: `${statLabel} · ${base}`, statLabel, group: 'jets', base, type: inferActionType(action) });
+  });
+  return [...caracs, ...jets, { value: 'Autre', label: 'Autre (valeur libre)', statLabel: 'Autre', group: 'autre', base: null }];
+}
+
+/** Défense proposée d'office : le premier jet de type défense, sinon la CC. */
+export function defaultDefenseValue(options) {
+  return options.find(option => option.group === 'jets' && option.type === 'defense')?.value || 'CC';
 }
 
 export function actionLabel(action = {}) {
@@ -275,11 +301,12 @@ function renderComparison(entries, handlers, busy) {
  * @param {string|null} options.type type retenu
  * @param {object|null} options.target cible effective
  * @param {{ adversaries: Array, allies: Array }} options.groups cibles possibles
+ * @param {{ options: Array, value: string, option: object }|null} options.defense choix de défense de la cible (attaque avec cible)
  * @param {boolean} options.canCalculate
  * @param {boolean} options.canApply
  * @param {object} options.handlers select, input, roll, calculate, compare, choose, apply, cancel
  */
-export function renderResolutionPanel({ draft, actor, actions, actionKey: selectedKey, type, target, groups, canCalculate, canApply, handlers }) {
+export function renderResolutionPanel({ draft, actor, actions, actionKey: selectedKey, type, target, groups, defense, canCalculate, canApply, handlers }) {
   const section = node('section', 'workspace-resolution workspace-card');
   section.setAttribute('aria-labelledby', 'workspace-resolution-title');
   const title = node('h3', 'workspace-rubric', 'Résolution');
@@ -361,16 +388,26 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
     disabled: draft.busy
   }));
   if (type === 'attack' && target) {
-    const defense = node('div', 'workspace-defense');
+    const defenseBlock = node('div', 'workspace-defense');
     const legend = node('p', 'workspace-roll-label');
     legend.append('Défense de ', node('span', 'combatant-name', target.name), ' (facultative)');
-    defense.appendChild(legend);
+    defenseBlock.appendChild(legend);
     const row = node('div', 'workspace-roll-row');
     const stat = document.createElement('select');
-    stat.setAttribute('aria-label', `Caractéristique de défense de ${target.name}`);
+    stat.setAttribute('aria-label', `Défense de ${target.name} : caractéristique ou jet`);
     stat.dataset.focusKey = 'defense-stat';
-    DEFENSE_STATS.forEach(value => stat.appendChild(new Option(value, value)));
-    stat.value = draft.defenseStat;
+    const groupOf = (label, group) => {
+      const items = defense.options.filter(option => option.group === group);
+      if (!items.length) return;
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = label;
+      items.forEach(option => optgroup.appendChild(new Option(option.label, option.value)));
+      stat.appendChild(optgroup);
+    };
+    groupOf('Caractéristiques', 'caracs');
+    groupOf('Jets enregistrés', 'jets');
+    defense.options.filter(option => option.group === 'autre').forEach(option => stat.appendChild(new Option(option.label, option.value)));
+    stat.value = defense.value;
     stat.disabled = draft.busy;
     stat.addEventListener('change', () => handlers.select({ defenseStat: stat.value, defenseBase: null }));
     const base = document.createElement('input');
@@ -382,16 +419,16 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
     base.disabled = draft.busy;
     base.addEventListener('input', () => handlers.input('defenseBase', base.value));
     row.append(stat, base);
-    defense.appendChild(row);
-    defense.appendChild(rollField({
+    defenseBlock.appendChild(row);
+    defenseBlock.appendChild(rollField({
       field: 'defense',
-      label: `Jet de défense (${draft.defenseStat === 'Autre' ? 'valeur' : draft.defenseStat} ${draft.defenseBase || '—'})`,
+      label: `Jet de défense (${defense.option.value === 'Autre' ? 'valeur' : defense.option.statLabel} ${draft.defenseBase || '—'})`,
       value: draft.defenseRoll,
       error: draft.error?.field === 'defense' ? draft.error.message : '',
       handlers,
       disabled: draft.busy
     }));
-    rolls.appendChild(defense);
+    rolls.appendChild(defenseBlock);
   }
   section.append(rolls, node('p', 'workspace-roll-hint', 'Dés lancés à la table : tapez le résultat dans la case, puis Entrée.'));
   section.lastChild.id = 'workspace-roll-hint';
