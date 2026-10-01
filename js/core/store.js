@@ -11,6 +11,7 @@ import { simulateAction, applySimulation as applyActionSimulation, discardSimula
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
 import { sharedState } from './sync-protocol.js';
+import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 
 export const KEY = { RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -1078,6 +1079,15 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         }
       }
       save(); emitBus('reserve'); if (propagate) emitBus('combat');
+    },
+    // Mise à jour des PJ depuis leurs fiches : réserve et personnages persistants seulement, jamais le combat.
+    applyFicheSync(entries) {
+      if (!canMutate()) return false;
+      const captured = JSON.parse(JSON.stringify(entries || []));
+      // Rien à changer : pas de commande, donc pas d'entrée d'historique.
+      const probe = JSON.parse(JSON.stringify({ reserve: Array.from(reserve.values()), persistentCharacters, encounters }));
+      if (applyFicheSyncToDraft(probe, captured) === probe) return { ok: true, changed: false };
+      return api.executeCommand('sync-fiches', draft => applyFicheSyncToDraft(draft, captured));
     },
     removeProfile(id) {
       if (!canMutate()) return false;

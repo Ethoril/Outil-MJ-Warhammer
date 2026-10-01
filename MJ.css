@@ -455,3 +455,6 @@ body:has(dialog.tool-sheet[open]) #toast-container { right: calc(clamp(480px, 50
   .actor-card { width: 100%; }
   dialog .card { min-width: unset; width: 95vw; }
 }
+.fiche-sync-view label { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.fiche-sync-diff, .fiche-sync-actions { margin: 6px 0; padding-left: 20px; }
+.fiche-sync-actions li { margin: 6px 0; }

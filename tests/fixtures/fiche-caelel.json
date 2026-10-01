@@ -1,0 +1,174 @@
+{
+  "_format": "wfrp4-fiche",
+  "_version": 1,
+  "_app": "v2.24.1",
+  "_charId": "caelel",
+  "_exportedAt": "2026-10-01T16:13:08.360Z",
+  "nom": "Caelel Feuille Grise",
+  "race": "elfe-sylvain",
+  "carriere": "Arpenteur Fantôme (ES)",
+  "rang": "2",
+  "blessuresAct": "18",
+  "resilience": "1",
+  "determination": "1",
+  "chance": "1",
+  "destin": "1",
+  "corruption": "0",
+  "possessions": "Arc long d'elfe sylvain\nFlèches\nÉpée elfique\nArmure de cuir",
+  "carac": {
+    "cc": {
+      "base": 44,
+      "adv": 10
+    },
+    "ct": {
+      "base": 49,
+      "adv": 10
+    },
+    "f": {
+      "base": 29,
+      "adv": 1
+    },
+    "e": {
+      "base": 33,
+      "adv": 10
+    },
+    "i": {
+      "base": 55,
+      "adv": 0
+    },
+    "ag": {
+      "base": 41,
+      "adv": 10
+    },
+    "dex": {
+      "base": 37,
+      "adv": 10
+    },
+    "int": {
+      "base": 41,
+      "adv": 10
+    },
+    "fm": {
+      "base": 36,
+      "adv": 0
+    },
+    "soc": {
+      "base": 36,
+      "adv": 4
+    }
+  },
+  "skillsBasic": {
+    "Perception": 10,
+    "Orientation": 5,
+    "Intimidation": 5,
+    "Ragot": 10,
+    "Intuition": 10,
+    "Charme": 5,
+    "Athlétisme": 15,
+    "Subornation": 5,
+    "Esquive": 4,
+    "Marchandage": 10,
+    "Survie en extérieur": 5,
+    "Discrétion": 5,
+    "Résistance": 4,
+    "Corps à corps (Base)": 15,
+    "Escalade": 15
+  },
+  "skillsAdvanced": [
+    {
+      "adv": 0,
+      "carac": "i",
+      "nom": "Pistage"
+    },
+    {
+      "nom": "Projectiles (Arc)",
+      "carac": "ct",
+      "adv": 0
+    },
+    {
+      "adv": 0,
+      "nom": "Projectiles (Entraves)",
+      "carac": "ct"
+    },
+    {
+      "carac": "int",
+      "adv": 0,
+      "nom": "Conn. Bêtes"
+    },
+    {
+      "adv": 0,
+      "nom": "Discrétion (Urbaine)",
+      "carac": "ag"
+    },
+    {
+      "nom": "Métier (Archetier)",
+      "carac": "dex",
+      "adv": 0
+    },
+    {
+      "adv": 0,
+      "carac": "int",
+      "nom": "Signe secrets ranger"
+    },
+    {
+      "nom": "Pièges",
+      "adv": 0,
+      "carac": "dex"
+    },
+    {
+      "adv": 0,
+      "carac": "f",
+      "nom": "Natation"
+    },
+    {
+      "nom": "Lecture sur les lèvres",
+      "carac": "i",
+      "adv": 0
+    }
+  ],
+  "careers": [],
+  "talentsAcq": [
+    {
+      "nom": "Dur à cuire"
+    },
+    {
+      "nom": "Lire/Écrire"
+    },
+    {
+      "nom": "Nomade"
+    },
+    {
+      "nom": "Sens aiguisé (vue)"
+    },
+    {
+      "nom": "Vision nocturne"
+    },
+    {
+      "nom": "Tireur de précision"
+    },
+    {
+      "nom": "Frappe assommante"
+    },
+    {
+      "nom": "Discret"
+    },
+    {
+      "nom": "Tir précis"
+    },
+    {
+      "nom": "Grimpeur"
+    }
+  ],
+  "talentsAvail": [],
+  "sorts": [],
+  "prieres": [],
+  "xpLog": [],
+  "customSpecs": {},
+  "customTalents": {},
+  "chosenVariants": {},
+  "careerOverrides": {},
+  "optVisible": {
+    "section-sorts": false,
+    "section-prieres": false
+  }
+}

@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.9.0)
+# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.10.0)
 
 Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhammer Fantasy Roleplay 4e édition**.
 

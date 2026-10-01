@@ -20,6 +20,7 @@ import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initClosureView } from './ui/closure-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
+import { initFicheSyncView } from './ui/fiche-sync-view.js';
 import { parseProfileJson, parseProfileInput, PROFILE_JSON_EXAMPLE } from './core/json-profile-import.js';
 import { createActionEditor } from './ui/action-editor.js';
 import { createEncounter, normalizeEncounter, normalizeCamp, CAMP_LABELS } from './core/encounters.js';
@@ -734,6 +735,28 @@ function openTextImportView() {
   });
 }
 
+// Fiches de personnage : les modules Firebase (Firestore, App Check) ne sont chargés qu'à l'ouverture.
+async function openFicheSyncView() {
+  const { createFicheSource } = await import('./core/fiche-source.js');
+  const source = createFicheSource();
+  return openOverlay('Mettre à jour les PJ', (mount, dialog) => {
+    const view = initFicheSyncView({
+      mount, hosted: true, source,
+      getContext: () => ({ profiles: Store.listProfiles() }),
+      callbacks: {
+        onApply: async entries => {
+          const result = await awaitStore(requireStoreApi('applyFicheSync')(entries), 'Mise à jour des PJ');
+          dialog.close();
+          if (result?.changed === false) { showToast('Aucun changement : les PJ sont déjà à jour', 'info'); return; }
+          showToast(entries.length > 1 ? `${entries.length} PJ mis à jour depuis les fiches` : 'PJ mis à jour depuis la fiche', 'success', { label: 'Annuler', onClick: () => Store.undo() });
+        },
+        onCancel: () => dialog.close()
+      }
+    });
+    view.start();
+  });
+}
+
 function openArchivesView() {
   return openOverlay('Archives de séances', (mount, dialog) => {
     const render = () => {
@@ -1220,6 +1243,7 @@ on(qs('#workspace-reminders'), 'click', () => safeOpen(openRemindersView));
 on(qs('#workspace-events'), 'click', () => safeOpen(openEventsView));
 on(qs('#workspace-archives'), 'click', () => safeOpen(openArchivesView));
 on(qs('#workspace-import-text'), 'click', () => safeOpen(openTextImportView));
+on(qs('#workspace-fiche-sync'), 'click', () => { openFicheSyncView().catch(error => showToast(contextMessage('Fiches indisponibles', error, 'vérifiez votre connexion, puis réessayez.'), 'error')); });
 on(qs('#workspace-close-scene'), 'click', () => safeOpen(openClosureView));
 on(qs('#workspace-restart-combat'), 'click', () => { restartCombat(); });
 on(qs('#workspace-save'), 'click', () => DOM.combat.btnSaveFile?.click());

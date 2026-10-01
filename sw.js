@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.9.0';
+const CACHE_NAME = 'wfrp-cache-v3.10.0';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -40,6 +40,8 @@ const ASSETS_TO_CACHE = [
   './js/core/json-profile-import.js',
   './js/core/turn-order.js',
   './js/core/sanitize.js',
+  './js/core/fiche-sync.js',
+  './js/core/fiche-source.js',
   './js/core/keywords.js',
   './js/core/roll-qualities.js',
   './js/data/keywords-fallback.json',
@@ -69,11 +71,14 @@ const ASSETS_TO_CACHE = [
   './js/ui/workspace-view.js',
   './js/ui/closure-view.js',
   './js/ui/import-text-view.js',
+  './js/ui/fiche-sync-view.js',
   './js/ui/prepare-view.js',
   './js/ui/workspace.css',
   './vendor/firebase/firebase-app.js',
   './vendor/firebase/firebase-auth.js',
-  './vendor/firebase/firebase-database.js'
+  './vendor/firebase/firebase-database.js',
+  './vendor/firebase/firebase-firestore.js',
+  './vendor/firebase/firebase-app-check.js'
 ];
 
 self.addEventListener('install', (event) => {
@@ -103,8 +108,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Pour Firebase, gstatic et Google Sheets, network-first avec fallback
-  if (url.hostname.includes('firebase') || url.hostname.includes('gstatic') || url.hostname.includes('docs.google.com')) {
+  // Pour Firebase, gstatic, Google Sheets, Firestore/App Check (googleapis) et reCAPTCHA, network-first avec fallback
+  if (url.hostname.includes('firebase') || url.hostname.includes('gstatic') || url.hostname.includes('docs.google.com') || url.hostname.includes('googleapis') || url.hostname.endsWith('www.google.com')) {
     event.respondWith(
       fetch(event.request).catch(() => caches.match(event.request))
     );
