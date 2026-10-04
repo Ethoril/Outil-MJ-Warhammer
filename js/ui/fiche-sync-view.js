@@ -152,6 +152,9 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       actions.appendChild(button('Connexion Google (fiches)', signIn));
     } else {
       const who = document.createElement('p'); who.className = 'muted'; who.textContent = `Connecté : ${userName}`; root.appendChild(who);
+      const scope = document.createElement('p'); scope.className = 'muted';
+      scope.textContent = 'La bibliothèque et les PJ déjà en combat seront mis à jour. En combat, les PV actuels, les états et le tour en cours sont conservés ; les PV maximum suivent la fiche.';
+      root.appendChild(scope);
       snapshots.forEach(snapshot => root.appendChild(entryCard(snapshot)));
       if (missing.length) { const absent = document.createElement('p'); absent.className = 'muted'; absent.textContent = `Fiche absente : ${missing.join(', ')}.`; root.appendChild(absent); }
       const chosen = [...selections.entries()].filter(([, selection]) => selection.profileId);

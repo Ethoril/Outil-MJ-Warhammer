@@ -1080,12 +1080,12 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }
       save(); emitBus('reserve'); if (propagate) emitBus('combat');
     },
-    // Mise à jour des PJ depuis leurs fiches : réserve et personnages persistants seulement, jamais le combat.
+    // Mise à jour des fiches jusque dans le combat, sans changer les PV actuels ni les états.
     applyFicheSync(entries) {
       if (!canMutate()) return false;
       const captured = JSON.parse(JSON.stringify(entries || []));
       // Rien à changer : pas de commande, donc pas d'entrée d'historique.
-      const probe = JSON.parse(JSON.stringify({ reserve: Array.from(reserve.values()), persistentCharacters, encounters }));
+      const probe = JSON.parse(JSON.stringify(currentEnvelope()));
       if (applyFicheSyncToDraft(probe, captured) === probe) return { ok: true, changed: false };
       return api.executeCommand('sync-fiches', draft => applyFicheSyncToDraft(draft, captured));
     },

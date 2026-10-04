@@ -209,7 +209,9 @@ test('application — uniquement les champs prévus, sur un brouillon', () => {
   assert.equal(next.persistentCharacters[0].hp, 18);
   assert.deepEqual(next.persistentCharacters[0].states, ['Sonné|1']);
   assert.equal(next.persistentCharacters[1].hp, 5);
-  assert.deepEqual(next.combat, draft.combat);
+  assert.equal(next.combat.participants[0].hp, 3);
+  assert.equal(next.combat.participants[0].maxHp, 18);
+  assert.equal(next.combat.participants[0].caracs.F, 30);
 });
 
 test('application — le lien choisi est enregistré, « aucune » aussi, et le lien enregistré prime', () => {
@@ -236,14 +238,18 @@ test('application — personnage persistant lié par la rencontre plutôt que pa
   assert.deepEqual(next.persistentCharacters.map(item => item.hp), [18, 2]);
 });
 
-test('Store.applyFicheSync — une commande annulable, combat intact', async () => {
-  const store = createStore({ persistence: memoryPersistence() });
+test('Store.applyFicheSync — combat et scène mis à jour, persistés et annulables', async () => {
+  const persistence = memoryPersistence();
+  const store = createStore({ persistence });
   await store.ready;
   await store.addProfile(profile());
   await store.savePersistentCharacter({ id: 'pc', name: 'Caelel', hp: 4 });
   await store.saveEncounter({ id: 'r', title: 'Rencontre', entries: [{ id: 'e1', profileId: 'caelel-pj', quantity: 1, zone: 'active', persistentCharacterId: 'pc' }] });
   await store.launchEncounter('r');
+  const actorId = store.listParticipants()[0].id;
+  await store.updateParticipant(actorId, { hp: -2, states: ['Sonné|1'] });
   const combatBefore = JSON.stringify(store.listParticipants());
+  const sceneBefore = store.getActiveScene();
   const reserveBefore = JSON.stringify(store.listProfiles());
   const revision = store.getLocalRevision();
 
@@ -253,12 +259,84 @@ test('Store.applyFicheSync — une commande annulable, combat intact', async () 
   assert.equal(updated.hp, 18); assert.equal(updated.caracs.F, 30);
   assert.equal(updated.diceLines[0].base, 69);
   assert.equal(store.listPersistentCharacters()[0].hp, 18);
-  assert.equal(JSON.stringify(store.listParticipants()), combatBefore, 'les participants en jeu ne bougent pas');
+  const participant = store.listParticipants()[0];
+  assert.equal(participant.hp, -2, 'les blessures déjà subies sont conservées');
+  assert.equal(participant.maxHp, 18);
+  assert.equal(participant.initiative, 55);
+  assert.equal(participant.caracs.F, 30);
+  assert.equal(participant.actions[0].base, 69);
+  assert.equal(participant.actions[0].damageFormula, 'BF+5');
+  assert.deepEqual(participant.states, JSON.parse(combatBefore)[0].states);
+  const scene = store.getActiveScene();
+  assert.equal(scene.round, sceneBefore.round);
+  assert.equal(scene.currentActorId, sceneBefore.currentActorId);
+  assert.deepEqual(scene.order, sceneBefore.order);
+  assert.equal(scene.participants[0].actions[0].base, 69);
+  const reloaded = createStore({ persistence });
+  await reloaded.ready;
+  assert.deepEqual(reloaded.listParticipants(), store.listParticipants());
+  assert.deepEqual(reloaded.getActiveScene(), scene);
 
   await store.undo();
   assert.equal(JSON.stringify(store.listProfiles()), reserveBefore);
   assert.equal(store.listPersistentCharacters()[0].hp, 4);
   assert.equal(JSON.stringify(store.listParticipants()), combatBefore);
+  assert.equal(JSON.stringify(store.getActiveScene().participants), combatBefore);
+});
+
+test('Store.applyFicheSync — répare le combat même quand la bibliothèque est déjà à jour', async () => {
+  const store = createStore({ persistence: memoryPersistence() });
+  await store.ready;
+  await store.addProfile(profile());
+  await store.importFromReserve(['caelel-pj']);
+  // État produit par la version précédente : seule la bibliothèque était actualisée.
+  const entry = { charId: 'caelel', profileId: 'caelel-pj', snapshot };
+  const updated = applyFicheSync({ reserve: [profile()] }, [entry]).reserve[0];
+  await store.updateProfile('caelel-pj', updated);
+  const before = structuredClone(store.getDiceLines());
+  const revision = store.getLocalRevision();
+  await store.applyFicheSync([entry]);
+  assert.equal(store.getLocalRevision(), revision + 1);
+  assert.equal(store.listParticipants()[0].caracs.F, 30);
+  assert.equal(store.listParticipants()[0].hp, 12);
+  assert.equal(store.listParticipants()[0].maxHp, 18);
+  assert.equal(store.getDiceLines()[0].base, 69);
+  assert.equal(store.getDiceLines()[0].damageFormula, 'BF+5');
+  assert.equal(store.getDiceLines()[0].id, before[0].id);
+  assert.deepEqual(await store.applyFicheSync([entry]), { ok: true, changed: false });
+  await store.undo();
+  assert.equal(store.listParticipants()[0].caracs.F, 25);
+  assert.deepEqual(structuredClone(store.getDiceLines()), before);
+});
+
+test('combat — copies actives et en attente, ajustements locaux et participants étrangers', () => {
+  const makeParticipant = (id, zone) => ({
+    id, zone, profileId: 'caelel-pj', name: 'Nom de combat', hp: 3, maxHp: 12,
+    initiative: 40, caracs: { ...profile().caracs, M: 6 }, states: ['Sonné|1'],
+    armor: { body: 4 }, camp: 'pj',
+    actions: [...profile().diceLines.map(action => ({ ...action, mod: -20, targetId: 'ennemi' })), { id: 'locale', note: 'Action locale', base: 17 }]
+  });
+  const draft = {
+    reserve: [profile()],
+    combat: { round: 4, currentActorId: 'actif', order: ['actif', 'ennemi', 'banc'], participants: [makeParticipant('actif', 'active'), makeParticipant('banc', 'bench'), { ...makeParticipant('ennemi', 'active'), profileId: 'autre' }] }
+  };
+  const before = structuredClone(draft);
+  const next = applyFicheSync(draft, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot, links: { esq: '' }, convert: { epee: false } }]);
+  for (const participant of next.combat.participants.slice(0, 2)) {
+    const original = draft.combat.participants.find(item => item.id === participant.id);
+    for (const key of ['id', 'name', 'hp', 'zone', 'states', 'armor', 'camp']) assert.deepEqual(participant[key], original[key], key);
+    assert.equal(participant.caracs.M, 6);
+    assert.equal(participant.maxHp, 18);
+    assert.equal(participant.actions[0].base, 69);
+    assert.equal(participant.actions[0].mod, -20);
+    assert.equal(participant.actions[0].targetId, 'ennemi');
+    assert.equal(participant.actions[0].damage, 7, 'conversion décochée');
+    assert.equal(participant.actions[2].base, 45, 'action non liée');
+    assert.deepEqual(participant.actions.at(-1), original.actions.at(-1));
+  }
+  assert.deepEqual(next.combat.participants[2], draft.combat.participants[2]);
+  for (const key of ['round', 'currentActorId', 'order']) assert.deepEqual(next.combat[key], draft.combat[key]);
+  assert.deepEqual(draft, before, 'aucune mutation du brouillon');
 });
 
 test('erreurs de lecture — messages lisibles', () => {

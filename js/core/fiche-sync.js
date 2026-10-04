@@ -201,13 +201,16 @@ export function planProfileSync(snapshot, profile, { links = {}, convert = {} } 
 }
 
 /**
- * Applique des mises à jour de fiches à un brouillon d'état (réserve + personnages persistants).
- * Le combat, la scène active et leurs participants ne sont jamais touchés.
+ * Applique des mises à jour de fiches à la réserve, aux personnages persistants
+ * et aux copies en combat. Les PV actuels, états et tours en combat sont conservés.
+ * Le Store répercute ensuite le combat vers la scène active.
  * `entries` : [{ charId, profileId, snapshot, links, convert }].
  */
 export function applyFicheSync(draft, entries) {
   const reserve = (draft.reserve || []).map(cloneValue);
   let characters = (draft.persistentCharacters || []).map(cloneValue);
+  let participants = draft.combat?.participants || [];
+  let diceLines = draft.diceLines || [];
   const done = [];
   for (const entry of entries || []) {
     const index = reserve.findIndex(profile => profile.id === entry.profileId);
@@ -215,6 +218,7 @@ export function applyFicheSync(draft, entries) {
     const profile = reserve[index];
     const profileBefore = JSON.stringify(profile);
     const charactersBefore = JSON.stringify(characters);
+    const combatBefore = JSON.stringify([participants, diceLines]);
     const plan = planProfileSync(entry.snapshot, profile, { links: entry.links, convert: entry.convert });
     const byId = new Map(plan.actions.map(action => [action.id, action]));
     profile.caracs = { ...profile.caracs, ...entry.snapshot.caracs };
@@ -231,16 +235,50 @@ export function applyFicheSync(draft, entries) {
       if (planned.damage?.enabled) Object.assign(action, normalizeDamageFields({ damage: planned.damage.bonus, damageFormula: planned.damage.formula }));
       return action;
     });
+    const syncAction = raw => {
+      // Les actions de scène gardent leur ID ; les anciennes lignes de dés ont
+      // un ID propre. Repli seulement sur un nom/type non ambigu, jamais l'index.
+      const matches = profile.diceLines.filter(action => action.type === raw.type && normalizeName(action.note) === normalizeName(raw.note));
+      const source = profile.diceLines.find(action => action.id === raw.id) || (matches.length === 1 ? matches[0] : null);
+      const planned = source && byId.get(source.id);
+      if (!planned) return raw;
+      const action = cloneValue(raw);
+      if (planned.skill) {
+        action.base = planned.newBase;
+        action.extensions = { ...action.extensions, ficheSkill: planned.skill };
+      } else if (planned.stored !== null && !planned.missing) {
+        action.extensions = { ...action.extensions, ficheSkill: '' };
+      }
+      // Répare aussi les copies restées en dégâts fixes après une synchronisation
+      // antérieure de la bibliothèque, même si celle-ci est déjà à jour.
+      if (source.damageFormula) Object.assign(action, normalizeDamageFields(source));
+      return action;
+    };
+    const participantIds = new Set();
+    participants = participants.map(item => {
+      if (item.profileId !== profile.id) return item;
+      participantIds.add(item.id);
+      return {
+        ...item,
+        caracs: { ...item.caracs, ...entry.snapshot.caracs },
+        ...(entry.snapshot.initiative !== null ? { initiative: entry.snapshot.initiative } : {}),
+        ...(wounds !== null ? { maxHp: wounds } : {}),
+        ...(Array.isArray(item.actions) ? { actions: item.actions.map(syncAction) } : {})
+      };
+    });
+    diceLines = diceLines.map(line => participantIds.has(line.participantId) ? syncAction(line) : line);
     // PV du personnage persistant remis au maximum : lien d'une rencontre vers ce profil, sinon même nom.
     const linked = new Set((draft.encounters || []).flatMap(item => item.entries || []).filter(item => item.profileId === profile.id && item.persistentCharacterId).map(item => item.persistentCharacterId));
     const named = characters.filter(item => normalizeName(item.name) === normalizeName(profile.name)).map(item => item.id);
     const targets = linked.size ? linked : new Set(named);
     if (wounds !== null) characters = characters.map(item => (targets.has(item.id) ? { ...item, hp: wounds } : item));
-    if (JSON.stringify(profile) !== profileBefore || JSON.stringify(characters) !== charactersBefore) done.push(profile.name);
+    if (JSON.stringify(profile) !== profileBefore || JSON.stringify(characters) !== charactersBefore || JSON.stringify([participants, diceLines]) !== combatBefore) done.push(profile.name);
   }
   if (!done.length) return draft;
   return {
     ...draft, reserve, persistentCharacters: characters,
+    ...(draft.combat ? { combat: { ...draft.combat, participants } } : {}),
+    ...(draft.diceLines ? { diceLines } : {}),
     log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Fiches PJ mises à jour : ${done.join(', ')}.` }, ...(draft.log || [])].slice(0, 300)
   };
 }
