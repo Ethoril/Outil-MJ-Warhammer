@@ -6,7 +6,7 @@ const entry = (profileId, quantity = 1) => ({ id: `${profileId}-${quantity}`, pr
 const profiles = [{ id: 'gob', name: 'Gobelin' }, { id: 'chef', name: 'Chef gobelin' }];
 
 test('libellés de statut', () => {
-  assert.deepEqual({ ...ENCOUNTER_STATUS_LABELS }, { active: 'En cours', suspended: 'Suspendue', prepared: 'Préparée', closed: 'Clôturée' });
+  assert.deepEqual({ ...ENCOUNTER_STATUS_LABELS }, { active: 'En cours', suspended: 'Suspendue', prepared: 'Préparée' });
 });
 
 test('statut affiché : déduit des scènes vivantes', () => {
@@ -15,7 +15,7 @@ test('statut affiché : déduit des scènes vivantes', () => {
   const scenes = { activeScene, suspendedScenes };
   assert.deepEqual(encounterDisplayStatus({ id: 'a', status: 'prepared' }, scenes), { key: 'active', label: 'En cours', sceneId: 's1' });
   assert.deepEqual(encounterDisplayStatus({ id: 'b', status: 'active' }, scenes), { key: 'suspended', label: 'Suspendue', sceneId: 's2' });
-  assert.deepEqual(encounterDisplayStatus({ id: 'c', status: 'closed' }, scenes), { key: 'closed', label: 'Clôturée', sceneId: null });
+  assert.deepEqual(encounterDisplayStatus({ id: 'c', status: 'closed' }, scenes), { key: 'prepared', label: 'Préparée', sceneId: null });
   assert.deepEqual(encounterDisplayStatus({ id: 'd', status: 'prepared' }, scenes), { key: 'prepared', label: 'Préparée', sceneId: null });
 });
 
@@ -43,7 +43,7 @@ test('tri : en cours, suspendues, préparées, clôturées, ordre stable', () =>
   ];
   const scenes = { activeScene: { id: 'x', status: 'active', encounterId: 'a1' }, suspendedScenes: [{ id: 'y', encounterId: 's1' }] };
   const sorted = sortEncountersForDisplay(list, scenes);
-  assert.deepEqual(sorted.map(item => item.id), ['a1', 's1', 'p1', 'p2', 'c1', 'c2']);
+  assert.deepEqual(sorted.map(item => item.id), ['a1', 's1', 'p1', 'c1', 'p2', 'c2']);
   assert.notEqual(sorted, list);
   assert.deepEqual(list.map(item => item.id), ['p1', 'c1', 's1', 'a1', 'p2', 'c2']);
   assert.deepEqual(sortEncountersForDisplay([]), []);

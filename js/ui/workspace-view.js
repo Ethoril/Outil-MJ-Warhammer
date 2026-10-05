@@ -299,6 +299,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     removeProfile: typeof actions.removeProfile === 'function' ? actions.removeProfile : null,
     editProfile: typeof actions.editProfile === 'function' ? actions.editProfile : null,
     editParticipant: typeof actions.editParticipant === 'function' ? actions.editParticipant : null,
+    removeParticipant: typeof actions.removeParticipant === 'function' ? actions.removeParticipant : null,
     renderRules: actions.renderRules || null,
     renderOverview: typeof actions.renderOverview === 'function' ? actions.renderOverview : null,
     renderLog: actions.renderLog || null,
@@ -448,7 +449,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (compact) encounters = encounters.filter(encounter => encounterDisplayStatus(encounter, scenes).key !== 'active');
     // Aussi sans carte : le combat en cours peut venir d'une rencontre supprimée depuis.
     const note = !compact && running
-      ? node('p', 'workspace-muted workspace-encounter-note', `Combat en cours : « ${scenes.activeScene.title || 'Séance'} ». Suspendez-le ou clôturez-le (menu ⋯) pour lancer une autre rencontre.`)
+      ? node('p', 'workspace-muted workspace-encounter-note', `Combat en cours : « ${scenes.activeScene.title || 'Séance'} ». Suspendez-le ou supprimez la rencontre pour en lancer une autre.`)
       : null;
     if (!encounters.length) return { list: null, note };
     const list = node('div', 'workspace-encounter-list');
@@ -478,7 +479,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       else if (disabled) element.title = title;
       return element;
     };
-    const busyTitle = 'Un combat est en cours : suspendez-le ou clôturez-le d’abord';
+    const busyTitle = 'Un combat est en cours : suspendez-le ou supprimez sa rencontre d’abord';
     const actions = node('div', 'workspace-inline-actions');
     if (status.key === 'active') {
       actions.appendChild(command('Revenir au combat', 'workspace-primary', 'show-play', callbacks.showPlay));
@@ -491,12 +492,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
     if (!compact) {
       actions.appendChild(command('Modifier', 'workspace-secondary', 'edit-encounter', callbacks.editEncounter));
-      // Une rencontre en jeu garde sa carte : sinon sa séance suspendue n'aurait plus que le menu ⋯.
-      const inPlay = status.key === 'active' || status.key === 'suspended';
-      actions.appendChild(command('Supprimer', 'workspace-secondary', 'delete-encounter', callbacks.deleteEncounter, {
-        disabled: inPlay,
-        title: status.key === 'active' ? 'Clôturez d’abord la séance (menu ⋯)' : 'Reprenez puis clôturez d’abord la séance'
-      }));
+      actions.appendChild(command('Supprimer', 'workspace-secondary', 'delete-encounter', callbacks.deleteEncounter));
     }
     card.appendChild(actions);
     return card;
@@ -547,7 +543,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         states.forEach(item => list.appendChild(node('span', 'workspace-state-chip', stateLabel(item))));
         item.appendChild(list);
       }
-      track.appendChild(item);
+      const remove = defeatedParticipantButton(participant, `track-remove-${participant.id}`);
+      if (remove) {
+        const entry = node('div', `workspace-track-entry is-camp-${context.camp(participant)}`);
+        entry.append(item, remove);
+        track.appendChild(entry);
+      } else track.appendChild(item);
     });
     column.appendChild(track);
 
@@ -565,6 +566,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         enter.disabled = !callbacks.enterParticipant;
         if (!callbacks.enterParticipant) enter.title = 'Action indisponible';
         row.append(label, enter);
+        const remove = defeatedParticipantButton(participant, `bench-remove-${participant.id}`);
+        if (remove) row.appendChild(remove);
         bench.appendChild(row);
       });
       column.appendChild(bench);
@@ -604,6 +607,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     }
     form.append(name, level, duration, add, cancel);
     return form;
+  }
+
+  function canRemoveDefeated(participant) {
+    return participant && Number(participant.hp) <= 0 && participant.kind !== 'PJ' && normalizeCamp(participant.camp, participant.kind) !== 'pj';
+  }
+
+  function defeatedParticipantButton(participant, focusKey) {
+    if (!canRemoveDefeated(participant)) return null;
+    const remove = button('Retirer du combat', 'workspace-secondary danger', { 'aria-label': `Retirer ${participant.name} du combat`, 'data-focus-key': focusKey });
+    remove.dataset.workspaceAction = 'remove-participant';
+    remove.dataset.actorId = participant.id;
+    remove.disabled = !callbacks.removeParticipant;
+    return remove;
   }
 
   function renderSheet(participant, role, context) {
@@ -718,6 +734,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     edit.disabled = state.actionBusy || !callbacks.editParticipant;
     if (!callbacks.editParticipant) edit.title = 'Action indisponible';
     actionsRow.appendChild(edit);
+    const remove = defeatedParticipantButton(participant, `remove-${participant.id}`);
+    if (remove) actionsRow.appendChild(remove);
     sheet.appendChild(actionsRow);
     return sheet;
   }
@@ -1200,6 +1218,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       case 'duplicate-profile': callbacks.duplicateProfile?.(target.dataset.profileId); break;
       case 'remove-profile': callbacks.removeProfile?.(target.dataset.profileId); break;
       case 'edit-participant': callbacks.editParticipant(participantId); break;
+      case 'remove-participant':
+        if (canRemoveDefeated(participant)) {
+          target.disabled = true;
+          Promise.resolve(callbacks.removeParticipant?.(participantId)).then(() => render(), () => { target.disabled = false; });
+        }
+        break;
       case 'adjust-hp': callbacks.adjustHp?.({ participantId, delta: Number(target.dataset.hpDelta) }); break;
       case 'enter-participant': callbacks.enterParticipant?.(participantId); break;
       case 'add-profile-to-combat': callbacks.addProfileToCombat?.(target.dataset.profileId); break;

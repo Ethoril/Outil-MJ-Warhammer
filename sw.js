@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.10.1';
+const CACHE_NAME = 'wfrp-cache-v3.11.0';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -33,7 +33,6 @@ const ASSETS_TO_CACHE = [
   './js/core/resolution.js',
   './js/core/criticals.js',
   './js/core/scene-events.js',
-  './js/core/closure.js',
   './js/core/encounters.js',
   './js/core/simulation.js',
   './js/core/text-profile-import.js',
@@ -69,7 +68,6 @@ const ASSETS_TO_CACHE = [
   './js/ui/theme.js',
   './js/ui/toast.js',
   './js/ui/workspace-view.js',
-  './js/ui/closure-view.js',
   './js/ui/import-text-view.js',
   './js/ui/fiche-sync-view.js',
   './js/ui/prepare-view.js',

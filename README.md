@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.10.1)
+# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.11.0)
 
 Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhammer Fantasy Roleplay 4e édition**.
 
@@ -12,6 +12,8 @@ Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhamme
 
 * **Réserve de profils** : Gestion des PNJ, PJ et Créatures avec caractéristiques, armures et lignes de dés prédéfinies. Création par le formulaire « Nouveau profil », par import JSON ([format](docs/IMPORT_PROFILS_JSON.md)) ou par import texte ([format](docs/IMPORT_PROFILS_TEXTE.md)).
 * **Gestionnaire de combat interactif** :
+  * Suppression directe des rencontres et de leur combat actif ou suspendu, annulable, sans clôture ni archivage.
+  * Bouton « Retirer du combat » pour les PNJ à 0 PV ou moins ; les PJ restent en jeu.
   * Suivi d'initiative dynamique par glisser-déplacer.
   * Zones *Active* et *En attente / Réserve tactique*.
   * Moteur de calcul de dégâts WFRP 4e (localisation automatique d100 inverse, déduction Endurance/Armure, plancher à 1, gestion des armes *Inoffensives*, Acharnement automatique et état *À Terre*).

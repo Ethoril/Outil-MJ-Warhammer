@@ -18,7 +18,6 @@ import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
-import { initClosureView } from './ui/closure-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
 import { initFicheSyncView } from './ui/fiche-sync-view.js';
 import { parseProfileJson, parseProfileInput, PROFILE_JSON_EXAMPLE } from './core/json-profile-import.js';
@@ -455,11 +454,11 @@ function persistentCharacters() {
   return requireStoreApi('listPersistentCharacters')();
 }
 
-// Enregistrement silencieux d'une rencontre : le statut stocké est conservé, sauf « clôturée » qui redevient préparée dès qu'on la modifie.
+// Enregistrement silencieux de la préparation.
 async function persistEncounter(draft) {
   const model = normalizeEncounter(draft);
   const stored = Store.listEncounters?.().find(item => item.id === model.id);
-  model.status = stored && stored.status !== 'closed' ? stored.status : 'prepared';
+  model.status = stored?.status || 'prepared';
   if (prepareWindow) prepareWindow.encounterId = model.id;
   await awaitStore(requireStoreApi('saveEncounter')(model), 'Rencontre');
   return model;
@@ -553,9 +552,14 @@ const encounterListActions = {
       const encounter = Store.listEncounters().find(item => item.id === id);
       if (!encounter) return false;
       await awaitStore(requireStoreApi('deleteEncounter')(id), 'Suppression');
-      // « Annuler » rétablit cette rencontre-là, et non la dernière action de l'historique.
+      // La suppression et son annulation incluent le combat associé.
+      const deletionRevision = Store.getLocalRevision();
       const restore = async () => {
-        try { await awaitStore(requireStoreApi('saveEncounter')(encounter), 'Rencontre'); showToast(`Rencontre « ${encounter.title} » rétablie`, 'success'); }
+        if (Store.getLocalRevision() !== deletionRevision) {
+          showToast('Utilisez Annuler dans la barre pour revenir sur les actions suivantes, puis sur la suppression.', 'info');
+          return;
+        }
+        try { await awaitStore(Store.undo(), 'Annulation'); showToast(`Rencontre « ${encounter.title} » rétablie`, 'success'); }
         catch (error) { showToast(contextMessage('Rencontre non rétablie', error, 'réessayez.'), 'error'); }
       };
       showToast(`Rencontre « ${encounter.title} » supprimée`, 'success', { label: 'Annuler', onClick: restore });
@@ -629,7 +633,6 @@ function renderAppMenu() {
   const active = Store.getActiveScene?.();
   const running = active?.status === 'active';
   ['workspace-reminders', 'workspace-events'].forEach(id => { const button = qs(`#${id}`); if (button) button.disabled = !running; });
-  const close = qs('#workspace-close-scene'); if (close) close.hidden = !active;
   const restart = qs('#workspace-restart-combat'); if (restart) restart.hidden = !(running || Store.getCombat?.().participants?.size > 0);
   const mount = qs('#app-menu-resume'); if (!mount) return;
   mount.replaceChildren();
@@ -688,29 +691,6 @@ function downloadText(filename, content, type) {
   const link = document.createElement('a'); link.href = url; link.download = filename; link.click(); URL.revokeObjectURL(url);
 }
 
-function openClosureView() {
-  const scene = sceneFromStore();
-  const characters = persistentCharacters();
-  return openOverlay('Clôturer la séance', (mount, dialog) => {
-    const view = initClosureView({
-      mount, hosted: true, scene, persistentCharacters: characters,
-      callbacks: {
-        onPreview: preview => { if (!preview.ready) showToast('Un même personnage existe en deux versions : choisissez celle à garder', 'warning'); },
-        onApply: async (preview, options = {}) => {
-          const result = await awaitStore(requireStoreApi('closeScene')({ preview, selections: options.selections, authorities: options.authorities }), 'Clôture');
-          if (result?.status === 'stale') throw userError('La séance a changé : affichez à nouveau le report.');
-          if (result?.status === 'conflict') throw userError('Un même personnage existe en deux versions : choisissez celle à garder.');
-          dialog.close();
-          showToast('Séance clôturée et archivée', 'success');
-        },
-        onCancel: () => dialog.close(),
-        onExport: text => downloadText(`wfrp-seance-${new Date().toISOString().slice(0, 10)}.md`, text, 'text/markdown;charset=utf-8')
-      }
-    });
-    view.render();
-  });
-}
-
 // Import de profils analysés (texte ou JSON) : refusé tant que les points à vérifier ne sont pas confirmés.
 async function storeParsedProfiles(parsed, confirmed) {
   if (parsed.status !== 'ready' && !confirmed) throw userError('Confirmez les champs absents ou ambigus avant import.');
@@ -754,29 +734,6 @@ async function openFicheSyncView() {
       }
     });
     view.start();
-  });
-}
-
-function openArchivesView() {
-  return openOverlay('Archives de séances', (mount, dialog) => {
-    const render = () => {
-      mount.replaceChildren();
-      const archives = requireStoreApi('listArchives')();
-      if (!archives.length) { const empty = document.createElement('p'); empty.textContent = 'Aucune séance archivée.'; mount.appendChild(empty); return; }
-      archives.slice().reverse().forEach(archive => {
-        const row = document.createElement('article'); row.className = 'card';
-        const title = document.createElement('h3'); title.textContent = archive.title || 'Séance';
-        const meta = document.createElement('p'); meta.textContent = `${archive.createdAt || 'Date inconnue'} · Round ${archive.round ?? 0} · ${archive.reports?.length || 0} report(s)`;
-        const markdown = document.createElement('button'); markdown.type = 'button'; markdown.className = 'ghost small'; markdown.textContent = 'Exporter Markdown';
-        markdown.addEventListener('click', () => downloadText(`wfrp-archive-${archive.id}.md`, requireStoreApi('exportArchive')(archive.id, 'markdown'), 'text/markdown;charset=utf-8'));
-        const json = document.createElement('button'); json.type = 'button'; json.className = 'ghost small'; json.textContent = 'Exporter JSON';
-        json.addEventListener('click', () => downloadText(`wfrp-archive-${archive.id}.json`, requireStoreApi('exportArchive')(archive.id, 'json'), 'application/json'));
-        const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Supprimer';
-        remove.addEventListener('click', async () => { remove.disabled = true; try { await awaitStore(requireStoreApi('deleteArchive')(archive.id), 'Suppression'); render(); } catch (error) { remove.disabled = false; showToast(contextMessage('Archive non supprimée', error, 'réessayez.'), 'error'); } });
-        row.append(title, meta, markdown, json, remove); mount.appendChild(row);
-      });
-    };
-    render();
   });
 }
 
@@ -1057,6 +1014,15 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         dialog.addEventListener('close', restore, { once: true });
       });
     },
+    removeParticipant: async id => {
+      try {
+        await awaitStore(Store.removeParticipant(id), 'Retrait');
+        showToast('Combattant retiré du combat', 'success');
+      } catch (error) {
+        showToast(contextMessage('Combattant non retiré', error, 'réessayez.'), 'error');
+        throw error;
+      }
+    },
     editParticipant: id => {
       const participant = Store.getCombat().participants.get(id);
       if (!participant) return;
@@ -1241,10 +1207,8 @@ renderAppMenu();
 const safeOpen = operation => { try { operation(); } catch (error) { showToast(userMessage(error, 'Cette fenêtre n’a pas pu s’ouvrir : rechargez la page.'), 'error'); } };
 on(qs('#workspace-reminders'), 'click', () => safeOpen(openRemindersView));
 on(qs('#workspace-events'), 'click', () => safeOpen(openEventsView));
-on(qs('#workspace-archives'), 'click', () => safeOpen(openArchivesView));
 on(qs('#workspace-import-text'), 'click', () => safeOpen(openTextImportView));
 on(qs('#workspace-fiche-sync'), 'click', () => { openFicheSyncView().catch(error => showToast(contextMessage('Fiches indisponibles', error, 'vérifiez votre connexion, puis réessayez.'), 'error')); });
-on(qs('#workspace-close-scene'), 'click', () => safeOpen(openClosureView));
 on(qs('#workspace-restart-combat'), 'click', () => { restartCombat(); });
 on(qs('#workspace-save'), 'click', () => DOM.combat.btnSaveFile?.click());
 on(qs('#workspace-load'), 'click', () => DOM.combat.btnLoadFile?.click());

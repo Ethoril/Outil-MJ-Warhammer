@@ -1,3 +1,4 @@
+import { tmpdir } from 'node:os';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -97,6 +98,7 @@ async function main() {
         actions: {
           renderOverview(content) { content.textContent = 'Rappel courant'; },
           adjustHp(payload) { calls.push({ type: 'adjustHp', payload }); },
+          removeParticipant(id) { calls.push({ type: 'remove', id }); },
           enterParticipant(id) { calls.push({ type: 'enter', id }); },
           beginEncounter() { encounterCalls.push({ type: 'begin' }); },
           editEncounter(id) { encounterCalls.push({ type: 'edit', id }); },
@@ -131,8 +133,8 @@ async function main() {
     const cards = prepare.locator('.workspace-encounter-card');
     await expect(prepare.getByRole('button', { name: 'Nouvelle rencontre', exact: true })).toBeEnabled();
     await expect(cards).toHaveCount(3);
-    await expect(cards.nth(0)).toHaveAttribute('data-encounter-id', 'enc-empty');
-    await expect(cards.nth(2)).toContainText('Clôturée');
+    await expect(cards.nth(0)).toHaveAttribute('data-encounter-id', 'enc-closed');
+    await expect(cards.nth(2)).toContainText('Préparée');
     const card = prepare.locator('[data-encounter-id="enc-1"].workspace-encounter-card');
     await expect(card.getByRole('heading', { name: 'Embuscade au gué' })).toBeVisible();
     await expect(card.locator('.workspace-encounter-status.is-prepared')).toHaveText('Préparée');
@@ -149,11 +151,10 @@ async function main() {
     await rerender();
     await expect(card.locator('.workspace-encounter-status.is-active')).toHaveText('En cours');
     await expect(cards.first()).toHaveAttribute('data-encounter-id', 'enc-1');
-    await expect(prepare).toContainText('Combat en cours : « Embuscade au gué ». Suspendez-le ou clôturez-le (menu ⋯) pour lancer une autre rencontre.');
+    await expect(prepare).toContainText('Combat en cours : « Embuscade au gué ». Suspendez-le ou supprimez la rencontre pour en lancer une autre.');
     await expect(prepare.getByRole('button', { name: 'Lancer « Vieille embuscade »' })).toBeDisabled();
     await expect(prepare.getByRole('button', { name: 'Lancer « Vieille embuscade »' })).toHaveAttribute('title', /Un combat est en cours/);
-    await expect(card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' })).toBeDisabled();
-    await expect(card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' })).toHaveAttribute('title', 'Clôturez d’abord la séance (menu ⋯)');
+    await expect(card.getByRole('button', { name: 'Supprimer « Embuscade au gué »' })).toBeEnabled();
     await card.getByRole('button', { name: 'Revenir au combat « Embuscade au gué »' }).click();
     await card.getByRole('button', { name: 'Recommencer « Embuscade au gué »' }).click();
     await card.getByRole('button', { name: 'Suspendre « Embuscade au gué »' }).click();
@@ -165,7 +166,7 @@ async function main() {
     });
     await rerender();
     await expect(prepare.locator('.workspace-encounter-card[data-encounter-id="enc-closed"]')).toContainText('Suspendue');
-    await expect(prepare.getByRole('button', { name: 'Supprimer « Vieille embuscade »' })).toBeDisabled();
+    await expect(prepare.getByRole('button', { name: 'Supprimer « Vieille embuscade »' })).toBeEnabled();
     await prepare.getByRole('button', { name: 'Reprendre « Vieille embuscade »' }).click();
     await page.evaluate(() => { window.workspaceTestData.scenes.active = { id: 'scene-3', title: 'Autre', status: 'active', encounterId: 'enc-empty' }; });
     await rerender();
@@ -214,6 +215,22 @@ async function main() {
     await expect(actorSheet).toContainText('E · BE');
     // Default target: the first combatant of another camp in the order.
     await expect(targetSheet).toContainText('Combattant 2');
+    const deadNpc = page.locator('.workspace-track').getByRole('button', { name: 'Retirer Combattant 2 du combat', exact: true });
+    await expect(deadNpc).toBeVisible();
+    await deadNpc.click();
+    assert.deepEqual(await page.evaluate(() => window.workspaceTestData.calls.pop()), { type: 'remove', id: 'actor-2' });
+    await page.evaluate(() => { window.workspaceTestData.combat.participants.get('actor-2').hp = 1; });
+    await rerender();
+    await expect(deadNpc).toHaveCount(0);
+    await page.evaluate(() => { const npc = window.workspaceTestData.combat.participants.get('actor-2'); npc.hp = 0; npc.kind = 'PJ'; });
+    await rerender();
+    await expect(deadNpc).toHaveCount(0);
+    await page.evaluate(() => { const npc = window.workspaceTestData.combat.participants.get('actor-2'); npc.hp = -2; npc.kind = 'Créature'; window.workspaceTestData.combat.participants.get('actor-1').hp = 0; });
+    await rerender();
+    await expect(deadNpc).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Retirer Combattant 1 du combat', exact: true })).toHaveCount(0);
+    await page.evaluate(() => { window.workspaceTestData.combat.participants.get('actor-1').hp = 10; });
+    await rerender();
     // La cible par défaut porte l’étiquette « cible » dans la piste ; le tour, le marqueur ▶.
     await expect(page.locator('.workspace-track-role')).toHaveCount(1);
     await expect(page.locator('[data-workspace-select="actor-2"] .workspace-track-role')).toHaveText('cible');
@@ -508,11 +525,11 @@ async function main() {
     await expect(actorSheet).toContainText('Un nom de combattant très long');
     await expect(actorSheet).toContainText('Agit hors tour');
 
-    await page.screenshot({ path: '/private/tmp/mj-workspace-1440.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-workspace-1440.png'), fullPage: true });
     await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
     await page.setViewportSize({ width: 900, height: 900 });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    await page.screenshot({ path: '/private/tmp/mj-workspace-900.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-workspace-900.png'), fullPage: true });
     await page.evaluate(() => document.documentElement.removeAttribute('data-theme'));
 
     await page.getByRole('tab', { name: 'Bibliothèque' }).click();

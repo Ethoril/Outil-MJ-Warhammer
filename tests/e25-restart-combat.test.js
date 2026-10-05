@@ -112,7 +112,7 @@ test('restartCombat — aucun combat, rencontre supprimée ou vidée : message l
   assert.throws(() => store.restartCombat(), error => userMessage(error) === 'La rencontre n’a plus aucun combattant : complétez sa composition avant de recommencer.');
   assert.equal(store.listParticipants().length, 3);
   await store.deleteEncounter('rencontre');
-  assert.throws(() => store.restartCombat(), error => userMessage(error) === 'La rencontre d’origine n’existe plus : clôturez la séance, puis relancez une rencontre.');
+  assert.throws(() => store.restartCombat(), error => userMessage(error) === 'Aucun combat en cours à recommencer.');
 });
 
 test('restartCombat — ordre d’initiative et mode automatique, projections identiques', async () => {
@@ -140,4 +140,60 @@ test('restartCombat — les choix de rappels de la scène sont effacés', async 
   assert.equal(store.listReminderChoices().length, 2);
   await store.restartCombat();
   assert.deepEqual(store.listReminderChoices().map(item => item.id), ['autre-scene:t1:consequence:b']);
+});
+
+test('suppression — combat actif nettoyé et restauré par annulation', async () => {
+  const store = await launched();
+  const scene = store.getActiveScene();
+  const participant = store.listParticipants()[0];
+  await store.updateParticipant(participant.id, { hp: -2 });
+  await store.setRoundTurn(3, participant.id);
+  await store.executeCommand('test-linked-data', draft => ({ ...draft,
+    diceLines: [{ id: 'owned', participantId: participant.id }, { id: 'other', participantId: 'other', targetId: participant.id }],
+    reminderChoices: [{ id: `${scene.id}:turn:reminder` }, { id: 'unrelated:turn:reminder' }]
+  }));
+  await store.deleteEncounter('rencontre');
+  assert.equal(store.getActiveScene(), null);
+  assert.equal(store.listParticipants().length, 0);
+  assert.equal(store.getCombat().currentActorId, null);
+  assert.equal(store.getCombat().round, 0);
+  assert.deepEqual(store.getCombat().order, []);
+  assert.equal(store.listProfiles().length, 3);
+  assert.deepEqual(store.getDiceLines().map(line => [line.id, line.targetId]), [['other', null]]);
+  assert.deepEqual(store.listReminderChoices().map(item => item.id), ['unrelated:turn:reminder']);
+  await store.undo();
+  assert.equal(store.getActiveScene().id, scene.id);
+  assert.equal(store.listParticipants().find(item => item.id === participant.id).hp, -2);
+  assert.equal(store.getCombat().round, 3);
+});
+
+test('suppression — rencontre suspendue retirée sans toucher au combat actif', async () => {
+  const store = await launched();
+  await store.suspendActiveScene();
+  await store.saveEncounter({ id: 'other', title: 'Autre', entries: [{ profileId: 'chien', zone: 'active' }] });
+  await store.launchEncounter('other');
+  const active = store.getActiveScene();
+  await store.deleteEncounter('rencontre');
+  assert.deepEqual(store.listSuspendedScenes(), []);
+  assert.equal(store.getActiveScene().id, active.id);
+  assert.equal(store.listParticipants()[0].profileId, 'chien');
+  await store.undo();
+  assert.equal(store.listSuspendedScenes().length, 1);
+  assert.equal(store.getActiveScene().id, active.id);
+});
+
+test('retrait — PNJ vaincu retiré de la scène et des tours, profil conservé, annulable', async () => {
+  const store = await launched();
+  const [first, second] = store.listParticipants().filter(item => item.zone === 'active');
+  await store.updateParticipant(first.id, { hp: 0 });
+  await store.setRoundTurn(1, first.id);
+  await store.removeParticipant(first.id);
+  assert.equal(store.getActiveScene().participants.some(item => item.id === first.id), false);
+  assert.equal(store.getCombat().participants.has(first.id), false);
+  assert.equal(store.getCombat().order.includes(first.id), false);
+  assert.equal(store.getCombat().currentActorId, second.id);
+  assert.equal(store.getProfile(first.profileId).hp, 12);
+  await store.undo();
+  assert.equal(store.getCombat().participants.get(first.id).hp, 0);
+  assert.equal(store.getCombat().currentActorId, first.id);
 });

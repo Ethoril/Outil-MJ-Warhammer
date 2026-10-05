@@ -3,7 +3,7 @@ import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, uid } from
 import { normalizeEffects } from './effects.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const statuses = new Set(['prepared', 'active', 'suspended', 'closed']);
+const statuses = new Set(['prepared', 'active', 'suspended']);
 
 export const CAMP_LABELS = Object.freeze({ pj: 'PJ', allie: 'Allié', ennemi: 'Ennemi', neutre: 'Neutre' });
 const CAMP_ALIASES = new Map([
@@ -177,13 +177,8 @@ export function resumeScene(scene, { activeScene = null } = {}) {
   return { ...cloneValue(scene), status: 'active' };
 }
 
-export function closeScene(scene) {
-  if (!isRecord(scene) || !['active', 'suspended'].includes(scene.status)) throw new Error('Scène active ou suspendue requise');
-  return { ...cloneValue(scene), status: 'closed', closedAt: new Date().toISOString() };
-}
-
-export const ENCOUNTER_STATUS_LABELS = Object.freeze({ active: 'En cours', suspended: 'Suspendue', prepared: 'Préparée', closed: 'Clôturée' });
-const STATUS_ORDER = ['active', 'suspended', 'prepared', 'closed'];
+export const ENCOUNTER_STATUS_LABELS = Object.freeze({ active: 'En cours', suspended: 'Suspendue', prepared: 'Préparée' });
+const STATUS_ORDER = ['active', 'suspended', 'prepared'];
 
 /** Statut affiché d'une rencontre, déduit des scènes vivantes (le `status` stocké peut être en retard). */
 export function encounterDisplayStatus(encounter, { activeScene = null, suspendedScenes = [] } = {}) {
@@ -192,7 +187,7 @@ export function encounterDisplayStatus(encounter, { activeScene = null, suspende
   if (activeScene?.status === 'active' && activeScene.encounterId === id) return result('active', activeScene.id);
   const suspended = (Array.isArray(suspendedScenes) ? suspendedScenes : []).find(scene => scene?.encounterId === id);
   if (suspended) return result('suspended', suspended.id);
-  return result(encounter?.status === 'closed' ? 'closed' : 'prepared');
+  return result('prepared');
 }
 
 /** Nombre de combattants et composition lisible : « Gobelin ×3, Chef gobelin ». */
@@ -209,7 +204,7 @@ export function encounterSummary(encounter, profiles = []) {
   return { count, text };
 }
 
-/** En cours, suspendues, préparées, puis clôturées ; ordre d'origine conservé dans chaque groupe. */
+/** En cours, suspendues, préparées ; ordre d'origine conservé dans chaque groupe. */
 export function sortEncountersForDisplay(encounters, scenes = {}) {
   const rank = encounter => STATUS_ORDER.indexOf(encounterDisplayStatus(encounter, scenes).key);
   return (Array.isArray(encounters) ? encounters : []).map((encounter, index) => ({ encounter, index, rank: rank(encounter) }))

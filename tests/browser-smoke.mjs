@@ -367,17 +367,14 @@ async function main() {
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(1);
     await expect(page.locator('.workspace-track')).toContainText('PV 15/14');
 
-    await openAppMenu(page);
-    await page.locator('#workspace-close-scene').click();
-    const closure = page.getByRole('dialog');
-    await closure.getByRole('button', { name: 'Voir le report' }).click();
-    await closure.getByRole('button', { name: 'Clôturer et archiver' }).click();
-    await expect(closure).toBeHidden();
-    await expect(page.locator('#toast-container')).toContainText('clôturée');
+    await openWorkspaceSpace(page, 'prepare');
+    await page.locator('.workspace-encounter-card').getByRole('button', { name: /^Supprimer/ }).click();
+    await openWorkspaceSpace(page, 'play');
+    await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(0);
 
     assert.deepEqual(errors, [], `exceptions navigateur: ${errors.join('\n')}`);
     await context.close();
-    console.log('✔ test:browser — démarrage, CRUD profil, rencontre réelle, résolution, undo/redo, reload et clôture');
+    console.log('✔ test:browser — démarrage, CRUD profil, rencontre réelle, résolution, undo/redo, reload et suppression');
   } finally {
     await browser.close();
     server.close();

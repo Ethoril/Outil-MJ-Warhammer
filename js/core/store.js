@@ -5,7 +5,6 @@ import { createStateCommand } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat } from './turn-order.js';
 import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounterEntry, duplicateEncounter, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene } from './encounters.js';
-import { previewClosure as buildClosurePreview, applyClosure as applySceneClosure, retainArchives, exportArchive as formatArchive } from './closure.js';
 import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution } from './resolution.js';
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
@@ -474,7 +473,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       ...state,
       // The journal is appended by independent local events and is therefore
       // intentionally outside command undo/redo. Other collections remain in
-      // the snapshot because commands such as closure and reminder decisions
+      // the snapshot because commands such as reminder decisions
       // must be reversible.
       log: cloneValue(current.log)
     };
@@ -909,7 +908,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const combatRequested = !sameValue(before?.combat, next?.combat);
         let canonical = migrateSnapshot(next, { appVersion, contextId }).data;
         canonical = synchronizeSceneCombat(before, canonical, localRevision + 1, { sceneRequested, combatRequested });
-        // A scene revision is the CAS token used by closure previews.  Keep it
+        // A scene revision identifies changes to the scene.  Keep it
         // monotone with the command revision so a stale preview cannot be
         // silently regenerated over a live combat edit.
         if (canonical.activeScene && canonical.activeScene.status === 'active'
@@ -1634,7 +1633,22 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       return api.executeCommand('save-encounter', draft => ({ ...draft, encounters: [...(draft.encounters || []).filter(item => item.id !== model.id), model] }));
     },
     deleteEncounter(id) {
-      return api.executeCommand('delete-encounter', draft => ({ ...draft, encounters: (draft.encounters || []).filter(item => item.id !== id) }));
+      return api.executeCommand('delete-encounter', draft => {
+        const scenes = [draft.activeScene, ...(draft.suspendedScenes || [])].filter(scene => scene?.encounterId === id);
+        const sceneIds = new Set(scenes.map(scene => scene.id));
+        const participantIds = new Set(scenes.flatMap(scene => (scene.participants || []).map(item => item.id)));
+        const removingActive = draft.activeScene?.encounterId === id;
+        return {
+          ...draft,
+          encounters: (draft.encounters || []).filter(item => item.id !== id),
+          activeScene: removingActive ? null : draft.activeScene,
+          suspendedScenes: (draft.suspendedScenes || []).filter(scene => scene.encounterId !== id),
+          combat: removingActive ? { ...draft.combat, round: 0, currentActorId: null, order: [], participants: [] } : draft.combat,
+          diceLines: (draft.diceLines || []).filter(line => !participantIds.has(line.participantId))
+            .map(line => participantIds.has(line.targetId) ? { ...line, targetId: null } : line),
+          reminderChoices: (draft.reminderChoices || []).filter(choice => ![...sceneIds].some(sceneId => choice.id?.startsWith(`${sceneId}:`)))
+        };
+      });
     },
     duplicateEncounter(id) {
       const source = encounters.find(item => item.id === id);
@@ -1672,7 +1686,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     // (scène active), ou PV au maximum et états vidés (combat monté sans rencontre).
     restartCombat() {
       const scene = activeScene?.status === 'active' ? activeScene : null;
-      const missing = () => new Error('Rencontre d’origine introuvable : clôturez la séance, puis relancez une rencontre.');
+      const missing = () => new Error('Rencontre d’origine introuvable : supprimez le combat associé, puis relancez une rencontre.');
       const empty = () => new Error('La rencontre n’a plus aucun combattant : complétez sa composition avant de recommencer.');
       const source = scene ? encounters.find(item => item.id === scene.encounterId) : null;
       if (scene && !source) throw missing();
@@ -1729,47 +1743,6 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         suspendedScenes: (draft.suspendedScenes || []).filter(item => item.id !== id),
         encounters: (draft.encounters || []).map(item => item.id === scene.encounterId ? { ...item, status: 'active' } : item)
       }));
-    },
-    previewClosure(options = {}) {
-      if (!activeScene) throw new Error('Aucune scène active');
-      return buildClosurePreview(activeScene, { persistentCharacters, ...options });
-    },
-    closeScene(options = {}) {
-      if (!activeScene) throw new Error('Aucune scène active');
-      const initialPreview = options.preview || buildClosurePreview(activeScene, { persistentCharacters, ...options });
-      if (!initialPreview.ready) return { status: 'conflict', conflicts: cloneValue(initialPreview.conflicts), preview: initialPreview };
-      if (options.preview && options.preview.sceneRevision !== (activeScene.revision ?? null)) {
-        return { status: 'stale', requiresPreview: true, preview: initialPreview };
-      }
-      return api.executeCommand('close-scene', draft => {
-        const scene = draft.activeScene;
-        // An explicit preview is an approval boundary. Rebuilding it here
-        // could silently include a later HP/state edit and close the wrong
-        // characters. applyClosure performs the revision/participant CAS.
-        const preview = options.preview || buildClosurePreview(scene, { persistentCharacters: draft.persistentCharacters || [], selections: options.selections, authorities: options.authorities, includeStates: options.includeStates });
-        const result = applySceneClosure(scene, preview, { persistentCharacters: draft.persistentCharacters || [], selectedParticipantIds: options.selectedParticipantIds, archiveId: options.archiveId });
-        if (result.status !== 'applied') throw new Error(result.reason || 'Clôture à revoir');
-        const participantIds = new Set((scene.participants || []).map(item => item?.id).filter(Boolean));
-        return {
-          ...draft,
-          activeScene: null,
-          diceLines: (draft.diceLines || [])
-            .filter(line => !participantIds.has(line.participantId))
-            .map(line => participantIds.has(line.targetId) ? { ...line, targetId: null } : line),
-          persistentCharacters: (draft.persistentCharacters || []).map(character => result.characterUpdates.find(update => update.id === character.id) || character),
-          archives: retainArchives([...(draft.archives || []), result.archive]),
-          encounters: (draft.encounters || []).map(item => item.id === scene.encounterId ? { ...item, status: 'closed' } : item)
-        };
-      });
-    },
-    listArchives() { return cloneValue(archives); },
-    exportArchive(id, format = 'json') {
-      const archive = archives.find(item => item.id === id);
-      if (!archive) throw new Error('Archive introuvable');
-      return formatArchive(archive, format);
-    },
-    deleteArchive(id) {
-      return api.executeCommand('delete-archive', draft => ({ ...draft, archives: (draft.archives || []).filter(item => item.id !== id) }));
     },
     previewResolution(input = {}) {
       const combatState = { revision: localRevision, participants: Array.from(combat.participants.values()), appliedResolutionIds };

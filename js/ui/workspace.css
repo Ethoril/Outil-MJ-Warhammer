@@ -134,6 +134,11 @@
   padding: 8px 10px;
   font-weight: 400;
 }
+.workspace-track-entry { display: grid; gap: 4px; padding-bottom: 6px; background: var(--panel); border: 1px solid var(--chip); border-left: 4px solid var(--camp-neutre); border-radius: var(--radius); }
+.workspace-track-entry.is-camp-allie { border-left-color: var(--camp-allie); }
+.workspace-track-entry.is-camp-ennemi { border-left-color: var(--camp-ennemi); }
+.workspace-track-entry > .workspace-track-item { border: 0; border-radius: var(--radius); }
+.workspace-track-entry > .danger { justify-self: end; margin-right: 6px; }
 .workspace-track-item.is-camp-pj { border-left-color: var(--camp-pj); }
 .workspace-track-item.is-camp-allie { border-left-color: var(--camp-allie); }
 .workspace-track-item.is-camp-ennemi { border-left-color: var(--camp-ennemi); }

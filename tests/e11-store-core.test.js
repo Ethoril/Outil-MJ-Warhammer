@@ -27,27 +27,15 @@ test('Store — scène et combat partagent les mêmes participants, suspension/r
   await store.resumeScene(suspended.id);
   const activeSceneId = store.getActiveScene().id;
   assert.equal(store.listParticipants()[0].hp, 4);
-  const preview = store.previewClosure();
-  const result = await store.closeScene({ preview });
-  assert.equal(result.ok, true);
+  await store.deleteEncounter('encounter');
   assert.equal(store.getActiveScene(), null);
   assert.equal(store.getCombat().participants.size, 0);
-  assert.equal(store.listPersistentCharacters()[0].hp, 4);
-  assert.equal(store.listArchives().length, 1);
-  await store.undo();
-  assert.equal(store.listArchives().length, 0);
-  assert.equal(store.getActiveScene().id, activeSceneId);
   assert.equal(store.listPersistentCharacters()[0].hp, 9);
+  await store.undo();
+  assert.equal(store.getActiveScene().id, activeSceneId);
+  assert.equal(store.listParticipants()[0].hp, 4);
   await store.redo();
   assert.equal(store.getActiveScene(), null);
-  assert.equal(store.listArchives().length, 1);
-  const archiveId = store.listArchives()[0].id;
-  await store.deleteArchive(archiveId);
-  assert.equal(store.listArchives().length, 0);
-  await store.undo();
-  assert.equal(store.listArchives().length, 1);
-  await store.redo();
-  assert.equal(store.listArchives().length, 0);
 });
 
 test('Store — une simulation appliquée ne passe qu’une fois par la résolution', async () => {

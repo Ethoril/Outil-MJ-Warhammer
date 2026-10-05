@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createEncounter, setEncounterEntry, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene, duplicateEncounter, normalizeCamp } from '../js/core/encounters.js';
-import { previewClosure, applyClosure, retainArchives, exportArchive } from '../js/core/closure.js';
 import { migrateSnapshot } from '../js/core/migrations.js';
 
 const ids = (() => { let n = 0; return () => `id-${++n}`; })();
@@ -44,79 +43,6 @@ test('E11 rencontre — suspension/reprise, improvisation et actif unique', () =
   assert.equal(improvised.participants.at(-1).improvised, true);
   assert.equal(improvised.participants.at(-1).profileId, null);
   assert.notEqual(duplicateEncounter(encounter, ids).id, encounter.id);
-});
-
-test('E13 clôture — preview sélectif et conflit de doublon persistant', () => {
-  const scene = { id: 'scene', encounterId: 'enc', title: 'Fin', status: 'active', round: 2, participants: [
-    { id: 'p1', name: 'Renaut 1', hp: 4, states: [{ name: 'Sonné', duration: 1 }, { name: 'Brisé', duration: null }], persistentCharacterId: 'char' },
-    { id: 'p2', name: 'Renaut 2', hp: 8, states: [], persistentCharacterId: 'char' }
-  ], events: [] };
-  const conflict = previewClosure(scene, { persistentCharacters: [{ id: 'char', name: 'Renaut', hp: 14, states: [] }] });
-  assert.equal(conflict.ready, false);
-  assert.equal(conflict.conflicts[0].reason, 'personnage-persistant-associe-plusieurs-fois');
-  const cleanScene = { ...scene, participants: [scene.participants[0]] };
-  const preview = previewClosure(cleanScene, { persistentCharacters: [{ id: 'char', name: 'Renaut', hp: 14, states: [] }] });
-  const applied = applyClosure(cleanScene, preview, { persistentCharacters: [{ id: 'char', name: 'Renaut', hp: 14, states: [] }], now: 'round:3' });
-  assert.equal(applied.status, 'applied');
-  assert.equal(applied.characterUpdates[0].hp, 4);
-  assert.equal(applied.scene.status, 'closed');
-  assert.equal(applied.archive.reports[0].statesAfter[0].name, 'Brisé');
-});
-
-test('E13 clôture — désélection explicite, états temporaires et autorité résolvent le doublon', () => {
-  const scene = { id: 'scene-select', status: 'active', revision: 3, participants: [
-    { id: 'p1', name: 'A', hp: 5, states: [{ name: 'Temporaire', duration: 2 }, { name: 'Persistant', duration: null }], persistentCharacterId: 'char' },
-    { id: 'p2', name: 'B', hp: 6, states: [], persistentCharacterId: 'char' }
-  ] };
-  const characters = [{ id: 'char', name: 'A/B', hp: 10, states: [] }];
-  const deselected = previewClosure(scene, { persistentCharacters: characters, selections: { p1: '', p2: '' }, authorities: {} });
-  assert.deepEqual(deselected.reports, []);
-  assert.equal(deselected.ready, true);
-  const resolved = previewClosure(scene, { persistentCharacters: characters, authorities: { char: 'p2' } });
-  assert.equal(resolved.ready, true);
-  assert.deepEqual(resolved.reports.map(report => report.participantId), ['p2']);
-  const unresolved = previewClosure(scene, { persistentCharacters: characters });
-  assert.equal(unresolved.ready, false);
-  assert.equal(unresolved.conflicts[0].requiresAuthority, true);
-  const p1Report = previewClosure({ ...scene, participants: [scene.participants[0]] }, { persistentCharacters: characters }).reports[0];
-  assert.deepEqual(p1Report.statesAfter.map(state => state.name), ['Persistant']);
-});
-
-test('E13 clôture — aperçu périmé après modification scène, PV ou états', () => {
-  const scene = { id: 'scene-stale', revision: 1, status: 'active', participants: [{ id: 'p1', hp: 5, states: [], persistentCharacterId: 'char' }] };
-  const options = { persistentCharacters: [{ id: 'char', hp: 10, states: [] }] };
-  const preview = previewClosure(scene, options);
-  scene.participants[0].hp = 4;
-  assert.equal(applyClosure(scene, preview, options).status, 'stale');
-  scene.participants[0].hp = 5;
-  scene.revision = 2;
-  assert.equal(applyClosure(scene, preview, options).status, 'stale');
-  scene.revision = 1;
-  scene.participants[0].states = [{ name: 'Sonné', duration: null }];
-  assert.equal(applyClosure(scene, preview, options).status, 'stale');
-});
-
-test('E13 archives — rétention bornée et export lisible', () => {
-  const archives = retainArchives([{ id: 'a' }, { id: 'b' }, { id: 'c' }], 2);
-  assert.deepEqual(archives.map(item => item.id), ['b', 'c']);
-  assert.deepEqual(retainArchives([{ id: 'a' }], 0), []);
-  assert.throws(() => retainArchives([{ id: 'a' }], -1), RangeError);
-  assert.throws(() => retainArchives([{ id: 'a' }], 1.5), RangeError);
-  const archive = { title: 'Fin', createdAt: 'round:3', round: 3, reports: [{ characterName: 'Renaut', hpBefore: 14, hpAfter: 4, statesAfter: [{ name: 'Sonné' }] }] };
-  assert.match(exportArchive(archive, 'markdown'), /Renaut.*14.*4/);
-  assert.equal(JSON.parse(exportArchive(archive, 'json')).title, 'Fin');
-});
-
-test('E13 archives — seuls les reports cochés sont archivés', () => {
-  const scene = { id: 'scene-archive', status: 'active', participants: [
-    { id: 'p1', hp: 3, states: [], persistentCharacterId: 'c1' },
-    { id: 'p2', hp: 7, states: [], persistentCharacterId: 'c2' }
-  ] };
-  const characters = [{ id: 'c1', hp: 10 }, { id: 'c2', hp: 10 }];
-  const preview = previewClosure(scene, { persistentCharacters: characters });
-  const result = applyClosure(scene, preview, { persistentCharacters: characters, selectedParticipantIds: ['p1'] });
-  assert.deepEqual(result.archive.reports.map(report => report.participantId), ['p1']);
-  assert.equal(result.characterUpdates.length, 1);
 });
 
 test('E11/E13 migration — rencontres, personnages et archives optionnels sont conservés', () => {

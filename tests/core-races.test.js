@@ -126,7 +126,7 @@ test('Store — une réconciliation distante conserve les archives locales et po
   store.attachSync({ dbRef: {}, contextId: 'guest', createSession: options => createSyncSession({ ...options, transport: network }) });
   for (let i = 0; i < 150 && store.getProfile('remote') === null; i++) await new Promise(resolve => setTimeout(resolve, 2));
   assert.equal(store.getProfile('remote').name, 'Distant');
-  assert.equal(store.listArchives()[0].id, 'archive-local');
+  assert.equal((await persistence.load()).archives[0].id, 'archive-local');
   assert.equal(store.getHistory().boundary.reason, 'remote-sync');
   const revision = store.getLocalRevision();
   store.detachSync();
@@ -134,7 +134,7 @@ test('Store — une réconciliation distante conserve les archives locales et po
   const reloadedPersistence = createPersistence({ indexedDB, dbName: 'race-remote-metadata', contextId: 'guest' });
   const reloaded = createStore({ persistence: reloadedPersistence });
   await reloaded.ready;
-  assert.equal(reloaded.listArchives()[0].id, 'archive-local');
+  assert.equal((await reloadedPersistence.load()).archives[0].id, 'archive-local');
   assert.equal(reloaded.getHistory().boundary.reason, 'remote-sync');
   assert.equal(reloaded.getLocalRevision(), revision);
   reloadedPersistence.close();

@@ -1,3 +1,4 @@
+import { tmpdir } from 'node:os';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -224,10 +225,10 @@ async function main() {
     await resolution.locator('[data-roll-input="attack"]').fill('23');
     await resolution.locator('[data-roll-input="attack"]').press('Enter');
     await expect(resolution.locator('.workspace-result')).toContainText('DR +2');
-    await page.screenshot({ path: '/private/tmp/mj-index-play-1440.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-index-play-1440.png'), fullPage: true });
     await page.setViewportSize({ width: 900, height: 900 });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    await page.screenshot({ path: '/private/tmp/mj-index-play-900.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-index-play-900.png'), fullPage: true });
     await page.setViewportSize({ width: 1440, height: 900 });
 
     // E16 : calculer n'applique rien. Le second onglet réel modifie la même
@@ -283,13 +284,13 @@ async function main() {
     await expect(encounterCards.first().getByRole('button', { name: /^Revenir au combat/ })).toBeVisible();
     await expect(encounterCards.first().getByRole('button', { name: /^Lancer/ })).toHaveCount(0);
     // Une rencontre en jeu ne se supprime pas : sa séance perdrait sa carte.
-    await expect(encounterCards.first().getByRole('button', { name: /^Supprimer/ })).toBeDisabled();
+    await expect(encounterCards.first().getByRole('button', { name: /^Supprimer/ })).toBeEnabled();
     await encounterCards.first().getByRole('button', { name: /^Suspendre/ }).click();
     await expect(page.locator('#toast-container')).toContainText('Séance suspendue');
     await expect(encounterCards.first()).toContainText('Suspendue');
     // Le focus passe de « Suspendre » à « Reprendre », sur la même carte.
     await expect.poll(() => page.evaluate(() => document.activeElement?.dataset.focusKey || '')).toMatch(/^resume-scene-/);
-    await expect(encounterCards.first().getByRole('button', { name: /^Supprimer/ })).toBeDisabled();
+    await expect(encounterCards.first().getByRole('button', { name: /^Supprimer/ })).toBeEnabled();
     await page.reload();
     await page.locator('#tab-prepare').click();
     await openAppMenu(page);
@@ -311,19 +312,9 @@ async function main() {
     await characters.getByRole('button', { name: 'Ajouter un personnage' }).click();
     await expect(page.locator('#toast-container')).toContainText('Personnage persistant ajouté');
     await characterOverlay.getByRole('button', { name: 'Fermer' }).click();
+    await encounterCards.first().getByRole('button', { name: /^Supprimer/ }).click();
     await page.locator('#tab-combat').click();
-    await openAppMenu(page);
-    await page.locator('#app-menu').getByRole('button', { name: 'Clôturer la séance' }).click();
-    const closureOverlay = page.getByRole('dialog');
-    await expect(closureOverlay).toBeVisible();
-    await expect(closureOverlay.getByRole('heading')).toHaveText(['Clôturer la séance']);
-    const closureTarget = closureOverlay.getByRole('combobox', { name: /Personnage persistant pour/ }).first();
-    await closureTarget.selectOption({ label: 'PJ persistant' });
-    await closureOverlay.getByRole('button', { name: 'Voir le report' }).click();
-    await expect(closureOverlay.locator('.closure-preview')).toBeVisible();
-    await closureOverlay.getByRole('button', { name: 'Clôturer et archiver' }).click();
-    await expect(closureOverlay).toBeHidden();
-    await expect(page.locator('#toast-container')).toContainText('clôturée');
+    await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(0);
 
     // Capture a dense, real play space as a visual regression: fifteen long
     // profile names with prepared actions must remain readable at both widths.
@@ -393,9 +384,9 @@ async function main() {
     await expect(eventsOverlay).toBeVisible();
     // Une seule fenêtre à la fois ; Échap ferme et rend le focus au menu ⋯.
     await openAppMenu(page);
-    await page.locator('#workspace-archives').click();
+    await page.locator('#workspace-restores').click();
     await expect(page.getByRole('dialog')).toHaveCount(1);
-    await expect(page.getByRole('dialog').getByRole('heading', { level: 2 })).toHaveText('Archives de séances');
+    await expect(page.getByRole('dialog').getByRole('heading', { level: 2 })).toHaveText('Versions précédentes');
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).toHaveCount(0);
     await expect(page.locator('#btn-menu')).toBeFocused();
@@ -518,15 +509,15 @@ async function main() {
     await expect(page.locator('#btn-theme-toggle')).toHaveText('Thème : Sombre');
     await page.keyboard.press('Escape');
     await expect(page.locator('#app-menu')).toBeHidden();
-    await page.screenshot({ path: '/private/tmp/mj-index-play-15-dark-1440.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-index-play-15-dark-1440.png'), fullPage: true });
     await page.setViewportSize({ width: 900, height: 900 });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    await page.screenshot({ path: '/private/tmp/mj-index-play-15-dark-900.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-index-play-15-dark-900.png'), fullPage: true });
     await page.locator('#tab-prepare').click();
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.screenshot({ path: '/private/tmp/mj-index-1440.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-index-1440.png'), fullPage: true });
     await page.setViewportSize({ width: 900, height: 900 });
-    await page.screenshot({ path: '/private/tmp/mj-index-900.png', fullPage: true });
+    await page.screenshot({ path: join(tmpdir(), 'mj-index-900.png'), fullPage: true });
 
     // E04: preview the newest durable restore point, restore it through the
     // confirmation boundary, and verify the restored scene after reload.
