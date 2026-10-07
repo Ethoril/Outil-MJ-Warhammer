@@ -3,8 +3,9 @@
 // n'en tenait aucun compte, ils se réduisaient à des pastilles informatives.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { applyTargetBonus, isCriticalRoll, isFumbleRoll, activeEngines } from '../js/core/roll-qualities.js';
+import { applyAttackSl, applyTargetBonus, isCriticalRoll, isFumbleRoll, activeEngines } from '../js/core/roll-qualities.js';
 import { isDouble } from '../js/core/dice.js';
+import { previewResolution } from '../js/core/resolution.js';
 
 test('Précise — +10 au score cible', () => {
   assert.equal(applyTargetBonus(45, [{ id: 'precise' }]).target, 55);
@@ -75,4 +76,43 @@ test('activeEngines — dédoublonne les alias et ignore l\'inconnu', () => {
   assert.deepEqual(activeEngines([{ id: 'nawak' }]), [], 'mot-clé inconnu ignoré');
   assert.deepEqual(activeEngines(null), [], 'entrée invalide tolérée');
   assert.deepEqual(activeEngines(['precise']).map(x => x.id), ['precise'], 'chaîne acceptée');
+});
+
+test('Pointue — +1 DR sur une réussite seulement', () => {
+  assert.deepEqual(applyAttackSl(3, true, [{ id: 'pointue' }]), { sl: 4, bonus: 1 });
+  assert.deepEqual(applyAttackSl(-2, false, [{ id: 'pointue' }]), { sl: -2, bonus: 0 });
+  assert.deepEqual(applyAttackSl(3, true, []), { sl: 3, bonus: 0 });
+});
+
+test('Imprécise — −1 DR sur réussite comme sur échec', () => {
+  assert.deepEqual(applyAttackSl(3, true, [{ id: 'imprecise' }]), { sl: 2, bonus: -1 });
+  assert.deepEqual(applyAttackSl(-2, false, [{ id: 'imprecise' }]), { sl: -3, bonus: -1 });
+});
+
+test('Pointue + Imprécise — Imprécise l’emporte', () => {
+  assert.deepEqual(applyAttackSl(3, true, [{ id: 'pointue' }, { id: 'imprecise' }]), { sl: 2, bonus: -1 });
+});
+
+test('Pointue / Imprécise — effet sur un test opposé et sur les Dégâts (previewResolution)', () => {
+  const actor = { id: 'a', name: 'A', caracs: { F: 30 }, states: [] };
+  const target = { id: 't', name: 'T', hp: 10, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, states: [] };
+  const run = (qualities, roll = 43, defense = { roll: 35, base: 40 }) => previewResolution({
+    actor, target, roll, defense, action: { type: 'attack', base: 50, damage: 4, qualities }
+  });
+  const plain = run([]);
+  const pointue = run(['Pointue']);
+  const imprecise = run(['Imprécise']);
+  assert.equal(pointue.slBonus, 1);
+  assert.equal(pointue.sl, plain.sl + 1);
+  assert.equal(pointue.opposition.netSl, plain.opposition.netSl + 1);
+  assert.equal(pointue.damage.sl, plain.damage.sl + 1);
+  assert.equal(pointue.damage.finalDamage, plain.damage.finalDamage + 1);
+  assert.equal(imprecise.opposition.netSl, plain.opposition.netSl - 1);
+  assert.equal(imprecise.success, plain.success, 'la réussite ne change pas');
+  // Échec propre : Pointue sans effet, Imprécise −1
+  assert.equal(run(['Pointue'], 90).sl, run([], 90).sl);
+  assert.equal(run(['Imprécise'], 90).sl, run([], 90).sl - 1);
+  // Non-attaque : aucun effet
+  const skill = previewResolution({ actor, roll: 30, action: { type: 'skill', base: 60, qualities: ['Pointue'] } });
+  assert.equal(skill.slBonus, 0);
 });

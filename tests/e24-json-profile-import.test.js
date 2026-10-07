@@ -46,14 +46,14 @@ test('JSON — l’exemple complet est prêt et remplit chaque case', () => {
 
 test('JSON — qualité avec valeur, formule de dégâts, caracs supplémentaires', () => {
   const result = one({ nom: 'Brute', pv: 20, caracteristiques: { M: 4, A: 2, B: 20, BF: 3, F: 45 }, jets: [
-    { nom: 'Massue', score: 50, degats: 'BF+4', qualites: [{ nom: 'Recharge', valeur: 3 }, 'Taille 2', 'Impact'] },
+    { nom: 'Massue', score: 50, degats: 'BF+4', qualites: [{ nom: 'Recharge', valeur: 3 }, 'Dispersion 2', 'Impact'] },
     { nom: 'Souffle', score: 30, degats: '1d10' }
   ] });
   assert.equal(result.status, 'ready');
   const [profile] = result.profiles;
   assert.deepEqual(profile.caracs, { M: 4, A: 2, B: 20, BF: 3, F: 45 });
   const [club, breath] = profile.actions;
-  assert.deepEqual(club.qualities.map(({ id, rating }) => [id, rating]), [['recharge', 3], ['taille', 2], ['percutante', undefined]]);
+  assert.deepEqual(club.qualities.map(({ id, rating }) => [id, rating]), [['recharge', 3], ['dispersion', 2], ['percutante', undefined]]);
   assert.deepEqual([breath.damage, breath.damageFormula], [0, '1d10']);
 });
 
@@ -124,9 +124,9 @@ test('JSON — valeurs trop larges ou ambiguës signalées', () => {
 });
 
 test('JSON — qualités : liste de textes groupés, valeur X réservée aux mots-clés à X, héritage d’objet ignoré', () => {
-  const result = one({ nom: 'A', pv: 1, jets: [{ nom: 'Arbalète', score: 40, qualites: ['Recharge 2, Taille 1', 'Percutante 3', 'constructor', { id: 'zorglub', name: 'Zorglub Spécial' }] }] });
+  const result = one({ nom: 'A', pv: 1, jets: [{ nom: 'Arbalète', score: 40, qualites: ['Recharge 2, Salve 1', 'Percutante 3', 'constructor', { id: 'zorglub', name: 'Zorglub Spécial' }] }] });
   const qualities = result.profiles[0].actions[0].qualities;
-  assert.deepEqual(qualities.map(({ id, rating }) => [id, rating]), [['recharge', 2], ['taille', 1], ['percutante', undefined], ['constructor', undefined], ['zorglub-special', undefined]]);
+  assert.deepEqual(qualities.map(({ id, rating }) => [id, rating]), [['recharge', 2], ['salve', 1], ['percutante', undefined], ['constructor', undefined], ['zorglub-special', undefined]]);
   assert.deepEqual(result.unknownQualities.map(item => item.value), ['constructor', 'Zorglub Spécial']);
   // Objet sans « valeur » : l'entier final du nom en tient lieu, comme pour un texte.
   const [crossbow] = one({ nom: 'A', pv: 1, jets: [{ nom: 'Arbalète', score: 40, qualites: [{ nom: 'Recharge 2' }] }] }).profiles[0].actions;

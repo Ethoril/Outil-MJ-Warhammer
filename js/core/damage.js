@@ -131,27 +131,21 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
     }
   });
 
-  // 1. Modificateurs de dégâts bruts (Pointue: +1, Imprécise: -1)
-  let baseDamage = weapon.value;
-  activeEngines.forEach(ae => {
-    if (ae.engine.engine === 'modify-damage' && ae.engine.params?.bonus) {
-      baseDamage += ae.engine.params.bonus;
-    }
-  });
+  const baseDamage = weapon.value;
 
-  // 2. Percutante / Impact : ajoute le dé d'unités du jet
+  // 1. Percutante / Impact : ajoute le dé d'unités du jet
   const unitsDie = Number(roll) > 0 ? (Number(roll) % 10 || 10) : 0;
   const isPercutante = activeEngines.some(ae => ae.engine.engine === 'add-units-die');
   const bonusPercutante = isPercutante ? unitsDie : 0;
 
-  // 3. Dévastatrice : utilise max(unitsDie, SL) pour les SL de dégâts
+  // 2. Dévastatrice : utilise max(unitsDie, SL) pour les SL de dégâts
   const isDevastatrice = activeEngines.some(ae => ae.engine.engine === 'best-of-units-or-sl');
   let effectiveSL = Number(sl) || 0;
   if (isDevastatrice && unitsDie > effectiveSL) {
     effectiveSL = unitsDie;
   }
 
-  // 4. Inoffensive : PA x 2, pas de plancher
+  // 3. Inoffensive : PA x 2, pas de plancher
   const isInoffensive = activeEngines.some(ae => ae.quality.id === 'inoffensive');
   const paEffectif = (Number(targetArmour) || 0) * (isInoffensive ? FACTEUR_INOFFENSIVE : 1);
   const be = Number(targetToughnessBonus) || 0;
@@ -190,8 +184,6 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
   };
 }
 
-const MODIFIER_LABELS = { pointue: 'Pointue', imprecise: 'Imprécise' };
-
 /** Readable terms of a computeDamage result, for the UI (`8 arme + 4 DR … = 12`, `BF 3 + 4 arme …`). */
 export function damageBreakdown(damage) {
   if (!damage || typeof damage !== 'object') return { terms: [], total: 0, notes: [] };
@@ -214,11 +206,6 @@ export function damageBreakdown(damage) {
   const strengthBonus = Number.isFinite(damage.strengthBonus) ? damage.strengthBonus : null;
   if (strengthBonus !== null) add(strengthBonus, 'BF', { labelFirst: true });
   add((Number(damage.weaponDamage) || 0) - (strengthBonus ?? 0), 'arme');
-  // Pointue / Imprécise are already folded into the weapon damage by computeDamage.
-  engines.filter(item => item.engine.engine === 'modify-damage' && item.engine.params?.bonus).forEach(item => {
-    const bonus = item.engine.params.bonus;
-    notes.push(`${MODIFIER_LABELS[item.quality.id] || item.quality.id} ${bonus > 0 ? '+' : MINUS}${Math.abs(bonus)} inclus dans l’arme`);
-  });
   const devastatrice = has('best-of-units-or-sl');
   add(damage.sl, devastatrice ? 'DR (Dévastatrice)' : 'DR');
   if (devastatrice) notes.push('Dévastatrice : meilleur du DR et du dé des unités');

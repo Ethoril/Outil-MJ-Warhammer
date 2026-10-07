@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.11.0)
+# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.11.1)
 
 Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhammer Fantasy Roleplay 4e édition**.
 
@@ -16,7 +16,8 @@ Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhamme
   * Bouton « Retirer du combat » pour les PNJ à 0 PV ou moins ; les PJ restent en jeu.
   * Suivi d'initiative dynamique par glisser-déplacer.
   * Zones *Active* et *En attente / Réserve tactique*.
-  * Moteur de calcul de dégâts WFRP 4e (localisation automatique d100 inverse, déduction Endurance/Armure, plancher à 1, gestion des armes *Inoffensives*, Acharnement automatique et état *À Terre*).
+  * Moteur de calcul de dégâts WFRP 4e (localisation automatique d100 inverse, déduction Endurance/Armure, plancher à 1, gestion des armes *Inoffensives*, Acharnement automatique et état *À Terre*). *Pointue* (+1 DR sur une attaque réussie) et *Imprécise* (−1 DR) modifient le DR de l'attaque, avant le test opposé et les dégâts.
+  * Mots-clés d'armes et d'armures lus dans l'onglet « Mots Clés Armes et Armures » des aides de jeu (noms officiels, 55 entrées), avec copie locale hors ligne.
   * Gestion automatique des états (*Hémorragique*, *Enflammé*, *Surpris*, *Sonné*, *Inconscient*...).
 * **Panneau de règles interactif** : Base de données de règles avec moteur de recherche en temps réel et sections auto-dépliables.
 * **Confort d'usage & PWA** :

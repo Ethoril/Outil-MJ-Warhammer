@@ -41,13 +41,9 @@ test('Keywords — Calcul des dégâts Palier 1 (Percutante & Dévastatrice)', (
 });
 
 test('Keywords — Calcul des dégâts Palier 1 (Pointue, Imprécise & Inoffensive)', () => {
-  // Pointue (+1 dégât)
-  const resPointue = computeDamage({ weaponDamage: 5, sl: 2, qualities: [{ id: 'pointue' }] });
-  assert.equal(resPointue.weaponDamage, 6);
-
-  // Imprécise (-1 dégât)
-  const resImprecise = computeDamage({ weaponDamage: 5, sl: 2, qualities: [{ id: 'imprecise' }] });
-  assert.equal(resImprecise.weaponDamage, 4);
+  // Pointue et Imprécise agissent sur le DR du test, pas sur les dégâts de l'arme
+  assert.equal(computeDamage({ weaponDamage: 5, sl: 2, qualities: [{ id: 'pointue' }] }).weaponDamage, 5);
+  assert.equal(computeDamage({ weaponDamage: 5, sl: 2, qualities: [{ id: 'imprecise' }] }).weaponDamage, 5);
 
   // Inoffensive (PA x 2, plancher 0)
   const resInof = computeDamage({ weaponDamage: 2, sl: 0, targetArmour: 2, qualities: [{ id: 'inoffensive' }] });

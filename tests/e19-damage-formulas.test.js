@@ -198,8 +198,8 @@ test('E19 computeDamage — arme en formule de force', () => {
 
 test('E19 computeDamage — qualité Pointue, expressions non calculables, arme numérique', () => {
   const pointy = computeDamage({ weaponDamage: 'BF+4', strengthBonus: 3, sl: 2, targetToughnessBonus: 3, targetArmour: 1, qualities: ['Pointue'] });
-  assert.equal(pointy.weaponDamage, 8);
-  assert.equal(damageBreakdown(pointy).terms.find(term => term.label === 'arme').value, 5);
+  assert.equal(pointy.weaponDamage, 7);
+  assert.equal(damageBreakdown(pointy).terms.find(term => term.label === 'arme').value, 4);
   assert.equal(computeDamage({ weaponDamage: '1d10' }), null);
   assert.equal(computeDamage({ weaponDamage: 'BF+4' }), null);
   const numeric = computeDamage({ weaponDamage: 6, sl: 2, targetToughnessBonus: 3, targetArmour: 2 });

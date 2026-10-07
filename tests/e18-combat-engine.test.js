@@ -305,10 +305,9 @@ test('E18 damageBreakdown — termes lisibles et formule', () => {
 
 test('E18 damageBreakdown — Pointue, Dévastatrice, Inoffensive et plancher', () => {
   const pointue = damageBreakdown(computeDamage({ weaponDamage: 4, sl: 0, roll: 41, targetToughnessBonus: 3, targetArmour: 2, qualities: ['Pointue', 'Dévastatrice'] }));
-  assert.equal(pointue.terms[0].value, 5, 'Pointue déjà incluse dans l’arme');
+  assert.equal(pointue.terms[0].value, 4, 'Pointue ne touche pas l’arme');
   assert.equal(pointue.terms[1].label, 'DR (Dévastatrice)');
   assert.equal(pointue.total, 1);
-  assert.ok(pointue.notes.some(note => /Pointue \+1/.test(note)));
   assert.ok(pointue.notes.some(note => /Dévastatrice/.test(note)));
   const floored = computeDamage({ weaponDamage: 2, sl: 0, targetToughnessBonus: 3, targetArmour: 2 });
   assert.ok(damageBreakdown(floored).notes.includes('minimum 1'));

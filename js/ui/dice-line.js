@@ -2,7 +2,7 @@ import { DOM, escapeHtml } from './dom.js';
 import { d100, isDouble, SL, getReverseRoll, getLocationName, getCritEffect } from '../core/dice.js';
 import { parseState } from '../core/sanitize.js';
 import { actionWeaponDamage, computeDamage, normalizeDamageFields, strengthBonusOf } from '../core/damage.js';
-import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from '../core/roll-qualities.js';
+import { applyAttackSl, applyTargetBonus, isCriticalRoll, isFumbleRoll } from '../core/roll-qualities.js';
 import { createQualityPicker } from './action-editor.js';
 
 export function renderMiniDiceLine(dl, p, Store) {
@@ -129,7 +129,8 @@ export function runDiceLine(id, Store) {
 
   const roll = d100();
   const success = roll <= target;
-  const sl = SL(target, roll);
+  // Pointue / Imprécise modifient le DR (jamais la réussite) ; le DR modifié sert aux dégâts.
+  const { sl, bonus: slBonus } = applyAttackSl(SL(target, roll), success, dl.qualities);
   const dbl = isDouble(roll);
 
   const targetParticipant = dl.targetId ? combat.participants.get(dl.targetId) : null;
@@ -280,7 +281,7 @@ export function runDiceLine(id, Store) {
 
   let resHTML = `<span class="dice-rollvalue">1d100 = ${roll}</span>`;
   resHTML += `<span class="${success ? 'result-good' : 'result-bad'}">${success ? 'Réussite' : 'Échec'}</span>`;
-  resHTML += `<span class="${sl >= 0 ? 'result-good' : 'result-bad'}">SL ${sl >= 0 ? '+' : ''}${sl}</span>`;
+  resHTML += `<span class="${sl >= 0 ? 'result-good' : 'result-bad'}">SL ${sl >= 0 ? '+' : ''}${sl}${slBonus ? ` (${slBonus > 0 ? 'Pointue +' : 'Imprécise −'}${Math.abs(slBonus)})` : ''}</span>`;
   resHTML += `<span class="badge">${escapeHtml(p?.name || '?')}</span>`;
 
   if (dl.note) resHTML += `<span class="badge warn">${escapeHtml(dl.note)}</span>`;
@@ -312,7 +313,7 @@ export function runDiceLine(id, Store) {
     kind: 'roll',
     actorId: p?.id,
     targetId: dl.targetId,
-    text: `🎲 ${p?.name} (Roll ${roll} vs ${target}${statePenalty ? ` base ${base}-${statePenalty}` : ''}) SL${sl} ${dl.note ? '[' + dl.note + ']' : ''}`,
+    text: `🎲 ${p?.name} (Roll ${roll} vs ${target}${statePenalty ? ` base ${base}-${statePenalty}` : ''}) SL${sl}${slBonus ? ` (${slBonus > 0 ? 'Pointue +' : 'Imprécise −'}${Math.abs(slBonus)})` : ''} ${dl.note ? '[' + dl.note + ']' : ''}`,
     detail: { Jet: roll, Cible: target, SL: sl, MotsClés: (dl.qualities || []).map(q => typeof q === 'string' ? q : q.id).join(', ') }
   });
 }

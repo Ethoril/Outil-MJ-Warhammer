@@ -123,7 +123,7 @@ Le calcul actuel est :
 
 ```text
 arme = nombre saisi, ou BF + n pour une formule BF±n (BF = floor(F / 10) de l'attaquant)
-base = arme + Pointue(1) + Imprécise(-1)
+base = arme
 déUnités = roll % 10, avec 0 → 10
 DR_effectif = max(déUnités, DR) si Dévastatrice, sinon DR
 bonusPercutante = déUnités si Percutante ou Impact
@@ -187,21 +187,20 @@ Le registre mécanique réel de `js/data/keyword-engines.js` est :
 | `inoffensive` | PA ×2 et suppression du plancher | `tests/damage.test.js`, `tests/keywords.test.js` |
 | `percutante`, `impact` | dé d'unités ajouté aux dégâts | `tests/keywords.test.js` |
 | `devastatrice` | `max(déUnités, DR)` | `tests/keywords.test.js` |
-| `pointue`, `imprecise` | dégâts bruts +1/−1 | `tests/keywords.test.js` |
+| `pointue`, `imprecise` | DR de l'attaque : Pointue +1 sur réussite, Imprécise −1 sur tout test (elle l'emporte sur Pointue) ; appliqué avant le test opposé et les dégâts par `applyAttackSl()` | `tests/roll-qualities.test.js` |
 | `precise` | score cible +10 | `tests/roll-qualities.test.js` |
 | `empaleuse` | critique aux multiples de 10 sur réussite | `tests/roll-qualities.test.js` |
 | `dangereuse` | maladresse sur échec contenant un 9 | `tests/roll-qualities.test.js` |
 
-Le fallback `js/data/keywords-fallback.json` contient 31 libellés éditoriaux. Les autres
+Le fallback `js/data/keywords-fallback.json` contient 55 libellés éditoriaux. Les autres
 mots-clés sont lisibles et sélectionnables, mais non calculés. Le texte du Sheet/fallback est
-donc un rappel humain, jamais une source de logique. Les textes signalent notamment les paires
-Percutante/Impact, Pénétrante/Perforante et Entrave/Immobilisante, mais seuls les aliases
-codés ci-dessus sont effectifs.
+donc un rappel humain, jamais une source de logique. Depuis la refonte du Sheet, chaque
+mot-clé n'y a qu'un nom officiel (Perforante, Immobilisante…) ; seul l'alias `impact` →
+`percutante` reste codé ci-dessus.
 
 **Incohérence à traiter en E06.** `activeEngines()` dédoublonne les slugs identiques, mais
 `impact` et `percutante` restent deux entrées du registre qui portent le même moteur ;
-`computeDamage()` ne dédoublonne pas les qualités avant d'appliquer les modifications
-`Pointue`/`Imprécise`. Les tests prouvent seulement qu'Impact et Percutante donnent un
+`computeDamage()` ne dédoublonne pas les qualités avant d'appliquer leurs moteurs. Les tests prouvent seulement qu'Impact et Percutante donnent un
 même moteur, pas que toute combinaison répétée est canoniquement réduite. E06 doit définir la
 canonicalisation et les aliases ; E12 doit tester l'effet une seule fois.
 

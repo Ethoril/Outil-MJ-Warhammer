@@ -2,7 +2,7 @@
 import {
   SL, getCritEffect, getLocationName, getReverseRoll, isDouble
 } from './dice.js';
-import { applyTargetBonus, isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
+import { applyAttackSl, applyTargetBonus, isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 import { normalizeState } from './effects.js';
@@ -64,7 +64,7 @@ export function describeResolutionDetail(detail) {
   if (present(detail.actionType)) parts.push(`Type : ${DETAIL_TYPE_LABELS[detail.actionType] || detail.actionType}`);
   if (present(detail.roll)) parts.push(`Jet : ${detail.roll}`);
   if (present(detail.targetScore)) parts.push(`Seuil : ${detail.targetScore}`);
-  if (present(detail.sl)) parts.push(`DR : ${signedValue(detail.sl)}`);
+  if (present(detail.sl)) parts.push(`DR : ${signedValue(detail.sl)}${detail.slBonus ? ` (${detail.slBonus > 0 ? 'Pointue' : 'Imprécise'} ${signedValue(detail.slBonus)})` : ''}`);
   const opposition = isRecord(detail.opposition) && isRecord(detail.opposition.defender) ? detail.opposition : null;
   if (opposition) {
     const { label, score, roll } = opposition.defender;
@@ -334,7 +334,10 @@ export function previewResolution(input) {
   const qualityTarget = applyTargetBonus(preQualityTarget, action.qualities);
   const targetScore = qualityTarget.target;
   const success = roll <= targetScore;
-  const sl = SL(targetScore, roll);
+  // Pointue / Imprécise modifient le DR de l'attaque (jamais la réussite) : avant l'opposition et les dégâts.
+  const { sl, bonus: slBonus } = attackType(action.type)
+    ? applyAttackSl(SL(targetScore, roll), success, action.qualities)
+    : { sl: SL(targetScore, roll), bonus: 0 };
   const doubled = isDouble(roll);
   const criticalClassification = isCriticalRoll(roll, doubled, action.qualities);
   const fumbleClassification = isFumbleRoll(roll, doubled, action.qualities);
@@ -422,6 +425,7 @@ export function previewResolution(input) {
     success,
     hit,
     sl,
+    slBonus,
     double: doubled,
     critical: criticalBlock,
     fumble: kind === 'Maladresse' ? { expanded } : null,

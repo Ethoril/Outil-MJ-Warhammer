@@ -216,7 +216,9 @@ function renderResult(preview, target, draft, handlers) {
   const result = node('div', 'workspace-result');
   const pills = node('div', 'workspace-result-pills');
   const opposed = preview.opposition?.mode === 'opposed' ? preview.opposition : null;
-  pills.appendChild(outcomePill(ROLL_LABELS[preview.actionType] || 'Jet', preview.success, preview.sl));
+  const pill = outcomePill(ROLL_LABELS[preview.actionType] || 'Jet', preview.success, preview.sl);
+  if (preview.slBonus) pill.textContent += ` (${preview.slBonus > 0 ? 'Pointue' : 'Imprécise'} ${signed(preview.slBonus)})`;
+  pills.appendChild(pill);
   if (opposed) pills.appendChild(outcomePill('Défense', opposed.defender.success, opposed.defender.sl));
   if (preview.critical?.kind === 'Critique') pills.appendChild(node('span', 'workspace-outcome is-critical', preview.attack ? 'Coup critique' : 'Réussite critique'));
   if (preview.fumble) pills.appendChild(node('span', 'workspace-outcome is-critical', 'Maladresse'));

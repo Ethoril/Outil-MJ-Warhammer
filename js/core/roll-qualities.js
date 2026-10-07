@@ -33,6 +33,23 @@ export function applyTargetBonus(baseTarget, qualities = []) {
 }
 
 /**
+ * Pointue / Imprécise — modifient le DR du test d'attaque, jamais sa réussite.
+ * Pointue : +1 sur une réussite seulement ; Imprécise : −1 sur tout test, et
+ * elle l'emporte sur Pointue. Rend le DR modifié et le bonus appliqué (0 sans qualité).
+ */
+export function applyAttackSl(sl, success, qualities = []) {
+  const engines = activeEngines(qualities).filter(e => e.engine === 'attack-sl-bonus');
+  const overridden = new Set(engines.flatMap(e => e.overrides || []));
+  let bonus = 0;
+  for (const e of engines) {
+    if (overridden.has(e.id)) continue;
+    if (e.params?.onSuccessOnly && !success) continue;
+    bonus += Number(e.params?.bonus) || 0;
+  }
+  return { sl: (Number(sl) || 0) + bonus, bonus };
+}
+
+/**
  * Empaleuse — critique élargi : tout multiple de 10 ou tout double, sur une réussite.
  * Sans la qualité, la règle habituelle s'applique (double seul).
  * `estDouble` est fourni par l'appelant pour rester cohérent avec isDouble() de dice.js,

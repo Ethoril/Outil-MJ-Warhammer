@@ -508,6 +508,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         roll: preview?.roll ?? null,
         targetScore: preview?.score?.target ?? null,
         sl: preview?.sl ?? null,
+        ...(preview?.slBonus ? { slBonus: preview.slBonus } : {}),
         ...(preview?.location ? { location: { roll: preview.location.roll, name: preview.location.name } } : {}),
         damage: preview?.damage || null,
         ...(preview?.weapon ? { weapon: preview.weapon } : {}),
