@@ -22,7 +22,7 @@ Le profil de réserve d’un PJ lié reste un modèle à pleine santé (`hp = ma
 
 L’export de fin de combat conserve ce maximum dans la réserve et reporte la santé sur le personnage persistant lié. Sans lien unique, ou si plusieurs copies ont des santés différentes, il affiche un avertissement et conserve le personnage persistant précédent ; aucun personnage n’est créé implicitement.
 
-Les compétences, talents, armes, armures, sorts et prières se consultent dans les profils et sur les combattants. Les valeurs liées à la fiche se modifient dans la fiche source. Notes, groupes et actions locales restent modifiables dans l'outil MJ. Les nouveaux effets automatiques de talents appartiennent au lot 2 ; la magie reste consultative.
+Les compétences, talents, armes, armures, sorts et prières se consultent dans les profils et sur les combattants. Les valeurs liées à la fiche se modifient dans la fiche source. Notes, groupes et actions locales restent modifiables dans l'outil MJ. Les effets automatiques de talents et la durée des états appartiennent au lot 2 ; l’automatisation de la magie et des prières est prévue au lot 3. L’application mobile dédiée passe au lot 4, après stabilisation des lots précédents. La magie et les prières restent consultatives dans la version actuelle.
 
 ## Protections et résolution
 

@@ -2,7 +2,7 @@
 
 Développement autorisé le 8 octobre 2026. Base Git : 3bc07ed880561831334f6d96dc9755a6afe6e47d, version 3.11.1. Branche de travail : codex/fiches-pj-referentiels. Worktree : F:\OutilMJ\worktrees\fiches-pj-referentiels.
 
-Le cahier des charges version 1.3 et ses 40 cas de recette font foi. Le lot 1 est livré et réceptionné en production après les correctifs jusqu’à 3.12.3 et les confirmations du MJ (récupération des fiches, connexion et reprise sur Chrome Android) ; le lot 2 des effets de talents et de la durée des états est préparé mais attend sa sélection détaillée. Le lot 3 prévoit une application mobile pour les séances, à lancer après stabilisation et validation des lots précédents. La magie reste consultative. La version 3.12.0 a ensuite été publiée sur demande explicite ; GitHub Pages et les règles Firebase v3 ont été contrôlés après déploiement.
+Le cahier des charges version 1.4 et ses 40 cas de recette du lot 1 font foi. Le lot 1 est livré et réceptionné en production après les correctifs jusqu’à 3.12.3 et les confirmations du MJ (récupération des fiches, connexion et reprise sur Chrome Android) ; le lot 2 des effets de talents et de la durée des états est préparé mais attend sa sélection détaillée. Le lot 3 prévoit l’automatisation de la magie et des prières. L’application mobile pour les séances passe au lot 4, à lancer après stabilisation et validation des lots 1 à 3. La magie et les prières restent consultatives dans la version actuelle. La version 3.12.0 a ensuite été publiée sur demande explicite ; GitHub Pages et les règles Firebase v3 ont été contrôlés après déploiement.
 
 ## Lots et responsabilités
 
@@ -16,7 +16,8 @@ Le cahier des charges version 1.3 et ses 40 cas de recette font foi. Le lot 1 es
 | 1.5 Aides et harmonisation | references_equipment + chef d'orchestre UI | Consultation objets/talents et définitions communes | Intégré, contrôlé localement |
 | 1.6 Recette | Sous-agent indépendant controle | Baseline, tests adversariaux, revue et limites | Recette locale et 37 contrôles Auth/RTDB sous émulateurs passés ; récupération des fiches et reprise sur téléphone Chrome confirmées par le MJ en production ; limitation Brave acceptée |
 | 2 Talents mécaniques et durée des états | À cadrer ultérieurement | Cahier détaillé des talents et de la durée des états, puis moteurs | Préparé, pas lancé |
-| 3 Application mobile de séance | À définir après stabilisation | Cadrage mobile, prototype des parcours de séance, application et recette sur appareils réels | Planifié et différé ; lancement après validation des lots précédents |
+| 3 Magie et prières automatisées | À cadrer après le lot 2 | Cahier détaillé, résolution des actions et application des effets, puis recette | Planifié, pas lancé |
+| 4 Application mobile de séance | À définir après stabilisation | Cadrage mobile, prototype des parcours de séance, application et recette sur appareils réels | Planifié et différé ; lancement après validation des lots 1 à 3 |
 
 ## Frontières de fichiers
 
@@ -45,7 +46,11 @@ La suite finale passe 397 tests, contre 320 en baseline. Les 37 contrôles HTTP 
 
 Le lot 2 reste à spécifier talent par talent : déclencheur, rang/spécialité, durée, cumul, cible, priorité, effets persistants et validation par exemples source. Aucun moteur supplémentaire de talent n'a été lancé dans le lot 1. La récupération réelle des fiches et la reprise sur téléphone Chrome ont ensuite été confirmées par le MJ après publication ; ces confirmations sont consignées ci-dessous, séparément des contrôles simulés. Les règles v3 sont éprouvées sous émulateur ; un JDK 21 portable et Firebase CLI isolés permettent de reproduire cette recette sans installation globale.
 
-## Lot 3 différé : application mobile de séance
+## Lot 3 à cadrer : magie et prières automatisées
+
+Le lot 3 automatise la résolution et les effets des actions de magie et de prières, à partir des données des fiches et des références communes. Son périmètre détaillé, ses conditions et ses cas de recette seront précisés avant développement. Il réutilisera la gestion des durées d’états du lot 2 ; la magie et les prières restent consultatives dans la version actuelle.
+
+## Lot 4 différé : application mobile de séance
 
 L’application mobile sera créée lorsque le reste de l’outil sera terminé, fiable et validé en séance. Elle reprendra les mêmes données et moteurs métier, avec une interface pensée pour la consultation et la conduite du combat sur téléphone. Les plateformes, la technologie, la distribution et les exigences hors ligne seront définies dans son cahier détaillé ; aucun développement mobile n’est lancé à ce stade.
 
@@ -83,8 +88,12 @@ Le MJ confirme que la connexion Google fonctionne sur le même téléphone Andro
 
 Sur Brave Android, l'erreur réelle est `auth/popup-closed-by-user` : la fenêtre se ferme avant la fin de la connexion, malgré la désactivation des protections du site. La cause précise n'est pas établie. Brave n'est pas pris en charge pour la connexion Google et la synchronisation ; Chrome est le navigateur retenu sur Android. Le MJ accepte de documenter cette limitation et de passer à la suite. L'investigation Brave est close, sans nouveau changement d'authentification.
 
-**Lot 1 clôturé avec cette limite de compatibilité acceptée.** Le lot 2 des effets de talents reste à cadrer et n'est pas lancé. Le lot 3 de l'application mobile demeure différé jusqu'à la stabilisation des lots précédents ; la magie reste consultative au lot 1.
+**Lot 1 clôturé avec cette limite de compatibilité acceptée.** Le lot 2 des effets de talents reste à cadrer et n'est pas lancé. Le lot 3 de magie et prières automatisées reste à cadrer ; le lot 4 de l'application mobile demeure différé jusqu'à la stabilisation des lots précédents. La magie reste consultative au lot 1.
 
 ## Ajout de périmètre au lot 2 — 8 octobre 2026
 
 À la demande du MJ, la durée des états est ajoutée au lot 2, en complément des effets de talents. Le cadrage devra définir le suivi de la durée restante, le décompte, l’expiration, les cumuls ou prolongations et la conservation à la reprise entre appareils. Les modalités seront spécifiées avant développement ; aucun moteur nouveau n’est lancé par cet ajout documentaire.
+
+## Réorganisation des lots — 8 octobre 2026
+
+Décision du MJ : le lot 2 conserve les effets de talents et la durée des états ; le lot 3 porte désormais sur la magie et les prières automatisées ; l’application mobile est décalée au lot 4, après stabilisation des lots précédents. Cet ajustement est documentaire ; les lots 2 à 4 ne sont pas lancés.

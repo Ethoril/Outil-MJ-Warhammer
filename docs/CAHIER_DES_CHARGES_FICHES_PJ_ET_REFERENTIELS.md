@@ -1,6 +1,6 @@
 # Cahier des charges de développement pour les fiches PJ et les aides de jeu
 
-Version 1.3 du 8 octobre 2026. Statut : lot 1 livré et réceptionné en production (3.12.3), avec la limitation Brave acceptée ; lots 2 et 3 non lancés. Application cible : Outil MJ Warhammer, version initialement observée 3.11.1. Les preuves et limites de réception sont consignées dans [le rapport de recette](RECETTE_FICHES_PJ.md) et [le suivi](SUIVI_FICHES_PJ.md).
+Version 1.4 du 8 octobre 2026. Statut : lot 1 livré et réceptionné en production (3.12.3), avec la limitation Brave acceptée ; lots 2, 3 et 4 non lancés. Application cible : Outil MJ Warhammer, version initialement observée 3.11.1. Les preuves et limites de réception sont consignées dans [le rapport de recette](RECETTE_FICHES_PJ.md) et [le suivi](SUIVI_FICHES_PJ.md).
 
 L’outil MJ doit reprendre les données de jeu des PJ depuis leurs fiches de campagne, notamment leurs talents, armes, boucliers et armures personnalisés. Les définitions affichées et les effets calculés doivent suivre les mêmes références que les fiches, avec **Aides de jeu comme source de vérité commune**. Une modification d’équipement dans la fiche doit devenir visible et utilisable dans l’outil après synchronisation, sans ressaisie et sans modifier l’état courant de la partie.
 
@@ -41,7 +41,7 @@ La livraison conserve une synchronisation déclenchée par le MJ avec aperçu av
 
 Le lot 1 reprend les talents pour consultation et rappel, sans ajouter l’application mécanique de leurs effets. Les automatismes déjà présents, dont le calcul des Blessures maximum avec Dur à cuire, restent conservés et vérifiés. Le lot 2 doit permettre d’appliquer les effets de certains talents ; la liste retenue et les règles d’activation seront définies dans son cahier détaillé. L’automatisation de tous les talents et de tous les mots clés n’est pas un objectif implicite.
 
-La magie est confirmée hors périmètre du lot 1, en dehors de la consultation des sorts, prières et références. Son développement fera l’objet d’un chantier ultérieur ; il n’est pas automatiquement ajouté au lot 2 des talents.
+La magie est confirmée hors périmètre du lot 1, en dehors de la consultation des sorts, prières et références. L’automatisation de la magie et des prières est prévue au lot 3 ; elle reste distincte du lot 2 des talents et de la durée des états.
 
 ## 2 État de départ vérifié
 
@@ -495,7 +495,15 @@ Le lot 2 inclut également la gestion de la durée des états, indépendamment d
 
 Les spécifications détaillées et les cas de recette propres au lot 2 seront rédigés avant son développement. Le lot 2 ne comprend pas implicitement un moteur de magie.
 
-### 12.3 Lot 3 Création d’une application mobile pour les séances
+### 12.3 Lot 3 Automatisation de la magie et des prières
+
+Ce lot doit permettre de résoudre les actions de magie et de prières des personnages et d’appliquer leurs effets dans l’outil MJ, à partir des données des fiches et des références communes Aides de jeu.
+
+Son cahier détaillé précisera les règles et actions couvertes, les conditions de lancement, les cibles, les ressources, la résolution, les effets et leurs durées, ainsi que les incidents éventuels. Il s’appuiera sur la gestion des durées d’états du lot 2. La provenance, l’aperçu avant application, l’annulation et la reprise entre appareils devront être préservés.
+
+Les spécifications et les cas de recette seront définis avant le développement. La magie et les prières restent consultatives dans la version actuelle ; aucun moteur supplémentaire n’est lancé par ce changement de découpage.
+
+### 12.4 Lot 4 Création d’une application mobile pour les séances
 
 Créer une application mobile adaptée à l’usage du MJ à la table : consultation rapide des PJ, talents, armes, armures et règles ; suivi du combat, des PV, des états et des tours ; résolution des actions avec des commandes tactiles lisibles et accessibles.
 
@@ -505,7 +513,7 @@ L’application mobile doit réutiliser les mêmes données, référentiels et m
 
 Le choix des plateformes cibles, de la technologie (PWA installable, application hybride ou native) et du mode de distribution sera arrêté lors du cadrage de ce lot. La présence actuelle d’une interface web responsive ou d’une PWA ne vaut pas livraison de l’application mobile demandée.
 
-Livrer un cahier des charges mobile, un prototype des parcours de séance puis l’application, avec recette sur appareils réels et vérification de la continuité d’une séance entre ordinateur et mobile. Les critères détaillés seront définis avant le développement du lot 3.
+Livrer un cahier des charges mobile, un prototype des parcours de séance puis l’application, avec recette sur appareils réels et vérification de la continuité d’une séance entre ordinateur et mobile. Les critères détaillés seront définis avant le développement du lot 4.
 
 ## 13 Décisions de fonctionnement validées
 
@@ -518,8 +526,8 @@ Livrer un cahier des charges mobile, un prototype des parcours de séance puis l
 | Protection | Six localisations, couches calculées et conditions assistées ou automatisées selon le contexte ; bouclier séparé |
 | Aptitudes | Confirmé : consultation et rappels au lot 1 ; application des effets de certains talents au lot 2 |
 | Durée des états | Ajout au périmètre du lot 2 : suivi, décompte et expiration ; fonctionnement détaillé à spécifier avant développement |
-| Application mobile | Lot 3 planifié pour l’usage en séance ; développement différé jusqu’à la stabilisation et la validation des lots précédents |
-| Magie possédée | Confirmé : consultation seulement au lot 1 ; moteur de magie dans un chantier ultérieur |
+| Application mobile | Lot 4 planifié pour l’usage en séance ; développement différé jusqu’à la stabilisation et la validation des lots 1 à 3 |
+| Magie et prières | Consultation seulement au lot 1 ; automatisation au lot 3, à spécifier avant développement |
 | Référentiels | Aides de jeu prioritaire, surcharges et références complémentaires explicites |
 | Compatibilité | Migration des sauvegardes et synchronisation multiappareils incluses au lot 1 ; schéma v3 et reprise idempotente de v2 |
 

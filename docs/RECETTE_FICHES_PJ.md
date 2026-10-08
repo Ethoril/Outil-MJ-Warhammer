@@ -94,7 +94,7 @@ Défauts détectés puis corrigés : doublons à l’adoption, attaque inventée
 
 ## Sources et limites
 
-docs/MATRICE_REFERENCES_ET_MOTEURS.md trace source, édition et couverture moteur. Les référentiels communs suivent le même contrat public que les fiches ; les sept onglets publics ont été relus pendant le développement. Une aide locale historique sans preuve Sheets garde son statut d’arbitrage/complément local. Aucun nouveau moteur de talent au lot 1 ; les effets supplémentaires relèvent du lot 2. Magie acquise en consultation seulement.
+docs/MATRICE_REFERENCES_ET_MOTEURS.md trace source, édition et couverture moteur. Les référentiels communs suivent le même contrat public que les fiches ; les sept onglets publics ont été relus pendant le développement. Une aide locale historique sans preuve Sheets garde son statut d’arbitrage/complément local. Aucun nouveau moteur de talent au lot 1 ; les effets supplémentaires relèvent du lot 2. Magie et prières acquises en consultation seulement au lot 1 ; leur automatisation est prévue au lot 3. L’application mobile dédiée est planifiée au lot 4, après stabilisation des lots précédents.
 
 La recette Auth/RTDB a réellement chargé les règles production et trouvé un défaut : receipts:1 était accepté par le seul wildcard des enfants. Le durcissement autorisé ajoute newData.hasChildren() au conteneur receipts dans production et fixture v3. Le scalaire est désormais refusé ; receipts:{} reste accepté et supprimé nativement par RTDB. La fixture de combat vide a été adaptée à cette même suppression native, sans modification métier pour faire passer un test.
 
