@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.12.2';
+const CACHE_NAME = 'wfrp-cache-v3.12.3';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -37,6 +37,7 @@ const ASSETS_TO_CACHE = [
   './js/core/migrations.js',
   './js/core/persistence.js',
   './js/core/sync.js',
+  './js/core/auth-errors.js',
   './js/core/sync-protocol.js',
   './js/core/sync-session.js',
   './js/core/effects.js',

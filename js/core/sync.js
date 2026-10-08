@@ -7,6 +7,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
 import { transactionUpdate } from './sync-protocol.js';
 import { createSyncSession } from './sync-session.js';
 import { migrateV2SyncDocument, initializeV3Root } from './sync-migration.js';
+import { googleAuthErrorCode, googleAuthErrorMessage } from './auth-errors.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD5f_ngBZ3OCXJCjT5M45BqbhkzI_QObLc",
@@ -34,20 +35,20 @@ try {
   console.warn('⚠️ Impossible d\'initialiser Firebase:', e);
 }
 
-export function loginWithGoogle() {
-  if (!auth || !provider) return Promise.reject(new Error('Firebase non initialisé'));
-  return signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log('✅ Connecté:', result.user.displayName);
-      const loginScreen = document.getElementById('login-screen');
-      const appContent = document.getElementById('app-content');
-      if (loginScreen) loginScreen.style.display = 'none';
-      if (appContent) appContent.style.display = 'block';
-    })
-    .catch((error) => {
-      console.error('❌ Erreur connexion:', error);
-      alert('Connexion impossible : vérifiez votre réseau, autorisez la fenêtre de connexion, puis réessayez.');
-    });
+export async function loginWithGoogle() {
+  try {
+    if (!auth || !provider) throw Object.assign(new Error('Firebase non initialisé'), { code: 'auth/not-initialized' });
+    // Keep the SDK call in the click gesture, before the first await.
+    const result = await signInWithPopup(auth, provider);
+    console.log('✅ Connecté:', result.user.displayName);
+    const loginScreen = document.getElementById('login-screen');
+    const appContent = document.getElementById('app-content');
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (appContent) appContent.style.display = 'block';
+  } catch (error) {
+    console.error('❌ Erreur connexion:', googleAuthErrorCode(error));
+    alert(googleAuthErrorMessage(error, { online: navigator.onLine !== false }));
+  }
 }
 
 export function logoutUser() {
