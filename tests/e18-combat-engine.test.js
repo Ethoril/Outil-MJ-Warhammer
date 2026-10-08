@@ -182,8 +182,8 @@ test('E18 bibliothèque — addProfilesToCombat ignore un profil supprimé avant
 const attacker = { id: 'a', name: 'Attaquant', states: [] };
 const defender = { id: 't', name: 'Cible', hp: 10, caracs: { E: 30 }, armor: { head: 0, body: 1, arms: 0, legs: 2 }, states: [] };
 
-test('E18 opposé — sans défense, hit === success et rien d’autre ne change', () => {
-  const input = { actor: attacker, target: defender, action: { type: 'attack', base: 50, damage: 4 }, roll: 34 };
+test('E18 opposé — tir sans défense, hit === success', () => {
+  const input = { actor: attacker, target: defender, v5: { kind: 'ranged' }, action: { type: 'attack', base: 50, damage: 4 }, roll: 34 };
   const result = previewResolution(input);
   assert.equal(result.hit, result.success);
   assert.equal(result.opposition, null);
@@ -197,12 +197,10 @@ test('E18 opposé — DR net, dégâts avec DR net, localisation latéralisée',
   // Attaquant 50, jet 21 → DR 3. Défenseur 40, jet 35 → DR 1. Net 2.
   const result = previewResolution({ actor: attacker, target: defender, action: { type: 'attack', base: 50, damage: 4 }, roll: 21, defense: { roll: 35, base: 40 } });
   assert.equal(result.hit, true);
-  assert.deepEqual(result.opposition, {
-    mode: 'opposed',
-    attacker: { score: 50, roll: 21, success: true, sl: 3 },
-    defender: { label: 'CC', base: 40, mod: 0, statePenalty: 0, score: 40, roll: 35, success: true, sl: 1 },
-    netSl: 2, winner: 'attacker'
-  });
+  assert.equal(result.opposition.mode, 'opposed');
+  assert.deepEqual([result.opposition.attacker.score, result.opposition.attacker.roll, result.opposition.attacker.sl], [50, 21, 3]);
+  assert.deepEqual([result.opposition.defender.label, result.opposition.defender.score, result.opposition.defender.sl], ['CC', 40, 1]);
+  assert.deepEqual([result.opposition.netSl, result.opposition.winner], [2, 'attacker']);
   assert.equal(result.location.roll, 12);
   assert.equal(result.location.name, 'Bras Gauche');
   assert.equal(result.location.side, 'left');
@@ -210,45 +208,47 @@ test('E18 opposé — DR net, dégâts avec DR net, localisation latéralisée',
   assert.equal(result.damage.finalDamage, 4 + 2 - 3 - 0);
 });
 
-test('E18 opposé — défense gagnante : pas de touche, ni localisation ni dégâts ni critique', () => {
-  const result = previewResolution({ actor: attacker, target: defender, action: { type: 'attack', base: 50, damage: 4 }, roll: 44, defense: { roll: 11, base: 60, label: 'Esquive' } });
+test('E18 opposé — double réussi perdant : critique sans dégâts ordinaires', () => {
+  const result = previewResolution({ actor: attacker, target: defender, action: { type: 'attack', base: 50, damage: 4 }, roll: 44,
+    defense: { roll: 11, base: 60, label: 'Esquive', v5: { kind: 'test' } }, criticalRolls: { location: 57, effect: 20 } });
   assert.equal(result.success, true);
-  assert.equal(result.critical, null, 'double réussi mais pas de touche');
+  assert.ok(result.critical, 'double réussi critique même si opposition perdue');
   assert.equal(result.hit, false);
   assert.equal(result.opposition.winner, 'defender');
   assert.equal(result.opposition.defender.label, 'Esquive');
   assert.equal(result.location, null);
   assert.equal(result.damage, null);
+  assert.equal(result.defenderCritical, null, 'Esquive ne cause pas de Blessure critique de mêlée');
   const applied = applyResolution(result, { revision: 0, participants: [defender], appliedResolutionIds: [] });
   assert.equal(applied.status, 'applied');
-  assert.equal(applied.state.participants[0].hp, 10);
+  assert.equal(applied.state.participants[0].hp, 9);
 });
 
 test('E18 opposé — l’attaquant peut toucher en ratant si la défense rate davantage', () => {
-  // Attaquant 30, jet 45 → DR −1 (échec). Défenseur 30 − 10 (Sonné), jet 80 → DR −6.
+  // Attaquant 30, jet 45 → DR −1 (échec). Défenseur 30, −1 DR (Sonné), jet 80 → DR −6.
   const result = previewResolution({ actor: attacker, target: { ...defender, states: ['Sonné'] }, action: { type: 'attack', base: 30, damage: 4 }, roll: 45, defense: { roll: '80', base: 30 } });
   assert.equal(result.success, false);
   assert.equal(result.hit, true);
-  assert.equal(result.opposition.defender.statePenalty, 10);
-  assert.equal(result.opposition.defender.score, 20);
+  assert.equal(result.opposition.defender.statePenalty, 1);
+  assert.equal(result.opposition.defender.score, 30);
   assert.equal(result.opposition.netSl, 5);
   assert.equal(result.location.roll, 54);
   assert.equal(result.damage.sl, 5);
   assert.equal(result.critical, null);
 });
 
-test('E18 opposé — égalité de DR : le plus haut score gagne, égalité parfaite = pas de touche', () => {
+test('E18 opposé — égalité de DR : l’initiateur gagne quelle que soit la différence de score', () => {
   const higher = previewResolution({ actor: attacker, target: defender, action: { type: 'attack', base: 55, damage: 4 }, roll: 30, defense: { roll: 20, base: 45 } });
   assert.equal(higher.opposition.netSl, 0);
   assert.equal(higher.opposition.winner, 'attacker');
   assert.equal(higher.hit, true);
   assert.equal(higher.damage.sl, 0);
   const lower = previewResolution({ actor: attacker, target: defender, action: { type: 'attack', base: 45, damage: 4 }, roll: 20, defense: { roll: 30, base: 55 } });
-  assert.equal(lower.opposition.winner, 'defender');
+  assert.equal(lower.opposition.winner, 'attacker');
   const tie = previewResolution({ actor: attacker, target: defender, action: { type: 'attack', base: 50, damage: 4 }, roll: 30, defense: { roll: 30, base: 50 } });
-  assert.equal(tie.opposition.winner, 'tie');
-  assert.equal(tie.hit, false);
-  assert.equal(tie.damage, null);
+  assert.equal(tie.opposition.winner, 'attacker');
+  assert.equal(tie.hit, true);
+  assert.equal(tie.damage.sl, 0);
 });
 
 test('E18 opposé — jet de défense validé comme le jet d’attaque, 00 = 100', () => {
@@ -268,8 +268,8 @@ test('E18 opposé — le Store transmet la défense et journalise le DR net', as
   assert.equal(result.status, 'applied');
   assert.equal(store.getCombat().participants.get('target').hp, 7);
   const entry = store.getLog()[0];
-  assert.match(entry.text, /défense Esquive/);
-  assert.match(entry.text, /DR net 2/);
+  assert.match(entry.text, /DR 2/);
+  assert.equal(entry.detail.opposition.defender.label, 'Esquive');
   assert.equal(entry.detail.opposition.netSl, 2);
   assert.equal(entry.detail.hit, true);
 });

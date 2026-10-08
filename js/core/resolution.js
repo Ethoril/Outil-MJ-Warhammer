@@ -4,18 +4,23 @@ import { getReferenceStatus } from './reference-catalog.js';
 import { ENGINES } from '../data/keyword-engines.js';
 /** Pure E12 action resolution. It never reads DOM, mutates a Store or rolls implicitly. */
 import {
-  SL, getCritEffect, getLocationName, getReverseRoll, isDouble
+  getLocationName
 } from './dice.js';
-import { applyAttackSl, applyTargetBonus, isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
+import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
-import { normalizeState } from './effects.js';
-import { parseCriticalEffect } from './criticals.js';
+import { acquireV5Conditions } from './v5-effects.js';
+import { selectV5Test, resolveV5Opposition, reverseV5Roll } from './v5-roll.js';
+import { buildV5RollDecision } from './v5-decision.js';
+import { previewMomentumEvents } from './v5-momentum.js';
+import { buildCombatTest, hasMomentum, withMomentum, conditionLevels, v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
+import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION } from '../data/v5-crits.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const signedValue = value => { const number = Number(value) || 0; return number < 0 ? `−${Math.abs(number)}` : `+${number}`; };
+const knownHp = actor => actor?.hp !== null && actor?.hp !== undefined && actor?.hp !== '' && Number.isFinite(Number(actor.hp));
 const DETAIL_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
 
 /** « gravité 43 + 10 = 53 → Côtes fracturées » ; « gravité non tirée » tant que le d100 manque. */
@@ -31,13 +36,17 @@ function describeCritical(detail) {
   const critical = detail.critical;
   if (!critical) return [];
   const first = critical.details;
+  if (!isRecord(first) && critical.second) {
+    const second = critical.second;
+    return [`Critique d’excédent : ${second.location.name} · ${describeSeverity(second)}`, ...(second.parsed?.reminders || []).map(text => `À arbitrer : ${text}`)];
+  }
   if (!isRecord(first) || !isRecord(first.location) || first.locationRoll === null || first.locationRoll === undefined) {
     return [detail.actionType && detail.actionType !== 'attack' ? 'Réussite critique' : 'Coup critique'];
   }
   const parts = [`Critique : localisation ${first.locationRoll} → ${first.location.name} · ${describeSeverity(first)}`];
   const second = critical.second;
   if (isRecord(second) && isRecord(second.location)) {
-    parts.push(`Second critique (PV sous zéro) : ${second.location.name} · ${describeSeverity(second)}`);
+    parts.push(`Critique d’excédent : ${second.location.name} · ${describeSeverity(second)}`);
   }
   const application = critical.application;
   if (isRecord(application)) {
@@ -66,6 +75,8 @@ export function describeResolutionDetail(detail) {
   const parts = [];
   const present = value => value !== null && value !== undefined;
   if (present(detail.actionType)) parts.push(`Type : ${DETAIL_TYPE_LABELS[detail.actionType] || detail.actionType}`);
+  if (detail.ruleVersion) parts.push(`Règle : ${detail.ruleVersion}`);
+  if (detail.test?.initialRoll != null && detail.test.initialRoll !== detail.roll) parts.push(`Jet initial : ${detail.test.initialRoll} · choix : ${detail.test.optionId}`);
   if (present(detail.roll)) parts.push(`Jet : ${detail.roll}`);
   if (present(detail.targetScore)) parts.push(`Seuil : ${detail.targetScore}`);
   if (present(detail.sl)) parts.push(`DR : ${signedValue(detail.sl)}${detail.slBonus ? ` (${detail.slBonus > 0 ? 'Pointue' : 'Imprécise'} ${signedValue(detail.slBonus)})` : ''}`);
@@ -75,14 +86,15 @@ export function describeResolutionDetail(detail) {
     const hit = present(detail.hit) ? ` · ${detail.hit ? 'touché' : 'pas de touche'}` : '';
     parts.push(`Opposition : défense ${label} ${score} (d100 ${roll}) · DR net ${signedValue(opposition.netSl)}${hit}`);
   } else if (present(detail.hit)) parts.push(detail.hit ? 'Touché' : 'Pas de touche');
-  // La localisation du critique remplace la ligne « Localisation » (c'est la même zone).
-  const criticalLocated = isRecord(detail.critical?.details) && isRecord(detail.critical.details.location) && present(detail.critical.details.locationRoll);
-  if (!criticalLocated && isRecord(detail.location) && present(detail.location.roll) && detail.location.name) parts.push(`Localisation : ${detail.location.roll} → ${detail.location.name}`);
+  // Ordinary damage and the Critical Wound have independent V5 locations.
+  if (isRecord(detail.location) && present(detail.location.roll) && detail.location.name) parts.push(`Localisation : ${detail.location.roll} → ${detail.location.name}`);
   const damage = isRecord(detail.damage) ? formatDamageFormula(detail.damage) : '';
   if (damage) parts.push(`Dégâts : ${damage}`);
   const weapon = isRecord(detail.weapon) && detail.weapon.status === 'manual' ? formatWeaponDamage(detail.weapon) : '';
   if (weapon) parts.push(`Arme : ${weapon}`);
   parts.push(...describeCritical(detail));
+  if (detail.defenderCritical) parts.push(...describeCritical({ actionType: 'attack', critical: detail.defenderCritical }).map(text => `Défenseur → attaquant : ${text}`));
+  for (const change of detail.momentum || []) parts.push(`Élan (${change.participantId}) : ${change.before ? 'oui' : 'non'} → ${change.after ? 'oui' : 'non'}`);
   if (detail.fumble) parts.push('Maladresse');
   // Read only the stored receipt: refreshing today's catalogue must never rewrite history.
   const shortVersion = value => String(value).split(':').map(part => /^[a-f0-9]{32,}$/i.test(part) ? part.slice(0, 12) : part).join(':');
@@ -112,7 +124,6 @@ const ATTACK_TYPES = new Set(['attack', 'attaque']);
 const OPPOSITION_TYPES = new Set(['opposition', 'opposed']);
 const SKILL_TYPES = new Set(['skill']);
 const DEFENSE_TYPES = new Set(['defense']);
-const PENALTY_STATES = new Set(['sonne', 'aveugle', 'extenue', 'brise']);
 export const MAX_APPLIED_RESOLUTION_IDS = 500;
 
 function safeSet(target, key, value) {
@@ -149,22 +160,6 @@ function parseInteger(value, fallback = 0) {
   if (value === undefined || value === null || value === '') return fallback;
   const parsed = parseInt(value, 10);
   return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-function stateKey(state) {
-  if (typeof state === 'string') return state.split('|', 1)[0].trim().toLocaleLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  return typeof state?.key === 'string' ? state.key : stateKey(state?.name || '');
-}
-
-function statePenalty(states) {
-  if (!Array.isArray(states)) return { value: 0, names: [] };
-  const names = [];
-  for (const state of states) {
-    const key = stateKey(state);
-    if (PENALTY_STATES.has(key) && !names.includes(key)) names.push(key);
-  }
-  return { value: names.length * 10, names };
 }
 
 function attackType(type) {
@@ -205,6 +200,9 @@ export function normalizeResolutionInput(input = {}) {
   if (hasOwn(input, 'baseRevision') && (!Number.isInteger(input.baseRevision) || input.baseRevision < 0)) {
     throw new ResolutionError('baseRevision invalide', 'INVALID_REVISION', { value: input.baseRevision });
   }
+  if (input.round !== undefined && (!Number.isSafeInteger(input.round) || input.round < 1)) {
+    throw new ResolutionError('Round de résolution invalide', 'INVALID_ROUND', { value: input.round });
+  }
   const baseRevision = input.baseRevision ?? 0;
   const type = String(action.type || 'test').trim().toLocaleLowerCase();
   const weaponItem = actor?.equipment?.find(item => item.id === action.extensions?.fiche?.equipmentId);
@@ -215,17 +213,22 @@ export function normalizeResolutionInput(input = {}) {
   const qualities = normalizeQualities(merged?.qualities || action.qualities || input.qualities || []);
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
-  // Optional defender side of an opposed attack; absent means the historic
-  // attacker-only resolution, byte for byte.
+  // Defender settings describe the Test actually chosen (Melee or Dodge).
   const defense = isRecord(input.defense) ? {
     roll: parseRoll(input.defense.roll),
     base: parseInteger(input.defense.base, 0),
     mod: parseInteger(input.defense.mod, 0),
+    v5: isRecord(input.defense.v5) ? clone(input.defense.v5) : {},
+    qualities: normalizeQualities(input.defense.qualities || []),
     label: typeof input.defense.label === 'string' && input.defense.label.trim() ? input.defense.label.trim() : 'CC'
   } : null;
   return {
     resolutionId,
     baseRevision,
+    ...(input.round !== undefined ? { round: input.round } : {}),
+    v5: isRecord(input.v5) ? clone(input.v5) : {},
+    defenderCriticalRolls: normalizeCriticalRolls(input.defenderCriticalRolls),
+    defenderCriticalDeclined: Array.isArray(input.defenderCriticalDeclined) ? input.defenderCriticalDeclined.map(String) : [],
     actor,
     action: {
       ...action,
@@ -277,34 +280,20 @@ function locationSide(name) {
   return null;
 }
 
-/** WFRP opposed test: higher SL wins, then the higher score; a perfect tie is no hit. */
-function opposedOutcome(attacker, defense, target) {
-  const penalties = statePenalty(target?.states);
-  const score = Math.max(0, defense.base + defense.mod - penalties.value);
-  const defender = {
-    label: defense.label, base: defense.base, mod: defense.mod, statePenalty: penalties.value,
-    score, roll: defense.roll, success: defense.roll <= score, sl: SL(score, defense.roll)
-  };
-  const netSl = attacker.sl - defender.sl;
-  const winner = netSl > 0 ? 'attacker' : netSl < 0 ? 'defender'
-    : attacker.score > defender.score ? 'attacker' : attacker.score < defender.score ? 'defender' : 'tie';
-  return { mode: 'opposed', attacker, defender, netSl, winner };
-}
-
 function locationOf(roll) {
   const named = getLocationName(roll);
   return { roll, ...named, side: locationSide(named.name) };
 }
 
-/** Gravité d'un critique : d100 saisi (+10 Acharnement, plafonné à 100) lu sur la table de la zone. */
-function criticalSeverity(location, base, acharnement, { inoffensive = false, alternative = null } = {}) {
-  const bonus = acharnement ? 10 : 0;
+/** V5 severity: entered d100 plus +10 per excess Wound; no global cap at 100. */
+function criticalSeverity(location, base, severityBonus, { inoffensive = false, alternative = null } = {}) {
+  const bonus = Number(severityBonus) || 0;
   const needsAlternative = inoffensive && alternative === null;
   const effectRollBase = needsAlternative || base === undefined || base === null ? null : inoffensive ? Math.min(base, alternative) : base;
-  const effectRoll = effectRollBase === null ? null : Math.min(100, effectRollBase + bonus);
-  const found = location && effectRoll !== null ? getCritEffect(location.key, effectRoll) : null;
+  const effectRoll = effectRollBase === null ? null : effectRollBase + bonus;
+  const found = location && effectRoll !== null ? getV5CriticalEffect(location.key, effectRoll) : null;
   const effect = found ? clone(found) : null;
-  return { effectRollBase, bonus, effectRoll, effect, needsAlternative, ...(inoffensive ? { effectRollCandidates: [base ?? null, alternative], effectAlternativeRoll: alternative } : {}), parsed: effect ? parseCriticalEffect(effect.eff) : null };
+  return { effectRollBase, bonus, effectRoll, effect, needsAlternative, ...(inoffensive ? { effectRollCandidates: [base ?? null, alternative], effectAlternativeRoll: alternative } : {}), tableVersion: V5_CRITICAL_TABLE_VERSION, parsed: effect ? clone(effect.parsed) : null };
 }
 
 function criticalDetails(rolls, location, acharnement, inoffensive = false) {
@@ -318,7 +307,7 @@ function criticalDetails(rolls, location, acharnement, inoffensive = false) {
   };
 }
 
-/** Second critique : cible qui passe sous zéro, à la localisation du jet d'attaque inversé. */
+/** Excess damage triggers a separate Critical Wound at the ordinary hit location. */
 function secondCritical(reversed, rolls, acharnement, inoffensive = false) {
   const location = locationOf(reversed);
   const severity = criticalSeverity(location, rolls?.secondEffect, acharnement, { inoffensive, alternative: rolls?.secondEffectAlternative ?? null });
@@ -338,9 +327,10 @@ function criticalItems(first, second, declined) {
       const amount = parsed.extraWounds;
       push({ id: `${crit}-wounds`, kind: 'wounds', label: `+${amount} Blessure${amount > 1 ? 's' : ''}`, amount });
     }
-    parsed.states.forEach(({ key, name, level }) => push({
-      id: `${crit}-state-${key}`, kind: 'state', label: criticalItemLabel(key, name, level), level, key, name
-    }));
+    parsed.states.forEach(condition => {
+      const { key, name, level } = condition;
+      push({ id: `${crit}-state-${key}`, kind: 'state', label: criticalItemLabel(key, name, level), level, key, name, condition: clone(condition) });
+    });
   });
   return items;
 }
@@ -350,9 +340,7 @@ function criticalApplication(items) {
   const application = { extraWounds: 0, states: [] };
   items.filter(item => item.applied).forEach(item => {
     if (item.kind === 'wounds') { application.extraWounds += item.amount; return; }
-    const known = application.states.find(state => state.key === item.key);
-    if (!known) application.states.push({ key: item.key, name: item.name, level: item.level });
-    else if (item.key !== 'a-terre') known.level += item.level;
+    application.states.push(clone(item.condition || { key: item.key, name: item.name, level: item.level }));
   });
   return application;
 }
@@ -362,51 +350,74 @@ export function previewHpLoss(preview) {
   return (Number(preview?.damage?.finalDamage) || 0) + (Number(preview?.critical?.application?.extraWounds) || 0);
 }
 
-/** Preview one action, preserving the exact supplied d100 and any critical dice. */
+/** Resolve and compare through the same pure V5 action calculation. No random draw. */
 export function previewResolution(input) {
   const normalized = normalizeResolutionInput(input);
-  const { actor, action, target, roll } = normalized;
-  const penalties = statePenalty(actor?.states);
-  const preQualityTarget = Math.max(0, action.base + action.mod - penalties.value);
-  const qualityTarget = applyTargetBonus(preQualityTarget, action.qualities);
-  const targetScore = qualityTarget.target;
-  const success = roll <= targetScore;
-  // Pointue / Imprécise modifient le DR de l'attaque (jamais la réussite) : avant l'opposition et les dégâts.
-  const { sl, bonus: slBonus } = attackType(action.type)
-    ? applyAttackSl(SL(targetScore, roll), success, action.qualities)
-    : { sl: SL(targetScore, roll), bonus: 0 };
-  const doubled = isDouble(roll);
+  const actorPlan = buildCombatTest(normalized);
+  const defenderPlan = normalized.defense ? buildCombatTest(normalized, 'defender') : null;
+  const choose = (plan, choice) => selectV5Test(plan.test, choice || plan.test.options[0].id);
+  const actorTest = choose(actorPlan, normalized.v5.choice);
+  const defenderTest = defenderPlan ? choose(defenderPlan, normalized.defense.v5.choice) : null;
+  const missingActorChoice = actorPlan.test.choiceRequired && !normalized.v5.choice;
+  const missingDefenderChoice = defenderPlan?.test.choiceRequired && !normalized.defense.v5.choice;
+  const result = resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defenderTest);
+  const consequence = (plan, test, otherPlan, otherTest, role, unknownOther) => {
+    const option = role === 'actor' ? resolvedV5Action(normalized, plan, test, otherPlan, otherTest)
+      : resolvedV5Action(normalized, otherPlan, otherTest, plan, test);
+    const criticals = [option.critical, option.defenderCritical].filter(Boolean);
+    const complete = !unknownOther && !option.unresolved.length && !option.mechanicalWarnings.length
+      && !option.protection?.manual?.length && !criticals.some(critical => critical.details?.pending || critical.second?.pending)
+      && (!option.hit || !option.attack || (option.damage && knownHp(normalized.target)));
+    return { certainty: complete ? 'complete' : 'partial', hit: option.hit,
+      location: option.location?.name || null,
+      woundsLost: complete ? Math.min(Math.max(0, Number(normalized.target?.hp) || 0), previewHpLoss(option)) : null,
+      importantEffects: criticals.map(critical => critical === option.defenderCritical ? 'Critique défensif sur l’attaquant' : 'Blessure critique sur la cible'),
+      costs: [], preview: option };
+  };
+  result.decisions = {
+    actor: buildV5RollDecision(actorPlan.test, { baseRevision: normalized.baseRevision,
+      evaluateOutcome: test => consequence(actorPlan, test, defenderPlan, defenderTest, 'actor', missingDefenderChoice) }),
+    ...(defenderPlan ? { defender: buildV5RollDecision(defenderPlan.test, { baseRevision: normalized.baseRevision, recommendationPreference: 'min',
+      evaluateOutcome: test => consequence(defenderPlan, test, actorPlan, actorTest, 'defender', missingActorChoice) }) } : {})
+  };
+  result.choiceRequired = Boolean(missingActorChoice || missingDefenderChoice);
+  return result;
+}
+
+function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defenderTest) {
+  const { actor, action, target } = normalized;
+  const roll = actorTest.roll, targetScore = actorTest.score, success = actorTest.success, sl = actorTest.sl;
+  const penalties = { value: actorPlan.penalty, names: actorPlan.penaltyStates };
+  const slBonus = actorTest.details.modifiers.filter(item => item.id.startsWith('quality-')).reduce((sum, item) => sum + item.amount, 0);
+  const doubled = actorTest.details.doubled;
   const criticalClassification = isCriticalRoll(roll, doubled, action.qualities);
   const fumbleClassification = isFumbleRoll(roll, doubled, action.qualities);
-  // With a defense, an attack lands when the attacker wins the opposed test,
-  // even on a failed own roll; without one, hitting is succeeding.
-  const opposed = attackType(action.type) && normalized.defense
-    ? opposedOutcome({ score: targetScore, roll, success, sl }, normalized.defense, target) : null;
-  const hit = opposed ? opposed.winner === 'attacker' : success;
-  const acharnement = attackType(action.type) && success && hit && Number(target?.hp) <= 0;
-  let kind = null;
-  let expanded = false;
-  if (success && hit && criticalClassification.critique) {
-    kind = 'Critique';
-    expanded = criticalClassification.élargi;
-  } else if (!success && fumbleClassification.maladresse) {
-    kind = 'Maladresse';
-    expanded = fumbleClassification.élargi;
-  } else if (acharnement) {
-    kind = 'Critique';
-  }
-
-  // Coup critique d'une attaque : la localisation vient d'un nouveau d100, pas du jet inversé.
-  const criticalAttack = kind === 'Critique' && attackType(action.type);
+  const opposition = defenderTest ? resolveV5Opposition(actorTest, defenderTest) : null;
+  const opposed = opposition ? { mode: 'opposed', attacker: { ...actorTest },
+    defender: { ...defenderTest, label: normalized.defense.label, base: normalized.defense.base, mod: defenderTest.details.totalModifier, statePenalty: defenderPlan.penalty }, netSl: opposition.netSl,
+    winner: opposition.winner === 'initiator' ? 'attacker' : 'defender', tie: opposition.tie } : null;
+  const targetLevels = conditionLevels(target);
+  const context = normalized.v5.context || {};
+  const cannotDefend = targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
+  const helpless = (targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true)
+    && (actorPlan.kind === 'melee' || (actorPlan.kind === 'ranged' && context.pointBlank === true));
+  const hit = helpless && !opposed ? true : opposed ? opposed.winner === 'attacker' : success;
+  const criticalAttack = attackType(action.type) && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
-  const location = !hit ? null
-    : criticalAttack ? (criticalLocationRoll === undefined ? null : locationOf(criticalLocationRoll))
-      : locationOf(getReverseRoll(roll));
+  const location = hit && attackType(action.type) ? locationOf(reverseV5Roll(roll)) : null;
+  const criticalLocation = criticalAttack && criticalLocationRoll != null ? locationOf(criticalLocationRoll) : null;
   const inoffensive = action.qualities.some(q => q.id === 'inoffensive') && keywordMechanicalStatus('inoffensive').status === 'covered';
-  const criticalFirst = criticalAttack ? criticalDetails(normalized.criticalRolls, location, acharnement, inoffensive) : null;
+  let criticalFirst = criticalAttack ? criticalDetails(normalized.criticalRolls, criticalLocation, 0, inoffensive) : null;
   let damage = null;
   let protection = null;
-  const mechanicalWarnings = action.qualities.filter(q => Object.hasOwn(ENGINES, q.id) && keywordMechanicalStatus(q.id).status !== 'covered').map(q => ({ keywordId: q.id, reason: 'version-effet-non-couverte' }));
+  const unresolved = [...actorPlan.unresolved, ...(defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(defenderPlan?.restrictions || [])];
+  if (attackType(action.type) && actorPlan.kind === 'melee' && !normalized.defense && !cannotDefend) unresolved.push('Jet de défense requis pour l’opposition de Corps à corps.');
+  if (attackType(action.type) && actorPlan.kind === 'ranged' && normalized.defense && context.rangedOppositionAllowed !== true && !(defenderPlan.kind === 'test' && v5ShieldDefense(normalized).rangedDodgeAllowed)) unresolved.push('Confirmer la règle autorisant cette défense contre un tir.');
+  if (Number(actor?.hp) < 0 || Number(target?.hp) < 0) unresolved.push('PV historiques négatifs : migration explicite à 0 requise avant une action V5.');
+  const allQualities = [...action.qualities, ...(normalized.defense?.qualities || [])];
+  const mechanicalWarnings = allQualities.filter(q => Object.hasOwn(ENGINES, q.id)
+    && (keywordMechanicalStatus(q.id).status !== 'covered' || ['target-score-bonus', 'add-units-die'].includes(ENGINES[q.id].engine)))
+    .map(q => ({ keywordId: q.id, reason: 'description-mecanique-v5-requise' }));
   // Weapon damage of a landed attack (`BF+4` read with the attacker's F). A
   // `manual` status (unknown expression, F missing) means no automatic damage:
   // the MJ arbitrates instead of silently getting 0.
@@ -416,14 +427,14 @@ export function previewResolution(input) {
   if (hit && attackType(action.type) && target && (hasOwn(action, 'damage') || hasOwn(action, 'damageFormula'))) {
     weapon = evaluateWeaponDamage(weaponDamage, strengthBonus);
   }
-  // Sans localisation du critique, l'armure de la zone est inconnue : pas de dégâts calculés.
-  if (weapon && !criticalFirst?.needsLocation) {
+  // Normal damage always uses the final roll reversed, independently of critical dice.
+  if (weapon) {
     protection = locationProtection(target, { ...normalized.protectionContext,
-      ranged: normalized.attackContext?.ranged ?? normalized.protectionContext.ranged, defenseProvided: Boolean(normalized.defense),
+      ranged: normalized.attackContext?.ranged ?? (normalized.v5.kind === 'ranged' ? true : normalized.v5.kind === 'melee' ? false : normalized.protectionContext.ranged), defenseProvided: Boolean(normalized.defense),
       location, attackRoll: roll,
       hitLocationRoll: location?.roll, critical: criticalAttack, qualities: action.qualities });
     const targetArmour = protection.ap;
-    if (protection.criticalIgnored && kind === 'Critique') kind = null;
+
     if (targetArmour !== null && !mechanicalWarnings.length)     damage = computeDamage({
       weaponDamage,
       strengthBonus,
@@ -435,33 +446,82 @@ export function previewResolution(input) {
     });
   }
 
-  let criticalBlock = kind === 'Critique' ? { kind, expanded, acharnement, details: criticalFirst } : null;
-  if (criticalAttack && !protection?.criticalIgnored) {
-    // Second critique : PV avant le coup ≥ 0 et PV avant − dégâts normaux < 0 (Blessures du critique exclues).
-    const hpBefore = Number(target?.hp);
-    const reversed = getReverseRoll(roll);
-    const second = damage && hpBefore >= 0 && hpBefore - damage.finalDamage < 0
-      ? secondCritical(reversed, normalized.criticalRolls, acharnement, inoffensive) : null;
-    const items = criticalItems(criticalFirst, second, normalized.criticalDeclined);
-    criticalBlock = {
-      ...criticalBlock,
-      ...(second ? { second } : {}),
-      // Dégâts non calculables : pas de table pour le second critique, seulement son rappel
-      // (cible encore à 0 PV ou plus : déjà sous zéro, elle ne peut plus y passer).
-      ...(weapon?.status === 'manual' && location && hpBefore >= 0 ? { secondHint: { locationRoll: reversed, location: locationOf(reversed) } } : {}),
-      items,
-      application: criticalApplication(items)
-    };
+  // Critical hits use their own random location; normal weapon damage keeps the reversed final hit roll.
+  if (criticalFirst?.location) {
+    const guard = locationProtection(target, { ...normalized.protectionContext, location: criticalFirst.location,
+      ranged: normalized.attackContext?.ranged ?? (normalized.v5.kind === 'ranged' ? true : normalized.v5.kind === 'melee' ? false : normalized.protectionContext.ranged), defenseProvided: Boolean(normalized.defense), attackRoll: roll, hitLocationRoll: criticalFirst.locationRoll,
+      critical: true, qualities: action.qualities });
+    if (guard.criticalIgnored) criticalFirst = null;
+    else { criticalFirst.protection = guard; unresolved.push(...guard.manual.map(reason => `Protection du critique : ${reason}`)); }
   }
+  const hpBefore = Math.max(0, Number(target?.hp) || 0);
+  const excess = damage ? Math.max(0, damage.finalDamage - hpBefore) : 0;
+  const second = knownHp(target) && excess > 0 ? secondCritical(reverseV5Roll(roll), normalized.criticalRolls, excess * 10, inoffensive) : null;
+  let criticalBlock = criticalFirst || second ? { kind: 'Critique', expanded: criticalClassification.élargi,
+    acharnement: false, details: criticalFirst, ...(second ? { second, excessWounds: excess } : {}),
+    ...(weapon?.status === 'manual' ? { secondHint: { locationRoll: reverseV5Roll(roll), location } } : {}) } : null;
+  if (criticalBlock) {
+    criticalBlock.items = criticalItems(criticalFirst, second, normalized.criticalDeclined);
+    criticalBlock.application = criticalApplication(criticalBlock.items);
+  } else if (!attackType(action.type) && actorTest.critical) criticalBlock = { kind: 'Critique', details: null };
+  let defenderCritical = null;
+  const defenderCriticalClassification = defenderTest ? isCriticalRoll(defenderTest.roll, defenderTest.details.doubled, normalized.defense.qualities) : null;
+  const defenderFumbleClassification = defenderTest ? isFumbleRoll(defenderTest.roll, defenderTest.details.doubled, normalized.defense.qualities) : null;
+  if (['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
+    const critLocation = normalized.defenderCriticalRolls?.location != null ? locationOf(normalized.defenderCriticalRolls.location) : null;
+    const details = criticalDetails(normalized.defenderCriticalRolls, critLocation, 0, normalized.defense.qualities.some(q => q.id === 'inoffensive'));
+    const guard = critLocation ? locationProtection(actor, { location: critLocation, attackRoll: defenderTest.roll,
+      hitLocationRoll: critLocation.roll, critical: true, ranged: false, qualities: normalized.defense.qualities }) : null;
+    if (!guard?.criticalIgnored) {
+      if (guard) { details.protection = guard; unresolved.push(...guard.manual.map(reason => `Protection du critique défensif : ${reason}`)); }
+      const items = criticalItems(details, null, normalized.defenderCriticalDeclined);
+      defenderCritical = { kind: 'Critique', targetId: actor?.id, details, items, application: criticalApplication(items) };
+    }
+  }
+  const conditionChanges = {};
+  const conditionPlan = (participant, states, role, authorId) => {
+    if (!participant || !states?.length) return;
+    const receipt = acquireV5Conditions(participant, states, { resolutionId: normalized.resolutionId, authorId, targetId: participant.id, round: normalized.round, source: { kind: 'critical' } });
+    conditionChanges[role] = receipt;
+    unresolved.push(...receipt.needsInput.map(item => `${role === 'actor' ? 'Attaquant' : 'Cible'} : ${item.label}`));
+  };
+  conditionPlan(target, criticalBlock?.application?.states, 'target', actor?.id);
+  conditionPlan(actor, defenderCritical?.application?.states, 'actor', target?.id);
+  const momentum = [];
+  const planMomentum = (participant, events) => {
+    if (!participant?.id) return;
+    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events }) });
+  };
+  const actorEvents = [], targetEvents = [];
+  const event = (type, data = {}) => ({ id: `${normalized.resolutionId}:${type}`, type, ...data });
+  if (actorPlan.charging) actorEvents.push(event('chargeEnemy'));
+  if (actorPlan.kind === 'melee') {
+    if (opposed) actorEvents.push(event(hit ? 'opposedMeleeWon' : 'opposedMeleeLost'));
+    else if (!success) actorEvents.push(event('meleeTestFailed'));
+  }
+  if (defenderPlan?.kind === 'melee' && opposed) targetEvents.push(event(hit ? 'opposedMeleeLost' : 'opposedMeleeWon'));
+  const criticalEffects = criticalBlock?.application;
+  targetEvents.push(event('woundsLost', { amount: Math.min(hpBefore, (damage?.finalDamage || 0) + (criticalEffects?.extraWounds || 0)) }));
+  targetEvents.push(event('conditionAcquired', { instances: conditionChanges.target?.acquiredInstances || 0 }));
+  actorEvents.push(event('woundsLost', { amount: Math.min(Math.max(0, Number(actor?.hp) || 0), defenderCritical?.application.extraWounds || 0) }));
+  actorEvents.push(event('conditionAcquired', { instances: conditionChanges.actor?.acquiredInstances || 0 }));
+  planMomentum(actor, actorEvents); planMomentum(target, targetEvents);
 
   return {
     resolutionId: normalized.resolutionId,
     baseRevision: normalized.baseRevision,
     input: normalized,
     status: 'preview',
+    ruleVersion: V5_COMBAT_RULE_VERSION,
+    test: actorTest,
+    defenderTest,
+    momentum,
+    conditionChanges,
+    unresolved,
+    defenderCritical,
     actionType: action.type,
     attack: attackType(action.type),
-    score: { base: action.base, mod: action.mod, statePenalty: penalties.value, penaltyStates: penalties.names, target: targetScore },
+    score: { base: action.base, mod: actorTest.details.totalModifier, statePenalty: penalties.value, penaltyStates: penalties.names, target: targetScore },
     roll,
     success,
     hit,
@@ -469,7 +529,8 @@ export function previewResolution(input) {
     slBonus,
     double: doubled,
     critical: criticalBlock,
-    fumble: kind === 'Maladresse' ? { expanded } : null,
+    fumble: !success && fumbleClassification.maladresse ? { expanded: fumbleClassification.élargi } : null,
+    defenderFumble: defenderTest && !defenderTest.success && defenderFumbleClassification.maladresse ? { expanded: defenderFumbleClassification.élargi } : null,
     location,
     targetId: target?.id || null,
     damage,
@@ -492,25 +553,37 @@ export function applyResolution(preview, currentState) {
   if (!isRecord(currentState) || !Number.isInteger(currentState.revision) || currentState.revision < 0) {
     throw new ResolutionError('État courant invalide', 'INVALID_STATE');
   }
+  if (hasOwn(currentState, 'round') && (!Number.isSafeInteger(currentState.round) || currentState.round < 1)) {
+    throw new ResolutionError('Round de l’état courant invalide', 'INVALID_STATE');
+  }
   const appliedIds = Array.isArray(currentState.appliedResolutionIds) ? currentState.appliedResolutionIds : [];
   if (preview.application?.applied || appliedIds.includes(preview.resolutionId)) {
     return { status: 'duplicate', state: clone(currentState), resolution: clone(preview) };
   }
-  if (currentState.revision !== preview.baseRevision) {
+  if (currentState.revision !== preview.baseRevision || (hasOwn(currentState, 'round') && currentState.round !== preview.input.round)) {
     return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
   }
   const carriesDamage = preview.input.action.damage !== undefined || preview.input.action.damageFormula !== undefined;
+  if (preview.attack && preview.damage && !knownHp(preview.input.target)) return { status: 'manual', reason: 'PV-de-la-cible-requis', state: clone(currentState), resolution: clone(preview) };
   if (preview.attack && carriesDamage && !preview.targetId) {
     return { status: 'manual', reason: 'cible-requise-pour-les-dégâts', state: clone(currentState), resolution: clone(preview) };
   }
   if (preview.attack && preview.critical?.details?.needsLocation) {
     return { status: 'manual', reason: 'localisation-du-critique-requise', state: clone(currentState), resolution: clone(preview) };
   }
-  if (preview.critical?.details?.needsAlternative || preview.critical?.second?.needsAlternative) {
+  if (preview.critical?.details?.needsAlternative || preview.critical?.second?.needsAlternative || preview.defenderCritical?.details?.needsAlternative) {
     return { status: 'manual', reason: 'deux-jets-gravite-requis:inoffensive', state: clone(currentState), resolution: clone(preview) };
   }
   if (preview.protection?.manual?.length || preview.mechanicalWarnings?.length) {
     return { status: 'manual', reason: preview.protection?.manual?.[0] || 'version-effet-non-couverte', state: clone(currentState), resolution: clone(preview) };
+  }
+  if (preview.ruleVersion !== V5_COMBAT_RULE_VERSION) return { status: 'manual', reason: 'ancien-apercu-a-recalculer-en-v5', state: clone(currentState), resolution: clone(preview) };
+  if (preview.choiceRequired || preview.unresolved?.length) return { status: 'manual', reason: preview.unresolved?.[0] || 'choix-inversion-requis', state: clone(currentState), resolution: clone(preview) };
+  if ([preview.critical, preview.defenderCritical].some(critical => critical?.details?.pending || critical?.second?.pending))
+    return { status: 'manual', reason: 'jets-de-critique-requis', state: clone(currentState), resolution: clone(preview) };
+  for (const subject of [preview.input.actor, preview.input.target].filter(Boolean)) {
+    const live = participantById(currentState, subject.id);
+    if (live && JSON.stringify(live) !== JSON.stringify(subject)) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
   }
   const nextState = clone(currentState);
   const target = participantById(currentState, preview.targetId);
@@ -522,23 +595,30 @@ export function applyResolution(preview, currentState) {
     }
     const updated = clone(target);
     const oldHp = Number(updated.hp) || 0;
-    updated.hp = oldHp - previewHpLoss(preview);
-    const states = Array.isArray(updated.states) ? [...updated.states] : [];
-    const findState = key => states.findIndex(state => stateKey(state).replace(/-/g, ' ') === key.replace(/-/g, ' '));
-    // Même état déjà présent : niveau augmenté, durée conservée ; « À Terre » ne double jamais.
-    for (const { key, name, level } of criticalEffects.states) {
-      const at = findState(key);
-      if (at < 0) states.push(normalizeState({ name, level, duration: null, source: { kind: 'critical', resolutionId: preview.resolutionId } }, states.length));
-      else if (key !== 'a-terre') {
-        const known = typeof states[at] === 'string' ? normalizeState(states[at], at) : states[at];
-        states[at] = { ...known, level: (Number(known.level) || 1) + level };
-      }
+    updated.hp = Math.max(0, oldHp - previewHpLoss(preview));
+    if (criticalEffects.states.length) {
+      const receipt = acquireV5Conditions(updated, criticalEffects.states, { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, targetId: updated.id, round: preview.input.round, source: { kind: 'critical' } });
+      if (!receipt.ready) return { status: 'manual', reason: receipt.needsInput[0].label, state: clone(currentState), resolution: clone(preview) };
+      Object.assign(updated, receipt.participant);
     }
-    if (updated.hp <= 0 && findState('a-terre') < 0) {
-      states.push({ name: 'À Terre', key: 'a-terre', level: 1, duration: null, source: { kind: 'resolution', resolutionId: preview.resolutionId } });
-    }
-    if (states.length || Array.isArray(updated.states)) updated.states = states;
     nextState.participants = participantListWithUpdate(currentState, preview.targetId, updated);
+  }
+  const defenderEffects = preview.defenderCritical?.application;
+  if (defenderEffects && preview.input.actor?.id) {
+    const liveActor = participantById(nextState, preview.input.actor.id);
+    if (!liveActor) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
+    const updated = clone(liveActor);
+    updated.hp = Math.max(0, (Number(updated.hp) || 0) - defenderEffects.extraWounds);
+    if (defenderEffects.states.length) {
+      const receipt = acquireV5Conditions(updated, defenderEffects.states, { resolutionId: preview.resolutionId, authorId: preview.input.target?.id, targetId: updated.id, round: preview.input.round, source: { kind: 'critical' } });
+      if (!receipt.ready) return { status: 'manual', reason: receipt.needsInput[0].label, state: clone(currentState), resolution: clone(preview) };
+      Object.assign(updated, receipt.participant);
+    }
+    nextState.participants = participantListWithUpdate(nextState, updated.id, updated);
+  }
+  for (const change of preview.momentum || []) {
+    const live = participantById(nextState, change.participantId);
+    if (live) nextState.participants = participantListWithUpdate(nextState, live.id, withMomentum(live, change.after));
   }
   nextState.revision = currentState.revision + 1;
   nextState.appliedResolutionIds = [...appliedIds, preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);

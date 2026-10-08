@@ -4,8 +4,8 @@ const freeze = value => {
   if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value); }
   return value;
 };
-export function buildV5RollDecision(preview, { evaluateOutcome, baseRevision } = {}) {
-  if (preview?.ruleVersion !== V5_TEST_RULE_VERSION || typeof evaluateOutcome !== 'function'
+export function buildV5RollDecision(preview, { evaluateOutcome, baseRevision, recommendationPreference = 'max' } = {}) {
+  if (!['min', 'max'].includes(recommendationPreference) || preview?.ruleVersion !== V5_TEST_RULE_VERSION || typeof evaluateOutcome !== 'function'
     || !Number.isInteger(baseRevision) || baseRevision < 0) throw new TypeError('Contexte de décision invalide');
   const options = preview.options.map(option => {
     const test = selectV5Test(preview, option.id);
@@ -21,9 +21,9 @@ export function buildV5RollDecision(preview, { evaluateOutcome, baseRevision } =
       details: { test, action: structuredClone(outcome) } };
   });
   const comparable = options.length > 1 && options.every(option => option.summary.certainty === 'complete' && option.summary.woundsLost !== null);
-  const greatest = comparable ? Math.max(...options.map(option => option.summary.woundsLost)) : null;
-  const winners = comparable ? options.filter(option => option.summary.woundsLost === greatest) : [];
-  const recommendation = winners.length === 1 ? { optionId: winners[0].id, criterion: 'knownWoundsLost', label: 'Plus de Blessures' } : null;
+  const preferred = comparable ? Math[recommendationPreference](...options.map(option => option.summary.woundsLost)) : null;
+  const winners = comparable ? options.filter(option => option.summary.woundsLost === preferred) : [];
+  const recommendation = winners.length === 1 ? { optionId: winners[0].id, criterion: recommendationPreference === 'min' ? 'minimumKnownWoundsLost' : 'knownWoundsLost', label: recommendationPreference === 'min' ? 'Moins de Blessures subies' : 'Plus de Blessures' } : null;
   return freeze({ ruleVersion: V5_TEST_RULE_VERSION, baseRevision, choiceRequired: preview.choiceRequired,
     forcedInversion: preview.forcedInversion, options, recommendation, equivalentKnownWounds: comparable && winners.length > 1,
     presentation: { detailsInitiallyCollapsed: true, confirmationRequired: true } });

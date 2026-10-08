@@ -419,8 +419,15 @@ export function applyFicheSync(draft, entries) {
         const syncedKey = sourceActionKey(source);
         if (syncedKey) seen.add(syncedKey);
         // Preserve scene adjustments/target/ammunition/context and independent action IDs.
+        const extensions = { ...(raw.extensions || {}), ...cloneValue(source.extensions) };
+        if (source.extensions?.v5 || raw.extensions?.v5) {
+          extensions.v5 = { ...(source.extensions?.v5 || {}), ...(raw.extensions?.v5 || {}) };
+          // A live legacy threshold adjustment is still awaiting the MJ's
+          // explicit conversion. A library DR must not silently replace it.
+          if (raw.mod && raw.extensions?.v5?.slModifier == null) delete extensions.v5.slModifier;
+        }
         const copy = { ...cloneValue(source), ...cloneValue(raw), base: source.base, note: source.note, damage: source.damage,
-          qualities: cloneValue(source.qualities), extensions: { ...(raw.extensions || {}), ...cloneValue(source.extensions) } };
+          qualities: cloneValue(source.qualities), extensions };
         if (source.damageFormula) copy.damageFormula = source.damageFormula; else delete copy.damageFormula;
         result.push(copy);
       }

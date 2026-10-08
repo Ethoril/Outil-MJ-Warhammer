@@ -1,30 +1,25 @@
-# Consigne de reprise pour l’agent
+# Reprise du chantier local V5
 
-À copier dans la nouvelle conversation après ouverture du dépôt :
+Mise à jour du 9 octobre 2026. Lire ce document avant de repartir de l'ancien premier incrément.
 
-> Reprends le lot 2 de l’Outil MJ Warhammer depuis la branche `codex/lot2-talents-v5`. Lis `docs/lot2/README.md`, `LOT2_ETAPES.md`, `LOT2_CADRAGE.md`, `LOT2_DEMARRAGE.md` et `LOT2_CONTRATS_MOTEUR.md`. Le cadrage et le début du chantier sont autorisés. Le socle initial est `7477421e937d73ba4d3cf81b1c8582c0c8315544`, base `28657e39477bbcbfeb0de826b3f1d05e525bb386`, version 3.12.3. Les fonctions nouvelles sont testées mais ne sont pas raccordées au combat. La prochaine étape est 2.1 : résolution V5 réelle et interface de comparaison. La maquette `maquette-choix-avantage.html` est approuvée. Continue dans un checkout isolé, préserve les autres lots et ne déploie aucune fonctionnalité inachevée.
+> Continuer sur `codex/lot2-talents-v5`, dans son worktree attaché. Les étapes 2.1 et 2.2 sont raccordées au combat et validées localement ; le socle 2.3 est préparé séparément et ne doit pas être annoncé comme actif. Lire `LOT2_AVANCEMENT.md`, `LOT2_CONTROLE.md`, `LOT2_ETAPES.md`, le cadrage et les contrats. Ne pas remplacer ce travail par le socle distant antérieur. Ne pas pousser, fusionner dans main ni déployer sans instruction du MJ. La publication précédente de main concernait seulement docs/lot2/.
 
-## Décisions du MJ
+## Décisions maintenues et nouvelles
 
-- Catalogue utile complet, PJ actuels prioritaires. Lire les snapshots réels : la fixture Caelel ne prouve pas les talents des cinq PJ actuels.
-- Système jouable unique V5 ; aucun compteur d’Avantage V4 ni convertisseur automatique. Le MJ convertit les descriptions dans Aides de jeu ailleurs. Une bibliographie V4 peut rester ; la description mécanique doit être V5 et son contrat validé.
-- Dix talents de bonus de caractéristiques déjà compris dans les fiches sont exclus. Les autres valeurs dérivées ne sont pas exclues par défaut ; ne pas ajouter deux fois Dur à cuire à l’import.
-- Annulation Avantage/Désavantage **1 pour 1**. Solde : inversion, puis +1/−1 DR par source supplémentaire au-delà de la première. Doubles inchangés, DR supplémentaires conservés.
-- Élan binaire : gain sur victoire opposée en mêlée ou Charge ; Avantage en Corps à corps. Perte sur échec/opposition perdue, Blessures effectivement perdues, État effectivement acquis, pause ou fin de combat.
-- Une seule dépense d’Élan pour une attaque supplémentaire par Tour. Exemption de coût distincte du quota du talent. Conservation d’Élan limitée aux motifs déclarés.
-- Choix laissés au joueur. Comparer touche, DR, localisation, Blessures, effets et coût. Recommandation avec critère explicite ; aucune recommandation définitive sur données inconnues.
-- Calculs repliés, détail accessible, journal compact. Même résolveur pur pour les deux options et l’action finale, sans nouveau tirage lors de la comparaison.
-- Résultat, coût, quota et échéance dans une seule commande, avec révision, prévention des doubles applications et annulation complète.
-- Magie/prières automatisées au lot 3 ; application mobile au lot 4. Le panneau reste lisible sur écran étroit.
+- Un seul moteur jouable V5 ; aucun compteur d'Avantage V4 et aucune conversion automatique des anciens modificateurs de seuil. Le MJ précise un modificateur en DR ; le seuil de compétence ne change pas.
+- Annulation des sources Avantage/Désavantage 1 pour 1 ; inversion puis DR des sources supplémentaires. Choix explicite des deux participants, sans nouveau tirage. La recommandation défensive minimise les Blessures subies.
+- Élan binaire : victoire opposée en mêlée ou Charge ; pertes sur opposition/échec mêlée, Blessures effectivement perdues, État effectivement acquis, pause/fin. Une seule dépense d'Élan pour attaque supplémentaire par Tour, même après regain ; exemption et quota restent distincts.
+- Critiques de succès doubles indépendants du gagnant, y compris défenseur. Localisation normale du jet final inversé distincte de la localisation du critique. Excédent : +10 par Blessure en trop, sans plafond global de gravité.
+- États et effets : occurrences et causes conservées, horloge par scène, auteur différent de cible, fin de Round distincte de fin de Tour. Les jets nécessaires sont saisis ou lancés explicitement avant la commande atomique.
+- **Historique sans valeur patrimoniale pour le MJ.** Supprimer une rencontre purge son journal lié, ses archives et les copies de ces traces dans l'annulation. Annuler peut restaurer la rencontre, sans ressusciter son journal purgé. La rencontre de test n'exige aucune migration de conservation.
+- Les 206 descriptions d'Aides de jeu ont été actualisées depuis la source V5. Les IDs sont stables. Une bibliographie V4 reste possible ; c'est la mécanique publiée et contractualisée qui compte.
+- Dix bonus de caractéristiques déjà inclus dans la fiche restent exclus. Priorité PJ depuis leurs snapshots actuels, jamais depuis la seule fixture Caelel. Ne pas ajouter deux fois Dur à cuire.
+- Les règles consultables ont été reprises en V5 : Tests, combat, Élan, santé, critiques, États, Psychologie et Corruption. Magie/prières restent au lot 3.
 
-## État réel
+## État et prochaine étape
 
-Quatre modules `js/core/` : `v5-roll.js`, `v5-momentum.js`, `v5-decision.js`, `talent-contracts.js`. Deux fichiers de tests lot2, 62 tests nouveaux ; suite complète 468 réussis lors du premier incrément. Modules déclarés au cache, sans raccordement au combat.
+`LOT2_AVANCEMENT.md` donne les commandes et vérifications finales. `LOT2_CONTROLE.md` consigne le contrôle indépendant. `LOT2_ETAPE_2_3_SOCLE.md` décrit les coûts, quotas et contrats préparés sans raccordement.
 
-Schéma déclaratif 1 : sept opérations. Coûts, quotas, choix et échéances sont encore rejetés explicitement. L’inventaire de 206 identités et neuf exemples n’est pas un registre activé. Les tests utilisent des contrats synthétiques.
+Prochaine étape : raccorder le socle 2.3 aux aperçus, aux choix de l'interface et à la commande Store commune ; ensuite contractualiser le catalogue utile 2.4 avec couverture explicite. Les coûts de Fortune des récupérations sont actuellement confirmés comme décomptés à la table ; aucun compteur de ressource n'est modifié implicitement.
 
-## Reprise
-
-Vérifier branche, état Git et instructions locales ; installer les dépendances et rejouer les tests. Conserver le travail des autres lots. Lire le PDF personnel après transfert. Les divergences de critiques défensifs, critiques indépendants du gagnant et borne de santé sont à réconcilier : le socle ne certifie pas tout le combat V5.
-
-L’historique garde ses calculs et leur version. Les nouvelles actions utilisent un seul système. Toute migration doit être explicite, testée, avec sauvegarde et reprise. Ne pas activer un talent depuis une description ancienne en attente de conversion.
+Le livre personnel est `Livre de base V5 EN v2.pdf`, consulté dans le dossier de règles fourni par le MJ. Aucun PDF ni export privé n'est dans Git ou le ZIP. Les scénarios de recette sont synthétiques. `CHOIX_POUR_LA_REPRISE.md` prépare les arbitrages restant utiles sans bloquer le travail déjà validé.

@@ -1,3 +1,6 @@
+import { acquireV5Conditions, recoverV5Condition, healV5Wounds } from './v5-effects.js';
+import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
+import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
 import { sanitizeArray, sanitizeProfile, sanitizeParticipant } from './sanitize.js';
 import { migrateSnapshot, migrateLegacyStorage, CURRENT_SCHEMA_VERSION } from './migrations.js';
@@ -410,8 +413,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     // Combat remains the canonical live editing surface.  When an active scene
     // exists, mirror its participant snapshot before serialising so legacy and
     // persistent stores cannot diverge after a direct combat mutation.
+    let exportedScene = activeScene;
     if (activeScene && activeScene.status === 'active') {
-      activeScene = {
+      exportedScene = {
         ...activeScene,
         round: combat.round,
         currentActorId: combat.currentActorId,
@@ -439,7 +443,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       encounters: cloneValue(encounters),
       persistentCharacters: cloneValue(persistentCharacters),
       archives: cloneValue(archives),
-      ...(activeScene ? { activeScene: cloneValue(activeScene) } : {}),
+      ...(exportedScene ? { activeScene: cloneValue(exportedScene) } : {}),
       ...(suspendedScenes.length ? { suspendedScenes: cloneValue(suspendedScenes) } : {}),
       ...(reminderChoices.length ? { reminderChoices: cloneValue(reminderChoices) } : {}),
       ...(appliedResolutionIds.length ? { appliedResolutionIds: [...appliedResolutionIds] } : {}),
@@ -509,20 +513,23 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     const targetLabel = target.name || preview?.targetId || 'cible';
     const outcome = preview?.success ? 'réussite' : 'échec';
     const opposed = preview?.opposition?.mode === 'opposed' ? preview.opposition : null;
-    const defenseText = opposed
-      ? ` ; défense ${opposed.defender.label} ${opposed.defender.score} (d100 ${opposed.defender.roll}), DR net ${opposed.netSl} — ${preview.hit ? 'touché' : 'pas de touche'}`
-      : '';
-    const weaponText = preview?.weapon?.status === 'manual' ? ` ; dégâts à arbitrer (${preview.weapon.text})` : '';
-    const criticalPart = (label, part) => part?.location ? ` ; ${label} ${part.location.name}${part.effect ? ` « ${part.effect.name} »` : ''}` : '';
-    const criticalText = criticalPart('critique', preview?.critical?.details) + criticalPart('second critique', preview?.critical?.second);
+    const wounds = Math.min(Math.max(0, Number(target.hp) || 0), (preview.damage?.finalDamage || 0) + (preview.critical?.application?.extraWounds || 0));
+    const manualDamage = preview?.weapon?.status === 'manual' ? ` · dégâts à arbitrer (${preview.weapon.text})` : '';
     return {
       id: uid(), ts: Date.now(), kind: 'resolution',
+      encounterId: activeScene?.encounterId || null, sceneId: activeScene?.id || null,
       actorId: actor.id || input.actorId || null,
       targetId: target.id || preview?.targetId || null,
       actorName: actor.name || null, targetName: target.name || null,
-      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${outcome} sur ${targetLabel} (d100 ${preview?.roll ?? '?'})${defenseText}${weaponText}${criticalText}`,
+      text: `${RESOLUTION_TYPE_LABELS[actionType] || 'Action'} — ${opposed ? preview.hit ? 'touché' : 'pas de touche' : outcome} sur ${targetLabel} · DR ${opposed?.netSl ?? preview.sl}${preview.damage || preview.critical?.application?.extraWounds ? ` · ${wounds} Blessures` : ''}${manualDamage}${preview.critical ? ' · critique' : ''}${preview.defenderCritical ? ' · critique défensif' : ''}`,
       detail: {
         ...(opposed ? { hit: Boolean(preview.hit), opposition: opposed } : {}),
+        ruleVersion: preview.ruleVersion,
+        input: cloneValue(input),
+        test: cloneValue(preview.test),
+        defenderTest: cloneValue(preview.defenderTest),
+        defenderCritical: cloneValue(preview.defenderCritical),
+        momentum: cloneValue(preview.momentum),
         resolutionId: preview?.resolutionId || null,
         actionType,
         roll: preview?.roll ?? null,
@@ -563,6 +570,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     const order = (Array.isArray(scene?.order) ? scene.order : []).filter(id => ids.has(id));
     return {
       ...state,
+      extensions: { ...(state.extensions || {}), v5: { ...(state.extensions?.v5 || {}), turnIndex: scene?.extensions?.v5?.turnIndex ?? state.extensions?.v5?.turnIndex ?? 1 } },
       combat: {
         ...(state.combat || {}),
         round: Number(scene?.round) || 0,
@@ -577,6 +585,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     if (!scene) return state;
     const nextScene = {
       ...cloneValue(scene),
+      ...(state.extensions?.v5?.turnIndex !== undefined ? { extensions: { ...(scene.extensions || {}), v5: { ...(scene.extensions?.v5 || {}), turnIndex: state.extensions.v5.turnIndex } } } : {}),
       round: Number(state.combat?.round) || 0,
       currentActorId: state.combat?.currentActorId || null,
       order: Array.isArray(state.combat?.order) ? [...state.combat.order] : [],
@@ -888,6 +897,40 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId, extensions: { ...template.extensions, profileActionId: template.id } }));
   }
 
+  function commitV5Effect(type, participantId, evaluate, supplied = {}) {
+    const options = cloneValue(supplied);
+    let receipt;
+    const expected = options.baseRevision ?? localRevision;
+    return Promise.resolve().then(() => api.executeCommand(type, draft => {
+      if (draft.localRevision !== expected) throw Object.assign(new Error('Le combat a changé'), { code: 'V5_EFFECT_STALE' });
+      const participant = (draft.combat?.participants || []).find(item => item.id === participantId);
+      if (!participant) throw Object.assign(new Error('Participant introuvable'), { code: 'V5_EFFECT_STALE' });
+      receipt = evaluate(participant, draft);
+      if (!receipt.ready) throw Object.assign(new Error('Données requises pour l’état V5'), { code: 'V5_EFFECT_INPUT' });
+      return { ...draft,
+        combat: { ...draft.combat, participants: draft.combat.participants.map(item => item.id === participantId ? receipt.participant : item) },
+        log: [{ id: uid(), kind: 'effect', actorId: options.authorId || participantId, targetId: participantId,
+          text: `${participant.name} · ${type === 'heal-wounds-v5' ? `${receipt.hpDelta} Blessures récupérées` : type === 'recover-condition-v5' ? `${receipt.removed.length} effet(s) retiré(s)` : `${receipt.acquiredInstances} État(s) acquis`}`,
+          detail: { ruleVersion: receipt.ruleVersion, acquiredInstances: receipt.acquiredInstances, removed: receipt.removed, reminders: receipt.reminders, hpDelta: receipt.hpDelta } }, ...(draft.log || [])].slice(0, 300) };
+    })).then(result => result?.ok === false ? result : { ...receipt, status: 'applied', ok: true, persistence: result })
+      .catch(error => {
+        if (error.code === 'V5_EFFECT_STALE') return { status: 'stale', requiresPreview: true };
+        if (error.code === 'V5_EFFECT_INPUT') return { ...receipt, status: 'requires-input', baseRevision: expected,
+          requests: receipt.needsInput.map(need => ({ ...need, participantId, participantName: combat.participants.get(participantId)?.name, kind: need.field === 'recoveryTest' ? 'test' : ['transition','recoveryMethod'].includes(need.field) ? 'manual' : ['minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery'].includes(need.field) ? 'boolean' : 'integer' })) };
+        throw error;
+      });
+  }
+
+  function v5EffectContext(draft, options) {
+    const round = draft.combat?.round;
+    if (!Number.isSafeInteger(round) || round < 1) return options;
+    return { ...options, round, transition: { ...(options.transition || {}), round } };
+  }
+
+  function freshScene(scene) {
+    return { ...scene, extensions: { ...(scene.extensions || {}), v5: { ...(scene.extensions?.v5 || {}), turnIndex: 1 } }, participants: (scene.participants || []).map(participant => withMomentum(participant, false)) };
+  }
+
   // Same numbering as duplicateProfile: « Gobelin », « Gobelin 2 », « Gobelin 3 »…
   function uniqueName(name, usedNames) {
     if (!usedNames.has(name)) return name;
@@ -914,7 +957,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   }
 
   const api = {
-    executeCommand(type, mutator, { restore = null, recordHistory = true } = {}) {
+    executeCommand(type, mutator, { restore = null, recordHistory = true, purgeEncounterId = null } = {}) {
       if (!canMutate()) throw new Error('Store non prêt');
       if (typeof mutator !== 'function') throw new TypeError('Mutateur de commande requis');
       const run = () => {
@@ -931,6 +974,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           throw error;
         }
         if (next === undefined) throw new Error('La commande n’a produit aucun état');
+        next = tagNewEncounterLogs(before, next);
+        const purgeScope = purgeEncounterId ? encounterJournalScope(fullBefore, purgeEncounterId) : null;
+        if (purgeScope) next = purgeEncounterJournal(next, purgeScope);
         validateCommandEnvelope(next);
         // Canonicalize through the same migration/sanitize pipeline used by
         // hydration.  The exact canonical value is what both IDB and the live
@@ -958,15 +1004,16 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         // state commands.  Keeping them outside the structured history means a
         // profile edit followed by a log entry still undoes the profile edit in
         // one gesture, and a local log never consumes a shared revision.
+        const baseHistory = purgeScope ? purgeEncounterJournalHistory(historyState, purgeScope) : historyState;
         const nextHistory = recordHistory
-          ? recordCommand(historyState, createStateCommand({
+          ? recordCommand(baseHistory, createStateCommand({
             id: `${CLIENT_ID}:command:${nextRevision}`,
             type,
             baseRevision,
-            before,
+            before: purgeScope ? purgeEncounterJournal(before, purgeScope) : before,
             after
           }))
-          : historyState;
+          : baseHistory;
         const protocolReady = Boolean(syncSession && syncSessionReady);
         const remoteNeeded = recordHistory && (hasSharedStateChange(before, after) || pendingProtocolState);
         const markPending = !protocolReady && Boolean(syncSession) && hasSharedStateChange(before, after);
@@ -1206,12 +1253,24 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
         return api.executeCommand('update-participant', draft => {
           assertEditRevision(expectedLocalRevision, draft.localRevision);
-          return { ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === id ? { ...item, ...capturedPatch } : item) } };
+          return { ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === id ? momentumAfterChange(item, { ...item, ...capturedPatch }) : item) } };
         });
       }
       assertEditRevision(expectedLocalRevision, localRevision);
-      Object.assign(p, patch); markDirty(`combat/participants/${id}`, p); save();
+      Object.assign(p, momentumAfterChange(p, { ...p, ...patch })); markDirty(`combat/participants/${id}`, p); save();
       if ('zone' in patch) emitBus('combat'); else emitBus('combat:update', { id, patch });
+    },
+
+    acquireConditions(id, states, options = {}) {
+      const captured = cloneValue(states), context = cloneValue(options);
+      return commitV5Effect('acquire-conditions-v5', id, (participant, draft) => acquireV5Conditions(participant, captured, v5EffectContext(draft, { ...context, targetId: id })), context);
+    },
+    recoverCondition(id, condition, options = {}) {
+      const captured = cloneValue(options);
+      return commitV5Effect('recover-condition-v5', id, (participant, draft) => recoverV5Condition(participant, condition, v5EffectContext(draft, captured)), options);
+    },
+    healWounds(id, amount, options = {}) {
+      return commitV5Effect('heal-wounds-v5', id, participant => healV5Wounds(participant, amount), options);
     },
 
     moveParticipant(id, zone, beforeId = null) {
@@ -1634,7 +1693,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           const target = entry.targetId ? (combat.participants.get(entry.targetId) || reserve.get(entry.targetId)) : null;
           persistentItem = {
             id: entry.id || uid(), ts: entry.ts || Date.now(), time: entry.time || now(),
-            kind: entry.kind || 'management', actorId: entry.actorId || null, targetId: entry.targetId || null,
+            kind: entry.kind || 'management', encounterId: entry.encounterId || activeScene?.encounterId || null, sceneId: entry.sceneId || activeScene?.id || null, actorId: entry.actorId || null, targetId: entry.targetId || null,
             actorName: entry.actorName || actor?.name || null, targetName: entry.targetName || target?.name || null,
             text: entry.text || '', detail: entry.detail || null
           };
@@ -1645,7 +1704,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }
       let item;
       if (typeof entry === 'string') {
-        item = { id: uid(), ts: Date.now(), time: now(), kind: 'management', text: entry };
+        item = { id: uid(), ts: Date.now(), time: now(), kind: 'management', encounterId: activeScene?.encounterId || null, sceneId: activeScene?.id || null, text: entry };
       } else if (entry && typeof entry === 'object') {
         const actor = entry.actorId ? (combat.participants.get(entry.actorId) || reserve.get(entry.actorId)) : null;
         const target = entry.targetId ? (combat.participants.get(entry.targetId) || reserve.get(entry.targetId)) : null;
@@ -1654,6 +1713,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           ts: entry.ts || Date.now(),
           time: entry.time || now(),
           kind: entry.kind || 'management',
+          encounterId: entry.encounterId || activeScene?.encounterId || null, sceneId: entry.sceneId || activeScene?.id || null,
           actorId: entry.actorId || null,
           targetId: entry.targetId || null,
           actorName: entry.actorName || actor?.name || null,
@@ -1703,8 +1763,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const sceneIds = new Set(scenes.map(scene => scene.id));
         const participantIds = new Set(scenes.flatMap(scene => (scene.participants || []).map(item => item.id)));
         const removingActive = draft.activeScene?.encounterId === id;
+        const purged = purgeEncounterJournal(draft, encounterJournalScope(draft, id));
         return {
-          ...draft,
+          ...purged,
           encounters: (draft.encounters || []).filter(item => item.id !== id),
           activeScene: removingActive ? null : draft.activeScene,
           suspendedScenes: (draft.suspendedScenes || []).filter(scene => scene.encounterId !== id),
@@ -1713,7 +1774,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
             .map(line => participantIds.has(line.targetId) ? { ...line, targetId: null } : line),
           reminderChoices: (draft.reminderChoices || []).filter(choice => ![...sceneIds].some(sceneId => choice.id?.startsWith(`${sceneId}:`)))
         };
-      });
+      }, { purgeEncounterId: id });
     },
     duplicateEncounter(id) {
       const source = encounters.find(item => item.id === id);
@@ -1743,7 +1804,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!encounter) throw new Error('Rencontre introuvable');
       return api.executeCommand('launch-encounter', draft => ({
         ...draft,
-        activeScene: launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: draft.activeScene || null }),
+        activeScene: freshScene(launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: draft.activeScene || null })),
         encounters: (draft.encounters || []).map(item => item.id === encounter.id ? { ...item, status: 'active' } : item)
       }));
     },
@@ -1762,9 +1823,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if (!current) {
           return {
             ...draft,
+            extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: 1 } },
             combat: {
               ...draft.combat, round: 0, currentActorId: null,
-              participants: (draft.combat?.participants || []).map(item => ({ ...item, hp: item.maxHp ?? item.hp, states: [] }))
+              participants: (draft.combat?.participants || []).map(item => (withMomentum({ ...item, hp: item.maxHp ?? item.hp, states: [] }, false)))
             },
             log: [{ id: uid(), ts: Date.now(), kind: 'management', text: 'Combat recommencé : PV remis au maximum.' }, ...(draft.log || [])].slice(0, 300)
           };
@@ -1772,11 +1834,12 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const encounter = (draft.encounters || []).find(item => item.id === current.encounterId);
         if (!encounter) throw missing();
         if (!(encounter.entries || []).length) throw empty();
-        const launched = launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: null });
+        const launched = freshScene(launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: null }));
         const nextScene = { ...launched, id: current.id, startedAt: current.startedAt };
         const oldIds = new Set((current.participants || []).map(item => item?.id).filter(Boolean));
         return {
           ...draft,
+          extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: 1 } },
           activeScene: nextScene,
           // Départ : ordre d'initiative, donc mode automatique même si la piste avait été réordonnée à la main.
           combat: { ...draft.combat, round: 0, currentActorId: null, order: [...nextScene.order], participants: cloneValue(nextScene.participants), orderMode: ORDER_MODES.AUTOMATIC },
@@ -1794,7 +1857,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!activeScene) throw new Error('Aucune scène active');
       return api.executeCommand('suspend-scene', draft => ({
         ...draft, activeScene: null,
-        suspendedScenes: [...(draft.suspendedScenes || []), suspendScene(draft.activeScene)],
+        suspendedScenes: [...(draft.suspendedScenes || []), suspendScene({ ...draft.activeScene, participants: (draft.activeScene.participants || []).map(participant => withMomentum(participant, false)) })],
         combat: { ...draft.combat, round: 0, currentActorId: null, order: [], participants: [] },
         encounters: (draft.encounters || []).map(item => item.id === draft.activeScene.encounterId ? { ...item, status: 'suspended' } : item)
       }));
@@ -1810,16 +1873,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }));
     },
     previewResolution(input = {}) {
-      const combatState = { revision: localRevision, participants: Array.from(combat.participants.values()), appliedResolutionIds };
+      const round = Number.isSafeInteger(combat.round) && combat.round > 0 ? combat.round : input.round;
       const actor = input.actor || combat.participants.get(input.actorId);
       const target = input.target || (input.targetId ? combat.participants.get(input.targetId) : null);
-      return buildResolutionPreview({ ...input, actor, target, baseRevision: input.baseRevision ?? localRevision });
+      return buildResolutionPreview({ ...input, round, actor, target, baseRevision: input.baseRevision ?? localRevision });
     },
     applyResolution(preview) {
       let semanticResult = null;
       const commit = api.executeCommand('apply-resolution', draft => {
         const current = {
           revision: draft.localRevision || 0,
+          ...(Number.isSafeInteger(draft.combat?.round) && draft.combat.round > 0 ? { round: draft.combat.round } : {}),
           participants: draft.combat?.participants || [],
           appliedResolutionIds: draft.appliedResolutionIds || []
         };
@@ -1857,7 +1921,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       });
     },
     simulateAction(input = {}) {
-      return simulateAction({ revision: localRevision, participants: Array.from(combat.participants.values()) }, { ...input, baseRevision: input.baseRevision ?? localRevision, actor: input.actor || combat.participants.get(input.actorId), target: input.target || (input.targetId ? combat.participants.get(input.targetId) : null) });
+      return simulateAction({ revision: localRevision, participants: Array.from(combat.participants.values()) }, { ...input, round: Number.isSafeInteger(combat.round) && combat.round > 0 ? combat.round : input.round, baseRevision: input.baseRevision ?? localRevision, actor: input.actor || combat.participants.get(input.actorId), target: input.target || (input.targetId ? combat.participants.get(input.targetId) : null) });
     },
     applySimulation(simulation) {
       let semanticResult = null;
@@ -1868,6 +1932,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const commit = api.executeCommand('apply-simulation', draft => {
         const current = {
           revision: draft.localRevision || 0,
+          ...(Number.isSafeInteger(draft.combat?.round) && draft.combat.round > 0 ? { round: draft.combat.round } : {}),
           participants: draft.combat?.participants || [],
           appliedResolutionIds: draft.appliedResolutionIds || []
         };

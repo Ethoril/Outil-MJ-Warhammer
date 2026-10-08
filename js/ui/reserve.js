@@ -2,7 +2,7 @@ import { DOM, qs, qsa, on, escapeHtml } from './dom.js';
 import { Profile, groupProfiles, normalizeAction, normalizeTags, cloneValue, normalizeArmorLocations } from '../core/models.js';
 import { normalizeDamageFields } from '../core/damage.js';
 import { normalizeSearchText } from '../core/sanitize.js';
-import { ACTION_FIELD_HELP, createQualityPicker } from './action-editor.js';
+import { ACTION_FIELD_HELP, createQualityPicker, preserveEditedV5Modifier } from './action-editor.js';
 import { showToast } from './toast.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { resolveKeyword } from '../core/reference-catalog.js';
@@ -128,11 +128,12 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     // Nom accessible court et infobulle d'aide pour chaque case.
     const help = (label, tip) => `aria-label="${escapeHtml(label)}" title="${escapeHtml(tip)}"`;
 
-    row.innerHTML = `<select class="pf-dice-type" ${help('Type du jet', ACTION_FIELD_HELP.type)}><option value="">Type…</option><option value="attack">Attaque</option><option value="skill">Compétence</option><option value="defense">Défense</option><option value="opposition">Opposition</option></select><input type="number" placeholder="Score" value="${base}" class="pf-dice-base" ${help('Score', ACTION_FIELD_HELP.base)} style="width:60px;"><input type="number" placeholder="Mod." value="${mod ?? 0}" class="pf-dice-mod" ${help('Modificateur', ACTION_FIELD_HELP.mod)} style="width:52px;"><input type="text" placeholder="Nom (ex : Épée)" value="${escapeHtml(note)}" class="pf-dice-note" ${help('Nom du jet', ACTION_FIELD_HELP.note)} style="flex:1;"><input type="text" placeholder="Dég." ${help('Dégâts', ACTION_FIELD_HELP.damage)} value="${escapeHtml(String(damageFormula || (damage !== undefined && damage !== null ? damage : '')))}" class="pf-dice-damage" style="width:64px;"><span class="pf-dice-quality-picker"></span><button type="button" class="danger tiny btn-remove-dice" ${help('Retirer ce jet', ACTION_FIELD_HELP.remove)}>×</button>`;
+    row.innerHTML = `<select class="pf-dice-type" ${help('Type du jet', ACTION_FIELD_HELP.type)}><option value="">Type…</option><option value="attack">Attaque</option><option value="skill">Compétence</option><option value="defense">Défense</option><option value="opposition">Opposition</option></select><input type="number" placeholder="Score" value="${base}" class="pf-dice-base" ${help('Score', ACTION_FIELD_HELP.base)} style="width:60px;"><input type="number" placeholder="DR V5" value="${original.extensions?.v5?.slModifier ?? (mod ? '' : 0)}" class="pf-dice-mod" step="1" ${help('Modificateur V5 (DR)', ACTION_FIELD_HELP.mod)} style="width:52px;"><input type="text" placeholder="Nom (ex : Épée)" value="${escapeHtml(note)}" class="pf-dice-note" ${help('Nom du jet', ACTION_FIELD_HELP.note)} style="flex:1;"><input type="text" placeholder="Dég." ${help('Dégâts', ACTION_FIELD_HELP.damage)} value="${escapeHtml(String(damageFormula || (damage !== undefined && damage !== null ? damage : '')))}" class="pf-dice-damage" style="width:64px;"><span class="pf-dice-quality-picker"></span><button type="button" class="danger tiny btn-remove-dice" ${help('Retirer ce jet', ACTION_FIELD_HELP.remove)}>×</button>`;
     row.querySelector('.pf-dice-type').value = type || '';
     // Anciennes cases X et Cap. (le moteur ne s'en sert pas) : plus affichées, leurs valeurs restent enregistrées.
     row._kept = { valuesX, capacity };
     row._original = cloneValue(original);
+    if (mod && original.extensions?.v5?.slModifier == null) { const hint = document.createElement('span'); hint.className = 'muted'; hint.textContent = `Ancien seuil ${mod > 0 ? '+' : ''}${mod} : DR à confirmer`; row.append(hint); row.querySelector('.pf-dice-mod').addEventListener('input', () => { hint.hidden = row.querySelector('.pf-dice-mod').value !== ''; }); }
 
     const normalized = normalizeAction({ qualities: currentQualities });
     row._qualities = normalized.qualities;
@@ -214,10 +215,14 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
         // `BF+4` garde son texte ; un nombre reste un nombre.
         const { damage, damageFormula } = normalizeDamageFields({ damage: row.querySelector('.pf-dice-damage')?.value ?? '' });
         if (b || row._original?.id || row._original?.extensions?.fiche) {
+          const rawModifier = row.querySelector('.pf-dice-mod')?.value ?? '';
+          const v5 = { ...(row._original?.extensions?.v5 || {}) }; delete v5.slModifier;
+          if (rawModifier !== '') v5.slModifier = Number(rawModifier);
           diceLines.push({
             ...cloneValue(row._original || {}),
+            extensions: { ...(row._original?.extensions || {}), v5 },
             base: b === '' ? '' : parseInt(b),
-            mod: Number(row.querySelector('.pf-dice-mod')?.value) || 0,
+            mod: rawModifier !== '' ? 0 : row._original?.mod || 0,
             type: row.querySelector('.pf-dice-type')?.value || '',
             note: n,
             damage,
@@ -237,9 +242,9 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
       for (const key of ['caracs', 'initiative', 'hp', 'maxHp', 'armor', 'armorLocations']) data[key] = cloneValue(existing[key]);
       data.diceLines = data.diceLines.flatMap(action => {
         const live = existing.diceLines.find(row => row.id === action.id);
-        if (live?.extensions?.fiche?.equipmentId) return [{ ...cloneValue(live), mod: action.mod }];
+        if (live?.extensions?.fiche?.equipmentId) return [preserveEditedV5Modifier(cloneValue(live), action)];
         if (action.extensions?.fiche?.equipmentId) return [];
-        return [live?.extensions?.ficheSkill ? { ...action, base: live.base, extensions: { ...action.extensions, ...cloneValue(live.extensions) } } : action];
+        return [live?.extensions?.ficheSkill ? preserveEditedV5Modifier({ ...action, base: live.base, extensions: { ...action.extensions, ...cloneValue(live.extensions) } }, action) : action];
       });
       for (const live of existing.diceLines) if (live.extensions?.fiche?.equipmentId && !data.diceLines.some(action => action.id === live.id)) data.diceLines.push(cloneValue(live));
     } else data.maxHp = data.hp;

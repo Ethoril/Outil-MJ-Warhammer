@@ -55,13 +55,13 @@ test('Contrôle final R09/R10 — un emplacement ouvert choisi explicitement ne 
 
 test('Contrôle final R20/R27/R29 — le journal exporté conserve la version d’effet et la provenance arme/munition/protection appliquées', async () => {
   const store = createStore({ persistence: memory() }); await store.ready;
-  const weapon = object('bow', { name: 'Arc historique', category: 'Arc', range: '50', keywords: [{ id: 'precise', parameter: '' }] });
-  const ammo = object('arrow', { kind: 'ammunition', name: 'Flèche historique', category: 'Arc', range: '', damage: '+0', keywords: [{ id: 'precise', parameter: '' }] });
+  const weapon = object('bow', { name: 'Arc historique', category: 'Arc', range: '50', keywords: [{ id: 'pointue', parameter: '' }] });
+  const ammo = object('arrow', { kind: 'ammunition', name: 'Flèche historique', category: 'Arc', range: '', damage: '+0', keywords: [{ id: 'pointue', parameter: '' }] });
   const armor = object('mail', { kind: 'armour', name: 'Maille historique', category: 'Maille', damage: '', ap: 2, layer: 'flexible', locations: ['body', 'rightArm', 'leftArm'], keywords: [] });
   const attacker = actor([], { equipment: [weapon, ammo], caracs: { F: 30, E: 40 }, extensions: { ficheId: 'caelel' } });
   const target = actor([], { id: 'target', profileId: 'enemy', name: 'Cible', hp: 30, maxHp: 30, equipment: [armor], armorLocations: { head: 0, body: 2, rightArm: 2, leftArm: 2, rightLeg: 0, leftLeg: 0 }, caracs: { E: 30 } });
   await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { participants: [attacker, target], order: ['actor', 'target'], currentActorId: 'actor', round: 1 }, diceLines: [], log: [] });
-  const preview = store.previewResolution({ actorId: 'actor', targetId: 'target', roll: 12, ammunitionId: 'arrow', action: { id: 'shot', type: 'attack', base: 65, damage: 'BF+4', qualities: [{ id: 'precise', parameter: '' }], extensions: { fiche: { charId: 'caelel', equipmentId: 'bow', role: 'attack', requiresLink: false } } } });
+  const preview = store.previewResolution({ actorId: 'actor', targetId: 'target', roll: 12, ammunitionId: 'arrow', action: { id: 'shot', type: 'attack', base: 65, damage: 'BF+4', qualities: [{ id: 'pointue', parameter: '' }], extensions: { fiche: { charId: 'caelel', equipmentId: 'bow', role: 'attack', requiresLink: false } } } });
   assert.ok(preview.referenceVersion); assert.equal(preview.input.ammunitionSources.length, 2);
   const applied = await store.applyResolution(preview); assert.equal(applied.status, 'applied');
   const exported = JSON.parse(store.getFullJSON());

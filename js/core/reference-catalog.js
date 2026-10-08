@@ -64,7 +64,7 @@ let status={source:'instantané local (dépôt)',contentVersion:current.contentV
 let initialized=false;let pending=null;
 export function loadInitialReferences(){
  if(initialized)return current;initialized=true;
- try{const raw=globalThis.localStorage?.getItem(CACHE_KEY);if(raw){const cache=JSON.parse(raw);const next=createReferenceResolvers(cache.data);current=deepFreeze(cache.data);resolvers=next;status={source:'localStorage',contentVersion:current.contentVersion,updatedAt:cache.updatedAt||current.fetchedAt,error:null};}}
+ try{const raw=globalThis.localStorage?.getItem(CACHE_KEY);if(raw){const cache=JSON.parse(raw);const next=createReferenceResolvers(cache.data);const cacheDate=Date.parse(cache.updatedAt||cache.data.fetchedAt),bundledDate=Date.parse(snapshot.fetchedAt);if(Number.isFinite(bundledDate)&&(!Number.isFinite(cacheDate)||cacheDate<bundledDate))return current;current=deepFreeze(cache.data);resolvers=next;status={source:'localStorage',contentVersion:current.contentVersion,updatedAt:cache.updatedAt||current.fetchedAt,error:null};}}
  catch(error){status={...status,error:`Cache de références ignoré : ${error.message}`};}return current;
 }
 export function getReferenceCatalogue(){loadInitialReferences();return {...current.equipment,contentVersion:current.contentVersion,talents:resolvers.talentResolver.entries,skills:resolvers.skillResolver.primaryEntries,magic:current.magic};}

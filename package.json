@@ -10,7 +10,8 @@
     "test:references-browser": "node tests/browser-references-smoke.mjs",
     "test:pwa-sessions": "node tests/lot1-pwa-sessions-browser.mjs",
     "test:startup": "node tests/browser-startup.mjs",
-    "test:cloud-migration": "node tests/cloud-sparse-v2-emulator.mjs"
+    "test:cloud-migration": "node tests/cloud-sparse-v2-emulator.mjs",
+    "test:lot2-browser": "node tests/lot2-combat-v5-browser.mjs"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.4",

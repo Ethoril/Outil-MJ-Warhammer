@@ -10,6 +10,8 @@ export const ENGINES = {
   // Pointue : +1 DR sur une réussite ; Imprécise : −1 DR sur tout test, et l'emporte sur Pointue.
   pointue:      { tier: 1, engine: 'attack-sl-bonus', params: { bonus: 1, onSuccessOnly: true } },
   imprecise:    { tier: 1, engine: 'attack-sl-bonus', params: { bonus: -1 }, overrides: ['pointue'] },
+  defensive:    { tier: 1, engine: 'defense-sl-bonus', params: { bonus: 1 } },
+  desequilibree: { tier: 1, engine: 'defense-sl-bonus', params: { bonus: -1 }, overrides: ['defensive'] },
   precise:      { tier: 1, engine: 'target-score-bonus', params: { bonus: 10 } },
   empaleuse:    { tier: 1, engine: 'expanded-critical' },
   dangereuse:   { tier: 1, engine: 'fumble-on-nine' }

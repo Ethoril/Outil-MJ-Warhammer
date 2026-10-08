@@ -1,21 +1,51 @@
 {
   "schemaVersion": 1,
-  "preparedAt": "2026-10-08",
+  "preparedAt": "2026-10-09",
   "repository": "https://github.com/Ethoril/Outil-MJ-Warhammer",
   "developmentBranch": "codex/lot2-talents-v5",
   "engineCommit": "7477421e937d73ba4d3cf81b1c8582c0c8315544",
   "baseCommit": "28657e39477bbcbfeb0de826b3f1d05e525bb386",
   "applicationVersion": "3.12.3",
   "lastEngineVerification": {
+    "tests": 619,
+    "passed": 619,
+    "failed": 0,
+    "date": "2026-10-09",
+    "scope": "local development worktree",
+    "browserSuites": [
+      "test:lot2-browser",
+      "test:startup",
+      "test:fiches-browser"
+    ]
+  },
+  "nextStage": "2.3",
+  "mockupApproved": true,
+  "sourceConversionOwner": "MJ dans Aides de jeu, conversion V5 actualisée",
+  "publicFolder": "docs/lot2/",
+  "pdfIncluded": false,
+  "applicationCodeInZip": false,
+  "engineCommitRole": "historical-initial-foundation",
+  "localIncrement": {
+    "date": "2026-10-09",
+    "baseCommit": "98e2e48ab7f862cd84fb97163b5e8c7ed3945b11",
+    "revision": "local commit containing this manifest",
+    "remotePublished": false,
+    "completedStages": [
+      "2.1",
+      "2.2"
+    ],
+    "preparedStage": "2.3 pure modules only"
+  },
+  "initialEngineVerification": {
     "tests": 468,
     "passed": 468,
     "newLot2Tests": 62,
     "date": "2026-10-08"
   },
-  "nextStage": "2.1",
-  "mockupApproved": true,
-  "sourceConversionOwner": "MJ dans Aides de jeu",
-  "publicFolder": "docs/lot2/",
-  "pdfIncluded": false,
-  "applicationCodeInZip": false
+  "talentSource": {
+    "count": 206,
+    "updatedAt": "2026-10-09",
+    "csvSha256": "935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e",
+    "changedDescriptionHashes": 19
+  }
 }

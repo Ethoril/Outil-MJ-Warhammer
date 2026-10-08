@@ -1,5 +1,7 @@
 # Contrats déclaratifs de talents : schéma 1
 
+> État historique du premier incrément. Pour le raccordement actuel, lire [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md) et [REPRISE_AGENT.md](REPRISE_AGENT.md).
+
 Ce document décrit le premier évaluateur pur, pas le catalogue de talents complet. Les opérations ne sont pas encore raccordées au combat. Les futurs contrats de coût, quota, choix et échéance nécessitent une extension du schéma : leur présence est actuellement une erreur explicite.
 
 ## Entrée

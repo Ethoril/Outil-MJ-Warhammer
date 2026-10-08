@@ -6,10 +6,10 @@ import { canonicalQualityId, normalizeQualities } from '../core/quality-normaliz
 export const ACTION_FIELD_HELP = Object.freeze({
   type: 'Type du jet : Attaque (dégâts, défense de la cible), Compétence, Défense ou Opposition. Vide : attaque s’il y a des dégâts, sinon compétence.',
   base: 'Score à atteindre au d100 (compétence ou caractéristique), par exemple 45.',
-  mod: 'Modificateur ajouté au score à chaque jet, par exemple 10 ou −10.',
+  mod: 'Modificateur V5 en degrés de réussite (DR), par exemple +1 ou −2. Le score reste celui de la compétence. Un ancien bonus de seuil doit être confirmé en DR.',
   note: 'Nom du jet, affiché dans Jouer et proposé quand ce personnage se défend (Épée, Esquive…).',
   damage: 'Dégâts de l’arme : un nombre (7) ou une formule avec le Bonus de Force (BF+4). Vide : aucun dégât.',
-  qualities: 'Mots-clés de l’arme (Percutante, Précise…). Un mot-clé à X (Recharge X…) se règle ici avec sa valeur.',
+  qualities: 'Mots-clés de l’arme, avec leur description mécanique V5 validée. Un mot-clé à X (Recharge X…) se règle ici avec sa valeur.',
   remove: 'Retirer ce jet'
 });
 
@@ -114,7 +114,13 @@ export function createActionEditor({ container, action = {}, caracs, onChange = 
   };
   const typeSelect = document.createElement('select'); typeSelect.className = 'action-type'; typeSelect.title = ACTION_FIELD_HELP.type; typeSelect.setAttribute('aria-label', 'Type du jet'); typeSelect.append(new Option('Type…', ''), new Option('Attaque', 'attack'), new Option('Compétence', 'skill'), new Option('Défense', 'defense'), new Option('Opposition', 'opposition')); typeSelect.value = state.type || ''; typeSelect.addEventListener('change', () => { state = readValue(); onChange({ ...state }); }); root.append(typeSelect);
   root.append(input('action-base', 'number', state.base, 'Score', 'Score', ACTION_FIELD_HELP.base));
-  root.append(input('action-mod', 'number', state.mod || 0, 'Mod.', 'Modificateur', ACTION_FIELD_HELP.mod));
+  const modifier = input('action-mod', 'number', state.extensions?.v5?.slModifier ?? (state.mod ? null : 0), 'DR V5', 'Modificateur V5 (DR)', ACTION_FIELD_HELP.mod);
+  modifier.step = '1'; root.append(modifier);
+  if (state.mod && state.extensions?.v5?.slModifier == null) {
+    const warning = document.createElement('span'); warning.className = 'action-mod-warning muted';
+    warning.textContent = `Ancien seuil ${state.mod > 0 ? '+' : ''}${state.mod} : DR à préciser`;
+    root.append(warning); modifier.addEventListener('change', () => { warning.hidden = modifier.value !== ''; });
+  }
   root.append(input('action-note', 'text', state.note, 'Action / arme', 'Nom du jet', ACTION_FIELD_HELP.note));
   const damageInput = input('action-damage', 'text', state.damageFormula || state.damage, 'Dég. (BF+4)', 'Dégâts', ACTION_FIELD_HELP.damage);
   const damageValue = document.createElement('output');
@@ -134,10 +140,20 @@ export function createActionEditor({ container, action = {}, caracs, onChange = 
   const readValue = () => {
     const { damageFormula, ...rest } = state;
     const damage = normalizeDamageFields({ damage: root.querySelector('.action-damage')?.value ?? '' });
-    return { ...rest, type: root.querySelector('.action-type')?.value || '', base: root.querySelector('.action-base')?.value ?? '', mod: Number(root.querySelector('.action-mod')?.value) || 0, note: root.querySelector('.action-note')?.value ?? '', damage: damage.damage, ...(damage.damageFormula ? { damageFormula: damage.damageFormula } : {}), qualities: picker.getQualities() };
+    const modifierText = root.querySelector('.action-mod')?.value ?? '';
+    const v5 = { ...(state.extensions?.v5 || {}) }; delete v5.slModifier;
+    if (modifierText !== '') v5.slModifier = Number(modifierText);
+    return { ...rest, type: root.querySelector('.action-type')?.value || '', base: root.querySelector('.action-base')?.value ?? '', mod: modifierText !== '' ? 0 : state.mod || 0, extensions: { ...(state.extensions || {}), v5 }, note: root.querySelector('.action-note')?.value ?? '', damage: damage.damage, ...(damage.damageFormula ? { damageFormula: damage.damageFormula } : {}), qualities: picker.getQualities() };
   };
   const picker = createQualityPicker({ container: qualityContainer, qualities: state.qualities, onChange: qualities => { state = { ...readValue(), qualities }; onChange({ ...state }); } });
   root.append(qualityContainer);
   container.append(root);
   return { element: root, picker, getValue: () => readValue() };
+}
+
+/** Keep a refreshed source action while saving its explicitly edited V5 difficulty. */
+export function preserveEditedV5Modifier(live, edited) {
+  const v5 = { ...(live.extensions?.v5 || {}) }; delete v5.slModifier;
+  if (edited.extensions?.v5?.slModifier != null) v5.slModifier = edited.extensions.v5.slModifier;
+  return { ...live, mod: edited.mod || 0, extensions: { ...(live.extensions || {}), v5 } };
 }

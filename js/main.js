@@ -1,3 +1,4 @@
+import { withMomentum, momentumAfterChange } from './core/v5-combat-rules.js';
 import { APP_VERSION } from './version.js';
 import { Bus } from './ui/bus.js';
 import { DOM, qs, on } from './ui/dom.js';
@@ -16,12 +17,13 @@ import { renderLog, initLogViewUI } from './ui/journal-view.js';
 import { showToast } from './ui/toast.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
+import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as normalizeV5RecoveryOptions } from './ui/v5-effect-dialog.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
 import { initFicheSyncView } from './ui/fiche-sync-view.js';
 import { parseProfileJson, parseProfileInput, PROFILE_JSON_EXAMPLE } from './core/json-profile-import.js';
-import { createActionEditor } from './ui/action-editor.js';
+import { createActionEditor, preserveEditedV5Modifier } from './ui/action-editor.js';
 import { createEncounter, normalizeEncounter, normalizeCamp, CAMP_LABELS } from './core/encounters.js';
 import { userError, userMessage, contextMessage } from './ui/messages.js';
 import { deriveReminders, pendingReminders, resolveReminder, REMINDER_DECISIONS } from './core/reminders.js';
@@ -237,7 +239,7 @@ initThemeManager();
 // Version (Lot 10.6 : numéro dans le menu, titre complet au survol)
 if (DOM.btnVersion) {
   DOM.btnVersion.textContent = `Version ${APP_VERSION}`;
-  DOM.btnVersion.title = `Version ${APP_VERSION} - WFRP 4e Outil MJ`;
+  DOM.btnVersion.title = `Version ${APP_VERSION} - Outil MJ Warhammer — moteur V5`;
   DOM.btnVersion.addEventListener('click', () => {
     Store.log(`ℹ️ Application en version ${APP_VERSION}`);
     showToast(`Version ${APP_VERSION} active`, 'info');
@@ -297,23 +299,41 @@ const importModalUI = initImportModalUI(Store);
 const cardUI = initCardUI(Store, Combat);
 const combatViewUI = initCombatViewUI(Store, Combat, cardUI, id => {
   const line = Store.getDiceLines().find(item => item.id === id);
-  if (line && inferActionType(line) === 'attack') {
+  if (line) {
     const actor = Store.getCombat().participants.get(line.participantId);
-    if (!actor || actor.zone !== 'active') { showToast('Faites entrer ce combattant en jeu pour résoudre son attaque.', 'info'); return; }
+    if (!actor || actor.zone !== 'active') { showToast('Faites entrer ce combattant en jeu pour résoudre son action.', 'info'); return; }
+  }
+  if (line && inferActionType(line) === 'attack') {
     goToSpace('play');
     if (!workspaceView?.openResolution(line)) showToast('Cette action a changé : choisissez son attaque dans Jouer.', 'info');
     return;
   }
-  runDiceLine(id, Store);
+  const result = runDiceLine(id, Store);
+  if (result?.status === 'requires-resolution' && line) {
+    goToSpace('play');
+    if (!workspaceView?.openResolution(line, { roll: result.initialRoll })) showToast('Cette action a changé : choisissez son Test dans Jouer.', 'info');
+  }
 });
 
 initLogViewUI(Store);
 
 // Avance d'un tour, ou démarre le combat s'il n'a pas commencé. Partagé par le
 // bandeau, le raccourci N / Espace et la commande « Terminer le tour » de Jouer.
-function advanceTurn() {
-  const combat = Store.getCombat();
-  return combat.round > 0 ? Combat.nextTurn() : Combat.start();
+let advancingTurn = false;
+async function advanceTurn() {
+  if (advancingTurn) return { status: 'pending' };
+  advancingTurn = true;
+  try {
+    const combat = Store.getCombat();
+    let result = await (combat.round > 0 ? Combat.nextTurn() : Combat.start());
+    if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: result,
+      title: 'Terminer le tour : effets V5', getCurrentRevision: () => Store.getLocalRevision(),
+      submit: (inputs, baseRevision) => Combat.nextTurn({ inputs, baseRevision }) });
+    if (result?.status === 'stale') showToast('La partie a changé : recalculez les effets avant de terminer le tour.', 'info');
+    else if (result?.status !== 'cancelled') await awaitStore(result, 'Fin du tour');
+    return result;
+  } catch (error) { showToast(contextMessage('Tour non terminé', error, 'vérifiez les effets en attente, puis réessayez.'), 'error'); return { status: 'error' }; }
+  finally { advancingTurn = false; }
 }
 
 initKeyboardShortcuts(Store, Combat, goToSpace, {
@@ -458,6 +478,22 @@ function openOverlay(title, build) {
     focusFromMemo(opener);
   }, { once: true });
   return dialog;
+}
+
+async function resolveV5EffectOperation(operation, { title = 'Résoudre les effets V5', inputs = {} } = {}) {
+  const baseRevision = Store.getLocalRevision();
+  let result = await operation(inputs, baseRevision);
+  if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: { ...result, inputs }, title,
+    getCurrentRevision: () => Store.getLocalRevision(), submit: operation });
+  if (result?.status === 'cancelled') return result;
+  if (result?.status === 'stale') throw userError('La partie a changé : recalculez cette action.');
+  await awaitStore(result, title);
+  if (result?.reminders?.length) showToast(result.reminders.join(' ; '), 'info');
+  return result;
+}
+
+function recoveryOptionsFor(input = {}) {
+  return normalizeV5RecoveryOptions(input, Store.getCombat().round);
 }
 
 function persistentCharacters() {
@@ -1052,7 +1088,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             </label>
           </div>
           <section class="participant-state-edit card">
-            <div class="row"><h3>États</h3><button type="button" class="ghost small" data-add-state>Ajouter un état</button></div>
+            <div class="row"><h3>États — arbitrage du MJ</h3><p class="muted">Cette correction manuelle remplace les états. Pour une acquisition ou une récupération selon les règles, utilisez les commandes de Jouer.</p><button type="button" class="ghost small" data-add-state>Ajouter un état</button></div>
             <div class="participant-state-list"></div>
           </section>
           <section class="participant-action-edit card"><div class="row"><h3>Actions préparées</h3><button type="button" class="ghost small" data-add-action>Ajouter une action</button></div><div class="participant-action-list"></div></section>
@@ -1084,7 +1120,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         baseline.states = JSON.stringify(normalizeEffects(stateValues));
         const statesChanged = () => JSON.stringify(normalizeEffects(stateValues)) !== baseline.states;
         const stateMount = form.querySelector('.participant-state-list');
-        const stateNames = ['Blessé', 'À Terre', 'Sonné', 'Inconscient', 'Aveuglé', 'Assourdi', 'Exténué', 'Hémorragique', 'Surpris', 'Enchevêtré', 'Enflammé', 'Brisé'];
+        const stateNames = ['Blessé', 'À Terre', 'Sonné', 'Inconscient', 'Aveuglé', 'Assourdi', 'Exténué', 'Hémorragique', 'Surpris', 'Enchevêtré', 'Enflammé', 'Brisé', 'Empoisonné', 'Souillé'];
         const renderStates = () => {
           stateMount.replaceChildren();
           stateValues.forEach((state, index) => {
@@ -1118,7 +1154,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             const sourceSkill = Boolean(action.extensions?.ficheSkill);
             const editor = createActionEditor({ container, action, caracs: participant.caracs, onChange: next => {
               actionsTouched = true;
-              actionValues[index] = sourceObject ? { ...action, mod: next.mod } : sourceSkill ? { ...next, id: action.id, base: action.base } : { ...next, id: action.id };
+              actionValues[index] = sourceObject ? preserveEditedV5Modifier(action, next) : sourceSkill ? { ...next, id: action.id, base: action.base } : { ...next, id: action.id };
               header.firstChild.textContent = actionValues[index].note || `Action ${index + 1}`;
             } });
             if (sourceObject) {
@@ -1158,9 +1194,9 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
               // An open editor must also retain source changes applied while it was open.
               patch.actions = actionValues.flatMap(action => {
                 const live = liveActions.find(item => item.id === action.id);
-                if (live?.extensions?.fiche?.equipmentId) return [{ ...live, mod: action.mod }];
+                if (live?.extensions?.fiche?.equipmentId) return [preserveEditedV5Modifier(live, action)];
                 if (action.extensions?.fiche?.equipmentId) return [];
-                return [live?.extensions?.ficheSkill ? { ...action, base: live.base, extensions: { ...action.extensions, ...live.extensions } } : action];
+                return [live?.extensions?.ficheSkill ? preserveEditedV5Modifier({ ...action, base: live.base, extensions: { ...action.extensions, ...live.extensions } }, action) : action];
               });
               for (const live of liveActions) if (live.extensions?.fiche?.equipmentId && !patch.actions.some(action => action.id === live.id)) patch.actions.push(live);
             }
@@ -1190,6 +1226,13 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
       });
     },
     enterParticipant: id => awaitStore(Store.moveParticipant(id, 'active'), 'Entrée en jeu').catch(error => showToast(contextMessage('Entrée en jeu impossible', error, 'réessayez.'), 'error')),
+    setMomentum: (id, value) => awaitStore(Store.executeCommand('set-momentum', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(participant => participant.id === id ? withMomentum(participant, value) : participant) } })), 'Élan'),
+    acquireStates: (id, states) => resolveV5EffectOperation((inputs, baseRevision) => Store.acquireConditions(id, states, { ...(inputs[id] || {}), baseRevision, authorId: Store.getCombat().currentActorId || id, targetId: id, round: Store.getCombat().round }), { title: 'Ajouter un État V5' }),
+    recoverState: async (id, state) => {
+      const participant = Store.getCombat().participants.get(id); if (!participant) return { status: 'cancelled' };
+      const method = await chooseV5RecoveryMethod({ participantName: participant.name, condition: state }); if (!method) return { status: 'cancelled' };
+      return resolveV5EffectOperation((inputs, baseRevision) => Store.recoverCondition(id, state.id || state.key || state.name, { method, ...(method === 'medical-attention' ? { medicalAttention: true } : method === 'surgery' ? { surgery: true } : {}), ...recoveryOptionsFor(inputs[id]), baseRevision }), { title: `Récupérer ${state.name}` });
+    },
     setStates: (id, states) => awaitStore(Store.updateParticipant(id, { states: normalizeEffects(states) }), 'États'),
     addProfileToCombat: async id => {
       try {
@@ -1215,10 +1258,11 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     renderOverview: renderWorkspaceOverview,
     renderLog: content => { renderLog(Store, content, { contextual: true }); },
     adjustHp: ({ participantId, delta }) => {
+      if (Number(delta) > 0 && typeof Store.healWounds === 'function') return resolveV5EffectOperation((inputs, baseRevision) => Store.healWounds(participantId, Number(delta), { ...(inputs[participantId] || {}), baseRevision }), { title: 'Récupérer des Blessures' });
       if (typeof Store.executeCommand === 'function') {
         return awaitStore(Store.executeCommand('adjust-hp', draft => {
           const participants = (draft.combat?.participants || []).map(participant => participant.id === participantId
-            ? { ...participant, hp: (Number(participant.hp) || 0) + Number(delta || 0) }
+            ? momentumAfterChange(participant, { ...participant, hp: Math.max(0, (Number(participant.hp) || 0) + Number(delta || 0)) })
             : participant);
           const changed = participants.find(participant => participant.id === participantId);
           return { ...draft, combat: { ...draft.combat, participants }, log: [{ ts: Date.now(), kind: 'damage', actorId: participantId, text: `${changed?.name || 'Participant'} : PV ajustés` }, ...(draft.log || [])].slice(0, 300) };
@@ -1301,7 +1345,7 @@ on(DOM.combat.fileInput, 'change', (e) => {
   e.target.value = '';
 });
 on(DOM.combat.btnStart, 'click', () => Combat.start());
-on(DOM.combat.btnNextTurn, 'click', () => Combat.nextTurn());
+on(DOM.combat.btnNextTurn, 'click', advanceTurn);
 on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
 if (DOM.combat.btnEndCombat) {
   on(DOM.combat.btnEndCombat, 'click', () => {

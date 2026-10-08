@@ -1,10 +1,22 @@
 {
   "sourceVersion": "equipment:37ddace6c91d39cc2e883dce9b5ade1ab0ce658cd686dd0811c034702938f95e",
-  "auditedAt": "2026-10-08",
+  "auditedAt": "2026-10-09",
   "entries": [
     {
       "id": "dangereuse",
       "effect": "Tout Test raté avec un 9 sur le dé des dizaines ou des unités provoque une Maladresse.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "defensive",
+      "effect": "+1 DR aux Tests de Corps à corps pour s'opposer à une attaque. Une seule arme Défensive compte à la fois ; Déséquilibrée l'emporte.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.304"
+    },
+    {
+      "id": "desequilibree",
+      "effect": "-1 DR pour s'opposer à une attaque avec cette arme.",
       "edition": "V5",
       "source": "Livre de base V5 EN p.305"
     },
@@ -19,6 +31,12 @@
       "effect": "Coup critique sur un double ou un multiple de 10 obtenu en réussissant le Test. À distance, le projectile reste fiché : Guérison Intermédiaire (+0 DR) pour une flèche ou un carreau, chirurgien pour une balle ; chaque projectile non retiré empêche de guérir 1 Blessure.",
       "edition": "V5",
       "source": "Livre de base V5 EN p.304"
+    },
+    {
+      "id": "flexible",
+      "effect": "Peut se porter sous une armure non Flexible ; les deux protections s'appliquent.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.306"
     },
     {
       "id": "impenetrable",
@@ -73,12 +91,6 @@
       "effect": "Quand l'arme sert à s'opposer à une attaque, elle confère X PA à toutes les localisations. Avec X ≥ 2, elle peut aussi s'opposer aux projectiles tirés dans sa ligne de vue.",
       "edition": "V4",
       "source": "Livre de base FR (V4) p.298"
-    },
-    {
-      "id": "flexible",
-      "effect": "Peut se porter sous une armure non Flexible ; les deux protections s'appliquent.",
-      "edition": "V5",
-      "source": "Livre de base V5 EN p.306"
     }
   ]
 }
