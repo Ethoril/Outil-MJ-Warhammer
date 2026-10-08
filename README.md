@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.11.1)
+# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.12.3)
 
 Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhammer Fantasy Roleplay 4e édition**.
 
@@ -97,7 +97,7 @@ La configuration Firebase (`firebaseConfig`) dans `js/core/sync.js` est **public
 
 La sécurité est assurée par les **Firebase Security Rules** sur Realtime Database.
 
-Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). Après la bascule, la branche v1 reste lisible uniquement par le compte propriétaire pour permettre la migration, mais les écritures v1 sont bloquées afin d’éviter qu’un ancien client ne remplace un état plus récent. Les nouvelles versions utilisent `wfrp-sessions-v2/$uid/current`, isolé par compte, avec validation de la structure et de la révision.
+Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). Les branches v1 et v2 restent lisibles uniquement par le compte propriétaire pour permettre la reprise, mais leurs écritures sont bloquées afin d’éviter qu’un ancien client ne remplace un état plus récent. La version 3.12.3 utilise `wfrp-sessions-v3/$uid/current`, isolé par compte, avec validation du schéma 3, de la révision et des reçus.
 
 Pour déployer uniquement ces règles sur le projet Firebase configuré :
 
@@ -107,13 +107,14 @@ npx firebase-tools deploy --only database --project outil-mj-warhammer
 
 Cette commande publie les règles de Realtime Database; elle n'écrit ni ne migre les données. Vérifier ensuite dans Firebase Console que la version active correspond à `firebase.database.rules.json`. La fixture `firebase.database.rules.v2.test.json` est réservée aux tests et n'est pas la source de déploiement.
 
-Avant la transition, les règles v1 étaient permissives. Après déploiement, v1 est en lecture seule pour son UID propriétaire, tandis que v2 autorise les lectures et écritures uniquement dans l’espace du propriétaire avec une révision valide et non décroissante. Les données v1 restent lisibles afin que l’application puisse proposer leur migration vers v2.
+La première connexion v3 reprend la séance v2 si aucune racine v3 n’existe, sans modifier la source v2. Une racine v3 existante est conservée. Les anciennes données v1 restent accessibles au propriétaire pour une récupération explicite ; voir le [guide de reprise](docs/GUIDE_FICHES_PJ_ET_REPRISE_V3.md).
 
 ---
 
 ## 🌐 Navigateurs supportés
 
-**Cible unique : Chrome sur macOS.** C'est le seul environnement d'usage et le seul vérifié.
-Le projet emploie délibérément des API modernes sans solution de repli (modules ES,
-`<dialog>`, `structuredClone`, `:has()`), et aucun test n'a été mené ailleurs.
-Autres navigateurs récents : probablement fonctionnels, non garantis.
+Pour la connexion Google et la synchronisation sur téléphone Android, utiliser **Chrome**. Le MJ a confirmé en production la connexion et la récupération des données de son compte sur le téléphone après usage sur ordinateur (8 octobre 2026, version 3.12.3).
+
+**Brave n'est pas pris en charge pour la connexion Google et la synchronisation.** L'échec a été constaté sur Brave Android : la fenêtre de connexion se ferme avec `auth/popup-closed-by-user`, même avec les protections du site désactivées. Cette limitation est acceptée ; aucun correctif spécifique Brave n'est planifié. L'ouverture du formulaire Google sous Brave Windows a été vérifiée, sans validation d'une connexion complète.
+
+Les contrôles navigateur automatisés utilisent Edge sur Windows. Le projet utilise des API modernes (modules ES, `<dialog>`, `structuredClone`, `:has()`). Les autres environnements ne sont pas garantis. Voir le [guide de connexion et de reprise](docs/GUIDE_FICHES_PJ_ET_REPRISE_V3.md) et la [recette du lot 1](docs/RECETTE_FICHES_PJ.md).

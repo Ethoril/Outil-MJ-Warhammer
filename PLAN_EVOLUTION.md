@@ -1,5 +1,7 @@
 # Plan d’évolution — Outil MJ Warhammer
 
+> **Compatibilité actualisée le 8 octobre 2026 :** les cibles navigateur ci-dessous décrivent le cadrage historique. La connexion Google et la reprise des données ont depuis été confirmées sur Chrome Android par le MJ. Brave n’est pas pris en charge pour la connexion et la synchronisation (échec constaté sur Android). Voir le [guide actuel](docs/GUIDE_FICHES_PJ_ET_REPRISE_V3.md). Le lot 3 de l’application mobile dédiée reste différé.
+
 > Rédigé le 5 septembre 2026, sur le dépôt `a27ece9` (application 3.5.1 après J1).
 > Statut : E01–E04 réalisés et validés par le parent ; E05 est en validation de ses scénarios de reprise et de migration.
 > Demande : améliorer fonctionnement, UI et fonctionnalités ; écran destiné aux joueurs exclu.

@@ -1,5 +1,13 @@
 # Fiches PJ : usage, actualisation et reprise v3
 
+## Connexion et navigateurs
+
+Sur téléphone Android, utiliser **Chrome** pour se connecter avec Google et synchroniser la séance. La connexion et la récupération des données entre ordinateur et téléphone ont été confirmées par le MJ en production le 8 octobre 2026, avec la version 3.12.3.
+
+Brave n'est pas pris en charge pour la connexion Google et la synchronisation. Sur Brave Android, la fenêtre Google se ferme avec `auth/popup-closed-by-user`, y compris après désactivation des protections du site. Le MJ accepte cette limitation et la clôture de l'investigation Brave. Ne pas effacer les données locales pour contourner cet échec.
+
+Utiliser le même compte Google sur les deux appareils pour reprendre les données de la séance. La connexion au projet des fiches reste distincte de celle de la séance MJ.
+
 ## Synchroniser les PJ
 
 Dans la bibliothèque, ouvrir « Mettre à jour les PJ », se connecter avec le compte Google MJ autorisé dans le projet des fiches, puis attendre la lecture. L'application Firebase des fiches est distincte de celle de la séance MJ. Les lectures demandent les données serveur ; une fiche absente ou inaccessible est signalée sans vider son profil.
@@ -64,7 +72,7 @@ Sur ce poste, les scripts navigateur historiques utilisent `PLAYWRIGHT_EXECUTABL
 
 ## Préparer la publication
 
-La version locale est 3.12.0, schéma et protocole 3. Le développement est isolé de la branche de production. Aucune publication n'est exécutée par ce chantier local.
+La version 3.12.3 est publiée, avec schéma et protocole 3. Le lot 1 est réceptionné : récupération des fiches et reprise sur Chrome Android confirmées par le MJ, avec la limitation Brave documentée. La procédure ci-dessous décrit la bascule initiale et reste la référence pour les publications suivantes.
 
 1. Exporter une sauvegarde de la séance depuis la version actuelle et conserver une copie du document cloud v2 avant bascule.
 2. Exécuter la suite unitaire, le smoke navigateur, la recette dédiée fiches et les règles RTDB v3 sous émulateur. Les tests simulés ne remplacent pas une lecture avec le compte MJ et App Check.
@@ -76,6 +84,6 @@ La première connexion v3 lit v2 si aucune racine v3 n'existe, migre son état p
 
 ## Retour et récupération
 
-Avant publication, revenir au checkout de production ne nécessite aucune migration distante : aucun changement de production n'a eu lieu. Conserver le worktree et les sauvegardes pour inspection.
+Conserver le worktree et les sauvegardes de la bascule pour inspection. La production utilise désormais le schéma v3 ; changer de checkout local ne revient pas sur cette migration distante.
 
 Après création de données v3, revenir à un client v2 peut masquer les nouvelles données et n'est pas un retour sûr. Préférer une version corrigée capable de lire le schéma 3. Une restauration historique doit être explicite, depuis une sauvegarde validée, après export de l'état v3 courant ; ne jamais écraser le namespace v3 pour contourner une erreur de migration. Restaurer les règles et l'application comme un ensemble validé, sans rendre les chemins accessibles publiquement.

@@ -1,5 +1,7 @@
 # Plan de refonte — Outil MJ Warhammer
 
+> **Compatibilité actualisée le 8 octobre 2026 :** les cibles navigateur ci-dessous décrivent le cadrage historique. La connexion Google et la reprise des données ont depuis été confirmées sur Chrome Android par le MJ. Brave n’est pas pris en charge pour la connexion et la synchronisation (échec constaté sur Android). Voir le [guide actuel](docs/GUIDE_FICHES_PJ_ET_REPRISE_V3.md). Le lot 3 de l’application mobile dédiée reste différé.
+
 > **Évolutions à venir :** voir [PLAN_EVOLUTION.md](PLAN_EVOLUTION.md), établi le 5 septembre 2026. Ce document conserve l’historique de la refonte précédente ; le nouveau programme utilise les lots E01 à E17 et exclut l’écran destiné aux joueurs.
 
 > Document de travail. Établi à partir de l'audit du commit `24d7056` (v3.5).

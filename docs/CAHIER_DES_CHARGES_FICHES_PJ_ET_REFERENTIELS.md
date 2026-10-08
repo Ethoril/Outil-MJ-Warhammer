@@ -1,6 +1,6 @@
 # Cahier des charges de développement pour les fiches PJ et les aides de jeu
 
-Version 1.3 du 8 octobre 2026. Statut : décisions de fonctionnement validées ; développement du lot 1 autorisé. Application cible : Outil MJ Warhammer, version observée 3.11.1.
+Version 1.3 du 8 octobre 2026. Statut : lot 1 livré et réceptionné en production (3.12.3), avec la limitation Brave acceptée ; lots 2 et 3 non lancés. Application cible : Outil MJ Warhammer, version initialement observée 3.11.1. Les preuves et limites de réception sont consignées dans [le rapport de recette](RECETTE_FICHES_PJ.md) et [le suivi](SUIVI_FICHES_PJ.md).
 
 L’outil MJ doit reprendre les données de jeu des PJ depuis leurs fiches de campagne, notamment leurs talents, armes, boucliers et armures personnalisés. Les définitions affichées et les effets calculés doivent suivre les mêmes références que les fiches, avec **Aides de jeu comme source de vérité commune**. Une modification d’équipement dans la fiche doit devenir visible et utilisable dans l’outil après synchronisation, sans ressaisie et sans modifier l’état courant de la partie.
 

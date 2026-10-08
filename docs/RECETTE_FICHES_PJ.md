@@ -2,7 +2,20 @@
 
 Contrôle du 8 octobre 2026, application locale 3.12.0, cahier des charges v1.3 (R01–R40).
 
-**Verdict final : aucun blocage local identifié pour le lot 1.** Le cahier v1.3 est couvert par les contrôles unitaires, navigateur et Auth/RTDB locaux décrits ci-dessous. Les dernières gardes source/édition, les interfaces d’association et de provenance, et le démarrage hors ligne sont vérifiés. Aucun déploiement ni accès aux fiches Firestore privées n'a été réalisé par le contrôleur. La connexion au compte MJ/App Check, l'application des règles déployées et la réception sur appareils physiques restent à effectuer avant réception production complète.
+**Verdict final : aucun blocage local identifié pour le lot 1.** Le cahier v1.3 est couvert par les contrôles unitaires, navigateur et Auth/RTDB locaux décrits ci-dessous. Les dernières gardes source/édition, les interfaces d’association et de provenance, et le démarrage hors ligne sont vérifiés. Aucun déploiement ni accès aux fiches Firestore privées n'a été réalisé par le contrôleur. Ces contrôles locaux ne prouvaient pas la connexion au compte MJ/App Check ni la réception sur appareils physiques ; les confirmations de production ultérieures figurent dans la section suivante.
+
+## Réception production et décision de compatibilité — 8 octobre 2026
+
+Le lot 1 est livré en production, avec les correctifs 3.12.1 à 3.12.3. La version 3.12.3 publiée et ses fichiers ont été vérifiés après la réussite de GitHub Pages ; les tests locaux atteignent 406 contrôles réussis, complétés par huit scénarios de diagnostic Auth avec SDK simulé. La vérification publique du démarrage, du cache et des messages d'erreur n'utilise aucune identité réelle et n'écrit aucune séance cloud.
+
+La recette avec identité réelle est rapportée par le MJ :
+
+- La récupération des données des fiches PJ fonctionne.
+- La connexion Google fonctionne sur son téléphone Android dans Chrome.
+- Ses données sont bien récupérées sur ce téléphone après usage sur ordinateur ; le MJ confirme que le multiposte fonctionne.
+- Brave Android échoue avec `auth/popup-closed-by-user`, même avec les protections du site désactivées. Le MJ accepte de documenter Brave comme non pris en charge pour la connexion Google et la synchronisation, et de clore cette investigation.
+
+**Lot 1 réceptionné avec la limitation Brave acceptée.** La validation de reprise rapportée par le MJ ne constitue pas une nouvelle mesure indépendante de tous les scénarios de conflits, de refus d'accès ou de démarrage hors ligne sur appareil physique. Les preuves locales détaillées ci-dessous conservent leur périmètre ; aucun nouveau moteur de talent ou de magie n'est inclus.
 
 ## Baseline et résultats
 
@@ -27,7 +40,7 @@ Le navigateur utilisé est Edge installé, avec PLAYWRIGHT_EXECUTABLE_PATH=C:\Pr
 
 | Cas | Preuve et résultat local | Limite de réception |
 |---|---|---|
-| R01 | Source simulée avec métadonnées de protocole, données utiles normalisées, accès source utilisé en lecture seule | Auth/App Check et cinq fiches privées à contrôler avec le compte MJ |
+| R01 | Source simulée avec métadonnées de protocole, données utiles normalisées, accès source utilisé en lecture seule | Lecture des fiches confirmée par le MJ ; audit indépendant détaillé des cinq fiches et du parcours App Check non réalisé |
 | R02–R05 | Exemplaires distincts, renommage avec ID stable, retrait des seules actions liées, adoption sans doublon et réapplication sans second delta/révision | Remplacement explicite et refus des associations concurrentes vérifiés dans l'interface |
 | R06–R09 | Exemplaires personnalisés et paramètres textuels conservés ; rangs/spécialités séparés ; résolveur commun et scores source ; emplacement ouvert non calculable | Source/édition limitée aux références tracées dans la matrice |
 | R10 | Tir sans compétence : base vide, liaison requise, SKILL_LINK_REQUIRED et confirmation explicite ; aucun repli mêlée | Aucune limite locale identifiée |
@@ -39,10 +52,10 @@ Le navigateur utilisé est Edge installé, avec PLAYWRIGHT_EXECUTABLE_PATH=C:\Pr
 | R21–R22 | Absent conserve, tableau vide confirmé retire ; collection invalide/ID dupliqué exclu sans perte ; anciennes liaisons conservées si compétences invalides | Aucune limite locale identifiée |
 | R23–R24 | 8/14→10/16 ; 8/14→4/10 puis −2/4 ; copies actives/suspendues/persistantes cohérentes, archives intactes | Aucun état ou effet de seuil ajouté par sync |
 | R25 | Source et profil périmés refusés avant/après relecture ; CAS vérifié dans la file durable ; édition participant/profil ne rétablit pas une arme BF+4 après sync BF+7 | Latence source simulée, pas de service privé réel |
-| R26–R27 | Undo/JSON/copies préservés ; deux contextes navigateur avec IndexedDB natif, file hors ligne durable, reprise, transfert v3, conflit, export et restauration | Transport HTTP CAS simulé ; deux appareils physiques et Firebase réels non vérifiés |
+| R26–R27 | Undo/JSON/copies préservés ; deux contextes navigateur avec IndexedDB natif, file hors ligne durable, reprise, transfert v3, conflit, export et restauration | Transport HTTP CAS simulé ; reprise réelle sur Chrome Android confirmée par le MJ ; conflits et file hors ligne sur appareils physiques non vérifiés indépendamment |
 | R28–R29 | Sheets incomplet/en échec conserve l'ensemble précédent ; effet non couvert conserve son texte et demande arbitrage ; historique inchangé | Aides locales sans preuve Sheets explicitement à arbitrer |
 | R30 | Vrai service worker contrôlant la page ; reload hors ligne, catalogue, sync identique, vraie mise à jour par Actualiser, purge anciens caches sans perte IDB | Installation système sur téléphone physique non attestée |
-| R31 | Migration pure/course d’initialisation/anciennes files ; Auth+RTDB sous émulateurs : owner/foreign/guest, v1/v2 gelés, schema3 et révisions/reçus | Déploiement des règles et clients physiques v2/v3 sur même compte à vérifier |
+| R31 | Migration pure/course d’initialisation/anciennes files ; Auth+RTDB sous émulateurs : owner/foreign/guest, v1/v2 gelés, schema3 et révisions/reçus | Règles v3 déployées et contrôlées ; reprise réelle confirmée par le MJ ; coexistence de clients physiques anciens v2 et v3 non vérifiée indépendamment |
 | R32 | Résolveur/référentiel commun, provenance/version fondée sur contenu utile, navigation des référentiels et détail historique | Les aides complémentaires locales ne deviennent pas une source Sheets par affichage |
 | R33–R35 | Imports PNJ/texte/JSON conservés ; six zones ; caractéristiques/scores sans bonus talent ajouté ; équipement actualisé et santé persistante à la rencontre | Export de plusieurs copies divergentes vers un persistant refusé explicitement |
 | R36 | Sorts/prières conservés et consultables, sans nouvelle action ni moteur magique | Combat magique hors lot 1 |
@@ -85,7 +98,7 @@ docs/MATRICE_REFERENCES_ET_MOTEURS.md trace source, édition et couverture moteu
 
 La recette Auth/RTDB a réellement chargé les règles production et trouvé un défaut : receipts:1 était accepté par le seul wildcard des enfants. Le durcissement autorisé ajoute newData.hasChildren() au conteneur receipts dans production et fixture v3. Le scalaire est désormais refusé ; receipts:{} reste accepté et supprimé nativement par RTDB. La fixture de combat vide a été adaptée à cette même suppression native, sans modification métier pour faire passer un test.
 
-Avant réception production, appliquer le guide avec le compte MJ : Auth/App Check et cinq fiches privées, migration cloud et règles déployées, clients physiques v2/v3 sur deux appareils, installation système/actualisation PWA. Vérifier SHA/version après publication effective. Les émulateurs, service worker et deux contextes locaux sont des preuves valides de leur périmètre ; ils n'attestent pas de ces opérations de production.
+Le plan initial de recette production prévoyait le compte MJ (Auth/App Check et fiches privées), la migration cloud et les règles déployées, deux appareils et l'installation/actualisation PWA. Les confirmations réellement obtenues sont listées dans la section de réception production ci-dessus. Les émulateurs, le service worker et les deux contextes locaux attestent de leur propre périmètre ; ils ne remplacent pas une recette physique exhaustive.
 
 ## Reproduction et preuves Auth/RTDB
 
