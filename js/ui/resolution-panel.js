@@ -1,3 +1,4 @@
+import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipment.js';
 /**
  * Résolution intégrée de Jouer (sans modale). Ce module ne fait que construire
  * le DOM à partir du brouillon tenu par workspace-view : toute saisie remonte
@@ -91,7 +92,7 @@ function chip(label, { pressed = false, key, attrs = {} } = {}) {
 }
 
 // Champs de jet du critique : clé du brouillon de workspace-view. Saisir ou cocher ne vide jamais l'aperçu.
-const CRITICAL_ROLL_KEYS = Object.freeze({ location: 'criticalLocationRoll', effect: 'criticalEffectRoll', second: 'criticalSecondRoll' });
+const CRITICAL_ROLL_KEYS = Object.freeze({ location: 'criticalLocationRoll', effect: 'criticalEffectRoll', second: 'criticalSecondRoll', effectAlternative: 'criticalEffectAlternativeRoll', secondEffectAlternative: 'criticalSecondAlternativeRoll' });
 
 function rollField({ field, label, value, error, handlers, disabled, critical = null }) {
   const wrapper = node('div', 'workspace-roll');
@@ -144,7 +145,8 @@ const zoneName = location => String(location.name).toLocaleLowerCase();
 
 function criticalEffectLine(part) {
   const base = part.effectRollBase;
-  const roll = part.bonus ? `${base} + ${part.bonus} = ${part.effectRoll}` : String(part.effectRoll);
+  const choice = part.effectRollCandidates?.length === 2 ? `min(${part.effectRollCandidates.join(', ')}) = ` : '';
+  const roll = choice + (part.bonus ? `${base} + ${part.bonus} = ${part.effectRoll}` : String(part.effectRoll));
   const line = node('p', 'workspace-result-line workspace-critical-effect');
   line.append(node('span', 'num', `${roll} → `), node('strong', '', `« ${part.effect.name} »`), ` : ${part.effect.eff}`);
   return line;
@@ -196,6 +198,7 @@ function renderCritical(preview, draft, handlers) {
     block.append(...criticalSeverity(details, 'first', {
       field: 'critical-effect', label: 'Gravité (d100)', value: draft.criticalEffectRoll, error: errors.effect || ''
     }, preview, draft, handlers));
+    if (details.needsAlternative || details.effectAlternativeRoll != null) block.appendChild(rollField({ field:'critical-effect-alternative', label:'Inoffensive : deuxième gravité (retenir le minimum)', value:draft.criticalEffectAlternativeRoll, error:errors.effectAlternative || '', handlers, disabled:draft.busy, critical:'effectAlternative' }));
   }
   if (second) {
     const follow = node('div', 'workspace-critical is-second');
@@ -205,6 +208,7 @@ function renderCritical(preview, draft, handlers) {
     follow.append(...criticalSeverity(second, 'second', {
       field: 'critical-second', label: 'Gravité du second critique (d100)', value: draft.criticalSecondRoll, error: errors.secondEffect || ''
     }, preview, draft, handlers));
+    if (second.needsAlternative || second.effectAlternativeRoll != null) follow.appendChild(rollField({ field:'critical-second-alternative', label:'Inoffensive : deuxième gravité du second critique', value:draft.criticalSecondAlternativeRoll, error:errors.secondEffectAlternative || '', handlers, disabled:draft.busy, critical:'secondEffectAlternative' }));
     block.appendChild(follow);
   } else if (secondHint) {
     block.appendChild(node('p', 'workspace-formula-notes workspace-muted', `Si les dégâts font passer la cible sous 0 PV : second critique au ${zoneName(secondHint.location)} (jet inversé ${secondHint.locationRoll}).`));
@@ -257,6 +261,15 @@ function renderResult(preview, target, draft, handlers) {
       ? `Dégâts à arbitrer : ${text} demande la Force de ${name} (F inconnue).`
       : `Dégâts à arbitrer : « ${text} » n’est pas calculable automatiquement.`));
   }
+  if(preview.protection) {
+    const p=preview.protection;
+    result.appendChild(node('p','workspace-formula-notes',`Protection retenue : ${p.ap ?? 'à arbitrer'} PA · bouclier ${p.shieldAp || 0} PA`));
+    if(p.counted?.length)result.appendChild(node('p','workspace-formula-notes',`Armures comptées : ${p.counted.map(row=>row.name || row.item?.name).filter(Boolean).join(', ')}`));
+    if(p.ignored?.length)result.appendChild(node('p','workspace-formula-notes',`Écartées : ${p.ignored.map(row=>`${row.item?.name || 'armure'} (${row.reason})`).join(' · ')}`));
+    if(p.manual?.length)result.appendChild(node('p','workspace-field-error',`Protection à arbitrer : ${p.manual.map(code=>({'disponibilite-bouclier-requise':'disponibilité du bouclier à préciser','usage-bouclier-requis':'utilisation du bouclier à préciser','jet-opposition-requis:bouclier':'jet de défense requis','type-attaque-requis:bouclier':'attaque à distance ou de mêlée à préciser','bouclier-projectile-contexte-requis':'tir : Protectrice 2 minimum et attaquant visible requis','pa-a-preciser':'valeur des PA à préciser'})[code] || code).join(', ')}. Renseignez les PA retenus pour appliquer.`));
+    for(const warning of p.warnings||[])result.appendChild(node('p','workspace-formula-notes',typeof warning==='string'?warning:warning.message||warning.code));
+  }
+  if(preview.mechanicalWarnings?.length)result.appendChild(node('p','workspace-field-error',`Effets à arbitrer : ${preview.mechanicalWarnings.map(row=>typeof row==='string'?row:`${row.keywordId || row.code || 'mot clé'} : ${row.reason || 'effet à vérifier'}`).join(', ')}`));
   if (criticalAttack) result.appendChild(renderCritical(preview, draft, handlers));
   if (target && (preview.damage || preview.critical?.application?.extraWounds)) {
     const after = (Number(target.hp) || 0) - previewHpLoss(preview);
@@ -377,6 +390,25 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
   if (!actions.length) return section;
   const action = actions.find((item, index) => actionKey(item, index) === selectedKey) || actions[0];
 
+  if(action.extensions?.fiche?.requiresLink) section.appendChild(node('p','workspace-field-error','Compétence à choisir dans « Mettre à jour les PJ » avant de lancer cette action.'));
+  if(type === 'attack') {
+    const ammo=action.extensions?.equipment?.range ? (actor.equipment||[]).filter(row=>row.kind==='ammunition' && ammunitionCompatibility(action.extensions.equipment,row).status !== 'incompatible') : [];
+    if(ammo.length) { const label=node('label','workspace-type','Munition');const select=document.createElement('select');select.setAttribute('aria-label','Munition');select.append(new Option('Aucune munition ajoutée',''));ammo.forEach(row=>select.append(new Option(row.name,row.id)));select.value=draft.ammunitionId||'';select.addEventListener('change',()=>handlers.select({ammunitionId:select.value,ammunitionArbitrated:false}));label.append(select);section.append(label); }
+    const selectedAmmo = ammo.find(row=>row.id===draft.ammunitionId);
+    if(selectedAmmo && ammunitionCompatibility(action.extensions.equipment,selectedAmmo).status==='manual') { const label=node('label','workspace-type');const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.checked=draft.ammunitionArbitrated===true;checkbox.addEventListener('change',()=>handlers.select({ammunitionArbitrated:checkbox.checked}));label.append(checkbox,'Compatibilité de cette munition vérifiée par le MJ');section.append(label); }
+    if(target) {
+      const context=draft.protectionContext||{};const block=node('details','workspace-defense');block.append(node('summary','','Protection et bouclier pour cette attaque'));
+      const shields=(target.equipment||[]).filter(row=>row.kind==='shield');
+      if(shields.length){const label=node('label','workspace-type','Bouclier');const select=document.createElement('select');select.setAttribute('aria-label','Bouclier utilisé');select.append(new Option('Aucun',''));shields.forEach(row=>select.append(new Option(row.name,row.id)));select.value=context.shieldId||'';select.addEventListener('change',()=>handlers.select({protectionContext:{...context,shieldId:select.value}}));label.append(select);block.append(label);}
+      for(const [key,text] of [['shieldAvailable','Bouclier disponible ce tour'],['opposedWithShield','Défense opposée avec ce bouclier'],['ranged','Attaque à distance'],['lineOfSight','Attaquant visible']]) {
+        const label=node('label','workspace-type',text);const choice=document.createElement('select');choice.setAttribute('aria-label',text);
+        const inferred=key === 'ranged' && action.extensions?.equipment ? equipmentAttackContext(action.extensions.equipment)?.ranged : undefined;
+        const value=typeof inferred==='boolean'?inferred:context[key];choice.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));choice.value=typeof value==='boolean'?String(value):'';choice.disabled=typeof inferred==='boolean';
+        choice.addEventListener('change',()=>handlers.select({protectionContext:{...context,[key]:choice.value===''?undefined:choice.value==='true'}}));label.append(choice);block.append(label);
+      }
+      const manual=node('label','workspace-type','PA retenus après arbitrage (facultatif)');const input=document.createElement('input');input.type='number';input.min='0';input.setAttribute('aria-label','PA retenus après arbitrage');input.value=context.manualAp ?? '';input.addEventListener('change',()=>handlers.select({protectionContext:{...context,manualAp:input.value===''?undefined:Number(input.value)}}));manual.append(input);block.append(manual);section.append(block);
+    }
+  }
   // Jets
   const rolls = node('div', 'workspace-resolution-rolls');
   const attr = action.attr && action.attr !== 'Custom' ? `${action.attr} ` : '';
@@ -437,7 +469,7 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
 
   const commands = node('div', 'workspace-inline-actions workspace-resolution-commands');
   const calculate = button('Calculer', 'workspace-secondary', { 'data-focus-key': 'calculate' });
-  calculate.disabled = draft.busy || !canCalculate;
+  calculate.disabled = draft.busy || !canCalculate || action.extensions?.fiche?.requiresLink;
   if (!canCalculate) calculate.title = 'Action indisponible';
   calculate.addEventListener('click', () => handlers.calculate());
   commands.appendChild(calculate);
@@ -472,7 +504,7 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
         : target && effects && (effects.extraWounds || effects.states.length) ? `Appliquer le critique à ${target.name}`
           : manual ? 'Enregistrer sans dégâts' : 'Enregistrer le résultat';
     const primary = button(label, 'workspace-primary', { 'data-focus-key': 'apply' });
-    primary.disabled = draft.busy || !canApply || needsTarget || needsLocation || invalidCritical;
+    primary.disabled = draft.busy || !canApply || needsTarget || needsLocation || invalidCritical || preview.critical?.details?.needsAlternative || preview.critical?.second?.needsAlternative || Boolean(preview.protection?.manual?.length || preview.mechanicalWarnings?.length);
     if (needsTarget) primary.title = 'Choisissez une cible pour appliquer une attaque';
     else if (needsLocation) primary.title = 'Lancez d’abord la localisation du critique';
     else if (invalidCritical) primary.title = 'Corrigez le jet de critique';

@@ -6,6 +6,7 @@ import { getDatabase, ref, get, runTransaction, onValue, set, update } from '../
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from '../../vendor/firebase/firebase-auth.js';
 import { transactionUpdate } from './sync-protocol.js';
 import { createSyncSession } from './sync-session.js';
+import { migrateV2SyncDocument, initializeV3Root } from './sync-migration.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD5f_ngBZ3OCXJCjT5M45BqbhkzI_QObLc",
@@ -70,14 +71,17 @@ export function initFirebaseSync(onUserConnected, onStatus = () => {}, onUserDis
   }
 
   function startAuth() {
-    if (initialized || !navigator.onLine || !auth) {
-      if (!navigator.onLine || !auth) {
+    if (initialized || !auth) {
+      if (!auth) {
         onStatus('offline');
         showOfflineBanner();
       }
       return;
     }
-    onStatus('connecting');
+    // Restore Firebase's persisted identity even when no network is available.
+    // The matching local account stays usable; a new login still needs the network.
+    if (!navigator.onLine) { onStatus('offline'); showOfflineBanner(); }
+    else onStatus('connecting');
     document.querySelectorAll('[data-google-login]').forEach(btn => {
       if (btn.dataset.firebaseBound === 'true') return;
       btn.dataset.firebaseBound = 'true';
@@ -93,7 +97,7 @@ export function initFirebaseSync(onUserConnected, onStatus = () => {}, onUserDis
       console.log('👤 Utilisateur:', user.displayName, '(' + user.uid + ')');
       if (loginScreen) loginScreen.style.display = 'none';
       if (appContent) appContent.style.display = 'block';
-      onStatus('connected');
+      onStatus(navigator.onLine ? 'connected' : 'offline');
 
       if (userInfo) {
         userInfo.innerHTML = `👤 ${user.displayName} · Compte <button id="btn-logout" class="ghost" style="margin-left:10px;">Déconnexion</button>`;
@@ -101,15 +105,21 @@ export function initFirebaseSync(onUserConnected, onStatus = () => {}, onUserDis
         if (btnLogout) btnLogout.addEventListener('click', () => logoutUser());
       }
 
-      // v2 has its own namespace.  The v1 root is read only through the
-      // explicit migration hook below and is never used by v2 transactions.
-      const path = `wfrp-sessions-v2/${user.uid}/current`;
+      // v3 isolates new data from old clients. v2 initializes this namespace once;
+      // v1 remains available only through the explicit historical import.
+      const path = `wfrp-sessions-v3/${user.uid}/current`;
       const dbRef = ref(db, path);
+      const previousDbRef = ref(db, `wfrp-sessions-v2/${user.uid}/current`);
       const legacyDbRef = ref(db, `wfrp-sessions/${user.uid}/current`);
       const transport = {
         async read() {
           const snapshot = await get(dbRef);
-          return snapshot.val();
+          if (snapshot.val() != null) return snapshot.val();
+          const previous = (await get(previousDbRef)).val();
+          if (previous == null) return null;
+          const migrated = migrateV2SyncDocument(previous);
+          const result = await runTransaction(dbRef, current => initializeV3Root(current, migrated), { applyLocally: false });
+          return result.snapshot?.val?.() ?? (await get(dbRef)).val();
         },
         async transaction(operation) {
           const result = await runTransaction(dbRef, current => transactionUpdate(current, operation), { applyLocally: false });

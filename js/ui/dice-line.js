@@ -1,3 +1,5 @@
+import { inferActionType } from '../core/resolution.js';
+import { showToast } from './toast.js';
 import { DOM, escapeHtml } from './dom.js';
 import { d100, isDouble, SL, getReverseRoll, getLocationName, getCritEffect } from '../core/dice.js';
 import { parseState } from '../core/sanitize.js';
@@ -101,6 +103,9 @@ export function renderMiniDiceLine(dl, p, Store) {
   btnDel.className = 'action-btn danger btn-del-dice';
   btnDel.title = "Supprimer ligne";
 
+  if (dl.extensions?.fiche?.equipmentId) {
+    for (const input of [inValue, inNote, inDamage, inValuesX, inCapacity, btnDel, ...kwContainer.querySelectorAll('input,select,button')]) input.disabled = true;
+  } else if (dl.extensions?.ficheSkill) inValue.readOnly = true;
   row.append(inValue, inNote, inDamage, inValuesX, inCapacity, selTarget, kwContainer, btnRoll, btnDel);
   return row;
 }
@@ -111,6 +116,7 @@ export function runDiceLine(id, Store) {
 
   const dl = diceLines.find(x => x.id === id);
   if (!dl) return;
+  if (inferActionType(dl) === 'attack') { showToast('Résolvez cette attaque dans Jouer pour choisir son contexte de protection.', 'info'); return { status: 'requires-resolution' }; }
   const p = combat.participants.get(dl.participantId);
 
   const base = parseInt(dl.base) || 0;

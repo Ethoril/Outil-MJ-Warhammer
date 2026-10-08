@@ -12,6 +12,7 @@ import { userMessage } from './messages.js';
 import { normalizeEffects } from '../core/effects.js';
 import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
 import { uid } from '../core/models.js';
+import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
@@ -80,7 +81,8 @@ function stateLabel(state) {
 const toughnessBonus = participant => Math.floor((Number(participant?.caracs?.E) || 0) / 10);
 
 // PA non nuls : Tête, Corps, Bras, Jambes.
-function armorSummary(armor = {}) {
+function armorSummary(armor = {}, precise = null) {
+  if (precise) return Object.entries(precise).filter(([,ap])=>Number(ap)>0).map(([key,ap])=>`${({head:"T",body:"C",rightArm:"BD",leftArm:"BG",rightLeg:"JD",leftLeg:"JG"})[key] || key}${ap}`).join(" ") || "—";
   const parts = [['T', 'head'], ['C', 'body'], ['B', 'arms'], ['J', 'legs']]
     .filter(([, key]) => Number(armor?.[key]) > 0)
     .map(([letter, key]) => `${letter}${Number(armor[key])}`);
@@ -106,7 +108,7 @@ function hpBar(participant) {
 }
 
 // Clé du brouillon → nom du jet attendu par le moteur (criticalRolls).
-const CRITICAL_ERROR_FIELDS = Object.freeze({ criticalLocationRoll: 'location', criticalEffectRoll: 'effect', criticalSecondRoll: 'secondEffect' });
+const CRITICAL_ERROR_FIELDS = Object.freeze({ criticalLocationRoll: 'location', criticalEffectRoll: 'effect', criticalSecondRoll: 'secondEffect', criticalEffectAlternativeRoll: 'effectAlternative', criticalSecondAlternativeRoll: 'secondEffectAlternative' });
 const criticalRollError = () => userMessage(new ResolutionError('Jet invalide', 'INVALID_ROLL'), 'Jet invalide.');
 
 function validRoll(value) {
@@ -131,7 +133,7 @@ function profileSearchText(profile = {}) {
     action?.name, action?.note, action?.attr, action?.base,
     ...(action?.qualities || []).flatMap(quality => [quality?.name, quality?.id, quality])
   ]);
-  return [profile.name, profile.group, profile.kind, profile.notes, ...(profile.tags || []), ...actions]
+  return [profile.name, profile.group, profile.kind, profile.notes, ...(profile.tags || []), ...actions, ...(profile.skills || []).map(row=>row.name), ...(profile.talents || []).map(row=>row.name || row.nom), ...(profile.equipment || []).flatMap(row=>[row.name,...(row.keywords || []).map(word=>word.id)])]
     .filter(value => value !== undefined && value !== null)
     .join(' ')
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -252,20 +254,20 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   };
   function emptyResolution(actorId) {
     return {
-      actorId, actionKey: null, type: null, attackRoll: '', defenseStat: null, defenseBase: null, defenseSource: null, defenseRoll: '',
+      actorId, actionKey: null, type: null, attackRoll: '', defenseStat: null, defenseBase: null, defenseSource: null, defenseRoll: '', protectionContext: {}, ammunitionId: '', ammunitionArbitrated: false,
       // Critique : jets saisis, effets décochés et erreurs de saisie par champ (l'aperçu reste affiché).
-      criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalDeclined: [], criticalErrors: {},
+      criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {},
       preview: null, comparison: null, error: null, busy: false
     };
   }
   // Un nouvel aperçu (autre action, type, cible ou jet) repart de zéro côté critique.
   function resetCritical(draft) {
-    Object.assign(draft, { criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalDeclined: [], criticalErrors: {} });
+    Object.assign(draft, { criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {} });
   }
   // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
   // La localisation change aussi les dégâts, donc l'existence du second critique.
   function forgetDeclined(draft, field) {
-    const prefixes = field === 'criticalLocationRoll' ? ['first-', 'second-'] : field === 'criticalEffectRoll' ? ['first-'] : ['second-'];
+    const prefixes = field === 'criticalLocationRoll' ? ['first-', 'second-'] : ['criticalEffectRoll', 'criticalEffectAlternativeRoll'].includes(field) ? ['first-'] : ['second-'];
     draft.criticalDeclined = draft.criticalDeclined.filter(id => !prefixes.some(prefix => id.startsWith(prefix)));
   }
   function recalculateCritical() {
@@ -367,6 +369,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (draft.defenseSource !== source) {
         draft.defenseSource = source;
         if (source !== 'Autre') draft.defenseBase = null;
+        draft.protectionContext = {};
       }
       if (draft.defenseBase === null && source !== 'Autre') draft.defenseBase = defense.option.base === null ? null : String(defense.option.base);
     }
@@ -428,14 +431,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       return;
     }
     const list = node('div', 'workspace-profile-grid');
-    profiles.forEach(profile => list.appendChild(profileSummary(profile, {
+    profiles.forEach(profile => { const card=profileSummary(profile, {
       canEdit: Boolean(callbacks.editProfile),
       canDuplicate: Boolean(callbacks.duplicateProfile),
       canRemove: Boolean(callbacks.removeProfile),
       onEdit: callbacks.editProfile,
       onDuplicate: callbacks.duplicateProfile,
       onRemove: callbacks.removeProfile
-    })));
+    }); card.appendChild(renderFicheDetails(profile)); list.appendChild(card); });
     refs.prepare.appendChild(list);
   }
 
@@ -536,7 +539,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       hp.prepend(node('span', 'workspace-sr', 'PV '));
       top.appendChild(hp);
       item.append(top, hpBar(participant),
-        node('span', 'workspace-track-meta num', `BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor)}`));
+        node('span', 'workspace-track-meta num', `BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor,participant.armorLocations)}`));
       const states = normalizeEffects(participant.states);
       if (states.length) {
         const list = node('span', 'workspace-track-states');
@@ -694,7 +697,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     sheet.appendChild(grid);
 
     const body = node('div', 'workspace-sheet-body');
-    body.appendChild(renderSilhouette({ armor: participant.armor, location: hit?.location || null, name: participant.name }));
+    body.appendChild(renderSilhouette({ armor: participant.armor, armorLocations: participant.armorLocations, location: hit?.location || null, name: participant.name }));
     const states = node('div', 'workspace-sheet-states');
     states.appendChild(rubric('États', 'p'));
     const list = node('div', 'workspace-state-list');
@@ -726,6 +729,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (formOpen) states.appendChild(renderStateForm(participant));
     body.appendChild(states);
     sheet.appendChild(body);
+    sheet.appendChild(renderFicheDetails(participant));
 
     const actionsRow = node('div', 'workspace-inline-actions');
     const edit = button('Modifier', 'workspace-secondary', { 'aria-label': `Modifier ${participant.name}`, 'data-focus-key': `edit-${participant.id}` });
@@ -752,8 +756,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if ('targetId' in patch) {
         state.targetChoice = patch.targetId;
         draft.defenseBase = null;
+        draft.protectionContext = {};
       }
-      if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.actionKey = patch.actionKey; draft.type = null; }
+      if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
+      if ('protectionContext' in patch) draft.protectionContext = patch.protectionContext;
+      if ('ammunitionId' in patch) draft.ammunitionId = patch.ammunitionId;
+      if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;
       if ('type' in patch) draft.type = patch.type;
       if ('defenseStat' in patch) { draft.defenseStat = patch.defenseStat; draft.defenseBase = null; }
       resetCritical(draft);
@@ -823,7 +831,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         actor: context.actor,
         action: { ...context.action, type: context.type },
         targetId: context.target?.id || null,
-        roll: String(draft.attackRoll).trim()
+        roll: String(draft.attackRoll).trim(), protectionContext: draft.protectionContext, ammunitionId: draft.ammunitionId, ammunitionArbitrated: draft.ammunitionArbitrated
       };
       if (context.type === 'attack' && context.target && String(draft.defenseRoll).trim()) {
         input.defense = { roll: String(draft.defenseRoll).trim(), base: draft.defenseBase ?? 0, label: context.defense.option.statLabel };
@@ -864,7 +872,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       draft.error = null;
       try {
         draft.comparison = [...context.groups.adversaries, ...context.groups.allies].map(target => {
-          const input = { actor: context.actor, action: { ...context.action, type: context.type }, targetId: target.id, roll };
+          const input = { actor: context.actor, action: { ...context.action, type: context.type }, targetId: target.id, roll, ammunitionId: draft.ammunitionId, ammunitionArbitrated: draft.ammunitionArbitrated, protectionContext: target.id === context.target?.id ? draft.protectionContext : {} };
           if (context.type === 'attack' && defenseRoll) {
             // Même choix que pour la cible courante s'il existe chez elle, sinon son défaut ; la cible
             // courante garde la valeur affichée (saisie à la main comprise), comme pour « Calculer ».
@@ -1082,14 +1090,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (!profiles.length) content.appendChild(node('p', 'workspace-muted', 'Aucun profil correspondant.'));
       else {
         const list = node('div', 'workspace-profile-grid');
-        profiles.forEach(profile => list.appendChild(profileSummary(profile, {
+        profiles.forEach(profile => { const card=profileSummary(profile, {
           canEdit: Boolean(callbacks.editProfile),
           canDuplicate: Boolean(callbacks.duplicateProfile),
           canRemove: Boolean(callbacks.removeProfile),
           onEdit: callbacks.editProfile,
           onDuplicate: callbacks.duplicateProfile,
           onRemove: callbacks.removeProfile
-        })));
+        }); card.appendChild(renderFicheDetails(profile)); list.appendChild(card); });
         content.appendChild(list);
       }
     } else if (state.librarySection === 'rules') {
@@ -1106,10 +1114,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (!profiles.length) content.appendChild(node('p', 'workspace-muted', 'Aucun favori enregistré.'));
       else {
         const list = node('div', 'workspace-profile-grid');
-        profiles.forEach(profile => list.appendChild(profileSummary(profile, {
+        profiles.forEach(profile => { const card=profileSummary(profile, {
           canEdit: Boolean(callbacks.editProfile),
           onEdit: callbacks.editProfile
-        })));
+        }); card.appendChild(renderFicheDetails(profile)); list.appendChild(card); });
         content.appendChild(list);
       }
     }
@@ -1288,9 +1296,24 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       render();
     },
     selectActor,
+    openResolution(line) {
+      const actor = readParticipants(Store).find(item => item.id === line.participantId && item.zone === 'active');
+      if (!actor) return false;
+      const actions = actorActions(actor);
+      const action = actions.find(item => item.id === line.id || item.id === line.extensions?.profileActionId);
+      if (!action) return false;
+      state.space = 'play';
+      state.actorChoice = { id: actor.id, turn: turnKey(readCombat(Store)) };
+      state.resolution = emptyResolution(actor.id);
+      state.resolution.actionKey = actionKey(action, actions.indexOf(action));
+      state.targetChoice = line.targetId || null;
+      render('roll-attack');
+      return true;
+    },
     selectTarget(id) {
       state.targetChoice = id || 'none';
       state.resolution.defenseBase = null;
+      state.resolution.protectionContext = {};
       resetCritical(state.resolution);
       state.resolution.preview = null;
       render();

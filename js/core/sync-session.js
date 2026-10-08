@@ -1,3 +1,4 @@
+import { migrateSnapshot } from './migrations.js';
 import {
   SyncProtocolError,
   createOperation,
@@ -6,7 +7,7 @@ import {
   validateSyncDocument
 } from './sync-protocol.js';
 
-const PROTOCOL_VERSION = 2;
+const PROTOCOL_VERSION = 3;
 const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 
 function normalizeRemoteDocument(raw) {
@@ -39,7 +40,7 @@ function mergeRemoteState(remoteState, envelope) {
     || error?.code === 'INVALID_RECEIPTS';
 }
 
-function validV2Operation(operation) {
+function validCurrentOperation(operation) {
   try {
     createOperation(operation);
     return true;
@@ -58,7 +59,7 @@ function hasSharedData(state) {
 }
 
 function makeSession(session, deviceId) {
-  const candidate = session && typeof session === 'object' ? session : {};
+  const candidate = session && typeof session === 'object' && (session.protocolVersion === undefined || session.protocolVersion === PROTOCOL_VERSION) ? session : {};
   return {
     protocolVersion: PROTOCOL_VERSION,
     deviceId: typeof candidate.deviceId === 'string' && candidate.deviceId.trim()
@@ -130,16 +131,18 @@ export function createSyncSession({
     if (opening) return opening;
     opening = (async () => {
       localState = clone(initialState ?? await persistence.load()) || {};
+      if (localState.schemaVersion === 2) localState = migrateSnapshot(localState).data;
       const storedSession = typeof persistence.readSession === 'function' ? await persistence.readSession() : null;
       session = makeSession(storedSession, localDeviceId);
       const oldOutbox = typeof persistence.listOutbox === 'function' ? await persistence.listOutbox() : [];
-      const incompatibleOutbox = oldOutbox.some(operation => !validV2Operation(operation));
+      const incompatibleOutbox = oldOutbox.some(operation => !validCurrentOperation(operation));
       if (incompatibleOutbox) {
         // E02 updates have no device/sequence/baseRevision. Keep the local
-        // state, but explicitly discard that incompatible queue before v2.
-        await persistence.saveAtomic({ state: localState, session, resetOutbox: true });
+        // state, but explicitly discard that incompatible queue before v3.
+        localState = { ...localState, syncPending: true };
+        await persistence.saveAtomic({ state: localState, session, resetOutbox: true, restore: { reason: 'protocol-transition-v3', state: clone(localState) } });
         onStatus('transition');
-      } else if (!storedSession) {
+      } else if (!storedSession || storedSession.protocolVersion !== PROTOCOL_VERSION) {
         await persistence.saveAtomic({ state: localState, session });
       }
       try {
@@ -180,6 +183,8 @@ export function createSyncSession({
         // for an explicit user choice instead of silently adopting remote.
         session.baseRevision = remote.revision;
         await persistence.saveAtomic({ state: localState, session });
+        conflictState = { local: [], localState: clone(localState), remote: clone(remote), baseRevision: remote.revision };
+        onConflict({ local: [], localState: clone(localState), remote: clone(remote) });
         onStatus('conflict');
       }
       if (stopped) throw new Error('Session arrêtée');
@@ -198,7 +203,7 @@ export function createSyncSession({
           });
         });
       }
-      onStatus('ready');
+      onStatus(conflictState ? 'conflict' : 'ready');
       return { session: clone(session), remote: clone(remote), remoteAvailable, localState: clone(localState) };
     })().finally(() => { opening = null; });
     return opening;
@@ -267,6 +272,7 @@ export function createSyncSession({
       onStatus('offline');
       return { status: 'offline', remote: clone(remote), remoteAvailable };
     }
+    if (conflictState) { conflictState.remote = clone(remote); onStatus('conflict'); return { status: 'conflict', remote: clone(remote), remoteAvailable, outbox: clone(conflictState.local) }; }
     let outbox = typeof persistence.listOutbox === 'function' ? await persistence.listOutbox() : [];
     const preservePendingLocal = Boolean(nextLocalState?.syncPending || localState?.syncPending);
     if (remoteAvailable) {
@@ -297,9 +303,9 @@ export function createSyncSession({
         return { status: 'pending', remote: clone(remote), remoteAvailable, outbox: [] };
       }
     }
-    if (outbox.some(operation => !validV2Operation(operation))) {
+    if (outbox.some(operation => !validCurrentOperation(operation))) {
       onStatus('error');
-      throw new SyncProtocolError('File d’opérations antérieur au protocole v2', 'SCHEMA_INCOMPATIBLE');
+      throw new SyncProtocolError('File d’opérations antérieure au protocole v3', 'SCHEMA_INCOMPATIBLE');
     }
     if (remoteAvailable && outbox.some((operation, index) => operation.baseRevision !== remote.revision + index)) {
       conflictState = {
@@ -317,9 +323,9 @@ export function createSyncSession({
     await open({ initialState: nextLocalState });
     const outbox = typeof persistence.listOutbox === 'function' ? await persistence.listOutbox() : [];
     for (const operation of outbox) {
-      if (!validV2Operation(operation)) {
+      if (!validCurrentOperation(operation)) {
         onStatus('error');
-        throw new SyncProtocolError('Opération locale incompatible avec v2', 'SCHEMA_INCOMPATIBLE');
+        throw new SyncProtocolError('Opération locale incompatible avec v3', 'SCHEMA_INCOMPATIBLE');
       }
       const result = await transport.transaction(clone(operation));
       if (result?.status === 'aborted') {
@@ -400,7 +406,7 @@ export function createSyncSession({
     const savedLocalState = clone(nextLocalState ?? conflictState.localState ?? localState ?? {});
     session.baseRevision = chosen.revision;
     session.sequence = chosen.receipts[session.deviceId] || 0;
-    localState = savedLocalState;
+    localState = { ...savedLocalState, syncPending: false };
     await adoptRemote(chosen.state, chosen, {
       resetOutbox: true,
       restore: { reason: 'conflict-remote', state: { local: savedLocalState, remote: chosen } }
@@ -413,7 +419,7 @@ export function createSyncSession({
   async function resolveLocal({ state, localState: nextLocalState = localState } = {}) {
     if (!conflictState) throw new Error('Aucun conflit à résoudre');
     const base = conflictState.remote;
-    const chosenLocalState = clone(nextLocalState ?? conflictState.localState ?? localState ?? {});
+    const chosenLocalState = { ...clone(nextLocalState ?? conflictState.localState ?? localState ?? {}), syncPending: false };
     const outgoingState = clone(state ?? chosenLocalState);
     session.baseRevision = base.revision;
     // The old queued operations are discarded.  Reuse the server receipt as

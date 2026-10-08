@@ -12,7 +12,7 @@ import {
 } from '../js/core/sync-protocol.js';
 
 const state = (name = 'base') => ({
-  schemaVersion: 2,
+  schemaVersion: 3,
   reserve: [{ id: name }],
   combat: { round: 1, participants: [] }
 });
@@ -116,7 +116,7 @@ test('E05 protocole — journal, historique et UI ne sont jamais envoyés', () =
 
 test('E05 protocole — schéma incompatible refusé et extensions prototypes inertes', () => {
   assert.throws(
-    () => validateSyncDocument({ revision: 0, state: { schemaVersion: 3 }, receipts: {} }),
+    () => validateSyncDocument({ revision: 0, state: { schemaVersion: 4 }, receipts: {} }),
     error => error instanceof SyncProtocolError && error.code === 'SCHEMA_INCOMPATIBLE'
   );
   assert.throws(

@@ -249,7 +249,7 @@ test('E04 migration — ancien format, turnIndex et références orphelines prod
     log: ['ancienne entrée']
   };
   const { data, report } = migrateSnapshot(source);
-  assert.equal(data.schemaVersion, 2);
+  assert.equal(data.schemaVersion, 3);
   assert.equal(data.combat.currentActorId, 'p2');
   assert.deepEqual(data.combat.order, ['p1', 'p2']);
   assert.equal(data.combat.participants[1].profileId, null);
@@ -338,7 +338,7 @@ test('E04 migration — lecture des anciennes clés sans suppression ni écritur
     setItem: () => { writes++; throw new Error('write interdite'); }
   };
   const { data } = migrateLegacyStorage(storage);
-  assert.equal(data.schemaVersion, 2);
+  assert.equal(data.schemaVersion, 3);
   assert.equal(data.extensions.legacySyncTimestamp, '1234');
   assert.equal(writes, 0);
   assert.equal(values.has('wfrp.reserve.v1'), true);

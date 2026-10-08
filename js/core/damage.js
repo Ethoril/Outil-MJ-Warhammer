@@ -1,3 +1,4 @@
+import { keywordMechanicalStatus } from './keywords.js';
 import { ENGINES } from '../data/keyword-engines.js';
 import { normalizeQualities } from './quality-normalization.js';
 
@@ -122,11 +123,12 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
   const weapon = evaluateWeaponDamage(weaponDamage, strengthBonus);
   if (weapon.status !== 'resolved') return null;
   const normQualities = normalizeQualities(qualities);
+  if (normQualities.some(q => Object.hasOwn(ENGINES, q.id) && keywordMechanicalStatus(q.id).status !== 'covered')) return null;
 
   const activeEngines = [];
   normQualities.forEach(q => {
     const engineDef = ENGINES[q.id];
-    if (engineDef) {
+    if (engineDef && keywordMechanicalStatus(q.id).status === 'covered') {
       activeEngines.push({ quality: q, engine: engineDef });
     }
   });
@@ -135,18 +137,19 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
 
   // 1. Percutante / Impact : ajoute le dé d'unités du jet
   const unitsDie = Number(roll) > 0 ? (Number(roll) % 10 || 10) : 0;
-  const isPercutante = activeEngines.some(ae => ae.engine.engine === 'add-units-die');
+  const isInoffensive = activeEngines.some(ae => ae.quality.id === 'inoffensive');
+  const isPercutante = !isInoffensive && activeEngines.some(ae => ae.engine.engine === 'add-units-die');
   const bonusPercutante = isPercutante ? unitsDie : 0;
 
   // 2. Dévastatrice : utilise max(unitsDie, SL) pour les SL de dégâts
-  const isDevastatrice = activeEngines.some(ae => ae.engine.engine === 'best-of-units-or-sl');
+  const isDevastatrice = !isInoffensive && activeEngines.some(ae => ae.engine.engine === 'best-of-units-or-sl');
   let effectiveSL = Number(sl) || 0;
   if (isDevastatrice && unitsDie > effectiveSL) {
     effectiveSL = unitsDie;
   }
 
   // 3. Inoffensive : PA x 2, pas de plancher
-  const isInoffensive = activeEngines.some(ae => ae.quality.id === 'inoffensive');
+
   const paEffectif = (Number(targetArmour) || 0) * (isInoffensive ? FACTEUR_INOFFENSIVE : 1);
   const be = Number(targetToughnessBonus) || 0;
   const absorption = be + paEffectif;
@@ -189,7 +192,7 @@ export function damageBreakdown(damage) {
   if (!damage || typeof damage !== 'object') return { terms: [], total: 0, notes: [] };
   const engines = normalizeQualities(damage.activeQualities || [])
     .map(quality => ({ quality, engine: ENGINES[quality.id] }))
-    .filter(item => item.engine);
+    .filter(item => item.engine && !(damage.isInoffensive && ['add-units-die', 'best-of-units-or-sl'].includes(item.engine.engine)));
   const has = engine => engines.some(item => item.engine.engine === engine);
   const terms = [];
   const notes = [];

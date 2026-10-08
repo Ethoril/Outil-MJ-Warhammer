@@ -10,11 +10,11 @@ export const SILHOUETTE_TITLE = 'Tête 01–09 · Bras G 10–24 · Bras D 25–
 // Coordonnées dans un viewBox 0 0 120 160 ; `armor` est la clé de Participant.armor.
 const ZONES = Object.freeze([
   { id: 'head', label: 'Tête', armor: 'head', shape: 'circle', cx: 60, cy: 18, r: 14 },
-  { id: 'arm-right', label: 'Bras droit', armor: 'arms', shape: 'rect', x: 22, y: 36, width: 17, height: 52 },
+  { id: 'arm-right', label: 'Bras droit', armor: 'arms', precise: 'rightArm', shape: 'rect', x: 22, y: 36, width: 17, height: 52 },
   { id: 'body', label: 'Corps', armor: 'body', shape: 'rect', x: 42, y: 35, width: 36, height: 56 },
-  { id: 'arm-left', label: 'Bras gauche', armor: 'arms', shape: 'rect', x: 81, y: 36, width: 17, height: 52 },
-  { id: 'leg-right', label: 'Jambe droite', armor: 'legs', shape: 'rect', x: 42, y: 94, width: 17, height: 62 },
-  { id: 'leg-left', label: 'Jambe gauche', armor: 'legs', shape: 'rect', x: 61, y: 94, width: 17, height: 62 }
+  { id: 'arm-left', label: 'Bras gauche', armor: 'arms', precise: 'leftArm', shape: 'rect', x: 81, y: 36, width: 17, height: 52 },
+  { id: 'leg-right', label: 'Jambe droite', armor: 'legs', precise: 'rightLeg', shape: 'rect', x: 42, y: 94, width: 17, height: 62 },
+  { id: 'leg-left', label: 'Jambe gauche', armor: 'legs', precise: 'leftLeg', shape: 'rect', x: 61, y: 94, width: 17, height: 62 }
 ]);
 
 function svg(tag, attrs = {}) {
@@ -43,7 +43,7 @@ function armorValue(armor, key) {
  * @param {{ armor?: object, location?: object|null, name?: string }} options
  * @returns {HTMLElement} figure avec la silhouette et sa légende
  */
-export function renderSilhouette({ armor = {}, location = null, name = '' } = {}) {
+export function renderSilhouette({ armor = {}, armorLocations = null, location = null, name = '' } = {}) {
   const hitZone = locationZone(location);
   const figure = document.createElement('figure');
   figure.className = 'silhouette';
@@ -62,7 +62,7 @@ export function renderSilhouette({ armor = {}, location = null, name = '' } = {}
     const cx = zone.shape === 'circle' ? zone.cx : zone.x + zone.width / 2;
     const cy = zone.shape === 'circle' ? zone.cy : zone.y + zone.height / 2;
     const text = svg('text', { x: cx, y: cy, 'text-anchor': 'middle', 'dominant-baseline': 'central' });
-    text.textContent = String(armorValue(armor, zone.armor));
+    text.textContent = String(armorValue(armorLocations || armor, armorLocations ? zone.precise || zone.armor : zone.armor));
     group.append(shape, text);
     drawing.appendChild(group);
   });

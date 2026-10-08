@@ -1,116 +1,20 @@
-import fallbackData from '../data/keywords-fallback.json' with { type: 'json' };
+import contracts from '../data/keyword-engine-contracts.json' with { type: 'json' };
 import { ENGINES } from '../data/keyword-engines.js';
-
-const STORAGE_KEY = 'wfrp.keywords.v1';
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Mots%20Cl%C3%A9s%20Armes%20et%20Armures';
-
-let keywordsList = [];
-let keywordsStatus = { source: 'local', updatedAt: null, error: null };
-
-export function slugify(text) {
-  if (!text) return '';
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+x\b/gi, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-export function parseCSV(csvText) {
-  const lines = csvText.split(/\r?\n/);
-  const results = [];
-  
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-    
-    const cols = line.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/).map(col => {
-      return col.replace(/^"|"$/g, '').trim();
-    });
-
-    if (cols.length >= 2 && cols[0]) {
-      const rawName = cols[0];
-      const effect = cols[1] || '';
-      const hasRating = /\bx\b/i.test(rawName);
-      const slug = slugify(rawName);
-
-      results.push({
-        name: rawName,
-        slug,
-        hasRating,
-        effect
-      });
-    }
-  }
-
-  return results;
-}
-
-export function loadInitialKeywords() {
-  if (typeof localStorage !== 'undefined') {
-    const cached = localStorage.getItem(STORAGE_KEY);
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed.data) && parsed.data.length > 0) {
-          keywordsList = parsed.data;
-          keywordsStatus = { source: 'localStorage', updatedAt: parsed.updatedAt, error: null };
-          return keywordsList;
-        }
-      } catch (e) {
-        console.warn('[Keywords] Cache localStorage corrompu:', e);
-      }
-    }
-  }
-
-  keywordsList = fallbackData;
-  keywordsStatus = { source: 'instantané local (dépôt)', updatedAt: null, error: null };
-  return keywordsList;
-}
-
-export async function fetchKeywords(forceRefresh = false) {
-  if (!keywordsList.length) {
-    loadInitialKeywords();
-  }
-
-  if (typeof fetch === 'undefined') return keywordsList;
-
-  try {
-    const res = await fetch(SHEET_URL, { cache: forceRefresh ? 'reload' : 'default' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const text = await res.text();
-    const parsed = parseCSV(text);
-
-    if (parsed.length > 0) {
-      keywordsList = parsed;
-      const now = new Date().toLocaleDateString('fr-FR') + ' ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      keywordsStatus = { source: 'Google Sheets', updatedAt: now, error: null };
-
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: parsed, updatedAt: now }));
-      }
-      console.log(`[Keywords] ${parsed.length} mot(s)-clé(s) mis à jour depuis Google Sheets`);
-    }
-  } catch (err) {
-    console.warn('[Keywords] Échec du rafraîchissement depuis Google Sheets (utilisation du cache local):', err.message);
-    keywordsStatus.error = err.message;
-  }
-
-  return keywordsList;
-}
-
-export function getKeywordList() {
-  if (!keywordsList.length) loadInitialKeywords();
-  return keywordsList;
-}
-
-export function getKeywordBySlug(slug) {
-  const norm = slugify(slug);
-  return getKeywordList().find(k => k.slug === norm || slugify(k.name) === norm) || null;
-}
-
-export function getKeywordsStatus() {
-  return keywordsStatus;
+import { referenceSlug, parseReferenceCSV, parseKeywordCSV, getReferenceCatalogue, getReferenceStatus, loadInitialReferences, refreshReferences, resolveKeyword } from './reference-catalog.js';
+export const slugify=referenceSlug;
+const display=word=>({...word,slug:word.id,hasRating:Boolean(word.parameter)});
+/** Supports the historic two-column format for imports; network refresh requires the explicit contract. */
+export function parseCSV(text){const table=parseReferenceCSV(text);if(table[0]?.some(h=>h==='Identifiant'))return parseKeywordCSV(text).map(display);const [headers,...rows]=table;if(!headers||headers.length<2)return [];return rows.filter(row=>row[0]?.trim()).map(row=>({name:row[0].trim(),slug:slugify(row[0]),hasRating:/\bx\b/iu.test(row[0]),effect:row[1]||''}));}
+export const loadInitialKeywords=()=>{loadInitialReferences();return getKeywordList();};
+export async function fetchKeywords(forceRefresh=false){await refreshReferences({forceRefresh});return getKeywordList();}
+export const getKeywordList=()=>getReferenceCatalogue().keywords.map(display);
+export const getKeywordBySlug=value=>{const word=resolveKeyword(value);return word?display(word):null;};
+export const getKeywordsStatus=()=>getReferenceStatus();
+export function keywordMechanicalStatus(value){
+ const raw=typeof value==='string'?value:value?.id;const id=ENGINES[raw]?.aliasOf??resolveKeyword(raw)?.id??raw;
+ const word=resolveKeyword(id),baseline=contracts.entries.find(w=>w.id===id);
+ const protectionEngine = ({flexible:'armour-layers',partielle:'conditional-location-armour','points-faibles':'conditional-critical-armour',impenetrable:'odd-hit-critical-immunity',protectrice:'contextual-shield-armour'})[id];
+ const engine=ENGINES[id] || (protectionEngine ? {tier:1,engine:protectionEngine,scope:'protection'} : null);if(!engine)return {id,status:'manual',reason:'effet-non-automatise',word};
+ if(!word||!baseline||word.effect!==baseline.effect||word.edition!==baseline.edition)return {id,status:'manual',reason:'version-effet-non-couverte',word};
+ return {id,status:'covered',word,engine,effectVersion:`${contracts.sourceVersion}:${id}`,limitations:id==='empaleuse'?['Projectiles fichés et soin à gérer manuellement']:id==='inoffensive'?['Deux jets de gravité requis pour le critique']:[]};
 }

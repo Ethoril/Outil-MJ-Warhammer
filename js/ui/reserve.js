@@ -1,9 +1,11 @@
 import { DOM, qs, qsa, on, escapeHtml } from './dom.js';
-import { Profile, groupProfiles, normalizeAction, normalizeTags } from '../core/models.js';
+import { Profile, groupProfiles, normalizeAction, normalizeTags, cloneValue, normalizeArmorLocations } from '../core/models.js';
 import { normalizeDamageFields } from '../core/damage.js';
 import { normalizeSearchText } from '../core/sanitize.js';
 import { ACTION_FIELD_HELP, createQualityPicker } from './action-editor.js';
 import { showToast } from './toast.js';
+import { renderFicheDetails } from './fiche-details.js';
+import { resolveKeyword } from '../core/reference-catalog.js';
 import { contextMessage } from './messages.js';
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
@@ -15,7 +17,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   function ensureProfileFields() {
     const kind = DOM.reserve.form?.querySelector('[name=kind]');
     if (kind && !kind.querySelector('option[value="PNJ"]')) kind.append(new Option('PNJ', 'PNJ'));
-    if (qs('#form-profile-meta')) return;
+    if (DOM.reserve.form?.querySelector('#form-profile-meta')) return;
     const meta = document.createElement('div');
     meta.id = 'form-profile-meta';
     meta.style.cssText = 'display:grid; gap:6px; margin:10px 0;';
@@ -24,11 +26,38 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     DOM.reserve.form.insertBefore(meta, actions);
   }
 
+  function ensureArmorSides() {
+    const f = DOM.reserve.form;
+    if (!f || f.querySelector('[name=armor_rightArm]')) return;
+    const labels = { rightArm: 'Bras droit', leftArm: 'Bras gauche', rightLeg: 'Jambe droite', leftLeg: 'Jambe gauche' };
+    const section = document.createElement('div'); section.id = 'form-armor-sides'; section.className = 'row';
+    for (const [key, label] of Object.entries(labels)) {
+      const wrapper = document.createElement('label'); wrapper.textContent = `PA ${label}`;
+      const input = document.createElement('input'); input.type = 'number'; input.min = '0'; input.name = `armor_${key}`; input.value = '0'; input.style.width = '75px';
+      wrapper.append(input); section.append(wrapper);
+    }
+    for (const family of ['arms', 'legs']) {
+      const input = f.querySelector(`[name=armor_${family}]`);
+      const label = input?.closest('label'); if (label) label.hidden = true; else if (input) input.hidden = true;
+    }
+    f.insertBefore(section, f.querySelector('.actions'));
+  }
+
+  function lockSourceFields(profile = null) {
+    const f = DOM.reserve.form; const linked = Boolean(profile?.extensions?.ficheId);
+    const sourceNames = ['initiative', 'hp', 'E', 'CC', 'CT', 'F', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'armor_head', 'armor_body', 'armor_arms', 'armor_legs', 'armor_rightArm', 'armor_leftArm', 'armor_rightLeg', 'armor_leftLeg'];
+    for (const name of sourceNames) { const input = f.querySelector(`[name=${name}]`); if (input) { input.readOnly = linked; input.title = linked ? 'Valeur provenant de la fiche ; actualisez les PJ pour la modifier.' : ''; } }
+    let notice = f.querySelector('#fiche-source-notice');
+    if (!notice) { notice = document.createElement('div'); notice.id = 'fiche-source-notice'; notice.className = 'muted'; f.prepend(notice); }
+    notice.hidden = !linked;
+    notice.textContent = linked ? 'Données de jeu liées à la fiche du PJ. Modifiez les caractéristiques, talents, armes et protections dans sa fiche, puis actualisez les PJ. Les notes et actions locales restent éditables ici.' : '';
+  }
+
   function renderReserve() {
     const term = normalizeSearchText(DOM.reserve.search.value || '');
     const all = Store.listProfiles();
     const filtered = all.filter(p =>
-      !term || [p.name, p.group, p.kind, p.notes, ...(p.tags || []), ...((p.diceLines?.length ? p.diceLines : p.actions) || []).flatMap(line => (line.qualities || []).map(q => q.name || q.id))]
+      !term || [p.name, p.group, p.kind, p.notes, ...(p.tags || []), ...(p.skills || []).map(row => row.name), ...(p.talents || []).flatMap(row => [row.name, row.specialty]), ...(p.equipment || []).flatMap(item => [item.name, item.category, ...(item.keywords || []).flatMap(word => [word.id, resolveKeyword(word.id)?.name])]), ...((p.diceLines?.length ? p.diceLines : p.actions) || []).flatMap(line => (line.qualities || []).map(q => q.name || q.id))]
         .some(value => normalizeSearchText(value).includes(term))
     );
 
@@ -77,7 +106,9 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const btnDup = document.createElement('button'); btnDup.textContent = 'Dupliq.'; btnDup.classList.add('ghost'); btnDup.addEventListener('click', () => Store.duplicateProfile(p.id));
     const btnFav = document.createElement('button'); btnFav.textContent = p.favorite ? '★' : '☆'; btnFav.title = 'Profil favori'; btnFav.classList.add('ghost'); btnFav.addEventListener('click', () => settle(Store.updateProfile(p.id, { favorite: !p.favorite }), 'Favori'));
     const btnDel = document.createElement('button'); btnDel.textContent = 'Suppr'; btnDel.classList.add('danger', 'ghost'); btnDel.addEventListener('click', () => settle(Promise.resolve(Store.removeProfile(p.id)).then(result => settle(Store.log(`Réserve: supprimé ${p.name}`), 'Journal').then(() => result)), 'Suppression'));
-    right.append(btnEdit, btnDup, btnFav, btnDel); div.append(left, right); return div;
+    right.append(btnEdit, btnDup, btnFav, btnDel); div.append(left, right);
+    if (p.extensions?.ficheId || p.ficheSnapshot || p.equipment?.length || p.talents?.length) { const details = renderFicheDetails(p); details.style.width = '100%'; div.append(details); }
+    return div;
   }
 
   function ensureDiceSectionExists() {
@@ -90,7 +121,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     sect.querySelector('#btn-add-tpl').addEventListener('click', () => addProfileDiceRow());
   }
 
-  function addProfileDiceRow({ base = '', mod = 0, type = '', note = '', damage = '', damageFormula = '', qualities = [], valuesX = null, capacity = null } = {}) {
+  function addProfileDiceRow(original = {}) {
+    const { base = '', mod = 0, type = '', note = '', damage = '', damageFormula = '', qualities = [], valuesX = null, capacity = null } = original;
     const row = document.createElement('div'); row.className = 'row'; row.style.marginBottom = '6px'; row.style.gap = '4px';
     const currentQualities = Array.isArray(qualities) ? qualities : [];
     // Nom accessible court et infobulle d'aide pour chaque case.
@@ -100,6 +132,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     row.querySelector('.pf-dice-type').value = type || '';
     // Anciennes cases X et Cap. (le moteur ne s'en sert pas) : plus affichées, leurs valeurs restent enregistrées.
     row._kept = { valuesX, capacity };
+    row._original = cloneValue(original);
 
     const normalized = normalizeAction({ qualities: currentQualities });
     row._qualities = normalized.qualities;
@@ -108,12 +141,18 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
 
     const btnRemoveDice = row.querySelector('.btn-remove-dice');
     btnRemoveDice.addEventListener('click', () => row.remove());
+    if (original.extensions?.fiche?.equipmentId) {
+      for (const control of row.querySelectorAll('input,select,button')) if (!control.classList.contains('pf-dice-mod')) control.disabled = true;
+      const sourceLabel = document.createElement('span'); sourceLabel.className = 'muted'; sourceLabel.textContent = base === '' ? 'Fiche · liaison requise' : 'Fiche'; row.append(sourceLabel);
+    } else if (original.extensions?.ficheSkill) row.querySelector('.pf-dice-base').readOnly = true;
     DOM.reserve.form?.querySelector('#form-dice-list')?.appendChild(row);
   }
 
   function loadProfileIntoForm(p) {
     ensureProfileFields();
+    ensureArmorSides();
     const f = DOM.reserve.form;
+    lockSourceFields(p);
     f.querySelector('[name=id]').value = p.id; f.querySelector('[name=name]').value = p.name;
     f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
     f.querySelector('[name=group]').value = p.group || '';
@@ -121,7 +160,9 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     f.querySelector('[name=notes]').value = p.notes || '';
     f.querySelector('[name=favorite]').checked = Boolean(p.favorite);
     f.querySelector('[name=propagate]').checked = false;
-    f.querySelector('[name=armor_head]').value = p.armor?.head || 0; f.querySelector('[name=armor_body]').value = p.armor?.body || 0;
+    const armorLocations = normalizeArmorLocations(p.armorLocations ?? p.armor);
+    f.querySelector('[name=armor_head]').value = armorLocations.head; f.querySelector('[name=armor_body]').value = armorLocations.body;
+    for (const key of ['rightArm', 'leftArm', 'rightLeg', 'leftLeg']) f.querySelector(`[name=armor_${key}]`).value = armorLocations[key];
     f.querySelector('[name=armor_arms]').value = p.armor?.arms || 0; f.querySelector('[name=armor_legs]').value = p.armor?.legs || 0;
     const inputE = f.querySelector('[name=E]'); if (inputE) inputE.value = p.caracs?.E || 0;
     ['CC', 'CT', 'F', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'].forEach(k => { f.querySelector(`[name=${k}]`).value = p.caracs[k] || ''; });
@@ -136,6 +177,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
 
   function resetForm() {
     ensureProfileFields();
+    ensureArmorSides();
+    lockSourceFields();
     DOM.reserve.form.reset();
     DOM.reserve.form.querySelector('[name=id]').value = '';
     DOM.reserve.form.querySelector('[name=kind]').value = 'Créature';
@@ -144,7 +187,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     DOM.reserve.form.querySelector('[name=notes]').value = '';
     DOM.reserve.form.querySelector('[name=favorite]').checked = false;
     DOM.reserve.form.querySelector('[name=propagate]').checked = false;
-    if (qs('#form-dice-list')) qs('#form-dice-list').innerHTML = '';
+    const diceList = DOM.reserve.form.querySelector('#form-dice-list'); if (diceList) diceList.innerHTML = '';
     formTitle.textContent = "Nouveau profil"; btnSubmit.textContent = "Ajouter"; btnCancel.style.display = 'none';
   }
 
@@ -159,7 +202,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const caracs = Object.fromEntries(Object.entries(existingCaracs).filter(([k]) => !formCaracs.includes(k)));
     caracs['E'] = Number(fd.get('E') || 0);
     ['CC', 'CT', 'F', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'].forEach(k => { const raw = fd.get(k); if (raw !== null && raw !== '') { const v = Number(raw); if (Number.isFinite(v)) caracs[k] = v; } });
-    const armor = { head: Number(fd.get('armor_head') || 0), body: Number(fd.get('armor_body') || 0), arms: Number(fd.get('armor_arms') || 0), legs: Number(fd.get('armor_legs') || 0) };
+    const armorLocations = Object.fromEntries(['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg'].map(key => [key, Number(fd.get(`armor_${key}`) || 0)]));
+    const armor = { head: armorLocations.head, body: armorLocations.body, arms: armorLocations.rightArm, legs: armorLocations.rightLeg };
 
     const diceLines = [];
     const diceList = DOM.reserve.form.querySelector('#form-dice-list');
@@ -169,14 +213,15 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
         const n = row.querySelector('.pf-dice-note').value;
         // `BF+4` garde son texte ; un nombre reste un nombre.
         const { damage, damageFormula } = normalizeDamageFields({ damage: row.querySelector('.pf-dice-damage')?.value ?? '' });
-        if (b) {
+        if (b || row._original?.id || row._original?.extensions?.fiche) {
           diceLines.push({
-            base: parseInt(b),
+            ...cloneValue(row._original || {}),
+            base: b === '' ? '' : parseInt(b),
             mod: Number(row.querySelector('.pf-dice-mod')?.value) || 0,
             type: row.querySelector('.pf-dice-type')?.value || '',
             note: n,
             damage,
-            ...(damageFormula ? { damageFormula } : {}),
+            damageFormula: damageFormula || null,
             qualities: row._qualities || [],
             valuesX: row._kept?.valuesX ?? null,
             capacity: row._kept?.capacity ?? null
@@ -186,12 +231,23 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     }
 
     const id = fd.get('id');
-    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, diceLines };
+    const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, armorLocations, diceLines };
+    const existing = id ? Store.getProfile(id) : null;
+    if (existing?.extensions?.ficheId) {
+      for (const key of ['caracs', 'initiative', 'hp', 'maxHp', 'armor', 'armorLocations']) data[key] = cloneValue(existing[key]);
+      data.diceLines = data.diceLines.flatMap(action => {
+        const live = existing.diceLines.find(row => row.id === action.id);
+        if (live?.extensions?.fiche?.equipmentId) return [{ ...cloneValue(live), mod: action.mod }];
+        if (action.extensions?.fiche?.equipmentId) return [];
+        return [live?.extensions?.ficheSkill ? { ...action, base: live.base, extensions: { ...action.extensions, ...cloneValue(live.extensions) } } : action];
+      });
+      for (const live of existing.diceLines) if (live.extensions?.fiche?.equipmentId && !data.diceLines.some(action => action.id === live.id)) data.diceLines.push(cloneValue(live));
+    } else data.maxHp = data.hp;
     try {
       const propagate = id && fd.get('propagate') === 'on';
       // The Store owns the profile/participant transaction. This keeps the
       // opt-in propagation atomic and preserves current PV, states and targets.
-      const result = id ? Store.updateProfile(id, data, { propagate }) : Store.addProfile(new Profile(data));
+      const result = id ? Store.updateProfile(id, data, { propagate, expectedLocalRevision: Store.getLocalRevision() }) : Store.addProfile(new Profile(data));
       const persisted = await result;
       if (persisted?.ok === false) throw persisted.error || new Error('Sauvegarde du profil impossible.');
       const logged = Store.log(`Réserve: ${id ? 'modifié' : 'ajouté'} ${data.name}`);

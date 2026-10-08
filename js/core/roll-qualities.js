@@ -1,3 +1,4 @@
+import { keywordMechanicalStatus } from './keywords.js';
 // Moteurs de mots-clés qui agissent sur le JET, et non sur les dégâts.
 // Séparés de damage.js parce qu'ils s'appliquent avant lui : le score cible, la
 // condition de critique et celle de maladresse. Fonctions pures, donc testables —
@@ -13,7 +14,7 @@ export function activeEngines(qualities = []) {
   for (const q of normalizeQualities(qualities)) {
     const id = q.id;
     const def = ENGINES[id];
-    if (def) out.push({ id, ...def });
+    if (def && keywordMechanicalStatus(id).status === 'covered') out.push({ id, ...def });
   }
   return out;
 }

@@ -7,7 +7,7 @@ import { applyOperation, createSyncDocument } from '../js/core/sync-protocol.js'
 import { createStore } from '../js/core/store.js';
 
 const envelope = extra => ({
-  schemaVersion: 2, reserve: [], combat: { round: 0, order: [], participants: [] },
+  schemaVersion: 3, reserve: [], combat: { round: 0, order: [], participants: [] },
   log: [], diceLines: [], ...extra
 });
 
@@ -179,7 +179,7 @@ test('Store — un échec IDB lors d’une frontière distante ne remplace pas l
   const basePersistence = createPersistence({ indexedDB, dbName: 'race-remote-save-failure', contextId: 'guest' });
   await basePersistence.saveAtomic({
     state: envelope({ reserve: [{ id: 'local', name: 'Local' }], history: { past: [], future: [], boundary: null } }),
-    session: { protocolVersion: 2, deviceId: 'failure-device', sequence: 0, baseRevision: 0 }
+    session: { protocolVersion: 3, deviceId: 'failure-device', sequence: 0, baseRevision: 0 }
   });
   const persistence = {
     ...basePersistence,

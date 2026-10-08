@@ -265,7 +265,8 @@ test('Store — Migration maxHp (E-01)', () => {
   const parts = store.listParticipants();
 
   assert.equal(parts.find(p => p.id === 'part1').maxHp, 15);
-  assert.equal(parts.find(p => p.id === 'part2').maxHp, 8);
+  assert.equal(parts.find(p => p.id === 'part2').maxHp, null, 'R37 : maximum inconnu sans profil associé');
+  assert.equal(parts.find(p => p.id === 'part2').hp, 8);
   assert.equal(parts.find(p => p.id === 'part3').maxHp, 20);
   assert.equal(parts.find(p => p.id === 'part4').maxHp, 0);
 });

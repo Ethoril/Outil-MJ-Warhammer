@@ -1,8 +1,9 @@
 /** Import local de profils au format JSON (version 1). L'entrée reste inerte : ni HTML, ni code, ni réseau. */
 import { canonicalQualityId, isKnownQuality, normalizeQualities } from './quality-normalization.js';
-import { canonicalCaracKey, normalizeTags } from './models.js';
+import { canonicalCaracKey, normalizeTags, cloneValue, normalizeArmorLocations, FICHE_DATA_FIELDS } from './models.js';
 import { normalizeDamageFields } from './damage.js';
 import { getKeywordBySlug, getKeywordList } from './keywords.js';
+import { normalizeEquipment } from './equipment.js';
 import { parseProfileText } from './text-profile-import.js';
 
 const FORMAT_VERSION = 1;
@@ -20,7 +21,9 @@ const PROFILE_KEYS = {
   hp: ['pv', 'hp', 'pvmax', 'blessures'], initiative: ['initiative', 'init'],
   caracs: ['caracteristiques', 'caracteristique', 'caracs'], armor: ['armure', 'armor'],
   tags: ['tags', 'motscles'], notes: ['notes'], favorite: ['favori', 'favorite'],
-  actions: ['jets', 'actions', 'dicelines']
+  actions: ['jets', 'actions', 'dicelines'], maxHp: ['maxhp'], armorLocations: ['armorlocations'],
+  skills: ['skills'], talents: ['talents'], equipment: ['equipment'], spells: ['spells'], prayers: ['prayers'],
+  ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['movement'], race: ['race']
 };
 const PROFILE_IGNORED = ['id', 'extensions', 'participantid', 'targetid', 'attr', 'format', 'version', 'profils', 'profiles'];
 const ACTION_KEYS = {
@@ -29,8 +32,8 @@ const ACTION_KEYS = {
   valuesX: ['x', 'valeurx', 'valuesx', 'valuex', 'xvalues'], capacity: ['capacite', 'capacity', 'munitions']
 };
 const ACTION_IGNORED = ['id', 'extensions', 'participantid', 'targetid', 'attr'];
-const QUALITY_KEYS = { name: ['nom', 'name', 'label', 'id'], rating: ['valeur', 'value', 'rating', 'x'] };
-const ARMOR_KEYS = { head: ['tete', 'head'], body: ['corps', 'body'], arms: ['bras', 'arms'], legs: ['jambes', 'legs'] };
+const QUALITY_KEYS = { name: ['nom', 'name', 'label', 'id'], rating: ['valeur', 'value', 'rating', 'x'], parameter: ['parameter'] };
+const ARMOR_KEYS = { head: ['tete', 'head'], body: ['corps', 'body'], arms: ['bras', 'arms'], legs: ['jambes', 'legs'], rightArm: ['brasdroit', 'rightarm'], leftArm: ['brasgauche', 'leftarm'], rightLeg: ['jambedroite', 'rightleg'], leftLeg: ['jambegauche', 'leftleg'] };
 const KIND_NAMES = new Map([['pj', 'PJ'], ['pnj', 'PNJ'], ['creature', 'Créature']]);
 const ACTION_TYPES = new Map([['attaque', 'attack'], ['attack', 'attack'], ['competence', 'skill'], ['skill', 'skill'], ['defense', 'defense'], ['defence', 'defense'], ['opposition', 'opposition']]);
 
@@ -169,9 +172,11 @@ function parseQualities(value, label, errors, unknownQualities) {
   for (const item of list.flatMap(entry => typeof entry === 'string' ? entry.split(',') : [entry])) {
     let name = '';
     let rating;
+    let sourceParameter;
     if (isRecord(item)) {
       const { values } = readRecord(item, QUALITY_KEYS, ['extensions']);
       name = typeof values.name === 'string' ? values.name.trim() : '';
+      if (Object.hasOwn(values, 'parameter')) sourceParameter = cloneValue(values.parameter);
       if (values.rating !== undefined && values.rating !== null) rating = parseInteger(values.rating, field, errors) ?? undefined;
       else [name, rating] = split(name);
     } else if (typeof item === 'string') {
@@ -184,8 +189,9 @@ function parseQualities(value, label, errors, unknownQualities) {
     if (!id) continue;
     const keyword = getKeywordBySlug(id);
     // Valeur X réservée aux mots-clés à X (ou inconnus) ; sans valeur, 1 comme le sélecteur.
-    const given = keyword && !keyword.hasRating ? undefined : rating ?? (keyword?.hasRating ? 1 : undefined);
-    qualities.push({ id, name: keyword?.name || name, ...(given !== undefined ? { rating: given } : {}) });
+    const numericParameter = sourceParameter !== '' && sourceParameter != null && Number.isFinite(Number(sourceParameter)) ? Number(sourceParameter) : undefined;
+    const given = keyword && !keyword.hasRating ? undefined : rating ?? numericParameter ?? (sourceParameter === undefined && keyword?.hasRating ? 1 : undefined);
+    qualities.push({ id, name: keyword?.name || name, ...(sourceParameter !== undefined ? { parameter: sourceParameter } : {}), ...(given !== undefined ? { rating: given } : {}) });
   }
   return normalizeQualities(qualities);
 }
@@ -200,12 +206,14 @@ function parseAction(raw, number, errors, unknownQualities) {
   if (!name) { if (!nameErrors.length) errors.push({ field: `${label} · nom`, reason: 'champ-manquant', value: '' }); }
   unknown.forEach(key => errors.push({ field: `${label} · ${key}`, reason: 'champ-inconnu', value: '' }));
   const action = { name: name || `Jet ${number}`, note: name || `Jet ${number}`, type: '' };
+  if (isRecord(raw.extensions?.fiche)) { action.extensions = cloneValue(raw.extensions); if (typeof raw.id === 'string') action.id = raw.id; if (typeof raw.attr === 'string') action.attr = raw.attr; }
   if (values.type !== undefined && values.type !== null && values.type !== '') {
     const type = ACTION_TYPES.get(normKey(values.type));
     if (type) action.type = type;
     else errors.push({ field: `${label} · type`, reason: 'type-inconnu', value: shownValue(values.type) });
   }
-  if (values.base === undefined || values.base === null) { errors.push({ field: `${label} · score`, reason: 'champ-manquant', value: '' }); action.base = null; }
+  if (values.base === '' && raw.extensions?.fiche?.requiresLink) action.base = '';
+  else if (values.base === undefined || values.base === null) { errors.push({ field: `${label} · score`, reason: 'champ-manquant', value: '' }); action.base = null; }
   else action.base = parseInteger(values.base, `${label} · score`, errors);
   action.mod = values.mod === undefined || values.mod === null ? 0 : parseInteger(values.mod, `${label} · modificateur`, errors) ?? 0;
   // `degats` : entier ou formule (`BF+4`, `1d10`) ; une sauvegarde peut donner la formule à part (`damageFormula`).
@@ -298,6 +306,15 @@ function parseProfile(raw, index) {
     hp: hp !== null || (values.hp !== undefined && values.hp !== null) ? { status: 'found', value: hp, lines: [] } : { status: 'missing', value: null, lines: [] }
   };
   const profile = { name: name || null, kind, group, hp, initiative, caracs, armor: parseArmor(values.armor, errors), tags, notes, favorite, actions };
+  for (const key of FICHE_DATA_FIELDS) if (values[key] !== undefined) {
+    if (['skills', 'talents', 'equipment', 'spells', 'prayers'].includes(key) && !Array.isArray(values[key])) errors.push({ field: key, reason: 'liste-attendue', value: shownValue(values[key]) });
+    else profile[key] = cloneValue(values[key]);
+  }
+  if (profile.equipment) { const checked = normalizeEquipment(profile.equipment); if (checked.coverage === 'invalid') errors.push({ field: 'equipment', reason: 'collection-invalide', value: checked.warnings.map(w => w.message).join('; ') }); }
+  if (values.maxHp !== undefined) profile.maxHp = parseInteger(values.maxHp, 'maxHp', errors);
+  if (isRecord(raw.extensions?.fiche) || typeof raw.extensions?.ficheId === 'string') profile.extensions = cloneValue(raw.extensions);
+  if (values.armorLocations !== undefined) profile.armorLocations = normalizeArmorLocations(parseArmor(values.armorLocations, errors));
+  else if (['rightArm', 'leftArm', 'rightLeg', 'leftLeg'].some(key => Object.hasOwn(profile.armor, key))) profile.armorLocations = normalizeArmorLocations(profile.armor);
   const blocking = fields.name.status !== 'found' || fields.hp.status !== 'found' || errors.length > 0;
   return { index, profile, fields, errors, ambiguities: [], unknownQualities, blocking, sourceText: JSON.stringify(raw, null, 2) };
 }

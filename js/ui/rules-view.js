@@ -3,7 +3,8 @@ import { normalizeSearchText } from '../core/sanitize.js';
 import { RULES } from '../data/rules.js';
 import { CRIT_DATA } from '../data/crits.js';
 import { MAGIC_DATA } from '../data/magic.js';
-import { fetchKeywords, getKeywordList, getKeywordsStatus } from '../core/keywords.js';
+import { getKeywordList, getKeywordsStatus, keywordMechanicalStatus } from '../core/keywords.js';
+import { getReferenceCatalogue, getReferenceSnapshot, refreshReferences } from '../core/reference-catalog.js';
 import { showToast } from './toast.js';
 import { contextMessage } from './messages.js';
 
@@ -132,29 +133,51 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   // 1. BLOC MOTS-CLÉS D'ARMES ET D'ARMURES (§13.2, §13.7)
   const keywords = getKeywordList();
   const status = getKeywordsStatus();
-  const matchedKeywords = keywords.filter(k => !cleanTerm || normalizeSearchText(`${k.name} ${k.effect}`).includes(cleanTerm));
+  const matchedKeywords = keywords.filter(k => !cleanTerm || normalizeSearchText(`${k.name} ${k.effect} ${(k.aliases || []).join(' ')} ${k.id}`).includes(cleanTerm));
+  const catalogue = getReferenceCatalogue();
+  const date = status.updatedAt ? new Date(status.updatedAt).toLocaleString('fr-FR') : 'date inconnue';
+  html += `<div class="card"><p class="muted">Références : ${escapeHtml(status.source)} · dernier succès : ${escapeHtml(date)}</p><details><summary>Version des références</summary><p class="muted">${escapeHtml(status.contentVersion)}</p></details>${status.error ? `<p role="alert">Actualisation échouée : ${escapeHtml(status.error)}. Le dernier ensemble valide reste utilisé.</p>` : ''}${status.cacheWarning ? `<p role="status">${escapeHtml(status.cacheWarning)}</p>` : ''}<button type="button" class="btn-reload-keywords ghost small">Recharger les références Aides de jeu</button></div>`;
 
   if (matchedKeywords.length > 0) {
     matchCount += matchedKeywords.length;
     const isOpen = Boolean(cleanTerm);
-    const statusText = status.updatedAt ? `${status.source} (mis à jour le ${status.updatedAt})` : `${status.source}`;
-
-    html += `<div class="card rule-block">`;
-    html += `<details ${isOpen ? 'open' : ''}>`;
-    html += `<summary class="row" style="justify-content:space-between;"><span>🗡️ Mots-clés d'armes et d'armures (${matchedKeywords.length})</span></summary>`;
-    html += `<div class="rule-content">`;
-    html += `<div class="row" style="margin-bottom:12px; font-size:0.85em; background:rgba(0,0,0,0.05); padding:6px 10px; border-radius:6px;">`;
-    html += `<span class="muted">Provenance : <strong>${escapeHtml(statusText)}</strong></span>`;
-    html += `<div class="spacer"></div>`;
-    html += `<button type="button" class="btn-reload-keywords ghost small">🔄 Recharger depuis le Sheet</button>`;
-    html += `</div>`;
+    html += `<div class="card rule-block"><details ${isOpen ? 'open' : ''}><summary>🗡️ Mots-clés d'armes et d'armures (${matchedKeywords.length})</summary><div class="rule-content">`;
 
     html += `<table class="wfrp-table"><thead><tr><th style="width:25%;">Mot-clé</th><th>Effet</th></tr></thead><tbody>`;
     matchedKeywords.forEach(k => {
       const key = `keyword:${favoriteKey(k.slug || k.name)}`;
-      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(k.name)}</strong></td><td>${escapeHtml(k.effect)}</td></tr>`;
+      const coverage = keywordMechanicalStatus(k.id);
+      const effectStatus = coverage.status === 'covered' ? (coverage.limitations?.length ? `Mécanique partiellement couverte : ${coverage.limitations.join(' ; ')}` : 'Effet couvert par le moteur') : coverage.reason === 'version-effet-non-couverte' ? 'Effet modifié : à arbitrer' : 'Effet à appliquer manuellement';
+      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(k.name)}</strong>${k.parameter ? `<div class="muted">${escapeHtml(k.parameter)}</div>` : ''}</td><td>${escapeHtml(k.effect)}<p class="muted">${escapeHtml(k.source)} · ${escapeHtml(k.edition)} · ${escapeHtml(effectStatus)}</p>${k.note ? `<p class="muted">${escapeHtml(k.note)}</p>` : ''}</td></tr>`;
     });
     html += `</tbody></table></div></details></div>`;
+  }
+
+  // Talents and possessed magic share the public fiche references. Consultation only.
+  const pack = getReferenceSnapshot();
+  const talentMatches = catalogue.talents.filter(talent => {
+    const aliases = (pack.talents.legacyAliases || []).filter(alias => alias.englishName === talent.englishName).map(alias => alias.label);
+    return !cleanTerm || normalizeSearchText([talent.nom, talent.englishName, talent.description, ...aliases].join(' ')).includes(cleanTerm);
+  });
+  if (talentMatches.length) {
+    matchCount += talentMatches.length;
+    html += `<div class="card rule-block"><details ${cleanTerm ? 'open' : ''}><summary>Talents (${talentMatches.length})</summary><div class="rule-content"><p class="muted">Consultation des talents et limites. Les nouveaux effets mécaniques seront traités au lot 2.</p><table class="wfrp-table"><thead><tr><th>Talent</th><th>Effet et source</th></tr></thead><tbody>`;
+    for (const talent of talentMatches) {
+      const key = 'talent:' + talent.id;
+      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(talent.nom)}</strong>${talent.specializationLabel ? '<p class="muted">Spécialité : '+escapeHtml(talent.specializationLabel)+'</p>' : ''}</td><td>${escapeHtml(talent.description)}<p class="muted">Limite : ${escapeHtml(talent.limitText)} · ${escapeHtml(talent.source)}</p></td></tr>`;
+    }
+    html += '</tbody></table></div></details></div>';
+  }
+  for (const [title, rows, sheet] of [['Sorts', catalogue.magic.spells, 'Magie'], ['Prières et miracles', catalogue.magic.miracles, 'Miracles']]) {
+    const matches = rows.filter(row => !cleanTerm || normalizeSearchText([row.nom, row.type, row.desc, row.effet, ...(row.aliases || [])].join(' ')).includes(cleanTerm));
+    if (!matches.length) continue;
+    matchCount += matches.length;
+    html += `<div class="card rule-block"><details ${cleanTerm ? 'open' : ''}><summary>${escapeHtml(title)} (${matches.length})</summary><div class="rule-content"><p class="muted">Aides de jeu · ${escapeHtml(sheet)} · consultation uniquement</p><table class="wfrp-table"><thead><tr><th>Nom</th><th>Référence</th></tr></thead><tbody>`;
+    for (const row of matches) {
+      const key = 'magic:' + favoriteKey(sheet + ':' + row.type + ':' + row.nom);
+      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(row.nom)}</strong>${row.retired ? '<p class="muted">Référence historique retirée du catalogue</p>' : ''}</td><td>${row.type ? '<p>'+escapeHtml(row.type)+'</p>' : ''}${row.cn !== undefined ? '<p>NI : '+escapeHtml(String(row.cn))+'</p>' : ''}<p>Portée : ${escapeHtml(row.portee)} · Cible : ${escapeHtml(row.cible)} · Durée : ${escapeHtml(row.duree)}</p>${escapeHtml(row.desc || row.effet)}</td></tr>`;
+    }
+    html += '</tbody></table></div></details></div>';
   }
 
   // 2. BLOCS DE RÈGLES CLASSIQUES
@@ -170,7 +193,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
       html += `<details ${isOpen ? 'open' : ''}>`;
       const key = `rule:${favoriteKey(block.title)}`;
       html += `<summary class="row"><span>${escapeHtml(block.title)}</span><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button></summary>`;
-      html += `<div class="rule-content">`;
+      html += `<div class="rule-content"><p class="muted">Aide historique locale · source complémentaire et édition à confirmer. Aucun rattachement à Aides de jeu n’est vérifié.</p>`;
 
       if (block.intro) html += `<p>${escapeHtml(block.intro)}</p>`;
 
@@ -195,7 +218,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
           }
           html += `<details class="nested-details" ${isOpen ? 'open' : ''}>`;
           html += `<summary>${escapeHtml(nt.title)}</summary>`;
-          html += `<div data-table-id="${escapeHtml(nt.id)}">${tableHtml}</div>`;
+          html += `<div data-table-id="${escapeHtml(nt.id)}"><p class="muted">Table locale · référence exacte à confirmer</p>${tableHtml}</div>`;
           html += `</details>`;
         });
       }
@@ -205,7 +228,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   });
 
   if (matchCount === 0) {
-    html = `<p class="muted" style="padding: 16px; text-align: center;">Aucun résultat pour « ${escapeHtml(cleanTerm)} ».</p>`;
+    html += `<p class="muted" style="padding: 16px; text-align: center;">Aucun résultat pour « ${escapeHtml(cleanTerm)} ».</p>`;
   }
 
   listContainer.innerHTML = html;
@@ -228,13 +251,14 @@ function updateRulesList(term, root = qs('#panel-rules')) {
       btnReload.disabled = true;
       btnReload.textContent = '⏳ Chargement...';
       try {
-        await fetchKeywords(true);
-        showToast('Mots-clés mis à jour depuis Google Sheets', 'success');
+        const result = await refreshReferences({ forceRefresh: true });
+        if (result.ok) showToast('Références Aides de jeu actualisées', 'success');
+        else showToast(`Actualisation échouée : ${result.status.error}. Le dernier ensemble valide reste utilisé.`, 'error');
         updateRulesList(term, root);
       } catch (err) {
         showToast(contextMessage('Mots-clés non rechargés', err, 'vérifiez la connexion ; la liste locale reste utilisée.'), 'error');
         btnReload.disabled = false;
-        btnReload.textContent = '🔄 Recharger depuis le Sheet';
+        btnReload.textContent = 'Recharger les références Aides de jeu';
       }
     });
   }

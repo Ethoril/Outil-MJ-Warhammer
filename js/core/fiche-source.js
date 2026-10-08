@@ -18,10 +18,11 @@ const RECAPTCHA_SITE_KEY = '6Lfx25YtAAAAAAkRJrYSQsH6rdE1buedQzw0xTXb';
 const APP_CHECK_HOST = 'ethoril.github.io';
 const APP_NAME = 'fiches';
 
-export function createFicheSource() {
+export function createFicheSource({ loadSdk = null } = {}) {
   let sdk = null;
   const load = async () => {
     if (sdk) return sdk;
+    if (loadSdk) { sdk = await loadSdk(); return sdk; }
     const [app, auth, firestore] = await Promise.all([
       import('../../vendor/firebase/firebase-app.js'),
       import('../../vendor/firebase/firebase-auth.js'),
@@ -52,13 +53,23 @@ export function createFicheSource() {
       const { auth, authInstance } = await load();
       await auth.signOut(authInstance);
     },
-    /** [{ charId, data | null }] — null quand le document n'existe pas. Une erreur de lecture est propagée. */
+    /** Statut explicite par fiche ; un refus global est propagé, aucun résultat ne vide un profil implicitement. */
     async fetchAll() {
       const { firestore, db } = await load();
-      return Promise.all(FICHE_CHAR_IDS.map(async charId => {
-        const snapshot = await firestore.getDoc(firestore.doc(db, 'fiches', charId));
-        return { charId, data: snapshot.exists() ? (snapshot.data()?.data ?? null) : null };
+      const results = await Promise.all(FICHE_CHAR_IDS.map(async charId => {
+        try {
+          const read = firestore.getDocFromServer || firestore.getDoc;
+          const snapshot = await read(firestore.doc(db, 'fiches', charId));
+          if (!snapshot.exists()) return { charId, data: null, status: 'missing' };
+          const envelope = snapshot.data();
+          if (!envelope?.data || typeof envelope.data !== 'object' || Array.isArray(envelope.data)) return { charId, data: null, status: 'invalid' };
+          return { charId, data: envelope.data, status: 'available', metadata: {
+            schemaVersion: envelope.schemaVersion ?? null, revision: envelope.revision ?? null
+          } };
+        } catch (error) { return { charId, data: null, status: 'error', error }; }
       }));
+      if (results.every(item => item.status === 'error')) throw results[0].error;
+      return results;
     }
   };
 }

@@ -6,7 +6,7 @@ import { applyOperation, createOperation } from '../js/core/sync-protocol.js';
 import { createSyncSession } from '../js/core/sync-session.js';
 
 const local = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   reserve: [{ id: 'local', name: 'Local' }],
   combat: { round: 0, participants: [] },
   log: [{ id: 'log-1', kind: 'management', text: 'local' }],
@@ -14,7 +14,7 @@ const local = {
 };
 
 const remoteState = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   reserve: [{ id: 'remote', name: 'Distant' }],
   combat: { round: 1, participants: [] }
 };

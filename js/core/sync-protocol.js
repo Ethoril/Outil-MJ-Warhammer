@@ -5,7 +5,7 @@
  * validates/clones values and returns a new document. It never logs, writes or
  * invokes callbacks.
  */
-export const SYNC_PROTOCOL_VERSION = 2;
+export const SYNC_PROTOCOL_VERSION = 3;
 
 // These fields belong to a device/session and must never enter the shared root.
 export const LOCAL_STATE_FIELDS = Object.freeze([

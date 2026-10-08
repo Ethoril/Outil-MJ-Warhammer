@@ -1,3 +1,7 @@
+import { locationProtection, mergeEquipmentQualities, ammunitionCompatibility, equipmentAttackContext } from './equipment.js';
+import { keywordMechanicalStatus } from './keywords.js';
+import { getReferenceStatus } from './reference-catalog.js';
+import { ENGINES } from '../data/keyword-engines.js';
 /** Pure E12 action resolution. It never reads DOM, mutates a Store or rolls implicitly. */
 import {
   SL, getCritEffect, getLocationName, getReverseRoll, isDouble
@@ -80,6 +84,27 @@ export function describeResolutionDetail(detail) {
   if (weapon) parts.push(`Arme : ${weapon}`);
   parts.push(...describeCritical(detail));
   if (detail.fumble) parts.push('Maladresse');
+  // Read only the stored receipt: refreshing today's catalogue must never rewrite history.
+  const shortVersion = value => String(value).split(':').map(part => /^[a-f0-9]{32,}$/i.test(part) ? part.slice(0, 12) : part).join(':');
+  if (detail.referenceVersion) parts.push(`Référentiel utilisé : ${shortVersion(detail.referenceVersion)}`);
+  const sourceAction = detail.action?.extensions?.fiche;
+  if (sourceAction?.equipmentId) parts.push(`Arme de la fiche : ${detail.action.note || sourceAction.equipmentId} (exemplaire ${sourceAction.equipmentId})`);
+  if (detail.ammunitionId) parts.push(`Munition : exemplaire ${detail.ammunitionId}`);
+  for (const source of Array.isArray(detail.ammunitionSources) ? detail.ammunitionSources.filter(isRecord) : []) {
+    parts.push(`${source.kind === 'ammunition' ? 'Munition' : 'Arme'} ${source.equipmentId} : ${source.keywordId}${source.parameter ? ` (${source.parameter})` : ''}`);
+  }
+  const protection = isRecord(detail.protection) ? detail.protection : null;
+  const pieceName = item => item.name || item.item?.name || item.id || item.equipmentId || 'pièce';
+  if (protection) {
+    if (present(protection.ap)) parts.push(`Protection retenue : ${protection.ap} PA${protection.arbitrated ? ' (arbitrage MJ)' : ''}`);
+    if (protection.counted?.length) parts.push(`Armures comptées : ${protection.counted.map(pieceName).join(', ')}`);
+    if (protection.ignored?.length) parts.push(`Armures écartées : ${protection.ignored.map(pieceName).join(', ')}`);
+    if (protection.shield?.name) parts.push(`Bouclier : ${protection.shield.name} · ${protection.shieldAp || 0} PA`);
+  }
+  for (const rule of Array.isArray(detail.mechanics) ? detail.mechanics.filter(isRecord) : []) {
+    const origin = [rule.edition, rule.source].filter(Boolean).join(' · ');
+    parts.push(`Règle ${rule.name || rule.id} : ${rule.status === 'covered' ? 'automatisée' : 'à arbitrer'}${origin ? ` · ${origin}` : ''}${rule.effectVersion ? ` · version ${shortVersion(rule.effectVersion)}` : ''}${rule.effect ? ` · ${rule.effect}` : ''}`);
+  }
   return parts;
 }
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -174,6 +199,7 @@ export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = isRecord(input.action) ? clone(input.action) : {};
+  if (action.extensions?.fiche?.requiresLink) throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
   const target = isRecord(input.target) ? clone(input.target) : null;
   const roll = parseRoll(input.roll ?? input.dieRoll ?? input.enteredRoll);
   if (hasOwn(input, 'baseRevision') && (!Number.isInteger(input.baseRevision) || input.baseRevision < 0)) {
@@ -181,7 +207,12 @@ export function normalizeResolutionInput(input = {}) {
   }
   const baseRevision = input.baseRevision ?? 0;
   const type = String(action.type || 'test').trim().toLocaleLowerCase();
-  const qualities = normalizeQualities(action.qualities || input.qualities || []);
+  const weaponItem = actor?.equipment?.find(item => item.id === action.extensions?.fiche?.equipmentId);
+  const ammunition = actor?.equipment?.find(item => item.id === input.ammunitionId && item.kind === 'ammunition');
+  if(input.ammunitionId && !ammunition) throw new ResolutionError('Munition déclarée introuvable', 'AMMUNITION_NOT_FOUND');
+  if(ammunition){const compatibility=ammunitionCompatibility(weaponItem,ammunition);if(compatibility.status==='incompatible'||(compatibility.status==='manual'&&input.ammunitionArbitrated!==true))throw new ResolutionError('La compatibilité de cette munition avec cette arme doit être vérifiée', 'AMMUNITION_INCOMPATIBLE', compatibility);}
+  const merged = ammunition && weaponItem ? mergeEquipmentQualities(weaponItem, ammunition) : null;
+  const qualities = normalizeQualities(merged?.qualities || action.qualities || input.qualities || []);
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
   // Optional defender side of an opposed attack; absent means the historic
@@ -206,6 +237,9 @@ export function normalizeResolutionInput(input = {}) {
     target,
     roll,
     criticalRolls: normalizeCriticalRolls(input.criticalRolls),
+    attackContext: equipmentAttackContext(weaponItem),
+    protectionContext: isRecord(input.protectionContext) ? clone(input.protectionContext) : {},
+    ...(ammunition ? { ammunitionId: ammunition.id, ...(input.ammunitionArbitrated === true ? { ammunitionArbitrated: true } : {}), ammunitionSources: merged?.sources || [] } : {}),
     criticalDeclined: Array.isArray(input.criticalDeclined) ? input.criticalDeclined.map(String) : [],
     ...(defense ? { defense } : {})
   };
@@ -222,6 +256,8 @@ function normalizeCriticalRolls(raw) {
   read('location', 'location', 'locationRoll');
   read('effect', 'effect', 'effectRoll');
   read('secondEffect', 'secondEffect');
+  read('effectAlternative', 'effectAlternative');
+  read('secondEffectAlternative', 'secondEffectAlternative');
   return out;
 }
 
@@ -261,17 +297,18 @@ function locationOf(roll) {
 }
 
 /** Gravité d'un critique : d100 saisi (+10 Acharnement, plafonné à 100) lu sur la table de la zone. */
-function criticalSeverity(location, base, acharnement) {
+function criticalSeverity(location, base, acharnement, { inoffensive = false, alternative = null } = {}) {
   const bonus = acharnement ? 10 : 0;
-  const effectRollBase = base ?? null;
+  const needsAlternative = inoffensive && alternative === null;
+  const effectRollBase = needsAlternative || base === undefined || base === null ? null : inoffensive ? Math.min(base, alternative) : base;
   const effectRoll = effectRollBase === null ? null : Math.min(100, effectRollBase + bonus);
   const found = location && effectRoll !== null ? getCritEffect(location.key, effectRoll) : null;
   const effect = found ? clone(found) : null;
-  return { effectRollBase, bonus, effectRoll, effect, parsed: effect ? parseCriticalEffect(effect.eff) : null };
+  return { effectRollBase, bonus, effectRoll, effect, needsAlternative, ...(inoffensive ? { effectRollCandidates: [base ?? null, alternative], effectAlternativeRoll: alternative } : {}), parsed: effect ? parseCriticalEffect(effect.eff) : null };
 }
 
-function criticalDetails(rolls, location, acharnement) {
-  const severity = criticalSeverity(location, rolls?.effect, acharnement);
+function criticalDetails(rolls, location, acharnement, inoffensive = false) {
+  const severity = criticalSeverity(location, rolls?.effect, acharnement, { inoffensive, alternative: rolls?.effectAlternative ?? null });
   return {
     pending: !location || severity.effectRoll === null,
     needsLocation: !location,
@@ -282,9 +319,9 @@ function criticalDetails(rolls, location, acharnement) {
 }
 
 /** Second critique : cible qui passe sous zéro, à la localisation du jet d'attaque inversé. */
-function secondCritical(reversed, rolls, acharnement) {
+function secondCritical(reversed, rolls, acharnement, inoffensive = false) {
   const location = locationOf(reversed);
-  const severity = criticalSeverity(location, rolls?.secondEffect, acharnement);
+  const severity = criticalSeverity(location, rolls?.secondEffect, acharnement, { inoffensive, alternative: rolls?.secondEffectAlternative ?? null });
   return { locationRoll: location.roll, location, ...severity, pending: severity.effectRoll === null };
 }
 
@@ -365,8 +402,11 @@ export function previewResolution(input) {
   const location = !hit ? null
     : criticalAttack ? (criticalLocationRoll === undefined ? null : locationOf(criticalLocationRoll))
       : locationOf(getReverseRoll(roll));
-  const criticalFirst = criticalAttack ? criticalDetails(normalized.criticalRolls, location, acharnement) : null;
+  const inoffensive = action.qualities.some(q => q.id === 'inoffensive') && keywordMechanicalStatus('inoffensive').status === 'covered';
+  const criticalFirst = criticalAttack ? criticalDetails(normalized.criticalRolls, location, acharnement, inoffensive) : null;
   let damage = null;
+  let protection = null;
+  const mechanicalWarnings = action.qualities.filter(q => Object.hasOwn(ENGINES, q.id) && keywordMechanicalStatus(q.id).status !== 'covered').map(q => ({ keywordId: q.id, reason: 'version-effet-non-couverte' }));
   // Weapon damage of a landed attack (`BF+4` read with the attacker's F). A
   // `manual` status (unknown expression, F missing) means no automatic damage:
   // the MJ arbitrates instead of silently getting 0.
@@ -378,12 +418,13 @@ export function previewResolution(input) {
   }
   // Sans localisation du critique, l'armure de la zone est inconnue : pas de dégâts calculés.
   if (weapon && !criticalFirst?.needsLocation) {
-    const armour = target.armor || {};
-    const targetArmour = location?.key === 'HEAD' ? armour.head
-      : location?.key === 'ARM' ? armour.arms
-        : location?.key === 'BODY' ? armour.body
-          : location?.key === 'LEG' ? armour.legs : 0;
-    damage = computeDamage({
+    protection = locationProtection(target, { ...normalized.protectionContext,
+      ranged: normalized.attackContext?.ranged ?? normalized.protectionContext.ranged, defenseProvided: Boolean(normalized.defense),
+      location, attackRoll: roll,
+      hitLocationRoll: location?.roll, critical: criticalAttack, qualities: action.qualities });
+    const targetArmour = protection.ap;
+    if (protection.criticalIgnored && kind === 'Critique') kind = null;
+    if (targetArmour !== null && !mechanicalWarnings.length)     damage = computeDamage({
       weaponDamage,
       strengthBonus,
       sl: opposed ? opposed.netSl : sl,
@@ -395,12 +436,12 @@ export function previewResolution(input) {
   }
 
   let criticalBlock = kind === 'Critique' ? { kind, expanded, acharnement, details: criticalFirst } : null;
-  if (criticalAttack) {
+  if (criticalAttack && !protection?.criticalIgnored) {
     // Second critique : PV avant le coup ≥ 0 et PV avant − dégâts normaux < 0 (Blessures du critique exclues).
     const hpBefore = Number(target?.hp);
     const reversed = getReverseRoll(roll);
     const second = damage && hpBefore >= 0 && hpBefore - damage.finalDamage < 0
-      ? secondCritical(reversed, normalized.criticalRolls, acharnement) : null;
+      ? secondCritical(reversed, normalized.criticalRolls, acharnement, inoffensive) : null;
     const items = criticalItems(criticalFirst, second, normalized.criticalDeclined);
     criticalBlock = {
       ...criticalBlock,
@@ -433,6 +474,10 @@ export function previewResolution(input) {
     targetId: target?.id || null,
     damage,
     weapon,
+    protection,
+    mechanicalWarnings,
+    referenceVersion: getReferenceStatus().contentVersion,
+    mechanics: [...new Set([...action.qualities.map(q=>q.id),...(protection?.counted||[]).flatMap(item=>item.keywords.map(word=>word.id))])].map(id=>{const coverage=keywordMechanicalStatus(id);return {id,name:coverage.word?.name??id,status:coverage.status,engine:coverage.engine?.engine??null,effectVersion:coverage.effectVersion??null,effect:coverage.word?.effect??null,edition:coverage.word?.edition??null,source:coverage.word?.source??null,limitations:coverage.limitations||[]};}),
     opposition: opposed
       || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
@@ -460,6 +505,12 @@ export function applyResolution(preview, currentState) {
   }
   if (preview.attack && preview.critical?.details?.needsLocation) {
     return { status: 'manual', reason: 'localisation-du-critique-requise', state: clone(currentState), resolution: clone(preview) };
+  }
+  if (preview.critical?.details?.needsAlternative || preview.critical?.second?.needsAlternative) {
+    return { status: 'manual', reason: 'deux-jets-gravite-requis:inoffensive', state: clone(currentState), resolution: clone(preview) };
+  }
+  if (preview.protection?.manual?.length || preview.mechanicalWarnings?.length) {
+    return { status: 'manual', reason: preview.protection?.manual?.[0] || 'version-effet-non-couverte', state: clone(currentState), resolution: clone(preview) };
   }
   const nextState = clone(currentState);
   const target = participantById(currentState, preview.targetId);

@@ -29,7 +29,7 @@ function rawQualityId(quality) {
 
 /** Resolve aliasOf chains from the local mechanical registry. */
 export function canonicalQualityId(quality, registry = ENGINES) {
-  let id = slugify(rawQualityId(quality));
+  let id = getKeywordBySlug(rawQualityId(quality))?.id || slugify(rawQualityId(quality));
   const seen = new Set();
   while (id && registry[id]?.aliasOf && !seen.has(id)) {
     seen.add(id);
@@ -69,7 +69,7 @@ export function isKnownQuality(quality, registry = ENGINES) {
 export function qualityLabel(quality, registry = ENGINES) {
   const id = canonicalQualityId(quality, registry);
   const name = (id && getKeywordBySlug(id)?.name) || (isRecord(quality) ? quality.name : '') || rawQualityId(quality) || id;
-  const rating = isRecord(quality) && quality.rating !== null && quality.rating !== '' && Number.isFinite(Number(quality.rating)) ? Number(quality.rating) : null;
-  const text = rating !== null && /\sX$/i.test(name || '') ? name.replace(/\sX$/i, ` ${rating}`) : name;
+  const parameter = isRecord(quality) ? (quality.parameter ?? quality.rating) : null;
+  const text = parameter !== null && parameter !== undefined && parameter !== '' && /\sX$/i.test(name || '') ? name.replace(/\sX$/i, ` ${String(parameter)}`) : name;
   return text ? text.charAt(0).toLocaleUpperCase('fr-FR') + text.slice(1) : '';
 }

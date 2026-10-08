@@ -9,6 +9,10 @@ const FILE_INVALID = 'Ce fichier n’est pas une sauvegarde de l’outil MJ.';
 
 // Ordre significatif : la première correspondance l'emporte.
 const KNOWN_ERRORS = [
+  [error => error?.code === 'SKILL_LINK_REQUIRED', 'Choisissez la compétence de cette arme dans « Mettre à jour les PJ » avant de lancer l’action.'],
+  [error => error?.code === 'AMMUNITION_INCOMPATIBLE', 'Cette munition est incompatible avec l’arme choisie.'],
+  [error => error?.code === 'AMMUNITION_MANUAL', 'Vérifiez explicitement la compatibilité de cette munition avec l’arme.'],
+  [error => ['FICHE_SYNC_STALE','fiche-plan-stale'].includes(error?.code), 'La séance a changé depuis l’aperçu : relisez les fiches avant d’appliquer.'],
   [error => error?.name === 'ResolutionError' && error.code === 'INVALID_ROLL', 'Le jet doit être un nombre de 1 à 100 (00 = 100).'],
   [error => error?.status === 'stale' || error?.code === 'RESOLUTION_STALE' || /périm/i.test(error?.message || ''), 'La partie a changé depuis le calcul : recalculez.'],
   [error => /^Fonction Store indisponible/.test(error?.message || ''), 'Cette action n’est pas disponible dans cette version.'],

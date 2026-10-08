@@ -1,6 +1,6 @@
 /** E17 local profile parser. Input is inert text; no HTML, code or network is evaluated. */
 import { isKnownQuality, normalizeQualities } from './quality-normalization.js';
-import { canonicalCaracKey } from './models.js';
+import { canonicalCaracKey, normalizeArmorLocations } from './models.js';
 import { normalizeDamageFields } from './damage.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -13,7 +13,7 @@ const FIELD_ALIASES = new Map([
   ['groupe', 'group'], ['pv', 'hp'], ['points de vie', 'hp'], ['initiative', 'initiative'],
   ['notes', 'notes'], ['tags', 'tags'], ['mots cles', 'tags']
 ]);
-const ARMOR_NAMES = new Map([['tete', 'head'], ['tête', 'head'], ['corps', 'body'], ['body', 'body'], ['bras', 'arms'], ['jambes', 'legs'], ['head', 'head'], ['arms', 'arms'], ['legs', 'legs']]);
+const ARMOR_NAMES = new Map([['tete', 'head'], ['tête', 'head'], ['corps', 'body'], ['body', 'body'], ['bras', 'arms'], ['jambes', 'legs'], ['head', 'head'], ['arms', 'arms'], ['legs', 'legs'], ['bras droit', 'rightArm'], ['bras gauche', 'leftArm'], ['jambe droite', 'rightLeg'], ['jambe gauche', 'leftLeg'], ['rightarm', 'rightArm'], ['leftarm', 'leftArm'], ['rightleg', 'rightLeg'], ['leftleg', 'leftLeg']]);
 
 function splitBlocks(text) {
   return String(text ?? '').split(/^\s*---+\s*$/m).map(block => block.trim()).filter(Boolean);
@@ -114,6 +114,7 @@ function parseBlock(block, blockIndex) {
     caracs, armor, actions,
     tags: fields.tags?.value || [], notes: fields.notes?.value || ''
   };
+  if (['rightArm', 'leftArm', 'rightLeg', 'leftLeg'].some(key => Object.hasOwn(armor, key))) profile.armorLocations = normalizeArmorLocations(armor);
   const blocking = ['name', 'hp'].some(field => fields[field].status !== 'found') || errors.some(item => item.reason === 'entier-attendu' || item.reason === 'entier-hors-limites');
   return { index: blockIndex, profile, fields, errors, ambiguities, unknownQualities, blocking, sourceText: block };
 }

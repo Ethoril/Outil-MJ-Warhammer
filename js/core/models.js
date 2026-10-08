@@ -121,13 +121,32 @@ export function canonicalizeProfileFields(raw) {
   return rest;
 }
 
+// Fields that must survive every profile/participant projection and import.
+export const FICHE_DATA_FIELDS = Object.freeze(['armorLocations', 'protection', 'skills', 'talents', 'equipment', 'spells', 'prayers', 'ficheSnapshot', 'movement', 'race']);
+export const ARMOR_LOCATION_IDS = Object.freeze(['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg']);
+export function normalizeArmorLocations(armor = {}) {
+  const a = isRecord(armor) ? armor : {};
+  const legacy = { rightArm: 'arms', leftArm: 'arms', rightLeg: 'legs', leftLeg: 'legs' };
+  return Object.fromEntries(ARMOR_LOCATION_IDS.map(key => [key, finiteCarac(a[key] ?? a[legacy[key]]) ?? 0]));
+}
+export function normalizeFicheFields(raw = {}) {
+  const fields = {};
+  for (const key of FICHE_DATA_FIELDS) {
+    if (Object.hasOwn(raw, key)) fields[key] = cloneValue(raw[key]);
+  }
+  fields.armorLocations = normalizeArmorLocations(raw.armorLocations ?? raw.armor);
+  return fields;
+}
+
 export class Profile {
-  constructor({ id = uid(), name, kind = 'Créature', initiative = 30, hp = 10, caracs = {}, armor = { head: 0, body: 0, arms: 0, legs: 0 }, diceLines, actions, group = '', tags = [], notes = '', favorite = false, extensions = {} } = {}) {
+  constructor({ id = uid(), name, kind = 'Créature', initiative = 30, hp = 10, maxHp, caracs = {}, armor = { head: 0, body: 0, arms: 0, legs: 0 }, diceLines, actions, group = '', tags = [], notes = '', favorite = false, extensions = {}, ...ficheFields } = {}) {
     this.id = id;
     this.name = (name || 'Sans-nom').trim();
     this.kind = ['PJ', 'PNJ', 'Créature'].includes(kind) ? kind : 'Créature';
     this.initiative = Number(initiative) || 0;
     this.hp = Number(hp) || 0;
+    this.maxHp = finiteCarac(maxHp) ?? this.hp;
+    Object.assign(this, normalizeFicheFields({ ...ficheFields, armor }));
     this.caracs = normalizeCaracs(caracs);
     this.armor = isRecord(armor) ? cloneValue(armor) : {};
     this.diceLines = profileActionSource({ diceLines, actions }).map(normalizeAction);
@@ -148,7 +167,7 @@ export class Profile {
 }
 
 export class Participant {
-  constructor({ id = uid(), profileId, persistentCharacterId = null, improvised = false, name, kind, initiative = 0, hp = 10, maxHp, states = [], zone = 'bench', camp = 'neutre', color = 'default', armor = { head: 0, body: 0, arms: 0, legs: 0 }, caracs = {}, actions = [], tags = [], notes = '', source = null, extensions = {} } = {}) {
+  constructor({ id = uid(), profileId, persistentCharacterId = null, improvised = false, name, kind, initiative = 0, hp = 10, maxHp, states = [], zone = 'bench', camp = 'neutre', color = 'default', armor = { head: 0, body: 0, arms: 0, legs: 0 }, caracs = {}, actions = [], tags = [], notes = '', source = null, extensions = {}, ...ficheFields } = {}) {
     this.id = id;
     this.profileId = profileId || null;
     this.persistentCharacterId = persistentCharacterId || null;
@@ -157,7 +176,8 @@ export class Participant {
     this.kind = kind || 'Créature';
     this.initiative = Number(initiative) || 0;
     this.hp = Number(hp) || 0;
-    this.maxHp = maxHp !== undefined ? Number(maxHp) : Number(hp) || 0;
+    this.maxHp = maxHp === null ? null : finiteCarac(maxHp) ?? (Number(hp) || 0);
+    Object.assign(this, normalizeFicheFields({ ...ficheFields, armor }));
     // Les chaînes historiques restent acceptées, mais toute nouvelle instance
     // expose la forme structurée attendue par le moteur et l'UI.
     this.states = normalizeEffects(states);

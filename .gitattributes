@@ -1,0 +1,4 @@
+# Preserve the collected source bytes and their SHA256 proofs.
+# Whitespace inside raw CSV text belongs to the source content.
+js/data/reference-source-csv/*.csv -text -whitespace
+js/data/shared/**/*.js -text

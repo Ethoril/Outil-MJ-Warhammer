@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.11.1';
+const CACHE_NAME = 'wfrp-cache-v3.12.0';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -15,6 +15,20 @@ const ASSETS_TO_CACHE = [
   './assets/fonts/alegreya-sans-700.woff2',
   './js/version.js',
   './js/main.js',
+  './js/core/equipment.js',
+  './js/core/reference-catalog.js',
+  './js/core/sync-migration.js',
+  './js/data/keyword-engine-contracts.json',
+  './js/data/reference-equipment-builder.js',
+  './js/data/reference-snapshot.json',
+  './js/ui/fiche-details.js',
+  './js/data/shared/catalogue/skill-resolver.js',
+  './js/data/shared/catalogue/talent-resolver.js',
+  './js/data/shared/catalogue/talent-source.js',
+  './js/data/shared/fiche/basic-skills.js',
+  './js/data/shared/fiche/equipment.js',
+  './js/data/shared/fiche/skill-names.js',
+
   './js/core/store.js',
   './js/core/combat.js',
   './js/core/dice.js',
@@ -83,9 +97,13 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.clients.matchAll().then(clients => {
-      clients.forEach(client => client.postMessage({ type: 'wfrp-update-ready', version: CACHE_NAME }));
-    }))
+    }).then(() => {
+      // First installation has no waiting replacement to activate.
+      if (!self.registration.active) return;
+      return self.clients.matchAll().then(clients => {
+        clients.forEach(client => client.postMessage({ type: 'wfrp-update-ready', version: CACHE_NAME }));
+      });
+    })
   );
 });
 

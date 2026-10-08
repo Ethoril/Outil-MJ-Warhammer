@@ -1,10 +1,14 @@
 {
   "name": "outil-mj-warhammer",
-  "version": "3.11.1",
+  "version": "3.12.0",
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "test:browser": "node tests/browser-smoke.mjs"
+    "test:browser": "node tests/browser-smoke.mjs",
+    "test:fiches-browser": "node tests/fiches-pj-browser.mjs",
+    "test:firebase-v3": "node tests/firebase-rules-v3-emulator.mjs",
+    "test:references-browser": "node tests/browser-references-smoke.mjs",
+    "test:pwa-sessions": "node tests/lot1-pwa-sessions-browser.mjs"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.4",

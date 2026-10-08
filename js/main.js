@@ -27,7 +27,7 @@ import { userError, userMessage, contextMessage } from './ui/messages.js';
 import { deriveReminders, pendingReminders, resolveReminder, REMINDER_DECISIONS } from './core/reminders.js';
 import { createScene, proposeSceneEvent } from './core/scene-events.js';
 import { normalizeEffects, normalizeState } from './core/effects.js';
-import { previewHpLoss } from './core/resolution.js';
+import { previewHpLoss, inferActionType } from './core/resolution.js';
 import { initCombatBanner } from './ui/combat-banner.js';
 
 // Indicateur unique de la barre du haut : il résume les deux statuts détaillés
@@ -295,7 +295,17 @@ const reserveUI = initReserveUI(Store, { onSaved: payload => {
 } });
 const importModalUI = initImportModalUI(Store);
 const cardUI = initCardUI(Store, Combat);
-const combatViewUI = initCombatViewUI(Store, Combat, cardUI, (id) => runDiceLine(id, Store));
+const combatViewUI = initCombatViewUI(Store, Combat, cardUI, id => {
+  const line = Store.getDiceLines().find(item => item.id === id);
+  if (line && inferActionType(line) === 'attack') {
+    const actor = Store.getCombat().participants.get(line.participantId);
+    if (!actor || actor.zone !== 'active') { showToast('Faites entrer ce combattant en jeu pour résoudre son attaque.', 'info'); return; }
+    goToSpace('play');
+    if (!workspaceView?.openResolution(line)) showToast('Cette action a changé : choisissez son attaque dans Jouer.', 'info');
+    return;
+  }
+  runDiceLine(id, Store);
+});
 
 initLogViewUI(Store);
 
@@ -722,10 +732,10 @@ async function openFicheSyncView() {
   return openOverlay('Mettre à jour les PJ', (mount, dialog) => {
     const view = initFicheSyncView({
       mount, hosted: true, source,
-      getContext: () => ({ profiles: Store.listProfiles() }),
+      getContext: () => ({ profiles: Store.listProfiles(), participants: [...Store.listParticipants(), ...(Store.listSuspendedScenes?.() || []).flatMap(scene => (scene.participants || []).map(row => ({...row,name:`${row.name} — ${scene.title || 'scène suspendue'}`})))], revision: Store.getLocalRevision?.() }),
       callbacks: {
-        onApply: async entries => {
-          const result = await awaitStore(requireStoreApi('applyFicheSync')(entries), 'Mise à jour des PJ');
+        onApply: async (entries, options) => {
+          const result = await awaitStore(requireStoreApi('applyFicheSync')(entries, options), 'Mise à jour des PJ');
           dialog.close();
           if (result?.changed === false) { showToast('Aucun changement : les PJ sont déjà à jour', 'info'); return; }
           showToast(entries.length > 1 ? `${entries.length} PJ mis à jour depuis les fiches` : 'PJ mis à jour depuis la fiche', 'success', { label: 'Annuler', onClick: () => Store.undo() });
@@ -1054,6 +1064,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
           <div class="row"><button type="button" class="danger ghost" data-remove-participant>Retirer du combat</button><span class="spacer"></span><button type="submit">Enregistrer</button></div>`;
         form.elements.name.value = participant.name; form.elements.hp.value = participant.hp;
         form.elements.initiative.value = Number(participant.initiative) || 0;
+        form.elements.initiative.readOnly = Boolean(participant.extensions?.ficheId);
         form.elements.zone.value = participant.zone === 'active' ? 'active' : 'bench';
         form.elements.camp.value = normalizeCamp(participant.camp, participant.kind);
         // Fenêtre non modale : seuls les champs modifiés ici sont envoyés, pour ne pas
@@ -1067,7 +1078,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
           form.querySelector('[role="alert"]')?.remove();
           const alert = document.createElement('p'); alert.setAttribute('role', 'alert'); alert.textContent = message; form.prepend(alert);
         };
-        const setBusy = busy => form.querySelectorAll('button').forEach(button => { button.disabled = busy; });
+        const setBusy = busy => form.querySelectorAll('button').forEach(button => { button.disabled = busy || button.dataset.sourceReadonly === 'true'; });
 
         const stateValues = normalizeEffects(participant.states || []).map(state => ({ ...state }));
         baseline.states = JSON.stringify(normalizeEffects(stateValues));
@@ -1103,7 +1114,17 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Retirer cette action'; remove.addEventListener('click', () => { actionsTouched = true; actionValues.splice(index, 1); renderActions(); });
             const header = document.createElement('div'); header.className = 'row'; header.append(document.createElement('strong'), remove); header.firstChild.textContent = action.note || `Action ${index + 1}`;
             container.appendChild(header);
-            createActionEditor({ container, action, caracs: participant.caracs, onChange: next => { actionsTouched = true; actionValues[index] = { ...next, id: action.id }; header.firstChild.textContent = next.note || `Action ${index + 1}`; } });
+            const sourceObject = Boolean(action.extensions?.fiche?.equipmentId);
+            const sourceSkill = Boolean(action.extensions?.ficheSkill);
+            const editor = createActionEditor({ container, action, caracs: participant.caracs, onChange: next => {
+              actionsTouched = true;
+              actionValues[index] = sourceObject ? { ...action, mod: next.mod } : sourceSkill ? { ...next, id: action.id, base: action.base } : { ...next, id: action.id };
+              header.firstChild.textContent = actionValues[index].note || `Action ${index + 1}`;
+            } });
+            if (sourceObject) {
+              remove.disabled = true; remove.dataset.sourceReadonly = 'true'; remove.title = 'Action provenant de la fiche ; actualisez les PJ pour la retirer.';
+              for (const field of editor.element.querySelectorAll('input,select,button')) if (!field.classList.contains('action-mod')) { field.disabled = true; field.dataset.sourceReadonly = 'true'; }
+            } else if (sourceSkill) editor.element.querySelector('.action-base').readOnly = true;
             actionMount.appendChild(container);
           });
         };
@@ -1129,11 +1150,21 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
             const patch = {};
             if (fieldChanged('name')) patch.name = form.elements.name.value.trim() || participant.name;
             if (fieldChanged('hp')) patch.hp = Number(form.elements.hp.value) || 0;
-            if (fieldChanged('initiative')) patch.initiative = Number(form.elements.initiative.value) || 0;
+            if (!participant.extensions?.ficheId && fieldChanged('initiative')) patch.initiative = Number(form.elements.initiative.value) || 0;
             if (fieldChanged('camp')) patch.camp = form.elements.camp.value;
             if (statesChanged()) patch.states = normalizeEffects(stateValues);
-            if (actionsTouched) patch.actions = actionValues;
-            if (Object.keys(patch).length) await awaitStore(Store.updateParticipant(id, patch), 'Participant');
+            if (actionsTouched) {
+              const liveActions = Store.getCombat().participants.get(id)?.actions || [];
+              // An open editor must also retain source changes applied while it was open.
+              patch.actions = actionValues.flatMap(action => {
+                const live = liveActions.find(item => item.id === action.id);
+                if (live?.extensions?.fiche?.equipmentId) return [{ ...live, mod: action.mod }];
+                if (action.extensions?.fiche?.equipmentId) return [];
+                return [live?.extensions?.ficheSkill ? { ...action, base: live.base, extensions: { ...action.extensions, ...live.extensions } } : action];
+              });
+              for (const live of liveActions) if (live.extensions?.fiche?.equipmentId && !patch.actions.some(action => action.id === live.id)) patch.actions.push(live);
+            }
+            if (Object.keys(patch).length) await awaitStore(Store.updateParticipant(id, patch, { expectedLocalRevision: Store.getLocalRevision() }), 'Participant');
             if (fieldChanged('zone') && zone !== Store.getCombat().participants.get(id)?.zone) await awaitStore(Store.moveParticipant(id, zone), 'Zone');
             form.closest('dialog')?.close();
           } catch (error) { setBusy(false); alertError(contextMessage('Combattant non enregistré', error, 'vérifiez les champs, puis réessayez.')); }
@@ -1231,7 +1262,7 @@ on(DOM.importModal.confirm, 'click', async (e) => {
 });
 on(DOM.combat.btnExport, 'click', async () => {
   if (confirm('Appliquer PV aux profils correspondants ?')) {
-    try { await awaitStore(Store.exportToReserve(), 'Export'); showToast('Profils de la réserve mis à jour', 'success'); }
+    try { const result = await awaitStore(Store.exportToReserve(), 'Export'); showToast(result?.warnings?.length ? result.warnings.join(' ') : 'Profils de la réserve mis à jour', result?.warnings?.length ? 'warning' : 'success'); }
     catch (error) { showToast(contextMessage('Export impossible', error, 'réessayez.'), 'error'); }
   }
 });

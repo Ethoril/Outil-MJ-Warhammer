@@ -1,5 +1,5 @@
 import { normalizeEffects, normalizeState, resolveEffectCapability } from './effects.js';
-import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, profileActionSource } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, profileActionSource, normalizeFicheFields } from './models.js';
 
 export function normalizeSearchText(value) {
   return String(value ?? '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -19,6 +19,8 @@ export function sanitizeProfile(o) {
     kind: ['PJ', 'PNJ', 'Créature'].includes(o.kind) ? o.kind : 'Créature',
     initiative: Number(o.initiative) || 0,
     hp: Number(o.hp) || 0,
+    maxHp: o.maxHp == null ? Number(o.hp) || 0 : Number(o.maxHp),
+    ...normalizeFicheFields(o),
     caracs: normalizeCaracs(o.caracs),
     armor: (o.armor && typeof o.armor === 'object') ? cloneValue(o.armor) : { head: 0, body: 0, arms: 0, legs: 0 },
     diceLines: sanitizeArray(profileActionSource(o)).map(normalizeAction),
@@ -42,7 +44,7 @@ export function sanitizeParticipant(o) {
     profileId: o.profileId || null,
     persistentCharacterId: o.persistentCharacterId || null,
     improvised: Boolean(o.improvised),
-    maxHp: o.maxHp !== undefined ? Number(o.maxHp) : undefined,
+    maxHp: o.maxHp == null ? o.maxHp : Number(o.maxHp),
     // Les sauvegardes E04 peuvent encore contenir des chaînes ; conserver aussi
     // les objets modernes et leurs extensions lors de la normalisation.
     states: normalizeEffects(o.states),

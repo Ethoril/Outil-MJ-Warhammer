@@ -458,3 +458,18 @@ body:has(dialog.tool-sheet[open]) #toast-container { right: calc(clamp(480px, 50
 .fiche-sync-view label { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
 .fiche-sync-diff, .fiche-sync-actions { margin: 6px 0; padding-left: 20px; }
 .fiche-sync-actions li { margin: 6px 0; }
+
+@media (max-width: 600px) {
+  .topbar .topbar-main { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 8px; }
+  .topbar-main > .spacer { display: none; }
+  .topbar-main .tabs { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .topbar-main .tab { padding-inline: 8px; min-width: 0; }
+  .topbar-title { margin-right: 0; font-size: 18px; }
+  .status-indicator { font-size: 12px; gap: 4px; }
+  .topbar .combat-banner-inner { flex-wrap: wrap; }
+  .combat-banner-title { flex: 1 1 40%; max-width: 100%; }
+  .combat-banner-status { flex: 1 1 45%; white-space: normal; overflow-wrap: anywhere; }
+  .combat-banner-track { flex: 1 1 100%; }
+  .combat-banner-back, .combat-banner-primary { flex: 1 1 auto; white-space: normal; }
+  dialog.tool-sheet .card { width: auto; max-width: 100%; min-width: 0; }
+}

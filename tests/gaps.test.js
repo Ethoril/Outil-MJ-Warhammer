@@ -312,12 +312,12 @@ test('quota — journal réellement plafonné à 300', () => {
 
 // ─────────────────────────── E-01 : migration maxHp ───────────────────────────
 
-test('maxHp — profil introuvable : repli sur les PV courants', () => {
+test('maxHp — profil introuvable : maximum inconnu conservé pour R37', () => {
   const storage = mkStorage({
     'wfrp.reserve.v1': JSON.stringify([]),
     'wfrp.combat.v1': JSON.stringify({ round: 1, order: ['p'], participants: [{ id: 'p', profileId: 'disparu', name: 'X', hp: 6 }] }),
   });
-  assert.equal(createStore({ storage }).getCombat().participants.get('p').maxHp, 6);
+  assert.equal(createStore({ storage }).getCombat().participants.get('p').maxHp, null);
 });
 
 test('maxHp — migration aussi sur le chemin de synchronisation', () => {

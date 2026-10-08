@@ -1,6 +1,6 @@
-import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields } from './models.js';
+import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
 import { sanitizeArray, sanitizeProfile, sanitizeParticipant } from './sanitize.js';
-import { migrateSnapshot, migrateLegacyStorage } from './migrations.js';
+import { migrateSnapshot, migrateLegacyStorage, CURRENT_SCHEMA_VERSION } from './migrations.js';
 import { createStateCommand } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat } from './turn-order.js';
@@ -82,7 +82,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (node && typeof node === 'object') Object.entries(node).forEach(([key, child]) => visit(child, `${path}.${key}`));
     };
     visit(value);
-    if (!value || value.schemaVersion !== 2 || !Array.isArray(value.reserve) || !value.combat || typeof value.combat !== 'object') {
+    if (!value || value.schemaVersion !== CURRENT_SCHEMA_VERSION || !Array.isArray(value.reserve) || !value.combat || typeof value.combat !== 'object') {
       throw new Error('Enveloppe de commande invalide');
     }
     for (const [index, profile] of value.reserve.entries()) {
@@ -108,11 +108,31 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     }
   }
 
+  function shieldAfterAttack(participants, preview, round) {
+    const actorId = preview?.actorId || preview?.input?.actor?.id;
+    const equipmentId = preview?.input?.action?.extensions?.fiche?.equipmentId;
+    if (!preview?.attack || !equipmentId) return participants;
+    return participants.map(actor => {
+      if (actor.id !== actorId || !actor.equipment?.some(item => item.id === equipmentId && item.kind === 'shield')) return actor;
+      const unavailable = Array.isArray(actor.extensions?.shieldUnavailable) ? actor.extensions.shieldUnavailable : [];
+      return { ...actor, extensions: { ...actor.extensions,
+        shieldUnavailable: [...new Set([...unavailable, equipmentId])],
+        shieldUnavailableCause: { ...actor.extensions?.shieldUnavailableCause, [equipmentId]: { resolutionId: preview.resolutionId, round } } } };
+    });
+  }
+  function shieldAtTurnStart(participants, actorId) {
+    return participants.map(actor => {
+      if (actor.id !== actorId || !actor.extensions?.shieldUnavailable) return actor;
+      const extensions = { ...actor.extensions }; delete extensions.shieldUnavailable; delete extensions.shieldUnavailableCause;
+      return { ...actor, extensions };
+    });
+  }
+
   function repairMaxHp(list) {
     list.forEach(p => {
-      if (p.maxHp === undefined || p.maxHp === null) {
+      if (p.maxHp === undefined) {
         const prof = p.profileId ? reserve.get(p.profileId) : null;
-        p.maxHp = prof ? Number(prof.hp) : Number(p.hp);
+        p.maxHp = prof ? Number(prof.maxHp ?? prof.hp) : null;
       }
     });
     return list;
@@ -400,7 +420,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       };
     }
     return {
-      schemaVersion: 2,
+      schemaVersion: CURRENT_SCHEMA_VERSION,
       appVersion,
       exportedAt: new Date().toISOString(),
       contextId,
@@ -514,9 +534,19 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         ...(preview?.weapon ? { weapon: preview.weapon } : {}),
         critical: preview?.critical || null,
         fumble: preview?.fumble || null,
+        ...(preview?.referenceVersion ? { referenceVersion: preview.referenceVersion } : {}),
+        ...(preview?.mechanics ? { mechanics: cloneValue(preview.mechanics) } : {}),
+        ...(preview?.protection ? { protection: cloneValue(preview.protection) } : {}),
+        action: cloneValue(input.action || {}),
+        ...(input.ammunitionId ? { ammunitionId: input.ammunitionId, ammunitionSources: cloneValue(input.ammunitionSources || []) } : {}),
+        source: { actor: cloneValue(actor.ficheSnapshot?.source || null), target: cloneValue(target.ficheSnapshot?.source || null) },
         application: resolution?.application || null
       }
     };
+  }
+
+  function assertEditRevision(expected, actual) {
+    if (expected !== undefined && expected !== actual) throw Object.assign(new Error('La séance a changé pendant l’enregistrement. Votre saisie est conservée : vérifiez les données actualisées, puis réessayez.'), { code: 'LOCAL_EDIT_STALE', userFacing: true });
   }
 
   function sameValue(left, right) {
@@ -842,7 +872,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   function participantFromProfile(prof, overrides = {}) {
     return {
       id: uid(), profileId: prof.id, name: prof.name, kind: prof.kind,
-      initiative: prof.initiative, hp: prof.hp, maxHp: prof.hp,
+      initiative: prof.initiative, hp: prof.hp, maxHp: prof.maxHp ?? prof.hp,
+      ...normalizeFicheFields(prof), extensions: cloneValue(prof.extensions || {}),
       armor: JSON.parse(JSON.stringify(prof.armor || {})),
       caracs: JSON.parse(JSON.stringify(prof.caracs || {})),
       actions: JSON.parse(JSON.stringify(prof.actions || [])),
@@ -854,7 +885,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
   function diceLinesFromProfile(prof, participantId) {
     return (Array.isArray(prof.diceLines) ? prof.diceLines : [])
-      .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId }));
+      .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId, extensions: { ...template.extensions, profileActionId: template.id } }));
   }
 
   // Same numbering as duplicateProfile: « Gobelin », « Gobelin 2 », « Gobelin 3 »…
@@ -1042,12 +1073,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       save();
       emitBus('reserve');
     },
-    updateProfile(id, patch, { propagate = false } = {}) {
+    updateProfile(id, patch, { propagate = false, expectedLocalRevision } = {}) {
       if (!canMutate()) return false;
       const p = reserve.get(id); if (!p) return;
       if (persistence) {
         const capturedPatch = canonicalizeProfileFields(JSON.parse(JSON.stringify(patch || {})));
         return api.executeCommand('update-profile', draft => {
+        assertEditRevision(expectedLocalRevision, draft.localRevision);
         // Le profil stocké est d'abord ramené à une seule collection, puis le
         // patch s'applique par-dessus : ses `diceLines` font foi, même vides.
         const profiles = (draft.reserve || []).map(item => item.id === id ? { ...canonicalizeProfileFields(item), ...capturedPatch } : item);
@@ -1059,11 +1091,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           maxHp: capturedPatch.hp ?? item.maxHp,
           ...(capturedPatch.caracs ? { caracs: cloneValue(capturedPatch.caracs) } : {}),
           ...(capturedPatch.armor ? { armor: cloneValue(capturedPatch.armor) } : {}),
+          ...Object.fromEntries(FICHE_DATA_FIELDS.filter(key => Object.hasOwn(capturedPatch, key)).map(key => [key, cloneValue(capturedPatch[key])])),
           ...(capturedPatch.diceLines ? { actions: cloneValue(capturedPatch.diceLines) } : {})
         }) : draft.combat?.participants;
         return { ...draft, reserve: profiles, ...(propagate ? { combat: { ...draft.combat, participants } } : {}) };
         });
       }
+      assertEditRevision(expectedLocalRevision, localRevision);
       beginCommand('update-profile');
       Object.assign(p, canonicalizeProfileFields(patch));
       markDirty(`reserve/${id}`, p);
@@ -1075,19 +1109,22 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           Object.assign(part, { name: patch.name ?? part.name, kind: patch.kind ?? part.kind, initiative: patch.initiative ?? part.initiative, maxHp: patch.hp ?? part.maxHp });
           if (patch.caracs) part.caracs = cloneValue(patch.caracs);
           if (patch.armor) part.armor = cloneValue(patch.armor);
+          for (const key of FICHE_DATA_FIELDS) if (Object.hasOwn(patch, key)) part[key] = cloneValue(patch[key]);
           markDirty(`combat/participants/${part.id}`, part);
         }
       }
       save(); emitBus('reserve'); if (propagate) emitBus('combat');
     },
-    // Mise à jour des fiches jusque dans le combat, sans changer les PV actuels ni les états.
-    applyFicheSync(entries) {
+    // Une commande conserve les Blessures subies au delta de maximum, sans modifier les états ni le tour.
+    applyFicheSync(entries, { expectedLocalRevision } = {}) {
       if (!canMutate()) return false;
       const captured = JSON.parse(JSON.stringify(entries || []));
+      const assertRevision = revision => { if (expectedLocalRevision !== undefined && revision !== expectedLocalRevision) throw Object.assign(new Error('La partie a changé depuis l’aperçu : actualisez la synchronisation.'), { code: 'fiche-plan-stale' }); };
+      assertRevision(localRevision);
       // Rien à changer : pas de commande, donc pas d'entrée d'historique.
       const probe = JSON.parse(JSON.stringify(currentEnvelope()));
       if (applyFicheSyncToDraft(probe, captured) === probe) return { ok: true, changed: false };
-      return api.executeCommand('sync-fiches', draft => applyFicheSyncToDraft(draft, captured));
+      return api.executeCommand('sync-fiches', draft => { assertRevision(draft.localRevision); return applyFicheSyncToDraft(draft, captured); });
     },
     removeProfile(id) {
       if (!canMutate()) return false;
@@ -1162,13 +1199,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       log.forEach(entry => { if (entry?.actorId === id && !entry.actorName) entry.actorName = participant.name; if (entry?.targetId === id && !entry.targetName) entry.targetName = participant.name; });
       save(); emitBus('combat');
     },
-    updateParticipant(id, patch) {
+    updateParticipant(id, patch, { expectedLocalRevision } = {}) {
       if (!canMutate()) return false;
       const p = combat.participants.get(id); if (!p) return;
       if (persistence) {
         const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
-        return api.executeCommand('update-participant', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === id ? { ...item, ...capturedPatch } : item) } }));
+        return api.executeCommand('update-participant', draft => {
+          assertEditRevision(expectedLocalRevision, draft.localRevision);
+          return { ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === id ? { ...item, ...capturedPatch } : item) } };
+        });
       }
+      assertEditRevision(expectedLocalRevision, localRevision);
       Object.assign(p, patch); markDirty(`combat/participants/${id}`, p); save();
       if ('zone' in patch) emitBus('combat'); else emitBus('combat:update', { id, patch });
     },
@@ -1280,7 +1321,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
             mode: draft.combat?.orderMode || ORDER_MODES.AUTOMATIC, order: draft.combat?.order || []
           }), currentActorId: draft.combat?.currentActorId || null, round: draft.combat?.round || 0
         });
-        return { ...draft, combat: { ...draft.combat, order: result.order, currentActorId: result.currentActorId, round: result.round } };
+        return { ...draft, combat: { ...draft.combat, participants: shieldAtTurnStart(draft.combat?.participants || [], result.currentActorId), order: result.order, currentActorId: result.currentActorId, round: result.round } };
       });
       beginCommand('next-turn');
       const result = computeNextTurn({
@@ -1290,6 +1331,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       combat.order = result.order;
       combat.currentActorId = result.currentActorId;
       combat.round = result.round;
+      const startedActor = combat.participants.get(result.currentActorId);
+      if (startedActor?.extensions?.shieldUnavailable) { const cleared = shieldAtTurnStart([startedActor], startedActor.id)[0]; Object.assign(startedActor, cleared); markDirty(`combat/participants/${startedActor.id}`, startedActor); }
       markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode });
       save(); emitBus('combat');
       return result;
@@ -1363,7 +1406,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           const prof = reserve.get(id); if (!prof) return;
           const p = new Participant({
             profileId: prof.id, name: prof.name, kind: prof.kind,
-            initiative: prof.initiative, hp: prof.hp, maxHp: prof.hp,
+            initiative: prof.initiative, hp: prof.hp, maxHp: prof.maxHp ?? prof.hp,
+      ...normalizeFicheFields(prof), extensions: cloneValue(prof.extensions || {}),
             armor: { ...prof.armor }, caracs: { ...prof.caracs }, zone: 'bench'
           });
           this.addParticipant(p);
@@ -1425,24 +1469,44 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     exportToReserve() {
       if (!canMutate()) return false;
-      if (persistence) return api.executeCommand('export-reserve', draft => {
-        const byProfile = new Map((draft.combat?.participants || []).filter(participant => participant.profileId).map(participant => [participant.profileId, participant]));
+      let warnings = [];
+      const commit = api.executeCommand('export-reserve', draft => {
+        const participants = draft.combat?.participants || [];
+        const byProfile = new Map(participants.filter(participant => participant.profileId).map(participant => [participant.profileId, participant]));
+        const missing = new Set();
+        const updatedPersistent = new Map();
+        const conflicted = new Set();
+        const conflicts = new Set();
         const reserve = (draft.reserve || []).map(profile => {
           const participant = byProfile.get(profile.id);
-          return participant ? { ...profile, hp: participant.hp, maxHp: participant.maxHp } : profile;
+          if (!participant) return profile;
+          if (!profile.extensions?.ficheId) return { ...profile, hp: participant.hp, maxHp: participant.maxHp };
+          // Current health belongs to each explicitly linked persistent character.
+          for (const copy of participants.filter(item => item.profileId === profile.id)) {
+            const candidates = (draft.persistentCharacters || []).filter(character => copy.persistentCharacterId
+              ? character.id === copy.persistentCharacterId
+              : character.profileId === profile.id || character.extensions?.ficheId === profile.extensions.ficheId);
+            if (candidates.length !== 1) { missing.add(profile.name); continue; }
+            const character = candidates[0];
+            if (conflicted.has(character.id)) continue;
+            const current = { ...character, hp: copy.hp, maxHp: copy.maxHp, states: cloneValue(copy.states || []) };
+            const previous = updatedPersistent.get(character.id);
+            if (previous && !sameValue({ hp: previous.hp, maxHp: previous.maxHp, states: previous.states }, { hp: current.hp, maxHp: current.maxHp, states: current.states })) {
+              updatedPersistent.delete(character.id); conflicted.add(character.id);
+              conflicts.add(`Santé de ${character.name || profile.name} non reportée : plusieurs états de participants liés sont différents. Choisissez l’état à conserver.`);
+            } else updatedPersistent.set(character.id, current);
+          }
+          return { ...profile, hp: profile.maxHp ?? profile.hp };
         });
         const count = reserve.filter(profile => byProfile.has(profile.id)).length;
-        return { ...draft, reserve, log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Export → Réserve: ${count} profil(s) mis à jour` }, ...(draft.log || [])].slice(0, 300) };
+        warnings = [...conflicts, ...[...missing].map(name => `Santé de ${name} non reportée : aucun personnage persistant lié de façon unique. Maximum de réserve conservé.`)];
+        const notice = warnings.length ? ` ; ${warnings.join(' ')}` : '';
+        return { ...draft, reserve,
+          persistentCharacters: (draft.persistentCharacters || []).map(character => updatedPersistent.get(character.id) || character),
+          log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Export → Réserve: ${count} profil(s) traités${notice}` }, ...(draft.log || [])].slice(0, 300) };
       });
-      beginCommand('export-reserve');
-      let n = 0; combat.participants.forEach(p => {
-        if (!p.profileId) return;
-        const prof = reserve.get(p.profileId); if (!prof) return;
-        prof.hp = p.hp;
-        markDirty(`reserve/${prof.id}`, prof);
-        n++;
-      });
-      save(); this.log(`Export → Réserve: ${n} profil(s) mis à jour`); emitBus('reserve');
+      const withWarnings = result => ({ ...(result || {}), warnings });
+      return commit?.then ? commit.then(withWarnings) : withWarnings(commit);
     },
 
     canUndo() { return historyCanUndo(historyState) || Boolean(lastSnapshot); },
@@ -1772,6 +1836,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           error.code = result.status === 'stale' ? 'RESOLUTION_STALE' : 'RESOLUTION_MANUAL';
           throw error;
         }
+        result.state.participants = shieldAfterAttack(result.state.participants, preview, draft.combat?.round ?? 0);
         semanticResult = result;
         return {
           ...draft,
@@ -1817,6 +1882,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           error.code = result.status === 'stale' ? 'SIMULATION_STALE' : 'SIMULATION_INVALID';
           throw error;
         }
+        result.state.participants = shieldAfterAttack(result.state.participants, simulation.preview, draft.combat?.round ?? 0);
         semanticResult = result;
         return {
           ...draft,

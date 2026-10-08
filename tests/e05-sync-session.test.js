@@ -5,8 +5,8 @@ import { createPersistence } from '../js/core/persistence.js';
 import { applyOperation } from '../js/core/sync-protocol.js';
 import { createSyncSession, normalizeRemoteDocument } from '../js/core/sync-session.js';
 
-const state = name => ({ schemaVersion: 2, reserve: [{ id: name }], combat: { round: 1, participants: [] } });
-const localEnvelope = { schemaVersion: 2, reserve: [], combat: { round: 0, participants: [] }, log: [], diceLines: [] };
+const state = name => ({ schemaVersion: 3, reserve: [{ id: name }], combat: { round: 1, participants: [] } });
+const localEnvelope = { schemaVersion: 3, reserve: [], combat: { round: 0, participants: [] }, log: [], diceLines: [] };
 
 function transportFor(rootRef) {
   return {
@@ -24,7 +24,7 @@ test('E05 session — Firebase null/maps vides sont normalisés sans envoyer les
   assert.deepEqual(normalizeRemoteDocument(null), { revision: 0, state: {}, receipts: {} });
   assert.deepEqual(normalizeRemoteDocument({}), { revision: 0, state: {}, receipts: {} });
   const root = normalizeRemoteDocument({ revision: 0, state: {
-    schemaVersion: 2, appVersion: '3.5.1', contextId: 'guest', writer: 'local', timestamp: 12,
+    schemaVersion: 3, appVersion: '3.5.1', contextId: 'guest', writer: 'local', timestamp: 12,
     reserve: []
   } });
   assert.equal(root.state.appVersion, undefined);
@@ -41,7 +41,7 @@ test('E05 session — sequence et révision persistent ensemble, rejeu après ac
   await session.open({ initialState: localEnvelope });
   const operation = await session.enqueue({ state: state('first'), localState: localEnvelope });
   assert.equal(operation.sequence, 1);
-  assert.deepEqual((await persistence.readSession()), { protocolVersion: 2, deviceId: 'device-a', sequence: 1, baseRevision: 0 });
+  assert.deepEqual((await persistence.readSession()), { protocolVersion: 3, deviceId: 'device-a', sequence: 1, baseRevision: 0 });
   await session.flush({ localState: localEnvelope });
   assert.equal(rootRef.current.revision, 1);
   assert.deepEqual(await persistence.listOutbox(), []);
@@ -99,7 +99,7 @@ test('E05 session — un échec d’écriture ne consomme pas la séquence', asy
   let fail = true;
   const stateStore = {
     value: structuredClone(localEnvelope),
-    session: { protocolVersion: 2, deviceId: 'retry-device', sequence: 0, baseRevision: 0 },
+    session: { protocolVersion: 3, deviceId: 'retry-device', sequence: 0, baseRevision: 0 },
     operations: []
   };
   const persistence = {
@@ -158,7 +158,7 @@ test('E05 session — une file E02 incompatible est purgée en gardant l’état
   });
   await session.open();
   assert.deepEqual(await persistence.listOutbox(), []);
-  assert.deepEqual(await persistence.load(), localEnvelope);
+  assert.deepEqual(await persistence.load(), { ...localEnvelope, syncPending: true });
   assert.equal((await persistence.readSession()).deviceId, 'new-device');
   persistence.close();
 });

@@ -8,6 +8,7 @@ import {
 
 const caelel = JSON.parse(readFileSync(new URL('./fixtures/fiche-caelel.json', import.meta.url), 'utf8'));
 const snapshot = ficheSnapshot('caelel', caelel);
+const confirmed = { links: { epee: 'Corps à corps (Base)', arc: 'Projectiles (Arc)', esq: 'Esquive', perc: 'Perception' }, convert: { epee: true } };
 const skill = name => snapshot.skills.find(item => item.name === name);
 // La vraie fiche n’a pas de seconde spécialisation de mêlée : copie dérivée avec « Corps à corps (Escrime) » à +5.
 const avecEscrime = ficheSnapshot('caelel', { ...caelel, skillsAdvanced: [...caelel.skillsAdvanced, { nom: 'Corps à corps (Escrime)', carac: 'cc', adv: 5 }] });
@@ -153,17 +154,17 @@ test('liens proposés — mêlée, tir, esquive, parade, compétence', () => {
   assert.equal(suggestSkill({ note: 'Épée', type: 'attack' }, skills), 'Corps à corps (Base)');
   assert.equal(suggestSkill({ note: 'Escrime', type: 'attack' }, avecEscrime.skills), 'Corps à corps (Escrime)');
   assert.equal(suggestSkill({ note: 'Arc long', type: 'attack' }, skills), 'Projectiles (Arc)');
-  assert.equal(suggestSkill({ note: 'Arbalète', type: 'attack' }, skills), 'Corps à corps (Base)', 'deux compétences de tir (Arc, Entraves) : aucune ne s’impose');
+  assert.equal(suggestSkill({ note: 'Arbalète', type: 'attack' }, skills), '', 'deux compétences de tir (Arc, Entraves) : aucune ne s’impose');
   assert.equal(suggestSkill({ note: 'Arbalète', type: 'attack' }, skills.filter(item => item.name !== 'Projectiles (Entraves)')), 'Projectiles (Arc)', 'une seule compétence de tir : proposée');
   assert.equal(suggestSkill({ note: 'Esquive', type: 'defense' }, skills), 'Esquive');
   assert.equal(suggestSkill({ note: 'Parade', type: 'defense' }, skills), 'Corps à corps (Base)');
   assert.equal(suggestSkill({ note: 'Perception', type: 'skill' }, skills), 'Perception');
   assert.equal(suggestSkill({ note: 'Prière', type: 'skill' }, skills), '');
-  assert.equal(suggestSkill({ note: 'Arc', type: 'attack' }, skills.filter(item => !item.name.startsWith('Projectiles'))), 'Corps à corps (Base)');
+  assert.equal(suggestSkill({ note: 'Arc', type: 'attack' }, skills.filter(item => !item.name.startsWith('Projectiles'))), '');
 });
 
 test('plan — écarts, jets liés et conversion des dégâts fixes', () => {
-  const plan = planProfileSync(snapshot, profile());
+  const plan = planProfileSync(snapshot, profile(), confirmed);
   assert.deepEqual(plan.caracs.find(item => item.key === 'F'), { key: 'F', old: 25, new: 30, changed: true });
   assert.deepEqual(plan.initiative, { old: 40, new: 55 });
   assert.deepEqual(plan.hp, { old: 12, new: 18, computable: true });
@@ -190,7 +191,7 @@ test('application — uniquement les champs prévus, sur un brouillon', () => {
     encounters: [], combat: { participants: [{ id: 'p1', profileId: 'caelel-pj', hp: 3, maxHp: 12 }] }, log: []
   };
   const copy = structuredClone(draft);
-  const next = applyFicheSync(draft, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot, links: { rien: '' }, convert: {} }]);
+  const next = applyFicheSync(draft, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot, ...confirmed, links: { ...confirmed.links, rien: '' } }]);
   assert.deepEqual(draft, copy, 'le brouillon d’entrée n’est pas modifié');
   const pj = next.reserve[0];
   assert.deepEqual(pj.caracs, { CC: 54, F: 30, E: 43, M: 5, CT: 59, I: 55, Ag: 51, Dex: 47, Int: 51, FM: 36, Soc: 40 });
@@ -200,16 +201,16 @@ test('application — uniquement les champs prévus, sur un brouillon', () => {
   const [epee, arc, esq, perc, rien] = pj.diceLines;
   assert.equal(epee.base, 69); assert.equal(epee.mod, 5); assert.equal(epee.note, 'Épée');
   assert.equal(epee.damage, 5); assert.equal(epee.damageFormula, 'BF+5');
-  assert.deepEqual(epee.extensions, { garde: true, ficheSkill: 'Corps à corps (Base)' });
+  assert.equal(epee.extensions.garde, true); assert.equal(epee.extensions.ficheSkill, 'Corps à corps (Base)'); assert.equal(epee.extensions.fiche.bindingVersion, 1);
   assert.equal(arc.base, 59); assert.equal(arc.damageFormula, 'BF+3');
   assert.equal(esq.base, 55); assert.equal(perc.base, 65);
-  assert.equal(rien.base, 33); assert.equal(rien.extensions?.ficheSkill, undefined);
+  assert.equal(rien.base, 33); assert.equal(rien.extensions?.ficheSkill, '', 'déliaison explicite mémorisée');
   for (const key of ['name', 'kind', 'group', 'tags', 'notes', 'favorite', 'armor']) assert.deepEqual(pj[key], draft.reserve[0][key], key);
   assert.deepEqual(next.reserve[1], draft.reserve[1]);
-  assert.equal(next.persistentCharacters[0].hp, 18);
+  assert.equal(next.persistentCharacters[0].hp, 4, 'ancien maximum inconnu : PV conservés');
   assert.deepEqual(next.persistentCharacters[0].states, ['Sonné|1']);
   assert.equal(next.persistentCharacters[1].hp, 5);
-  assert.equal(next.combat.participants[0].hp, 3);
+  assert.equal(next.combat.participants[0].hp, 9, '9 blessures subies conservées');
   assert.equal(next.combat.participants[0].maxHp, 18);
   assert.equal(next.combat.participants[0].caracs.F, 30);
 });
@@ -220,7 +221,7 @@ test('application — le lien choisi est enregistré, « aucune » aussi, et le 
   const [epee, , esq] = first.reserve[0].diceLines;
   assert.equal(epee.base, 59); assert.equal(epee.extensions.ficheSkill, 'Corps à corps (Escrime)');
   assert.equal(epee.damage, 7); assert.equal(epee.damageFormula, undefined);
-  assert.equal(esq.base, 45); assert.equal(esq.extensions?.ficheSkill, undefined, 'jamais lié, laissé tel quel');
+  assert.equal(esq.base, 45); assert.equal(esq.extensions?.ficheSkill, '', 'déliaison explicitement mémorisée');
   const again = planProfileSync(avecEscrime, first.reserve[0]);
   assert.equal(again.actions[0].skill, 'Corps à corps (Escrime)', 'le lien enregistré n’est pas reproposé');
   const unlinked = applyFicheSync({ reserve: [first.reserve[0]] }, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot: avecEscrime, links: { epee: '' } }]);
@@ -235,7 +236,9 @@ test('application — personnage persistant lié par la rencontre plutôt que pa
     encounters: [{ id: 'r', entries: [{ profileId: 'caelel-pj', persistentCharacterId: 'lié' }] }]
   };
   const next = applyFicheSync(draft, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot }]);
-  assert.deepEqual(next.persistentCharacters.map(item => item.hp), [18, 2]);
+  assert.deepEqual(next.persistentCharacters.map(item => item.hp), [2, 2], 'ancien maximum inconnu conserve les PV');
+  assert.equal(next.persistentCharacters[0].maxHp, 18);
+  assert.equal(next.persistentCharacters[1].maxHp, undefined);
 });
 
 test('Store.applyFicheSync — combat et scène mis à jour, persistés et annulables', async () => {
@@ -253,14 +256,14 @@ test('Store.applyFicheSync — combat et scène mis à jour, persistés et annul
   const reserveBefore = JSON.stringify(store.listProfiles());
   const revision = store.getLocalRevision();
 
-  await store.applyFicheSync([{ charId: 'caelel', profileId: 'caelel-pj', snapshot, links: {}, convert: {} }]);
+  await store.applyFicheSync([{ charId: 'caelel', profileId: 'caelel-pj', snapshot, ...confirmed }]);
   assert.equal(store.getLocalRevision(), revision + 1);
   const updated = store.listProfiles().find(item => item.id === 'caelel-pj');
   assert.equal(updated.hp, 18); assert.equal(updated.caracs.F, 30);
   assert.equal(updated.diceLines[0].base, 69);
-  assert.equal(store.listPersistentCharacters()[0].hp, 18);
+  assert.equal(store.listPersistentCharacters()[0].hp, 4, 'ancien maximum inconnu');
   const participant = store.listParticipants()[0];
-  assert.equal(participant.hp, -2, 'les blessures déjà subies sont conservées');
+  assert.equal(participant.hp, 4, '14 blessures subies conservées au delta +6');
   assert.equal(participant.maxHp, 18);
   assert.equal(participant.initiative, 55);
   assert.equal(participant.caracs.F, 30);
@@ -290,7 +293,7 @@ test('Store.applyFicheSync — répare le combat même quand la bibliothèque es
   await store.addProfile(profile());
   await store.importFromReserve(['caelel-pj']);
   // État produit par la version précédente : seule la bibliothèque était actualisée.
-  const entry = { charId: 'caelel', profileId: 'caelel-pj', snapshot };
+  const entry = { charId: 'caelel', profileId: 'caelel-pj', snapshot, ...confirmed };
   const updated = applyFicheSync({ reserve: [profile()] }, [entry]).reserve[0];
   await store.updateProfile('caelel-pj', updated);
   const before = structuredClone(store.getDiceLines());
@@ -298,7 +301,7 @@ test('Store.applyFicheSync — répare le combat même quand la bibliothèque es
   await store.applyFicheSync([entry]);
   assert.equal(store.getLocalRevision(), revision + 1);
   assert.equal(store.listParticipants()[0].caracs.F, 30);
-  assert.equal(store.listParticipants()[0].hp, 12);
+  assert.equal(store.listParticipants()[0].hp, 18, 'ancien 12/12 devient 18/18');
   assert.equal(store.listParticipants()[0].maxHp, 18);
   assert.equal(store.getDiceLines()[0].base, 69);
   assert.equal(store.getDiceLines()[0].damageFormula, 'BF+5');
@@ -321,10 +324,11 @@ test('combat — copies actives et en attente, ajustements locaux et participant
     combat: { round: 4, currentActorId: 'actif', order: ['actif', 'ennemi', 'banc'], participants: [makeParticipant('actif', 'active'), makeParticipant('banc', 'bench'), { ...makeParticipant('ennemi', 'active'), profileId: 'autre' }] }
   };
   const before = structuredClone(draft);
-  const next = applyFicheSync(draft, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot, links: { esq: '' }, convert: { epee: false } }]);
+  const next = applyFicheSync(draft, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot, links: { ...confirmed.links, esq: '' }, convert: { epee: false } }]);
   for (const participant of next.combat.participants.slice(0, 2)) {
     const original = draft.combat.participants.find(item => item.id === participant.id);
-    for (const key of ['id', 'name', 'hp', 'zone', 'states', 'armor', 'camp']) assert.deepEqual(participant[key], original[key], key);
+    for (const key of ['id', 'name', 'zone', 'states', 'armor', 'camp']) assert.deepEqual(participant[key], original[key], key);
+    assert.equal(participant.hp, 9, '3/12 devient 9/18');
     assert.equal(participant.caracs.M, 6);
     assert.equal(participant.maxHp, 18);
     assert.equal(participant.actions[0].base, 69);
@@ -345,4 +349,16 @@ test('erreurs de lecture — messages lisibles', () => {
   assert.match(ficheErrorMessage({ code: 'unavailable' }), /injoignables/);
   assert.match(ficheErrorMessage(new Error('x'), { online: false }), /injoignables/);
   assert.match(ficheErrorMessage({ code: 'auth/popup-closed-by-user' }), /annulée/);
+});
+
+test('première reprise — suggestions visibles mais aucun lien implicite ni conversion', () => {
+  const plan = planProfileSync(snapshot, profile());
+  assert.equal(plan.actions[0].proposed, 'Corps à corps (Base)');
+  assert.equal(plan.actions[0].skill, '');
+  assert.equal(plan.actions[0].newBase, 50);
+  assert.equal(plan.actions[0].damage.enabled, false);
+  const result = applyFicheSync({ reserve: [profile()] }, [{ charId: 'caelel', profileId: 'caelel-pj', snapshot }]);
+  assert.equal(result.reserve[0].diceLines[0].base, 50);
+  assert.equal(result.reserve[0].diceLines[0].damage, 7);
+  assert.equal(result.reserve[0].diceLines[0].extensions.ficheSkill, undefined);
 });

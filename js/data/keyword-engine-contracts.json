@@ -1,0 +1,84 @@
+{
+  "sourceVersion": "equipment:37ddace6c91d39cc2e883dce9b5ade1ab0ce658cd686dd0811c034702938f95e",
+  "auditedAt": "2026-10-08",
+  "entries": [
+    {
+      "id": "dangereuse",
+      "effect": "Tout Test raté avec un 9 sur le dé des dizaines ou des unités provoque une Maladresse.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "devastatrice",
+      "effect": "Sur une touche, les Dégâts utilisent le plus élevé entre le DR et le dé des unités. Inoffensive l'annule.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.304"
+    },
+    {
+      "id": "empaleuse",
+      "effect": "Coup critique sur un double ou un multiple de 10 obtenu en réussissant le Test. À distance, le projectile reste fiché : Guérison Intermédiaire (+0 DR) pour une flèche ou un carreau, chirurgien pour une balle ; chaque projectile non retiré empêche de guérir 1 Blessure.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.304"
+    },
+    {
+      "id": "impenetrable",
+      "effect": "Ignore les Coups critiques causés par un jet pour toucher impair (11, 33…).",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.306"
+    },
+    {
+      "id": "imprecise",
+      "effect": "-1 DR pour attaquer avec cette arme. L'emporte sur Pointue.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "inoffensive",
+      "effect": "Les PA sont doublés contre cette arme ; pas de Blessure minimale automatique ; pour une Blessure critique, lancer deux fois et garder le résultat le plus bas. Annule Percutante et Dévastatrice.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "partielle",
+      "effect": "Si le numéro de localisation de la touche est pair, les PA de cette armure sont ignorés.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.306"
+    },
+    {
+      "id": "percutante",
+      "effect": "Sur une touche, ajoute le dé des unités du jet d'attaque aux Dégâts. Inoffensive l'annule.",
+      "edition": "V4",
+      "source": "Livre de base FR (V4) p.298"
+    },
+    {
+      "id": "points-faibles",
+      "effect": "Un Critique infligé par une arme Empaleuse ignore les PA de cette armure.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.306"
+    },
+    {
+      "id": "pointue",
+      "effect": "+1 DR à tout Test réussi pour attaquer avec cette arme. Imprécise l'emporte.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305"
+    },
+    {
+      "id": "precise",
+      "effect": "+10 à tout Test effectué avec cette arme.",
+      "edition": "V4",
+      "source": "Livre de base FR (V4) p.298"
+    },
+    {
+      "id": "protectrice",
+      "effect": "Quand l'arme sert à s'opposer à une attaque, elle confère X PA à toutes les localisations. Avec X ≥ 2, elle peut aussi s'opposer aux projectiles tirés dans sa ligne de vue.",
+      "edition": "V4",
+      "source": "Livre de base FR (V4) p.298"
+    },
+    {
+      "id": "flexible",
+      "effect": "Peut se porter sous une armure non Flexible ; les deux protections s'appliquent.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.306"
+    }
+  ]
+}

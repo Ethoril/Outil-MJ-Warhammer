@@ -1,0 +1,11 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {refreshReferences,getReferenceSnapshot} from '../js/core/reference-catalog.js';
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const csvDirectory=process.argv.find(a=>a.startsWith('--csv-dir='))?.slice(10);
+const fetchImpl=csvDirectory?async url=>({ok:true,text:()=>readFile(resolve(csvDirectory,new URL(url).searchParams.get('sheet')+'.csv'),'utf8')}):globalThis.fetch;
+const result=await refreshReferences({fetchImpl,forceRefresh:true,storage:null});
+if(!result.ok)throw new Error(result.status.error);
+await writeFile(resolve(root,'js/data/reference-snapshot.json'),JSON.stringify(getReferenceSnapshot(),null,2)+'\n');
+console.log(JSON.stringify(result.status));

@@ -2,13 +2,13 @@
  * Pure migration pipeline for persisted WFRP state.
  *
  * It accepts the historical local/file shape and Firebase's object maps, and returns
- * a schema v2 envelope without mutating the input. It deliberately does not write
+ * a schema v3 envelope without mutating the input. It deliberately does not write
  * storage or execute extension fields.
  */
-import { normalizeCaracs, profileActionSource } from './models.js';
+import { normalizeCaracs, profileActionSource, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
 import { normalizeDamageFields } from './damage.js';
 
-export const CURRENT_SCHEMA_VERSION = 2;
+export const CURRENT_SCHEMA_VERSION = 3;
 
 export class MigrationError extends Error {
   constructor(message, details = {}) {
@@ -153,8 +153,8 @@ function itemId(entry, path, report) {
   return id;
 }
 
-const PROFILE_KEYS = ['id', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'caracs', 'armor', 'diceLines', 'actions', 'group', 'tags', 'notes', 'favorite'];
-const PARTICIPANT_KEYS = ['id', 'profileId', 'persistentCharacterId', 'improvised', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'states', 'zone', 'camp', 'color', 'armor', 'caracs', 'actions', 'tags', 'notes', 'source'];
+const PROFILE_KEYS = [...FICHE_DATA_FIELDS, 'id', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'caracs', 'armor', 'diceLines', 'actions', 'group', 'tags', 'notes', 'favorite'];
+const PARTICIPANT_KEYS = [...FICHE_DATA_FIELDS, 'id', 'profileId', 'persistentCharacterId', 'improvised', 'name', 'kind', 'initiative', 'hp', 'maxHp', 'states', 'zone', 'camp', 'color', 'armor', 'caracs', 'actions', 'tags', 'notes', 'source'];
 const DICE_KEYS = ['id', 'participantId', 'type', 'attr', 'base', 'mod', 'note', 'damage', 'damageFormula', 'targetId', 'qualities', 'valuesX', 'capacity'];
 const COMBAT_KEYS = ['round', 'currentActorId', 'order', 'participants', 'meta', 'orderMode', 'extensions'];
 
@@ -173,6 +173,7 @@ function migrateProfiles(raw, report) {
     validateFiniteNumbers(item, ['initiative', 'hp', 'maxHp'], 'reserve/' + id, report);
     sanitizeNumericMap(item, 'caracs', 'reserve/' + id, report);
     if (isObject(item.caracs)) item.caracs = normalizeCaracs(item.caracs);
+    Object.assign(item, normalizeFicheFields(item));
     sanitizeNumericMap(item, 'armor', 'reserve/' + id, report);
     if (Array.isArray(item.actions)) {
       // `diceLines` fait foi, sauf s'il est vide à côté d'actions remplies ;
@@ -210,6 +211,7 @@ function migrateParticipants(raw, profiles, report) {
     validateFiniteNumbers(item, ['initiative', 'hp', 'maxHp'], 'combat/participants/' + id, report);
     sanitizeNumericMap(item, 'caracs', 'combat/participants/' + id, report);
     if (isObject(item.caracs)) item.caracs = normalizeCaracs(item.caracs);
+    Object.assign(item, normalizeFicheFields(item));
     sanitizeNumericMap(item, 'armor', 'combat/participants/' + id, report);
     out.push(withExtensions(item, PARTICIPANT_KEYS, 'combat/participants/' + id, report));
   }
@@ -349,10 +351,18 @@ function rootExtensions(raw) {
   return extensions;
 }
 
-function optionalRootCollections(raw) {
+function optionalRootCollections(raw, profiles, report) {
   const result = {};
+  const scenes = value => {
+    if (!isObject(value)) return clone(value);
+    return { ...clone(value), participants: migrateParticipants(value.participants, profiles, report) };
+  };
   for (const key of ['encounters', 'persistentCharacters', 'archives', 'activeScene', 'suspendedScenes', 'reminderChoices', 'appliedResolutionIds']) {
-    if (Object.prototype.hasOwnProperty.call(raw, key)) safeSet(result, key, clone(raw[key]));
+    if (!Object.hasOwn(raw, key)) continue;
+    if (key === 'activeScene') safeSet(result, key, raw[key] ? scenes(raw[key]) : null);
+    else if (key === 'suspendedScenes') safeSet(result, key, collection(raw[key], key, report).map(({ item }) => scenes(item)));
+    else if (key === 'persistentCharacters') safeSet(result, key, collection(raw[key], key, report).filter(({ item }) => isObject(item)).map(({ item }) => Object.hasOwn(item, 'armor') || Object.hasOwn(item, 'armorLocations') ? { ...clone(item), ...normalizeFicheFields(item) } : clone(item)));
+    else safeSet(result, key, clone(raw[key]));
   }
   return result;
 }
@@ -407,7 +417,7 @@ export function migrateSnapshot(input, options = {}) {
     ...(raw.history && typeof raw.history === 'object' ? { history: clone(raw.history) } : {}),
     ...(Number.isInteger(raw.localRevision) && raw.localRevision >= 0 ? { localRevision: raw.localRevision } : {}),
     ...(raw.syncPending ? { syncPending: true } : {}),
-    ...optionalRootCollections(raw)
+    ...optionalRootCollections(raw, reserve, report)
   };
   const extensions = rootExtensions(raw);
   if (Object.keys(extensions).length) result.extensions = extensions;

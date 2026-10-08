@@ -1,5 +1,5 @@
 /** Pure E11 encounter and scene lifecycle operations. */
-import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, uid } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeFicheFields, normalizeTags, uid } from './models.js';
 import { normalizeEffects } from './effects.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -39,12 +39,14 @@ function cloneParticipant(profile, options, idFactory) {
     kind: profile.kind || 'Créature',
     initiative: Number(options.initiative ?? profile.initiative) || 0,
     hp: baseHp,
-    maxHp: Number(profile.maxHp ?? profile.hp) || 0,
+    maxHp: persistent?.maxHp === null ? null : Number(persistent?.maxHp ?? profile.maxHp ?? profile.hp) || 0,
     states,
     zone: options.zone === 'active' ? 'active' : 'bench',
     camp: requiredText(options.camp, 'neutre'),
     color: options.color || 'default',
     armor: cloneValue(profile.armor || {}),
+    ...normalizeFicheFields(profile),
+    extensions: cloneValue(profile.extensions || {}),
     caracs: normalizeCaracs(profile.caracs),
     tags: normalizeTags(profile.tags),
     notes: typeof profile.notes === 'string' ? profile.notes : '',
@@ -161,6 +163,7 @@ export function addImprovisedParticipant(scene, participant = {}, idFactory = ui
     initiative: Number(participant.initiative) || 0, hp, maxHp: Number(participant.maxHp ?? hp) || 0,
     states: normalizeEffects(participant.states), zone: participant.zone === 'active' ? 'active' : 'bench',
     camp: requiredText(participant.camp, 'neutre'), armor: cloneValue(participant.armor || {}), caracs: normalizeCaracs(participant.caracs),
+    ...normalizeFicheFields(participant),
     tags: normalizeTags(participant.tags), notes: typeof participant.notes === 'string' ? participant.notes : '', actions: [], source: { improvised: true }
   });
   return next;

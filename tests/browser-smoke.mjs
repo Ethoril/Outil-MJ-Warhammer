@@ -1,3 +1,4 @@
+import { testFicheReserveEditor } from './fiches-pj-reserve-browser.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
@@ -46,8 +47,7 @@ async function fillProfile(page, values) {
   await form.locator('[name=E]').fill(String(values.endurance));
   await form.locator('[name=armor_head]').fill(String(values.armor.head));
   await form.locator('[name=armor_body]').fill(String(values.armor.body));
-  await form.locator('[name=armor_arms]').fill(String(values.armor.arms));
-  await form.locator('[name=armor_legs]').fill(String(values.armor.legs));
+  for (const key of ['rightArm', 'leftArm', 'rightLeg', 'leftLeg']) await form.locator(`[name=armor_${key}]`).fill(String(values.armor[key] ?? (key.endsWith('Arm') ? values.armor.arms : values.armor.legs)));
   await form.locator('details').first().locator('summary').click();
   await form.locator('[name=CC]').fill(String(values.CC));
 }
@@ -114,7 +114,7 @@ async function main() {
     const page = await context.newPage();
     const errors = [];
     const dialogs = [];
-    page.on('pageerror', error => errors.push(error.stack || error.message));
+    page.on('pageerror', error => { errors.push(error.stack || error.message); console.error(`Browser exception: ${error.stack || error.message}`); });
     page.on('dialog', async dialog => {
       dialogs.push({ type: dialog.type(), message: dialog.message() });
       await dialog.accept();
@@ -147,7 +147,7 @@ async function main() {
     const form = await openProfileForm(page);
     for (const name of [
       'name', 'kind', 'group', 'initiative', 'hp', 'E',
-      'armor_head', 'armor_body', 'armor_arms', 'armor_legs',
+      'armor_head', 'armor_body', 'armor_rightArm', 'armor_leftArm', 'armor_rightLeg', 'armor_leftLeg',
       'CC', 'CT', 'F', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'
     ]) {
       await expect(form.locator(`[name=${name}]`)).toHaveCount(1);
@@ -156,7 +156,7 @@ async function main() {
     // Create a complete profile through actual form controls, including a prepared roll.
     await fillProfile(page, {
       name: 'Aline du Test', kind: 'PJ', group: 'Recette', initiative: 55,
-      hp: 14, endurance: 35, armor: { head: 1, body: 2, arms: 0, legs: 0 }, CC: 48
+      hp: 14, endurance: 35, armor: { head: 1, body: 2, rightArm: 3, leftArm: 1, rightLeg: 2, leftLeg: 0 }, CC: 48
     });
     await addProfileDice(page, { base: 48, note: 'Épée de recette', damage: 1 });
     await form.locator('#btn-submit-form').click();
@@ -179,6 +179,8 @@ async function main() {
     await expect(formForEdit.locator('[name=group]')).toHaveValue('Recette');
     await expect(formForEdit.locator('[name=E]')).toHaveValue('35');
     await expect(formForEdit.locator('[name=armor_body]')).toHaveValue('2');
+    await expect(formForEdit.locator('[name=armor_rightArm]')).toHaveValue('3');
+    await expect(formForEdit.locator('[name=armor_leftArm]')).toHaveValue('1');
     await expect(formForEdit.locator('#form-dice-list .row')).toHaveCount(1);
 
     await formForEdit.locator('[name=name]').fill('Annulation ignorée');
@@ -371,6 +373,8 @@ async function main() {
     await page.locator('.workspace-encounter-card').getByRole('button', { name: /^Supprimer/ }).click();
     await openWorkspaceSpace(page, 'play');
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(0);
+
+    await testFicheReserveEditor(page, openWorkspaceProfileEditor);
 
     assert.deepEqual(errors, [], `exceptions navigateur: ${errors.join('\n')}`);
     await context.close();

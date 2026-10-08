@@ -8,7 +8,7 @@ import { createSyncSession } from '../js/core/sync-session.js';
 import { createStore } from '../js/core/store.js';
 
 const emptyState = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   reserve: [],
   combat: { round: 0, order: [], participants: [] },
   log: [],
@@ -202,7 +202,7 @@ test('E05 sécurité import — un compte v2 synchronisé ne propose jamais le b
   await store.addProfile({ id: 'stale-draft', name: 'Brouillon invité obsolète', hp: 10, initiative: 30 });
 
   const remoteRoot = createSyncDocument({
-    schemaVersion: 2,
+    schemaVersion: 3,
     reserve: [{ id: 'restored-profile', name: 'Sauvegarde restaurée' }],
     combat: { round: 0, order: [], participants: [] },
     diceLines: []
