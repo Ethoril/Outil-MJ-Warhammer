@@ -483,13 +483,15 @@ Les sous-lots peuvent être développés successivement dans un travail isolé, 
 
 Livrer également une procédure d’actualisation du catalogue, la matrice des moteurs et des cas manuels, un guide de synchronisation PJ, une notice de reprise des anciennes actions et une procédure de retour. Après création de données v3, un retour applicatif exige une version capable de lire v3 ou une restauration explicite ; un ancien client v2 ne constitue pas un retour sûr.
 
-### 12.2 Lot 2 Application des effets de certains talents
+### 12.2 Lot 2 Effets de certains talents et durée des états
 
 Ce lot doit appliquer les effets d’une sélection explicite de talents acquis par le PJ. Leur liste est établie à partir d’Aides de jeu et des talents réellement présents dans les fiches. La sélection n’est pas encore arrêtée ; le lot 1 prépare les IDs, rangs, spécialités, versions et contextes nécessaires.
 
 Pour chaque talent retenu, définir les caractéristiques ou compétences affectées, le rang et la spécialité applicables, le déclencheur, la durée, les conditions, le cumul, la cible et les éventuels choix du MJ. Distinguer un effet permanent déjà intégré aux valeurs de la fiche d’un effet conditionnel appliqué à une résolution. Un effet ne peut jamais être ajouté une seconde fois.
 
 Le moteur doit expliquer chaque modification dans l’aperçu de résolution, conserver sa provenance dans l’historique et permettre l’annulation des effets de partie. Un talent inconnu, incomplet ou non couvert reste consultable et manuel. Livrer une matrice par talent avec source, exemples chiffrés, tests de rang/spécialité/cumul et non-régression des PJ sans ce talent.
+
+Le lot 2 inclut également la gestion de la durée des états, indépendamment des talents : durée restante visible, décompte et expiration selon la règle de chaque état. Le cahier détaillé précisera les moments de décompte, les cumuls et prolongations, les états sans durée fixe, les interventions du MJ et la conservation des durées lors des sauvegardes, reprises et synchronisations. Le niveau d’un état et sa durée doivent rester distincts.
 
 Les spécifications détaillées et les cas de recette propres au lot 2 seront rédigés avant son développement. Le lot 2 ne comprend pas implicitement un moteur de magie.
 
@@ -515,6 +517,7 @@ Livrer un cahier des charges mobile, un prototype des parcours de séance puis l
 | Santé | Blessures subies conservées ; PV actuels ajustés au delta de maximum ; états inchangés |
 | Protection | Six localisations, couches calculées et conditions assistées ou automatisées selon le contexte ; bouclier séparé |
 | Aptitudes | Confirmé : consultation et rappels au lot 1 ; application des effets de certains talents au lot 2 |
+| Durée des états | Ajout au périmètre du lot 2 : suivi, décompte et expiration ; fonctionnement détaillé à spécifier avant développement |
 | Application mobile | Lot 3 planifié pour l’usage en séance ; développement différé jusqu’à la stabilisation et la validation des lots précédents |
 | Magie possédée | Confirmé : consultation seulement au lot 1 ; moteur de magie dans un chantier ultérieur |
 | Référentiels | Aides de jeu prioritaire, surcharges et références complémentaires explicites |

@@ -2,7 +2,7 @@
 
 Développement autorisé le 8 octobre 2026. Base Git : 3bc07ed880561831334f6d96dc9755a6afe6e47d, version 3.11.1. Branche de travail : codex/fiches-pj-referentiels. Worktree : F:\OutilMJ\worktrees\fiches-pj-referentiels.
 
-Le cahier des charges version 1.3 et ses 40 cas de recette font foi. Le lot 1 est livré et réceptionné en production après les correctifs jusqu’à 3.12.3 et les confirmations du MJ (récupération des fiches, connexion et reprise sur Chrome Android) ; le lot 2 des effets de talents est préparé mais attend sa sélection détaillée. Le lot 3 prévoit une application mobile pour les séances, à lancer après stabilisation et validation des lots précédents. La magie reste consultative. La version 3.12.0 a ensuite été publiée sur demande explicite ; GitHub Pages et les règles Firebase v3 ont été contrôlés après déploiement.
+Le cahier des charges version 1.3 et ses 40 cas de recette font foi. Le lot 1 est livré et réceptionné en production après les correctifs jusqu’à 3.12.3 et les confirmations du MJ (récupération des fiches, connexion et reprise sur Chrome Android) ; le lot 2 des effets de talents et de la durée des états est préparé mais attend sa sélection détaillée. Le lot 3 prévoit une application mobile pour les séances, à lancer après stabilisation et validation des lots précédents. La magie reste consultative. La version 3.12.0 a ensuite été publiée sur demande explicite ; GitHub Pages et les règles Firebase v3 ont été contrôlés après déploiement.
 
 ## Lots et responsabilités
 
@@ -15,7 +15,7 @@ Le cahier des charges version 1.3 et ses 40 cas de recette font foi. Le lot 1 es
 | 1.4 Combat et protections | references_equipment + chef d'orchestre UI | Six zones, couches, conditions et choix de contexte | Intégré, contrôlé localement |
 | 1.5 Aides et harmonisation | references_equipment + chef d'orchestre UI | Consultation objets/talents et définitions communes | Intégré, contrôlé localement |
 | 1.6 Recette | Sous-agent indépendant controle | Baseline, tests adversariaux, revue et limites | Recette locale et 37 contrôles Auth/RTDB sous émulateurs passés ; récupération des fiches et reprise sur téléphone Chrome confirmées par le MJ en production ; limitation Brave acceptée |
-| 2 Talents mécaniques | À sélectionner ultérieurement | Cahier détaillé des talents puis moteurs | Préparé, pas lancé |
+| 2 Talents mécaniques et durée des états | À cadrer ultérieurement | Cahier détaillé des talents et de la durée des états, puis moteurs | Préparé, pas lancé |
 | 3 Application mobile de séance | À définir après stabilisation | Cadrage mobile, prototype des parcours de séance, application et recette sur appareils réels | Planifié et différé ; lancement après validation des lots précédents |
 
 ## Frontières de fichiers
@@ -84,3 +84,7 @@ Le MJ confirme que la connexion Google fonctionne sur le même téléphone Andro
 Sur Brave Android, l'erreur réelle est `auth/popup-closed-by-user` : la fenêtre se ferme avant la fin de la connexion, malgré la désactivation des protections du site. La cause précise n'est pas établie. Brave n'est pas pris en charge pour la connexion Google et la synchronisation ; Chrome est le navigateur retenu sur Android. Le MJ accepte de documenter cette limitation et de passer à la suite. L'investigation Brave est close, sans nouveau changement d'authentification.
 
 **Lot 1 clôturé avec cette limite de compatibilité acceptée.** Le lot 2 des effets de talents reste à cadrer et n'est pas lancé. Le lot 3 de l'application mobile demeure différé jusqu'à la stabilisation des lots précédents ; la magie reste consultative au lot 1.
+
+## Ajout de périmètre au lot 2 — 8 octobre 2026
+
+À la demande du MJ, la durée des états est ajoutée au lot 2, en complément des effets de talents. Le cadrage devra définir le suivi de la durée restante, le décompte, l’expiration, les cumuls ou prolongations et la conservation à la reprise entre appareils. Les modalités seront spécifiées avant développement ; aucun moteur nouveau n’est lancé par cet ajout documentaire.
