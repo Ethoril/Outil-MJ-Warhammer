@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.12.0';
+const CACHE_NAME = 'wfrp-cache-v3.12.1';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -72,7 +72,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/import-modal.js',
   './js/ui/action-editor.js',
   './js/ui/keyboard.js',
-  './js/ui/log-view.js',
+  './js/ui/journal-view.js',
   './js/ui/messages.js',
   './js/ui/reserve.js',
   './js/ui/resolution-panel.js',

@@ -12,7 +12,7 @@ import { initCardUI } from './ui/card.js';
 import { initCombatViewUI } from './ui/combat-view.js';
 import { runDiceLine } from './ui/dice-line.js';
 import { renderReferenceTables } from './ui/rules-view.js';
-import { renderLog, initLogViewUI } from './ui/log-view.js';
+import { renderLog, initLogViewUI } from './ui/journal-view.js';
 import { showToast } from './ui/toast.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';

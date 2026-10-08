@@ -2,7 +2,7 @@
 
 Développement autorisé le 8 octobre 2026. Base Git : 3bc07ed880561831334f6d96dc9755a6afe6e47d, version 3.11.1. Branche de travail : codex/fiches-pj-referentiels. Worktree : F:\OutilMJ\worktrees\fiches-pj-referentiels.
 
-Le cahier des charges version 1.3 et ses 40 cas de recette font foi. Le lot 1 est intégré et validé localement en version 3.12.0 ; le lot 2 des effets de talents est préparé mais attend sa sélection détaillée. Le lot 3 prévoit une application mobile pour les séances, à lancer après stabilisation et validation des lots précédents. La magie reste consultative. Aucun déploiement n'est inclus dans les actions déjà exécutées.
+Le cahier des charges version 1.3 et ses 40 cas de recette font foi. Le lot 1 est intégré et validé localement en version 3.12.0 ; le lot 2 des effets de talents est préparé mais attend sa sélection détaillée. Le lot 3 prévoit une application mobile pour les séances, à lancer après stabilisation et validation des lots précédents. La magie reste consultative. La version 3.12.0 a ensuite été publiée sur demande explicite ; GitHub Pages et les règles Firebase v3 ont été contrôlés après déploiement.
 
 ## Lots et responsabilités
 
@@ -43,8 +43,16 @@ Les deux sous-agents de développement ont livré et gelé leurs modules. Le con
 
 La suite finale passe 397 tests, contre 320 en baseline. Les 37 contrôles HTTP des règles de production passent sous émulateurs Auth/RTDB isolés. Les parcours navigateur et les captures de bureau/mobile sont consignés dans le rapport de recette. Le service worker réel est vérifié à l’installation, au rechargement hors ligne et à la mise à jour explicite ; deux contextes navigateur avec IndexedDB natif couvrent la reprise et les conflits via un transport HTTP simulé. Le démarrage hors ligne du contexte MJ est vérifié avec identité persistée simulée. Les tests du protocole et des accès simulés ne prouvent pas l'accès réel aux fiches Firebase.
 
-Le lot 2 reste à spécifier talent par talent : déclencheur, rang/spécialité, durée, cumul, cible, priorité, effets persistants et validation par exemples source. Aucun moteur supplémentaire de talent n'a été lancé dans le lot 1. La publication attend la recette Auth/App Check avec le compte MJ et la reprise sur appareils réels. Les règles v3 sont éprouvées sous émulateur ; un JDK 21 portable et Firebase CLI isolés permettent de reproduire cette recette sans installation globale.
+Le lot 2 reste à spécifier talent par talent : déclencheur, rang/spécialité, durée, cumul, cible, priorité, effets persistants et validation par exemples source. Aucun moteur supplémentaire de talent n'a été lancé dans le lot 1. La recette Auth/App Check avec le compte MJ et la reprise sur appareils réels restent à confirmer après la publication autorisée de 3.12.0. Les règles v3 sont éprouvées sous émulateur ; un JDK 21 portable et Firebase CLI isolés permettent de reproduire cette recette sans installation globale.
 
 ## Lot 3 différé : application mobile de séance
 
 L’application mobile sera créée lorsque le reste de l’outil sera terminé, fiable et validé en séance. Elle reprendra les mêmes données et moteurs métier, avec une interface pensée pour la consultation et la conduite du combat sur téléphone. Les plateformes, la technologie, la distribution et les exigences hors ligne seront définies dans son cahier détaillé ; aucun développement mobile n’est lancé à ce stade.
+
+## Correctif de démarrage 3.12.1
+
+Après la publication 3.12.0, un navigateur utilisateur a signalé `ERR_BLOCKED_BY_CLIENT` sur `js/ui/log-view.js`. Cette dépendance statique empêchait l’évaluation de `main.js` et la liaison des boutons Google. Le module du journal est renommé `journal-view.js` pour éviter ce blocage de chemin ; ses imports et le précache sont actualisés.
+
+L’écran initial indique désormais le chargement de l’espace. Le point d’entrée capture les erreurs du graphe de modules et propose un réessai explicite ; un démarrage prolongé propose également ce réessai. Aucun stockage local, compte, règle Firebase ni contenu de séance n’est supprimé ou changé par ce correctif.
+
+La suite du projet passe 397 tests. La reproduction ciblée du blocage et la recette PWA passent sous Edge avec IndexedDB natif ; l’identité Auth du segment hors ligne est simulée. Le module renommé conserve exactement le contenu de l’ancien module. Le contrôle indépendant vérifie aussi un autre import bloqué, le message visible, le réessai et l’identité complète de l’état local avant/après. Le remplacement d’un worker déjà en attente exige de fermer tous les anciens onglets contrôlés et de laisser son activation se terminer avant réouverture.

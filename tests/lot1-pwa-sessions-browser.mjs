@@ -1,11 +1,13 @@
 /** Real service-worker/native IDB receipt; remote hub simulates protocol CAS, never Firebase. */
 import assert from 'node:assert/strict';
+import { APP_VERSION } from '../js/version.js';
 import { createServer } from 'node:http';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
 import { resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { applyOperation } from '../js/core/sync-protocol.js';
+const cacheName = `wfrp-cache-v${APP_VERSION}`, updatedCacheName = `${cacheName}-qa-update`;
 const root = fileURLToPath(new URL('../', import.meta.url));
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/fiche-caelel.json', import.meta.url)));
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.webmanifest': 'application/manifest+json' };
@@ -39,7 +41,7 @@ const server = createServer(async (req, res) => {
     const path = resolve(root, '.' + decodeURIComponent(route === '/' ? '/index.html' : route));
     assert.ok(path.startsWith(resolve(root) + sep) && statSync(path).isFile());
     let content = readFileSync(path);
-    if (route === '/sw.js' && updateWorker) content = Buffer.from(content.toString().replace('wfrp-cache-v3.12.0', 'wfrp-cache-v3.12.0-qa-update'));
+    if (route === '/sw.js' && updateWorker) content = Buffer.from(content.toString().replace(cacheName, updatedCacheName));
     res.writeHead(200, { 'Content-Type': types[extname(path)] || 'application/octet-stream', 'Cache-Control': 'no-cache' }); res.end(content);
   } catch (error) { res.writeHead(404); res.end(String(error.message)); }
 });
@@ -78,7 +80,7 @@ try {
     return { state, profile: Store.getProfile('pwa-pj'), keywords: getReferenceCatalogue().keywords.length, caches: await caches.keys() };
   }, fixture);
   await page.evaluate(async () => {
-    const { renderLog } = await import('/js/ui/log-view.js');
+    const { renderLog } = await import('/js/ui/journal-view.js');
     const mount = document.createElement('div'); mount.id = 'qa-journal'; document.body.appendChild(mount);
     const log = [{ kind: 'resolution', text: 'Jet historique', detail: { referenceVersion: 'references:version-historique', action: { note: '<img src=x onerror=alert(1)>', extensions: { fiche: { equipmentId: 'arc-1' } } }, ammunitionId: 'fleche-1', protection: { ap: 2, counted: [{ name: 'Maille historique' }] }, mechanics: [{ id: 'precise', name: 'Précise historique', status: 'covered', edition: 'Édition historique', effect: 'Effet conservé' }] } }];
     renderLog({ getLog: () => log, listParticipants: () => [], listProfiles: () => [] }, mount, { contextual: true });
@@ -89,7 +91,7 @@ try {
   assert.equal(await page.locator('#qa-journal img').count(), 0, 'historical source strings remain escaped');
   await page.locator('#qa-journal').evaluate(node => node.remove());
   assert.equal(seeded.profile.maxHp, 18); assert.equal(seeded.profile.hp, 18, 'reserve is a full-health template'); assert.equal(seeded.keywords, 55);
-  assert.ok(seeded.caches.includes('wfrp-cache-v3.12.0'));
+  assert.ok(seeded.caches.includes(cacheName));
   assert.equal(await page.getByRole('button', { name: 'Actualiser', exact: true }).count(), 0, 'first installation offers no inactive update button');
   await pwaContext.setOffline(true); await page.reload();
   await page.waitForFunction(() => document.querySelector('#app-content')?.style.display === 'block');
@@ -108,7 +110,7 @@ try {
   const revision = offline.after;
   await page.waitForFunction(() => document.querySelector('#local-status')?.dataset.status === 'saved');
   await page.getByRole('button', { name: 'Actualiser', exact: true }).click();
-  await page.waitForFunction(async () => (await caches.keys()).includes('wfrp-cache-v3.12.0-qa-update') && !(await caches.keys()).includes('wfrp-cache-v3.12.0'));
+  await page.waitForFunction(async ({ current, next }) => (await caches.keys()).includes(next) && !(await caches.keys()).includes(current), { current: cacheName, next: updatedCacheName });
   await page.waitForFunction(() => document.querySelector('#app-content')?.style.display === 'block');
   const updated = await page.evaluate(async () => { const { Store } = await import('/js/main.js'); await Store.ready; return { profile: Store.getProfile('pwa-pj'), revision: Store.getLocalRevision(), caches: await caches.keys() }; });
   assert.deepEqual(updated.profile, seeded.profile); assert.equal(updated.revision, revision); assert.equal(updated.caches.includes('qa-obsolete-cache'), false); assert.deepEqual(errors, []);
@@ -159,6 +161,9 @@ try {
   await accountPage.waitForFunction(async () => (await import('/js/main.js')).Store.getProfile('pwa-pj')?.extensions?.ficheId === 'caelel');
   await accountContext.setOffline(true); await accountPage.reload();
   await accountPage.waitForFunction(async () => (await import('/js/main.js')).Store.getProfile('pwa-pj')?.extensions?.ficheId === 'caelel');
+  // The remembered local context can hydrate before the deferred Auth adapter.
+  // Wait for Auth itself, rather than treating the presence of a profile as its completion.
+  await accountPage.waitForFunction(() => Number(localStorage.getItem('qa-auth-restores')) >= 2);
   assert.ok(await accountPage.evaluate(() => Number(localStorage.getItem('qa-auth-restores')) >= 2), 'Auth observer runs at cold offline startup');
   const offlineAccount = await accountPage.evaluate(async () => (await import('/js/main.js')).Store.getProfile('pwa-pj'));
   assert.deepEqual(offlineAccount, seeded.profile, 'only the persisted authenticated context is restored, without copying it into guest');

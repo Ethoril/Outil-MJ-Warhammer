@@ -495,7 +495,7 @@ js/
     dice-line.js       rendu et exécution d'une ligne de jet
     import-modal.js    modale d'import
     rules-view.js      génération des tables de référence
-    log-view.js        journal
+    journal-view.js        journal
 tests/
   dice.test.js
   states.test.js

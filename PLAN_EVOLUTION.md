@@ -244,7 +244,7 @@ Le fichier `tests/fixtures/ancien-format.json` reste intact. Ajouter de nouvelle
 - Introduire un test navigateur de démarrage et un parcours de base, exécutés avec des données fictives et un adaptateur de synchronisation isolé.
 - Ajouter une commande de test UI séparée de `npm test`. Un outil navigateur de développement est acceptable ; aucune dépendance ajoutée à l’application servie.
 
-**Surfaces :** `index.html`, `ui/reserve.js`, `ui/card.js`, `ui/log-view.js`, `core/store.js`, tests UI et unitaires.
+**Surfaces :** `index.html`, `ui/reserve.js`, `ui/card.js`, `ui/journal-view.js`, `core/store.js`, tests UI et unitaires.
 
 **Acceptation :** zéro exception au démarrage ; créer et modifier un profil complet ; l’importer, lui attribuer un jet et une couleur ; filtrer le journal ; terminer le combat sans ligne orpheline ; recharger et retrouver les données.
 
