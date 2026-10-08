@@ -56,3 +56,13 @@ Après la publication 3.12.0, un navigateur utilisateur a signalé `ERR_BLOCKED_
 L’écran initial indique désormais le chargement de l’espace. Le point d’entrée capture les erreurs du graphe de modules et propose un réessai explicite ; un démarrage prolongé propose également ce réessai. Aucun stockage local, compte, règle Firebase ni contenu de séance n’est supprimé ou changé par ce correctif.
 
 La suite du projet passe 397 tests. La reproduction ciblée du blocage et la recette PWA passent sous Edge avec IndexedDB natif ; l’identité Auth du segment hors ligne est simulée. Le module renommé conserve exactement le contenu de l’ancien module. Le contrôle indépendant vérifie aussi un autre import bloqué, le message visible, le réessai et l’identité complète de l’état local avant/après. Le remplacement d’un worker déjà en attente exige de fermer tous les anciens onglets contrôlés et de laisser son activation se terminer avant réouverture.
+
+## Correctif de reprise cloud 3.12.2
+
+La connexion Google réussissait mais la reprise de la session v2 échouait avec « Enveloppe de sauvegarde incomplète ». Le défaut a été reproduit sur la copie v2 sauvegardée avant le déploiement : son état contient le combat, les lignes de dés, les extensions et schemaVersion=2, mais la réserve vide n’est pas matérialisée dans le document RTDB.
+
+La migration cloud reconstruit uniquement `reserve: []` si le champ est absent, avant d’appeler la migration stricte existante. Un champ présent mais invalide reste rejeté ; un combat absent ou invalide n’est pas réparé implicitement. Les imports de fichiers gardent leur validation stricte. La source v2 et sa révision sont préservées ; une racine v3 existante n’est jamais remplacée. Aucune modification d’Auth ni des règles Firebase n’est incluse.
+
+La suite passe 404 tests, dont sept nouveaux contrôles anonymes de cette structure cloud, des champs conservés, du rejet avant écriture et de l’initialisation unique v3. La recette de cache utilise désormais la version applicative courante pour rester reproductible après les correctifs.
+
+Le contrôle indépendant passe sur la copie privée de la sauvegarde v2 : ses 12 lignes de dés et ses extensions sont conservées, la source reste intacte. Le test permanent `tests/cloud-sparse-v2-emulator.mjs` confirme avec Auth/RTDB locaux la suppression des listes vides, l’initialisation v3 unique, sa relecture et son adoption par le vrai Store/session, avec journal local préservé. Ce test Node utilise fake-indexeddb ; le contrôle navigateur séparé utilise IndexedDB natif et vérifie la mise à jour vers 3.12.2. Aucun test n’écrit dans la base de production et les règles restent identiques.

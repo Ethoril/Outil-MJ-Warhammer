@@ -3,6 +3,8 @@
  * Upgrade uses actual committed 3.12.0 files and real service workers.
  */
 import assert from 'node:assert/strict';
+import { APP_VERSION } from '../js/version.js';
+const currentCache = `wfrp-cache-v${APP_VERSION}`;
 import { createServer } from 'node:http';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, statSync, mkdirSync } from 'node:fs';
@@ -118,7 +120,7 @@ try {
   let activated = false;
   for (let attempt = 0; attempt < 200 && !activated; attempt += 1) {
     for (const worker of upgrade.serviceWorkers()) {
-      try { const names = await worker.evaluate(() => caches.keys()); activated = names.includes('wfrp-cache-v3.12.1') && !names.includes('wfrp-cache-v3.12.0'); } catch { /* old worker can terminate during activation */ }
+      try { const names = await worker.evaluate(() => caches.keys()); activated = names.includes(currentCache) && !names.includes('wfrp-cache-v3.12.0'); } catch { /* old worker can terminate during activation */ }
       if (activated) break;
     }
     if (!activated) await new Promise(done => setTimeout(done, 50));
@@ -126,15 +128,15 @@ try {
   assert.ok(activated, 'replacement activates after last old controlled page closes');
   const newPage = await upgrade.newPage(); await configureFilter(upgrade, newPage);
   await newPage.goto(url, { waitUntil: 'domcontentloaded' }); await ready(newPage);
-  await newPage.waitForFunction(async () => {
+  await newPage.waitForFunction(async current => {
     const names = await caches.keys();
-    return names.includes('wfrp-cache-v3.12.1') && !names.includes('wfrp-cache-v3.12.0');
-  }, { timeout: 20000 });
+    return names.includes(current) && !names.includes('wfrp-cache-v3.12.0');
+  }, currentCache, { timeout: 20000 });
   assert.deepEqual(await profile(newPage, 'upgrade-preserved'), oldProfile);
   assert.deepEqual(await readDurable(newPage), oldState, 'worker upgrade preserves the native IDB envelope');
-  await newPage.screenshot({ path: resolve(output, 'upgrade312-to3121.png'), fullPage: true });
+  await newPage.screenshot({ path: resolve(output, `upgrade312-to${APP_VERSION}.png`), fullPage: true });
   await upgrade.close();
-  console.log('Upgrade réel 3.12.0 → 3.12.1 : symptôme ancien reproduit, filtre maintenu, fermeture du dernier onglet, nouveau cache actif, profil et état local identiques.');
+  console.log(`Upgrade réel 3.12.0 → ${APP_VERSION} : symptôme ancien reproduit, filtre maintenu, fermeture du dernier onglet, nouveau cache actif, profil et état local identiques.`);
 } finally {
   await browser?.close();
   await new Promise(done => server.close(done));

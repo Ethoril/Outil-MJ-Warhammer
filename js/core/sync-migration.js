@@ -7,8 +7,13 @@ export function migrateV2SyncDocument(raw) {
     || Object.keys(raw).some(key => !['revision', 'state', 'receipts'].includes(key))) throw new SyncProtocolError('Session cloud v2 invalide : aucune reprise appliquée.');
   if (raw.state.schemaVersion !== undefined && raw.state.schemaVersion !== 2) throw new SyncProtocolError('Version de session source incompatible.');
   if (raw.receipts !== undefined && (!record(raw.receipts) || Object.values(raw.receipts).some(value => !Number.isSafeInteger(value) || value < 0))) throw new SyncProtocolError('Reçus de session v2 invalides.');
+  // Realtime Database omits empty lists from cloud snapshots. Reconstruct only
+  // the absent v2 reserve here; file imports retain migrateSnapshot's strict envelope.
+  // A present malformed value must still fail validation, never become an empty list.
+  const state = Object.prototype.hasOwnProperty.call(raw.state, 'reserve')
+    ? raw.state : { ...raw.state, reserve: [] };
   let data;
-  try { ({ data } = migrateSnapshot(raw.state)); } catch (cause) { throw new SyncProtocolError(`Session v2 non migrable : ${cause.message}`, "INVALID_STATE"); }
+  try { ({ data } = migrateSnapshot(state)); } catch (cause) { throw new SyncProtocolError(`Session v2 non migrable : ${cause.message}`, "INVALID_STATE"); }
   return createSyncDocument(data, { revision: raw.revision, receipts: {} });
 }
 /** A fresh v3 path may be initialized once. Existing roots, even malformed ones, are never overwritten. */
