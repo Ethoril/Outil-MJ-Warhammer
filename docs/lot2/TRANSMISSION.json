@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "preparedAt": "2026-10-08",
+  "repository": "https://github.com/Ethoril/Outil-MJ-Warhammer",
+  "developmentBranch": "codex/lot2-talents-v5",
+  "engineCommit": "7477421e937d73ba4d3cf81b1c8582c0c8315544",
+  "baseCommit": "28657e39477bbcbfeb0de826b3f1d05e525bb386",
+  "applicationVersion": "3.12.3",
+  "lastEngineVerification": {
+    "tests": 468,
+    "passed": 468,
+    "newLot2Tests": 62,
+    "date": "2026-10-08"
+  },
+  "nextStage": "2.1",
+  "mockupApproved": true,
+  "sourceConversionOwner": "MJ dans Aides de jeu",
+  "publicFolder": "docs/lot2/",
+  "pdfIncluded": false,
+  "applicationCodeInZip": false
+}

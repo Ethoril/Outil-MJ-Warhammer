@@ -1,0 +1,77 @@
+<style>
+
+#lot2-choice-demo { color-scheme: light dark; --combat-bg: light-dark(#fcfaf6,#211e1b); --combat-panel: light-dark(#ffffff,#2b2723); --combat-text: light-dark(#29241e,#f0e8dd); --combat-dim: light-dark(#665d52,#c4b6a4); --combat-border: light-dark(#d7cabb,#66594a); --combat-accent: light-dark(#795822,#e1ba75); --combat-selected: light-dark(#f0e4ce,#493b28); background:var(--combat-bg); color:var(--combat-text); padding:20px; border-radius:12px; font:14px/1.5 system-ui,sans-serif; }
+#lot2-choice-demo * { box-sizing:border-box; }
+#lot2-choice-demo h3 { font-size:18px; font-weight:500; margin:16px 0; }
+#lot2-choice-demo strong { font-weight:500; }
+#lot2-choice-demo .combat-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+#lot2-choice-demo .combat-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+#lot2-choice-demo .combat-option { padding:16px; border:1px solid var(--combat-border); border-radius:8px; background:var(--combat-panel); }
+#lot2-choice-demo .combat-badge { display:inline-block; padding:3px 8px; border-radius:5px; background:var(--combat-selected); color:var(--combat-text); font-size:12px; }
+#lot2-choice-demo .combat-button { font:inherit; color:var(--combat-text); background:var(--combat-panel); border:1px solid var(--combat-border); border-radius:6px; padding:9px 12px; cursor:pointer; }
+#lot2-choice-demo .combat-button[aria-pressed="true"] { background:var(--combat-selected); border-color:var(--combat-accent); }
+#lot2-choice-demo .combat-confirm { background:var(--combat-selected); }
+#lot2-choice-demo .combat-button:disabled { opacity:.5; cursor:default; }
+#lot2-choice-demo details { margin:16px 0; }
+#lot2-choice-demo summary { cursor:pointer; padding:7px 0; }
+#lot2-choice-demo .combat-table { width:100%; border-collapse:collapse; margin:8px 0; table-layout:fixed; }
+#lot2-choice-demo .combat-table th,#lot2-choice-demo .combat-table td { text-align:left; padding:8px 4px; border-bottom:1px solid var(--combat-border); overflow-wrap:anywhere; font-weight:400; }
+#lot2-choice-demo .combat-table th { font-weight:500; }
+#lot2-choice-demo .combat-note { color:var(--combat-dim); font-size:12px; }
+#lot2-choice-demo hr { border:0; border-top:1px solid var(--combat-border); margin:16px 0; }
+#lot2-choice-demo #lot2-receipt { margin-top:12px; overflow-wrap:anywhere; }
+@media(max-width:560px) { #lot2-choice-demo { padding:14px; } #lot2-choice-demo .combat-options { grid-template-columns:minmax(0,1fr); } }
+
+</style>
+<div id="lot2-choice-demo">
+<div class="combat-row"><span class="combat-badge">Exemple fictif</span><span>Tir contre un garde · Avantage disponible</span></div>
+<h3>Conserver 42 ou inverser en 24 ?</h3>
+<div class="combat-options">
+<section class="combat-option" aria-label="Option conserver le jet">
+<div class="combat-row"><strong>Conserver 42</strong><span class="combat-badge">Plus de Blessures</span></div>
+<p>Touché · +3 DR</p><p>Bras gauche · Protection légère</p><p><strong>5 Blessures infligées</strong></p>
+<button class="combat-button" type="button" data-option="keep" aria-pressed="false">Choisir 42</button>
+</section>
+<section class="combat-option" aria-label="Option inverser le jet">
+<div class="combat-row"><strong>Inverser en 24</strong><span class="combat-badge">Plus de DR</span></div>
+<p>Touché · +5 DR</p><p>Bras droit · Protection renforcée</p><p><strong>3 Blessures infligées</strong></p>
+<button class="combat-button" type="button" data-option="reverse" aria-pressed="false">Choisir 24</button>
+</section>
+</div>
+<details><summary class="combat-summary">Voir les calculs et les règles</summary>
+<table class="combat-table"><thead><tr><th>Calcul</th><th>Conserver 42</th><th>Inverser en 24</th></tr></thead><tbody>
+<tr><td>Score de tir</td><td>70</td><td>70</td></tr>
+<tr><td>DR</td><td>7 − 4 = +3</td><td>7 − 2 = +5</td></tr>
+<tr><td>Localisation</td><td>42 → 24 : bras gauche</td><td>24 → 42 : bras droit</td></tr>
+<tr><td>Dégâts</td><td>Arme 6 + DR 3 = 9</td><td>Arme 6 + DR 5 = 11</td></tr>
+<tr><td>Protection</td><td>BE 3 + PA 1 = 4</td><td>BE 3 + PA 5 = 8</td></tr>
+<tr><td>Blessures</td><td>9 − 4 = 5</td><td>11 − 8 = 3</td></tr>
+</tbody></table><div class="combat-note">Avantage : inversion favorable facultative. Localisation calculée depuis le jet retenu. Protections fictives.</div>
+</details><hr>
+<div class="combat-row"><span id="lot2-selected" aria-live="polite">Aucun choix confirmé</span><button id="lot2-apply" class="combat-button combat-confirm" type="button" disabled>Confirmer le choix</button></div>
+<div id="lot2-receipt" hidden aria-live="polite"></div>
+</div>
+<script>
+(() => {
+const root=document.getElementById('lot2-choice-demo');
+const buttons=[...root.querySelectorAll('[data-option]')];
+const selected=root.querySelector('#lot2-selected');
+const apply=root.querySelector('#lot2-apply');
+const receipt=root.querySelector('#lot2-receipt');
+const options={keep:{roll:42,location:'bras gauche',wounds:5},reverse:{roll:24,location:'bras droit',wounds:3}};
+let choice=null;
+buttons.forEach(button=>button.addEventListener('click',()=>{
+choice=button.dataset.option;
+buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+const r=options[choice];
+selected.textContent='Choix : '+r.roll+' · '+r.location+' · '+r.wounds+' Blessures';
+apply.disabled=false;receipt.hidden=true;
+}));
+apply.addEventListener('click',()=>{
+if(!choice)return;
+const r=options[choice];
+receipt.textContent='Aperçu du journal : Tir → garde · '+r.location+' · −'+r.wounds+' Blessures · jet '+r.roll+' retenu';
+receipt.hidden=false;apply.disabled=true;selected.textContent='Choix confirmé dans cet exemple';
+});
+})();
+</script>
