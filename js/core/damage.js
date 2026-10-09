@@ -141,11 +141,12 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
   const isPercutante = !isInoffensive && activeEngines.some(ae => ae.engine.engine === 'add-units-die');
   const bonusPercutante = isPercutante ? unitsDie : 0;
 
-  // 2. Dévastatrice : utilise max(unitsDie, SL) pour les SL de dégâts
+  // 2. Dévastatrice : max(chiffre littéral des unités du jet retenu, SL), 0 reste 0.
+  const unitsDigit = Number(roll) > 0 ? Number(roll) % 10 : 0;
   const isDevastatrice = !isInoffensive && activeEngines.some(ae => ae.engine.engine === 'best-of-units-or-sl');
   let effectiveSL = Number(sl) || 0;
-  if (isDevastatrice && unitsDie > effectiveSL) {
-    effectiveSL = unitsDie;
+  if (isDevastatrice && unitsDigit > effectiveSL) {
+    effectiveSL = unitsDigit;
   }
 
   // 3. Inoffensive : PA x 2, pas de plancher

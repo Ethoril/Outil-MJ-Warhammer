@@ -39,3 +39,5 @@ Le catalogue contient 105 clauses automatiques et 10 assistées, comptées sépa
 [Le contrôle indépendant 2.4](LOT2_CONTROLE_2_4.md) et [l’avancement](LOT2_AVANCEMENT.md) donnent les commandes et résultats finaux. Les tests de source utilisent réellement le catalogue chargé/actualisé et le Store, et les recettes Edge manipulent les vrais champs, choix et boutons d’application.
 
 Toute nouvelle famille mécanique demande son incrément commun, son contrat validé et sa recette avant activation. La couverture visible des 206 talents permet de poursuivre les vagues 2.4 ; Riposte/Frappe réactive et les clauses encore manuelles ne sont pas activées par cette livraison locale. La recette globale 2.5, le cloud réel et toute publication restent des étapes ultérieures.
+
+Le contrôle ultérieur des mots-clés porte la version à `v5-combat-2026-10-09.24.4` : Dévastatrice unités littérales 0=0 décidée par le MJ, revalidation des qualités contributrices et du bouclier. [Recettes et limites](LOT2_CONTROLE_MOTS_CLES.md), dont Coup ciblé + Partielle avec PA explicitement arbitrés.

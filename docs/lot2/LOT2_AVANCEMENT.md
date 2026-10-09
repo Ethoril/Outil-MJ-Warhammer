@@ -10,7 +10,7 @@ La **première vague 2.4 est réalisée localement** : 35 contrats de Tests et F
 
 Frappe assommante et Assommante gèrent Sonné sur la perte réelle de Blessures à la tête, avec Mâchoires/Battement. La neutralisation silencieuse suit la décision MJ p. 135, Test opposé hors combat sans Coup ciblé ; dégâts/états spéciaux restent manuels, aucun critique ou gain d’Élan de combat. Orateur et les autres Tests emploient compétences canoniques et contextes explicites. Maître en déguisement/Loup de mer/Numismate offrent un choix après réussite DR/unités, sans relance ; 0 reste 0.
 
-[Le rapport 2.4](LOT2_RACCORDEMENT_2_4.md) décrit mécanique/API/limites ; [le contrôle indépendant](LOT2_CONTROLE_2_4.md) consigne les défauts détectés puis corrigés. L’application relit toutes les empreintes contributrices contre la source courante, y compris après actualisation survenue depuis l’aperçu. Version mécanique `v5-combat-2026-10-09.24.2`.
+[Le rapport 2.4](LOT2_RACCORDEMENT_2_4.md) décrit mécanique/API/limites ; [le contrôle indépendant](LOT2_CONTROLE_2_4.md) consigne les défauts détectés puis corrigés. L’application relit toutes les empreintes contributrices contre la source courante, y compris après actualisation survenue depuis l’aperçu. Version mécanique `v5-combat-2026-10-09.24.4`.
 
 ## Validation reproductible
 
@@ -28,7 +28,7 @@ node tools/build-v5-talent-coverage.mjs
 git diff --check
 ```
 
-Recette finale : **769/769 tests Node réussis**, zéro échec, annulation ou test ignoré. Les **97 nouveaux tests 2.4** comprennent 46 Tests contextuels/choix, 19 qualités/neutralisation et 32 contrôles Store indépendants, inclus dans le total.
+Recette finale : **801/801 tests Node réussis**, zéro échec, annulation ou test ignoré. Les **97 nouveaux tests 2.4** comprennent 46 Tests contextuels/choix, 19 qualités/neutralisation et 32 contrôles Store indépendants, inclus dans le total, avec 32 tests supplémentaires du contrôle des mots-clés.
 
 La première vague ef073c3 avait réussi les sept recettes Edge ci-dessus. Après les décisions MJ et la source corrigée, **cinq recettes Edge pertinentes sont repassées séparément** : 2.3 développement, 2.4 indépendant, démarrage, fiches et références. Elles éprouvent gestes ordinateur/téléphone, sombre/parchemin, vrais choix et boutons d’application, annulation, cache et imports. La recette 2.4 inclut doubles réussis des deux côtés en neutralisation, avec PV/états/Élan préservés. Le démarrage éprouve le cache réel 3.12.0 → 3.12.3 et IndexedDB préservée. Le générateur produit à nouveau exactement le même catalogue ; diff conforme.
 
@@ -51,3 +51,7 @@ Poursuivre les vagues mécaniques 2.4 encore manuelles, notamment Riposte/Frappe
 Sept descriptions corrigées sont relues dans le CSV public, 206 IDs conservés. Résistance est le seul contrat actif dont l’empreinte source a changé ; sa précision « durant la session » est revalidée sans activer le quota de réussite automatique. Les trois contrats de choix DR/unités portent une nouvelle version de règle pour la lecture littérale 0=0. Le choix peut donner 0 DR en conservant la réussite marginale ; les DR initiaux restent disponibles. Aucun échec n’est converti en réussite.
 
 Le contrôle indépendant comprend 32 tests et les gestes Edge 0 DR/apply/undo plus Petit en rappel homebrew. Toutes les clauses de Petit sont conservées manuellement, sauf coût Piétinement 1 Élan/Momentum ; aucun recalcul de Taille ou Blessures importées. Les signalements Seigneur de guerre et contradiction des frappes sont retirés après relecture. [L’audit](ECARTS_LIVRE_V5_AIDES_DE_JEU.md) est actualisé.
+
+## Contrôle des mots-clés après talents
+
+[Rapport et commandes](LOT2_CONTROLE_MOTS_CLES.md) : 5 740 comparaisons contre 6871764/09df6c2, aucun écart inattendu, descriptions des 55 mots-clés et profils inchangés. Sources revalidées à confirmation et Protectrice contrôlée même sans touche. Les contre-tests préservent objets inutilisés et PA arbitrés. Décision MJ supplémentaire : Dévastatrice 0=0 après inversion, Inoffensive continue de l’annuler. Quatre recettes Edge pertinentes éprouvent mots-clés, 2.4, fiches et références. La combinaison Coup ciblé + Partielle reste à arbitrer en PA. Aucune activation des familles manuelles, aucun push/déploiement.

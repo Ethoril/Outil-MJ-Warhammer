@@ -55,7 +55,7 @@ const locationId=context=>{
 const supportedConditional = id => contracts.entries.find(w=>w.id===id);
 /** Effective armour for a supplied hit context. Shield never enters permanent PA. */
 export function locationProtection(target,context={}){
- const id=locationId(context),warnings=[],manual=[];if(!id)return {ap:null,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:['localisation-requise'],warnings};
+ const id=locationId(context),warnings=[],manual=[],evaluatedKeywords=new Set();if(!id)return {ap:null,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:['localisation-requise'],warnings};
  const hasEquipment=Array.isArray(target?.equipment)&&target.equipment.some(i=>i.kind==='armour'||i.kind==='shield');
  const armor=target?.armorLocations??target?.armor??{};
  const protection=hasEquipment?armourProtection(target.equipment):null;
@@ -66,6 +66,7 @@ export function locationProtection(target,context={}){
  const attackWords=(context.qualities||[]).map(w=>resolveKeyword(typeof w==='string'?w:w.id)?.id??(typeof w==='string'?w:w.id));
  let criticalIgnored=false;
  for(const item of location?.counted||[]){let include=true;const known=item.keywords.map(w=>w.id);
+ for(const keywordId of known)evaluatedKeywords.add(keywordId);
  for(const keywordId of known)if(!resolveKeyword(keywordId))manual.push(`effet-inconnu:${keywordId}`);
  for(const keywordId of known.filter(word=>['flexible','partielle','points-faibles','impenetrable'].includes(word))){
   const source=resolveKeyword(keywordId);const baseline=supportedConditional(keywordId);
@@ -86,6 +87,7 @@ export function locationProtection(target,context={}){
   else if(context.opposedWithShield===true){
    if(context.defenseProvided!==true)manual.push('jet-opposition-requis:bouclier');
    if(typeof context.ranged!=='boolean')manual.push('type-attaque-requis:bouclier');
+   evaluatedKeywords.add('protectrice');
    const definition=resolveKeyword('protectrice'),baseline=supportedConditional('protectrice');
    if(!definition||definition.effect!==baseline?.effect||definition.edition!==baseline?.edition)manual.push('effet-non-couvert:protectrice');
    const word=shield.keywords.find(w=>w.id==='protectrice'),rating=Number(word?.parameter);
@@ -97,6 +99,6 @@ export function locationProtection(target,context={}){
   }
   else if(context.opposedWithShield===undefined)manual.push('usage-bouclier-requis');
  }
- if(context.manualAp!==undefined&&context.manualAp!==null){const override=Number(context.manualAp);if(Number.isFinite(override)&&override>=0)return {location:id,ap:override,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[],warnings,arbitrated:true};}
- return {location:id,ap:manual.length?null:ap+shieldAp,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[...new Set(manual)],warnings};
+ if(context.manualAp!==undefined&&context.manualAp!==null){const override=Number(context.manualAp);if(Number.isFinite(override)&&override>=0)return {location:id,ap:override,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[],warnings,evaluatedKeywords:context.critical&&evaluatedKeywords.has('impenetrable')?['impenetrable']:[],arbitrated:true};}
+ return {location:id,ap:manual.length?null:ap+shieldAp,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[...new Set(manual)],warnings,evaluatedKeywords:[...evaluatedKeywords]};
 }

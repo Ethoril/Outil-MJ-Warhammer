@@ -25,3 +25,7 @@ L’utilisateur demande aussi un document pour corriger Aides de jeu : [audit](E
 ## Mise à jour après retour du MJ
 
 Les sept corrections d’Aides de jeu ont été relues et intégrées. Résistance est le seul contrat actif dont la description a changé ; son empreinte a été revalidée sans activer la réussite automatique par séance. Tous les choix DR/unités raccordés lisent désormais le chiffre littéral : 20→0, réussite conservée. Petit est conservé intégralement en homebrew, Piétinement 1 Élan ; aucune migration Taille/PV. Les signalements Seigneur de guerre et contradiction des deux frappes sont retirés. Lire l’audit actualisé ; ne pas reprendre ses recommandations 0→10 antérieures.
+
+## Contrôle des mots-clés après talents
+
+[Contrôle des mots-clés](LOT2_CONTROLE_MOTS_CLES.md) terminé : 801 tests Node, 32 nouvelles recettes et 5 740 comparaisons des états antérieurs. Deux lacunes préexistantes de sources/Protectrice corrigées. Dévastatrice applique aussi la décision MJ unités littérales 0=0, après inversion ; Inoffensive l’annule. Version mécanique .24.4. Une pièce inutilisée ou un bouclier indisponible ne rend pas l’aperçu périmé ; les PA arbitrés sont conservés. Coup ciblé + Partielle demande encore des PA arbitrés, aucune parité inventée. Pas de nouvelle famille automatique ni publication.

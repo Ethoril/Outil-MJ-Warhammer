@@ -1,10 +1,11 @@
 /** Common V5 combat context; session resources live in extensions.v5. */
 import { previewV5Test } from './v5-roll.js';
 import { activeEngines } from './roll-qualities.js';
+import { keywordMechanicalStatus } from './keywords.js';
 import { activeV5TalentEffects } from './v5-talents.js';
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
-export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.2';
+export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.4';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
 export const withMomentum = (actor, value) => !value && actor.extensions?.v5?.hasMomentum === undefined ? actor : ({ ...actor, extensions: { ...(actor.extensions || {}), v5: { ...(actor.extensions?.v5 || {}), hasMomentum: Boolean(value) } } });
 export const conditionLevels = actor => {
@@ -44,9 +45,12 @@ export function v5ShieldDefense(normalized) {
   const shield = normalized.target?.equipment?.find(item => item.kind === 'shield' && item.id === context.shieldId);
   const word = shield?.keywords?.find(item => item.id === 'protectrice');
   const rating = word?.parameter?.trim() === '' ? null : Number(word?.parameter);
-  const confirmed = Boolean(normalized.defense && shield && context.shieldAvailable === true && context.opposedWithShield === true
+  const contextConfirmed = Boolean(normalized.defense && shield && context.shieldAvailable === true && context.opposedWithShield === true
     && !normalized.target?.extensions?.shieldUnavailable?.includes(shield.id) && Number.isSafeInteger(rating) && rating > 0);
-  return { confirmed, rangedDodgeAllowed: confirmed && rating >= 2, rating: confirmed ? rating : null };
+  const sourceCovered = !contextConfirmed || keywordMechanicalStatus('protectrice').status === 'covered';
+  const confirmed = contextConfirmed && sourceCovered;
+  return { confirmed, rangedDodgeAllowed: confirmed && rating >= 2, rating: confirmed ? rating : null,
+    unresolved: contextConfirmed && !sourceCovered ? 'Bouclier : source de Protectrice non couverte ; arbitrage MJ requis.' : null };
 }
 export function buildCombatTest(normalized, role = 'actor') {
   const defending = role === 'defender';
@@ -68,7 +72,9 @@ export function buildCombatTest(normalized, role = 'actor') {
     const defenseEngines = kind === 'melee' ? activeEngines(action.qualities || []).filter(engine => engine.engine === 'defense-sl-bonus') : [];
     const overriddenDefense = new Set(defenseEngines.flatMap(engine => engine.overrides || []));
     const defensive = defenseEngines.some(engine => engine.id === 'defensive' && !overriddenDefense.has(engine.id));
-    const shield = v5ShieldDefense(normalized).confirmed;
+    const shieldDefense = v5ShieldDefense(normalized);
+    if (shieldDefense.unresolved) unresolved.push(shieldDefense.unresolved);
+    const shield = shieldDefense.confirmed;
     if (defensive || shield) modifiers.push({ id: 'defensive-protection', label: shield ? 'Bouclier V5 (ne cumule pas Défensive)' : 'Défensive', amount: 1 });
     for (const engine of defenseEngines) if (!overriddenDefense.has(engine.id) && engine.params.bonus < 0)
       modifiers.push({ id: `quality-${engine.id}`, label: 'Déséquilibrée', amount: engine.params.bonus });

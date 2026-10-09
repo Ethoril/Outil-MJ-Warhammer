@@ -449,6 +449,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   let criticalFirst = criticalAttack && !replacement ? criticalDetails(normalized.criticalRolls, criticalLocation, 0, inoffensive) : null;
   let damage = null;
   let protection = null;
+  // Preserve every protection consulted, including pieces/criticals it suppresses.
+  const protectionReceipts = [];
   const unresolved = [...actorPlan.unresolved, ...(defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(defenderPlan?.restrictions || [])];
   if (attackType(action.type) && context.calledShot === true && !CALLED_SHOT_LOCATIONS[context.calledShotLocation]) unresolved.push('Coup ciblé : préciser la localisation visée.');
   const actorSkillId = action.extensions?.fiche?.skillId ?? context.skillId;
@@ -479,6 +481,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       ranged: normalized.attackContext?.ranged ?? (normalized.v5.kind === 'ranged' ? true : normalized.v5.kind === 'melee' ? false : normalized.protectionContext.ranged), defenseProvided: Boolean(normalized.defense),
       location, attackRoll: roll,
       hitLocationRoll: location?.roll, critical: criticalAttack, qualities: action.qualities });
+    protectionReceipts.push(protection);
     const targetArmour = protection.ap;
 
     if (targetArmour !== null && !mechanicalWarnings.length)     damage = computeDamage({
@@ -498,6 +501,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     const guard = locationProtection(target, { ...normalized.protectionContext, location: criticalFirst.location,
       ranged: normalized.attackContext?.ranged ?? (normalized.v5.kind === 'ranged' ? true : normalized.v5.kind === 'melee' ? false : normalized.protectionContext.ranged), defenseProvided: Boolean(normalized.defense), attackRoll: roll, hitLocationRoll: criticalFirst.locationRoll,
       critical: true, qualities: action.qualities });
+    protectionReceipts.push(guard);
     if (guard.criticalIgnored) criticalFirst = null;
     else { criticalFirst.protection = guard; unresolved.push(...guard.manual.map(reason => `Protection du critique : ${reason}`)); }
   }
@@ -519,6 +523,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     const details = criticalDetails(normalized.defenderCriticalRolls, critLocation, 0, normalized.defense.qualities.some(q => q.id === 'inoffensive'));
     const guard = critLocation ? locationProtection(actor, { location: critLocation, attackRoll: defenderTest.roll,
       hitLocationRoll: critLocation.roll, critical: true, ranged: false, qualities: normalized.defense.qualities }) : null;
+    if (guard) protectionReceipts.push(guard);
     if (!guard?.criticalIgnored) {
       if (guard) { details.protection = guard; unresolved.push(...guard.manual.map(reason => `Protection du critique défensif : ${reason}`)); }
       const items = criticalItems(details, null, normalized.defenderCriticalDeclined);
@@ -606,7 +611,14 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     protection,
     mechanicalWarnings,
     referenceVersion: getReferenceStatus().contentVersion,
-    mechanics: [...new Set([...action.qualities.map(q=>q.id),...(protection?.counted||[]).flatMap(item=>item.keywords.map(word=>word.id))])].map(id=>{const coverage=v5QualityMechanicalStatus(id);return {id,name:coverage.word?.name??id,status:coverage.status,engine:coverage.engine?.engine??null,effectVersion:coverage.effectVersion??null,effect:coverage.word?.effect??null,edition:coverage.word?.edition??null,source:coverage.word?.source??null,limitations:coverage.limitations||[]};}),
+    mechanics: [...new Set([...allQualities.map(q => q.id),
+      ...(v5ShieldDefense(normalized).confirmed ? ['protectrice'] : []),
+      ...protectionReceipts.flatMap(guard => guard.evaluatedKeywords || [])])].map(id => {
+      const coverage = v5QualityMechanicalStatus(id);
+      return { id, name: coverage.word?.name ?? id, status: coverage.status, engine: coverage.engine?.engine ?? null,
+        effectVersion: coverage.effectVersion ?? null, effect: coverage.word?.effect ?? null, edition: coverage.word?.edition ?? null,
+        source: coverage.word?.source ?? null, limitations: coverage.limitations || [] };
+    }),
     opposition: opposed
       || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
@@ -645,8 +657,14 @@ export function applyResolution(preview, currentState) {
   if (preview.protection?.manual?.length || preview.mechanicalWarnings?.length) {
     return { status: 'manual', reason: preview.protection?.manual?.[0] || 'version-effet-non-couverte', state: clone(currentState), resolution: clone(preview) };
   }
-  if (preview.weaponConditions?.proposed?.length && v5QualityMechanicalStatus('assommante').status !== 'covered')
-    return { status: 'manual', reason: 'Assommante : source changée, recalcul requis.', state: clone(currentState), resolution: clone(preview) };
+  // Re-read only the contractual Qualities used by this preview. Editorial
+  // reminders remain manual; changing an unrelated reference never invalidates it.
+  for (const receipt of (preview.mechanics || []).filter(row => row.status === 'covered')) {
+    const live = v5QualityMechanicalStatus(receipt.id);
+    if (live.status !== 'covered' || live.effectVersion !== receipt.effectVersion || live.engine?.engine !== receipt.engine
+      || live.word?.effect !== receipt.effect || live.word?.edition !== receipt.edition || live.word?.source !== receipt.source)
+      return { status: 'manual', reason: `${receipt.name} : source changée, recalcul requis.`, state: clone(currentState), resolution: clone(preview) };
+  }
   const liveTalentHashes = currentV5TalentHashes();
   const preparationOrigins = preview.input.qualityTalentPlan?.proposals?.flatMap(row => row.origins) || [];
   const resolutionOrigins = [...preparationOrigins,...(preview.talentPlans || []).flatMap(plan=>(plan.proposals || []).flatMap(row=>row.origins || []))];

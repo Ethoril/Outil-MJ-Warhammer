@@ -5,7 +5,7 @@ Dossier actualisé localement le 9 octobre 2026 après la première vague 2.4. L
 ## Lire dans cet ordre
 
 1. [Passation prête à copier](PASSATION_PROCHAINE_FENETRE.md) et [reprise agent](REPRISE_AGENT.md).
-2. [Raccordement 2.4](LOT2_RACCORDEMENT_2_4.md), [contrôle indépendant](LOT2_CONTROLE_2_4.md) et [écarts livre/Aides de jeu](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
+2. [Raccordement 2.4](LOT2_RACCORDEMENT_2_4.md), [contrôle indépendant](LOT2_CONTROLE_2_4.md), [contrôle des mots-clés](LOT2_CONTROLE_MOTS_CLES.md) et [écarts livre/Aides de jeu](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
 3. [Avancement et commandes](LOT2_AVANCEMENT.md), [étapes](LOT2_ETAPES.md), [décisions validées](CHOIX_POUR_LA_REPRISE.md).
 4. [Cadrage](LOT2_CADRAGE.md), [contrats moteur](LOT2_CONTRATS_MOTEUR.md), [inventaire](LOT2_INVENTAIRE_TALENTS.md), [JSON](LOT2_INVENTAIRE_TALENTS.json) et [sources/transfert](SOURCES_ET_TRANSFERT.md).
 5. Historique : [raccordement 2.3](LOT2_RACCORDEMENT_2_3.md), [contrôle 2.3](LOT2_CONTROLE_2_3.md), [socle 2.3](LOT2_ETAPE_2_3_SOCLE.md), [premier incrément](LOT2_DEMARRAGE.md), [contrôle 2.1/2.2](LOT2_CONTROLE.md).

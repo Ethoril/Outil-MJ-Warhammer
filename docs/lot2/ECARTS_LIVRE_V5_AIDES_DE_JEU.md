@@ -28,6 +28,8 @@ Formulation de table :
 
 Un jet réussi de **20** permet donc de garder ses DR ou de retenir **0 DR**. Le choix de 0 conserve une réussite marginale (+0), et ne transforme pas un échec en réussite. Le jet de 100 reste un échec automatique. Si une inversion est choisie, lire les unités du **jet inversé retenu**, avec un choix distinct de l’option conservée.
 
+Pendant le contrôle des mots-clés, le MJ étend explicitement cette lecture littérale à **Dévastatrice** : les dégâts prennent le maximum entre DR et chiffre des unités 0 à 9 du jet final. Inoffensive l’annule toujours. Cette décision est intégrée au moteur et aux [recettes de mots-clés](LOT2_CONTROLE_MOTS_CLES.md).
+
 Cette décision concerne tous les talents permettant ce choix : Attirant (p. 115), Maître en déguisement et Travailleur qualifié (p. 122), Numismate et Loup de mer (p. 123), Intrigant (p. 125), Bonnes jambes et Chirurgie (p. 127), Marinier et Tour des souvenirs (p. 128). Les déclencheurs propres à chacun restent nécessaires.
 
 Le moteur raccordé couvre actuellement ce choix pour Maître en déguisement, Loup de mer et Numismate. Les autres talents restent des rappels jusqu’à contractualisation ; cette décision ne les active pas automatiquement.

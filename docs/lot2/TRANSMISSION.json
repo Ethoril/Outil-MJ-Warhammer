@@ -7,24 +7,24 @@
   "baseCommit": "28657e39477bbcbfeb0de826b3f1d05e525bb386",
   "applicationVersion": "3.12.3",
   "lastEngineVerification": {
-    "tests": 769,
-    "passed": 769,
+    "tests": 801,
+    "passed": 801,
     "failed": 0,
     "skipped": 0,
     "date": "2026-10-09",
-    "scope": "local source corrections and explicit MJ rulings; synthetic fixtures",
+    "scope": "local keyword/talent non-regression, live-source confirmation guards, explicit MJ Damaging 0=0; synthetic fixtures",
     "browserSuites": [
-      "test:lot2-23-browser",
-      "test:startup",
       "test:fiches-browser",
       "test:references-browser"
     ],
     "independentBrowserSuites": [
-      "test:lot2-24-browser"
+      "test:lot2-24-browser",
+      "node tests/lot2-v5-keyword-control-browser.mjs"
     ],
     "independentStoreTests": 32,
     "newStage24Tests": 97,
-    "revision": "local commit containing this manifest"
+    "revision": "local commit containing this manifest",
+    "newKeywordAuditTests": 32
   },
   "nextStage": "2.4 remaining mechanical families, then separate 2.5 delivery acceptance",
   "mockupApproved": true,
@@ -35,7 +35,7 @@
   "engineCommitRole": "historical-initial-foundation",
   "localIncrement": {
     "date": "2026-10-09",
-    "baseCommit": "ef073c3",
+    "baseCommit": "f659eec",
     "revision": "local commit containing this manifest",
     "remotePublished": false,
     "completedStages": [
@@ -94,7 +94,7 @@
     "activeContractCount": 41,
     "catalogueTreatmentCount": 206,
     "allEffectsCertified": false,
-    "ruleVersion": "v5-combat-2026-10-09.24.2"
+    "ruleVersion": "v5-combat-2026-10-09.24.4"
   },
   "initialEngineVerification": {
     "tests": 468,
@@ -195,5 +195,23 @@
     "independentStoreTests": 30,
     "newStage24Tests": 91,
     "revision": "ef073c3"
+  },
+  "keywordAudit": {
+    "report": "LOT2_CONTROLE_MOTS_CLES.md",
+    "baselines": [
+      "6871764",
+      "09df6c2"
+    ],
+    "comparisons": 5740,
+    "unexpectedDifferences": 0,
+    "expectedAssommanteDifferences": 36,
+    "explicitLiteralDamagingDifferences": 22,
+    "keywordDescriptions": 55,
+    "equipmentDataUnchanged": true,
+    "independentTests": 32,
+    "literalDamagingUnits": "max(damage SL, final roll units digit 0 to 9); Undamaging cancels",
+    "knownLimit": "Called shot plus Partial needs explicitly arbitrated AP; no invented hit-location parity",
+    "sourceGuards": "only contractual Qualities evaluated, including suppressed criticals; unused gear and explicit AP arbitration remain valid",
+    "remotePublished": false
   }
 }
