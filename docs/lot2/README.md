@@ -32,6 +32,8 @@ Node.js et npm sont nécessaires. `npm ci` reconstruit les dépendances ; aucun 
 
 ## Lire dans cet ordre
 
+Pour un nouveau chat, commencer par [la passation prête à copier](PASSATION_PROCHAINE_FENETRE.md).
+
 1. [REPRISE_AGENT.md](REPRISE_AGENT.md) : contexte et consigne à donner à l’agent.
 2. [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md) et [LOT2_CONTROLE.md](LOT2_CONTROLE.md) : raccordement 2.1/2.2, validation et limites.
 3. [LOT2_ETAPES.md](LOT2_ETAPES.md) : six étapes, prochaine étape 2.3.
@@ -51,4 +53,4 @@ Consultation : https://ethoril.github.io/Outil-MJ-Warhammer/docs/lot2/
 
 Seul `docs/lot2/` est publié sur main. Le dossier local décrit désormais le moteur raccordé 2.1/2.2 et le socle 2.3 préparé. Cette mise à jour locale ne publie ni le dossier ni le moteur ; Firebase n’est pas modifié. Le livre PDF personnel doit être transféré séparément. Les fichiers temporaires et la conversation d’origine ne sont pas nécessaires à la reprise.
 
-Voir aussi [arbitrages pour la reprise](CHOIX_POUR_LA_REPRISE.md) et [socle 2.3](LOT2_ETAPE_2_3_SOCLE.md).
+Voir aussi [trois arbitrages validés](CHOIX_POUR_LA_REPRISE.md) et [socle 2.3](LOT2_ETAPE_2_3_SOCLE.md).

@@ -1,6 +1,6 @@
 # Reprise du chantier local V5
 
-Mise à jour du 9 octobre 2026. Lire ce document avant de repartir de l'ancien premier incrément.
+Mise à jour du 9 octobre 2026, après validation des trois arbitrages. Pour un nouveau chat, lire aussi [PASSATION_PROCHAINE_FENETRE.md](PASSATION_PROCHAINE_FENETRE.md).
 
 > Continuer sur `codex/lot2-talents-v5`, dans son worktree attaché. Les étapes 2.1 et 2.2 sont raccordées au combat et validées localement ; le socle 2.3 est préparé séparément et ne doit pas être annoncé comme actif. Lire `LOT2_AVANCEMENT.md`, `LOT2_CONTROLE.md`, `LOT2_ETAPES.md`, le cadrage et les contrats. Ne pas remplacer ce travail par le socle distant antérieur. Ne pas pousser, fusionner dans main ni déployer sans instruction du MJ. La publication précédente de main concernait seulement docs/lot2/.
 
@@ -22,4 +22,4 @@ Mise à jour du 9 octobre 2026. Lire ce document avant de repartir de l'ancien p
 
 Prochaine étape : raccorder le socle 2.3 aux aperçus, aux choix de l'interface et à la commande Store commune ; ensuite contractualiser le catalogue utile 2.4 avec couverture explicite. Les coûts de Fortune des récupérations sont actuellement confirmés comme décomptés à la table ; aucun compteur de ressource n'est modifié implicitement.
 
-Le livre personnel est `Livre de base V5 EN v2.pdf`, consulté dans le dossier de règles fourni par le MJ. Aucun PDF ni export privé n'est dans Git ou le ZIP. Les scénarios de recette sont synthétiques. `CHOIX_POUR_LA_REPRISE.md` prépare les arbitrages restant utiles sans bloquer le travail déjà validé.
+Le livre personnel est `Livre de base V5 EN v2.pdf`, consulté dans le dossier de règles fourni par le MJ. Aucun PDF ni export privé n'est dans Git ou le ZIP. Les scénarios de recette sont synthétiques. `CHOIX_POUR_LA_REPRISE.md` consigne les trois arbitrages validés : choix MJ des pénalités mixtes, Battement supprimant toutes les Blessures et conséquences du critique, Fortune gérée par personnage dans l’outil entre les rencontres, avec dépenses annulables et sans écriture automatique dans la fiche. Ne pas redemander ces choix ; leur raccordement 2.3 reste à développer.

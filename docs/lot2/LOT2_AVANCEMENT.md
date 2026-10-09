@@ -40,6 +40,10 @@ Les scripts navigateur utilisent Edge sur Windows, ou `PLAYWRIGHT_EXECUTABLE_PAT
 
 Recette finale du 9 octobre : **619/619 tests Node réussis, zéro échec ni test ignoré**. Les trois recettes navigateur ci-dessus sont réussies : combat V5 sur ordinateur/téléphone et deux thèmes, démarrage/mise à jour PWA, fiches PJ et synchronisation. Le contrôle indépendant supplémentaire couvre aussi le socle 2.3 et les horloges d’acquisition.
 
+## Passation et décisions validées
+
+Les trois arbitrages sont fixés dans [CHOIX_POUR_LA_REPRISE.md](CHOIX_POUR_LA_REPRISE.md). [PASSATION_PROCHAINE_FENETRE.md](PASSATION_PROCHAINE_FENETRE.md) contient le message à copier, le contexte technique et la suite. Cette actualisation est documentaire ; la validation du moteur ci-dessus reste celle du commit `6871764`.
+
 ## Suite du chantier
 
 Le socle pur 2.3 est préparé et testé séparément : `LOT2_ETAPE_2_3_SOCLE.md`. Il reste à relier ses coûts, ressources, quotas, choix et échéances à l'action réelle, puis aux contrats source et à leur couverture visible. L'inventaire de 206 talents reste préparatoire ; la priorité des PJ actuels doit venir des snapshots de séance. Réactions, attaques supplémentaires et catalogue complet ne sont pas annoncés actifs.

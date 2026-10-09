@@ -16,7 +16,8 @@
       "test:lot2-browser",
       "test:startup",
       "test:fiches-browser"
-    ]
+    ],
+    "engineCommit": "6871764"
   },
   "nextStage": "2.3",
   "mockupApproved": true,
@@ -47,5 +48,18 @@
     "updatedAt": "2026-10-09",
     "csvSha256": "935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e",
     "changedDescriptionHashes": 19
+  },
+  "handoffDocument": "PASSATION_PROCHAINE_FENETRE.md",
+  "confirmedDecisions": {
+    "date": "2026-10-09",
+    "mixedConditionPenalties": "MJ chooses per action between SL penalty and disadvantage",
+    "battementCritical": "remove all wounds and critical consequences; apply only Battement effects",
+    "fortune": {
+      "owner": "tool",
+      "scope": "stable character across encounters",
+      "initialization": "known current sheet balance or explicit MJ entry",
+      "undoableSpending": true,
+      "automaticSourceSheetWrites": false
+    }
   }
 }

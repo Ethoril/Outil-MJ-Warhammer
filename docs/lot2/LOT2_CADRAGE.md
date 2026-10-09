@@ -77,7 +77,7 @@ Mâchoires d’acier applique une transformation similaire au premier événemen
 
 Inlassable ne retire pas Exténué : il modifie le niveau utilisé pour ses pénalités. L’exemple du catalogue, rang 2 et quatre instances, laisse une instance pénalisante. Le contrat de pénalité final sera établi depuis la description V5 actualisée dans Aides de jeu. Le moteur applique le nombre d’instances à ignorer ; il n’adapte pas la description V4 de l’ancien instantané.
 
-Battement crée un effet sur la cible jusqu’à la fin du prochain Tour de l’auteur après un choix de renoncer aux dégâts. Le contrat fournit restriction de défense et Avantage aux attaques de mêlée contre elle. Il dépend de la taille, de l’identité de l’auteur et d’une échéance liée à son Tour.
+Battement crée un effet sur la cible jusqu’à la fin du prochain Tour de l’auteur après un choix de renoncer aux dégâts. Arbitrage MJ du 9 octobre : supprimer toutes les Blessures et les conséquences du critique, puis appliquer uniquement les effets de Battement. Le contrat fournit restriction de défense et Avantage aux attaques de mêlée contre elle. Il dépend de la taille, de l’identité de l’auteur et d’une échéance liée à son Tour.
 
 ## Ordre de résolution
 

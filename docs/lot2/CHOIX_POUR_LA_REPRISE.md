@@ -1,21 +1,23 @@
-# Arbitrages préparés pour la reprise
+# Trois arbitrages validés par le MJ
 
-Le travail validé peut être relu sans répondre à ces points. Les comportements conservateurs ci-dessous sont visibles et testés.
+Décisions choisies dans le sélecteur le 9 octobre 2026. Elles font autorité pour la suite du chantier ; ne pas les redemander.
 
 ## États donnant des types de pénalité différents
 
-Le livre impose le plus fort effet des États différents, mais comparer une pénalité de DR à un Désavantage dépend du jet. La résolution demande actuellement au MJ quelle pénalité retenir, et garde sa réponse dans le reçu.
+Le MJ choisit par action entre la pénalité de DR et le Désavantage. L’outil présente les possibilités et conserve la décision dans le reçu. Ne pas comparer automatiquement les deux variantes ni additionner implicitement ces pénalités.
 
-Choix utile : conserver cet arbitrage par action ; ou préciser une convention générale pour les situations mixtes. Aucune addition implicite des deux pénalités n'est présentée comme certifiée.
+Ce comportement est déjà raccordé dans l’étape 2.1.
 
 ## Battement et critiques
 
-Le texte V5 demande de renoncer à infliger « any Damage ». Le socle 2.3 retient tous les dégâts pour sa proposition ; il reste à décider si les États et conséquences d'un critique distinct sont aussi annulés. Le contrat reste brouillon tant que ce cas n'est pas validé et raccordé.
+Battement supprime toutes les Blessures et les conséquences du critique ; seuls ses propres effets s’appliquent. Le raccordement doit donc supprimer les dégâts ordinaires, les Blessures supplémentaires, les États et les autres conséquences du critique remplacé.
 
-Choix utile : renoncer aussi aux conséquences du critique ; ou conserver les conséquences non chiffrées du critique en supprimant toutes les Blessures. Ce choix devra être affiché avant application et testé.
+L’arbitrage est tranché. Le contrat reste toutefois brouillon et inactif jusqu’à l’implémentation et la recette de cette règle, avec comparaison et application cohérentes. La décision du MJ ne transforme pas le prototype pur en talent déjà jouable.
 
 ## Ressources de Fortune
 
-La récupération d'État par Fortune demande actuellement confirmation du point déjà décompté à la table. Le socle des coûts sait préparer une dépense de ressource, mais ses compteurs ne sont pas encore reliés aux données de fiche et à la séance.
+Le compteur courant appartient à l’outil, par personnage, et est conservé entre les rencontres. Il est initialisé depuis la fiche lorsque le solde courant est connu, ou renseigné par le MJ. Les dépenses sont annulables, sans écriture automatique dans la fiche.
 
-La reprise doit décider où vit le compteur courant de séance et comment le synchroniser avec la fiche. Ne pas inventer de solde depuis une ressource absente, ni appliquer automatiquement un coût à une donnée privée non contrôlée.
+Pour le raccordement 2.3 : employer l’identité stable du personnage, garder ressources et usages dans les sauvegardes et la synchronisation de l’outil, et appliquer dépense et résultat dans une commande atomique. Le lancement, la reprise ou la suppression d’une rencontre ne réinitialisent pas ce solde. Un maximum ou une donnée absente ne constituent pas un solde courant connu.
+
+Le moteur raccordé 2.2 confirme encore le point décompté à la table. Le nouveau compteur et sa consommation restent à développer.
