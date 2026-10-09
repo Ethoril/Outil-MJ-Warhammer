@@ -119,7 +119,7 @@ export function describeWeaponDamage(action, caracs) {
  * attacker's, needed by `BF`. Returns null when the weapon damage cannot be
  * computed automatically (see evaluateWeaponDamage).
  */
-export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, roll = 0, targetToughnessBonus = 0, targetArmour = 0, qualities = [] } = {}) {
+export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, roll = 0, damageBonus = 0, targetToughnessBonus = 0, targetArmour = 0, qualities = [] } = {}) {
   const weapon = evaluateWeaponDamage(weaponDamage, strengthBonus);
   if (weapon.status !== 'resolved') return null;
   const normQualities = normalizeQualities(qualities);
@@ -154,7 +154,7 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
   const be = Number(targetToughnessBonus) || 0;
   const absorption = be + paEffectif;
 
-  const totalRaw = baseDamage + effectiveSL + bonusPercutante;
+  const totalRaw = baseDamage + effectiveSL + bonusPercutante + damageBonus;
   const net = totalRaw - absorption;
 
   let finalDamage = net;
@@ -175,6 +175,7 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
     ...(weapon.kind === 'strength' ? { strengthBonus: weapon.strengthBonus } : {}),
     sl: effectiveSL,
     bonusPercutante,
+    ...(damageBonus ? { talentDamage: damageBonus } : {}),
     be,
     targetArmour: Number(targetArmour) || 0,
     paEffectif,
@@ -213,6 +214,7 @@ export function damageBreakdown(damage) {
   add(damage.sl, devastatrice ? 'DR (Dévastatrice)' : 'DR');
   if (devastatrice) notes.push('Dévastatrice : meilleur du DR et du dé des unités');
   if (has('add-units-die')) add(damage.bonusPercutante, 'Percutante');
+  if (damage.talentDamage) add(damage.talentDamage, 'talents');
   subtract(damage.be, 'BE');
   subtract(damage.paEffectif, damage.isInoffensive ? `PA (×${FACTEUR_INOFFENSIVE})` : 'PA');
   if (damage.isInoffensive) notes.push(`Inoffensive : PA ×${FACTEUR_INOFFENSIVE}, pas de minimum`);

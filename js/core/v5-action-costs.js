@@ -136,8 +136,15 @@ export function commitV5ActionCosts(plan, state, { resolveAction } = {}) {
   if (!record(result) || result.status !== 'applied' || !record(result.state)) return { status: 'blocked', state: clone(state), result: clone(result ?? null) };
   if (![state.revision, state.revision + 1].includes(result.state.revision) || !participant(result.state, plan.actorId)) throw new TypeError('Résultat atomique invalide');
   const next = clone(result.state);
-  ledger.appliedActions.push({ actionId: plan.actionId, actorId: plan.actorId, encounterId: plan.request.clock.encounterId ?? null });
-  next.v5ActionLedger = ledger; next.revision = state.revision + 1;
+  const resultLedger = ledgerOf(next);
+  for (const row of ledger.quotaUsage) {
+    const key = entry => JSON.stringify([entry.actorId, entry.quotaId, entry.scope, entry.scopeKey]);
+    const found = resultLedger.quotaUsage.find(entry => key(entry) === key(row));
+    if (!found || found.used < row.used) throw new TypeError('Résultat ayant perdu un usage réservé');
+  }
+  for (const entry of ledger.appliedActions) if (!resultLedger.appliedActions.some(row => row.actionId === entry.actionId)) throw new TypeError('Résultat ayant perdu une action confirmée');
+  resultLedger.appliedActions.push({ actionId: plan.actionId, actorId: plan.actorId, encounterId: plan.request.clock.encounterId ?? null });
+  next.v5ActionLedger = resultLedger; next.revision = state.revision + 1;
   return { status: 'applied', state: next, receipt: { ruleVersion: V5_ACTION_COST_RULE_VERSION, actionId: plan.actionId,
     actorId: plan.actorId, baseRevision: plan.baseRevision, revision: next.revision, paid: clone(checked.paid), waived: clone(checked.waived), usages: clone(checked.usages) }, result: clone(result) };
 }

@@ -2,7 +2,7 @@
 
 Le lot 2 couvre le catalogue complet des talents utiles aux résolutions de l’outil MJ, avec priorité aux talents des PJ actuels. Le moteur commun applique exclusivement les règles V5 publiées dans Aides de jeu, y compris Avantage, Désavantage et Élan (Momentum). Le MJ prend en charge la conversion des talents dans le référentiel source. La durée des états fait partie du même chantier. Magie et prières automatisées restent au lot 3, application mobile au lot 4.
 
-Ce document est un cadrage de développement. L’inventaire classe les 206 talents par famille principale et propose neuf contrats représentatifs. Les clauses restantes sont à détailler ; aucun automatisme de talent n’est activé. Actualisation du 9 octobre 2026 : le combat et les États V5 des étapes 2.1/2.2 sont raccordés. Le détail de l’implémentation actuelle est dans [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md) ; le socle 2.3 reste séparé.
+Ce document conserve le cadrage de développement initial. L’inventaire classe les 206 talents et propose neuf exemples préparatoires. État courant du 9 octobre 2026 : combat/États 2.1/2.2 et cinq contrats représentatifs 2.3 sont raccordés localement. Voir [LOT2_RACCORDEMENT_2_3.md](LOT2_RACCORDEMENT_2_3.md) et [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md). Les autres clauses restent à contractualiser ; cet inventaire ne certifie pas tout le catalogue.
 
 ## Sources et état de départ
 

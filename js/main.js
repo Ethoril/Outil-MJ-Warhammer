@@ -18,6 +18,7 @@ import { showToast } from './ui/toast.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
 import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as normalizeV5RecoveryOptions } from './ui/v5-effect-dialog.js';
+import { openV5FortuneDialog } from './ui/v5-fortune-dialog.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
@@ -490,6 +491,12 @@ async function resolveV5EffectOperation(operation, { title = 'Résoudre les effe
   await awaitStore(result, title);
   if (result?.reminders?.length) showToast(result.reminders.join(' ; '), 'info');
   return result;
+}
+
+function editFortuneFor(id) {
+  const participant = Store.getCombat().participants.get(id);
+  if (!participant) return Promise.resolve(null);
+  return openV5FortuneDialog({ participantName: participant.name, fortune: Store.getFortune(id), getCurrentRevision: () => Store.getLocalRevision(), submit: (amount, options) => Store.setFortune(id, amount, options) });
 }
 
 function recoveryOptionsFor(input = {}) {
@@ -1226,11 +1233,13 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
       });
     },
     enterParticipant: id => awaitStore(Store.moveParticipant(id, 'active'), 'Entrée en jeu').catch(error => showToast(contextMessage('Entrée en jeu impossible', error, 'réessayez.'), 'error')),
+    getFortune: id => Store.getFortune(id),
+    editFortune: id => editFortuneFor(id),
     setMomentum: (id, value) => awaitStore(Store.executeCommand('set-momentum', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(participant => participant.id === id ? withMomentum(participant, value) : participant) } })), 'Élan'),
     acquireStates: (id, states) => resolveV5EffectOperation((inputs, baseRevision) => Store.acquireConditions(id, states, { ...(inputs[id] || {}), baseRevision, authorId: Store.getCombat().currentActorId || id, targetId: id, round: Store.getCombat().round }), { title: 'Ajouter un État V5' }),
     recoverState: async (id, state) => {
       const participant = Store.getCombat().participants.get(id); if (!participant) return { status: 'cancelled' };
-      const method = await chooseV5RecoveryMethod({ participantName: participant.name, condition: state }); if (!method) return { status: 'cancelled' };
+      const method = await chooseV5RecoveryMethod({ participantName: participant.name, condition: state, getFortune: () => Store.getFortune(id), editFortune: () => editFortuneFor(id) }); if (!method) return { status: 'cancelled' };
       return resolveV5EffectOperation((inputs, baseRevision) => Store.recoverCondition(id, state.id || state.key || state.name, { method, ...(method === 'medical-attention' ? { medicalAttention: true } : method === 'surgery' ? { surgery: true } : {}), ...recoveryOptionsFor(inputs[id]), baseRevision }), { title: `Récupérer ${state.name}` });
     },
     setStates: (id, states) => awaitStore(Store.updateParticipant(id, { states: normalizeEffects(states) }), 'États'),

@@ -7,19 +7,23 @@
   "baseCommit": "28657e39477bbcbfeb0de826b3f1d05e525bb386",
   "applicationVersion": "3.12.3",
   "lastEngineVerification": {
-    "tests": 619,
-    "passed": 619,
+    "tests": 672,
+    "passed": 672,
     "failed": 0,
+    "skipped": 0,
     "date": "2026-10-09",
     "scope": "local development worktree",
     "browserSuites": [
       "test:lot2-browser",
+      "test:lot2-23-browser",
       "test:startup",
       "test:fiches-browser"
     ],
-    "engineCommit": "6871764"
+    "independentBrowserSuite": "tests/lot2-v5-23-control-browser.mjs",
+    "independentStoreTests": 21,
+    "revision": "local commit containing this manifest"
   },
-  "nextStage": "2.3",
+  "nextStage": "2.4",
   "mockupApproved": true,
   "sourceConversionOwner": "MJ dans Aides de jeu, conversion V5 actualisée",
   "publicFolder": "docs/lot2/",
@@ -28,14 +32,25 @@
   "engineCommitRole": "historical-initial-foundation",
   "localIncrement": {
     "date": "2026-10-09",
-    "baseCommit": "98e2e48ab7f862cd84fb97163b5e8c7ed3945b11",
+    "baseCommit": "a1af52824076ea91624da625136abde6bd5fe11e",
     "revision": "local commit containing this manifest",
     "remotePublished": false,
     "completedStages": [
       "2.1",
-      "2.2"
+      "2.2",
+      "2.3 representative integration"
     ],
-    "preparedStage": "2.3 pure modules only"
+    "activeTalentIds": [
+      "talent-accurate-shot",
+      "talent-strike-mighty-blow",
+      "talent-iron-jaw",
+      "talent-beat-blade",
+      "talent-furious-assault"
+    ],
+    "catalogueComplete": false,
+    "liveCloudVerification": false,
+    "report": "LOT2_RACCORDEMENT_2_3.md",
+    "independentControl": "LOT2_CONTROLE_2_3.md"
   },
   "initialEngineVerification": {
     "tests": 468,

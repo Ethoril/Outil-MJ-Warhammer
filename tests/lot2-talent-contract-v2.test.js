@@ -17,12 +17,12 @@ const clock={encounterId:'enc',round:1,turnId:'a-turn-1'};
 const iron=extra=>evaluate('talent-iron-jaw',{event:'condition.beforeAcquire',role:'defender',context:{condition:{id:'sonne',instances:2}},
   state:state(),actorId:'a',actionId:'gain-stunned',clock,...extra});
 
-test('2.3 real contracts — quatre identités traçables, trois validées, Battement brouillon non activé',()=>{
-  assert.equal(registry.contracts.length,4);
-  assert.equal(registry.contracts.filter(item=>item.status==='validated').length,3);
-  for(const item of registry.contracts){assert.equal(validateTalentContractV2(item),true);assert.equal(item.source.effectHash,sourceHashes[item.talentId]);}
+test('2.3 real contracts — cinq identités traçables, cinq validées, descriptions publiques épinglées',()=>{
+  assert.equal(registry.contracts.length,5);
+  assert.equal(registry.contracts.filter(item=>item.status==='validated').length,5);
+  for(const item of registry.contracts){assert.equal(validateTalentContractV2(item),true);assert.equal(item.source.effectHash,sourceHashes[item.talentId]);assert.equal(hash(registry.sourceDescriptions[item.talentId]),item.source.effectHash);}
   assert.equal(getReferenceCatalogue().talents.length,206);
-  assert.equal(contract('talent-beat-blade').status,'draft');
+  assert.equal(contract('talent-beat-blade').status,'validated');
 });
 
 test('2.3 real Tir précis — +1 sans visée, +2 avec visée, aucun multiplicateur rang implicite',()=>{
@@ -49,9 +49,9 @@ test('2.3 real Coup puissant — bonus dépend Avantage V5 net explicitement dé
     const plan=evaluate('talent-strike-mighty-blow',{context:{kind:'melee',weapon:{isMelee:true},attack:{hit:true,usedAdvantageV5}}});
     assert.equal(plan.proposals[0].amount,amount);
   }
-  const ranged=evaluate('talent-strike-mighty-blow',{context:{kind:'ranged',weapon:{isMelee:false},attack:{hit:true}}});
+  const ranged=evaluate('talent-strike-mighty-blow',{context:{kind:'ranged',weapon:{isMelee:false},attack:{success:true,hit:true}}});
   assert.equal(ranged.ready,true);assert.equal(ranged.proposals.length,0);
-  const unknown=evaluate('talent-strike-mighty-blow',{context:{kind:'melee',weapon:{isMelee:true},attack:{hit:true}}});
+  const unknown=evaluate('talent-strike-mighty-blow',{context:{kind:'melee',weapon:{isMelee:true},attack:{success:true,hit:true}}});
   assert.equal(unknown.ready,false);assert.equal(unknown.proposals.length,0);
 });
 
@@ -103,14 +103,14 @@ test('2.3 condition reductions — plafonnées0 et métadonnées distinctes cons
 });
 
 test('2.3 Battement — catalogue brouillon reste inactif même si choix exprimé',()=>{
-  const plan=evaluate('talent-beat-blade',{event:'action.afterAttack',context:{kind:'melee',attack:{hit:true},actor:{id:'a',size:3},target:{id:'t',size:3}},choices:{'talent-beat-blade:replace-damage':true}});
+  const plan=evaluate('talent-beat-blade',{contracts:[{...contract('talent-beat-blade'),status:'draft'}],event:'action.afterAttack',context:{kind:'melee',attack:{success:true,hit:true},actor:{id:'a',size:3},target:{id:'t',size:3}},choices:{'talent-beat-blade:replace-damage':true}});
   assert.equal(plan.proposals.length,0);assert.equal(plan.trace[0].status,'draft');
 });
 
 const beat=(extra={})=>{
   // Prototype capability test only. This local copy does not validate or activate the published draft.
   const prototype={...structuredClone(contract('talent-beat-blade')),status:'validated'};
-  return evaluate('talent-beat-blade',{contracts:[prototype],event:'action.afterAttack',context:{kind:'melee',attack:{hit:true},actor:{id:'a',size:3},target:{id:'t',size:3},authorNextTurnEnd:{phase:'endOfTurn',round:2,turn:4,actorId:'a'}},choices:{'talent-beat-blade:replace-damage':true},...extra});
+  return evaluate('talent-beat-blade',{contracts:[prototype],event:'action.afterAttack',context:{kind:'melee',attack:{success:true,hit:true},actor:{id:'a',size:3},target:{id:'t',size:3},authorNextTurnEnd:{phase:'endOfTurn',round:2,turn:4,actorId:'a'}},choices:{'talent-beat-blade:replace-damage':true},...extra});
 };
 
 test('2.3 Battement prototype — choix oui crée remplacement et échéance auteur, exception Esquive explicite',()=>{
@@ -122,16 +122,16 @@ test('2.3 Battement prototype — choix oui crée remplacement et échéance aut
 });
 
 test('2.3 Battement prototype — choix non ne demande pas échéance, plus grande cible inapplicable',()=>{
-  assert.equal(beat({choices:{'talent-beat-blade:replace-damage':false},context:{kind:'melee',attack:{hit:true},actor:{size:3},target:{size:3}}}).proposals.length,0);
-  const large=beat({context:{kind:'melee',attack:{hit:true},actor:{size:3},target:{size:4}}});
+  assert.equal(beat({choices:{'talent-beat-blade:replace-damage':false},context:{kind:'melee',attack:{success:true,hit:true},actor:{size:3},target:{size:3}}}).proposals.length,0);
+  const large=beat({context:{kind:'melee',attack:{success:true,hit:true},actor:{size:3},target:{size:4}}});
   assert.equal(large.ready,true);assert.equal(large.proposals.length,0);
 });
 
 test('2.3 Battement prototype — choix, taille ou fin prochain Tour inconnus empêchent application',()=>{
   assert.equal(beat({choices:{}}).ready,false);
-  assert.equal(beat({context:{kind:'melee',attack:{hit:true},actor:{id:'a',size:3},target:{id:'t'}}}).ready,false);
-  assert.equal(beat({context:{kind:'melee',attack:{hit:true},actor:{id:'a',size:3},target:{id:'t',size:3}}}).ready,false);
-  assert.throws(()=>beat({context:{kind:'melee',attack:{hit:true},actor:{id:'a',size:3},target:{id:'t',size:3},authorNextTurnEnd:{phase:'endOfTurn',round:2,turn:4,actorId:'t'}}}),/auteur/);
+  assert.equal(beat({context:{kind:'melee',attack:{success:true,hit:true},actor:{id:'a',size:3},target:{id:'t'}}}).ready,false);
+  assert.equal(beat({context:{kind:'melee',attack:{success:true,hit:true},actor:{id:'a',size:3},target:{id:'t',size:3}}}).ready,false);
+  assert.throws(()=>beat({context:{kind:'melee',attack:{success:true,hit:true},actor:{id:'a',size:3},target:{id:'t',size:3},authorNextTurnEnd:{phase:'endOfTurn',round:2,turn:4,actorId:'t'}}}),/auteur/);
 });
 
 test('2.3 source — description changée ou absente ne produit aucun effet automatique',()=>{

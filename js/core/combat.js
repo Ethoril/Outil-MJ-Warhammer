@@ -1,4 +1,5 @@
 import { previewV5Turn } from './v5-turn.js';
+import { uid } from './models.js';
 import { advanceEndOfTurn } from './effects.js';
 
 export function computeEndOfTurn(p, d10Roll = 1) {
@@ -35,7 +36,8 @@ export function createCombatEngine(Store) {
       ? Store.executeCommand('start-combat', draft => ({
         ...draft,
         combat: { ...draft.combat, round, currentActorId: firstActor.id },
-        extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: st.round === 0 ? 1 : draft.extensions?.v5?.turnIndex || 1 } },
+        extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: st.round === 0 ? 1 : draft.extensions?.v5?.turnIndex || 1,
+          combatId: st.round === 0 ? uid() : draft.extensions?.v5?.combatId || uid() } },
         log: [{ kind: 'management', actorId: firstActor.id, actorName: firstActor.name, text: `Combat démarré. Round ${round}. Tour: ${firstActor.name}` }, ...(draft.log || [])].slice(0, 300)
       }))
       : Store.setRoundTurn(round, firstActor.id);

@@ -132,6 +132,11 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
     source, caracs: totals, initiative: totals.I ?? null, movement: MOVEMENT[race || 'humain'] ?? 4,
     wounds: max, woundsMax: max, skills, talents: coverage.talents === 'present' ? talentResult.items : [],
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
+  // `chance` is the fiche's current resource; `destin` is its maximum.
+  // Empty/missing/invalid values do not authorize a resource initialization.
+  if (own(raw, 'chance') && ((typeof raw.chance === 'string' && /^\d+$/.test(raw.chance)) || typeof raw.chance === 'number') && Number.isSafeInteger(Number(raw.chance)) && Number(raw.chance) >= 0) {
+    snapshot.resources = { fortune: Number(raw.chance) };
+  }
   source.fingerprint = ficheFingerprint(snapshot);
   return snapshot;
 }

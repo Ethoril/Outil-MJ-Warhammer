@@ -1,6 +1,7 @@
 /** Common V5 combat context; session resources live in extensions.v5. */
 import { previewV5Test } from './v5-roll.js';
 import { activeEngines } from './roll-qualities.js';
+import { activeV5TalentEffects } from './v5-talents.js';
 import { normalizeState } from './effects.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.1';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
@@ -71,6 +72,10 @@ export function buildCombatTest(normalized, role = 'actor') {
       modifiers.push({ id: `quality-${engine.id}`, label: 'Déséquilibrée', amount: engine.params.bonus });
   }
   const advantages = [...(settings.advantageSources || [])], disadvantages = [...(settings.disadvantageSources || [])];
+  if (defending && kind === 'melee' && activeV5TalentEffects(actor).some(effect => effect.restriction === 'cannotOpposeWithMelee'))
+    restrictions.push('Battement : la cible ne peut pas opposer Corps à corps ; Esquive reste possible.');
+  if (!defending && kind === 'melee' && activeV5TalentEffects(target).some(effect => effect.advantageFilter === 'meleeAttacksAgainstTarget'))
+    advantages.push({ id: 'talent-beat-blade', label: 'Battement sur la cible' });
   const charging = !defending && kind === 'melee' && settings.charging === true;
   if (kind === 'melee' && (hasMomentum(actor) || charging)) advantages.push({ id: 'momentum', label: charging ? 'Élan de Charge' : 'Élan' });
   const relevant = new Map(['sonne', 'extenue', 'empoisonne'].map(key => [key, levels.get(key) || 0]));

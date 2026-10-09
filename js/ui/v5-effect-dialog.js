@@ -29,24 +29,31 @@ export function recoveryOptionsFor(input = {}, combatRound) {
   return options;
 }
 
-/** Choose an actual recovery method; Fortune payment remains an explicit table decision. */
-export function chooseV5RecoveryMethod({ participantName, condition } = {}) {
+/** Choose a recovery with its actual tool Fortune balance and cost visible. */
+export function chooseV5RecoveryMethod({ participantName, condition, getFortune, editFortune } = {}) {
   const methods = recoveryMethodsFor(condition);
   if (!methods.length) return Promise.resolve(null);
   return new Promise(resolve => {
     const opener = document.activeElement;
-    const dialog = el('dialog', null, 'tool-sheet v5-effect-dialog'); const form = el('form');
-    const heading = el('h2', `Récupérer ${condition.name} — ${participantName}`); heading.id = 'v5-recovery-method-title'; dialog.setAttribute('aria-labelledby',heading.id);
-    const label = el('label','Méthode de récupération'); const select = el('select'); select.setAttribute('aria-label','Méthode de récupération'); select.append(new Option('Choisir…',''), ...methods.map(([value,text]) => new Option(text,value))); label.append(select);
-    const paymentLabel = el('label', null, 'v5-effect-boolean'); paymentLabel.hidden=true;
-    const payment = el('input');payment.type='checkbox';paymentLabel.append(payment,'Un point de Fortune a été dépensé à la table');
-    select.addEventListener('change', () => { paymentLabel.hidden=select.value!=='fortune'; payment.required=select.value==='fortune'; });
-    const controls=el('div',null,'row');const submit=el('button','Continuer');submit.type='submit';const cancel=el('button','Annuler','ghost');cancel.type='button';controls.append(submit,cancel);
-    form.append(heading,label,paymentLabel,controls);dialog.append(form);document.body.append(dialog);
-    let selected=null;
-    form.addEventListener('submit',event=>{event.preventDefault(); if(!select.value){select.focus();return;} if(select.value==='fortune'&&!payment.checked){payment.reportValidity();return;}selected=select.value;dialog.close();});
-    cancel.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{dialog.remove();opener?.isConnected&&opener.focus();resolve(selected);},{once:true});
-    dialog.showModal();select.focus();
+    const dialog = el('dialog', null, 'tool-sheet v5-effect-dialog'), form = el('form');
+    const heading = el('h2', 'Récupérer ' + condition.name + ' — ' + participantName); heading.id = 'v5-recovery-method-title'; dialog.setAttribute('aria-labelledby', heading.id);
+    const label = el('label', 'Méthode de récupération'), select = el('select'); select.setAttribute('aria-label', 'Méthode de récupération'); select.append(new Option('Choisir…', ''), ...methods.map(([value, text]) => new Option(text, value))); label.append(select);
+    const fortuneHint = el('p', '', 'workspace-muted'), fortuneEdit = el('button', 'Initialiser Fortune', 'ghost'); fortuneEdit.type = 'button';
+    const controls = el('div', null, 'row'), confirm = el('button', 'Continuer'), cancel = el('button', 'Annuler', 'ghost'); confirm.type = 'submit'; cancel.type = 'button'; controls.append(confirm, cancel);
+    let fortune = typeof getFortune === 'function' ? getFortune() : { balance: null }, selected = null;
+    const refreshFortune = () => {
+      fortune = typeof getFortune === 'function' ? getFortune() : fortune;
+      fortuneHint.textContent = fortune.balance === null ? 'Fortune : solde courant inconnu. Initialisez le compteur avant une dépense.' : 'Fortune disponible : ' + fortune.balance + ' · coût de cette récupération : 1 point.';
+      const option = Array.from(select.options).find(row => row.value === 'fortune'); if (option) option.disabled = fortune.balance === null || fortune.balance < 1;
+      fortuneEdit.hidden = typeof editFortune !== 'function'; fortuneEdit.textContent = fortune.balance === null ? 'Initialiser Fortune' : 'Modifier Fortune';
+      confirm.disabled = select.value === 'fortune' && (fortune.balance === null || fortune.balance < 1);
+    };
+    select.addEventListener('change', refreshFortune);
+    fortuneEdit.addEventListener('click', async () => { fortuneEdit.disabled = true; try { await editFortune(); refreshFortune(); } finally { fortuneEdit.disabled = false; } });
+    form.append(heading, label, fortuneHint, fortuneEdit, controls); dialog.append(form); document.body.append(dialog); refreshFortune();
+    form.addEventListener('submit', event => { event.preventDefault(); if (!select.value) { select.focus(); return; } refreshFortune(); if (confirm.disabled) return; selected = select.value; dialog.close(); });
+    cancel.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => { dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(selected); }, { once: true });
+    dialog.showModal(); select.focus();
   });
 }
 

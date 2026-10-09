@@ -1,6 +1,6 @@
 # Contrôle indépendant du combat et des effets V5
 
-Contrôle du 9 octobre 2026 sur la branche locale `codex/lot2-talents-v5`.
+Contrôle historique du 9 octobre 2026 sur la branche locale `codex/lot2-talents-v5`, avant le raccordement 2.3. Le verdict courant du raccordement est dans [LOT2_CONTROLE_2_3.md](LOT2_CONTROLE_2_3.md), avec validation globale dans [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md).
 
 ## Verdict
 

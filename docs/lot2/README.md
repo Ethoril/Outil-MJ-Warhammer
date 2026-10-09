@@ -1,56 +1,35 @@
 # Reprise du lot 2 sur une autre machine
 
-Dossier préparé le **8 octobre 2026**, actualisé localement le **9 octobre 2026**. Il rassemble le cadrage, l’inventaire, l’état du moteur raccordé, le découpage convenu et la maquette approuvée par le MJ.
+Dossier du 8 octobre, actualisé le 9 octobre 2026 après raccordement représentatif 2.3. Il contient cadrage, inventaire, état courant, validation et maquette approuvée.
 
-## Récupérer le code commencé
+## Reprendre le code local
 
-L’incrément du 9 octobre est conservé localement et n’est pas encore sur GitHub. Ces commandes récupèrent le dernier état distant publié ; sur la machine du chantier, reprendre le worktree attaché et son commit local. Pour changer de machine, transférer aussi cet état Git ou attendre une publication explicitement autorisée. Le ZIP de documents seul ne remplace pas le code.
+La branche **`codex/lot2-talents-v5`** contient `a1af528` et le commit de raccordement contenant ce dossier. Les nouveaux commits ne sont pas poussés. Sur la machine du chantier, retrouver le worktree `lot2-combat-v5` depuis le dépôt principal :
 
-La branche **`codex/lot2-talents-v5`** porte le chantier. Son socle initial est le commit **`7477421e937d73ba4d3cf81b1c8582c0c8315544`**, depuis **`28657e39477bbcbfeb0de826b3f1d05e525bb386`**, version applicative 3.12.3. La branche contient ensuite ce dossier de transmission.
-
-Pour une nouvelle installation :
-
-```sh
-git clone --branch codex/lot2-talents-v5 https://github.com/Ethoril/Outil-MJ-Warhammer.git
-cd Outil-MJ-Warhammer
-npm ci
-npm test
+```text
+git worktree list
+git show codex/lot2-talents-v5:docs/lot2/PASSATION_PROCHAINE_FENETRE.md
 ```
 
-Pour un dépôt déjà présent et propre :
+Conserver les modifications existantes et reprendre la référence locale ; ne pas la remplacer par `origin` ni réinitialiser. Pour changer de machine, transférer aussi l’état Git local ou attendre une publication explicitement autorisée. Un clone distant récupère seulement la dernière version publiée. Le ZIP documentaire ne contient pas le code.
 
-```sh
-git fetch origin
-git switch --track origin/codex/lot2-talents-v5
-```
+Les références historiques sont le socle initial `7477421e937d73ba4d3cf81b1c8582c0c8315544`, puis le moteur 2.1/2.2 `6871764`. La version applicative reste 3.12.3. Main et le site public sont inchangés par cette reprise.
 
-Si la branche existe déjà, la sélectionner puis vérifier son suivi distant. Si le dépôt contient des modifications, les conserver et créer un worktree isolé depuis la branche distante. Ne pas réinitialiser le travail local.
-
-Node.js et npm sont nécessaires. `npm ci` reconstruit les dépendances ; aucun chemin de runtime ni dossier node_modules de la machine d’origine n’est requis. La recette initiale du socle a exécuté **468 tests tous réussis**, dont **62 nouveaux**. La maquette a été testée dans Edge à 800 et 360 px.
-
-**Ne pas reprendre uniquement depuis `main`** : `main` reçoit le dossier de consultation ; les modules de moteur et leurs tests restent sur la branche de chantier.
+Node.js/npm sont nécessaires ; `npm ci` reconstruit les dépendances. [Les commandes de validation](LOT2_AVANCEMENT.md) couvrent 672 tests Node et cinq recettes Edge réussis. Les données/captures sont synthétiques ; aucun runtime, node_modules ni export privé n’est nécessaire au transfert.
 
 ## Lire dans cet ordre
 
-Pour un nouveau chat, commencer par [la passation prête à copier](PASSATION_PROCHAINE_FENETRE.md).
+1. [Passation prête à copier](PASSATION_PROCHAINE_FENETRE.md) et [REPRISE_AGENT.md](REPRISE_AGENT.md).
+2. [Raccordement 2.3](LOT2_RACCORDEMENT_2_3.md) et [contrôle indépendant 2.3](LOT2_CONTROLE_2_3.md).
+3. [Avancement](LOT2_AVANCEMENT.md) et [découpage](LOT2_ETAPES.md) : prochaine étape 2.4.
+4. [Trois arbitrages validés](CHOIX_POUR_LA_REPRISE.md), [cadrage](LOT2_CADRAGE.md) et [contrats moteur](LOT2_CONTRATS_MOTEUR.md).
+5. [Inventaire des 206 talents](LOT2_INVENTAIRE_TALENTS.md), [JSON](LOT2_INVENTAIRE_TALENTS.json) et [sources/transfert](SOURCES_ET_TRANSFERT.md).
+6. Repères historiques : [premier incrément](LOT2_DEMARRAGE.md), [contrôle 2.1/2.2](LOT2_CONTROLE.md), [socle pur 2.3](LOT2_ETAPE_2_3_SOCLE.md).
 
-1. [REPRISE_AGENT.md](REPRISE_AGENT.md) : contexte et consigne à donner à l’agent.
-2. [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md) et [LOT2_CONTROLE.md](LOT2_CONTROLE.md) : raccordement 2.1/2.2, validation et limites.
-3. [LOT2_ETAPES.md](LOT2_ETAPES.md) : six étapes, prochaine étape 2.3.
-4. [LOT2_CADRAGE.md](LOT2_CADRAGE.md) : périmètre, règles, architecture et décisions.
-5. [LOT2_DEMARRAGE.md](LOT2_DEMARRAGE.md) : incrément réalisé et limites.
-6. [LOT2_CONTRATS_MOTEUR.md](LOT2_CONTRATS_MOTEUR.md) : schéma exécutable.
-7. [LOT2_INVENTAIRE_TALENTS.md](LOT2_INVENTAIRE_TALENTS.md) et [JSON](LOT2_INVENTAIRE_TALENTS.json) : 206 identités et neuf exemples préparatoires.
-8. [SOURCES_ET_TRANSFERT.md](SOURCES_ET_TRANSFERT.md) : sources et éléments à actualiser.
-
-La [maquette autonome](maquette-choix-avantage.html) s’ouvre directement ou depuis un serveur statique. Son fragment éditable est `maquette-choix-avantage.fragment.html`. Son scénario est fictif, sans donnée de séance.
-
-Le [ZIP du dossier](lot2-preparation.zip) conserve les documents et la maquette hors ligne. **Il ne contient pas le code de l’application**, à récupérer depuis la branche Git. `SHA256SUMS.txt` vérifie les fichiers ; `TRANSMISSION.json` indique les versions de référence.
+La [maquette autonome](maquette-choix-avantage.html) utilise un scénario fictif. Le [ZIP](lot2-preparation.zip) conserve documentation et maquette hors ligne ; [SHA256SUMS.txt](SHA256SUMS.txt) vérifie les fichiers, [TRANSMISSION.json](TRANSMISSION.json) indique les références. Le ZIP ne contient ni code applicatif, PDF ou données privées.
 
 ## Publication
 
-Consultation : https://ethoril.github.io/Outil-MJ-Warhammer/docs/lot2/
+[Le dossier déjà publié](https://ethoril.github.io/Outil-MJ-Warhammer/docs/lot2/) décrit un état antérieur. La reprise locale raccorde cinq talents et les ressources/usages, sans publier ce dossier ou le moteur. Firebase reste inchangé. Le livre personnel PDF se transfère séparément.
 
-Seul `docs/lot2/` est publié sur main. Le dossier local décrit désormais le moteur raccordé 2.1/2.2 et le socle 2.3 préparé. Cette mise à jour locale ne publie ni le dossier ni le moteur ; Firebase n’est pas modifié. Le livre PDF personnel doit être transféré séparément. Les fichiers temporaires et la conversation d’origine ne sont pas nécessaires à la reprise.
-
-Voir aussi [trois arbitrages validés](CHOIX_POUR_LA_REPRISE.md) et [socle 2.3](LOT2_ETAPE_2_3_SOCLE.md).
+Ne pas pousser, fusionner dans main ou déployer sans instruction explicite du MJ. Le catalogue utile 2.4 et la recette de livraison 2.5 restent à faire.

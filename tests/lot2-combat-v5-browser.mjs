@@ -28,8 +28,8 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
   await page.goto(`${origin}/blank`); await page.setContent('<main><div id="mount"></div><button id="test-undo">Annuler la dernière commande</button><div id="editor"></div><div id="dice-prep-results"></div><button id="test-quick-roll">Jet rapide V5</button><button id="test-next-turn">Terminer le tour de recette</button></main>');
   await page.addStyleTag({ path: join(root, 'MJ.css') }); await page.addStyleTag({ path: join(root, 'js/ui/workspace.css') });
   await page.evaluate(async ({ origin, both, states, extraTarget, actorMomentum }) => {
-    const [{ initWorkspaceView }, { createStore }, { renderReferenceTables }, { withMomentum }, { createCombatEngine }, { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor }] = await Promise.all([
-      import(`${origin}/js/ui/workspace-view.js`), import(`${origin}/js/core/store.js`), import(`${origin}/js/ui/rules-view.js`), import(`${origin}/js/core/v5-combat-rules.js`), import(`${origin}/js/core/combat.js`), import(`${origin}/js/ui/v5-effect-dialog.js`)
+    const [{ initWorkspaceView }, { createStore }, { renderReferenceTables }, { withMomentum }, { createCombatEngine }, { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor }, { openV5FortuneDialog }] = await Promise.all([
+      import(`${origin}/js/ui/workspace-view.js`), import(`${origin}/js/core/store.js`), import(`${origin}/js/ui/rules-view.js`), import(`${origin}/js/core/v5-combat-rules.js`), import(`${origin}/js/core/combat.js`), import(`${origin}/js/ui/v5-effect-dialog.js`), import(`${origin}/js/ui/v5-fortune-dialog.js`)
     ]);
     let saved = null;
     const listeners = new Map();
@@ -56,14 +56,16 @@ async function setup({ width = 1440, both = false, states = [], extraTarget = fa
       if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: result, submit: (inputs,baseRevision) => combatEngine.nextTurn({inputs,baseRevision}), getCurrentRevision: () => store.getLocalRevision(), title:'Terminer le tour : effets V5' });
       turnResults.push(result);
     });
+    const editFortune = id => openV5FortuneDialog({ participantName: store.listParticipants().find(row => row.id === id).name, fortune: store.getFortune(id), getCurrentRevision: () => store.getLocalRevision(), submit: (amount, options) => store.setFortune(id, amount, options) });
     const view = initWorkspaceView({ Store: store, Bus: bus, mount: document.querySelector('#mount'), actions: {
       renderRules: content => renderReferenceTables('', content), renderLog: content => { content.textContent = store.getLog().map(row => row.text).join('\n'); },
+      getFortune: id => store.getFortune(id), editFortune,
       setMomentum: (id, value) => { calls.push({ kind: 'momentum', id, value }); const participant = store.listParticipants().find(row => row.id === id); return store.updateParticipant(id, withMomentum(participant, value)); },
       adjustHp: ({participantId,delta}) => delta>0 ? collect((inputs,baseRevision)=>store.healWounds(participantId,delta,{baseRevision}), 'Récupérer des Blessures') : store.updateParticipant(participantId,{hp:Math.max(0,store.listParticipants().find(row=>row.id===participantId).hp+delta)}),
       setStates: (id, next) => store.updateParticipant(id, { states: next }),
       acquireStates: (id, next) => collect((inputs,baseRevision) => store.acquireConditions(id,next,{...(inputs[id]||{}),baseRevision,round:store.getCombat().round,authorId:store.getCombat().currentActorId,targetId:id}), 'Ajouter un État V5'),
       recoverState: async(id,state) => {
-        const method=await chooseV5RecoveryMethod({participantName:store.listParticipants().find(row=>row.id===id).name,condition:state});if(!method)return {status:'cancelled'};
+        const method=await chooseV5RecoveryMethod({participantName:store.listParticipants().find(row=>row.id===id).name,condition:state,getFortune:()=>store.getFortune(id),editFortune:()=>editFortune(id)});if(!method)return {status:'cancelled'};
         return collect((inputs,baseRevision)=>{ const options={method,...(method==='medical-attention'?{medicalAttention:true}:method==='surgery'?{surgery:true}:{}),...recoveryOptionsFor(inputs[id],store.getCombat().round),baseRevision};return store.recoverCondition(id,state.id||state.key||state.name,options); },'Récupérer un État');
       },
       applyResolution: async preview => { calls.push({ kind: 'apply', preview: structuredClone(preview) }); const result = await store.applyResolution(preview); applyResults.push(result); return result; }
@@ -287,9 +289,18 @@ try {
   // Fortune removes Unconscious after explicit payment, then its unresolved cause reacquires it at the actual end of Round.
   const fortune = await setup({states:[{name:'Inconscient',level:1,v5Recovery:{kind:'causeEnded'}}],actorMomentum:false});const f=fortune.page;await f.evaluate(()=>{const random=Math.random;window.fortuneDiceDraws=0;Math.random=()=>{const stack=new Error().stack;if(stack.includes('/dice.js')||stack.includes('/v5-effect-dialog.js'))window.fortuneDiceDraws+=1;return random();};});
   const outsideOptions=await f.evaluate(()=>window.lot2UI.recoveryOptionsFor({currentRound:3,outOfCombat:true}));assert.deepEqual(outsideOptions,{outOfCombat:true,transition:{round:3}},'explicit out-of-combat Round is retained without inventing a phase');
-  await f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'}).click();const fortuneMethod=f.getByRole('dialog',{name:/Récupérer Inconscient/});await fortuneMethod.getByLabel('Méthode de récupération').selectOption('fortune');
-  await fortuneMethod.getByRole('button',{name:'Continuer'}).click();await expect(fortuneMethod).toBeVisible();await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toBeVisible();
-  await fortuneMethod.getByLabel('Un point de Fortune a été dépensé à la table').check();await fortuneMethod.getByRole('button',{name:'Continuer'}).click();await expect(fortuneMethod).toHaveCount(0);await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toHaveCount(0);
+  await f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'}).click();const fortuneMethod=f.getByRole('dialog',{name:/Récupérer Inconscient/});
+  await expect(fortuneMethod.locator('option[value="fortune"]')).toHaveJSProperty('disabled',true);
+  await fortuneMethod.getByRole('button',{name:'Initialiser Fortune'}).click();
+  const fortuneInit=f.getByRole('dialog',{name:'Fortune — Acteur de recette'});await expect(fortuneInit).toBeVisible();
+  await fortuneInit.getByRole('button',{name:'Annuler',exact:true}).click();
+  assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),null,'cancelling initialization preserves unknown balance');
+  await fortuneMethod.getByRole('button',{name:'Initialiser Fortune'}).click();await fortuneInit.getByLabel('Points de Fortune disponibles').fill('2');await fortuneInit.getByRole('button',{name:'Initialiser Fortune',exact:true}).click();await expect(fortuneInit).toHaveCount(0);
+  await expect(fortuneMethod.locator('option[value="fortune"]')).toHaveJSProperty('disabled',false);await expect(fortuneMethod).toContainText('Fortune disponible : 2');
+  await fortuneMethod.getByLabel('Méthode de récupération').selectOption('fortune');await fortuneMethod.getByRole('button',{name:'Continuer'}).click();await expect(fortuneMethod).toHaveCount(0);await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toHaveCount(0);
+  assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),1,'recovery spends exactly one Fortune');
+  await f.getByRole('button',{name:'Annuler la dernière commande'}).click();await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toBeVisible();assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),2);
+  await f.evaluate(()=>window.lot2UI.store.redo());await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toHaveCount(0);assert.equal(await f.evaluate(()=>window.lot2UI.store.getFortune('actor').balance),1);
   assert.deepEqual(await f.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.pendingConditionReacquisition),[{condition:'inconscient',round:1,reason:'fortune-cause-persists'}]);assert.equal(await f.evaluate(()=>window.fortuneDiceDraws),0);
   await f.getByRole('button',{name:'Terminer le tour de recette'}).click();await expect.poll(()=>f.evaluate(()=>window.lot2UI.store.getCombat().currentActorId)).toBe('target');await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toHaveCount(0);assert.equal(await f.evaluate(()=>window.lot2UI.store.getCombat().round),1);
   await f.getByRole('button',{name:'Terminer le tour de recette'}).click();await expect.poll(()=>f.evaluate(()=>window.lot2UI.store.getCombat().round)).toBe(2);await expect(f.getByRole('button',{name:'Récupérer Inconscient de Acteur de recette'})).toBeVisible();assert.deepEqual(await f.evaluate(()=>window.lot2UI.store.listParticipants().find(row=>row.id==='actor').extensions.v5.pendingConditionReacquisition),[]);assert.equal(await f.evaluate(()=>window.fortuneDiceDraws),0);await fortune.context.close();

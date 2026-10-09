@@ -1,3 +1,8 @@
+import { listV5ReactionOpportunities, closeV5ReactionOpportunities } from './v5-reactions.js';
+import { previewV5TalentConditions } from './v5-talents.js';
+import { normalizeEffects } from './effects.js';
+import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
+import { getV5Fortune, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, setV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds } from './v5-effects.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
@@ -15,7 +20,7 @@ import { createScene, createIntention, createSceneEvent, createSceneClock, propo
 import { sharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 
-export const KEY = { RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
+export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
 export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
@@ -252,6 +257,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   }
 
   function applyDataToState(data, { includeLog = false, includeHistory = true } = {}) {
+    data = projectV5ResourceEnvelope(data);
     stateExtensions = data.extensions && typeof data.extensions === 'object' && !Array.isArray(data.extensions)
       ? JSON.parse(JSON.stringify(data.extensions)) : {};
     encounters = Array.isArray(data.encounters) ? cloneValue(data.encounters) : [];
@@ -506,7 +512,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   const RESOLUTION_TYPE_LABELS = { attack: 'Attaque', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition' };
 
   function resolutionLogEntry(preview, resolution) {
-    const input = preview?.input || {};
+    const rawInput = preview?.input || {};
+    const { v5State, ...input } = rawInput;
     const actor = input.actor || {};
     const target = input.target || {};
     const actionType = preview?.actionType || input.action?.type || 'action';
@@ -547,6 +554,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         action: cloneValue(input.action || {}),
         ...(input.ammunitionId ? { ammunitionId: input.ammunitionId, ammunitionSources: cloneValue(input.ammunitionSources || []) } : {}),
         source: { actor: cloneValue(actor.ficheSnapshot?.source || null), target: cloneValue(target.ficheSnapshot?.source || null) },
+        ...(preview?.talentTrace ? { talentTrace: cloneValue(preview.talentTrace) } : {}),
+        ...(preview?.talents ? { talents: cloneValue(preview.talents) } : {}),
+        ...(preview?.talentPlans ? { talentPlans: cloneValue(preview.talentPlans), activeEffects: cloneValue(preview.activeEffects), damageReplacedByTalent: preview.damageReplacedByTalent } : {}),
+        ...(resolution?.actionCostReceipt ? { actionCostReceipt: cloneValue(resolution.actionCostReceipt) } : {}),
+        ...(resolution?.talentUsageReceipts?.length ? { talentUsageReceipts: cloneValue(resolution.talentUsageReceipts) } : {}),
         application: resolution?.application || null
       }
     };
@@ -689,6 +701,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         storage.setItem(KEY.COMBAT, JSON.stringify(cObj));
         storage.setItem(KEY.LOG, JSON.stringify(log));
         storage.setItem(KEY.DICE, JSON.stringify(diceLines));
+        storage.setItem(KEY.EXTENSIONS, JSON.stringify(stateExtensions));
         if (lastAppliedTimestamp) {
           storage.setItem(KEY.TS, String(lastAppliedTimestamp));
         }
@@ -751,6 +764,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     // sans rien salir, et le journal n'est plus synchronisé. Un lot vide ne doit donc pousser
     // que writer et timestamp, qui suffisent à garder l'arbitrage cohérent.
     if (fullSync || !peutEcrireParChemin) {
+      updates['extensions'] = cloneValue(stateExtensions);
       const reserveMap = {};
       reserve.forEach((p, id) => { reserveMap[id] = p; });
       updates['reserve'] = reserveMap;
@@ -818,6 +832,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   function load() {
     if (!storage) return;
     try {
+      const extensions = JSON.parse(storage.getItem(KEY.EXTENSIONS) || '{}');
+      stateExtensions = extensions && typeof extensions === 'object' && !Array.isArray(extensions) ? extensions : {};
       const r = JSON.parse(storage.getItem(KEY.RESERVE) || '[]');
       reserve = new Map(r.map(o => [o.id, new Profile(o)]));
       const c = JSON.parse(storage.getItem(KEY.COMBAT) || 'null');
@@ -856,6 +872,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const d = JSON.parse(storage.getItem(KEY.DICE) || '[]');
       diceLines = (Array.isArray(d) ? d : []).map(x => new DiceLine(x));
       lastAppliedTimestamp = Number(storage.getItem(KEY.TS) || '0') || 0;
+      const resourceEnvelope = currentEnvelope();
+      reserve = new Map(projectV5Resources(resourceEnvelope, Array.from(reserve.values())).map(row => [row.id, new Profile(row)]));
+      combat.participants = new Map(projectV5Resources(resourceEnvelope, Array.from(combat.participants.values())).map(row => [row.id, new Participant(row)]));
       // Lecture complete du stockage : l’état local initial est confirmé.
       // Une écriture ultérieure en quota dépassé repassera explicitement en erreur.
       reportLocalStatus('saved');
@@ -903,17 +922,34 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     const expected = options.baseRevision ?? localRevision;
     return Promise.resolve().then(() => api.executeCommand(type, draft => {
       if (draft.localRevision !== expected) throw Object.assign(new Error('Le combat a changé'), { code: 'V5_EFFECT_STALE' });
-      const participant = (draft.combat?.participants || []).find(item => item.id === participantId);
+      if (options.resolutionId && (draft.extensions?.v5?.actionLedger?.appliedActions || []).some(row => row.actionId === options.resolutionId)) throw Object.assign(new Error('Événement déjà appliqué'), { code: 'V5_EFFECT_DUPLICATE' });
+      const participant = projectV5Resources(draft, draft.combat?.participants || []).find(item => item.id === participantId);
       if (!participant) throw Object.assign(new Error('Participant introuvable'), { code: 'V5_EFFECT_STALE' });
       receipt = evaluate(participant, draft);
       if (!receipt.ready) throw Object.assign(new Error('Données requises pour l’état V5'), { code: 'V5_EFFECT_INPUT' });
+      if (receipt.talentUsageRequests?.length) {
+        const initial = v5StoreActionState(draft);
+        const applied = commitV5StoreTalentUsages({ talentUsageRequests: receipt.talentUsageRequests }, { status: 'applied', state: initial }, initial);
+        if (applied.status !== 'applied') throw Object.assign(new Error('Usage de talent indisponible'), { code: 'V5_EFFECT_STALE' });
+        draft.extensions = { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), actionLedger: applied.state.v5ActionLedger } };
+        receipt.talentUsageReceipts = applied.talentUsageReceipts;
+      }
+      if (type === 'recover-condition-v5' && options.method === 'fortune' && receipt.removed.length) {
+        const current = getV5Fortune(draft, participant);
+        if (current.balance === null) throw Object.assign(new Error('Initialisez le compteur de Fortune du personnage.'), { code: 'V5_FORTUNE_UNKNOWN', userFacing: true });
+        if (current.balance < 1) throw Object.assign(new Error('Aucun point de Fortune disponible.'), { code: 'V5_FORTUNE_INSUFFICIENT', userFacing: true });
+        receipt.participant.extensions = { ...(receipt.participant.extensions || {}), v5: { ...(receipt.participant.extensions?.v5 || {}), resources: { ...(receipt.participant.extensions?.v5?.resources || {}), fortune: current.balance - 1 } } };
+        receipt.resourceCost = { resource: 'fortune', characterId: current.characterId, before: current.balance, amount: 1, after: current.balance - 1 };
+        draft = commitV5Resources(draft, (draft.combat?.participants || []).map(item => item.id === participantId ? receipt.participant : item));
+      }
       return { ...draft,
         combat: { ...draft.combat, participants: draft.combat.participants.map(item => item.id === participantId ? receipt.participant : item) },
         log: [{ id: uid(), kind: 'effect', actorId: options.authorId || participantId, targetId: participantId,
           text: `${participant.name} · ${type === 'heal-wounds-v5' ? `${receipt.hpDelta} Blessures récupérées` : type === 'recover-condition-v5' ? `${receipt.removed.length} effet(s) retiré(s)` : `${receipt.acquiredInstances} État(s) acquis`}`,
-          detail: { ruleVersion: receipt.ruleVersion, acquiredInstances: receipt.acquiredInstances, removed: receipt.removed, reminders: receipt.reminders, hpDelta: receipt.hpDelta } }, ...(draft.log || [])].slice(0, 300) };
+          detail: { ruleVersion: receipt.ruleVersion, acquiredInstances: receipt.acquiredInstances, removed: receipt.removed, reminders: receipt.reminders, hpDelta: receipt.hpDelta, ...(receipt.resourceCost ? { resourceCost: receipt.resourceCost } : {}), ...(receipt.talentPlan ? { talentPlan: receipt.talentPlan, talentUsageReceipts: receipt.talentUsageReceipts } : {}) } }, ...(draft.log || [])].slice(0, 300) };
     })).then(result => result?.ok === false ? result : { ...receipt, status: 'applied', ok: true, persistence: result })
       .catch(error => {
+        if (error.code === 'V5_EFFECT_DUPLICATE') return { status: 'duplicate', ok: true };
         if (error.code === 'V5_EFFECT_STALE') return { status: 'stale', requiresPreview: true };
         if (error.code === 'V5_EFFECT_INPUT') return { ...receipt, status: 'requires-input', baseRevision: expected,
           requests: receipt.needsInput.map(need => ({ ...need, participantId, participantName: combat.participants.get(participantId)?.name, kind: need.field === 'recoveryTest' ? 'test' : ['transition','recoveryMethod'].includes(need.field) ? 'manual' : ['minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery'].includes(need.field) ? 'boolean' : 'integer' })) };
@@ -1171,7 +1207,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       // Rien à changer : pas de commande, donc pas d'entrée d'historique.
       const probe = JSON.parse(JSON.stringify(currentEnvelope()));
       if (applyFicheSyncToDraft(probe, captured) === probe) return { ok: true, changed: false };
-      return api.executeCommand('sync-fiches', draft => { assertRevision(draft.localRevision); return applyFicheSyncToDraft(draft, captured); });
+      return api.executeCommand('sync-fiches', draft => { assertRevision(draft.localRevision); const next = applyFicheSyncToDraft(draft, captured); return reconcileV5ResourceBindings(draft, next, captured); });
     },
     removeProfile(id) {
       if (!canMutate()) return false;
@@ -1263,7 +1299,36 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
     acquireConditions(id, states, options = {}) {
       const captured = cloneValue(states), context = cloneValue(options);
-      return commitV5Effect('acquire-conditions-v5', id, (participant, draft) => acquireV5Conditions(participant, captured, v5EffectContext(draft, { ...context, targetId: id })), context);
+      const actionId = context.resolutionId || uid();
+      return commitV5Effect('acquire-conditions-v5', id, (participant, draft) => {
+        const proposed = normalizeEffects(captured).map((row, index) => ({ ...row,
+          key: row.key === 'stunned' ? 'sonne' : row.key,
+          level: typeof captured[index] === 'object' && captured[index]?.level !== undefined ? captured[index].level : row.level }));
+        const talent = previewV5TalentConditions(participant, proposed, { state: v5StoreActionState(draft), clock: v5StoreActionClock(draft), actionId });
+        const receipt = acquireV5Conditions(participant, talent.states, v5EffectContext(draft, { ...context, resolutionId: actionId, targetId: id }));
+        receipt.talentPlan = talent.plan;
+        receipt.talentUsageRequests = talent.usageRequests.length ? talent.usageRequests : [{ actorId: id, actionId, costs: [], quotas: [], exemptions: [], clock: v5StoreActionClock(draft) }];
+        if (!talent.plan.ready) {
+          receipt.ready = false;
+          receipt.needsInput.push(...talent.plan.unresolved.flatMap(item => item.fields.map(field => ({ field, label: 'Contexte requis pour le talent : ' + field }))));
+        }
+        return receipt;
+      }, { ...context, resolutionId: actionId });
+    },
+    getFortune(id) {
+      const envelope = currentEnvelope();
+      const subject = envelope.combat.participants.find(item => item.id === id) || envelope.reserve.find(item => item.id === id) || envelope.persistentCharacters.find(item => item.id === id);
+      if (!subject) throw new TypeError('Personnage introuvable');
+      return { ...getV5Fortune(envelope, subject), baseRevision: localRevision };
+    },
+    setFortune(id, amount, options = {}) {
+      const captured = cloneValue(options), expected = captured.baseRevision ?? localRevision, characterId = uid();
+      return api.executeCommand('set-fortune-v5', draft => {
+        if (draft.localRevision !== expected) throw Object.assign(new Error('La partie a changé. Recalculez le compteur de Fortune.'), { code: 'V5_EFFECT_STALE', userFacing: true });
+        const subject = (draft.combat?.participants || []).find(item => item.id === id) || (draft.reserve || []).find(item => item.id === id) || (draft.persistentCharacters || []).find(item => item.id === id);
+        if (!subject) throw new TypeError('Personnage introuvable');
+        return setV5Fortune(draft, subject, amount, { source: captured.source || 'mj', characterId });
+      });
     },
     recoverCondition(id, condition, options = {}) {
       const captured = cloneValue(options);
@@ -1856,7 +1921,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     suspendActiveScene() {
       if (!activeScene) throw new Error('Aucune scène active');
       return api.executeCommand('suspend-scene', draft => ({
-        ...draft, activeScene: null,
+        ...closeV5ReactionOpportunities(draft), activeScene: null,
         suspendedScenes: [...(draft.suspendedScenes || []), suspendScene({ ...draft.activeScene, participants: (draft.activeScene.participants || []).map(participant => withMomentum(participant, false)) })],
         combat: { ...draft.combat, round: 0, currentActorId: null, order: [], participants: [] },
         encounters: (draft.encounters || []).map(item => item.id === draft.activeScene.encounterId ? { ...item, status: 'suspended' } : item)
@@ -1872,23 +1937,21 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         encounters: (draft.encounters || []).map(item => item.id === scene.encounterId ? { ...item, status: 'active' } : item)
       }));
     },
-    previewResolution(input = {}) {
-      const round = Number.isSafeInteger(combat.round) && combat.round > 0 ? combat.round : input.round;
-      const actor = input.actor || combat.participants.get(input.actorId);
-      const target = input.target || (input.targetId ? combat.participants.get(input.targetId) : null);
-      return buildResolutionPreview({ ...input, round, actor, target, baseRevision: input.baseRevision ?? localRevision });
+    getReactionOpportunities(actorId) {
+      const envelope = currentEnvelope();
+      return listV5ReactionOpportunities(envelope, actorId, { clock: v5StoreActionClock(envelope) });
     },
-    applyResolution(preview) {
+    previewResolution(input = {}) {
+      const prepared = buildV5StoreActionInput(currentEnvelope(), input);
+      return annotateV5StoreActionPreview(buildResolutionPreview(prepared), prepared);
+    },
+    applyResolution(supplied) {
+      const preview = cloneValue(supplied);
       let semanticResult = null;
       const commit = api.executeCommand('apply-resolution', draft => {
-        const current = {
-          revision: draft.localRevision || 0,
-          ...(Number.isSafeInteger(draft.combat?.round) && draft.combat.round > 0 ? { round: draft.combat.round } : {}),
-          participants: draft.combat?.participants || [],
-          appliedResolutionIds: draft.appliedResolutionIds || []
-        };
+
         let result;
-        try { result = applyActionResolution(preview, current); }
+        try { result = applyV5StoreAction(preview, draft, state => applyActionResolution(preview, state)); }
         catch (error) { error.code = error.code || 'RESOLUTION_INVALID'; throw error; }
         if (result.status === 'duplicate') {
           const error = new Error('Résultat déjà appliqué');
@@ -1901,11 +1964,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           throw error;
         }
         result.state.participants = shieldAfterAttack(result.state.participants, preview, draft.combat?.round ?? 0);
+        result.resolution = { ...result.resolution, actionCostReceipt: result.actionCostReceipt, talentUsageReceipts: result.talentUsageReceipts };
         semanticResult = result;
         return {
-          ...draft,
-          combat: { ...draft.combat, participants: result.state.participants },
-          appliedResolutionIds: result.state.appliedResolutionIds,
+          ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         };
       });
@@ -1921,22 +1983,23 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       });
     },
     simulateAction(input = {}) {
-      return simulateAction({ revision: localRevision, participants: Array.from(combat.participants.values()) }, { ...input, round: Number.isSafeInteger(combat.round) && combat.round > 0 ? combat.round : input.round, baseRevision: input.baseRevision ?? localRevision, actor: input.actor || combat.participants.get(input.actorId), target: input.target || (input.targetId ? combat.participants.get(input.targetId) : null) });
+      const sourceState = v5StoreActionState(currentEnvelope());
+      const prepared = buildV5StoreActionInput(currentEnvelope(), input);
+      const simulation = simulateAction(prepared.v5State, prepared);
+      if (simulation.preview) simulation.preview = annotateV5StoreActionPreview(simulation.preview, prepared);
+      simulation.sourceState = sourceState;
+      return simulation;
     },
-    applySimulation(simulation) {
+    applySimulation(supplied) {
+      const simulation = cloneValue(supplied);
       let semanticResult = null;
       // applyActionSimulation has already executed the pure resolution. Passing
       // result.resolution back through applyResolution would apply it twice and
       // immediately report a duplicate. Commit the returned state once through
       // the Store command boundary so it remains undoable and revisioned.
       const commit = api.executeCommand('apply-simulation', draft => {
-        const current = {
-          revision: draft.localRevision || 0,
-          ...(Number.isSafeInteger(draft.combat?.round) && draft.combat.round > 0 ? { round: draft.combat.round } : {}),
-          participants: draft.combat?.participants || [],
-          appliedResolutionIds: draft.appliedResolutionIds || []
-        };
-        const result = applyActionSimulation(simulation, current);
+
+        const result = applyV5StoreAction(simulation.preview, draft, state => applyActionSimulation(simulation, state));
         if (result.status === 'duplicate') {
           const error = new Error('Simulation déjà appliquée');
           error.code = 'SIMULATION_DUPLICATE';
@@ -1948,11 +2011,10 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           throw error;
         }
         result.state.participants = shieldAfterAttack(result.state.participants, simulation.preview, draft.combat?.round ?? 0);
+        result.resolution = { ...result.resolution, actionCostReceipt: result.actionCostReceipt, talentUsageReceipts: result.talentUsageReceipts };
         semanticResult = result;
         return {
-          ...draft,
-          combat: { ...draft.combat, participants: result.state.participants },
-          appliedResolutionIds: result.state.appliedResolutionIds,
+          ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(simulation.preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         };
       });
@@ -1967,7 +2029,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       });
     },
     getSimulationState() {
-      return { revision: localRevision, participants: cloneValue(Array.from(combat.participants.values())), appliedResolutionIds: [...appliedResolutionIds] };
+      return v5StoreActionState(currentEnvelope());
     },
     discardSimulation(simulation) { return discardSimulation(simulation); },
     getReminders(transition = {}) {

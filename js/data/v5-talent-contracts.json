@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "sourceCatalogueVersion": "sha256:d497bb6d01c62c811097b9b0784d229d2c56b34d428f134f6ad21af764e17bd4",
   "verifiedAt": "2026-10-09",
-  "coverage": "Three validated pure contracts; Beat Blade draft pending critical-damage interaction. Not wired into combat.",
+  "coverage": "Five validated V5 contracts wired into combat and explicit reaction opportunities; remaining catalogue coverage is incomplete.",
   "contracts": [
     {
       "schemaVersion": 2,
@@ -220,8 +220,8 @@
       "schemaVersion": 2,
       "talentId": "talent-beat-blade",
       "edition": "V5",
-      "status": "draft",
-      "ruleVersion": "talent-v5-2026-10-09.1",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.2",
       "source": {
         "effectHash": "sha256:8a69c53432d97d2cc3b99491b684df096cd8f6a635a675916f81505a7cc6add3",
         "reference": "Livre de base V5, p. 115 ; achat : p. 191"
@@ -236,6 +236,11 @@
               "field": "kind",
               "op": "eq",
               "value": "melee"
+            },
+            {
+              "field": "attack.success",
+              "op": "eq",
+              "value": true
             },
             {
               "field": "attack.hit",
@@ -272,6 +277,64 @@
           }
         }
       ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-furious-assault",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.2",
+      "source": {
+        "effectHash": "sha256:864e1ad7fd0b62fa94bc7a1596d1bc8d0a521efe3704561c174262d5a04b10ee",
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "after-melee-hit",
+          "event": "action.afterAttack",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "melee"
+            },
+            {
+              "field": "attack.hit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantExtraAttack",
+              "stackGroup": "talent-furious-assault",
+              "stack": "unique"
+            }
+          ],
+          "costs": [
+            {
+              "id": "talent-furious-assault:momentum",
+              "resource": "momentum",
+              "amount": 1
+            }
+          ],
+          "quotas": [
+            {
+              "id": "talent-furious-assault:round",
+              "scope": "round",
+              "maximum": 1
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "sourceDescriptions": {
+    "talent-accurate-shot": "Vos attaques à distance réussies infligent +1 Dégât, ou +2 si vous avez pris le temps de viser.",
+    "talent-strike-mighty-blow": "=+1 dégât avec les armes de corps à corps, ou +2 si l'attaque a été effectuée avec Avantage V5.",
+    "talent-iron-jaw": "La première fois de chaque rencontre que vous devriez gagner un ou plusieurs états Sonné, vous en gagnez un de moins.",
+    "talent-beat-blade": "Après une attaque de Corps à corps réussie, renoncez aux Dégâts : jusqu’à la fin de votre prochain Tour, la cible ne peut plus opposer une Compétence de Corps à corps et les attaques de Corps à corps contre elle ont Avantage V5. Elle peut encore Esquiver. Inefficace contre une cible plus grande que vous.",
+    "talent-furious-assault": "Une fois par Round, après avoir touché un adversaire au Corps à corps, vous pouvez immédiatement perdre votre Momentum pour effectuer une attaque supplémentaire."
+  }
 }

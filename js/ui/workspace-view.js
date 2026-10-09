@@ -263,7 +263,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       actorId, actionKey: null, externalActionId: null, type: null, attackRoll: '', defenseStat: null, defenseBase: null, defenseSource: null, defenseRoll: '', protectionContext: {}, ammunitionId: '', ammunitionArbitrated: false,
       // Critique : jets saisis, effets décochés et erreurs de saisie par champ (l'aperçu reste affiché).
       criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {}, defenderCriticalLocationRoll: '', defenderCriticalEffectRoll: '', defenderCriticalEffectAlternativeRoll: '', defenderCriticalDeclined: [],
-      v5Kind: null, v5SlModifier: null, v5Advantages: 0, v5Disadvantages: 0, v5Choice: null, defenseChoice: null, charging: false, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, v5Context: {}, defenseContext: {},
+      v5Kind: null, v5SlModifier: null, v5Advantages: 0, v5Disadvantages: 0, v5Choice: null, defenseChoice: null, charging: false, extraAttack: false, reactionId: null, reactionAction: null, aimed: false, beatBlade: false, actorSize: null, targetSize: null, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, v5Context: {}, defenseContext: {},
       preview: null, comparison: null, error: null, busy: false
     };
   }
@@ -323,6 +323,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     adjustHp: typeof actions.adjustHp === 'function' ? actions.adjustHp : null,
     enterParticipant: typeof actions.enterParticipant === 'function' ? actions.enterParticipant : null,
     setMomentum: typeof actions.setMomentum === 'function' ? actions.setMomentum : null,
+    getFortune: typeof actions.getFortune === 'function' ? actions.getFortune : null,
+    editFortune: typeof actions.editFortune === 'function' ? actions.editFortune : null,
     setStates: typeof actions.setStates === 'function' ? actions.setStates : null,
     acquireStates: typeof actions.acquireStates === 'function' ? actions.acquireStates : null,
     recoverState: typeof actions.recoverState === 'function' ? actions.recoverState : null,
@@ -333,7 +335,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function actorActions(participant) {
     if (!participant) return [];
     const lines = typeof Store.getDiceLines === 'function' ? Store.getDiceLines().filter(line => line.participantId === participant.id) : [];
-    const available = (participant.actions || []).length ? participant.actions : lines;
+    let available = (participant.actions || []).length ? participant.actions : lines;
+    if (state.resolution.actorId === participant.id && state.resolution.reactionAction) {
+      const bound = state.resolution.reactionAction;
+      available = available.some(row => row.id === bound.id) ? available.map(row => row.id === bound.id ? bound : row) : [...available, bound];
+    }
     const resumed = state.resolution.actorId === participant.id && lines.find(line => line.id === state.resolution.externalActionId);
     return resumed && !available.some(action => action.id === resumed.id) ? [...available, resumed] : available;
   }
@@ -765,6 +771,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       'data-focus-key': `momentum-${participant.id}` });
     momentumButton.dataset.workspaceAction = 'toggle-momentum'; momentumButton.dataset.actorId = participant.id;
     momentumButton.disabled = !callbacks.setMomentum; body.appendChild(momentumButton);
+    if (callbacks.getFortune || callbacks.editFortune) {
+      const fortune = callbacks.getFortune?.(participant.id);
+      const fortuneButton = button('Fortune : ' + (fortune?.balance ?? '?'), 'workspace-secondary', {
+        'aria-label': 'Modifier la Fortune de ' + participant.name, 'data-focus-key': 'fortune-' + participant.id });
+      fortuneButton.dataset.workspaceAction = 'edit-fortune'; fortuneButton.dataset.actorId = participant.id;
+      fortuneButton.disabled = !callbacks.editFortune; body.appendChild(fortuneButton);
+    }
+    for (const offer of Store.getReactionOpportunities?.(participant.id) || []) {
+      const use = button('Assaut féroce : attaque supplémentaire (1 Élan)', 'workspace-secondary', {
+        'aria-label': 'Utiliser Assaut féroce de ' + participant.name, 'data-focus-key': 'reaction-' + participant.id });
+      use.dataset.workspaceAction = 'use-reaction'; use.dataset.actorId = participant.id; use.dataset.reactionId = offer.id;
+      use.disabled = state.resolution.busy || state.resolution.reactionId === offer.id; body.appendChild(use);
+    }
     body.appendChild(states);
     sheet.appendChild(body);
     sheet.appendChild(renderFicheDetails(participant));
@@ -798,6 +817,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return { kind: draft.v5Kind || inferV5Kind({ ...context.action, type: context.type }, equipmentAttackContext(context.action.extensions?.equipment)),
       ...(draft.v5SlModifier != null ? { slModifier: draft.v5SlModifier } : context.action.extensions?.v5?.slModifier != null ? { slModifier: context.action.extensions.v5.slModifier } : {}),
       choice: draft.v5Choice, charging: draft.charging, context: draft.v5Context,
+      extraAttack: draft.extraAttack === true, ...(draft.reactionId ? { reactionId: draft.reactionId } : {}), aimed: draft.aimed === true,
+      actorSize: draft.actorSize, targetSize: draft.targetSize,
+      talentChoices: { 'talent-beat-blade:replace-damage': draft.beatBlade === true },
       advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'), disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré') };
   }
   function defenseV5Input(context, draft) {
@@ -811,16 +833,17 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const resolutionHandlers = {
     select(patch) {
       const draft = state.resolution;
-      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext']) if (key in patch) draft[key] = patch[key];
+      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext']) if (key in patch) draft[key] = patch[key];
       draft.v5Choice = null; draft.defenseChoice = null;
       if ('targetId' in patch) {
         state.targetChoice = patch.targetId;
+        draft.targetSize = null;
         draft.defenseBase = null; draft.defenseSource = null;
         draft.defenseKind = null; draft.defenseSlModifier = null;
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {};
         draft.protectionContext = {};
       }
-      if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
+      if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
       if ('protectionContext' in patch) draft.protectionContext = patch.protectionContext;
       if ('ammunitionId' in patch) draft.ammunitionId = patch.ammunitionId;
       if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;
@@ -964,7 +987,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             if ((shown ?? option.base) == null || shown === '' || !Number.isInteger(Number(shown ?? option.base))) throw userError(`Précisez le score de défense de ${target.name} avant la comparaison.`);
             input.defense = { roll: defenseRoll, base: (shown ?? option.base) ?? 0, mod: option.mod || 0, qualities: option.qualities || [], label: option.statLabel, v5: { ...defenseV5Input({ ...context, defense: { option } }, target.id === context.target?.id ? draft : { ...draft, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, defenseContext: {} }), choice: null } };
           }
-          input.v5 = { ...v5Input(context, draft), choice: null };
+          input.v5 = { ...v5Input(context, draft), targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
           return { targetId: target.id, name: target.name, hp: target.hp, preview: Store.previewResolution(input) };
         });
       } catch (error) {
@@ -979,6 +1002,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (!entry || draft.busy) return;
       if(previewIsStale(entry.preview)){rejectStalePreview();return;}
       state.targetChoice = targetId;
+      draft.targetSize = entry.preview.input.v5?.targetSize ?? null;
       // playContext relit la valeur de défense de la nouvelle cible ; « Autre » garde la saisie.
       if (draft.defenseStat !== 'Autre') draft.defenseBase = entry.preview.input.defense?.base == null ? null : String(entry.preview.input.defense.base);
       const comparedDefense = defenseChoice(readParticipants(Store).find(item => item.id === targetId));
@@ -1012,7 +1036,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         } else {
           draft.attackRoll = '';
           draft.defenseRoll = '';
-          draft.v5Choice = null; draft.defenseChoice = null; draft.charging = false;
+          draft.v5Choice = null; draft.defenseChoice = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false;
           focusKey = 'roll-attack';
         }
         draft.preview = null;
@@ -1331,6 +1355,20 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           Promise.resolve(callbacks.removeParticipant?.(participantId)).then(() => render(), () => { target.disabled = false; });
         }
         break;
+      case 'use-reaction': {
+        const offer = Store.getReactionOpportunities?.(participantId).find(row => row.id === target.dataset.reactionId);
+        if (!offer || state.resolution.busy) break;
+        const source = actorActions(participant).find(row => row.id === offer.action.id);
+        state.actorChoice = { id: participantId, turn: turnKey(readCombat(Store)) };
+        state.targetChoice = offer.targetId;
+        state.resolution = { ...emptyResolution(participantId), type: 'attack', v5Kind: 'melee', extraAttack: true,
+          reactionId: offer.id, reactionAction: { ...offer.action, note: source?.note || 'Attaque d’Assaut féroce' } };
+        const bound = state.resolution.reactionAction;
+        state.resolution.actionKey = actionKey(bound, actorActions(participant).findIndex(row => row.id === bound.id));
+        render('roll-attack');
+        break;
+      }
+      case 'edit-fortune': callbacks.editFortune?.(participantId); break;
       case 'toggle-momentum': if (participant) Promise.resolve(callbacks.setMomentum?.(participantId, !hasMomentum(participant))).catch(error => { state.resolution.error = { field: 'general', message: userMessage(error, 'Élan non enregistré : réessayez.') }; render(); }); break;
       case 'adjust-hp': callbacks.adjustHp?.({ participantId, delta: Number(target.dataset.hpDelta) }); break;
       case 'enter-participant': callbacks.enterParticipant?.(participantId); break;

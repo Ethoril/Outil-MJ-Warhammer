@@ -34,7 +34,18 @@ export function purgeEncounterJournal(state, scope) {
   if (!state) return state;
   const linked = entry => journalEntryBelongsToEncounter(entry, scope);
   const removed = new Set((state.log || []).filter(linked).map(entry => entry.detail?.resolutionId).filter(Boolean));
-  return { ...state, log: (state.log || []).filter(entry => !linked(entry)),
+  const ledger = state.extensions?.v5?.actionLedger;
+  const ownedClocks = new Set([scope.encounterId, ...scope.sceneIds]);
+  const quotaBelongs = entry => {
+    try { return ownedClocks.has(JSON.parse(entry.scopeKey)[0]); } catch { return false; }
+  };
+  const cleanedLedger = ledger ? {
+    appliedActions: ledger.appliedActions.filter(entry => !ownedClocks.has(entry.encounterId)),
+    quotaUsage: ledger.quotaUsage.filter(entry => !quotaBelongs(entry))
+  } : null;
+  return { ...state,
+    ...((cleanedLedger || state.extensions?.v5?.reactionOpportunities) ? { extensions: { ...state.extensions, v5: { ...state.extensions.v5, ...(cleanedLedger ? { actionLedger: cleanedLedger } : {}), ...(state.extensions.v5.reactionOpportunities ? { reactionOpportunities: state.extensions.v5.reactionOpportunities.filter(entry => !ownedClocks.has(entry.encounterId)) } : {}) } } } : {}),
+    log: (state.log || []).filter(entry => !linked(entry)),
     archives: (state.archives || []).filter(entry => !linked(entry)),
     appliedResolutionIds: (state.appliedResolutionIds || []).filter(id => !removed.has(id)) };
 }

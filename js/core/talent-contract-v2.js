@@ -30,7 +30,7 @@ function validateEffect(effect, event) {
     if (effect.stack !== 'unique') throw new TypeError('Cumul unique requis');
     if (['preventMomentumLoss','suppressQuality'].includes(op)) id(effect.key,'Cible d’opération');
     const phase = {grantAdvantage:'test.beforeRoll',grantDisadvantage:'test.beforeRoll',preventMomentumLoss:'momentum.beforeLoss',suppressQuality:'test.beforeRoll',grantExtraAttack:'action.before'}[op];
-    if (phase !== event) throw new TypeError('Phase unique invalide');
+    if (phase !== event && !(op === 'grantExtraAttack' && event === 'action.afterAttack')) throw new TypeError('Phase unique invalide');
     if (op === 'preventMomentumLoss' && !['oppositionLost','meleeTestFailed','woundsLost','conditionAcquired','combatPause','combatEnd'].includes(effect.key)) throw new TypeError('Motif d’Élan non couvert');
   } else if (op === 'replaceDamage') {
     only(effect,['op','scope','stackGroup','stack']);
@@ -106,6 +106,7 @@ export function evaluateTalentContractsV2({ contracts, acquisitions, sourceHashe
         if (!expiry) missing.add('authorNextTurnEnd');
         if (!context.actor?.id) missing.add('actor.id');
         if (!context.target?.id) missing.add('target.id');
+        if (context.target?.id && context.actor?.id === context.target.id) missing.add('target.distinctFromAuthor');
         if (expiry && context.actor?.id && (expiry.phase !== 'endOfTurn' || expiry.actorId !== context.actor.id)) throw new TypeError('Échéance du prochain Tour de l’auteur requise');
         if (expiry && context.actor?.id && context.target?.id) effect.timedEffect = createV5TimedEffect({id:effect.key,kind:'talent-active',restriction:effect.restriction,advantageFilter:effect.advantageFilter,source:clone(origin)}, {authorId:context.actor.id,targetId:context.target.id,expiry});
       }

@@ -103,9 +103,9 @@ test('Contrôle indépendant 2.3 — comparaison sur Élan payé, résultat atom
   assert.deepEqual(initial,original,'All plans and compositions preserve the original snapshot');
 });
 
-test('Contrôle indépendant 2.3 — Battement reste inactif et schéma 1 conserve son refus des champs v2',()=>{
+test('Contrôle indépendant 2.3 — Battement brouillon reste inactif et schéma 1 conserve son refus des champs v2',()=>{
   const sourceHashes=Object.fromEntries(registry.contracts.map(item=>[item.talentId,item.source.effectHash]));
-  const plan=evaluateTalentContractsV2({contracts:registry.contracts,acquisitions:[{talentId:'talent-beat-blade'}],sourceHashes,
+  const plan=evaluateTalentContractsV2({contracts:registry.contracts.map(item=>item.talentId==='talent-beat-blade'?{...item,status:'draft'}:item),acquisitions:[{talentId:'talent-beat-blade'}],sourceHashes,
     event:'action.afterAttack',role:'attacker',context:{kind:'melee',attack:{hit:true},actor:{id:'control-a',size:3},target:{id:'control-t',size:3},
       authorNextTurnEnd:{phase:'endOfTurn',round:4,turn:9,actorId:'control-a'}},choices:{'talent-beat-blade:replace-damage':true}});
   assert.deepEqual(plan.proposals,[]);assert.equal(plan.trace[0].status,'draft');

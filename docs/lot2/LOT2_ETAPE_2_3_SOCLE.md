@@ -1,6 +1,6 @@
 # Étape 2.3 — socle pur des coûts, usages et contrats v2
 
-Incrément local du 9 octobre 2026. Ces modules sont testés séparément ; ils ne sont pas raccordés au Store, à la résolution réelle ou à l’interface. Ils ne certifient pas le catalogue complet ni les talents des PJ actuels.
+Document historique du socle pur préparé le 9 octobre 2026, avant le raccordement. **État courant :** [LOT2_RACCORDEMENT_2_3.md](LOT2_RACCORDEMENT_2_3.md) et [LOT2_CONTROLE_2_3.md](LOT2_CONTROLE_2_3.md). Les cinq contrats sont désormais raccordés au Store, à la résolution et à l’interface ; le catalogue complet reste à contractualiser. Les sections ci-dessous conservent les API et le statut du socle initial.
 
 ## Coût et commande atomique
 

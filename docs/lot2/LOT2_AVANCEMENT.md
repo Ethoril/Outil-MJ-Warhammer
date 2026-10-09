@@ -1,51 +1,43 @@
 # Avancement local du 9 octobre 2026
 
-Le moteur reste dans la branche `codex/lot2-talents-v5`. Main et le site public ne sont pas modifiés. Le travail reprend le socle 3.12.3 ; il ne constitue pas une nouvelle version publiée.
+Branche `codex/lot2-talents-v5`, reprise incluant `a1af528`. Main et le site public restent inchangés. Version applicative 3.12.3, sans nouvelle publication.
 
-## Étape 2.1 raccordée
+## État courant
 
-Une chaîne commune V5 résout Tests, oppositions, inversion, dégâts, protections et critiques. Les aperçus des deux choix emploient les mêmes dés et le même résolveur que l'action appliquée. La localisation réelle et les PA peuvent faire préférer conserver 61 (5 Blessures) à inverser en 16 (3 Blessures), malgré les DR supérieurs de l'inversion. Les inconnues empêchent un conseil définitif.
+Les étapes 2.1 et 2.2 sont raccordées au combat : chaîne commune V5, choix d’inversion sans nouveau dé, critiques indépendants du gagnant, Élan binaire, acquisitions/récupérations et échéances atomiques. Les horloges appartiennent aux scènes et distinguent auteur/cible. Les données ou jets inconnus suspendent l’application.
 
-Le choix du défenseur recommande la moindre perte de Blessures subies. Les succès doubles des perdants ou défenseurs peuvent infliger un critique. L'excédent provoque un autre critique à la localisation normale, avec gravité au-delà de 100 si nécessaire. Les PV sont bornés à zéro sans À Terre automatique. Les conditions et l'Élan sont appliqués avec la même commande révisée et annulable.
+Le raccordement représentatif **2.3 est réalisé localement** : cinq contrats actifs, coûts préparés avant calcul, Fortune stable entre rencontres, quotas durables et réaction explicite. [LOT2_RACCORDEMENT_2_3.md](LOT2_RACCORDEMENT_2_3.md) décrit le comportement, les modules, les reçus et les limites. [LOT2_CONTROLE_2_3.md](LOT2_CONTROLE_2_3.md) donne le contrôle indépendant.
 
-Les calculs sont repliés. Le journal est compact avec un reçu détaillé/versionné. L'ancien bouton d'attaque ouvre la résolution commune ; le jet rapide générique utilise également le résolveur V5. Les anciens modificateurs de seuil ne deviennent pas silencieusement des DR.
+Tir précis et Coup puissant ajoutent leurs bonus fixes avec le contexte réel. Mâchoires d’acier réduit la première acquisition Sonné avant ses conséquences. Battement supprime tous les dégâts et le critique qu’il remplace, conserve le critique défensif indépendant et expire au prochain Tour de l’auteur. Assaut féroce prépare une action distincte, liée au résultat source, payée seulement à confirmation. Annulation, rechargement, refus et erreur de disque sont contrôlés.
 
-## Étape 2.2 raccordée
-
-Le module d'États est pur et reçoit les jets explicitement. Acquisition, cumul, retrait, récupération et échéances conservent leurs métadonnées. Une occurrence temporaire peut expirer au Tour de son auteur, même portée par une autre cible. L'horloge appartient à la scène ; pause, autre rencontre et reprise ne décalent pas cette échéance.
-
-Enflammé, Hémorragique et Empoisonné agissent à la fin du Round. Si un d10, un Test de survie ou la gravité d'un critique de feu manque, la transition entière attend. Les saisies restent dans la fenêtre entre deux demandes ; un changement concurrent bloque l'application. Les résultats, retraits, Blessures et passage de Tour sont enregistrés ensemble. Les acquisitions sensibles à une échéance reçoivent le Round réel ; une horloge absente reste une donnée requise. Pour un BE nul et le poison, l’échéance de survie doit être précisée plutôt qu’inventée. Un critique exigeant ce contexte par victime reste à arbitrer avant application automatique.
-
-Les récupérations sont proposées selon la condition, avec méthode et contexte explicites. Guérir des Blessures retire autant d'instances Hémorragique réellement guéries ; Empoisonné à zéro peut empêcher la guérison. Sonné peut provoquer Inconscient selon le BE ; Inconscient retire Sonné. Les causes de critiques peuvent verrouiller une récupération. Une dépense de Fortune est confirmée à la table ; son compteur appartient au raccordement des ressources 2.3.
-
-L'édition complète de fiche reste un arbitrage volontaire du MJ ; elle ne doit pas servir de preuve que toutes les récupérations sont automatiques. Les profils en attente d'entrée dans le combat ne reçoivent pas ses effets périodiques de Round. Les durées historiques numériques comptent les Tours de leur porteur jusqu'à modification explicite.
-
-## Règles et source des talents
-
-L'encart dispose de repères Jets, Élan, Critiques et États, d'une recherche des effets des critiques et de tableaux lisibles sur téléphone. Psychologie et Corruption ont aussi été reprises depuis le livre V5. Les aides magiques restantes sont identifiées comme hors de cette validation.
-
-Le CSV Talents publié a été capturé ; 206 IDs conservés, 19 descriptions/empreintes différentes du snapshot précédent. CSV SHA-256 : `935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e`. Le snapshot applicatif et l'inventaire portable sont cohérents. Un vieux cache local ne remplace plus un référentiel livré plus récent. Cette actualisation n'active aucun talent par simple lecture de son texte.
+Fortune est initialisée explicitement depuis Chance courant connu ou saisie MJ, jamais depuis Destin/maximum. Son registre appartient au personnage, avec projection sur toutes les copies. La première association PJ locale univoque préserve le solde dépensé et sa provenance ; remplacement/ambiguïté ne provoquent aucun transfert supposé. Aucune écriture automatique dans la fiche.
 
 ## Validation reproductible
 
-```sh
+```text
 npm ci
 npm test
 npm run test:lot2-browser
+npm run test:lot2-23-browser
+node tests/lot2-v5-23-control-browser.mjs
 npm run test:startup
 npm run test:fiches-browser
 ```
 
-Les scripts navigateur utilisent Edge sur Windows, ou `PLAYWRIGHT_EXECUTABLE_PATH` pour un autre Chromium installé. Ils créent des contextes isolés et des données fictives. Les captures locales sont dans `tmp/lot2-ui/` et `tmp/fiches-pj-receipt/`, hors Git. Le test de démarrage éprouve aussi le cache PWA réel et l'absence de perte de données locales après mise à jour.
+Node/npm et les dépendances étaient déjà installés pour cette reprise. Recette finale : **672/672 tests Node réussis, zéro échec, annulation ou test ignoré**. Les cinq recettes Edge ci-dessus sont réussies, exécutées séparément. Elles couvrent ordinateur/téléphone, sombre/parchemin, coûts, Fortune, quotas, Battement, réaction, annulation, synchronisation de fiches et démarrage. Le cache réel 3.12.0 → 3.12.3 est éprouvé avec IndexedDB préservée. Les 21 tests du contrôleur indépendant 2.3 sont inclus dans la suite Node. `git diff --check` est conforme.
 
-Recette finale du 9 octobre : **619/619 tests Node réussis, zéro échec ni test ignoré**. Les trois recettes navigateur ci-dessus sont réussies : combat V5 sur ordinateur/téléphone et deux thèmes, démarrage/mise à jour PWA, fiches PJ et synchronisation. Le contrôle indépendant supplémentaire couvre aussi le socle 2.3 et les horloges d’acquisition.
+Les scripts navigateur utilisent Edge sur Windows ou `PLAYWRIGHT_EXECUTABLE_PATH`. Données et captures sont synthétiques, dans `tmp/` ignoré. Les tests de rejet disque produisent volontairement une erreur console. Les contrôles cloud sont locaux (enveloppe et sérialisation), sans recette sur un compte distant réel.
 
-## Passation et décisions validées
+## Sources et repères historiques
 
-Les trois arbitrages sont fixés dans [CHOIX_POUR_LA_REPRISE.md](CHOIX_POUR_LA_REPRISE.md). [PASSATION_PROCHAINE_FENETRE.md](PASSATION_PROCHAINE_FENETRE.md) contient le message à copier, le contexte technique et la suite. Cette actualisation est documentaire ; la validation du moteur ci-dessus reste celle du commit `6871764`.
+Le CSV Talents V5 contient 206 IDs conservés et 19 descriptions/empreintes modifiées ; SHA-256 : `935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e`. Source, snapshot applicatif et inventaire portable sont cohérents. Le texte actualisé ne remplace pas un contrat mécanique certifié.
+
+Le commit `6871764` validait 619 tests Node et les trois recettes historiques combat/démarrage/fiches pour 2.1/2.2 et le socle pur 2.3. [LOT2_CONTROLE.md](LOT2_CONTROLE.md) et [LOT2_ETAPE_2_3_SOCLE.md](LOT2_ETAPE_2_3_SOCLE.md) documentent cet état antérieur. Le raccordement courant dépasse leur statut « non raccordé ».
+
+Les règles consultables V5 incluent Tests, Élan, santé, critiques, États, Psychologie et Corruption. La magie et les prières restent au lot 3. Les [trois arbitrages](CHOIX_POUR_LA_REPRISE.md) sont validés et implémentés dans leur portée raccordée.
 
 ## Suite du chantier
 
-Le socle pur 2.3 est préparé et testé séparément : `LOT2_ETAPE_2_3_SOCLE.md`. Il reste à relier ses coûts, ressources, quotas, choix et échéances à l'action réelle, puis aux contrats source et à leur couverture visible. L'inventaire de 206 talents reste préparatoire ; la priorité des PJ actuels doit venir des snapshots de séance. Réactions, attaques supplémentaires et catalogue complet ne sont pas annoncés actifs.
+Catalogue utile **2.4** depuis les snapshots PJ réellement importés, puis recette de livraison **2.5**. Les cinq contrats ne certifient pas tous les talents. Frappe assommante, Orateur, tests contextuels, Riposte/Frappe réactive et autres effets restent à contractualiser ; toute nouvelle famille mécanique exige un incrément testé. Dix bonus de caractéristiques intégrés aux fiches restent exclus ; ne pas ajouter Dur à cuire deux fois.
 
-Après 2.3 : catalogue utile 2.4, puis recette de livraison 2.5. Aucun push, fusion, déploiement ou migration de données privées n'a été effectué.
+[La passation](PASSATION_PROCHAINE_FENETRE.md) donne la reprise locale. Aucun push, fusion, déploiement, migration de données privées ni PDF/export privé ajouté au dépôt.

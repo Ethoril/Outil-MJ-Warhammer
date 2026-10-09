@@ -1,4 +1,6 @@
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
+import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../core/talent-contracts.js';
+import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipment.js';
 /**
  * Résolution intégrée de Jouer (sans modale). Ce module ne fait que construire
@@ -267,6 +269,11 @@ function renderResult(preview, target, draft, handlers) {
   result.appendChild(pills);
   if (preview.attack) result.appendChild(node('p', 'workspace-result-line', `${preview.hit ? 'Touché' : 'Pas de touche'}${preview.location ? ` · ${preview.location.name}` : ''}`));
   if (target && preview.damage) result.appendChild(node('p', 'workspace-result-line', `${target.name} : ${previewHpLoss(preview)} Blessures proposées · PV ${target.hp} → ${Math.max(0, Number(target.hp) - previewHpLoss(preview))}`));
+  if (preview.actionCosts?.paid?.length) result.appendChild(node('p', 'workspace-result-line',
+    'Coût proposé avant le jet : ' + preview.actionCosts.paid.map(cost => cost.resource === 'momentum' ? '1 Élan' : cost.amount + ' ' + cost.resource).join(', ')));
+  if (preview.damageReplacedByTalent) result.appendChild(node('p', 'workspace-result-line', 'Battement : 0 Blessure ; toutes les conséquences du critique remplacé sont supprimées. Esquive reste possible.'));
+  const reductions = (preview.talentPlans || []).flatMap(plan => plan.proposals || []).filter(proposal => proposal.op === 'reduceConditionAcquisition');
+  if (reductions.length) result.appendChild(node('p', 'workspace-result-line', 'Mâchoires d’acier : un Sonné évité, premier usage de cette rencontre.'));
   for (const change of preview.momentum || []) {
     const name = change.participantId === preview.input.actor?.id ? preview.input.actor.name : target?.name;
     result.appendChild(node('p', 'workspace-result-line', `${name || 'Combattant'} : Élan ${change.before ? 'oui' : 'non'} → ${change.after ? 'oui' : 'non'}`));
@@ -290,6 +297,19 @@ function renderResult(preview, target, draft, handlers) {
   if (preview.damage) calculations.appendChild(node('p', 'workspace-formula num', formatDamageFormula(preview.damage)));
   if (preview.protection) calculations.appendChild(node('p', 'workspace-formula-notes', `Protection retenue : ${preview.protection.ap ?? 'inconnue'} PA`));
   calculations.appendChild(node('p', 'workspace-muted', `Règle : ${preview.ruleVersion}`));
+  const covered = new Set(Object.values(V5_TALENT_IDS));
+  const excluded = new Set(EXCLUDED_BASE_CHARACTERISTIC_TALENTS);
+  const acquired = preview.input.actor?.talents || [];
+  const uncovered = acquired.filter(row => !excluded.has(row.id) && (!covered.has(row.id) || row.status !== 'resolved'));
+  if (uncovered.length) calculations.appendChild(node('p', 'workspace-muted', 'Autres talents à arbitrer par le MJ : ' + uncovered.map(row => row.name || row.nom || row.id).join(', ')));
+  if (acquired.some(row => excluded.has(row.id))) calculations.appendChild(node('p', 'workspace-muted', 'Les bonus permanents de caractéristiques sont déjà compris dans la fiche.'));
+  const disabled = new Map((preview.talentPlans || []).flatMap(plan => plan.trace || [])
+    .filter(row => ['sourceChanged','sourceUnavailable','draft'].includes(row.status)).map(row => [row.talentId, row.status]));
+  for (const [id, status] of disabled) {
+    const talent = [...acquired, ...(preview.input.target?.talents || [])].find(row => row.id === id);
+    calculations.appendChild(node('p', 'workspace-field-error', (talent?.name || id) + ' : ' +
+      (status === 'sourceChanged' ? 'description modifiée' : status === 'sourceUnavailable' ? 'source indisponible' : 'règle encore en préparation') + ' ; effet à arbitrer par le MJ.'));
+  }
   result.appendChild(calculations);
   return result;
 }
@@ -444,6 +464,36 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
   if (kind.value === 'melee' && type === 'attack') {
     const charge = node('label','workspace-type'); const check = document.createElement('input'); check.type='checkbox'; check.checked=draft.charging === true;
     check.addEventListener('change',()=>handlers.select({charging:check.checked})); charge.append(check,'Charge donnant Élan (distance et conditions vérifiées)'); v5.appendChild(charge);
+  }
+  const talentToggle = (key, text, checked) => {
+    const label = node('label', 'workspace-type'); const check = document.createElement('input');
+    check.type = 'checkbox'; check.checked = checked === true; check.setAttribute('aria-label', text);
+    check.dataset.focusKey = key; check.addEventListener('change', () => handlers.select({ [key]: check.checked }));
+    label.append(check, text); v5.appendChild(label);
+  };
+  if (type === 'attack') {
+    if (draft.reactionId) {
+      v5.appendChild(node('p', 'workspace-muted', 'Assaut féroce : nouvelle attaque avec la même arme contre le même adversaire. Coût : 1 Élan ; une fois par Round et un seul paiement d’attaque supplémentaire par Tour.'));
+      const cancel = button('Quitter la préparation d’Assaut féroce', 'workspace-ghost');
+      cancel.addEventListener('click', () => handlers.select({ reactionId: null, extraAttack: false })); v5.appendChild(cancel);
+    } else talentToggle('extraAttack', 'Attaque supplémentaire : payer 1 Élan (une fois par Tour)', draft.extraAttack);
+    if (kind.value === 'ranged' && hasV5Talent(actor, V5_TALENT_IDS.accurateShot))
+      talentToggle('aimed', 'Visée effectuée : Tir précis donne +2 Dégâts', draft.aimed);
+    if (kind.value === 'melee' && hasV5Talent(actor, V5_TALENT_IDS.beatBlade)) {
+      talentToggle('beatBlade', 'Battement : remplacer toutes les Blessures et conséquences du critique', draft.beatBlade);
+      if (draft.beatBlade) {
+        for (const [key, labelText] of [['actorSize','Taille de l’auteur'],['targetSize','Taille de la cible']]) {
+          const label = node('label', 'workspace-type', labelText); const select = document.createElement('select');
+          select.appendChild(new Option('À préciser', ''));
+          for (const [value, text] of [[0,'Minuscule'],[1,'Très petite'],[2,'Petite'],[3,'Moyenne'],[4,'Grande'],[5,'Énorme'],[6,'Monstrueuse']])
+            select.appendChild(new Option(text, String(value)));
+          select.value = draft[key] == null ? '' : String(draft[key]); select.setAttribute('aria-label', labelText); select.dataset.focusKey = key;
+          select.addEventListener('change', () => handlers.select({ [key]: select.value === '' ? null : Number(select.value) }));
+          label.appendChild(select); v5.appendChild(label);
+        }
+        v5.appendChild(node('p', 'workspace-muted', 'Jusqu’à la fin du prochain Tour de l’auteur : la cible ne peut opposer Corps à corps ; Esquive reste possible et les attaques de mêlée contre elle ont Avantage.'));
+      }
+    }
   }
   if (type === 'attack' && target) {
     const label=node('label','workspace-type','Nature de la défense'); const select=document.createElement('select');
