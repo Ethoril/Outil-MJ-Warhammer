@@ -3,11 +3,11 @@ import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from './talent-contracts.js';
 import { previewV5ActionCosts } from './v5-action-costs.js';
 import { createV5TimedEffect } from './v5-effects.js';
 export const TALENT_CONTRACT_V2_SCHEMA_VERSION = 2;
-const EVENTS = new Set(['test.beforeRoll','damage.beforeProtection','condition.beforeAcquire','momentum.beforeLoss','action.before','action.afterAttack']);
+const EVENTS = new Set(['test.beforeRoll','test.afterRoll','damage.beforeProtection','condition.beforeAcquire','momentum.beforeLoss','action.before','action.afterAttack']);
 const ROLES = new Set(['actor','attacker','defender']);
-const FIELDS = new Set(['kind','skillId','specialization','aimed','charging','terrain','weapon.group','weapon.reach','weapon.isMelee','actor.id','actor.size','target.id','target.size','condition.id','condition.instances','momentum.lossReason','attack.success','attack.hit','attack.usedAdvantageV5']);
+const FIELDS = new Set(['kind','skillId','skillGroupId','specialization','specializationId','lying','influencingGroup','touchingOpponent','resistingThreat','threatId','runningOrJumping','falling','begging','inCombat','resistingInfluence','escapingBonds','breakingEntry','resistingPoisonOrAlcohol','onOcean','estimatingObject','test.success','test.roll','test.sl','silentTakedown','calledShot','outsideCombat','targetUnaware','aimed','charging','terrain','weapon.group','weapon.reach','weapon.isMelee','weapon.improvised','weapon.pummel','actor.id','actor.size','target.id','target.size','condition.id','condition.instances','momentum.lossReason','attack.success','attack.hit','attack.usedAdvantageV5']);
 const NUMERIC = new Set(['modifySL','modifyDamage','reduceConditionAcquisition']);
-const UNIQUE = new Set(['grantAdvantage','grantDisadvantage','preventMomentumLoss','suppressQuality','grantExtraAttack']);
+const UNIQUE = new Set(['grantAdvantage','grantDisadvantage','preventMomentumLoss','suppressQuality','addQuality','grantExtraAttack']);
 const clone = structuredClone;
 const isRecord = value => value && typeof value === 'object' && !Array.isArray(value);
 const id = (value, label) => { if (typeof value !== 'string' || !value.trim()) throw new TypeError(`${label} requis`); };
@@ -28,10 +28,13 @@ function validateEffect(effect, event) {
   } else if (UNIQUE.has(op)) {
     only(effect,['op','key','stackGroup','stack']);
     if (effect.stack !== 'unique') throw new TypeError('Cumul unique requis');
-    if (['preventMomentumLoss','suppressQuality'].includes(op)) id(effect.key,'Cible d’opération');
-    const phase = {grantAdvantage:'test.beforeRoll',grantDisadvantage:'test.beforeRoll',preventMomentumLoss:'momentum.beforeLoss',suppressQuality:'test.beforeRoll',grantExtraAttack:'action.before'}[op];
+    if (['preventMomentumLoss','suppressQuality','addQuality'].includes(op)) id(effect.key,'Cible d’opération');
+    const phase = {grantAdvantage:'test.beforeRoll',grantDisadvantage:'test.beforeRoll',preventMomentumLoss:'momentum.beforeLoss',suppressQuality:'action.before',addQuality:'action.before',grantExtraAttack:'action.before'}[op];
     if (phase !== event && !(op === 'grantExtraAttack' && event === 'action.afterAttack')) throw new TypeError('Phase unique invalide');
     if (op === 'preventMomentumLoss' && !['oppositionLost','meleeTestFailed','woundsLost','conditionAcquired','combatPause','combatEnd'].includes(effect.key)) throw new TypeError('Motif d’Élan non couvert');
+  } else if (op === 'chooseSLUnits') {
+    only(effect,['op','stackGroup','stack']);
+    if (effect.stack !== 'unique' || event !== 'test.afterRoll') throw new TypeError('Choix de DR/unités invalide');
   } else if (op === 'replaceDamage') {
     only(effect,['op','scope','stackGroup','stack']);
     if (effect.scope !== 'allDamage' || effect.stack !== 'unique' || event !== 'action.afterAttack') throw new TypeError('Remplacement de dégâts invalide');
@@ -60,6 +63,7 @@ export function validateTalentContractV2(contract) {
       if (condition.op === 'lteField' ? !FIELDS.has(condition.otherField) : condition.op === 'in' ? !Array.isArray(condition.value) || !condition.value.length || !condition.value.every(scalar) : condition.op === 'eq' ? !scalar(condition.value) : condition.op === 'gte' && !Number.isFinite(condition.value)) throw new TypeError('Valeur de prédicat invalide');
     }
     clause.effects.forEach(effect => validateEffect(effect,clause.event));
+    if (clause.effects.some(effect=>effect.op==='chooseSLUnits') && !clause.choice) throw new TypeError('Choix explicite de DR/unités requis');
     if (clause.choice) { only(clause.choice,['id']); id(clause.choice.id,'Choix'); }
     for (const collection of ['costs','exemptions','quotas']) if (clause[collection] !== undefined && !Array.isArray(clause[collection])) throw new TypeError('Ressources v2 invalides');
     // Validate cost vocabulary without requiring actual balances or clocks.
@@ -81,7 +85,7 @@ export function evaluateTalentContractsV2({ contracts, acquisitions, sourceHashe
     if (disabled) { trace.push({talentId:acquisition.talentId,status:disabled}); continue; }
     for (const clause of contract.clauses) {
       if (clause.event !== event || clause.role !== role) continue;
-      const origin = {talentId:contract.talentId,clauseId:clause.id,ruleVersion:contract.ruleVersion,source:clone(contract.source)}, missing = new Set(); let rejected = false;
+      const origin = {talentId:contract.talentId,clauseId:clause.id,specialization:acquisition.specialization??null,ruleVersion:contract.ruleVersion,source:clone(contract.source)}, missing = new Set(); let rejected = false;
       for (const predicate of clause.when) {
         const actual = read(context,predicate.field), other = predicate.op === 'lteField' ? read(context,predicate.otherField) : undefined;
         if (actual == null) {missing.add(predicate.field); continue;}
@@ -98,9 +102,13 @@ export function evaluateTalentContractsV2({ contracts, acquisitions, sourceHashe
         const selection = choices[clause.choice.id];
         if (selection === undefined) missing.add(`choices.${clause.choice.id}`);
         else if (typeof selection !== 'boolean') throw new TypeError('Choix explicite oui/non requis');
-        else if (!selection) {trace.push({...origin,status:'choiceDeclined'}); continue;}
+        else if (!selection && !clause.effects.some(effect=>effect.op==='chooseSLUnits')) {trace.push({...origin,status:'choiceDeclined'}); continue;}
       }
       const effects = clone(clause.effects);
+      for (const effect of effects) if (effect.op === 'chooseSLUnits') {
+        if (!clause.choice) throw new TypeError('Choix explicite de DR/unités requis');
+        effect.selection = choices[clause.choice.id] === true ? 'units' : 'sl';
+      }
       for (const effect of effects) if (effect.op === 'createActiveEffect') {
         const expiry = context.authorNextTurnEnd;
         if (!expiry) missing.add('authorNextTurnEnd');
@@ -130,7 +138,7 @@ export function evaluateTalentContractsV2({ contracts, acquisitions, sourceHashe
   }
   const groups = new Map();
   for (const proposal of proposals) {
-    const key=JSON.stringify([proposal.op,proposal.key??null,proposal.stackGroup]);const existing=groups.get(key);
+    const key=JSON.stringify([proposal.op,proposal.key??null,proposal.stackGroup,...(proposal.op==='chooseSLUnits'?[proposal.selection]:[])]);const existing=groups.get(key);
     if(!existing){groups.set(key,proposal);continue;}
     if(existing.stack!==proposal.stack)throw new TypeError('Cumul contradictoire');
     if(existing.timedEffect && JSON.stringify(existing.timedEffect)!==JSON.stringify(proposal.timedEffect))throw new TypeError('Effets actifs distincts ne doivent pas partager un groupe');

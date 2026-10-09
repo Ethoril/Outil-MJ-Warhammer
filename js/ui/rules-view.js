@@ -6,6 +6,9 @@ import { V5_RULES } from '../data/v5-rules.js';
 import { MAGIC_DATA } from '../data/magic.js';
 import { getKeywordList, getKeywordsStatus, keywordMechanicalStatus } from '../core/keywords.js';
 import { getReferenceCatalogue, getReferenceSnapshot, refreshReferences } from '../core/reference-catalog.js';
+import { v5TalentCoverage, importedPjTalentPriorities, V5_TALENT_TREATMENT_LABELS } from '../core/v5-talent-coverage.js';
+import { v5QualityMechanicalStatus } from '../core/v5-talent-qualities.js';
+const referenceContexts = new WeakMap();
 import { showToast } from './toast.js';
 import { contextMessage } from './messages.js';
 
@@ -93,10 +96,11 @@ function renderSection(sec) {
   return html;
 }
 
-export function renderReferenceTables(filterTerm = '', target = null) {
+export function renderReferenceTables(filterTerm = '', target = null, options = {}) {
   const panel = qs('#panel-rules');
   const root = target || panel;
   if (!root) return;
+  referenceContexts.set(root, {getEnvelope:options.getEnvelope || (()=>({})),onlyImported:false});
 
   const term = normalizeSearchText(filterTerm || '').trim();
 
@@ -127,6 +131,9 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   if (!listContainer) return;
 
   const cleanTerm = normalizeSearchText(term).trim();
+  const settings = referenceContexts.get(root) || {};
+  const priorities = importedPjTalentPriorities(settings.getEnvelope?.() || {});
+  const priorityById = new Map(priorities.items.map(row=>[row.talentId,row]));
   const favorites = readRuleFavorites();
   let matchCount = 0;
   let html = '';
@@ -148,7 +155,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
     html += `<table class="wfrp-table"><thead><tr><th style="width:25%;">Mot-clé</th><th>Effet</th></tr></thead><tbody>`;
     matchedKeywords.forEach(k => {
       const key = `keyword:${favoriteKey(k.slug || k.name)}`;
-      const coverage = keywordMechanicalStatus(k.id);
+      const coverage = v5QualityMechanicalStatus(k.id);
       const effectStatus = k.edition !== 'V5' ? 'Description mécanique V5 à valider avant application' : coverage.status === 'covered' ? (coverage.limitations?.length ? `Mécanique partiellement couverte : ${coverage.limitations.join(' ; ')}` : 'Effet couvert par le moteur') : coverage.reason === 'version-effet-non-couverte' ? 'Effet modifié : à arbitrer' : 'Effet à appliquer manuellement';
       html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(k.name)}</strong>${k.parameter ? `<div class="muted">${escapeHtml(k.parameter)}</div>` : ''}</td><td>${escapeHtml(k.effect)}<p class="muted">${escapeHtml(k.source)} · ${escapeHtml(k.edition)} · ${escapeHtml(effectStatus)}</p>${k.note ? `<p class="muted">${escapeHtml(k.note)}</p>` : ''}</td></tr>`;
     });
@@ -159,14 +166,21 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   const pack = getReferenceSnapshot();
   const talentMatches = catalogue.talents.filter(talent => {
     const aliases = (pack.talents.legacyAliases || []).filter(alias => alias.englishName === talent.englishName).map(alias => alias.label);
-    return !cleanTerm || normalizeSearchText([talent.nom, talent.englishName, talent.description, ...aliases].join(' ')).includes(cleanTerm);
+    return (!settings.onlyImported || priorityById.has(talent.id)) && (!cleanTerm || normalizeSearchText([talent.nom, talent.englishName, talent.description, ...aliases].join(' ')).includes(cleanTerm));
   });
-  if (talentMatches.length) {
+  if (talentMatches.length || settings.onlyImported) {
     matchCount += talentMatches.length;
-    html += `<div class="card rule-block"><details ${cleanTerm ? 'open' : ''}><summary>Talents (${talentMatches.length})</summary><div class="rule-content"><p class="muted">Consultation des talents et limites. Les nouveaux effets mécaniques seront traités au lot 2.</p><table class="wfrp-table"><thead><tr><th>Talent</th><th>Effet et source</th></tr></thead><tbody>`;
+    html += `<div class="card rule-block"><details ${cleanTerm ? 'open' : ''}><summary>Talents (${talentMatches.length})</summary><div class="rule-content"><p class="muted">Traitement par clause : automatique, choix assisté ou rappel MJ. Les descriptions seules ne déclenchent aucun effet.</p><table class="wfrp-table"><thead><tr><th>Talent</th><th>Effet et source</th></tr></thead><tbody>`;
+    html += '<tr><td colspan="2"><button type="button" class="ghost small" data-talents-imported aria-pressed="'+Boolean(settings.onlyImported)+'">'+(settings.onlyImported?'Afficher tout le catalogue':'Priorités des PJ importés')+'</button><p class="muted">'+priorities.characters+' fiche(s) réellement importée(s) · '+priorities.acquisitions+' acquisition(s) résolue(s). Sources locales ; aucune lecture de l’état en ligne.</p>'+(priorities.ambiguousCharacters?'<p role="status">'+priorities.ambiguousCharacters+' identité(s) avec snapshots de talents divergents : priorité non fusionnée.</p>':'')+(priorities.unresolvedAcquisitions?'<p role="status">'+priorities.unresolvedAcquisitions+' acquisition(s) non résolue(s) : à vérifier.</p>':'')+'</td></tr>';
+    if(!talentMatches.length)html += '<tr><td colspan="2"><p role="status">Aucun talent de PJ importé ne correspond. Affichez tout le catalogue pour poursuivre la consultation.</p></td></tr>';
+    talentMatches.sort((a,b)=>(priorityById.get(b.id)?.characters||0)-(priorityById.get(a.id)?.characters||0)||a.nom.localeCompare(b.nom,'fr'));
     for (const talent of talentMatches) {
       const key = 'talent:' + talent.id;
-      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(talent.nom)}</strong>${talent.specializationLabel ? '<p class="muted">Spécialité : '+escapeHtml(talent.specializationLabel)+'</p>' : ''}</td><td>${escapeHtml(talent.description)}<p class="muted">Limite : ${escapeHtml(talent.limitText)} · ${escapeHtml(talent.source)}</p></td></tr>`;
+      const coverage=v5TalentCoverage(talent.id,catalogue),priority=priorityById.get(talent.id);
+      const treatment=coverage.clauses.map(clause=>'<p class="muted">'+escapeHtml(V5_TALENT_TREATMENT_LABELS[clause.mode]+' : '+clause.text)+(clause.reason?' '+escapeHtml(clause.reason):'')+'</p>').join('');
+      const imported=priority?'<p class="muted">PJ importés : '+priority.characters+' · acquisitions : '+priority.acquisitions+'</p>':'';
+      const sourceWarning=coverage.status==='sourceChanged'?'<p role="status">Description modifiée : clauses mécaniques suspendues avant revalidation.</p>':coverage.status==='sourceUnavailable'?'<p role="status">Source indisponible : effets à arbitrer.</p>':'';
+      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(talent.nom)}</strong>${talent.specializationLabel ? '<p class="muted">Spécialité : '+escapeHtml(talent.specializationLabel)+'</p>' : ''}</td><td>${escapeHtml(talent.description)}${imported}${sourceWarning}${treatment}<p class="muted">Limite : ${escapeHtml(talent.limitText)} · ${escapeHtml(talent.source)}</p></td></tr>`;
     }
     html += '</tbody></table></div></details></div>';
   }
@@ -235,6 +249,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
 
   listContainer.innerHTML = html;
 
+  listContainer.querySelector('[data-talents-imported]')?.addEventListener('click',()=>{settings.onlyImported=!settings.onlyImported;referenceContexts.set(root,settings);updateRulesList(term,root);});
   listContainer.querySelectorAll('[data-rule-filter]').forEach(button => button.addEventListener('click', () => { const input = root.querySelector('.rules-search'); input.value = button.dataset.ruleFilter; updateRulesList(input.value, root); input.focus(); }));
   listContainer.querySelectorAll('.rule-favorite').forEach(button => {
     button.addEventListener('click', event => {

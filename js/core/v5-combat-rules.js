@@ -3,7 +3,8 @@ import { previewV5Test } from './v5-roll.js';
 import { activeEngines } from './roll-qualities.js';
 import { activeV5TalentEffects } from './v5-talents.js';
 import { normalizeState } from './effects.js';
-export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.1';
+import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
+export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
 export const withMomentum = (actor, value) => !value && actor.extensions?.v5?.hasMomentum === undefined ? actor : ({ ...actor, extensions: { ...(actor.extensions || {}), v5: { ...(actor.extensions?.v5 || {}), hasMomentum: Boolean(value) } } });
 export const conditionLevels = actor => {
@@ -61,6 +62,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   if (rawModifier == null && action.mod) unresolved.push('Ancien modificateur de seuil : saisir explicitement les DR V5.');
   const slModifier = rawModifier ?? 0;
   if (!Number.isInteger(slModifier)) throw new TypeError('Modificateur V5 : nombre entier de DR requis');
+  if (!defending && settings.context?.calledShot === true && !settings.calledShotPenaltyIgnored) modifiers.push({ id: 'called-shot', label: 'Coup ciblé V5', amount: -2 });
   if (slModifier) modifiers.push({ id: 'difficulty', label: 'Difficulté V5', amount: slModifier });
   if (defending) {
     const defenseEngines = kind === 'melee' ? activeEngines(action.qualities || []).filter(engine => engine.engine === 'defense-sl-bonus') : [];
@@ -129,6 +131,10 @@ export function buildCombatTest(normalized, role = 'actor') {
   const overridden = new Set(qualityModifiers.flatMap(engine => engine.overrides || []));
   for (const engine of qualityModifiers) if (!overridden.has(engine.id) && !engine.params?.onSuccessOnly)
     modifiers.push({ id: `quality-${engine.id}`, label: engine.id, amount: engine.params.bonus });
+  const talentRole = defending ? 'defender' : ['attack', 'attaque'].includes(action.type) ? 'attacker' : 'actor';
+  const talentModifiers = previewV5TalentTestModifiers(actor, { action, settings, kind, role: talentRole });
+  modifiers.push(...talentModifiers.slModifiers); advantages.push(...talentModifiers.advantageSources); disadvantages.push(...talentModifiers.disadvantageSources);
+  unresolved.push(...talentModifiers.unresolved);
   let test = previewV5Test({ score: Math.max(0, action.base), roll: defending ? action.roll : normalized.roll, kind,
     slModifiers: modifiers, advantageSources: advantages, disadvantageSources: disadvantages });
   // Pointue is conditional on success after all unconditional DR modifiers.
@@ -141,6 +147,8 @@ export function buildCombatTest(normalized, role = 'actor') {
       option.result.details.totalModifier += conditionalBonus;
     }
   }
-  return { test, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),
+  const talentSL = previewV5TalentSLChoices(actor, test, { action, settings, kind, role: talentRole });
+  test = talentSL.test; unresolved.push(...talentSL.unresolved);
+  return { test, talentPlans: [talentModifiers.plan, ...talentSL.plans], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),
     unresolved, restrictions, charging, qualityBonus: conditionalBonus };
 }

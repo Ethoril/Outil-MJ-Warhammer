@@ -1,16 +1,16 @@
 # Avancement local du 9 octobre 2026
 
-Branche `codex/lot2-talents-v5`, reprise incluant `a1af528`. Main et le site public restent inchangés. Version applicative 3.12.3, sans nouvelle publication.
+Branche `codex/lot2-talents-v5`, après `a1af528` et `09df6c2`. Main et le site public inchangés ; version applicative 3.12.3. Aucun push, fusion ni déploiement.
 
 ## État courant
 
-Les étapes 2.1 et 2.2 sont raccordées au combat : chaîne commune V5, choix d’inversion sans nouveau dé, critiques indépendants du gagnant, Élan binaire, acquisitions/récupérations et échéances atomiques. Les horloges appartiennent aux scènes et distinguent auteur/cible. Les données ou jets inconnus suspendent l’application.
+2.1/2.2 et cinq contrats représentatifs 2.3 restent raccordés : choix V5, Élan binaire, critiques indépendants du gagnant, États/échéances, Fortune stable par personnage et quotas/réactions dans la commande durable. [Raccordement 2.3](LOT2_RACCORDEMENT_2_3.md) et [contrôle 2.3](LOT2_CONTROLE_2_3.md) conservent leur portée historique.
 
-Le raccordement représentatif **2.3 est réalisé localement** : cinq contrats actifs, coûts préparés avant calcul, Fortune stable entre rencontres, quotas durables et réaction explicite. [LOT2_RACCORDEMENT_2_3.md](LOT2_RACCORDEMENT_2_3.md) décrit le comportement, les modules, les reçus et les limites. [LOT2_CONTROLE_2_3.md](LOT2_CONTROLE_2_3.md) donne le contrôle indépendant.
+La **première vague 2.4 est réalisée localement** : 35 contrats de Tests et Frappe assommante ajoutés, soit **41 contrats parfois partiels**. Les **206 talents** exposent leur traitement par clause dans les Règles/fiches/actions ; les autres effets restent en rappels explicites. Les priorités viennent exclusivement des PJ effectivement importés, sans liste privée ni lecture de leur compte en ligne. Dix bonus intégrés aux fiches sont exclus et Dur à cuire non doublé ; magie/prières restent au lot 3.
 
-Tir précis et Coup puissant ajoutent leurs bonus fixes avec le contexte réel. Mâchoires d’acier réduit la première acquisition Sonné avant ses conséquences. Battement supprime tous les dégâts et le critique qu’il remplace, conserve le critique défensif indépendant et expire au prochain Tour de l’auteur. Assaut féroce prépare une action distincte, liée au résultat source, payée seulement à confirmation. Annulation, rechargement, refus et erreur de disque sont contrôlés.
+Frappe assommante et Assommante gèrent Sonné sur la perte réelle de Blessures à la tête, avec Mâchoires/Battement. La neutralisation silencieuse suit la décision MJ p. 135, Test opposé hors combat sans Coup ciblé ; dégâts/états spéciaux restent manuels, aucun critique ou gain d’Élan de combat. Orateur et les autres Tests emploient compétences canoniques et contextes explicites. Maître en déguisement/Loup de mer/Numismate offrent un choix après réussite DR/unités, sans relance ; 0 vaut 10.
 
-Fortune est initialisée explicitement depuis Chance courant connu ou saisie MJ, jamais depuis Destin/maximum. Son registre appartient au personnage, avec projection sur toutes les copies. La première association PJ locale univoque préserve le solde dépensé et sa provenance ; remplacement/ambiguïté ne provoquent aucun transfert supposé. Aucune écriture automatique dans la fiche.
+[Le rapport 2.4](LOT2_RACCORDEMENT_2_4.md) décrit mécanique/API/limites ; [le contrôle indépendant](LOT2_CONTROLE_2_4.md) consigne les défauts détectés puis corrigés. L’application relit toutes les empreintes contributrices contre la source courante, y compris après actualisation survenue depuis l’aperçu. Version mécanique `v5-combat-2026-10-09.24`.
 
 ## Validation reproductible
 
@@ -20,24 +20,28 @@ npm test
 npm run test:lot2-browser
 npm run test:lot2-23-browser
 node tests/lot2-v5-23-control-browser.mjs
+npm run test:lot2-24-browser
 npm run test:startup
 npm run test:fiches-browser
+npm run test:references-browser
+node tools/build-v5-talent-coverage.mjs
+git diff --check
 ```
 
-Node/npm et les dépendances étaient déjà installés pour cette reprise. Recette finale : **672/672 tests Node réussis, zéro échec, annulation ou test ignoré**. Les cinq recettes Edge ci-dessus sont réussies, exécutées séparément. Elles couvrent ordinateur/téléphone, sombre/parchemin, coûts, Fortune, quotas, Battement, réaction, annulation, synchronisation de fiches et démarrage. Le cache réel 3.12.0 → 3.12.3 est éprouvé avec IndexedDB préservée. Les 21 tests du contrôleur indépendant 2.3 sont inclus dans la suite Node. `git diff --check` est conforme.
+Recette finale : **763/763 tests Node réussis**, zéro échec, annulation ou test ignoré. Les **91 nouveaux tests 2.4** comprennent 42 Tests contextuels/choix, 19 qualités/neutralisation et 30 contrôles Store indépendants, inclus dans le total.
 
-Les scripts navigateur utilisent Edge sur Windows ou `PLAYWRIGHT_EXECUTABLE_PATH`. Données et captures sont synthétiques, dans `tmp/` ignoré. Les tests de rejet disque produisent volontairement une erreur console. Les contrôles cloud sont locaux (enveloppe et sérialisation), sans recette sur un compte distant réel.
+Les **sept recettes Edge** ci-dessus sont réussies, séparément : combat V5, 2.3 développement, 2.3 indépendant, 2.4 indépendant, démarrage, fiches et références. Elles éprouvent gestes ordinateur/téléphone, sombre/parchemin, vrais choix et boutons d’application, annulation, cache et imports. La recette 2.4 inclut doubles réussis des deux côtés en neutralisation, avec PV/états/Élan préservés. Le démarrage éprouve le cache réel 3.12.0 → 3.12.3 et IndexedDB préservée. Le générateur produit à nouveau exactement le même catalogue ; diff conforme.
 
-## Sources et repères historiques
+Node/npm et dépendances déjà installés. Les navigateurs utilisent Edge Windows ou PLAYWRIGHT_EXECUTABLE_PATH. Fixtures synthétiques, réseau externe bloqué et captures/logs dans tmp/ ignoré. Le test d’erreur de disque provoque volontairement une erreur console. Les contrôles cloud restent locaux (enveloppes/outbox/sérialisation), sans compte distant réel. Ces régressions locales ne constituent pas la recette globale 2.5.
 
-Le CSV Talents V5 contient 206 IDs conservés et 19 descriptions/empreintes modifiées ; SHA-256 : `935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e`. Source, snapshot applicatif et inventaire portable sont cohérents. Le texte actualisé ne remplace pas un contrat mécanique certifié.
+## Sources et audit demandé
 
-Le commit `6871764` validait 619 tests Node et les trois recettes historiques combat/démarrage/fiches pour 2.1/2.2 et le socle pur 2.3. [LOT2_CONTROLE.md](LOT2_CONTROLE.md) et [LOT2_ETAPE_2_3_SOCLE.md](LOT2_ETAPE_2_3_SOCLE.md) documentent cet état antérieur. Le raccordement courant dépasse leur statut « non raccordé ».
+Le CSV Talents épinglé conserve 206 IDs ; SHA-256 `935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e`. Cet incrément ne modifie pas le Google Sheet. [Le document d’écarts](ECARTS_LIVRE_V5_AIDES_DE_JEU.md) compare les 166 talents du livre V5, distingue erreurs/ambiguïtés/contradiction interne127–135 et propose des corrections françaises. Les 39 talents de suppléments sont à vérifier avec leur source ; Petit/V4 est étudié séparément. Aucune certification de l’état en ligne n’en découle.
 
-Les règles consultables V5 incluent Tests, Élan, santé, critiques, États, Psychologie et Corruption. La magie et les prières restent au lot 3. Les [trois arbitrages](CHOIX_POUR_LA_REPRISE.md) sont validés et implémentés dans leur portée raccordée.
+Les cinq snapshots privés locaux relus précédemment (5/7 octobre, 52 acquisitions, 36 IDs) restent des preuves datées. Ils ne prouvent pas l’état en ligne du 9 octobre et ne sont pas incorporés aux fixtures, Git ou ZIP.
 
-## Suite du chantier
+## Suite
 
-Catalogue utile **2.4** depuis les snapshots PJ réellement importés, puis recette de livraison **2.5**. Les cinq contrats ne certifient pas tous les talents. Frappe assommante, Orateur, tests contextuels, Riposte/Frappe réactive et autres effets restent à contractualiser ; toute nouvelle famille mécanique exige un incrément testé. Dix bonus de caractéristiques intégrés aux fiches restent exclus ; ne pas ajouter Dur à cuire deux fois.
+Poursuivre les vagues mécaniques 2.4 encore manuelles, notamment Riposte/Frappe réactive et autres clauses utiles, avec incrément moteur et recette avant activation. La couverture 206 et les 41 contrats ne certifient pas tous les effets. La recette de livraison 2.5 et toute publication demandent une étape ultérieure.
 
-[La passation](PASSATION_PROCHAINE_FENETRE.md) donne la reprise locale. Aucun push, fusion, déploiement, migration de données privées ni PDF/export privé ajouté au dépôt.
+[La passation](PASSATION_PROCHAINE_FENETRE.md) décrit la reprise locale. Le ZIP/checksums ont été actualisés : documentation/maquette seulement, sans code, PDF ou export privé. Transférer aussi l’état Git local pour changer de machine.

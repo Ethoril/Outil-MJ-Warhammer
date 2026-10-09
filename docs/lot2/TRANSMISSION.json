@@ -7,23 +7,28 @@
   "baseCommit": "28657e39477bbcbfeb0de826b3f1d05e525bb386",
   "applicationVersion": "3.12.3",
   "lastEngineVerification": {
-    "tests": 672,
-    "passed": 672,
+    "tests": 763,
+    "passed": 763,
     "failed": 0,
     "skipped": 0,
     "date": "2026-10-09",
-    "scope": "local development worktree",
+    "scope": "local development worktree; synthetic fixtures",
     "browserSuites": [
       "test:lot2-browser",
       "test:lot2-23-browser",
       "test:startup",
-      "test:fiches-browser"
+      "test:fiches-browser",
+      "test:references-browser"
     ],
-    "independentBrowserSuite": "tests/lot2-v5-23-control-browser.mjs",
-    "independentStoreTests": 21,
+    "independentBrowserSuites": [
+      "tests/lot2-v5-23-control-browser.mjs",
+      "test:lot2-24-browser"
+    ],
+    "independentStoreTests": 30,
+    "newStage24Tests": 91,
     "revision": "local commit containing this manifest"
   },
-  "nextStage": "2.4",
+  "nextStage": "2.4 remaining mechanical families, then separate 2.5 delivery acceptance",
   "mockupApproved": true,
   "sourceConversionOwner": "MJ dans Aides de jeu, conversion V5 actualisée",
   "publicFolder": "docs/lot2/",
@@ -32,25 +37,66 @@
   "engineCommitRole": "historical-initial-foundation",
   "localIncrement": {
     "date": "2026-10-09",
-    "baseCommit": "a1af52824076ea91624da625136abde6bd5fe11e",
+    "baseCommit": "09df6c215abc814a8618a952d417aa07ab70faf9",
     "revision": "local commit containing this manifest",
     "remotePublished": false,
     "completedStages": [
       "2.1",
       "2.2",
-      "2.3 representative integration"
+      "2.3 representative integration",
+      "2.4 first useful catalogue wave"
     ],
     "activeTalentIds": [
       "talent-accurate-shot",
       "talent-strike-mighty-blow",
       "talent-iron-jaw",
       "talent-beat-blade",
-      "talent-furious-assault"
+      "talent-furious-assault",
+      "talent-alley-cat",
+      "talent-rover",
+      "talent-cat-tongued",
+      "talent-public-speaker",
+      "talent-scale-sheer-surface",
+      "talent-fast-hands",
+      "talent-linguistics",
+      "talent-resistant",
+      "talent-dicer",
+      "talent-menacing",
+      "talent-strong-swimmer",
+      "talent-dealmaker",
+      "talent-field-dressing",
+      "talent-commanding-presence",
+      "talent-orientation",
+      "talent-gregarious",
+      "talent-bookish",
+      "talent-briber",
+      "talent-trapper",
+      "talent-super-numerate",
+      "talent-roughrider",
+      "talent-crack-the-whip",
+      "talent-nose-for-trouble",
+      "talent-pilot",
+      "talent-tunnel-fighter",
+      "talent-sprinter",
+      "talent-catfall",
+      "talent-panhandle",
+      "talent-inspiring",
+      "talent-iron-will",
+      "talent-contortionist",
+      "talent-carouser",
+      "talent-master-of-disguise",
+      "talent-old-salt",
+      "talent-numismatics",
+      "talent-strike-to-stun"
     ],
     "catalogueComplete": false,
     "liveCloudVerification": false,
-    "report": "LOT2_RACCORDEMENT_2_3.md",
-    "independentControl": "LOT2_CONTROLE_2_3.md"
+    "report": "LOT2_RACCORDEMENT_2_4.md",
+    "independentControl": "LOT2_CONTROLE_2_4.md",
+    "activeContractCount": 41,
+    "catalogueTreatmentCount": 206,
+    "allEffectsCertified": false,
+    "ruleVersion": "v5-combat-2026-10-09.24"
   },
   "initialEngineVerification": {
     "tests": 468,
@@ -75,6 +121,22 @@
       "initialization": "known current sheet balance or explicit MJ entry",
       "undoableSpending": true,
       "automaticSourceSheetWrites": false
+    },
+    "silentTakedown": {
+      "date": "2026-10-09",
+      "authority": "core V5 p135 for Strike to Stun; internal book contradiction p127/p135",
+      "test": "Melee vs Endurance outside combat against unaware target; Advantage; no called shot",
+      "outcomes": "MJ manual; no ordinary combat critical or Momentum gain",
+      "publicSheetEdited": false
     }
+  },
+  "sourceAudit": {
+    "report": "ECARTS_LIVRE_V5_AIDES_DE_JEU.md",
+    "coreTalentsCompared": 166,
+    "catalogueCount": 206,
+    "otherSupplementTalentsNotVerified": 39,
+    "smallV4ReviewedSeparately": true,
+    "publicOnlineStateCertified": false,
+    "privatePdfIncluded": false
   }
 }

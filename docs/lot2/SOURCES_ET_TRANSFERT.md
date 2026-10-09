@@ -26,3 +26,7 @@ Aucune donnée Firebase ni export de séance n’est incluse. Reprendre via la s
 - Accès aux sources habituelles lorsque le travail nécessite catalogue ou données PJ actuels.
 
 Aucun chemin de la machine d’origine ni contenu caché de la conversation n’est nécessaire pour comprendre le chantier.
+
+## Lecture comparative 2.4
+
+[Le document des écarts](ECARTS_LIVRE_V5_AIDES_DE_JEU.md) compare le snapshot public local épinglé aux 166 talents du livre pp.114–128, plus les pages de procédures pertinentes. Il distingue erreurs, ambiguïtés et contradiction interne p.127/p.135. Les 39 talents de suppléments ne sont pas certifiés par cette lecture ; Petit/V4 est étudié séparément. Il prépare des corrections, sans modifier le Google Sheet ni certifier son état en ligne. Les extractions de travail restent ignorées dans tmp/.

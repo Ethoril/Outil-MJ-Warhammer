@@ -1,5 +1,11 @@
 /** Explicit acquired identities and pinned public source text; never parse names or rules at runtime. */
-import registry from '../data/v5-talent-contracts.json' with { type: 'json' };
+import baseRegistry from '../data/v5-talent-contracts.json' with { type: 'json' };
+import testRegistry from '../data/v5-test-talent-contracts.json' with { type: 'json' };
+import qualityRegistry from '../data/v5-quality-talent-contracts.json' with { type: 'json' };
+const registry = {contracts:[...baseRegistry.contracts,...testRegistry.contracts,...qualityRegistry.contracts],
+  sourceDescriptions:{...baseRegistry.sourceDescriptions,...testRegistry.sourceDescriptions,...qualityRegistry.sourceDescriptions}};
+export const V5_TALENT_CONTRACTS = Object.freeze(registry.contracts);
+export const V5_TALENT_APPROVED_OVERRIDES = Object.freeze(qualityRegistry.approvedOverrides || {});
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { evaluateTalentContractsV2, reduceV5ConditionProposals } from './talent-contract-v2.js';
 

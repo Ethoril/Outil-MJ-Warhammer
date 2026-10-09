@@ -66,7 +66,7 @@ test('Contrôle indépendant V5 — critique conserve auteur, cible, verrou des 
   assert.deepEqual(blinded.v5Recovery,{kind:'medicalAttention'});
   assert.equal(blinded.authorId,author.id);assert.equal(blinded.targetId,target.id);
   assert.equal(blinded.source.authorId,author.id);assert.equal(blinded.source.targetId,target.id);
-  assert.equal(store.getLog()[0].detail.ruleVersion,'v5-combat-2026-10-09.1');
+  assert.equal(store.getLog()[0].detail.ruleVersion,'v5-combat-2026-10-09.24');
   const legacy=store.previewResolution({...input,action:{...input.action,qualities:['Précise']}});
   assert.ok(legacy.mechanicalWarnings.some(warning=>warning.keywordId==='precise'));
   assert.equal((await store.applyResolution(legacy)).status,'manual');

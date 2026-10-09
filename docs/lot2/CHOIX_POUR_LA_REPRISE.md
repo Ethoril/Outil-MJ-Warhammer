@@ -1,4 +1,4 @@
-# Trois arbitrages validés par le MJ
+# Arbitrages validés par le MJ
 
 Décisions choisies dans le sélecteur le 9 octobre 2026. Elles font autorité pour la suite du chantier ; ne pas les redemander.
 
@@ -21,3 +21,9 @@ Le compteur courant appartient à l’outil, par personnage, et est conservé en
 Le raccordement 2.3 emploie l’identité stable du personnage, conserve ressources et usages dans les sauvegardes et la synchronisation de l’outil, et applique dépense et résultat dans une commande atomique. Le lancement, la reprise ou la suppression d’une rencontre ne réinitialisent pas ce solde. Un maximum ou une donnée absente ne constituent pas un solde courant connu.
 
 Implémenté dans le raccordement local 2.3 : compteur depuis la fiche de séance, initialisation explicite, récupération et dépense atomiques, annulation/rechargement/export et document cloud contrôlés. La première association locale PJ explicitement validée et univoque conserve le solde outil déjà dépensé. Un remplacement de fiche ne transfère pas ce solde par hypothèse. Aucune écriture dans la fiche source.
+
+## Frappe assommante : neutralisation silencieuse
+
+Décision explicite du MJ le 9 octobre 2026 : aligner cette clause sur le livre, procédure p. 135, et préparer un document des écarts avec Aides de jeu en vue de correction. Le livre p. 127 reprend pourtant la même exemption de Coup ciblé qu’Aides de jeu : c’est une incohérence interne. La p. 135 fait autorité pour cet incrément.
+
+Hors combat, cible ignorant le danger : Test opposé Corps à corps/Résistance avec Avantage de Frappe assommante, sans Coup ciblé. L’outil assiste le Test ; BF Blessures/Inconscient à la victoire, Sonné/alarme à la défaite restent manuels. Aucun critique ou gain d’Élan de combat automatique. Le contrat conserve le texte public épinglé et l’exception approuvée ; une correction publique future exige revalidation. [Audit et propositions](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).

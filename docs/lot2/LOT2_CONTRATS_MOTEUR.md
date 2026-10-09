@@ -64,3 +64,9 @@ Le plan et le contexte devront être attachés à un aperçu protégé par révi
 5. Passer le contrat validé après vérification. Si une mécanique est absente du vocabulaire, étendre l’opération commune et son schéma avant de l’utiliser.
 
 L’inventaire `LOT2_INVENTAIRE_TALENTS.json` est distinct de ce schéma. Ses exemples doivent être contractualisés et validés avant toute activation.
+
+## Extension raccordée 2.4
+
+Le schéma v2 raccordé conserve les opérations 2.3 et ajoute action.before/addQuality ou suppressQuality pour la préparation temporaire d’arme, et test.afterRoll/chooseSLUnits pour un choix explicite après réussite. Les champs canoniques skillId/skillGroupId/specializationId font autorité sur les labels libres ; contextes métier typés par talent. La face0 des unités vaut10 ; choix distinct pour jet conservé et inversé, sans relance.
+
+Les origines et empreintes de tous les plans appliqués sont relues contre le catalogue courant au moment d’Appliquer. Version mécanique v5-combat-2026-10-09.24 : anciens aperçus à recalculer. Couverture visible et statut du texte épinglé ne certifient pas toutes les clauses. Voir [raccordement 2.4](LOT2_RACCORDEMENT_2_4.md) pour API et limites.

@@ -18,7 +18,7 @@ try{
  assert.match(await page.locator('.rules-list').innerText(),/Dur à cuire/);
  await page.locator('.rules-search').fill('Impact');assert.match(await page.locator('.rules-list').innerText(),/Percutante/);
  await page.locator('.rules-search').fill('Purification');assert.match(await page.locator('.rules-list').innerText(),/consultation uniquement/);
- await page.locator('.rules-search').fill('');assert.match(await page.locator('.rules-list').textContent(),/source complémentaire et édition à confirmer/);
+ await page.locator('.rules-search').fill('');assert.match(await page.locator('.rules-list').textContent(),/Source d’une autre édition ou d’un supplément : adaptation V5 à vérifier/);
  await page.locator('.btn-reload-keywords').click();await page.waitForFunction(()=>document.querySelector('[role="alert"]')?.textContent.includes('Actualisation échouée'));
  assert.match(await page.locator('.rules-list').innerText(),/dernier ensemble valide/);assert.equal(await page.locator('.toast-success').count(),0);assert.equal(await page.locator('.btn-reload-keywords').isEnabled(),true);
  await page.locator('.rules-search').fill('Hardy');assert.match(await page.locator('.rules-list').innerText(),/Dur à cuire/);

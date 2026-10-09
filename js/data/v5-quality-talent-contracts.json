@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 2,
+  "sourceCatalogueVersion": "references:7f7fc1b3d3b90339382e876528044ddd39a39e97b425e2348462a1711beed8b2",
+  "verifiedAt": "2026-10-09",
+  "coverage": "Frappe assommante: temporary Pummel and MJ-approved harmonisation of Silent Takedowns; the special outcomes remain manual.",
+  "contracts": [
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-strike-to-stun",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.3",
+      "source": {
+        "effectHash": "sha256:eacdf97f21d75376b090b13e8d0ba4216d97f6f6e45c4932abef9036802e011e",
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "improvised-pummel",
+          "event": "action.before",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "in",
+              "value": [
+                "melee",
+                "ranged"
+              ]
+            },
+            {
+              "field": "weapon.improvised",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "weapon.pummel",
+              "op": "eq",
+              "value": false
+            }
+          ],
+          "effects": [
+            {
+              "op": "addQuality",
+              "key": "assommante",
+              "stackGroup": "talent-strike-to-stun:pummel",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "silent-takedown-advantage",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "melee"
+            },
+            {
+              "field": "silentTakedown",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "outsideCombat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "targetUnaware",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_72_70_73_20_e0_20_63_6f_72_70_73"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-strike-to-stun:silent",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceDescriptions": {
+    "talent-strike-to-stun": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, ignorez la pénalité de coup ciblé pour une neutralisation silencieuse (p. 135)."
+  },
+  "qualityContracts": [
+    {
+      "id": "assommante",
+      "effect": "Si une touche à la Tête fait perdre au moins autant de Blessures que le Bonus d'Endurance de la cible, celle-ci subit 1 état Sonné.",
+      "edition": "V5",
+      "source": "Livre de base V5 EN p.305",
+      "effectHash": "sha256:f1b3110c98b5c539ebcbc23f1b660f500062ba7af5386ac9fa8a3c379a14d0ca",
+      "ruleVersion": "quality-v5-2026-10-09.1",
+      "engine": "head-hit-wounds-stunned"
+    }
+  ],
+  "approvedOverrides": {
+    "talent-strike-to-stun": {
+      "decision": "MJ, 9 octobre 2026 : harmoniser la procédure de neutralisation silencieuse selon Livre V5 p.135.",
+      "publicDescription": "Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Avec une arme Assommante, ignorez la pénalité de coup ciblé pour une neutralisation silencieuse (p. 135).",
+      "correctedDescription": "Toutes vos armes improvisées ont Assommante. Pour une neutralisation silencieuse hors combat contre une cible inconsciente du danger, vous avez Avantage au Test opposé Corps à corps/Résistance. Cette procédure n’est pas un Coup ciblé ; ses conséquences spéciales restent à arbitrer.",
+      "reference": "Livre de base V5, p.127 et p.135 : clauses contradictoires, arbitrage MJ donnant priorité à p.135."
+    }
+  }
+}

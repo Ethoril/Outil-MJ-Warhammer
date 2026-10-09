@@ -8,6 +8,9 @@ import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipme
  * par `handlers`, et la vue reste propriétaire de l'état entre deux rendus.
  */
 import { formatDamageFormula, damageBreakdown, describeWeaponDamage, inferActionType, previewHpLoss } from '../core/resolution.js';
+import { getReferenceCatalogue } from '../core/reference-catalog.js';
+import { V5_TEST_TALENT_IDS, V5_TALENT_TEST_CONTEXT_FIELDS, applicableV5TalentTestFields } from '../core/v5-talent-tests.js';
+import { acquiredV5TalentCoverage, V5_TALENT_TREATMENT_LABELS } from '../core/v5-talent-coverage.js';
 import { actionHasDamage } from '../core/damage.js';
 import { qualityLabel } from '../core/quality-normalization.js';
 
@@ -56,10 +59,10 @@ const finiteBase = value => (value !== null && value !== '' && value !== undefin
  * Choix de défense d'une cible : CC, Ag, ses jets enregistrés à base numérique, puis « Autre ».
  * `actions` est la liste complète de la cible (l'index fait la clé `jet:`).
  */
-export function defenseOptions(target, actions = []) {
-  const caracs = ['CC', 'Ag'].map(stat => {
+export function defenseOptions(target, actions = [], { includeEndurance = false } = {}) {
+  const caracs = ['CC', 'Ag', ...(includeEndurance ? ['E'] : [])].map(stat => {
     const base = finiteBase(target?.caracs?.[stat]);
-    return { value: stat, label: `${stat} · ${base ?? '—'}`, statLabel: stat, group: 'caracs', base };
+    return { value: stat, label: `${stat} · ${base ?? '—'}`, statLabel: stat, group: 'caracs', base, ...(stat === 'E' ? { type: 'skill', v5: { kind: 'test' } } : {}) };
   });
   const jets = [];
   actions.forEach((action, index) => {
@@ -67,9 +70,10 @@ export function defenseOptions(target, actions = []) {
     if (raw === null) return;
     const base = raw;
     const statLabel = action.note || action.name || 'Jet';
-    jets.push({ value: `jet:${actionKey(action, index)}`, label: `${statLabel} · ${base}`, statLabel, group: 'jets', base, mod: action.mod || 0, v5: { ...(action.extensions?.v5 || {}), kind: action.extensions?.v5?.kind || (inferActionType(action) === 'skill' || (action.attr && action.attr !== 'CC') || /esquive|dodge/i.test(statLabel) ? 'test' : 'melee') }, qualities: action.qualities || [], type: inferActionType(action) });
+    jets.push({ value: `jet:${actionKey(action, index)}`, label: `${statLabel} · ${base}`, statLabel, group: 'jets', base, mod: action.mod || 0, v5: { ...(action.extensions?.v5 || {}), kind: action.extensions?.v5?.kind || (inferActionType(action) === 'skill' || (action.attr && action.attr !== 'CC') || /esquive|dodge/i.test(statLabel) ? 'test' : 'melee') }, qualities: action.qualities || [], extensions: action.extensions, type: inferActionType(action) });
   });
-  return [...caracs, ...jets, { value: 'Autre', label: 'Autre (valeur libre)', statLabel: 'Autre', group: 'autre', base: null }];
+  const skills=(target.skills||[]).filter(row=>row.status==='resolved'&&finiteBase(row.total)!==null).map(row=>({value:'skill:'+row.id,label:(row.name||row.nom||row.sourceName)+' · '+row.total,statLabel:row.name||row.nom||row.sourceName,group:'skills',base:Number(row.total),mod:0,type:'skill',extensions:{fiche:{skillId:row.id}},v5:{kind:row.group==='Corps à corps'?'melee':'test'}}));
+  return [...caracs, ...skills, ...jets, { value: 'Autre', label: 'Autre (valeur libre)', statLabel: 'Autre', group: 'autre', base: null }];
 }
 
 /** Défense proposée d'office : le premier jet de type défense, sinon la CC. */
@@ -261,6 +265,16 @@ function renderResult(preview, target, draft, handlers) {
   const result = node('div', 'workspace-result');
   if (preview.choiceRequired) result.appendChild(node('p', 'workspace-muted', 'Aperçu provisoire : les joueurs doivent confirmer leurs choix.'));
   result.appendChild(renderV5Decisions(preview, draft, handlers));
+  for(const choice of Object.entries(preview.talentSLChoices || {}).flatMap(([role,choices])=>choices.map(row=>({...row,role})))){
+    const role=choice.role || 'actor', draftKey=role==='defender'?'defenseTalentChoices':'talentChoices';
+    const label=node('label','workspace-type',choice.label+' · '+(role==='defender'?'défense':'Test')+' · '+(choice.optionId==='keep'?'jet conservé':'jet inversé'));
+    const select=document.createElement('select');select.setAttribute('aria-label',choice.label+' : DR ou unités ('+(role==='defender'?'défenseur':'acteur')+', '+(choice.optionId==='keep'?'jet conservé':'jet inversé')+')');
+    select.dataset.focusKey='talent-sl-'+role+'-'+choice.key;
+    select.append(new Option('Choisir après réussite',''),new Option('Conserver '+choice.sl+' DR','false'),new Option('Retenir '+choice.units+' (unités)','true'));
+    const value=draft[draftKey]?.[choice.key];select.value=typeof value==='boolean'?String(value):'';
+    select.addEventListener('change',()=>{handlers.select({[draftKey]:{...(draft[draftKey]||{}),[choice.key]:select.value===''?undefined:select.value==='true'}});handlers.calculate();});
+    label.append(select);result.append(label);
+  }
   const pills = node('div', 'workspace-result-pills');
   pills.appendChild(outcomePill(ROLL_LABELS[preview.actionType] || 'Jet', preview.success, preview.sl));
   if (preview.opposition?.mode === 'opposed') pills.appendChild(outcomePill('Défense', preview.opposition.defender.success, preview.opposition.defender.sl));
@@ -278,7 +292,16 @@ function renderResult(preview, target, draft, handlers) {
     const name = change.participantId === preview.input.actor?.id ? preview.input.actor.name : target?.name;
     result.appendChild(node('p', 'workspace-result-line', `${name || 'Combattant'} : Élan ${change.before ? 'oui' : 'non'} → ${change.after ? 'oui' : 'non'}`));
   }
-  for (const warning of preview.unresolved || []) result.appendChild(node('p', 'workspace-field-error', warning));
+  for(const reminder of preview.reminders || [])result.appendChild(node('p','workspace-muted',reminder));
+  for(const occurrence of preview.weaponConditions?.applied || [])result.appendChild(node('p','workspace-result-line','Assommante : '+occurrence.level+' état Sonné proposé.'));
+  for (const warning of preview.unresolved || []) {
+    const match = /^Talent(?: (talent-[a-z0-9-]+))? : préciser (.+)\.$/.exec(warning);
+    const talentName = match?.[1] ? getReferenceCatalogue().talents.find(row=>row.id===match[1])?.nom || 'Talent' : 'Talent';
+    const field = match?.[2];
+    const contextLabel = V5_TALENT_TEST_CONTEXT_FIELDS.find(row=>row.field===field)?.label || ({skillId:'Compétence du Test',skillGroupId:'Compétence du Test',specialization:'Spécialité du Test',specializationId:'Spécialité du Test',weaponImprovised:'Arme improvisée','weapon.improvised':'Arme improvisée',silentTakedown:'Neutralisation silencieuse',outsideCombat:'Procédure hors combat',targetUnaware:'Cible ignorant le danger'})[field];
+    const text = match && (contextLabel || field.startsWith('choices.')) ? talentName+' : '+(contextLabel ? contextLabel+' — à préciser.' : 'choisir DR ou unités pour ce jet réussi.') : warning;
+    result.appendChild(node('p', 'workspace-field-error', text));
+  }
   if (preview.choiceRequired) result.appendChild(node('p', 'workspace-muted', 'Choisissez chaque inversion facultative avant de confirmer.'));
   if (preview.weapon?.status === 'manual') result.appendChild(node('p', 'workspace-field-error', `Dégâts à arbitrer : ${preview.weapon.text}.`));
   if (preview.protection?.manual?.length) result.appendChild(node('p', 'workspace-field-error', 'Protection à préciser : renseignez les PA après arbitrage.'));
@@ -297,11 +320,10 @@ function renderResult(preview, target, draft, handlers) {
   if (preview.damage) calculations.appendChild(node('p', 'workspace-formula num', formatDamageFormula(preview.damage)));
   if (preview.protection) calculations.appendChild(node('p', 'workspace-formula-notes', `Protection retenue : ${preview.protection.ap ?? 'inconnue'} PA`));
   calculations.appendChild(node('p', 'workspace-muted', `Règle : ${preview.ruleVersion}`));
-  const covered = new Set(Object.values(V5_TALENT_IDS));
+  const covered = new Set([...Object.values(V5_TALENT_IDS),...V5_TEST_TALENT_IDS,'talent-strike-to-stun']);
   const excluded = new Set(EXCLUDED_BASE_CHARACTERISTIC_TALENTS);
   const acquired = preview.input.actor?.talents || [];
-  const uncovered = acquired.filter(row => !excluded.has(row.id) && (!covered.has(row.id) || row.status !== 'resolved'));
-  if (uncovered.length) calculations.appendChild(node('p', 'workspace-muted', 'Autres talents à arbitrer par le MJ : ' + uncovered.map(row => row.name || row.nom || row.id).join(', ')));
+
   if (acquired.some(row => excluded.has(row.id))) calculations.appendChild(node('p', 'workspace-muted', 'Les bonus permanents de caractéristiques sont déjà compris dans la fiche.'));
   const disabled = new Map((preview.talentPlans || []).flatMap(plan => plan.trace || [])
     .filter(row => ['sourceChanged','sourceUnavailable','draft'].includes(row.status)).map(row => [row.talentId, row.status]));
@@ -309,6 +331,13 @@ function renderResult(preview, target, draft, handlers) {
     const talent = [...acquired, ...(preview.input.target?.talents || [])].find(row => row.id === id);
     calculations.appendChild(node('p', 'workspace-field-error', (talent?.name || id) + ' : ' +
       (status === 'sourceChanged' ? 'description modifiée' : status === 'sourceUnavailable' ? 'source indisponible' : 'règle encore en préparation') + ' ; effet à arbitrer par le MJ.'));
+  }
+  for (const [role, subject] of [['Acteur',preview.input.actor],['Défenseur',preview.input.target]]) {
+    const rows=acquiredV5TalentCoverage(subject);
+    if(!rows.length)continue;
+    const details=node('details','workspace-talent-coverage');details.append(node('summary','',role+' : traitement des talents acquis'));
+    for(const row of rows){details.append(node('strong','',row.name||row.talentId));for(const clause of row.clauses)details.append(node('p','workspace-muted',V5_TALENT_TREATMENT_LABELS[clause.mode]+' · '+clause.text));}
+    calculations.append(details);
   }
   result.appendChild(calculations);
   return result;
@@ -495,7 +524,7 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
       }
     }
   }
-  if (type === 'attack' && target) {
+  if (['attack','opposition'].includes(type) && target) {
     const label=node('label','workspace-type','Nature de la défense'); const select=document.createElement('select');
     select.append(new Option('Corps à corps','melee'),new Option('Esquive / autre Test','test'));
     select.value=draft.defenseKind || defense.option.v5?.kind || (defense.option.value === 'Ag' || /esquive|dodge/i.test(defense.option.statLabel) ? 'test' : 'melee'); select.dataset.focusKey='defense-kind'; select.setAttribute('aria-label','Nature de la défense');
@@ -523,13 +552,45 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
     select.addEventListener('change', () => handlers.select({ [contextKey]: { ...current, conditionPenaltyMode: select.value || undefined } }));
     label.appendChild(select); container.appendChild(label);
   };
+  const talentFields=node('div','workspace-v5-context');
+  const addTalentContext=(role,subject,selectedAction)=>{
+    const contextKey=role==='defender'?'defenseContext':'v5Context',current=draft[contextKey]||{};
+    if(!(subject?.talents||[]).some(row=>V5_TEST_TALENT_IDS.includes(row.id)))return;
+    const importedSkill=selectedAction?.extensions?.fiche?.skillId;
+    const skillId=importedSkill||current.skillId;
+    const label=node('label','workspace-type',role==='defender'?'Compétence de défense pour les talents':'Compétence de ce Test pour les talents');
+    const select=document.createElement('select');select.setAttribute('aria-label',label.textContent);select.dataset.focusKey=role+'-talent-skill';
+    select.append(new Option('À préciser',''),new Option('Test de caractéristique (aucune compétence)','none'));
+    for(const skill of getReferenceCatalogue().skills)select.append(new Option(skill.nom||skill.name||skill.id,skill.id));
+    select.value=skillId||'';select.disabled=Boolean(importedSkill);
+    select.addEventListener('change',()=>handlers.select({[contextKey]:{...current,skillId:select.value||undefined}}));label.append(select);talentFields.append(label);
+    for(const descriptor of applicableV5TalentTestFields(subject,skillId)){
+      if(descriptor.type==='boolean'){contextField(talentFields,role,descriptor.field,descriptor.label);continue;}
+      const caption=node('label','workspace-type',descriptor.label);const choice=document.createElement('select');choice.setAttribute('aria-label',descriptor.label+(role==='defender'?' (défense)':''));choice.dataset.focusKey=role+'-'+descriptor.field;
+      choice.append(new Option('À préciser',''));for(const option of descriptor.options||[])choice.append(new Option(option.label,String(option.value)));choice.value=current[descriptor.field]||'';
+      choice.addEventListener('change',()=>handlers.select({[contextKey]:{...current,[descriptor.field]:choice.value||undefined}}));caption.append(choice);talentFields.append(caption);
+    }
+  };
+  addTalentContext('actor',actor,action);
+  if(['attack','opposition'].includes(type)&&target)addTalentContext('defender',target,defense?.option);
+  if(['melee','ranged'].includes(kind.value)&&type==='attack'&&hasV5Talent(actor,'talent-strike-to-stun'))contextField(talentFields,'actor','weaponImprovised','Arme improvisée (Frappe assommante)');
+  if(type==='attack'){
+    contextField(talentFields,'actor','calledShot','Coup ciblé (−2 DR, hors modificateur saisi)');
+    if(draft.v5Context?.calledShot){const label=node('label','workspace-type','Localisation du coup ciblé');const select=document.createElement('select');select.setAttribute('aria-label','Localisation du coup ciblé');select.append(new Option('À préciser',''));for(const [value,text] of [['head','Tête'],['body','Corps'],['leftArm','Bras gauche'],['rightArm','Bras droit'],['leftLeg','Jambe gauche'],['rightLeg','Jambe droite']])select.append(new Option(text,value));select.value=draft.v5Context?.calledShotLocation||'';select.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),calledShotLocation:select.value||undefined}}));label.append(select);talentFields.append(label);}
+  }
+  if(hasV5Talent(actor,'talent-strike-to-stun')){
+    contextField(talentFields,'actor','silentTakedown','Test de neutralisation silencieuse (page 135)');
+    if(draft.v5Context?.silentTakedown){contextField(talentFields,'actor','outsideCombat','Procédure hors combat');contextField(talentFields,'actor','targetUnaware','Cible ignorant le danger');talentFields.append(node('p','workspace-muted','Choisir Opposition et Corps à corps contre Résistance. Après le Test, arbitrer : victoire = BF Blessures et Inconscient ; défaite = cible Sonnée et alarme.'));
+    }
+  }
+  if(talentFields.childNodes.length){talentFields.prepend(rubric('Contexte des talents'));v5.append(talentFields);}
   const contextual = node('details', 'workspace-v5-context-details'); contextual.appendChild(node('summary', '', 'Circonstances des Tests'));
   const fields = node('div', 'workspace-v5-context');
   for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'actor', key, label);
   conditionModeField(fields, 'actor');
   if (kind.value === 'ranged' && target) { contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé : exception vérifiée par le MJ'); contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant'); }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');
-  if (type === 'attack' && target) {
+  if (['attack', 'opposition'].includes(type) && target) {
     fields.appendChild(rubric('Circonstances de la défense'));
     for (const [key, label] of [['involvesMovement','Le Test implique un mouvement'],['runningOrHiding','Le Test sert à fuir ou se cacher'],['reliesOnSight','Le Test est réalisable sans voir mais repose sur la vue'],['requiresSight','Le Test est impossible sans voir'],['usesFellowship','Le Test utilise la Sociabilité']]) contextField(fields, 'defender', key, label);
     conditionModeField(fields, 'defender');
@@ -548,7 +609,7 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
     handlers,
     disabled: draft.busy
   }));
-  if (type === 'attack' && target) {
+  if (['attack', 'opposition'].includes(type) && target) {
     const defenseBlock = node('div', 'workspace-defense');
     const legend = node('p', 'workspace-roll-label');
     legend.append('Défense de ', node('span', 'combatant-name', target.name), kind.value === 'melee' ? ' (requise en mêlée)' : ' (selon les circonstances)');
@@ -566,6 +627,7 @@ export function renderResolutionPanel({ draft, actor, actions, actionKey: select
       stat.appendChild(optgroup);
     };
     groupOf('Caractéristiques', 'caracs');
+    groupOf('Compétences importées', 'skills');
     groupOf('Jets enregistrés', 'jets');
     defense.options.filter(option => option.group === 'autre').forEach(option => stat.appendChild(new Option(option.label, option.value)));
     stat.value = defense.value;

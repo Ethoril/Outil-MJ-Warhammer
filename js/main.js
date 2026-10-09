@@ -1263,7 +1263,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
       else if (result?.status !== 'stale') throw new Error(result?.reason || 'Résolution non appliquée.');
       return result;
     },
-    renderRules: content => { renderReferenceTables('', content); },
+    renderRules: content => { renderReferenceTables('', content, { getEnvelope:()=>JSON.parse(Store.getFullJSON()) }); },
     renderOverview: renderWorkspaceOverview,
     renderLog: content => { renderLog(Store, content, { contextual: true }); },
     adjustHp: ({ participantId, delta }) => {
@@ -1464,6 +1464,6 @@ Bus.on('sync:guest-import-available', ({ snapshot, contextId, kind } = {}) => {
 // Rendu initial
 reserveUI.renderReserve();
 combatViewUI.renderCombat();
-renderReferenceTables();
+renderReferenceTables('', null, { getEnvelope:()=>JSON.parse(Store.getFullJSON()) });
 renderLog(Store);
 startRemoteAdapter();

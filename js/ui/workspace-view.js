@@ -384,14 +384,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (state.targetChoice && state.targetChoice !== 'none') target = others.find(participant => participant.id === state.targetChoice) || null;
     if (!target && state.targetChoice !== 'none' && type !== 'skill') target = groups.adversaries[0] || others[0] || null;
     if (draft.preview && draft.preview.targetId !== (target?.id || null)) { draft.preview = null; resetCritical(draft); }
-    const defense = type === 'attack' && target ? defenseChoice(target) : null;
+    const defense = ['attack','opposition'].includes(type) && target ? defenseChoice(target, type) : null;
     if (defense) {
       // Valeur pré-remplie pour une cible, une option et sa valeur : une autre combinaison (jet disparu,
       // autre cible, CC modifiée) repart de sa propre valeur, une saisie à la main sur la même reste. « Autre » garde la saisie.
       const source = defense.option.value === 'Autre' ? 'Autre' : `${target.id}|${defense.option.value}|${defense.option.base}`;
       if (draft.defenseSource !== source) {
         draft.defenseSource = source;
-        draft.defenseKind = null; draft.defenseSlModifier = null; draft.defenseContext = {};
+        draft.defenseKind = null; draft.defenseSlModifier = null; draft.defenseContext = {}; draft.defenseTalentChoices = {};
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseChoice = null;
         if (source !== 'Autre') draft.defenseBase = null;
         draft.protectionContext = {};
@@ -402,8 +402,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   // Options de défense d'une cible et choix effectif : celui du brouillon s'il existe chez elle, sinon son défaut.
-  function defenseChoice(target) {
-    const options = defenseOptions(target, actorActions(target));
+  function defenseChoice(target, type) {
+    const options = defenseOptions(target, actorActions(target), { includeEndurance: type === 'opposition' });
     const wanted = state.resolution.defenseStat;
     const option = options.find(item => item.value === wanted) || options.find(item => item.value === defaultDefenseValue(options));
     return { options, value: option.value, option };
@@ -817,23 +817,22 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return { kind: draft.v5Kind || inferV5Kind({ ...context.action, type: context.type }, equipmentAttackContext(context.action.extensions?.equipment)),
       ...(draft.v5SlModifier != null ? { slModifier: draft.v5SlModifier } : context.action.extensions?.v5?.slModifier != null ? { slModifier: context.action.extensions.v5.slModifier } : {}),
       choice: draft.v5Choice, charging: draft.charging, context: draft.v5Context,
+      talentChoices: { ...(draft.talentChoices || {}), 'talent-beat-blade:replace-damage': draft.beatBlade === true },
       extraAttack: draft.extraAttack === true, ...(draft.reactionId ? { reactionId: draft.reactionId } : {}), aimed: draft.aimed === true,
-      actorSize: draft.actorSize, targetSize: draft.targetSize,
-      talentChoices: { 'talent-beat-blade:replace-damage': draft.beatBlade === true },
-      advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'), disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré') };
+      actorSize: draft.actorSize, targetSize: draft.targetSize,      advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'), disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré') };
   }
   function defenseV5Input(context, draft) {
     if (draft.defenseSlModifier != null && !Number.isInteger(draft.defenseSlModifier)) throw userError('Le modificateur V5 de défense doit être un nombre entier de DR.');
     return { kind: draft.defenseKind || context.defense.option.v5?.kind || (context.defense.option.value === 'Ag' || /esquive|dodge/i.test(context.defense.option.statLabel) ? 'test' : 'melee'),
       ...(draft.defenseSlModifier != null ? { slModifier: draft.defenseSlModifier } : context.defense.option.v5?.slModifier != null ? { slModifier: context.defense.option.v5.slModifier } : {}),
-      choice: draft.defenseChoice, context: draft.defenseContext,
+      choice: draft.defenseChoice, context: { ...(draft.defenseContext || {}), ...(context.defense.option.extensions?.fiche?.skillId ? { skillId: context.defense.option.extensions.fiche.skillId } : {}) }, talentChoices: draft.defenseTalentChoices || {},
       advantageSources: declaredSources(draft.defenseAdvantages, 'Avantage déclaré en défense'),
       disadvantageSources: declaredSources(draft.defenseDisadvantages, 'Désavantage déclaré en défense') };
   }
   const resolutionHandlers = {
     select(patch) {
       const draft = state.resolution;
-      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext']) if (key in patch) draft[key] = patch[key];
+      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','talentChoices','defenseTalentChoices']) if (key in patch) draft[key] = patch[key];
       draft.v5Choice = null; draft.defenseChoice = null;
       if ('targetId' in patch) {
         state.targetChoice = patch.targetId;
@@ -843,7 +842,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {};
         draft.protectionContext = {};
       }
-      if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
+      if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
       if ('protectionContext' in patch) draft.protectionContext = patch.protectionContext;
       if ('ammunitionId' in patch) draft.ammunitionId = patch.ammunitionId;
       if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;
@@ -929,7 +928,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         targetId: context.target?.id || null,
         roll: String(draft.attackRoll).trim(), protectionContext: draft.protectionContext, ammunitionId: draft.ammunitionId, ammunitionArbitrated: draft.ammunitionArbitrated
       };
-      if (context.type === 'attack' && context.target && String(draft.defenseRoll).trim()) {
+      if (['attack','opposition'].includes(context.type) && context.target && String(draft.defenseRoll).trim()) {
         input.defense = { roll: String(draft.defenseRoll).trim(), base: draft.defenseBase, mod: context.defense.option.mod || 0, qualities: context.defense.option.qualities || [], label: context.defense.option.statLabel };
       }
       // Seuls les jets de critique valides partent au moteur ; les autres montrent l'erreur sous leur champ.
@@ -979,7 +978,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       try {
         draft.comparison = [...context.groups.adversaries, ...context.groups.allies].map(target => {
           const input = { actor: context.actor, action: { ...context.action, type: context.type }, targetId: target.id, roll, ammunitionId: draft.ammunitionId, ammunitionArbitrated: draft.ammunitionArbitrated, protectionContext: target.id === context.target?.id ? draft.protectionContext : {} };
-          if (context.type === 'attack' && defenseRoll) {
+          if (['attack','opposition'].includes(context.type) && defenseRoll) {
             // Même choix que pour la cible courante s'il existe chez elle, sinon son défaut ; la cible
             // courante garde la valeur affichée (saisie à la main comprise), comme pour « Calculer ».
             const { option } = defenseChoice(target);

@@ -194,6 +194,9 @@ async function main() {
   await ammo.selectOption('arrows');
   await resolution.getByRole('button', { name: /Inoffensive recette/ }).first().click();
   await expect(resolution.getByRole('combobox', { name: 'Munition', exact: true })).toHaveCount(0, 'no ammunition on melee attack');
+  // The synthetic unbound action must now identify its skill and non-improvised weapon explicitly.
+  await resolution.getByRole('combobox', { name: 'Compétence de ce Test pour les talents', exact: true }).selectOption('skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65');
+  await resolution.getByRole('combobox', { name: 'Arme improvisée (Frappe assommante)', exact: true }).selectOption('false');
   await resolution.getByRole('button', { name: 'Cible recette', exact: true }).click();
   await resolution.locator('[data-roll-input="attack"]').fill('33');
   await resolution.locator('[data-focus-key="defense-stat"]').selectOption('CC');

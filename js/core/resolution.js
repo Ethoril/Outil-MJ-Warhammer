@@ -1,6 +1,6 @@
 import { locationProtection, mergeEquipmentQualities, ammunitionCompatibility, equipmentAttackContext } from './equipment.js';
 import { keywordMechanicalStatus } from './keywords.js';
-import { getReferenceStatus } from './reference-catalog.js';
+import { getReferenceStatus, getReferenceCatalogue } from './reference-catalog.js';
 import { ENGINES } from '../data/keyword-engines.js';
 /** Pure E12 action resolution. It never reads DOM, mutates a Store or rolls implicitly. */
 import {
@@ -14,8 +14,9 @@ import { selectV5Test, resolveV5Opposition, reverseV5Roll } from './v5-roll.js';
 import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
 import { buildCombatTest, hasMomentum, withMomentum, conditionLevels, v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
-import { evaluateV5Talents, previewV5TalentConditions, V5_TALENT_IDS } from './v5-talents.js';
+import { evaluateV5Talents, previewV5TalentConditions, currentV5TalentHashes, V5_TALENT_IDS } from './v5-talents.js';
 import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION } from '../data/v5-crits.js';
+import { previewV5ActionQualities, previewV5WeaponConditions, v5QualityMechanicalStatus } from './v5-talent-qualities.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
@@ -88,6 +89,7 @@ export function describeResolutionDetail(detail) {
     parts.push(`Opposition : défense ${label} ${score} (d100 ${roll}) · DR net ${signedValue(opposition.netSl)}${hit}`);
   } else if (present(detail.hit)) parts.push(detail.hit ? 'Touché' : 'Pas de touche');
   // Ordinary damage and the Critical Wound have independent V5 locations.
+  if (detail.location?.calledShot) parts.push('Coup ciblé : ' + detail.location.name);
   if (isRecord(detail.location) && present(detail.location.roll) && detail.location.name) parts.push(`Localisation : ${detail.location.roll} → ${detail.location.name}`);
   const damage = isRecord(detail.damage) ? formatDamageFormula(detail.damage) : '';
   if (damage) parts.push(`Dégâts : ${damage}`);
@@ -101,6 +103,8 @@ export function describeResolutionDetail(detail) {
     if (proposal.op === 'modifyDamage') parts.push('Talent : +' + proposal.amount + ' Dégât (' + proposal.origins.map(origin => origin.talentId).join(', ') + ')');
     if (proposal.op === 'reduceConditionAcquisition') parts.push('Mâchoires d’acier : ' + proposal.amount + ' Sonné évité ; premier usage de la rencontre.');
   }
+  for (const condition of detail.weaponConditions?.applied || []) parts.push('Assommante : ' + condition.level + ' état Sonné appliqué.');
+  for (const reminder of detail.reminders || []) parts.push(reminder);
   if (detail.fumble) parts.push('Maladresse');
   // Read only the stored receipt: refreshing today's catalogue must never rewrite history.
   const shortVersion = value => String(value).split(':').map(part => /^[a-f0-9]{32,}$/i.test(part) ? part.slice(0, 12) : part).join(':');
@@ -221,6 +225,9 @@ export function normalizeResolutionInput(input = {}) {
   if (!resolutionId.trim()) throw new ResolutionError('resolutionId invalide');
   // Defender settings describe the Test actually chosen (Melee or Dodge).
   const defense = isRecord(input.defense) ? {
+    ...(isRecord(input.defense.extensions) ? { extensions: clone(input.defense.extensions) } : {}),
+    ...(typeof input.defense.type === 'string' ? { type: input.defense.type } : {}),
+    ...(typeof input.defense.attr === 'string' ? { attr: input.defense.attr } : {}),
     roll: parseRoll(input.defense.roll),
     base: parseInteger(input.defense.base, 0),
     mod: parseInteger(input.defense.mod, 0),
@@ -293,6 +300,15 @@ function locationOf(roll) {
   const named = getLocationName(roll);
   return { roll, ...named, side: locationSide(named.name) };
 }
+const CALLED_SHOT_LOCATIONS = Object.freeze({ head: { key: 'HEAD', name: 'Tête', side: null }, body: { key: 'BODY', name: 'Corps', side: null },
+  leftArm: { key: 'ARM', name: 'Bras Gauche', side: 'left' }, rightArm: { key: 'ARM', name: 'Bras Droit', side: 'right' },
+  leftLeg: { key: 'LEG', name: 'Jambe Gauche', side: 'left' }, rightLeg: { key: 'LEG', name: 'Jambe Droite', side: 'right' } });
+function attackLocation(normalized, roll) {
+  const context = normalized.v5.context || {};
+  if (context.calledShot !== true) return locationOf(reverseV5Roll(roll));
+  const selected = CALLED_SHOT_LOCATIONS[context.calledShotLocation];
+  return selected ? { roll: null, ...selected, calledShot: true } : null;
+}
 
 /** V5 severity: entered d100 plus +10 per excess Wound; no global cap at 100. */
 function criticalSeverity(location, base, severityBonus, { inoffensive = false, alternative = null } = {}) {
@@ -317,8 +333,8 @@ function criticalDetails(rolls, location, acharnement, inoffensive = false) {
 }
 
 /** Excess damage triggers a separate Critical Wound at the ordinary hit location. */
-function secondCritical(reversed, rolls, acharnement, inoffensive = false) {
-  const location = locationOf(reversed);
+function secondCritical(reversed, rolls, acharnement, inoffensive = false, ordinaryLocation = null) {
+  const location = ordinaryLocation || locationOf(reversed);
   const severity = criticalSeverity(location, rolls?.secondEffect, acharnement, { inoffensive, alternative: rolls?.secondEffectAlternative ?? null });
   return { locationRoll: location.roll, location, ...severity, pending: severity.effectRoll === null };
 }
@@ -361,7 +377,9 @@ export function previewHpLoss(preview) {
 
 /** Resolve and compare through the same pure V5 action calculation. No random draw. */
 export function previewResolution(input) {
-  const normalized = normalizeResolutionInput(input);
+  const prepared = previewV5ActionQualities(normalizeResolutionInput(input));
+  const normalized = prepared.normalized;
+  normalized.qualityTalentPlan = prepared.plan;
   const actorPlan = buildCombatTest(normalized);
   const defenderPlan = normalized.defense ? buildCombatTest(normalized, 'defender') : null;
   const choose = (plan, choice) => selectV5Test(plan.test, choice || plan.test.options[0].id);
@@ -411,15 +429,15 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const helpless = (targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true)
     && (actorPlan.kind === 'melee' || (actorPlan.kind === 'ranged' && context.pointBlank === true));
   const hit = helpless && !opposed ? true : opposed ? opposed.winner === 'attacker' : success;
-  const criticalAttack = attackType(action.type) && success && criticalClassification.critique;
+  const criticalAttack = attackType(action.type) && normalized.v5.context?.silentTakedown !== true && success && criticalClassification.critique;
   const criticalLocationRoll = normalized.criticalRolls?.location;
-  const location = hit && attackType(action.type) ? locationOf(reverseV5Roll(roll)) : null;
+  const location = hit && attackType(action.type) ? attackLocation(normalized, roll) : null;
   const criticalLocation = criticalAttack && criticalLocationRoll != null ? locationOf(criticalLocationRoll) : null;
   const inoffensive = action.qualities.some(q => q.id === 'inoffensive') && keywordMechanicalStatus('inoffensive').status === 'covered';
   const talentContext = { kind: actorPlan.kind, aimed: normalized.v5.aimed,
     weapon: { isMelee: typeof normalized.attackContext?.ranged === 'boolean' ? !normalized.attackContext.ranged : actorPlan.kind === 'melee' },
     actor: { id: actor?.id, size: normalized.v5.actorSize }, target: { id: target?.id, size: normalized.v5.targetSize },
-    attack: { success, hit: attackType(action.type) && hit, usedAdvantageV5: actorTest.advantage.net > 0 },
+    attack: { success, hit: attackType(action.type) && context.silentTakedown !== true && hit, usedAdvantageV5: actorTest.advantage.net > 0 },
     authorNextTurnEnd: normalized.authorNextTurnEnd };
   const damageTalents = evaluateV5Talents(actor, { event: 'damage.beforeProtection', role: 'attacker', context: talentContext });
   const beatTalents = evaluateV5Talents(actor, { event: 'action.afterAttack', role: 'attacker', context: talentContext,
@@ -432,7 +450,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   let damage = null;
   let protection = null;
   const unresolved = [...actorPlan.unresolved, ...(defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(defenderPlan?.restrictions || [])];
-  for (const plan of [damageTalents, beatTalents]) unresolved.push(...plan.unresolved.flatMap(row => row.fields.map(field => 'Talent : préciser ' + field + '.')));
+  if (attackType(action.type) && context.calledShot === true && !CALLED_SHOT_LOCATIONS[context.calledShotLocation]) unresolved.push('Coup ciblé : préciser la localisation visée.');
+  const actorSkillId = action.extensions?.fiche?.skillId ?? context.skillId;
+  const actorSkill = context.silentTakedown === true ? getReferenceCatalogue().skills.find(row => row.id === actorSkillId) : null;
+  const defenseSkillId = normalized.defense?.extensions?.fiche?.skillId ?? normalized.defense?.v5?.context?.skillId;
+  const enduranceDefense = defenseSkillId ? defenseSkillId === 'skill-52_e9_73_69_73_74_61_6e_63_65-base' : /^(?:Résistance|Resistance|Endurance|E)$/iu.test(normalized.defense?.label || '');
+  if (context.silentTakedown === true && (attackType(action.type) || actorPlan.kind !== 'melee' || actorSkill?.groupId !== 'skill-group-43_6f_72_70_73_20_e0_20_63_6f_72_70_73' || !defenderPlan || defenderPlan.kind !== 'test' || !enduranceDefense || context.outsideCombat !== true || context.targetUnaware !== true || context.calledShot === true)) unresolved.push('Neutralisation silencieuse : Test opposé Corps à corps/Résistance hors combat, cible inconsciente du danger et sans Coup ciblé requis ; conséquences spéciales à arbitrer.');
+  for (const plan of [normalized.qualityTalentPlan, damageTalents, beatTalents].filter(Boolean)) unresolved.push(...plan.unresolved.flatMap(row => row.fields.map(field => 'Talent : préciser ' + field + '.')));
   if (attackType(action.type) && actorPlan.kind === 'melee' && !normalized.defense && !cannotDefend) unresolved.push('Jet de défense requis pour l’opposition de Corps à corps.');
   if (attackType(action.type) && actorPlan.kind === 'ranged' && normalized.defense && context.rangedOppositionAllowed !== true && !(defenderPlan.kind === 'test' && v5ShieldDefense(normalized).rangedDodgeAllowed)) unresolved.push('Confirmer la règle autorisant cette défense contre un tir.');
   if (Number(actor?.hp) < 0 || Number(target?.hp) < 0) unresolved.push('PV historiques négatifs : migration explicite à 0 requise avant une action V5.');
@@ -446,7 +470,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   let weapon = null;
   const weaponDamage = actionWeaponDamage(action);
   const strengthBonus = strengthBonusOf(actor?.caracs);
-  if (!replacement && hit && attackType(action.type) && target && (hasOwn(action, 'damage') || hasOwn(action, 'damageFormula'))) {
+  if (!replacement && context.silentTakedown !== true && hit && attackType(action.type) && target && (hasOwn(action, 'damage') || hasOwn(action, 'damageFormula'))) {
     weapon = evaluateWeaponDamage(weaponDamage, strengthBonus);
   }
   // Normal damage always uses the final roll reversed, independently of critical dice.
@@ -479,18 +503,18 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   const hpBefore = Math.max(0, Number(target?.hp) || 0);
   const excess = damage ? Math.max(0, damage.finalDamage - hpBefore) : 0;
-  const second = !replacement && knownHp(target) && excess > 0 ? secondCritical(reverseV5Roll(roll), normalized.criticalRolls, excess * 10, inoffensive) : null;
+  const second = !replacement && knownHp(target) && excess > 0 ? secondCritical(reverseV5Roll(roll), normalized.criticalRolls, excess * 10, inoffensive, location) : null;
   let criticalBlock = criticalFirst || second ? { kind: 'Critique', expanded: criticalClassification.élargi,
     acharnement: false, details: criticalFirst, ...(second ? { second, excessWounds: excess } : {}),
     ...(weapon?.status === 'manual' ? { secondHint: { locationRoll: reverseV5Roll(roll), location } } : {}) } : null;
   if (criticalBlock) {
     criticalBlock.items = criticalItems(criticalFirst, second, normalized.criticalDeclined);
     criticalBlock.application = criticalApplication(criticalBlock.items);
-  } else if (!attackType(action.type) && actorTest.critical) criticalBlock = { kind: 'Critique', details: null };
+  } else if (context.silentTakedown !== true && !attackType(action.type) && actorTest.critical) criticalBlock = { kind: 'Critique', details: null };
   let defenderCritical = null;
   const defenderCriticalClassification = defenderTest ? isCriticalRoll(defenderTest.roll, defenderTest.details.doubled, normalized.defense.qualities) : null;
   const defenderFumbleClassification = defenderTest ? isFumbleRoll(defenderTest.roll, defenderTest.details.doubled, normalized.defense.qualities) : null;
-  if (['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
+  if (context.silentTakedown !== true && ['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
     const critLocation = normalized.defenderCriticalRolls?.location != null ? locationOf(normalized.defenderCriticalRolls.location) : null;
     const details = criticalDetails(normalized.defenderCriticalRolls, critLocation, 0, normalized.defense.qualities.some(q => q.id === 'inoffensive'));
     const guard = critLocation ? locationProtection(actor, { location: critLocation, attackRoll: defenderTest.roll,
@@ -501,6 +525,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       defenderCritical = { kind: 'Critique', targetId: actor?.id, details, items, application: criticalApplication(items) };
     }
   }
+  const weaponConditions = previewV5WeaponConditions({ qualities: action.qualities, hit: attackType(action.type) && hit,
+    location, target, damage, resolutionId: normalized.resolutionId, replaced: Boolean(replacement) });
+  unresolved.push(...weaponConditions.unresolved);
+  mechanicalWarnings.push(...weaponConditions.warnings);
+  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed];
   const conditionChanges = {}, talentUsageRequests = [], conditionTalentPlans = [];
   const conditionPlan = (participant, states, role, authorId) => {
     if (!participant || !states?.length) return;
@@ -510,11 +539,13 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentUsageRequests.push(...reduced.usageRequests);
     conditionTalentPlans.push(reduced.plan);
     unresolved.push(...reduced.plan.unresolved.flatMap(row => row.fields.map(field => 'Talent : préciser ' + field + '.')));
-    const receipt = acquireV5Conditions(participant, states, { resolutionId: normalized.resolutionId, authorId, targetId: participant.id, round: normalized.round, source: { kind: 'critical' } });
+    const receipt = acquireV5Conditions(participant, states, { resolutionId: normalized.resolutionId, authorId, targetId: participant.id, round: normalized.round, source: role === 'actor' ? { kind: 'critical' } : {} });
     conditionChanges[role] = receipt;
     unresolved.push(...receipt.needsInput.map(item => `${role === 'actor' ? 'Attaquant' : 'Cible'} : ${item.label}`));
   };
-  conditionPlan(target, criticalBlock?.application?.states, 'target', actor?.id);
+  conditionPlan(target, targetConditionApplication, 'target', actor?.id);
+  if (criticalBlock?.application) criticalBlock.application.states = targetConditionApplication.filter(row => row.source?.kind !== 'quality');
+  weaponConditions.applied = targetConditionApplication.filter(row => row.source?.kind === 'quality');
   conditionPlan(actor, defenderCritical?.application?.states, 'actor', target?.id);
   const momentum = [];
   const planMomentum = (participant, events) => {
@@ -523,12 +554,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   };
   const actorEvents = [], targetEvents = [];
   const event = (type, data = {}) => ({ id: `${normalized.resolutionId}:${type}`, type, ...data });
-  if (actorPlan.charging) actorEvents.push(event('chargeEnemy'));
-  if (actorPlan.kind === 'melee') {
+  if (context.outsideCombat !== true && actorPlan.charging) actorEvents.push(event('chargeEnemy'));
+  if (context.outsideCombat !== true && actorPlan.kind === 'melee') {
     if (opposed) actorEvents.push(event(hit ? 'opposedMeleeWon' : 'opposedMeleeLost'));
     else if (!success) actorEvents.push(event('meleeTestFailed'));
   }
-  if (defenderPlan?.kind === 'melee' && opposed) targetEvents.push(event(hit ? 'opposedMeleeLost' : 'opposedMeleeWon'));
+  if (context.outsideCombat !== true && defenderPlan?.kind === 'melee' && opposed) targetEvents.push(event(hit ? 'opposedMeleeLost' : 'opposedMeleeWon'));
   const criticalEffects = criticalBlock?.application;
   targetEvents.push(event('woundsLost', { amount: Math.min(hpBefore, (damage?.finalDamage || 0) + (criticalEffects?.extraWounds || 0)) }));
   targetEvents.push(event('conditionAcquired', { instances: conditionChanges.target?.acquiredInstances || 0 }));
@@ -547,7 +578,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     momentum,
     conditionChanges,
     talentUsageRequests,
-    talentPlans: [damageTalents, beatTalents, ...conditionTalentPlans],
+    talentPlans: [normalized.qualityTalentPlan, ...(actorPlan.talentPlans || []), ...(defenderPlan?.talentPlans || []), damageTalents, beatTalents, ...conditionTalentPlans].filter(Boolean),
+    talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
+    weaponConditions,
+    targetConditionApplication,
+    reminders: context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [],
     activeEffects,
     damageReplacedByTalent: replacement ? clone(replacement) : null,
     unresolved,
@@ -571,7 +606,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     protection,
     mechanicalWarnings,
     referenceVersion: getReferenceStatus().contentVersion,
-    mechanics: [...new Set([...action.qualities.map(q=>q.id),...(protection?.counted||[]).flatMap(item=>item.keywords.map(word=>word.id))])].map(id=>{const coverage=keywordMechanicalStatus(id);return {id,name:coverage.word?.name??id,status:coverage.status,engine:coverage.engine?.engine??null,effectVersion:coverage.effectVersion??null,effect:coverage.word?.effect??null,edition:coverage.word?.edition??null,source:coverage.word?.source??null,limitations:coverage.limitations||[]};}),
+    mechanics: [...new Set([...action.qualities.map(q=>q.id),...(protection?.counted||[]).flatMap(item=>item.keywords.map(word=>word.id))])].map(id=>{const coverage=v5QualityMechanicalStatus(id);return {id,name:coverage.word?.name??id,status:coverage.status,engine:coverage.engine?.engine??null,effectVersion:coverage.effectVersion??null,effect:coverage.word?.effect??null,edition:coverage.word?.edition??null,source:coverage.word?.source??null,limitations:coverage.limitations||[]};}),
     opposition: opposed
       || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
@@ -610,6 +645,13 @@ export function applyResolution(preview, currentState) {
   if (preview.protection?.manual?.length || preview.mechanicalWarnings?.length) {
     return { status: 'manual', reason: preview.protection?.manual?.[0] || 'version-effet-non-couverte', state: clone(currentState), resolution: clone(preview) };
   }
+  if (preview.weaponConditions?.proposed?.length && v5QualityMechanicalStatus('assommante').status !== 'covered')
+    return { status: 'manual', reason: 'Assommante : source changée, recalcul requis.', state: clone(currentState), resolution: clone(preview) };
+  const liveTalentHashes = currentV5TalentHashes();
+  const preparationOrigins = preview.input.qualityTalentPlan?.proposals?.flatMap(row => row.origins) || [];
+  const resolutionOrigins = [...preparationOrigins,...(preview.talentPlans || []).flatMap(plan=>(plan.proposals || []).flatMap(row=>row.origins || []))];
+  if (resolutionOrigins.some(origin => liveTalentHashes[origin.talentId] !== origin.source.effectHash))
+    return { status: 'manual', reason: 'Talent : source changée, recalcul requis.', state: clone(currentState), resolution: clone(preview) };
   if (preview.ruleVersion !== V5_COMBAT_RULE_VERSION) return { status: 'manual', reason: 'ancien-apercu-a-recalculer-en-v5', state: clone(currentState), resolution: clone(preview) };
   if (preview.choiceRequired || preview.unresolved?.length) return { status: 'manual', reason: preview.unresolved?.[0] || 'choix-inversion-requis', state: clone(currentState), resolution: clone(preview) };
   if ([preview.critical, preview.defenderCritical].some(critical => critical?.details?.pending || critical?.second?.pending))
@@ -621,7 +663,8 @@ export function applyResolution(preview, currentState) {
   const nextState = clone(currentState);
   const target = participantById(currentState, preview.targetId);
   const criticalEffects = preview.critical?.application || { extraWounds: 0, states: [] };
-  if (preview.attack && preview.targetId && (preview.damage || criticalEffects.extraWounds || criticalEffects.states.length)) {
+  const targetConditions = preview.targetConditionApplication || criticalEffects.states;
+  if (preview.attack && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length)) {
     if (!target) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     if (JSON.stringify(target) !== JSON.stringify(preview.input.target)) {
       return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
@@ -629,8 +672,8 @@ export function applyResolution(preview, currentState) {
     const updated = clone(target);
     const oldHp = Number(updated.hp) || 0;
     updated.hp = Math.max(0, oldHp - previewHpLoss(preview));
-    if (criticalEffects.states.length) {
-      const receipt = acquireV5Conditions(updated, criticalEffects.states, { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, targetId: updated.id, round: preview.input.round, source: { kind: 'critical' } });
+    if (targetConditions.length) {
+      const receipt = acquireV5Conditions(updated, targetConditions, { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, targetId: updated.id, round: preview.input.round, source: {} });
       if (!receipt.ready) return { status: 'manual', reason: receipt.needsInput[0].label, state: clone(currentState), resolution: clone(preview) };
       Object.assign(updated, receipt.participant);
     }

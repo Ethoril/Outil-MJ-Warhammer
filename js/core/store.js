@@ -556,6 +556,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         source: { actor: cloneValue(actor.ficheSnapshot?.source || null), target: cloneValue(target.ficheSnapshot?.source || null) },
         ...(preview?.talentTrace ? { talentTrace: cloneValue(preview.talentTrace) } : {}),
         ...(preview?.talents ? { talents: cloneValue(preview.talents) } : {}),
+        ...(preview?.weaponConditions ? { weaponConditions: cloneValue(preview.weaponConditions), targetConditionApplication: cloneValue(preview.targetConditionApplication), reminders: cloneValue(preview.reminders || []) } : {}),
         ...(preview?.talentPlans ? { talentPlans: cloneValue(preview.talentPlans), activeEffects: cloneValue(preview.activeEffects), damageReplacedByTalent: preview.damageReplacedByTalent } : {}),
         ...(resolution?.actionCostReceipt ? { actionCostReceipt: cloneValue(resolution.actionCostReceipt) } : {}),
         ...(resolution?.talentUsageReceipts?.length ? { talentUsageReceipts: cloneValue(resolution.talentUsageReceipts) } : {}),
