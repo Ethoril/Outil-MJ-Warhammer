@@ -71,13 +71,15 @@ test('Contrôle 2.4 — DR ou unités exige choix explicite, conserve réussite 
  const missing=ctx.store.previewResolution(raw);assert.ok(missing.unresolved.length>0);assert.equal((await ctx.store.applyResolution(missing)).status,'manual');
  const dr=ctx.store.previewResolution({...raw,v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':false}}});assert.equal(dr.sl,3);assert.equal(dr.success,true);
  const units=ctx.store.previewResolution({...raw,v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':true}}});assert.equal(units.sl,8);assert.equal(units.test.score,50);assert.equal(units.success,true);
- const zero=ctx.store.previewResolution({...raw,roll:20,v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':true}}});assert.equal(zero.sl,10);assert.equal(zero.success,true);
+ const zero=ctx.store.previewResolution({...raw,roll:20,v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':true}}});assert.equal(zero.sl,0);assert.equal(zero.success,true);assert.equal(zero.test.zeroOutcome,'marginalSuccess');
  const failed=ctx.store.previewResolution({...raw,roll:98});assert.equal(failed.success,false);assert.equal(failed.unresolved.length,0);
+ const hundred=ctx.store.previewResolution({...raw,roll:100,v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':true}}});assert.equal(hundred.success,false);assert.ok(!hundred.test.details.talentSLReplacement);assert.equal(hundred.unresolved.length,0);
 });
 
 test('Contrôle 2.4 — choix unités utilise jet final inversé et choix de l’option non retenue ne bloque pas',async()=>{
  const ctx=await setup({actorTalents:[owned('talent-master-of-disguise')]});const raw=testInput(ctx,'control24-final-units','Divertissement (Interprétation)',{v5:{kind:'test',choice:'reverse',advantageSources:[{id:'control24-assisted',label:'Circonstance décidée par le MJ'}],talentChoices:{'talent-master-of-disguise:sl:reverse':true}}});
  const reverse=ctx.store.previewResolution(raw);assert.equal(reverse.roll,16);assert.equal(reverse.sl,6);assert.equal(reverse.success,true);assert.equal(reverse.unresolved.length,0);
+ const zero=ctx.store.previewResolution({...raw,roll:6,action:{...raw.action,base:90},v5:{kind:'test',choice:'reverse',disadvantageSources:[{id:'control24-forced',label:'Désavantage déclaré'}],talentChoices:{'talent-master-of-disguise:sl:reverse':true}}});assert.equal(zero.roll,60);assert.equal(zero.sl,0);assert.equal(zero.success,true);assert.equal(zero.test.zeroOutcome,'marginalSuccess');assert.equal(zero.unresolved.length,0);
  const keep=ctx.store.previewResolution({...raw,v5:{...raw.v5,choice:'keep',talentChoices:{}}});assert.equal(keep.success,false);assert.equal(keep.unresolved.length,0);
 });
 
@@ -85,6 +87,7 @@ test('Contrôle 2.4 — défenseur applique son propre choix DR/unités dans une
  const ctx=await setup({targetTalents:[owned('talent-master-of-disguise')]});
  const raw={...testInput(ctx,'control24-defender-sl','Charme',{roll:24}),targetId:ctx.targetId,action:{type:'opposition',base:50},defense:{base:50,roll:28,label:'Interprétation',extensions:{fiche:{skillId:skill('Divertissement (Interprétation)')}},v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':true}}}};
  const p=ctx.store.previewResolution(raw);assert.equal(p.opposition.defender.sl,8);assert.equal(p.opposition.winner,'defender');assert.equal(p.unresolved.length,0);
+ const zero=ctx.store.previewResolution({...raw,defense:{...raw.defense,roll:20}});assert.equal(zero.opposition.defender.sl,0);assert.equal(zero.opposition.defender.success,true);assert.equal(zero.opposition.defender.zeroOutcome,'marginalSuccess');assert.equal(zero.opposition.winner,'attacker');assert.equal(zero.unresolved.length,0);
 });
 
 test('Contrôle 2.4 — source publique modifiée ou absente bloque bonus même avec acquisition résolue',()=>{
@@ -269,4 +272,23 @@ test('Contrôle 2.4 — défense Corps à corps déguisée en Résistance ne val
  const ctx=await setup({actorTalents:[owned('talent-strike-to-stun')]});const before=envelope(ctx.store);
  const p=ctx.store.previewResolution({resolutionId:'control24-silent-wrong-defense-kind',actorId:ctx.actorId,targetId:ctx.targetId,action:{type:'opposition',base:60,attr:'CC',extensions:{fiche:{skillId:skill('Corps à corps (Bagarre)')}}},roll:44,defense:{base:30,roll:22,label:'Résistance',v5:{kind:'melee'}},v5:{kind:'melee',choice:'keep',context:{silentTakedown:true,outsideCombat:true,targetUnaware:true,calledShot:false}}});
  assert.ok(p.unresolved.some(row=>/Neutralisation silencieuse/.test(row)));assert.equal(p.critical,null);assert.equal(p.defenderCritical,null);assert.equal((await ctx.store.applyResolution(p)).status,'manual');assert.deepEqual(envelope(ctx.store),before);
+});
+
+
+test('Contrôle 2.4 — arbitrage MJ unités0 conserve réussite et choix DR, puis reçu durable annulable',async()=>{
+ const ctx=await setup({actorTalents:[owned('talent-master-of-disguise')]});const raw=testInput(ctx,'control24-zero-mj','Divertissement (Interprétation)',{roll:20});const before=envelope(ctx.store);
+ const dr=ctx.store.previewResolution({...raw,v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':false}}});assert.equal(dr.sl,3);assert.equal(dr.success,true);
+ const zero=ctx.store.previewResolution({...raw,v5:{kind:'test',talentChoices:{'talent-master-of-disguise:sl:keep':true}}});assert.equal(zero.sl,0);assert.equal(zero.success,true);assert.equal(zero.test.zeroOutcome,'marginalSuccess');assert.deepEqual(envelope(ctx.store),before);
+ assert.equal((await ctx.store.applyResolution(zero)).status,'applied');const detail=ctx.store.getLog()[0].detail;assert.equal(detail.sl,0);assert.equal(detail.test.success,true);assert.equal(detail.test.zeroOutcome,'marginalSuccess');assert.ok(envelope(ctx.store).appliedResolutionIds.includes(raw.resolutionId));
+ const reloaded=createStore({persistence:ctx.persistence});await reloaded.ready;assert.deepEqual(reloaded.getLog()[0].detail,detail);assert.equal(JSON.parse(reloaded.getFullJSON()).log[0].detail.sl,0);
+ await reloaded.undo();assert.ok(!envelope(reloaded).appliedResolutionIds?.includes(raw.resolutionId));assert.deepEqual(JSON.parse(JSON.stringify(reloaded.listParticipants())),before.combat.participants);
+ await reloaded.redo();assert.ok(envelope(reloaded).appliedResolutionIds.includes(raw.resolutionId));assert.equal(reloaded.getLog()[0].detail.test.success,true);assert.equal(reloaded.getLog()[0].detail.test.zeroOutcome,'marginalSuccess');
+});
+
+test('Contrôle 2.4 — Petit homebrew demeure rappel sans recalcul PV/taille ni mécanique de talent',async()=>{
+ const small=v5TalentCoverage('talent-small');assert.equal(small.status,'verified');assert.ok(small.clauses.every(row=>row.mode==='reminder'));assert.match(small.description,/coût 1 Momentum/);assert.doesNotMatch(small.description,/coût 1 Avantage V4/);
+ const ctx=await setup({actorTalents:[owned('talent-small')],actor:{extensions:{v5:{hasMomentum:false},fiche:{size:'Petite'}}}});const before=structuredClone(person(ctx,ctx.actorId));
+ const p=ctx.store.previewResolution(testInput(ctx,'control24-small-manual','Charme',{roll:20,v5:{kind:'test',actorSize:'small',targetSize:'average'}}));assert.equal(p.test.score,50);assert.equal(p.sl,3);assert.equal(p.input.v5.actorSize,'small');assert.ok(!proposals(p).some(row=>row.origins?.some(origin=>origin.talentId==='talent-small')));assert.equal((await ctx.store.applyResolution(p)).status,'applied');
+ const after=person(ctx,ctx.actorId);assert.equal(after.hp,before.hp);assert.equal(after.maxHp,before.maxHp);assert.deepEqual(after.caracs,before.caracs);assert.deepEqual(after.states,before.states);assert.equal(after.extensions.fiche.size,before.extensions.fiche.size);assert.equal(after.extensions.v5.hasMomentum,false);
+ const baseline=await setup();const mechanics={v5:{kind:'melee',actorSize:'small',targetSize:'average'}};const withSmall=ctx.store.previewResolution(hitInput(ctx,'control24-small-hit',mechanics)),withoutSmall=baseline.store.previewResolution(hitInput(baseline,'control24-baseline-hit',mechanics));assert.deepEqual(withSmall.score,withoutSmall.score);assert.deepEqual(withSmall.damage,withoutSmall.damage);assert.ok(!proposals(withSmall).some(row=>row.origins?.some(origin=>origin.talentId==='talent-small')));
 });

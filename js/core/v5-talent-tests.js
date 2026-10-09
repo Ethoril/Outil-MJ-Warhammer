@@ -60,8 +60,8 @@ export function previewV5TalentSLChoices(participant, preview, { action, setting
     }
     const plan = evaluateV5Talents(participant, { event: 'test.afterRoll', role, context, choices, includeTalents: V5_TEST_TALENT_IDS });
     plans.push({ ...plan, optionId: option.id });
-    // The units d10 follows the source convention: face 0 has value 10.
-    const units = option.result.roll % 10 || 10;
+    // Explicit MJ ruling: use the literal units digit, including 0, of this final roll.
+    const units = option.result.roll % 10;
     const applicable = [...plan.trace.filter(row => ['applicable', 'requiresContext'].includes(row.status))];
     for (const row of applicable) {
       const contract = registry.contracts.find(item => item.talentId === row.talentId);

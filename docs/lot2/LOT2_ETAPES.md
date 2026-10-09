@@ -18,3 +18,5 @@ Le [rapport 2.3](LOT2_RACCORDEMENT_2_3.md) et le [contrôle indépendant](LOT2_C
 [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md) consigne les commandes et limites. LOT2_DEMARRAGE.md décrit le premier incrément historique. Le chantier reste local : aucun push, fusion dans main ni déploiement.
 
 Voir [le raccordement 2.4](LOT2_RACCORDEMENT_2_4.md) et [le contrôle indépendant](LOT2_CONTROLE_2_4.md).
+
+Retour MJ du 9 octobre intégré : unités littérales 0=0, Petit conservé en homebrew avec Piétinement 1 Momentum, sept descriptions corrigées relues et audit rectifié. Voir les décisions et l’avancement actualisés.

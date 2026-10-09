@@ -623,9 +623,9 @@
       "talentId": "talent-resistant",
       "edition": "V5",
       "status": "validated",
-      "ruleVersion": "talent-v5-2026-10-09.24",
+      "ruleVersion": "talent-v5-2026-10-09.24.2",
       "source": {
-        "effectHash": "sha256:24a44a19e884fad6a5b363baffc55818dca0cf42a739582609c0b9f24f8510cb",
+        "effectHash": "sha256:50dbc748caa6756bb2506f36a045587479a33845cbab23eca630e8b2a639f9d5",
         "reference": "Livre de base V5, p. 124 ; achat : p. 191"
       },
       "clauses": [
@@ -2508,7 +2508,7 @@
       "talentId": "talent-master-of-disguise",
       "edition": "V5",
       "status": "validated",
-      "ruleVersion": "talent-v5-2026-10-09.24",
+      "ruleVersion": "talent-v5-2026-10-09.24.2",
       "source": {
         "effectHash": "sha256:228d2b2508bef20973e572967aa5b2647a94d305bbfd5a219eb7170c7fdb0d33",
         "reference": "Livre de base V5, p. 122 ; achat : p. 191"
@@ -2602,7 +2602,7 @@
       "talentId": "talent-old-salt",
       "edition": "V5",
       "status": "validated",
-      "ruleVersion": "talent-v5-2026-10-09.24",
+      "ruleVersion": "talent-v5-2026-10-09.24.2",
       "source": {
         "effectHash": "sha256:d93c5e0565fa2c558a59a7aeef035be4c6c9bfff750a8ba2b5f40f5e7ba80e61",
         "reference": "Livre de base V5, p. 123 ; achat : p. 191"
@@ -2720,7 +2720,7 @@
       "talentId": "talent-numismatics",
       "edition": "V5",
       "status": "validated",
-      "ruleVersion": "talent-v5-2026-10-09.24",
+      "ruleVersion": "talent-v5-2026-10-09.24.2",
       "source": {
         "effectHash": "sha256:d39e413e1d2c577484c2e38e97634bf09dce60b90be75971f2c4bdb0e60b6dfd",
         "reference": "Livre de base V5, p. 123 ; achat : p. 191"
@@ -2833,7 +2833,7 @@
     "talent-scale-sheer-surface": "Avantage V5 aux Tests d'Escalade. Vous pouvez tenter de grimper des surfaces apparemment impossibles (glace, parois lisses, poteaux graissés…), avec une difficulté imposée au maximum Très difficile (−3 DR).",
     "talent-fast-hands": "Vous pouvez divertir avec Escamotage en faisant apparaître ou disparaître de petits objets. Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact.",
     "talent-linguistics": "Avantage V5 aux Tests de Langue. Chaque Augmentation d’une spécialisation de Langue coûte toujours 50 PX, quel que soit le nombre déjà acquis. Ne s’applique qu’aux langues servant à communiquer, jamais à Langue (Magick).",
-    "talent-resistant": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace. Répétable avec une nouvelle menace, une fois par choix.",
+    "talent-resistant": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace durant la session. Répétable avec une nouvelle menace, une fois par choix.",
     "talent-dicer": "Avantage V5 à tous vos Tests de Pari.",
     "talent-menacing": "Avantage V5 aux Tests d’Intimidation. Les voleurs, bandits et pickpockets raisonnables choisissent généralement une autre cible s’ils en disposent.",
     "talent-strong-swimmer": "Avantage V5 aux Tests de Natation ; +2 DR aux poursuites à la nage.",
@@ -2985,5 +2985,17 @@
         "skill-c9_76_61_6c_75_61_74_69_6f_6e-base"
       ]
     }
-  ]
+  ],
+  "approvedRulings": {
+    "unitsSL": {
+      "decision": "MJ, 9 octobre 2026 : les choix DR/unités lisent le chiffre littéral du jet retenu ; 0 reste 0, sans nouveau tirage.",
+      "zeroValue": 0,
+      "initialSuccessRequired": true
+    },
+    "resistantSession": {
+      "decision": "MJ, 9 octobre 2026 : Avantage aux autres Tests de résistance à la menace durant la session. Réussite automatique une fois par séance séparée et manuelle.",
+      "scope": "current table session",
+      "automaticSuccessQuota": "manual"
+    }
+  }
 }

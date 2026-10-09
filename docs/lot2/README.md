@@ -15,3 +15,5 @@ Dossier actualisé localement le 9 octobre 2026 après la première vague 2.4. L
 [La maquette](maquette-choix-avantage.html) utilise un scénario fictif. [Le ZIP](lot2-preparation.zip) contient seulement documentation et maquette, sans code/PDF/export privé ; [SHA256SUMS.txt](SHA256SUMS.txt) contrôle ses documents normalisés en LF, [TRANSMISSION.json](TRANSMISSION.json) décrit les versions. Transférer séparément le livre personnel et l’état Git local. Node/npm et `npm ci` reconstruisent le runtime.
 
 [Le dossier déjà publié](https://ethoril.github.io/Outil-MJ-Warhammer/docs/lot2/) décrit un état antérieur. Ne pas pousser, fusionner dans main ou déployer sans instruction explicite du MJ.
+
+Retour MJ du 9 octobre intégré : unités littérales 0=0, Petit conservé en homebrew avec Piétinement 1 Momentum, sept descriptions corrigées relues et audit rectifié. Voir les décisions et l’avancement actualisés.

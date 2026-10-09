@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "contentVersion": "references:7f7fc1b3d3b90339382e876528044ddd39a39e97b425e2348462a1711beed8b2",
-  "fetchedAt": "2026-10-08T22:25:22.577Z",
+  "contentVersion": "references:b7e3eba43f928122401f631f80a9ca06418aa5afea802dbddebadbcb8b8ebd38",
+  "fetchedAt": "2026-10-09T09:40:18.249Z",
   "sourceFiles": {
     "js/fiche/equipment.js": {
       "sha256": "eff19ac1781fa878ad17f631e9584b017be255a1c6e42da675f4d51be107ab93"
@@ -7562,8 +7562,8 @@
   },
   "talents": {
     "schemaVersion": 2,
-    "catalogVersion": "sha256:d497bb6d01c62c811097b9b0784d229d2c56b34d428f134f6ad21af764e17bd4",
-    "fetchedAt": "2026-10-08T22:25:22.577Z",
+    "catalogVersion": "sha256:410c21554f9ec5ed6a304c68f540f419947aef6e4954268e697cee473bcb1b1d",
+    "fetchedAt": "2026-10-09T09:40:18.249Z",
     "source": {
       "kind": "google-sheets-public-snapshot",
       "spreadsheetId": "1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs",
@@ -7576,7 +7576,7 @@
         "nom": "Acrobaties équestres",
         "englishName": "Trick Rider",
         "sourceLabel": "Acrobaties équestres (Trick Rider)",
-        "description": "À cheval, vous pouvez utiliser toutes vos compétences de Représentation et votre compétence Esquive sans modification.",
+        "description": "À cheval, vous pouvez utiliser toutes vos compétences de Représentation. Vous pouvez également utiliser Esquive sans modification liée au fait d'être monté",
         "limitText": "1",
         "source": "Livre de base V5, p. 128 ; achat : p. 191",
         "specializationLabel": null
@@ -7687,7 +7687,7 @@
         "nom": "Attirant",
         "englishName": "Attractive",
         "sourceLabel": "Attirant (Attractive)",
-        "description": "Sur un Test de Charme réussi pour influencer une personne attirée par vous, choisissez entre les DR obtenus et le chiffre des unités de votre jet.",
+        "description": "Sur un Test de Charme réussi pour influencer une ou plusieurs personnes attirées par vous, choisissez les DR obtenus ou la valeur du dé des unités de ce jet.",
         "limitText": "1",
         "source": "Livre de base V5, p. 115 ; achat : p. 191",
         "specializationLabel": null
@@ -8149,7 +8149,7 @@
         "nom": "Effraction",
         "englishName": "Break and Enter",
         "sourceLabel": "Effraction (Break and Enter)",
-        "description": "En observant un bâtiment, une pièce fermée ou un coffre-fort, vous repérez le trajet d’entrée apparemment le plus rapide et silencieux. Avantage V5 aux Tests de Crochetage et de Force pour enfoncer portes ou fenêtres.",
+        "description": "En observant un bâtiment, une pièce fermée ou un coffre-fort, vous repérez le trajet d’entrée apparemment le plus rapide et silencieux. Avantage V5 aux Tests de Crochetage, ainsi qu'aux Tests de Force pour enfoncer portes ou fenêtres.",
         "limitText": "1",
         "source": "Livre de base V5, p. 116 ; achat : p. 191",
         "specializationLabel": null
@@ -8229,7 +8229,7 @@
         "nom": "Ferveur ardente",
         "englishName": "Impassioned Zeal",
         "sourceLabel": "Ferveur ardente [Cause] (Impassioned Zeal)",
-        "description": "Choisissez une cause politique, religieuse ou philosophique. Avantage V5 aux Tests de Charme lorsque vous la défendez ; Désavantage V5 lorsque vous mentez à son sujet ou la dénoncez.",
+        "description": "Choisissez une cause politique, religieuse ou philosophique. Avantage V5 aux Tests de Charme lorsque vous parlez de cette cause ; Désavantage V5 lorsque vous mentez à son sujet ou la dénoncez.",
         "limitText": "1",
         "source": "Livre de base V5, p. 121 ; achat : p. 191",
         "specializationLabel": "Cause"
@@ -9040,7 +9040,7 @@
         "nom": "Petit",
         "englishName": "Small",
         "sourceLabel": "Petit (Small)",
-        "description": "Vous êtes de taille Petite : Points de Blessure = 2×Bonus d’Endurance + Bonus de Force Mentale. Face à un adversaire plus grand, +10 pour le toucher et −2 DR par catégorie de différence si vous défendez avec Capacité de Combat. Ses armes sont Dévastatrices (écart 1) ou Percutantes (écart ≥2), ses dégâts sont multipliés par l’écart (minimum ×1), et ses coups réussis déclenchent les Frappes Mortelles même si vous survivez. Il peut quitter le combat sans désengagement. En Force opposée, avec un écart de 1, vous devez obtenir un Critique pour comparer les DR ; avec un écart ≥2, il gagne automatiquement. S’il est agressif, il cause Peur (écart 1) ou Terreur (écart ≥2), indice égal à l’écart, et peut vous Piétiner : attaque gratuite de Corps à corps (Bagarre), dégâts égaux à son Bonus de Force, coût 1 Avantage V4. Inversez les rapports lorsque votre adversaire est plus petit que vous.",
+        "description": "Vous êtes de taille Petite : Points de Blessure = 2×Bonus d’Endurance + Bonus de Force Mentale. Face à un adversaire plus grand, +10 pour le toucher et −2 DR par catégorie de différence si vous défendez avec Capacité de Combat. Ses armes sont Dévastatrices (écart 1) ou Percutantes (écart ≥2), ses dégâts sont multipliés par l’écart (minimum ×1), et ses coups réussis déclenchent les Frappes Mortelles même si vous survivez. Il peut quitter le combat sans désengagement. En Force opposée, avec un écart de 1, vous devez obtenir un Critique pour comparer les DR ; avec un écart ≥2, il gagne automatiquement. S’il est agressif, il cause Peur (écart 1) ou Terreur (écart ≥2), indice égal à l’écart, et peut vous Piétiner : attaque gratuite de Corps à corps (Bagarre), dégâts égaux à son Bonus de Force, coût 1 Momentum. Inversez les rapports lorsque votre adversaire est plus petit que vous.",
         "limitText": "1",
         "source": "Livre de base V4 (FR), p. 143",
         "specializationLabel": null
@@ -9160,7 +9160,7 @@
         "nom": "Résistance",
         "englishName": "Resistant",
         "sourceLabel": "Résistance [Menace] (Resistant)",
-        "description": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace. Répétable avec une nouvelle menace, une fois par choix.",
+        "description": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace durant la session. Répétable avec une nouvelle menace, une fois par choix.",
         "limitText": "Sans limitation",
         "source": "Livre de base V5, p. 124 ; achat : p. 191",
         "specializationLabel": "Menace",
@@ -9252,7 +9252,7 @@
         "nom": "Saut carpé",
         "englishName": "Jump Up",
         "sourceLabel": "Saut carpé (Jump Up)",
-        "description": "Avantage V5 aux Tests de Représentation (Acrobaties) pour divertir ou vous déplacer rapidement hors combat. Chaque fois que vous subissez À terre, vous pouvez immédiatement réussir un Test d’Athlétisme ou de Représentation (Acrobaties) Intermédiaire (+0 DR) pour vous relever.",
+        "description": "Avantage V5 aux Tests de Représentation (Acrobaties) pour divertir ou vous déplacer rapidement hors combat. Chaque fois que vous subissez À terre, vous pouvez immédiatement tenter un Test d'Athlétisme ou de Représentation (Acrobaties) Intermédiaire (+0 DR) ; en cas de réussite, vous vous relevez.",
         "limitText": "1",
         "source": "Livre de base V5, p. 121 ; achat : p. 191",
         "specializationLabel": null
@@ -20154,8 +20154,8 @@
     {
       "worksheet": "Talents",
       "url": "https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/gviz/tq?tqx=out:csv&sheet=Talents",
-      "sha256": "935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e",
-      "fetchedAt": "2026-10-08T22:25:22.577Z",
+      "sha256": "4ef3ee500c6d4da8b26dbb30fbb751995954be66e822a7dc306acde379229d8f",
+      "fetchedAt": "2026-10-09T09:40:18.249Z",
       "status": "public-export"
     },
     {

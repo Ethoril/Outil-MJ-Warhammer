@@ -4,7 +4,7 @@ import { activeEngines } from './roll-qualities.js';
 import { activeV5TalentEffects } from './v5-talents.js';
 import { normalizeState } from './effects.js';
 import { previewV5TalentTestModifiers, previewV5TalentSLChoices } from './v5-talent-tests.js';
-export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24';
+export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.2';
 export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
 export const withMomentum = (actor, value) => !value && actor.extensions?.v5?.hasMomentum === undefined ? actor : ({ ...actor, extensions: { ...(actor.extensions || {}), v5: { ...(actor.extensions?.v5 || {}), hasMomentum: Boolean(value) } } });
 export const conditionLevels = actor => {

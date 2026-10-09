@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "ruleVersion": "catalogue-utile-v5-2026-10-09.1",
-  "sourceCatalogueVersion": "references:7f7fc1b3d3b90339382e876528044ddd39a39e97b425e2348462a1711beed8b2",
+  "ruleVersion": "catalogue-utile-v5-2026-10-09.2",
+  "sourceCatalogueVersion": "references:b7e3eba43f928122401f631f80a9ca06418aa5afea802dbddebadbcb8b8ebd38",
   "policy": "Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.",
   "items": [
     {
       "talentId": "talent-trick-rider",
       "name": "Acrobaties équestres",
       "family": "jets_et_contextes",
-      "description": "À cheval, vous pouvez utiliser toutes vos compétences de Représentation et votre compétence Esquive sans modification.",
+      "description": "À cheval, vous pouvez utiliser toutes vos compétences de Représentation. Vous pouvez également utiliser Esquive sans modification liée au fait d'être monté",
       "source": {
-        "effectHash": "sha256:c8418e342ae0e78d338647f54cd7b26bcbd363cefb254a4fb47f08d9a341db85",
+        "effectHash": "sha256:40fbf3e7d9d6dd92f20f0b04c3b0fd70d89f1a59104a44cb16c42b1e6a8a06ff",
         "reference": "Livre de base V5, p. 128 ; achat : p. 191"
       },
       "clauses": [
         {
           "id": "manual",
           "mode": "reminder",
-          "text": "À cheval, vous pouvez utiliser toutes vos compétences de Représentation et votre compétence Esquive sans modification.",
+          "text": "À cheval, vous pouvez utiliser toutes vos compétences de Représentation. Vous pouvez également utiliser Esquive sans modification liée au fait d'être monté",
           "reason": "Contexte, choix ou mécanique non raccordés : le MJ applique la description après vérification du Test et de la spécialité."
         }
       ]
@@ -206,16 +206,16 @@
       "talentId": "talent-attractive",
       "name": "Attirant",
       "family": "jets_et_contextes",
-      "description": "Sur un Test de Charme réussi pour influencer une personne attirée par vous, choisissez entre les DR obtenus et le chiffre des unités de votre jet.",
+      "description": "Sur un Test de Charme réussi pour influencer une ou plusieurs personnes attirées par vous, choisissez les DR obtenus ou la valeur du dé des unités de ce jet.",
       "source": {
-        "effectHash": "sha256:f8ea43d7a1b4e3fcbc6340edf55a47fe6b57ef9270d74e7f96aad0a29cd13125",
+        "effectHash": "sha256:de3cda54841e3af42418f3dd189d863ddb2e5069682643dd6486db7a8fb09a0e",
         "reference": "Livre de base V5, p. 115 ; achat : p. 191"
       },
       "clauses": [
         {
           "id": "manual",
           "mode": "reminder",
-          "text": "Sur un Test de Charme réussi pour influencer une personne attirée par vous, choisissez entre les DR obtenus et le chiffre des unités de votre jet.",
+          "text": "Sur un Test de Charme réussi pour influencer une ou plusieurs personnes attirées par vous, choisissez les DR obtenus ou la valeur du dé des unités de ce jet.",
           "reason": "Contexte, choix ou mécanique non raccordés : le MJ applique la description après vérification du Test et de la spécialité."
         }
       ]
@@ -1130,16 +1130,16 @@
       "talentId": "talent-break-and-enter",
       "name": "Effraction",
       "family": "jets_et_contextes",
-      "description": "En observant un bâtiment, une pièce fermée ou un coffre-fort, vous repérez le trajet d’entrée apparemment le plus rapide et silencieux. Avantage V5 aux Tests de Crochetage et de Force pour enfoncer portes ou fenêtres.",
+      "description": "En observant un bâtiment, une pièce fermée ou un coffre-fort, vous repérez le trajet d’entrée apparemment le plus rapide et silencieux. Avantage V5 aux Tests de Crochetage, ainsi qu'aux Tests de Force pour enfoncer portes ou fenêtres.",
       "source": {
-        "effectHash": "sha256:2bd1ef85d937532b100b53887047f597f45eecbc6300a92c2d6359e26ffa95a9",
+        "effectHash": "sha256:c12357d4d90ab7e7d6149a1e3e9ce83186c085bb9ce50d3d2d6981c1661c1a9f",
         "reference": "Livre de base V5, p. 116 ; achat : p. 191"
       },
       "clauses": [
         {
           "id": "manual",
           "mode": "reminder",
-          "text": "En observant un bâtiment, une pièce fermée ou un coffre-fort, vous repérez le trajet d’entrée apparemment le plus rapide et silencieux. Avantage V5 aux Tests de Crochetage et de Force pour enfoncer portes ou fenêtres.",
+          "text": "En observant un bâtiment, une pièce fermée ou un coffre-fort, vous repérez le trajet d’entrée apparemment le plus rapide et silencieux. Avantage V5 aux Tests de Crochetage, ainsi qu'aux Tests de Force pour enfoncer portes ou fenêtres.",
           "reason": "Contexte, choix ou mécanique non raccordés : le MJ applique la description après vérification du Test et de la spécialité."
         }
       ]
@@ -1304,16 +1304,16 @@
       "talentId": "talent-impassioned-zeal",
       "name": "Ferveur ardente",
       "family": "jets_et_contextes",
-      "description": "Choisissez une cause politique, religieuse ou philosophique. Avantage V5 aux Tests de Charme lorsque vous la défendez ; Désavantage V5 lorsque vous mentez à son sujet ou la dénoncez.",
+      "description": "Choisissez une cause politique, religieuse ou philosophique. Avantage V5 aux Tests de Charme lorsque vous parlez de cette cause ; Désavantage V5 lorsque vous mentez à son sujet ou la dénoncez.",
       "source": {
-        "effectHash": "sha256:bddd825cc9bd47a7de437202753dc3cef84c37bb957238541a90a28a6dc8f847",
+        "effectHash": "sha256:3360cd6f6571e07dc4d71f6931d729d3ac188f98f4adc53a629f4b43d1954e8a",
         "reference": "Livre de base V5, p. 121 ; achat : p. 191"
       },
       "clauses": [
         {
           "id": "manual",
           "mode": "reminder",
-          "text": "Choisissez une cause politique, religieuse ou philosophique. Avantage V5 aux Tests de Charme lorsque vous la défendez ; Désavantage V5 lorsque vous mentez à son sujet ou la dénoncez.",
+          "text": "Choisissez une cause politique, religieuse ou philosophique. Avantage V5 aux Tests de Charme lorsque vous parlez de cette cause ; Désavantage V5 lorsque vous mentez à son sujet ou la dénoncez.",
           "reason": "Contexte, choix ou mécanique non raccordés : le MJ applique la description après vérification du Test et de la spécialité."
         }
       ]
@@ -1440,7 +1440,7 @@
           "id": "approved-source-ruling",
           "mode": "reminder",
           "text": "MJ, 9 octobre 2026 : harmoniser la procédure de neutralisation silencieuse selon Livre V5 p.135. Toutes vos armes improvisées ont Assommante. Pour une neutralisation silencieuse hors combat contre une cible inconsciente du danger, vous avez Avantage au Test opposé Corps à corps/Résistance. Cette procédure n’est pas un Coup ciblé ; ses conséquences spéciales restent à arbitrer.",
-          "reason": "Livre de base V5, p.127 et p.135 : clauses contradictoires, arbitrage MJ donnant priorité à p.135."
+          "reason": "Livre de base V5, p.127 et p.135 : renvoi au Coup ciblé à clarifier ; procédure p.135 retenue par le MJ pour cet incrément."
         },
         {
           "id": "improvised-pummel",
@@ -2118,19 +2118,19 @@
           "id": "choose-sl-units-actor",
           "contractClauseId": "choose-sl-units-actor",
           "mode": "assisted",
-          "text": "Test : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Test : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "choose-sl-units-attacker",
           "contractClauseId": "choose-sl-units-attacker",
           "mode": "assisted",
-          "text": "Attaque : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Attaque : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "choose-sl-units-defender",
           "contractClauseId": "choose-sl-units-defender",
           "mode": "assisted",
-          "text": "Défense : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Défense : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "manual",
@@ -2358,19 +2358,19 @@
           "id": "choose-sl-units-actor",
           "contractClauseId": "choose-sl-units-actor",
           "mode": "assisted",
-          "text": "Test : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Test : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "choose-sl-units-attacker",
           "contractClauseId": "choose-sl-units-attacker",
           "mode": "assisted",
-          "text": "Attaque : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Attaque : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "choose-sl-units-defender",
           "contractClauseId": "choose-sl-units-defender",
           "mode": "assisted",
-          "text": "Défense : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Défense : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "manual",
@@ -2778,19 +2778,19 @@
           "id": "choose-sl-units-actor",
           "contractClauseId": "choose-sl-units-actor",
           "mode": "assisted",
-          "text": "Test : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Test : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "choose-sl-units-attacker",
           "contractClauseId": "choose-sl-units-attacker",
           "mode": "assisted",
-          "text": "Attaque : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Attaque : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "choose-sl-units-defender",
           "contractClauseId": "choose-sl-units-defender",
           "mode": "assisted",
-          "text": "Défense : Choisir entre DR réussis et résultat du dé des unités (0 vaut 10)."
+          "text": "Défense : Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0)."
         },
         {
           "id": "manual",
@@ -3056,17 +3056,17 @@
       "talentId": "talent-small",
       "name": "Petit",
       "family": "valeurs_permanentes",
-      "description": "Vous êtes de taille Petite : Points de Blessure = 2×Bonus d’Endurance + Bonus de Force Mentale. Face à un adversaire plus grand, +10 pour le toucher et −2 DR par catégorie de différence si vous défendez avec Capacité de Combat. Ses armes sont Dévastatrices (écart 1) ou Percutantes (écart ≥2), ses dégâts sont multipliés par l’écart (minimum ×1), et ses coups réussis déclenchent les Frappes Mortelles même si vous survivez. Il peut quitter le combat sans désengagement. En Force opposée, avec un écart de 1, vous devez obtenir un Critique pour comparer les DR ; avec un écart ≥2, il gagne automatiquement. S’il est agressif, il cause Peur (écart 1) ou Terreur (écart ≥2), indice égal à l’écart, et peut vous Piétiner : attaque gratuite de Corps à corps (Bagarre), dégâts égaux à son Bonus de Force, coût 1 Avantage V4. Inversez les rapports lorsque votre adversaire est plus petit que vous.",
+      "description": "Vous êtes de taille Petite : Points de Blessure = 2×Bonus d’Endurance + Bonus de Force Mentale. Face à un adversaire plus grand, +10 pour le toucher et −2 DR par catégorie de différence si vous défendez avec Capacité de Combat. Ses armes sont Dévastatrices (écart 1) ou Percutantes (écart ≥2), ses dégâts sont multipliés par l’écart (minimum ×1), et ses coups réussis déclenchent les Frappes Mortelles même si vous survivez. Il peut quitter le combat sans désengagement. En Force opposée, avec un écart de 1, vous devez obtenir un Critique pour comparer les DR ; avec un écart ≥2, il gagne automatiquement. S’il est agressif, il cause Peur (écart 1) ou Terreur (écart ≥2), indice égal à l’écart, et peut vous Piétiner : attaque gratuite de Corps à corps (Bagarre), dégâts égaux à son Bonus de Force, coût 1 Momentum. Inversez les rapports lorsque votre adversaire est plus petit que vous.",
       "source": {
-        "effectHash": "sha256:c4fb5599cedd2bb7a97706687ccca0fc9b3e87a63578d383ca7603509764a63c",
+        "effectHash": "sha256:7b4e09a7906faf21324f1a5e6044416cc548a92542a374cc2756d534c0dff32a",
         "reference": "Livre de base V4 (FR), p. 143"
       },
       "clauses": [
         {
           "id": "manual",
           "mode": "reminder",
-          "text": "Source d’une autre édition ou d’un supplément : adaptation V5 à vérifier. Vous êtes de taille Petite : Points de Blessure = 2×Bonus d’Endurance + Bonus de Force Mentale. Face à un adversaire plus grand, +10 pour le toucher et −2 DR par catégorie de différence si vous défendez avec Capacité de Combat. Ses armes sont Dévastatrices (écart 1) ou Percutantes (écart ≥2), ses dégâts sont multipliés par l’écart (minimum ×1), et ses coups réussis déclenchent les Frappes Mortelles même si vous survivez. Il peut quitter le combat sans désengagement. En Force opposée, avec un écart de 1, vous devez obtenir un Critique pour comparer les DR ; avec un écart ≥2, il gagne automatiquement. S’il est agressif, il cause Peur (écart 1) ou Terreur (écart ≥2), indice égal à l’écart, et peut vous Piétiner : attaque gratuite de Corps à corps (Bagarre), dégâts égaux à son Bonus de Force, coût 1 Avantage V4. Inversez les rapports lorsque votre adversaire est plus petit que vous.",
-          "reason": "Valeur dérivée à vérifier sur la fiche importée ; ne pas recalculer ni ajouter automatiquement."
+          "text": "Homebrew MJ conservé : toutes les clauses de Petit restent applicables à la table ; le Piétinement coûte un Élan (Momentum) au lieu d’un Avantage V4. Application manuelle, sans migration de Taille ou de Blessures. Vous êtes de taille Petite : Points de Blessure = 2×Bonus d’Endurance + Bonus de Force Mentale. Face à un adversaire plus grand, +10 pour le toucher et −2 DR par catégorie de différence si vous défendez avec Capacité de Combat. Ses armes sont Dévastatrices (écart 1) ou Percutantes (écart ≥2), ses dégâts sont multipliés par l’écart (minimum ×1), et ses coups réussis déclenchent les Frappes Mortelles même si vous survivez. Il peut quitter le combat sans désengagement. En Force opposée, avec un écart de 1, vous devez obtenir un Critique pour comparer les DR ; avec un écart ≥2, il gagne automatiquement. S’il est agressif, il cause Peur (écart 1) ou Terreur (écart ≥2), indice égal à l’écart, et peut vous Piétiner : attaque gratuite de Corps à corps (Bagarre), dégâts égaux à son Bonus de Force, coût 1 Momentum. Inversez les rapports lorsque votre adversaire est plus petit que vous.",
+          "reason": "Décision MJ du 9 octobre 2026 ; effets non automatisés."
         }
       ]
     },
@@ -3320,9 +3320,9 @@
       "talentId": "talent-resistant",
       "name": "Résistance",
       "family": "jets_et_contextes",
-      "description": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace. Répétable avec une nouvelle menace, une fois par choix.",
+      "description": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace durant la session. Répétable avec une nouvelle menace, une fois par choix.",
       "source": {
-        "effectHash": "sha256:24a44a19e884fad6a5b363baffc55818dca0cf42a739582609c0b9f24f8510cb",
+        "effectHash": "sha256:50dbc748caa6756bb2506f36a045587479a33845cbab23eca630e8b2a639f9d5",
         "reference": "Livre de base V5, p. 124 ; achat : p. 191"
       },
       "clauses": [
@@ -3500,16 +3500,16 @@
       "talentId": "talent-jump-up",
       "name": "Saut carpé",
       "family": "etats_et_recuperation",
-      "description": "Avantage V5 aux Tests de Représentation (Acrobaties) pour divertir ou vous déplacer rapidement hors combat. Chaque fois que vous subissez À terre, vous pouvez immédiatement réussir un Test d’Athlétisme ou de Représentation (Acrobaties) Intermédiaire (+0 DR) pour vous relever.",
+      "description": "Avantage V5 aux Tests de Représentation (Acrobaties) pour divertir ou vous déplacer rapidement hors combat. Chaque fois que vous subissez À terre, vous pouvez immédiatement tenter un Test d'Athlétisme ou de Représentation (Acrobaties) Intermédiaire (+0 DR) ; en cas de réussite, vous vous relevez.",
       "source": {
-        "effectHash": "sha256:ff3cceb59c1c7bdeef95ced5a531ed0ab2bc4afd04493fbb022b3a45192666b6",
+        "effectHash": "sha256:3c336494fb164df25ca76ec9e96e43bd7c241fc0460495448e63037f3c655001",
         "reference": "Livre de base V5, p. 121 ; achat : p. 191"
       },
       "clauses": [
         {
           "id": "manual",
           "mode": "reminder",
-          "text": "Avantage V5 aux Tests de Représentation (Acrobaties) pour divertir ou vous déplacer rapidement hors combat. Chaque fois que vous subissez À terre, vous pouvez immédiatement réussir un Test d’Athlétisme ou de Représentation (Acrobaties) Intermédiaire (+0 DR) pour vous relever.",
+          "text": "Avantage V5 aux Tests de Représentation (Acrobaties) pour divertir ou vous déplacer rapidement hors combat. Chaque fois que vous subissez À terre, vous pouvez immédiatement tenter un Test d'Athlétisme ou de Représentation (Acrobaties) Intermédiaire (+0 DR) ; en cas de réussite, vous vous relevez.",
           "reason": "Acquisition, pénalité ou récupération à arbitrer ; ce rappel ne retire ni n’ajoute d’État."
         }
       ]

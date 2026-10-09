@@ -2,6 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { createStore } from '../js/core/store.js';
 import registry from '../js/data/v5-test-talent-contracts.json' with { type: 'json' };
 import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
 import { evaluateTalentContractsV2, validateTalentContractV2 } from '../js/core/talent-contract-v2.js';
@@ -172,10 +173,14 @@ test('2.4 both successful keep/reverse options require independent choices on se
   assert.equal(resolved.unresolved.length, 0); assert.equal(resolved.test.options[1].result.sl, 5);
 });
 
-test('2.4 units die zero means ten, preserves successful outcome and critical remains independent', () => {
-  const zero = build(['master-of-disguise'], 'Divertissement (Interprétation)', { talentChoices: { 'talent-master-of-disguise:sl:keep': true } }, { roll: 30 });
-  assert.equal(zero.test.options[0].result.sl, 10); assert.equal(zero.test.options[0].result.success, true);
-  assert.equal(zero.test.options[0].result.zeroOutcome, null);
+test('2.4 literal units zero keeps marginal success, explicit DR choice and independent critical', () => {
+  const zero = build(['master-of-disguise'], 'Divertissement (Interprétation)', { talentChoices: { 'talent-master-of-disguise:sl:keep': true } }, { roll: 20 });
+  assert.equal(zero.test.options[0].result.sl, 0); assert.equal(zero.test.options[0].result.success, true);
+  assert.equal(zero.test.options[0].result.zeroOutcome, 'marginalSuccess');
+  assert.equal(zero.talentSLChoices[0].units, 0); assert.equal(zero.talentSLChoices[0].sl, 4);
+  const dr = build(['master-of-disguise'], 'Divertissement (Interprétation)', { talentChoices: { 'talent-master-of-disguise:sl:keep': false } }, { roll: 20 });
+  assert.equal(dr.test.options[0].result.sl, 4); assert.equal(dr.test.options[0].result.success, true);
+  assert.equal(zero.test.options[0].result.details.talentSLReplacement.from, 4);
   const critical = build(['master-of-disguise'], 'Divertissement (Interprétation)', { talentChoices: { 'talent-master-of-disguise:sl:keep': true } }, { roll: 11 });
   assert.equal(critical.test.options[0].result.critical, true); assert.equal(critical.test.options[0].result.sl, 1);
 });
@@ -217,4 +222,86 @@ test('2.4 declarative action-before qualities require unique operation keys and 
   assert.equal(normal.test.options[0].result.sl, 0);
   const ignored = build([], 'Corps à corps (Base)', { kind: 'melee', context: { calledShot: true }, calledShotPenaltyIgnored: true });
   assert.equal(ignored.test.options[0].result.sl, 2);
+});
+
+test('2.4 literal units never turn failed or automatically failed tests into success', () => {
+  for (const roll of [80, 97, 100]) {
+    const p = build(['master-of-disguise'], 'Divertissement (Interprétation)', { talentChoices: { 'talent-master-of-disguise:sl:keep': true } }, { roll });
+    assert.equal(p.test.options[0].result.success, false);
+    assert.equal(p.talentSLChoices.length, 0);
+    assert.equal(p.test.options[0].result.details.talentSLReplacement, undefined);
+    assert.equal(p.unresolved.length, 0);
+    if (roll === 100) {
+      assert.equal(p.test.options[0].result.fumble, true);
+      assert.equal(p.test.options[0].result.sl, -5);
+    }
+  }
+});
+
+test('2.4 literal units use final forced inverse and preserve each option success', () => {
+  const forced = build(['master-of-disguise'], 'Divertissement (Interprétation)', {
+    disadvantageSources: [{ id: 'synthetic-unfavourable' }], choice: 'reverse',
+    talentChoices: { 'talent-master-of-disguise:sl:reverse': true } }, { roll: 2 });
+  assert.equal(forced.test.initialRoll, 2);
+  assert.equal(forced.test.forcedInversion, true);
+  assert.equal(forced.test.options[0].id, 'reverse');
+  assert.equal(forced.test.options[0].result.roll, 20);
+  assert.equal(forced.test.options[0].result.sl, 0);
+  assert.equal(forced.test.options[0].result.success, true);
+  assert.equal(forced.test.options[0].result.zeroOutcome, 'marginalSuccess');
+  const failKeep = build(['master-of-disguise'], 'Divertissement (Interprétation)', {
+    advantageSources: [{ id: 'synthetic-favourable' }], choice: 'keep',
+    talentChoices: { 'talent-master-of-disguise:sl:keep': true, 'talent-master-of-disguise:sl:reverse': true } }, { roll: 70 });
+  assert.equal(failKeep.test.options[0].result.success, false);
+  assert.equal(failKeep.test.options[0].result.sl, -1);
+  assert.equal(failKeep.test.options[1].result.success, true);
+  assert.equal(failKeep.test.options[1].result.sl, 7);
+  assert.equal(failKeep.unresolved.length, 0);
+});
+
+test('2.4 defender zero choice preserves its own success and source independent from initiator', () => {
+  const p = buildCombatTest({ actor: actor(['master-of-disguise']), target: actor(['master-of-disguise']),
+    action: action('Divertissement (Interprétation)'), roll: 47,
+    defense: { ...action('Divertissement (Interprétation)'), roll: 20,
+      v5: { kind: 'test', talentChoices: { 'talent-master-of-disguise:sl:keep': true } } },
+    v5: { kind: 'test', talentChoices: { 'talent-master-of-disguise:sl:keep': false } } }, 'defender');
+  assert.equal(p.test.options[0].result.sl, 0);
+  assert.equal(p.test.options[0].result.success, true);
+  assert.equal(p.test.options[0].result.zeroOutcome, 'marginalSuccess');
+  assert.equal(p.unresolved.length, 0);
+});
+
+test('2.4 literal zero choice remains successful in durable result, reload, undo and redo', async () => {
+  let saved = null;
+  const persistence = { load: async () => structuredClone(saved),
+    saveAtomic: async ({ state }) => { saved = structuredClone(state); return { ok: true }; } };
+  const store = createStore({ persistence });
+  await store.ready;
+  const source = actor(['master-of-disguise'], { name: 'Acteur synthétique', kind: 'PJ', camp: 'pj',
+    zone: 'active', maxHp: 12, initiative: 60, caracs: { Soc: 60 }, extensions: { v5: { hasMomentum: false } } });
+  await store.loadFromJSON({ schemaVersion: 3, extensions: { v5: { combatId: 'literal-units-combat', turnIndex: 1 } },
+    reserve: [], combat: { round: 1, currentActorId: 'a', order: ['a'], participants: [source] }, diceLines: [], log: [] });
+  const participantsBefore = JSON.parse(JSON.stringify(store.listParticipants()));
+  const p = store.previewResolution({ resolutionId: 'literal-zero-result', actorId: 'a',
+    action: action('Divertissement (Interprétation)'), roll: 20,
+    v5: { kind: 'test', talentChoices: { 'talent-master-of-disguise:sl:keep': true } } });
+  assert.equal(p.sl, 0); assert.equal(p.success, true); assert.equal(p.test.zeroOutcome, 'marginalSuccess');
+  assert.equal(p.unresolved.length, 0);
+  assert.equal((await store.applyResolution(p)).status, 'applied');
+  assert.ok(JSON.parse(store.getFullJSON()).appliedResolutionIds.includes('literal-zero-result'));
+  const detail = store.getLog()[0].detail;
+  assert.equal(detail.sl, 0); assert.equal(detail.test.success, true); assert.equal(detail.test.zeroOutcome, 'marginalSuccess');
+  assert.equal(detail.input.v5.talentChoices['talent-master-of-disguise:sl:keep'], true);
+  const reloaded = createStore({ persistence });
+  await reloaded.ready;
+  assert.deepEqual(reloaded.getLog()[0].detail, detail);
+  await reloaded.undo();
+  assert.deepEqual(JSON.parse(JSON.stringify(reloaded.listParticipants())), participantsBefore);
+  assert.equal((JSON.parse(reloaded.getFullJSON()).appliedResolutionIds || []).includes('literal-zero-result'), false);
+  assert.deepEqual(reloaded.getLog()[0].detail, detail, 'journal is intentionally independent from command undo');
+  await reloaded.redo();
+  assert.ok(JSON.parse(reloaded.getFullJSON()).appliedResolutionIds.includes('literal-zero-result'));
+  assert.equal(reloaded.getLog()[0].detail.sl, 0);
+  assert.equal(reloaded.getLog()[0].detail.test.success, true);
+  assert.equal(reloaded.getLog()[0].detail.test.zeroOutcome, 'marginalSuccess');
 });

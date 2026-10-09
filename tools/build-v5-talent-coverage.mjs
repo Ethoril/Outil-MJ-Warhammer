@@ -76,7 +76,7 @@ const items=snapshot.talents.entries.map(source=>{
  const override=registries.map(row=>row.approvedOverrides?.[source.id]).find(Boolean);
  if(override)clauses.push({id:'approved-source-ruling',mode:'reminder',text:override.decision+' '+override.correctedDescription,reason:override.reference});
  if(contract) for(const clause of contract.clauses){
- const labels={grantAdvantage:'Accorde un Avantage au Test pertinent.',chooseSLUnits:'Choisir entre DR réussis et résultat du dé des unités (0 vaut 10).',modifyDamage:'Bonus de Dégâts avant protections.',reduceConditionAcquisition:'Réduit les États proposés avant acquisition.',replaceDamage:'Remplace les Blessures et le critique après choix.',createActiveEffect:'Effet jusqu’à la fin du prochain Tour de l’auteur.',grantExtraAttack:'Propose une attaque supplémentaire explicite, avec coût et quota.',addQuality:'Ajoute Assommante à l’arme improvisée pour cette action.'};
+ const labels={grantAdvantage:'Accorde un Avantage au Test pertinent.',chooseSLUnits:'Choisir entre DR réussis et chiffre des unités du jet retenu (0 reste 0).',modifyDamage:'Bonus de Dégâts avant protections.',reduceConditionAcquisition:'Réduit les États proposés avant acquisition.',replaceDamage:'Remplace les Blessures et le critique après choix.',createActiveEffect:'Effet jusqu’à la fin du prochain Tour de l’auteur.',grantExtraAttack:'Propose une attaque supplémentaire explicite, avec coût et quota.',addQuality:'Ajoute Assommante à l’arme improvisée pour cette action.'};
  const role={actor:'Test',attacker:'Attaque',defender:'Défense'}[clause.role];
  clauses.push({id:clause.id,contractClauseId:clause.id,mode:clause.choice||clause.effects.some(e=>e.op==='chooseSLUnits')?'assisted':'automatic',text:role+' : '+clause.effects.map(effect=>labels[effect.op]||'Effet soumis aux conditions du talent.').join(' ')});
  }
@@ -84,10 +84,11 @@ const items=snapshot.talents.entries.map(source=>{
  const residual=!contract?source.description:Object.hasOwn(residuals,source.id)?residuals[source.id]:null;
  if(special)clauses.push({id:'scope',mode:special,text:special==='excluded'?'Bonus de caractéristique déjà compris dans la fiche ; aucun ajout.':'Effets de magie ou prière réservés au lot 3.',ruleText:source.description});
  else if(residual)clauses.push({id:'manual',mode:'reminder',text:source.id==='talent-hardy'?'Dur à cuire : le maximum importé intègre déjà ce Bonus d’Endurance. Vérifier le maximum de la fiche ; ne jamais l’ajouter une deuxième fois.':residual,reason:reasons[old.family]||'Décision MJ.'});
- if(!/Livre de base V5/.test(source.source))for(const clause of clauses)if(clause.mode==='reminder')clause.text='Source d’une autre édition ou d’un supplément : adaptation V5 à vérifier. '+clause.text;
+ if(source.id==='talent-small')for(const clause of clauses)if(clause.mode==='reminder'){clause.text='Homebrew MJ conservé : toutes les clauses de Petit restent applicables à la table ; le Piétinement coûte un Élan (Momentum) au lieu d’un Avantage V4. Application manuelle, sans migration de Taille ou de Blessures. '+clause.text;clause.reason='Décision MJ du 9 octobre 2026 ; effets non automatisés.';}
+ if(source.id!=='talent-small'&&!/Livre de base V5/.test(source.source))for(const clause of clauses)if(clause.mode==='reminder')clause.text='Source d’une autre édition ou d’un supplément : adaptation V5 à vérifier. '+clause.text;
  if(!clauses.length)throw Error('Talent sans traitement '+source.id);
  return {talentId:source.id,name:source.nom,family:old.family,description:source.description,source:{effectHash,reference:source.source},clauses};
 });
-const result={schemaVersion:1,ruleVersion:'catalogue-utile-v5-2026-10-09.1',sourceCatalogueVersion:snapshot.contentVersion,policy:'Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.',items};
+const result={schemaVersion:1,ruleVersion:'catalogue-utile-v5-2026-10-09.2',sourceCatalogueVersion:snapshot.contentVersion,policy:'Traitement explicite par clause. Les rappels ne sont pas des automatismes et les contrats actifs sont vérifiés séparément.',items};
 writeFileSync('js/data/v5-talent-coverage.json',JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify({identities:items.length,contracts:contracts.size,modes:items.flatMap(row=>row.clauses).reduce((counts,clause)=>(counts[clause.mode]=(counts[clause.mode]||0)+1,counts),{})}));

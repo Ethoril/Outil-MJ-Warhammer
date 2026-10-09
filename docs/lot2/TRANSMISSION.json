@@ -7,25 +7,23 @@
   "baseCommit": "28657e39477bbcbfeb0de826b3f1d05e525bb386",
   "applicationVersion": "3.12.3",
   "lastEngineVerification": {
-    "tests": 763,
-    "passed": 763,
+    "tests": 769,
+    "passed": 769,
     "failed": 0,
     "skipped": 0,
     "date": "2026-10-09",
-    "scope": "local development worktree; synthetic fixtures",
+    "scope": "local source corrections and explicit MJ rulings; synthetic fixtures",
     "browserSuites": [
-      "test:lot2-browser",
       "test:lot2-23-browser",
       "test:startup",
       "test:fiches-browser",
       "test:references-browser"
     ],
     "independentBrowserSuites": [
-      "tests/lot2-v5-23-control-browser.mjs",
       "test:lot2-24-browser"
     ],
-    "independentStoreTests": 30,
-    "newStage24Tests": 91,
+    "independentStoreTests": 32,
+    "newStage24Tests": 97,
     "revision": "local commit containing this manifest"
   },
   "nextStage": "2.4 remaining mechanical families, then separate 2.5 delivery acceptance",
@@ -37,7 +35,7 @@
   "engineCommitRole": "historical-initial-foundation",
   "localIncrement": {
     "date": "2026-10-09",
-    "baseCommit": "09df6c215abc814a8618a952d417aa07ab70faf9",
+    "baseCommit": "ef073c3",
     "revision": "local commit containing this manifest",
     "remotePublished": false,
     "completedStages": [
@@ -96,7 +94,7 @@
     "activeContractCount": 41,
     "catalogueTreatmentCount": 206,
     "allEffectsCertified": false,
-    "ruleVersion": "v5-combat-2026-10-09.24"
+    "ruleVersion": "v5-combat-2026-10-09.24.2"
   },
   "initialEngineVerification": {
     "tests": 468,
@@ -107,8 +105,22 @@
   "talentSource": {
     "count": 206,
     "updatedAt": "2026-10-09",
-    "csvSha256": "935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e",
-    "changedDescriptionHashes": 19
+    "csvSha256": "4ef3ee500c6d4da8b26dbb30fbb751995954be66e822a7dc306acde379229d8f",
+    "changedDescriptionHashes": 7,
+    "initialConversionChangedDescriptionHashes": 19,
+    "changedTalentIds": [
+      "talent-trick-rider",
+      "talent-attractive",
+      "talent-break-and-enter",
+      "talent-impassioned-zeal",
+      "talent-small",
+      "talent-resistant",
+      "talent-jump-up"
+    ],
+    "revalidatedActiveContractIds": [
+      "talent-resistant"
+    ],
+    "otherSheetsRefreshedOnline": false
   },
   "handoffDocument": "PASSATION_PROCHAINE_FENETRE.md",
   "confirmedDecisions": {
@@ -124,10 +136,27 @@
     },
     "silentTakedown": {
       "date": "2026-10-09",
-      "authority": "core V5 p135 for Strike to Stun; internal book contradiction p127/p135",
+      "authority": "core V5 p135 procedure retained for Strike to Stun; p127 called-shot reference to clarify, no contradiction asserted",
       "test": "Melee vs Endurance outside combat against unaware target; Advantage; no called shot",
       "outcomes": "MJ manual; no ordinary combat critical or Momentum gain",
       "publicSheetEdited": false
+    },
+    "unitsSL": {
+      "date": "2026-10-09",
+      "read": "literal units digit of retained roll",
+      "zeroValue": 0,
+      "initialSuccessRequired": true,
+      "initialSuccessPreservedAtZero": true,
+      "separateKeepReverseChoices": true,
+      "reroll": false
+    },
+    "resistantSession": "Advantage on other relevant threat resistance tests during session; automatic success once per session remains manual",
+    "smallHomebrew": {
+      "date": "2026-10-09",
+      "preserveAllTalentClauses": true,
+      "onlyChange": "stomp costs one Momentum instead of one V4 Advantage",
+      "automation": "manual reminders",
+      "automaticCharacterSizeOrWoundsMigration": false
     }
   },
   "sourceAudit": {
@@ -137,6 +166,34 @@
     "otherSupplementTalentsNotVerified": 39,
     "smallV4ReviewedSeparately": true,
     "publicOnlineStateCertified": false,
-    "privatePdfIncluded": false
+    "privatePdfIncluded": false,
+    "withdrawnFindings": [
+      "War Leader Fear wording",
+      "contradiction between strikes"
+    ],
+    "literalUnitsRuling": 0,
+    "publicTalentsCsvReadAfterMjCorrections": true
+  },
+  "firstStage24Verification": {
+    "tests": 763,
+    "passed": 763,
+    "failed": 0,
+    "skipped": 0,
+    "date": "2026-10-09",
+    "scope": "local development worktree; synthetic fixtures",
+    "browserSuites": [
+      "test:lot2-browser",
+      "test:lot2-23-browser",
+      "test:startup",
+      "test:fiches-browser",
+      "test:references-browser"
+    ],
+    "independentBrowserSuites": [
+      "tests/lot2-v5-23-control-browser.mjs",
+      "test:lot2-24-browser"
+    ],
+    "independentStoreTests": 30,
+    "newStage24Tests": 91,
+    "revision": "ef073c3"
   }
 }

@@ -6,11 +6,11 @@
 
 Les cinq contrats 2.3 restent actifs. Les nouveaux contrats couvrent 35 talents de Tests et Frappe assommante. Orateur et les contextes prioritaires sont raccordés : compétence canonique, circonstances explicites, Avantage/Désavantage et annulation 1 pour 1. Le libellé libre d’un jet ne peut pas remplacer son identité importée.
 
-Maître en déguisement, Loup de mer et Numismate proposent après réussite un choix entre DR et valeur du dé des unités, pour chaque variante conservée ou inversée. La face 0 vaut 10 (livre p. 6). Aucun nouveau dé n’est lancé ; ce choix ne transforme pas un échec initial en réussite. Les autres clauses des mêmes talents restent visibles en rappels MJ.
+Maître en déguisement, Loup de mer et Numismate proposent après réussite un choix entre DR et valeur du dé des unités, pour chaque variante conservée ou inversée. Le chiffre 0 reste 0 (décision MJ). Aucun nouveau dé n’est lancé ; ce choix ne transforme pas un échec initial en réussite. Les autres clauses des mêmes talents restent visibles en rappels MJ.
 
 Frappe assommante ajoute temporairement Assommante à une arme improvisée : le catalogue d’armes n’est pas modifié. Une touche à la tête qui retire réellement au moins le BE de la cible propose un Sonné. La localisation normale reste distincte de la localisation critique. Mâchoires d’acier réduit les acquisitions regroupées une seule fois avant leurs conséquences ; Battement supprime aussi cette acquisition lorsqu’il remplace la touche. Le critique défensif indépendant de combat reste conservé.
 
-Le Coup ciblé ordinaire applique −2 DR et exige sa localisation explicite (p. 167). Pour la neutralisation silencieuse, la décision du MJ retient la procédure p. 135 : hors combat, cible ignorant le danger, Corps à corps opposé à Résistance, Avantage de Frappe assommante et aucun Coup ciblé. L’outil aide au Test ; les conséquences particulières restent à arbitrer : victoire = BF Blessures et Inconscient, défaite = cible Sonnée et alarme. Les dégâts, critiques et gains d’Élan de combat ne s’y appliquent pas automatiquement. L’incohérence p. 127/p. 135 et le texte proposé sont détaillés dans [l’audit des sources](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
+Le Coup ciblé ordinaire applique −2 DR et exige sa localisation explicite (p. 167). Pour la neutralisation silencieuse, la décision du MJ retient la procédure p. 135 : hors combat, cible ignorant le danger, Corps à corps opposé à Résistance, Avantage de Frappe assommante et aucun Coup ciblé. L’outil aide au Test ; les conséquences particulières restent à arbitrer : victoire = BF Blessures et Inconscient, défaite = cible Sonnée et alarme. Les dégâts, critiques et gains d’Élan de combat ne s’y appliquent pas automatiquement. La clarification du renvoi p. 127/p. 135 et les décisions sont détaillés dans [l’audit des sources](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
 
 ## Catalogue et PJ réellement importés
 
@@ -28,7 +28,7 @@ Les dix bonus de caractéristiques déjà intégrés aux fiches sont exclus. Dur
 - `js/core/v5-talent-qualities.js` et `js/data/v5-quality-talent-contracts.json` : Frappe assommante, qualité Assommante épinglée et exception p. 135 approuvée.
 - `js/core/v5-talent-coverage.js`, `js/data/v5-talent-coverage.json`, `tools/build-v5-talent-coverage.mjs` : catalogue par clauses et priorités locales. Le générateur est une préparation hors ligne ; aucun texte libre n’est interprété comme règle à l’exécution.
 - Le schéma v2 ajoute `action.before` (`addQuality/suppressQuality`) et `test.afterRoll` (`chooseSLUnits`). Rang, spécialité, rôle et cumul restent explicites.
-- La version mécanique devient `v5-combat-2026-10-09.24` : un ancien aperçu est refusé et doit être recalculé.
+- La version mécanique devient `v5-combat-2026-10-09.24.2` : un ancien aperçu est refusé et doit être recalculé.
 - Au clic Appliquer, les origines contractuelles et leurs empreintes sont relues contre la source courante, en plus de la révision Store. Une actualisation entre aperçu et application refuse l’effet sans mutation ni historique.
 - Résultat, États, usages et reçu restent dans une commande durable atomique ; annulation et rechargement restaurent l’ensemble. Les aperçus ne consomment rien. Les six nouveaux actifs sont ajoutés au précache du Service Worker.
 

@@ -24,6 +24,20 @@ Implémenté dans le raccordement local 2.3 : compteur depuis la fiche de séanc
 
 ## Frappe assommante : neutralisation silencieuse
 
-Décision explicite du MJ le 9 octobre 2026 : aligner cette clause sur le livre, procédure p. 135, et préparer un document des écarts avec Aides de jeu en vue de correction. Le livre p. 127 reprend pourtant la même exemption de Coup ciblé qu’Aides de jeu : c’est une incohérence interne. La p. 135 fait autorité pour cet incrément.
+Décision explicite du MJ le 9 octobre 2026 : aligner cette clause sur le livre, procédure p. 135, et préparer un document des écarts avec Aides de jeu en vue de correction. Après relecture, le signalement de contradiction est retiré : les deux talents sont distincts et l’Avantage p. 135 n’est pas incompatible avec une exemption de pénalité. Le renvoi au Coup ciblé p. 127 est à clarifier. La procédure p. 135 reste l’autorité retenue pour cet incrément.
 
 Hors combat, cible ignorant le danger : Test opposé Corps à corps/Résistance avec Avantage de Frappe assommante, sans Coup ciblé. L’outil assiste le Test ; BF Blessures/Inconscient à la victoire, Sonné/alarme à la défaite restent manuels. Aucun critique ou gain d’Élan de combat automatique. Le contrat conserve le texte public épinglé et l’exception approuvée ; une correction publique future exige revalidation. [Audit et propositions](ECARTS_LIVRE_V5_AIDES_DE_JEU.md).
+
+## Choix DR ou chiffre des unités
+
+Décision explicite du MJ après le premier audit, le 9 octobre 2026 : lecture littérale du chiffre des unités du jet retenu, **0 reste 0**, sans nouveau tirage. 20 permet donc de retenir 0 DR. Une réussite initiale reste une réussite marginale +0 ; un échec ne devient pas une réussite. Choix séparés pour options conservée et inversée. Cette décision remplace la recommandation antérieure 0→10.
+
+## Petit conservé en homebrew
+
+Toutes les clauses de Petit sont conservées pour la table. Seule modification : le Piétinement coûte **un Élan/Momentum au lieu d’un Avantage V4**. Ne pas migrer les Blessures, la Taille ou les fiches des PJ. Rappel manuel tant que les mécaniques concernées ne sont pas raccordées et éprouvées.
+
+## Corrections de source et signalements retirés
+
+Le MJ a corrigé Ferveur ardente, Saut carpé, Effraction, Attirant et Acrobaties équestres ; Résistance précise les autres Tests avec Avantage « durant la session ». Les sept modifications, Petit compris, ont été relues dans le CSV public. Le quota de réussite automatique de Résistance par séance reste distinct et manuel.
+
+Seigneur de guerre suit la Peur psychologique définie par le livre ; aucun problème de formulation n’est retenu. Les deux frappes ne se contredisent pas. Ces signalements sont retirés du document d’écarts.

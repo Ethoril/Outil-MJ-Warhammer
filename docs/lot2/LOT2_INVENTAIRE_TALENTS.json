@@ -5,7 +5,7 @@
   "coverage": "206 identités classées par famille principale ; neuf contrats représentatifs proposés. Noyau développé séparément, aucun automatisme applicatif activé. Les talents mixtes restent à détailler clause par clause.",
   "selection": "Catalogue utile complet, PJ actuels prioritaires",
   "rulePolicy": "Système jouable unique V5. Conversion des descriptions assurée par le MJ à la source Aides de jeu ; le moteur applique les contrats V5 publiés et validés.",
-  "sourceCatalogueVersion": "sha256:d497bb6d01c62c811097b9b0784d229d2c56b34d428f134f6ad21af764e17bd4",
+  "sourceCatalogueVersion": "sha256:410c21554f9ec5ed6a304c68f540f419947aef6e4954268e697cee473bcb1b1d",
   "sourceCataloguePath": "js/data/reference-snapshot.json (Talents) et js/data/reference-source-csv/Talents.csv",
   "referenceCorePdf": "Livre de base V5 EN v2.pdf (livre personnel, hors dépôt)",
   "counts": {
@@ -27,7 +27,7 @@
       "specializationLabel": null,
       "purchaseLimit": "1",
       "source": "Livre de base V5, p. 128 ; achat : p. 191",
-      "sourceEffectSha256": "c8418e342ae0e78d338647f54cd7b26bcbd363cefb254a4fb47f08d9a341db85",
+      "sourceEffectSha256": "40fbf3e7d9d6dd92f20f0b04c3b0fd70d89f1a59104a44cb16c42b1e6a8a06ff",
       "family": "jets_et_contextes",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -229,7 +229,7 @@
       "specializationLabel": null,
       "purchaseLimit": "1",
       "source": "Livre de base V5, p. 115 ; achat : p. 191",
-      "sourceEffectSha256": "f8ea43d7a1b4e3fcbc6340edf55a47fe6b57ef9270d74e7f96aad0a29cd13125",
+      "sourceEffectSha256": "de3cda54841e3af42418f3dd189d863ddb2e5069682643dd6486db7a8fb09a0e",
       "family": "jets_et_contextes",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -1030,7 +1030,7 @@
       "specializationLabel": null,
       "purchaseLimit": "1",
       "source": "Livre de base V5, p. 116 ; achat : p. 191",
-      "sourceEffectSha256": "2bd1ef85d937532b100b53887047f597f45eecbc6300a92c2d6359e26ffa95a9",
+      "sourceEffectSha256": "c12357d4d90ab7e7d6149a1e3e9ce83186c085bb9ce50d3d2d6981c1661c1a9f",
       "family": "jets_et_contextes",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -1186,7 +1186,7 @@
       "specializationLabel": "Cause",
       "purchaseLimit": "1",
       "source": "Livre de base V5, p. 121 ; achat : p. 191",
-      "sourceEffectSha256": "bddd825cc9bd47a7de437202753dc3cef84c37bb957238541a90a28a6dc8f847",
+      "sourceEffectSha256": "3360cd6f6571e07dc4d71f6931d729d3ac188f98f4adc53a629f4b43d1954e8a",
       "family": "jets_et_contextes",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -2464,7 +2464,7 @@
       "specializationLabel": null,
       "purchaseLimit": "1",
       "source": "Livre de base V4 (FR), p. 143",
-      "sourceEffectSha256": "c4fb5599cedd2bb7a97706687ccca0fc9b3e87a63578d383ca7603509764a63c",
+      "sourceEffectSha256": "7b4e09a7906faf21324f1a5e6044416cc548a92542a374cc2756d534c0dff32a",
       "family": "valeurs_permanentes",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -2633,7 +2633,7 @@
       "specializationLabel": "Menace",
       "purchaseLimit": "Sans limitation",
       "source": "Livre de base V5, p. 124 ; achat : p. 191",
-      "sourceEffectSha256": "24a44a19e884fad6a5b363baffc55818dca0cf42a739582609c0b9f24f8510cb",
+      "sourceEffectSha256": "50dbc748caa6756bb2506f36a045587479a33845cbab23eca630e8b2a639f9d5",
       "family": "jets_et_contextes",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -2759,7 +2759,7 @@
       "specializationLabel": null,
       "purchaseLimit": "1",
       "source": "Livre de base V5, p. 121 ; achat : p. 191",
-      "sourceEffectSha256": "ff3cceb59c1c7bdeef95ced5a531ed0ab2bc4afd04493fbb022b3a45192666b6",
+      "sourceEffectSha256": "3c336494fb164df25ca76ec9e96e43bd7c241fc0460495448e63037f3c655001",
       "family": "etats_et_recuperation",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -3376,12 +3376,12 @@
   "sourceNormalization": {
     "owner": "MJ dans le référentiel source",
     "targetRuleset": "V5",
-    "inventoryState": "206 identités et empreintes relues depuis Aides de jeu converti V5 le 9 octobre 2026 ; aucun talent activé par cette actualisation.",
+    "inventoryState": "206 identités conservées ; sept descriptions corrigées par le MJ relues le 9 octobre 2026. Les traitements automatiques restent subordonnés aux contrats validés.",
     "runtimeConversion": false,
     "legacyCombatAdvantageCounter": false,
     "bibliographyEditionIsNotMechanic": "Une source V4 peut documenter une description adaptée V5 ; vérifier la clause publiée et son contrat, pas seulement la bibliographie.",
     "activation": "Empreinte d’effet source conforme au contrat V5 validé.",
-    "publicCsvSha256": "935a96f79688a798bb1cc2fc320db78bfe753974fc8263581152ecd1322abd4e"
+    "publicCsvSha256": "4ef3ee500c6d4da8b26dbb30fbb751995954be66e822a7dc306acde379229d8f"
   },
   "commonRules": {
     "source": "Convention du MJ précisée dans ce chat le 8 octobre 2026",
@@ -3468,5 +3468,13 @@
     "requiredVisible": "costs, usage limits, affected targets and pending decisions",
     "journal": "one compact entry per action with expandable receipt"
   },
-  "updatedAt": "2026-10-09"
+  "updatedAt": "2026-10-09",
+  "homebrewDecisions": {
+    "talent-small": {
+      "decidedAt": "2026-10-09",
+      "scope": "preserve entire talent for current table",
+      "onlyChange": "stomp cost: one Momentum instead of one V4 Advantage",
+      "automaticSizeOrWoundMigration": false
+    }
+  }
 }

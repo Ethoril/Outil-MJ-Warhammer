@@ -1,162 +1,81 @@
-# Écarts entre le Livre de base V5 et les Aides de jeu
+# Livre V5 et Aides de jeu — suivi des corrections et décisions
 
-Revue documentaire du 9 octobre 2026. Ce document prépare des corrections de formulation et identifie les arbitrages nécessaires. Il ne modifie ni le catalogue public externe ni ses acquisitions.
+Revue du 9 octobre 2026, actualisée après les réponses du MJ et la relecture du CSV public Talents. Sept descriptions corrigées ont été retrouvées dans la source ; les 206 identités sont conservées. Ce document suit les corrections acceptées, les signalements retirés et les règles de table. Il ne modifie pas le Google Sheet.
 
-La comparaison porte sur la copie locale des descriptions publiques dans [reference-snapshot.json](../../js/data/reference-snapshot.json) et sur les règles du **Livre de base V5**, avec les pages indiquées ci-dessous. Elle ne certifie pas l'état du référentiel en ligne au 9 octobre.
+## Portée et source
 
-## Portée de la revue
+La première lecture portait sur les **166 talents du Livre de base V5, pages 114–128**, descriptions, limites et spécialités. Les pages 6, 130–131, 135, 175, 183–184, 191 et 360–361 fournissent les procédures utiles. Les 39 talents de suppléments nécessitent leurs sources propres ; Petit, de source V4, est traité ci-dessous comme homebrew décidé par le MJ.
 
-**166 talents sur les 206 entrées du catalogue** ont été relus entièrement : les talents dont la source est le Livre de base V5, pages **114 à 128**. La page 129 ouvre le chapitre Règles et ne contient pas de talent supplémentaire. La revue inclut les descriptions, les limites d'acquisition et les spécialités répétables.
+La mise à jour actuelle vérifie les **sept descriptions modifiées**, sans refaire ni prétendre élargir la revue des 166 talents. Référence : [Aides de jeu](https://docs.google.com/spreadsheets/d/1SCnAJCthdto7ROjovuyDYmz4y9GJBBLfThuYNmYR_Cs/edit), copie locale [snapshot](../../js/data/reference-snapshot.json). SHA-256 du CSV Talents relu : `4ef3ee500c6d4da8b26dbb30fbb751995954be66e822a7dc306acde379229d8f`.
 
-| Page | Talents relus | Page | Talents relus | Page | Talents relus |
-|---|---:|---|---:|---|---:|
-| 114 | 6 | 119 | 12 | 124 | 14 |
-| 115 | 9 | 120 | 12 | 125 | 14 |
-| 116 | 12 | 121 | 12 | 126 | 8 |
-| 117 | 11 | 122 | 11 | 127 | 16 |
-| 118 | 5 | 123 | 10 | 128 | 14 |
+| Talent | Page | Correction acceptée et retrouvée dans la source |
+|---|---:|---|
+| Ferveur ardente | 121 | Avantage à Charme lorsqu’on parle de la cause ; Désavantage pour mentir à son sujet ou la dénoncer. |
+| Saut carpé | 121 | Tenter immédiatement le Test de relèvement ; se relever seulement si le Test réussit. La réussite n’est pas accordée sans jet. |
+| Effraction | 116 | Crochetage reçoit l’Avantage ; la restriction portes/fenêtres concerne les Tests de Force. |
+| Attirant | 115 | Une ou plusieurs personnes attirées peuvent être influencées. Le choix DR/unités suit la lecture littérale ci-dessous. |
+| Acrobaties équestres | 128 | Représentation autorisée à cheval ; Esquive ignore la modification liée au fait d’être monté. |
+| Résistance | 124 | Avantage aux autres Tests de résistance à la menace **durant la session**. Réussite automatique une fois par séance distincte. |
+| Petit | V4 FR 143 | Homebrew conservant toutes les clauses ; seul le coût du Piétinement devient **1 Momentum**. |
 
-Les références croisées nécessaires ont été vérifiées pages **6, 130–131, 135, 175, 184, 191 et 360–361**. La suite du talent **Imitation** au début de la page 123 a bien été relue : la reconnaissance d'un accent simulé figure dans le livre et n'est pas un ajout des Aides.
+## Choix entre DR et chiffre des unités : décision MJ
 
-Les **40 autres entrées** comprennent **Petit**, explicitement issu du livre V4, et **39 talents de suppléments**. Leurs descriptions ne sont pas certifiées par cette revue du livre de base V5.
+Le MJ tranche : il s’agit de lire **le chiffre littéral des unités du jet retenu**, sans lancer un autre dé. **0 reste 0.** L’extrapolation précédente depuis la convention d’un d10 page 6 était trop affirmative et est retirée.
 
-Les catégories suivantes distinguent une différence démontrée, une formulation ambiguë, une contradiction du livre et une adaptation décidée par le MJ. Une ambiguïté ne vaut pas preuve d'une règle différente.
+Formulation de table :
 
-## Corrections certaines
+> Lors d’un Test réussi correspondant au talent, choisissez les DR obtenus ou le chiffre des unités de ce jet. Le chiffre 0 vaut 0 ; aucun nouveau tirage.
 
-### Ferveur ardente — Impassioned Zeal, page 121
+Un jet réussi de **20** permet donc de garder ses DR ou de retenir **0 DR**. Le choix de 0 conserve une réussite marginale (+0), et ne transforme pas un échec en réussite. Le jet de 100 reste un échec automatique. Si une inversion est choisie, lire les unités du **jet inversé retenu**, avec un choix distinct de l’option conservée.
 
-Le livre accorde l'Avantage aux Tests de Charme lorsque le personnage **parle de sa cause**. Les Aides disent « lorsque vous la défendez », ce qui réduit le déclencheur à la défense de la cause et peut exclure une discussion informative ou neutre.
+Cette décision concerne tous les talents permettant ce choix : Attirant (p. 115), Maître en déguisement et Travailleur qualifié (p. 122), Numismate et Loup de mer (p. 123), Intrigant (p. 125), Bonnes jambes et Chirurgie (p. 127), Marinier et Tour des souvenirs (p. 128). Les déclencheurs propres à chacun restent nécessaires.
 
-**Texte proposé :**
+Le moteur raccordé couvre actuellement ce choix pour Maître en déguisement, Loup de mer et Numismate. Les autres talents restent des rappels jusqu’à contractualisation ; cette décision ne les active pas automatiquement.
 
-> Choisissez une cause politique, religieuse ou philosophique. Avantage V5 aux Tests de Charme lorsque vous parlez de cette cause ; Désavantage V5 lorsque vous mentez à son sujet ou la dénoncez.
+## Seigneur de guerre : signalement retiré
 
-La clause de Désavantage demeure. Si les circonstances semblent satisfaire les deux clauses, leur articulation doit rester explicite ; la correction de traduction ne doit pas inventer une priorité entre elles.
+La formulation des Aides suit le talent page 128. La **Peur est un effet psychologique défini page 183**, avec ses conséquences. Qu’elle ne figure pas dans les États physiques cumulables page 184 ne rend pas le talent ambigu ou invalide.
 
-### Saut carpé — Jump Up, page 121
+Le signalement précédent mélangeait la représentation interne de l’outil et la validité du texte. Il est **retiré** : aucune correction de Seigneur de guerre n’est demandée. Le moteur ne doit pas inventer un nouvel État cumulable pour représenter cet effet psychologique.
 
-Le livre autorise à **tenter immédiatement un Test** lorsqu'on subit À terre. Les Aides disent « vous pouvez immédiatement réussir un Test », formulation qui peut faire croire que la réussite est accordée. Le talent permet la tentative immédiate ; le jet reste nécessaire.
+## Frappe blessante et Frappe assommante : clarification du signalement
 
-**Texte proposé :**
+Les deux talents sont distincts et leurs effets similaires de neutralisation ne se contredisent pas. **La qualification précédente de contradiction était trop affirmative et est retirée.**
 
-> Avantage V5 aux Tests de Représentation (Acrobaties) pour divertir ou vous déplacer rapidement hors combat. Chaque fois que vous subissez À terre, vous pouvez immédiatement tenter un Test d'Athlétisme ou de Représentation (Acrobaties) Intermédiaire (+0 DR) ; en cas de réussite, vous vous relevez.
+Page 127 :
 
-### Talents permettant de choisir les DR ou le dé des unités
+- Frappe blessante donne deux tirages sur la table des Blessures critiques et mentionne une exemption de pénalité de Coup ciblé pour neutraliser silencieusement.
+- Frappe assommante donne Assommante aux armes improvisées et mentionne cette exemption avec une arme Assommante.
 
-Le livre parle du **dé des unités**. La convention du d10, page **6**, donne une valeur de **10 à sa face 0**. La formulation « chiffre des unités » peut conduire à retenir 0 au lieu de 10.
+Page 135, la procédure de neutralisation silencieuse se joue hors combat contre une cible ignorant le danger, avec opposition Corps à corps/Résistance. Elle accorde explicitement **Avantage à Frappe assommante seule**. Elle ne mentionne pas de Coup ciblé. Le point soulevé concernait ce **renvoi incomplet à la procédure**, pas un conflit entre les deux talents. Avantage et exemption de pénalité peuvent coexister ; l’absence de mention ne prouve pas une incompatibilité.
 
-La substitution intervient seulement après un Test réussi. Elle emploie le dé du jet retenu et n'autorise aucun nouveau tirage.
+La décision MJ antérieure donnant priorité à la procédure p. 135 pour le raccordement de Frappe assommante est maintenue dans sa portée actuelle. L’outil assiste le Test sans appliquer automatiquement Coup ciblé, critiques ou Élan de combat. Victoire : BF Blessures et Inconscient ; victoire de la cible : Sonné et alarme. Ces conséquences spéciales restent manuelles.
 
-**Formulation commune proposée :**
+Aucun Avantage n’est transféré à Frappe blessante. Le texte public des deux frappes est inchangé dans la mise à jour actuelle ; aucune correction de traduction n’est imposée.
 
-> Lors d'un Test réussi correspondant aux conditions du talent, choisissez les DR obtenus ou la valeur du dé des unités de ce jet (0 vaut 10), sans relancer.
+## Petit : homebrew explicitement conservé
 
-Les déclencheurs propres à chaque talent doivent être conservés :
+Pour préserver le personnage concerné à la table, le MJ conserve **tout le talent Petit tel quel**, sauf le Piétinement : **1 Momentum remplace 1 Avantage V4**. La correction est retrouvée dans Aides de jeu.
 
-| Talent des Aides | Page | Test ou condition à conserver | État de la formulation actuelle |
-|---|---:|---|---|
-| Attirant | 115 | Charme pour influencer des personnes attirées par le personnage | « chiffre des unités » à remplacer |
-| Maître en déguisement | 122 | Divertissement (Interprétation) | « chiffre du dé des unités » à remplacer |
-| Travailleur qualifié | 122 | Métier dans la spécialisation choisie | « chiffre du dé des unités » à remplacer |
-| Numismate | 123 | Évaluation pour estimer un objet | « chiffre du dé des unités » à remplacer |
-| Loup de mer | 123 | Ramer ou Voile sur l'océan | « chiffre du dé des unités » à remplacer |
-| Intrigant | 125 | Ragot ou Savoir (Politique) | Dit déjà « valeur » ; note commune utile |
-| Bonnes jambes | 127 | Athlétisme pour sprinter ou bondir | Dit déjà « valeur » ; note commune utile |
-| Chirurgie | 127 | Guérison hors combat | Dit déjà « valeur » ; note commune utile |
-| Marinier | 128 | Ramer ou Voile sur rivière ou lac | Dit déjà « valeur » ; note commune utile |
-| Tour des souvenirs | 128 | Savoir | Dit déjà « valeur » ; note commune utile |
+Les différences avec Taille V5 pages 360–361 restent des choix intentionnels de ce homebrew. Elles ne sont plus proposées comme corrections à effectuer :
 
-Par exemple, un jet réussi de **20** permet de choisir la valeur **10** du dé des unités. Un jet de **100** reste un échec automatique selon la page 130 et n'active pas une clause réservée à la réussite.
-
-Les cinq lignes qui disent déjà « valeur » ne sont pas des traductions fausses identifiées ; leur clarification partage la convention numérique des cinq autres.
-
-## Ambiguïtés à lever
-
-| Talent et pages | Ambiguïté constatée | Proposition française |
+| Sujet | Règle de table conservée | Livre V5 pour comparaison |
 |---|---|---|
-| **Effraction** — Break and Enter, p. 116 | Le livre accorde Avantage à Crochetage sans condition d'enfoncement. Seuls les Tests de Force sont limités aux portes ou fenêtres. La phrase française peut attacher cette restriction aux deux compétences. | « Avantage V5 aux Tests de Crochetage, ainsi qu'aux Tests de Force pour enfoncer portes ou fenêtres. » |
-| **Attirant** — Attractive, p. 115 | Le livre vise les personnes attirées par le personnage ; « une personne » dans les Aides peut suggérer que les groupes sont exclus. Aucun maximum d'une cible n'est indiqué dans l'entrée. | « Sur un Test de Charme réussi pour influencer une ou plusieurs personnes attirées par vous, choisissez les DR obtenus ou la valeur du dé des unités de ce jet (0 vaut 10). » L'attirance reste une condition. |
-| **Acrobaties équestres** — Trick Rider, p. 128 | Le livre autorise les compétences de Représentation à cheval et précise séparément Esquive non modifiée. Le français peut faire porter « sans modification » sur les deux familles ou suggérer une exemption universelle aux difficultés et aux États. | « À cheval, vous pouvez utiliser toutes vos compétences de Représentation. Vous pouvez également utiliser Esquive sans modification liée au fait d'être monté. » Cette précision de portée doit être validée avant remplacement. |
-| **Résistance** — Resistant, p. 124 | Le livre énonce l'Avantage aux Tests ultérieurs après la clause de réussite automatique par séance. Les Aides disent « tous les autres Tests », sans rendre la séquence claire. Le texte ne tranche pas sûrement la disponibilité de l'Avantage avant la première utilisation automatique. | Conserver deux clauses distinctes et consigner l'interprétation temporelle retenue. Ne pas ajouter par hypothèse un quota par séance à la clause d'Avantage. |
-| **Seigneur de guerre** — War Leader, p. 128 et liste des États p. 184 | Le livre lui-même emploie Peur comme un État dans ce talent, alors que Peur ne figure pas dans la liste complète des États. Il existe une Psychologie Peur. Les Aides reproduisent cette ambiguïté. | « L'effet cesse à votre mort ; il est suspendu pendant vos états Brisé ou Inconscient, ou lorsque vous êtes soumis à l'effet de Peur visé par cette règle. » L'effet psychologique exact reste à préciser ; cette phrase ne crée pas un nouvel État Peur. |
+| Blessures de taille Petite | 2 × BE + BFM | 2 × BE, p. 361 |
+| Défense contre plus grand | −2 DR par catégorie de différence | −2 DR lorsque l’adversaire est plus grand, p. 360 |
+| Dégâts et qualités liés à la taille | Multiplicateurs et qualités de la description Petit | Bonus de Force supplémentaires, avec exceptions pour tirs/attaques gratuites/supplémentaires, p. 360 |
+| Peur/Terreur | Peur ou Terreur suivant l’écart indiqué par Petit | Peur envers la créature agressive plus grande, p. 360 |
+| Piétinement | Attaque gratuite Bagarre, BF Dégâts, **coût 1 Momentum** | Momentum, attaque gratuite Bagarre et BF Dégâts, p. 361 |
+| Exemple du halfling | Acquisition Petit conservée | Exemple Moyenne dans la table p. 360 |
 
-Ces propositions clarifient une portée ou signalent une interprétation. Elles ne doivent pas être publiées comme autant d'erreurs certaines du texte source.
+L’outil conserve cette décision en rappel explicite. Il ne migre ni la taille, ni le maximum de Blessures, ni les données importées, et n’ajoute aucun automatisme de taille/Piétinement sans incrément moteur et recette. La règle de table demeure applicable manuellement.
 
-## Neutralisation silencieuse : contradiction du livre et décision du MJ
+## Autres sources et limites
 
-### Les deux passages
+Les 40 entrées hors livre V5 incluent 38 références explicitement V4 (dont Petit) et deux références Temple of Spite déclarant leur compatibilité V5. Leurs sources propres restent nécessaires pour une revue exhaustive. La bibliographie conservée ne certifie pas une conversion mécanique.
 
-À la page **127**, **Frappe assommante** et **Frappe blessante** décrivent une exemption de pénalité de coup ciblé pour une neutralisation silencieuse. Pour Frappe assommante, l'arme doit avoir la Qualité Assommante. Les Aides reprennent cette clause fidèlement.
+Battement conserve l’arbitrage MJ supprimant toutes les conséquences du critique attaquant remplacé ; il ne s’agit pas d’une erreur démontrée dans les Aides. Les quotas de séance de Résistance et Obstiné restent manuels ; cette limite de l’outil ne constitue pas une erreur de texte.
 
-La procédure de neutralisation silencieuse, page **135**, prévoit :
+La revue initiale n’avait relevé aucun autre écart chiffré certain sur les 166 talents. Frénésie/Haine (p. 184), Coup bas de Combat déloyal (1 Blessure et 1 Sonné, p. 175) et achat général à 100 PX par acquisition autorisée (p. 191) restent confirmés.
 
-- Une opposition de **Corps à corps contre Résistance**.
-- Une tentative **hors combat**, contre une cible qui ignore la présence ou l'intention de l'agresseur.
-- Si l'agresseur gagne : des Dégâts égaux à son Bonus de Force et l'état **Inconscient** pour la cible.
-- Si la cible gagne : elle reçoit **Sonné** et donne immédiatement l'alarme.
-- **Frappe assommante accorde Avantage** à cette opposition.
-
-La page 135 ne mentionne ni coup ciblé ni pénalité correspondante. Elle ne cite pas Frappe blessante. Le désaccord est donc **interne au livre**, et ne peut être présenté comme une simple mauvaise traduction des Aides.
-
-### Décision explicite du MJ maintenue
-
-Pour **Frappe assommante**, la procédure de la **page 135 fait autorité**. Son Avantage est distinct de la clause qui donne Assommante aux armes improvisées.
-
-**Texte proposé pour les Aides :**
-
-> Toutes vos armes improvisées ont la Qualité Assommante (Pummel). Pour une neutralisation silencieuse hors combat contre une cible qui ignore votre présence ou votre intention, vous avez Avantage V5 au Test opposé de Corps à corps contre sa Résistance, selon la procédure p. 135.
-
-Ajouter une note documentaire :
-
-> Arbitrage MJ : la procédure p. 135 est retenue ; la clause de pénalité de coup ciblé p. 127 n'est pas appliquée à cette procédure.
-
-Pour **Frappe blessante**, le bénéfice de double tirage sur la table des Blessures critiques reste distinct. La clause supplémentaire de neutralisation silencieuse p. 127 demeure **à clarifier** : ne pas lui transférer l'Avantage propre à Frappe assommante.
-
-## Arbitrages du chantier qui ne sont pas des erreurs de traduction
-
-**Battement**, page **115**, est correctement résumé par les Aides comme une renonciation aux Dégâts après une attaque de Corps à corps réussie. Le chantier applique une décision MJ explicite : le remplacement supprime toutes les Blessures et conséquences du critique remplacé, tandis que le critique défensif indépendant est conservé. Cette précision est un arbitrage d'application ; elle ne prouve pas que la description publique était mal traduite.
-
-**Résistance**, page **124**, et **Obstiné**, page **127**, ont une fréquence **par séance** dans les deux sources. L'absence d'automatisation robuste d'une horloge de séance est une limite de l'outil, pas une correction à faire au texte des Aides.
-
-## Autres éditions et suppléments
-
-Les **40 entrées hors livre de base V5** comportent :
-
-- **38 références explicitement V4**, dont Petit et 37 talents de suppléments.
-- **2 entrées de Temple of Spite** dont la référence déclare une édition non nommée et une compatibilité V5.
-
-Les références V4 incluent notamment les guides des Elfes et des Nains, Archives of the Empire, Winds of Magic et Up in Arms. Une description adaptée ou un libellé « compatible V5 » ne certifie pas à lui seul toutes ses règles dans le moteur V5.
-
-Ces 39 talents de suppléments nécessitent un contrôle de leur **source propre**, puis l'identification des adaptations voulues par le MJ. La revue présente ne leur attribue ni conformité ni non-conformité au livre de base.
-
-### Petit — Small : héritage V4, pas une conversion V5 validée
-
-La ligne **Petit** cite explicitement **Livre de base V4 FR, p. 143**. Elle contient encore une dépense d'Avantage V4 et ne figure pas dans la liste des talents du livre V5 pages 114–128.
-
-Les règles de **Taille V5, pages 360–361**, diffèrent sur plusieurs points :
-
-| Sujet | Description actuelle de Petit | Livre V5 |
-|---|---|---|
-| Blessures d'une créature de taille Petite | 2 × Bonus d'Endurance + Bonus de Force Mentale | 2 × Bonus d'Endurance, p. 361 |
-| Défense de Corps à corps contre plus grand | −2 DR par catégorie de différence | −2 DR lorsque la créature est plus grande, p. 360 |
-| Dégâts de taille | Multiplication suivant l'écart ; qualités supplémentaires de V4 | Bonus de Force supplémentaires selon la taille. Les tirs, attaques gratuites et attaques supplémentaires sont exclus de ces modificateurs, p. 360 |
-| Peur et Terreur | Passage automatique à Terreur à partir de deux catégories d'écart | Le passage Taille décrit Peur envers une créature agressive plus grande ; il ne donne pas cette conversion automatique en Terreur, p. 360 |
-| Piétinement | Dépense d'un Avantage V4 | Perdre Momentum pour une attaque gratuite de Corps à corps (Bagarre), Dégâts égaux au Bonus de Force, p. 361 |
-| Exemple du halfling | Une ancienne acquisition peut laisser supposer une taille Petite | Le tableau d'exemples classe le halfling dans la taille Moyenne, p. 360 |
-
-Le Désengagement face à plus petit et les règles de Force opposée restent largement reconnaissables entre les deux versions. Cela ne valide pas le reste de la ligne.
-
-**Annotation proposée immédiatement, sans inventer un talent V5 :**
-
-> Entrée héritée de V4, conservée pour référence. Ses effets ne constituent pas une conversion V5 validée. Pour la V5, consulter Taille p. 360–361 ; toute adaptation de cette acquisition nécessite un choix explicite du MJ.
-
-Une adaptation future doit préciser le rôle de l'ancienne acquisition Petit, plutôt que changer automatiquement la taille, les Blessures ou les règles de combat du personnage.
-
-## Résultats confirmés et limites
-
-La revue n'a relevé **aucun autre écart chiffré certain** parmi les 166 talents du livre de base sur les bonus, durées, dépenses, fréquences, plafonds d'acquisition, spécialités répétées, coûts des Sorts/Miracles ou coûts d'abandon.
-
-Les enrichissements de **Frénésie** et **Haine** dans les Aides sont confirmés par la page **184**. Le critique **Coup bas** associé à **Combat déloyal** inflige bien **1 Blessure et 1 Sonné**, page **175**. L'achat général d'un talent coûte **100 PX par acquisition**, y compris pour les répétitions autorisées, page **191**.
-
-Ce document n'est ni une certification des **206 talents**, ni une preuve d'activation de toutes leurs clauses, ni une recette de livraison **2.5**. Les propositions ci-dessus restent à appliquer ultérieurement au référentiel public externe. Il ne contient aucun PDF, extrait privé du livre ou import de fiche PJ.
+Cette mise à jour ne certifie pas tous les effets des 206 talents ni une livraison 2.5. Aucun PDF, extrait privé du livre ou export de PJ n’est incorporé au dossier ou au ZIP.
