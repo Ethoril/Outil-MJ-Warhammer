@@ -364,7 +364,11 @@ function optionalRootCollections(raw, profiles, report) {
     if (!Object.hasOwn(raw, key)) continue;
     if (key === 'activeScene') safeSet(result, key, raw[key] ? scenes(raw[key]) : null);
     else if (key === 'suspendedScenes') safeSet(result, key, collection(raw[key], key, report).map(({ item }) => scenes(item)));
-    else if (key === 'persistentCharacters') safeSet(result, key, collection(raw[key], key, report).filter(({ item }) => isObject(item)).map(({ item }) => Object.hasOwn(item, 'armor') || Object.hasOwn(item, 'armorLocations') ? { ...clone(item), ...normalizeFicheFields(item) } : clone(item)));
+    else if (key === 'persistentCharacters') safeSet(result, key, collection(raw[key], key, report).filter(({ item }) => isObject(item)).map(({ item }) => {
+      const next = { ...clone(item), ...normalizeFicheFields(item) };
+      if (!Object.hasOwn(item, 'armor') && !Object.hasOwn(item, 'armorLocations')) delete next.armorLocations;
+      return next;
+    }));
     else safeSet(result, key, clone(raw[key]));
   }
   return result;

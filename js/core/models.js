@@ -71,6 +71,13 @@ export function normalizeTags(tags) {
   return [...new Set(tags.map(tag => typeof tag === 'string' ? tag.trim() : '').filter(Boolean))];
 }
 
+export function normalizeTraits(traits) {
+  if (!Array.isArray(traits)) return [];
+  return traits
+    .filter(t => (typeof t === 'string' && t.trim()) || (isRecord(t) && typeof (t.name ?? t.nom ?? t.id) === 'string' && String(t.name ?? t.nom ?? t.id).trim()))
+    .map(t => typeof t === 'string' ? t.trim() : cloneValue(t));
+}
+
 export function normalizeAction(raw = {}) {
   const input = isRecord(raw) ? cloneValue(raw) : {};
   const base = input.base ?? '';
@@ -107,8 +114,8 @@ export function normalizeAction(raw = {}) {
  * Les écritures, elles, passent par le patch qui fait foi (voir updateProfile).
  */
 export function profileActionSource(raw) {
-  const lines = Array.isArray(raw?.diceLines) ? raw.diceLines : null;
-  const actions = Array.isArray(raw?.actions) ? raw.actions : null;
+  const lines = Array.isArray(raw?.diceLines) ? raw.diceLines.filter(isRecord) : null;
+  const actions = Array.isArray(raw?.actions) ? raw.actions.filter(isRecord) : null;
   if (lines && (lines.length > 0 || !actions?.length)) return lines;
   return actions || lines || [];
 }
@@ -129,10 +136,24 @@ export function normalizeArmorLocations(armor = {}) {
   const legacy = { rightArm: 'arms', leftArm: 'arms', rightLeg: 'legs', leftLeg: 'legs' };
   return Object.fromEntries(ARMOR_LOCATION_IDS.map(key => [key, finiteCarac(a[key] ?? a[legacy[key]]) ?? 0]));
 }
+function cleanEquipmentItem(item) {
+  const copy = cloneValue(item);
+  if (Array.isArray(copy.keywords)) copy.keywords = copy.keywords.filter(isRecord);
+  if (Array.isArray(copy.locations)) copy.locations = copy.locations.filter(x => typeof x === 'string' && x);
+  return copy;
+}
 export function normalizeFicheFields(raw = {}) {
   const fields = {};
   for (const key of FICHE_DATA_FIELDS) {
-    if (Object.hasOwn(raw, key)) fields[key] = ['spells','talents','skills','prayers','equipment'].includes(key) && Array.isArray(raw[key]) ? raw[key].filter(isRecord).map(cloneValue) : cloneValue(raw[key]);
+    if (Object.hasOwn(raw, key)) fields[key] = ['spells','talents','skills','prayers','equipment'].includes(key) && Array.isArray(raw[key])
+      ? raw[key].filter(isRecord).map(key === 'equipment' ? cleanEquipmentItem : cloneValue)
+      : cloneValue(raw[key]);
+  }
+  if (isRecord(fields.ficheSnapshot)) {
+    for (const k of ['spells','talents','skills','prayers','equipment','weapons','armours','armors']) {
+      if (Array.isArray(fields.ficheSnapshot[k])) fields.ficheSnapshot[k] = fields.ficheSnapshot[k].filter(isRecord).map(k === 'equipment' ? cleanEquipmentItem : cloneValue);
+    }
+    if (Array.isArray(fields.ficheSnapshot.traits)) fields.ficheSnapshot.traits = normalizeTraits(fields.ficheSnapshot.traits);
   }
   fields.armorLocations = normalizeArmorLocations(raw.armorLocations ?? raw.armor);
   return fields;
@@ -149,20 +170,23 @@ export class Profile {
     Object.assign(this, normalizeFicheFields({ ...ficheFields, armor }));
     this.caracs = normalizeCaracs(caracs);
     this.armor = isRecord(armor) ? cloneValue(armor) : {};
-    this.diceLines = profileActionSource({ diceLines, actions }).map(normalizeAction);
+    this.diceLines = profileActionSource({ diceLines, actions }).filter(isRecord).map(normalizeAction);
     // Une seule collection évite qu’une modification du formulaire ne laisse
     // une copie obsolète derrière `actions`.
     Object.defineProperty(this, 'actions', {
       enumerable: false,
       configurable: true,
       get: () => this.diceLines,
-      set: value => { this.diceLines = Array.isArray(value) ? value.map(normalizeAction) : []; }
+      set: value => { this.diceLines = Array.isArray(value) ? value.filter(isRecord).map(normalizeAction) : []; }
     });
     this.group = (group || '').trim();
     this.tags = normalizeTags(tags);
     this.notes = typeof notes === 'string' ? notes : '';
     this.favorite = Boolean(favorite);
     this.extensions = isRecord(extensions) ? cloneValue(extensions) : {};
+    if (Array.isArray(this.extensions.traits)) this.extensions.traits = normalizeTraits(this.extensions.traits);
+    if (Array.isArray(ficheFields.traits)) this.traits = normalizeTraits(ficheFields.traits);
+    for (const k of ['weapons', 'armours', 'armors']) if (Array.isArray(ficheFields[k])) this[k] = ficheFields[k].filter(isRecord).map(cloneValue);
   }
 }
 
@@ -186,27 +210,29 @@ export class Participant {
     this.color = color;
     this.armor = isRecord(armor) ? cloneValue(armor) : {};
     this.caracs = normalizeCaracs(caracs);
-    this.actions = Array.isArray(actions) ? actions.map(normalizeAction) : [];
+    this.actions = Array.isArray(actions) ? actions.filter(isRecord).map(normalizeAction) : [];
     this.tags = normalizeTags(tags);
     this.notes = typeof notes === 'string' ? notes : '';
     this.source = isRecord(source) ? cloneValue(source) : (source == null ? null : cloneValue(source));
     this.extensions = isRecord(extensions) ? cloneValue(extensions) : {};
+    if (Array.isArray(this.extensions.traits)) this.extensions.traits = normalizeTraits(this.extensions.traits);
+    for (const k of ['weapons', 'armours', 'armors']) if (Array.isArray(ficheFields[k])) this[k] = ficheFields[k].filter(isRecord).map(cloneValue);
     if (Array.isArray(ficheFields.traits)) {
-      this.traits = cloneValue(ficheFields.traits);
+      this.traits = normalizeTraits(ficheFields.traits);
     } else if (Array.isArray(this.extensions?.v5?.temporaryTraits)) {
-      this.traits = cloneValue([...new Set([
+      this.traits = normalizeTraits([...new Set([
         ...(this.extensions.v5.baseTraits || this.extensions?.traits || []),
         ...this.extensions.v5.temporaryTraits
       ])]);
     } else if (Array.isArray(this.extensions?.traits)) {
-      this.traits = cloneValue(this.extensions.traits);
+      this.traits = normalizeTraits(this.extensions.traits);
     }
     if (Array.isArray(this.extensions?.v5?.spellEffects)) {
-      this.spellEffects = cloneValue(this.extensions.v5.spellEffects);
+      this.spellEffects = this.extensions.v5.spellEffects.filter(isRecord).map(cloneValue);
     } else if (Array.isArray(ficheFields.spellEffects)) {
-      this.spellEffects = cloneValue(ficheFields.spellEffects);
+      this.spellEffects = ficheFields.spellEffects.filter(isRecord).map(cloneValue);
     } else if (Array.isArray(this.extensions?.spellEffects)) {
-      this.spellEffects = cloneValue(this.extensions.spellEffects);
+      this.spellEffects = this.extensions.spellEffects.filter(isRecord).map(cloneValue);
     }
     if (Number.isFinite(Number(this.extensions?.v5?.fortune))) {
       this.fortune = Number(this.extensions.v5.fortune);

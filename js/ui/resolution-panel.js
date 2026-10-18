@@ -503,7 +503,7 @@ function renderV5MagicContext({ actor, participants = [], target, type, draft, h
     };
     if(movementOnly){addNum(specificBox,'magicVortexDirectionRoll','Tempête : direction aléatoire d10 (sans Test de FM)',1,10);addNum(specificBox,'magicVortexDistance','Tempête : déplacement 2d10 mètres',2,20);}
     if (isVortexSpell && !movementOnly) {
-      // Vortex aléatoire (Winds of Magic p. 20) : direction choisie + Test de Force Mentale Moyen (+20) ; en cas d'échec, d10 de direction.
+      // Vortex aléatoire (Winds of Magic p. 20) : direction choisie + Test de Force Mentale Accessible (+2 DR) ; en cas d'échec, d10 de direction.
       const compassLabel = node('label', 'workspace-type', 'Vortex : direction choisie par le lanceur');
       const compassSelect = document.createElement('select');
       compassSelect.setAttribute('aria-label', 'Direction du Vortex choisie par le lanceur');
@@ -513,7 +513,7 @@ function renderV5MagicContext({ actor, participants = [], target, type, draft, h
       compassSelect.addEventListener('change', () => handlers.select({ magicVortexDirection: compassSelect.value || null }));
       compassLabel.appendChild(compassSelect);
       specificBox.appendChild(compassLabel);
-      const willLabel = node('label', 'workspace-type', 'Vortex : Test de Force Mentale Moyen (+20)');
+      const willLabel = node('label', 'workspace-type', 'Vortex : Test de Force Mentale Accessible (+2 DR)');
       const willSelect = document.createElement('select');
       willSelect.setAttribute('aria-label', 'Résultat du Test de Force Mentale du Vortex');
       willSelect.dataset.focusKey = 'magicVortexWillpower';

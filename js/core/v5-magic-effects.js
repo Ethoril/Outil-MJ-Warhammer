@@ -15,6 +15,7 @@ import { parseWeaponDamage, evaluateWeaponDamage } from './damage.js';
 import { HIT_LOCATIONS } from '../data/shared/fiche/equipment.js';
 import { normalizeArmorLocations, locationProtection } from './equipment.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
+import { isTargetDaemon, isTargetUndead } from './v5-magic-attributes.js';
 
 export const V5_MAGIC_EFFECTS_VERSION = 'v5-magic-effects-2026-10-10.1';
 /** Expressions chiffrées déclarées par un contrat ; aucun dé et aucune interprétation de prose. */
@@ -405,8 +406,9 @@ function captureLayerBase(next) {
  * pas stockées : effectiveSkillScore y ajoute l'écart effectif − base, une seule fois.
  */
 function recomputeLayerValues(next, effects) {
+  effects = (Array.isArray(effects) ? effects : []).filter(e => e && typeof e === 'object' && !Array.isArray(e));
   const hadSuppression=effects.some(e=>e.suppressedEffectIds?.length) || next.extensions.v5.suppressedEffectIds?.length;
-  next.extensions.v5.suppressedEffectIds=effects.flatMap(e=>e.suppressedEffectIds || []);
+  next.extensions.v5.suppressedEffectIds=effects.flatMap(e=>e.suppressedEffectIds || []).filter(id => typeof id === 'string' && id);
   effects=[...unsuppressedSpellEffects(effects),...(next.extensions.v5.divineEffects || [])];
   const v5 = next.extensions.v5;
   const baseCaracs = v5.baseCaracs || next.baseCaracs;
@@ -441,7 +443,7 @@ function recomputeLayerValues(next, effects) {
   v5.suppressedSpellIds=[...new Set(effects.flatMap(e=>e.specialState?.suppressedSpellIds || []))];
   v5.specialStates=Object.assign({},...effects.map(e=>e.specialState || {}));
   if(hadSuppression){
-    if(Array.isArray(v5.baseTraits))next.traits=[...new Set([...v5.baseTraits,...effects.flatMap(e=>e.traits || []),...(v5.miscastEffects || []).flatMap(e=>e.traitsGained || [])])];
+    if(Array.isArray(v5.baseTraits))next.traits=[...new Set([...v5.baseTraits,...effects.flatMap(e=>e.traits || []),...(v5.miscastEffects || []).flatMap(e=>e?.traitsGained || [])])].filter(t => typeof t === 'string' && t);
     v5.weaponBonuses=effects.filter(e=>e.weaponBonus).map(e=>({effectId:e.id,...e.weaponBonus}));
     v5.magicShieldBonusSl=Math.max(0,...effects.map(e=>Number(e.magicShieldBonusSl)||0));
     v5.damageCapToSlOnly=effects.some(e=>e.damageCapToSlOnly);
@@ -449,7 +451,7 @@ function recomputeLayerValues(next, effects) {
   return { effectiveWard, effectiveTestModifiers };
 }
 /** Impasse conserve la couche d'origine et son horloge ; seules ses valeurs sont momentanément inactives. */
-export function unsuppressedSpellEffects(effects=[]){const ids=new Set(effects.flatMap(e=>e.suppressedEffectIds || []));return effects.filter(e=>!ids.has(e.id));}
+export function unsuppressedSpellEffects(effects=[]){const list=(Array.isArray(effects)?effects:[]).filter(e=>e&&typeof e==='object'&&!Array.isArray(e));const ids=new Set(list.flatMap(e=>e.suppressedEffectIds || []));return list.filter(e=>!ids.has(e.id));}
 
 /**
  * S-05 : nouvelle base réelle (fiche synchronisée, modification MJ des caractéristiques ou de l'armure).
@@ -1086,17 +1088,10 @@ export function resolveSpellDamage({
   }
 
   // Bonus conditionnels selon les traits de la cible (ex: daemonBonus, undeadBonus)
-  const targetTraitsStr = [
-    ...(Array.isArray(target.traits) ? target.traits : []),
-    target.category || '',
-    target.type || '',
-    target.species || ''
-  ].map(t => typeof t === 'string' ? t : (t?.name || t?.id || '')).join(' ').toLowerCase();
-
-  if (Number.isFinite(Number(spell.daemonBonus)) && /demon|démon|daemon/i.test(targetTraitsStr)) {
+  if (Number.isFinite(Number(spell.daemonBonus)) && isTargetDaemon(target)) {
     rawDamage += Number(spell.daemonBonus);
   }
-  if (Number.isFinite(Number(spell.undeadBonus)) && /mort-vivant|undead/i.test(targetTraitsStr)) {
+  if (Number.isFinite(Number(spell.undeadBonus)) && isTargetUndead(target)) {
     rawDamage += Number(spell.undeadBonus);
   }
 

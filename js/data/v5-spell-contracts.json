@@ -4644,10 +4644,10 @@
         },
         {
           "id": "locations",
-          "label": "+6 DR : localisation choisie par le tireur (Test de CT +0)",
+          "label": "+6 DR : localisation choisie par le tireur (Test de CT Intermédiaire +0 DR)",
           "cost": 6,
           "kind": "contract-rule",
-          "reminder": "Test de CT (+0) : le tireur choisit la localisation des projectiles touchant une cible maudite."
+          "reminder": "Test de CT Intermédiaire (+0 DR) : le tireur choisit la localisation des projectiles touchant une cible maudite."
         }
       ]
     },
@@ -4845,10 +4845,10 @@
       "specific": [
         {
           "id": "wide",
-          "label": "+5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence −10)",
+          "label": "+5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR)",
           "cost": 5,
           "kind": "contract-rule",
-          "reminder": "Zone portée à la Volonté en yards ; Test d’Intelligence Difficile (−10) pour exempter les alliés."
+          "reminder": "Zone portée à la Volonté en yards ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés."
         },
         {
           "id": "blessings",
@@ -4862,7 +4862,7 @@
           "label": "+10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h",
           "cost": 10,
           "kind": "reminder",
-          "reminder": "Les objets magiques perdent leurs pouvoirs, les Protections sont annulées ; les lanceurs qui ratent le Test de Focalisation (+0) perdent toute magie 24 h."
+          "reminder": "Les objets magiques perdent leurs pouvoirs, les Protections sont annulées ; les lanceurs qui ratent le Test de Focalisation Intermédiaire (+0 DR) perdent toute magie 24 h."
         }
       ]
     },
@@ -4955,7 +4955,7 @@
           "label": "+8 DR : alliés exemptés (Test de Corps à corps Intermédiaire +0 DR)",
           "cost": 8,
           "kind": "contract-rule",
-          "reminder": "Test de Corps à corps (+0) : les alliés sont exemptés des effets."
+          "reminder": "Test de Corps à corps Intermédiaire (+0 DR) : les alliés sont exemptés des effets."
         }
       ]
     },
@@ -5136,7 +5136,7 @@
           "label": "+6 DR : alliés exemptés (Test d’Agilité Intermédiaire +0 DR)",
           "cost": 6,
           "kind": "contract-rule",
-          "reminder": "Test d’Agilité (+0) : les alliés sont exemptés des effets."
+          "reminder": "Test d’Agilité Intermédiaire (+0 DR) : les alliés sont exemptés des effets."
         }
       ]
     },
@@ -5240,10 +5240,10 @@
         },
         {
           "id": "items",
-          "label": "+4 DR : objets magiques maléfiques inactifs (Test de Sociabilité +2 DR)",
+          "label": "+4 DR : objets magiques maléfiques inactifs (Test de Sociabilité Accessible +2 DR)",
           "cost": 4,
           "kind": "reminder",
-          "reminder": "Objets maléfiques ou chaotiques inactifs pendant le sort si le Test de Sociabilité (+20) est réussi."
+          "reminder": "Objets maléfiques ou chaotiques inactifs pendant le sort si le Test de Sociabilité Accessible (+2 DR) est réussi."
         },
         {
           "id": "damage",
@@ -5611,7 +5611,7 @@
           "label": "+4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR",
           "cost": 4,
           "kind": "contract-rule",
-          "reminder": "Test de Calme (+0) pour se déplacer ; les volants qui le ratent tombent de 50 yards par Round ; Tests de CT à −3 DR."
+          "reminder": "Test de Calme Intermédiaire (+0 DR) pour se déplacer ; les volants qui le ratent tombent de 50 yards par Round ; Tests de CT à −3 DR."
         },
         {
           "id": "machines",
@@ -5625,7 +5625,7 @@
           "label": "+8 DR : alliés exemptés (Test d’Initiative Intermédiaire +0 DR)",
           "cost": 8,
           "kind": "contract-rule",
-          "reminder": "Test d’Initiative (+0) : les alliés sont exemptés des effets."
+          "reminder": "Test d’Initiative Intermédiaire (+0 DR) : les alliés sont exemptés des effets."
         }
       ]
     },
@@ -5727,10 +5727,10 @@
       "specific": [
         {
           "id": "duration",
-          "label": "+5 DR : durée portée à BI minutes (Test de Volonté Difficile −20)",
+          "label": "+5 DR : durée portée à BI minutes (Test de Force Mentale Difficile −2 DR)",
           "cost": 5,
           "kind": "contract-rule",
-          "reminder": "Durée portée à BI minutes si le Test de Volonté (−20) est réussi."
+          "reminder": "Durée portée à BI minutes si le Test de Force Mentale Difficile (−2 DR) est réussi."
         },
         {
           "id": "nexus",

@@ -377,6 +377,6 @@ Les reçus des lots 1 à 4 portent leur statut final. Lileath reste conforme apr
 
 C-06 : fait. Les 26 points et les décisions de règle sont suivis dans [le rapport R2](LOT3_RAPPORT_CORRECTIONS_RELECTURE_2.md). Catalogue : 21 cellules sur 20 sorts ; [report MJ R2](LOT3_A_REPORTER_DANS_LA_FEUILLE_RELECTURE_2.md). Les comptages de la matrice ci-dessus restent distincts de la vérification de toutes les clauses et situations.
 
-## Reliquats du vérificateur final (17 octobre 2026)
+## Mini-passe finale avant livraison 3.15.0 (18 octobre 2026)
 
-Les cinq reliquats sont corrigés et documentés dans [le rapport du 17 octobre](LOT3_RAPPORT_RELIQUATS_2026_10_17.md). Nouveau delta : 5 cellules de Magie et 1 de Miracles. [Delta supplémentaire](LOT3_A_REPORTER_DANS_LA_FEUILLE_RELIQUATS.md) ; [report cumulé actuel](LOT3_A_REPORTER_DANS_LA_FEUILLE_ACTUEL.md).
+Les cinq reliquats sont corrigés, vérifiés et documentés dans [le rapport de mini-passe](LOT3_RAPPORT_MINI_PASSE.md). Report Google Sheets consolidé depuis le 14 octobre : 25 cellules de `Magie` et 1 cellule de `Miracles` dans [LOT3_A_REPORTER_DANS_LA_FEUILLE_FINAL.md](LOT3_A_REPORTER_DANS_LA_FEUILLE_FINAL.md) (et [Miracles_V5_cellules.json](Miracles_V5_cellules.json)).

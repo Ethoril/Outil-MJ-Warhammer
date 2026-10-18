@@ -328,10 +328,10 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Coruscation de Finreir | +5 DR : faille instable dans BFM mètres, Yenlui −3 | 5 DR | Rappel chiffré (non calculée) |
 | Coruscation de Finreir | +8 DR : portail dans un terrain solide, un Domaine et Haute Magie | 8 DR | Rappel chiffré (non calculée) |
 | Malédiction d'Attraction des Flèches | +4 DR : les boucliers perdent leurs PA et Défensif contre les tirs | 4 DR | Calculée (exécutée par la sonde) |
-| Malédiction d'Attraction des Flèches | +6 DR : localisation choisie par le tireur (Test de CT +0) | 6 DR | Calculée (exécutée par la sonde) |
+| Malédiction d'Attraction des Flèches | +6 DR : localisation choisie par le tireur (Test de CT Intermédiaire +0 DR) | 6 DR | Calculée (exécutée par la sonde) |
 | Impasse | +6 DR : bonus de Pierre-Vent, cercle ou jonction annulé, Yenlui lumineux | 6 DR | Rappel chiffré (non calculée) |
 | Impasse | +9 DR : contrôle du Flux magique d’un Foyer arcanique annulé, Yenlui lumineux | 9 DR | Rappel chiffré (non calculée) |
-| Drain de Magie | +5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence −10) | 5 DR | Calculée (exécutée par la sonde) |
+| Drain de Magie | +5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
 | Drain de Magie | +7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux | 7 DR | Rappel chiffré (non calculée) |
 | Drain de Magie | +10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h | 10 DR | Rappel chiffré (non calculée) |
 | Convocation Ardente | +5 DR : dégâts +6 au 2 e Round, puis +1 par Round, Yenlui sombre | 5 DR | Calculée (exécutée par la sonde) |
@@ -341,7 +341,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Glamour de Teclis | +3 DR : effet durant BI heures pour qui rate 3 Tests, Yenlui sombre | 3 DR | Calculée (exécutée par la sonde) |
 | Glamour de Teclis | +6 DR : alliés exemptés (Test d’Agilité Intermédiaire +0 DR) | 6 DR | Calculée (exécutée par la sonde) |
 | Bannissement Majeur | +1 DR aux Tests de dissipation gratuits pour chaque +1 DR | 1 DR par palier | Rappel chiffré (non calculée) |
-| Bannissement Majeur | +4 DR : objets magiques maléfiques inactifs (Test de Sociabilité +2 DR) | 4 DR | Rappel chiffré (non calculée) |
+| Bannissement Majeur | +4 DR : objets magiques maléfiques inactifs (Test de Sociabilité Accessible +2 DR) | 4 DR | Rappel chiffré (non calculée) |
 | Bannissement Majeur | +7 DR : dégâts +15 (ou +30 si Taille Grande ou plus), Yenlui lumineux | 7 DR | Calculée (exécutée par la sonde) |
 | Œil Invisible | +4 DR : l’œil gagne Sens de la magie, Seconde vue et Vision dans le noir | 4 DR | Calculée (exécutée par la sonde) |
 | Œil Invisible | +8 DR : portée portée à l’Intelligence en miles | 8 DR | Calculée (exécutée par la sonde) |
@@ -352,7 +352,7 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Tempête | +4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR | 4 DR | Calculée (exécutée par la sonde) |
 | Tempête | +5 DR : projectile +15 par Round contre bâtiments et machines de guerre | 5 DR | Calculée (exécutée par la sonde) |
 | Tempête | +8 DR : alliés exemptés (Test d’Initiative Intermédiaire +0 DR) | 8 DR | Calculée (exécutée par la sonde) |
-| Chemin entre les Mondes | +5 DR : durée portée à BI minutes (Test de Volonté Difficile −20) | 5 DR | Calculée (exécutée par la sonde) |
+| Chemin entre les Mondes | +5 DR : durée portée à BI minutes (Test de Force Mentale Difficile −2 DR) | 5 DR | Calculée (exécutée par la sonde) |
 | Chemin entre les Mondes | +8 DR : traversée des Voies des Anciens d’un nexus à un autre | 8 DR | Rappel chiffré (non calculée) |
 | Bête Indomptée | Variante humain, FM −1 ou table d10 chaque Round | 4 DR | Rappel chiffré (non calculée) |
 | Pulvérisation Musquée | Durée +1 jour | 2 DR par palier | Rappel chiffré (non calculée) |

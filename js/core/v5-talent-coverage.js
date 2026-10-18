@@ -22,7 +22,7 @@ export function v5TalentCoverage(talentId, catalogue = getReferenceCatalogue()) 
   return {...item,status,clauses};
 }
 export function acquiredV5TalentCoverage(subject, catalogue = getReferenceCatalogue()) {
-  return (subject?.talents || []).map(row => row.status === 'resolved' && row.id && Number.isSafeInteger(row.rank) && row.rank > 0
+  return (subject?.talents || []).filter(row => row && typeof row === 'object' && !Array.isArray(row)).map(row => row.status === 'resolved' && row.id && Number.isSafeInteger(row.rank) && row.rank > 0
     ? {...v5TalentCoverage(row.id,catalogue),rank:row.rank,specialization:row.specialization || row.specialty || null}
     : {talentId:row.id || null,name:row.name || row.nom || 'Talent inconnu',status:'acquisitionUnresolved',clauses:[{id:'unresolved',mode:'reminder',text:'Acquisition non résolue : préciser identité, rang et spécialité avant tout effet.'}]});
 }
@@ -43,10 +43,10 @@ export function importedPjTalentPriorities(envelope = {}) {
   for (const entry of characters.values()) {
     const snapshots = [...entry.snapshots.values()];
     // Divergent scene snapshots do not silently union ranks or invent a newest online state.
-    const talentSignatures = new Set(snapshots.map(snapshot => JSON.stringify((snapshot.talents || []).map(row => [row.id,row.status,row.rank,row.specialization || row.specialty || null]).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b))))));
+    const talentSignatures = new Set(snapshots.map(snapshot => JSON.stringify((snapshot.talents || []).filter(row => row && typeof row === 'object' && !Array.isArray(row)).map(row => [row.id,row.status,row.rank,row.specialization || row.specialty || null]).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b))))));
     if (talentSignatures.size > 1) {ambiguousCharacters++;continue;}
     const owned = new Map();
-    for (const row of snapshots[0].talents || []) {
+    for (const row of (snapshots[0].talents || []).filter(r => r && typeof r === 'object' && !Array.isArray(r))) {
       if(row.status !== 'resolved' || !row.id || !Number.isSafeInteger(row.rank) || row.rank < 1){unresolvedAcquisitions++;continue;}
       const key=JSON.stringify([row.id,row.specialization || row.specialty || null]);
       if(!owned.has(key))owned.set(key,row);

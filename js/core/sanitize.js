@@ -1,5 +1,5 @@
 import { normalizeEffects, normalizeState, resolveEffectCapability } from './effects.js';
-import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, profileActionSource, normalizeFicheFields } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, normalizeTraits, profileActionSource, normalizeFicheFields } from './models.js';
 import { validateDivineAccessRegistry } from './v5-divine-access.js';
 import { validateGameClock } from './v5-game-time.js';
 
@@ -100,6 +100,12 @@ function sanitizeMagicFields(value) {
     if (key === 'wards') out[key] = out[key].filter(row => Number.isFinite(row.threshold));
   }
   if (Object.hasOwn(out, 'divineExecutions')) out.divineExecutions = sanitizeArray(out.divineExecutions).filter(row=>magicRecord(row)&&typeof row.executionId==='string'&&typeof row.actorId==='string'&&typeof row.contractId==='string').slice(-100);
+  for (const key of ['baseTraits', 'temporaryTraits', 'traits', 'traitsGained']) if (Object.hasOwn(out, key)) {
+    out[key] = normalizeTraits(sanitizeArray(out[key]));
+  }
+  for (const key of ['suppressedSpellIds', 'suppressedEffectIds']) if (Object.hasOwn(out, key)) {
+    out[key] = sanitizeArray(out[key]).filter(id => typeof id === 'string' && id);
+  }
   if (Object.hasOwn(out, 'appliedSpellExecutions')) out.appliedSpellExecutions = [...new Set(sanitizeArray(out.appliedSpellExecutions).filter(id => typeof id === 'string' && id))].slice(-MAGIC_EXECUTION_LIMIT);
   if (Object.hasOwn(out, 'highMagicExecutions')) out.highMagicExecutions = sanitizeArray(out.highMagicExecutions)
     .filter(row => magicRecord(row) && typeof row.id === 'string' && typeof row.actorId === 'string' && typeof row.spellId === 'string')
@@ -125,6 +131,7 @@ export function sanitizeMagicSubject(subject,{synchronizeAliases=true}={}) {
     const cleanExt = sanitizeMagicFields(extAliases);
     out.extensions = { ...subject.extensions, ...cleanExt };
     for (const key of Object.keys(extAliases)) if (!Object.hasOwn(cleanExt, key)) delete out.extensions[key];
+    if (Object.hasOwn(out.extensions, 'traits')) out.extensions.traits = normalizeTraits(sanitizeArray(out.extensions.traits));
     if (Object.hasOwn(subject.extensions, 'v5')) out.extensions.v5 = sanitizeMagicFields(subject.extensions.v5);
     const canonical=out.extensions.v5;
     if(synchronizeAliases && Array.isArray(canonical?.spellEffects)){out.spellEffects=cloneValue(canonical.spellEffects);out.extensions.spellEffects=cloneValue(canonical.spellEffects);}
@@ -173,13 +180,17 @@ export function sanitizeProfile(o) {
     maxHp: o.maxHp == null ? Number(o.hp) || 0 : Number(o.maxHp),
     ...normalizeFicheFields(o),
     caracs: normalizeCaracs(o.caracs),
-    armor: (o.armor && typeof o.armor === 'object') ? cloneValue(o.armor) : { head: 0, body: 0, arms: 0, legs: 0 },
-    diceLines: sanitizeArray(profileActionSource(o)).map(normalizeAction),
+    armor: magicRecord(o.armor) ? cloneValue(o.armor) : { head: 0, body: 0, arms: 0, legs: 0 },
+    diceLines: sanitizeArray(profileActionSource(o)).filter(magicRecord).map(normalizeAction),
     group: typeof o.group === 'string' ? o.group.trim() : '',
     tags: normalizeTags(o.tags),
     notes: typeof o.notes === 'string' ? o.notes : '',
     favorite: Boolean(o.favorite),
-    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {}
+    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {},
+    ...(Array.isArray(o.traits) ? { traits: normalizeTraits(o.traits) } : {}),
+    ...(Array.isArray(o.weapons) ? { weapons: o.weapons.filter(magicRecord).map(cloneValue) } : {}),
+    ...(Array.isArray(o.armours) ? { armours: o.armours.filter(magicRecord).map(cloneValue) } : {}),
+    ...(Array.isArray(o.armors) ? { armors: o.armors.filter(magicRecord).map(cloneValue) } : {})
   };
   // `actions` reste lisible mais n'est jamais une seconde copie énumérable.
   Object.defineProperty(profile, 'actions', { enumerable: false, configurable: true, get: () => profile.diceLines });
@@ -192,7 +203,7 @@ export function sanitizeParticipant(o) {
   if (!base) return null;
   return {
     ...base,
-    actions: Array.isArray(o.actions) ? o.actions.map(normalizeAction) : [],
+    actions: Array.isArray(o.actions) ? o.actions.filter(magicRecord).map(normalizeAction) : [],
     profileId: o.profileId || null,
     persistentCharacterId: o.persistentCharacterId || null,
     improvised: Boolean(o.improvised),
@@ -207,8 +218,8 @@ export function sanitizeParticipant(o) {
     notes: typeof o.notes === 'string' ? o.notes : '',
     source: o.source == null ? null : cloneValue(o.source),
     extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {},
-    ...(Array.isArray(o.traits) ? { traits: cloneValue(o.traits) } : {}),
-    ...(Array.isArray(o.spellEffects) ? { spellEffects: cloneValue(o.spellEffects) } : {}),
+    ...(Array.isArray(o.traits) ? { traits: normalizeTraits(o.traits) } : {}),
+    ...(Array.isArray(o.spellEffects) ? { spellEffects: o.spellEffects.filter(magicRecord).map(cloneValue) } : {}),
     // null reste null (solde absent) : il ne devient pas 0.
     ...(o.fortune === null ? { fortune: null } : Number.isFinite(Number(o.fortune)) ? { fortune: Number(o.fortune) } : {}),
     ...(o.temporaryFortune === null ? { temporaryFortune: null } : Number.isFinite(Number(o.temporaryFortune)) ? { temporaryFortune: Number(o.temporaryFortune) } : {}),

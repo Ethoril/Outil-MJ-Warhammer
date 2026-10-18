@@ -5,7 +5,7 @@ import { reverseV5Roll } from './v5-roll.js';
 import { attackNature, previewMagicProtection, wardDiceCount,natureTagLabel } from './v5-magic-combat.js';
 import { acquireV5Conditions } from './v5-effects.js';
 import { previewV5Test, selectV5Test } from './v5-roll.js';
-import { hasArcaneMagicLore, hasLivingMagicNature } from './v5-magic-attributes.js';
+import { hasArcaneMagicLore, hasLivingMagicNature, hasTargetNatureOrTrait } from './v5-magic-attributes.js';
 import { magicTalentRank,effectiveSkillScore } from './v5-magic-talents.js';
 /** Retrait atomique des couches dont le contrat annonce une fin sur événement. */
 export function endSpellEffectsOnEvent(participants,actorId,event){
@@ -175,8 +175,7 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
   } else {
     const spec=kind==='move' ? effect.specialState?.moveTest : effect.triggered;
     if (!spec || kind==='trigger' && !effect.triggered) return block('Cette clause ne figure pas dans l’effet choisi.');
-    const traits=(target.traits || []).join(' ').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-    if (spec.exceptLore && hasArcaneMagicLore(target,spec.exceptLore) || spec.requiredAnyTrait && !spec.requiredAnyTrait.some(t=>traits.includes(t))) summary='Destinataire exempté.';
+    if (spec.exceptLore && hasArcaneMagicLore(target,spec.exceptLore) || spec.requiredAnyTrait && !spec.requiredAnyTrait.some(t=>hasTargetNatureOrTrait(target,t))) summary='Destinataire exempté.';
     else {
       let failed=true;
       const testSpec=controlValue==='alternative' && spec.alternativeTest?spec.alternativeTest:spec.test || (kind==='move'?spec:null);
@@ -374,7 +373,7 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
         }
       }
 
-      const bfm=Math.floor(Number(caster.caracs.FM)/10),multiplier=spec.doubleOnTrait && (target.traits || []).some(t=>t.toLowerCase()===spec.doubleOnTrait.toLowerCase())?2:1;
+      const bfm=Math.floor(Number(caster.caracs.FM)/10),multiplier=spec.doubleOnTrait && hasTargetNatureOrTrait(target,spec.doubleOnTrait)?2:1;
       damageSpec={formula:String((bfm+base)*multiplier),magicMissile:true};
     }
     let lost = 0, healed = 0;

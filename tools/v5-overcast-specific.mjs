@@ -66,17 +66,17 @@ export const OVERCAST_SPECIFIC = {
   ],
   'Bannissement Majeur': [
     { id: 'dispel', label: '+1 DR aux Tests de dissipation gratuits pour chaque +1 DR', cost: 1, repeat: true, kind: 'reminder', reminder: 'Bonus de +{pas} DR aux Tests de dissipation gratuits du sort ; familles de sorts désignées par le MJ.' },
-    { id: 'items', label: '+4 DR : objets magiques maléfiques inactifs (Test de Sociabilité +2 DR)', cost: 4, kind: 'reminder', reminder: 'Objets maléfiques ou chaotiques inactifs pendant le sort si le Test de Sociabilité (+20) est réussi.' },
+    { id: 'items', label: '+4 DR : objets magiques maléfiques inactifs (Test de Sociabilité Accessible +2 DR)', cost: 4, kind: 'reminder', reminder: 'Objets maléfiques ou chaotiques inactifs pendant le sort si le Test de Sociabilité Accessible (+2 DR) est réussi.' },
     { id: 'damage', label: '+7 DR : dégâts +15 (ou +30 si Taille Grande ou plus), Yenlui lumineux', cost: 7, kind: 'reminder', reminder: 'Dégâts portés à +15 (ou +30 contre Taille Grande ou plus) ; le lanceur gagne Yenlui (lumineux).' }
   ],
   'Convocation Ardente': [
     { id: 'escalation', label: '+5 DR : dégâts +6 au 2e Round, puis +1 par Round, Yenlui sombre', cost: 5, kind: 'reminder', reminder: 'Dégâts +6 au 2e Round puis +1 à chaque Round suivant ; le lanceur gagne Yenlui (sombre).' },
-    { id: 'exempt', label: '+8 DR : alliés exemptés (Test de Corps à corps Intermédiaire +0 DR)', cost: 8, kind: 'reminder', reminder: 'Test de Corps à corps (+0) : les alliés sont exemptés des effets.' }
+    { id: 'exempt', label: '+8 DR : alliés exemptés (Test de Corps à corps Intermédiaire +0 DR)', cost: 8, kind: 'reminder', reminder: 'Test de Corps à corps Intermédiaire (+0 DR) : les alliés sont exemptés des effets.' }
   ],
   'Drain de Magie': [
-    { id: 'wide', label: '+5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence −10)', cost: 5, kind: 'reminder', reminder: 'Zone portée à la Volonté en yards ; Test d’Intelligence Difficile (−10) pour exempter les alliés.' },
+    { id: 'wide', label: '+5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR)', cost: 5, kind: 'reminder', reminder: 'Zone portée à la Volonté en yards ; Test d’Intelligence Difficile (−1 DR) pour exempter les alliés.' },
     { id: 'blessings', label: '+7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux', cost: 7, kind: 'reminder', reminder: 'Bénédictions et Miracles persistants dissipés ; le lanceur gagne Yenlui (lumineux).' },
-    { id: 'items', label: '+10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h', cost: 10, kind: 'reminder', reminder: 'Les objets magiques perdent leurs pouvoirs, les Protections sont annulées ; les lanceurs qui ratent le Test de Focalisation (+0) perdent toute magie 24 h.' }
+    { id: 'items', label: '+10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h', cost: 10, kind: 'reminder', reminder: 'Les objets magiques perdent leurs pouvoirs, les Protections sont annulées ; les lanceurs qui ratent le Test de Focalisation Intermédiaire (+0 DR) perdent toute magie 24 h.' }
   ],
   'La Fortune est Capricieuse': [
     { id: 'actions', label: '+4 DR : doubles des actions non magiques = échec automatique', cost: 4, kind: 'reminder', reminder: 'Les actions non magiques de la cible échouent automatiquement sur un double.' },
@@ -84,19 +84,19 @@ export const OVERCAST_SPECIFIC = {
   ],
   'Glamour de Teclis': [
     { id: 'hours', label: '+3 DR : effet durant BI heures pour qui rate 3 Tests, Yenlui sombre', cost: 3, kind: 'reminder', reminder: 'Les cibles qui ratent trois Tests de Navigation restent affectées BI heures ; le lanceur gagne Yenlui (sombre).' },
-    { id: 'exempt', label: '+6 DR : alliés exemptés (Test d’Agilité Intermédiaire +0 DR)', cost: 6, kind: 'reminder', reminder: 'Test d’Agilité (+0) : les alliés sont exemptés des effets.' }
+    { id: 'exempt', label: '+6 DR : alliés exemptés (Test d’Agilité Intermédiaire +0 DR)', cost: 6, kind: 'reminder', reminder: 'Test d’Agilité Intermédiaire (+0 DR) : les alliés sont exemptés des effets.' }
   ],
   'Œil Invisible': [
     { id: 'senses', label: '+4 DR : l’œil gagne Sens de la magie, Seconde vue et Vision dans le noir', cost: 4, kind: 'reminder', reminder: 'L’œil gagne Perception de la Magie, Seconde vue et Vision dans le noir.' },
     { id: 'range', label: '+8 DR : portée portée à l’Intelligence en miles', cost: 8, kind: 'reminder', reminder: 'Portée portée à l’Intelligence en miles.' }
   ],
   'Tempête': [
-    { id: 'cool', label: '+4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR', cost: 4, kind: 'reminder', reminder: 'Test de Calme (+0) pour se déplacer ; les volants qui le ratent tombent de 50 yards par Round ; Tests de CT à −3 DR.' },
+    { id: 'cool', label: '+4 DR : Test de Calme pour bouger, chute des volants, CT −3 DR', cost: 4, kind: 'reminder', reminder: 'Test de Calme Intermédiaire (+0 DR) pour se déplacer ; les volants qui le ratent tombent de 50 yards par Round ; Tests de CT à −3 DR.' },
     { id: 'machines', label: '+5 DR : projectile +15 par Round contre bâtiments et machines de guerre', cost: 5, kind: 'reminder', reminder: 'Chaque Round, projectile magique de dégâts +15 contre les bâtiments et machines de guerre de la zone.' },
-    { id: 'exempt', label: '+8 DR : alliés exemptés (Test d’Initiative Intermédiaire +0 DR)', cost: 8, kind: 'reminder', reminder: 'Test d’Initiative (+0) : les alliés sont exemptés des effets.' }
+    { id: 'exempt', label: '+8 DR : alliés exemptés (Test d’Initiative Intermédiaire +0 DR)', cost: 8, kind: 'reminder', reminder: 'Test d’Initiative Intermédiaire (+0 DR) : les alliés sont exemptés des effets.' }
   ],
   'Chemin entre les Mondes': [
-    { id: 'duration', label: '+5 DR : durée portée à BI minutes (Test de Volonté Difficile −20)', cost: 5, kind: 'reminder', reminder: 'Durée portée à BI minutes si le Test de Volonté (−20) est réussi.' },
+    { id: 'duration', label: '+5 DR : durée portée à BI minutes (Test de Force Mentale Difficile −2 DR)', cost: 5, kind: 'reminder', reminder: 'Durée portée à BI minutes si le Test de Force Mentale Difficile (−2 DR) est réussi.' },
     { id: 'nexus', label: '+8 DR : traversée des Voies des Anciens d’un nexus à un autre', cost: 8, kind: 'reminder', reminder: 'Les cibles situées sur un nexus géomantique rejoignent le nexus choisi par le MJ, sans limite de distance.' }
   ],
   'Coruscation de Finreir': [
@@ -109,6 +109,6 @@ export const OVERCAST_SPECIFIC = {
   ],
   'Malédiction d\'Attraction des Flèches': [
     { id: 'shields', label: '+4 DR : les boucliers perdent leurs PA et Défensif contre les tirs', cost: 4, kind: 'reminder', reminder: 'Les boucliers des cibles perdent leurs PA et leur qualité Défensive contre les tirs.' },
-    { id: 'locations', label: '+6 DR : localisation choisie par le tireur (Test de CT +0)', cost: 6, kind: 'reminder', reminder: 'Test de CT (+0) : le tireur choisit la localisation des projectiles touchant une cible maudite.' }
+    { id: 'locations', label: '+6 DR : localisation choisie par le tireur (Test de CT Intermédiaire +0 DR)', cost: 6, kind: 'reminder', reminder: 'Test de CT Intermédiaire (+0 DR) : le tireur choisit la localisation des projectiles touchant une cible maudite.' }
   ]
 };

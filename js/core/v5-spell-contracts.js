@@ -34,6 +34,8 @@ import {
   applyLoreAttribute,
   isTargetUndead,
   isTargetDaemon,
+  hasTargetNatureOrTrait,
+  hasLivingMagicNature,
   isTargetWearingMetalArmor,
   hasArcaneMagicLore,
   arcaneMagicLores
@@ -543,7 +545,7 @@ export function vortexMovementFromDie(roll) {
 
 /**
  * Résout le déplacement et les effets d'un vortex magique (Winds of Magic pp. 20-21, Random Vortices).
- * Round de lancer : le lanceur choisit la direction et fait un Test de Force Mentale Moyen (+20) — réussite : 2d10 yards dans la direction
+ * Round de lancer : le lanceur choisit la direction et fait un Test de Force Mentale Accessible (+2 DR) — réussite : 2d10 yards dans la direction
  * choisie ; échec : direction aléatoire (d10 de la table, 1 = le vortex disparaît, 5 = il reste en place). Les mouvements des Rounds suivants
  * (fin du Tour du lanceur, d10 + 2d10 yards) restent suivis à la table par le MJ : le moteur ne déplace pas de pions.
  * Propose direction et distance, puis applique les conséquences aux cibles réellement traversées (saisie MJ).
@@ -825,7 +827,7 @@ function previewSecondaryRecipients(contract, actor, options, spellNature, sl, p
       if (!target || id === actor.id && !effects.allowCasterSecondary) return { blocked: { error: `${contract.name} : ${spec.label} désigné introuvable ou identique au lanceur.` } };
       const row = { group: spec.group, targetId: id, targetName: target.name || id, conditions: [], woundsLost: 0 };
       if(testModifiers){
-        if(effects.engagedEnemyLivingOnly && /mort.vivant|undead|construct|automate|daemon|d[eé]mon/i.test((target.traits || []).join(' '))){row.immune='Créature non vivante';results.push(row);continue;}
+        if(effects.engagedEnemyLivingOnly && !hasLivingMagicNature(target)){row.immune='Créature non vivante';results.push(row);continue;}
         row.testModifiers=testModifiers;
       }
       // Coups récurrents (Lames Azurées) : pas de dégâts au lancement, l'effet les porte à chaque Tour de l'adversaire désigné.
@@ -1757,7 +1759,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     const rule = effects.targetRule || {};
     const traits = [...(target.traits || []), ...(target.extensions?.traits || [])].map(fold).join(' ');
     const size = /petite|small/.test(traits) ? 'small' : /enorme|enormous|monstr/.test(traits) ? 'enormous' : /grande|large/.test(traits) ? 'large' : 'average';
-    if ((rule.requiredFact && options.targetTests?.[target.id]?.[rule.requiredFact]!==true) || (rule.exceptAnyTrait?.some(t=>traits.includes(t))) || (rule.requiredAllTraits?.some(group=>!group.some(t=>traits.includes(t)))) || (rule.exceptLore && hasArcaneMagicLore(target,rule.exceptLore)) || (rule.exceptTrait && traits.includes(rule.exceptTrait)) || (rule.requiredTrait && !traits.includes(rule.requiredTrait)) || (rule.requiredAnyTrait && !rule.requiredAnyTrait.some(t=>traits.includes(t))) || (rule.allowedSizes && !rule.allowedSizes.includes(size)) || (rule.alliesOnly && target.camp!==actor.camp) || (rule.enemiesOnly && !isHostileTarget(actor,target))) {
+    if ((rule.requiredFact && options.targetTests?.[target.id]?.[rule.requiredFact]!==true) || (rule.exceptAnyTrait?.some(t=>hasTargetNatureOrTrait(target,t))) || (rule.requiredAllTraits?.some(group=>!group.some(t=>hasTargetNatureOrTrait(target,t)))) || (rule.exceptLore && hasArcaneMagicLore(target,rule.exceptLore)) || (rule.exceptTrait && hasTargetNatureOrTrait(target,rule.exceptTrait)) || (rule.requiredTrait && !hasTargetNatureOrTrait(target,rule.requiredTrait)) || (rule.requiredAnyTrait && !rule.requiredAnyTrait.some(t=>hasTargetNatureOrTrait(target,t))) || (rule.allowedSizes && !rule.allowedSizes.includes(size)) || (rule.alliesOnly && target.camp!==actor.camp) || (rule.enemiesOnly && !isHostileTarget(actor,target))) {
       targetReceipt.resisted = true; targetReceipt.actions.push({ kind: 'excluded', summary: 'Cible exemptée ou inadmissible selon les clauses du sort.' }); targetResults.push(targetReceipt); continue;
     }
     let secondaryFailCondition = null;
@@ -2614,7 +2616,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     // Traitement spécifique de Bannissement Mineur (minor-banishment)
     if (specialTag === 'minor-banishment' || effects.banishMinorDaemon) {
       const banishDmg = bfm + Math.max(1, Number(sl) || 1);
-      const isDaemonOrUndead = isTargetDaemon(target) || isTargetUndead(target) || (target.traits || []).some(t => /instable|demon|démon|daemon|mort-vivant|undead/i.test(String(t?.name || t)));
+      const isDaemonOrUndead = isTargetDaemon(target) || isTargetUndead(target) || hasTargetNatureOrTrait(target, 'instable');
       targetReceipt.minorBanishment = {
         applicable: isDaemonOrUndead,
         damage: isDaemonOrUndead ? banishDmg : 0

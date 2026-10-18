@@ -5,7 +5,7 @@
 import { BEAST_PROFILES, KADON_PROFILES, BEAST_TRAIT_COST, KADON_OPTION_COST, optionalTransformationTraits, previewBeastForm, traitSize } from '../core/v5-magic-arbitrations.js';
 import {spellObjectChoices,conjuredWeaponSkillScore} from '../core/equipment.js';
 import {wardDiceCount} from '../core/v5-magic-combat.js';
-import {getSpellContract} from '../core/v5-spell-contracts.js';
+import {getSpellContract,isHostileTarget} from '../core/v5-spell-contracts.js';
 
 function node(tag, className, text) {
   const element = document.createElement(tag);
@@ -141,6 +141,7 @@ export function renderSpellOptions({ actor, participants, contract, draft, handl
   for(const who of participants.filter(p=>targetIds.includes(p.id))){
     const test=selectedEffects.primarySecondaryTests?(who.id===targetIds[0]?selectedEffects.primarySecondaryTests.primary:selectedEffects.primarySecondaryTests.others):selectedEffects.secondaryTest;
     if(test && (!test.whenFact || draft.magicTargetTests?.[who.id]?.[test.whenFact]===true) && !draft.magicTargetTests?.[who.id]?.[test.skipWhenFact])spellField(test.rollField || 'resistanceRoll','Sort : '+test.skill+' ('+(test.modifierSl || 0)+' DR, d100)',{who,min:1,max:100});
+    if(selectedEffects.attitudeModifiers && isHostileTarget(actor,who))spellField('fearRoll','Cor : Peur (Calme, d100)',{who,min:1,max:100});
     if(selectedEffects.followupTest){const t=selectedEffects.followupTest;spellField(t.rollField,'Sort : second '+t.skill+' ('+t.modifierSl+' DR, d100) si premier échec',{who,min:1,max:100});}
     if(selectedEffects.permanentStatDice)for(const [key,field] of Object.entries(selectedEffects.permanentStatDice))spellField(field,'Vieillissement : perte permanente de '+key+' (d10) si Calme raté',{who,min:1,max:10});
     if(Object.entries(baseEffects.optionRules || {}).some(([id,r])=>r.immediateSuffocation && draft.magicOvercastSpecific?.[id] && (draft.magicSpellFacts?.['optionTargets_'+id] || []).includes(who.id)))spellField('optionResistanceRoll','Suffocation : Force Mentale (d100)',{who,min:1,max:100});

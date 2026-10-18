@@ -80345,8 +80345,8 @@
     "scope": "26 points et décisions de règle ; cas nommés testés, aucune certification de tous les scénarios de campagne."
   },
   "reliquats": {
-    "date": "2026-10-17",
-    "report": "LOT3_RAPPORT_RELIQUATS_2026_10_17.md",
+    "date": "2026-10-18",
+    "report": "LOT3_RAPPORT_MINI_PASSE.md",
     "status": "fait",
     "catalogueVersions": {
       "contentVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
@@ -80357,8 +80357,8 @@
         "Miracles": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6"
       }
     },
-    "delta": "LOT3_A_REPORTER_DANS_LA_FEUILLE_RELIQUATS.md",
-    "cumulativeDelta": "LOT3_A_REPORTER_DANS_LA_FEUILLE_ACTUEL.md",
-    "scope": "Cinq reliquats : équipement, champ secondaire, Démon, difficultés et Yenlui d’Apothéose."
+    "finalSheetReport": "LOT3_A_REPORTER_DANS_LA_FEUILLE_FINAL.md",
+    "miraclesCellFile": "Miracles_V5_cellules.json",
+    "scope": "Cinq reliquats : tableaux RTDB, champ secondaire conditionnel, détection stricte des natures (Démon/Mort-vivant/Artificiel/Éthéré), difficultés V5 et Yenlui d’Apothéose."
   }
 }

@@ -108,10 +108,32 @@ export function isTargetDaemon(participant) {
   return participant?.isDaemon === true || natureLabels(participant).some(label => DAEMON_NATURE.test(label));
 }
 
+/** Artificiel / Construct explicite. */
+export function isTargetConstruct(participant) {
+  return participant?.isConstruct === true || natureLabels(participant).some(label => CONSTRUCT_NATURE.test(label));
+}
+
+/** Éthéré explicite. */
+export function isTargetEthereal(participant) {
+  return participant?.isEthereal === true || natureLabels(participant).some(label => ETHEREAL_NATURE.test(label));
+}
+
+/** Vérifie un trait ou une nature exacte sans faux positif sur une sous-chaîne (ex: « Chasseur de démons »). */
+export function hasTargetNatureOrTrait(participant, traitKey) {
+  const key = fold(traitKey);
+  if (!key) return false;
+  if (key === 'demon' || key === 'daemon' || key === 'demoniaque' || key === 'daemonic') return isTargetDaemon(participant);
+  if (key === 'mort-vivant' || key === 'mort vivant' || key === 'undead') return isTargetUndead(participant);
+  if (key === 'construct' || key === 'artificiel' || key === 'artificielle' || key === 'automate') return isTargetConstruct(participant);
+  if (key === 'ethere' || key === 'etheree' || key === 'ethereal') return isTargetEthereal(participant);
+  const pattern = new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}s?(?:\\s*\\([^)]*\\)|\\s+\\d+\\+?)?$`);
+  return natureLabels(participant).some(label => pattern.test(label));
+}
+
 /** Nature vivante commune (V5 p.250). Les Blessures et le décès restent propres à chaque effet. */
 export function hasLivingMagicNature(participant) {
   return !isTargetUndead(participant) && !isTargetDaemon(participant)
-    && !natureLabels(participant).some(label => CONSTRUCT_NATURE.test(label) || ETHEREAL_NATURE.test(label));
+    && !isTargetConstruct(participant) && !isTargetEthereal(participant);
 }
 
 /**
