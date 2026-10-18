@@ -42,8 +42,8 @@ Conséquence : aucune seconde Action ni report automatique. La situation reste b
 Source des options : [DIVIN_UP_IN_ARMS_ADAPTATIONS.md](DIVIN_UP_IN_ARMS_ADAPTATIONS.md) §6. Les 13 questions sont tranchées par le MJ (option recommandée du document dans chaque cas) :
 
 | Question | Réponse |
-| --- | --- 
 | --- | --- |
+| 1. Commander la Légion, forme du +10 | +1 DR aux Tests de Commandement (équivalence V5 du +10 V4, tableau de difficulté p.131). |
 | 2. Commander la Légion, Tests concernés | Tous les Tests de Commandement du Round liés à un combat armé ; le MJ veille à la pertinence. |
 | 3. Effrayer l’Ennemi, qui teste | Tout ennemi qui voit le prêtre au lancement, une fois pendant la durée. |
 | 4. Willpower entière ou Bonus | Convention V5 du livre de base : portée en caractéristique entière, zones en Bonus (écart V4 documenté). |
@@ -57,4 +57,4 @@ Source des options : [DIVIN_UP_IN_ARMS_ADAPTATIONS.md](DIVIN_UP_IN_ARMS_ADAPTATI
 | 12. Vindicte Vengeresse, ennemi impénitent | Le MJ désigne l’ennemi impénitent à chaque scène ; la contrainte s’arrête si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient. |
 | 13. Connaître son Ennemi, informations | Caractéristiques, Traits, compétences, Talents ; les secrets restent gardés par le MJ. |
 
-Les neuf contrats sont raccordés par `docs/divin/sources/miracles/myrmidia-up-in-arms.mjs` (ids du catalogue conservés) ; la validation reste soumise au contrôle indépendant des valeurs relues sur la page 79.
+Les neuf contrats sont raccordés par `docs/divin/sources/miracles/myrmidia-up-in-arms.mjs` (ids du catalogue conservés). Contrôle indépendant des valeurs relues sur la page 79 (18 octobre, lecteur distinct) : aucun écart de valeur, de portée, de cible, de durée ni de page ; deux notes de traçabilité (décision 1 consignée ci-dessus, justification de Dévotion de la Guerrière à reformuler).
