@@ -39,7 +39,7 @@ export function summarizeV5Advantage({ advantageSources = [], disadvantageSource
     slModifier: Math.sign(net) * Math.max(0, Math.abs(net) - 1),
     inversion: net > 0 ? 'optionalFavourable' : net < 0 ? 'mandatoryUnfavourable' : 'none' });
 }
-function evaluate({ score, roll, modifiers, advantage, kind }) {
+function evaluate({ score, roll, modifiers, advantage, kind, channellingGain }) {
   const baseSl = Math.floor(score / 10) - Math.floor(roll / 10);
   const totalModifier = modifiers.reduce((sum, item) => sum + item.amount, 0) + advantage.slModifier;
   let sl = baseSl + totalModifier;
@@ -51,7 +51,7 @@ function evaluate({ score, roll, modifiers, advantage, kind }) {
   const doubled = roll === 100 || roll % 11 === 0;
   const critical = doubled && success;
   const fumble = doubled && !success;
-  if (kind === 'test' && critical) sl = Math.max(5, sl);
+  if (kind === 'test' && critical && !channellingGain) sl = Math.max(5, sl);
   if (kind === 'test' && fumble) sl = Math.min(-5, sl);
   const zeroOutcome = sl === 0 ? (success ? 'marginalSuccess' : 'marginalFailure') : null;
   return { ruleVersion: V5_TEST_RULE_VERSION, roll, score, kind, success, sl, zeroOutcome, critical, fumble,
@@ -59,7 +59,7 @@ function evaluate({ score, roll, modifiers, advantage, kind }) {
       totalModifier, beforeCriticalSl, automatic, doubled } };
 }
 /** Retain both legal outcomes when favourable inversion is optional; caller must select explicitly. */
-export function previewV5Test({ score, roll, kind = 'test', slModifiers = [], advantageSources = [], disadvantageSources = [] } = {}) {
+export function previewV5Test({ score, roll, kind = 'test', channellingGain = false, slModifiers = [], advantageSources = [], disadvantageSources = [] } = {}) {
   finite(score, 'Score');
   if (score < 0 || !Number.isInteger(score) || !KINDS.has(kind)) throw new TypeError('Contexte de test invalide');
   const initialRoll = normalizeV5Roll(roll);
@@ -76,7 +76,7 @@ export function previewV5Test({ score, roll, kind = 'test', slModifiers = [], ad
   const advantage = summarizeV5Advantage({ advantageSources, disadvantageSources });
   const reversed = reverseV5Roll(initialRoll);
   const make = (id, selectedRoll) => ({ id, reversed: id === 'reverse',
-    result: evaluate({ score, roll: selectedRoll, modifiers, advantage, kind }) });
+    result: evaluate({ score, roll: selectedRoll, modifiers, advantage, kind, channellingGain }) });
   let options = [make('keep', initialRoll)];
   if (advantage.net > 0 && reversed < initialRoll) options.push(make('reverse', reversed));
   if (advantage.net < 0 && reversed > initialRoll) options = [make('reverse', reversed)];

@@ -2,10 +2,11 @@
 import baseRegistry from '../data/v5-talent-contracts.json' with { type: 'json' };
 import testRegistry from '../data/v5-test-talent-contracts.json' with { type: 'json' };
 import qualityRegistry from '../data/v5-quality-talent-contracts.json' with { type: 'json' };
-const registry = {contracts:[...baseRegistry.contracts,...testRegistry.contracts,...qualityRegistry.contracts],
-  sourceDescriptions:{...baseRegistry.sourceDescriptions,...testRegistry.sourceDescriptions,...qualityRegistry.sourceDescriptions}};
+import additionalRegistry from '../data/v5-additional-talent-contracts.json' with { type: 'json' };
+const registry = {contracts:[...baseRegistry.contracts,...testRegistry.contracts,...qualityRegistry.contracts,...additionalRegistry.contracts],
+  sourceDescriptions:{...baseRegistry.sourceDescriptions,...testRegistry.sourceDescriptions,...qualityRegistry.sourceDescriptions,...additionalRegistry.sourceDescriptions}};
 export const V5_TALENT_CONTRACTS = Object.freeze(registry.contracts);
-export const V5_TALENT_APPROVED_OVERRIDES = Object.freeze(qualityRegistry.approvedOverrides || {});
+export const V5_TALENT_APPROVED_OVERRIDES = Object.freeze({...qualityRegistry.approvedOverrides,...additionalRegistry.approvedOverrides});
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { evaluateTalentContractsV2, reduceV5ConditionProposals } from './talent-contract-v2.js';
 
@@ -37,12 +38,10 @@ export function evaluateV5Talents(participant, { event, role, context, choices =
 }
 /** One shared reduction for attack, defense and direct acquisition Store commands. */
 export function previewV5TalentConditions(participant, states, { state, clock = {}, actionId } = {}) {
-  const instances = states.filter(row => row.key === 'sonne').reduce((sum, row) => sum + row.level, 0);
-  const plan = evaluateV5Talents(participant, { event: 'condition.beforeAcquire', role: 'defender',
-    context: { condition: { id: 'sonne', instances } }, state, clock, actionId });
-  return { plan, states: reduceV5ConditionProposals(states, plan.proposals.filter(row => row.op === 'reduceConditionAcquisition')),
-    usageRequests: plan.quotas.length || plan.costs.length ? [{ actorId: participant.id, actionId, clock,
-      costs: plan.costs, quotas: plan.quotas, exemptions: plan.exemptions }] : [] };
+  const keys=[...new Set(states.map(row=>row.key))];
+  const plans=keys.map(key=>evaluateV5Talents(participant,{event:'condition.beforeAcquire',role:'defender',context:{condition:{id:key,instances:states.filter(row=>row.key===key).reduce((sum,row)=>sum+row.level,0)}},state,clock,actionId:actionId+':'+key}));
+  const plan={ready:plans.every(row=>row.ready),proposals:plans.flatMap(row=>row.proposals),unresolved:plans.flatMap(row=>row.unresolved),trace:plans.flatMap(row=>row.trace),quotas:plans.flatMap(row=>row.quotas),costs:plans.flatMap(row=>row.costs),exemptions:plans.flatMap(row=>row.exemptions)};
+  return {plan,states:reduceV5ConditionProposals(states,plan.proposals.filter(row=>row.op==='reduceConditionAcquisition')),usageRequests:plan.quotas.length||plan.costs.length?[{actorId:participant.id,actionId,clock,costs:plan.costs,quotas:plan.quotas,exemptions:plan.exemptions}]:[]};
 }
 export function activeV5TalentEffects(participant) {
   return (participant?.states || []).filter(row => row.kind === 'talent-active'

@@ -103,7 +103,7 @@ test('2.3 costs — identifiants, expressions et quotas réservés non déclarat
     {costs:[{id:'x',resource:'fortune',amount:1,expression:'Math.random()'}]},
     {costs:[{id:'x',resource:'constructor',amount:1}]},
     {quotas:[{id:'system:paid-momentum-extra-attack',scope:'turn',maximum:99}]},
-    {quotas:[{id:'q',scope:'session',maximum:1}]},{exemptions:[{costId:'missing',sourceId:'talent'}]},
+    {quotas:[{id:'q',scope:'unknown',maximum:1}]},{exemptions:[{costId:'missing',sourceId:'talent'}]},
     {costs:[{id:'x',resource:'fortune',amount:1},{id:'x',resource:'focus',amount:1}]}
   ])assert.throws(()=>previewV5ActionCosts(request(changes)));
 });

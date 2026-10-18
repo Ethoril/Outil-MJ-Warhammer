@@ -1,0 +1,36 @@
+# Développement — Courroux 11–15 « Leçons divines »
+
+État local du 18 octobre 2026, dans le worktree divin-v5. Aucun commit ni publication.
+
+## Contrat et décision
+
+- La règle `wrath:11-15:pray-sl-modifier` est générée séparément du plafond 06–10. Son reçu PDF atteste p. 218 et les règles de Test p. 130–131; l’API `getPrayerSLModifiers(actor, context)` fournit le −1 SL avant l’issue du Test. Le plafond 06–10 demeure appliqué après sélection de l’issue.
+- Le d10 de durée est explicite (`wrathDurationRoll`, entier 1–10); le Sin utilisé est capturé à la résolution du Courroux avant son décrément, conformément à l’ordre p. 218 (inférence de séquencement explicitée dans la note source).
+- La politique temporelle produit est séparée du reçu PDF sous `roundPolicy`, décision `DIV-TIME-LESSONS-01`: « Fin du Nᵉ Round, en comptant le Round actuel comme premier Round ». L’exemple source/contrat est Round 4, d10 3, Sin 1 → N=4, fin après effets du Round 7. Cette politique ne doit pas être présentée comme une clause du livre.
+- La sanction est créée après résolution du Test déclencheur; un Test réussi n’est pas recalculé rétroactivement. Hors combat, sans Round courant attesté, l’application exige une décision/position utilisable. Le cumul d’une seconde occurrence reste bloqué sans mutation, car la source ne dit pas s’il faut additionner, remplacer ou renouveler.
+
+## Parcours intégré
+
+Le panneau de prière expose le résultat d10 requis, l’aperçu affiche `d10 + Péché`, le nombre de Rounds et le Round d’expiration. L’application vérifie à nouveau l’aperçu, le Round et la scène; elle stocke une couche typée source-validée sur l’acteur et ses miroirs durables avec durée, ancre, échéance et preuve de Courroux. Le malus pré-issue est raccordé au moteur partagé pour Prière divine, les Tests génériques (initiateur et défenseur d’opposition) et la méditation. Le Test de Calme n’est pas concerné.
+
+Seule une transition de combat rejouée depuis le reçu canonique, dont les phases validées contiennent `endOfRound` au Round d’échéance, scène d’ancrage et borne `afterEffects`, retire la sanction. Le Round actuel compte comme premier. `expireDivineAtPhases` ignore cette couche; une avance en secondes de campagne et un changement manuel de Round ne fabriquent pas la phase. Le retrait et la pose passent par le même Store et les copies durables; Undo/Redo et persistance suivent l’état de commande existant. Le codec conserve la couche via la sanitation typée. Aucun convertisseur d’horloge ou calcul de Test parallèle n’a été introduit.
+
+## Sanitation
+
+La sanitation commune conserve `amount: -1` uniquement pour le type `prayer-sl-modifier`, afin que la preuve puisse être validée strictement. Les quantités génériques, les dégâts et les réductions de dégâts gardent leurs bornes non négatives habituelles. Le test développement vérifie également que `amount: 0` et la chaîne `"-1"` ne deviennent pas des couches valides.
+
+## Preuves et contrôles
+
+- Contrôleur indépendant: rouge avant implémentation `wrath-lessons-red-4.log`, 12 cas, 11 échecs attendus et 1 comportement déjà bloquant; rouge initial également conservé dans `wrath-lessons-red-3.log` (10 cas, 9 échecs, 1 comportement bloquant). Les rouges sont archivés dans le dossier de preuves privé de la tâche. Le contrôle a archivé le rejeu intermédiaire 10/12 avant la fin de correction des deux fixtures.
+- Deux défauts d’intégration ont été conservés avant correction: (1) un vrai aller-retour RTDB omettait `roundAnchor.sceneId:null`; rouge cloud `lessons-cloud-red-1.log`, SHA-256 `EC6D35411DC93AD31F9BF892AFFEAB8EE380BED33CCFBCACFDD527286A6F8175`; le cloud a validé la restauration distante par source/proof. (2) après entrée du d100 Courroux, le formulaire n’exposait pas le d10 manquant; rouge UI et capture `failure.png` conservés dans le dossier privé `wrath-lessons-browser-independent`. Un deuxième défaut UI découvert pendant le rejeu venait d’un diagnostic `process.env` laissé dans un module partagé navigateur; il a été supprimé. Rerun UI indépendant vert: aperçu du d10, application, rechargement IndexedDB, prochain Test avec −1 SL et absence du faux rappel de Courroux; quatre captures 1440/390 en sombre/parchemin. Le contrôleur rapporte 19/19 contrôles indépendants.
+- Le cloud2 a d’abord réussi 27 contrôles, puis a révélé une attente de fixture, pas un défaut moteur: elle utilisait `init`, tandis que le Store lit `initiative`, ce qui changeait l’ordre et le nombre de Tours. Le principal a corrigé uniquement cette fixture, en conservant les 25 vérifications historiques; la recette finale a validé les scénarios cloud.
+- Revue visuelle principale: un aperçu 11–15 prêt (d10=4, Sin=1, résultat et échéance résolus) conservait à tort le rappel « Courroux divin déclenché; le résultat du Courroux reste à résoudre selon la table V5 ». Reproduction rouge archivée hors worktree: `wrath-lessons-ready-reminder-red.log`, SHA-256 `166FDD7CF49D34BCB070F50B7AA4BDAD107920778BE00BE5344C1F889E3A7090`. Correctif après checkpoint global: le rappel ne s’affiche que si jet, ligne de table ou conséquences MJ manquent encore. Rejeu ciblé vert hors worktree: `wrath-lessons-ready-reminder-green.log`, SHA-256 `3F0428599EEEA94CC9EA7E66BC2794B4D416F69374767A7B1937713461315301`; le d10 absent reste bloquant et demande le résultat.
+- Les deux fixtures corrigées par le contrôleur ne changent aucune attente mécanique: la prière de Bataille réussie fournit l’échéance déjà requise par son contrat; la méditation fournit les quatre d10 requis après un résultat de 3 SL.
+- Vert ciblé courant: `node --test tests/divin-v5-wrath-calendar-independent.test.js tests/divin-v5-wrath-lessons-independent.test.js tests/divin-v5-wrath-lessons-dev.test.js` — 93/93, incluant codec (normalisation distante attestée seulement; import local incomplet refusé), le contrôle du rappel prêt/non prêt, consommateurs adversariaux, cap et malus distincts, annulation/persistance et changement de Round après aperçu.
+- Contrats générés deux fois par `tools/build-v5-divine-contracts.mjs`; les deux sorties sont identiques aux deux passes: `js/data/v5-divine-contracts.json` SHA-256 `22D5A6E22D6E10FF93C7D06C0F2676F9BE9302E120B40A124D8141F48664CD72`; `docs/divin/DIVIN_INVENTAIRE.json` SHA-256 `8399D5C6DAFFAA381A8D4DDA6A346C46856F813B93D3B73999A2B3AE44F64042`.
+- La source ciblée p. 218, p. 130–131 et la décision utilisateur sont documentées dans `docs/divin/sources/DIVIN_L06_LECONS_LECTURE.md`. L’ajout n’incrémente aucun compteur de lecture.
+- Recette finale principale après le correctif de rappel: 2616/2616 tests, 20/20 commandes et 30/30 contrôles cloud verts; checkpoint archivé par le principal `tmp/divin/history/2026-10-18-lessons-before-ui-reminder`.
+
+## Limites restantes
+
+Cette validation ne certifie pas tout le lot E5 ni toutes les lignes de Courroux. Les transitions qui ne présentent pas la phase réelle correspondante ne retirent pas la sanction; si le Round d’échéance est dépassé sans reçu exact, la commande se bloque et demande une résolution explicite. Une scène suspendue ou une reprise sans continuité d’ancre ne doit pas être convertie en expiration. Les comptes de tests, commandes et cloud portent sur la recette locale finale, pas sur une certification exhaustive de chaque clause E5.

@@ -1,0 +1,3384 @@
+{
+  "schemaVersion": 1,
+  "scope": "L06-base-blessings",
+  "warning": "Décomposition source uniquement; ne ferme aucun livre ni les lots E1/E2/E7. Les dépendances restent à développer et valider.",
+  "bookId": "L06",
+  "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+  "readers": [
+    {
+      "reader": "/root",
+      "role": "first",
+      "evidencePath": "docs/divin/sources/DIVIN_E2_BENEDICTIONS_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "reader": "/root/e0_controle",
+      "role": "independent",
+      "evidencePath": "docs/divin/DIVIN_E2_E3_CONTROLE_INDEPENDANT.md"
+    }
+  ],
+  "review": {
+    "status": "reviewed",
+    "reviewer": "/root/e0_controle",
+    "evidencePath": "docs/divin/DIVIN_E2_E3_CONTROLE_INDEPENDANT.md"
+  },
+  "counts": {
+    "blessings": 19,
+    "associations": 60,
+    "commonClauses": 11,
+    "effectClauses": 21,
+    "mechanicalClauses": 32,
+    "narrativeClauses": 0,
+    "independentlyReviewedIdentities": 19,
+    "runtimeValidatedClauses": 0
+  },
+  "identities": [
+    {
+      "id": "L06:blessing:battle",
+      "canonicalName": "Battle",
+      "frenchName": "Bataille",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Battle"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:battle:ws",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Weapon Skill.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Battle"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Weapon Skill.",
+          "operation": "Ajouter +10 à Weapon Skill pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:battle",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:battle:ws"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:breath",
+      "canonicalName": "Breath",
+      "frenchName": "Respiration",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Breath"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:breath:need-breathe",
+          "kind": "mechanical",
+          "summaryFr": "La cible n’a pas besoin de respirer.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Breath"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et donnée de jeu indiquées par l’effet.",
+          "operation": "Ne pas exiger que la cible respire pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Événements et état respiratoires.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:breath",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        },
+        {
+          "id": "L06:clause:blessing:breath:suffocation",
+          "kind": "mechanical",
+          "summaryFr": "La cible ignore les règles de Suffocation.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Breath"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et donnée de jeu indiquées par l’effet.",
+          "operation": "Ne pas appliquer Suffocation pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Règles de Suffocation.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:breath",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:breath:need-breathe",
+        "L06:clause:blessing:breath:suffocation"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:charisma",
+      "canonicalName": "Charisma",
+      "frenchName": "Charisme",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Charisma"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:charisma:fel",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Fellowship.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Charisma"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Fellowship.",
+          "operation": "Ajouter +10 à Fellowship pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:charisma",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:charisma:fel"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:conscience",
+      "canonicalName": "Conscience",
+      "frenchName": "Conscience",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Conscience"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:stricture:cool",
+          "kind": "mechanical",
+          "summaryFr": "Pour enfreindre une règle du dieu qui a lancé la bénédiction, la cible doit réussir Cool Average (+2 SL); sinon honte et action non entreprise.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Conscience"
+            }
+          ],
+          "trigger": "La cible s’apprête à enfreindre une règle (stricture) du dieu auquel prie le personnage qui a lancé la bénédiction.",
+          "preconditions": "Identifier règle du culte du personnage-priant et action correspondante.",
+          "inputs": "Règle et Test Cool de la cible.",
+          "operation": "Avant une action qui enfreint une règle du dieu auquel prie le personnage ayant lancé la bénédiction, résoudre Cool Average (+2 SL); si échec, bloquer cette action.",
+          "failure": "Échec: honte, action non entreprise.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Seulement les règles du dieu invoqué par le personnage qui a lancé la bénédiction.",
+          "dependencies": "Tests de Cool, règles propres au culte et interruption d’action.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:conscience",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:stricture:cool"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:courage",
+      "canonicalName": "Courage",
+      "frenchName": "Courage",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Courage"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:courage:wp",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Willpower.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Courage"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Willpower.",
+          "operation": "Ajouter +10 à Willpower pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:courage",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:courage:wp"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:finesse",
+      "canonicalName": "Finesse",
+      "frenchName": "Finesse",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Finesse"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:finesse:dex",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Dexterity.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Finesse"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Dexterity.",
+          "operation": "Ajouter +10 à Dexterity pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:finesse",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:finesse:dex"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:fortune",
+      "canonicalName": "Fortune",
+      "frenchName": "Fortune",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Fortune"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:reroll:next-failed-test",
+          "kind": "mechanical",
+          "summaryFr": "La cible peut relancer son prochain Test échoué; le résultat de la relance doit être conservé.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Fortune"
+            }
+          ],
+          "trigger": "Au prochain Test échoué pendant la durée.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Résultat initial du Test; second jet de relance.",
+          "operation": "Effectuer un second jet pour le prochain Test échoué et imposer le résultat de la relance.",
+          "failure": "Si aucun Test échoue avant expiration, le bénéfice n’est pas utilisé.",
+          "duration": "Jusqu’au prochain Test échoué ou expiration des 6 rounds; ordre de priorité à raccorder.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Une seule relance est spécifiée.",
+          "dependencies": "Moteur Test, garde/consommation de relance, second jet, persistance et Undo.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:fortune",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:reroll:next-failed-test"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:grace",
+      "canonicalName": "Grace",
+      "frenchName": "Grâce",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Grace"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:grace:ag",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Agility.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Grace"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Agility.",
+          "operation": "Ajouter +10 à Agility pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:grace",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:grace:ag"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:hardiness",
+      "canonicalName": "Hardiness",
+      "frenchName": "Robustesse",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Hardiness"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:hardiness:t",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Toughness.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Hardiness"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Toughness.",
+          "operation": "Ajouter +10 à Toughness pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:hardiness",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:hardiness:t"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:healing",
+      "canonicalName": "Healing",
+      "frenchName": "Soin",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Healing"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": "Touch",
+          "sourceUnit": "touch",
+          "gameValue": "Touch",
+          "gameUnit": "contact",
+          "noteFr": "Portée de contact conservée."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": "Instant",
+          "sourceUnit": "instant",
+          "gameValue": "Instant",
+          "gameUnit": "instant"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:healing:wound",
+          "kind": "mechanical",
+          "summaryFr": "La cible guérit +1 Wound.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Healing"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible, Wounds actuelles/maximales.",
+          "operation": "Restaurer 1 Wound à la cible.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Instant; modification immédiate.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Résolution de Wounds, plafond applicable et persistance.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:healing",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:healing:wound"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:might",
+      "canonicalName": "Might",
+      "frenchName": "Puissance",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Might"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:might:strength",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Strength.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Might"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Strength.",
+          "operation": "Ajouter +10 à Strength pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:might",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:might:strength"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:protection",
+      "canonicalName": "Protection",
+      "frenchName": "Protection",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Protection"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:protection:attack-gate",
+          "kind": "mechanical",
+          "summaryFr": "Un ennemi doit réussir Cool Average (+2 SL) pour attaquer la cible; en cas d’échec, il choisit une autre cible ou une autre Action.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Protection"
+            }
+          ],
+          "trigger": "Un ennemi veut attaquer la cible protégée.",
+          "preconditions": "Attaque ciblant le bénéficiaire pendant l’effet.",
+          "inputs": "Attaquant, Test Cool, cibles/Actions alternatives.",
+          "operation": "Avant l’attaque d’un ennemi contre la cible, demander Cool Average (+2 SL); en cas d’échec, imposer autre cible ou Action.",
+          "failure": "Échec: choisir autre cible ou autre Action.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Le cas où aucune autre cible ou Action ne convient n’est pas décrit.",
+          "dependencies": "Test Cool, identification des ennemis, Actions alternatives et interruption d’attaque.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:protection",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:protection:attack-gate"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:recuperation",
+      "canonicalName": "Recuperation",
+      "frenchName": "Récupération",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Recuperation"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": "Touch",
+          "sourceUnit": "touch",
+          "gameValue": "Touch",
+          "gameUnit": "contact",
+          "noteFr": "Portée de contact conservée."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": "Instant",
+          "sourceUnit": "instant",
+          "gameValue": "Instant",
+          "gameUnit": "instant"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:disease-duration:duration",
+          "kind": "mechanical",
+          "summaryFr": "La cible peut réduire d’un jour la durée d’une maladie dont elle souffre.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Recuperation"
+            }
+          ],
+          "trigger": "Réussite sur une cible atteinte de la maladie choisie.",
+          "preconditions": "La cible est la personne atteinte par l’instance de maladie choisie.",
+          "inputs": "Personne cible, instance de maladie et durée restante.",
+          "operation": "Réduire d’un jour la durée restante de la maladie ciblée.",
+          "failure": "Sans maladie/durée réductible, bénéfice non spécifié.",
+          "duration": "Instant; réduction immédiate d’un jour.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Le quota de tentatives par instance/personne bénéficiaire est décrit dans la clause distincte.",
+          "dependencies": "Identité de l’instance de maladie, durée restante, règles de maladie.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:recuperation",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        },
+        {
+          "id": "L06:clause:blessing:one-attempt:quota",
+          "kind": "mechanical",
+          "summaryFr": "Cette prière ne peut être tentée qu’une fois par instance de maladie et par personne atteinte.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Recuperation"
+            }
+          ],
+          "trigger": "Au moment d’engager une tentative pour la maladie de la personne cible.",
+          "preconditions": "Aucune tentative antérieure enregistrée pour cette personne atteinte et cette instance de maladie.",
+          "inputs": "Personne atteinte, ID stable de l’instance de maladie, historique partagé des tentatives.",
+          "operation": "Refuser une autre tentative sur la même personne bénéficiaire et instance de maladie, quel que soit l’invocateur.",
+          "failure": "La limite porte sur la tentative, pas sur la réussite: elle interdit une autre tentative après un échec.",
+          "duration": "Au moins pendant la durée de vie de l’instance; clôture selon le modèle de maladie.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Limite par instance de maladie et par personne bénéficiaire; non limitée au prêtre qui lance.",
+          "dependencies": "Identifiants et cycle de vie des maladies, historique partagé persistant, Undo.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:recuperation",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:disease-duration:duration",
+        "L06:clause:blessing:one-attempt:quota"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:righteousness",
+      "canonicalName": "Righteousness",
+      "frenchName": "Droiture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Righteousness"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:magical:weapon-magical",
+          "kind": "mechanical",
+          "summaryFr": "L’arme de la cible compte comme Magical.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Righteousness"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible, arme et propriété Magical.",
+          "operation": "Traiter l’arme de la cible comme Magical pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Modèle équipement/arme, propriété Magical, résistances et expiration.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:righteousness",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:magical:weapon-magical"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:savagery",
+      "canonicalName": "Savagery",
+      "frenchName": "Sauvagerie",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Savagery"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:critical:critical-wound",
+          "kind": "mechanical",
+          "summaryFr": "À la prochaine Critical Wound infligée par la cible, lancer deux fois et choisir le meilleur résultat.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Savagery"
+            }
+          ],
+          "trigger": "La cible inflige sa prochaine Critical Wound pendant l’effet.",
+          "preconditions": "L’attaque de la cible produit une Critical Wound.",
+          "inputs": "Deux résultats de Critical Wound.",
+          "operation": "Au prochain événement Critical Wound causé par la cible, lancer deux fois et retenir le meilleur.",
+          "failure": "Si aucune blessure critique ne survient pendant la durée, le bénéfice n’est pas utilisé.",
+          "duration": "Jusqu’à la prochaine Critical Wound ou expiration; ordre des événements à raccorder.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "S’applique à la prochaine blessure critique infligée.",
+          "dependencies": "Événement critique, générateur de résultats, dés et sélection du meilleur.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:savagery",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:critical:critical-wound"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:tenacity",
+      "canonicalName": "Tenacity",
+      "frenchName": "Ténacité",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Tenacity"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": "Instant",
+          "sourceUnit": "instant",
+          "gameValue": "Instant",
+          "gameUnit": "instant"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:remove-condition:condition",
+          "kind": "mechanical",
+          "summaryFr": "La cible peut retirer une Condition, sauf Besmirched.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Tenacity"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Condition présente.",
+          "operation": "Retirer une Condition de la cible, sauf Besmirched.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Instant.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Une seule Condition; Besmirched exclue.",
+          "dependencies": "Catalogue des Conditions, alias de Besmirched et règles de retrait.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:tenacity",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:remove-condition:condition"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:the-hunt",
+      "canonicalName": "The Hunt",
+      "frenchName": "Chasse",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing The Hunt"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:hunt:bs",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Ballistic Skill.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing The Hunt"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Ballistic Skill.",
+          "operation": "Ajouter +10 à Ballistic Skill pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:the-hunt",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:hunt:bs"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:wisdom",
+      "canonicalName": "Wisdom",
+      "frenchName": "Sagesse",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Wisdom"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:wisdom:int",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Intelligence.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Wisdom"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Intelligence.",
+          "operation": "Ajouter +10 à Intelligence pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:wisdom",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:wisdom:int"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    },
+    {
+      "id": "L06:blessing:wit",
+      "canonicalName": "Wit",
+      "frenchName": "Esprit",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Wit"
+        }
+      ],
+      "commonClauseIds": [
+        "L06:common:blessing-access",
+        "L06:common:pray-test",
+        "L06:common:spoken-prayer",
+        "L06:common:pray-outcome",
+        "L06:common:success-level-benefits",
+        "L06:common:one-active-instance",
+        "L06:common:cross-invoker-stacking",
+        "L06:common:sin-and-wrath",
+        "L06:common:petty-concerns",
+        "L06:common:stricture-sin",
+        "L06:common:blessing-perception"
+      ],
+      "parameters": {
+        "range": {
+          "sourceValue": 6,
+          "sourceUnit": "yards",
+          "gameValue": 6,
+          "gameUnit": "meters (convention DIV-03)",
+          "noteFr": "Même valeur numérique source, affichée en mètres; aucune conversion physique."
+        },
+        "targets": {
+          "sourceValue": 1,
+          "sourceUnit": "target",
+          "gameValue": 1,
+          "gameUnit": "target"
+        },
+        "duration": {
+          "sourceValue": 6,
+          "sourceUnit": "rounds",
+          "gameValue": 6,
+          "gameUnit": "rounds"
+        }
+      },
+      "clauses": [
+        {
+          "id": "L06:clause:blessing:wit:initiative",
+          "kind": "mechanical",
+          "summaryFr": "La cible gagne +10 en Initiative.",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 221,
+              "printedPage": 221,
+              "section": "Blessing Wit"
+            }
+          ],
+          "trigger": "Après réussite du Test de Pray.",
+          "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+          "inputs": "Cible et Initiative.",
+          "operation": "Ajouter +10 à Initiative pendant l’effet.",
+          "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+          "duration": "Durée de la bénédiction indiquée dans parameters.",
+          "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+          "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+          "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+          "notApplicable": {},
+          "identityId": "L06:blessing:wit",
+          "sourceStatus": "independently-checked",
+          "developmentStatus": "not-started",
+          "verificationStatus": "not-run"
+        }
+      ],
+      "openQuestions": [],
+      "clauseIds": [
+        "L06:clause:blessing:wit:initiative"
+      ],
+      "sourceDecomposition": "independently-reviewed",
+      "runtimeCoverage": {
+        "validatedClauses": 0,
+        "existingContractReferences": []
+      }
+    }
+  ],
+  "commonClauses": [
+    {
+      "id": "L06:common:blessing-access",
+      "kind": "mechanical",
+      "summaryFr": "Bless donne accès aux six bénédictions associées au culte du personnage.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 217,
+          "printedPage": 217,
+          "section": "The Blessed"
+        }
+      ],
+      "trigger": "Lorsqu’une bénédiction est tentée.",
+      "preconditions": "Posséder Bless et relever du culte qui associe cette bénédiction.",
+      "inputs": "Talent, culte et identité de la bénédiction.",
+      "operation": "Autoriser l’invocation seulement si le talent et le culte donnent accès.",
+      "failure": "Sans Bless ou sans association au culte, accès non établi.",
+      "duration": "Vérifié à chaque tentative.",
+      "stacking": "Sans objet sur l’accès.",
+      "limitations": "Une dérogation MJ est une décision locale, pas une règle source.",
+      "dependencies": "Règles de talent p.116, associations de culte p.220.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:blessing-perception",
+      "kind": "mechanical",
+      "summaryFr": "La manifestation d’une bénédiction est imperceptible sans Holy Visions; elle se confond ordinairement avec la bonne fortune. Les miracles s’accompagnent au contraire de signes divins.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 220,
+          "printedPage": 220,
+          "section": "Divine Manifestations"
+        }
+      ],
+      "trigger": "Un observateur cherche à percevoir une manifestation divine.",
+      "preconditions": "Distinguer la bénédiction elle-même de ses conséquences observables et vérifier Holy Visions.",
+      "inputs": "Nature de la prière, observateur, talent Holy Visions et faits perceptifs nécessaires.",
+      "operation": "Ne pas déclarer la bénédiction perceptible comme manifestation divine à un observateur sans Holy Visions; conserver les conséquences ordinaires visibles et leurs coïncidences.",
+      "failure": "L’absence de Holy Visions ne permet pas d’identifier directement la manifestation d’une bénédiction.",
+      "duration": "Pendant la manifestation concernée.",
+      "stacking": "Le nombre de bénédictions ne contourne pas cette règle de perception.",
+      "limitations": "Les miracles produisent des signes adaptés au dieu; cela ne confère aucune connaissance automatique de leur règle ou auteur.",
+      "dependencies": "Holy Visions p.120, contexte perceptif MJ et information connue de chaque observateur.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:cross-invoker-stacking",
+      "kind": "mechanical",
+      "summaryFr": "Les invocations de la même prière par des personnes différentes ne donnent pas des bonus cumulatifs.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 217,
+          "printedPage": 217,
+          "section": "Limitations"
+        }
+      ],
+      "trigger": "Plusieurs personnages invoquent la même prière sur un effet simultané.",
+      "preconditions": "Prière identique, auteurs différents, bonus qui se chevauchent.",
+      "inputs": "Prière, auteurs, bénéficiaire, modificateurs.",
+      "operation": "Ne pas additionner les bonus des invocations identiques.",
+      "failure": "Ne pas appliquer de cumul de bonus interdit par la source.",
+      "duration": "Pendant l’application simultanée des effets concernés.",
+      "stacking": "Non-cumul explicite entre invocateurs pour la même prière.",
+      "limitations": "L’exemple source est Finesse; autres interactions à raccorder.",
+      "dependencies": "Identité d’effet et moteur de modificateurs actifs.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:one-active-instance",
+      "kind": "mechanical",
+      "summaryFr": "Un personnage ne peut avoir active qu’une instance d’une même bénédiction; il attend la fin de l’instance avant de tenter à nouveau cette prière.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 217,
+          "printedPage": 217,
+          "section": "Limitations"
+        }
+      ],
+      "trigger": "Avant une nouvelle tentative d’une bénédiction déjà active.",
+      "preconditions": "Une instance de la même prière lancée par le personnage est active.",
+      "inputs": "Auteur, identité de prière, expiration.",
+      "operation": "Refuser une seconde instance concurrente de la même prière.",
+      "failure": "Ne pas créer de seconde instance avant fin de la première.",
+      "duration": "Jusqu’à la fin de la durée de l’instance active.",
+      "stacking": "Règle par auteur et même prière.",
+      "limitations": "La source n’exclut pas des bénédictions différentes.",
+      "dependencies": "Identité de prière et durée/horloge réelle.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:petty-concerns",
+      "kind": "mechanical",
+      "summaryFr": "Des usages multiples dans la scène, sur la même blessure, sur la même cible ou cas similaire peuvent irriter les dieux; le MJ peut attribuer typiquement 1 à 3 Sin Points.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 220,
+          "printedPage": 220,
+          "section": "Petty Concerns"
+        }
+      ],
+      "trigger": "Usages multiples, répétition sur même blessure/cible ou cas similaire.",
+      "preconditions": "Le MJ juge que le contexte entre dans l’abus décrit.",
+      "inputs": "Contexte des usages et jugement MJ.",
+      "operation": "Le MJ peut attribuer des Sin Points, typiquement 1 à 3.",
+      "failure": "Pas automatique; décision MJ.",
+      "duration": "Sans durée propre; les Sin Points suivent leurs règles.",
+      "stacking": "Sans objet.",
+      "limitations": "Exemples non exhaustifs, aucun quota universel.",
+      "dependencies": "Sin Points, règles du culte et décision du MJ.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:pray-outcome",
+      "kind": "mechanical",
+      "summaryFr": "Réussite: l’effet de la bénédiction se manifeste; échec: paroles prononcées sans effet; Fumble: renvoi à Wrath of the Gods.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 217,
+          "printedPage": 217,
+          "section": "Blessings and Miracles"
+        }
+      ],
+      "trigger": "À la résolution du Test de Pray.",
+      "preconditions": "Un Test valide est engagé.",
+      "inputs": "Résultat et SL du Test.",
+      "operation": "Sur réussite, manifester l’effet; sur échec, ne rien appliquer; sur Fumble, résoudre Wrath.",
+      "failure": "Un échec simple ne produit aucun effet; un Fumble n’est pas ramené à un échec simple.",
+      "duration": "L’effet manifeste suit sa durée propre.",
+      "stacking": "Sans cumul créé par la résolution elle-même.",
+      "limitations": "Wrath n’est pas fermée dans ce registre.",
+      "dependencies": "Moteur Test/Fumble et table Wrath p.218–219.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:pray-test",
+      "kind": "mechanical",
+      "summaryFr": "Tenter une bénédiction avec un Test de Pray Challenging (+0 SL).",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 217,
+          "printedPage": 217,
+          "section": "Blessings and Miracles"
+        }
+      ],
+      "trigger": "Lorsqu’un personnage engage une bénédiction.",
+      "preconditions": "L’accès à la bénédiction est établi.",
+      "inputs": "Pray (Fel), paramètres du Test, cible et portée.",
+      "operation": "Résoudre un Test Challenging (+0 SL).",
+      "failure": "Les résultats réussite, échec et Fumble ont des suites distinctes.",
+      "duration": "Aucune durée de Test spécifiée.",
+      "stacking": "Le Test ne cumule pas lui-même les effets.",
+      "limitations": "Le MJ peut accroître la difficulté si la prière est dite à voix basse ou sans conviction.",
+      "dependencies": "Pray (Fel) avancée p.113; moteur des Tests, SL, relances et états.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:sin-and-wrath",
+      "kind": "mechanical",
+      "summaryFr": "Le dé des unités du Test Pray comparé aux Sin Points peut déclencher Wrath même après une réussite; un Fumble déclenche aussi Wrath. Ajouter +10 par Sin Point au jet Wrath, puis retirer un point (minimum 0).",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 218,
+          "printedPage": 218,
+          "section": "Sin and Wrath"
+        },
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 130,
+          "printedPage": 130,
+          "section": "Advantage and Disadvantage"
+        },
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 133,
+          "printedPage": 133,
+          "section": "Fate and Fortune"
+        }
+      ],
+      "trigger": "À chaque Pray; Fumble ou insulte irréfléchie peuvent entraîner Wrath.",
+      "preconditions": "Total courant de Sin Points, sans plafond source.",
+      "inputs": "Dé des unités du Test, Sin Points, jet Wrath.",
+      "operation": "Si le dé des unités ≤ Sin Points, appliquer Wrath même sur réussite; sur Fumble aussi; modifier jet Wrath de +10 par point puis retirer 1 point après résolution.",
+      "failure": "Le résultat dépend de la table Wrath et ne se réduit pas à cette clause.",
+      "duration": "Selon le résultat de la table Wrath.",
+      "stacking": "Bonus calculé par Sin Point courant.",
+      "limitations": "Déduction croisée p.130/133/218: prendre les unités du résultat final retenu après inversion et éventuelle relance; ce n’est pas une citation unique.",
+      "dependencies": "Sin Points, résultat final du Test selon p.130/133, et table complète Wrath p.218–219 encore non fermée.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:spoken-prayer",
+      "kind": "mechanical",
+      "summaryFr": "Il faut pouvoir intoner la prière, le rite, le chant ou la formule, fermement et avec conviction.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 217,
+          "printedPage": 217,
+          "section": "Limitations"
+        }
+      ],
+      "trigger": "Avant et pendant le Test de Pray.",
+      "preconditions": "Le personnage peut parler ou chanter la formule.",
+      "inputs": "Voix, formule, circonstances.",
+      "operation": "N’autoriser la tentative que si la formule peut être dite ou chantée.",
+      "failure": "Si le personnage ne peut intoner la formule, la condition source manque.",
+      "duration": "S’applique à la tentative en cours.",
+      "stacking": "Sans objet pour cette condition.",
+      "limitations": "Le style dépend du culte; le MJ peut accroître la difficulté si voix basse ou sans conviction.",
+      "dependencies": "Capacité de parler et éventuel ajustement de difficulté MJ.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:stricture-sin",
+      "kind": "mechanical",
+      "summaryFr": "La violation des strictures du dieu peut faire attribuer un ou plusieurs Péchés selon la gravité, au jugement du MJ.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 217,
+          "printedPage": 217,
+          "section": "Sin Points"
+        }
+      ],
+      "trigger": "Une violation de stricture du dieu est constatée.",
+      "preconditions": "Le MJ établit le fait et sa gravité; le culte du personnage est identifié.",
+      "inputs": "Stricture, fait confirmé, nombre entier de Péchés attribué et motif.",
+      "operation": "Ajouter au total courant les Péchés attribués par le MJ, sans plafond.",
+      "failure": "Sans constat et décision MJ, ne pas inventer de violation ni de Péchés.",
+      "duration": "Les Péchés persistent selon leurs règles de diminution.",
+      "stacking": "Chaque attribution rejoint le total courant; pas de maximum.",
+      "limitations": "Distinct de l’abus de répétitions de p.220, dont 1–3 est une valeur typique et non un plafond général.",
+      "dependencies": "Strictures du culte, décision MJ tracée, registre de Péchés, Pénitences et Courroux.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:common:success-level-benefits",
+      "kind": "mechanical",
+      "summaryFr": "Par tranche de +2 SL choisir +6 yards de portée, +1 cible ou +6 rounds; choix répétable; une durée Instant ne peut pas être étendue.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 220,
+          "printedPage": 220,
+          "section": "Success Levels"
+        }
+      ],
+      "trigger": "Après un Test de Pray réussi avec SL suffisants.",
+      "preconditions": "La bénédiction a le paramètre concerné; une durée Instant ne peut être accrue.",
+      "inputs": "SL, portée, cibles, durée.",
+      "operation": "Pour chaque +2 SL, ajouter un bénéfice choisi parmi portée, cible ou durée.",
+      "failure": "Pas de bénéfice d’extension sans tranche complète de +2 SL.",
+      "duration": "Durée ajoutée: +6 rounds; Instant reste Instant.",
+      "stacking": "Les choix répétés s’additionnent dans cette invocation.",
+      "limitations": "Portée source conservée en yards, affichage en mètres selon DIV-03 sans conversion physique.",
+      "dependencies": "Calcul des SL, cible/portée, durée et horloge.",
+      "notApplicable": {},
+      "identityId": "L06:common:blessings",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    }
+  ],
+  "clauses": [
+    {
+      "id": "L06:clause:blessing:battle:ws",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Weapon Skill.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Battle"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Weapon Skill.",
+      "operation": "Ajouter +10 à Weapon Skill pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:battle",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:breath:need-breathe",
+      "kind": "mechanical",
+      "summaryFr": "La cible n’a pas besoin de respirer.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Breath"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et donnée de jeu indiquées par l’effet.",
+      "operation": "Ne pas exiger que la cible respire pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Événements et état respiratoires.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:breath",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:breath:suffocation",
+      "kind": "mechanical",
+      "summaryFr": "La cible ignore les règles de Suffocation.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Breath"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et donnée de jeu indiquées par l’effet.",
+      "operation": "Ne pas appliquer Suffocation pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Règles de Suffocation.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:breath",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:charisma:fel",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Fellowship.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Charisma"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Fellowship.",
+      "operation": "Ajouter +10 à Fellowship pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:charisma",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:courage:wp",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Willpower.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Courage"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Willpower.",
+      "operation": "Ajouter +10 à Willpower pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:courage",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:critical:critical-wound",
+      "kind": "mechanical",
+      "summaryFr": "À la prochaine Critical Wound infligée par la cible, lancer deux fois et choisir le meilleur résultat.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Savagery"
+        }
+      ],
+      "trigger": "La cible inflige sa prochaine Critical Wound pendant l’effet.",
+      "preconditions": "L’attaque de la cible produit une Critical Wound.",
+      "inputs": "Deux résultats de Critical Wound.",
+      "operation": "Au prochain événement Critical Wound causé par la cible, lancer deux fois et retenir le meilleur.",
+      "failure": "Si aucune blessure critique ne survient pendant la durée, le bénéfice n’est pas utilisé.",
+      "duration": "Jusqu’à la prochaine Critical Wound ou expiration; ordre des événements à raccorder.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "S’applique à la prochaine blessure critique infligée.",
+      "dependencies": "Événement critique, générateur de résultats, dés et sélection du meilleur.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:savagery",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:disease-duration:duration",
+      "kind": "mechanical",
+      "summaryFr": "La cible peut réduire d’un jour la durée d’une maladie dont elle souffre.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Recuperation"
+        }
+      ],
+      "trigger": "Réussite sur une cible atteinte de la maladie choisie.",
+      "preconditions": "La cible est la personne atteinte par l’instance de maladie choisie.",
+      "inputs": "Personne cible, instance de maladie et durée restante.",
+      "operation": "Réduire d’un jour la durée restante de la maladie ciblée.",
+      "failure": "Sans maladie/durée réductible, bénéfice non spécifié.",
+      "duration": "Instant; réduction immédiate d’un jour.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Le quota de tentatives par instance/personne bénéficiaire est décrit dans la clause distincte.",
+      "dependencies": "Identité de l’instance de maladie, durée restante, règles de maladie.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:recuperation",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:finesse:dex",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Dexterity.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Finesse"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Dexterity.",
+      "operation": "Ajouter +10 à Dexterity pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:finesse",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:grace:ag",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Agility.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Grace"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Agility.",
+      "operation": "Ajouter +10 à Agility pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:grace",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:hardiness:t",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Toughness.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Hardiness"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Toughness.",
+      "operation": "Ajouter +10 à Toughness pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:hardiness",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:healing:wound",
+      "kind": "mechanical",
+      "summaryFr": "La cible guérit +1 Wound.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Healing"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible, Wounds actuelles/maximales.",
+      "operation": "Restaurer 1 Wound à la cible.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Instant; modification immédiate.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Résolution de Wounds, plafond applicable et persistance.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:healing",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:hunt:bs",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Ballistic Skill.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing The Hunt"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Ballistic Skill.",
+      "operation": "Ajouter +10 à Ballistic Skill pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:the-hunt",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:magical:weapon-magical",
+      "kind": "mechanical",
+      "summaryFr": "L’arme de la cible compte comme Magical.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Righteousness"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible, arme et propriété Magical.",
+      "operation": "Traiter l’arme de la cible comme Magical pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Modèle équipement/arme, propriété Magical, résistances et expiration.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:righteousness",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:might:strength",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Strength.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Might"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Strength.",
+      "operation": "Ajouter +10 à Strength pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:might",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:one-attempt:quota",
+      "kind": "mechanical",
+      "summaryFr": "Cette prière ne peut être tentée qu’une fois par instance de maladie et par personne atteinte.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Recuperation"
+        }
+      ],
+      "trigger": "Au moment d’engager une tentative pour la maladie de la personne cible.",
+      "preconditions": "Aucune tentative antérieure enregistrée pour cette personne atteinte et cette instance de maladie.",
+      "inputs": "Personne atteinte, ID stable de l’instance de maladie, historique partagé des tentatives.",
+      "operation": "Refuser une autre tentative sur la même personne bénéficiaire et instance de maladie, quel que soit l’invocateur.",
+      "failure": "La limite porte sur la tentative, pas sur la réussite: elle interdit une autre tentative après un échec.",
+      "duration": "Au moins pendant la durée de vie de l’instance; clôture selon le modèle de maladie.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Limite par instance de maladie et par personne bénéficiaire; non limitée au prêtre qui lance.",
+      "dependencies": "Identifiants et cycle de vie des maladies, historique partagé persistant, Undo.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:recuperation",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:protection:attack-gate",
+      "kind": "mechanical",
+      "summaryFr": "Un ennemi doit réussir Cool Average (+2 SL) pour attaquer la cible; en cas d’échec, il choisit une autre cible ou une autre Action.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Protection"
+        }
+      ],
+      "trigger": "Un ennemi veut attaquer la cible protégée.",
+      "preconditions": "Attaque ciblant le bénéficiaire pendant l’effet.",
+      "inputs": "Attaquant, Test Cool, cibles/Actions alternatives.",
+      "operation": "Avant l’attaque d’un ennemi contre la cible, demander Cool Average (+2 SL); en cas d’échec, imposer autre cible ou Action.",
+      "failure": "Échec: choisir autre cible ou autre Action.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Le cas où aucune autre cible ou Action ne convient n’est pas décrit.",
+      "dependencies": "Test Cool, identification des ennemis, Actions alternatives et interruption d’attaque.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:protection",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:remove-condition:condition",
+      "kind": "mechanical",
+      "summaryFr": "La cible peut retirer une Condition, sauf Besmirched.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Tenacity"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Condition présente.",
+      "operation": "Retirer une Condition de la cible, sauf Besmirched.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Instant.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Une seule Condition; Besmirched exclue.",
+      "dependencies": "Catalogue des Conditions, alias de Besmirched et règles de retrait.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:tenacity",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:reroll:next-failed-test",
+      "kind": "mechanical",
+      "summaryFr": "La cible peut relancer son prochain Test échoué; le résultat de la relance doit être conservé.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Fortune"
+        }
+      ],
+      "trigger": "Au prochain Test échoué pendant la durée.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Résultat initial du Test; second jet de relance.",
+      "operation": "Effectuer un second jet pour le prochain Test échoué et imposer le résultat de la relance.",
+      "failure": "Si aucun Test échoue avant expiration, le bénéfice n’est pas utilisé.",
+      "duration": "Jusqu’au prochain Test échoué ou expiration des 6 rounds; ordre de priorité à raccorder.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Une seule relance est spécifiée.",
+      "dependencies": "Moteur Test, garde/consommation de relance, second jet, persistance et Undo.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:fortune",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:stricture:cool",
+      "kind": "mechanical",
+      "summaryFr": "Pour enfreindre une règle du dieu qui a lancé la bénédiction, la cible doit réussir Cool Average (+2 SL); sinon honte et action non entreprise.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Conscience"
+        }
+      ],
+      "trigger": "La cible s’apprête à enfreindre une règle (stricture) du dieu auquel prie le personnage qui a lancé la bénédiction.",
+      "preconditions": "Identifier règle du culte du personnage-priant et action correspondante.",
+      "inputs": "Règle et Test Cool de la cible.",
+      "operation": "Avant une action qui enfreint une règle du dieu auquel prie le personnage ayant lancé la bénédiction, résoudre Cool Average (+2 SL); si échec, bloquer cette action.",
+      "failure": "Échec: honte, action non entreprise.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Seulement les règles du dieu invoqué par le personnage qui a lancé la bénédiction.",
+      "dependencies": "Tests de Cool, règles propres au culte et interruption d’action.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:conscience",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:wisdom:int",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Intelligence.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Wisdom"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Intelligence.",
+      "operation": "Ajouter +10 à Intelligence pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:wisdom",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    },
+    {
+      "id": "L06:clause:blessing:wit:initiative",
+      "kind": "mechanical",
+      "summaryFr": "La cible gagne +10 en Initiative.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Wit"
+        }
+      ],
+      "trigger": "Après réussite du Test de Pray.",
+      "preconditions": "L’accès est autorisé et la cible respecte les paramètres de portée et de cible.",
+      "inputs": "Cible et Initiative.",
+      "operation": "Ajouter +10 à Initiative pendant l’effet.",
+      "failure": "Après échec du Test Pray aucun effet ne se manifeste; voir règle commune.",
+      "duration": "Durée de la bénédiction indiquée dans parameters.",
+      "stacking": "Le cumul avec une autre source n’est pas tranché par cette entrée; appliquer les clauses communes pertinentes.",
+      "limitations": "Aucune limite supplémentaire indiquée par cette entrée.",
+      "dependencies": "Moteur de Test, cible, effet et expiration à raccorder.",
+      "notApplicable": {},
+      "identityId": "L06:blessing:wit",
+      "sourceStatus": "independently-checked",
+      "developmentStatus": "not-started",
+      "verificationStatus": "not-run"
+    }
+  ],
+  "associations": [
+    {
+      "id": "L06:association:manann:battle",
+      "cult": "Manann",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:breath",
+      "cult": "Manann",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:courage",
+      "cult": "Manann",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:hardiness",
+      "cult": "Manann",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:savagery",
+      "cult": "Manann",
+      "identityId": "L06:blessing:savagery",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:tenacity",
+      "cult": "Manann",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:morr:breath",
+      "cult": "Morr",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:courage",
+      "cult": "Morr",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:fortune",
+      "cult": "Morr",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:righteousness",
+      "cult": "Morr",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:tenacity",
+      "cult": "Morr",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:wisdom",
+      "cult": "Morr",
+      "identityId": "L06:blessing:wisdom",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:battle",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:conscience",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:courage",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:fortune",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:protection",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:righteousness",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:ranald:charisma",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:charisma",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:conscience",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:finesse",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:finesse",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:fortune",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:protection",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:wit",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:wit",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:rhya:breath",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:conscience",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:grace",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:grace",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:healing",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:healing",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:protection",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:recuperation",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:recuperation",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:breath",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:conscience",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:healing",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:healing",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:protection",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:recuperation",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:recuperation",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:tenacity",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:battle",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:courage",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:hardiness",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:might",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:might",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:protection",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:righteousness",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:taal:battle",
+      "cult": "Taal",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:breath",
+      "cult": "Taal",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:conscience",
+      "cult": "Taal",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:hardiness",
+      "cult": "Taal",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:savagery",
+      "cult": "Taal",
+      "identityId": "L06:blessing:savagery",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:the-hunt",
+      "cult": "Taal",
+      "identityId": "L06:blessing:the-hunt",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:ulric:battle",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:courage",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:hardiness",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:might",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:might",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:savagery",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:savagery",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:tenacity",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:verena:conscience",
+      "cult": "Verena",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:courage",
+      "cult": "Verena",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:fortune",
+      "cult": "Verena",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:righteousness",
+      "cult": "Verena",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:wisdom",
+      "cult": "Verena",
+      "identityId": "L06:blessing:wisdom",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:wit",
+      "cult": "Verena",
+      "identityId": "L06:blessing:wit",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    }
+  ],
+  "openQuestions": []
+}

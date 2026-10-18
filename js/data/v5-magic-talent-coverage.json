@@ -1,0 +1,640 @@
+{
+  "schemaVersion": 1,
+  "ruleVersion": "magic-v5-2026-10-10",
+  "scope": "277 sorts ; progression et miracles séparés",
+  "items": [
+    {
+      "talentId": "talent-animal-assistant",
+      "name": "Assistant animal",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:02b5e8399488c74e88e1d851f29ec3fc9d14f91bdbbf163a7083dac1d3444287"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Familier lié et aide possible confirmés : Avantage V5 en Focalisation, Langue (Magick), Survie en extérieur ou Perception de nature magique. Choix explicite d’inversion.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-animal-assistant/magic:0"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magical-assistant",
+      "name": "Assistant magique",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:82849d837127b7825c6262a47c50b34bf5d6bbf7f7b2e4855773c85a68c261e4"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Familier lié et aide possible confirmés : +2 DR aux Tests concernés de Focalisation, Langue (Magick), Savoir (Magie) et Recherche magique ; aucun Avantage supplémentaire.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magical-assistant/magic:0"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-lileath-s-blessing",
+      "name": "Bénédiction de Lileath",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:a6b8f58b88711b706d76c83f6d450f9d19c990656c80dce7d71301eba0e290ac"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "automatic",
+          "text": "Tout Test de Focalisation Qhaysh, réussi ou non : +1 DR par rang ; gain de réserve seulement sur réussite.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-lileath-s-blessing/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "automatic",
+          "text": "Bonus de sorts : nombre de sources positives conservées augmenté du rang, pour caractéristiques, PA et DR de Tests ; pire malus conservé.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-lileath-wiring.test.js#H-05"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-bless",
+      "name": "Béni",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:8f0f36dbe7340bef60ab3081e891466e203f4c5b4612a64cdfa96a517f111e6e"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Divinité, Bénédictions, incompatibilités et désapprentissage appartiennent à la fiche.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "deferred",
+          "text": "Les Bénédictions et Miracles requièrent le cadrage divin séparé.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-blessed-by-isha",
+      "name": "Béni par Isha",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:08790cbbf9ede8c430ca339673549767fffe9a3c39554af91cec76b1f55f0700"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Permission d’apprentissage de Haute Magie et conditions d’acquisition dans la fiche.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sword-dancing",
+      "name": "Danse des épées",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:b7db0bb3c3c6bd59a41c665ac237221b2c1a9b5dac002d2c07a085db07af0c08"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "deferred",
+          "text": "Techniques de combat elfiques distinctes des 277 sorts : futur périmètre Danse des épées, avec ses seuils, dégâts, Tests opposés et Yenlui.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "owned",
+          "text": "Apprentissage des techniques et PX dans la fiche.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magic-defiance",
+      "name": "Défiance magique",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:8891b0f2e43a5b7e12e60a3d0708f64013b0b90c31851480af4c03d4e6db5868"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Un d100 et un choix par cible pour inverser les Tests secondaires de résistance aux effets de sort.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magic-defiance/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "assisted",
+          "text": "Annuler un sort affectant la cible : 1 Chance, une fois par aventure explicitement commencée ; paiement et quota réversibles et persistants.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magic-defiance/magic:1"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-instinctive-diction",
+      "name": "Diction instinctive",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:7bbf8c4f867f8366a592bc5e423302e27411ba8a9cf2e076ccd80d48399da0bd"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Choix de réduction de 20 du jet Mineur, seulement pour le talent acquis ; résultat sous 1 annulé ; interdictions d’atténuation prioritaires.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-instinctive-diction/magic:0"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-gifts-of-khaine",
+      "name": "Dons de Khaine",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:4069376320ad2875b4e07b27c55eef37050a9d8fd7b3d765da90d24df0b929fb"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "deferred",
+          "text": "Dons de Khaine : techniques après Blessures de mêlée, distinctes des sorts ; périmètre combat elfique séparé.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "owned",
+          "text": "Acquisitions des Dons dans la fiche.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-holy-hatred",
+      "name": "Haine sacrée",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:f1f38bcfd4a086b1908cea2600cd5ad693d45310cfd657c9a1abbfb6ff665ac7"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "deferred",
+          "text": "Bonus aux Blessures des Miracles : hors de la finalisation des sorts.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-aethyric-attunement",
+      "name": "Harmonisation aethyrique",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:09ded3a1abc23bbb89c62f9a1d96d8df16c7194b8cedc1d74e36191fbc897f95"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Deux jets d’incident et choix explicite ; Mineur au rang 1, Majeur au rang 2. Aucun dé ou choix implicite.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-aethyric-attunement/magic:0"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-high-magic",
+      "name": "Haute Magie",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:258078fe86e49c699c138dfbbf1c756785742b99b00982d155981ec8f235174b"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "automatic",
+          "text": "Surplus de Haute Magie réussi : +1 DR par rang disponible pour la surpuissance ; plafond BI + BFM conservé.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-high-magic/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "owned",
+          "text": "Domaines requis, autorisations et mémorisation dans la fiche.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-suffuse-with",
+      "name": "Imprégné",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:91da30b698fc8a25083c99344a715e107280bb7a211a08e6b6498749076d3cc6"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Source canonique du Vent et distance réelle saisie, au plus 8 yards : +1 DR à un sort déjà réussi, sans cumul entre auras.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-suffuse-with/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "assisted",
+          "text": "Choix de substitution de la compétence autorisée pour le Vent par Focalisation commune.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-suffuse-with/magic:1"
+        },
+        {
+          "id": "magic:2",
+          "mode": "assisted",
+          "text": "Aqshy donne accès à Frénésie et permet de remplacer la FM du Test d’entrée par Focalisation ; aucun remplacement FM ordinaire. Les autres Vents substituent seulement les compétences listées. Le Vent perceptible par Seconde vue reste un rappel descriptif.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-cloture.test.js#talent-suffuse-with/magic:2"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-invoke",
+      "name": "Invocation",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:b5dc62251be4ab9970d4a7d08f93ebbd16009a52093efe686d8dbe3e3148aeba"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Apprentissage des Miracles et obligations religieuses dans la fiche.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "deferred",
+          "text": "Lancement et effets des Miracles à cadrer séparément.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-mind-over-body",
+      "name": "L’esprit sur le corps",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:8dea4623b136fc5274767216859634e31f893abe995720cc8e352d8372516fac"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Contemplation, Test de Prière et tous les d10 de durée saisis ; effet temporaire et expiration.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-mind-over-body/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "automatic",
+          "text": "Pendant la contemplation : immunité aux États explicitement liés à la douleur ; au rang 2, immunité Aveuglé.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-mind-over-body/magic:1"
+        },
+        {
+          "id": "magic:2",
+          "mode": "assisted",
+          "text": "Rang 3 : dépenser 1 Chance pendant la contemplation pour ignorer les pénalités de Blessures Critiques des Tests étendus désignés par le MJ, sans supprimer les blessures (adaptation V5 locale de Resolve, HEPG p.101).",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-mind-over-body/magic:2"
+        },
+        {
+          "id": "magic:3",
+          "mode": "reminder",
+          "text": "Vision mentale, perte des couleurs et limites sensorielles sont rappelées à table.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-war-wizard",
+      "name": "Mage de guerre",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:db464acb100d31b28c7dd6ac638246c67591f8b186dea704bd48b1ddaee42024"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Action gratuite de lancer NI ≤ 5 : talent et Élan requis, Élan consommé et aucun autre Test magique pendant ce Tour. Verrou levé au prochain Tour.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-war-wizard/magic:0"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-arcane-magic",
+      "name": "Magie des Arcanes",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:55ab1c76324bc82463b9d558fdcddf17991075347d9e72a5e9e99c57b10926fd"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "automatic",
+          "text": "Attributs Feu/Lumière : immunité par acquisition canonique du Domaine correspondant ; un simple nom libre n’active aucun effet.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-arcane-magic/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "owned",
+          "text": "Domaines connus, acquisition, apprentissage et mémorisation dans la fiche.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-rune-magic",
+      "name": "Magie des runes",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:cfc421894c96dccbac12bb15104538c414a26a126f4bbd4bc499e6d92cfaa774"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Runes connues et conditions d’apprentissage dans la fiche.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "deferred",
+          "text": "Forge, activation et effets des runes sont un autre périmètre ; distinct des runes des Cadai.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-chaos-magic",
+      "name": "Magie du Chaos",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:17d87e1b9b3abcb7b0796b3773139fa0461e8cc802972584b6a7f454605e5a66"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Apprentissage, compatibilités et conséquences permanentes dans la fiche.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "deferred",
+          "text": "Aucun ajout de sorts de Chaos absents du catalogue audité.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-petty-magic",
+      "name": "Magie mineure",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:e66b42de1ffa5dc3f9ec1085be99c1273ffc998486bba50a810622e9c86a0b86"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Sorts mineurs appris, nombre connu et PX dans la fiche.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-master-rune-magic",
+      "name": "Magie des Runes de Maître",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:4f61ebc74fd380b7b918b81554800e86fb67e9fac2443a43bb48b494efb2a435"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Apprentissage des Runes majeures dans la fiche.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "deferred",
+          "text": "Bonus aux Tests de gravure dans le périmètre d’artisanat runique séparé.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-cadai-meditation",
+      "name": "Méditation Cadai",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:2308b895665230960449a35c13994cc2f45f5e6049b80b307aea2f703c7f1f9b"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Heure de méditation et Test de Prière +2 DR ; réussite conservée comme rappel de passage de Yenlui à Lumineux, sans écriture dans la fiche.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-cadai-meditation/magic:0"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-eye-of-the-storm",
+      "name": "Œil de la tempête",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:8270b0306c4203c9ac712b9ed69076fb68d7d19261afda0b3bab89fc45b08589"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Contemplation, Test de Prière et dés de durée explicites ; interruption par distraction désignée ignorée au rang 1.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-eye-of-the-storm/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "automatic",
+          "text": "Rang 2 actif : pénalités Exténué ignorées pour Focalisation et incantation.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-eye-of-the-storm/magic:1"
+        },
+        {
+          "id": "magic:2",
+          "mode": "reminder",
+          "text": "Rang 2 : récupération naturelle de fatigue deux fois plus rapide, à appliquer au repos géré à table ; la fatigue n’est pas effacée automatiquement.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:3",
+          "mode": "reminder",
+          "text": "Rang 3 : ajustement de ±1 du jet de météo à appliquer par le MJ ; l’outil n’a pas de moteur météo.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-soul-pact",
+      "name": "Pacte de l’âme",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:fa0dff0ddde945d9f5188032795890afc02b937eb2d890f9e95224157c6d725f"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "deferred",
+          "text": "Pacte de l’âme exige un sort de magie sombre ; ces sorts sont absents du catalogue audité. Aucun effet de Pacte activé sur les sorts des huit Vents.",
+          "magicRegistry": true
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magical-sense",
+      "name": "Perception de la Magie",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:55deb6f2d600741fb3773358fece2d2bdc2b48400ff4961adcf1c97324fdaac0"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Au lancement, rappel automatique des observateurs canoniques et portée égale à leur Perception ; distance et direction à préciser par le MJ, sans identification de la magie.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magical-sense/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "assisted",
+          "text": "Perception d’un mouvement de magie avec perception des Vents confirmée : Avantage V5 et choix de d100.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magical-sense/magic:1"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magic-resistance",
+      "name": "Résistance à la Magie",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:26b59747b3239e653130fadbb5cb020006774febe721c39ea063796b2a36b0cc"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "automatic",
+          "text": "Hors Puissance totale, réduit de 3 les DR d’un sort pour cette cible avant vérification de son NI ; ne pénalise pas les autres cibles.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-magic-resistance/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "owned",
+          "text": "Incompatibilités d’apprentissage dans la fiche.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:2",
+          "mode": "automatic",
+          "text": "D-07 : contre Puissance totale, NI ignoré et −3 DR aux seuls effets de la cible résistante.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-cloture.test.js#talent-magic-resistance/magic:2"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sanctuary-of-the-mind",
+      "name": "Sanctuaire de l’esprit",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:bca08dd555dec1cc0f17913633e62d4435901ccec4f202939fd53ca8f0ff00cd"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "assisted",
+          "text": "Contemplation, Prière et dés de durée explicites ; expiration.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-sanctuary-of-the-mind/magic:0"
+        },
+        {
+          "id": "magic:1",
+          "mode": "automatic",
+          "text": "Rang 1 actif : Corruption produite par les incidents d’incantation évitée ; rang 2 : +1 DR Recherche.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-sanctuary-of-the-mind/magic:1"
+        },
+        {
+          "id": "magic:2",
+          "mode": "assisted",
+          "text": "Rang 3 actif : ignore seulement la pénalité de Yenlui identifiée, en conservant les autres malus.",
+          "magicRegistry": true,
+          "executionProbe": "tests/lot3-v5-high-talent-coverage.test.js#talent-sanctuary-of-the-mind/magic:2"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-witch",
+      "name": "Sorcier !",
+      "status": "validated",
+      "source": {
+        "effectHash": "sha256:2bb5372883d388deac68d77ec62dd294e4bfdbad316ab37652b8d9c1c8c7c8c4"
+      },
+      "clauses": [
+        {
+          "id": "magic:0",
+          "mode": "owned",
+          "text": "Focalisation et Langue (Magick) comme compétences de base, apprentissage des sorts et PX dans la fiche.",
+          "magicRegistry": true
+        },
+        {
+          "id": "magic:1",
+          "mode": "reminder",
+          "text": "Conséquences fictionnelles et chasse aux sorciers rappelées au MJ.",
+          "magicRegistry": true
+        }
+      ]
+    }
+  ],
+  "contextReminders": [
+    {
+      "talentId": "talent-second-sight",
+      "mode": "reminder",
+      "source": "Livre de base V5 p. 236 ; D-17",
+      "text": "En zone saturée, le Désavantage aux Tests de Perception des phénomènes ordinaires est annoncé et appliqué par le MJ ; aucun Désavantage automatique."
+    }
+  ]
+}

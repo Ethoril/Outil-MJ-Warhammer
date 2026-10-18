@@ -119,16 +119,17 @@ export function describeWeaponDamage(action, caracs) {
  * attacker's, needed by `BF`. Returns null when the weapon damage cannot be
  * computed automatically (see evaluateWeaponDamage).
  */
-export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, roll = 0, damageBonus = 0, targetToughnessBonus = 0, targetArmour = 0, qualities = [] } = {}) {
+export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, roll = 0, damageBonus = 0, targetToughnessBonus = 0, targetArmour = 0, qualities = [],damageMultiplier=1,approvedQualities=[] } = {}) {
   const weapon = evaluateWeaponDamage(weaponDamage, strengthBonus);
   if (weapon.status !== 'resolved') return null;
   const normQualities = normalizeQualities(qualities);
-  if (normQualities.some(q => Object.hasOwn(ENGINES, q.id) && keywordMechanicalStatus(q.id).status !== 'covered')) return null;
+  if(!Number.isSafeInteger(damageMultiplier)||damageMultiplier<1)throw new TypeError('Multiplicateur de dégâts invalide');
+  if (normQualities.some(q => Object.hasOwn(ENGINES, q.id) && !approvedQualities.includes(q.id)&&keywordMechanicalStatus(q.id).status !== 'covered')) return null;
 
   const activeEngines = [];
   normQualities.forEach(q => {
     const engineDef = ENGINES[q.id];
-    if (engineDef && keywordMechanicalStatus(q.id).status === 'covered') {
+    if (engineDef && (keywordMechanicalStatus(q.id).status === 'covered'||approvedQualities.includes(q.id))) {
       activeEngines.push({ quality: q, engine: engineDef });
     }
   });
@@ -136,7 +137,7 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
   const baseDamage = weapon.value;
 
   // 1. Percutante / Impact : ajoute le dé d'unités du jet
-  const unitsDie = Number(roll) > 0 ? (Number(roll) % 10 || 10) : 0;
+  const unitsDie = Number(roll) > 0 ? (approvedQualities.includes('percutante')?Number(roll)%10:(Number(roll) % 10 || 10)) : 0;
   const isInoffensive = activeEngines.some(ae => ae.quality.id === 'inoffensive');
   const isPercutante = !isInoffensive && activeEngines.some(ae => ae.engine.engine === 'add-units-die');
   const bonusPercutante = isPercutante ? unitsDie : 0;
@@ -155,7 +156,8 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
   const be = Number(targetToughnessBonus) || 0;
   const absorption = be + paEffectif;
 
-  const totalRaw = baseDamage + effectiveSL + bonusPercutante + damageBonus;
+  const unmultipliedDamage = baseDamage + effectiveSL + bonusPercutante + damageBonus;
+  const totalRaw = unmultipliedDamage*damageMultiplier;
   const net = totalRaw - absorption;
 
   let finalDamage = net;
@@ -172,6 +174,7 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
 
   return {
     weaponDamage: baseDamage,
+    ...(damageMultiplier!==1?{damageMultiplier,unmultipliedDamage,preProtectionDamage:totalRaw}:{}),
     // Part of weaponDamage that is the attacker's Strength Bonus (`BF+4`).
     ...(weapon.kind === 'strength' ? { strengthBonus: weapon.strengthBonus } : {}),
     sl: effectiveSL,
@@ -216,6 +219,7 @@ export function damageBreakdown(damage) {
   if (devastatrice) notes.push('Dévastatrice : meilleur du DR et du dé des unités');
   if (has('add-units-die')) add(damage.bonusPercutante, 'Percutante');
   if (damage.talentDamage) add(damage.talentDamage, 'talents');
+  if(damage.damageMultiplier){add(damage.preProtectionDamage-damage.unmultipliedDamage,'Petit ×'+damage.damageMultiplier);notes.push('Petit : multiplication avant BE/PA');}
   subtract(damage.be, 'BE');
   subtract(damage.paEffectif, damage.isInoffensive ? `PA (×${FACTEUR_INOFFENSIVE})` : 'PA');
   if (damage.isInoffensive) notes.push(`Inoffensive : PA ×${FACTEUR_INOFFENSIVE}, pas de minimum`);

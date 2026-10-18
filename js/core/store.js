@@ -1,13 +1,176 @@
+import {previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
+import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
+import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
+import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
+import {resoluteException} from './v5-talent-replacements.js';
+import {previewChannelling, applyChannelling} from './v5-magic-channelling.js';
+import {previewCasting, applyCasting} from './v5-magic-casting.js';
+import {previewMiscast, applyMiscast, resolveMiscast, isMiscastConditionLocked} from './v5-magic-miscasts.js';
+import {
+  previewBurnout,
+  applyBurnout,
+  previewBurnoutRecovery,
+  applyBurnoutRecovery,
+  getCadaiRunes,
+  deployCadaiRune,
+  consumeCadaiRune,
+  previewCadaiCorruptionReroll
+} from './v5-magic-high.js';
+import {
+  previewDispelCasting,
+  applyDispelCasting,
+  previewDispelPersistent,
+  applyDispelPersistent
+} from './v5-magic-dispel.js';
+import {
+  applySpellEffects as applyParticipantSpellEffects,
+  expireSpellEffects as expireParticipantSpellEffects,
+  rebaseMagicLayers,
+  currentMagicRound,
+  endBeastForm as revertParticipantBeastForm,
+  resolveMagicMissile,
+  resolveSpellDamage,
+  resolveTouchOpposition,
+  resolveSpellHealing
+} from './v5-magic-effects.js';
+import {
+  previewLoreAttribute,
+  applyLoreAttribute as applyLoreAttributeInternal
+} from './v5-magic-attributes.js';
+import {
+  previewBeastForm,
+  applyBeastForm as applyParticipantBeastForm,
+  previewVerdantApotheosis,
+  applyVerdantApotheosis as applyVerdantApotheosisInternal,
+  previewDaemonbane,
+  applyDaemonbane as applyDaemonbaneInternal,
+  restoreDaemonbaneMaxHp as restoreDaemonbaneMaxHpInternal,
+  daemonbaneReductions,
+  previewHandOfGlory,
+  applyHandOfGlory as applyHandOfGloryInternal,
+  calculateSapheryWard,
+  testSapheryWard,
+  applyScytheOfShyishRules
+} from './v5-magic-arbitrations.js';
+import {
+  getSpellContract,
+  getContractChoiceOptions,
+  validateSpellTargets,
+  validateSpellFingerprint,
+  previewSpellExecution as previewSpellExecutionInternal,
+  applySpellExecution as applySpellExecutionInternal
+} from './v5-spell-contracts.js';
+import {preventIdentifiedSurprise} from './v5-talent-situations.js';
 import { listV5ReactionOpportunities, closeV5ReactionOpportunities } from './v5-reactions.js';
+import { refreshV5TalentEffects,previewV5FrenzyExit } from './v5-talent-actions.js';
 import { previewV5TalentConditions } from './v5-talents.js';
 import { normalizeEffects } from './effects.js';
 import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
-import { getV5Fortune, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, setV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
+import { getV5Fortune, getV5Fate, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds } from './v5-effects.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
+import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
+import { advanceCampaignSnapshot } from './v5-campaign-time.js';
+import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
+import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
+
+function prayerCapClockNeeds(participant, snapshot, path='participant'){
+ const check=validatePrayerSLCaps(participant,{clock:snapshot?.extensions?.v5?.gameClock||null});if(!check.ok)return check.needsInput;
+ if(check.caps.length){
+  const clock=snapshot?.extensions?.v5?.gameClock;
+  if(!clock||!Number.isSafeInteger(clock.campaignSeconds))return [{path:`${path}.extensions.v5.divineEffects`,message:'Horloge absente : la sanction de Prière ne peut pas être vérifiée.'}];
+  const expired=check.caps.filter(cap=>cap.deadline.atSeconds<=clock.campaignSeconds);
+  if(expired.length)return expired.map(()=>({path:`${path}.extensions.v5.divineEffects`,message:'Sanction de Prière échue au curseur actuel; résolvez-la avant ce Test.'}));
+ }
+ const sceneId=snapshot?.activeScene?.status==='active'?snapshot.activeScene.id:null,round=snapshot?.combat?.round;
+ const lesson=getPrayerSLModifiers(participant,{sceneId,round});
+ return lesson.ok?[]:lesson.needsInput.map(row=>({path:`${path}.${row.path}`,message:row.message}));
+}
+function recordV5ActionUsage(envelope,actorId,actionId){
+ const clock=v5StoreActionClock(envelope);if(!clock.encounterId||!clock.turnId||envelope.combat?.currentActorId!==actorId)return {ok:true,tracked:false};
+ envelope.extensions??={};envelope.extensions.v5??={};
+ const rows=envelope.extensions.v5.standardTurnActions||[];
+ if(!rows.some(row=>row.actionId===actionId))envelope.extensions.v5.standardTurnActions=[...rows,{actorId,actionId,encounterId:clock.encounterId,round:clock.round,turnId:clock.turnId,kind:'action'}].slice(-500);
+ return {ok:true,clock};
+}
+function standardV5ActionSpent(envelope,actorId,clock=v5StoreActionClock(envelope)){
+ return Boolean(clock.encounterId&&clock.turnId&&(envelope.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId));
+}
+function brokenEscapeActionSpent(envelope,actorId,clock=v5StoreActionClock(envelope)){
+ if(!clock.encounterId||!clock.turnId)return false;
+ const key=JSON.stringify([clock.encounterId,clock.turnId]);
+ return standardV5ActionSpent(envelope,actorId,clock)||(envelope.extensions?.v5?.actionLedger?.quotaUsage||[]).some(row=>row.actorId===actorId&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used>0);
+}
+function isBrokenEscapeActor(actor){
+ return (actor?.states||[]).some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
+}
+function brokenEscapeActionBlock(envelope,actorId){
+ const clock=v5StoreActionClock(envelope);
+ return isBrokenEscapeActor(envelope.combat?.participants?.find(row=>row.id===actorId))&&brokenEscapeActionSpent(envelope,actorId,clock)
+  ? {ready:false,status:'blocked',code:'BROKEN_ESCAPE_ACTION_SPENT',error:'Le quota Action du Tour est déjà dépensé pour ce personnage Brisé.'}
+  : null;
+}
+function isV5ActionUse(preview,input={}){
+ return preview?.attack===true||input?.attack===true||preview?.input?.v5?.context?.isAction===true||input?.v5?.context?.isAction===true;
+}
+function isExplicitV5NonAction(preview,input={}){
+ return !isV5ActionUse(preview,input)&&(preview?.input?.v5?.context?.isAction===false||input?.v5?.context?.isAction===false);
+}
+function isV5SkillTest(preview,input={}){
+ const source=preview?.input||input||{},action=source.action||input?.action||{};
+ const kind=source.v5?.kind||input?.v5?.kind;
+ return kind==='test'||['skill','defense','opposition'].includes(String(action.type||'').toLowerCase())||Boolean(source.defense||input?.defense);
+}
+function brokenEscapeActionClassificationBlock(actor,preview,input={}){
+ if(!isBrokenEscapeActor(actor))return null;
+ const source=preview?.input||input||{},action=source.action||input?.action||{};
+ if(preview?.attack===true||source.attack===true||input?.attack===true||action.type==='attack'||input?.action?.type==='attack')return null;
+ if(!isV5SkillTest(preview,input))return null;
+ const classification=source.v5?.context?.isAction??input?.v5?.context?.isAction;
+ if(typeof classification==='boolean')return null;
+ return {ready:false,status:'requires-input',code:'BROKEN_ESCAPE_ACTION_CLASSIFICATION_REQUIRED',error:'Pr\u00e9ciser si ce Test consomme l\u2019Action du Tour.',needsInput:[{field:'v5.context.isAction',type:'boolean',label:'Ce Test consomme-t-il l\u2019Action du Tour ?'}]};
+}
+function throwBrokenEscapeActionClassification(block){
+ if(block)throw Object.assign(new Error(block.error),{userFacing:true,code:block.code,needsInput:block.needsInput});
+}
+function hasV5ReactionOpportunity(prepared){
+ return Boolean(prepared?.reactionValidation?.ready===true&&prepared.reactionValidation.opportunity);
+}
+function recordV5EscapeVisibility(envelope,actorId,visibleToAnyEnemy,sourceId){
+ if(typeof visibleToAnyEnemy!=='boolean')return;
+ const clock=v5StoreActionClock(envelope),root=envelope.extensions?.v5||{},escape=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]});
+ escape.receipts=[...(escape.receipts||[]),{id:`visibility:${sourceId}`,actorId,visibleToAnyEnemy,turn:clock,source:'explicit-gm',committedAtRevision:(envelope.localRevision||0)+1}].slice(-300);
+ envelope.extensions??={};envelope.extensions.v5={...root,brokenEscape:escape};
+}
+
+// S-05 : un participant dont la base magique est suivie (couches, Forme bestiale) reçoit un patch de caractéristiques/armure comme nouvelle base.
+const isMagicBased = p => Boolean(p?.extensions?.v5?.baseCaracs || p?.extensions?.v5?.spellEffects?.length || p?.extensions?.v5?.divineEffects?.length || p?.extensions?.v5?.beastForm);
+// V5 p. 239 : Clairvoyance chaotique ne dure que le reste de la séance.
+function clearSessionClairvoyance(participant) {
+  if (participant.extensions?.v5?.corruptionPerFortuneSpent === undefined) return participant;
+  const { corruptionPerFortuneSpent, ...v5 } = participant.extensions.v5;
+  return { ...participant, extensions: { ...participant.extensions, v5 } };
+}
+// V5 p. 239 : un État lié à un effet d’incident irrévocable ne se retire pas à la main, ni par une modification brute de `states`.
+function assertMiscastConditionsKept(before, after) {
+  const kept = new Map((after.states || []).map(state => [state.id, state]));
+  if ((before.states || []).some(state => {
+    if (!isMiscastConditionLocked(before, state)) return false;
+    const proposed = kept.get(state.id), level = Number(proposed?.level ?? 1);
+    return !proposed || !Number.isFinite(level) || level < Number(state.level ?? 1);
+  })) {
+    throw Object.assign(new Error('Regard maudit : cet État ne peut être retiré ni son niveau diminué avant la fin de l’incident magique.'), { code: 'MISCAST_CONDITION_LOCKED', userFacing: true });
+  }
+  return after;
+}
+function pickBaseLayers(participant, patch) {
+  if (!(patch?.caracs || patch?.armor) || !isMagicBased(participant)) return {};
+  const rebased = rebaseMagicLayers(participant, { caracs: patch.caracs, armor: patch.armor });
+  return Object.fromEntries(['caracs', 'armor', 'M', 'movement', 'extensions'].filter(key => rebased[key] !== undefined).map(key => [key, rebased[key]]));
+}
 import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
-import { sanitizeArray, sanitizeProfile, sanitizeParticipant } from './sanitize.js';
+import { sanitizeArray, sanitizeProfile, sanitizeParticipant, sanitizeMagicEnvelope } from './sanitize.js';
 import { migrateSnapshot, migrateLegacyStorage, CURRENT_SCHEMA_VERSION } from './migrations.js';
 import { createStateCommand } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
@@ -17,7 +180,7 @@ import { previewResolution as buildResolutionPreview, applyResolution as applyAc
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
-import { sharedState } from './sync-protocol.js';
+import { sharedState, sameSharedState } from './sync-protocol.js';
 import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
 
 export const KEY = { EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
@@ -42,6 +205,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   let pendingCommandBefore = null;
   let pendingCommandType = null;
   let orderMode = ORDER_MODES.AUTOMATIC;
+  const issuedBrokenEscapePreviews = new Map();
   let localRevision = 0;
   let lastRemoteRevision = -1;
   let turnSelectionPending = false;
@@ -118,6 +282,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
   function shieldAfterAttack(participants, preview, round) {
     const actorId = preview?.actorId || preview?.input?.actor?.id;
+    if(['attack','attaque'].includes(preview?.input?.action?.type)){participants=endSpellEffectsOnEvent(participants,actorId,'attack');if(preview.targetId)participants=endSpellEffectsOnEvent(participants,preview.targetId,'incoming-attack');}
     const equipmentId = preview?.input?.action?.extensions?.fiche?.equipmentId;
     if (!preview?.attack || !equipmentId) return participants;
     return participants.map(actor => {
@@ -128,14 +293,6 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         shieldUnavailableCause: { ...actor.extensions?.shieldUnavailableCause, [equipmentId]: { resolutionId: preview.resolutionId, round } } } };
     });
   }
-  function shieldAtTurnStart(participants, actorId) {
-    return participants.map(actor => {
-      if (actor.id !== actorId || !actor.extensions?.shieldUnavailable) return actor;
-      const extensions = { ...actor.extensions }; delete extensions.shieldUnavailable; delete extensions.shieldUnavailableCause;
-      return { ...actor, extensions };
-    });
-  }
-
   function repairMaxHp(list) {
     list.forEach(p => {
       if (p.maxHp === undefined) {
@@ -257,7 +414,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
   }
 
   function applyDataToState(data, { includeLog = false, includeHistory = true } = {}) {
-    data = projectV5ResourceEnvelope(data);
+    data = projectV5ResourceEnvelope(sanitizeMagicEnvelope(data));
     stateExtensions = data.extensions && typeof data.extensions === 'object' && !Array.isArray(data.extensions)
       ? JSON.parse(JSON.stringify(data.extensions)) : {};
     encounters = Array.isArray(data.encounters) ? cloneValue(data.encounters) : [];
@@ -557,7 +714,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         ...(preview?.talentTrace ? { talentTrace: cloneValue(preview.talentTrace) } : {}),
         ...(preview?.talents ? { talents: cloneValue(preview.talents) } : {}),
         ...(preview?.weaponConditions ? { weaponConditions: cloneValue(preview.weaponConditions), targetConditionApplication: cloneValue(preview.targetConditionApplication), reminders: cloneValue(preview.reminders || []) } : {}),
-        ...(preview?.talentPlans ? { talentPlans: cloneValue(preview.talentPlans), activeEffects: cloneValue(preview.activeEffects), damageReplacedByTalent: preview.damageReplacedByTalent } : {}),
+        ...(preview?.talentPlans ? { talentPlans: cloneValue(preview.talentPlans), activeEffects: cloneValue(preview.activeEffects), damageReplacedByTalent: preview.damageReplacedByTalent, secondaryTargets: cloneValue(preview.secondaryTargets||[]) } : {}),
         ...(resolution?.actionCostReceipt ? { actionCostReceipt: cloneValue(resolution.actionCostReceipt) } : {}),
         ...(resolution?.talentUsageReceipts?.length ? { talentUsageReceipts: cloneValue(resolution.talentUsageReceipts) } : {}),
         application: resolution?.application || null
@@ -673,7 +830,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     reportLocalStatus('saving');
     persistenceQueue = persistenceQueue
       .then(() => persistence.saveAtomic({ state, operations: operationEntries, restore: restoreCopy }))
-      .then(() => {
+      .then(result => {
+        if (result?.ok === false) {
+          if (latestPersistenceToken === token) reportLocalStatus('error');
+          return result;
+        }
         if (latestPersistenceToken === token) reportLocalStatus('saved');
         return { ok: true };
       })
@@ -942,6 +1103,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         receipt.participant.extensions = { ...(receipt.participant.extensions || {}), v5: { ...(receipt.participant.extensions?.v5 || {}), resources: { ...(receipt.participant.extensions?.v5?.resources || {}), fortune: current.balance - 1 } } };
         receipt.resourceCost = { resource: 'fortune', characterId: current.characterId, before: current.balance, amount: 1, after: current.balance - 1 };
         draft = commitV5Resources(draft, (draft.combat?.participants || []).map(item => item.id === participantId ? receipt.participant : item));
+        receipt.participant = (draft.combat?.participants || []).find(item => item.id === participantId) || receipt.participant;
       }
       return { ...draft,
         combat: { ...draft.combat, participants: draft.combat.participants.map(item => item.id === participantId ? receipt.participant : item) },
@@ -988,8 +1150,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
   function effectiveCombatOrder() {
     return effectiveOrder(Array.from(combat.participants.values()), {
-      mode: orderMode,
-      order: combat.order
+      mode: stateExtensions?.v5?.orderRound===combat.round ? 'manual' : orderMode,
+      order: combat.order,
+      round:combat.round
+    });
+  }
+
+  function magicCommand(type, mutator, options = {}, preview = null) {
+    const expected = options.baseRevision ?? preview?.baseRevision ?? localRevision;
+    return api.executeCommand(type, draft => {
+      if (draft.localRevision !== expected) throw Object.assign(new Error('État modifié depuis l’aperçu : la partie a changé. Recalculez avant d’appliquer cette action magique.'), { code: 'V5_MAGIC_STALE', userFacing: true });
+      return mutator(draft);
     });
   }
 
@@ -1011,6 +1182,9 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           throw error;
         }
         if (next === undefined) throw new Error('La commande n’a produit aucun état');
+        // Les soldes de Chance projetés sur les participants suivent toujours le registre (expirations comprises).
+        next = finalizeDivineState(before,next);
+        next = projectV5ResourceEnvelope(removeExpiredSummons(next));
         next = tagNewEncounterLogs(before, next);
         const purgeScope = purgeEncounterId ? encounterJournalScope(fullBefore, purgeEncounterId) : null;
         if (purgeScope) next = purgeEncounterJournal(next, purgeScope);
@@ -1023,6 +1197,26 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const combatRequested = !sameValue(before?.combat, next?.combat);
         let canonical = migrateSnapshot(next, { appVersion, contextId }).data;
         canonical = synchronizeSceneCombat(before, canonical, localRevision + 1, { sceneRequested, combatRequested });
+        // Scene activation/suspension and legacy combat edits can change the
+        // canonical combat position without representing elapsed time. Keep
+        // the clock's projection in the same atomic command and history state;
+        // only a real clock revision may carry validated temporal phases.
+        const beforeClock = before.extensions?.v5?.gameClock;
+        const canonicalClock = canonical.extensions?.v5?.gameClock;
+        if (canonicalClock) {
+          const targetPosition = readCombatPosition(canonical);
+          if (beforeClock && canonicalClock.revision > beforeClock.revision) {
+            if (!sameValue(canonicalClock.combat, targetPosition)) {
+              throw Object.assign(new Error('La position temporelle du reçu ne correspond pas au combat canonique.'), { code: 'V5_CLOCK_POSITION_CONFLICT' });
+            }
+          } else {
+            const reconciled = reconcileGameClockPosition(canonicalClock, targetPosition);
+            if (reconciled.changed) canonical = {
+              ...canonical,
+              extensions: { ...(canonical.extensions || {}), v5: { ...(canonical.extensions?.v5 || {}), gameClock: reconciled.clock } }
+            };
+          }
+        }
         // A scene revision identifies changes to the scene.  Keep it
         // monotone with the command revision so a stale preview cannot be
         // silently regenerated over a live combat edit.
@@ -1167,14 +1361,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         // Le profil stocké est d'abord ramené à une seule collection, puis le
         // patch s'applique par-dessus : ses `diceLines` font foi, même vides.
         const profiles = (draft.reserve || []).map(item => item.id === id ? { ...canonicalizeProfileFields(item), ...capturedPatch } : item);
+        // S-05 : caractéristiques et armure du profil = nouvelle base ; les couches magiques actives se recalculent dessus.
         const participants = propagate ? (draft.combat?.participants || []).map(item => item.profileId !== id ? item : {
-          ...item,
+          ...(capturedPatch.caracs || capturedPatch.armor ? { ...item, ...(isMagicBased(item) ? rebaseMagicLayers(item, { caracs: capturedPatch.caracs, armor: capturedPatch.armor }) : { caracs: capturedPatch.caracs ? cloneValue(capturedPatch.caracs) : item.caracs, armor: capturedPatch.armor ? cloneValue(capturedPatch.armor) : item.armor }) } : item),
           name: capturedPatch.name ?? item.name,
           kind: capturedPatch.kind ?? item.kind,
           initiative: capturedPatch.initiative ?? item.initiative,
           maxHp: capturedPatch.hp ?? item.maxHp,
-          ...(capturedPatch.caracs ? { caracs: cloneValue(capturedPatch.caracs) } : {}),
-          ...(capturedPatch.armor ? { armor: cloneValue(capturedPatch.armor) } : {}),
           ...Object.fromEntries(FICHE_DATA_FIELDS.filter(key => Object.hasOwn(capturedPatch, key)).map(key => [key, cloneValue(capturedPatch[key])])),
           ...(capturedPatch.diceLines ? { actions: cloneValue(capturedPatch.diceLines) } : {})
         }) : draft.combat?.participants;
@@ -1191,8 +1384,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (propagate) {
         for (const part of combat.participants.values()) if (part.profileId === id) {
           Object.assign(part, { name: patch.name ?? part.name, kind: patch.kind ?? part.kind, initiative: patch.initiative ?? part.initiative, maxHp: patch.hp ?? part.maxHp });
-          if (patch.caracs) part.caracs = cloneValue(patch.caracs);
-          if (patch.armor) part.armor = cloneValue(patch.armor);
+          if (isMagicBased(part)) Object.assign(part, rebaseMagicLayers(part, { caracs: patch.caracs, armor: patch.armor }));
+          else { if (patch.caracs) part.caracs = cloneValue(patch.caracs); if (patch.armor) part.armor = cloneValue(patch.armor); }
           for (const key of FICHE_DATA_FIELDS) if (Object.hasOwn(patch, key)) part[key] = cloneValue(patch[key]);
           markDirty(`combat/participants/${part.id}`, part);
         }
@@ -1290,11 +1483,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
         return api.executeCommand('update-participant', draft => {
           assertEditRevision(expectedLocalRevision, draft.localRevision);
-          return { ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === id ? momentumAfterChange(item, { ...item, ...capturedPatch }) : item) } };
+          return { ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === id ? momentumAfterChange(item, assertMiscastConditionsKept(item, { ...item, ...capturedPatch, ...pickBaseLayers(item, capturedPatch) })) : item) } };
         });
       }
       assertEditRevision(expectedLocalRevision, localRevision);
-      Object.assign(p, momentumAfterChange(p, { ...p, ...patch })); markDirty(`combat/participants/${id}`, p); save();
+      Object.assign(p, momentumAfterChange(p, assertMiscastConditionsKept(p, { ...p, ...patch, ...pickBaseLayers(p, patch) }))); markDirty(`combat/participants/${id}`, p); save();
       if ('zone' in patch) emitBus('combat'); else emitBus('combat:update', { id, patch });
     },
 
@@ -1305,10 +1498,15 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const proposed = normalizeEffects(captured).map((row, index) => ({ ...row,
           key: row.key === 'stunned' ? 'sonne' : row.key,
           level: typeof captured[index] === 'object' && captured[index]?.level !== undefined ? captured[index].level : row.level }));
-        const talent = previewV5TalentConditions(participant, proposed, { state: v5StoreActionState(draft), clock: v5StoreActionClock(draft), actionId });
+        const surprise=preventIdentifiedSurprise(participant,proposed,context.surpriseEventId);participant=surprise.participant;
+        const talent = previewV5TalentConditions(participant, surprise.states, { state: v5StoreActionState(draft), clock: v5StoreActionClock(draft), actionId });
         const receipt = acquireV5Conditions(participant, talent.states, v5EffectContext(draft, { ...context, resolutionId: actionId, targetId: id }));
+        const exit=previewV5FrenzyExit(receipt.participant,{round:draft.combat?.round,resolutionId:actionId,state:v5StoreActionState(draft),clock:v5StoreActionClock(draft)});
+        receipt.participant=exit.participant;
+        const resolute=resoluteException({},receipt.participant,{context},receipt.acquiredInstances);if(resolute.unresolved.length){receipt.ready=false;receipt.needsInput.push(...resolute.unresolved.map(label=>({field:'resolute',label})));}if(resolute.exceptions.length&&participant.extensions?.v5?.hasMomentum===true)receipt.participant={...receipt.participant,extensions:{...receipt.participant.extensions,v5:{...receipt.participant.extensions?.v5,hasMomentum:true}}};receipt.resoluteTest=resolute.test;
+        if(exit.unresolved.length){receipt.ready=false;receipt.needsInput.push(...exit.unresolved.map(label=>({field:'frenzyExit',label})));}
         receipt.talentPlan = talent.plan;
-        receipt.talentUsageRequests = talent.usageRequests.length ? talent.usageRequests : [{ actorId: id, actionId, costs: [], quotas: [], exemptions: [], clock: v5StoreActionClock(draft) }];
+        receipt.talentUsageRequests = talent.usageRequests.length||exit.usageRequests.length ? [...talent.usageRequests,...exit.usageRequests] : [{ actorId: id, actionId, costs: [], quotas: [], exemptions: [], clock: v5StoreActionClock(draft) }];
         if (!talent.plan.ready) {
           receipt.ready = false;
           receipt.needsInput.push(...talent.plan.unresolved.flatMap(item => item.fields.map(field => ({ field, label: 'Contexte requis pour le talent : ' + field }))));
@@ -1316,11 +1514,89 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         return receipt;
       }, { ...context, resolutionId: actionId });
     },
+    advanceCampaignTime(input, options = {}) {
+      if (!input || typeof input !== 'object' || Array.isArray(input)) throw new TypeError('Commande de temps de campagne invalide');
+      const { seconds, reason } = input;
+      if (!Number.isSafeInteger(seconds) || seconds < 1) throw new TypeError('Secondes entières positives requises');
+      if (typeof reason !== 'string' || !reason.trim()) throw new TypeError('Motif MJ requis');
+      if (!persistence && storage != null) return { ok: false, status: 'requires-input', receipt: null,
+        processedSubjects: [], needsInput: [{ path: 'storage', code: 'non-atomic-storage',
+          message: 'Cette sauvegarde ne permet pas d’enregistrer ensemble l’heure de jeu et les échéances. Rechargez la partie avec une sauvegarde transactionnelle pour avancer le temps.' }] };
+      const currentClock = stateExtensions?.v5?.gameClock || createGameClock(currentEnvelope());
+      const clockBaseRevision = input.clockBaseRevision ?? currentClock.revision;
+      if (!Number.isSafeInteger(clockBaseRevision) || clockBaseRevision < 0) throw new TypeError('Révision de clock invalide');
+      const eventId = input.eventId ?? `clock-v1:${clockBaseRevision}:store:${CLIENT_ID}:${uid()}`;
+      const event = { id: eventId, baseRevision: clockBaseRevision, kind: 'campaign-time-advance', seconds, reason };
+      const localBaseRevision = options.baseRevision ?? localRevision;
+      if (!Number.isSafeInteger(localBaseRevision) || localBaseRevision < 0) throw new TypeError('Révision locale invalide');
+      const preflight = advanceGameClock(currentClock, event);
+      if (preflight.status === 'duplicate') return { ok: true, status: 'duplicate', receipt: preflight.receipt, clock: preflight.clock, processedSubjects: [] };
+      if (!preflight.ok) return { ok: false, status: preflight.status, receipt: preflight.receipt || null, clock: preflight.clock };
+      const resultError = result => Object.assign(new Error(result.status), { code: 'CAMPAIGN_TIME_RESULT', result });
+      let processedSubjects = [];
+      let acceptedClock = null, acceptedReceipt = null;
+      let command;
+      try {
+        command = api.executeCommand('advance-campaign-time', draft => {
+          const clock = draft.extensions?.v5?.gameClock || createGameClock(draft);
+          const advanced = advanceGameClock(clock, event);
+          if (advanced.status === 'duplicate') throw resultError({ ok: true, status: 'duplicate', receipt: advanced.receipt, clock: advanced.clock, processedSubjects: [] });
+          if (!advanced.ok) throw resultError({ ok: false, status: advanced.status, receipt: advanced.receipt || null, clock: advanced.clock });
+          if (draft.localRevision !== localBaseRevision) throw resultError({ ok: false, status: 'stale', receipt: null, clock });
+          const progressed = advanceCampaignSnapshot(draft, { seconds, clock: draft.extensions?.v5?.gameClock });
+          if (!progressed.ok) throw resultError({ ok: false, status: 'requires-input', receipt: null, clock, processedSubjects: [], needsInput: progressed.needsInput });
+          const staged={...progressed.snapshot,extensions:{...(progressed.snapshot.extensions||{}),v5:{...(progressed.snapshot.extensions?.v5||{}),gameClock:advanced.clock}}};
+          const divine=expireDivineAtClock(staged,{fromClock:clock,toClock:advanced.clock,receipt:advanced.receipt});
+          if(!divine.ok)throw resultError({ok:false,status:'requires-input',receipt:null,clock,processedSubjects:[],needsInput:divine.needsInput});
+          processedSubjects = [...progressed.processedSubjects,...divine.removed.map(row=>({path:row.path,id:row.participantId,expiredEffectId:row.effectId}))];
+          acceptedClock = advanced.clock;
+          acceptedReceipt = advanced.receipt;
+          return { ...divine.state,
+            log: [{ id: uid(), kind: 'management', text: `Temps de campagne avancé de ${seconds} seconde(s) : ${reason.trim()}` }, ...(draft.log || [])].slice(0, 300)
+          };
+        });
+      } catch (error) {
+        if (error?.code === 'CAMPAIGN_TIME_RESULT') return error.result;
+        throw error;
+      }
+      return Promise.resolve(command).then(persisted => {
+        if (persisted?.ok === false) return { ok: false, status: 'persistence-error', receipt: null, error: persisted.error || null };
+        return { ok: true, status: 'applied', receipt: acceptedReceipt || preflight.receipt, clock: acceptedClock || preflight.clock, processedSubjects };
+      }).catch(error => {
+        if (error?.code === 'CAMPAIGN_TIME_RESULT') return error.result;
+        return { ok: false, status: 'persistence-error', receipt: null, error };
+      });
+    },
+    advanceTalentMinutes(minutes, options = {}) {
+      const seconds = campaignDurationSeconds(minutes, 'minutes');
+      const clock = stateExtensions?.v5?.gameClock || createGameClock(currentEnvelope());
+      return api.advanceCampaignTime({ seconds, reason: `Avance de durée : ${minutes} minute(s)`, clockBaseRevision: clock.revision }, options);
+    },
+    startTalentSession(options = {}){
+      const sessionId = uid();
+      return magicCommand('start-talent-session', draft => {
+        const cleanScene = scene => scene ? { ...scene, participants: (scene.participants || []).map(clearSessionClairvoyance),
+          ...(scene.combat ? { combat: { ...scene.combat, participants: (scene.combat.participants || []).map(clearSessionClairvoyance) } } : {}) } : scene;
+        return { ...draft, reserve: (draft.reserve || []).map(clearSessionClairvoyance),
+          persistentCharacters: (draft.persistentCharacters || []).map(clearSessionClairvoyance),
+          combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(clearSessionClairvoyance) },
+          ...(draft.activeScene ? { activeScene: cleanScene(draft.activeScene) } : {}),
+          suspendedScenes: (draft.suspendedScenes || []).map(cleanScene),
+          extensions: { ...draft.extensions, v5: { ...draft.extensions?.v5, talentSessionId: sessionId } },
+          log: [{ id: uid(), kind: 'management', text: 'Nouvelle séance : quotas des talents renouvelés.' }, ...(draft.log || [])].slice(0, 300) };
+      }, options);
+    },
     getFortune(id) {
       const envelope = currentEnvelope();
       const subject = envelope.combat.participants.find(item => item.id === id) || envelope.reserve.find(item => item.id === id) || envelope.persistentCharacters.find(item => item.id === id);
       if (!subject) throw new TypeError('Personnage introuvable');
       return { ...getV5Fortune(envelope, subject), baseRevision: localRevision };
+    },
+    getFate(id) {
+      const envelope = currentEnvelope();
+      const subject = envelope.combat.participants.find(item => item.id === id) || envelope.reserve.find(item => item.id === id) || envelope.persistentCharacters.find(item => item.id === id);
+      if (!subject) throw new TypeError('Personnage introuvable');
+      return { ...getV5Fate(envelope, subject), baseRevision: localRevision };
     },
     setFortune(id, amount, options = {}) {
       const captured = cloneValue(options), expected = captured.baseRevision ?? localRevision, characterId = uid();
@@ -1377,8 +1653,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
 
     setRoundTurn(round, currentActorId) {
       if (!canMutate()) return false;
-      if (persistence) return api.executeCommand('set-round-turn', draft => ({ ...draft, combat: { ...draft.combat, round, currentActorId } }));
+      if (persistence) return api.executeCommand('set-round-turn', draft => {
+        return { ...draft, combat: { ...draft.combat, round, currentActorId } };
+      });
       beginCommand('set-round-turn'); combat.round = round; combat.currentActorId = currentActorId;
+      const clock = stateExtensions?.v5?.gameClock;
+      if (clock) {
+        const reconciled = reconcileGameClockPosition(clock, readCombatPosition(currentEnvelope()));
+        if (reconciled.changed) stateExtensions = {
+          ...stateExtensions,
+          v5: { ...(stateExtensions.v5 || {}), gameClock: reconciled.clock }
+        };
+      }
       markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order }); save(); emitBus('combat');
     },
     rebuildOrder() {
@@ -1440,27 +1726,76 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     },
     nextTurn() {
       if (!canMutate()) return false;
-      if (persistence) return api.executeCommand('next-turn', draft => {
-        const result = computeNextTurn({
-          participants: draft.combat?.participants || [], order: effectiveOrder(draft.combat?.participants || [], {
-            mode: draft.combat?.orderMode || ORDER_MODES.AUTOMATIC, order: draft.combat?.order || []
-          }), currentActorId: draft.combat?.currentActorId || null, round: draft.combat?.round || 0
+      const current=currentEnvelope(),actor=current.combat?.participants?.find(row=>row.id===current.combat?.currentActorId),keyActor=actor?.id,seq=current.extensions?.v5?.brokenEscape?.byActorId?.[keyActor];
+      const carriesBroken=(actor?.states||[]).some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
+      const sequenceCompletedThisTurn=seq?.turnId===v5StoreActionClock(current).turnId&&seq?.fleeCommitted&&seq?.sprintCommitted;
+      if(carriesBroken&&seq?.visibleToAnyEnemy!==false&&!sequenceCompletedThisTurn){
+        const clock=v5StoreActionClock(current),ledger=current.extensions?.v5?.actionLedger||{quotaUsage:[]},actionSpent=standardV5ActionSpent(current,keyActor,clock)||(ledger.quotaUsage||[]).some(row=>row.actorId===keyActor&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===JSON.stringify([clock.encounterId,clock.turnId])&&row.used>0),fleeThisTurn=seq?.turnId===clock.turnId&&seq?.fleeCommitted;
+        const midturn=actionSpent&&!fleeThisTurn;
+        const message=midturn?'DIV-BROKEN-MIDTURN-01 : décision MJ explicite requise pour cette occurrence; aucune Action supplémentaire ni report automatique.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le MJ ne confirme pas la sortie de vue.';
+        throw Object.assign(new Error(message),{code:midturn?'DIV-BROKEN-MIDTURN-01':'BROKEN_ESCAPE_REQUIRED',userFacing:true});
+      }
+      let transitionResult = null;
+      return api.executeCommand('next-turn', draft => {
+        const beforePosition = readCombatPosition(draft);
+        const order = effectiveOrder(draft.combat?.participants || [], {
+          mode: draft.combat?.orderMode || ORDER_MODES.AUTOMATIC, order: draft.combat?.order || [], round: draft.combat?.round || 0
         });
-        return { ...draft, combat: { ...draft.combat, participants: shieldAtTurnStart(draft.combat?.participants || [], result.currentActorId), order: result.order, currentActorId: result.currentActorId, round: result.round } };
+        const result = computeNextTurn({
+          participants: draft.combat?.participants || [], order,
+          currentActorId: draft.combat?.currentActorId || null, round: draft.combat?.round || 0
+        });
+        transitionResult = result;
+        const realTurn = beforePosition.round > 0 && Boolean(beforePosition.currentActorId) && Boolean(result.currentActorId);
+        const nextTurnIndex = realTurn ? beforePosition.turnIndex + 1 : beforePosition.turnIndex;
+        const combat = { ...draft.combat, participants: draft.combat?.participants || [], order: result.order,
+          currentActorId: result.currentActorId, round: result.round };
+        let extensions = draft.extensions || {};
+        let v5 = extensions.v5 || {};
+        let activeScene = draft.activeScene;
+        let clock = v5.gameClock || createGameClock(draft);
+        const fromClock=cloneValue(clock);let clockReceipt=null;
+        if (JSON.stringify(clock.combat) !== JSON.stringify(beforePosition))
+          throw Object.assign(new Error('La projection de l’horloge est décalée du combat canonique.'), { code: 'V5_CLOCK_POSITION_CONFLICT' });
+        let phases = [];
+        if (realTurn) {
+          const toPosition = { ...beforePosition, round: result.round, turnIndex: nextTurnIndex, currentActorId: result.currentActorId };
+          phases = deriveTurnPhasePlan({ from: beforePosition, to: toPosition });
+          const clockResult = advanceGameClock(clock, {
+            id: `clock-v1:${clock.revision}:store-next-turn-${CLIENT_ID}-${draft.localRevision || 0}-${++operationSequence}`,
+            baseRevision: clock.revision, kind: 'combat-transition', sceneId: beforePosition.sceneId,
+            from: beforePosition, to: toPosition, phases
+          });
+          if (!clockResult.ok) throw Object.assign(new Error('La transition legacy ne correspond pas à la révision de l’horloge.'), { code: 'V5_CLOCK_STALE' });
+          clock = clockResult.clock;
+          clockReceipt=clockResult.receipt;
+          phases = clockResult.validatedPhases;
+          v5 = { ...v5, turnIndex: nextTurnIndex, gameClock: clock };
+          if (activeScene?.status === 'active') activeScene = { ...activeScene,
+            extensions: { ...(activeScene.extensions || {}), v5: { ...(activeScene.extensions?.v5 || {}), turnIndex: nextTurnIndex } } };
+        } else {
+          const positionAfter = readCombatPosition({ ...draft, combat, extensions, activeScene });
+          clock = reconcileGameClockPosition(clock, positionAfter).clock;
+          v5 = { ...v5, gameClock: clock };
+        }
+        extensions = { ...extensions, v5 };
+        const unshielded = shieldAtTurnStart(combat.participants, result.currentActorId);
+        const processed = processCombatTurnSpells(unshielded, result.round, result.currentActorId,
+          { actorId: draft.combat?.currentActorId, round: draft.combat?.round });
+        combat.participants = processed;
+        if (realTurn && phases.length) {
+          const expired = expireDivineAtPhases({ ...draft, combat }, phases);
+          combat.participants = expired.combat.participants;
+        }
+        let nextState={ ...draft, activeScene, extensions, combat };
+        if(realTurn&&clockReceipt){
+          const divine=expireDivineAtClock(nextState,{fromClock,toClock:clock,receipt:clockReceipt});
+          if(!divine.ok)throw Object.assign(new Error(divine.needsInput.map(row=>row.message).join(' ')),{code:'V5_TURN_INPUT',needsInput:divine.needsInput});
+          nextState=divine.state;
+        }
+        transitionResult = { ...result, phases, clock: cloneValue(clock) };
+        return nextState;
       });
-      beginCommand('next-turn');
-      const result = computeNextTurn({
-        participants: Array.from(combat.participants.values()),
-        order: effectiveCombatOrder(), currentActorId: combat.currentActorId, round: combat.round
-      });
-      combat.order = result.order;
-      combat.currentActorId = result.currentActorId;
-      combat.round = result.round;
-      const startedActor = combat.participants.get(result.currentActorId);
-      if (startedActor?.extensions?.shieldUnavailable) { const cleared = shieldAtTurnStart([startedActor], startedActor.id)[0]; Object.assign(startedActor, cleared); markDirty(`combat/participants/${startedActor.id}`, startedActor); }
-      markDirty('combat/meta', { round: combat.round, currentActorId: combat.currentActorId, order: combat.order, orderMode });
-      save(); emitBus('combat');
-      return result;
     },
     consumeTurnSelection() {
       const pending = turnSelectionPending;
@@ -1942,15 +2277,121 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       const envelope = currentEnvelope();
       return listV5ReactionOpportunities(envelope, actorId, { clock: v5StoreActionClock(envelope) });
     },
+    confirmBrokenEscapeVisibility({actorId,visibleToAnyEnemy}={}) {
+      const envelope=currentEnvelope(),clock=v5StoreActionClock(envelope);
+      if(typeof visibleToAnyEnemy!=='boolean')return {ready:false,status:'requires-input',needsInput:[{field:'visibleToAnyEnemy',label:'Le MJ doit confirmer la visibilité envers tout ennemi.'}]};
+      if(!actorId||actorId!==envelope.combat?.currentActorId)return {ready:false,status:'blocked',error:'L’attestation de visibilité doit viser l’acteur du Tour canonique.'};
+      const actor=envelope.combat?.participants?.find(row=>row.id===actorId),broken=(actor?.states||[]).some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
+      if(!broken)return {ready:false,status:'blocked',error:'Le personnage ne porte pas Brisé.'};
+      const key=JSON.stringify([clock.encounterId,clock.turnId]),ledger=envelope.extensions?.v5?.actionLedger||{appliedActions:[],quotaUsage:[]};
+      const actionUsed=ledger.quotaUsage.some(row=>row.actorId===actorId&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used>0)||standardV5ActionSpent(envelope,actorId,clock);
+      const seq=envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const sameTurn=seq?.turnId===clock.turnId;
+      if(actionUsed&&!(sameTurn&&seq?.fleeCommitted))return {ready:false,status:'blocked',code:'DIV-BROKEN-MIDTURN-01',needsInput:[{field:'decision.DIV-BROKEN-MIDTURN-01',label:'Décision MJ explicite requise pour cette occurrence; ce fait de visibilité ne la remplace pas.'}],error:'DIV-BROKEN-MIDTURN-01 : confirmer hors vue ne résout pas une Action déjà dépensée.'};
+      let receipt;const saved=api.executeCommand('v5-broken-escape-visibility',draft=>{
+        if(draft.localRevision!==envelope.localRevision)throw Object.assign(new Error('La partie a changé; recalculez le fait de visibilité.'),{userFacing:true});
+        const root=draft.extensions?.v5||{},state=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]});state.byActorId??={};
+        const previous=sameTurn?(state.byActorId[actorId]||{}):{};state.byActorId[actorId]={...previous,actorId,turnId:clock.turnId,visibleToAnyEnemy,factsCommitted:true,fleeCommitted:previous.fleeCommitted===true,sprintCommitted:previous.sprintCommitted===true};
+        receipt={id:`visibility:${actorId}:${clock.turnId}:${visibleToAnyEnemy?'visible':'hidden'}`,actorId,action:'visibility-confirmation',turn:clock,visibleToAnyEnemy,source:'explicit-gm',sourceRuleVersion:BROKEN_ESCAPE_RULE_VERSION};
+        state.receipts=[...(state.receipts||[]),receipt].slice(-300);draft.extensions??={};draft.extensions.v5={...root,brokenEscape:state};return draft;
+      });
+      const finish=result=>result?.ok===false?{status:'error',error:result.error}: {status:'applied',receipt,persistence:result};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    previewBrokenEscape(input = {}) {
+      const envelope = currentEnvelope(), actor = envelope.combat?.participants?.find(row => row.id === input.actorId && row.zone === 'active');
+      const clock = v5StoreActionClock(envelope);
+      if (input.actorId !== envelope.combat?.currentActorId) return {ready:false,status:'blocked',error:'La fuite doit être résolue pendant le Tour canonique du personnage.'};
+      const key = clock.encounterId && clock.turnId ? JSON.stringify([clock.encounterId,clock.turnId]) : null;
+      const quota = (envelope.extensions?.v5?.actionLedger?.quotaUsage || []);
+      const used = id => id==='system:turn-action'&&standardV5ActionSpent(envelope,input.actorId,clock) ? 1 : key && quota.find(row => row.actorId === input.actorId && row.quotaId === id && row.scope === 'turn' && row.scopeKey === key)?.used || 0;
+      const sequence = envelope.extensions?.v5?.brokenEscape?.byActorId?.[input.actorId] || null;
+      if (input.action === 'flee' && used('system:turn-action') > 0) return {ready:false,status:'blocked',code:'DIV-BROKEN-MIDTURN-01',needsInput:[{field:'decision.DIV-BROKEN-MIDTURN-01',label:'Décision MJ explicite requise pour cette occurrence.'}],error:'DIV-BROKEN-MIDTURN-01 : une Action a déjà été dépensée pendant ce Tour; décision MJ explicite requise pour cette occurrence.'};
+      if (input.action === 'flee' && used('system:turn-move') > 0) return {ready:false,status:'blocked',error:'Le quota Move du Tour est déjà dépensé.'};
+      if (['sprint','hide'].includes(input.action) && used('system:turn-action') > 0) return {ready:false,status:'blocked',error:'Le quota Action du Tour est déjà dépensé.'};
+      const value = previewV5BrokenEscape({state:envelope,actor,actorId:input.actorId,action:input.action,facts:input.facts,turn:clock,roll:input.roll,choice:input.choice,sequence:sequence && sequence.turnId===clock.turnId ? sequence : null});
+      if (value.ready) {
+        value.baseRevision = envelope.localRevision || 0;
+        value.actionId = `broken-escape:${input.actorId}:${clock.turnId}:${input.action}`;
+        value.facts = structuredClone(input.facts);
+        const proof=JSON.stringify(value);issuedBrokenEscapePreviews.set(value.actionId,proof);
+        while(issuedBrokenEscapePreviews.size>100)issuedBrokenEscapePreviews.delete(issuedBrokenEscapePreviews.keys().next().value);
+      }
+      return value;
+    },
+    applyBrokenEscape(supplied) {
+      const plan = cloneValue(supplied), actorId=plan?.actorId;
+      const prior=currentEnvelope().extensions?.v5?.actionLedger?.appliedActions?.find(row=>row.actionId===plan?.actionId);
+      if(prior)return Promise.resolve({status:'duplicate',receipt:currentEnvelope().extensions?.v5?.brokenEscape?.receipts?.find(row=>row.id===plan.actionId)||null});
+      if (!plan?.ready || !plan.actionId || issuedBrokenEscapePreviews.get(plan.actionId)!==JSON.stringify(plan)) return Promise.reject(new Error('Aperçu de fuite absent ou modifié; recalculez.'));
+      let receipt;
+      const saved=api.executeCommand('v5-broken-escape',draft=>{
+        const clock=v5StoreActionClock(draft),key=clock.encounterId&&clock.turnId?JSON.stringify([clock.encounterId,clock.turnId]):null;
+        if(draft.localRevision!==plan.baseRevision||JSON.stringify(clock)!==JSON.stringify(plan.turn))throw Object.assign(new Error('La partie ou le Tour a changé; recalculez la fuite.'),{userFacing:true});
+        const actor=draft.combat?.participants?.find(row=>row.id===actorId&&row.zone==='active');if(!actor)throw new Error('Personnage de fuite absent.');
+        const root=draft.extensions?.v5||{},ledger=structuredClone(root.actionLedger||{appliedActions:[],quotaUsage:[]}),quotaId=plan.action==='flee'?'system:turn-move':'system:turn-action';
+        const old=ledger.quotaUsage.find(row=>row.actorId===actorId&&row.quotaId===quotaId&&row.scope==='turn'&&row.scopeKey===key);
+        if(old?.used)throw Object.assign(new Error('Quota de Tour déjà dépensé; recalcul requis.'),{userFacing:true});
+        const seqs=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]}),seq=seqs.byActorId?.[actorId]||{};
+        if(plan.action==='sprint'&&(!seq.fleeCommitted||seq.turnId!==clock.turnId||seq.visibleToAnyEnemy!==true))throw Object.assign(new Error('Move Flee préalable manquant ou périmé.'),{userFacing:true});
+        if(plan.action==='flee'&&((plan.facts.engagedEnemyIds||[]).length||plan.facts.visibleToAnyEnemy!==true))throw Object.assign(new Error('Faits de fuite modifiés; recalculez.'),{userFacing:true});
+        if(plan.action==='flee'&&(ledger.quotaUsage.some(row=>row.actorId===actorId&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used)||standardV5ActionSpent(draft,actorId,clock)))throw Object.assign(new Error('DIV-BROKEN-MIDTURN-01 : Action déjà dépensée, décision MJ explicite requise.'),{userFacing:true});
+        if(old)old.used=1;else ledger.quotaUsage.push({actorId,quotaId,scope:'turn',scopeKey:key,used:1});
+        ledger.appliedActions??=[];ledger.appliedActions.push({actionId:plan.actionId,actorId,encounterId:clock.encounterId||null});
+        const current=plan.action==='flee'?{...plan.sequenceAfter,fleeCommitted:true,sprintCommitted:false,turnId:clock.turnId,startedAtRevision:draft.localRevision+1}:plan.action==='sprint'?{...plan.sequenceAfter,fleeCommitted:true,sprintCommitted:true,turnId:clock.turnId}:seq;
+        seqs.byActorId??={};if(plan.action!=='hide')seqs.byActorId[actorId]=current;
+        receipt={id:plan.actionId,actorId,action:plan.action,turn:structuredClone(clock),facts:{...structuredClone(plan.facts),...(plan.action==='flee'?{engagementConfirmation:{confirmed:true,enemyCount:(plan.facts.engagedEnemyIds||[]).length}}:{})},test:plan.test?structuredClone(plan.test):null,moveDistance:plan.moveDistance,sprintDistance:plan.sprintDistance??null,totalDistance:plan.totalDistance??plan.moveDistance,source:structuredClone(BROKEN_ESCAPE_SOURCE),ruleVersion:BROKEN_ESCAPE_RULE_VERSION};
+        seqs.receipts=[...(seqs.receipts||[]),receipt].slice(-300);
+        draft.extensions??={};draft.extensions.v5={...root,actionLedger:ledger,brokenEscape:seqs};
+        return draft;
+      });
+      const finish=result=>{if(result?.ok===false)return {status:'error',reason:result.error||'Écriture refusée; état inchangé.'};issuedBrokenEscapePreviews.delete(plan.actionId);return {status:'applied',receipt,persistence:result};};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
     previewResolution(input = {}) {
-      const prepared = buildV5StoreActionInput(currentEnvelope(), input);
-      return annotateV5StoreActionPreview(buildResolutionPreview(prepared), prepared);
+      const snapshot=currentEnvelope(),prepared = buildV5StoreActionInput(snapshot, input);
+      const actorId=prepared.actor?.id||prepared.actorId||input.actorId, escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const escapeActor=snapshot.combat?.participants?.find(row=>row.id===actorId);
+      const reaction=hasV5ReactionOpportunity(prepared);
+      if(!reaction&&!isExplicitV5NonAction(null,input)&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){
+        const visibility=input.brokenEscapeFacts?.visibleToAnyEnemy;
+        const blocked=isV5BrokenEscapeActionBlocked(escapeActor,{visibleToAnyEnemy:visibility,sequence:escape});
+        if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',needsInput:blocked==='needs-fact'?[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}]:[],baseRevision:localRevision,input:structuredClone(input)};
+      }
+      const classificationBlock=!reaction?brokenEscapeActionClassificationBlock(escapeActor,null,input):null;
+      if(classificationBlock)return {...classificationBlock,baseRevision:localRevision,input:structuredClone(input)};
+      prepared.prayerSLContext={sceneId:snapshot.activeScene?.status==='active'?snapshot.activeScene.id:null,round:snapshot.combat?.round};
+      const actor=snapshot.combat?.participants?.find(row=>row.id===actorId);
+      if(actor){const needs=prayerCapClockNeeds(actor,snapshot,`combat.participants.${actor.id}`);if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};}
+      const defenderSkillId=prepared.defense?.extensions?.fiche?.skillId||prepared.defense?.v5?.context?.skillId
+        ||input.defense?.extensions?.fiche?.skillId||input.defense?.v5?.context?.skillId;
+      if(defenderSkillId==='skill-50_72_69_e8_72_65-base'){
+        const defenderId=prepared.target?.id||prepared.targetId||input.targetId;
+        const defender=snapshot.combat?.participants?.find(row=>row.id===defenderId);
+        if(defender){const needs=prayerCapClockNeeds(defender,snapshot,`combat.participants.${defender.id}`);if(needs.length)return {ready:false,status:'requires-input',error:needs[0].message,needsInput:needs,unresolved:needs.map(row=>row.message),baseRevision:localRevision};}
+      }
+      const preview=annotateV5StoreActionPreview(buildResolutionPreview(prepared), prepared);
+      if(!reaction&&isV5ActionUse(preview,input)){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
+      if(!reaction&&preview.attack===true){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision,input:structuredClone(input)};}
+      return {...preview,ready:(preview.unresolved||[]).length===0,input:{...(preview.input||prepared),brokenEscapeFacts:structuredClone(input.brokenEscapeFacts)}};
     },
     applyResolution(supplied) {
       const preview = cloneValue(supplied);
+      const actorId=preview.input?.actor?.id||preview.input?.actorId||preview.actorId||preview.input?.source?.id;
+      const snapshot=currentEnvelope(),escapeActor=snapshot.combat?.participants?.find(row=>row.id===actorId),escape=snapshot.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const guardPrepared=buildV5StoreActionInput(snapshot,preview.input||{}),reaction=hasV5ReactionOpportunity(guardPrepared);
+      if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){
+        const blocked=isV5BrokenEscapeActionBlocked(escapeActor,{visibleToAnyEnemy:preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,sequence:escape});
+        if(blocked)throw new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.');
+        throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(escapeActor,preview,preview.input||{}));
+        if(isV5ActionUse(preview,preview.input||{})){const actionBlock=brokenEscapeActionBlock(snapshot,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
+      }
       let semanticResult = null;
       const commit = api.executeCommand('apply-resolution', draft => {
 
+        const commitPrepared=buildV5StoreActionInput(draft,preview.input||{}),commitReaction=hasV5ReactionOpportunity(commitPrepared),commitActor=draft.combat?.participants?.find(row=>row.id===actorId);
+        if(!commitReaction)throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(commitActor,preview,preview.input||{}));
+        if(!commitReaction&&isV5ActionUse(preview,preview.input||{})){const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
         let result;
         try { result = applyV5StoreAction(preview, draft, state => applyActionResolution(preview, state)); }
         catch (error) { error.code = error.code || 'RESOLUTION_INVALID'; throw error; }
@@ -1964,13 +2405,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
           error.code = result.status === 'stale' ? 'RESOLUTION_STALE' : 'RESOLUTION_MANUAL';
           throw error;
         }
+        const resolvedActorId=preview.input?.actor?.id||preview.input?.actorId;
         result.state.participants = shieldAfterAttack(result.state.participants, preview, draft.combat?.round ?? 0);
         result.resolution = { ...result.resolution, actionCostReceipt: result.actionCostReceipt, talentUsageReceipts: result.talentUsageReceipts };
         semanticResult = result;
-        return {
+        const next={
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         };
+        if(isV5ActionUse(preview,preview.input||{})&&!commitReaction)recordV5ActionUsage(next,resolvedActorId,preview.resolutionId);
+        if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(next,actorId,preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,preview.resolutionId);
+        return next;
       });
       return Promise.resolve(commit).then(persisted => {
         if (persisted?.ok === false) return { status: 'error', reason: 'Résolution non sauvegardée' };
@@ -1984,22 +2429,33 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       });
     },
     simulateAction(input = {}) {
-      const sourceState = v5StoreActionState(currentEnvelope());
-      const prepared = buildV5StoreActionInput(currentEnvelope(), input);
+      const envelope=currentEnvelope(),sourceState=v5StoreActionState(envelope),prepared=buildV5StoreActionInput(envelope,input);
+      const owner=prepared.actor?.id||prepared.actorId||input.actorId,person=envelope.combat?.participants?.find(row=>row.id===owner),sequence=envelope.extensions?.v5?.brokenEscape?.byActorId?.[owner];
+      const reaction=hasV5ReactionOpportunity(prepared),freeTest=isExplicitV5NonAction(null,input);
+      if(isBrokenEscapeActor(person)&&!reaction&&!freeTest){const blocked=isV5BrokenEscapeActionBlocked(person,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence});if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',sourceState};}
+      const classificationBlock=!reaction?brokenEscapeActionClassificationBlock(person,null,input):null;
+      if(classificationBlock)return {...classificationBlock,sourceState};
       const simulation = simulateAction(prepared.v5State, prepared);
       if (simulation.preview) simulation.preview = annotateV5StoreActionPreview(simulation.preview, prepared);
       simulation.sourceState = sourceState;
+      if(isBrokenEscapeActor(person)&&!reaction&&isV5ActionUse(simulation.preview,input)){const actionBlock=brokenEscapeActionBlock(envelope,owner);if(actionBlock)return {...actionBlock,mode:'simulation',sourceState,preview:simulation.preview};}
       return simulation;
     },
     applySimulation(supplied) {
-      const simulation = cloneValue(supplied);
+      const simulation=cloneValue(supplied),input=simulation.preview?.input||{},actorId=input.actor?.id||input.actorId,env=currentEnvelope(),actor=env.combat?.participants?.find(row=>row.id===actorId),sequence=env.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const prepared=buildV5StoreActionInput(env,input),reaction=hasV5ReactionOpportunity(prepared),freeTest=isExplicitV5NonAction(simulation.preview,input);
+      if(isBrokenEscapeActor(actor)&&!reaction&&!freeTest){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence});if(blocked)throw new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.');}
+      if(!reaction)throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(actor,simulation.preview,input));
+      if(isBrokenEscapeActor(actor)&&!reaction&&isV5ActionUse(simulation.preview,input)){const actionBlock=brokenEscapeActionBlock(env,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
       let semanticResult = null;
       // applyActionSimulation has already executed the pure resolution. Passing
       // result.resolution back through applyResolution would apply it twice and
       // immediately report a duplicate. Commit the returned state once through
       // the Store command boundary so it remains undoable and revisioned.
       const commit = api.executeCommand('apply-simulation', draft => {
-
+        const commitPrepared=buildV5StoreActionInput(draft,input),commitReaction=hasV5ReactionOpportunity(commitPrepared),commitActor=draft.combat?.participants?.find(row=>row.id===actorId);
+        if(!commitReaction)throwBrokenEscapeActionClassification(brokenEscapeActionClassificationBlock(commitActor,simulation.preview,input));
+        if(isBrokenEscapeActor(commitActor)&&!commitReaction&&isV5ActionUse(simulation.preview,input)){const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
         const result = applyV5StoreAction(simulation.preview, draft, state => applyActionSimulation(simulation, state));
         if (result.status === 'duplicate') {
           const error = new Error('Simulation déjà appliquée');
@@ -2014,10 +2470,13 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         result.state.participants = shieldAfterAttack(result.state.participants, simulation.preview, draft.combat?.round ?? 0);
         result.resolution = { ...result.resolution, actionCostReceipt: result.actionCostReceipt, talentUsageReceipts: result.talentUsageReceipts };
         semanticResult = result;
-        return {
+        const next={
           ...v5StoreActionResult(draft, result),
           log: [resolutionLogEntry(simulation.preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         };
+        if(isV5ActionUse(simulation.preview,input)&&!commitReaction)recordV5ActionUsage(next,actorId,simulation.preview.resolutionId);
+        if(isBrokenEscapeActor(commitActor))recordV5EscapeVisibility(next,actorId,input.brokenEscapeFacts?.visibleToAnyEnemy,simulation.preview.resolutionId);
+        return next;
       });
       return Promise.resolve(commit).then(persisted => {
         if (persisted?.ok === false) return { status: 'error', reason: 'Simulation non sauvegardée' };
@@ -2028,11 +2487,501 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if (error?.code === 'SIMULATION_INVALID') return { status: 'error', reason: error.message };
         throw error;
       });
-    },
-    getSimulationState() {
+    },    getSimulationState() {
       return v5StoreActionState(currentEnvelope());
     },
     discardSimulation(simulation) { return discardSimulation(simulation); },
+    previewChannelling(input = {}) {
+      const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
+      return {...previewChannelling(participant, {...input,assistant:combat.participants.get(input.assistantId),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}),input:structuredClone(input),baseRevision:localRevision};
+    },
+    applyChannelling(preview, options = {}) {
+      return applyChannelling(api, preview, {...options,turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)});
+    },
+    previewCasting(spell, input = {}) {
+      const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
+      return {...previewCasting(participant, spell, {...input,assistant:combat.participants.get(input.assistantId),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}),input:structuredClone(input),baseRevision:localRevision};
+    },
+    applyCasting(preview, options = {}) {
+      return applyCasting(api, preview, options);
+    },
+    previewMiscast(input = {}) {
+      const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
+      const bfm = input.bfm !== undefined ? input.bfm : Math.floor((Number(participant?.caracs?.FM) || 0) / 10);
+      return previewMiscast({ ...input, bfm, participant });
+    },
+    applyMiscast(preview, options = {}) {
+      return applyMiscast(api, preview, options);
+    },
+    previewBurnout(input = {}) {
+      const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
+      return previewBurnout({ participant, ...input });
+    },
+    applyBurnout(preview, options = {}) {
+      return applyBurnout(api, preview, options);
+    },
+    previewBurnoutRecovery(input = {}) {
+      const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      const participant = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
+      return { ...previewBurnoutRecovery(participant && projectV5Resources(currentEnvelope(), [participant])[0], { ...input, envelope: currentEnvelope() }), baseRevision: localRevision };
+    },
+    applyBurnoutRecovery(preview, options = {}) {
+      const captured = cloneValue(preview), context = cloneValue(options), expected = context.baseRevision ?? captured?.baseRevision ?? localRevision;
+      if (captured?.possible === false) throw Object.assign(new Error(captured.reason || 'Récupération d’épuisement impossible.'), { userFacing: true });
+      return applyBurnoutRecovery({ ...api, executeCommand: (type, mutator) => magicCommand(type, mutator, { baseRevision: expected }) }, captured, context);
+    },
+    rerollCorruptionWithCadai(input={}){
+      input = cloneValue(input);
+      return magicCommand('v5-cadai-corruption',draft=>{
+        const participants=draft.combat?.participants || [],i=participants.findIndex(p=>p.id===input.actorId);if(i<0)throw new Error('Acteur introuvable.');
+        // HEPG p. 84 : la Corruption doit découler d'une exécution réelle de Haute Magie de cet acteur ; un jet de Corruption ne se relance qu'une fois.
+        const executions=draft.extensions?.v5?.highMagicExecutions || [],e=executions.findIndex(row=>row.id===input.castExecutionId && row.actorId===input.actorId);
+        if(e<0)throw new Error('Relance de Corruption : exécution de Haute Magie de ce lanceur introuvable.');
+        const corruptionId=String(input.corruptionId || 'corruption');
+        const actor=participants[i],spell=getSpellContract(executions[e].spellId);
+        const reroll=previewCadaiCorruptionReroll(actor,{spell,castExecutionId:input.castExecutionId,accessible:input.accessible,firstRoll:input.firstRoll,reroll:input.reroll,slModifier:Number(input.slModifier || 0),alreadyRerolled:executions[e].rerolledCorruption.includes(corruptionId)});
+        if(!reroll.ready)throw Object.assign(new Error(reroll.error),{userFacing:true});
+        const paid=consumeCadaiRune(actor,{purpose:'corruption'});if(!paid.success)throw new Error(paid.reason);
+        participants[i]=paid.participant;participants[i].extensions.v5.lastCadaiCorruption={firstRoll:reroll.firstRoll,reroll:reroll.reroll,test:reroll.test,slModifier:reroll.slModifier,castExecutionId:input.castExecutionId,corruptionId,remaining:paid.remaining};
+        draft.extensions.v5.highMagicExecutions=executions.map((row,index)=>index===e?{...row,rerolledCorruption:[...row.rerolledCorruption,corruptionId]}:row);
+        draft.log=[{id:uid(),kind:'magic',ts:Date.now(),text:'Rune des Cadai : Test de Corruption relancé '+reroll.firstRoll+' → '+reroll.reroll+' ; '+reroll.test.sl+' DR, '+(reroll.test.success?'réussite':'échec')+'. Conséquences d’exposition à reporter sur la fiche.'},...(draft.log || [])];return draft;
+      }, input);
+    },
+    activateMindOverBody(actorId, options = {}){
+      return magicCommand('v5-mind-over-body-fortune',draft=>{
+        const participants=draft.combat?.participants || [],actor=participants.find(p=>p.id===actorId);
+        const effect=activeMagicTalent(actor,'mind-over-body');
+        if(!effect || effect.magicTalentRank<3 || magicTalentRank(actor,'mind-over-body')<3)throw new Error('Contemplation active et rang 3 requis.');
+        if(effect.ignoreCriticalPenalties)throw new Error('Blessures critiques déjà ignorées pour cette contemplation.');
+        const fortune=getV5Fortune(draft,actor).balance;if(fortune==null || fortune<1)throw new Error('Un Point de Chance initialisé est requis.');
+        const before=structuredClone(draft);actor.extensions.v5.resources={...(actor.extensions.v5.resources || {}),fortune:fortune-1};effect.ignoreCriticalPenalties=true;
+        const paid=commitV5Resources(before,participants);draft.extensions=paid.extensions;draft.combat.participants=paid.combat.participants;
+        draft.log=[{id:uid(),kind:'magic',ts:Date.now(),text:'L’esprit sur le corps : 1 Chance dépensée ; pénalités de Blessures Critiques ignorées pendant cette contemplation. Les blessures restent présentes.'},...(draft.log || [])];return projectV5ResourceEnvelope(draft);
+      }, options);
+    },
+    startMagicAdventure(options = {}){return magicCommand('v5-magic-adventure',draft=>{draft.extensions ??={};draft.extensions.v5 ??={};draft.extensions.v5.magicAdventureId=uid();return draft;}, options);},
+    applyMagicMeditation(input={}){
+      input = cloneValue(input);
+      return magicCommand('v5-magic-meditation',draft=>{
+        const participants=draft.combat?.participants || [],index=participants.findIndex(p=>p.id===input.actorId);if(index<0)throw new Error('Acteur introuvable.');
+        const needs=prayerCapClockNeeds(participants[index],draft,`combat.participants.${input.actorId}`);if(needs.length)throw Object.assign(new Error(needs[0].message),{userFacing:true,needsInput:needs});
+        input.prayerSLContext={sceneId:draft.activeScene?.status==='active'?draft.activeScene.id:null,round:draft.combat?.round};
+        const preview=previewMagicMeditation(participants[index],input);if(!preview.ready)throw new Error(preview.error);
+        if(preview.success){
+          if(preview.yenlui){participants[index].extensions ??={};participants[index].extensions.v5 ??={};participants[index].extensions.v5.yenlui=preview.yenlui;}
+          else {participants[index]=expireParticipantSpellEffects(participants[index],{spellId:input.talentId}).participant;participants[index]=applyParticipantSpellEffects(participants[index],preview.effect,{round:currentMagicRound(draft.combat)}).participant;}
+        }
+        const slTrace=preview.prayerSLAdjustment?` · Courroux « Pensez à vos actes » : ${preview.prayerSLAdjustment.rawSL} DR bruts → ${preview.prayerSLAdjustment.effectiveSL} DR appliqués (plafond +0, huit jours impériaux)`:'';
+        draft.log=[{id:uid(),ts:Date.now(),kind:'magic',text:input.name+' : '+(preview.success?'méditation réussie':'échec')+' ; jet '+input.roll+' ; '+preview.test.sl+' DR'+slTrace},...(draft.log || [])];return draft;
+      }, input);
+    },
+    getCadaiRunes(actorId = null) {
+      const targetId = actorId || combat.currentActorId;
+      const participant = (combat.participants.get(targetId)) || Array.from(combat.participants.values())[0];
+      return getCadaiRunes(participant);
+    },
+    deployCadaiRune(input = {}) {
+      input = cloneValue(input);
+      const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      return magicCommand('v5-cadai-deploy', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === actorId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        if(input.reset){participants[index].extensions ??={};participants[index].extensions.v5 ??={};participants[index].extensions.v5.cadaiRunes={deployed:0,max:Math.floor((Number(participants[index].caracs?.FM)||0)/10)};}
+        else {
+          if(input.conditionsConfirmed!==true)throw new Error('Lire/Écrire, matériel et conditions de déploiement requis.');
+          const skill=(participants[index].skills || []).find(row=>/savoir.*magie|lore.*magic/i.test(row.name || row.nom || ''));
+          const score=Number(skill?.total ?? skill?.score ?? skill?.value ?? participants[index].caracs?.Int) || 0;
+          const test=selectV5Test(previewV5Test({score,roll:input.roll,kind:'test'}),'keep');
+          if(test.success)participants[index] = deployCadaiRune(participants[index], {count:1});
+          draft.log=[{id:uid(),ts:Date.now(),kind:'magic',text:'Déploiement Cadai (1 Round) : '+(test.success?'réussi':'échec')+' ; jet '+input.roll+' ; '+test.sl+' DR'},...(draft.log || [])];
+        }
+        const runes = getCadaiRunes(participants[index]);
+        draft.log = [
+          { id: uid(), ts: Date.now(), kind: 'magic', text: `Runes des Cadai déployées : ${runes.deployed}/${runes.max}` },
+          ...(draft.log || [])
+        ].slice(0, 300);
+        return draft;
+      }, input);
+    },
+    consumeCadaiRune(input = {}) {
+      const actorId = input.actorId || input.actor?.id || combat.currentActorId;
+      return api.executeCommand('v5-cadai-consume', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === actorId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        const res = consumeCadaiRune(participants[index], input);
+        if (!res.success) throw new Error(res.reason);
+        participants[index] = res.participant;
+        draft.log = [
+          { id: uid(), ts: Date.now(), kind: 'magic', text: res.summary },
+          ...(draft.log || [])
+        ].slice(0, 300);
+        return draft;
+      });
+    },
+    previewDispelCasting(castingPreview, input = {}) {
+      const dispellerId = input.dispellerId || input.actorId || combat.currentActorId;
+      const dispeller = (combat.participants.get(dispellerId)) || Array.from(combat.participants.values())[0];
+      const round = input.round !== undefined ? input.round : currentMagicRound(combat);
+      return previewDispelCasting(dispeller, castingPreview, { turnKey: `${round}:${stateExtensions?.v5?.turnIndex ?? 1}`, round, ...input });
+    },
+    applyDispelCasting(preview, options = {}) {
+      return applyDispelCasting(api, preview, options);
+    },
+    previewDispelPersistent(persistentEffect, input = {}) {
+      const dispellerId = input.dispellerId || input.actorId || combat.currentActorId;
+      const dispeller = (combat.participants.get(dispellerId)) || Array.from(combat.participants.values())[0];
+      return previewDispelPersistent(dispeller, persistentEffect, input);
+    },
+    applyDispelPersistent(preview, options = {}) {
+      if(preview.baseRevision!==undefined && preview.baseRevision!==localRevision)throw new Error('État modifié : recalcul requis.');
+      return applyDispelPersistent(api, preview, options);
+    },
+    applySpellEffects(participantId, effectDefinition, options = {}) {
+      const targetId = participantId || combat.currentActorId;
+      return api.executeCommand('v5-spell-effects-apply', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === targetId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        const res = applyParticipantSpellEffects(participants[index], effectDefinition, {
+          ...options,
+          round: currentMagicRound(draft.combat)
+        });
+        participants[index] = res.participant;
+        const logText = `Effet magique appliqué sur ${participants[index].name || targetId} : ${effectDefinition.spellName || effectDefinition.id || 'Sort'}`;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: logText }, ...(draft.log || [])].slice(0, 300);
+        return projectV5ResourceEnvelope(draft);
+      });
+    },
+    expireSpellEffects(participantId, filter = {}) {
+      const targetId = participantId || combat.currentActorId;
+      return api.executeCommand('v5-spell-effects-expire', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === targetId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        const res = expireParticipantSpellEffects(participants[index], filter);
+        participants[index] = res.participant;
+        const logText = `Expiration d’effets magiques sur ${participants[index].name || targetId} (${res.removedEffects.length} effet(s) retiré(s))`;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: logText }, ...(draft.log || [])].slice(0, 300);
+        return projectV5ResourceEnvelope(draft);
+      });
+    },
+    consumeTemporaryFortune(participantId, amount = 1) {
+      const targetId = participantId || combat.currentActorId;
+      let consumedCount = 0;
+      const result = api.executeCommand('v5-consume-temp-fortune', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === targetId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        const res = consumeParticipantTempFortune(participants[index], amount);
+        participants[index] = res.participant;
+        creditFortuneCorruption(draft, participants, participants[index], res.consumed);
+        consumedCount = res.consumed;
+        const logText = `${participants[index].name || targetId} consomme ${res.consumed} point(s) de Chance temporaire(s)`;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: logText }, ...(draft.log || [])].slice(0, 300);
+        return projectV5ResourceEnvelope(draft);
+      });
+      // En persistance la commande est asynchrone : le compte n'est connu qu'une fois l'état écrit.
+      return typeof result?.then === 'function' ? result.then(done => done?.ok === false ? { ...done, consumed: 0 } : { consumed: consumedCount }) : { consumed: consumedCount };
+    },
+    consumeTemporaryFate(participantId, amount = 1) {
+      const targetId = participantId || combat.currentActorId;
+      let consumedCount = 0;
+      const result = api.executeCommand('v5-consume-temp-fate', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === targetId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        const res = consumeParticipantTempFate(participants[index], amount);
+        participants[index] = res.participant;
+        consumedCount = res.consumed;
+        const logText = `${participants[index].name || targetId} consomme ${res.consumed} point(s) de Destin temporaire(s)`;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: logText }, ...(draft.log || [])].slice(0, 300);
+        return projectV5ResourceEnvelope(draft);
+      });
+      // En persistance la commande est asynchrone : le compte n'est connu qu'une fois l'état écrit.
+      return typeof result?.then === 'function' ? result.then(done => done?.ok === false ? { ...done, consumed: 0 } : { consumed: consumedCount }) : { consumed: consumedCount };
+    },
+    previewLoreAttribute(input = {}) {
+      const casterId = input.casterId || input.caster?.id || combat.currentActorId;
+      const caster = (combat.participants.get(casterId)) || Array.from(combat.participants.values())[0];
+      const targets = (input.targetIds || []).map(id => combat.participants.get(id)).filter(Boolean);
+      return { ...previewLoreAttribute({
+        caster,
+        targets: targets.length > 0 ? targets : (input.targets || []),
+        ...input
+      }), baseRevision: localRevision };
+    },
+    applyLoreAttribute(preview, options = {}) {
+      preview = structuredClone(preview); options = cloneValue(options);
+      return magicCommand('v5-lore-attribute-apply', draft => {
+        const participants = draft.combat?.participants || [];
+        const casterId = options.casterId || preview.casterId || combat.currentActorId;
+        const caster = participants.find(p => p.id === casterId);
+        const targets = participants.filter(p => (options.targetIds || []).includes(p.id));
+        const res = applyLoreAttributeInternal(draft, preview, { ...options, caster, targets });
+        for (const [id, updated] of res.updatedParticipants.entries()) {
+          const idx = participants.findIndex(p => p.id === id);
+          if (idx !== -1) participants[idx] = updated;
+        }
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: `Attribut de Domaine ${preview.loreName || preview.lore} appliqué` }, ...(draft.log || [])].slice(0, 300);
+        return projectV5ResourceEnvelope(draft);
+      }, options, preview);
+    },
+    previewBeastForm(beastProfile, input = {}) {
+      const casterId = input.casterId || combat.currentActorId;
+      const caster = (combat.participants.get(casterId)) || Array.from(combat.participants.values())[0];
+      return { ...previewBeastForm(caster, beastProfile, input), baseRevision: localRevision };
+    },
+    applyBeastForm(casterId, beastProfile, options = {}) {
+      beastProfile = cloneValue(beastProfile); options = cloneValue(options);
+      const targetId = casterId || combat.currentActorId;
+      return magicCommand('v5-beast-form-apply', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === targetId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        const res = applyParticipantBeastForm(participants[index], beastProfile, options);
+        participants[index] = res.participant;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: `${participants[index].name} adopte la ${res.preview.spellName} (${beastProfile.name})` }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }, options);
+    },
+    revertBeastForm(casterId) {
+      const targetId = casterId || combat.currentActorId;
+      return api.executeCommand('v5-beast-form-revert', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === targetId);
+        if (index === -1) throw new Error('Participant introuvable dans le combat');
+        const res = revertParticipantBeastForm(participants[index]);
+        participants[index] = res.participant;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: `${participants[index].name} reprend sa forme normale (${res.woundsCarriedOver} Blessure(s) conservée(s))` }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      });
+    },
+    previewVerdantApotheosis(input = {}) {
+      const casterId = input.casterId || combat.currentActorId;
+      const caster = (combat.participants.get(casterId)) || Array.from(combat.participants.values())[0];
+      const corpses = (input.corpseIds || []).map(id => combat.participants.get(id)).filter(Boolean);
+      return { ...previewVerdantApotheosis({
+        caster,
+        corpses: corpses.length > 0 ? corpses : (input.corpses || []),
+        ...input
+      }), baseRevision: localRevision };
+    },
+    applyVerdantApotheosis(preview, options = {}) {
+      preview = structuredClone(preview); options = cloneValue(options);
+      return magicCommand('v5-verdant-apotheosis-apply', draft => {
+        const participants = draft.combat?.participants || [];
+        const targetCorpses = participants.filter(p => preview.results.some(r => r.corpseId === p.id));
+        const res = applyVerdantApotheosisInternal(targetCorpses, preview);
+        for (const updated of res.updatedCorpses) {
+          const idx = participants.findIndex(p => p.id === updated.id);
+          if (idx !== -1) participants[idx] = updated;
+        }
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: `Apothéose Verdoyante : ${preview.admissibleCount} participant(s) revenu(s) à la vie` }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }, options, preview);
+    },
+    previewDaemonbane(targetId, input = {}) {
+      const casterId = input.casterId || combat.currentActorId;
+      const caster = (combat.participants.get(casterId)) || Array.from(combat.participants.values())[0];
+      const target = combat.participants.get(targetId);
+      return { ...previewDaemonbane({ caster, target, ...input }), baseRevision: localRevision };
+    },
+    applyDaemonbane(targetId, preview, options = {}) {
+      preview = structuredClone(preview); options = cloneValue(options);
+      return magicCommand('v5-daemonbane-apply', draft => {
+        const participants = draft.combat?.participants || [];
+        const index = participants.findIndex(p => p.id === targetId);
+        if (index === -1) throw new Error('Participant démon introuvable');
+        const res = applyDaemonbaneInternal(participants[index], preview);
+        participants[index] = res.target;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: `Fléau des Démons : ${preview.summary}` }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }, options, preview);
+    },
+    /** D-15 : fin de rencontre, le MJ restaure les Bmax divisées par le Fléau des Démons (toutes, ou celles des ids donnés). */
+    restoreDaemonbaneMaxHp(targetIds = null) {
+      return api.executeCommand('v5-daemonbane-restore', draft => {
+        const participants = draft.combat?.participants || [];
+        const names = [];
+        participants.forEach((p, index) => {
+          if (!p.extensions?.v5?.daemonbaneMaxHp || (targetIds && !targetIds.includes(p.id))) return;
+          participants[index] = restoreDaemonbaneMaxHpInternal(p);
+          names.push(p.name);
+        });
+        if (!names.length) throw new Error('Aucune Blessure maximale divisée à restaurer.');
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: `Fléau des Démons : Bmax restaurées (${names.join(', ')})` }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      });
+    },
+    listDaemonbaneReductions() {
+      return daemonbaneReductions(Array.from(combat.participants.values()));
+    },
+    previewHandOfGlory(targetIds = [], input = {}) {
+      const casterId = input.casterId || combat.currentActorId;
+      const caster = (combat.participants.get(casterId)) || Array.from(combat.participants.values())[0];
+      const targets = (targetIds || []).map(id => combat.participants.get(id)).filter(Boolean);
+      return { ...previewHandOfGlory({
+        caster,
+        targets: targets.length > 0 ? targets : (input.targets || []),
+        ...input
+      }), baseRevision: localRevision };
+    },
+    applyHandOfGlory(targetIds = [], preview, options = {}) {
+      targetIds = [...targetIds]; preview = structuredClone(preview); options = cloneValue(options);
+      return magicCommand('v5-hand-of-glory-apply', draft => {
+        const participants = draft.combat?.participants || [];
+        const targets = participants.filter(p => targetIds.includes(p.id));
+        const res = applyHandOfGloryInternal(targets, preview, options);
+        for (const updated of res.updatedTargets) {
+          const idx = participants.findIndex(p => p.id === updated.id);
+          if (idx !== -1) participants[idx] = updated;
+        }
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'magic', text: `Main de Gloire : ${preview.summary}` }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      }, options, preview);
+    },
+    getHighMagicExecutions(actorId = combat.currentActorId) {
+      return cloneValue((stateExtensions.v5?.highMagicExecutions || []).filter(row => row.actorId === actorId));
+    },
+    getDivineAccessGrants(actorId=null) { return getStoreDivineAccessGrants(currentEnvelope(),actorId); },
+    resolveDivineAccess(actorId,contractId) { return resolveStoreDivineAccess(currentEnvelope(),actorId,contractId); },
+    grantDivineAccess(actorId,contractId,options={}) {
+      const expected=options.baseRevision;
+      const before=createStoreDivineAccessGrant(currentEnvelope(),actorId,contractId,{...options,baseRevision:expected});
+      if(!before.ok)return before;
+      let transition;
+      try{
+        const saved=api.executeCommand('v5-divine-access-grant',draft=>{
+          transition=createStoreDivineAccessGrant(draft,actorId,contractId,{...options,baseRevision:expected});
+          if(!transition.ok)throw Object.assign(new Error(transition.error),{userFacing:true,code:transition.code});
+          return transition.state;
+        });
+        const finish=result=>result?.ok===false?{ok:false,error:result.error||'La dérogation n’a pas été enregistrée.',code:result.code||'PERSISTENCE'}:{...transition,ok:true};
+        return saved&&typeof saved.then==='function'?saved.then(finish).catch(error=>({ok:false,error:error.message||'La dérogation n’a pas été enregistrée.',code:error.code||'DIVINE_ACCESS_COMMAND'})):finish(saved);
+      }catch(error){return {ok:false,error:error.message||'La dérogation n’a pas été enregistrée.',code:error.code||'DIVINE_ACCESS_COMMAND'};}
+    },
+    revokeDivineAccessGrant(grantId,options={}) {
+      const expected=options.baseRevision;
+      const before=revokeStoreDivineAccessGrant(currentEnvelope(),grantId,{...options,baseRevision:expected});
+      if(!before.ok)return before;
+      let transition;
+      try{
+        const saved=api.executeCommand('v5-divine-access-revoke',draft=>{
+          transition=revokeStoreDivineAccessGrant(draft,grantId,{...options,baseRevision:expected});
+          if(!transition.ok)throw Object.assign(new Error(transition.error),{userFacing:true,code:transition.code});
+          return transition.state;
+        });
+        const finish=result=>result?.ok===false?{ok:false,error:result.error||'La révocation n’a pas été enregistrée.',code:result.code||'PERSISTENCE'}:{...transition,ok:true};
+        return saved&&typeof saved.then==='function'?saved.then(finish).catch(error=>({ok:false,error:error.message||'La révocation n’a pas été enregistrée.',code:error.code||'DIVINE_ACCESS_COMMAND'})):finish(saved);
+      }catch(error){return {ok:false,error:error.message||'La révocation n’a pas été enregistrée.',code:error.code||'DIVINE_ACCESS_COMMAND'};}
+    },    getDivineContract(identifier) { return getDivineContract(identifier); },
+    getAllDivineContracts() { return getAllDivineContracts(); },
+    previewDivineExecution(identifier,input={}) {
+      const envelope=currentEnvelope(),actorId=input.actorId||envelope.combat?.currentActorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId),sequence=envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
+      const actionBlock=brokenEscapeActionBlock(envelope,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};
+      const brise=actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
+      if(brise){const fact=input.brokenEscapeFacts?.visibleToAnyEnemy;if(typeof fact!=='boolean')return {ready:false,status:'requires-input',error:'Le MJ doit confirmer la visibilité actuelle envers tout ennemi.',needsInput:[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}],baseRevision:localRevision};
+       const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:fact,sequence});if(blocked)return {ready:false,status:'blocked',error:'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',baseRevision:localRevision};const actionBlock=brokenEscapeActionBlock(envelope,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};}
+      return previewStoreDivine(envelope,identifier,input);
+    },
+    applyDivineExecution(identifier,input={}) {
+      input=cloneValue(input);let execution;
+      const saved=api.executeCommand('v5-divine-prayer',draft=>{
+        const actorId=input.preview?.input?.actorId||input.preview?.input?.actor?.id||draft.combat?.currentActorId,actor=draft.combat?.participants?.find(row=>row.id===actorId),brise=actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
+        const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        const visibility=input.brokenEscapeFacts?.visibleToAnyEnemy??input.preview?.input?.brokenEscapeFacts?.visibleToAnyEnemy;
+        if(brise){if(typeof visibility!=='boolean')throw Object.assign(new Error('Le MJ doit confirmer la visibilité actuelle envers tout ennemi.'),{userFacing:true});const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visibility,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)throw Object.assign(new Error('Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});}
+        execution=applyStoreDivine(draft,identifier,input);
+        if(execution?.ready&&execution.state){const executionId=execution.executionId||input.preview?.executionId||`prayer:${identifier}:${execution.state.localRevision}`,tracked=recordV5ActionUsage(execution.state,actorId,executionId);if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});
+          if((execution.state.combat?.participants||[]).find(row=>row.id===actorId)?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(execution.state,actorId,visibility,executionId);}
+        return execution.state;
+      });
+      const finish=result=>result?.ok===false?result:{...execution,ok:true};
+      return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    endDivinePrayer(executionId,options={}) {
+      const expected=options.baseRevision??localRevision;
+      return api.executeCommand('v5-divine-end',draft=>{
+        if(draft.localRevision!==expected)throw Object.assign(new Error('La partie a changé : vérifiez les prières actives.'),{userFacing:true});
+        return endStoreDivinePrayer(draft,executionId,options);
+      });
+    },
+    setDivineSin(actorId,value,options={}) {
+      const expected=options.baseRevision??localRevision;
+      return api.executeCommand('v5-divine-sin',draft=>{
+        if(draft.localRevision!==expected)throw Object.assign(new Error('La partie a changé : vérifiez le total de Péchés.'),{userFacing:true});
+        return setStoreDivineSin(draft,actorId,value,options);
+      });
+    },
+    getSpellContract(identifier) {
+      return getSpellContract(identifier);
+    },
+    getContractChoiceOptions(contractOrId) {
+      const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
+      return getContractChoiceOptions(contract);
+    },
+    validateSpellTargets(actor, contractOrId, targets = [], options = {}) {
+      const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
+      return validateSpellTargets(actor, contract, targets, options);
+    },
+    validateSpellFingerprint(contract, sourceSpell) {
+      return validateSpellFingerprint(contract, sourceSpell);
+    },
+    previewSpellExecution(contractOrId, input = {}) {
+      const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
+      const actorId = input.actorId || input.casterId || combat.currentActorId;
+      const actor = (combat.participants.get(actorId)) || Array.from(combat.participants.values())[0];
+      const actionBlock=brokenEscapeActionBlock(currentEnvelope(),actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};
+      if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:currentEnvelope().extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)return {ready:false,status:'requires-input',error:blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.',needsInput:blocked==='needs-fact'?[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Confirmer la visibilité actuelle envers tout ennemi.'}]:[],baseRevision:localRevision};}
+      const targetIds = input.targetIds || (input.targetId ? [input.targetId] : []);
+      const targets = targetIds.map(id => combat.participants.get(id)).filter(Boolean);
+      return { ...previewSpellExecutionInternal(actor, contract, targets.length > 0 ? targets : (input.targets || []), {...input,magicAdventureId:stateExtensions?.v5?.magicAdventureId,fortuneByTarget:Object.fromEntries(Array.from(combat.participants.values()).map(p=>[p.id,getV5Fortune(currentEnvelope(),p).balance])),participants:Array.from(combat.participants.values()),assistant:combat.participants.get(input.assistantId),round:currentMagicRound(combat),turnKey:String(combat.round || 1)+':'+String(stateExtensions?.v5?.turnIndex || 1)}), baseRevision: localRevision };
+    },
+    applySpellExecution(contractOrId, input = {}) {
+      input = cloneValue(input);
+      let execResult = null;
+      const command = magicCommand('v5-spell-execution-apply', draft => {
+        const contract = typeof contractOrId === 'object' && contractOrId?.id ? contractOrId : getSpellContract(contractOrId);
+        const beforeResources=structuredClone(draft);
+        const actorId=input.actorId||input.casterId||draft.combat?.currentActorId,actor=draft.combat?.participants?.find(row=>row.id===actorId);
+        const actionBlock=brokenEscapeActionBlock(draft,actorId);if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
+        if(actor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))){const blocked=isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:input.brokenEscapeFacts?.visibleToAnyEnemy,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]});if(blocked)throw Object.assign(new Error(blocked==='needs-fact'?'Le MJ doit confirmer la visibilité envers tout ennemi.':'Brisé impose Move (Flee), puis Action (Sprint) tant que le personnage reste visible.'),{userFacing:true});}
+        execResult = applySpellExecutionInternal(draft, contract, input);
+        // V5 p. 255 : une attaque magique effectivement appliquée termine aussi l’invisibilité, dans la même commande.
+        const offensive=input.offensiveAction===true || contract.effects?.missile || contract.effects?.damage || contract.effects?.rolledDamage || contract.effects?.vortex || contract.effects?.breath || contract.effects?.sleep || contract.effects?.dropHeldObject || contract.effects?.opposedTest || contract.effects?.suppression || ['damage','magic-missile'].includes(contract.effects?.type) || (contract.effects?.conditions || []).some(s=>/aveugl|sonn|enchev|empoison|brise|enflam|hemorrag/i.test(typeof s==='string'?s:s.name));
+        if(offensive && (input.targetIds || []).some(id=>id!==(input.actorId || draft.combat.currentActorId)))draft.combat.participants=endSpellEffectsOnEvent(draft.combat.participants,input.actorId || draft.combat.currentActorId,'attack');
+        const paid=(draft.combat?.participants || []).filter(p=>p.extensions?.v5?.magicDefianceAdventure && p.extensions.v5.magicDefianceAdventure!==beforeResources.combat?.participants?.find(old=>old.id===p.id)?.extensions?.v5?.magicDefianceAdventure);
+        if(paid.length){
+          const beforeParticipants=beforeResources.combat?.participants || [];
+          const committed=commitV5Resources(beforeResources,beforeParticipants.map(p=>paid.find(next=>next.id===p.id) || p));
+          draft.extensions.v5.characterResources=committed.extensions?.v5?.characterResources || [];
+          draft.combat.participants=draft.combat.participants.map(p=>paid.some(row=>row.id===p.id)?committed.combat.participants.find(row=>row.id===p.id):p);
+        }
+        if(execResult?.ready!==false){const tracked=recordV5ActionUsage(draft,actorId,input.preview?.executionId||input.preview?.actionId||`spell:${contract.id}:${draft.localRevision}`);if(!tracked.ok)throw Object.assign(new Error(tracked.reason),{userFacing:true});}
+        return projectV5ResourceEnvelope(draft);
+      }, input, input.preview);
+      const result = persisted => persisted?.ok === false ? persisted : execResult;
+      return command && typeof command.then === 'function' ? command.then(result) : result(command);
+    },
+    previewSpellInteraction(input = {}) { return previewSpellInteraction(currentEnvelope(),input); },
+    applySpellInteraction(input = {}) {
+      const expected=input.baseRevision ?? localRevision;
+      const preview=previewSpellInteraction(currentEnvelope(),input);
+      if(!preview.ready) return {...preview,ok:false};
+      if(expected!==localRevision) return {ok:false,ready:false,status:'stale',error:'Le combat a changé.'};
+      return api.executeCommand('v5-spell-interaction',draft=>{
+        if(draft.localRevision!==expected) throw new Error('Le combat a changé.');
+        const result=previewSpellInteraction(draft,input);
+        if(!result.ready) throw new Error(result.error);
+        return result.state;
+      });
+    },
     getReminders(transition = {}) {
       lastReminderTransition = cloneValue(transition || {});
       if (!activeScene) return [];
@@ -2486,8 +3435,19 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
             const remoteRevision = Number.isInteger(remoteRoot.revision) ? remoteRoot.revision : null;
             const remoteChanged = remoteRevision !== null
               ? remoteRevision > lastRemoteRevision
-              : !sameValue(sharedState(remoteData), sharedState(current));
+              : !sameSharedState(remoteData, current);
             if (!remoteChanged) return null;
+            // Receiving our already persisted cloud snapshot after a reload is
+            // an acknowledgement, not an external edit. Retain undo/redo and
+            // the local revision; sync-session saves this with its cursor.
+            if (sameSharedState(remoteData, current)) return {
+              state: { ...current, syncPending: false },
+              commit: () => {
+                if (attachEpoch !== syncAttachEpoch) return;
+                pendingProtocolState = false;
+                if (remoteRevision !== null) lastRemoteRevision = Math.max(lastRemoteRevision, remoteRevision);
+              }
+            };
             // Build the complete next envelope before touching the live store.
             // sync-session persists this candidate together with its session and
             // invokes commit only after that transaction succeeds.

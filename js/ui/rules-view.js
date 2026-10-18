@@ -36,7 +36,7 @@ export function renderD100Table(data) {
 }
 
 function extractTextFromBlock(block) {
-  let text = (block.title || '') + ' ' + (block.intro || '') + ' ';
+  let text = (block.title || '') + ' ' + (block.intro || '') + ' ' + (block.source || '') + ' ' + (block.tablesIntro || '') + ' ';
   if (block.sections) {
     block.sections.forEach(sec => {
       text += (sec.h4 || '') + ' ' + (sec.p || '') + ' ' + (sec.example || '') + ' ' + (sec.pAfter || '') + ' ';
@@ -61,7 +61,7 @@ function renderSection(sec) {
   if (sec.example) html += `<p class="example"><em>${escapeHtml(sec.example)}</em></p>`;
 
   if (sec.table) {
-    html += `<table class="wfrp-table"><thead><tr><th>Jet</th><th>Localisation</th></tr></thead><tbody>`;
+    html += `<table class="wfrp-table"><thead><tr><th>${escapeHtml(sec.tableHeaders?.[0] || 'Jet')}</th><th>${escapeHtml(sec.tableHeaders?.[1] || 'Localisation')}</th></tr></thead><tbody>`;
     sec.table.forEach(r => {
       html += `<tr><td>${escapeHtml(r.jet)}</td><td>${escapeHtml(r.loc)}</td></tr>`;
     });
@@ -198,7 +198,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
 
   // 2. BLOCS DE RÈGLES CLASSIQUES
   [...V5_RULES, ...RULES.filter(block => !['localisation','sante','psychologie','corruption'].includes(block.id))].forEach(block => {
-    const fullText = extractTextFromBlock(block) + ' ' + (block.nestedTables || []).flatMap(table => CRIT_DATA[table.key] || []).map(row => normalizeSearchText(row.name + ' ' + row.eff + ' ' + (row.parsed?.states || []).map(state => state.name).join(' '))).join(' ');
+    const fullText = extractTextFromBlock(block) + ' ' + (block.nestedTables || []).flatMap(table => (table.type === 'magic' ? MAGIC_DATA : CRIT_DATA)[table.key] || []).map(row => normalizeSearchText(row.name + ' ' + row.eff + ' ' + (row.parsed?.states || []).map(state => state.name).join(' '))).join(' ');
     const matches = !cleanTerm || fullText.includes(cleanTerm);
 
     if (matches) {
@@ -221,7 +221,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
 
       if (block.tablesHeader) {
         html += `<h3 style="margin-top:30px; border-top:2px solid var(--border); padding-top:10px;">${escapeHtml(block.tablesHeader)}</h3>`;
-        html += `<p class="muted">Gravité du critique, bonus d’excédent compris :</p>`;
+        html += `<p class="muted">${escapeHtml(block.tablesIntro || 'Gravité du critique, bonus d’excédent compris :')}</p>`;
       }
 
       if (block.nestedTables) {
@@ -234,7 +234,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
           }
           html += `<details class="nested-details" ${isOpen ? 'open' : ''}>`;
           html += `<summary>${escapeHtml(nt.title)}</summary>`;
-          html += `<div data-table-id="${escapeHtml(nt.id)}">${nt.type === 'crit' ? `<p class="muted">V5 · Livre de base EN, p. ${{HEAD:173,ARM:174,BODY:175,LEG:176}[nt.key]}</p>` : `<p class="muted">Table locale · référence exacte à confirmer</p>`}${tableHtml}</div>`;
+          html += `<div data-table-id="${escapeHtml(nt.id)}">${nt.type === 'crit' ? `<p class="muted">V5 · Livre de base EN, p. ${{HEAD:173,ARM:174,BODY:175,LEG:176}[nt.key]}</p>` : `<p class="muted">${escapeHtml(nt.source || 'Table locale · référence exacte à confirmer')}</p>`}${tableHtml}</div>`;
           html += `</details>`;
         });
       }

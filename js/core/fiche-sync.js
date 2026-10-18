@@ -5,6 +5,7 @@ import { cloneValue, normalizeAction, uid } from './models.js';
 import { normalizeEquipment, calculateArmor, armourProtection, equipmentQualities } from './equipment.js';
 import { getReferenceCatalogue, resolveSkill, aggregateTalents } from './reference-catalog.js';
 import { actionHasDamage, normalizeDamageFields, strengthBonusOf } from './damage.js';
+import { rebaseMagicLayers } from './v5-magic-effects.js';
 
 export const FICHE_CHAR_IDS = Object.freeze(['bhelgi', 'caelel', 'elysia', 'hellaya', 'wren']);
 
@@ -129,7 +130,7 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   const source = { schemaVersion: metadata.schemaVersion ?? null, revision: metadata.revision ?? null,
     resolverVersion: catalog?.contentVersion ?? catalog?.catalogVersion ?? catalog?.version ?? null };
   const snapshot = { format: 1, charId, name: typeof raw.nom === 'string' ? raw.nom.trim() : '', race,
-    source, caracs: totals, initiative: totals.I ?? null, movement: MOVEMENT[race || 'humain'] ?? 4,
+    source, caracs: totals, initiative: totals.I ?? null, movement: race ? MOVEMENT[race] ?? 4 : null,
     wounds: max, woundsMax: max, skills, talents: coverage.talents === 'present' ? talentResult.items : [],
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
   // `chance` is the fiche's current resource; `destin` is its maximum.
@@ -452,6 +453,31 @@ export function applyFicheSync(draft, entries) {
         output.armorLocations = cloneValue(updated.armorLocations); output.protection = cloneValue(updated.protection);
       }
       if (Array.isArray(subject.actions)) output.actions = syncActions(subject.actions);
+      // S-05 : la fiche est la nouvelle base ; les couches magiques actives se recalculent dessus (jamais l'inverse).
+      const magic = subject.extensions?.v5;
+      if (magic?.baseCaracs || magic?.spellEffects?.length || magic?.beastForm) {
+        const rebased = rebaseMagicLayers(subject, { caracs: entry.snapshot.caracs, movement: updated.movement,
+          ...(entry.snapshot.coverage?.equipment === 'present' ? { armor: updated.armorLocations } : {}) });
+        output.caracs = rebased.caracs;
+        output.extensions = { ...output.extensions, v5: rebased.extensions.v5 };
+        if (rebased.armor !== undefined) output.armor = rebased.armor;
+        for (const key of ['M', 'movement']) if (rebased[key] !== undefined) output[key] = rebased[key];
+      }
+      if(magic?.beastForm){
+        const form=output.extensions.v5.beastForm,original=form.originalParticipant;
+        form.deferredFicheSync=true;
+        if(original){
+          const maximum=usableMax(entry.snapshot);if(maximum!=null){const lost=Math.max(0,original.maxHp-original.hp);original.maxHp=maximum;original.hp=Math.max(0,maximum-lost);}
+          original.fields ||= {};
+          for(const key of ['skills','talents','equipment'])if(entry.snapshot.coverage?.[key]==='present')original.fields[key]=cloneValue(updated[key]);
+          if(entry.snapshot.coverage?.equipment==='present'){
+            original.fields.armorLocations=cloneValue(updated.armorLocations);original.fields.protection=cloneValue(updated.protection);original.fields.armor=cloneValue(updated.armorLocations);
+            original.baseArmor={extension:cloneValue(updated.armorLocations),flat:cloneValue(updated.armorLocations)};
+          }
+          if(entry.snapshot.movement!=null)original.M=entry.snapshot.movement;
+        }
+        for(const key of ['maxHp','hp','skills','talents','equipment','actions','armorLocations','armor','protection','M','movement']){if(subject[key]!==undefined)output[key]=cloneValue(subject[key]);else delete output[key];}
+      }
       return output;
     };
     const touchedIds = new Set();
@@ -470,7 +496,7 @@ export function applyFicheSync(draft, entries) {
       const byParticipant = new Map();
       for (const id of touchedIds) byParticipant.set(id, next.diceLines.filter(line => line.participantId === id));
       next.diceLines = next.diceLines.filter(line => !touchedIds.has(line.participantId));
-      for (const [id, lines] of byParticipant) next.diceLines.push(...syncActions(lines).map(line => ({ ...line, participantId: id, id: lines.some(old => old.id === line.id) ? line.id : `${id}:${line.id}` })));
+      for (const [id, lines] of byParticipant) next.diceLines.push(...(combatById.get(id)?.extensions?.v5?.beastForm ? lines : syncActions(lines)).map(line => ({ ...line, participantId: id, id: lines.some(old => old.id === line.id) ? line.id : `${id}:${line.id}` })));
     }
     const linked = new Set((next.encounters || []).flatMap(item => item.entries || []).filter(item => item.profileId === profile.id && item.persistentCharacterId).map(item => item.persistentCharacterId));
     for (const subject of [...(next.combat?.participants || []), ...(next.activeScene?.participants || []), ...(next.suspendedScenes || []).flatMap(scene => scene.participants || [])]) if (subject.profileId === profile.id && subject.persistentCharacterId) linked.add(subject.persistentCharacterId);

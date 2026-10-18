@@ -102,6 +102,40 @@
       "effectHash": "sha256:f1b3110c98b5c539ebcbc23f1b660f500062ba7af5386ac9fa8a3c379a14d0ca",
       "ruleVersion": "quality-v5-2026-10-09.1",
       "engine": "head-hit-wounds-stunned"
+    },
+    {
+      "id": "a-poudre-noire",
+      "name": "À Poudre noire",
+      "effect": "La cible doit réussir un Test de Calme Accessible (+2 DR) ou subir 1 état Brisé, même si le tir la rate.",
+      "type": "Atout d'arme",
+      "parameter": "",
+      "source": "Livre de base V5 EN p.304",
+      "edition": "V5",
+      "aliases": [
+        "Blackpowder",
+        "Poudre Noire"
+      ],
+      "note": "Les armes à poudre noire et d'ingénierie ont aussi Dévastatrice (LdB FR p.295).",
+      "ruleVersion": "v5-combat-2026-10-09.24.5",
+      "effectHash": "sha256:9505680f103fb40128c435068899da734ad8d4fe49c3a59e1ac9179f745a97c0",
+      "engine": "broken-on-calm-failure"
+    },
+    {
+      "id": "perforante",
+      "name": "Perforante",
+      "effect": "Ignore 2 PA.",
+      "type": "Atout d'arme",
+      "parameter": "",
+      "source": "Livre de base V5 EN p.305",
+      "edition": "V5",
+      "aliases": [
+        "Penetrating",
+        "Pénétrante"
+      ],
+      "note": "",
+      "effectHash": "sha256:fa3f847edae3b71525f491a3d6b96036632fc9133b7263b24165856abaa9aa2b",
+      "ruleVersion": "quality-v5-2026-10-09.24.5",
+      "engine": "ignore-two-armour"
     }
   ],
   "approvedOverrides": {

@@ -132,7 +132,7 @@ export function normalizeArmorLocations(armor = {}) {
 export function normalizeFicheFields(raw = {}) {
   const fields = {};
   for (const key of FICHE_DATA_FIELDS) {
-    if (Object.hasOwn(raw, key)) fields[key] = cloneValue(raw[key]);
+    if (Object.hasOwn(raw, key)) fields[key] = ['spells','talents','skills','prayers','equipment'].includes(key) && Array.isArray(raw[key]) ? raw[key].filter(isRecord).map(cloneValue) : cloneValue(raw[key]);
   }
   fields.armorLocations = normalizeArmorLocations(raw.armorLocations ?? raw.armor);
   return fields;
@@ -191,6 +191,59 @@ export class Participant {
     this.notes = typeof notes === 'string' ? notes : '';
     this.source = isRecord(source) ? cloneValue(source) : (source == null ? null : cloneValue(source));
     this.extensions = isRecord(extensions) ? cloneValue(extensions) : {};
+    if (Array.isArray(ficheFields.traits)) {
+      this.traits = cloneValue(ficheFields.traits);
+    } else if (Array.isArray(this.extensions?.v5?.temporaryTraits)) {
+      this.traits = cloneValue([...new Set([
+        ...(this.extensions.v5.baseTraits || this.extensions?.traits || []),
+        ...this.extensions.v5.temporaryTraits
+      ])]);
+    } else if (Array.isArray(this.extensions?.traits)) {
+      this.traits = cloneValue(this.extensions.traits);
+    }
+    if (Array.isArray(this.extensions?.v5?.spellEffects)) {
+      this.spellEffects = cloneValue(this.extensions.v5.spellEffects);
+    } else if (Array.isArray(ficheFields.spellEffects)) {
+      this.spellEffects = cloneValue(ficheFields.spellEffects);
+    } else if (Array.isArray(this.extensions?.spellEffects)) {
+      this.spellEffects = cloneValue(this.extensions.spellEffects);
+    }
+    if (Number.isFinite(Number(this.extensions?.v5?.fortune))) {
+      this.fortune = Number(this.extensions.v5.fortune);
+    } else if (Number.isFinite(Number(ficheFields.fortune))) {
+      this.fortune = Number(ficheFields.fortune);
+    } else if (Number.isFinite(Number(this.extensions?.fortune))) {
+      this.fortune = Number(this.extensions.fortune);
+    }
+    if (Number.isFinite(Number(this.extensions?.v5?.temporaryFortune))) {
+      this.temporaryFortune = Number(this.extensions.v5.temporaryFortune);
+    } else if (Number.isFinite(Number(ficheFields.temporaryFortune))) {
+      this.temporaryFortune = Number(ficheFields.temporaryFortune);
+    } else if (Number.isFinite(Number(this.extensions?.temporaryFortune))) {
+      this.temporaryFortune = Number(this.extensions.temporaryFortune);
+    }
+    if (Number.isFinite(Number(this.extensions?.v5?.fate))) {
+      this.fate = Number(this.extensions.v5.fate);
+    } else if (Number.isFinite(Number(ficheFields.fate))) {
+      this.fate = Number(ficheFields.fate);
+    } else if (Number.isFinite(Number(this.extensions?.fate))) {
+      this.fate = Number(this.extensions.fate);
+    }
+    if (Number.isFinite(Number(this.extensions?.v5?.temporaryFate))) {
+      this.temporaryFate = Number(this.extensions.v5.temporaryFate);
+    } else if (Number.isFinite(Number(ficheFields.temporaryFate))) {
+      this.temporaryFate = Number(ficheFields.temporaryFate);
+    } else if (Number.isFinite(Number(this.extensions?.temporaryFate))) {
+      this.temporaryFate = Number(this.extensions.temporaryFate);
+    }
+    if (this.extensions?.v5?.channelling && typeof this.extensions.v5.channelling === 'object') {
+      this.channelling = cloneValue(this.extensions.v5.channelling);
+      this.channellingReserve = cloneValue(this.extensions.v5.channelling);
+    } else if (ficheFields.channelling && typeof ficheFields.channelling === 'object') {
+      this.channelling = cloneValue(ficheFields.channelling);
+    } else if (this.extensions?.channelling && typeof this.extensions.channelling === 'object') {
+      this.channelling = cloneValue(this.extensions.channelling);
+    }
   }
 }
 

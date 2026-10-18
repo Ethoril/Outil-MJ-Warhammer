@@ -7,6 +7,9 @@
  */
 import { normalizeCaracs, profileActionSource, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
 import { normalizeDamageFields } from './damage.js';
+import { sanitizeMagicEnvelope } from './sanitize.js';
+import { emptyDivineAccess } from './v5-divine-access.js';
+import { createGameClock, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 
 export const CURRENT_SCHEMA_VERSION = 3;
 
@@ -317,7 +320,7 @@ function normaliseMeta(combat, report) {
     if (metaExtensions.extensions) extensions.meta = metaExtensions.extensions;
   }
   for (const key of Object.keys(base)) {
-    if (!['round', 'currentActorId', 'order', 'participants', 'meta', 'extensions'].includes(key)) {
+    if (!['round', 'currentActorId', 'order', 'participants', 'meta', 'orderMode', 'extensions'].includes(key)) {
       safeSet(extensions, key, base[key]);
     }
   }
@@ -370,6 +373,10 @@ function optionalRootCollections(raw, profiles, report) {
 export function migrateSnapshot(input, options = {}) {
   if (!isObject(input)) throw new MigrationError('Enveloppe de sauvegarde invalide', { reason: 'objet-attendu' });
   const raw = clone(input);
+  const prayerCapExists=rows=>(Array.isArray(rows)?rows:[]).some(row=>(row?.extensions?.v5?.divineEffects||[]).some(effect=>effect?.type==='prayer-sl-cap'));
+  const hasPrayerCalendarCap=prayerCapExists(raw.combat?.participants)||prayerCapExists(raw.reserve)||prayerCapExists(raw.persistentCharacters)
+    ||prayerCapExists(raw.activeScene?.participants)||(raw.suspendedScenes||[]).some(scene=>prayerCapExists(scene?.participants));
+  if(hasPrayerCalendarCap&&!raw.extensions?.v5?.gameClock)throw new MigrationError('Sanction calendaire de Prière sans horloge d’origine : migration refusée.',{reason:'prayer-cap-clock-anchor-missing'});
   const hasReserve = Object.prototype.hasOwnProperty.call(raw, 'reserve');
   const hasCombat = Object.prototype.hasOwnProperty.call(raw, 'combat');
   if (!hasReserve || !hasCombat || !isObject(raw.combat)
@@ -420,8 +427,25 @@ export function migrateSnapshot(input, options = {}) {
     ...optionalRootCollections(raw, reserve, report)
   };
   const extensions = rootExtensions(raw);
+  const extensionsV5 = isObject(extensions.v5) ? { ...extensions.v5 } : {};
+  if (!Object.prototype.hasOwnProperty.call(extensionsV5, 'divineAccess')) {
+    extensionsV5.divineAccess = emptyDivineAccess();
+  }
+  extensions.v5 = extensionsV5;
+  result.extensions = extensions;
+  if (!Object.prototype.hasOwnProperty.call(extensionsV5, 'gameClock')) {
+    extensionsV5.gameClock = createGameClock(result);
+    pushReport(report, 'migrated', 'extensions.v5.gameClock', { from: 'absent', to: 'initiale-sans-temps-écoulé' });
+  } else {
+    const reconciled = reconcileGameClockPosition(extensionsV5.gameClock, readCombatPosition(result));
+    if (reconciled.changed) {
+      extensionsV5.gameClock = reconciled.clock;
+      pushReport(report, 'repaired', 'extensions.v5.gameClock.combat', { from: 'projection-décalée', to: 'position-canonique-combat', elapsedSeconds: 0, phases: [] });
+    }
+  }
+  extensions.v5 = extensionsV5;
   if (Object.keys(extensions).length) result.extensions = extensions;
-  return { data: result, report };
+  return { data: sanitizeMagicEnvelope(result), report };
 }
 
 export function migrateLegacyStorage(storage, options = {}) {

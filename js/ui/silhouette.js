@@ -35,6 +35,7 @@ export function locationZone(location) {
 }
 
 function armorValue(armor, key) {
+  if (armor?.[key] === null) return '?';
   const value = Number(armor?.[key]);
   return Number.isFinite(value) ? value : 0;
 }

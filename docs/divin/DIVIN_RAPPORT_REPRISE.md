@@ -1,0 +1,43 @@
+# Reprise locale du programme divin exhaustif
+
+18 octobre 2026, Europe/Paris. **Programme en cours, sans publication.** La fuite non engagée de Brisé est raccordée depuis les faits MJ jusqu’aux usages du Tour et aux reçus persistés. Recette courante : **2667/2667 tests Node, 22/22 commandes et 45 contrôles cloud locaux**. La tranche ne clôt pas Brisé ni E5/E6 ni le programme exhaustif.
+
+## Tranche réellement exécutée
+
+Sources L06 p.161,163,185–186, empreinte PDF revérifiée. Le MJ renseigne visibilité envers au moins un ennemi, absence d’engagement, mode marche/course et visibilité après chaque étape. Aucun fait spatial ni dé n’est inventé. Le panneau commun est accessible dans Jouer aux personnages portant Brisé, sans talent divin requis.
+
+Move/Flee consomme le déplacement du Tour. S’il reste visible, Sprint consomme l’Action et résout le Test partagé d’Athlétisme Intermédiaire (+2 DR), avec score importé, États pris en charge, jet explicite et choix d’inversion requis. La contribution Sprint est Run + DR, en plus du déplacement Flee. Exemple : M4, course16, Athlétisme60, d10050, +3DR donnent19 mètres supplémentaires, soit35 mètres de jeu au total; provenance16/19/35 yards conservée suivant la convention DIV-03. Atteindre une cachette avec Flee laisse l’Action disponible; après Sprint elle est dépensée même si le personnage est désormais hors vue.
+
+L’attestation hors vue est une commande distincte, sans déplacement fictif ni coût d’Action. L’aperçu reste inerte; l’application vérifie Tour, révision, preuve émise et budgets. Résolution, simulation, prière, sort et vraie transition du moteur V5 respectent les gardes raccordées. Sous Brisé, le MJ doit classer un Test non attaque comme Action ou Test gratuit; une absence de classification bloque. Le suivi standardTurnActions conserve les Actions reconnues ou explicitement classées sans modifier les quotas de talents hérités. Les Tests historiques non classés avant l’acquisition de Brisé ne sont pas certifiés comme Actions par cette tranche. Les reçus conservent source/version, Tour, faits MJ, confirmation d’engagement vide, jet/résultat et distances. Le fait hors vue ne retire aucun Brisé et n’équivaut pas à un Round entier caché.
+
+## Arbitrage humain et limites mécaniques
+
+**DIV-BROKEN-MIDTURN-01** : « Bloquer ce cas pour une décision MJ explicite à chaque occurrence. » Si Brisé arrive après une Prière ayant déjà consommé l’Action, le cas est bloqué. Aucun report automatique ni Action supplémentaire; une simple confirmation hors vue ne résout pas l’arbitrage. L’exécution d’une décision motivée par occurrence reste à développer; le blocage n’est pas annoncé comme un mécanisme complet d’arbitrage.
+
+Restent explicitement bloqués : Flee engagé (Élan des ennemis, Brisé supplémentaire et attaques gratuites), interactions motrices Sonné/À terre/Enchevêtré/Inconscient et Sprinter. Hide est facultatif; son marquage Action et le refus après Sprint sont vérifiés, mais ses effets complets ne sont pas certifiés. Les faux marqueurs de réaction sont refusés; une réaction source valide sous Brisé n’a pas été positivement testée indépendamment. Ces clauses sont des manques E6, pas des rappels narratifs livrés.
+
+## Preuves et contrôles
+
+[Recette complète](../../tmp/divin/recipe-receipt.json), fin 2026-10-18T10:59:07.053Z; [validation principale](../../tmp/divin/broken-principal-receipt.json). Les trois contrôles de génération passent; les sept sorties générées et quatre catalogues protégés restent identiques à la capture. Aucun JSON généré n’a été édité à la main.
+
+Le contrôle indépendant comporte 29 tests; le développement 2. Le [navigateur indépendant](../../tmp/divin/brise-flee-sprint-browser-independent/receipt.json) utilise la vraie application par gestes, IndexedDB natif, Undo/Redo, reload et quatre vues1440/390 sombre/parchemin inspectées par contrôleur et principal. Le problème initial de sélecteur et le Round manquant de l’affichage sont distingués des contrôles mécaniques. Le blocage des requêtes HTTPS externes est resté actif.
+
+Le [reçu cloud](../../tmp/divin/cloud-divine-receipt.json) conserve les contrôles hérités et ajoute fuite/Sprint : deux clients isolés, Auth/RTDB localhost, IndexedDB natif, faits/jet/source, reload/Undo/Redo, conflit hors ligne et branche gagnante sans double Action. Aucun service de production ni téléphone physique n’est couvert.
+
+Rouges conservés : API absente, alias À terre, deuxième Action après Sprint hors vue, Sprinter par identifiant, previews Simulation et Action explicite, faux marqueurs de réaction, marquage UI du Hide, refus précoce effacé par la garde cible et compétence sans classification de coût. Le rouge navigateur de compétence établit un aperçu accepté, sans exécution du résultat. Les simulations rouges initiales n’ont pas prouvé une mutation au commit; le défaut établi concernait leur aperçu et la classification Action. Les refus précoces affichent désormais un avis accessible, sans résultat de Test fictif ni application active. Le premier Node global (2657 tests,5 échecs) et le premier cloud sont dans tmp/divin/broken-principal-*.log. Les trois attentes historiques de quotas de talents sont restées identiques. Trois fixtures ont été précisées après contrôle indépendant : Bœuf hors vue; les Tests d’États du navigateur combat sont hors vue et explicitement gratuits, sans relâcher leurs attentes; le scénario cloud de Prière vérifie le malus−2DR sur l’acteur effectivement reçu via le Test partagé, plus le refus de seconde Action du même Tour. Aucune Action supplémentaire n’a été autorisée pour obtenir du vert. La preuve d’engagement vide utilise une confirmation structurée, sans transformer une absence RTDB en fait MJ implicite.
+
+Le rouge Node complémentaire de classification (tmp/divin/broken-escape-simulation-classification-red.log) établit, lui, une mutation réelle par Résolution et Simulation d’un Test non classé après Sprint. Le correctif exige le fait explicite isAction sous Brisé, avant le Test et au commit; le contrôle conserve les cas positifs du Test gratuit explicite sans nouvelle dépense. Il couvre aussi l’absence de classification avant toute dépense sous Brisé.
+
+Rapports : [développement mécanique](DIVIN_E6_BRISE_MECANIQUE_DEVELOPPEMENT.md), [développement UI](DIVIN_E6_BRISE_UI_DEVELOPPEMENT.md), [contrôle indépendant](DIVIN_E6_BRISE_CONTROLE_INDEPENDANT.md).
+
+## Héritage et programme encore ouvert
+
+Courroux61–65/89–95 conserve l’acquisition1+Péchés pré-décrément, perte d’Élan et provenance sur le prêtre. Hémorragique reste exécuté en vraie fin de Round, distinct des échéances des bénédictions. Courroux6–10 garde son plafond à0DR pendant huit jours impériaux; Leçons11–15 garde d10+Péchés et−1DR. DIV-TIME-LESSONS-01 reste fin du Nᵉ Round en comptant le Round courant; pose hors combat sans Round attesté, répétition active et ancres incohérentes restent ouverts.
+
+E1 : **89 pages doublement lues,82 accords,7 divergences,2605 pages non explorées,133 identités partielles et60 associations**, sur17 livres/2694 pages. Aucun livre fermé; cette lecture ciblée n’augmente pas ces compteurs. E2 conserve11 clauses communes et21 clauses de bénédictions, sans certification générale runtime. Toujours **quatre effets de prière appliqués** (Bataille,Courage,Bouclier,Soleil), huit prières assistées, Haine sacrée non raccordée aux dégâts, neuf adaptations Up in Arms bloquées. Les sanctions et états de Courroux ne sont pas des prières supplémentaires.
+
+Suite : terminer les cas bloqués Brisé et l’arbitrage par occurrence, autres Courroux/cas Leçons, puis contrats calendaires/ancres/identités; convention et migration des semaines magiques avant modification du convertisseur7jours; E1/E2 sur2605 pages et7 divergences; autres E3/E4/E6–E9,19 bénédictions/60 associations/60 miracles, Haine sacrée et suppléments; enfin E10/E11 exhaustifs. La durée de Sur un Terrain Mortel reste non attestée dans la recherche réalisée.
+
+## Conservation
+
+Worktree C:/Users/arnot/.codex/worktrees/divin-v5/Outil MJ Warhammer, codex/divin-v5, HEAD fb0f280150cdbdab1af220163abfaa491e2156ee. Capture de cette fenêtre : C:/Users/arnot/.codex/visualizations/2026/10/18/01a14e61-da98-71d0-a37a-664a6af43209/divin-broken-baseline, **644 fichiers et 547 preuves tmp/divin**. Comparer au [delta de reprise](../../tmp/divin/broken-change-manifest.json), jamais reconstruire depuis HEAD. Le rapport et les reçus2636/21/38 sont figés sous tmp/divin/history/2026-10-18-before-broken-escape. Main E: est propre à 08ce45d24faa1727a8155716ade5f5dcba09efd4. Aucun commit, push, fusion, déploiement, fiche externe ou feuille publique.

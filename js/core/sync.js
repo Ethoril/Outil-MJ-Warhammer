@@ -5,7 +5,7 @@ import { initializeApp } from '../../vendor/firebase/firebase-app.js';
 import { getDatabase, ref, get, runTransaction, onValue, set, update } from '../../vendor/firebase/firebase-database.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from '../../vendor/firebase/firebase-auth.js';
 import { transactionUpdate } from './sync-protocol.js';
-import { createSyncSession } from './sync-session.js';
+import { createSyncSession, normalizeRemoteDocument } from './sync-session.js';
 import { migrateV2SyncDocument, initializeV3Root } from './sync-migration.js';
 import { googleAuthErrorCode, googleAuthErrorMessage } from './auth-errors.js';
 
@@ -123,7 +123,7 @@ export function initFirebaseSync(onUserConnected, onStatus = () => {}, onUserDis
           return result.snapshot?.val?.() ?? (await get(dbRef)).val();
         },
         async transaction(operation) {
-          const result = await runTransaction(dbRef, current => transactionUpdate(current, operation), { applyLocally: false });
+          const result = await runTransaction(dbRef, current => transactionUpdate(normalizeRemoteDocument(current), operation), { applyLocally: false });
           return {
             status: result.committed ? 'committed' : 'aborted',
             root: result.snapshot?.val?.() ?? null

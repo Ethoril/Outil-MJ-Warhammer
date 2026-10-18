@@ -1,5 +1,7 @@
 # Contrôle indépendant du catalogue 2.4
 
+**Actualisation finale du 9 octobre :** 131 contrats et 382 clauses moteur, Petit raccordé. 910 tests Node et recettes navigateur passent ; [bilan courant](LOT2_TRI_TALENTS.md) et [validation finale](LOT2_AVANCEMENT.md). Le corps ci-dessous conserve le contrôle historique de première vague ; ses anciens chiffres ne constituent pas le bilan courant.
+
 Contrôle du 9 octobre 2026, séparé du développement, avec 32 tests Node Store dans `tests/lot2-v5-24-control.test.js` et une recette Edge dans `tests/lot2-v5-24-control-browser.mjs`. Les fixtures sont synthétiques ; les routes externes sont bloquées. Aucun PDF ou export de PJ n’est incorporé.
 
 Le contrôle couvre source/identité/rang/spécialité, contextes acteur/défenseur, cumul et refus, choix DR/unités (0 reste 0), Sonné réel, seuil après protection, durabilité, annulation/rechargement, erreur de disque et absence de mutation sur refus. Trois actualisations réelles de source entre aperçu et Appliquer (Orateur, Maître en déguisement, Coup puissant) provoquent un refus sans changement de révision ni journal.

@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-17",
+  "versions": {
+    "before": {
+      "contentVersion": "references:91baffb889130b513c59df546f8c81ff9bf003fbc1ec47e1e23877959d4f7573",
+      "catalogVersion": "sha256:2ebb39e1fd936c250a8f3a90b99bf5c3afdad337d987b4bc7a7d54256eb2638f",
+      "localRevision": "2026-10-14-catalogue-v5-relecture-2"
+    },
+    "after": {
+      "contentVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+      "catalogVersion": "sha256:267a5ba2a20c19f5b5ae6b5576f8932ca9e88393fd5df6a718fe9448e6f8077c",
+      "localRevision": "2026-10-17-catalogue-v5-reliquats",
+      "csvSha256": {
+        "Magie": "8aca1ccac29f4f0a56388efdef7db700896f29e66857fad50fdc3829bd283db5",
+        "Miracles": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6"
+      }
+    }
+  },
+  "changes": [
+    {
+      "worksheet": "Magie",
+      "row": 25,
+      "column": 7,
+      "cell": "G25",
+      "name": "Blizzard enflammé de Ygethmor",
+      "field": "desc",
+      "before": "Vous invoquez un puissant tourbillon de braises et de flammes. \n - Chaque cible dans la zone subit 8 + DR Dégâts chaque round. \n - Test d’Athlétisme Difficile (+0) requis pour éviter la Condition À Terre. \n - Objets et terrains inflammables ont 25% de chance de s’enflammer chaque round. \n - Seul un couvert solide protège de ses effets.",
+      "after": "Vous invoquez un puissant tourbillon de braises et de flammes. \n - Chaque cible dans la zone subit 8 + DR Dégâts chaque round. \n - Test d’Athlétisme Intermédiaire (+0 DR) requis pour éviter la Condition À Terre. \n - Objets et terrains inflammables ont 25% de chance de s’enflammer chaque round. \n - Seul un couvert solide protège de ses effets."
+    },
+    {
+      "worksheet": "Magie",
+      "row": 75,
+      "column": 7,
+      "cell": "G75",
+      "name": "Apothéose",
+      "field": "desc",
+      "before": "Vous infusez la cible d'une magie pure, lui permettant de récupérer un nombre de Blessures égal à votre Bonus de Force Mentale et lui octroyant temporairement le Trait de Créature Peur 1.\nSurpuissance :\n• Tous les +3 DR : La cible récupère à nouveau votre Bonus de Force Mentale en Blessures.\n• +6 DR : Vous soignez une Blessure Critique si vous réussissez un Test de Sociabilité Intermédiaire (+0 DR).\n• +10 DR : Vous ramenez la cible à la vie à son maximum de Blessures. Sa tête est entourée d’un halo magique. Elle meurt définitivement après un nombre de minutes égal à votre Bonus de Force Mentale ou si Apothéose est dissipé.",
+      "after": "Vous infusez la cible d'une magie pure, lui permettant de récupérer un nombre de Blessures égal à votre Bonus de Force Mentale et lui octroyant temporairement le Trait de Créature Peur 1.\nSurpuissance :\n• Tous les +3 DR : La cible récupère à nouveau votre Bonus de Force Mentale en Blessures.\n• +6 DR : Vous soignez une Blessure Critique si vous réussissez un Test de Sociabilité Intermédiaire (+0 DR).\n• +10 DR : Vous ramenez la cible à la vie à son maximum de Blessures. Sa tête est entourée d’un halo magique. Elle meurt définitivement après un nombre de minutes égal à votre Bonus de Force Mentale ou si Apothéose est dissipé. Vous gagnez du Yenlui (Sombre)."
+    },
+    {
+      "worksheet": "Magie",
+      "row": 80,
+      "column": 7,
+      "cell": "G80",
+      "name": "Drain de Magie",
+      "field": "desc",
+      "before": "Vous expulsez la magie du monde en invoquant un vortex éthérique. Les sorts persistants dans la zone d'effet sont immédiatement dissipés sans Test Étendu, et la magie accumulée par les lanceurs en Focalisation est perdue. Les objets magiques et Traits de Créature Protection ne sont pas affectés.\nSurpuissance :\n• +5 DR : Vous augmentez la Zone d’Effet à Force Mentale mètres. Un Test d'Intelligence Difficile (−1 DR) permet d'exempter des cibles alliées (y compris vous-même) des effets du sort.\n• +7 DR : Les Bénédictions et Miracles persistants sont également dissipés. Vous gagnez du Yenlui (Lumière).\n• +10 DR : Les objets magiques perdent temporairement leurs pouvoirs et les Traits de Créature Protection sont annulés. Les lanceurs de sorts doivent réussir un Test de Focalisation Difficile (+0) ou perdre toute capacité à lancer des sorts pendant 24 heures.",
+      "after": "Vous expulsez la magie du monde en invoquant un vortex éthérique. Les sorts persistants dans la zone d'effet sont immédiatement dissipés sans Test Étendu, et la magie accumulée par les lanceurs en Focalisation est perdue. Les objets magiques et Traits de Créature Protection ne sont pas affectés.\nSurpuissance :\n• +5 DR : Vous augmentez la Zone d’Effet à Force Mentale mètres. Un Test d'Intelligence Difficile (−1 DR) permet d'exempter des cibles alliées (y compris vous-même) des effets du sort.\n• +7 DR : Les Bénédictions et Miracles persistants sont également dissipés. Vous gagnez du Yenlui (Lumière).\n• +10 DR : Les objets magiques perdent temporairement leurs pouvoirs et les Traits de Créature Protection sont annulés. Les lanceurs de sorts doivent réussir un Test de Focalisation Intermédiaire (+0 DR) ou perdre toute capacité à lancer des sorts pendant 24 heures."
+    },
+    {
+      "worksheet": "Magie",
+      "row": 84,
+      "column": 7,
+      "cell": "G84",
+      "name": "Bannissement Majeur",
+      "field": "desc",
+      "before": "Vous irradiez des flots du plus pur Qhaysh pour bannir le mal et les ténèbres. Chaque round, les créatures Démoniaques et Mort-vivantes dans la Zone d’Effet subissent un projectile magique infligeant +8 Dégâts (ou +15 Dégâts si elles sont de Taille Grande ou supérieure). Les créatures Instables subissent le double des Dégâts. Les Démons détruits par ce sort ne peuvent être réinvoqués pendant 1001 jours. Les Morts-vivants détruits ne peuvent jamais être réanimés. De plus, vous pouvez gratuitement tenter de dissiper chaque sort de Sorcellerie, Démonologie, Nécromancie, Magie Noire ou Chaos dans la Zone d’Effet.\nSurpuissance :\n• Pour chaque +1 DR, vous bénéficiez d’un bonus de +1 DR aux Tests de Dissipation.\n• +4 DR : Les objets magiques possédant des enchantements maléfiques ou chaotiques cessent de fonctionner pendant la durée du sort si vous réussissez un Test de Sociabilité Moyen (+2 DR).\n• +7 DR : Les Dégâts augmentent à +15 (ou +30 si la cible est de Taille Grande ou supérieure). Vous gagnez du Yenlui (Lumineux).",
+      "after": "Vous irradiez des flots du plus pur Qhaysh pour bannir le mal et les ténèbres. Chaque round, les créatures Démoniaques et Mort-vivantes dans la Zone d’Effet subissent un projectile magique infligeant +8 Dégâts (ou +15 Dégâts si elles sont de Taille Grande ou supérieure). Les créatures Instables subissent le double des Dégâts. Les Démons détruits par ce sort ne peuvent être réinvoqués pendant 1001 jours. Les Morts-vivants détruits ne peuvent jamais être réanimés. De plus, vous pouvez gratuitement tenter de dissiper chaque sort de Sorcellerie, Démonologie, Nécromancie, Magie Noire ou Chaos dans la Zone d’Effet.\nSurpuissance :\n• Pour chaque +1 DR, vous bénéficiez d’un bonus de +1 DR aux Tests de Dissipation.\n• +4 DR : Les objets magiques possédant des enchantements maléfiques ou chaotiques cessent de fonctionner pendant la durée du sort si vous réussissez un Test de Sociabilité Accessible (+2 DR).\n• +7 DR : Les Dégâts augmentent à +15 (ou +30 si la cible est de Taille Grande ou supérieure). Vous gagnez du Yenlui (Lumineux)."
+    },
+    {
+      "worksheet": "Magie",
+      "row": 107,
+      "column": 7,
+      "cell": "G107",
+      "name": "Pulvérisation Musquée",
+      "field": "desc",
+      "before": "Vous projetez un musc à l’odeur répugnante. Choisissez une option : \n - Marquer une cible : Les Tests pour retrouver la cible bénéficient de +2 DR. \n - Marquer un territoire : Les animaux sauvages n’entrent pas sauf s'ils sont affamés ou menacés (Test de Calme Moyen (+2 DR)). \n - Le musc persiste 1 jour +1 jour/ +2 DR et ne peut pas être lavé.",
+      "after": "Vous projetez un musc à l’odeur répugnante. Choisissez une option : \n - Marquer une cible : Les Tests pour retrouver la cible bénéficient de +2 DR. \n - Marquer un territoire : Les animaux sauvages n’entrent pas sauf s'ils sont affamés ou menacés (Test de Calme Accessible (+2 DR)). \n - Le musc persiste 1 jour +1 jour/ +2 DR et ne peut pas être lavé."
+    },
+    {
+      "worksheet": "Miracles",
+      "row": 13,
+      "column": 5,
+      "cell": "E13",
+      "name": "Attaque Rapide",
+      "field": "effet",
+      "before": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Difficile (+0) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale.",
+      "after": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale."
+    }
+  ],
+  "source": "Apothéose : HEPG p.86, Yenlui (Dark) → Sombre. Difficultés V5 : Intermédiaire +0 DR, Accessible +2 DR."
+}

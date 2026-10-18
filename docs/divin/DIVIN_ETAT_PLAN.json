@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 1,
+  "planDate": "2026-10-17",
+  "userTimeZone": "Europe/Paris",
+  "preparedAt": "2026-10-17T17:46:42.024Z",
+  "scope": "Brisé non engagé : Flee/Sprint, faits MJ et quotas de Tour, garde Actions/transition V5, UI, reçus et persistance; interactions bloquées et programme exhaustif ouverts",
+  "root": "C:/Users/arnot/.codex/worktrees/divin-v5/Outil MJ Warhammer",
+  "branch": "codex/divin-v5",
+  "head": "fb0f280150cdbdab1af220163abfaa491e2156ee",
+  "main": {
+    "root": "E:/Outil MJ Warhammer",
+    "head": "08ce45d24faa1727a8155716ade5f5dcba09efd4",
+    "status": "",
+    "clean": true
+  },
+  "decisions": {
+    "previousDivineDecisions": 8,
+    "planningQuestions": 10,
+    "answersReceived": 10,
+    "pendingScopeQuestions": 0,
+    "materialCosts": "Confirmation MJ sans inventaire ni débit automatique",
+    "lessonsRoundPolicy": {
+      "id": "DIV-TIME-LESSONS-01",
+      "answer": "Fin du Nᵉ Round, en comptant le Round actuel comme premier Round",
+      "receivedOn": "2026-10-18",
+      "scope": "Wrath11–15 only",
+      "source": "explicit-human-reply-this-conversation"
+    },
+    "brokenMidturnPolicy": {
+      "id": "DIV-BROKEN-MIDTURN-01",
+      "answer": "Bloquer ce cas pour une décision MJ explicite à chaque occurrence.",
+      "receivedOn": "2026-10-18",
+      "source": "explicit-human-reply-this-conversation",
+      "status": "block-implemented-per-occurrence-adjudication-execution-open"
+    }
+  },
+  "corpus": {
+    "books": 17,
+    "physicalPages": 2694,
+    "pagesWithoutExtractedText": 26,
+    "currentHashesVerified": 17,
+    "completeBookAuditsUnderNewPlan": 0,
+    "currentAudit": {
+      "schemaVersion": 1,
+      "corpusBooks": 17,
+      "totalPhysicalPages": 2694,
+      "pagesNotExplored": 2605,
+      "pagesFirstRead": 89,
+      "pagesIndependentlyRead": 89,
+      "pagesDoubleClassified": 89,
+      "pagesDoubleClassifiedSameClassification": 82,
+      "pagesDoubleClassifiedSamePrintedPage": 89,
+      "pagesWithClassificationDisagreement": 7,
+      "pagesWithPrintedPageDisagreement": 0,
+      "pagesVisualPending": 0,
+      "pagesWithoutExtractedText": 26,
+      "pagesWithoutExtractedTextVisuallyReadByFirst": 26,
+      "pagesWithoutExtractedTextVisuallyReadByIndependent": 26,
+      "pagesWithoutExtractedTextVisuallyReadByBoth": 26,
+      "pagesWithoutExtractedTextVisuallyCovered": 24,
+      "booksFullyDoubleClassified": 0,
+      "booksClosed": 0,
+      "identities": 133,
+      "identitiesByCategory": {
+        "blessing": 19,
+        "miracle": 60,
+        "talent": 0,
+        "rite": 0,
+        "ritual": 0,
+        "rune": 0,
+        "artifact": 0,
+        "gift": 0,
+        "pact": 0,
+        "innate-power": 0,
+        "common-rule": 4,
+        "stricture": 50
+      },
+      "identitiesPartialE1": 133,
+      "associations": 60,
+      "clauses": 0,
+      "clauseInventoryCompleteness": "not-yet-decomposed",
+      "clausesBySourceStatus": {
+        "to-explore": 0,
+        "read": 0,
+        "independently-checked": 0,
+        "v5-explicit": 0,
+        "v4-adaptation-required": 0,
+        "adaptation-decided": 0,
+        "open-contradiction": 0
+      },
+      "clausesByDevelopmentStatus": {
+        "not-started": 0,
+        "developed": 0,
+        "wired": 0,
+        "correcting": 0,
+        "integrated": 0
+      },
+      "clausesByVerificationStatus": {
+        "not-run": 0,
+        "runtime-exercised": 0,
+        "developer-tested": 0,
+        "independently-tested": 0,
+        "principal-validated": 0
+      },
+      "mechanicallyIntegratedClauses": 0,
+      "anomaliesOpen": 8,
+      "decisions": 0
+    },
+    "currentL06HashVerifiedAt": "2026-10-18T09:37:19.340Z",
+    "currentL06HashVerificationReceipt": "tmp/divin/conditions-source-hash-receipt.json",
+    "currentCorpusHashesVerifiedAt": "2026-10-18T07:53:44.498Z",
+    "currentCorpusHashReceipt": "tmp/divin/continuation-corpus-hash-receipt.json",
+    "currentTrancheSourceHashReceipt": "tmp/divin/conditions-source-hash-receipt.json",
+    "currentTrancheSourceHashBooks": [
+      "L06"
+    ],
+    "readingMetricsNote": "26 pages sans texte ont été vues par les deux rôles; 24 seulement ont aussi un accord de classement et de folio. Ces compteurs restent distincts; les divergences L01/93–94 sont conservées. Aucune nouvelle double lecture n’est ajoutée par cette reprise."
+  },
+  "implementation": {
+    "changedDuringPlanning": false,
+    "runtimeFilesCompared": 386,
+    "allMatchPreviousManifest": true,
+    "sourceFingerprint": "sha256:812a3fd8168c99af2ca03b52f882b945777929e433dbafa8104302b27a7e5671",
+    "registryEntries": 22,
+    "implementedPrayerEffects": 4,
+    "assistedPrayers": 8,
+    "holyHatred": "inventorié, pas de raccordement aux dégâts",
+    "supplementMiracles": "9 sources Up in Arms V4 p.79 corrigées dans le générateur; 9 adaptations V5 toujours bloquées",
+    "changedDuringThisWindow": true,
+    "eagleSummary": "Texte corrigé et contrôlé; statut assisté et raccordements E8 toujours incomplets",
+    "comparisonHistorical": true,
+    "newRuntimeCapabilities": [
+      "Motivated exact prayer grants: once/scene/durable, revocation and consumption",
+      "Canonical condition context for Prayer using the shared V5 roll service",
+      "Read-only previews including Sin/Wrath; atomic committed changes and Undo",
+      "Shared combat clock and validated phase plan for both real turn paths, atomic IDB/history/sync",
+      "Explicit campaign time command, actual UI, native IndexedDB and synchronized atomic known-family expirations",
+      "Wrath6–10 standalone successful Prayer SL cap0 for8 Imperial days; three consumers and real/campaign expirations",
+      "Wrath11–15 ordinary -1 Pray SL before shared Test outcome, explicit d10+Sin duration and MJ end-of-Nth-Round policy; verified receipt phase expiry",
+      "Wrath61–65/89–95 canonical Condition acquisition conserved; Broken non-engaged Move/Flee and Sprint wired with explicit facts, shared Tests, turn budgets and guards, local IDB/history/sync; engaged and other blocked cases remain open"
+    ],
+    "e2SourceClauses": {
+      "blessings": 19,
+      "associations": 60,
+      "commonClauses": 11,
+      "effectClauses": 21,
+      "mechanicalClauses": 32,
+      "narrativeClauses": 0,
+      "independentlyReviewedIdentities": 19,
+      "runtimeValidatedClauses": 0
+    },
+    "e5": {
+      "combatClock": "tested-and-wired",
+      "campaignAdvance": "command-and-real-ui-tested-known-families",
+      "durationConversion": "partial-known-legacy-anchors-and-explicit-blocks",
+      "fullLotComplete": false,
+      "backend": "native-IndexedDB, memory-without-storage; legacy-localStorage-refused",
+      "remaining": [
+        "other divine calendar contracts and Wrath mechanics",
+        "legacy anchors and seven-day magic week convention",
+        "durable identity gaps and outside-snapshot consequences",
+        "absent-author source exceptions",
+        "Broken engaged Flee, movement interactions, Sprinter and per-occurrence mid-Turn adjudication execution"
+      ],
+      "prayerSLRules": 2,
+      "wrathCalendar": "wrath6-10-tested-real-ui-native-idb-sync-undo",
+      "wrathLessons": "source-explicit-d10-pretest-modifier-real-round-phase-tested-native-idb-sync-undo",
+      "lessonsLimits": "Pose initiale hors combat sans Round attesté refusée; seconde occurrence active à arbitrer; repère de scène/Round devenu incohérent à résoudre explicitement. Les secondes de campagne ne fabriquent aucune fin de Round.",
+      "weekInventory": "docs/divin/sources/DIVIN_SEMAINE_MAGIE_INVENTAIRE.md; no migration",
+      "wrathConditionRules": 2,
+      "wrathConditions": "source-backed-canonical-acquisition-tested-real-ui-native-idb-sync-undo",
+      "wrathConditionsLimits": "Acquisitions conservées; Brisé non engagé Flee/Sprint raccordés. Engagement, interactions motrices, Sprinter et arbitrage mid-Tour par occurrence restent bloqués; Hide complet non certifié."
+    },
+    "sourceStrictures": {
+      "count": 50,
+      "nonHumanAccessRules": 3,
+      "status": "source-inventory-reviewed-partial-e1",
+      "runtimeCertified": 0
+    },
+    "brokenEscape": {
+      "status": "non-engaged-tranche-principal-validated",
+      "sourcePages": [
+        161,
+        163,
+        185,
+        186
+      ],
+      "independentTests": 29,
+      "developerTests": 2,
+      "fullConditionComplete": false,
+      "standardActionHistory": "extensions.v5.standardTurnActions",
+      "scope": "Brisé non engagé : Flee/Sprint, faits MJ et quotas de Tour, garde Actions/transition V5, UI, reçus et persistance; interactions bloquées et programme exhaustif ouverts",
+      "limits": [
+        "Engaged Flee: Momentum, extra Broken and free attacks",
+        "Movement interactions: Stunned, Prone, Entangled, Unconscious",
+        "Sprinter integration, presently blocked",
+        "Optional Hide: Action wiring and spent-budget refusal tested, full hiding effect not certified",
+        "Positive source-valid reaction under Broken not independently exercised",
+        "Per-occurrence mid-turn adjudication execution UI remains to develop",
+        "Other Wrath, E5/E6, E1-E11 exhaustive coverage",
+        "Historical Tests without an Action classification before Broken acquisition are not certified as turn Actions"
+      ]
+    }
+  },
+  "baselineRecipe": {
+    "path": "tmp/divin/history/recipe-before-resume.json",
+    "passed": true,
+    "nodeTests": 2308,
+    "commands": 11,
+    "completedAt": "2026-10-17T09:48:50.368Z",
+    "rerunDuringPlanning": false
+  },
+  "planReview": {
+    "sources": {
+      "agent": "/root/divin_sources",
+      "mode": "lecture seule",
+      "result": "Métadonnées et méthode contrôlées; halflings et pistes de panthéons/créatures ajoutés."
+    },
+    "architecture": {
+      "agent": "/root/divin_moteur",
+      "mode": "lecture seule",
+      "result": "Contre-lecture finale : séquence E6 primitives → E7 bénédictions → E8 miracles → E9 suppléments acyclique; quotas/recharges et unicité des services intégrés; aucun blocage supplémentaire signalé."
+    },
+    "independentControl": {
+      "agent": "/root/divin_controle",
+      "mode": "lecture seule",
+      "result": "Périmètre, indépendance, recettes et critères de fin cohérents; aucune mise en œuvre annoncée."
+    },
+    "principal": {
+      "status": "plan contrôlé et prêt à transmettre; exécution exhaustive non commencée",
+      "implementationNotCertifiedByPlan": true,
+      "checkedAt": "2026-10-17T17:47:58.659Z"
+    }
+  },
+  "nextActions": [
+    "1. E5/E6 : terminer les cas Brisé bloqués (engagement, États moteurs, Sprinter) et l’exécution de l’arbitrage mid-Tour explicite par occurrence; autres Courroux et cas Leçons ouverts. Ne pas présenter la tranche non engagée comme clôture de Brisé.",
+    "2. E5 : la table magique UNIT_MINUTES.weeks vaut encore10080 minutes, soit7 jours. La contradiction avec la semaine impériale sourcée est identifiée; aucune couche historique n’a été réinterprétée silencieusement. Il faut inventorier les sources et migrer avec contrôles avant de modifier cette convention.",
+    "3. E1/E2 :2605 pages et renvois à explorer,7 classements à confronter, autres identités et toutes clauses à inventorier. Les candidats Hospice restent à décomposer/adapter V5; cette lecture ne livre pas leurs mécaniques.",
+    "4. E3/E4 : accès/acquisitions/pertes hors combat, autres Tests/ressources/relances, Fortune/Chance, quotas et interactions d’États. Clarté d’esprit+Exténué reste ouvert.",
+    "5. E6–E9 : primitives restantes et intégration clause par clause des 19 bénédictions/60 associations,60 miracles de base, Courroux restant, Haine sacrée et suppléments. Sur un Terrain Mortel garde une durée officiellement non attestée dans la recherche réalisée.",
+    "6. E10/E11 : fermeture de couverture, contrôle indépendant et validation principale exhaustive. Aucun de ces critères n’est acquis par les recettes ciblées actuelles."
+  ],
+  "artifacts": {
+    "DIVIN_PLAN_EXHAUSTIF.md": {
+      "sha256": "53aaa8bd65b9ea38a58433b747156acf4b2400fffafcb0e8096defd51e21bf5a"
+    },
+    "DIVIN_QUESTIONS_PLAN.md": {
+      "sha256": "1aa6e6be0facda91b55ab7a9a78a47add625e450b6a2f8ad6df8530da8b12dd6"
+    },
+    "DIVIN_PASSATION_FENETRE_SUIVANTE.md": {
+      "sha256": "dd953105a6dfe3cfcebb8136eaa53ee2fadf5c13c8562efd53c13af1088166ea"
+    },
+    "DIVIN_CORPUS_LIVRES.json": {
+      "sha256": "511c1dee7b869db4efe63f3474b1b05d91a2fbce20bf7d1d4a049006a4dee61e"
+    },
+    "DIVIN_PLAN.md": {
+      "sha256": "8c384a5d717bce00c12605f13ac810c44317f71bf3d1c7d6323a00a24002ce7f"
+    },
+    "DIVIN_ARBITRAGES.md": {
+      "sha256": "bffa4d57f853504b846a39df785474bcc0be94774950caf12b7e96943ac36cb2"
+    },
+    "DIVIN_RAPPORT_REPRISE.md": {
+      "sha256": "846a984926438efdff9baf6e7c0fa83cbea02ea8af7f0c2a1f17bdc1506b6441"
+    }
+  },
+  "documentChecks": {
+    "relativeLinks": "checked-20-current-report-handoff-development-control-links",
+    "lotIds": 12,
+    "planningDecisions": 10,
+    "trailingWhitespaceErrors": 0,
+    "errors": [],
+    "currentWindowReview": "passed-independent-document-review-and-principal-validation",
+    "finalReviewers": [
+      "/root/luna_controle",
+      "/root"
+    ],
+    "currentWindowReviewers": [
+      "/root/luna_controle",
+      "/root"
+    ],
+    "currentWindowReviewedAt": "2026-10-18T11:02:57.712Z",
+    "currentWindowReviewScope": "Brisé non engagé : Flee/Sprint, faits MJ et quotas de Tour, garde Actions/transition V5, UI, reçus et persistance; interactions bloquées et programme exhaustif ouverts",
+    "independentDocumentReview": "passed-final-readonly-review"
+  },
+  "updatedAt": "2026-10-18T11:02:57.712Z",
+  "planReviewHistorical": true,
+  "currentRecipe": {
+    "path": "tmp/divin/recipe-receipt.json",
+    "passed": true,
+    "nodeTests": 2667,
+    "commands": 22,
+    "completedAt": "2026-10-18T10:59:07.053Z",
+    "sourceFingerprint": "sha256:812a3fd8168c99af2ca03b52f882b945777929e433dbafa8104302b27a7e5671",
+    "cloudChecks": 45,
+    "appliesTo": "Brisé non engagé : Flee/Sprint, faits MJ et quotas de Tour, garde Actions/transition V5, UI, reçus et persistance; interactions bloquées et programme exhaustif ouverts"
+  },
+  "executionWindow": {
+    "capturedAt": "2026-10-18T09:41:43.010Z",
+    "updatedAt": "2026-10-18T10:59:29.978Z",
+    "fullProgramComplete": false,
+    "snapshot": "C:/Users/arnot/.codex/visualizations/2026/10/18/01a14e61-da98-71d0-a37a-664a6af43209/divin-broken-baseline",
+    "snapshotFiles": 644,
+    "snapshotEvidence": 547,
+    "principal": "/root",
+    "authors": [
+      "/root/luna_developpement",
+      "/root/luna_sources",
+      "/root"
+    ],
+    "controllers": [
+      "/root/luna_controle"
+    ],
+    "lots": {
+      "E0": "validated",
+      "E1": "133-identities-89-pages-7-disagreements-partial",
+      "E2": "source-blessing-clauses-reviewed-runtime-incomplete",
+      "E3": "exact-access-grants-vertical-tranche-tested-rest-open",
+      "E4": "prayer-condition-context-vertical-tranche-tested-rest-open",
+      "E5": "campaign-wrath6-10/11-15-and-61-65/89-95-acquisition-tested-rest-open",
+      "E6": "non-engaged-Broken-escape-tranche-validated-rest-open",
+      "E7": "not-started",
+      "E8": "not-started",
+      "E9": "not-started",
+      "E10": "continuous-checkpoints-not-final",
+      "E11": "not-finally-validated"
+    },
+    "report": "docs/divin/DIVIN_RAPPORT_REPRISE.md",
+    "principalReceipt": "tmp/divin/broken-principal-receipt.json",
+    "activeTranche": "Brisé non engagé : Flee/Sprint, faits MJ et quotas de Tour, garde Actions/transition V5, UI, reçus et persistance; interactions bloquées et programme exhaustif ouverts",
+    "finalReview": {
+      "reviewedAt": "2026-10-18T11:02:57.712Z",
+      "reviewers": [
+        "/root/luna_controle",
+        "/root"
+      ],
+      "productAndTestsFrozen": true,
+      "programComplete": false
+    }
+  },
+  "previousExecutionWindow": {
+    "capturedAt": "2026-10-18T09:21:52.9890003Z",
+    "updatedAt": "2026-10-18T09:38:58.514Z",
+    "fullProgramComplete": false,
+    "snapshot": "C:/Users/arnot/.codex/visualizations/2026/10/18/01a14e4f-ac4b-73e2-904a-3a4e89591017/divin-conditions-baseline",
+    "snapshotFiles": 635,
+    "principal": "/root",
+    "authors": [
+      "/root/wrath_conditions_dev",
+      "/root"
+    ],
+    "controllers": [
+      "/root/wrath_conditions_control",
+      "/root/wrath_conditions_source"
+    ],
+    "lots": {
+      "E0": "validated",
+      "E1": "133-identities-89-pages-7-disagreements-partial",
+      "E2": "source-blessing-clauses-reviewed-runtime-incomplete",
+      "E3": "exact-access-grants-vertical-tranche-tested-rest-open",
+      "E4": "prayer-condition-context-vertical-tranche-tested-rest-open",
+      "E5": "campaign-wrath6-10/11-15-and-61-65/89-95-acquisition-tested-rest-open",
+      "E6": "not-closed-Broken-Flee-Sprint-obligation-unwired",
+      "E7": "not-started",
+      "E8": "not-started",
+      "E9": "not-started",
+      "E10": "continuous-checkpoints-not-final",
+      "E11": "not-finally-validated"
+    },
+    "report": "docs/divin/DIVIN_RAPPORT_REPRISE.md",
+    "principalReceipt": "tmp/divin/conditions-principal-receipt.json",
+    "activeTranche": "Wrath61–65/89–95 Condition acquisition, with explicit Broken movement/action limit"
+  },
+  "checkpointE3E4": {
+    "path": "tmp/divin/history/e3-e4-green/recipe-receipt.json",
+    "passed": true,
+    "nodeTests": 2419,
+    "commands": 15,
+    "completedAt": "2026-10-17T20:03:15.934Z",
+    "followupVerification": {
+      "reason": "Only redundant trailing newline removed from store.js after all 14 functional commands were green; diff check rerun.",
+      "semanticContentUnchanged": true,
+      "redCheckpoint": "tmp/divin/history/e3-e4-whitespace-red/recipe-receipt.json"
+    }
+  },
+  "previousRecipe": {
+    "path": "tmp/divin/history/2026-10-17-before-campaign/recipe-receipt.json",
+    "passed": true,
+    "nodeTests": 2451,
+    "commands": 16,
+    "completedAt": "2026-10-17T20:41:44.417Z",
+    "sourceFingerprint": "sha256:e37d1c1bd858d9a162fa44fbdaab7257eef3c0410368fc4916d3863d0c334c4d",
+    "appliesTo": "frozen-E3-E4-E5-combat-tranche"
+  },
+  "checkpointCampaign": {
+    "path": "tmp/divin/history/2026-10-18-campaign-green/recipe-receipt.json",
+    "passed": true,
+    "nodeTests": 2514,
+    "commands": 18,
+    "completedAt": "2026-10-18T07:00:50.922Z",
+    "sourceFingerprint": "sha256:e37d1c1bd858d9a162fa44fbdaab7257eef3c0410368fc4916d3863d0c334c4d",
+    "appliesTo": "Frozen campaign/strictures checkpoint before calendar-source and wrath continuation",
+    "cloudChecks": 20
+  },
+  "previousCheckpointBeforeLessons": {
+    "path": "tmp/divin/history/2026-10-18-before-lessons/recipe-receipt.json",
+    "passed": true,
+    "nodeTests": 2594,
+    "commands": 19,
+    "completedAt": "2026-10-18T07:58:14.930Z",
+    "sourceFingerprint": "sha256:9cbcdca5dfce7d31510afdf2460c990d929a7decdf344279f94c7adace280897",
+    "cloudChecks": 25,
+    "appliesTo": "Local campaign/Wrath6–10/source continuation, not exhaustive program"
+  },
+  "previousWindowBeforeLessons": {
+    "capturedAt": "2026-10-18T06:23:40.8435073Z",
+    "updatedAt": "2026-10-18T08:02:29.708Z",
+    "fullProgramComplete": false,
+    "snapshot": "C:/Users/arnot/.codex/visualizations/2026/10/18/01a14da8-877d-7ea0-a2d5-38e6a9590721/divin-campaign-baseline",
+    "snapshotFiles": 604,
+    "principal": "/root",
+    "authors": [
+      "/root/e5_campaign_dev",
+      "/root/e1_strictures_dev",
+      "/root"
+    ],
+    "controllers": [
+      "/root/e5_campaign_control",
+      "/root/e1_strictures_control"
+    ],
+    "lots": {
+      "E0": "validated",
+      "E1": "133-identities-89-pages-7-disagreements-partial",
+      "E2": "source-blessing-clauses-reviewed-runtime-incomplete",
+      "E3": "exact-access-grants-vertical-tranche-tested-rest-open",
+      "E4": "prayer-condition-context-vertical-tranche-tested-rest-open",
+      "E5": "campaign-known-families-and-wrath6-10-tested-rest-open",
+      "E6": "not-started",
+      "E7": "not-started",
+      "E8": "not-started",
+      "E9": "not-started",
+      "E10": "continuous-checkpoints-not-final",
+      "E11": "not-finally-validated"
+    },
+    "report": "docs/divin/DIVIN_RAPPORT_REPRISE.md",
+    "principalReceipt": "tmp/divin/continuation-principal-receipt.json",
+    "activeTranche": "tmp/divin/wrath-resume-session.json"
+  },
+  "previousCheckpointBeforeConditions": {
+    "path": "tmp/divin/history/2026-10-18-before-wrath-conditions/recipe-receipt.json",
+    "passed": true,
+    "nodeTests": 2616,
+    "commands": 20,
+    "completedAt": "2026-10-18T09:16:35.691Z",
+    "sourceFingerprint": "sha256:2bf4e97878423cf9d8463f88387ec0c3947f2c933629ea0a19d65e49312e135d",
+    "cloudChecks": 30,
+    "appliesTo": "Local Wrath11–15 and inherited targeted recipes; not exhaustive program"
+  },
+  "previousWindowBeforeConditions": {
+    "capturedAt": "2026-10-18T08:46:22.0156308Z",
+    "updatedAt": "2026-10-18T09:16:56.333Z",
+    "fullProgramComplete": false,
+    "snapshot": "C:/Users/arnot/.codex/visualizations/2026/10/18/01a14e2e-d9b6-7711-8177-5812fb60a8a9/divin-resume-baseline",
+    "snapshotFiles": 628,
+    "principal": "/root",
+    "authors": [
+      "/root/wrath_lessons_dev",
+      "/root"
+    ],
+    "controllers": [
+      "/root/wrath_lessons_control",
+      "/root/wrath_lessons_source"
+    ],
+    "lots": {
+      "E0": "validated",
+      "E1": "133-identities-89-pages-7-disagreements-partial",
+      "E2": "source-blessing-clauses-reviewed-runtime-incomplete",
+      "E3": "exact-access-grants-vertical-tranche-tested-rest-open",
+      "E4": "prayer-condition-context-vertical-tranche-tested-rest-open",
+      "E5": "campaign-and-wrath6-10/11-15-targeted-tests-rest-open",
+      "E6": "not-started",
+      "E7": "not-started",
+      "E8": "not-started",
+      "E9": "not-started",
+      "E10": "continuous-checkpoints-not-final",
+      "E11": "not-finally-validated"
+    },
+    "report": "docs/divin/DIVIN_RAPPORT_REPRISE.md",
+    "principalReceipt": "tmp/divin/lessons-principal-receipt.json",
+    "activeTranche": "Wrath11–15 and preliminary magic-week inventory"
+  }
+}

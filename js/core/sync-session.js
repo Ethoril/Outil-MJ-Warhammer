@@ -1,4 +1,6 @@
 import { migrateSnapshot } from './migrations.js';
+import { advanceGameClock } from './v5-game-time.js';
+import { validatePrayerSLCaps, getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import {
   SyncProtocolError,
   createOperation,
@@ -9,15 +11,187 @@ import {
 
 const PROTOCOL_VERSION = 3;
 const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+const stableClockValue = value => {
+  if (Array.isArray(value)) return `[${value.map(stableClockValue).join(',')}]`;
+  if (!value || typeof value !== 'object') return JSON.stringify(value);
+  return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableClockValue(value[key])}`).join(',')}}`;
+};
 
 function normalizeRemoteDocument(raw) {
   // Realtime Database omits empty maps and can return null for a new path.
-  // Those two shapes mean an empty document; any partially populated document
-  // still has to pass the strict protocol validator.
+  // It also removes an empty nested array, so restore only this known canonical
+  // registry shape at the remote boundary. Local imports and protocol
+  // operations continue through validateSyncDocument without this repair.
   if (raw == null || (typeof raw === 'object' && Object.keys(raw).length === 0)) {
     return createSyncDocument();
   }
-  return validateSyncDocument(raw);
+  let candidate = raw;
+  const access = raw?.state?.extensions?.v5?.divineAccess;
+  if (access && typeof access === 'object' && !Array.isArray(access) && access.schemaVersion === 1) {
+    let remoteAccess = access;
+    if (!Object.hasOwn(access, 'grants') && Object.keys(access).length === 1) {
+      remoteAccess = { schemaVersion: 1, grants: [] };
+    } else if (Array.isArray(access.grants)) {
+      let repaired = false;
+      const grants = access.grants.map(row => {
+        if (row && typeof row === 'object' && !Array.isArray(row)
+          && ['once', 'durable'].includes(row.scope) && !Object.hasOwn(row, 'sceneId')) {
+          repaired = true;
+          return { ...row, sceneId: null };
+        }
+        return row;
+      });
+      if (repaired) remoteAccess = { ...access, grants };
+    }
+    if (remoteAccess !== access) {
+      candidate = {
+        ...raw,
+        state: {
+          ...raw.state,
+          extensions: {
+            ...raw.state.extensions,
+            v5: { ...raw.state.extensions.v5, divineAccess: remoteAccess }
+          }
+        }
+      };
+    }
+  }
+  // RTDB omits null leaves. Restore only the empty-state clock representation
+  // and nullable combat coordinates that this schema defines; local imports
+  // stay strict and never pass through this decoder.
+  const gameClock = candidate?.state?.extensions?.v5?.gameClock;
+  if (gameClock && typeof gameClock === 'object' && !Array.isArray(gameClock)
+    && gameClock.schemaVersion === 1 && Number.isSafeInteger(gameClock.revision)
+    && gameClock.combat && typeof gameClock.combat === 'object' && !Array.isArray(gameClock.combat)) {
+    let repaired = false;
+    const combat = { ...gameClock.combat };
+    const canonicalSceneId = candidate.state.activeScene?.status === 'active'
+      ? candidate.state.activeScene.id : null;
+    if (!Object.hasOwn(combat, 'sceneId') && canonicalSceneId == null) { combat.sceneId = null; repaired = true; }
+    if (!Object.hasOwn(combat, 'currentActorId') && candidate.state.combat?.currentActorId == null) {
+      combat.currentActorId = null; repaired = true;
+    }
+    let lastEvent = gameClock.lastEvent;
+    if (gameClock.revision === 0 && !Object.hasOwn(gameClock, 'lastEvent')) { lastEvent = null; repaired = true; }
+    else if (lastEvent && typeof lastEvent === 'object' && !Array.isArray(lastEvent)
+      && typeof lastEvent.payloadFingerprint === 'string'
+      && ((lastEvent.kind === 'combat-transition' && Array.isArray(lastEvent.validatedPhases))
+        || (lastEvent.kind === 'campaign-time-advance' && !Object.hasOwn(lastEvent, 'validatedPhases')))) {
+      // RTDB drops null leaves and empty arrays recursively. Attest any nullable
+      // combat phase fields, or a missing empty campaign phase list, against a
+      // replay of the canonical payload fingerprint. Local imports stay strict.
+      try {
+        const event = JSON.parse(lastEvent.payloadFingerprint);
+        // Build a valid ephemeral predecessor receipt for positive revisions;
+        // the normal clock invariant requires every nonzero revision to retain
+        // its lastEvent. This seed exists only to replay/attest the received
+        // payload and is never persisted.
+        const seedEvent = event.baseRevision > 0 ? {
+          id: `clock-v1:${event.baseRevision - 1}:remote-normalizer-seed`,
+          baseRevision: event.baseRevision - 1, kind: 'campaign-time-advance',
+          seconds: 1, reason: 'Seed interne de validation du reçu distant'
+        } : null;
+        const seedReceipt = seedEvent ? {
+          id: seedEvent.id, baseRevision: seedEvent.baseRevision, resultRevision: event.baseRevision,
+          payloadFingerprint: stableClockValue(seedEvent), kind: seedEvent.kind, validatedPhases: []
+        } : null;
+        const replay = advanceGameClock({ schemaVersion: 1, revision: event.baseRevision, campaignSeconds: 0,
+          combat: event.kind === 'combat-transition' ? event.from : combat, lastEvent: seedReceipt }, event);
+        const receiptMatches = replay.ok && replay.receipt.payloadFingerprint === lastEvent.payloadFingerprint
+          && replay.receipt.id === lastEvent.id && replay.receipt.baseRevision === lastEvent.baseRevision
+          && replay.receipt.resultRevision === lastEvent.resultRevision && replay.receipt.kind === lastEvent.kind
+          && (lastEvent.kind === 'campaign-time-advance'
+            ? !Object.hasOwn(lastEvent, 'validatedPhases') && replay.validatedPhases.length === 0
+            : replay.validatedPhases.length === lastEvent.validatedPhases.length);
+        if (receiptMatches) {
+          if (lastEvent.kind === 'campaign-time-advance') {
+            lastEvent = { ...lastEvent, validatedPhases: [] };
+            repaired = true;
+          } else {
+            let phaseRepair = false;
+            const validatedPhases = lastEvent.validatedPhases.map((row, index) => {
+              const canonical = replay.validatedPhases[index];
+              if (!row || typeof row !== 'object' || Array.isArray(row)) return row;
+              const restored = { ...row };
+              for (const key of ['sceneId', 'actorId']) {
+                if (!Object.hasOwn(restored, key) && canonical[key] === null) {
+                  restored[key] = null;
+                  phaseRepair = true;
+                }
+              }
+              return restored;
+            });
+            if (phaseRepair) { lastEvent = { ...lastEvent, validatedPhases }; repaired = true; }
+          }
+        }
+      } catch { /* strict validation below rejects unauthenticated/partial receipts */ }
+    }
+    if (repaired) {
+      candidate = {
+        ...candidate,
+        state: {
+          ...candidate.state,
+          extensions: {
+            ...candidate.state.extensions,
+            v5: { ...candidate.state.extensions.v5, gameClock: { ...gameClock, combat, lastEvent } }
+          }
+        }
+      };
+    }
+  }
+  // RTDB omits nullable leaves. A cap placed at the pristine clock (revision 0,
+  // campaign second 0) has a uniquely attestable null lastEventId; repair only
+  // that remote shape. Local imports continue through strict validation.
+  const remoteClock=candidate?.state?.extensions?.v5?.gameClock;
+  if(remoteClock?.schemaVersion===1&&Number.isSafeInteger(remoteClock.revision)&&remoteClock.revision>=0
+    &&Number.isSafeInteger(remoteClock.campaignSeconds)&&remoteClock.campaignSeconds>=0){
+    const repairedState=clone(candidate.state);let capAnchorRepair=false;
+    const patchParticipant=participant=>{
+      const effects=participant?.extensions?.v5?.divineEffects;
+      if(!Array.isArray(effects))return;
+      for(const layer of effects){
+        const anchor=layer?.type==='prayer-sl-cap'?layer.clockAnchor:null;
+        if(anchor&&anchor.clockRevision===0&&anchor.campaignSeconds===0&&!Object.hasOwn(anchor,'lastEventId')){
+          const candidate=clone(participant);
+          for(const row of candidate.extensions.v5.divineEffects||[]){
+            if(row?.type==='prayer-sl-cap'&&row.clockAnchor?.clockRevision===0&&row.clockAnchor.campaignSeconds===0
+              &&!Object.hasOwn(row.clockAnchor,'lastEventId'))row.clockAnchor.lastEventId=null;
+          }
+          if(validatePrayerSLCaps(candidate,{clock:remoteClock}).ok){anchor.lastEventId=null;capAnchorRepair=true;}
+        }
+      }
+    };
+    (repairedState.combat?.participants||[]).forEach(patchParticipant);
+    (repairedState.reserve||[]).forEach(patchParticipant);
+    (repairedState.persistentCharacters||[]).forEach(patchParticipant);
+    (repairedState.activeScene?.participants||[]).forEach(patchParticipant);
+    (repairedState.suspendedScenes||[]).forEach(scene=>(scene?.participants||[]).forEach(patchParticipant));
+    if(capAnchorRepair)candidate={...candidate,state:repairedState};
+  }
+  // RTDB also omits a null `roundAnchor.sceneId`. Restore it only on this
+  // remote boundary and only when the complete, source-validated lesson layer
+  // proves that null is its canonical value. Local imports remain strict.
+  const repairedState=candidate?.state&&typeof candidate.state==='object'?clone(candidate.state):null;let lessonAnchorRepair=false;
+  const patchLessonAnchor=participant=>{
+    const effects=participant?.extensions?.v5?.divineEffects;
+    if(!Array.isArray(effects)||!effects.some(layer=>layer?.type==='prayer-sl-modifier'
+      &&layer.roundAnchor&&typeof layer.roundAnchor==='object'&&!Object.hasOwn(layer.roundAnchor,'sceneId')))return;
+    const trial=clone(participant);
+    for(const layer of trial.extensions.v5.divineEffects)if(layer?.type==='prayer-sl-modifier'
+      &&layer.roundAnchor&&typeof layer.roundAnchor==='object'&&!Object.hasOwn(layer.roundAnchor,'sceneId'))layer.roundAnchor.sceneId=null;
+    if(!getPrayerSLModifiers(trial).ok)return;
+    for(const layer of participant.extensions.v5.divineEffects)if(layer?.type==='prayer-sl-modifier'
+      &&layer.roundAnchor&&typeof layer.roundAnchor==='object'&&!Object.hasOwn(layer.roundAnchor,'sceneId'))layer.roundAnchor.sceneId=null;
+    lessonAnchorRepair=true;
+  };
+  const visitRows=rows=>{if(Array.isArray(rows))rows.forEach(patchLessonAnchor);};
+  if(repairedState){
+    visitRows(repairedState.combat?.participants);visitRows(repairedState.reserve);visitRows(repairedState.persistentCharacters);
+    visitRows(repairedState.activeScene?.participants);
+    (repairedState.suspendedScenes||[]).forEach(scene=>visitRows(scene?.participants));
+    if(lessonAnchorRepair)candidate={...candidate,state:repairedState};
+  }
+  return validateSyncDocument(candidate);
 }
 
 // A v2 root contains only the shared branches.  Keep the local envelope around

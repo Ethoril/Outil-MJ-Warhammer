@@ -1,8 +1,36 @@
 /** Pure fiche equipment contract, copied functions regenerated from the source project. */
 import { HIT_LOCATIONS, armourProtection, equipmentFormula, armourLayer, validateEquipmentItem } from '../data/shared/fiche/equipment.js';
+import talentQualityRegistry from '../data/v5-quality-talent-contracts.json' with {type:'json'};
 import contracts from '../data/keyword-engine-contracts.json' with { type: 'json' };
 import { getReferenceCatalogue, resolveKeyword } from './reference-catalog.js';
+import { conditionalArmour, natureTagLabel } from './v5-magic-combat.js';
 export { HIT_LOCATIONS, armourProtection, equipmentFormula, armourLayer, validateEquipmentItem };
+/** Armes de corps à corps conjurables (V5 p. 301), sans prix ni inventaire permanent. */
+export const ARCANE_WEAPON_PROFILES=Object.freeze(Object.fromEntries([
+ ['dagger','Dague',2,1,'very-short',[]],['knife','Couteau',1,1,'very-short',['inoffensive']],['hand-weapon','Arme de base',4,1,'average',['desequilibree']],['improvised','Arme improvisée',1,1,'average',['desequilibree','inoffensive']],['net','Filet',null,1,'short',['defensive',{id:'immobilisante',rating:50,parameter:'50'}]],['sword','Épée',4,1,'average',[]],
+ ['garrote','Garrot',2,2,'personal',['immobilisante','inoffensive']],['knuckles','Poing américain',2,1,'personal',[]],['unarmed','Mains nues conjurées',0,1,'personal',['inoffensive']],
+ ['cavalry-hammer','Marteau de cavalerie',5,2,'long',['assommante']],['lance','Lance de cavalerie',6,1,'very-long',['devastatrice','empaleuse']],
+ ['buckler','Bocle',1,1,'personal',['parade','inoffensive']],['foil','Fleuret',3,1,'average',['rapide','empaleuse','precise','inoffensive']],['main-gauche','Main gauche',2,1,'short',['defensive','empaleuse','parade']],['rapier','Rapière',4,1,'long',['rapide','empaleuse']],['swordbreaker','Brise-lame',1,1,'short',['defensive','parade','piege-lame']],
+ ['flail','Fléau',4,1,'average',['assommante','a-enroulement','desequilibree']],['grain-flail','Fléau à grain',3,2,'long',['assommante','imprecise']],['military-flail','Fléau militaire',5,2,'long',['devastatrice','assommante','a-enroulement','desequilibree']],['whip','Fouet',2,1,'very-long',['a-enroulement','desequilibree','inoffensive']],
+ ['halberd','Hallebarde',5,2,'long',['defensive','entaille','empaleuse']],['pike','Pique',4,2,'massive',['empaleuse']],['staff','Bâton',3,2,'long',['defensive','assommante','inoffensive']],['spear','Lance',4,2,'very-long',['rapide','empaleuse']],
+ ['bastard-sword','Épée bâtarde',5,2,'long',['devastatrice','defensive']],['greataxe','Grande hache',6,2,'long',['devastatrice','entaille','desequilibree']],['pick','Pic',5,2,'long',['devastatrice','perforante','desequilibree']],['warhammer','Marteau de guerre',6,2,'long',['devastatrice','assommante','desequilibree']],['zweihander','Espadon',5,2,'long',['devastatrice','entaille']]
+].map(([id,name,damage,hands,reach,qualities])=>[id,{id,name,damage,hands,reach,qualities}])));
+/** Objets réellement présents, y compris les armes d'une action locale sans fiche liée. */
+export function conjuredWeaponSkillScore(participant,key){
+ const groups={garrote:'bagarre',knuckles:'bagarre',unarmed:'bagarre','cavalry-hammer':'cavalerie',lance:'cavalerie',buckler:'escrime',foil:'escrime','main-gauche':'escrime',rapier:'escrime',swordbreaker:'escrime',flail:'fleau','grain-flail':'fleau','military-flail':'fleau',whip:'fleau',halberd:'hast',pike:'hast',staff:'hast',spear:'hast','bastard-sword':'deux mains',greataxe:'deux mains',pick:'deux mains',warhammer:'deux mains',zweihander:'deux mains'};
+ const fold=s=>String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ const group=groups[key] || 'base',skill=(participant.skills || []).find(s=>/corps a corps|melee/.test(fold(s.name || s.nom)) && ({base:/base|basic/,bagarre:/bagarre|brawling/,cavalerie:/cavalerie|cavalry/,escrime:/escrime|fencing/,fleau:/fleau|flail/,hast:/hast|polearm/,'deux mains':/deux mains|two.hand/}[group]).test(fold(s.name || s.nom)));
+ const value=skill?.total ?? skill?.value ?? skill?.score;
+ return value!=null && Number.isFinite(Number(value))?Number(value):group==='base'||group==='bagarre'?Number.isFinite(Number(participant.caracs?.CC))?Number(participant.caracs.CC):null:null;
+}
+export function spellObjectChoices(participant,{weaponsOnly=false}={}){
+ const items=(Array.isArray(participant?.equipment)?participant.equipment:[]).filter(item=>!weaponsOnly || item.kind==='weapon').map(item=>({id:item.id,label:item.name || item.nom || item.id,kind:item.kind}));
+ for(const action of participant?.actions || [])if(['attack','attaque'].includes(action.type)){
+  const id=action.extensions?.fiche?.equipmentId || action.id;
+  if(id && !items.some(item=>item.id===id))items.push({id,label:action.note || action.name || id,kind:'weapon'});
+ }
+ return items.filter(item=>typeof item.id==='string' && item.id.length);
+}
 export function normalizeEquipment(collection,{catalogue=getReferenceCatalogue(),present=collection!==undefined}={}){
  if(!present)return {coverage:'absent',items:[],warnings:[]};
  const invalid=message=>({coverage:'invalid',items:[],warnings:[{field:'equipment',code:'invalid-collection',severity:'error',message}]});
@@ -75,6 +103,7 @@ export function locationProtection(target,context={}){
   if(keywordId==='points-faibles'){if(context.critical===undefined)manual.push('contexte-critique-requis:points-faibles');else if(context.critical&&attackWords.includes('empaleuse')){include=false;ignored.push({item,reason:'Points faibles : critique Empaleuse'});}}
   if(keywordId==='impenetrable'&&context.critical){if(!Number.isInteger(attackRoll)||attackRoll<1||attackRoll>100)manual.push('jet-attaque-requis:impenetrable');else if(attackRoll%2!==0)criticalIgnored=true;}
  }
+ if(known.some(key=>(context.ignoredArmourFlaws||[]).includes(key))){include=false;ignored.push({item,reason:'Talent : armure ignorée ('+known.filter(key=>context.ignoredArmourFlaws.includes(key)).join(', ')+')'});}
  if(include)counted.push(item);
  }
  if(location)ap=counted.reduce((sum,item)=>sum+item.ap,0);
@@ -99,6 +128,15 @@ export function locationProtection(target,context={}){
   }
   else if(context.opposedWithShield===undefined)manual.push('usage-bouclier-requis');
  }
+ // L’équipement de fiche reste intact ; la dégradation physique appartient au combat et les PA magiques aux couches
+ // (`extensions.v5.magicAp`). Avec `armor` seul, la valeur est déjà effective (couches et dégradation comprises).
+ if(protection||target?.armorLocations)ap=Math.max(0,ap+(Number(target?.extensions?.v5?.magicAp?.[id])||0)-(Number(target?.extensions?.v5?.armorDamage?.[id])||0));
+ // PA magiques sans cumul avec l'armure (Coruscation) et PA conditionnels à la nature de l'attaque (Bouclier céruléen : métal).
+ ap=Math.max(ap,Number(target?.extensions?.v5?.magicApFloor?.[id])||0);
+ const conditional=conditionalArmour(target,context.nature||{});
+ if(conditional.unknown.length)manual.push('PA magiques conditionnels : préciser '+conditional.unknown.map(natureTagLabel).join(', ')+'.');
+ ap+=conditional.bonus;
+ if(attackWords.includes('perforante')){const word=resolveKeyword('perforante'),source=talentQualityRegistry.qualityContracts.find(q=>q.id==='perforante');evaluatedKeywords.add('perforante');if(word?.effect!==source?.effect||word?.edition!==source?.edition||word?.source!==source?.source)manual.push('effet-non-couvert:perforante');else ap=Math.max(0,ap-2);}
  if(context.manualAp!==undefined&&context.manualAp!==null){const override=Number(context.manualAp);if(Number.isFinite(override)&&override>=0)return {location:id,ap:override,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[],warnings,evaluatedKeywords:context.critical&&evaluatedKeywords.has('impenetrable')?['impenetrable']:[],arbitrated:true};}
  return {location:id,ap:manual.length?null:ap+shieldAp,baseAp,shieldAp,counted,ignored,shield,criticalIgnored,manual:[...new Set(manual)],warnings,evaluatedKeywords:[...evaluatedKeywords]};
 }

@@ -79,7 +79,7 @@ export function normalizeState(raw, index = 0) {
     name = String(raw ?? '').trim();
   }
 
-  const key = stateKey(name);
+  const key = ['talent-active','talent-pending'].includes(source.kind) && typeof source.key==='string' && /^[a-z0-9:-]+$/.test(source.key) ? source.key : stateKey(name);
   const out = source;
   safeSet(out, 'id', stateId(raw, index, key));
   safeSet(out, 'key', key);

@@ -5,7 +5,7 @@
   "coverage": "206 identités classées par famille principale ; neuf contrats représentatifs proposés. Noyau développé séparément, aucun automatisme applicatif activé. Les talents mixtes restent à détailler clause par clause.",
   "selection": "Catalogue utile complet, PJ actuels prioritaires",
   "rulePolicy": "Système jouable unique V5. Conversion des descriptions assurée par le MJ à la source Aides de jeu ; le moteur applique les contrats V5 publiés et validés.",
-  "sourceCatalogueVersion": "sha256:410c21554f9ec5ed6a304c68f540f419947aef6e4954268e697cee473bcb1b1d",
+  "sourceCatalogueVersion": "sha256:8e1cbacfb94e59532708d5f9fbd69e49c4a5714eba242ec0e90e660da18a2b48",
   "sourceCataloguePath": "js/data/reference-snapshot.json (Talents) et js/data/reference-source-csv/Talents.csv",
   "referenceCorePdf": "Livre de base V5 EN v2.pdf (livre personnel, hors dépôt)",
   "counts": {
@@ -345,7 +345,7 @@
       "specializationLabel": null,
       "purchaseLimit": "Bonus d’Initiative",
       "source": "High Elf Player’s Guide (V4), p. 83",
-      "sourceEffectSha256": "c1c8d5d49fa5a85b2148dac3a45e8a5293eb6ba22050d081d71763f78d2d432d",
+      "sourceEffectSha256": "a6b8f58b88711b706d76c83f6d450f9d19c990656c80dce7d71301eba0e290ac",
       "family": "lot3_magie_et_prieres",
       "status": "lot3_magie_et_prieres",
       "priorityEvidence": null,
@@ -2464,7 +2464,7 @@
       "specializationLabel": null,
       "purchaseLimit": "1",
       "source": "Livre de base V4 (FR), p. 143",
-      "sourceEffectSha256": "7b4e09a7906faf21324f1a5e6044416cc548a92542a374cc2756d534c0dff32a",
+      "sourceEffectSha256": "985ad43b65cdc8c51d93e093fac92ac1b47f3ac1da276bb527c2d163a378915c",
       "family": "valeurs_permanentes",
       "status": "a_contractualiser",
       "priorityEvidence": null,
@@ -3381,7 +3381,7 @@
     "legacyCombatAdvantageCounter": false,
     "bibliographyEditionIsNotMechanic": "Une source V4 peut documenter une description adaptée V5 ; vérifier la clause publiée et son contrat, pas seulement la bibliographie.",
     "activation": "Empreinte d’effet source conforme au contrat V5 validé.",
-    "publicCsvSha256": "4ef3ee500c6d4da8b26dbb30fbb751995954be66e822a7dc306acde379229d8f"
+    "publicCsvSha256": "dff408c3dea1cd46ab78ae7debf450e071ca68aba0049f1b736841cff75b80df"
   },
   "commonRules": {
     "source": "Convention du MJ précisée dans ce chat le 8 octobre 2026",

@@ -1,0 +1,6012 @@
+{
+  "schemaVersion": 1,
+  "identities": [
+    {
+      "id": "L06:stricture:manann:01",
+      "bookId": "L06",
+      "canonicalName": "Manann stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 205,
+          "printedPage": 205,
+          "section": "The Cult of Manann — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:manann:02",
+      "bookId": "L06",
+      "canonicalName": "Manann stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 205,
+          "printedPage": 205,
+          "section": "The Cult of Manann — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:manann:03",
+      "bookId": "L06",
+      "canonicalName": "Manann stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 205,
+          "printedPage": 205,
+          "section": "The Cult of Manann — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:manann:04",
+      "bookId": "L06",
+      "canonicalName": "Manann stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 205,
+          "printedPage": 205,
+          "section": "The Cult of Manann — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:manann:05",
+      "bookId": "L06",
+      "canonicalName": "Manann stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 205,
+          "printedPage": 205,
+          "section": "The Cult of Manann — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:morr:01",
+      "bookId": "L06",
+      "canonicalName": "Morr stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 206,
+          "printedPage": 206,
+          "section": "The Cult of Morr — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:morr:02",
+      "bookId": "L06",
+      "canonicalName": "Morr stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 206,
+          "printedPage": 206,
+          "section": "The Cult of Morr — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:morr:03",
+      "bookId": "L06",
+      "canonicalName": "Morr stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 206,
+          "printedPage": 206,
+          "section": "The Cult of Morr — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:morr:04",
+      "bookId": "L06",
+      "canonicalName": "Morr stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 206,
+          "printedPage": 206,
+          "section": "The Cult of Morr — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:morr:05",
+      "bookId": "L06",
+      "canonicalName": "Morr stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 206,
+          "printedPage": 206,
+          "section": "The Cult of Morr — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:myrmidia:01",
+      "bookId": "L06",
+      "canonicalName": "Myrmidia stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 207,
+          "printedPage": 207,
+          "section": "The Cult of Myrmidia — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:myrmidia:02",
+      "bookId": "L06",
+      "canonicalName": "Myrmidia stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 207,
+          "printedPage": 207,
+          "section": "The Cult of Myrmidia — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:myrmidia:03",
+      "bookId": "L06",
+      "canonicalName": "Myrmidia stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 207,
+          "printedPage": 207,
+          "section": "The Cult of Myrmidia — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:myrmidia:04",
+      "bookId": "L06",
+      "canonicalName": "Myrmidia stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 207,
+          "printedPage": 207,
+          "section": "The Cult of Myrmidia — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:myrmidia:05",
+      "bookId": "L06",
+      "canonicalName": "Myrmidia stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 207,
+          "printedPage": 207,
+          "section": "The Cult of Myrmidia — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ranald:01",
+      "bookId": "L06",
+      "canonicalName": "Ranald stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 208,
+          "printedPage": 208,
+          "section": "The Cult of Ranald — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ranald:02",
+      "bookId": "L06",
+      "canonicalName": "Ranald stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 208,
+          "printedPage": 208,
+          "section": "The Cult of Ranald — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ranald:03",
+      "bookId": "L06",
+      "canonicalName": "Ranald stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 208,
+          "printedPage": 208,
+          "section": "The Cult of Ranald — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ranald:04",
+      "bookId": "L06",
+      "canonicalName": "Ranald stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 208,
+          "printedPage": 208,
+          "section": "The Cult of Ranald — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ranald:05",
+      "bookId": "L06",
+      "canonicalName": "Ranald stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 208,
+          "printedPage": 208,
+          "section": "The Cult of Ranald — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:rhya:01",
+      "bookId": "L06",
+      "canonicalName": "Rhya stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 209,
+          "printedPage": 209,
+          "section": "The Cult of Rhya — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:rhya:02",
+      "bookId": "L06",
+      "canonicalName": "Rhya stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 209,
+          "printedPage": 209,
+          "section": "The Cult of Rhya — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:rhya:03",
+      "bookId": "L06",
+      "canonicalName": "Rhya stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 209,
+          "printedPage": 209,
+          "section": "The Cult of Rhya — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:rhya:04",
+      "bookId": "L06",
+      "canonicalName": "Rhya stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 209,
+          "printedPage": 209,
+          "section": "The Cult of Rhya — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:rhya:05",
+      "bookId": "L06",
+      "canonicalName": "Rhya stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 209,
+          "printedPage": 209,
+          "section": "The Cult of Rhya — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:shallya:01",
+      "bookId": "L06",
+      "canonicalName": "Shallya stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 210,
+          "printedPage": 210,
+          "section": "The Cult of Shallya — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:shallya:02",
+      "bookId": "L06",
+      "canonicalName": "Shallya stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 210,
+          "printedPage": 210,
+          "section": "The Cult of Shallya — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:shallya:03",
+      "bookId": "L06",
+      "canonicalName": "Shallya stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 210,
+          "printedPage": 210,
+          "section": "The Cult of Shallya — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:shallya:04",
+      "bookId": "L06",
+      "canonicalName": "Shallya stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 210,
+          "printedPage": 210,
+          "section": "The Cult of Shallya — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:shallya:05",
+      "bookId": "L06",
+      "canonicalName": "Shallya stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 210,
+          "printedPage": 210,
+          "section": "The Cult of Shallya — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:sigmar:01",
+      "bookId": "L06",
+      "canonicalName": "Sigmar stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 211,
+          "printedPage": 211,
+          "section": "The Cult of Sigmar — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:sigmar:02",
+      "bookId": "L06",
+      "canonicalName": "Sigmar stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 211,
+          "printedPage": 211,
+          "section": "The Cult of Sigmar — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:sigmar:03",
+      "bookId": "L06",
+      "canonicalName": "Sigmar stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 211,
+          "printedPage": 211,
+          "section": "The Cult of Sigmar — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:sigmar:04",
+      "bookId": "L06",
+      "canonicalName": "Sigmar stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 211,
+          "printedPage": 211,
+          "section": "The Cult of Sigmar — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:sigmar:05",
+      "bookId": "L06",
+      "canonicalName": "Sigmar stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 211,
+          "printedPage": 211,
+          "section": "The Cult of Sigmar — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:taal:01",
+      "bookId": "L06",
+      "canonicalName": "Taal stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 212,
+          "printedPage": 212,
+          "section": "The Cult of Taal — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:taal:02",
+      "bookId": "L06",
+      "canonicalName": "Taal stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 212,
+          "printedPage": 212,
+          "section": "The Cult of Taal — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:taal:03",
+      "bookId": "L06",
+      "canonicalName": "Taal stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 212,
+          "printedPage": 212,
+          "section": "The Cult of Taal — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:taal:04",
+      "bookId": "L06",
+      "canonicalName": "Taal stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 212,
+          "printedPage": 212,
+          "section": "The Cult of Taal — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:taal:05",
+      "bookId": "L06",
+      "canonicalName": "Taal stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 212,
+          "printedPage": 212,
+          "section": "The Cult of Taal — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ulric:01",
+      "bookId": "L06",
+      "canonicalName": "Ulric stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 213,
+          "printedPage": 213,
+          "section": "The Cult of Ulric — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ulric:02",
+      "bookId": "L06",
+      "canonicalName": "Ulric stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 213,
+          "printedPage": 213,
+          "section": "The Cult of Ulric — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ulric:03",
+      "bookId": "L06",
+      "canonicalName": "Ulric stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 213,
+          "printedPage": 213,
+          "section": "The Cult of Ulric — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ulric:04",
+      "bookId": "L06",
+      "canonicalName": "Ulric stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 213,
+          "printedPage": 213,
+          "section": "The Cult of Ulric — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:ulric:05",
+      "bookId": "L06",
+      "canonicalName": "Ulric stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 213,
+          "printedPage": 213,
+          "section": "The Cult of Ulric — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:verena:01",
+      "bookId": "L06",
+      "canonicalName": "Verena stricture 01",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 214,
+          "printedPage": 214,
+          "section": "The Cult of Verena — Strictures, item 1"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:verena:02",
+      "bookId": "L06",
+      "canonicalName": "Verena stricture 02",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 214,
+          "printedPage": 214,
+          "section": "The Cult of Verena — Strictures, item 2"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:verena:03",
+      "bookId": "L06",
+      "canonicalName": "Verena stricture 03",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 214,
+          "printedPage": 214,
+          "section": "The Cult of Verena — Strictures, item 3"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:verena:04",
+      "bookId": "L06",
+      "canonicalName": "Verena stricture 04",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 214,
+          "printedPage": 214,
+          "section": "The Cult of Verena — Strictures, item 4"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:stricture:verena:05",
+      "bookId": "L06",
+      "canonicalName": "Verena stricture 05",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le numéro de commandement est un repère éditorial local; la source ne donne pas de nom propre à chaque puce."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias propre à cette puce n’est établi dans cette tranche."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les détenteurs, exceptions par type d’acteur et conséquences d’une violation nécessitent d’autres règles ou décisions."
+      },
+      "category": "stricture",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 214,
+          "printedPage": 214,
+          "section": "The Cult of Verena — Strictures, item 5"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "violation-consequence",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:common-rule:access:dwarf-ancestor-gods",
+      "bookId": "L06",
+      "canonicalName": "Dwarf ancestor-god priest access",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le nom anglais est un intitulé éditorial de registre, pas un nom propre donné par la source."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias n’est établi dans cette tranche."
+      },
+      "tradition": "non-human",
+      "actorKinds": [
+        "dwarf"
+      ],
+      "category": "common-rule",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 215,
+          "printedPage": 215,
+          "section": "Dwarf Priests"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "access-resolution",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:common-rule:access:elven-priests",
+      "bookId": "L06",
+      "canonicalName": "Elven priest access",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le nom anglais est un intitulé éditorial de registre, pas un nom propre donné par la source."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias n’est établi dans cette tranche."
+      },
+      "tradition": "non-human",
+      "actorKinds": [
+        "high-elf",
+        "wood-elf"
+      ],
+      "category": "common-rule",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 215,
+          "printedPage": 215,
+          "section": "Elven Priests"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "access-resolution",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:common-rule:access:halfling-priests",
+      "bookId": "L06",
+      "canonicalName": "Halfling priest access",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Le nom anglais est un intitulé éditorial de registre, pas un nom propre donné par la source."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Aucun alias n’est établi dans cette tranche."
+      },
+      "tradition": "non-human",
+      "actorKinds": [
+        "halfling"
+      ],
+      "category": "common-rule",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 215,
+          "printedPage": 215,
+          "section": "Halfling Priests"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "access-resolution",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:common-rule:little-prayers",
+      "bookId": "L06",
+      "canonicalName": "Little Prayers",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Petites prières est un libellé de travail, traduction éditoriale à relier au catalogue local."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "Alias à établir."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "Option commune aux divinités avec bénéfice approprié décidé par le MJ; ne pas lui attribuer un culte unique."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Accès, compétence Pray, lieux saints et cas sans Bless à décomposer sans habilitation libre."
+      },
+      "category": "common-rule",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 203,
+          "printedPage": 203,
+          "section": "Options: Little Prayers"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "secret-d100-and-Pray-threshold",
+        "benefit-choice-and-scope",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:battle",
+      "bookId": "L06",
+      "canonicalName": "Battle",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Battle"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:breath",
+      "bookId": "L06",
+      "canonicalName": "Breath",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Breath"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:charisma",
+      "bookId": "L06",
+      "canonicalName": "Charisma",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Charisma"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:conscience",
+      "bookId": "L06",
+      "canonicalName": "Conscience",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Conscience"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:courage",
+      "bookId": "L06",
+      "canonicalName": "Courage",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Courage"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:finesse",
+      "bookId": "L06",
+      "canonicalName": "Finesse",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Finesse"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:fortune",
+      "bookId": "L06",
+      "canonicalName": "Fortune",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Fortune"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:grace",
+      "bookId": "L06",
+      "canonicalName": "Grace",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Grace"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:hardiness",
+      "bookId": "L06",
+      "canonicalName": "Hardiness",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Hardiness"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:healing",
+      "bookId": "L06",
+      "canonicalName": "Healing",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Healing"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:the-hunt",
+      "bookId": "L06",
+      "canonicalName": "The Hunt",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing The Hunt"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:might",
+      "bookId": "L06",
+      "canonicalName": "Might",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Might"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:protection",
+      "bookId": "L06",
+      "canonicalName": "Protection",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Protection"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:recuperation",
+      "bookId": "L06",
+      "canonicalName": "Recuperation",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Recuperation"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:righteousness",
+      "bookId": "L06",
+      "canonicalName": "Righteousness",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Righteousness"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:savagery",
+      "bookId": "L06",
+      "canonicalName": "Savagery",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Savagery"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:tenacity",
+      "bookId": "L06",
+      "canonicalName": "Tenacity",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Tenacity"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:wisdom",
+      "bookId": "L06",
+      "canonicalName": "Wisdom",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Wisdom"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:blessing:wit",
+      "bookId": "L06",
+      "canonicalName": "Wit",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": {
+        "status": "unresolved",
+        "reason": "La bénédiction générique est associée à plusieurs cultes."
+      },
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "blessing",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "Blessing Wit"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "tradition",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:manann:becalm",
+      "bookId": "L06",
+      "canonicalName": "Becalm",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 222,
+          "printedPage": 222,
+          "section": "Miracle Becalm"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:manann:drowned-man-s-face",
+      "bookId": "L06",
+      "canonicalName": "Drowned Man’s Face",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 222,
+          "printedPage": 222,
+          "section": "Miracle Drowned Man’s Face"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:manann:fair-winds",
+      "bookId": "L06",
+      "canonicalName": "Fair Winds",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 222,
+          "printedPage": 222,
+          "section": "Miracle Fair Winds"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:manann:manalt-s-bounty",
+      "bookId": "L06",
+      "canonicalName": "Manalt’s Bounty",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 222,
+          "printedPage": 222,
+          "section": "Miracle Manalt’s Bounty"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:manann:sea-legs",
+      "bookId": "L06",
+      "canonicalName": "Sea Legs",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Sea Legs"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:manann:waterwalk",
+      "bookId": "L06",
+      "canonicalName": "Waterwalk",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Manann",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Waterwalk"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:morr:death-mask",
+      "bookId": "L06",
+      "canonicalName": "Death Mask",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Death Mask"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:morr:destroy-undead",
+      "bookId": "L06",
+      "canonicalName": "Destroy Undead",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Destroy Undead"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:morr:dooming",
+      "bookId": "L06",
+      "canonicalName": "Dooming",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Dooming"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:morr:last-rites",
+      "bookId": "L06",
+      "canonicalName": "Last Rites",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Last Rites"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:morr:portal-s-threshold",
+      "bookId": "L06",
+      "canonicalName": "Portal’s Threshold",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Portal’s Threshold"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:morr:stay-morr-s-hand",
+      "bookId": "L06",
+      "canonicalName": "Stay Morr’s Hand",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Morr",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "Miracle Stay Morr’s Hand"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:myrmidia:blazing-sun",
+      "bookId": "L06",
+      "canonicalName": "Blazing Sun",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Blazing Sun"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:myrmidia:eagle-s-eye",
+      "bookId": "L06",
+      "canonicalName": "Eagle’s Eye",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Eagle’s Eye"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:myrmidia:fury-s-call",
+      "bookId": "L06",
+      "canonicalName": "Fury’s Call",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Fury’s Call"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:myrmidia:inspiring",
+      "bookId": "L06",
+      "canonicalName": "Inspiring",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Inspiring"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:myrmidia:shield-of-myrmidia",
+      "bookId": "L06",
+      "canonicalName": "Shield of Myrmidia",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Shield of Myrmidia"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:myrmidia:spear-of-myrmidia",
+      "bookId": "L06",
+      "canonicalName": "Spear of Myrmidia",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Myrmidia",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Spear of Myrmidia"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ranald:an-invitation",
+      "bookId": "L06",
+      "canonicalName": "An Invitation",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle An Invitation"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ranald:cat-s-eyes",
+      "bookId": "L06",
+      "canonicalName": "Cat’s Eyes",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Cat’s Eyes"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ranald:cheat-the-odds",
+      "bookId": "L06",
+      "canonicalName": "Cheat the Odds",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "Miracle Cheat the Odds"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ranald:ranald-s-grace",
+      "bookId": "L06",
+      "canonicalName": "Ranald’s Grace",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle Ranald’s Grace"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ranald:trickster-s-glamour",
+      "bookId": "L06",
+      "canonicalName": "Trickster’s Glamour",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle Trickster’s Glamour"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ranald:you-saw-nothing",
+      "bookId": "L06",
+      "canonicalName": "You Saw Nothing",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ranald",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle You Saw Nothing"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:rhya:rhya-s-children",
+      "bookId": "L06",
+      "canonicalName": "Rhya’s Children",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle Rhya’s Children"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:rhya:rhya-s-harvest",
+      "bookId": "L06",
+      "canonicalName": "Rhya’s Harvest",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle Rhya’s Harvest"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:rhya:rhya-s-shelter",
+      "bookId": "L06",
+      "canonicalName": "Rhya’s Shelter",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle Rhya’s Shelter"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:rhya:rhya-s-succour",
+      "bookId": "L06",
+      "canonicalName": "Rhya’s Succour",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle Rhya’s Succour"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:rhya:rhya-s-touch",
+      "bookId": "L06",
+      "canonicalName": "Rhya’s Touch",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 225,
+          "printedPage": 225,
+          "section": "Miracle Rhya’s Touch"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:rhya:rhya-s-union",
+      "bookId": "L06",
+      "canonicalName": "Rhya’s Union",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Rhya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Rhya’s Union"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:shallya:anchorite-s-endurance",
+      "bookId": "L06",
+      "canonicalName": "Anchorite’s Endurance",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Anchorite’s Endurance"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:shallya:balm-to-a-wounded-mind",
+      "bookId": "L06",
+      "canonicalName": "Balm to a Wounded Mind",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Balm to a Wounded Mind"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:shallya:bitter-catharsis",
+      "bookId": "L06",
+      "canonicalName": "Bitter Catharsis",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Bitter Catharsis"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:shallya:martyr",
+      "bookId": "L06",
+      "canonicalName": "Martyr",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Martyr"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:shallya:shallya-s-tears",
+      "bookId": "L06",
+      "canonicalName": "Shallya’s Tears",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Shallya’s Tears"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:shallya:unblemished-innocence",
+      "bookId": "L06",
+      "canonicalName": "Unblemished Innocence",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Shallya",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Unblemished Innocence"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:sigmar:beacon-of-righteous-virtue",
+      "bookId": "L06",
+      "canonicalName": "Beacon of Righteous Virtue",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Beacon of Righteous Virtue"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:sigmar:heed-not-the-witch",
+      "bookId": "L06",
+      "canonicalName": "Heed Not the Witch",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 226,
+          "printedPage": 226,
+          "section": "Miracle Heed Not the Witch"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:sigmar:sigmar-s-fiery-hammer",
+      "bookId": "L06",
+      "canonicalName": "Sigmar’s Fiery Hammer",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle Sigmar’s Fiery Hammer"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:sigmar:soulfire",
+      "bookId": "L06",
+      "canonicalName": "Soulfire",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle Soulfire"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:sigmar:twin-tailed-comet",
+      "bookId": "L06",
+      "canonicalName": "Twin-tailed Comet",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle Twin-tailed Comet"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:sigmar:vanquish-the-unrighteous",
+      "bookId": "L06",
+      "canonicalName": "Vanquish the Unrighteous",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Sigmar",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle Vanquish the Unrighteous"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:taal:animal-instincts",
+      "bookId": "L06",
+      "canonicalName": "Animal Instincts",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle Animal Instincts"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:taal:king-of-the-wild",
+      "bookId": "L06",
+      "canonicalName": "King of the Wild",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle King of the Wild"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:taal:leaping-stag",
+      "bookId": "L06",
+      "canonicalName": "Leaping Stag",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle Leaping Stag"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:taal:lord-of-the-hunt",
+      "bookId": "L06",
+      "canonicalName": "Lord of the Hunt",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "Miracle Lord of the Hunt"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:taal:tanglefoot",
+      "bookId": "L06",
+      "canonicalName": "Tanglefoot",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle Tanglefoot"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:taal:tooth-and-claw",
+      "bookId": "L06",
+      "canonicalName": "Tooth and Claw",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Taal",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle Tooth and Claw"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ulric:hoarfrost-s-chill",
+      "bookId": "L06",
+      "canonicalName": "Hoarfrost’s Chill",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle Hoarfrost’s Chill"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ulric:howl-of-the-wolf",
+      "bookId": "L06",
+      "canonicalName": "Howl of the Wolf",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle Howl of the Wolf"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ulric:pelt-of-the-winter-wolf",
+      "bookId": "L06",
+      "canonicalName": "Pelt of the Winter Wolf",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle Pelt of the Winter Wolf"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ulric:the-snow-king-s-judgement",
+      "bookId": "L06",
+      "canonicalName": "The Snow King’s Judgement",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle The Snow King’s Judgement"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ulric:ulric-s-fury",
+      "bookId": "L06",
+      "canonicalName": "Ulric’s Fury",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle Ulric’s Fury"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:ulric:winter-s-bite",
+      "bookId": "L06",
+      "canonicalName": "Winter’s Bite",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Ulric",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 228,
+          "printedPage": 228,
+          "section": "Miracle Winter’s Bite"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:verena:as-verena-is-my-witness",
+      "bookId": "L06",
+      "canonicalName": "As Verena Is My Witness",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 229,
+          "printedPage": 229,
+          "section": "Miracle As Verena Is My Witness"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:verena:blind-justice",
+      "bookId": "L06",
+      "canonicalName": "Blind Justice",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 229,
+          "printedPage": 229,
+          "section": "Miracle Blind Justice"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:verena:shackles-of-truth",
+      "bookId": "L06",
+      "canonicalName": "Shackles of Truth",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 229,
+          "printedPage": 229,
+          "section": "Miracle Shackles of Truth"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:verena:sword-of-justice",
+      "bookId": "L06",
+      "canonicalName": "Sword of Justice",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 229,
+          "printedPage": 229,
+          "section": "Miracle Sword of Justice"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:verena:truth-will-out",
+      "bookId": "L06",
+      "canonicalName": "Truth Will Out",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 229,
+          "printedPage": 229,
+          "section": "Miracle Truth Will Out"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    },
+    {
+      "id": "L06:miracle:verena:wisdom-of-the-owl",
+      "bookId": "L06",
+      "canonicalName": "Wisdom of the Owl",
+      "frenchName": {
+        "status": "unresolved",
+        "reason": "Alias français à relier à une source et une décision de catalogue."
+      },
+      "aliases": {
+        "status": "unresolved",
+        "reason": "L’index d’alias n’a pas encore été établi."
+      },
+      "tradition": "Verena",
+      "actorKinds": {
+        "status": "unresolved",
+        "reason": "Les restrictions d’accès PJ, PNJ et créatures restent à établir."
+      },
+      "category": "miracle",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 229,
+          "printedPage": 229,
+          "section": "Miracle Wisdom of the Owl"
+        }
+      ],
+      "status": "source-read",
+      "recordCompleteness": "partial-e1",
+      "unresolvedFields": [
+        "frenchName",
+        "aliases",
+        "actorKinds",
+        "clause-decomposition",
+        "development",
+        "execution"
+      ]
+    }
+  ],
+  "associations": [
+    {
+      "id": "L06:association:manann:battle",
+      "cult": "Manann",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:breath",
+      "cult": "Manann",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:courage",
+      "cult": "Manann",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:hardiness",
+      "cult": "Manann",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:savagery",
+      "cult": "Manann",
+      "identityId": "L06:blessing:savagery",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:manann:tenacity",
+      "cult": "Manann",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Manann"
+      }
+    },
+    {
+      "id": "L06:association:morr:breath",
+      "cult": "Morr",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:courage",
+      "cult": "Morr",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:fortune",
+      "cult": "Morr",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:righteousness",
+      "cult": "Morr",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:tenacity",
+      "cult": "Morr",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:morr:wisdom",
+      "cult": "Morr",
+      "identityId": "L06:blessing:wisdom",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Morr"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:battle",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:conscience",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:courage",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:fortune",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:protection",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:myrmidia:righteousness",
+      "cult": "Myrmidia",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Myrmidia"
+      }
+    },
+    {
+      "id": "L06:association:ranald:charisma",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:charisma",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:conscience",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:finesse",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:finesse",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:fortune",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:protection",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:ranald:wit",
+      "cult": "Ranald",
+      "identityId": "L06:blessing:wit",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ranald"
+      }
+    },
+    {
+      "id": "L06:association:rhya:breath",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:conscience",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:grace",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:grace",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:healing",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:healing",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:protection",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:rhya:recuperation",
+      "cult": "Rhya",
+      "identityId": "L06:blessing:recuperation",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Rhya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:breath",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:conscience",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:healing",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:healing",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:protection",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:recuperation",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:recuperation",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:shallya:tenacity",
+      "cult": "Shallya",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Shallya"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:battle",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:courage",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:hardiness",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:might",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:might",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:protection",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:protection",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:sigmar:righteousness",
+      "cult": "Sigmar",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Sigmar"
+      }
+    },
+    {
+      "id": "L06:association:taal:battle",
+      "cult": "Taal",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:breath",
+      "cult": "Taal",
+      "identityId": "L06:blessing:breath",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:conscience",
+      "cult": "Taal",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:hardiness",
+      "cult": "Taal",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:the-hunt",
+      "cult": "Taal",
+      "identityId": "L06:blessing:the-hunt",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:taal:savagery",
+      "cult": "Taal",
+      "identityId": "L06:blessing:savagery",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Taal"
+      }
+    },
+    {
+      "id": "L06:association:ulric:battle",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:battle",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:courage",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:hardiness",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:hardiness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:might",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:might",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:savagery",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:savagery",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:ulric:tenacity",
+      "cult": "Ulric",
+      "identityId": "L06:blessing:tenacity",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Ulric"
+      }
+    },
+    {
+      "id": "L06:association:verena:conscience",
+      "cult": "Verena",
+      "identityId": "L06:blessing:conscience",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:courage",
+      "cult": "Verena",
+      "identityId": "L06:blessing:courage",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:fortune",
+      "cult": "Verena",
+      "identityId": "L06:blessing:fortune",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:righteousness",
+      "cult": "Verena",
+      "identityId": "L06:blessing:righteousness",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:wisdom",
+      "cult": "Verena",
+      "identityId": "L06:blessing:wisdom",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    },
+    {
+      "id": "L06:association:verena:wit",
+      "cult": "Verena",
+      "identityId": "L06:blessing:wit",
+      "sourceRef": {
+        "bookId": "L06",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+        "physicalPage": 220,
+        "printedPage": 220,
+        "section": "Blessings of Verena"
+      }
+    }
+  ],
+  "clauses": [],
+  "decisions": [],
+  "anomalies": [
+    {
+      "id": "tenacity-duration-note",
+      "status": "resolved",
+      "summaryFr": "Le résumé global du relevé de prières omettait Ténacité parmi les trois prières Instant; le relevé auteur corrigé nomme Soin, Récupération et Ténacité.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_LECTEUR.md"
+    },
+    {
+      "id": "fury-frenzy-trait",
+      "status": "open",
+      "summaryFr": "Frénésie de l’Appel à la Fureur renvoie au Trait de Créature; le lien avec la psychologie de PJ reste à contrôler.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "id": "eagles-eye-profile",
+      "status": "resolved",
+      "summaryFr": "Le résumé runtime reprend maintenant le profil et l’usage sensoriel de l’Aigle vérifiés; E7/E8 et le raccordement mécanique restent à faire.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 224,
+          "printedPage": 224,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/DIVIN_OEIL_AIGLE_CONTROLE_INDEPENDANT.md"
+    },
+    {
+      "id": "destroy-undead-range-typo",
+      "status": "open",
+      "summaryFr": "La portée imprimée de Destroy Undead porte « Yo »; le corps décrit une zone autour du prêtre.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 223,
+          "printedPage": 223,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "id": "comet-invalid-creatures",
+      "status": "open",
+      "summaryFr": "La catégorie « invalid creatures » de Twin-tailed Comet n’est pas définie dans la page relue.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 227,
+          "printedPage": 227,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "id": "manann-miles-units",
+      "status": "open",
+      "summaryFr": "Les portées de Manann en miles demandent une décision distincte de la conversion yards vers mètres.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 222,
+          "printedPage": 222,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "id": "recuperation-attempt-identity",
+      "status": "open",
+      "summaryFr": "Récupération limite l’usage à une tentative par maladie et personne; l’identité durable de l’instance reste à concevoir.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "id": "touch-and-tenacity",
+      "status": "open",
+      "summaryFr": "Séparer les prières Touch/Instant Soin et Récupération de Ténacité, qui n’exige pas de contact.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 221,
+          "printedPage": 221,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "id": "wrath-table-extended-ranges",
+      "status": "open",
+      "summaryFr": "Les plages du Courroux au-delà de 100 sont imprimées; les conséquences et Tests secondaires restent à décomposer.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 219,
+          "printedPage": 219,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    },
+    {
+      "id": "delayed-miracle-consequences",
+      "status": "open",
+      "summaryFr": "Plusieurs miracles dépendent d’événements ultérieurs, d’une interruption ou d’une échéance réelle.",
+      "sourceRefs": [
+        {
+          "bookId": "L06",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeCA58977285cff4c9230ebac28bd2d9de",
+          "physicalPage": 222,
+          "printedPage": 222,
+          "section": "L06 p.217-229 principal control notes"
+        }
+      ],
+      "evidencePath": "docs/divin/sources/DIVIN_L06_P217_229_CONTROLE_PRINCIPAL.md"
+    }
+  ]
+}

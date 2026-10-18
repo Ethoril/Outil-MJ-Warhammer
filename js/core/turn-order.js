@@ -22,8 +22,10 @@ function activeParticipants(participants) {
   }).map(clone);
 }
 
-function initiativeOrder(participants) {
+function initiativeOrder(participants,round) {
   return activeParticipants(participants).sort((a, b) => {
+    const late=p=>Number.isFinite(round)&&(p.states || []).some(s=>s.source?.coldBreath && /extenue|fatigued/i.test(s.key || s.name) && round>Number(s.v5Timing?.acquiredRound ?? s.source?.coldAfterRound ?? Infinity));
+    if(late(a)!==late(b))return late(a)?1:-1;
     const initiativeA = Number(a.initiative) || 0;
     const initiativeB = Number(b.initiative) || 0;
     return initiativeB - initiativeA || String(a.name || '').localeCompare(String(b.name || '')) || a.id.localeCompare(b.id);
@@ -35,9 +37,9 @@ function activeIds(participants) {
 }
 
 /** Return the one order used by both the visible track and the turn engine. */
-export function effectiveOrder(participants, { mode = ORDER_MODES.AUTOMATIC, order = [] } = {}) {
+export function effectiveOrder(participants, { mode = ORDER_MODES.AUTOMATIC, order = [],round } = {}) {
   const ids = activeIds(participants);
-  if (mode !== ORDER_MODES.MANUAL) return initiativeOrder(participants);
+  if (mode !== ORDER_MODES.MANUAL) return initiativeOrder(participants,round);
   const kept = [];
   for (const id of Array.isArray(order) ? order : []) {
     if (typeof id === 'string' && ids.has(id) && !kept.includes(id)) kept.push(id);

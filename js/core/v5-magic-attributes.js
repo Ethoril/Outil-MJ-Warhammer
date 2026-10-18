@@ -1,0 +1,416 @@
+import { magicTalentRank } from './v5-magic-talents.js';
+/**
+ * Attributs de Domaine de Magie V5 (Lore Attributes) — Lot 3.2.
+ * Conforme au Livre de base V5 EN v2 pp. 240–255 et au Cadrage Magie V5.
+ * Module pur : aucune E/S, aucun tirage implicite, prévisualisations sans mutation d'état.
+ */
+
+import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
+import { applySpellEffects } from './v5-magic-effects.js';
+import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
+
+export const V5_MAGIC_ATTRIBUTES_VERSION = 'v5-magic-attributes-2026-10-10.1';
+
+const fold = str => String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+export const LORE_ATTRIBUTES = Object.freeze({
+  beasts: Object.freeze({ id: 'beasts', wind: 'Ghur', name: 'Domaine des Bêtes' }),
+  death: Object.freeze({ id: 'death', wind: 'Shyish', name: 'Domaine de la Mort' }),
+  fire: Object.freeze({ id: 'fire', wind: 'Aqshy', name: 'Domaine du Feu' }),
+  heavens: Object.freeze({ id: 'heavens', wind: 'Azyr', name: 'Domaine des Cieux' }),
+  life: Object.freeze({ id: 'life', wind: 'Ghyran', name: 'Domaine de la Vie' }),
+  light: Object.freeze({ id: 'light', wind: 'Hysh', name: 'Domaine de la Lumière' }),
+  metal: Object.freeze({ id: 'metal', wind: 'Chamon', name: 'Domaine du Métal' }),
+  shadow: Object.freeze({ id: 'shadow', wind: 'Ulgu', name: 'Domaine des Ombres' }),
+  high: Object.freeze({ id: 'high', wind: 'Qhaysh', name: 'Haute Magie' })
+});
+
+/**
+ * Normalise l'identifiant du domaine.
+ */
+export function normalizeLoreId(rawLore) {
+  const s = fold(rawLore);
+  if (/bete|beast|ghur/i.test(s)) return 'beasts';
+  if (/mort|death|shyish/i.test(s)) return 'death';
+  if (/feu|fire|aqshy/i.test(s)) return 'fire';
+  if (/cieux|heaven|azyr/i.test(s)) return 'heavens';
+  if (/vie|life|ghyran|jade/i.test(s)) return 'life';
+  if (/lumiere|light|hysh/i.test(s)) return 'light';
+  if (/metal|chamon|or|gold/i.test(s)) return 'metal';
+  if (/ombre|shadow|ulgu/i.test(s)) return 'shadow';
+  if (/haute|high|qhaysh/i.test(s)) return 'high';
+  return null;
+}
+
+/**
+ * Vérifie si le participant possède le talent Magie Arcanique pour un domaine.
+ */
+const ARCANE_LORE_PATTERNS = {
+  fire: /feu|fire|aqshy/i,
+  light: /lumiere|light|hysh/i,
+  beasts: /bete|beast|ghur/i,
+  death: /mort|death|shyish/i,
+  heavens: /cieux|heaven|azyr/i,
+  life: /vie|life|ghyran/i,
+  metal: /metal|chamon/i,
+  shadow: /ombre|shadow|ulgu/i
+};
+
+export function hasArcaneMagicLore(participant, loreKey) {
+  const talents = Array.isArray(participant?.talents) ? participant.talents : [];
+  const lorePattern = ARCANE_LORE_PATTERNS[loreKey];
+
+  if (!lorePattern) return false;
+
+  return talents.some(t => {
+    return ((t.status==='resolved' && t.id==='talent-arcane-magic' && magicTalentRank(participant,'arcane-magic') && lorePattern.test(fold(t.specialization))));
+  });
+}
+
+/** Domaines pour lesquels le participant possède Magie des Arcanes (HEPG p. 80 : un sort d'Arcane suit le Domaine où il a été appris). */
+export function arcaneMagicLores(participant) {
+  return Object.keys(ARCANE_LORE_PATTERNS).filter(key => hasArcaneMagicLore(participant, key));
+}
+
+/**
+ * Détecte si un participant porte de l'armure de métal.
+ */
+export function isTargetWearingMetalArmor(participant) {
+  if (participant?.hasMetalArmor === true) return true;
+  // Matériau réel de la pièce : la couche (rigide, flexible) n'en dit rien (cuir bouilli, capes). Un matériau inconnu n'est pas présumé métallique.
+  return wornArmourPieces(participant).some(item => armorMaterial(item) === 'metal');
+}
+
+/** Désignations de nature : jamais le nom du personnage ni une sous-chaîne d'un rôle. */
+function natureLabels(participant) {
+  return [
+    ...(Array.isArray(participant?.traits) ? participant.traits : []),
+    ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : []),
+    ...(Array.isArray(participant?.tags) ? participant.tags : []),
+    participant?.category || '',
+    participant?.species || ''
+  ].map(value => fold(typeof value === 'string' ? value : value?.name || value?.nom || value?.id || '').replace(/\s+/g, ' '));
+}
+
+// Les parenthèses (valeur du trait, précision de la nature) ne changent pas la désignation.
+const UNDEAD_NATURE = /^(?:morts?[- ]?vivants?|undead(?: creatures?)?)(?:\s*\([^)]*\)|\s+\d+\+?)?$/;
+const DAEMON_NATURE = /^(?:demons?|daemons?|demoniaques?|daemonic|sanguinaire)(?:\s*\([^)]*\)|\s+\d+\+?)?$/;
+const CONSTRUCT_NATURE = /^(?:artificiels?|artificielles?|creatures? artificielles?|constructs?|automates?|automata)(?:\s*\([^)]*\)|\s+\d+\+?)?$/;
+const ETHEREAL_NATURE = /^(?:etheres?|etherees?|ethereal(?: creatures?)?)(?:\s*\([^)]*\)|\s+\d+\+?)?$/;
+
+/** Mort-vivant explicite : une haine ou un rôle « Chasseur de morts-vivants » ne suffit pas. */
+export function isTargetUndead(participant) {
+  return participant?.isUndead === true || natureLabels(participant).some(label => UNDEAD_NATURE.test(label));
+}
+
+/** Démon explicite, y compris les désignations françaises et anglaises déjà admises. */
+export function isTargetDaemon(participant) {
+  return participant?.isDaemon === true || natureLabels(participant).some(label => DAEMON_NATURE.test(label));
+}
+
+/** Nature vivante commune (V5 p.250). Les Blessures et le décès restent propres à chaque effet. */
+export function hasLivingMagicNature(participant) {
+  return !isTargetUndead(participant) && !isTargetDaemon(participant)
+    && !natureLabels(participant).some(label => CONSTRUCT_NATURE.test(label) || ETHEREAL_NATURE.test(label));
+}
+
+/**
+ * Prévisualisation de l'Attribut de Domaine V5 (Lore Attribute).
+ * Fonction pure déterministe sans mutation d'état.
+ */
+export function previewLoreAttribute({
+  lore,
+  caster,
+  targets = [],
+  spell = {},
+  castingRoll,
+  castingSl = 0,
+  chosenLore = null, // Pour Haute Magie : choix d'un des 8 Domaines
+  options = {}
+} = {}) {
+  let activeLore = normalizeLoreId(lore || spell.lore);
+
+  // Haute Magie : choix d'un attribut parmi les 8 Domaines (ou aucun)
+  if (activeLore === 'high') {
+    if (chosenLore) {
+      activeLore = normalizeLoreId(chosenLore);
+    } else {
+      return {
+        lore: 'high',
+        activeLore: null,
+        summary: 'Haute Magie : aucun attribut de domaine choisi.',
+        casterEffects: null,
+        targetEffects: new Map(),
+        damageRules: {}
+      };
+    }
+  }
+
+  if (!activeLore || !LORE_ATTRIBUTES[activeLore]) {
+    return {
+      lore: null,
+      activeLore: null,
+      summary: 'Aucun attribut de domaine applicable.',
+      casterEffects: null,
+      targetEffects: new Map(),
+      damageRules: {}
+    };
+  }
+
+  const bfm = Math.floor((Number(caster?.caracs?.FM) || 0) / 10);
+  const bi = Math.floor((Number(caster?.caracs?.Int) || 0) / 10);
+
+  let casterEffects = null;
+  const targetEffects = new Map();
+  const damageRules = {
+    ignoreMetalAp: false,
+    ignoreNonMagicalAp: false,
+    metalDamageBonus: false,
+    extraDamagePerTarget: new Map(),
+    extraDirectWoundsPerTarget: new Map()
+  };
+
+  // Attributs facultatifs (« peut infliger ») : appliqués cible par cible selon `options.attributeTargets` (par défaut : tous).
+  const chosen = target => options.attributeTargets?.[target.id] !== false;
+
+  switch (activeLore) {
+    case 'beasts': {
+      // Bêtes (Ghur) : le lanceur peut causer Peur (1) pendant BFM Rounds
+      casterEffects = {
+        type: 'lore-attribute-beasts',
+        lore: 'beasts',
+        trait: 'Peur (1)',
+        durationRounds: bfm,
+        summary: `Le lanceur cause Peur (1) pendant ${bfm} Rounds.`
+      };
+      break;
+    }
+
+    case 'death': {
+      // Mort (Shyish) : peut infliger 1 état Exténué à toute cible vivante (max 1 seul acquis par cet attribut à la fois)
+      for (const target of targets) {
+        if (!target) continue;
+        const alive = hasLivingMagicNature(target) && Number(target.hp)>0 && !target.dead && !target.isDead;
+        if (!alive || !chosen(target)) continue;
+
+        const states = Array.isArray(target.states) ? target.states : [];
+        const alreadyHasDeathFatigued = states.some(s => {
+          const isFatigued = /extenue|fatigued/i.test(s?.key || s?.name || '');
+          return isFatigued && (s?.source?.kind === 'lore-attribute-death' || s?.sourceKind === 'lore-attribute-death');
+        });
+
+        if (!alreadyHasDeathFatigued) {
+          targetEffects.set(target.id, {
+            type: 'lore-attribute-death',
+            lore: 'death',
+            addCondition: { name: 'Exténué', level: 1, source: { kind: 'lore-attribute-death' } },
+            summary: `${target.name || target.id} subit 1 état Exténué (Attribut Mort).`
+          });
+        }
+      }
+      break;
+    }
+
+    case 'fire': {
+      // Feu (Aqshy) : inflige 1 état Enflammé à toute cible affectée sauf si Arcane Magic (Fire)
+      for (const target of targets) {
+        if (!target) continue;
+        const immune = hasArcaneMagicLore(target, 'fire');
+        if (!immune && chosen(target)) {
+          targetEffects.set(target.id, {
+            type: 'lore-attribute-fire',
+            lore: 'fire',
+            addCondition: { name: 'Enflammé', level: 1, source: { kind: 'lore-attribute-fire' } },
+            summary: `${target.name || target.id} subit 1 état Enflammé (Attribut Feu).`
+          });
+        }
+      }
+      break;
+    }
+
+    case 'heavens': {
+      // Cieux (Azyr) :
+      // 1. Les sorts infligeant des dégâts ignorent les PA d'armure de métal
+      // 2. Le lanceur gagne 1 Point de Chance (Fortune) utilisable jusqu'au début de son prochain Tour
+      damageRules.ignoreMetalAp = true;
+      casterEffects = {
+        type: 'lore-attribute-heavens',
+        lore: 'heavens',
+        gainFortune: 1,
+        expiry: 'startOfNextTurn',
+        summary: 'Le lanceur gagne 1 Point de Chance temporaire jusqu’au début de son prochain Tour.'
+      };
+      break;
+    }
+
+    case 'life': {
+      // Vie (Ghyran) :
+      // 1. Retire tous les états Hémorragique et Exténué des cibles affectées
+      // 2. Cibles Morts-vivants subissent BFM Blessures supplémentaires ignorant BE et PA
+      for (const target of targets) {
+        if (!target) continue;
+        const isUndead = isTargetUndead(target);
+        // V5 p. 250 : seuls les vivants (ni Artificiel, ni Démoniaque, ni Éthéré, ni Mort-vivant) perdent Hémorragique et Exténué.
+        const living = hasLivingMagicNature(target) && Number(target.hp)>0 && !target.dead && !target.isDead;
+        const effect = {
+          type: 'lore-attribute-life',
+          lore: 'life',
+          removeConditions: living ? ['hemorragique', 'extenue'] : [],
+          extraDirectWounds: isUndead ? bfm : 0,
+          summary: `${target.name || target.id} : ${living ? 'retrait des états Hémorragique et Exténué.' : 'non vivant, états conservés.'}${isUndead ? ` Cible Mort-vivante : subit ${bfm} Blessures directes.` : ''}`
+        };
+        targetEffects.set(target.id, effect);
+        if (isUndead && bfm > 0) {
+          damageRules.extraDirectWoundsPerTarget.set(target.id, bfm);
+        }
+      }
+      break;
+    }
+
+    case 'light': {
+      // Lumière (Hysh) :
+      // 1. Peut infliger 1 état Aveuglé aux cibles sauf si Arcane Magic (Light)
+      // 2. Cibles Démons et Morts-vivants subissent BI Blessures supplémentaires ignorant BE et PA
+      for (const target of targets) {
+        if (!target) continue;
+        const immune = hasArcaneMagicLore(target, 'light');
+        const isDaemonOrUndead = isTargetDaemon(target) || isTargetUndead(target);
+        const effect = {
+          type: 'lore-attribute-light',
+          lore: 'light',
+          addCondition: !immune && chosen(target) ? { name: 'Aveuglé', level: 1, source: { kind: 'lore-attribute-light' } } : null,
+          extraDirectWounds: isDaemonOrUndead ? bi : 0,
+          summary: `${target.name || target.id} : ${immune ? 'immunisé à l’aveuglement.' : chosen(target) ? 'gagne 1 état Aveuglé.' : 'Aveuglé facultatif non appliqué.'}${isDaemonOrUndead ? ` Démon/Mort-vivant : subit ${bi} Blessures directes.` : ''}`
+        };
+        targetEffects.set(target.id, effect);
+        if (isDaemonOrUndead && bi > 0) {
+          damageRules.extraDirectWoundsPerTarget.set(target.id, bi);
+        }
+      }
+      break;
+    }
+
+    case 'metal': {
+      // Métal (Chamon, V5 p. 252) : les dégâts ignorent les PA d'armure de métal et gagnent en plus ces PA,
+      // ceux de la localisation touchée (lus à la résolution du coup).
+      damageRules.ignoreMetalAp = true;
+      damageRules.metalDamageBonus = true;
+      for (const target of targets) {
+        if (!target || !isTargetWearingMetalArmor(target)) continue;
+        targetEffects.set(target.id, {
+          type: 'lore-attribute-metal',
+          lore: 'metal',
+          summary: `${target.name || target.id} porte de l’armure de métal : les dégâts ignorent ses PA métalliques et les ajoutent (localisation touchée).`
+        });
+      }
+      break;
+    }
+
+    case 'shadow': {
+      // Ombres (Ulgu) :
+      // Tout sort de protection confère au lanceur +2 DR aux tests de Discrétion pour la durée du sort
+      // V5 p. 254 : les sorts d'Ombres qui infligent des dégâts ignorent tous les PA non magiques.
+      damageRules.ignoreNonMagicalAp = true;
+      const isProtection = spell.isProtection === true || spell.hasWard === true || options.isProtectionSpell === true || Boolean(spell.effects?.ward || spell.effects?.apModifiers || spell.effects?.damageReduction || spell.effects?.apFloor);
+      if (isProtection) {
+        casterEffects = {
+          type: 'lore-attribute-shadow',
+          lore: 'shadow',
+          testModifiers: [{ skill: 'Discrétion', sl: 2 }],
+          duration: spell.duration || 'sort',
+          summary: 'Sort de protection : le lanceur gagne +2 DR aux tests de Discrétion pour la durée du sort.'
+        };
+      }
+      break;
+    }
+  }
+
+  return {
+    lore: activeLore,
+    loreName: LORE_ATTRIBUTES[activeLore]?.name,
+    casterEffects,
+    targetEffects,
+    damageRules,
+    ready: true
+  };
+}
+
+/**
+ * Application atomique de l'Attribut de Domaine sur les participants.
+ */
+export function applyLoreAttribute(state, preview, options = {}) {
+  if (!preview || preview.ready === false) {
+    throw new TypeError('Aperçu d’attribut de domaine invalide');
+  }
+
+  const { casterEffects, targetEffects } = preview;
+  const updatedParticipants = new Map();
+
+  // 1. Effets sur le lanceur
+  if (casterEffects && options.caster) {
+    const caster = structuredClone(options.caster);
+    if (casterEffects.lore === 'beasts') {
+      // Gain Peur (1)
+      const res = applySpellEffects(caster, {
+        spellId: 'lore-attribute-beasts',
+        spellName: 'Attribut Domaine des Bêtes',
+        traits: ['Peur (1)'],
+        duration: casterEffects.durationRounds,
+        cn:options.cn,castExecutionId:options.castExecutionId,casterId:caster.id
+      }, { ...options, overcastDurationMultiplier: 1 }); // BFM Rounds propres à l'attribut, pas la durée du sort
+      updatedParticipants.set(caster.id, res.participant);
+    } else if (casterEffects.lore === 'heavens') {
+      const res=applySpellEffects(caster,{spellId:options.spellId || 'lore-attribute-heavens',spellName:'Attribut des Cieux',tempFortunePoints:casterEffects.gainFortune,duration:'Spéciale',expiresAtNextTurnOf:caster.id,appliedAtTurnSerial:options.turnSerial ?? 0,cn:options.cn,castExecutionId:options.castExecutionId,casterId:caster.id},{...options,overcastDurationMultiplier:1});
+      updatedParticipants.set(caster.id,res.participant);
+    } else if (casterEffects.lore === 'shadow') {
+      // +2 DR Discrétion
+      const res = applySpellEffects(caster, {
+        spellId: 'lore-attribute-shadow',
+        spellName: 'Attribut Domaine des Ombres',
+        testModifiers: { 'Discrétion': 2 },
+        cn:options.cn,castExecutionId:options.castExecutionId,casterId:caster.id,
+        duration: casterEffects.duration
+      }, options);
+      updatedParticipants.set(caster.id, res.participant);
+    }
+  }
+
+  // 2. Effets sur les cibles
+  const targets = options.targets || [];
+  for (const target of targets) {
+    const eff = targetEffects.get(target.id);
+    if (!eff) continue;
+
+    let currentTarget = structuredClone(updatedParticipants.get(target.id) || target);
+
+    // Ajout d'état
+    if (eff.addCondition) {
+      const receipt = acquireV5Conditions(currentTarget, [eff.addCondition], {
+        round: options.round ?? 1
+      });
+      currentTarget = receipt.participant;
+    }
+
+    // Retrait d'états (ex: Vie - Hémorragique et Exténué)
+    if (eff.removeConditions && Array.isArray(eff.removeConditions)) {
+      currentTarget.states = (currentTarget.states || []).filter(s => {
+        const key = fold(s.key || s.name || '');
+        return !eff.removeConditions.some(rem => key.includes(rem));
+      });
+    }
+
+    // Blessures directes supplémentaires (ex: Vie vs Mort-vivant, Lumière vs Démon/Mort-vivant)
+    if (eff.extraDirectWounds && eff.extraDirectWounds > 0) {
+      const currentHp = Number(currentTarget.hp) || 0;
+      currentTarget.hp = Math.max(0, currentHp - eff.extraDirectWounds);
+    }
+
+    updatedParticipants.set(currentTarget.id, currentTarget);
+  }
+
+  return {
+    status: 'applied',
+    updatedParticipants,
+    preview
+  };
+}

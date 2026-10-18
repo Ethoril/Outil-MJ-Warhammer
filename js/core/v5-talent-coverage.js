@@ -1,8 +1,9 @@
+import magicCoverage from '../data/v5-magic-talent-coverage.json' with {type:'json'};
 /** Coverage describes clauses; it never grants mechanics or consults private services. */
 import coverage from '../data/v5-talent-coverage.json' with { type: 'json' };
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { V5_TALENT_CONTRACTS } from './v5-talents.js';
-export const V5_TALENT_TREATMENT_LABELS = Object.freeze({automatic:'Automatique',assisted:'Assisté par un choix',reminder:'Rappel MJ',excluded:'Déjà intégré à la fiche',deferred:'Lot 3'});
+export const V5_TALENT_TREATMENT_LABELS = Object.freeze({automatic:'Automatique',assisted:'Assisté par un choix',reminder:'Rappel MJ',excluded:'Déjà intégré à la fiche',deferred:'Autre périmètre',owned:'Géré par la fiche',pending:'Mécanique à raccorder'});
 export function v5TalentCoverage(talentId, catalogue = getReferenceCatalogue()) {
   const item = coverage.items.find(row => row.talentId === talentId);
   const source = catalogue?.talents?.find(row => row.id === talentId);
@@ -12,7 +13,9 @@ export function v5TalentCoverage(talentId, catalogue = getReferenceCatalogue()) 
   const clauses = item.clauses.map(clause => {
     if (!['automatic','assisted'].includes(clause.mode)) return {...clause};
     const contract = contracts.get(item.talentId);
-    const active = status === 'verified' && contract?.status === 'validated' && contract.source.effectHash === item.source.effectHash
+    const magic=magicCoverage.items.find(row=>row.talentId===item.talentId);
+    const magicActive=clause.magicRegistry && status==='verified' && magic?.status==='validated' && magic.source.effectHash===item.source.effectHash && magic.clauses.some(row=>row.id===clause.id && ['automatic','assisted'].includes(row.mode));
+    const active = magicActive || status === 'verified' && contract?.status === 'validated' && contract.source.effectHash === item.source.effectHash
       && contract.clauses.some(row => row.id === clause.contractClauseId);
     return active ? {...clause} : {...clause,mode:'reminder',text:clause.text + ' Effet suspendu : source ou contrat à revalider.'};
   });

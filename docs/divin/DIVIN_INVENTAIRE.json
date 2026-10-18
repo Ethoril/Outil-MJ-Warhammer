@@ -1,0 +1,1881 @@
+{
+  "schemaVersion": 1,
+  "sourceFingerprint": "sha256:812a3fd8168c99af2ca03b52f882b945777929e433dbafa8104302b27a7e5671",
+  "counts": {
+    "blessings": 6,
+    "miracles": 15,
+    "miraclesSourceFound": 15,
+    "miraclesSourceNotFound": 0,
+    "miraclesV5SourceFound": 6,
+    "miraclesSupplementSourceFound": 9,
+    "miraclesV4AdaptationBlocked": 9,
+    "talents": 1
+  },
+  "items": [
+    {
+      "id": "divine:blessing:myrmidia:battle",
+      "type": "blessing",
+      "name": "Bénédiction de Bataille",
+      "deity": "Myrmidia",
+      "status": "implemented",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Bataille",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Bataille",
+        "clauses": [],
+        "accessSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 220,
+          "section": "Bénédictions par culte",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29",
+        "name": "Béni (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "CC",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Capacité de Combat.",
+        "access": "Béni (Myrmidia)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:battle"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:myrmidia:conscience",
+      "type": "blessing",
+      "name": "Bénédiction de Conscience",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Conscience",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Conscience",
+        "clauses": [],
+        "accessSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 220,
+          "section": "Bénédictions par culte",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29",
+        "name": "Béni (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "Pour rompre un commandement, test de Calme Accessible (+2 DR); en cas d’échec, honte et Action non effectuée.",
+        "access": "Béni (Myrmidia)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:conscience"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:myrmidia:courage",
+      "type": "blessing",
+      "name": "Bénédiction de Courage",
+      "deity": "Myrmidia",
+      "status": "implemented",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Courage",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Courage",
+        "clauses": [],
+        "accessSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 220,
+          "section": "Bénédictions par culte",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29",
+        "name": "Béni (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "FM",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Force Mentale.",
+        "access": "Béni (Myrmidia)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:courage"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:myrmidia:fortune",
+      "type": "blessing",
+      "name": "Bénédiction de Chance",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Chance",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Chance",
+        "clauses": [],
+        "accessSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 220,
+          "section": "Bénédictions par culte",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29",
+        "name": "Béni (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "access": "Béni (Myrmidia)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:fortune"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:myrmidia:protection",
+      "type": "blessing",
+      "name": "Bénédiction de Protection",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Protection",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Protection",
+        "clauses": [],
+        "accessSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 220,
+          "section": "Bénédictions par culte",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29",
+        "name": "Béni (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "access": "Béni (Myrmidia)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:protection"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:myrmidia:righteousness",
+      "type": "blessing",
+      "name": "Bénédiction de Droiture",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Droiture",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 221,
+        "section": "Bénédiction de Droiture",
+        "clauses": [],
+        "accessSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 220,
+          "section": "Bénédictions par culte",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29",
+        "name": "Béni (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "L’arme de la cible est considérée comme Magique.",
+        "access": "Béni (Myrmidia)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:righteousness"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:miracle:appel-a-la-fureur",
+      "type": "miracle",
+      "name": "Appel à la Fureur",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 224,
+        "section": "Miracles de Myrmidia - Fury's Call",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
+      },
+      "catalogueEntry": {
+        "nom": "Appel à la Fureur",
+        "portee": "(Sociabilité) mètres",
+        "cible": "(Bonus d’Intelligence) alliés",
+        "duree": "(Bonus de Sociabilité) Rounds",
+        "effet": "Vos Prières passionnées inspirent à vos alliés un mépris féroce de leurs ennemis. Tous les alliés affectés reçoivent le Trait Psychologique Haine à l’égard de tous ceux qui les engagent en combat."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "self"
+        },
+        "targets": {
+          "kind": "area",
+          "characteristicBonus": "Soc",
+          "unit": "yards"
+        },
+        "duration": {
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Fury's Call",
+        "effect": "Les alliés dans la zone gagnent Frénésie.",
+        "sourceStatus": "V5 base source checked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "local-catalogue"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "v5-fury-s-call"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:miracle:bouclier-de-myrmidia",
+      "type": "miracle",
+      "name": "Bouclier de Myrmidia",
+      "deity": "Myrmidia",
+      "status": "implemented",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 224,
+        "section": "Miracles de Myrmidia - Shield of Myrmidia",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
+      },
+      "catalogueEntry": {
+        "nom": "Bouclier de Myrmidia",
+        "portee": "(Sociabilité) mètres",
+        "cible": "(Bonus d’Intelligence) alliés",
+        "duree": "(Bonus de Sociabilité) Rounds",
+        "effet": "Vos Prières passionnées incitent Myrmidia à protéger vos alliés avec des filaments de lumière vive et scintillante, repoussant les frappes ennemies. Toutes les cibles affectées gagnent +1 PA à toutes les Localisations."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "characteristic",
+          "characteristic": "Soc",
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "allies"
+        },
+        "duration": {
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [
+        {
+          "type": "armor-bonus",
+          "value": 1,
+          "locations": "all",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
+      "labels": {
+        "canonicalName": "Shield of Myrmidia",
+        "effect": "Vous et les alliés à portée gagnent +1 PA à toutes les Localisations pendant le miracle.",
+        "sourceStatus": "V5 base source checked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "local-catalogue"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "v5-shield-of-myrmidia"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:miracle:inspirant",
+      "type": "miracle",
+      "name": "Inspirant",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 224,
+        "section": "Miracles de Myrmidia - Inspiring",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
+      },
+      "catalogueEntry": {
+        "nom": "Inspirant",
+        "portee": "(Sociabilité) mètres",
+        "cible": "(Bonus d’Intelligence) alliés",
+        "duree": "(Bonus de Sociabilité) Rounds",
+        "effet": "Vos Prières exaltantes inspirent la discipline et la coordination à l’intérieur de vos rangs. Les cibles affectées gagnent +1 Talent Coude-à-coude."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "self"
+        },
+        "targets": {
+          "kind": "area",
+          "characteristicBonus": "Soc",
+          "unit": "yards"
+        },
+        "duration": {
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Inspiring",
+        "effect": "Les alliés dans la zone gagnent le talent Drillé.",
+        "sourceStatus": "V5 base source checked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "local-catalogue"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "v5-inspiring"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:miracle:lance-de-myrmidia",
+      "type": "miracle",
+      "name": "Lance de Myrmidia",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 224,
+        "section": "Miracles de Myrmidia - Spear of Myrmidia",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
+      },
+      "catalogueEntry": {
+        "nom": "Lance de Myrmidia",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "(Bonus de Sociabilité) Rounds",
+        "effet": "Si vous portez une lance, elle gagne l’Atout Percutante, et est considérée comme Magique."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "self"
+        },
+        "targets": {
+          "kind": "self"
+        },
+        "duration": {
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Spear of Myrmidia",
+        "effect": "Votre lance gagne la qualité Dévastatrice et est considérée comme Magique.",
+        "sourceStatus": "V5 base source checked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "local-catalogue"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "v5-spear-of-myrmidia"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:miracle:il-de-l-aigle",
+      "type": "miracle",
+      "name": "Œil de l’aigle",
+      "deity": "Myrmidia",
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 224,
+        "section": "Miracles de Myrmidia - Eagle's Eye",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
+      },
+      "catalogueEntry": {
+        "nom": "Œil de l’aigle",
+        "portee": "(Sociabilité) mètres",
+        "cible": "Vous",
+        "duree": "(Bonus de Sociabilité) Rounds",
+        "effet": "Vous faites appel à Myrmidia pour envoyer un Serviteur divin vous accordant la connaissance de vos ennemis. Un aigle spectral se manifeste, planant dans le ciel au-dessus. L’aigle ressemble et possède les capacités d’un aigle normal, mais ne peut pas physiquement affecter le monde, ou être blessé en aucune manière. Pendant que le Miracle est actif, vous pouvez voir à travers les yeux de l’aigle et contrôler son vol, surveillant le champ de bataille et espionnant vos ennemis. Votre vision est perçante, mais vous n’avez accès à aucun de vos propres Talents, tels que Vision nocturne. Pendant que vous regardez à travers les yeux de l’aigle, vous ne pouvez pas le faire par vos propres yeux, ce qui vous laisse potentiellement vulnérable."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "characteristic",
+          "characteristic": "Soc",
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "self"
+        },
+        "duration": {
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Eagle's Eye",
+        "effect": "Un aigle spectral d’apparence et aux capacités normales apparaît; intangible, il ne peut pas affecter physiquement le monde et il est invulnérable. Perception 55, Sens aiguisé (Vue), Vol 80. Vous utilisez ses capacités à la place des vôtres : vous contrôlez son vol et voyez par ses yeux, sans voir par les vôtres pendant cette utilisation, ce qui vous laisse potentiellement vulnérable.",
+        "sourceStatus": "V5 base source checked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "local-catalogue"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "v5-eagle-s-eye"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:miracle:soleil-flamboyant",
+      "type": "miracle",
+      "name": "Soleil flamboyant",
+      "deity": "Myrmidia",
+      "status": "implemented",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 224,
+        "section": "Miracles de Myrmidia - Blazing Sun",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
+      },
+      "catalogueEntry": {
+        "nom": "Soleil flamboyant",
+        "portee": "Vous",
+        "cible": "Zone d’Effet",
+        "duree": "Instantanée",
+        "effet": "Vous faites appel à Myrmidia pour épurer le champ de bataille d’ennemis peu honorables, un éclair aveuglant de lumière dorée jaillit alors. Tous les non Myrmidiens qui regardent dans votre direction reçoivent 1 État Aveuglé. Pour chaque +2 DR, ils reçoivent +1 État Aveuglé."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "special"
+        },
+        "targets": {
+          "kind": "special"
+        },
+        "duration": {
+          "kind": "instant"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [],
+          "targetRules": [
+            "non-Myrmidian",
+            "looking-at-priest"
+          ],
+          "automaticEffectProgression": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "condition",
+          "key": "Blinded",
+          "level": 1,
+          "conditionRecovery": {
+            "event": "end-of-target-turn",
+            "unless": "lasting-source"
+          },
+          "targetRules": [
+            "non-Myrmidian",
+            "looking-at-priest"
+          ],
+          "perSuccessLevels": {
+            "every": 2,
+            "add": 1
+          }
+        }
+      ],
+      "labels": {
+        "canonicalName": "Blazing Sun",
+        "effect": "Les créatures non-Myrmidiennes qui vous regardent gagnent Aveuglé, +1 état par tranche de +2 DR.",
+        "sourceStatus": "V5 base source checked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "local-catalogue"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "v5-blazing-sun"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:miracle:commander-la-legion",
+      "type": "miracle",
+      "name": "Commander la Légion",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "Command the Legion"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Commander la Légion",
+        "portee": "Voir texte",
+        "cible": "Tout allié",
+        "duree": "1 Round",
+        "effet": "Myrmidia porte vos ordres à travers le champ de bataille. Vous pouvez émettre un ordre à un allié dans votre ligne de vue. L'ordre doit être pertinent à la réalisation d'une lutte armée ou d'une stratégie en cours. Tout Test de Commandement que vous effectuez bénéficie d'un bonus de +10."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Command the Legion",
+        "effect": "Myrmidia porte vos ordres à travers le champ de bataille. Vous pouvez émettre un ordre à un allié dans votre ligne de vue. L'ordre doit être pertinent à la réalisation d'une lutte armée ou d'une stratégie en cours. Tout Test de Commandement que vous effectuez bénéficie d'un bonus de +10.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-command-the-legion"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:effrayer-l-ennemi",
+      "type": "miracle",
+      "name": "Effrayer l'Ennemi",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "Dismay Foe"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Effrayer l'Ennemi",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "1 Round",
+        "effet": "Vous incarnez Myrmidia dans son aspect le plus courroucé. Gagnez le Trait de Créature Terreur 1."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Dismay Foe",
+        "effect": "Vous incarnez Myrmidia dans son aspect le plus courroucé. Gagnez le Trait de Créature Terreur 1.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-dismay-foe"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:en-bon-ordre",
+      "type": "miracle",
+      "name": "En Bon Ordre",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "In Good Order"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "En Bon Ordre",
+        "portee": "Soi-même",
+        "cible": "Alliés dans la zone d'effet (Bonus de Force Mentale en mètres)",
+        "duree": "Bonus de Force Mentale en Rounds",
+        "effet": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "In Good Order",
+        "effect": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-in-good-order"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:connaitre-son-ennemi",
+      "type": "miracle",
+      "name": "Connaître son Ennemi",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "Know Your Enemy"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Connaître son Ennemi",
+        "portee": "Bonus de Volonté en mètres",
+        "cible": "1",
+        "duree": "Instantané",
+        "effet": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Know Your Enemy",
+        "effect": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-know-your-enemy"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:sur-un-terrain-mortel",
+      "type": "miracle",
+      "name": "Sur un Terrain Mortel",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "On Deadly Ground"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Sur un Terrain Mortel",
+        "portee": "Soi-même",
+        "cible": "Alliés dans la zone d'effet (Bonus de Volonté en mètres)",
+        "duree": "Bonus de Force Mentale en Rounds",
+        "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "On Deadly Ground",
+        "effect": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-on-deadly-ground"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:attaque-rapide",
+      "type": "miracle",
+      "name": "Attaque Rapide",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "Quick Strike"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Attaque Rapide",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "3 Rounds",
+        "effet": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Quick Strike",
+        "effect": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-quick-strike"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:devotion-de-la-guerriere",
+      "type": "miracle",
+      "name": "Dévotion de la Guerrière",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "Shieldmaiden’s Devotion"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Dévotion de la Guerrière",
+        "portee": "36 mètres",
+        "cible": "Voir texte",
+        "duree": "4 Rounds",
+        "effet": "Vos prières chantées remplissent le cœur des fidèles avec l'intrépidité de ses plus braves guerrières. Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi). Cet ennemi peut être un individu spécifique ou une espèce particulière."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Shieldmaiden’s Devotion",
+        "effect": "Vos prières chantées remplissent le cœur des fidèles avec l'intrépidité de ses plus braves guerrières. Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi). Cet ennemi peut être un individu spécifique ou une espèce particulière.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-shieldmaiden-s-devotion"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:competence-martiale",
+      "type": "miracle",
+      "name": "Compétence Martiale",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "Skill of Combat"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Compétence Martiale",
+        "portee": "24 mètres",
+        "cible": "Voir texte",
+        "duree": "4 Rounds",
+        "effet": "Vous incarnez chez vos alliés l’habileté martiale de Myrmidia. Tant que ce miracle est actif, tous les alliés à portée bénéficient d'un bonus de +10 à leur CC et CT."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Skill of Combat",
+        "effect": "Vous incarnez chez vos alliés l’habileté martiale de Myrmidia. Tant que ce miracle est actif, tous les alliés à portée bénéficient d'un bonus de +10 à leur CC et CT.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-skill-of-combat"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:miracle:vindicte-vengeresse",
+      "type": "miracle",
+      "name": "Vindicte Vengeresse",
+      "deity": "Myrmidia",
+      "status": "blocked",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4",
+        "sourceStatus": "found-adaptation-blocked",
+        "printedPage": 79,
+        "section": "Vengeful Wrath"
+      },
+      "sourceReceipt": {
+        "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
+        "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+      },
+      "catalogueEntry": {
+        "nom": "Vindicte Vengeresse",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "6 Rounds",
+        "effet": "Vous êtes empli de l'indignation vertueuse de Myrmidia. Tant que ce miracle est actif, vous devez charger et attaquer l'ennemi impénitent le plus proche. Vous pouvez relancer tous vos jets de compétence de Mêlée tant que le miracle est actif."
+      },
+      "requiredTalent": {
+        "id": "talent-invoke",
+        "catalogueTalentId": "talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29",
+        "name": "Invocation (Myrmidia)",
+        "specialization": "Myrmidia"
+      },
+      "params": {
+        "range": {
+          "kind": "catalogue-only"
+        },
+        "targets": {
+          "kind": "catalogue-only"
+        },
+        "duration": {
+          "kind": "catalogue-only"
+        }
+      },
+      "extensions": [],
+      "effects": [],
+      "labels": {
+        "canonicalName": "Vengeful Wrath",
+        "effect": "Vous êtes empli de l'indignation vertueuse de Myrmidia. Tant que ce miracle est actif, vous devez charger et attaquer l'ennemi impénitent le plus proche. Vous pouvez relancer tous vos jets de compétence de Mêlée tant que le miracle est actif.",
+        "sourceStatus": "V4 source found; V5 adaptation blocked"
+      },
+      "clauses": [
+        {
+          "id": "catalogue-entry",
+          "mode": "source-checked",
+          "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "effect",
+          "mode": "blocked",
+          "sourceRef": "v4-vengeful-wrath"
+        }
+      ],
+      "needsInput": [
+        "v5-adaptation"
+      ]
+    },
+    {
+      "id": "divine:talent:holy-hatred",
+      "type": "talent",
+      "name": "Haine sacrée",
+      "deity": null,
+      "status": "manual",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 120,
+        "section": "Haine sacrée"
+      },
+      "sourceReceipt": {
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "talentId": "talent-holy-hatred",
+        "description": "Lorsqu’un Miracle inflige des Blessures, vous pouvez infliger +2 Blessures."
+      },
+      "requiredTalent": {
+        "id": "talent-holy-hatred"
+      },
+      "params": {},
+      "extensions": [],
+      "effects": [
+        {
+          "type": "damage-bonus",
+          "value": 2,
+          "when": "miracle-inflicts-wounds"
+        }
+      ],
+      "labels": {
+        "effect": "Lorsqu’un Miracle inflige des Blessures, vous pouvez infliger +2 Blessures."
+      },
+      "clauses": [
+        {
+          "id": "miracle-damage-bonus",
+          "mode": "manual",
+          "sourceRef": "talent-holy-hatred"
+        }
+      ],
+      "needsInput": [
+        "miracle-damage-hook"
+      ]
+    }
+  ]
+}

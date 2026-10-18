@@ -32,6 +32,7 @@ import { createScene, proposeSceneEvent } from './core/scene-events.js';
 import { normalizeEffects, normalizeState } from './core/effects.js';
 import { previewHpLoss, inferActionType } from './core/resolution.js';
 import { initCombatBanner } from './ui/combat-banner.js';
+import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
 
 // Indicateur unique de la barre du haut : il résume les deux statuts détaillés
 // (#local-status, #sync-status), qui restent lisibles dans la section « État » du menu.
@@ -131,8 +132,9 @@ const refreshHistoryButtons = () => {
   if (btnUndo) btnUndo.disabled = !Store.canUndo();
   if (btnRedo) btnRedo.disabled = !Store.canRedo?.();
 };
-btnUndo?.addEventListener('click', () => { if (Store.undo()) refreshHistoryButtons(); });
-btnRedo?.addEventListener('click', () => { if (Store.redo?.()) refreshHistoryButtons(); });
+refreshHistoryButtons();
+btnUndo?.addEventListener('click', async () => { await Store.undo(); refreshHistoryButtons(); });
+btnRedo?.addEventListener('click', async () => { await Store.redo?.(); refreshHistoryButtons(); });
 
 // L’espace de travail local est disponible immédiatement. L’adaptateur distant
 // est chargé ensuite afin qu’un SDK lent ou indisponible ne bloque pas l’interface.
@@ -1291,6 +1293,9 @@ renderAppMenu();
 const safeOpen = operation => { try { operation(); } catch (error) { showToast(userMessage(error, 'Cette fenêtre n’a pas pu s’ouvrir : rechargez la page.'), 'error'); } };
 on(qs('#workspace-reminders'), 'click', () => safeOpen(openRemindersView));
 on(qs('#workspace-events'), 'click', () => safeOpen(openEventsView));
+on(qs('#workspace-campaign-time'), 'click', () => {
+  openCampaignTimeDialog({ Store, returnFocus: qs('#btn-menu') }).catch(error => showToast(userMessage(error, 'Le temps de campagne est indisponible.'), 'error'));
+});
 on(qs('#workspace-import-text'), 'click', () => safeOpen(openTextImportView));
 on(qs('#workspace-fiche-sync'), 'click', () => { openFicheSyncView().catch(error => showToast(contextMessage('Fiches indisponibles', error, 'vérifiez votre connexion, puis réessayez.'), 'error')); });
 on(qs('#workspace-restart-combat'), 'click', () => { restartCombat(); });
