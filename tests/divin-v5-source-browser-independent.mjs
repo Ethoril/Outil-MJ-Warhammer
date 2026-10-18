@@ -48,11 +48,11 @@ try {
   await page.locator('[data-divine-panel] > summary').click();
   const select = page.locator('[aria-label="Prière divine"]');
   const target = await select.locator('option').evaluateAll(options => options.find(option => option.textContent.includes('Commander la Légion'))?.value);
-  assert.ok(target, 'un miracle V4 retrouvé et bloqué est disponible au choix dans le panneau');
+  assert.ok(target, 'un miracle V4 adapté est disponible au choix dans le panneau');
   await select.selectOption(target);
   const source = await page.locator('[data-divine-panel] .workspace-divine-content p.workspace-muted').filter({ hasText: 'Source :' }).innerText();
   assert.match(source, /Up in arms\.pdf.*V4.*p\. 79/i, 'le formulaire affiche le document, l’édition V4 et le folio attestés par le contrat');
-  assert.match(source, /adaptation V4 retrouvée.*contrat V5 bloqué/i, 'la provenance n’est pas présentée comme une adaptation V5');
+  assert.doesNotMatch(source, /contrat V5 bloqué/i, 'le miracle adapté n’est plus présenté comme bloqué');
   assert.doesNotMatch(source, /livre V5/i, 'le panneau ne rebaptise pas la source V4 en livre V5');
   assert.deepEqual(errors, [], 'le geste de sélection ne provoque pas d’erreur navigateur');
   console.log('E2/E3 UI source indépendante: source V4 p.79 correctement affichée.');
