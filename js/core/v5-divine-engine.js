@@ -350,6 +350,7 @@ const isCalendarEffect = effect => calendarSeconds(timedDuration(effect)) !== nu
 const effectApplies = (effect, participant, ctx) => {
   const scope = effect.appliesTo ?? (effect.casterOnly === true ? 'caster' : 'targets');
   if (scope === 'caster' && participant?.id !== ctx.actorId) return false;
+  if (scope === 'targets' && ctx.designated && !ctx.designated.some(row => row.id === participant?.id)) return false;
   return effectHandler(effect.type)?.applies?.(effect, participant, ctx) !== false;
 };
 
@@ -540,7 +541,10 @@ export function applyDivineExecution(state, contract, input = {}) {
   if (preview.success && preview.effects.length && !targets.length && preview.resolvedParams.targets?.unit !== 'self')
     return { ...fail('needs-input', 'Choisissez les cibles avant application.', [need('targetIds', 'Cibles explicites du contrat')]), state: clone(state), receipt: null, executionId: input.executionId, preview };
   let next = clone(state);
-  const appliedTargets = preview.success && (['implemented', 'assisted'].includes(contract.status) || contract.status === 'manual' && previewResult.status === 'reminder') ? (targets.length ? targets : [actor]) : [];
+  const designated = preview.success && (['implemented', 'assisted'].includes(contract.status) || contract.status === 'manual' && previewResult.status === 'reminder') ? (targets.length ? targets : [actor]) : [];
+  // Un effet réservé au prêtre (appliesTo 'caster') l'atteint même s'il n'est pas désigné ; les effets de cibles ne touchent que les désignées.
+  const casterScoped = preview.effects.some(effect => (effect.appliesTo ?? (effect.casterOnly === true ? 'caster' : 'targets')) === 'caster');
+  const appliedTargets = designated.length && casterScoped && !designated.some(row => row.id === actor.id) ? [...designated, actor] : designated;
   const layerEffects = preview.effects.filter(effect => !isLayerlessEffect(effect)
     && !(effect.duration?.unit === 'instant' || effect.durationRounds === 0));
   const effectReceipts = [];
@@ -550,7 +554,7 @@ export function applyDivineExecution(state, contract, input = {}) {
   // Durée manuelle en minutes/heures/jours : la couche de rappel porte l'échéance calendaire de la durée résolue.
   const manualCalendarDuration = timedManual && calendarSeconds(preview.resolvedParams.duration) !== null ? { value: preview.resolvedParams.duration.value, unit: preview.resolvedParams.duration.unit } : null;
   const calendarLayerEffects = layerEffects.filter(isCalendarEffect);
-  const appliesContext = { actorId, actor, contract, prayer: preview.prayer, input, targets: appliedTargets };
+  const appliesContext = { actorId, actor, contract, prayer: preview.prayer, input, targets: appliedTargets, designated };
   if ((preview.effects.length || timedManual) && appliedTargets.length) {
     if ((calendarLayerEffects.length || manualCalendarDuration) && !hasClockAnchor(input.clockAnchor))
       return { ...fail('needs-input', 'Horloge de jeu requise pour dater cette durée en minutes, heures ou jours.', [need('clockAnchor', 'Horloge de jeu de la partie')]), state: clone(state), receipt: null, executionId: input.executionId };

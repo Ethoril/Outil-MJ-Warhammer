@@ -75,7 +75,9 @@ export const miracles = [
     summary: 'Une comète s’abat sur une zone en ligne de vue et à portée contenant ceux que Sigmar juge ennemis. Tout dans la zone, sauf créatures invalides, subit 1d10 + DR Blessures sans TB ni PA et reçoit un État Enflammé. La zone doit être en extérieur. Si Sigmar ne trouve aucun ennemi, il vous frappe vous-même.',
     params: { range: soc('characteristic', 'yards'), targets: area, duration: { kind: 'instant' } },
     status: 'assisted', effect: null,
-    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, conditions: [{ key: 'Ablaze', level: 1, when: 'always' }] }],
+    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, conditions: [{ key: 'Ablaze', level: 1, when: 'always' }] },
+      { type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, conditions: [{ key: 'Ablaze', level: 1, when: 'always' }], appliesTo: 'caster',
+        casterWhen: { field: 'foe', label: 'ennemi de Sigmar (fait MJ)', value: true, match: 'none' } }],
     targetRules: [],
     needsInput: [{ id: 'target-area', text: 'Zone visée, en ligne de vue et à portée.' }, { id: 'outdoors', text: 'La zone est-elle en extérieur ?' }, { id: 'sigmar-foes', text: 'Ennemis de Sigmar présents dans la zone (arbitrage MJ); sinon le prêtre est frappé.' }, { id: 'invalid-creatures', text: 'Créatures invalides exclues (notion non définie par la source).' }, { id: 'damage-roll', text: 'Jet de 1d10 + DR.' }],
     clauses: [
@@ -83,7 +85,7 @@ export const miracles = [
       { id: 'outdoors-only', mode: 'manual', text: 'La zone ciblée doit être en extérieur.' },
       { id: 'area-damage', mode: 'engine', text: 'Tout ce qui est dans la zone, sauf créatures invalides, subit 1d10 + DR Blessures ignorant BE et PA.' },
       { id: 'ablaze', mode: 'engine', text: 'Chaque créature touchée reçoit un État Enflammé.' },
-      { id: 'backfire', mode: 'manual', text: 'Sans ennemi à frapper, Sigmar frappe le prêtre à la place.' }
+      { id: 'backfire', mode: 'engine', text: 'Sans ennemi à frapper (aucune cible désignée n’est un ennemi de Sigmar, fait MJ par cible), Sigmar frappe le prêtre à la place : mêmes dégâts et même État Enflammé sur lui.' }
     ],
     sourceDelta: 'Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en yards.'
   },

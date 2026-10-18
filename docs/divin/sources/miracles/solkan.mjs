@@ -22,7 +22,7 @@ export const miracles = [
   summary: 'D’un cri à Solkan, une vague de flammes purificatrices balaie Bonus de Sociabilité yards autour du prêtre. Tout ce qui a un Trait Mort-vivant, Démon ou Lanceur de sorts, tout Point de Péché ou de Corruption, ou un Talent de Magie Arcane, du Chaos ou Mineure, subit 1d10 Blessures sans TB ni PA, y compris le prêtre, ses alliés et les passants.',
   params: { range: { kind: 'self' }, targets: area, duration: { kind: 'instant' } },
   status: 'assisted', effect: null,
-  effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 } }],
+  effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, targetFilter: { traits: ['Mort-vivant', 'Démon', 'Lanceur de sorts'], fact: 'impure', label: 'impure : Péché, Corruption ou Talent de Magie Arcane, du Chaos ou Mineure (fait MJ)' } }],
   targetRules: [],
   needsInput: [
    { id: 'damage-roll', text: 'Jet de 1d10 (par cible ou commun).' },
@@ -31,27 +31,28 @@ export const miracles = [
   ],
   clauses: [
    { id: 'damage', mode: 'engine', text: 'Chaque cible affectée subit 1d10 Blessures, sans Bonus d’Endurance ni PA.' },
-   { id: 'who-is-hit', mode: 'manual', text: 'Seules sont touchées les créatures impures (Traits Mort-vivant, Démon ou Lanceur de sorts, Péché ou Corruption, Talent de Magie Arcane, du Chaos ou Mineure) ; le prêtre, ses alliés et les passants le sont aussi s’ils répondent à ces critères.' },
+   { id: 'who-is-hit', mode: 'assisted', text: 'Seules sont touchées les créatures impures (Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche ; sinon Péché ou Corruption, Talent de Magie Arcane, du Chaos ou Mineure, fait saisi par le MJ) ; le prêtre, ses alliés et les passants le sont aussi s’ils répondent à ces critères.' },
    { id: 'area', mode: 'assisted', text: 'Zone centrée sur le prêtre, de rayon égal à son Bonus de Sociabilité en yards.' },
    purity
   ],
-  sourceDelta: delta + ' Le moteur ne filtre pas les cibles impures : le MJ ne désigne que celles qui subissent les dégâts.'
+  sourceDelta: delta + ' Le moteur filtre les cibles : Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche, sinon fait MJ « impure » (Péché, Corruption, Talent de Magie Arcane, du Chaos ou Mineure) ; une cible déclarée non impure est ignorée.'
  },
  {
   name: 'Poing de vengeance', canonicalName: 'Fist of Vengeance', printedPage: 55,
   summary: 'Le prêtre appelle Solkan à frapper ceux qui bravent sa volonté : une déflagration écrase la cible et lui inflige 1d10 + Bonus de Volonté de dégâts, qui ignorent les PA.',
   params: { range: soc('characteristic-bonus', 'yards'), targets: { kind: 'count', value: 1 }, duration: { kind: 'instant' } },
-  status: 'manual', effect: null,
+  status: 'assisted', effect: null,
+  effects: [{ type: 'ordinary-damage', dice: { count: 1, sides: 10 }, bonusFrom: 'FM', ignoreAp: true }],
   targetRules: [],
   needsInput: [
    { id: 'target', text: 'Quelle créature est la cible, et est-elle à portée (Bonus de Sociabilité yards) ?' },
    { id: 'damage-roll', text: 'Jet de 1d10 ; le Bonus de Volonté du prêtre s’y ajoute.' }
   ],
   clauses: [
-   { id: 'damage', mode: 'manual', text: 'La cible subit 1d10 + Bonus de Volonté de dégâts, qui ignorent les Points d’Armure (le Bonus d’Endurance reste déduit).' },
+   { id: 'damage', mode: 'engine', text: 'La cible subit 1d10 + Bonus de Volonté de dégâts, qui ignorent les Points d’Armure (le Bonus d’Endurance reste déduit, minimum 1).' },
    purity
   ],
-  sourceDelta: delta + ' Le texte dit « Damage, ignoring AP » : dégâts ordinaires, non Blessures directes ; le Bonus d’Endurance reste donc déduit. L’effet direct-damage du moteur ignore aussi la TB et n’ajoute pas de Bonus de Volonté : non utilisé.'
+  sourceDelta: delta + ' Le texte dit « Damage, ignoring AP » : dégâts ordinaires, non Blessures directes ; le Bonus d’Endurance reste donc déduit. Encodé ordinary-damage : 1d10 + Bonus de Volonté, PA ignorés, Bonus d’Endurance déduit, minimum 1 Blessure ; la Haine sacrée ajoute +2 sur les Blessures réellement perdues.'
  },
  {
   name: 'Lame enflammée', canonicalName: 'Flaming Blade', printedPage: 55,

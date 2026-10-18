@@ -49,7 +49,7 @@ function autofill(contract, store, { targetIds }) {
   }
   for (const fields of Object.values(model.factFields)) for (const field of fields) setFieldValue(form, field, field.field === 'ally' && !field.required ? 'false' : 'true');
   const expiry = model.descr.expiryField ? buildExpiry({ contract, actor, choices: {}, round: 1, phase: 'endOfRound', manualRounds: form.expiryRounds }) : undefined;
-  return { model, form, request: { actorId: 'priest', targetIds, roll: 45, canSpeak: true, choices: { range: 0, targets: 0, duration: 0, effect: 0 }, ...(expiry ? { expiry } : {}), ...toEngineInput(form, { targetIds }) } };
+  return { model, form, request: { actorId: 'priest', targetIds, roll: 45, canSpeak: true, choices: { range: 0, targets: 0, duration: 0, effect: 0 }, ...(expiry ? { expiry } : {}), ...toEngineInput(form, { targetIds, contract, actor }) } };
 }
 
 test('chaque fait de la liste blanche des règles de cible a un libellé français et une aide', () => {

@@ -37,7 +37,7 @@ export const miracles = [
   summary: 'Le prêtre chante des harmonies subtiles qui tirent des profondeurs de la terre le ressentiment de ceux qui n’ont pas remercié Rhya. Tout humanoïde à Bonus de Sociabilité yards qui n’a pas fait de sacrifice à Rhya (ou à une divinité ou un esprit de la nature en bons termes avec son culte, comme Isha ou Taal) depuis le dernier équinoxe de printemps perd 1 Blessure (+1 par DR) et gagne un État Fatigué. Si cinq individus ou plus sont touchés, le sol dans la zone devient stérile pendant d10 ans.',
   params: { range: { kind: 'self' }, targets: area, duration: { kind: 'instant' } },
   status: 'assisted', effect: null,
-  effects: [{ type: 'condition', key: 'Fatigued', level: 1 }],
+  effects: [{ type: 'condition', key: 'Fatigued', level: 1 }, { type: 'direct-damage', fixed: 1, perSuccessLevel: 1, requiresFact: { field: 'humanoid', label: 'humanoïde touché (sans sacrifice à Rhya ni à une puissance de la nature alliée depuis le dernier équinoxe de printemps)' } }],
   targetRules: [],
   needsInput: [
    { id: 'humanoids', text: 'Humanoïdes présents dans la zone (Bonus de Sociabilité yards).' },
@@ -46,11 +46,11 @@ export const miracles = [
   ],
   clauses: [
    { id: 'fatigued', mode: 'engine', text: 'Chaque humanoïde touché gagne un État Fatigué.' },
-   { id: 'who-is-hit', mode: 'manual', text: 'Seuls les humanoïdes sans sacrifice à Rhya (ou à une puissance de la nature alliée) depuis le dernier équinoxe de printemps sont touchés.' },
-   { id: 'wounds', mode: 'manual', text: 'Chaque humanoïde touché perd 1 Blessure, +1 par DR obtenu au Test de Prière.' },
+   { id: 'who-is-hit', mode: 'assisted', text: 'Seuls les humanoïdes sans sacrifice à Rhya (ou à une puissance de la nature alliée) depuis le dernier équinoxe de printemps sont touchés (fait MJ saisi par cible).' },
+   { id: 'wounds', mode: 'engine', text: 'Chaque humanoïde touché perd 1 Blessure, +1 par DR obtenu au Test de Prière (perte fixe, sans BE ni PA).' },
    { id: 'barren', mode: 'manual', text: 'Si cinq individus ou plus sont touchés, rien ne pousse plus dans la zone pendant d10 ans.' }
   ],
-  sourceDelta: delta + ' La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : le moteur direct-damage exige des dés et ne convient pas.'
+  sourceDelta: delta + ' La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.'
  },
  {
   name: 'Domination de Rhya', canonicalName: "Rhya's Dominion", printedPage: 74,
