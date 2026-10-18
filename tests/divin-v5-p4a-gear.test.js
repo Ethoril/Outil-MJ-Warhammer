@@ -271,8 +271,8 @@ test('Flambeau de Vertu : Peur (1) sur le prêtre seul ; fearImmune réussit un 
   const store = await fixture();
   const beacon = getDivineContract(BEACON);
   assert.equal(beacon.status, 'assisted');
-  assert.deepEqual(beacon.effects.map(row => row.type), ['special-state', 'grant-trait']);
-  await cast(store, BEACON);
+  assert.deepEqual(beacon.effects.map(row => row.type), ['remove-condition', 'special-state', 'grant-trait']);
+  await cast(store, BEACON, { targetIds: ['priest'], facts: { targets: { priest: { ally: true, seesPriest: true } } } });
   const priest = person(store, 'priest');
   assert.equal(priest.extensions.v5.specialStates.fearImmune, true);
   assert.deepEqual(priest.traits, ['Vigilant', 'Peur (1)']);

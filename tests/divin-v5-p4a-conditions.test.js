@@ -177,7 +177,7 @@ test('Flambeau de Vertu : tous les États Brisé des alliés choisis sont retir�
   const preview = store.previewDivineExecution(BEACON, input({ facts: { targets: { ally: { ally: true } } } }));
   assert.equal(preview.ready, false);
   assert.ok(preview.needsInput.some(row => row.field === 'facts.targets.ally.seesPriest'));
-  const { result } = await cast(store, BEACON, { facts: { targets: { ally: { ally: true, seesPriest: true } } } });
+  const { result } = await cast(store, BEACON, { expiry, facts: { targets: { ally: { ally: true, seesPriest: true } } } });
   assert.equal(stateOf(store, 'ally', 'brise'), undefined);
   assert.ok(stateOf(store, 'ally', 'aveugle'));
   assert.equal(result.receipt.effectReceipts[0].result.removed.reduce((sum, row) => sum + row.level, 0), 2);
