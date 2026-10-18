@@ -1,12 +1,20 @@
 {
   "schemaVersion": 1,
-  "generatorVersion": "divine-contracts-0.2.0",
+  "generatorVersion": "divine-contracts-0.3.0",
   "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
   "sourceManifest": {
     "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
     "miraclesCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
     "v5EnglishBaseSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
-    "authoritativeEdition": "V5 EN"
+    "authoritativeEdition": "V5 EN",
+    "complementCorpusSha256": "b9f10d70233a7aeed054232710e1ae6864e5d13893e5d0793e6aa7571a976364",
+    "supplementBooks": [
+      {
+        "bookId": "L02",
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f"
+      }
+    ]
   },
   "sourceTalentDescriptions": {
     "talent-bless": "Vous connaissez toutes les Bénédictions de la divinité choisie ; une seule divinité normalement. Incompatible dans les deux sens avec Focalisation, Magie des Arcanes, Magie du Chaos, Résistance à la Magie, Magie mineure et Sorcier !. Désapprentissage : 100 PX, perte des Bénédictions et éventuelle défaveur divine décidée par le MJ.",
@@ -7990,6 +7998,1476 @@
         }
       ],
       "needsInput": []
+    },
+    {
+      "id": "divine:blessing:handrich:charisma",
+      "type": "blessing",
+      "name": "Bénédiction de Charisme",
+      "deity": "Handrich",
+      "catalogueName": "Bénédiction de Charisme",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Charisme (Handrich)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Charisme (Handrich)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 47,
+          "section": "Bénédictions de Handrich",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Charisme",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_48_61_6e_64_72_69_63_68_29",
+        "name": "Béni (Handrich)",
+        "specialization": "Handrich"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "Soc",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Sociabilité.",
+        "access": "Béni (Handrich)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:charisma"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:handrich:fortune",
+      "type": "blessing",
+      "name": "Bénédiction de Chance",
+      "deity": "Handrich",
+      "catalogueName": "Bénédiction de Chance",
+      "status": "manual",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Chance (Handrich)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Chance (Handrich)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 47,
+          "section": "Bénédictions de Handrich",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Chance",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_48_61_6e_64_72_69_63_68_29",
+        "name": "Béni (Handrich)",
+        "specialization": "Handrich"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "access": "Béni (Handrich)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:fortune"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:handrich:hardiness",
+      "type": "blessing",
+      "name": "Bénédiction de Vigueur",
+      "deity": "Handrich",
+      "catalogueName": "Bénédiction de Vigueur",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Vigueur (Handrich)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Vigueur (Handrich)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 47,
+          "section": "Bénédictions de Handrich",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Vigueur",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_48_61_6e_64_72_69_63_68_29",
+        "name": "Béni (Handrich)",
+        "specialization": "Handrich"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "E",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Endurance.",
+        "access": "Béni (Handrich)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:hardiness"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:handrich:protection",
+      "type": "blessing",
+      "name": "Bénédiction de Protection",
+      "deity": "Handrich",
+      "catalogueName": "Bénédiction de Protection",
+      "status": "manual",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Protection (Handrich)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Protection (Handrich)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 47,
+          "section": "Bénédictions de Handrich",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Protection",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_48_61_6e_64_72_69_63_68_29",
+        "name": "Béni (Handrich)",
+        "specialization": "Handrich"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "access": "Béni (Handrich)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:protection"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:handrich:wisdom",
+      "type": "blessing",
+      "name": "Bénédiction de Sagesse",
+      "deity": "Handrich",
+      "catalogueName": "Bénédiction de Sagesse",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Sagesse (Handrich)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Sagesse (Handrich)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 47,
+          "section": "Bénédictions de Handrich",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Sagesse",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_48_61_6e_64_72_69_63_68_29",
+        "name": "Béni (Handrich)",
+        "specialization": "Handrich"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "Int",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Intelligence.",
+        "access": "Béni (Handrich)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:wisdom"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:handrich:wit",
+      "type": "blessing",
+      "name": "Bénédiction de Vivacité",
+      "deity": "Handrich",
+      "catalogueName": "Bénédiction de Vivacité",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Vivacité (Handrich)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 47,
+        "section": "Bénédiction de Vivacité (Handrich)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 47,
+          "section": "Bénédictions de Handrich",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Vivacité",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_48_61_6e_64_72_69_63_68_29",
+        "name": "Béni (Handrich)",
+        "specialization": "Handrich"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "I",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Initiative.",
+        "access": "Béni (Handrich)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:wit"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:solkan:battle",
+      "type": "blessing",
+      "name": "Bénédiction de Bataille",
+      "deity": "Solkan",
+      "catalogueName": "Bénédiction de Bataille",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Bataille (Solkan)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Bataille (Solkan)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 55,
+          "section": "Bénédictions de Solkan",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Bataille",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_6f_6c_6b_61_6e_29",
+        "name": "Béni (Solkan)",
+        "specialization": "Solkan"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "CC",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Capacité de Combat.",
+        "access": "Béni (Solkan)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:battle"
+        },
+        {
+          "id": "solkan-purity",
+          "mode": "manual",
+          "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
+          "sourceRef": "archives-of-the-empire-3-p55"
+        }
+      ],
+      "needsInput": [],
+      "reminders": [
+        "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière."
+      ]
+    },
+    {
+      "id": "divine:blessing:solkan:conscience",
+      "type": "blessing",
+      "name": "Bénédiction de Conscience",
+      "deity": "Solkan",
+      "catalogueName": "Bénédiction de Conscience",
+      "status": "manual",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Conscience (Solkan)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Conscience (Solkan)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 55,
+          "section": "Bénédictions de Solkan",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Conscience",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_6f_6c_6b_61_6e_29",
+        "name": "Béni (Solkan)",
+        "specialization": "Solkan"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "Pour rompre un commandement, test de Calme Accessible (+2 DR); en cas d’échec, honte et Action non effectuée.",
+        "access": "Béni (Solkan)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:conscience"
+        },
+        {
+          "id": "solkan-purity",
+          "mode": "manual",
+          "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
+          "sourceRef": "archives-of-the-empire-3-p55"
+        }
+      ],
+      "needsInput": [],
+      "reminders": [
+        "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière."
+      ]
+    },
+    {
+      "id": "divine:blessing:solkan:courage",
+      "type": "blessing",
+      "name": "Bénédiction de Courage",
+      "deity": "Solkan",
+      "catalogueName": "Bénédiction de Courage",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Courage (Solkan)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Courage (Solkan)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 55,
+          "section": "Bénédictions de Solkan",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Courage",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_6f_6c_6b_61_6e_29",
+        "name": "Béni (Solkan)",
+        "specialization": "Solkan"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "FM",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Force Mentale.",
+        "access": "Béni (Solkan)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:courage"
+        },
+        {
+          "id": "solkan-purity",
+          "mode": "manual",
+          "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
+          "sourceRef": "archives-of-the-empire-3-p55"
+        }
+      ],
+      "needsInput": [],
+      "reminders": [
+        "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière."
+      ]
+    },
+    {
+      "id": "divine:blessing:solkan:hardiness",
+      "type": "blessing",
+      "name": "Bénédiction de Vigueur",
+      "deity": "Solkan",
+      "catalogueName": "Bénédiction de Vigueur",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Vigueur (Solkan)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Vigueur (Solkan)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 55,
+          "section": "Bénédictions de Solkan",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Vigueur",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_6f_6c_6b_61_6e_29",
+        "name": "Béni (Solkan)",
+        "specialization": "Solkan"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "E",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Endurance.",
+        "access": "Béni (Solkan)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:hardiness"
+        },
+        {
+          "id": "solkan-purity",
+          "mode": "manual",
+          "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
+          "sourceRef": "archives-of-the-empire-3-p55"
+        }
+      ],
+      "needsInput": [],
+      "reminders": [
+        "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière."
+      ]
+    },
+    {
+      "id": "divine:blessing:solkan:might",
+      "type": "blessing",
+      "name": "Bénédiction de Puissance",
+      "deity": "Solkan",
+      "catalogueName": "Bénédiction de Puissance",
+      "status": "implemented",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Puissance (Solkan)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Puissance (Solkan)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 55,
+          "section": "Bénédictions de Solkan",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Puissance",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_6f_6c_6b_61_6e_29",
+        "name": "Béni (Solkan)",
+        "specialization": "Solkan"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "F",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Force.",
+        "access": "Béni (Solkan)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:might"
+        },
+        {
+          "id": "solkan-purity",
+          "mode": "manual",
+          "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
+          "sourceRef": "archives-of-the-empire-3-p55"
+        }
+      ],
+      "needsInput": [],
+      "reminders": [
+        "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière."
+      ]
+    },
+    {
+      "id": "divine:blessing:solkan:tenacity",
+      "type": "blessing",
+      "name": "Bénédiction de Ténacité",
+      "deity": "Solkan",
+      "catalogueName": "Bénédiction de Ténacité",
+      "status": "manual",
+      "source": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Ténacité (Solkan)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "Archives of the Empire 3.pdf",
+        "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+        "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 55,
+        "section": "Bénédiction de Ténacité (Solkan)",
+        "clauses": [],
+        "accessSource": {
+          "document": "Archives of the Empire 3.pdf",
+          "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
+          "edition": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 55,
+          "section": "Bénédictions de Solkan",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Ténacité",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_6f_6c_6b_61_6e_29",
+        "name": "Béni (Solkan)",
+        "specialization": "Solkan"
+      },
+      "requiredKnownPrayer": false,
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "instant"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [],
+      "labels": {
+        "effect": "La cible retire 1 État (sauf Entaché).",
+        "access": "Béni (Solkan)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "manual",
+          "sourceRef": "blessing:tenacity"
+        },
+        {
+          "id": "solkan-purity",
+          "mode": "manual",
+          "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
+          "sourceRef": "archives-of-the-empire-3-p55"
+        }
+      ],
+      "needsInput": [],
+      "reminders": [
+        "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière."
+      ]
     },
     {
       "id": "divine:miracle:appel-a-la-fureur",
@@ -16016,5 +17494,5 @@
       ]
     }
   ],
-  "sourceFingerprint": "sha256:f5acfc9d3fcab0a32841e73b78ab7dfabc46381f5dc326572f7db5ed04e233be"
+  "sourceFingerprint": "sha256:827485ed6e084dd42b4396922c61e92f6a487120cca4563909875a5184b27227"
 }

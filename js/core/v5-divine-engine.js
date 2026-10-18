@@ -40,7 +40,9 @@ const objectValue = value => Boolean(value && typeof value === 'object' && !Arra
 function sourceError(contract, input = {}) {
   if (!contract || typeof contract.id !== 'string') return 'Contrat divin v1 requis.';
   if (!contract.source || !contract.sourceReceipt) return 'Source et reçu de source requis.';
-  if (contract.source.document !== 'Livre de base V5 EN v2.pdf') return 'La source V5 EN canonique est requise; le catalogue ou le Livre FR V4 ne confirme pas cette règle.';
+  // Livre de base V5, ou supplément déclaré par le registre (sourceManifest.supplementBooks) pour un module de miracles.
+  const supplement = DIVINE_REGISTRY.sourceManifest?.supplementBooks?.some(book => book.document === contract.source.document && book.fileSha256 === contract.source.fileSha256);
+  if (contract.source.document !== 'Livre de base V5 EN v2.pdf' && !supplement) return 'La source V5 EN canonique est requise; le catalogue ou le Livre FR V4 ne confirme pas cette règle.';
   if (input.sourceFingerprint !== DIVINE_REGISTRY.sourceFingerprint) return 'L’empreinte du registre divin canonique est absente ou obsolète.';
   const canonical = DIVINE_REGISTRY.contracts?.find(row => row.id === contract.id);
   // The Store attaches registry envelope metadata to its canonical contract.
@@ -415,7 +417,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const unit = resultRoll % 10;
   const sinTrigger = unit <= sin;
   const wrathTriggered = prayer.fumble || sinTrigger;
-  const reminders = [];
+  // `contract.reminders` : rappels permanents du culte ou de la prière (ex. Solkan : aucun Péché ni Corruption toléré).
+  const reminders = [...(contract.reminders || [])];
   if (contract.status === 'manual') reminders.push('Prière résolue; effet laissé au rappel MJ selon le contrat source.');
   // assisted : les effets structurés sont appliqués, les clauses non automatisées sortent en rappels MJ.
   const appliesEffects = ['implemented', 'assisted'].includes(contract.status);

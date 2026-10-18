@@ -5,7 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { source as prayerSource } from '../docs/divin/sources/L06-prayers.mjs';
 import { imperialWeek, thinkOverYourDeeds, heedMyLessons } from '../docs/divin/sources/L06-calendar-readings.mjs';
 import { wrathConditionReading, wrathConditionRules } from '../docs/divin/sources/L06-wrath-conditions-readings.mjs';
-import { paramKinds, paramUnits, targetRuleFacts } from '../js/core/v5-divine-grammar.js';
+import { paramKinds, paramUnits, supplementCults, targetRuleFacts } from '../js/core/v5-divine-grammar.js';
 import { validateEffect } from '../js/core/v5-divine-effect-handlers.js';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -20,6 +20,10 @@ if (!sameDirectory) {
 const readJson = path => JSON.parse(readFileSync(path, 'utf8'));
 const snapshot = readJson('js/data/reference-snapshot.json');
 const divineCorpus = readJson('docs/divin/DIVIN_CORPUS_LIVRES.json');
+// Livres ajoutés après la fermeture du corpus de 17 PDF : ils n'entrent ni dans son décompte ni dans l'audit page à page.
+const complementText = readFileSync('docs/divin/DIVIN_CORPUS_LIVRES_COMPLEMENT.json', 'utf8');
+const complementHash = createHash('sha256').update(complementText, 'utf8').digest('hex');
+const knownBooks = [...divineCorpus.books, ...JSON.parse(complementText).books];
 const csvPath = 'js/data/reference-source-csv/Miracles.csv';
 const csvText = readFileSync(csvPath, 'utf8');
 const csvHash = createHash('sha256').update(csvText, 'utf8').digest('hex');
@@ -81,6 +85,8 @@ const commonPrayerRules = [
  { id: 'divine-overuse', text: 'Le MJ peut attribuer typiquement 1 à 3 Points de Péché pour des usages répétés de bénédictions/miracles dans une même scène, sur la même blessure/cible ou situations similaires.', source: pdfRef(220, 'Option : Petits soucis'), mode: 'manual' }
 ];
 const cults = Object.keys(prayerSource.blessingsByCult);
+// Cultes acceptés pour les miracles de module : les dix cultes du livre de base et les cultes de supplément.
+const miracleCults = [...cults, ...supplementCults];
 const catalogueTalentId = name => `talent-${[...name].map(char => char.charCodeAt(0).toString(16)).join('_')}`;
 // The published Béni (Myrmidia) alias reads "Mymidia" (missing "r"); kept verbatim because the six Myrmidia blessings must not change.
 const publishedBlessedMyrmidiaAlias = 'talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29';
@@ -110,16 +116,38 @@ const blessingLibrary = {
 };
 const blessingKey = english => english === 'The Hunt' ? 'hunt' : english.toLowerCase();
 const blessingAccess = { source: pdfRef(220, 'Bénédictions par culte') };
-const blessingContract = (cult, key) => {
+// Livre de supplément : document, empreinte et pagination viennent du manifeste (corpus de 17 livres ou complément).
+// Le document et l'empreinte identifient le livre; `bookId` d'un module est une étiquette libre (ex. « AotE3 »), vérifiée seulement si elle égale un identifiant du manifeste.
+const findBook = ({ bookId, fileSha256, document }) => knownBooks.find(book => (fileSha256 === undefined || book.sha256 === String(fileSha256).toLowerCase()) && (document === undefined || book.file === document) && (fileSha256 !== undefined || document !== undefined) && (!knownBooks.some(other => other.id === bookId) || book.id === bookId));
+const supplementRef = (book, edition, sourceStatus = 'read-and-page-checked') => ({ document: book.file, fileSha256: book.sha256, edition, sourceStatus });
+const archivesOfTheEmpire3 = knownBooks.find(book => book.id === 'L02');
+const archivesOfTheEmpire3Edition = 'V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023)';
+if (archivesOfTheEmpire3?.file !== 'Archives of the Empire 3.pdf') throw new Error('Archives of the Empire 3 est absent du manifeste de corpus.');
+// Règles propres à un culte, reprises en rappel (`reminders`) et en clause manuelle de chaque prière du culte.
+const cultRules = {
+ Solkan: { id: 'solkan-purity', sourceRef: 'archives-of-the-empire-3-p55', text: 'Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.' }
+};
+const withCultRule = contract => {
+ const rule = cultRules[contract.deity];
+ return rule ? { ...contract, reminders: [rule.text], clauses: [...contract.clauses, { id: rule.id, mode: 'manual', text: rule.text, sourceRef: rule.sourceRef }] } : contract;
+};
+const blessingContract = (cult, key, origin = null) => {
  const row = blessingLibrary[key];
  if (!row) throw new Error(`Bénédiction inconnue dans la bibliothèque du générateur : ${key}`);
  const instant = row.instant === true;
  const requiredTalent = cultTalent('Béni', cult);
+ // Livre de base : p.221 (effet) et p.220 (accès). Supplément : page du culte (accès et liste) ; l'effet reste celui de la p.221 V5.
+ const section = `Bénédiction de ${row.name}`;
+ const effectSource = pdfRef(221, section);
+ const source = origin ? { ...origin.ref, printedPage: origin.printedPage, section: `${section} (${cult})`, clauses: [] } : effectSource;
+ const sourceReceipt = origin
+  ? { ...source, accessSource: { ...origin.ref, printedPage: origin.printedPage, section: `Bénédictions de ${cult}`, clauses: [] }, effectSource, catalogueSnapshotSha256: snapshotHash }
+  : { ...effectSource, accessSource: { ...blessingAccess.source }, catalogueSnapshotSha256: snapshotHash };
  const choices = instant
   ? [...(row.touch ? [] : [{range:{add:6,unit:'yards'}}]), {targets:{add:1}}]
   : [{range:{add:6,unit:'yards'}},{targets:{add:1}},{duration:{add:6,unit:'rounds'}}];
  return {
-  id:`divine:blessing:${enc(cult)}:${key}`, type:'blessing', name:`Bénédiction de ${row.name}`, deity:cult, catalogueName:`Bénédiction de ${row.name}`, status:row.effect?'implemented':'manual', source:pdfRef(221, `Bénédiction de ${row.name}`), sourceReceipt:{...pdfRef(221, `Bénédiction de ${row.name}`), accessSource:{...blessingAccess.source}, catalogueSnapshotSha256:snapshotHash}, requiredTalent, requiredKnownPrayer:false,
+  id:`divine:blessing:${enc(cult)}:${key}`, type:'blessing', name:`Bénédiction de ${row.name}`, deity:cult, catalogueName:`Bénédiction de ${row.name}`, status:row.effect?'implemented':'manual', source, sourceReceipt, requiredTalent, requiredKnownPrayer:false,
   params:{range:row.touch?{kind:'special',sourceText:'Touch'}:{kind:'fixed',value:6,unit:'yards'},targets:{kind:'count',value:1},duration:instant?{kind:'instant'}:{kind:'fixed',value:6,unit:'rounds'}},
   extensions:[{everySuccessLevels:2,choices,repeatable:true,instantDurationCannotIncrease:true}],
   effects:row.effect?[{...row.effect,duration:instant?{unit:'instant'}:{value:6,unit:'rounds'}}]:[], labels:{effect:row.label,access:requiredTalent.name}, clauses:[{id:'pray-test',mode:'engine',sourceRef:'prayer-success'},{id:'effect',mode:row.effect?'engine':'manual',sourceRef:`blessing:${key}`}], needsInput:[]
@@ -130,6 +158,13 @@ const blessings = [...cults.filter(cult => cult === 'Myrmidia'), ...cults.filter
  .flatMap(cult => prayerSource.blessingsByCult[cult].map(english => blessingContract(cult, blessingKey(english))));
 if (blessings.length !== 60 || new Set(blessings.map(row => row.id)).size !== 60) throw new Error('Expected 60 distinct cult blessing associations.');
 if (new Set(blessings.map(row => row.id.split(':').pop())).size !== 19) throw new Error('Expected 19 distinct blessing effects.');
+// Archives of the Empire 3 : Handrich (p.47) et Solkan (p.55) accèdent à six bénédictions du livre de base (effets identiques, p.221 V5).
+const supplementBlessingCults = [
+ { cult: 'Handrich', printedPage: 47, english: ['Charisma', 'Fortune', 'Hardiness', 'Protection', 'Wisdom', 'Wit'] },
+ { cult: 'Solkan', printedPage: 55, english: ['Battle', 'Conscience', 'Courage', 'Hardiness', 'Might', 'Tenacity'] }
+];
+const supplementBlessings = supplementBlessingCults.flatMap(({ cult, printedPage, english }) => english.map(name => withCultRule(blessingContract(cult, blessingKey(name), { ref: supplementRef(archivesOfTheEmpire3, archivesOfTheEmpire3Edition), printedPage }))));
+if (supplementBlessings.length !== 12 || new Set([...blessings, ...supplementBlessings].map(row => row.id)).size !== 72) throw new Error('Expected 12 distinct supplement blessing associations.');
 const miracleContracts = csvRows.map(entry => {
  const identified = sourceSix.get(entry.nom);
  const supplemental = sourceUpInArmsNine.get(entry.nom);
@@ -171,10 +206,28 @@ const loadMiracleModules = async () => {
 };
 const moduleMiracleContracts = (modules => {
  const fromModules = [];
- for (const { file, cult, miracles } of modules) {
+ const origins = new Map();
+ for (const { file, cult, miracles, source: declaredSource, aspect } of modules) {
   const at = (miracle, message) => new Error(`Module miracle ${file} (${miracle?.canonicalName ?? miracle?.name ?? '?'}) : ${message}`);
-  if (typeof cult !== 'string' || !cults.includes(cult)) throw new Error(`Module miracle ${file} : \`cult\` doit être l’un de ${cults.join(', ')} (reçu : ${String(cult)}).`);
+  if (typeof cult !== 'string' || !miracleCults.includes(cult)) throw new Error(`Module miracle ${file} : \`cult\` doit être l’un de ${miracleCults.join(', ')} (reçu : ${String(cult)}).`);
   if (!Array.isArray(miracles)) throw new Error(`Module miracle ${file} : \`miracles\` doit être un tableau.`);
+  if (aspect !== undefined && (typeof aspect !== 'string' || !aspect.trim())) throw new Error(`Module miracle ${file} : \`aspect\` doit être un texte non vide.`);
+  // Source facultative : par défaut le livre de base V5 EN v2 (contrats inchangés). Sinon un livre du manifeste (corpus ou complément).
+  let book = null, edition = null, sourceStatus = null;
+  if (declaredSource !== undefined) {
+   const sourceError = message => new Error(`Module miracle ${file} : \`source\` ${message}`);
+   if (!isRecord(declaredSource)) throw sourceError('doit être un objet { bookId, document, fileSha256, edition }.');
+   const { bookId, document, fileSha256, edition: declaredEdition, sourceStatus: declaredStatus } = declaredSource;
+   for (const [key, value] of Object.entries({ bookId, document, fileSha256 })) if (value !== undefined && (typeof value !== 'string' || !value.trim())) throw sourceError(`${key} doit être un texte non vide.`);
+   if (document === undefined && fileSha256 === undefined) throw sourceError('doit identifier le livre (document ou fileSha256).');
+   book = findBook({ bookId, document, fileSha256 });
+   if (!book) throw sourceError(`désigne un livre absent des manifestes DIVIN_CORPUS_LIVRES*.json (${[bookId, document, fileSha256].filter(Boolean).join(' / ')}) ou dont document, empreinte et bookId se contredisent.`);
+   if (typeof declaredEdition !== 'string' || !declaredEdition.trim()) throw sourceError('edition est requise (ex. « V4 EN »).');
+   if (declaredStatus !== undefined && (typeof declaredStatus !== 'string' || !declaredStatus.trim())) throw sourceError('sourceStatus doit être un texte non vide.');
+   if (book.sha256 === V5.fileSha256) { if (declaredEdition !== V5.edition) throw sourceError(`désigne le livre de base : edition doit valoir ${V5.edition}.`); book = null; }
+   else { edition = declaredEdition; sourceStatus = declaredStatus ?? 'read-and-page-checked'; }
+  }
+  const moduleSource = book ? supplementRef(book, edition, sourceStatus) : null;
   for (const miracle of miracles) {
    if (!isRecord(miracle)) throw at(miracle, 'chaque miracle doit être un objet.');
    for (const key of ['name', 'canonicalName', 'summary']) if (typeof miracle[key] !== 'string' || !miracle[key].trim()) throw at(miracle, `${key} doit être un texte non vide.`);
@@ -209,20 +262,26 @@ const moduleMiracleContracts = (modules => {
    if (miracle.extensions !== undefined && !Array.isArray(miracle.extensions)) throw at(miracle, 'extensions doit être un tableau.');
    if (cult === 'Myrmidia' && [...sourceSix.values()].some(row => row.canonicalName === miracle.canonicalName)) throw at(miracle, 'déjà défini par le livre de base Myrmidia du générateur.');
    const id = `divine:miracle:${enc(cult)}:${enc(miracle.canonicalName)}`;
-   if (fromModules.some(row => row.id === id)) throw at(miracle, `identifiant dupliqué ${id}.`);
+   const previous = origins.get(id);
+   if (previous) throw at(miracle, `identifiant dupliqué ${id}` + (previous.file === file ? '.' : previous.base !== !book
+    ? ` : ce miracle est déjà présent dans ${previous.base ? 'le livre de base' : 'un supplément'} (module ${previous.file}).`
+    : ` (déjà défini par le module ${previous.file}).`));
+   origins.set(id, { file, base: !book });
    const duration = miracle.params.duration;
    const defaultDuration = duration.kind === 'instant' ? { unit: 'instant' } : { value: null, sourceParameter: 'params.duration', unit: duration.unit ?? 'rounds', requiresResolvedExpiry: true };
-   fromModules.push({
-    id, type: 'miracle', name: miracle.name, catalogueName: miracle.name, canonicalName: miracle.canonicalName, deity: cult, status: miracle.status, source: pdfRef(miracle.printedPage, `Miracles de ${cult} - ${miracle.canonicalName}`),
-    sourceReceipt: { referenceSnapshotSha256: snapshotHash, catalogueSnapshotVersion: snapshot.contentVersion, sourceBookSha256: V5.fileSha256 },
+   const section = `Miracles de ${cult} - ${miracle.canonicalName}`;
+   fromModules.push(withCultRule({
+    id, type: 'miracle', name: miracle.name, catalogueName: miracle.name, canonicalName: miracle.canonicalName, deity: cult, ...(aspect === undefined ? {} : { aspect: aspect.trim() }), status: miracle.status,
+    source: book ? { ...moduleSource, printedPage: miracle.printedPage, section, clauses: [] } : pdfRef(miracle.printedPage, section),
+    sourceReceipt: { referenceSnapshotSha256: snapshotHash, catalogueSnapshotVersion: snapshot.contentVersion, sourceBookSha256: book ? book.sha256 : V5.fileSha256, ...(book ? { sourceBookId: book.id, sourceDocument: book.file, sourceEdition: edition } : {}) },
     requiredTalent: cultTalent('Invocation', cult), requiredKnownPrayer: true, sourceDelta: miracle.sourceDelta ?? null,
     params: structuredClone(miracle.params),
     extensions: miracle.extensions ? structuredClone(miracle.extensions) : [{ everySuccessLevels: 2, choices: [{ range: { addBaseValue: true } }, { targets: { addBaseValue: true } }, { duration: { addBaseValue: true } }], sourceRef: 'miracle-scaling', repeatable: true, restrictions: { youAndYouCannotIncreaseRangeOrTargets: true, instantDurationCannotIncrease: true } }],
     effects: declared.map(effect => ({ ...structuredClone(effect), duration: effect.duration ? structuredClone(effect.duration) : defaultDuration })),
-    targetRules: targetRules.filter(rule => targetRuleFacts.has(rule)), ...(targetRules.some(rule => !targetRuleFacts.has(rule)) ? { targetNotes: targetRules.filter(rule => !targetRuleFacts.has(rule)) } : {}), labels: { canonicalName: miracle.canonicalName, effect: miracle.summary, sourceStatus: 'V5 base source checked' },
+    targetRules: targetRules.filter(rule => targetRuleFacts.has(rule)), ...(targetRules.some(rule => !targetRuleFacts.has(rule)) ? { targetNotes: targetRules.filter(rule => !targetRuleFacts.has(rule)) } : {}), labels: { canonicalName: miracle.canonicalName, effect: miracle.summary, sourceStatus: book ? `${edition} supplement ${book.id} source checked` : 'V5 base source checked' },
     clauses: clauses.map(row => ({ id: row.id, mode: row.mode, text: row.text, sourceRef: `v5-${enc(miracle.canonicalName)}` })),
     needsInput: needsInput.map(row => ({ field: row.id, label: row.text }))
-   });
+   }));
   }
  }
  return fromModules;
@@ -257,15 +316,26 @@ const wrathConditionContracts=wrathConditionRules.map(rule=>({
   resultId:rule.resultId,conditions:rule.conditions,application:{sinTiming:'before-decrement',order:'apply-then-decrement'},
   evidencePath:'docs/divin/sources/L06-wrath-conditions-readings.mjs'}
 }));
-const contracts=[...blessings,...miracleContracts,...moduleMiracleContracts,hatred];
+// Livres de supplément réellement cités par un contrat (bénédictions de culte, modules de miracles) : le moteur n'accepte que ceux-là hors livre de base.
+const bySource=(rows,key)=>Object.fromEntries([...rows.reduce((map,row)=>map.set(key(row),(map.get(key(row))||0)+1),new Map())].sort(([a],[b])=>a<b?-1:a>b?1:0));
+const bookOf=row=>knownBooks.find(book=>book.sha256===row.source.fileSha256);
+const supplementBooks=[...new Map([...supplementBlessings,...moduleMiracleContracts].filter(row=>row.source.fileSha256!==V5.fileSha256).map(row=>[bookOf(row).id,{bookId:bookOf(row).id,document:row.source.document,fileSha256:row.source.fileSha256}])).values()].sort((a,b)=>a.bookId<b.bookId?-1:1);
+const contracts=[...blessings,...supplementBlessings,...miracleContracts,...moduleMiracleContracts,hatred];
 const catalogueDeltas=[...miracleContracts.filter(row=>sourceSix.has(row.catalogueName)),...moduleMiracleContracts.filter(row=>row.sourceDelta)].map(row=>({id:row.id,catalogueEntry:row.catalogueEntry??null,v5Summary:row.sourceDelta,status:row.status,source:row.source}));
-const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.2.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN'},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,catalogueDeltas,contracts};
+const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.3.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN',complementCorpusSha256:complementHash,supplementBooks},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,catalogueDeltas,contracts};
 const sourceFingerprint = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
 const result={...payload,sourceFingerprint:`sha256:${sourceFingerprint}`};
 const registryText=JSON.stringify(result,null,2)+'\n';
 const miraclesSupplementSourceFound = miracleContracts.filter(row => sourceUpInArmsNine.has(row.catalogueName)).length;
 const miraclesSourceFound = sourceSix.size + miraclesSupplementSourceFound;
-const inventory={schemaVersion:1,sourceFingerprint:result.sourceFingerprint,counts:{blessings:blessings.length,miracles:miracleContracts.length,moduleMiracles:moduleMiracleContracts.length,miraclesSourceFound,miraclesSourceNotFound:miracleContracts.length-miraclesSourceFound,miraclesV5SourceFound:sourceSix.size,miraclesSupplementSourceFound,miraclesV4AdaptationBlocked:miraclesSupplementSourceFound,talents:1},items:contracts.map(({id,type,name,deity,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,needsInput})=>({id,type,name,deity,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,needsInput}))};
+const moduleBook=row=>row.source.fileSha256===V5.fileSha256?'L06':bookOf(row).id;
+const inventory={schemaVersion:1,sourceFingerprint:result.sourceFingerprint,counts:{blessings:blessings.length,miracles:miracleContracts.length,moduleMiracles:moduleMiracleContracts.length,miraclesSourceFound,miraclesSourceNotFound:miracleContracts.length-miraclesSourceFound,miraclesV5SourceFound:sourceSix.size,miraclesSupplementSourceFound,miraclesV4AdaptationBlocked:miraclesSupplementSourceFound,talents:1},
+ // Compteurs par livre/culte/aspect : hors de `counts`, dont les clés sont figées par les tests existants.
+ sourceCounts:{
+  blessingsSupplement:supplementBlessings.length,blessingsTotal:blessings.length+supplementBlessings.length,blessingsByBook:bySource([...blessings,...supplementBlessings],row=>moduleBook(row)),blessingsByCult:bySource([...blessings,...supplementBlessings],row=>row.deity),
+  moduleMiraclesByBook:bySource(moduleMiracleContracts,moduleBook),moduleMiraclesByCult:bySource(moduleMiracleContracts,row=>row.deity),moduleMiraclesByAspect:bySource(moduleMiracleContracts.filter(row=>row.aspect),row=>row.aspect)},
+ notes:[{id:'old-faith-bless',source:{...supplementRef(archivesOfTheEmpire3,archivesOfTheEmpire3Edition),printedPage:58,section:'Priests of the Old Faith'},text:'Bless (Old Faith) ne donne pas six bénédictions fixes : le personnage en choisit six librement; Invoke (Old Faith) n’apprend aucun miracle mais une bénédiction de plus, aux mêmes coûts en PX que les miracles supplémentaires. Aucun contrat généré : choix à la charge du MJ, simple note d’inventaire.'}],
+ items:contracts.map(({id,type,name,deity,aspect,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,reminders,needsInput})=>({id,type,name,deity,aspect,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,reminders,needsInput}))};
 const inventoryText=JSON.stringify(inventory,null,2)+'\n';
 if(process.argv.includes('--check')){
  for(const [path,expected] of [['js/data/v5-divine-contracts.json',registryText],['docs/divin/DIVIN_INVENTAIRE.json',inventoryText]]){

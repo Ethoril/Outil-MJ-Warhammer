@@ -12,6 +12,11 @@ import { source as prayerSource } from '../docs/divin/sources/L06-prayers.mjs';
 const contracts = getAllDivineContracts();
 const blessings = contracts.filter(row => row.type === 'blessing');
 const cults = Object.keys(prayerSource.blessingsByCult);
+const baseBlessings = blessings.filter(row => cults.includes(row.deity));
+// Archives of the Empire 3 : Handrich p.47, Solkan p.55 (les effets restent ceux de la p.221 du livre de base V5).
+const supplementPages = { Handrich: 47, Solkan: 55 };
+const supplementBlessings = blessings.filter(row => row.deity in supplementPages);
+const pageOf = row => supplementPages[row.deity] ?? 221;
 const fold = value => String(value).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const actor = (id, cult, extra = {}) => ({ id, name: id, kind: 'PJ', camp: 'pj', zone: 'active', initiative: 60, hp: 20, maxHp: 30,
   caracs: { CC: 40, CT: 40, F: 30, E: 30, I: 40, Ag: 40, Dex: 40, Int: 50, FM: 50, Soc: 60, M: 4 },
@@ -30,11 +35,11 @@ const input = (more = {}) => ({ actorId: 'priest', targetIds: ['ally'], roll: 45
   facts: { targets: { ally: { withinRange: true, ally: true } } }, expiry: { phase: 'endOfTurn', round: 6, actorId: 'priest', moment: 'afterEffects' }, ...more });
 
 test('60 associations culte/bénédiction : 6 par culte, 19 effets, identifiants et talents Béni propres à chaque culte', () => {
-  assert.equal(blessings.length, 60);
-  assert.equal(new Set(blessings.map(row => row.id)).size, 60);
-  assert.equal(new Set(blessings.map(row => row.id.split(':').pop())).size, 19);
+  assert.equal(baseBlessings.length, 60);
+  assert.equal(new Set(baseBlessings.map(row => row.id)).size, 60);
+  assert.equal(new Set(baseBlessings.map(row => row.id.split(':').pop())).size, 19);
   for (const cult of cults) {
-    const rows = blessings.filter(row => row.deity === cult);
+    const rows = baseBlessings.filter(row => row.deity === cult);
     assert.equal(rows.length, 6, cult);
     assert.deepEqual(rows.map(row => row.id.split(':')[2]), Array(6).fill(fold(cult)));
     for (const row of rows) {
@@ -79,7 +84,7 @@ test('effets : 11 effets calculables, 8 rappels MJ; Soin et Tenacity/Convalescen
 const STAT = { battle: 'CC', charisma: 'Soc', courage: 'FM', finesse: 'Dex', grace: 'Ag', hardiness: 'E', hunt: 'CT', might: 'F', wisdom: 'Int', wit: 'I' };
 for (const row of blessings.filter(item => item.status === 'implemented' && STAT[item.id.split(':')[3]])) {
   const key = row.id.split(':')[3];
-  test(`${row.name} (${row.deity}) : +10 ${STAT[key]} à l’application, retiré à l’échéance, p.221`, async () => {
+  test(`${row.name} (${row.deity}) : +10 ${STAT[key]} à l’application, retiré à l’échéance, p.${pageOf(row)}`, async () => {
     const s = await fixture(row.deity);
     const before = person(s, 'ally').caracs[STAT[key]];
     const preview = s.previewDivineExecution(row.id, input());
@@ -88,7 +93,7 @@ for (const row of blessings.filter(item => item.status === 'implemented' && STAT
     const result = await s.applyDivineExecution(row.id, { preview });
     assert.equal(result.ready, true, result.error);
     assert.equal(person(s, 'ally').caracs[STAT[key]], before + 10);
-    assert.equal(result.receipt.source.printedPage, 221);
+    assert.equal(result.receipt.source.printedPage, pageOf(row));
     await s.undo();
     assert.equal(person(s, 'ally').caracs[STAT[key]], before);
     await s.redo();
@@ -237,4 +242,57 @@ test('chargeur de modules : un module invalide est refusé avec le fichier, le m
       assert.match(result.stderr, pattern);
     });
   }
+});
+
+test('Handrich et Solkan : 6 bénédictions chacun, source Archives of the Empire 3 (p.47 et p.55), effets du livre de base', () => {
+  assert.equal(blessings.length, 72);
+  assert.equal(supplementBlessings.length, 12);
+  const expected = {
+    Handrich: ['charisma', 'fortune', 'hardiness', 'protection', 'wisdom', 'wit'],
+    Solkan: ['battle', 'conscience', 'courage', 'hardiness', 'might', 'tenacity']
+  };
+  for (const [cult, keys] of Object.entries(expected)) {
+    const rows = supplementBlessings.filter(row => row.deity === cult);
+    assert.deepEqual(rows.map(row => row.id), keys.map(key => `divine:blessing:${fold(cult)}:${key}`));
+    for (const row of rows) {
+      const base = baseBlessings.find(item => item.id.split(':')[3] === row.id.split(':')[3]);
+      assert.equal(row.source.document, 'Archives of the Empire 3.pdf');
+      assert.equal(row.source.fileSha256, '5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f');
+      assert.match(row.source.edition, /^V4/);
+      assert.equal(row.source.printedPage, supplementPages[cult]);
+      assert.equal(row.sourceReceipt.accessSource.printedPage, supplementPages[cult]);
+      assert.equal(row.sourceReceipt.fileSha256, row.source.fileSha256);
+      assert.equal(row.sourceReceipt.effectSource.printedPage, 221);
+      assert.equal(row.sourceReceipt.effectSource.document, 'Livre de base V5 EN v2.pdf');
+      assert.deepEqual(row.requiredTalent, { id: 'talent-bless', catalogueTalentId: row.requiredTalent.catalogueTalentId, name: `Béni (${cult})`, specialization: cult });
+      assert.deepEqual([row.status, row.params, row.extensions, row.effects, row.labels.effect], [base.status, base.params, base.extensions, base.effects, base.labels.effect], row.id);
+    }
+  }
+  assert.equal(new Set(blessings.map(row => row.id.split(':')[3])).size, 19, 'aucun effet nouveau');
+  assert.equal(blessings.some(row => row.deity === 'Mathlann'), false, 'Mathlann : aucune bénédiction propre inventée');
+});
+
+test('la feuille de personnage résout Béni et Invocation de Handrich, Solkan et Mathlann vers les talents d’accès', () => {
+  for (const cult of ['Handrich', 'Solkan', 'Mathlann']) for (const [talent, id] of [['Béni', 'talent-bless'], ['Invocation', 'talent-invoke']]) {
+    const snapshot = ficheSnapshot('p', { nom: 'P', race: 'humain', carac: {}, talentsAcq: [{ nom: `${talent} (${cult})` }] });
+    assert.equal(snapshot.talents[0].id, id, `${talent} (${cult})`);
+    assert.equal(snapshot.talents[0].specialization, cult);
+  }
+  const row = supplementBlessings.find(item => item.deity === 'Handrich');
+  assert.equal(ficheSnapshot('p', { nom: 'P', race: 'humain', carac: {}, talentsAcq: [{ nom: 'Béni (Handrich)' }] }).talents[0].id, row.requiredTalent.id);
+});
+
+test('Solkan : aucun Péché ni Corruption toléré, rappel MJ sur chaque bénédiction et clause manuelle du contrat', async () => {
+  const solkan = supplementBlessings.filter(row => row.deity === 'Solkan');
+  for (const row of solkan) {
+    assert.equal(row.reminders.length, 1, row.id);
+    assert.match(row.reminders[0], /aucune Bénédiction ni aucun Miracle .* Péché ou de Corruption/);
+    assert.deepEqual(row.clauses.at(-1), { id: 'solkan-purity', mode: 'manual', text: row.reminders[0], sourceRef: 'archives-of-the-empire-3-p55' });
+    const s = await fixture('Solkan');
+    const preview = s.previewDivineExecution(row.id, input(row.params.duration.kind === 'instant' ? { expiry: undefined } : {}));
+    assert.equal(preview.ready, true, `${row.id} : ${preview.error}`);
+    assert.ok(preview.preview.reminders.includes(row.reminders[0]), row.id);
+  }
+  for (const row of supplementBlessings.filter(item => item.deity === 'Handrich')) assert.equal(row.reminders, undefined, 'la règle de profit de Handrich vise ses Miracles, pas ses Bénédictions');
+  assert.equal(blessings.filter(row => row.deity === 'Morr').some(row => row.reminders), false);
 });

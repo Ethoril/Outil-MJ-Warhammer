@@ -1,5 +1,8 @@
 /** Grammaire partagée des contrats divins : le générateur, le moteur et les tests lisent les mêmes listes. */
 
+// Cultes de supplément (hors les dix cultes du livre de base) acceptés pour les miracles de module.
+export const supplementCults = Object.freeze(['Handrich', 'Solkan', 'Mathlann']);
+
 // `touch` : portée Contact (valeur 0, fait withinTouch exigé, jamais étendue).
 export const paramKinds = new Set(['fixed', 'characteristic', 'characteristic-bonus', 'self', 'area', 'count', 'special', 'instant', 'touch']);
 export const paramUnits = new Set(['rounds', 'minutes', 'hours', 'days', 'yards', 'miles', 'targets', 'allies']);

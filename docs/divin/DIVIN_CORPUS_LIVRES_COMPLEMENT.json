@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "planDate": "2026-10-18",
+  "policy": "Complément au manifeste DIVIN_CORPUS_LIVRES.json. Les PDF listés ici sont ajoutés explicitement par le MJ après la fermeture du corpus de 17 livres; ils ne changent ni le décompte ni l'audit page à page de ce manifeste (les tests « 17 livres, 2694 pages » restent valides). Seul le générateur tools/build-v5-divine-contracts.mjs les lit, avec le manifeste principal, pour résoudre document et empreinte SHA-256 des modules de miracles de supplément (export const source = { bookId, document, fileSha256, edition }). Tout ajout rouvre l'inventaire et les dépendances concernées.",
+  "root": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs",
+  "books": [
+    {
+      "id": "L18",
+      "file": "WFRP_Power_Behind_the_Throne_Companion.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/WFRP_Power_Behind_the_Throne_Companion.pdf",
+      "bytes": 47877884,
+      "sha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
+      "physicalPages": 128,
+      "hashComputedAt": "2026-10-18",
+      "sourceRole": "Supplément V4 (crédits imprimés : Warhammer Fantasy Roleplay 4th Edition, copyright 2021); sources de miracles de supplément à adapter au socle V5.",
+      "editionProofStatus": "V4 établie par les crédits imprimés du livre."
+    }
+  ]
+}
