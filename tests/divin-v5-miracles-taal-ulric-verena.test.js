@@ -4,21 +4,23 @@ import { readFileSync } from 'node:fs';
 import * as taal from '../docs/divin/sources/miracles/taal.mjs';
 import * as ulric from '../docs/divin/sources/miracles/ulric.mjs';
 import * as verena from '../docs/divin/sources/miracles/verena.mjs';
+import { paramKinds, paramUnits, effectTypes } from '../js/core/v5-divine-grammar.js';
 
 const extraction = JSON.parse(readFileSync(new URL('../docs/divin/sources/extraction-2026-10-18/miracles.json', import.meta.url), 'utf8'));
 const modules = [['Taal', taal], ['Ulric', ulric], ['Verena', verena]];
-const engineEffectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
-const statuses = new Set(['implemented', 'manual', 'blocked']);
+const engineEffectTypes = effectTypes;
+const statuses = new Set(['implemented', 'assisted', 'manual', 'blocked']);
 const modes = new Set(['engine', 'assisted', 'manual']);
-const units = new Set(['yards', 'rounds', 'minutes', 'hours']);
+const units = paramUnits;
 
 const validParam = p => {
-  if (!p || typeof p !== 'object') return false;
+  if (!p || typeof p !== 'object' || !paramKinds.has(p.kind)) return false;
   switch (p.kind) {
     case 'fixed': return Number.isFinite(p.value) && units.has(p.unit);
     case 'characteristic':
     case 'characteristic-bonus': return typeof p.characteristic === 'string' && units.has(p.unit);
-    case 'area': return typeof p.characteristicBonus === 'string' && units.has(p.unit);
+    case 'area': return typeof (p.characteristicBonus ?? p.characteristic) === 'string' && units.has(p.unit);
+    case 'touch': return Object.keys(p).length === 1;
     case 'count': return Number.isFinite(p.value);
     case 'self': case 'special': case 'instant': return true;
     default: return false;

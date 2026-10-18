@@ -275,9 +275,16 @@ for(const [name,mutate] of [
 ])test('Courroux calendaire indépendant —refus atomique '+name,async()=>{
   const {store}=await fixture();await impose(store);await replaceCaps(store,mutate);await refuseTimeUnchanged(store);
 });
-test('Courroux calendaire indépendant —deadline Bataille avec copie source reste non supportée',async()=>{
+test('Courroux calendaire indépendant —deadline Bataille valide est retirée à son échéance par l’horloge',async()=>{
   const {store}=await fixture();const p=store.previewDivineExecution(BATTLE,prayer());await store.applyDivineExecution(BATTLE,{preview:p});
   const ally=actorOf(store,'ally'),extensions=clone(ally.extensions);extensions.v5.divineEffects[0].deadline={kind:'campaign-time',atSeconds:60};
+  await store.updateParticipant('ally',{extensions});
+  assert.equal((await step(store,59)).status,'applied');assert.equal(actorOf(store,'ally').extensions.v5.divineEffects.length,1);assert.equal(actorOf(store,'ally').caracs.CC,50);
+  assert.equal((await step(store,1)).status,'applied');assert.equal(actorOf(store,'ally').extensions.v5.divineEffects.length,0);assert.equal(actorOf(store,'ally').caracs.CC,40);
+});
+test('Courroux calendaire indépendant —deadline divine illisible bloque l’avance sans mutation',async()=>{
+  const {store}=await fixture();const p=store.previewDivineExecution(BATTLE,prayer());await store.applyDivineExecution(BATTLE,{preview:p});
+  const ally=actorOf(store,'ally'),extensions=clone(ally.extensions);extensions.v5.divineEffects[0].deadline={kind:'campaign-time',atSeconds:'60'};
   await store.updateParticipant('ally',{extensions});await refuseTimeUnchanged(store,60);
 });
 test('Courroux calendaire indépendant —migration sans clock refuse l’origine du cap existant',async()=>{
@@ -443,17 +450,15 @@ test('Courroux calendaire adversarial —copier une sanction sur un autre sujet 
   assert.ok(preview.needsInput?.length);
   await refuseTimeUnchanged(store);
 });
-for(const mode of ['legacy','v5'])test('Courroux calendaire adversarial —deadline arbitraire protégée avant phase '+mode,async()=>{
+for(const mode of ['legacy','v5'])test('Courroux calendaire adversarial —deadline calendaire protégée des phases de Tour '+mode,async()=>{
   const {store}=await fixture();const preview=store.previewDivineExecution(BATTLE,prayer());await store.applyDivineExecution(BATTLE,{preview});
   const ally=actorOf(store,'ally'),extensions=clone(ally.extensions);
   extensions.v5.divineEffects[0].deadline={kind:'campaign-time',atSeconds:60};
   extensions.v5.divineEffects[0].expiry={phase:'endOfTurn',round:1,actorId:'priest',moment:'afterEffects'};
   await store.updateParticipant('ally',{extensions});
-  const before=stateOf(store);let refused=false;
-  try{const result=await (mode==='legacy'?store.nextTurn():createCombatEngine(store).nextTurn());refused=result?.ok===false||result?.ready===false;}
-  catch(error){refused=error.userFacing===true||/calendaire|échéance|sanction|prise en charge/i.test(error.message);}
-  assert.equal(refused,true,'ne pas retirer en phase la donnée qui devait faire refuser la transition');
-  assert.deepEqual(stateOf(store),before,'le Tour refusé ne laisse ni clock ni couche partielle');
+  const result=await (mode==='legacy'?store.nextTurn():createCombatEngine(store).nextTurn());
+  assert.notEqual(result?.ok,false);assert.notEqual(result?.ready,false);
+  assert.equal(actorOf(store,'ally').extensions.v5.divineEffects.length,1,'une phase de Tour ne retire pas une couche qui porte une échéance calendaire');
 });
 test('Courroux calendaire adversarial —expireur divin refuse un miroir durable vide sans aide du processeur magique',async()=>{
   const priest=person('priest',{persistentCharacterId:'hero'}),persistent={...clone(priest),id:'hero'};delete persistent.persistentCharacterId;

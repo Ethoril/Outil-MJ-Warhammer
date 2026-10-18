@@ -74,16 +74,21 @@ export const miracles = [
   name: 'Mer déchaînée', canonicalName: 'Sea Legs', printedPage: 223,
   summary: 'La cible est trempée d’eau salée et tangue comme sur un pont de tempête : elle gagne un Aveuglé, un Assourdi et un Fatigué, et doit réussir un Test d’Athlétisme Accessible (+2 DR) pour utiliser son Mouvement ; en cas d’échec elle gagne aussi À terre.',
   params: { range: { kind: 'characteristic', characteristic: 'Soc', unit: 'yards' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
-  status: 'manual', effect: null,
+  status: 'assisted',
+  effects: [
+   { type: 'condition', key: 'Blinded', level: 1 },
+   { type: 'condition', key: 'Deafened', level: 1 },
+   { type: 'condition', key: 'Fatigued', level: 1 }
+  ],
   targetRules: [],
   needsInput: [
    { id: 'target', text: 'Quelle créature est la cible, et est-elle à portée ?' },
    { id: 'athletics-roll', text: 'Résultat du Test d’Athlétisme Accessible (+2 DR) de la cible lorsqu’elle veut se déplacer.' }
   ],
   clauses: [
-   { id: 'blinded', mode: 'assisted', text: 'La cible gagne 1 État Aveuglé.' },
-   { id: 'deafened', mode: 'assisted', text: 'La cible gagne 1 État Assourdi.' },
-   { id: 'fatigued', mode: 'assisted', text: 'La cible gagne 1 État Fatigué.' },
+   { id: 'blinded', mode: 'engine', text: 'La cible gagne 1 État Aveuglé.' },
+   { id: 'deafened', mode: 'engine', text: 'La cible gagne 1 État Assourdi.' },
+   { id: 'fatigued', mode: 'engine', text: 'La cible gagne 1 État Fatigué.' },
    { id: 'athletics', mode: 'manual', text: 'Pour utiliser son Mouvement, la cible tente un Test d’Athlétisme Accessible (+2 DR).' },
    { id: 'prone', mode: 'assisted', text: 'En cas d’échec au Test, la cible gagne aussi l’État À terre.' }
   ]

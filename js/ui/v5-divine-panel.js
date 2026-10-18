@@ -4,21 +4,22 @@ import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
-const labels={implemented:'Effet calculable',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
+const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
 function unitText(value,unit){
  if(unit==='yards')return `${value} mètres de jeu (source V5 : ${value} yards)`;
- return `${value}${unit?' '+({rounds:'Rounds',allies:'alliés',meters:'mètres'}[unit]||unit):''}`;
+ return `${value}${unit?' '+({rounds:'Rounds',minutes:'minutes',hours:'heures',days:'jours',miles:'miles',allies:'alliés',targets:'cibles',meters:'mètres'}[unit]||unit):''}`;
 }
 function paramText(param,actor){
- if(!param)return 'À préciser';if(param.kind==='self')return 'Vous';if(param.kind==='instant'||param.unit==='instant')return 'Instantané';if(param.kind==='special')return param.sourceText==='Touch'?'Contact':'Spécial';
+ if(!param)return 'À préciser';if(param.kind==='self')return 'Vous';if(param.kind==='instant'||param.unit==='instant')return 'Instantané';if(param.kind==='touch')return 'Contact';if(param.kind==='special')return param.sourceText==='Touch'?'Contact':'Spécial';
  const stat=param.characteristic||param.characteristicBonus;let value=param.value;
- if(param.kind==='characteristic')value=actor.caracs?.[stat];
- if(['area','characteristic-bonus'].includes(param.kind))value=Number.isFinite(Number(actor.caracs?.[stat]))?Math.floor(Number(actor.caracs[stat])/10):null;
+ if(param.kind==='characteristic'||param.kind==='area'&&param.characteristic)value=actor.caracs?.[stat];
+ if(param.kind==='characteristic-bonus'||param.kind==='area'&&param.characteristicBonus)value=Number.isFinite(Number(actor.caracs?.[stat]))?Math.floor(Number(actor.caracs[stat])/10):null;
  if(value===undefined||value===null)return param.sourceText||'À préciser';
  return (param.kind==='area'?'Zone de ':'')+unitText(value,param.unit);
 }
 function resolvedParamText(value){
  if(value.value===null||value.value===undefined)return {self:'Vous',special:'Spécial',instant:'Instantané'}[value.unit]||'Spécial';
+ if(value.unit==='touch')return 'Contact';
  return unitText(value.value,value.unit);
 }
 export function createDivinePanel({Store,refresh}){
@@ -151,7 +152,7 @@ export function createDivinePanel({Store,refresh}){
     check.addEventListener('change',()=>{state.targetIds=check.checked?[...state.targetIds,participant.id]:state.targetIds.filter(id=>id!==participant.id);state.preview=null;refresh();});wrap.append(check,document.createTextNode(participant.name));targets.append(wrap);
     if(check.checked){
      const facts=state.facts[participant.id]||{},group=node('div','workspace-divine-target-facts');
-     const rules=[['withinRange','Portée / zone confirmée'],...(contract.type==='miracle'&&contract.id.endsWith('soleil-flamboyant')?[['nonMyrmidian','Ne vénère pas Myrmidia'],['lookingAtPriest','Regarde le prêtre']]:[['ally','Allié admissible']])];
+     const rules=[contract.params?.range?.kind==='touch'?['withinTouch','Cible à portée de contact']:['withinRange','Portée / zone confirmée'],...(contract.type==='miracle'&&contract.id.endsWith('soleil-flamboyant')?[['nonMyrmidian','Ne vénère pas Myrmidia'],['lookingAtPriest','Regarde le prêtre']]:[['ally','Allié admissible']])];
      for(const [key,text] of rules)select(group,participant.name+' · '+text,facts[key]===undefined?'':String(facts[key]),[['','À préciser'],['true','Oui'],['false','Non']],value=>{state.facts[participant.id]={...facts,[key]:value===''?undefined:value==='true'};state.preview=null;refresh();},participant.id+'-'+key);
      targets.append(group);
     }

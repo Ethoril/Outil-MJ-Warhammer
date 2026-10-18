@@ -169,6 +169,7 @@ function unresolvedCombination(state){
   const spells=target.extensions?.v5?.spellEffects||[],divine=target.extensions?.v5?.divineEffects||[];
   for(const layer of divine)for(const spell of spells){
    if(Object.keys(layer.statModifiers||{}).some(key=>Number(layer.statModifiers[key])&&Number(spell.statModifiers?.[key])))return 'Le cumul d’un bonus divin et magique sur la même caractéristique reste à arbitrer (DIV-05).';
+   if(Object.keys(layer.testModifiers||{}).some(key=>Number(layer.testModifiers[key])&&Number(spell.testModifiers?.[key])))return 'Le cumul d’un modificateur de Test divin et magique sur la même cible de Test reste à arbitrer (DIV-05).';
    if(Object.keys(layer.apModifiers||{}).length && (Object.keys(spell.apModifiers||{}).length||Number(spell.apBonus)||Number(spell.armorBonus)))return 'Le cumul de PA divins et magiques reste à arbitrer (DIV-05).';
   }
  }
@@ -481,6 +482,33 @@ export function expireDivineAtPhases(state,phases=[]){
  return next;
 }
 
+function participantAtPath(state,path){
+ const flat=path.match(/^(combat\.participants|reserve|persistentCharacters|activeScene\.participants)\[(\d+)\]$/);
+ if(flat){
+  const list=flat[1]==='combat.participants'?state.combat?.participants:flat[1]==='reserve'?state.reserve:flat[1]==='persistentCharacters'?state.persistentCharacters:state.activeScene?.participants;
+  return list?.[Number(flat[2])]||null;
+ }
+ const scene=path.match(/^suspendedScenes\[(\d+)\]\.participants\[(\d+)\]$/);
+ return scene?state.suspendedScenes?.[Number(scene[1])]?.participants?.[Number(scene[2])]||null:null;
+}
+const calendarLayer=effect=>effect?.deadline?.kind==='campaign-time'&&effect.type!=='prayer-sl-cap';
+/** Retire toute couche divine calendaire échue, ses États rattachés, puis recalcule les valeurs effectives. */
+function expireCalendarLayers(state,now){
+ const next=clone(state),removed=[];
+ for(const item of subjectRows(next)){
+  const participant=participantAtPath(next,item.path),layers=participant?.extensions?.v5?.divineEffects;
+  if(!Array.isArray(layers)||!layers.some(effect=>calendarLayer(effect)&&effect.deadline.atSeconds<=now))continue;
+  const before=clone(participant),ended=layers.filter(effect=>calendarLayer(effect)&&effect.deadline.atSeconds<=now),kept=layers.filter(effect=>!ended.includes(effect));
+  const retained=new Set(kept.flatMap(layer=>layer.conditionStateIds||[]));
+  const gone=new Set(ended.flatMap(layer=>layer.conditionStateIds||[]).filter(id=>!retained.has(id)));
+  if(gone.size)participant.states=(participant.states||[]).filter(row=>!gone.has(row.id));
+  participant.extensions.v5.divineEffects=kept;
+  removed.push(...ended.map(effect=>({path:item.path,participantId:participant.id??null,effectId:effect.id})));
+  Object.assign(participant,refreshEffectLayers(participant,before));
+ }
+ return {state:next,removed};
+}
+
 /** Expire only this source-backed Prayer cap over one verified clock transition. */
 export function expireDivineAtClock(candidate,{fromClock,toClock,receipt}={}){
  const refuse=message=>({ok:false,status:'requires-input',state:null,removed:[],needsInput:[prayerNeeds('extensions.v5.divineEffects',message)]});
@@ -508,7 +536,7 @@ export function expireDivineAtClock(candidate,{fromClock,toClock,receipt}={}){
  const lessons=inspectPrayerLessons(candidate);
  if(!lessons.ok)return {ok:false,status:'requires-input',state:null,removed:[],needsInput:lessons.needsInput};
  for(const item of subjectRows(candidate))for(const [index,effect] of (item.row.extensions?.v5?.divineEffects||[]).entries())
-  if(effect?.deadline?.kind==='campaign-time'&&effect.type!=='prayer-sl-cap')return refuse(`Échéance divine non prise en charge : ${item.path}.extensions.v5.divineEffects[${index}].`);
+  if(calendarLayer(effect)&&!(Number.isSafeInteger(effect.deadline.atSeconds)&&effect.deadline.atSeconds>=0))return refuse(`Échéance divine invalide : ${item.path}.extensions.v5.divineEffects[${index}].`);
  for(const {caps} of checked.groups.values())for(const cap of caps){
   if(cap.deadline.atSeconds<=fromClock.campaignSeconds)return refuse('Une sanction est déjà échue au curseur de départ; résolution explicite requise.');
  }
@@ -537,6 +565,8 @@ export function expireDivineAtClock(candidate,{fromClock,toClock,receipt}={}){
   }
   }
  }
+ const calendar=expireCalendarLayers(next,toClock.campaignSeconds);
+ next=calendar.state;removed.push(...calendar.removed);
  return {ok:true,status:removed.length?'applied':'unchanged',state:next,removed,needsInput:[]};
 }
 

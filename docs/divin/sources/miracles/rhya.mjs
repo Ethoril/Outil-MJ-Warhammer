@@ -1,7 +1,7 @@
 // Miracles de Rhya, Livre de base V5 EN v2, p.225-226 imprimées. Valeurs vérifiées sur le PDF.
 export const cult = 'Rhya';
 
-const touch = { kind: 'special', sourceText: 'Touch' };
+const touch = { kind: 'touch' };
 const soc = (kind, unit) => ({ kind, characteristic: 'Soc', unit });
 const outdoors = { id: 'outdoors-only', mode: 'manual', text: 'Invocable uniquement en extérieur, hors des agglomérations.' };
 const outdoorsNeed = { id: 'outdoors', text: 'Le lieu est-il en extérieur, hors agglomération ?' };

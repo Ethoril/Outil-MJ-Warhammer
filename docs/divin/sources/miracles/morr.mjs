@@ -37,7 +37,7 @@ export const miracles = [
  {
   name: 'Condamné', canonicalName: 'Dooming', printedPage: 223,
   summary: 'Le prêtre plonge son regard dans celui de la cible et reçoit une vision de son Destin (Doom), presque toujours liée à sa mort. Une seule fois par personnage ; la cible peut ensuite acheter le Talent Condamné (Doomed) avec de l’XP comme s’il figurait dans sa carrière.',
-  params: { range: { kind: 'special', label: 'Touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'instant' } },
+  params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'instant' } },
   status: 'manual', effect: null,
   targetRules: ['une seule fois par personnage'],
   needsInput: [
@@ -50,7 +50,7 @@ export const miracles = [
    { id: 'once', mode: 'manual', text: 'Ne peut être exercé qu’une fois sur un personnage donné.' },
    { id: 'doomed-talent', mode: 'manual', text: 'Après le miracle, le Talent Condamné s’achète avec de l’XP comme s’il était dans la carrière de la cible.' }
   ],
-  sourceDelta: 'Aucune ambiguïté de chiffres. La portée Contact (Touch) n’a pas de forme dans la grammaire params : {kind:\'special\',label:\'Touch\'} utilisé.'
+  sourceDelta: 'Aucune ambiguïté de chiffres. La portée Contact (Touch) est encodée {kind:\'touch\'}.'
  },
  {
   name: 'Rites funéraires', canonicalName: 'Last Rites', printedPage: 223,
@@ -70,7 +70,7 @@ export const miracles = [
  {
   name: 'Seuil du Portail', canonicalName: "Portal's Threshold", printedPage: 223,
   summary: 'Le prêtre trace au sol une ligne de 8 yards maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.',
-  params: { range: { kind: 'special', label: 'Touch' }, targets: { kind: 'special' }, duration: { kind: 'special', label: 'Until sunrise' } },
+  params: { range: { kind: 'touch' }, targets: { kind: 'special' }, duration: { kind: 'special', label: 'Until sunrise' } },
   status: 'manual', effect: null,
   targetRules: ['Trait Mort-vivant', 'Mort-vivant et Construct : franchissement impossible'],
   needsInput: [
@@ -88,7 +88,7 @@ export const miracles = [
  {
   name: 'Main de Morr', canonicalName: "Stay Morr's Hand", printedPage: 223,
   summary: 'Le prêtre touche les yeux d’une personne proche de la mort et demande à Morr de guider l’âme sans la prendre. La cible doit avoir 0 Blessure et être consentante. Pendant la durée, elle gagne Inconscient et ne se détériore plus (maladie, Blessures Critiques, poisons suspendus). Le miracle prend fin si des soins appropriés sont prodigués ou si le prêtre accomplit les derniers rites (environ une minute) ; dans ce cas, à la mort, l’âme passe le portail de Morr et le cadavre ne pourra plus être ciblé par la Nécromancie.',
-  params: { range: { kind: 'special', label: 'Touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'hours' } },
+  params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'hours' } },
   status: 'manual', effect: null,
   targetRules: ['cible à 0 Blessure', 'consentante'],
   needsInput: [

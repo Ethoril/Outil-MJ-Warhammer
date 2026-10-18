@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:c8f243694c3302388246ca7ec6dab08c01e0f2aa7fb93c4f76b2cfe9d7f7e46b",
+  "sourceFingerprint": "sha256:d0f84ec1d498462fcfca577a402deeb1f005b7ccdae28d3cf8cd9ed09c23c06c",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -7873,7 +7873,7 @@
       "type": "miracle",
       "name": "Mer déchaînée",
       "deity": "Manann",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -7938,7 +7938,41 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "condition",
+          "key": "Blinded",
+          "level": 1,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "condition",
+          "key": "Deafened",
+          "level": 1,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "condition",
+          "key": "Fatigued",
+          "level": 1,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Sea Legs",
         "effect": "La cible est trempée d’eau salée et tangue comme sur un pont de tempête : elle gagne un Aveuglé, un Assourdi et un Fatigué, et doit réussir un Test d’Athlétisme Accessible (+2 DR) pour utiliser son Mouvement ; en cas d’échec elle gagne aussi À terre.",
@@ -7947,19 +7981,19 @@
       "clauses": [
         {
           "id": "blinded",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "La cible gagne 1 État Aveuglé.",
           "sourceRef": "v5-sea-legs"
         },
         {
           "id": "deafened",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "La cible gagne 1 État Assourdi.",
           "sourceRef": "v5-sea-legs"
         },
         {
           "id": "fatigued",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "La cible gagne 1 État Fatigué.",
           "sourceRef": "v5-sea-legs"
         },
@@ -8311,8 +8345,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "label": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",
@@ -8520,8 +8553,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "label": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "special"
@@ -8634,8 +8666,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "label": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",
@@ -9066,8 +9097,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "label": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",
@@ -9520,8 +9550,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "sourceText": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "special"
@@ -9839,8 +9868,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "sourceText": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",
@@ -9953,8 +9981,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "sourceText": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "special"
@@ -10159,8 +10186,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "sourceText": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",
@@ -10275,8 +10301,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "sourceText": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",
@@ -10484,8 +10509,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "sourceText": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",
@@ -10598,8 +10622,7 @@
       },
       "params": {
         "range": {
-          "kind": "special",
-          "sourceText": "Touch"
+          "kind": "touch"
         },
         "targets": {
           "kind": "count",

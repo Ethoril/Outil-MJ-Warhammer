@@ -55,7 +55,7 @@ export const miracles = [
  {
   name: 'Grâce de Ranald', canonicalName: "Ranald's Grace", printedPage: 225,
   summary: 'La cible gagne +10 en Agilité, +10 en Discrétion (Stealth) et le Talent Chute féline (Catfall) +1 pendant la durée.',
-  params: { range: { kind: 'special', label: 'Touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
+  params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
   status: 'manual', effect: null,
   targetRules: [],
   needsInput: [

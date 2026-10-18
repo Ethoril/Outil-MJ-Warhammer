@@ -1,7 +1,7 @@
 // Miracles de Shallya, Livre de base V5 EN v2, p.226 imprimée. Valeurs vérifiées sur le PDF.
 export const cult = 'Shallya';
 
-const touch = { kind: 'special', sourceText: 'Touch' };
+const touch = { kind: 'touch' };
 const soc = (kind, unit) => ({ kind, characteristic: 'Soc', unit });
 const one = { kind: 'count', value: 1 };
 

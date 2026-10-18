@@ -4,23 +4,25 @@ import { readFileSync } from 'node:fs';
 import * as rhya from '../docs/divin/sources/miracles/rhya.mjs';
 import * as shallya from '../docs/divin/sources/miracles/shallya.mjs';
 import * as sigmar from '../docs/divin/sources/miracles/sigmar.mjs';
+import { paramKinds, paramUnits, effectTypes } from '../js/core/v5-divine-grammar.js';
 
 const extraction = JSON.parse(readFileSync(new URL('../docs/divin/sources/extraction-2026-10-18/miracles.json', import.meta.url), 'utf8'));
 const norm = value => String(value).replace(/[’‘]/g, "'").toLowerCase();
 const modules = [rhya, shallya, sigmar];
-const ENGINE_EFFECT_TYPES = ['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal'];
-const STATUSES = ['implemented', 'manual', 'blocked'];
+const ENGINE_EFFECT_TYPES = [...effectTypes];
+const STATUSES = ['implemented', 'assisted', 'manual', 'blocked'];
 const MODES = ['engine', 'assisted', 'manual'];
-const UNITS = ['yards', 'rounds', 'minutes', 'hours'];
+const UNITS = [...paramUnits];
 const CHARACTERISTICS = ['Soc'];
 
 function validParam(param) {
-  if (!param || typeof param.kind !== 'string') return false;
+  if (!param || !paramKinds.has(param.kind)) return false;
   switch (param.kind) {
     case 'fixed': return Number.isFinite(param.value) && UNITS.includes(param.unit);
     case 'characteristic':
     case 'characteristic-bonus': return CHARACTERISTICS.includes(param.characteristic) && typeof param.unit === 'string';
-    case 'area': return CHARACTERISTICS.includes(param.characteristicBonus) && UNITS.includes(param.unit);
+    case 'area': return CHARACTERISTICS.includes(param.characteristicBonus ?? param.characteristic) && UNITS.includes(param.unit);
+    case 'touch': return Object.keys(param).length === 1;
     case 'count': return Number.isFinite(param.value);
     case 'self': case 'special': case 'instant': return true;
     default: return false;
@@ -55,6 +57,7 @@ for (const mod of modules) {
       if (miracle.effect !== null) assert.ok(ENGINE_EFFECT_TYPES.includes(miracle.effect.type), miracle.name);
       for (const effect of miracle.effects || []) assert.ok(ENGINE_EFFECT_TYPES.includes(effect.type), miracle.name);
       if (miracle.status === 'implemented') assert.ok(miracle.effect || miracle.effects?.length, `${miracle.name} implémenté sans effet`);
+      if (miracle.status === 'assisted') assert.ok(miracle.effect || miracle.effects?.length, `${miracle.name} assisté sans effet`);
       if (miracle.status === 'manual') {
         assert.ok(miracle.clauses.length > 0 && miracle.needsInput.length > 0, `${miracle.name} manuel sans clauses/faits`);
         assert.ok(miracle.clauses.some(clause => clause.mode !== 'engine'), `${miracle.name} manuel sans clause non automatisée`);

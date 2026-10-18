@@ -14,7 +14,7 @@ function validGrant(row){
  return true;
 }
 const contractOkay=contract=>isObject(contract)&&text(contract.id)&&['blessing','miracle'].includes(contract.type)
-  && contract.status!=='blocked'&&['implemented','manual'].includes(contract.status)
+  && contract.status!=='blocked'&&['implemented','assisted','manual'].includes(contract.status)
   && text(contract.requiredTalent?.id)&&text(contract.requiredTalent?.specialization)
   && isObject(contract.source)&&isObject(contract.sourceReceipt);
 const requiredTalent=(actor,contract)=>{

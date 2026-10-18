@@ -6,6 +6,9 @@ import {resolveDivineAccess,emptyDivineAccess} from './v5-divine-access.js';
 import {applyPrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {v5ResourceIdentity} from './v5-resources.js';
 import {resolveV5ConditionTestContext} from './v5-test-context.js';
+import {campaignDurationSeconds} from './v5-game-time.js';
+import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
+import {effectHandler,effectNeeds,isLayerlessEffect} from './v5-divine-effect-handlers.js';
 
 export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-17.1';
 const clone = value => structuredClone(value);
@@ -49,7 +52,7 @@ function sourceError(contract, input = {}) {
     && contract.source.sourceTextHash !== contract.sourceReceipt.sourceTextHash) return 'Reçu de source incohérent.';
   if (contract.status === 'blocked') return 'Contrat divin bloqué par une source ou un arbitrage manquant.';
   if (!['blessing', 'miracle'].includes(contract.type)) return 'Type de prière inconnu.';
-  if (!['implemented', 'manual'].includes(contract.status)) return 'Statut du contrat divin inconnu.';
+  if (!['implemented', 'assisted', 'manual'].includes(contract.status)) return 'Statut du contrat divin inconnu.';
   return null;
 }
 
@@ -60,6 +63,12 @@ function numericParam(value, actor) {
   if (['fixed', 'count', undefined].includes(value.kind) && fixed !== null && fixed >= 0) return { value: fixed, unit: value.unit || null };
   if (value.kind === 'instant' || value.unit === 'instant' || /instant/i.test(String(value.value))) return { value: null, unit: 'instant' };
   if (value.kind === 'special' || value.kind === 'self') return { value: null, unit: value.kind };
+  if (value.kind === 'touch') return { value: 0, unit: 'touch' };
+  // Zone en caractéristique entière (« Fellowship yards »), à la différence de characteristicBonus.
+  if (value.kind === 'area' && typeof value.characteristic === 'string') {
+    const score = finiteInteger(actor?.caracs?.[value.characteristic] ?? actor?.caracs?.[value.characteristic.toLowerCase()]);
+    return score !== null && score >= 0 && score <= 100 ? { value: score, unit: value.unit || null, characteristic: value.characteristic } : null;
+  }
   if (value.kind === 'characteristic' && typeof value.characteristic === 'string') {
     const amount = actor?.caracs?.[value.characteristic] ?? actor?.caracs?.[value.characteristic.toLowerCase()];
     const score = finiteInteger(amount);
@@ -80,6 +89,13 @@ function numericParam(value, actor) {
   return null;
 }
 
+function strengthValue(source, actor, prayer) {
+  if (source.kind === 'success-levels') return Math.max(0, prayer.sl);
+  const score = finiteInteger(actor?.caracs?.[source.characteristic] ?? actor?.caracs?.[String(source.characteristic).toLowerCase()]);
+  if (score === null || score < 0 || score > 100) return null;
+  return source.kind === 'characteristic-bonus' ? Math.floor(score / 10) : score;
+}
+
 function resolvePrayerChoices(contract, prayer, actor, input) {
   const choices = Object.hasOwn(input, 'choices') ? input.choices : {};
   if (!objectValue(choices)) return { error: 'Les choix d’extension doivent être un objet de nombres entiers.',
@@ -95,6 +111,8 @@ function resolvePrayerChoices(contract, prayer, actor, input) {
   const spent = Object.values(counts).reduce((sum, value) => sum + value, 0);
   if (spent > budget) return { error: `Les extensions choisies coûtent ${spent} paliers; le Test n’en autorise que ${budget}.`, needs: [need('choices', 'Dépenses dans les paliers de DR disponibles')] };
   if (extension?.repeatable !== true && spent > 1) return { error: 'Cette extension n’est pas déclarée répétable.', needs: [need('choices', 'Une seule extension autorisée par tranche')] };
+  if (counts.range > 0 && contract.params?.range?.kind === 'touch')
+    return { error: 'La Portée Contact ne peut pas être étendue.', needs: [need('choices.range', 'Aucune extension d’une Portée Contact')] };
   const rangeIsYou = contract.params?.range?.kind === 'self';
   const targetIsYou = contract.params?.targets?.kind === 'self';
   if (extension?.restrictions?.youAndYouCannotIncreaseRangeOrTargets
@@ -149,9 +167,18 @@ function resolvePrayerChoices(contract, prayer, actor, input) {
       || (declaredDuration && effect.duration?.unit === declaredDuration.unit && effect.duration?.value === declaredDuration.value);
     if (durationFollowsParameter && resolvedParams.duration?.value !== null && resolvedParams.duration)
       effect.duration = { value: resolvedParams.duration.value, unit: resolvedParams.duration.unit };
+    // Force d'État : la source remplace le niveau de base, la progression par DR s'y ajoute ensuite.
+    if (effect.strengthFrom) {
+      const strength = strengthValue(effect.strengthFrom, actor, prayer);
+      if (strength === null || strength < 1) return { error: 'La force de l’État ne peut pas être résolue ou est nulle.', needs: [need('contract.effects.strengthFrom', 'Caractéristique ou DR donnant une force d’État positive')] };
+      effect.level = strength;
+    }
     const progression = effect.perSuccessLevels;
-    if (progression && Number.isSafeInteger(progression.every) && progression.every > 0 && Number.isSafeInteger(progression.add))
-      effect.level = (effect.level ?? 1) + Math.floor(Math.max(0, prayer.sl) / progression.every) * progression.add;
+    if (progression && Number.isSafeInteger(progression.every) && progression.every > 0 && Number.isSafeInteger(progression.add)) {
+      const field = progression.field || 'level';
+      const base = Number.isFinite(effect[field]) ? effect[field] : field === 'level' ? 1 : 0;
+      effect[field] = base + Math.floor(Math.max(0, prayer.sl) / progression.every) * progression.add;
+    }
   }
   return { resolvedParams, resolvedEffects, choices: counts, spent, budget };
 }
@@ -168,7 +195,7 @@ function validateTargetRules(contract, targets, input, resolvedParams = {}, acto
     return { error: 'La prière se cible elle-même; choisissez uniquement le prêtre auteur.', needs: [need('targetIds', 'Cible propre du contrat')] };
     if (!targets.length) {
       if (resolvedParams.targets?.unit === 'self') return null;
-      if (rules.length || resolvedParams.targets?.unit === 'yards' || resolvedParams.targets?.unit === 'allies'
+      if (rules.length || resolvedParams.range?.unit === 'touch' || resolvedParams.targets?.unit === 'yards' || resolvedParams.targets?.unit === 'allies'
         || Number.isFinite(resolvedParams.range?.value) && resolvedParams.range.value > 0
         || Number.isFinite(targetLimit) && targetLimit > 0)
         return { error: 'Le contrat requiert une ou plusieurs cibles explicites.', needs: [need('targetIds', 'Cibles du miracle')] };
@@ -179,15 +206,14 @@ function validateTargetRules(contract, targets, input, resolvedParams = {}, acto
   if (!rules.length && !Number.isFinite(resolvedParams.range?.value)) return null;
   if (!targets.length) return { error: 'Le contrat requiert une ou plusieurs cibles explicites.', needs: [need('targetIds', 'Cibles du miracle')] };
   const facts = input.facts?.targets || {};
-  const aliases = {
-    'non-Myrmidian': 'nonMyrmidian', 'looking-at-priest': 'lookingAtPriest',
-    'within-range': 'withinRange', ally: 'ally'
-  };
+  const aliases = targetRuleFactFields;
   for (const target of targets) {
     const requiredFacts = [...rules];
     if (Number.isFinite(resolvedParams.range?.value) && resolvedParams.range.value > 0) requiredFacts.push('within-range');
     if (resolvedParams.targets?.unit === 'allies') requiredFacts.push('ally');
     if (resolvedParams.targets?.unit === 'yards') requiredFacts.push('within-range');
+    // Portée Contact : la cible doit être touchable, sans quoi la prière est refusée.
+    if (resolvedParams.range?.unit === 'touch') requiredFacts.push('withinTouch');
     for (const rule of [...new Set(requiredFacts)]) {
       const field = aliases[rule];
       if (!field) return { error: `Règle de cible non prise en charge : ${rule}.`, needs: [need('targetRules', 'Règle de cible à raccorder')] };
@@ -285,31 +311,43 @@ function accessError(actor, contract) {
   return null;
 }
 
-function effectNeeds(effect) {
-  const needs = [];
-  if (!effect || typeof effect !== 'object' || typeof effect.type !== 'string') return [need('contract.effects', 'Effet divin structuré requis')];
-  const supported = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
-  if (!supported.has(effect.type)) needs.push(need('contract.effects', `Effet ${effect.type} à raccorder ou arbitrer`));
-  if (effect.type === 'characteristic-modifier' && (!effect.characteristic || !Number.isFinite(effect.value))) needs.push(need('contract.effects.characteristic', 'Caractéristique et valeur sourcées requises'));
-  if (effect.type === 'armor-bonus' && !Number.isFinite(effect.value)) needs.push(need('contract.effects.armor', 'Bonus de PA sourcé requis'));
-  if (effect.type === 'condition' && !effect.key && !effect.name) needs.push(need('contract.effects.condition', 'État sourcé requis'));
-  if (['healing', 'wound-heal'].includes(effect.type) && !Number.isFinite(effect.value ?? effect.wounds)) needs.push(need('contract.effects.healing', 'Valeur de soin sourcée requise'));
-  return needs;
+// Durée en secondes de campagne d'une durée minutes/heures/jours entière ; null sinon (jamais d'échéance inventée).
+function calendarSeconds(duration) {
+  if (!duration || !calendarDurationUnits.has(duration.unit) || !Number.isSafeInteger(duration.value) || duration.value < 1) return null;
+  try { return campaignDurationSeconds(duration.value, duration.unit); } catch { return null; }
 }
+const hasClockAnchor = anchor => Boolean(anchor) && Number.isSafeInteger(anchor.campaignSeconds) && anchor.campaignSeconds >= 0;
+// Durée chiffrée d'un effet (hors instantané), ou null.
+function timedDuration(effect) {
+  if (effect?.duration?.unit === 'instant') return null;
+  if (Number.isSafeInteger(effect?.duration?.value)) return effect.duration;
+  return Number.isSafeInteger(effect?.durationRounds) ? { value: effect.durationRounds, unit: 'rounds' } : null;
+}
+const isCalendarEffect = effect => calendarSeconds(timedDuration(effect)) !== null;
 
-function effectLayer(effect, { contract, actorId, targetId, executionId, expiry }) {
+// Identifiant stable d'une couche ; un 2e effet du même type dans un contrat reçoit un suffixe d'ordre.
+const layerId = (executionId, targetId, contract, effect, ordinal = 0) =>
+  `${executionId}:${targetId}:${contract.id}:${effect.type}${ordinal ? ':' + (ordinal + 1) : ''}`;
+const sameTypeOrdinal = (effects, index) => effects.slice(0, index).filter(row => row.type === effects[index].type).length;
+
+function effectLayer(effect, { contract, actorId, targetId, executionId, expiry, clockAnchor, ordinal = 0 }) {
   const layer = {
-    id: `${executionId}:${targetId}:${contract.id}:${effect.type}`,
+    id: layerId(executionId, targetId, contract, effect, ordinal),
     executionId, prayerId: contract.id, casterId: actorId, targetId,
     source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt),
     type: effect.type, expiry: clone(expiry)
   };
-  if (effect.type === 'characteristic-modifier') layer.statModifiers = { [effect.characteristic]: effect.value };
-  if (effect.type === 'armor-bonus') layer.apModifiers = Object.fromEntries((Array.isArray(effect.locations) ? effect.locations : [effect.locations || 'all']).map(location => [location, effect.value]));
-  if (effect.type === 'condition') layer.conditions = [{ key: effect.key || effect.name, level: effect.level ?? 1 }];
-  if (['healing', 'wound-heal'].includes(effect.type)) layer.healing = { value: effect.value ?? effect.wounds };
+  Object.assign(layer, effectHandler(effect.type)?.buildLayer?.(effect, { contract, actorId, targetId, executionId }));
   if (effect.duration) layer.duration = clone(effect.duration);
   else if (Number.isSafeInteger(effect.durationRounds)) layer.duration = { value: effect.durationRounds, unit: 'rounds' };
+  // Durée en minutes/heures/jours : échéance calendaire absolue ancrée sur l'horloge de l'aperçu, sans échéance de Round.
+  const seconds = calendarSeconds(timedDuration(effect));
+  if (seconds !== null) {
+    if (!hasClockAnchor(clockAnchor)) throw new TypeError('Ancre d’horloge requise pour dater une durée calendaire.');
+    layer.expiry = null;
+    layer.clockAnchor = clone(clockAnchor);
+    layer.deadline = { kind: 'campaign-time', atSeconds: clockAnchor.campaignSeconds + seconds };
+  }
   return layer;
 }
 
@@ -376,13 +414,18 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const wrathTriggered = prayer.fumble || sinTrigger;
   const reminders = [];
   if (contract.status === 'manual') reminders.push('Prière résolue; effet laissé au rappel MJ selon le contrat source.');
-  const effects = prayer.success && contract.status === 'implemented' ? (contract.effects || []) : [];
-  const unresolvedEffects = effects.flatMap(effectNeeds);
+  // assisted : les effets structurés sont appliqués, les clauses non automatisées sortent en rappels MJ.
+  const appliesEffects = ['implemented', 'assisted'].includes(contract.status);
+  if (contract.status === 'assisted' && prayer.success) reminders.push('Effets structurés appliqués; clauses restantes laissées au rappel MJ.',
+    ...(contract.clauses || []).filter(clause => clause.mode !== 'engine' && clause.text).map(clause => clause.text));
+  const effects = prayer.success && appliesEffects ? (contract.effects || []) : [];
+  const effectTargets = targets?.length ? targets : [actor];
+  const unresolvedEffects = effects.flatMap(effect => effectNeeds(effect, { targets: effectTargets }));
   const choiceResult = resolvePrayerChoices(contract, prayer, actor, input);
   if (choiceResult.error) return { ...fail('needs-input', choiceResult.error, choiceResult.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt) }) };
   const targetProblem = validateTargetRules(contract, targets || [], input, choiceResult.resolvedParams, actor);
   if (targetProblem) return { ...fail('needs-input', targetProblem.error, targetProblem.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt), resolvedParams: clone(choiceResult.resolvedParams) }) };
-  const resolvedEffects = prayer.success && contract.status === 'implemented' ? choiceResult.resolvedEffects : [];
+  const resolvedEffects = prayer.success && appliesEffects ? choiceResult.resolvedEffects : [];
   let wrathRoll = null;
   let wrathResult = null;
   let wrathConsequences = null;
@@ -425,17 +468,22 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     return { ...fail('needs-wrath-resolution', 'Le Test est visible, mais le Courroux doit être résolu depuis sa table avant application.', missing), preview, sourceReceipt: clone(contract.sourceReceipt) };
   }
   const duration = choiceResult.resolvedParams.duration;
-  const hasTimedEffect = resolvedEffects.some(effect => effect.duration?.unit !== 'instant'
-    && (Number.isSafeInteger(effect.duration?.value) || Number.isSafeInteger(effect.durationRounds)));
+  const timedEffects = resolvedEffects.filter(effect => timedDuration(effect));
   const hasTimedManualPrayer = contract.status === 'manual' && duration && duration.value !== null && duration.unit !== 'instant';
-  if (prayer.success && (hasTimedEffect || hasTimedManualPrayer) && !input.expiry)
+  const manualCalendar = hasTimedManualPrayer && calendarSeconds(duration) !== null;
+  // Minutes/heures/jours : échéance calendaire sur l'horloge de jeu, jamais devinée sans elle.
+  if (prayer.success && (timedEffects.some(isCalendarEffect) || manualCalendar) && !hasClockAnchor(input.clockAnchor))
+    return { ...fail('needs-input', 'Horloge de jeu requise pour dater cette durée en minutes, heures ou jours.', [need('clockAnchor', 'Horloge de jeu de la partie')]), preview, sourceReceipt: clone(contract.sourceReceipt) };
+  // Durées en Rounds (ou non résolues) : échéance de Round explicite, alignée sur chaque durée sourcée.
+  const roundDurations = [...timedEffects.filter(effect => !isCalendarEffect(effect)).map(timedDuration), ...(hasTimedManualPrayer && !manualCalendar ? [duration] : [])];
+  if (prayer.success && roundDurations.length && !input.expiry)
     return { ...fail('needs-input', 'Échéance explicite requise pour suivre cette prière active.', [need('expiry', 'Fin du Tour auteur ou fin de Round choisie par le MJ')]), preview, sourceReceipt: clone(contract.sourceReceipt) };
-  if (prayer.success && (hasTimedEffect || hasTimedManualPrayer)) {
+  if (prayer.success && roundDurations.length) {
     const expiryError = validateExpiry(input.expiry);
-    const durationError = validateDurationDeadline(input.expiry, duration, input.round, actor.id);
+    const durationError = roundDurations.map(row => validateDurationDeadline(input.expiry, row, input.round, actor.id)).find(Boolean);
     if (expiryError || durationError) return { ...fail('needs-input', expiryError || durationError, [need('expiry', 'Échéance alignée sur la durée sourcée')]), preview, sourceReceipt: clone(contract.sourceReceipt) };
   }
-  return { ready: true, status: contract.status === 'implemented' ? 'ready' : 'reminder', preview, sourceReceipt: clone(contract.sourceReceipt), needsInput: [], ruleVersion: V5_DIVINE_ENGINE_VERSION };
+  return { ready: true, status: contract.status === 'manual' ? 'reminder' : 'ready', preview, sourceReceipt: clone(contract.sourceReceipt), needsInput: [], ruleVersion: V5_DIVINE_ENGINE_VERSION };
 }
 
 /** Append an explicitly resolved prayer and its supported effect layers atomically. */
@@ -463,17 +511,22 @@ export function applyDivineExecution(state, contract, input = {}) {
   if (preview.success && preview.effects.length && !targets.length && preview.resolvedParams.targets?.unit !== 'self')
     return { ...fail('needs-input', 'Choisissez les cibles avant application.', [need('targetIds', 'Cibles explicites du contrat')]), state: clone(state), receipt: null, executionId: input.executionId, preview };
   let next = clone(state);
-  const appliedTargets = preview.success && (contract.status === 'implemented' || contract.status === 'manual' && previewResult.status === 'reminder') ? (targets.length ? targets : [actor]) : [];
-  const layerEffects = preview.effects.filter(effect => !['wound-heal', 'healing'].includes(effect.type)
+  const appliedTargets = preview.success && (['implemented', 'assisted'].includes(contract.status) || contract.status === 'manual' && previewResult.status === 'reminder') ? (targets.length ? targets : [actor]) : [];
+  const layerEffects = preview.effects.filter(effect => !isLayerlessEffect(effect)
     && !(effect.duration?.unit === 'instant' || effect.durationRounds === 0));
   const effectReceipts = [];
   const activeDuration = contract.params?.duration ?? contract.duration;
   const timedManual = preview.success && contract.status === 'manual' && activeDuration !== undefined && activeDuration !== null
     && !/instant/i.test(typeof activeDuration === 'string' ? activeDuration : JSON.stringify(activeDuration));
+  // Durée manuelle en minutes/heures/jours : la couche de rappel porte l'échéance calendaire de la durée résolue.
+  const manualCalendarDuration = timedManual && calendarSeconds(preview.resolvedParams.duration) !== null ? { value: preview.resolvedParams.duration.value, unit: preview.resolvedParams.duration.unit } : null;
+  const calendarLayerEffects = layerEffects.filter(isCalendarEffect);
   if ((preview.effects.length || timedManual) && appliedTargets.length) {
-    if (!input.expiry && layerEffects.some(effect => (effect.duration && effect.duration.unit !== 'instant') || Number.isSafeInteger(effect.durationRounds)))
+    if ((calendarLayerEffects.length || manualCalendarDuration) && !hasClockAnchor(input.clockAnchor))
+      return { ...fail('needs-input', 'Horloge de jeu requise pour dater cette durée en minutes, heures ou jours.', [need('clockAnchor', 'Horloge de jeu de la partie')]), state: clone(state), receipt: null, executionId: input.executionId };
+    if (!input.expiry && layerEffects.some(effect => !isCalendarEffect(effect) && ((effect.duration && effect.duration.unit !== 'instant') || Number.isSafeInteger(effect.durationRounds))))
       return { ...fail('needs-input', 'Échéance explicite requise pour une prière temporaire.', [need('expiry', 'Instant d’expiration choisi')]), state: clone(state), receipt: null, executionId: input.executionId };
-    if (timedManual && !input.expiry) return { ...fail('needs-input', 'Échéance explicite requise pour suivre cette prière manuelle active.', [need('expiry', 'Instant d’expiration choisi')]), state: clone(state), receipt: null, executionId: input.executionId };
+    if (timedManual && !manualCalendarDuration && !input.expiry) return { ...fail('needs-input', 'Échéance explicite requise pour suivre cette prière manuelle active.', [need('expiry', 'Instant d’expiration choisi')]), state: clone(state), receipt: null, executionId: input.executionId };
     const expiryError = validateExpiry(input.expiry);
     if (input.expiry && expiryError) return { ...fail('invalid', expiryError, [need('expiry', 'Échéance explicite valide')]), state: clone(state), receipt: null, executionId: input.executionId };
     next = replaceParticipants(next, participants.map(participant => {
@@ -481,33 +534,19 @@ export function applyDivineExecution(state, contract, input = {}) {
       // clones into `next`; otherwise resolving Wrath below can mutate the
       // original caster when a different participant is the prayer's target.
       if (!appliedTargets.some(target => target.id === participant.id)) return clone(participant);
-      const layers = layerEffects.map(effect => effectLayer(effect, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry || null }));
-      if (timedManual && !layers.length) layers.push(effectLayer({ type: 'manual-prayer-reminder', duration: clone(activeDuration) }, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry }));
+      const layers = layerEffects.map((effect, index) => effectLayer(effect, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry || null, clockAnchor: input.clockAnchor, ordinal: sameTypeOrdinal(layerEffects, index) }));
+      if (timedManual && !layers.length) layers.push(effectLayer({ type: 'manual-prayer-reminder', duration: manualCalendarDuration || clone(activeDuration) }, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry, clockAnchor: input.clockAnchor }));
       const updated = clone(participant);
       updated.extensions ||= {}; updated.extensions.v5 ||= {};
       updated.extensions.v5.divineEffects = [...(updated.extensions.v5.divineEffects || []), ...layers];
       for (const [index, effect] of preview.effects.entries()) {
-        if (['wound-heal', 'healing'].includes(effect.type)) {
-          const healed = healV5Wounds(updated, Number(effect.value ?? effect.wounds));
-          Object.assign(updated, healed.participant || healed);
-          effectReceipts.push({ targetId: participant.id, type: effect.type, result: clone(healed) });
-        }
-        if (effect.type === 'condition') {
-          const layer = layers[layerEffects.findIndex(row => row === effect)];
-          const beforeIds = new Set((updated.states || []).map(row => row.id));
-          const acquired = acquireV5Conditions(updated, [{ name: effect.key || effect.name, level: effect.level ?? 1,
-            source: { kind: 'divine', prayerId: contract.id, executionId: input.executionId } }], { round: input.expiry?.round });
-          if (!acquired.ready) throw Object.assign(new Error('Données requises pour appliquer la Condition divine.'), { code: 'DIVINE_CONDITION_INPUT', needsInput: acquired.needsInput });
-          Object.assign(updated, acquired.participant);
-          const ids = (updated.states || []).filter(row => !beforeIds.has(row.id)).map((row, stateIndex) => {
-            row.id = `divine-condition:${input.executionId}:${participant.id}:${index}:${stateIndex}`;
-            return row.id;
-          });
-          if (layer) {
-            layer.conditionStateIds = ids;
-            updated.states = (updated.states || []).map(row => ids.includes(row.id) ? { ...row, divineEffectId: layer.id, divineExecutionId: input.executionId } : row);
-          }
-        }
+        const handler = effectHandler(effect.type);
+        if (!handler?.applyInstant) continue;
+        const layer = layers[layerEffects.findIndex(row => row === effect)];
+        const context = { contract, executionId: input.executionId, targetId: participant.id, index, layer, expiry: input.expiry, round: input.round };
+        const result = handler.applyInstant(updated, effect, context);
+        const row = handler.receipt?.(effect, context, result);
+        if (row) effectReceipts.push(row);
       }
       return updated;
     }));
@@ -525,7 +564,7 @@ export function applyDivineExecution(state, contract, input = {}) {
       sinBefore: preview.wrath.sinAtTest, sinAfter: preview.wrath.sinAfter,
       roll: preview.wrath.roll, modifiedRoll: preview.wrath.modifiedRoll, result: clone(preview.wrath.outcome),
       consequences: preview.wrath.consequences } : null,
-    appliedEffectIds: appliedTargets.flatMap(target => layerEffects.map(effect => `${input.executionId}:${target.id}:${contract.id}:${effect.type}`)),
+    appliedEffectIds: appliedTargets.flatMap(target => layerEffects.map((effect, index) => layerId(input.executionId, target.id, contract, effect, sameTypeOrdinal(layerEffects, index)))),
     effectReceipts,
     reminders: clone(preview.reminders), status: preview.status || previewResult.status
   };
@@ -548,6 +587,8 @@ function validateExpiry(expiry) {
 
 function validateDurationDeadline(expiry, duration, currentRound, casterId) {
   if (!duration || duration.value === null || duration.unit === 'instant') return null;
+  // Minutes/heures/jours : pas d'échéance de Round, la couche porte une échéance calendaire.
+  if (calendarSeconds(duration) !== null) return null;
   if (duration.unit !== 'rounds' || !Number.isSafeInteger(duration.value) || duration.value < 1) return 'Durée sourcée non résolue : échéance à arbitrer.';
   const startRound = Number.isSafeInteger(currentRound) && currentRound > 0 ? currentRound : 1;
   if (expiry.round !== startRound + duration.value - 1) return `L’échéance doit suivre la durée sourcée de ${duration.value} Round(s).`;
@@ -557,13 +598,13 @@ function validateDurationDeadline(expiry, duration, currentRound, casterId) {
 
 /** Build a divine layer only after its source, target and expiry have been resolved. */
 export function createDivineEffectLayer(effect, context = {}) {
-  const { contract, actorId, targetId, executionId, expiry } = context;
+  const { contract, actorId, targetId, executionId, expiry, clockAnchor } = context;
   if (!contract?.source || !contract?.sourceReceipt || !actorId || !targetId || !executionId) throw new TypeError('Provenance et identifiants de couche divine requis.');
   const error = validateExpiry(expiry);
   if (error) throw new TypeError(error);
   const missing = effectNeeds(effect);
   if (missing.length) throw new TypeError(missing.map(item => item.label).join('; '));
-  return freeze(effectLayer(effect, { contract, actorId, targetId, executionId, expiry: { ...expiry, moment: expiry.moment || 'afterEffects' } }));
+  return freeze(effectLayer(effect, { contract, actorId, targetId, executionId, expiry: { ...expiry, moment: expiry.moment || 'afterEffects' }, clockAnchor }));
 }
 
 /** Expire only divine layers whose explicit, absolute deadline has passed. */

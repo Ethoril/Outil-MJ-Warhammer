@@ -69,10 +69,9 @@ function inspectParticipant(participant, path, referenceRound, clock, needsInput
   }
   for (const [index, effect] of (Array.isArray(v5.divineEffects) ? v5.divineEffects : []).entries()) {
     if (effect?.deadline?.kind === 'campaign-time' && effect?.type !== 'prayer-sl-cap') {
-      const message = Number.isSafeInteger(effect.deadline.atSeconds) && effect.deadline.atSeconds >= 0
-        ? 'Échéance calendaire divine non routée par son expireur.'
-        : 'Échéance calendaire divine invalide.';
-      needsInput.push(needs(`${path}.extensions.v5.divineEffects[${index}].deadline`, message));
+      // Une échéance valide est retirée par expireDivineAtClock ; seule une échéance illisible bloque l'avance.
+      if (!(Number.isSafeInteger(effect.deadline.atSeconds) && effect.deadline.atSeconds >= 0))
+        needsInput.push(needs(`${path}.extensions.v5.divineEffects[${index}].deadline`, 'Échéance calendaire divine invalide.'));
     }
   }
   for (const [index, state] of (Array.isArray(participant?.states) ? participant.states : []).entries()) {

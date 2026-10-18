@@ -5,6 +5,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { source as prayerSource } from '../docs/divin/sources/L06-prayers.mjs';
 import { imperialWeek, thinkOverYourDeeds, heedMyLessons } from '../docs/divin/sources/L06-calendar-readings.mjs';
 import { wrathConditionReading, wrathConditionRules } from '../docs/divin/sources/L06-wrath-conditions-readings.mjs';
+import { paramKinds, paramUnits, targetRuleFacts } from '../js/core/v5-divine-grammar.js';
+import { validateEffect } from '../js/core/v5-divine-effect-handlers.js';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const workingDirectory = resolve(process.cwd());
@@ -156,11 +158,9 @@ const miracleContracts = csvRows.map(entry => {
 // Miracle modules : docs/divin/sources/miracles/*.mjs, chacun exportant `cult` et `miracles`.
 const moduleOverride = process.argv.find(arg => arg.startsWith('--miracle-modules='));
 const moduleDirectory = resolve(moduleOverride ? moduleOverride.slice('--miracle-modules='.length) : 'docs/divin/sources/miracles');
-const paramKinds = new Set(['fixed', 'characteristic', 'characteristic-bonus', 'self', 'area', 'count', 'special', 'instant']);
-const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
-// Seules ces règles ont un fait de cible dans le moteur ; tout autre texte de targetRules devient une note (targetNotes), non appliquée.
-const targetRuleFacts = new Set(['non-Myrmidian', 'looking-at-priest', 'within-range', 'ally']);
-const moduleStatuses = new Set(['implemented', 'manual', 'blocked']);
+// Grammaire (kinds, unités, types d'effet, faits de cible) : js/core/v5-divine-grammar.js, partagée avec le moteur et les tests.
+// Seules les règles de targetRuleFacts ont un fait de cible dans le moteur ; tout autre texte de targetRules devient une note (targetNotes), non appliquée.
+const moduleStatuses = new Set(['implemented', 'assisted', 'manual', 'blocked']);
 const clauseModes = new Set(['engine', 'assisted', 'manual']);
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
 const moduleFiles = existsSync(moduleDirectory) ? readdirSync(moduleDirectory).filter(name => name.endsWith('.mjs')).sort() : [];
@@ -186,18 +186,18 @@ const moduleMiracleContracts = (modules => {
     if (!isRecord(param) || !paramKinds.has(param.kind)) throw at(miracle, `params.${key}.kind doit être l’un de ${[...paramKinds].join(', ')}.`);
     if (['fixed', 'count'].includes(param.kind) && !Number.isSafeInteger(param.value)) throw at(miracle, `params.${key}.value doit être un entier.`);
     if (['characteristic', 'characteristic-bonus'].includes(param.kind) && typeof param.characteristic !== 'string') throw at(miracle, `params.${key}.characteristic est requis.`);
-    if (param.kind === 'area' && typeof param.characteristicBonus !== 'string') throw at(miracle, `params.${key}.characteristicBonus est requis.`);
+    if (param.kind === 'area' && (typeof param.characteristicBonus === 'string') === (typeof param.characteristic === 'string')) throw at(miracle, `params.${key}.characteristicBonus (Bonus) ou characteristic (valeur entière) est requis, pas les deux.`);
+    if (param.kind === 'touch' && key !== 'range') throw at(miracle, `params.${key}.kind touch est réservé à la portée.`);
+    if (param.unit !== undefined && !paramUnits.has(param.unit)) throw at(miracle, `params.${key}.unit doit être l’un de ${[...paramUnits].join(', ')}.`);
    }
    if (miracle.effect != null && miracle.effects != null) throw at(miracle, 'effect et effects sont exclusifs.');
    const declared = miracle.effects ?? (miracle.effect ? [miracle.effect] : []);
    if (!Array.isArray(declared)) throw at(miracle, 'effects doit être un tableau.');
-   if (miracle.status === 'implemented' && !declared.length) throw at(miracle, 'status implemented exige au moins un effet.');
-   // Un miracle manual/blocked peut porter un effet structuré : le moteur ne l’applique que si status vaut implemented.
+   if (['implemented', 'assisted'].includes(miracle.status) && !declared.length) throw at(miracle, `status ${miracle.status} exige au moins un effet.`);
+   // Un miracle manual/blocked peut porter un effet structuré : le moteur ne l’applique que si status vaut implemented ou assisted.
    for (const effect of declared) {
-    if (!isRecord(effect) || !effectTypes.has(effect.type)) throw at(miracle, `type d’effet non pris en charge par le moteur (attendu : ${[...effectTypes].join(', ')}).`);
-    if (effect.type === 'characteristic-modifier' && (typeof effect.characteristic !== 'string' || !Number.isFinite(effect.value))) throw at(miracle, 'characteristic-modifier exige characteristic et value.');
-    if (['armor-bonus', 'healing', 'wound-heal'].includes(effect.type) && !Number.isFinite(effect.value ?? effect.wounds)) throw at(miracle, `${effect.type} exige value.`);
-    if (effect.type === 'condition' && !effect.key && !effect.name) throw at(miracle, 'condition exige key ou name.');
+    const effectProblem = validateEffect(effect);
+    if (effectProblem) throw at(miracle, effectProblem);
    }
    const targetRules = miracle.targetRules ?? [];
    if (!Array.isArray(targetRules) || targetRules.some(rule => typeof rule !== 'string' || !rule.trim())) throw at(miracle, 'targetRules doit être un tableau de textes.');
