@@ -9,6 +9,29 @@ const need = (field, label) => ({ field, label });
 const positive = value => Number.isSafeInteger(value) && value >= 1;
 const record = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 
+// Condition d'application `when: {fact, label}` (effet `condition`) : fait de cible tri-état saisi par le MJ (ex. « a échoué à son Test »).
+// vrai : l'État est posé ; faux : la cible est ignorée (ni couche ni État) ; absent : l'aperçu est bloqué.
+const FACT_NAME = /^[A-Za-z][A-Za-z0-9]*$/;
+const whenFact = (effect, participant, input) => input?.facts?.targets?.[participant?.id]?.[effect.when.fact];
+const whenScope = (effect, { targets = [], actor } = {}) => effect.appliesTo === 'caster' || effect.casterOnly === true ? [actor].filter(Boolean) : targets;
+
+export function whenProblem(effect) {
+  if (effect.when === undefined) return null;
+  return record(effect.when) && FACT_NAME.test(effect.when.fact ?? '') && typeof effect.when.label === 'string' && effect.when.label.trim()
+    ? null : 'condition : when doit déclarer fact (identifiant) et label.';
+}
+export function whenNeeds(effect, ctx = {}) {
+  if (effect.when === undefined || whenProblem(effect)) return [];
+  return whenScope(effect, ctx).filter(participant => typeof whenFact(effect, participant, ctx.input) !== 'boolean')
+    .map(participant => need(`facts.targets.${participant.id}.${effect.when.fact}`, `${participant.name || participant.id} : ${effect.when.label}`));
+}
+export const whenApplies = (effect, participant, { input } = {}) => effect.when === undefined || whenFact(effect, participant, input) === true;
+export function whenFactFields(effect) {
+  if (effect.when === undefined || whenProblem(effect)) return [];
+  const label = effect.when.label.trim();
+  return [{ field: effect.when.fact, label: label[0].toUpperCase() + label.slice(1), help: label + '.', required: true }];
+}
+
 const removalAmount = effect => effect.amount === 'all' ? Number.MAX_SAFE_INTEGER : effect.amount ?? 1;
 const removalChoice = (input, targetId) => input?.removals?.[targetId];
 

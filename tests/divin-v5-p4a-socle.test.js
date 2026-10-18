@@ -58,7 +58,7 @@ async function fixture({ clock = true, ally = {} } = {}) {
   return store;
 }
 const input = (more = {}) => ({ actorId: 'priest', targetIds: ['ally'], roll: 45, canSpeak: true, choices: { range: 0, targets: 0, duration: 0, effect: 0 },
-  facts: { targets: { ally: { withinRange: true } } }, ...more });
+  facts: { targets: { ally: { withinRange: true, athleticsFailed: false } } }, ...more });
 const selfInput = (more = {}) => input({ targetIds: [], ...more });
 const step = (store, seconds) => store.advanceCampaignTime({ seconds, reason: 'Temps MJ du socle P4a' });
 const layers = (store, id) => person(store, id).extensions.v5.divineEffects || [];
