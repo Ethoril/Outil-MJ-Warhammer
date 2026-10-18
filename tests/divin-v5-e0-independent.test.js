@@ -31,7 +31,7 @@ function supplemental(name) {
 }
 
 test('E0 indépendant — les 15 miracles ont une source exacte, seuls les neuf Up in Arms restent à adapter', () => {
-  const miracles = registry.contracts.filter(row => row.type === 'miracle');
+  const miracles = registry.contracts.filter(row => row.type === 'miracle' && row.catalogueEntry);
   assert.equal(miracles.length, 15);
   for (const [name, title] of expected) {
     const row = supplemental(name);

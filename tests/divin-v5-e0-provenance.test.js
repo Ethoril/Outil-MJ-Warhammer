@@ -38,8 +38,10 @@ test('nine supplemental miracles have their verified Up in Arms source and remai
     assert.equal(row.clauses.find(clause => clause.id === 'effect').mode, 'blocked');
     assert.deepEqual(row.effects, []);
   }
-  assert.deepEqual(inventory.counts, {
-    blessings: 6,
+  const { moduleMiracles, ...counts } = inventory.counts;
+  assert.equal(typeof moduleMiracles, 'number');
+  assert.deepEqual(counts, {
+    blessings: 60,
     miracles: 15,
     miraclesSourceFound: 15,
     miraclesSourceNotFound: 0,

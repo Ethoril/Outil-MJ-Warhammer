@@ -10,7 +10,7 @@ function unitText(value,unit){
  return `${value}${unit?' '+({rounds:'Rounds',allies:'alliés',meters:'mètres'}[unit]||unit):''}`;
 }
 function paramText(param,actor){
- if(!param)return 'À préciser';if(param.kind==='self')return 'Vous';if(param.kind==='instant'||param.unit==='instant')return 'Instantané';if(param.kind==='special')return 'Spécial';
+ if(!param)return 'À préciser';if(param.kind==='self')return 'Vous';if(param.kind==='instant'||param.unit==='instant')return 'Instantané';if(param.kind==='special')return param.sourceText==='Touch'?'Contact':'Spécial';
  const stat=param.characteristic||param.characteristicBonus;let value=param.value;
  if(param.kind==='characteristic')value=actor.caracs?.[stat];
  if(['area','characteristic-bonus'].includes(param.kind))value=Number.isFinite(Number(actor.caracs?.[stat]))?Math.floor(Number(actor.caracs[stat])/10):null;
@@ -22,8 +22,8 @@ function resolvedParamText(value){
  return unitText(value.value,value.unit);
 }
 export function createDivinePanel({Store,refresh}){
- let state={actorId:null,open:false,targetIds:[],facts:{},choices:{range:0,targets:0,duration:0,effect:0}};
- function reset(actor){state={actorId:actor.id,open:state.open,contractId:getAllDivineContracts().find(row=>row.type==='blessing')?.id,targetIds:[],facts:{},choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',canSpeak:null,accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
+ let state={actorId:null,open:false,cult:'',targetIds:[],facts:{},choices:{range:0,targets:0,duration:0,effect:0}};
+ function reset(actor){state={actorId:actor.id,open:state.open,cult:'',contractId:getAllDivineContracts().find(row=>row.type==='blessing')?.id,targetIds:[],facts:{},choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',canSpeak:null,accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
  function change(key,value){state[key]=value;if(key!=='testOptionId')state.testOptionId='';state.preview=null;state.error='';refresh();}
  function invalidateEditedForm(input){
   const panel=input.closest('[data-divine-panel]');if(!panel)return;
@@ -64,14 +64,17 @@ export function createDivinePanel({Store,refresh}){
  }
  return {render(actor,participants=[]){
   if(!actor)return null;if(state.actorId!==actor.id)reset(actor);
-  const contracts=getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type));
+  const allContracts=getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type));
+  const cults=[...new Set(allContracts.map(row=>row.deity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr'));
+  const contracts=state.cult?allContracts.filter(row=>row.deity===state.cult):allContracts;
   const contract=contracts.find(row=>row.id===state.contractId)||contracts[0];if(!contract)return null;
   const panel=node('details','workspace-card workspace-divine');panel.dataset.divinePanel='';panel.open=state.open;
   panel.addEventListener('toggle',()=>{state.open=panel.open;});
   for(const type of ['input','change','click'])panel.addEventListener(type,()=>{if(panel.open)state.open=true;},true);
   panel.append(node('summary','workspace-rubric','Prières divines · '+actor.name));
   const content=node('div','workspace-divine-content');panel.append(content);
-  select(content,'Prière divine',contract.id,contracts.map(row=>[row.id,row.name+' · '+(labels[row.status]||row.status)]),value=>{state.targetIds=[];state.facts={};state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',value);},'prayer');
+  if(cults.length>1)select(content,'Culte',state.cult,[['','Tous les cultes'],...cults.map(cult=>[cult,cult])],value=>{state.cult=value;state.targetIds=[];state.facts={};state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',(value?allContracts.filter(row=>row.deity===value):allContracts)[0]?.id);},'cult');
+  select(content,'Prière divine',contract.id,contracts.map(row=>[row.id,row.name+(row.type==='blessing'&&row.deity?' ('+row.deity+')':'')+' · '+(labels[row.status]||row.status)]),value=>{state.targetIds=[];state.facts={};state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',value);},'prayer');
   content.append(node('p','workspace-muted',(labels[contract.status]||contract.status)+' · '+(contract.deity||'Culte à préciser')));
   content.append(node('p','',contract.labels?.effect||''));
   if(contract.sourceDelta&&contract.status!=='blocked')content.append(node('p','workspace-muted','La règle V5 est présentée ici ; le texte du catalogue de consultation doit encore être actualisé.'));

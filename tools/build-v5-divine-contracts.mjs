@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { source as prayerSource } from '../docs/divin/sources/L06-prayers.mjs';
 import { imperialWeek, thinkOverYourDeeds, heedMyLessons } from '../docs/divin/sources/L06-calendar-readings.mjs';
 import { wrathConditionReading, wrathConditionRules } from '../docs/divin/sources/L06-wrath-conditions-readings.mjs';
 
@@ -77,21 +78,56 @@ const commonPrayerRules = [
  { id: 'wrath-resolution', text: 'Lancer d100 sur la table, ajouter +10 par Point de Péché, puis après application du résultat retirer 1 Point de Péché (minimum zéro). Les effets fictionnels/permanents et décisions MJ ne sont pas automatisés sans données et validation.', source: { ...V5, printedPage: [218, 219], section: 'Tableau de la Colère des dieux' }, mode: 'manual' },
  { id: 'divine-overuse', text: 'Le MJ peut attribuer typiquement 1 à 3 Points de Péché pour des usages répétés de bénédictions/miracles dans une même scène, sur la même blessure/cible ou situations similaires.', source: pdfRef(220, 'Option : Petits soucis'), mode: 'manual' }
 ];
-const blessingSpecs = [
- {name:'Bataille', key:'battle', effect:{type:'characteristic-modifier',characteristic:'CC',value:10}, label:'La cible gagne +10 en Capacité de Combat.'},
- {name:'Conscience', key:'conscience', effect:null, label:'Pour rompre un commandement, test de Calme Accessible (+2 DR); en cas d’échec, honte et Action non effectuée.'},
- {name:'Courage', key:'courage', effect:{type:'characteristic-modifier',characteristic:'FM',value:10}, label:'La cible gagne +10 en Force Mentale.'},
- {name:'Chance', key:'fortune', effect:null, label:'La cible peut relancer son prochain Test échoué; le nouveau résultat tient.'},
- {name:'Protection', key:'protection', effect:null, label:'Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.'},
- {name:'Droiture', key:'righteousness', effect:null, label:'L’arme de la cible est considérée comme Magique.'}
-];
-const blessingAccess = { cult: 'Myrmidia', source: pdfRef(220, 'Bénédictions par culte'), requiredTalent: { id: 'talent-bless', catalogueTalentId: 'talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29', name: 'Béni (Myrmidia)', specialization: 'Myrmidia' } };
-const blessings = blessingSpecs.map(row => ({
- id:`divine:blessing:myrmidia:${row.key}`, type:'blessing', name:`Bénédiction de ${row.name}`, deity:'Myrmidia', catalogueName:`Bénédiction de ${row.name}`, status:row.effect?'implemented':'manual', source:pdfRef(221, `Bénédiction de ${row.name}`), sourceReceipt:{...pdfRef(221, `Bénédiction de ${row.name}`), accessSource:{...blessingAccess.source}, catalogueSnapshotSha256:snapshotHash}, requiredTalent:blessingAccess.requiredTalent, requiredKnownPrayer:false,
- params:{range:{kind:'fixed',value:6,unit:'yards'},targets:{kind:'count',value:1},duration:{kind:'fixed',value:6,unit:'rounds'}},
- extensions:[{everySuccessLevels:2,choices:[{range:{add:6,unit:'yards'}},{targets:{add:1}},{duration:{add:6,unit:'rounds'}}],repeatable:true,instantDurationCannotIncrease:true}],
- effects:row.effect?[{...row.effect,duration:{value:6,unit:'rounds'}}]:[], labels:{effect:row.label,access:'Béni (Myrmidia)'}, clauses:[{id:'pray-test',mode:'engine',sourceRef:'prayer-success'},{id:'effect',mode:row.effect?'engine':'manual',sourceRef:`blessing:${row.key}`}], needsInput:[]
-}));
+const cults = Object.keys(prayerSource.blessingsByCult);
+const catalogueTalentId = name => `talent-${[...name].map(char => char.charCodeAt(0).toString(16)).join('_')}`;
+// The published Béni (Myrmidia) alias reads "Mymidia" (missing "r"); kept verbatim because the six Myrmidia blessings must not change.
+const publishedBlessedMyrmidiaAlias = 'talent-42_e9_6e_69_20_28_4d_79_6d_69_64_69_61_29';
+const cultTalent = (talent, cult) => { const name = `${talent} (${cult})`; return { id: talent === 'Béni' ? 'talent-bless' : 'talent-invoke', catalogueTalentId: talent === 'Béni' && cult === 'Myrmidia' ? publishedBlessedMyrmidiaAlias : catalogueTalentId(name), name, specialization: cult }; };
+if (cultTalent('Invocation', 'Myrmidia').catalogueTalentId !== 'talent-49_6e_76_6f_63_61_74_69_6f_6e_20_28_4d_79_72_6d_69_64_69_61_29') throw new Error('Talent alias derivation differs from the published Myrmidia alias.');
+const statBlessing = (characteristic, label) => ({ effect: { type: 'characteristic-modifier', characteristic, value: 10 }, label: `La cible gagne +10 en ${label}.` });
+const blessingLibrary = {
+ battle: { name: 'Bataille', ...statBlessing('CC', 'Capacité de Combat') },
+ breath: { name: 'Souffle', effect: null, label: 'La cible n’a plus besoin de respirer et ignore les règles d’Étouffement.' },
+ charisma: { name: 'Charisme', ...statBlessing('Soc', 'Sociabilité') },
+ conscience: { name: 'Conscience', effect: null, label: 'Pour rompre un commandement, test de Calme Accessible (+2 DR); en cas d’échec, honte et Action non effectuée.' },
+ courage: { name: 'Courage', ...statBlessing('FM', 'Force Mentale') },
+ finesse: { name: 'Finesse', ...statBlessing('Dex', 'Dextérité') },
+ fortune: { name: 'Chance', effect: null, label: 'La cible peut relancer son prochain Test échoué; le nouveau résultat tient.' },
+ grace: { name: 'Grâce', ...statBlessing('Ag', 'Agilité') },
+ hardiness: { name: 'Vigueur', ...statBlessing('E', 'Endurance') },
+ healing: { name: 'Guérison', effect: { type: 'wound-heal', value: 1 }, label: 'La cible regagne 1 Blessure.', touch: true, instant: true },
+ hunt: { name: 'La Chasse', ...statBlessing('CT', 'Capacité de Tir') },
+ might: { name: 'Puissance', ...statBlessing('F', 'Force') },
+ protection: { name: 'Protection', effect: null, label: 'Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.' },
+ recuperation: { name: 'Convalescence', effect: null, label: 'La cible réduit d’un jour la durée d’une maladie; une seule tentative par maladie et par personne.', touch: true, instant: true },
+ righteousness: { name: 'Droiture', effect: null, label: 'L’arme de la cible est considérée comme Magique.' },
+ savagery: { name: 'Sauvagerie', effect: null, label: 'Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.' },
+ tenacity: { name: 'Ténacité', effect: null, label: 'La cible retire 1 État (sauf Entaché).', instant: true },
+ wisdom: { name: 'Sagesse', ...statBlessing('Int', 'Intelligence') },
+ wit: { name: 'Vivacité', ...statBlessing('I', 'Initiative') }
+};
+const blessingKey = english => english === 'The Hunt' ? 'hunt' : english.toLowerCase();
+const blessingAccess = { source: pdfRef(220, 'Bénédictions par culte') };
+const blessingContract = (cult, key) => {
+ const row = blessingLibrary[key];
+ if (!row) throw new Error(`Bénédiction inconnue dans la bibliothèque du générateur : ${key}`);
+ const instant = row.instant === true;
+ const requiredTalent = cultTalent('Béni', cult);
+ const choices = instant
+  ? [...(row.touch ? [] : [{range:{add:6,unit:'yards'}}]), {targets:{add:1}}]
+  : [{range:{add:6,unit:'yards'}},{targets:{add:1}},{duration:{add:6,unit:'rounds'}}];
+ return {
+  id:`divine:blessing:${enc(cult)}:${key}`, type:'blessing', name:`Bénédiction de ${row.name}`, deity:cult, catalogueName:`Bénédiction de ${row.name}`, status:row.effect?'implemented':'manual', source:pdfRef(221, `Bénédiction de ${row.name}`), sourceReceipt:{...pdfRef(221, `Bénédiction de ${row.name}`), accessSource:{...blessingAccess.source}, catalogueSnapshotSha256:snapshotHash}, requiredTalent, requiredKnownPrayer:false,
+  params:{range:row.touch?{kind:'special',sourceText:'Touch'}:{kind:'fixed',value:6,unit:'yards'},targets:{kind:'count',value:1},duration:instant?{kind:'instant'}:{kind:'fixed',value:6,unit:'rounds'}},
+  extensions:[{everySuccessLevels:2,choices,repeatable:true,instantDurationCannotIncrease:true}],
+  effects:row.effect?[{...row.effect,duration:instant?{unit:'instant'}:{value:6,unit:'rounds'}}]:[], labels:{effect:row.label,access:requiredTalent.name}, clauses:[{id:'pray-test',mode:'engine',sourceRef:'prayer-success'},{id:'effect',mode:row.effect?'engine':'manual',sourceRef:`blessing:${key}`}], needsInput:[]
+ };
+};
+// Myrmidia first: its six contracts keep their historical position in the registry.
+const blessings = [...cults.filter(cult => cult === 'Myrmidia'), ...cults.filter(cult => cult !== 'Myrmidia')]
+ .flatMap(cult => prayerSource.blessingsByCult[cult].map(english => blessingContract(cult, blessingKey(english))));
+if (blessings.length !== 60 || new Set(blessings.map(row => row.id)).size !== 60) throw new Error('Expected 60 distinct cult blessing associations.');
+if (new Set(blessings.map(row => row.id.split(':').pop())).size !== 19) throw new Error('Expected 19 distinct blessing effects.');
 const miracleContracts = csvRows.map(entry => {
  const identified = sourceSix.get(entry.nom);
  const supplemental = sourceUpInArmsNine.get(entry.nom);
@@ -117,6 +153,80 @@ const miracleContracts = csvRows.map(entry => {
   effects:effect?[effect]:[], targetRules:identified?.canonicalName==='Blazing Sun'?['non-Myrmidian','looking-at-priest']:[], labels, clauses, needsInput
  };
 });
+// Miracle modules : docs/divin/sources/miracles/*.mjs, chacun exportant `cult` et `miracles`.
+const moduleOverride = process.argv.find(arg => arg.startsWith('--miracle-modules='));
+const moduleDirectory = resolve(moduleOverride ? moduleOverride.slice('--miracle-modules='.length) : 'docs/divin/sources/miracles');
+const paramKinds = new Set(['fixed', 'characteristic', 'characteristic-bonus', 'self', 'area', 'count', 'special', 'instant']);
+const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
+// Seules ces règles ont un fait de cible dans le moteur ; tout autre texte de targetRules devient une note (targetNotes), non appliquée.
+const targetRuleFacts = new Set(['non-Myrmidian', 'looking-at-priest', 'within-range', 'ally']);
+const moduleStatuses = new Set(['implemented', 'manual', 'blocked']);
+const clauseModes = new Set(['engine', 'assisted', 'manual']);
+const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
+const moduleFiles = existsSync(moduleDirectory) ? readdirSync(moduleDirectory).filter(name => name.endsWith('.mjs')).sort() : [];
+const loadMiracleModules = async () => {
+ const loaded = [];
+ for (const file of moduleFiles) loaded.push({ file, ...(await import(pathToFileURL(resolve(moduleDirectory, file)).href)) });
+ return loaded;
+};
+const moduleMiracleContracts = (modules => {
+ const fromModules = [];
+ for (const { file, cult, miracles } of modules) {
+  const at = (miracle, message) => new Error(`Module miracle ${file} (${miracle?.canonicalName ?? miracle?.name ?? '?'}) : ${message}`);
+  if (typeof cult !== 'string' || !cults.includes(cult)) throw new Error(`Module miracle ${file} : \`cult\` doit être l’un de ${cults.join(', ')} (reçu : ${String(cult)}).`);
+  if (!Array.isArray(miracles)) throw new Error(`Module miracle ${file} : \`miracles\` doit être un tableau.`);
+  for (const miracle of miracles) {
+   if (!isRecord(miracle)) throw at(miracle, 'chaque miracle doit être un objet.');
+   for (const key of ['name', 'canonicalName', 'summary']) if (typeof miracle[key] !== 'string' || !miracle[key].trim()) throw at(miracle, `${key} doit être un texte non vide.`);
+   if (!Number.isSafeInteger(miracle.printedPage) || miracle.printedPage < 1) throw at(miracle, 'printedPage doit être un entier positif.');
+   if (!moduleStatuses.has(miracle.status)) throw at(miracle, `status doit être l’un de ${[...moduleStatuses].join(', ')}.`);
+   if (!isRecord(miracle.params)) throw at(miracle, 'params est requis.');
+   for (const key of ['range', 'targets', 'duration']) {
+    const param = miracle.params[key];
+    if (!isRecord(param) || !paramKinds.has(param.kind)) throw at(miracle, `params.${key}.kind doit être l’un de ${[...paramKinds].join(', ')}.`);
+    if (['fixed', 'count'].includes(param.kind) && !Number.isSafeInteger(param.value)) throw at(miracle, `params.${key}.value doit être un entier.`);
+    if (['characteristic', 'characteristic-bonus'].includes(param.kind) && typeof param.characteristic !== 'string') throw at(miracle, `params.${key}.characteristic est requis.`);
+    if (param.kind === 'area' && typeof param.characteristicBonus !== 'string') throw at(miracle, `params.${key}.characteristicBonus est requis.`);
+   }
+   if (miracle.effect != null && miracle.effects != null) throw at(miracle, 'effect et effects sont exclusifs.');
+   const declared = miracle.effects ?? (miracle.effect ? [miracle.effect] : []);
+   if (!Array.isArray(declared)) throw at(miracle, 'effects doit être un tableau.');
+   if (miracle.status === 'implemented' && !declared.length) throw at(miracle, 'status implemented exige au moins un effet.');
+   // Un miracle manual/blocked peut porter un effet structuré : le moteur ne l’applique que si status vaut implemented.
+   for (const effect of declared) {
+    if (!isRecord(effect) || !effectTypes.has(effect.type)) throw at(miracle, `type d’effet non pris en charge par le moteur (attendu : ${[...effectTypes].join(', ')}).`);
+    if (effect.type === 'characteristic-modifier' && (typeof effect.characteristic !== 'string' || !Number.isFinite(effect.value))) throw at(miracle, 'characteristic-modifier exige characteristic et value.');
+    if (['armor-bonus', 'healing', 'wound-heal'].includes(effect.type) && !Number.isFinite(effect.value ?? effect.wounds)) throw at(miracle, `${effect.type} exige value.`);
+    if (effect.type === 'condition' && !effect.key && !effect.name) throw at(miracle, 'condition exige key ou name.');
+   }
+   const targetRules = miracle.targetRules ?? [];
+   if (!Array.isArray(targetRules) || targetRules.some(rule => typeof rule !== 'string' || !rule.trim())) throw at(miracle, 'targetRules doit être un tableau de textes.');
+   const needsInput = miracle.needsInput ?? [];
+   if (!Array.isArray(needsInput) || needsInput.some(row => !isRecord(row) || typeof row.id !== 'string' || typeof row.text !== 'string')) throw at(miracle, 'needsInput doit être un tableau de { id, text }.');
+   const clauses = miracle.clauses ?? [];
+   if (!Array.isArray(clauses) || clauses.some(row => !isRecord(row) || typeof row.id !== 'string' || !clauseModes.has(row.mode) || typeof row.text !== 'string')) throw at(miracle, `clauses doit être un tableau de { id, mode (${[...clauseModes].join('|')}), text }.`);
+   if (miracle.sourceDelta !== undefined && typeof miracle.sourceDelta !== 'string') throw at(miracle, 'sourceDelta doit être un texte.');
+   if (miracle.extensions !== undefined && !Array.isArray(miracle.extensions)) throw at(miracle, 'extensions doit être un tableau.');
+   if (cult === 'Myrmidia' && [...sourceSix.values()].some(row => row.canonicalName === miracle.canonicalName)) throw at(miracle, 'déjà défini par le livre de base Myrmidia du générateur.');
+   const id = `divine:miracle:${enc(cult)}:${enc(miracle.canonicalName)}`;
+   if (fromModules.some(row => row.id === id)) throw at(miracle, `identifiant dupliqué ${id}.`);
+   const duration = miracle.params.duration;
+   const defaultDuration = duration.kind === 'instant' ? { unit: 'instant' } : { value: null, sourceParameter: 'params.duration', unit: duration.unit ?? 'rounds', requiresResolvedExpiry: true };
+   fromModules.push({
+    id, type: 'miracle', name: miracle.name, catalogueName: miracle.name, canonicalName: miracle.canonicalName, deity: cult, status: miracle.status, source: pdfRef(miracle.printedPage, `Miracles de ${cult} - ${miracle.canonicalName}`),
+    sourceReceipt: { referenceSnapshotSha256: snapshotHash, catalogueSnapshotVersion: snapshot.contentVersion, sourceBookSha256: V5.fileSha256 },
+    requiredTalent: cultTalent('Invocation', cult), requiredKnownPrayer: true, sourceDelta: miracle.sourceDelta ?? null,
+    params: structuredClone(miracle.params),
+    extensions: miracle.extensions ? structuredClone(miracle.extensions) : [{ everySuccessLevels: 2, choices: [{ range: { addBaseValue: true } }, { targets: { addBaseValue: true } }, { duration: { addBaseValue: true } }], sourceRef: 'miracle-scaling', repeatable: true, restrictions: { youAndYouCannotIncreaseRangeOrTargets: true, instantDurationCannotIncrease: true } }],
+    effects: declared.map(effect => ({ ...structuredClone(effect), duration: effect.duration ? structuredClone(effect.duration) : defaultDuration })),
+    targetRules: targetRules.filter(rule => targetRuleFacts.has(rule)), ...(targetRules.some(rule => !targetRuleFacts.has(rule)) ? { targetNotes: targetRules.filter(rule => !targetRuleFacts.has(rule)) } : {}), labels: { canonicalName: miracle.canonicalName, effect: miracle.summary, sourceStatus: 'V5 base source checked' },
+    clauses: clauses.map(row => ({ id: row.id, mode: row.mode, text: row.text, sourceRef: `v5-${enc(miracle.canonicalName)}` })),
+    needsInput: needsInput.map(row => ({ field: row.id, label: row.text }))
+   });
+  }
+ }
+ return fromModules;
+})(await loadMiracleModules());
 const hatred = {id:'divine:talent:holy-hatred',type:'talent',name:'Haine sacrée',catalogueName:'Haine sacrée',deity:null,status:'manual',source:{...V5,printedPage:120,section:'Haine sacrée'},sourceReceipt:{referenceSnapshotSha256:snapshotHash,talentId:'talent-holy-hatred',description:talentDescriptions['talent-holy-hatred']},requiredTalent:{id:'talent-holy-hatred'},params:{},extensions:[],effects:[{type:'damage-bonus',value:2,when:'miracle-inflicts-wounds'}],labels:{effect:talentDescriptions['talent-holy-hatred']},clauses:[{id:'miracle-damage-bonus',mode:'manual',sourceRef:'talent-holy-hatred'}],needsInput:['miracle-damage-hook']};
 const wrathRanges=[
  [1,5,'Visions sacrées','Visions; test de Calme Accessible (+2 DR), échec: 1 Sonné.'],[6,10,'Pensez à vos actes','Les tests de Prière réussis plafonnent à +0 DR pendant une semaine.'],[11,15,'Leçons divines','-1 DR à Prière pendant 1d10 + Points de Péché rounds.'],[16,20,'Prouvez votre dévotion','À terre; cet état ne peut pas être retiré avant un succès de Prière Accessible (+2 DR).'],[21,25,'Patience épuisée','Aucun test de Prière pendant 1d10 rounds.'],[26,30,'Vous ne comprenez pas','-1 DR aux compétences associées au dieu (MJ) pendant 1d10 + Péché heures.'],[31,35,'Manque de foi','Aucun test de Prière pendant 1d10 + Péché rounds.'],[36,40,'Partagez ma douleur','1 + Péché Blessures ignorant BE/PA; Endurance Accessible (+2 DR) ou Sonné.'],[41,45,'Cause indigne','Alliés à terre; les bénédictions/miracles du dieu qui les ciblent échouent pendant 1d10 + Péché jours.'],[46,50,'Cessez vos babillages','Aucun test de Prière pendant 2d10 + Péché rounds.'],[51,55,'Ressentez ma colère','1d10 + Péché Blessures; Endurance Intermédiaire (+0 DR) ou Sonné.'],[56,60,'Je ne vous aiderai pas','-1 DR à une compétence associée au dieu (MJ) pendant 1d10 + Péché jours.'],[61,65,'Blessures divines','1 + Péché états Hémorragique.'],[66,70,'Frappé de cécité','À terre et 3 états Aveuglé; succès d’un test de Prière Intermédiaire (+0 DR) retire 1 + DR états Aveuglé.'],[71,75,'Que sacrifierez-vous ?','1d10 + Péché Blessures ignorant BE/PA; Endurance Difficile (-1 DR) ou Sonné.'],[76,80,'Vous avez péché','Prier devient l’Action pendant 1d10 + Péché rounds.'],[81,87,'Purifiez la chair','2d10 + Péché Blessures ignorant BE/PA; Endurance Difficile (-2 DR), échec: Sonné +1 par -1 DR.'],[88,88,'Interférence démoniaque','Un démon inférieur apparaît à 2d10 yards et attaque la cible la plus proche.'],[89,95,'Craignez ma colère','1 + Péché états Brisé.'],[96,100,'Faites pénitence','Une pénitence est requise.'],[101,105,'Châtiment','0 Blessures puis Inconscient; ne peut être retiré avant de récupérer au moins 1 Blessure.'],[106,110,'N’invoquez pas mon nom','Perte de Béni et Invocation pendant 1d10 + Péché jours.'],[111,115,'Vanités retirées','Tous les objets pris; chaque pénitence rend un objet magique pris, si applicable.'],[116,120,'Vous abusez de ma miséricorde','Perte de Béni et Invocation pendant 2d10 + Péché jours.'],[121,125,'Contemplez vos fautes','À la prochaine récupération de Chance, ne gagner qu’1 point.'],[126,130,'Foudre et flammes','0 Blessures puis Enflammé.'],[131,135,'Souffrez comme moi','1 + Péché états Hémorragique chaque matin jusqu’à pénitence.'],[136,140,'Excommunication','Les talents Béni et Invocation sont perdus pendant deux pénitences; la pénitence 1 restitue Béni, la pénitence 2 restitue Invocation. Le culte est averti; tests sociaux Très Difficiles (-3 DR), sans bonus positif.'],[141,145,'Prouvez votre valeur','Un Serviteur divin apparaît à 1d100 yards et agit selon le dieu.'],[146,150,'Je vous rejette','Perte permanente de Béni, Invocation et toutes les avances de Prière; culte averti, tests sociaux Très Difficiles (-3 DR), sans bonus positif.'],[151,null,'Rendez des comptes','Jugement divin; sans Point de Destin, ne revient jamais. En dépensant un Point de Destin, revient au choix du MJ et subit Je vous rejette.']
@@ -147,15 +257,15 @@ const wrathConditionContracts=wrathConditionRules.map(rule=>({
   resultId:rule.resultId,conditions:rule.conditions,application:{sinTiming:'before-decrement',order:'apply-then-decrement'},
   evidencePath:'docs/divin/sources/L06-wrath-conditions-readings.mjs'}
 }));
-const contracts=[...blessings,...miracleContracts,hatred];
-const catalogueDeltas=miracleContracts.filter(row=>sourceSix.has(row.catalogueName)).map(row=>({id:row.id,catalogueEntry:row.catalogueEntry,v5Summary:row.sourceDelta,status:row.status,source:row.source}));
-const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.1.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN'},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,catalogueDeltas,contracts};
+const contracts=[...blessings,...miracleContracts,...moduleMiracleContracts,hatred];
+const catalogueDeltas=[...miracleContracts.filter(row=>sourceSix.has(row.catalogueName)),...moduleMiracleContracts.filter(row=>row.sourceDelta)].map(row=>({id:row.id,catalogueEntry:row.catalogueEntry??null,v5Summary:row.sourceDelta,status:row.status,source:row.source}));
+const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.2.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN'},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,catalogueDeltas,contracts};
 const sourceFingerprint = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
 const result={...payload,sourceFingerprint:`sha256:${sourceFingerprint}`};
 const registryText=JSON.stringify(result,null,2)+'\n';
 const miraclesSupplementSourceFound = miracleContracts.filter(row => sourceUpInArmsNine.has(row.catalogueName)).length;
 const miraclesSourceFound = sourceSix.size + miraclesSupplementSourceFound;
-const inventory={schemaVersion:1,sourceFingerprint:result.sourceFingerprint,counts:{blessings:blessings.length,miracles:miracleContracts.length,miraclesSourceFound,miraclesSourceNotFound:miracleContracts.length-miraclesSourceFound,miraclesV5SourceFound:sourceSix.size,miraclesSupplementSourceFound,miraclesV4AdaptationBlocked:miraclesSupplementSourceFound,talents:1},items:contracts.map(({id,type,name,deity,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,needsInput})=>({id,type,name,deity,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,needsInput}))};
+const inventory={schemaVersion:1,sourceFingerprint:result.sourceFingerprint,counts:{blessings:blessings.length,miracles:miracleContracts.length,moduleMiracles:moduleMiracleContracts.length,miraclesSourceFound,miraclesSourceNotFound:miracleContracts.length-miraclesSourceFound,miraclesV5SourceFound:sourceSix.size,miraclesSupplementSourceFound,miraclesV4AdaptationBlocked:miraclesSupplementSourceFound,talents:1},items:contracts.map(({id,type,name,deity,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,needsInput})=>({id,type,name,deity,status,source,sourceReceipt,catalogueEntry,requiredTalent,params,extensions,effects,labels,clauses,needsInput}))};
 const inventoryText=JSON.stringify(inventory,null,2)+'\n';
 if(process.argv.includes('--check')){
  for(const [path,expected] of [['js/data/v5-divine-contracts.json',registryText],['docs/divin/DIVIN_INVENTAIRE.json',inventoryText]]){
@@ -163,6 +273,8 @@ if(process.argv.includes('--check')){
   if(actual!==expected)throw new Error(`Generated output is stale: ${path}`);
  }
  console.log('Divin registry and inventory are current.');
+}else if(process.argv.includes('--dry-run')){
+ console.log(JSON.stringify({counts:inventory.counts,moduleContracts:moduleMiracleContracts}));
 }else{
  writeFileSync('js/data/v5-divine-contracts.json',registryText);
  writeFileSync('docs/divin/DIVIN_INVENTAIRE.json',inventoryText);
