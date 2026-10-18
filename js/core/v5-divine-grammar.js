@@ -16,7 +16,7 @@ export const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'c
 // Traits, États spéciaux, actions, Talents, bonus d'arme (v5-divine-effects-gear.js).
 for (const type of ['grant-trait', 'special-state', 'grant-actions', 'grant-talent', 'weapon-bonus']) effectTypes.add(type);
 // Dégâts directs (v5-divine-effects-damage.js).
-for (const type of ['direct-damage']) effectTypes.add(type);
+for (const type of ['direct-damage', 'ordinary-damage']) effectTypes.add(type);
 // États, verrous et Chance temporaire (v5-divine-effects-conditions.js).
 for (const type of ['remove-condition', 'expiry-condition', 'temporary-fortune']) effectTypes.add(type);
 // Tests de compétence (v5-divine-effects-tests.js).

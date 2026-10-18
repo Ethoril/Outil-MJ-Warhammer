@@ -135,7 +135,7 @@ test('Feu de l’âme : le statut de serviteur de la Ruine est demandé tant qu�
 
 test('Comète à Deux Queues : 1d10 plus les DR et Enflammé pour toute cible touchée', async () => {
   const store = await fixture('Sigmar', [fighter('a'), fighter('b')]);
-  await cast(store, COMET, input(['a', 'b'], { damageRoll: 7, roll: 25 }));
+  await cast(store, COMET, input(['a', 'b'], { damageRoll: 7, roll: 25 }, { a: { foe: true }, b: { foe: true } }));
   assert.deepEqual([person(store, 'a').hp, person(store, 'b').hp], [20 - 11, 20 - 11], '7 + 4 DR');
   assert.deepEqual(person(store, 'a').states.map(row => row.key), ['enflamme']);
   assert.deepEqual(person(store, 'b').states.map(row => row.key), ['enflamme']);
@@ -152,14 +152,14 @@ test('Haine sacrée : +2 Blessures si le prêtre a le talent, rien sans lui', as
   assert.equal(result.receipt.effectReceipts[0].result.bonuses.holyHatred, 2);
 });
 
-test('Jugement du Roi de la neige : le verdict MJ est requis, sans lui rien n’est infligé', async () => {
+test('Jugement du Roi de la neige : le verdict MJ est requis ; refusé, la cible est épargnée et le prêtre subit l’effet', async () => {
   const store = await fixture('Ulric', [fighter('target')]);
   const missing = store.previewDivineExecution(JUDGEMENT, input(['target'], { damageRoll: 4 }));
   assert.equal(missing.ready, false);
   assert.ok(missing.needsInput.some(row => row.field === 'facts.targets.target.judgement'));
-  const refused = store.previewDivineExecution(JUDGEMENT, input(['target'], { damageRoll: 4 }, { target: { judgement: false } }));
-  assert.equal(refused.ready, false);
+  await cast(store, JUDGEMENT, input(['target'], { damageRoll: 4 }, { target: { judgement: false } }));
   assert.equal(person(store, 'target').hp, 20);
+  assert.equal(person(store, 'priest').hp, 20 - 6, 'même jet 4 + 2 DR sur le prêtre');
 });
 
 test('Caresse de Rhya : soigne le Bonus de Sociabilité, un soin de plus par tranche de +2 DR', async () => {

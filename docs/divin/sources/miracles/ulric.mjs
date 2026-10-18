@@ -78,7 +78,8 @@ export const miracles = [
     summary: 'Le sang et la moelle de la cible gèlent : elle subit 1d10 Blessures sans Bonus d\'Endurance ni Points d\'Armure, plus 1 Blessure par DR. Si le MJ juge que la cible n\'est ni faible, ni lâche, ni fourbe, c\'est vous qui subissez l\'effet.',
     params: { range, targets: one, duration: { kind: 'instant' } },
     status: 'assisted', effect: null,
-    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, requiresFact: { field: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe (sinon le prêtre subit l’effet : à résoudre à la main)' } }],
+    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, requiresFact: { field: 'judgement', onFalse: 'skip', label: 'verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)' } },
+      { type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, appliesTo: 'caster', casterWhen: { field: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe', value: false, match: 'any' } }],
     targetRules: [],
     needsInput: [
       { id: 'target-judgement', text: 'Le MJ juge-t-il la cible faible, lâche ou fourbe ? Sinon le prêtre subit l\'effet.' },
@@ -86,7 +87,7 @@ export const miracles = [
     ],
     clauses: [
       { id: 'damage', mode: 'engine', text: '1d10 Blessures ignorant Bonus d\'Endurance et PA, +1 Blessure par DR.' },
-      { id: 'redirect', mode: 'manual', text: 'Si la cible n\'est ni faible, ni lâche, ni fourbe (décision MJ), le prêtre subit le même effet.' },
+      { id: 'redirect', mode: 'engine', text: 'Si la cible n\'est ni faible, ni lâche, ni fourbe (verdict MJ), elle est épargnée et le prêtre subit le même effet (même jet de dégâts).' },
       { id: 'haine-sacree', mode: 'engine', text: 'Dégâts de miracle : +2 si le prêtre a le talent Haine sacrée (déclencheur « miracle inflige des Blessures »).' }
     ]
   },

@@ -127,7 +127,7 @@ export function extensionFields(contract) {
 export function describeDivineForm(contract, { actor } = {}) {
   const params = contract?.params || {};
   const effects = contract?.effects || [];
-  const damage = effects.find(effect => effect.type === 'direct-damage');
+  const damage = effects.find(effect => effect.type === 'direct-damage' && effect.dice);
   const heal = effects.find(effect => effect.type === 'wound-heal');
   const removal = effects.find(effect => effect.type === 'remove-condition');
   const weapon = effects.find(effect => effect.type === 'weapon-bonus' && effect.designatedWeapon === true);
@@ -335,9 +335,12 @@ export function describeEffectResult(row, { contract, participants = [] } = {}) 
   const target = participants.find(item => item.id === row.targetId);
   const who = nameOf(target) || row.targetId;
   switch (row.type) {
-    case 'direct-damage': {
-      const dice = (contract?.effects || []).find(effect => effect.type === 'direct-damage')?.dice;
-      const parts = [`${dice ? `${dice.count}d${dice.sides}` : 'dé'} = ${result.die}`, `${result.DR} DR`];
+    case 'direct-damage':
+    case 'ordinary-damage': {
+      const dice = (contract?.effects || []).find(effect => effect.type === row.type && effect.dice)?.dice;
+      const parts = [...(result.die === null || result.die === undefined ? [] : [`${dice ? `${dice.count}d${dice.sides}` : 'dé'} = ${result.die}`]), `${result.DR} DR`];
+      if (result.rawDamage !== undefined) parts.push(`${result.rawDamage} bruts − BE ${result.be} − PA ${result.ap}`);
+      if (result.mirror) parts.push('retour sur le prêtre');
       if (result.bonuses?.conditional) parts.push(`bonus ciblé +${result.bonuses.conditional}`);
       if (result.bonuses?.holyHatred) parts.push(`Haine sacrée +${result.bonuses.holyHatred}`);
       return `${who} : ${result.woundsLost} Blessure(s) perdue(s) (${parts.join(', ')}) · ${result.hpBefore} → ${result.hpAfter}`
