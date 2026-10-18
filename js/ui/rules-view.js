@@ -1,10 +1,14 @@
 import { qs, escapeHtml } from './dom.js';
 import { normalizeSearchText } from '../core/sanitize.js';
 import { RULES } from '../data/rules.js';
-import { CRIT_DATA } from '../data/crits.js';
+import { V5_CRIT_DATA as CRIT_DATA } from '../data/v5-crits.js';
+import { V5_RULES } from '../data/v5-rules.js';
 import { MAGIC_DATA } from '../data/magic.js';
 import { getKeywordList, getKeywordsStatus, keywordMechanicalStatus } from '../core/keywords.js';
 import { getReferenceCatalogue, getReferenceSnapshot, refreshReferences } from '../core/reference-catalog.js';
+import { v5TalentCoverage, importedPjTalentPriorities, V5_TALENT_TREATMENT_LABELS } from '../core/v5-talent-coverage.js';
+import { v5QualityMechanicalStatus } from '../core/v5-talent-qualities.js';
+const referenceContexts = new WeakMap();
 import { showToast } from './toast.js';
 import { contextMessage } from './messages.js';
 
@@ -21,10 +25,10 @@ function writeRuleFavorites(favorites) {
 function favoriteKey(value) { return normalizeSearchText(value).replace(/[^a-z0-9]+/g, '-'); }
 
 export function renderD100Table(data) {
-  let html = `<table class="wfrp-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
+  let html = `<table class="wfrp-table rules-d100-table"><thead><tr><th>D100</th><th>Nom</th><th>Effet</th></tr></thead><tbody>`;
   let prevMax = 0;
   data.forEach(row => {
-    html += `<tr><td>${prevMax + 1}–${row.max}</td><td><strong>${escapeHtml(row.name)}</strong></td><td>${escapeHtml(row.eff)}</td></tr>`;
+    html += `<tr><td>${row.max === Number.MAX_SAFE_INTEGER ? `${prevMax + 1} et plus` : `${prevMax + 1}–${row.max}`}</td><td><strong>${escapeHtml(row.name)}</strong></td><td>${escapeHtml(row.eff)}${row.parsed?.states?.length ? `<p>${row.parsed.states.map(state => escapeHtml(`${state.name} ${state.level}`)).join(' · ')}</p>` : ''}</td></tr>`;
     prevMax = row.max;
   });
   html += `</tbody></table>`;
@@ -32,7 +36,7 @@ export function renderD100Table(data) {
 }
 
 function extractTextFromBlock(block) {
-  let text = (block.title || '') + ' ' + (block.intro || '') + ' ';
+  let text = (block.title || '') + ' ' + (block.intro || '') + ' ' + (block.source || '') + ' ' + (block.tablesIntro || '') + ' ';
   if (block.sections) {
     block.sections.forEach(sec => {
       text += (sec.h4 || '') + ' ' + (sec.p || '') + ' ' + (sec.example || '') + ' ' + (sec.pAfter || '') + ' ';
@@ -57,7 +61,7 @@ function renderSection(sec) {
   if (sec.example) html += `<p class="example"><em>${escapeHtml(sec.example)}</em></p>`;
 
   if (sec.table) {
-    html += `<table class="wfrp-table"><thead><tr><th>Jet</th><th>Localisation</th></tr></thead><tbody>`;
+    html += `<table class="wfrp-table"><thead><tr><th>${escapeHtml(sec.tableHeaders?.[0] || 'Jet')}</th><th>${escapeHtml(sec.tableHeaders?.[1] || 'Localisation')}</th></tr></thead><tbody>`;
     sec.table.forEach(r => {
       html += `<tr><td>${escapeHtml(r.jet)}</td><td>${escapeHtml(r.loc)}</td></tr>`;
     });
@@ -92,14 +96,15 @@ function renderSection(sec) {
   return html;
 }
 
-export function renderReferenceTables(filterTerm = '', target = null) {
+export function renderReferenceTables(filterTerm = '', target = null, options = {}) {
   const panel = qs('#panel-rules');
   const root = target || panel;
   if (!root) return;
+  referenceContexts.set(root, {getEnvelope:options.getEnvelope || (()=>({})),onlyImported:false});
 
   const term = normalizeSearchText(filterTerm || '').trim();
 
-  let html = `<h2 class="rules-title">Aides de Jeu & Règles</h2>`;
+  let html = `<h2 class="rules-title">Règles V5 et aides de jeu</h2>`;
 
   html += `
     <div class="card" style="margin-bottom: 16px;">
@@ -126,10 +131,14 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   if (!listContainer) return;
 
   const cleanTerm = normalizeSearchText(term).trim();
+  const settings = referenceContexts.get(root) || {};
+  const priorities = importedPjTalentPriorities(settings.getEnvelope?.() || {});
+  const priorityById = new Map(priorities.items.map(row=>[row.talentId,row]));
   const favorites = readRuleFavorites();
   let matchCount = 0;
   let html = '';
 
+  html += `<div class="card"><strong>Repères V5</strong><div class="row rules-v5-shortcuts">${['Jets','Élan','Critiques','États'].map(label => `<button type="button" class="ghost small" data-rule-filter="${label}">${label}</button>`).join('')}</div><p class="muted">Tests, Élan, Blessures et tables de critiques du livre V5. Les talents conservent leur source Aides de jeu.</p></div>`;
   // 1. BLOC MOTS-CLÉS D'ARMES ET D'ARMURES (§13.2, §13.7)
   const keywords = getKeywordList();
   const status = getKeywordsStatus();
@@ -146,8 +155,8 @@ function updateRulesList(term, root = qs('#panel-rules')) {
     html += `<table class="wfrp-table"><thead><tr><th style="width:25%;">Mot-clé</th><th>Effet</th></tr></thead><tbody>`;
     matchedKeywords.forEach(k => {
       const key = `keyword:${favoriteKey(k.slug || k.name)}`;
-      const coverage = keywordMechanicalStatus(k.id);
-      const effectStatus = coverage.status === 'covered' ? (coverage.limitations?.length ? `Mécanique partiellement couverte : ${coverage.limitations.join(' ; ')}` : 'Effet couvert par le moteur') : coverage.reason === 'version-effet-non-couverte' ? 'Effet modifié : à arbitrer' : 'Effet à appliquer manuellement';
+      const coverage = v5QualityMechanicalStatus(k.id);
+      const effectStatus = k.edition !== 'V5' ? 'Description mécanique V5 à valider avant application' : coverage.status === 'covered' ? (coverage.limitations?.length ? `Mécanique partiellement couverte : ${coverage.limitations.join(' ; ')}` : 'Effet couvert par le moteur') : coverage.reason === 'version-effet-non-couverte' ? 'Effet modifié : à arbitrer' : 'Effet à appliquer manuellement';
       html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(k.name)}</strong>${k.parameter ? `<div class="muted">${escapeHtml(k.parameter)}</div>` : ''}</td><td>${escapeHtml(k.effect)}<p class="muted">${escapeHtml(k.source)} · ${escapeHtml(k.edition)} · ${escapeHtml(effectStatus)}</p>${k.note ? `<p class="muted">${escapeHtml(k.note)}</p>` : ''}</td></tr>`;
     });
     html += `</tbody></table></div></details></div>`;
@@ -157,14 +166,21 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   const pack = getReferenceSnapshot();
   const talentMatches = catalogue.talents.filter(talent => {
     const aliases = (pack.talents.legacyAliases || []).filter(alias => alias.englishName === talent.englishName).map(alias => alias.label);
-    return !cleanTerm || normalizeSearchText([talent.nom, talent.englishName, talent.description, ...aliases].join(' ')).includes(cleanTerm);
+    return (!settings.onlyImported || priorityById.has(talent.id)) && (!cleanTerm || normalizeSearchText([talent.nom, talent.englishName, talent.description, ...aliases].join(' ')).includes(cleanTerm));
   });
-  if (talentMatches.length) {
+  if (talentMatches.length || settings.onlyImported) {
     matchCount += talentMatches.length;
-    html += `<div class="card rule-block"><details ${cleanTerm ? 'open' : ''}><summary>Talents (${talentMatches.length})</summary><div class="rule-content"><p class="muted">Consultation des talents et limites. Les nouveaux effets mécaniques seront traités au lot 2.</p><table class="wfrp-table"><thead><tr><th>Talent</th><th>Effet et source</th></tr></thead><tbody>`;
+    html += `<div class="card rule-block"><details ${cleanTerm ? 'open' : ''}><summary>Talents (${talentMatches.length})</summary><div class="rule-content"><p class="muted">Traitement par clause : automatique, choix assisté ou rappel MJ. Les descriptions seules ne déclenchent aucun effet.</p><table class="wfrp-table"><thead><tr><th>Talent</th><th>Effet et source</th></tr></thead><tbody>`;
+    html += '<tr><td colspan="2"><button type="button" class="ghost small" data-talents-imported aria-pressed="'+Boolean(settings.onlyImported)+'">'+(settings.onlyImported?'Afficher tout le catalogue':'Priorités des PJ importés')+'</button><p class="muted">'+priorities.characters+' fiche(s) réellement importée(s) · '+priorities.acquisitions+' acquisition(s) résolue(s). Sources locales ; aucune lecture de l’état en ligne.</p>'+(priorities.ambiguousCharacters?'<p role="status">'+priorities.ambiguousCharacters+' identité(s) avec snapshots de talents divergents : priorité non fusionnée.</p>':'')+(priorities.unresolvedAcquisitions?'<p role="status">'+priorities.unresolvedAcquisitions+' acquisition(s) non résolue(s) : à vérifier.</p>':'')+'</td></tr>';
+    if(!talentMatches.length)html += '<tr><td colspan="2"><p role="status">Aucun talent de PJ importé ne correspond. Affichez tout le catalogue pour poursuivre la consultation.</p></td></tr>';
+    talentMatches.sort((a,b)=>(priorityById.get(b.id)?.characters||0)-(priorityById.get(a.id)?.characters||0)||a.nom.localeCompare(b.nom,'fr'));
     for (const talent of talentMatches) {
       const key = 'talent:' + talent.id;
-      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(talent.nom)}</strong>${talent.specializationLabel ? '<p class="muted">Spécialité : '+escapeHtml(talent.specializationLabel)+'</p>' : ''}</td><td>${escapeHtml(talent.description)}<p class="muted">Limite : ${escapeHtml(talent.limitText)} · ${escapeHtml(talent.source)}</p></td></tr>`;
+      const coverage=v5TalentCoverage(talent.id,catalogue),priority=priorityById.get(talent.id);
+      const treatment=coverage.clauses.map(clause=>'<p class="muted">'+escapeHtml(V5_TALENT_TREATMENT_LABELS[clause.mode]+' : '+clause.text)+(clause.reason?' '+escapeHtml(clause.reason):'')+'</p>').join('');
+      const imported=priority?'<p class="muted">PJ importés : '+priority.characters+' · acquisitions : '+priority.acquisitions+'</p>':'';
+      const sourceWarning=coverage.status==='sourceChanged'?'<p role="status">Description modifiée : clauses mécaniques suspendues avant revalidation.</p>':coverage.status==='sourceUnavailable'?'<p role="status">Source indisponible : effets à arbitrer.</p>':'';
+      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(talent.nom)}</strong>${talent.specializationLabel ? '<p class="muted">Spécialité : '+escapeHtml(talent.specializationLabel)+'</p>' : ''}</td><td>${escapeHtml(talent.description)}${imported}${sourceWarning}${treatment}<p class="muted">Limite : ${escapeHtml(talent.limitText)} · ${escapeHtml(talent.source)}</p></td></tr>`;
     }
     html += '</tbody></table></div></details></div>';
   }
@@ -181,8 +197,8 @@ function updateRulesList(term, root = qs('#panel-rules')) {
   }
 
   // 2. BLOCS DE RÈGLES CLASSIQUES
-  RULES.forEach(block => {
-    const fullText = extractTextFromBlock(block);
+  [...V5_RULES, ...RULES.filter(block => !['localisation','sante','psychologie','corruption'].includes(block.id))].forEach(block => {
+    const fullText = extractTextFromBlock(block) + ' ' + (block.nestedTables || []).flatMap(table => (table.type === 'magic' ? MAGIC_DATA : CRIT_DATA)[table.key] || []).map(row => normalizeSearchText(row.name + ' ' + row.eff + ' ' + (row.parsed?.states || []).map(state => state.name).join(' '))).join(' ');
     const matches = !cleanTerm || fullText.includes(cleanTerm);
 
     if (matches) {
@@ -193,7 +209,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
       html += `<details ${isOpen ? 'open' : ''}>`;
       const key = `rule:${favoriteKey(block.title)}`;
       html += `<summary class="row"><span>${escapeHtml(block.title)}</span><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button></summary>`;
-      html += `<div class="rule-content"><p class="muted">Aide historique locale · source complémentaire et édition à confirmer. Aucun rattachement à Aides de jeu n’est vérifié.</p>`;
+      html += `<div class="rule-content">${block.source ? `<p class="muted">V5 · ${escapeHtml(block.source)}</p>` : `<p class="muted">Aide historique locale · source et édition à confirmer.</p>`}`;
 
       if (block.intro) html += `<p>${escapeHtml(block.intro)}</p>`;
 
@@ -205,7 +221,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
 
       if (block.tablesHeader) {
         html += `<h3 style="margin-top:30px; border-top:2px solid var(--border); padding-top:10px;">${escapeHtml(block.tablesHeader)}</h3>`;
-        html += `<p class="muted">Générés automatiquement par le système :</p>`;
+        html += `<p class="muted">${escapeHtml(block.tablesIntro || 'Gravité du critique, bonus d’excédent compris :')}</p>`;
       }
 
       if (block.nestedTables) {
@@ -218,7 +234,7 @@ function updateRulesList(term, root = qs('#panel-rules')) {
           }
           html += `<details class="nested-details" ${isOpen ? 'open' : ''}>`;
           html += `<summary>${escapeHtml(nt.title)}</summary>`;
-          html += `<div data-table-id="${escapeHtml(nt.id)}"><p class="muted">Table locale · référence exacte à confirmer</p>${tableHtml}</div>`;
+          html += `<div data-table-id="${escapeHtml(nt.id)}">${nt.type === 'crit' ? `<p class="muted">V5 · Livre de base EN, p. ${{HEAD:173,ARM:174,BODY:175,LEG:176}[nt.key]}</p>` : `<p class="muted">${escapeHtml(nt.source || 'Table locale · référence exacte à confirmer')}</p>`}${tableHtml}</div>`;
           html += `</details>`;
         });
       }
@@ -233,6 +249,8 @@ function updateRulesList(term, root = qs('#panel-rules')) {
 
   listContainer.innerHTML = html;
 
+  listContainer.querySelector('[data-talents-imported]')?.addEventListener('click',()=>{settings.onlyImported=!settings.onlyImported;referenceContexts.set(root,settings);updateRulesList(term,root);});
+  listContainer.querySelectorAll('[data-rule-filter]').forEach(button => button.addEventListener('click', () => { const input = root.querySelector('.rules-search'); input.value = button.dataset.ruleFilter; updateRulesList(input.value, root); input.focus(); }));
   listContainer.querySelectorAll('.rule-favorite').forEach(button => {
     button.addEventListener('click', event => {
       event.preventDefault(); event.stopPropagation();

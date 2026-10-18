@@ -35,13 +35,13 @@ export function parseKeywordCSV(text){
 }
 
 
-/** Consultation mapping matches fiches/tools/refresh-fiche-catalog.mjs; retired spells retained. */
+/** Consultation mapping matches the public sheet; removed spells are not retained. */
 export function buildMagicReferences(tables,previous){
  const header=value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase().trim();
  const records=name=>{const [headers,...rows]=tables[name]||[];if(!headers)throw new Error('Source magique absente : '+name);const keys=headers.map(header);if(!keys.includes('nom'))throw new Error('Colonne magique Nom absente');return rows.map(row=>Object.fromEntries(keys.map((key,i)=>[key,String(row[i]||'').trim()]).filter(([key])=>key))).filter(row=>row.nom);};
  const spells=records('Magie').map(row=>({nom:row.nom,type:row.type||'',cn:Number(row.ni)||0,portee:row.portee||'',cible:row.cible||'',duree:row.duree||'',desc:row.description||'',...(row.nom==='Epées Sanguines'?{aliases:['Sanguine Swords']}:{})}));
  const normalize=value=>String(value).normalize('NFD').replace(/[\u0300-\u036f]/gu,'').replace(/[’']/gu,"'").toLowerCase().trim();
- for(const old of previous.spells){const current=spells.find(row=>normalize(row.nom)===normalize(old.nom)||(row.aliases||[]).some(alias=>normalize(alias)===normalize(old.nom)));if(current){const aliases=[...new Set([...(current.aliases||[]),...(old.aliases||[])])];if(aliases.length)current.aliases=aliases;}else spells.push({...old,retired:true});}
+ for(const old of previous.spells){const current=spells.find(row=>normalize(row.nom)===normalize(old.nom)||(row.aliases||[]).some(alias=>normalize(alias)===normalize(old.nom)));if(current){const aliases=[...new Set([...(current.aliases||[]),...(old.aliases||[])])];if(aliases.length)current.aliases=aliases;}}
  const miracles=records('Miracles').map(row=>({nom:row.nom,portee:row.portee||'',cible:row.cible||'',duree:row.duree||'',effet:row.effet||''}));
  if(spells.length<100||miracles.length<10||spells.some(row=>!row.desc)||miracles.some(row=>!row.effet))throw new Error('Ensemble de références magiques incomplet');return {spells,miracles};
 }
@@ -64,7 +64,7 @@ let status={source:'instantané local (dépôt)',contentVersion:current.contentV
 let initialized=false;let pending=null;
 export function loadInitialReferences(){
  if(initialized)return current;initialized=true;
- try{const raw=globalThis.localStorage?.getItem(CACHE_KEY);if(raw){const cache=JSON.parse(raw);const next=createReferenceResolvers(cache.data);current=deepFreeze(cache.data);resolvers=next;status={source:'localStorage',contentVersion:current.contentVersion,updatedAt:cache.updatedAt||current.fetchedAt,error:null};}}
+ try{const raw=globalThis.localStorage?.getItem(CACHE_KEY);if(raw){const cache=JSON.parse(raw);const next=createReferenceResolvers(cache.data);if(cache.data.magic.spells.some(spell=>spell.retired===true))return current;if(cache.data.localRevision!==snapshot.localRevision)return current;const cacheDate=Date.parse(cache.updatedAt||cache.data.fetchedAt),bundledDate=Date.parse(snapshot.fetchedAt);if(Number.isFinite(bundledDate)&&(!Number.isFinite(cacheDate)||cacheDate<bundledDate))return current;current=deepFreeze(cache.data);resolvers=next;status={source:'localStorage',contentVersion:current.contentVersion,updatedAt:cache.updatedAt||current.fetchedAt,error:null};}}
  catch(error){status={...status,error:`Cache de références ignoré : ${error.message}`};}return current;
 }
 export function getReferenceCatalogue(){loadInitialReferences();return {...current.equipment,contentVersion:current.contentVersion,talents:resolvers.talentResolver.entries,skills:resolvers.skillResolver.primaryEntries,magic:current.magic};}

@@ -216,7 +216,7 @@ const MISS = 90;
 
 test('E19 résolution — BF+4 avec F 35, action brute et normalisée', () => {
   for (const action of [{ type: 'attack', base: 60, damage: 'BF+4' }, normalizeAction({ type: 'attack', base: 60, damage: 'BF+4' })]) {
-    const preview = previewResolution({ actor: attacker(), target: victim(), action, roll: HIT });
+    const preview = previewResolution({ v5: { kind: 'ranged' }, actor: attacker(), target: victim(), action, roll: HIT });
     assert.equal(preview.hit, true);
     assert.equal(preview.damage.weaponDamage, 7);
     assert.equal(preview.damage.strengthBonus, 3);
@@ -228,7 +228,7 @@ test('E19 résolution — BF+4 avec F 35, action brute et normalisée', () => {
 
 test('E19 résolution — expression inconnue : à arbitrer, PV inchangés à l’application', () => {
   const target = victim();
-  const preview = previewResolution({ actor: attacker(), target, action: { type: 'attack', base: 60, damage: '1d10' }, roll: HIT });
+  const preview = previewResolution({ v5: { kind: 'ranged' }, actor: attacker(), target, action: { type: 'attack', base: 60, damage: '1d10' }, roll: HIT });
   assert.equal(preview.damage, null);
   assert.equal(preview.weapon.status, 'manual');
   assert.equal(preview.weapon.reason, 'expression-non-reconnue');
@@ -239,20 +239,20 @@ test('E19 résolution — expression inconnue : à arbitrer, PV inchangés à l�
 });
 
 test('E19 résolution — F absente ou seulement BF', () => {
-  const noForce = previewResolution({ actor: attacker({}), target: victim(), action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: HIT });
+  const noForce = previewResolution({ v5: { kind: 'ranged' }, actor: attacker({}), target: victim(), action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: HIT });
   assert.equal(noForce.weapon.status, 'manual');
   assert.equal(noForce.weapon.reason, 'force-inconnue');
   assert.equal(noForce.damage, null);
-  const onlyBf = previewResolution({ actor: attacker({ BF: 4 }), target: victim(), action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: HIT });
+  const onlyBf = previewResolution({ v5: { kind: 'ranged' }, actor: attacker({ BF: 4 }), target: victim(), action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: HIT });
   assert.equal(onlyBf.weapon.value, 8);
   assert.equal(onlyBf.damage.weaponDamage, 8);
 });
 
 test('E19 résolution — pas d’arme sur un raté ou une compétence, inferActionType', () => {
-  const miss = previewResolution({ actor: attacker(), target: victim(), action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: MISS });
+  const miss = previewResolution({ v5: { kind: 'ranged' }, actor: attacker(), target: victim(), action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: MISS });
   assert.equal(miss.hit, false);
   assert.equal(miss.weapon, null);
-  const skill = previewResolution({ actor: attacker(), target: victim(), action: { type: 'skill', base: 60 }, roll: HIT });
+  const skill = previewResolution({ v5: { kind: 'ranged' }, actor: attacker(), target: victim(), action: { type: 'skill', base: 60 }, roll: HIT });
   assert.equal(skill.weapon, null);
   assert.equal(inferActionType({ damage: 0, damageFormula: 'BF' }), 'attack');
   assert.equal(inferActionType({ damage: 0, damageFormula: '' }), 'skill');
@@ -297,10 +297,10 @@ test('E19 store — résolution BF+4 puis expression à arbitrer journalisée', 
   await store.ready;
   await store.addParticipant({ id: 'actor', name: 'Orc', hp: 10, caracs: { F: 35 }, zone: 'active' });
   await store.addParticipant({ id: 'target', name: 'Cible', hp: 10, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, zone: 'active' });
-  const sure = store.previewResolution({ actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: HIT });
+  const sure = store.previewResolution({ v5: { kind: 'ranged' }, actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: HIT });
   assert.equal(sure.weapon.value, 7);
   assert.equal(sure.damage.weaponDamage, 7);
-  const manual = store.previewResolution({ actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: '1d10' }, roll: HIT });
+  const manual = store.previewResolution({ v5: { kind: 'ranged' }, actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: '1d10' }, roll: HIT });
   const result = await store.applyResolution(manual);
   assert.equal(result.status, 'applied');
   assert.equal(store.getCombat().participants.get('target').hp, 10);
@@ -315,13 +315,14 @@ test('le détail d\'une résolution du journal est lisible en français', async 
   await store.ready;
   await store.addParticipant({ id: 'actor', name: 'Orc', hp: 10, caracs: { F: 35 }, zone: 'active' });
   await store.addParticipant({ id: 'target', name: 'Cible', hp: 10, caracs: { E: 30 }, armor: { head: 0, body: 0, arms: 0, legs: 0 }, zone: 'active' });
-  const preview = store.previewResolution({ actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: 23 });
+  const preview = store.previewResolution({ v5: { kind: 'ranged' }, actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: 'BF+4' }, roll: 23 });
   await store.applyResolution(preview);
   const lines = describeResolutionDetail(store.getLog()[0].detail);
   assert.equal(lines[0], 'Type : Attaque');
-  assert.equal(lines[1], 'Jet : 23');
-  assert.equal(lines[2], 'Seuil : 60');
-  assert.match(lines[3], /^DR : [+−]\d+$/);
+  assert.ok(lines.includes('Jet : 23'));
+  assert.ok(lines.includes('Seuil : 60'));
+  assert.ok(lines.some(line => /^DR : [+−]\d+$/.test(line)));
+  assert.ok(lines.some(line => line.startsWith('Règle : v5-combat')));
   assert.ok(lines.some(line => line.startsWith('Localisation : 32 → ')));
   assert.ok(lines.some(line => line.startsWith('Dégâts : ') && line.includes('BF 3')));
   const text = lines.join(' | ');

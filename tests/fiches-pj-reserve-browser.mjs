@@ -33,7 +33,8 @@ export async function testFicheReserveEditor(page, openWorkspaceProfileEditor) {
     assert.equal(savedLinked.armorLocations.rightArm, 3); assert.equal(savedLinked.armorLocations.leftArm, 1);
     assert.equal(savedLinked.diceLines.length, 2);
     assert.equal(savedLinked.diceLines[0].id, 'browser-source-action');
-    assert.equal(savedLinked.diceLines[0].base, ''); assert.equal(savedLinked.diceLines[0].mod, 5);
+    assert.equal(savedLinked.diceLines[0].base, ''); assert.equal(savedLinked.diceLines[0].mod, 0);
+    assert.equal(savedLinked.diceLines[0].extensions.v5.slModifier, 5);
     assert.equal(savedLinked.diceLines[0].extensions.fiche.equipmentId, 'browser-weapon');
     assert.equal(savedLinked.diceLines[1].id, 'browser-local-action');
     assert.equal(savedLinked.diceLines[1].extensions.kept, 'local');

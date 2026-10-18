@@ -43,7 +43,7 @@ test('Store — une simulation appliquée ne passe qu’une fois par la résolut
   await store.ready;
   await store.addParticipant({ id: 'actor', name: 'Attaquant', hp: 10, zone: 'active' });
   await store.addParticipant({ id: 'target', name: 'Cible', hp: 10, armor: { body: 0 }, caracs: { E: 30 }, zone: 'active' });
-  const simulation = store.simulateAction({ actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: 2 }, roll: 40 });
+  const simulation = store.simulateAction({ v5: { kind: 'ranged' }, actorId: 'actor', targetId: 'target', action: { type: 'attack', base: 60, damage: 2 }, roll: 40 });
   const result = await store.applySimulation(simulation);
   assert.equal(result.status, 'applied');
   assert.equal(store.getCombat().participants.get('target').hp, 9);
@@ -58,7 +58,7 @@ test('Store — une résolution est appliquée après commit et un rejeu reste d
   await store.addParticipant({ id: 'actor-resolution', name: 'Attaquant', hp: 10, zone: 'active' });
   await store.addParticipant({ id: 'target-resolution', name: 'Cible', hp: 10, armor: { body: 0 }, caracs: { E: 30 }, zone: 'active' });
   const preview = store.previewResolution({
-    actorId: 'actor-resolution', targetId: 'target-resolution',
+    v5: { kind: 'ranged' }, actorId: 'actor-resolution', targetId: 'target-resolution',
     action: { type: 'attack', base: 60, damage: 2 }, roll: 40
   });
   const result = await store.applyResolution(preview);
@@ -87,7 +87,7 @@ test('Store — une résolution en file recalcule le draft et ne remplace pas un
   await store.ready;
   await store.addParticipant({ id: 'actor-race', name: 'Attaquant', hp: 10, zone: 'active' });
   await store.addParticipant({ id: 'target-race', name: 'Cible', hp: 10, armor: { body: 0 }, caracs: { E: 30 }, zone: 'active' });
-  const preview = store.previewResolution({ actorId: 'actor-race', targetId: 'target-race', action: { type: 'attack', base: 60, damage: 2 }, roll: 40 });
+  const preview = store.previewResolution({ v5: { kind: 'ranged' }, actorId: 'actor-race', targetId: 'target-race', action: { type: 'attack', base: 60, damage: 2 }, roll: 40 });
   hold = true;
   const edit = store.updateParticipant('target-race', { hp: 8 });
   const apply = store.applyResolution(preview);

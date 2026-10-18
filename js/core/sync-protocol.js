@@ -5,6 +5,8 @@
  * validates/clones values and returns a new document. It never logs, writes or
  * invokes callbacks.
  */
+import { sanitizeMagicEnvelope } from './sanitize.js';
+
 export const SYNC_PROTOCOL_VERSION = 3;
 
 // These fields belong to a device/session and must never enter the shared root.
@@ -67,7 +69,7 @@ function assertSharedStateVersion(state) {
 }
 
 /** Clone a state while removing device-local data from its shared root. */
-export function sharedState(state = {}) {
+export function sharedState(state = {},options={}) {
   if (!isRecord(state)) {
     throw new SyncProtocolError('state partagé doit être un objet', 'INVALID_STATE');
   }
@@ -76,7 +78,50 @@ export function sharedState(state = {}) {
   for (const [key, value] of Object.entries(state)) {
     if (!LOCAL_FIELDS.has(key)) safeSet(out, key, clone(value));
   }
-  return out;
+  return sanitizeMagicEnvelope(out,options);
+}
+
+// RTDB removes null and empty branches, and may return numeric maps as arrays.
+// Compare their stored meaning without changing either client snapshot.
+function storedValue(value) {
+  if (value == null) return undefined;
+  if (typeof value !== 'object') return value;
+  const out = {};
+  for (const key of Object.keys(value).sort()) {
+    const child = storedValue(value[key]);
+    if (child !== undefined) safeSet(out, key, child);
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
+function comparableSharedState(state) {
+  const out = sharedState(state,{synchronizeAliases:false});
+  // Older schema-3 migration copied this known field into extensions as well.
+  // Ignore only that identical redundant copy, retaining every other extension.
+  if (['manual', 'automatic'].includes(out.combat?.orderMode)
+    && out.combat?.extensions?.orderMode === out.combat.orderMode) {
+    delete out.combat.extensions.orderMode;
+  }
+  // Participant's magic aliases are display projections of the canonical extension.
+  // Ignore only exact redundant copies. A differing value remains a real conflict.
+  const rows=value=>Array.isArray(value)?value:isRecord(value)?Object.values(value):[];
+  const subjects=[...rows(out.reserve),...rows(out.persistentCharacters),...rows(out.combat?.participants),...rows(out.activeScene?.participants),...rows(out.suspendedScenes).filter(isRecord).flatMap(scene=>rows(scene.participants || scene.combat?.participants))];
+  const equal=(left,right)=>JSON.stringify(storedValue(left))===JSON.stringify(storedValue(right));
+  for(const p of subjects){
+    if(!isRecord(p))continue;
+    const v5=p.extensions?.v5 || {},ext=p.extensions || {};
+    const aliases={channelling:v5.channelling ?? ext.channelling,channellingReserve:v5.channelling,spellEffects:v5.spellEffects ?? ext.spellEffects,fortune:v5.fortune ?? ext.fortune,temporaryFortune:v5.temporaryFortune ?? ext.temporaryFortune,fate:v5.fate ?? ext.fate,temporaryFate:v5.temporaryFate ?? ext.temporaryFate,testModifiers:v5.testModifiers,baseCaracs:v5.baseCaracs,baseArmor:v5.baseArmor};
+    if(Array.isArray(v5.temporaryTraits))aliases.traits=Array.from(new Set([...(v5.baseTraits || ext.traits || []),...v5.temporaryTraits]));else if(Array.isArray(ext.traits))aliases.traits=ext.traits;
+    for(const [key,value] of Object.entries(aliases))if(value!==undefined && hasOwn(p,key) && equal(p[key],value))delete p[key];
+    for(const key of ['channelling','channellingReserve','spellEffects','baseCaracs','baseArmor','testModifiers','fortune','temporaryFortune','fate','temporaryFate']){
+      const value=key==='channellingReserve'?v5.channelling:v5[key];if(value!==undefined && hasOwn(ext,key)&&equal(ext[key],value))delete ext[key];
+    }
+  }
+  return storedValue(out);
+}
+
+export function sameSharedState(left, right) {
+  return JSON.stringify(comparableSharedState(left)) === JSON.stringify(comparableSharedState(right));
 }
 
 function validateReceipts(receipts) {

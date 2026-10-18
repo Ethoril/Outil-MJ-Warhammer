@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 2,
+  "sourceCatalogueVersion": "sha256:d497bb6d01c62c811097b9b0784d229d2c56b34d428f134f6ad21af764e17bd4",
+  "verifiedAt": "2026-10-09",
+  "coverage": "Five validated V5 contracts wired into combat and explicit reaction opportunities; remaining catalogue coverage is incomplete.",
+  "contracts": [
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-accurate-shot",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.1",
+      "source": {
+        "effectHash": "sha256:7b9d4ef667a338ef20ea21f3587a206de729db1ce9b9502cd2027aae29691080",
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "ordinary",
+          "event": "damage.beforeProtection",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "ranged"
+            },
+            {
+              "field": "attack.success",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "attack.hit",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "aimed",
+              "op": "eq",
+              "value": false
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyDamage",
+              "amount": 1,
+              "stackGroup": "talent-accurate-shot",
+              "stack": "max"
+            }
+          ]
+        },
+        {
+          "id": "boosted",
+          "event": "damage.beforeProtection",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "ranged"
+            },
+            {
+              "field": "attack.success",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "attack.hit",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "aimed",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyDamage",
+              "amount": 2,
+              "stackGroup": "talent-accurate-shot",
+              "stack": "max"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-strike-mighty-blow",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.1",
+      "source": {
+        "effectHash": "sha256:541b83ce4a9bce37565b529477f60c9eb5fb2c5eb05836f4e077457e8b3be897",
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "ordinary",
+          "event": "damage.beforeProtection",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "melee"
+            },
+            {
+              "field": "weapon.isMelee",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "attack.hit",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "attack.usedAdvantageV5",
+              "op": "eq",
+              "value": false
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyDamage",
+              "amount": 1,
+              "stackGroup": "talent-strike-mighty-blow",
+              "stack": "max"
+            }
+          ]
+        },
+        {
+          "id": "boosted",
+          "event": "damage.beforeProtection",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "melee"
+            },
+            {
+              "field": "weapon.isMelee",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "attack.hit",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "attack.usedAdvantageV5",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyDamage",
+              "amount": 2,
+              "stackGroup": "talent-strike-mighty-blow",
+              "stack": "max"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-iron-jaw",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.1",
+      "source": {
+        "effectHash": "sha256:bd879ea3b5c0af1e27f51c1e49f8384d2f100e60d9bd992c7d081721f8ab4ca6",
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "first-stunned-acquisition",
+          "event": "condition.beforeAcquire",
+          "role": "defender",
+          "when": [
+            {
+              "field": "condition.id",
+              "op": "eq",
+              "value": "sonne"
+            },
+            {
+              "field": "condition.instances",
+              "op": "gte",
+              "value": 1
+            }
+          ],
+          "effects": [
+            {
+              "op": "reduceConditionAcquisition",
+              "key": "sonne",
+              "amount": 1,
+              "stackGroup": "talent-iron-jaw",
+              "stack": "max"
+            }
+          ],
+          "quotas": [
+            {
+              "id": "talent-iron-jaw:first-stunned",
+              "scope": "encounter",
+              "maximum": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-beat-blade",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.2",
+      "source": {
+        "effectHash": "sha256:8a69c53432d97d2cc3b99491b684df096cd8f6a635a675916f81505a7cc6add3",
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "replace-damage",
+          "event": "action.afterAttack",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "melee"
+            },
+            {
+              "field": "attack.success",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "attack.hit",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "target.size",
+              "op": "lteField",
+              "otherField": "actor.size"
+            }
+          ],
+          "effects": [
+            {
+              "op": "replaceDamage",
+              "scope": "allDamage",
+              "stackGroup": "talent-beat-blade:damage",
+              "stack": "unique"
+            },
+            {
+              "op": "createActiveEffect",
+              "key": "talent-beat-blade",
+              "restriction": "cannotOpposeWithMelee",
+              "advantageFilter": "meleeAttacksAgainstTarget",
+              "stackGroup": "talent-beat-blade:active",
+              "stack": "unique",
+              "expiry": {
+                "anchor": "authorNextTurnEnd"
+              }
+            }
+          ],
+          "choice": {
+            "id": "talent-beat-blade:replace-damage"
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-furious-assault",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.2",
+      "source": {
+        "effectHash": "sha256:864e1ad7fd0b62fa94bc7a1596d1bc8d0a521efe3704561c174262d5a04b10ee",
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "after-melee-hit",
+          "event": "action.afterAttack",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "melee"
+            },
+            {
+              "field": "attack.hit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantExtraAttack",
+              "stackGroup": "talent-furious-assault",
+              "stack": "unique"
+            }
+          ],
+          "costs": [
+            {
+              "id": "talent-furious-assault:momentum",
+              "resource": "momentum",
+              "amount": 1
+            }
+          ],
+          "quotas": [
+            {
+              "id": "talent-furious-assault:round",
+              "scope": "round",
+              "maximum": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceDescriptions": {
+    "talent-accurate-shot": "Vos attaques à distance réussies infligent +1 Dégât, ou +2 si vous avez pris le temps de viser.",
+    "talent-strike-mighty-blow": "=+1 dégât avec les armes de corps à corps, ou +2 si l'attaque a été effectuée avec Avantage V5.",
+    "talent-iron-jaw": "La première fois de chaque rencontre que vous devriez gagner un ou plusieurs états Sonné, vous en gagnez un de moins.",
+    "talent-beat-blade": "Après une attaque de Corps à corps réussie, renoncez aux Dégâts : jusqu’à la fin de votre prochain Tour, la cible ne peut plus opposer une Compétence de Corps à corps et les attaques de Corps à corps contre elle ont Avantage V5. Elle peut encore Esquiver. Inefficace contre une cible plus grande que vous.",
+    "talent-furious-assault": "Une fois par Round, après avoir touché un adversaire au Corps à corps, vous pouvez immédiatement perdre votre Momentum pour effectuer une attaque supplémentaire."
+  }
+}

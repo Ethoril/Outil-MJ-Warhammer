@@ -148,7 +148,7 @@
 .workspace-track-item.is-target { box-shadow: 0 0 0 2px var(--text); }
 .workspace-track-top { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
 .workspace-track-marker { flex: none; width: 1ch; color: var(--accent-text); font-family: var(--font-ui); font-size: 12.5px; }
-.workspace-track-name { flex: 1; min-width: 0; font-size: 16.5px; line-height: 1.15; overflow-wrap: anywhere; }
+.workspace-track-name { flex: 1 1 140px; min-width: 90px; font-size: 16.5px; line-height: 1.15; overflow-wrap: anywhere; }
 .workspace-track-item.is-actor .workspace-track-name { color: var(--accent-text); }
 .workspace-track-role { flex: none; font-family: var(--font-ui); font-size: 12.5px; color: var(--muted); }
 .workspace-track-hp { flex: none; font-family: var(--font-ui); font-size: 14px; font-weight: 700; }
@@ -161,8 +161,8 @@
 .workspace-hp-bar.is-crit .workspace-hp-fill { background: var(--hp-crit); }
 
 .workspace-bench { margin-top: 16px; display: grid; gap: 6px; }
-.workspace-bench-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px dashed var(--border); border-radius: var(--radius); }
-.workspace-bench-label { min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
+.workspace-bench-item { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px dashed var(--border); border-radius: var(--radius); }
+.workspace-bench-label { flex: 1 1 100%; min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
 .workspace-bench-label .num { font-family: var(--font-ui); font-size: 12.5px; white-space: nowrap; }
 .workspace-bench-item button { flex: none; min-height: 32px; padding: 5px 9px; font-size: 13.5px; }
 
@@ -224,7 +224,7 @@
 .workspace-state-form .workspace-field-error { flex-basis: 100%; }
 
 /* Résolution */
-.workspace-resolution { display: grid; gap: 12px; }
+.workspace-resolution { display: grid; gap: 12px; min-width: 0; }
 .workspace-resolution > .workspace-rubric { margin: 0; }
 .workspace-resolution-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 6px 10px; align-items: start; }
 .workspace-resolution-row > .workspace-rubric { margin: 8px 0 0; font-size: 12px; }
@@ -371,3 +371,73 @@
 .fiche-consultation p { margin: 8px 0; font-size: 14px; line-height: 1.5; }
 .fiche-sync-entry select { max-width: 100%; }
 .fiche-sync-actions label { display: block; margin: 6px 0; }
+
+.workspace-v5-context { display:flex; flex-wrap:wrap; gap:8px 16px; padding:10px 0; min-width:0; max-width:100%; }
+.workspace-v5-context h4, .workspace-v5-context p { flex-basis:100%; min-width:0; overflow-wrap:anywhere; }
+.workspace-v5-context input[type=number] { width:5em; max-width:100%; }
+.workspace-v5-choice-group { border:0; padding:0; margin:0 0 12px; min-width:0; }
+.workspace-v5-choice-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.workspace-v5-choice { display:flex; align-items:flex-start; gap:8px; padding:12px; border:1px solid var(--chip); border-radius:var(--radius); cursor:pointer; }
+.workspace-v5-choice.is-selected { border-color:var(--accent-text); }
+.workspace-v5-choice-text { display:grid; gap:5px; min-width:0; overflow-wrap:anywhere; }
+.workspace-v5-recommendation { color:var(--hp-ok); }
+.workspace-v5-calculations summary { cursor:pointer; }
+.workspace-v5-calculations p { margin-top:6px; }
+@media (max-width:480px) { .workspace-v5-choice-cards { grid-template-columns:1fr; } }
+
+.workspace-v5-context-details { flex-basis:100%; min-width:0; max-width:100%; }
+.workspace-v5-context-details summary { cursor:pointer; }
+.workspace-v5-context .workspace-type { flex-wrap:wrap; min-width:0; max-width:100%; }
+.workspace-v5-context select { min-width:0; max-width:100%; box-sizing:border-box; }
+.workspace-v5-magic > .workspace-type { flex:1 1 220px; }
+.workspace-v5-magic select { width:100%; }
+.workspace-v5-choice:has(input:focus-visible) { outline:2px solid var(--text); outline-offset:2px; }
+
+/* Critical rows keep their range and full effect legible in the narrow rules pane. */
+.workspace-side-panel .rules-d100-table thead { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.workspace-side-panel .rules-d100-table tbody { display:block; }
+.workspace-side-panel .rules-d100-table tr { display:grid; grid-template-columns:72px minmax(0,1fr); border:1px solid var(--border); margin-bottom:8px; }
+.workspace-side-panel .rules-d100-table td { display:block; border:0; overflow-wrap:normal; }
+.workspace-side-panel .rules-d100-table td:first-child { font-family:var(--font-ui); font-weight:600; }
+.workspace-side-panel .rules-d100-table td:nth-child(3) { grid-column:1 / -1; border-top:1px solid var(--border); }
+.workspace-side-panel .rules-d100-table td p { margin:6px 0; }
+@media (max-width:520px) {
+  .workspace-side-panel .rule-content { padding-inline:6px; }
+  .workspace-side-panel .nested-details { margin-left:0; padding-left:6px; }
+}
+
+.workspace-state-expiration { flex-basis:100%; display:flex; flex-wrap:wrap; gap:8px; }
+.workspace-state-expiration p { flex-basis:100%; margin:4px 0; }
+.workspace-state-origin { flex-basis:100%; font-weight:400; }
+.workspace-state-recover { padding:2px 6px; font-size:12px; min-height:28px; }
+.v5-effect-dialog { max-width:640px; width:min(640px,calc(100vw - 32px)); }
+.v5-effect-dialog form { display:grid; gap:12px; padding:16px; }
+.v5-effect-dialog fieldset { min-width:0; border:1px solid var(--border); padding:12px; margin:10px 0; }
+.v5-effect-dialog legend { font-weight:600; }
+.v5-effect-field { display:grid; gap:6px; margin:12px 0; }
+.v5-effect-field input, .v5-effect-field select { max-width:100%; }
+.v5-effect-field input { width:7em; }
+.v5-effect-field label { display:block; }
+.v5-effect-test { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.v5-effect-boolean { display:flex; gap:8px; align-items:center; }
+.v5-effect-dialog .workspace-muted { margin:4px 0; }
+
+/* Input confirmation is a modal with the height of its contents, including on a phone. */
+dialog.v5-effect-dialog { inset:0; width:min(640px,calc(100vw - 32px)); max-width:calc(100vw - 32px); height:auto; max-height:calc(100dvh - 32px); margin:auto; padding:0; display:block; overflow:auto; border:1px solid var(--border); border-radius:var(--radius); }
+dialog.v5-effect-dialog::backdrop { background:rgba(0,0,0,.4); }
+
+dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto; margin:0; transform:translate(-50%,-50%); }
+.workspace-sheet-states { grid-column:1 / -1; }
+.workspace-state-form > .workspace-type { display:grid; gap:4px; flex:1 1 180px; }
+.workspace-state-expiration > .workspace-type { display:grid; gap:4px; flex:1 1 150px; }
+.workspace-state-form label select { flex:none; width:100%; }
+.workspace-state-origin { white-space:normal; }
+.workspace-state-chip:has(.workspace-state-origin) { flex-wrap:wrap; max-width:100%; border-radius:8px; }
+
+/* Options propres à Destruction des Arcanes. */
+.workspace-arcane-options { flex-basis:100%; display:grid; gap:8px; }
+.workspace-arcane-options > legend { font-weight:600; margin-bottom:6px; }
+.workspace-arcane-options .workspace-arcane-toggle { display:flex; flex-direction:row; align-items:center; gap:8px; }
+.workspace-v5-context .workspace-type.workspace-recipient-check, .workspace-v5-context-details > .workspace-type.workspace-recipient-check { flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; }
+.workspace-recipient-check input[type=checkbox] { flex:none; width:auto; margin:0; }
+.workspace-arcane-toggle input[type=checkbox] { flex:none; width:auto; margin:0; }

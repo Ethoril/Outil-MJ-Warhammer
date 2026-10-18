@@ -16,7 +16,7 @@ const target = {
 };
 
 test('E12 résolution — dé saisi et dé virtuel équivalents, 00 devient 100', () => {
-  const base = { actor, action: { type: 'test', base: 50, mod: 5 }, baseRevision: 3 };
+  const base = { actor, action: { type: 'test', base: 50, mod: 5 }, v5: { slModifier: 1, context: { runningOrHiding: false } }, baseRevision: 3 };
   const entered = previewResolution({ ...base, roll: '00' });
   const virtual = previewResolution({ ...base, roll: 100 });
   assert.equal(entered.roll, 100);
@@ -25,19 +25,22 @@ test('E12 résolution — dé saisi et dé virtuel équivalents, 00 devient 100'
   assert.throws(() => normalizeResolutionInput({ ...base, roll: 0 }), ResolutionError);
 });
 
-test('E12 résolution — malus par nom, modificateur visible et critique bornée', () => {
+test('E12 résolution — pénalité V5 des États et difficulté en DR, seuil inchangé', () => {
   const result = previewResolution({
-    actor, target,
-    action: { type: 'attack', base: 50, mod: 5, damage: 4, qualities: ['Précise', 'precise', 'Empaleuse'] },
+    actor, target, v5: { kind: 'ranged', slModifier: 1 },
+    action: { type: 'attack', base: 50, mod: 5, damage: 4, qualities: ['Empaleuse'] },
     baseRevision: 7, roll: 30, criticalRolls: { location: 20, effect: 40 }
   });
   assert.deepEqual(result.score, {
-    base: 50, mod: 5, statePenalty: 20, penaltyStates: ['sonne', 'brise'], target: 45
+    base: 50, mod: 0, statePenalty: 1, penaltyStates: ['sonne', 'brise'], target: 50
   });
   assert.equal(result.success, true);
-  assert.equal(result.sl, 1);
+  assert.equal(result.sl, 2);
   assert.equal(result.critical.kind, 'Critique');
   assert.equal(result.critical.details.effectRoll, 40);
+  const legacy = previewResolution({ actor: { id: 'a', states: [] }, target, action: { type: 'attack', base: 50, mod: 5, damage: 4 }, roll: 30 });
+  assert.equal(applyResolution(legacy, { revision: 0, participants: [target] }).status, 'manual');
+  assert.match(legacy.unresolved[0], /Ancien modificateur/);
 });
 
 test('E12 résolution — critique injecté, localisation et dégâts seulement pour attaque', () => {
@@ -64,7 +67,7 @@ test('E12 résolution — opposition non couverte reste un arbitrage manuel', ()
 test('E12 résolution — application unique et révision cible invalidante', () => {
   const preview = previewResolution({
     actor: { id: 'a', states: [] }, target,
-    action: { type: 'attack', base: 60, damage: 4 }, roll: 42, baseRevision: 1
+    action: { type: 'attack', base: 60, damage: 4 }, v5: { kind: 'ranged' }, roll: 42, baseRevision: 1
   });
   const current = { revision: 1, participants: [target], appliedResolutionIds: [] };
   const applied = applyResolution(preview, current);
@@ -85,7 +88,7 @@ test('E12 résolution — application unique et révision cible invalidante', ()
 });
 
 test('E12 résolution — rejeu conserve exactement les mêmes jets et entrées', () => {
-  const input = { actor, target, action: { type: 'attack', base: 60, damage: 4 }, roll: '01', baseRevision: 2 };
+  const input = { actor, target, action: { type: 'attack', base: 60, damage: 4 }, v5: { kind: 'ranged' }, roll: '01', baseRevision: 2 };
   const first = previewResolution(input);
   const replay = replayResolution(first.input);
   assert.deepEqual(replay, first);
@@ -101,7 +104,7 @@ test('E12 résolution — identifiants dérivés incluent action, cible et révi
 });
 
 test('E12 résolution — double application même ID reste unique et le journal borné', () => {
-  const preview = previewResolution({ resolutionId: 'same-action', actor: { id: 'a', states: [] }, target, action: { type: 'attack', base: 60, damage: 4 }, roll: 42, baseRevision: 1 });
+  const preview = previewResolution({ resolutionId: 'same-action', actor: { id: 'a', states: [] }, target, action: { type: 'attack', base: 60, damage: 4 }, v5: { kind: 'ranged' }, roll: 42, baseRevision: 1 });
   const current = { revision: 1, participants: [target], appliedResolutionIds: [] };
   const applied = applyResolution(preview, current);
   assert.equal(applyResolution(preview, applied.state).status, 'duplicate');

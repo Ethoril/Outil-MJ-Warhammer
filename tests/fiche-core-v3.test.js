@@ -91,7 +91,7 @@ for (const simulation of [false, true]) test(`Fiche v3 — attaque au bouclier $
   await store.launchEncounter('enc'); await store.nextTurn();
   const actor = store.listParticipants().find(row => row.profileId === 'pj');
   const target = store.listParticipants().find(row => row.profileId === 'target');
-  const input = { actorId: actor.id, targetId: target.id, action: actor.actions[0], roll: 42 };
+  const input = { actorId: actor.id, targetId: target.id, action: actor.actions[0], roll: 42, defense: { base: 30, roll: 65 } };
   const outcome = simulation ? await store.applySimulation(store.simulateAction(input)) : await store.applyResolution(store.previewResolution(input));
   assert.equal(outcome.status, 'applied');
   assert.deepEqual(store.listParticipants().find(row => row.id === actor.id).extensions.shieldUnavailable, ['shield']);

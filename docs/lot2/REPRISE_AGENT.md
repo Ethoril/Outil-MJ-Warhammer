@@ -1,30 +1,32 @@
-# Consigne de reprise pour l’agent
+# Reprise du chantier local V5
 
-À copier dans la nouvelle conversation après ouverture du dépôt :
+> État courant du 10 octobre : application locale **3.14.0**, magie finalisée et [recette 3.5](../lot3/LOT3_RECETTE_3_5.md). Lire d’abord [le bilan complet](../lot3/LOT3_FINALISATION_MAGIE.md). Le tri exclusif ci-dessous et ses 28 talents « lot 3 » décrivent le lot 2 historique. La couverture actuelle compte 285 clauses automatiques, 122 assistées, 63 rappels, 41 fiches, 10 exclusions et 9 clauses différées à un autre périmètre. Ingrédients exclus ; miracles inventoriés seulement. Worktree / branche / HEAD inchangés, aucune publication.
 
-> Reprends le lot 2 de l’Outil MJ Warhammer depuis la branche `codex/lot2-talents-v5`. Lis `docs/lot2/README.md`, `LOT2_ETAPES.md`, `LOT2_CADRAGE.md`, `LOT2_DEMARRAGE.md` et `LOT2_CONTRATS_MOTEUR.md`. Le cadrage et le début du chantier sont autorisés. Le socle initial est `7477421e937d73ba4d3cf81b1c8582c0c8315544`, base `28657e39477bbcbfeb0de826b3f1d05e525bb386`, version 3.12.3. Les fonctions nouvelles sont testées mais ne sont pas raccordées au combat. La prochaine étape est 2.1 : résolution V5 réelle et interface de comparaison. La maquette `maquette-choix-avantage.html` est approuvée. Continue dans un checkout isolé, préserve les autres lots et ne déploie aucune fonctionnalité inachevée.
+État du 9 octobre 2026 après le tri complet et le raccordement des familles restantes. Lire [le bilan détaillé](LOT2_TRI_TALENTS.md), [l’avancement](LOT2_AVANCEMENT.md), [les décisions](CHOIX_POUR_LA_REPRISE.md) et [la passation](PASSATION_PROCHAINE_FENETRE.md).
 
-## Décisions du MJ
+Continuer dans le worktree local `lot2-combat-v5`, branche `codex/lot2-talents-v5`. L’incrément courant est **non commité** sur HEAD `fb0f280`. Le main de E:\Outil MJ Warhammer reste inchangé sur `08ce45d`. Conserver toutes les modifications et nouveaux fichiers ; le distant et l’ancien ZIP de préparation ne les contiennent pas. Le paquet statique 3.13.0 est séparé dans tmp/lot2-25/. Aucun push, merge ou déploiement autorisé.
 
-- Catalogue utile complet, PJ actuels prioritaires. Lire les snapshots réels : la fixture Caelel ne prouve pas les talents des cinq PJ actuels.
-- Système jouable unique V5 ; aucun compteur d’Avantage V4 ni convertisseur automatique. Le MJ convertit les descriptions dans Aides de jeu ailleurs. Une bibliographie V4 peut rester ; la description mécanique doit être V5 et son contrat validé.
-- Dix talents de bonus de caractéristiques déjà compris dans les fiches sont exclus. Les autres valeurs dérivées ne sont pas exclues par défaut ; ne pas ajouter deux fois Dur à cuire à l’import.
-- Annulation Avantage/Désavantage **1 pour 1**. Solde : inversion, puis +1/−1 DR par source supplémentaire au-delà de la première. Doubles inchangés, DR supplémentaires conservés.
-- Élan binaire : gain sur victoire opposée en mêlée ou Charge ; Avantage en Corps à corps. Perte sur échec/opposition perdue, Blessures effectivement perdues, État effectivement acquis, pause ou fin de combat.
-- Une seule dépense d’Élan pour une attaque supplémentaire par Tour. Exemption de coût distincte du quota du talent. Conservation d’Élan limitée aux motifs déclarés.
-- Choix laissés au joueur. Comparer touche, DR, localisation, Blessures, effets et coût. Recommandation avec critère explicite ; aucune recommandation définitive sur données inconnues.
-- Calculs repliés, détail accessible, journal compact. Même résolveur pur pour les deux options et l’action finale, sans nouveau tirage lors de la comparaison.
-- Résultat, coût, quota et échéance dans une seule commande, avec révision, prévention des doubles applications et annulation complète.
-- Magie/prières automatisées au lot 3 ; application mobile au lot 4. Le panneau reste lisible sur écran étroit.
+## État exact
 
-## État réel
+206 talents triés par clause, 131 contrats validés et 382 clauses raccordées. Bilan exclusif : 131 avec moteur, 19 purement narratifs, 18 entièrement dans les fiches, 10 bonus de caractéristiques exclus, 28 lot 3. Les talents mixtes gardent leurs rappels et valeurs de fiche. Version applicative 3.13.0 ; version mécanique `v5-combat-2026-10-09.24.6`.
 
-Quatre modules `js/core/` : `v5-roll.js`, `v5-momentum.js`, `v5-decision.js`, `talent-contracts.js`. Deux fichiers de tests lot2, 62 tests nouveaux ; suite complète 468 réussis lors du premier incrément. Modules déclarés au cache, sans raccordement au combat.
+Petit est raccordé et éprouvé selon les réponses explicites du MJ : multiplication des Dégâts avant BE/PA et suppression intégrale des Frappes Mortelles. Piétinement à 1 Élan, rapports de Taille dans les deux sens, Force opposée et Peur/Terreur V5. Aucune migration de Taille/Blessures. 2.4 et 2.5 sont terminés localement dans le périmètre convenu. La version 3.13.0 est prête à publier sur autorisation ; voir [la recette et livraison](LOT2_RECETTE_2_5.md).
 
-Schéma déclaratif 1 : sept opérations. Coûts, quotas, choix et échéances sont encore rejetés explicitement. L’inventaire de 206 identités et neuf exemples n’est pas un registre activé. Les tests utilisent des contrats synthétiques.
+## Décisions à conserver
 
-## Reprise
+- Fiction en rappels ; progression/valeurs dérivées dans les fiches ; aucun bonus de caractéristique, aucun doublon de Dur à cuire.
+- Matraqueur : supplément Sonné au seuil Assommante V5, sans ancien bonus de Force. Commandant d’Équipage : Action réussie, prochain tir seulement.
+- Élan binaire, annulation Avantage/Désavantage 1 pour 1, inversion choisie sans nouveau dé. Unités littérales 0=0 ; réussite marginale conservée.
+- Coûts ordinaires avant jet ; dépenses réactives pour attraper/repousser après résultat. Tout résultat, coût et quota est atomique, persistant et annulable.
+- Critiques réussis indépendants du gagnant, localisation normale/critique distincte, +10 par Blessure d’excédent sans plafond global. Battement remplace tout le critique attaquant, conserve le critique défensif indépendant.
+- Pénalités mixtes d’États au choix MJ. Fortune stable par personnage, initialisation explicite, pas d’écriture dans la fiche. Horloges auteur/cible, Tour/Round/séance distinctes.
+- Neutralisation silencieuse p. 135 : Test hors combat assisté, conséquences particulières manuelles approuvées. Ne pas les rebaptiser narratives ni redemander ce choix.
+- Sources publiques exactes et acquisitions résolues requises ; revalidation à confirmation. Le texte seul n’accorde pas de mécanique. Les faits spatiaux et fictionnels restent explicites.
 
-Vérifier branche, état Git et instructions locales ; installer les dépendances et rejouer les tests. Conserver le travail des autres lots. Lire le PDF personnel après transfert. Les divergences de critiques défensifs, critiques indépendants du gagnant et borne de santé sont à réconcilier : le socle ne certifie pas tout le combat V5.
+Modules : contrats/tests/qualités, actions et combat, situations, psychologie, remplacements, taille/contact, attaques immédiates, protection alliée, Tourbillon, mesures et UI correspondantes. Conserver les modules dans le précache SW. Les imports croisés ne doivent pas lire un export importé au niveau supérieur avant son initialisation.
 
-L’historique garde ses calculs et leur version. Les nouvelles actions utilisent un seul système. Toute migration doit être explicite, testée, avec sauvegarde et reprise. Ne pas activer un talent depuis une description ancienne en attente de conversion.
+Les recettes synthétiques n’utilisent aucun compte distant. Aucun PDF/export privé dans Git/ZIP. Audit : 166 talents du livre, 39 suppléments non tous vérifiés, Petit homebrew séparé. Les vieux snapshots PJ ne prouvent pas un état en ligne.
+
+Les rapports 2.3/2.4 et mots-clés conservent leurs preuves historiques ; leurs nombres 41/801 et version .24.4 ne décrivent plus l’incrément courant. Voir l’avancement pour les contrôles finaux.
+
+Recette 2.5 : 921/921 tests Node, dix recettes Edge, huit scénarios avec RTDB/Auth locaux, règles d’accès et migration réelle locale, paquet exporté de 130 assets démarré hors ligne sur bureau/téléphone. Le rechargement d’un état cloud identique conserve désormais l’annulation ; un changement externe la ferme. Commandes et limites dans LOT2_RECETTE_2_5.md. Les preuves locales et le paquet sont dans tmp/lot2-25/ ignoré.

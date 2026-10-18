@@ -1,5 +1,7 @@
 # Inventaire des talents du lot 2
 
+Actualisation locale du 9 octobre 2026 : le CSV publié d’Aides de jeu a été recapturé après conversion V5 par le MJ. Les 206 identités sont conservées ; 19 descriptions et empreintes ont changé. Le JSON et le snapshot applicatif utilisent les mêmes textes et empreintes. Cette actualisation de source ne valide ni n’active automatiquement les contrats. Voir [avancement](LOT2_AVANCEMENT.md) et [socle 2.3](LOT2_ETAPE_2_3_SOCLE.md).
+
 Catalogue V5 fourni à la source par le MJ. Dix bonus de caractéristiques déjà intégrés à la fiche sont exclus du périmètre. Les familles restent principales et provisoires ; neuf contrats sont proposés dans le JSON. La priorité Caelel concerne la fixture locale.
 
 | Talent | Famille | Exemple PJ local | Contrat proposé | Source |

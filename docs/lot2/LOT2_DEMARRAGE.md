@@ -1,5 +1,7 @@
 # Lot 2 : cadrage final et premier incrément
 
+> État historique du premier incrément. Pour le raccordement actuel, lire [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md) et [REPRISE_AGENT.md](REPRISE_AGENT.md).
+
 Le chantier est commencé dans une branche isolée, `codex/lot2-talents-v5`, depuis le commit `28657e39477bbcbfeb0de826b3f1d05e525bb386` de la version 3.12.3. Le premier incrément fournit un socle testable et extensible. Les fonctions nouvelles ne sont pas encore raccordées à l’interface de combat ni à l’application des commandes du Store. Rien n’est publié et aucune donnée de séance n’est modifiée.
 
 ## Décisions de périmètre

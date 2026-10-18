@@ -10,9 +10,10 @@ test('défense : CC, Ag, jets à base numérique puis « Autre », dans cet ordr
     { id: 'esq', name: 'Esquive', base: '38', type: 'defense' }
   ]);
   assert.deepEqual(options.map(option => option.value), ['CC', 'Ag', 'jet:index-0', 'jet:esq', 'Autre']);
-  assert.deepEqual(options.map(option => option.label), ['CC · 41', 'Ag · 33', 'Épée · 50', 'Esquive · 38', 'Autre (valeur libre)']);
+  assert.deepEqual(options.map(option => option.label), ['CC · 41', 'Ag · 33', 'Épée · 45', 'Esquive · 38', 'Autre (valeur libre)']);
   assert.deepEqual(options.map(option => option.group), ['caracs', 'caracs', 'jets', 'jets', 'autre']);
-  assert.equal(options[2].base, 50);
+  assert.equal(options[2].base, 45);
+  assert.equal(options[2].mod, 5, 'ancien modificateur transporté, sans conversion implicite');
   assert.equal(options[2].statLabel, 'Épée');
   assert.equal(options[2].type, 'attack');
   assert.equal(options[3].type, 'defense');

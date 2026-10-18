@@ -1,5 +1,5 @@
 import { normalizeEffects, normalizeState, resolveEffectCapability } from './effects.js';
-import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, profileActionSource, normalizeFicheFields } from './models.js';
+import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, normalizeTraits, profileActionSource, normalizeFicheFields } from './models.js';
 
 export function normalizeSearchText(value) {
   return String(value ?? '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -11,7 +11,143 @@ export function sanitizeArray(val) {
   return [];
 }
 
+const magicRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const magicNumber = (value, min, max, integer = false) => {
+  if (!['number', 'string'].includes(typeof value) || value === '' || !Number.isFinite(Number(value))) return undefined;
+  const number = Math.max(min, Math.min(max, Number(value)));
+  return integer ? Math.trunc(number) : number;
+};
+// 100 reçus couvrent deux fenêtres d'Undo (50 commandes). Les anciens aperçus sont aussi refusés par leur révision.
+export const MAGIC_EXECUTION_LIMIT = 100;
+export const HIGH_MAGIC_EXECUTION_LIMIT = 50;
+
+function magicNumericMap(value, min, max, absent = false) {
+  if (!magicRecord(value)) return {};
+  return Object.fromEntries(Object.entries(value).flatMap(([key, raw]) => {
+    // Caractéristique absente : « – » ou null (Dex d'un animal) survivent telles quelles.
+    const number = absent && (raw === '–' || raw === null) ? raw : magicNumber(raw, min, max);
+    return number === undefined ? [] : [[key, number]];
+  }));
+}
+
+// Les anciennes formes sans métadonnées récentes restent jouables si leur retour est exploitable.
+function validBeastForm(value) {
+  if (!magicRecord(value) || !magicRecord(value.originalParticipant) || !magicRecord(value.originalParticipant.caracs)) return false;
+  const finite = number => ['number', 'string'].includes(typeof number) && number !== '' && Number.isFinite(Number(number));
+  const original = value.originalParticipant;
+  if (![original.hp, original.maxHp].every(number => finite(number) && Number(number) >= 0)) return false;
+  if (['durationMinutes', 'remainingMinutes', 'expiresAtRound'].some(key => value[key] != null && (!finite(value[key]) || Number(value[key]) < 0))) return false;
+  if (value.beastProfile != null && !magicRecord(value.beastProfile)) return false;
+  const maps = [value.beastProfile?.caracs, original.caracs, original.baseCaracs, value.originalBaseCaracs].filter(map => map != null);
+  return maps.every(map => magicRecord(map) && Object.values(map).every(number => number === null || number === '–' || finite(number)));
+}
+
+function sanitizeMagicFields(value) {
+  if (!magicRecord(value)) return {};
+  const out = cloneValue(value);
+  const numeric = (keys, min, max, integer = false) => {
+    for (const key of keys) {
+      if (!Object.hasOwn(out, key) || out[key] == null) continue;
+      const number = magicNumber(out[key], min, max, integer);
+      if (number === undefined) delete out[key]; else out[key] = number;
+    }
+  };
+  numeric(['ward', 'threshold', 'rangedOpponentPenaltySl'], -1000, 1000);
+  numeric(['fortune', 'fate', 'temporaryFortune', 'temporaryFate', 'remainingTempFortune', 'remainingTempFate', 'tempFortunePoints', 'tempFatePoints', 'magicTalentRank', 'casterLileathRank'], 0, 1000, true);
+  numeric(['damageReduction', 'amount', 'magicShieldBonusSl', 'bonusActions'], 0, 1000);
+  numeric(['damage', 'damageBonus', 'value'], -1000, 1000);
+  numeric(['ap', 'count'], 0, 1000);
+  numeric(['hp', 'maxHp', 'originalMaxHp', 'initialBeastHp'], 0, 1000000);
+  numeric(['M', 'movement'], 0, 1000);
+  numeric(['durationMinutes', 'remainingMinutes', 'durationRounds', 'durationDays', 'days', 'remainingDays'], 0, 1000000);
+  numeric(['expiresAtRound', 'appliedAtRound'], -1000000, 1000000);
+  for (const key of ['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']) if (out[key] !== '–') numeric([key], 0, 1000);
+  for (const key of ['active', 'permanent', 'ignoreCriticalPenalties', 'equipmentDropped', 'isJade', 'damageCapToSlOnly', 'banished', 'dead', 'needsCorruptionTest']) if (Object.hasOwn(out, key) && typeof out[key] !== 'boolean') delete out[key];
+  for (const key of ['baseCaracs', 'originalBaseCaracs', 'caracs']) if (Object.hasOwn(out, key)) out[key] = magicNumericMap(out[key], 0, 1000, true);
+  for (const key of ['statModifiers', 'testModifiers', 'apModifiers']) if (Object.hasOwn(out, key)) out[key] = magicNumericMap(out[key], -1000, 1000);
+  for (const key of ['magicAp', 'magicApFloor', 'armor', 'armorLocations']) if (Object.hasOwn(out, key)) {
+    // Armure naturelle d'une forme (Peau, +1 PA) : le nom est du texte, conservé avec les PA.
+    const name = key === 'armor' && magicRecord(out[key]) && typeof out[key].name === 'string' ? { name: out[key].name } : {};
+    out[key] = { ...magicNumericMap(out[key], 0, 1000), ...name };
+  }
+  if (Object.hasOwn(out, 'baseArmor')) out.baseArmor = magicRecord(out.baseArmor) && ('flat' in out.baseArmor || 'extension' in out.baseArmor)
+    ? { ...out.baseArmor, flat: out.baseArmor.flat == null ? out.baseArmor.flat : magicNumericMap(out.baseArmor.flat, 0, 1000), extension: out.baseArmor.extension == null ? out.baseArmor.extension : magicNumericMap(out.baseArmor.extension, 0, 1000) }
+    : magicNumericMap(out.baseArmor, 0, 1000);
+  for (const key of ['channelling', 'channellingReserve', 'reserve']) if (Object.hasOwn(out, key)) {
+    if (!magicRecord(out[key])) { delete out[key]; continue; }
+    out[key] = { ...out[key], sl: magicNumber(out[key].sl, 0, 10000, true) ?? 0 };
+    if (!['winds', 'high'].includes(out[key].type)) out[key]={type:null,sl:0};
+  }
+  if (Object.hasOwn(out, 'cadaiRunes')) {
+    if (!magicRecord(out.cadaiRunes)) delete out.cadaiRunes;
+    else {
+      const max = magicNumber(out.cadaiRunes.max, 0, 1000, true);
+      out.cadaiRunes = { ...out.cadaiRunes, ...(max === undefined ? {} : { max }), deployed: magicNumber(out.cadaiRunes.deployed, 0, max ?? 1000, true) ?? 0 };
+      if (max === undefined) delete out.cadaiRunes.max;
+    }
+  }
+  for (const key of ['beastForm', 'beastProfile', 'originalParticipant', 'fields', 'daemonbaneMaxHp', 'resources', 'defense', 'burnout', 'magic', 'weaponBonus']) if (Object.hasOwn(out, key) && out[key] != null) {
+    if (key === 'beastForm' && !validBeastForm(out[key])) { delete out[key]; continue; }
+    if (!magicRecord(out[key])) delete out[key]; else out[key] = sanitizeMagicFields(out[key]);
+  }
+  for (const key of ['spellEffects', 'miscastEffects', 'wards', 'damageReductions', 'weaponBonuses', 'attacks', 'characterResources', 'conditionalAp']) if (Object.hasOwn(out, key)) {
+    out[key] = sanitizeArray(out[key]).filter(magicRecord).map(sanitizeMagicFields);
+    if (key === 'wards') out[key] = out[key].filter(row => Number.isFinite(row.threshold));
+  }
+  for (const key of ['baseTraits', 'temporaryTraits', 'traits', 'traitsGained']) if (Object.hasOwn(out, key)) {
+    out[key] = normalizeTraits(sanitizeArray(out[key]));
+  }
+  for (const key of ['suppressedSpellIds', 'suppressedEffectIds']) if (Object.hasOwn(out, key)) {
+    out[key] = sanitizeArray(out[key]).filter(id => typeof id === 'string' && id);
+  }
+  if (Object.hasOwn(out, 'appliedSpellExecutions')) out.appliedSpellExecutions = [...new Set(sanitizeArray(out.appliedSpellExecutions).filter(id => typeof id === 'string' && id))].slice(-MAGIC_EXECUTION_LIMIT);
+  if (Object.hasOwn(out, 'highMagicExecutions')) out.highMagicExecutions = sanitizeArray(out.highMagicExecutions)
+    .filter(row => magicRecord(row) && typeof row.id === 'string' && typeof row.actorId === 'string' && typeof row.spellId === 'string')
+    .slice(-HIGH_MAGIC_EXECUTION_LIMIT).map(row => ({ ...row, rerolledCorruption: sanitizeArray(row.rerolledCorruption).filter(id => typeof id === 'string') }));
+  return out;
+}
+
+function migrateSpellNames(value,inSpells=false){
+  if(Array.isArray(value))return value.map(row=>migrateSpellNames(row,inSpells));
+  if(!magicRecord(value))return inSpells && value==='empête'?'Tempête':value;
+  const result={};for(const [key,v] of Object.entries(value)){const spellField=['spellName','canonicalName'].includes(key) || ['nom','name'].includes(key) && (inSpells || value.spellId==='spell-audit-1e7a5eaec18c122bde64' || value.id==='spell-audit-1e7a5eaec18c122bde64');Object.defineProperty(result,key,{value:spellField && v==='empête'?'Tempête':migrateSpellNames(v,key==='spells'),enumerable:true,writable:true,configurable:true});}return result;
+}
+export function sanitizeMagicSubject(subject,{synchronizeAliases=true}={}) {
+  subject=migrateSpellNames(subject);
+  if (!magicRecord(subject)) return subject;
+  // Les champs de fiche ordinaires restent ceux de leur normaliseur ; seuls leurs alias magiques sont traités ici.
+  const aliasKeys = ['channelling', 'channellingReserve', 'spellEffects', 'baseCaracs', 'baseArmor', 'testModifiers', 'fortune', 'temporaryFortune', 'fate', 'temporaryFate'];
+  const aliases = Object.fromEntries(aliasKeys.filter(key => Object.hasOwn(subject, key)).map(key => [key, subject[key]]));
+  const clean = sanitizeMagicFields(aliases), out = { ...subject, ...clean };
+  for (const key of Object.keys(aliases)) if (!Object.hasOwn(clean, key)) delete out[key];
+  if (magicRecord(subject.extensions)) {
+    const extAliases = Object.fromEntries(aliasKeys.filter(key => Object.hasOwn(subject.extensions, key)).map(key => [key, subject.extensions[key]]));
+    const cleanExt = sanitizeMagicFields(extAliases);
+    out.extensions = { ...subject.extensions, ...cleanExt };
+    for (const key of Object.keys(extAliases)) if (!Object.hasOwn(cleanExt, key)) delete out.extensions[key];
+    if (Object.hasOwn(out.extensions, 'traits')) out.extensions.traits = normalizeTraits(sanitizeArray(out.extensions.traits));
+    if (Object.hasOwn(subject.extensions, 'v5')) out.extensions.v5 = sanitizeMagicFields(subject.extensions.v5);
+    const canonical=out.extensions.v5;
+    if(synchronizeAliases && Array.isArray(canonical?.spellEffects)){out.spellEffects=cloneValue(canonical.spellEffects);out.extensions.spellEffects=cloneValue(canonical.spellEffects);}
+    if(synchronizeAliases && magicRecord(canonical?.channelling)){out.channelling=cloneValue(canonical.channelling);out.channellingReserve=cloneValue(canonical.channelling);out.extensions.channelling=cloneValue(canonical.channelling);out.extensions.channellingReserve=cloneValue(canonical.channelling);}
+  }
+  return out;
+}
+
+export function sanitizeMagicEnvelope(envelope,options={}) {
+  envelope=migrateSpellNames(envelope);
+  const out = { ...envelope }, subjects = value => sanitizeArray(value).map(subject=>sanitizeMagicSubject(subject,options));
+  for (const key of ['reserve', 'persistentCharacters']) if (Object.hasOwn(out, key)) out[key] = subjects(out[key]);
+  const scene = value => value && { ...value, ...(Object.hasOwn(value, 'participants') ? { participants: subjects(value.participants) } : {}), ...(value.combat ? { combat: { ...value.combat, participants: subjects(value.combat.participants) } } : {}) };
+  if (out.combat) out.combat = { ...out.combat, participants: subjects(out.combat.participants), ...(out.combat.extensions ? { extensions: sanitizeMagicFields(out.combat.extensions) } : {}) };
+  if (out.activeScene) out.activeScene = scene(out.activeScene);
+  if (out.suspendedScenes) out.suspendedScenes = sanitizeArray(out.suspendedScenes).filter(magicRecord).map(scene);
+  if (magicRecord(out.extensions) && Object.hasOwn(out.extensions, 'v5')) out.extensions = { ...out.extensions, v5: sanitizeMagicFields(out.extensions.v5) };
+  return out;
+}
+
 export function sanitizeProfile(o) {
+  o = sanitizeMagicSubject(o);
   if (!o || typeof o !== 'object' || !o.id || typeof o.id !== 'string') return null;
   const profile = {
     id: String(o.id),
@@ -22,13 +158,17 @@ export function sanitizeProfile(o) {
     maxHp: o.maxHp == null ? Number(o.hp) || 0 : Number(o.maxHp),
     ...normalizeFicheFields(o),
     caracs: normalizeCaracs(o.caracs),
-    armor: (o.armor && typeof o.armor === 'object') ? cloneValue(o.armor) : { head: 0, body: 0, arms: 0, legs: 0 },
-    diceLines: sanitizeArray(profileActionSource(o)).map(normalizeAction),
+    armor: magicRecord(o.armor) ? cloneValue(o.armor) : { head: 0, body: 0, arms: 0, legs: 0 },
+    diceLines: sanitizeArray(profileActionSource(o)).filter(magicRecord).map(normalizeAction),
     group: typeof o.group === 'string' ? o.group.trim() : '',
     tags: normalizeTags(o.tags),
     notes: typeof o.notes === 'string' ? o.notes : '',
     favorite: Boolean(o.favorite),
-    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {}
+    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {},
+    ...(Array.isArray(o.traits) ? { traits: normalizeTraits(o.traits) } : {}),
+    ...(Array.isArray(o.weapons) ? { weapons: o.weapons.filter(magicRecord).map(cloneValue) } : {}),
+    ...(Array.isArray(o.armours) ? { armours: o.armours.filter(magicRecord).map(cloneValue) } : {}),
+    ...(Array.isArray(o.armors) ? { armors: o.armors.filter(magicRecord).map(cloneValue) } : {})
   };
   // `actions` reste lisible mais n'est jamais une seconde copie énumérable.
   Object.defineProperty(profile, 'actions', { enumerable: false, configurable: true, get: () => profile.diceLines });
@@ -36,11 +176,12 @@ export function sanitizeProfile(o) {
 }
 
 export function sanitizeParticipant(o) {
+  o = sanitizeMagicSubject(o);
   const base = sanitizeProfile(o);
   if (!base) return null;
   return {
     ...base,
-    actions: Array.isArray(o.actions) ? o.actions.map(normalizeAction) : [],
+    actions: Array.isArray(o.actions) ? o.actions.filter(magicRecord).map(normalizeAction) : [],
     profileId: o.profileId || null,
     persistentCharacterId: o.persistentCharacterId || null,
     improvised: Boolean(o.improvised),
@@ -54,7 +195,16 @@ export function sanitizeParticipant(o) {
     tags: normalizeTags(o.tags),
     notes: typeof o.notes === 'string' ? o.notes : '',
     source: o.source == null ? null : cloneValue(o.source),
-    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {}
+    extensions: (o.extensions && typeof o.extensions === 'object' && !Array.isArray(o.extensions)) ? o.extensions : {},
+    ...(Array.isArray(o.traits) ? { traits: normalizeTraits(o.traits) } : {}),
+    ...(Array.isArray(o.spellEffects) ? { spellEffects: o.spellEffects.filter(magicRecord).map(cloneValue) } : {}),
+    // null reste null (solde absent) : il ne devient pas 0.
+    ...(o.fortune === null ? { fortune: null } : Number.isFinite(Number(o.fortune)) ? { fortune: Number(o.fortune) } : {}),
+    ...(o.temporaryFortune === null ? { temporaryFortune: null } : Number.isFinite(Number(o.temporaryFortune)) ? { temporaryFortune: Number(o.temporaryFortune) } : {}),
+    ...(o.fate === null ? { fate: null } : Number.isFinite(Number(o.fate)) ? { fate: Number(o.fate) } : {}),
+    ...(o.temporaryFate === null ? { temporaryFate: null } : Number.isFinite(Number(o.temporaryFate)) ? { temporaryFate: Number(o.temporaryFate) } : {}),
+    ...(o.channelling && typeof o.channelling === 'object' ? { channelling: cloneValue(o.channelling) } : {}),
+    ...(o.channellingReserve && typeof o.channellingReserve === 'object' ? { channellingReserve: cloneValue(o.channellingReserve) } : {})
   };
 }
 

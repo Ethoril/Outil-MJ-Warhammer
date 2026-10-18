@@ -84,41 +84,151 @@ export const RULES = [
     ]
   },
   {
-    id: 'magie',
-    title: 'La Magie & Lancer un Sort',
-    intro: 'Pour réussir un sort, il faut obtenir un SR (Seuil de Réussite) supérieur ou égal au NI (Niveau d\'Incantation) du sort.',
-    sections: [
+    "id": "magie",
+    "title": "Magie V5 & règles de la table",
+    "intro": "Magie raccordée dans l’outil : choisissez le lanceur, le sort ou la Focalisation, les cibles et les faits connus du MJ ; saisissez les jets, calculez l’aperçu puis appliquez-le. Un dé ou un fait requis manquant bloque l’application. Un aperçu périmé doit être recalculé. L’application, ses coûts et ses conséquences peuvent être annulés par Undo. Livre de base V5 EN v2, pp. 235–239, suppléments elfiques et arbitrages de la table confirmés jusqu’au 14 octobre 2026. DR : Degrés de Réussite ; NI : Niveau d’Incantation ; BFM : Bonus de Force Mentale ; BI : Bonus d’Intelligence.",
+    "sections": [
       {
-        h4: '1. Test de Focalisation (Channeling)',
-        ul: [
-          'Un test réussi permet d\'accumuler des succès (Bonus FM + SR obtenus) utilisables pour le prochain test de Langue Magik.',
-          'Peut être fait en Test étendu sur plusieurs rounds jusqu\'à accumuler assez de succès pour lancer le sort à difficulté 0.'
+        "h4": "1. Focalisation : règles homebrew",
+        "ul": [
+          "Une seule Compétence de Focalisation et une réserve commune pour les huit Vents. La Haute Magie utilise sa propre Compétence et sa réserve.",
+          "Une seule réserve peut être remplie à la fois. Commencer à Focaliser les huit Vents efface une réserve de Haute Magie, et inversement.",
+          "Focaliser utilise une Action et un Test de Focalisation (+0 DR). Chaque réussite ajoute DR + BFM à la réserve ; les réussites de plusieurs Tours se cumulent.",
+          "Sur un double réussi, le gain est DR réels + 2 × BFM : aucun plancher de +5 DR de critique ne s’ajoute à la réserve. Ce critique de Focalisation ne provoque pas, à lui seul, d’incantation imparfaite.",
+          "Une compétence importée « Focalisation (Vent coloré) » vaut la compétence unique pour les huit Vents. Si plusieurs valeurs diffèrent, une anomalie de fiche est affichée au MJ ; la valeur générique prime, ou à défaut la première valeur importée est commune à tous les Vents. Seule la Focalisation (Haute Magie / Qhaysh) reste distincte. Les Domaines connus restent requis, sans redistribution automatique des avances ou PX.",
+          "La Compétence commune ne rend pas les Vents identiques : le Vent utilisé reste nécessaire pour les bonus du lieu, les attributs de Domaine et les exceptions d’armure."
         ],
-        example: 'Exemple : Pour un sort NI 8. Si tu as 52 en FM et 62 en Focalisation. Tu lances 48. SR = 2 (62 vs 48) + Bonus FM (5) = 7 succès accumulés. Il te manque 1 succès pour le NI 8.'
+        "example": "Avec BFM 5, une Focalisation réussie à 2 DR ajoute 7 DR à la réserve. Une réussite critique à 5 DR ajoute 15 DR."
       },
       {
-        h4: '2. Test de Langue Magik (Lancement)',
-        ul: [
-          'Vous devez réussir un test de Langue Magik avec assez de SR pour combler ce qu\'il manque au NI du sort.',
-          'Si succès excédentaires en Focalisation : Chaque succès "de trop" donne un bonus de +10 au test de Langue Magik.'
+        "h4": "2. Incantation avec Langue (Magick)",
+        "ul": [
+          "Effectuez un Test de Langue (Magick) (+0 DR). Le Test doit réussir ; une réserve ne transforme pas un Test raté ou une maladresse en réussite.",
+          "Ajoutez la réserve appropriée aux DR du Test réussi. Le total doit atteindre le NI du sort. Toute tentative effective vide la réserve, réussie ou ratée ; préparer, consulter ou annuler un aperçu ne la consomme pas.",
+          "L’excédent au-delà du NI peut servir à la surpuissance. Il ne donne aucun bonus supplémentaire de +10 au Test.",
+          "Projectile magique : dégâts indiqués par le sort + BFM, puis réduction par BE et PA sauf exception du sort. Les DR ne s’ajoutent pas automatiquement aux dégâts. Inversez le jet d’incantation pour la localisation.",
+          "Sort de contact sur une cible réticente : après l’incantation réussie, opposez Corps à corps (Bagarre) ou Escamotage à la défense. Pour un projectile de contact, inversez ce jet de contact pour la localisation. Le contact n’ajoute aucun dégât d’arme."
+        ],
+        "example": "Une réserve de 7 DR et un lancer réussi à 3 DR donnent 10 DR. Pour NI 8, il reste 2 DR de surpuissance, sans modifier une seconde fois le Test."
+      },
+      {
+        "h4": "3. Surpuissance V5",
+        "p": "Dépensez au maximum BI + BFM DR parmi l’excédent disponible. Répartissez cette dépense entre les améliorations choisies ; un même DR ne paie pas plusieurs améliorations. Les options propres au sort restent distinctes.",
+        "ul": [
+          "Aucune surpuissance pour les sorts mineurs ou les sorts non mémorisés lancés depuis un grimoire.",
+          "Une portée « Vous » reste limitée au lanceur ; « Contact » ne peut être étendu. Une durée Instantanée ou Spéciale ne peut être prolongée. Une zone absente ne peut être créée.",
+          "Coûts et effets de la table ci-dessous : chaque colonne décrit le palier obtenu pour la dépense choisie, pas plusieurs achats cumulés de ce palier."
+        ],
+        "table": [
+          {
+            "jet": "1 DR",
+            "loc": "+1 cible ; +1 dégâts ; portée ×2"
+          },
+          {
+            "jet": "2 DR",
+            "loc": "+1 cible ; +2 dégâts ; portée ×2 ; durée ×2"
+          },
+          {
+            "jet": "3 DR",
+            "loc": "+1 cible ; +3 dégâts ; portée ×2 ; zone ×2 ; durée ×2"
+          },
+          {
+            "jet": "5 DR",
+            "loc": "+2 cibles ; +4 dégâts ; portée ×3 ; zone ×2 ; durée ×2"
+          },
+          {
+            "jet": "8 DR",
+            "loc": "+2 cibles ; +5 dégâts ; portée ×3 ; zone ×2 ; durée ×3"
+          },
+          {
+            "jet": "13 DR",
+            "loc": "+2 cibles ; +6 dégâts ; portée ×3 ; zone ×2 ; durée ×3"
+          },
+          {
+            "jet": "18 DR ou plus",
+            "loc": "+3 cibles ; +7 dégâts ; portée ×4 ; zone ×3 ; durée ×3"
+          }
+        ],
+        "tableHeaders": [
+          "Dépense par amélioration",
+          "Palier obtenu"
         ]
       },
       {
-        h4: 'Cas Spéciaux',
-        ul: [
-          'Interruption : Si interrompu pendant une Focalisation étendue, faire un Test de Calme Difficile (-20). Si échec : perte de succès et jet sur Incantations Imparfaites Mineures.',
-          'Réussite Critique : (Focalisation ou Langue Magik) Effet positif + jet sur table Mineure.',
-          'Maladresse (Focalisation) : Jet sur table Majeure.',
-          'Maladresse (Langue Magik) : Echec + Jet sur table Mineure.',
-          'Magie Sombre : Un dé sur un 8 (dizaine ou unité) = Jet sur table Mineure.'
+        "h4": "4. Interruptions et incantations imparfaites V5",
+        "ul": [
+          "Pause de Focalisation : à chaque Tour, un Test de Résistance Accessible (+2 DR) conserve la réserve ; un échec la fait perdre.",
+          "Dégâts ou État subi pendant la Focalisation : Test de Calme Difficile (−2 DR). Échec : perdez 1d10 DR de réserve et faites un jet Mineur avec +10 par DR effectivement perdu.",
+          "Maladresse de Focalisation : perdez 1d10 DR de réserve, puis jet Mineur avec +10 par DR effectivement perdu. Une réserve ne descend pas sous zéro.",
+          "Maladresse d’incantation : jet Mineur. Les DR de réserve ne permettent pas d’éviter la maladresse.",
+          "Double réussi en incantation : jet Mineur et choix d’un effet critique — Blessure Critique si le sort cause des dégâts ; Puissance totale, qui lance le sort et ajoute le chiffre des dizaines aux DR disponibles pour la surpuissance ; Force irrésistible, qui interdit sa dissipation. Les sorts mineurs ne produisent ni cet effet critique ni ce jet Mineur sur un double réussi.",
+          "Influence corruptrice : tout jet Mineur normalement déclenché devient un jet Majeur. Le lanceur ne compte pas comme sa propre influence corruptrice.",
+          "Règle de table : les ingrédients ne sont pas utilisés et ne réduisent jamais les incantations imparfaites. Les runes des Cadai conservent leurs règles propres.",
+          "Diction instinctive : peut réduire de 20 un résultat Mineur ; sous 01, aucun effet. Aucun effet sur la table Majeure. Harmonisation aethyrique demande ses jets et son choix explicites ; une interdiction d’atténuation reste prioritaire.",
+          "La Fortune est Capricieuse : un double provoque une maladresse aux Tests magiques et à la dissipation seulement.",
+          "Contre-réaction, résultat Majeur 96 et plus : le lanceur ne peut jamais être sa propre cible. Sans cible admissible à portée, sa tête explose ; désignez les cibles admissibles dans l’aperçu.",
+          "Si un résultat Mineur modifié dépasse 100, son excédent est ajouté au jet Majeur. La dernière entrée de la table Majeure couvre 96 et plus."
+        ]
+      },
+      {
+        "h4": "5. Effets, armure et dissipation",
+        "ul": [
+          "Les bonus et pénalités provenant de plusieurs sorts ne se cumulent pas : gardez le meilleur bonus et le pire malus pour chaque effet. Bénédiction de Lileath : le cumul autorisé dépend du talent du lanceur. Chaque Protection ainsi admise fait son propre d10 ; une seule réussite annule les dégâts.",
+          "Les effets temporaires modifient le participant dans l’outil et expirent selon le sort ; ils ne réécrivent pas la fiche source. Un État reçu suit sa récupération normale sauf si le sort précise une durée ou une suppression.",
+          "Armure portée : −1 DR par PA de la localisation la plus protégée aux Tests de Focalisation et d’incantation. L’armure non portée ne compte pas. Exceptions : métal pour Chamon, cuir pour Ghur. Les PA donnés par les sorts et l’armure naturelle n’imposent pas cette pénalité.",
+          "Dissipation pendant le lancer : une réaction par Round, avec Langue (Magick) connue, à portée FM yards. Saisissez distance et visibilité ; leur absence bloque la dissipation. Opposez les DR du dissipateur aux seuls DR du Test d’incantation ; l’égalité revient au lanceur. Un dissipateur à DR négatifs compte pour 0 DR et n’augmente jamais les DR du lanceur. Si le lanceur gagne, ajoutez sa réserve aux DR nets, puis vérifiez le NI et recalculez l’excédent et la surpuissance.",
+          "Dissipation d’un sort persistant : Action et Test étendu de Langue (Magick) (+0 DR), objectif égal au NI du sort. Dissiper son propre sort donne +1 DR.",
+          "Une durée plus courte se déclare lors du lancer. Une fois actif, le sort ne peut être arrêté avant terme que par dissipation, sauf exception explicite. Force irrésistible interdit la dissipation ; les méditations de talents ne sont pas dissipables.",
+          "1 Round = 10 secondes. Un effet exprimé en Rounds expire à la fin du tour de son auteur. L’expiration retire ses couches temporaires sans restaurer un ancien état complet ni guérir les Blessures reçues depuis.",
+          "Une Protection réussie annule les dégâts et le Coup Critique associé (trait Ward, V5 p. 363) ; les autres conséquences du sort restent évaluées. Les Blessures directes des attributs de Vie et de Lumière ignorent PA, BE et Protection.",
+          "Résistance à la Magie face à Puissance totale : le NI reste ignoré, mais la Résistance retire 3 DR aux effets sur la cible.",
+          "Seconde vue en zone saturée : le Désavantage reste un rappel MJ. Le MJ renseigne aussi les cibles des zones, les traversées et les collisions ; le vortex propose direction et distance, puis utilise les cibles réellement traversées."
+        ]
+      },
+      {
+        "h4": "6. Haute Magie : supplément elfe adapté",
+        "ul": [
+          "Lancement et surpuissance suivent les règles V5 et les options du sort. Le talent Haute Magie ne relève pas le plafond BI + BFM. Un seul attribut parmi les huit Domaines, ou aucun, peut être retenu sous arbitrage du MJ. Les sorts elfiques arcaniques gardent leurs deux Vents requis et le choix d’un seul attribut ; leur apprentissage relève de la fiche.",
+          "Épuisement magique : après un lancement non dissipé, si les DR dépensés en surpuissance dépassent le BFM, le risque en pourcentage est égal à cet excédent. Un d100 égal ou inférieur à ce risque bloque les incantations pendant autant de jours que le résultat ; un double rend le blocage permanent. Un Point de Chance annule le blocage temporaire, un Point de Destin le permanent. Un sort dissipé ne provoque pas d’épuisement. La Force Mentale du lanceur et le compteur requis doivent être renseignés ; le compteur doit être suffisant.",
+          "Runes des Cadai : Lire/Écrire, matériel approprié et Savoir (Magie) (+0 DR) ; une rune prend 1 Round à déployer, maximum BFM runes. Visible et à portée de bras, une rune paie la relance d’un seul jet distinct de Focalisation, incantation, incident, Corruption ou épuisement ; plusieurs jets demandent plusieurs runes. La relance de Corruption se rattache à une exécution réelle de Haute Magie de ce lanceur, une fois par jet identifié. Après départ et retour, il faut les déployer à nouveau.",
+          "Une Marque de la magie causée par un incident de Haute Magie devient 1d10 jours d’épuisement magique. Les conditions d’apprentissage, achats et Yenlui relèvent des fiches.",
+          "Main de Gloire, option à +6 DR : augmentez quatre caractéristiques au choix parmi CC, CT, Force, Endurance, Initiative et Agilité, avec le même jet de 3d10, et Mouvement +2. Les Blessures maximales restent inchangées malgré le bonus d’Endurance.",
+          "Bouclier de Saphery : Protection 9+ améliorée par les autres sorts de Haute Magie, sans plancher supplémentaire ; un seuil calculé de 1 ou moins réussit automatiquement sur 1d10."
+        ]
+      },
+      {
+        "h4": "7. Arbitrages de sorts de la table",
+        "ul": [
+          "Forme bestiale — Jade : doublon homebrew intégral de Forme bestiale V5 du Domaine des Bêtes, rattaché au Vent Ghyran avec l’attribut du Domaine de la Vie.",
+          "Apothéose Verdoyante (Winds of Magic, p. 89) : les morts admissibles reviennent avec 1 Blessure par DR final du sort, dans la limite de leurs Blessures maximales. Le total comprend les DR du Test réussi et la réserve consommée, avant dépense de surpuissance. Le sort ne guérit pas les Blessures Critiques, ne rend pas les membres perdus et ne sauve pas un corps décapité.",
+          "Fléau des Démons : Endurance ≤ Intelligence du lanceur, bannissement ; Intelligence < Endurance < 2 × Intelligence, Blessures maximales divisées par deux pour le reste de la rencontre ; Endurance ≥ 2 × Intelligence, aucun effet principal. Les effets secondaires V5 restent applicables. La réduction ne se cumule pas sur un Démon déjà affaibli. L’Endurance réelle de la cible est requise. Les Bmax divisées sont restaurées en fin de rencontre par action du MJ.",
+          "Faux de Shyish : les Morts-vivants engagés avec le porteur ne bénéficient pas d’Avantage V5 aux Tests contre lui. Cette clause ne neutralise pas leur Élan.",
+          "Forme bestiale : choisissez Sanglier, Chien, Rat géant, Araignée géante, Cheval ou Loup, des Bêtes du Reikland (V5 pp. 325–327). Mouvement, Force, Endurance, Agilité et Dex remplacés ; une Dex « – » interdit les Tests de Dex. Les Blessures sont recalculées par la formule V5 avec les nouvelles F et E, la FM du lanceur et la Taille de l’animal.",
+          "Forme bestiale : traits standard de l’animal sauf Bestial et Craintif ; un trait optionnel par +2 DR, sauf Taille (Énorme) et Nuée. Taille optionnelle ne change que le multiplicateur des Blessures : aucun ajustement de F, E ou Ag de la p. 361. Transformation de Kadon garde les Blessures du monstre.",
+          "Sous forme animale, les attaques de l’animal utilisent Corps à corps (Bagarre) du lanceur, à défaut sa CC. L’équipement est lâché pendant la transformation (Winds of Magic) ; seule la peau de l’animal protège. Parler, lancer des sorts, dissiper et Focaliser sont interdits. Les Blessures et Critiques subis sont suivis au retour.",
+          "Catalogue : Silence Arcane (V5 p. 245) et Coruscating Arc des Cieux (V5 p. 249) sont ajoutés au catalogue public. Silence Arcane reste distinct de Silence Ulgu / Hush ; Coruscating Arc reste distinct de T’Essla’s Arc."
         ]
       }
     ],
-    tablesHeader: 'Tableaux des Incantations Imparfaites',
-    nestedTables: [
-      { id: 'table-magic-minor', title: '✨ Table Mineure', type: 'magic', key: 'MINOR' },
-      { id: 'table-magic-major', title: '🔥 Table Majeure', type: 'magic', key: 'MAJOR' }
-    ]
+    "tablesHeader": "Incantations imparfaites — tables V5",
+    "nestedTables": [
+      {
+        "id": "table-magic-minor",
+        "title": "✨ Table Mineure V5",
+        "type": "magic",
+        "key": "MINOR",
+        "source": "Livre de base V5 EN v2, p. 238"
+      },
+      {
+        "id": "table-magic-major",
+        "title": "🔥 Table Majeure V5",
+        "type": "magic",
+        "key": "MAJOR",
+        "source": "Livre de base V5 EN v2, p. 239"
+      }
+    ],
+    "source": "Livre de base V5 EN v2, pp. 235–255 et 325–327 ; Haute Magie : High Elf Player’s Guide v2, pp. 83–89 ; arbitrages de la table des 9, 10 et 11 octobre 2026 ; Apothéose Verdoyante : Winds of Magic, p. 89",
+    "tablesIntro": "Lancez 1d100 et appliquez les modificateurs de l’incident. Les distances en yards et miles reprennent les unités du livre source."
   },
   {
     id: 'psychologie',

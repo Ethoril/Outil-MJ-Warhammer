@@ -1,0 +1,3396 @@
+{
+  "schemaVersion": 2,
+  "verifiedAt": "2026-10-09",
+  "coverage": "35 test-only contracts: scoped advantage clauses and explicit successful SL/unit choices; narrative, purchase, pursuit and session clauses remain manual.",
+  "contracts": [
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-alley-cat",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:56f9b5b704310e1b53c9b925a9177246a6221d4c31b0e1ca2e92f2a9aa78ce45",
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_73_63_72_e9_74_69_6f_6e-55_72_62_61_69_6e_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-alley-cat",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_73_63_72_e9_74_69_6f_6e-55_72_62_61_69_6e_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-alley-cat",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_73_63_72_e9_74_69_6f_6e-55_72_62_61_69_6e_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-alley-cat",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-rover",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:e3cf9bf918016381b49dfb40f3bbbf6c0fd0b2993a023b8def0b6e9f82ba0786",
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-rover",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-rover",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-rover",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-cat-tongued",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:234ea1a408e980ef8f6329a2731369ecccfc3d7c00540ccdfa6a5efa4d904517",
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "lying",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-cat-tongued",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "lying",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-cat-tongued",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "lying",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-cat-tongued",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-public-speaker",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:6e558eeece6c5afbebb040dec84ba7b25ecda098a6f70b772455bac4970f506c",
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "influencingGroup",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-public-speaker",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "influencingGroup",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-public-speaker",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "influencingGroup",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-public-speaker",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "situation-public-speaker",
+          "event": "talent.activate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "talentAction",
+              "op": "eq",
+              "value": "public-speaker"
+            }
+          ],
+          "effects": [
+            {
+              "op": "activateTalent",
+              "key": "talent-public-speaker",
+              "stackGroup": "talent-public-speaker",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-scale-sheer-surface",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:da3bb00fd35f774e9772592f4e6da48034847b424c5e3c8744b5bf4783afbabb",
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-scale-sheer-surface",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-scale-sheer-surface",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-scale-sheer-surface",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "limitTestPenalty",
+              "key": "difficulty",
+              "amount": 3,
+              "stackGroup": "talent:difficulty",
+              "stack": "max"
+            }
+          ],
+          "id": "talent-scale-sheer-surface:3"
+        },
+        {
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "limitTestPenalty",
+              "key": "difficulty",
+              "amount": 3,
+              "stackGroup": "talent:difficulty",
+              "stack": "max"
+            }
+          ],
+          "id": "talent-scale-sheer-surface:4"
+        },
+        {
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "limitTestPenalty",
+              "key": "difficulty",
+              "amount": 3,
+              "stackGroup": "talent:difficulty",
+              "stack": "max"
+            }
+          ],
+          "id": "talent-scale-sheer-surface:5"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-fast-hands",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:c0850e6d9d1109e91be1749758ee45afeabac717eb940b6ff28a17f533dbeb88",
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6d_6f_74_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-fast-hands",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6d_6f_74_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-fast-hands",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6d_6f_74_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-fast-hands",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "touch-opponent-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "melee"
+            },
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_67_61_72_72_65"
+            },
+            {
+              "field": "touchingOpponent",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-fast-hands",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-linguistics",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:09edd2d849eea2045f57b0e1839d06d44e1411e034d581949211a19109e9d670",
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "in",
+              "value": [
+                "skill-4c_61_6e_67_75_65-41_6c_62_69_6f_6e_65_73_65",
+                "skill-4c_61_6e_67_75_65-42_61_73_73_65_2d_63_6f_75_72",
+                "skill-4c_61_6e_67_75_65-42_61_74_61_69_6c_6c_65",
+                "skill-4c_61_6e_67_75_65-42_72_65_74_6f_6e_6e_69_65_6e",
+                "skill-4c_61_6e_67_75_65-43_61_74_68_61_79_65_6e",
+                "skill-4c_61_6e_67_75_65-43_6c_61_73_73_69_71_75_65",
+                "skill-4c_61_6e_67_75_65-45_6c_74_68_61_72_69_6e",
+                "skill-4c_61_6e_67_75_65-45_73_74_61_6c_69_65_6e",
+                "skill-4c_61_6e_67_75_65-47_6f_73_70_6f_64_61_72",
+                "skill-4c_61_6e_67_75_65-47_72_75_6d_62_61_72_74_68",
+                "skill-4c_61_6e_67_75_65-47_75_69_6c_64_65",
+                "skill-4c_61_6e_67_75_65-4b_68_61_7a_61_6c_69_64",
+                "skill-4c_61_6e_67_75_65-4d_6f_6f_74_69_73_68",
+                "skill-4c_61_6e_67_75_65-4e_6f_72_73_65",
+                "skill-4c_61_6e_67_75_65-51_75_65_65_6b_69_73_68",
+                "skill-4c_61_6e_67_75_65-52_65_69_6b_73_70_69_65_6c",
+                "skill-4c_61_6e_67_75_65-53_61_75_76_61_67_65",
+                "skill-4c_61_6e_67_75_65-53_6f_6d_62_72_65_20_2f_20_44_61_72_6b_20_54_6f_6e_67_75_65",
+                "skill-4c_61_6e_67_75_65-54_69_6c_e9_65_6e",
+                "skill-4c_61_6e_67_75_65-56_6f_6c_65_75_72",
+                "skill-4c_61_6e_67_75_65-57_61_73_74_65_6c_61_6e_64_65_72"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-linguistics",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "in",
+              "value": [
+                "skill-4c_61_6e_67_75_65-41_6c_62_69_6f_6e_65_73_65",
+                "skill-4c_61_6e_67_75_65-42_61_73_73_65_2d_63_6f_75_72",
+                "skill-4c_61_6e_67_75_65-42_61_74_61_69_6c_6c_65",
+                "skill-4c_61_6e_67_75_65-42_72_65_74_6f_6e_6e_69_65_6e",
+                "skill-4c_61_6e_67_75_65-43_61_74_68_61_79_65_6e",
+                "skill-4c_61_6e_67_75_65-43_6c_61_73_73_69_71_75_65",
+                "skill-4c_61_6e_67_75_65-45_6c_74_68_61_72_69_6e",
+                "skill-4c_61_6e_67_75_65-45_73_74_61_6c_69_65_6e",
+                "skill-4c_61_6e_67_75_65-47_6f_73_70_6f_64_61_72",
+                "skill-4c_61_6e_67_75_65-47_72_75_6d_62_61_72_74_68",
+                "skill-4c_61_6e_67_75_65-47_75_69_6c_64_65",
+                "skill-4c_61_6e_67_75_65-4b_68_61_7a_61_6c_69_64",
+                "skill-4c_61_6e_67_75_65-4d_6f_6f_74_69_73_68",
+                "skill-4c_61_6e_67_75_65-4e_6f_72_73_65",
+                "skill-4c_61_6e_67_75_65-51_75_65_65_6b_69_73_68",
+                "skill-4c_61_6e_67_75_65-52_65_69_6b_73_70_69_65_6c",
+                "skill-4c_61_6e_67_75_65-53_61_75_76_61_67_65",
+                "skill-4c_61_6e_67_75_65-53_6f_6d_62_72_65_20_2f_20_44_61_72_6b_20_54_6f_6e_67_75_65",
+                "skill-4c_61_6e_67_75_65-54_69_6c_e9_65_6e",
+                "skill-4c_61_6e_67_75_65-56_6f_6c_65_75_72",
+                "skill-4c_61_6e_67_75_65-57_61_73_74_65_6c_61_6e_64_65_72"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-linguistics",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "in",
+              "value": [
+                "skill-4c_61_6e_67_75_65-41_6c_62_69_6f_6e_65_73_65",
+                "skill-4c_61_6e_67_75_65-42_61_73_73_65_2d_63_6f_75_72",
+                "skill-4c_61_6e_67_75_65-42_61_74_61_69_6c_6c_65",
+                "skill-4c_61_6e_67_75_65-42_72_65_74_6f_6e_6e_69_65_6e",
+                "skill-4c_61_6e_67_75_65-43_61_74_68_61_79_65_6e",
+                "skill-4c_61_6e_67_75_65-43_6c_61_73_73_69_71_75_65",
+                "skill-4c_61_6e_67_75_65-45_6c_74_68_61_72_69_6e",
+                "skill-4c_61_6e_67_75_65-45_73_74_61_6c_69_65_6e",
+                "skill-4c_61_6e_67_75_65-47_6f_73_70_6f_64_61_72",
+                "skill-4c_61_6e_67_75_65-47_72_75_6d_62_61_72_74_68",
+                "skill-4c_61_6e_67_75_65-47_75_69_6c_64_65",
+                "skill-4c_61_6e_67_75_65-4b_68_61_7a_61_6c_69_64",
+                "skill-4c_61_6e_67_75_65-4d_6f_6f_74_69_73_68",
+                "skill-4c_61_6e_67_75_65-4e_6f_72_73_65",
+                "skill-4c_61_6e_67_75_65-51_75_65_65_6b_69_73_68",
+                "skill-4c_61_6e_67_75_65-52_65_69_6b_73_70_69_65_6c",
+                "skill-4c_61_6e_67_75_65-53_61_75_76_61_67_65",
+                "skill-4c_61_6e_67_75_65-53_6f_6d_62_72_65_20_2f_20_44_61_72_6b_20_54_6f_6e_67_75_65",
+                "skill-4c_61_6e_67_75_65-54_69_6c_e9_65_6e",
+                "skill-4c_61_6e_67_75_65-56_6f_6c_65_75_72",
+                "skill-4c_61_6e_67_75_65-57_61_73_74_65_6c_61_6e_64_65_72"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-linguistics",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-resistant",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24.2",
+      "source": {
+        "effectHash": "sha256:50dbc748caa6756bb2506f36a045587479a33845cbab23eca630e8b2a639f9d5",
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-resistant:actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "test"
+            },
+            {
+              "field": "preRollTalent",
+              "op": "eq",
+              "value": "resistant"
+            },
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "forceTestSuccess",
+              "key": "talent-resistant",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-resistant:attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "test"
+            },
+            {
+              "field": "preRollTalent",
+              "op": "eq",
+              "value": "resistant"
+            },
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "forceTestSuccess",
+              "key": "talent-resistant",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-resistant:defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "test"
+            },
+            {
+              "field": "preRollTalent",
+              "op": "eq",
+              "value": "resistant"
+            },
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "forceTestSuccess",
+              "key": "talent-resistant",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-dicer",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:e77a44585baeb894cb4337798f2fa640a7b096dc1608741882e2eca5b3ecacc3",
+        "reference": "Livre de base V5, p. 118 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-50_61_72_69"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-dicer",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-50_61_72_69"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-dicer",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-50_61_72_69"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-dicer",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-menacing",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:56bc31d7217b1915ab77df15686201d994fc89fdf47b2b67019e8a8535099c94",
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-49_6e_74_69_6d_69_64_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-menacing",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-49_6e_74_69_6d_69_64_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-menacing",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-49_6e_74_69_6d_69_64_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-menacing",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-strong-swimmer",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24.5",
+      "source": {
+        "effectHash": "sha256:5cb2766f13b22cfcf825523a71056097a9165f79e527fc8e7f9413f1494884d3",
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4e_61_74_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4e_61_74_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4e_61_74_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "modifySL-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "pursuit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifySL",
+              "amount": 2,
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "add"
+            }
+          ]
+        },
+        {
+          "id": "modifySL-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "pursuit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifySL",
+              "amount": 2,
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "add"
+            }
+          ]
+        },
+        {
+          "id": "modifySL-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "pursuit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifySL",
+              "amount": 2,
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-dealmaker",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:9f6f2f09c2d1cbc8eaded6f32dc798ed0e088b90923239e5a24ccd99f6f5fbdd",
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4d_61_72_63_68_61_6e_64_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-dealmaker",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4d_61_72_63_68_61_6e_64_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-dealmaker",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4d_61_72_63_68_61_6e_64_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-dealmaker",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-field-dressing",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:dce8b76e07740a3dafe7c4dc73408e0a8f03ba47ae10d998e17aa26334846229",
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-47_75_e9_72_69_73_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-field-dressing",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-47_75_e9_72_69_73_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-field-dressing",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-47_75_e9_72_69_73_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-field-dressing",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-commanding-presence",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd",
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-commanding-presence",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-commanding-presence",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-commanding-presence",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-orientation",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:ba1ec7d019cdf1596a32be084c77693b749cac9b0661431ae200e1ac7ca70109",
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4f_72_69_65_6e_74_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-orientation",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4f_72_69_65_6e_74_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-orientation",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-4f_72_69_65_6e_74_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-orientation",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-gregarious",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:022623676f890b7f909aecbdba116345fec48871ff18c866efed0e22abfaefce",
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_61_67_6f_74"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-gregarious",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_61_67_6f_74"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-gregarious",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_61_67_6f_74"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-gregarious",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-bookish",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:ec99d80aabee02b852cf13e53a0b5d92bb92157da70861c2199dd4b50a810aac",
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_65_63_68_65_72_63_68_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-bookish",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_65_63_68_65_72_63_68_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-bookish",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_65_63_68_65_72_63_68_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-bookish",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-briber",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:aaedab100a6c04917f8c634ea5520d890240c7a4b7d4ad1f46afd6c62b6f71aa",
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-53_75_62_6f_72_6e_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-briber",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-53_75_62_6f_72_6e_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-briber",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-53_75_62_6f_72_6e_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-briber",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-trapper",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:22ce870ac53b230aaf1b5307e38dd5367f4b23962806a43c0026734048cb51f3",
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-50_69_e9_67_65_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-trapper",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-50_69_e9_67_65_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-trapper",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-50_69_e9_67_65_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-trapper",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-super-numerate",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:d78d71b54e626e80698c176eb4ec0dc3386649d22e608f77dbdab250b8697055",
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-c9_76_61_6c_75_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-super-numerate",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-c9_76_61_6c_75_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-super-numerate",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-c9_76_61_6c_75_61_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-super-numerate",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-roughrider",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:b610ce81d9c63dbc323e14d0103c4f8cb1a860d50f8f895a1ef1c0828c0f6413",
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_65_76_61_75_63_68_65_72"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-roughrider",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_65_76_61_75_63_68_65_72"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-roughrider",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_65_76_61_75_63_68_65_72"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-roughrider",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-roughrider:additional:1",
+          "event": "situation.calculate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "situation",
+              "op": "eq",
+              "value": "pursuitMounted"
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyQuantity",
+              "key": "movement",
+              "amount": 1,
+              "stackGroup": "talent:movement:modifyQuantity",
+              "stack": "add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-crack-the-whip",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:5b58763a8d9d768781428a6050302dc4101e8d6e3ec582d333bf22ba0766ed0e",
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6e_64_75_69_74_65_20_64_27_61_74_74_65_6c_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-crack-the-whip",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6e_64_75_69_74_65_20_64_27_61_74_74_65_6c_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-crack-the-whip",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6e_64_75_69_74_65_20_64_27_61_74_74_65_6c_61_67_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-crack-the-whip",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-crack-the-whip:additional:1",
+          "event": "situation.calculate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "situation",
+              "op": "eq",
+              "value": "pursuitVehicle"
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyQuantity",
+              "key": "movement",
+              "amount": 1,
+              "stackGroup": "talent:movement:modifyQuantity",
+              "stack": "add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-nose-for-trouble",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:635e212b4a02bfd45a9c2eb6700232e8ada9f5322c26109b4a8df0eff6f139e6",
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-49_6e_74_75_69_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-nose-for-trouble",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-49_6e_74_75_69_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-nose-for-trouble",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-49_6e_74_75_69_74_69_6f_6e"
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-nose-for-trouble",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-pilot",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:cf0e27d074597a419312f6958f129d36000551a8e21f4b1935cdf245f7e16b4b",
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "in",
+              "value": [
+                "skill-group-52_61_6d_65_72",
+                "skill-group-56_6f_69_6c_65"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-pilot",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "in",
+              "value": [
+                "skill-group-52_61_6d_65_72",
+                "skill-group-56_6f_69_6c_65"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-pilot",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "in",
+              "value": [
+                "skill-group-52_61_6d_65_72",
+                "skill-group-56_6f_69_6c_65"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-pilot",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-tunnel-fighter",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:1f84aa698237349522cac218cd0ba20ea5865940ae039f7feaed59fb15fe16e7",
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "in",
+              "value": [
+                "skill-44_69_73_63_72_e9_74_69_6f_6e-53_6f_75_74_65_72_72_61_69_6e_65",
+                "skill-44_69_73_63_72_e9_74_69_6f_6e-53_6f_75_74_65_72_72_61_69_6e_73"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-tunnel-fighter",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "in",
+              "value": [
+                "skill-44_69_73_63_72_e9_74_69_6f_6e-53_6f_75_74_65_72_72_61_69_6e_65",
+                "skill-44_69_73_63_72_e9_74_69_6f_6e-53_6f_75_74_65_72_72_61_69_6e_73"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-tunnel-fighter",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "in",
+              "value": [
+                "skill-44_69_73_63_72_e9_74_69_6f_6e-53_6f_75_74_65_72_72_61_69_6e_65",
+                "skill-44_69_73_63_72_e9_74_69_6f_6e-53_6f_75_74_65_72_72_61_69_6e_73"
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-tunnel-fighter",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-sprinter",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:7e3c91b96267d54d312b14ad3a3b59c7471053b2b460f537c6407a4c3da0c941",
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "runningOrJumping",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-sprinter",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "runningOrJumping",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-sprinter",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "runningOrJumping",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-sprinter",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-catfall",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:854f9b8faddfec3bbbebd2f08b6cc94230a528338147709cbb51f9ea76353e25",
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "falling",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-catfall",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "falling",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-catfall",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "falling",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-catfall",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-panhandle",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:229269ab6bf2bd44837a46408906934f3b6741c5dd24d55423f1302efca03fcd",
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "begging",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-panhandle",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "begging",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-panhandle",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_68_61_72_6d_65"
+            },
+            {
+              "field": "begging",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-panhandle",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-inspiring",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:cb16f5827ce8f6a372e3df7f51b47f6587a65f4d7b9b4cd0516e1b247ea96bcc",
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            },
+            {
+              "field": "inCombat",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-inspiring",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            },
+            {
+              "field": "inCombat",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-inspiring",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+            },
+            {
+              "field": "inCombat",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-inspiring",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-iron-will",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:11140b3921f78094eb7e7a9f1f6c89fc51053ebd416ba8ec3fdc64039705dd5e",
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_61_6c_6d_65"
+            },
+            {
+              "field": "resistingInfluence",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-iron-will",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_61_6c_6d_65"
+            },
+            {
+              "field": "resistingInfluence",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-iron-will",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-43_61_6c_6d_65"
+            },
+            {
+              "field": "resistingInfluence",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-iron-will",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-contortionist",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:510c231496f32a065060526e09427bb7bb2222ee71ff845d2ab36f6ef62d5888",
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "escapingBonds",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-contortionist",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "escapingBonds",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-contortionist",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+            },
+            {
+              "field": "escapingBonds",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-contortionist",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-carouser",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24",
+      "source": {
+        "effectHash": "sha256:913a87cb0a23fc9e40fda57343e267ca77a68f25640d229a55109a6ef5172032",
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "advantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_e9_73_69_73_74_61_6e_63_65"
+            },
+            {
+              "field": "resistingPoisonOrAlcohol",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-carouser",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_e9_73_69_73_74_61_6e_63_65"
+            },
+            {
+              "field": "resistingPoisonOrAlcohol",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-carouser",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "advantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-52_e9_73_69_73_74_61_6e_63_65"
+            },
+            {
+              "field": "resistingPoisonOrAlcohol",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-carouser",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-master-of-disguise",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24.2",
+      "source": {
+        "effectHash": "sha256:228d2b2508bef20973e572967aa5b2647a94d305bbfd5a219eb7170c7fdb0d33",
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "choose-sl-units-actor",
+          "event": "test.afterRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_76_65_72_74_69_73_73_65_6d_65_6e_74-49_6e_74_65_72_70_72_e9_74_61_74_69_6f_6e"
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-master-of-disguise:sl"
+          }
+        },
+        {
+          "id": "choose-sl-units-attacker",
+          "event": "test.afterRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_76_65_72_74_69_73_73_65_6d_65_6e_74-49_6e_74_65_72_70_72_e9_74_61_74_69_6f_6e"
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-master-of-disguise:sl"
+          }
+        },
+        {
+          "id": "choose-sl-units-defender",
+          "event": "test.afterRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-44_69_76_65_72_74_69_73_73_65_6d_65_6e_74-49_6e_74_65_72_70_72_e9_74_61_74_69_6f_6e"
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-master-of-disguise:sl"
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-old-salt",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24.2",
+      "source": {
+        "effectHash": "sha256:d93c5e0565fa2c558a59a7aeef035be4c6c9bfff750a8ba2b5f40f5e7ba80e61",
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "choose-sl-units-actor",
+          "event": "test.afterRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "in",
+              "value": [
+                "skill-group-52_61_6d_65_72",
+                "skill-group-56_6f_69_6c_65"
+              ]
+            },
+            {
+              "field": "onOcean",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-old-salt:sl"
+          }
+        },
+        {
+          "id": "choose-sl-units-attacker",
+          "event": "test.afterRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "in",
+              "value": [
+                "skill-group-52_61_6d_65_72",
+                "skill-group-56_6f_69_6c_65"
+              ]
+            },
+            {
+              "field": "onOcean",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-old-salt:sl"
+          }
+        },
+        {
+          "id": "choose-sl-units-defender",
+          "event": "test.afterRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "in",
+              "value": [
+                "skill-group-52_61_6d_65_72",
+                "skill-group-56_6f_69_6c_65"
+              ]
+            },
+            {
+              "field": "onOcean",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-old-salt:sl"
+          }
+        },
+        {
+          "id": "talent-old-salt:additional:1",
+          "event": "situation.calculate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "situation",
+              "op": "eq",
+              "value": "crewOcean"
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyQuantity",
+              "key": "crew",
+              "amount": 1,
+              "stackGroup": "talent:crew:modifyQuantity",
+              "stack": "add"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "talentId": "talent-numismatics",
+      "edition": "V5",
+      "status": "validated",
+      "ruleVersion": "talent-v5-2026-10-09.24.5",
+      "source": {
+        "effectHash": "sha256:d39e413e1d2c577484c2e38e97634bf09dce60b90be75971f2c4bdb0e60b6dfd",
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191"
+      },
+      "clauses": [
+        {
+          "id": "choose-sl-units-actor",
+          "event": "test.afterRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-c9_76_61_6c_75_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "estimatingObject",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-numismatics:sl"
+          }
+        },
+        {
+          "id": "choose-sl-units-attacker",
+          "event": "test.afterRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-c9_76_61_6c_75_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "estimatingObject",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-numismatics:sl"
+          }
+        },
+        {
+          "id": "choose-sl-units-defender",
+          "event": "test.afterRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-c9_76_61_6c_75_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "estimatingObject",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "test.success",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "chooseSLUnits",
+              "stackGroup": "talent-sl-units",
+              "stack": "unique"
+            }
+          ],
+          "choice": {
+            "id": "talent-numismatics:sl"
+          }
+        },
+        {
+          "id": "grantAdvantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-53_61_76_6f_69_72-48_e9_72_61_6c_64_69_71_75_65"
+            },
+            {
+              "field": "identifyingHeraldry",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-numismatics",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "grantAdvantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-53_61_76_6f_69_72-48_e9_72_61_6c_64_69_71_75_65"
+            },
+            {
+              "field": "identifyingHeraldry",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-numismatics",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "grantAdvantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-53_61_76_6f_69_72-48_e9_72_61_6c_64_69_71_75_65"
+            },
+            {
+              "field": "identifyingHeraldry",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-numismatics",
+              "stack": "unique"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceDescriptions": {
+    "talent-alley-cat": "Avantage V5 aux Tests de Discrétion (Urbaine). Dans une ville connue, vous déterminez sans Test le trajet le plus rapide ou le moins visible.",
+    "talent-rover": "Avantage V5 aux Tests de Discrétion (Rurale). Vous pouvez généralement déterminer le trajet le plus facile et où trouver gibier, eau et abri.",
+    "talent-cat-tongued": "Avantage V5 aux Tests de Charme effectués pour mentir de façon convaincante.",
+    "talent-public-speaker": "Vous rassemblez aisément une foule et pouvez généralement évaluer son humeur et ses motivations. Avantage V5 aux Tests de Charme pour influencer un groupe. Après l’avoir charmé ainsi, vous pouvez employer Commandement pour l’inciter à agir, retirer ses états Brisé ou l’influencer autrement.",
+    "talent-scale-sheer-surface": "Avantage V5 aux Tests d'Escalade. Vous pouvez tenter de grimper des surfaces apparemment impossibles (glace, parois lisses, poteaux graissés…), avec une difficulté imposée au maximum Très difficile (−3 DR).",
+    "talent-fast-hands": "Vous pouvez divertir avec Escamotage en faisant apparaître ou disparaître de petits objets. Avantage V5 aux Tests d’Escamotage et de Corps à corps (Bagarre) pour toucher un adversaire, notamment pour un Sort de contact.",
+    "talent-linguistics": "Avantage V5 aux Tests de Langue. Chaque Augmentation d’une spécialisation de Langue coûte toujours 50 PX, quel que soit le nombre déjà acquis. Ne s’applique qu’aux langues servant à communiquer, jamais à Langue (Magick).",
+    "talent-resistant": "Choisissez une menace. Une fois par séance, avant de lancer un Test pour lui résister, vous pouvez le réussir automatiquement ; Avantage V5 à tous les autres Tests de résistance à cette menace durant la session. Répétable avec une nouvelle menace, une fois par choix.",
+    "talent-dicer": "Avantage V5 à tous vos Tests de Pari.",
+    "talent-menacing": "Avantage V5 aux Tests d’Intimidation. Les voleurs, bandits et pickpockets raisonnables choisissent généralement une autre cible s’ils en disposent.",
+    "talent-strong-swimmer": "Avantage V5 aux Tests de Natation ; +2 DR aux poursuites à la nage.",
+    "talent-dealmaker": "Avantage V5 aux Tests de Marchandage ; vous savez généralement quand une offre est vraiment définitive.",
+    "talent-field-dressing": "Avantage V5 aux Tests de Guérison. Vous fabriquez facilement des attelles ou bandages simples avec des matériaux ordinaires.",
+    "talent-commanding-presence": "En l’absence d’autorité reconnue, les gens se tournent naturellement vers vous en cas de crise et suivent vos ordres raisonnables. Avantage V5 aux Tests de Commandement.",
+    "talent-orientation": "Avantage V5 aux Tests d’Orientation. Vous connaissez automatiquement le nord à partir des étoiles, arbres ou autres signes familiers que vous apercevez.",
+    "talent-gregarious": "Avantage V5 aux Tests de Ragot ; vous savez généralement où trouver les lieux d’échange de rumeurs dans une agglomération.",
+    "talent-bookish": "Avantage V5 à tous vos Tests de Recherche.",
+    "talent-briber": "Quelques mots suffisent pour savoir si quelqu’un accepte un pot-de-vin et quel montant exact est nécessaire pour fermer les yeux ou vous aider. Avantage V5 à tous vos Tests de Subornation.",
+    "talent-trapper": "Avantage V5 aux Tests de Piégeage. Avec une heure de préparation, fabriquez un piège pour petit animal ou une fosse dissimulée (p. 136).",
+    "talent-super-numerate": "Avantage V5 aux Tests d'Évaluation. Vous calculez sans outil et mesurez précisément le temps écoulé tant que vous restez conscient.",
+    "talent-roughrider": "Avec la compétence Chevaucher, vous dirigez votre monture pour une Action et un Mouvement sans Test. Si un Test de Chevaucher est requis, vous le faites avec Avantage V5. En poursuite montée, +1 au Mouvement de l'animal.",
+    "talent-crack-the-whip": "Avec Conduite d’attelage, vous dirigez les animaux du véhicule pour une Action et un Mouvement sans Test. Si un Test de Conduite est requis, il bénéficie d’Avantage V5. En poursuite avec le véhicule, ajoutez +1 au Mouvement des animaux.",
+    "talent-nose-for-trouble": "Avantage V5 aux Tests d’Intuition ; vous savez généralement où trouver, dans une ville ou un village, de quoi parier, vous battre ou vous enivrer.",
+    "talent-pilot": "Avantage V5 aux Tests de Ramer et de Voile.",
+    "talent-tunnel-fighter": "Avantage V5 aux Tests de Discrétion (Souterraine). Vous estimez facilement la distance parcourue sous terre et approximativement la profondeur sous la surface.",
+    "talent-sprinter": "Avantage V5 aux Tests d'Athlétisme pour courir et sauter.",
+    "talent-catfall": "Toute chute compte comme volontaire : vous pouvez effectuer un Test d’Athlétisme pour réduire les Dégâts. Avantage V5 aux Tests d’Athlétisme effectués pendant la chute.",
+    "talent-panhandle": "Avantage V5 aux Tests de Charme pour mendier, y compris pendant une Activité Revenu. Vous savez généralement où trouver un abri urbain sûr mais inconfortable pour dormir.",
+    "talent-inspiring": "Avantage V5 aux Tests de Commandement effectués en combat.",
+    "talent-iron-will": "Avantage V5 aux Tests de Calme pour résister à l’influence d’autrui, qu’elle provienne d’un Test de Sociabilité ou de la magie.",
+    "talent-contortionist": "Vous pouvez vous glisser dans des ouvertures normalement difficiles ou impossibles, à l’appréciation du MJ. Avantage V5 aux Tests d’Athlétisme pour vous libérer de liens.",
+    "talent-carouser": "Une consommation modérée d’alcool n’a pas d’effet négatif ; un Test de Résistance à l’alcool n’est requis qu’en cas d’excès. Avantage V5 à ces Tests et aux Tests de Résistance contre le poison.",
+    "talent-master-of-disguise": "Votre posture, vos expressions et des vêtements adaptés permettent de modifier votre apparence au point de ne plus vous ressembler. Lors d’un Test réussi de Divertissement (Interprétation), utilisez au choix les DR obtenus ou le chiffre du dé des unités.",
+    "talent-old-salt": "Lors d’un Test réussi de Ramer ou Voile sur l’océan, utilisez au choix les DR obtenus ou le chiffre du dé des unités. Vous comptez comme deux bateliers pour l’équipage minimum nécessaire à la conduite d’un navire océanique.",
+    "talent-numismatics": "Avantage V5 aux Tests de Savoir (Héraldique) pour identifier l’origine d’une monnaie, médaille ou bannière. Lors d’un Test réussi d’Évaluation pour estimer un objet, utilisez au choix les DR obtenus ou le chiffre du dé des unités."
+  },
+  "contextDescriptors": [
+    {
+      "talentId": "talent-cat-tongued",
+      "field": "lying",
+      "label": "Le Test sert à mentir de façon convaincante",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-43_68_61_72_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-public-speaker",
+      "field": "influencingGroup",
+      "label": "Le Test sert à influencer un groupe",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-43_68_61_72_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-fast-hands",
+      "field": "touchingOpponent",
+      "label": "Le Test de Bagarre sert à toucher un adversaire",
+      "type": "boolean",
+      "skillIds": [
+        "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_67_61_72_72_65"
+      ]
+    },
+    {
+      "talentId": "talent-resistant",
+      "field": "resistingThreat",
+      "label": "Le Test sert à résister à une menace",
+      "type": "boolean"
+    },
+    {
+      "talentId": "talent-resistant",
+      "field": "threatId",
+      "label": "Menace correspondant à la spécialité acquise",
+      "type": "select",
+      "optionsFromAcquisitions": true
+    },
+    {
+      "talentId": "talent-sprinter",
+      "field": "runningOrJumping",
+      "label": "Le Test sert à courir ou sauter",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-catfall",
+      "field": "falling",
+      "label": "Le Test est effectué pendant une chute",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-panhandle",
+      "field": "begging",
+      "label": "Le Test sert à mendier",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-43_68_61_72_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-inspiring",
+      "field": "inCombat",
+      "label": "Le Test de Commandement est effectué en combat",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74"
+      ]
+    },
+    {
+      "talentId": "talent-iron-will",
+      "field": "resistingInfluence",
+      "label": "Le Test sert à résister à une influence",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-43_61_6c_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-contortionist",
+      "field": "escapingBonds",
+      "label": "Le Test sert à se libérer de liens",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-41_74_68_6c_e9_74_69_73_6d_65"
+      ]
+    },
+    {
+      "talentId": "talent-carouser",
+      "field": "resistingPoisonOrAlcohol",
+      "label": "Le Test résiste au poison ou à un excès d’alcool",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-52_e9_73_69_73_74_61_6e_63_65"
+      ]
+    },
+    {
+      "talentId": "talent-old-salt",
+      "field": "onOcean",
+      "label": "Le Test de Ramer/Voile est effectué sur l’océan",
+      "type": "boolean",
+      "skillGroupIds": [
+        "skill-group-52_61_6d_65_72",
+        "skill-group-56_6f_69_6c_65"
+      ]
+    },
+    {
+      "talentId": "talent-numismatics",
+      "field": "estimatingObject",
+      "label": "Le Test d’Évaluation sert à estimer un objet",
+      "type": "boolean",
+      "skillIds": [
+        "skill-c9_76_61_6c_75_61_74_69_6f_6e-base"
+      ]
+    }
+  ],
+  "approvedRulings": {
+    "unitsSL": {
+      "decision": "MJ, 9 octobre 2026 : les choix DR/unités lisent le chiffre littéral du jet retenu ; 0 reste 0, sans nouveau tirage.",
+      "zeroValue": 0,
+      "initialSuccessRequired": true
+    },
+    "resistantSession": {
+      "decision": "MJ, 9 octobre 2026 : Avantage aux autres Tests de résistance à la menace durant la session. Réussite automatique une fois par séance séparée et manuelle.",
+      "scope": "current table session",
+      "automaticSuccessQuota": "manual"
+    }
+  }
+}

@@ -9,6 +9,7 @@ const FILE_INVALID = 'Ce fichier n’est pas une sauvegarde de l’outil MJ.';
 
 // Ordre significatif : la première correspondance l'emporte.
 const KNOWN_ERRORS = [
+  [error => /: source changée, recalcul requis\.$/u.test(error?.message || ''), 'La source d’un talent ou d’un mot-clé a changé depuis le calcul : recalculez l’action.'],
   [error => error?.code === 'SKILL_LINK_REQUIRED', 'Choisissez la compétence de cette arme dans « Mettre à jour les PJ » avant de lancer l’action.'],
   [error => error?.code === 'AMMUNITION_INCOMPATIBLE', 'Cette munition est incompatible avec l’arme choisie.'],
   [error => error?.code === 'AMMUNITION_MANUAL', 'Vérifiez explicitement la compatibilité de cette munition avec l’arme.'],

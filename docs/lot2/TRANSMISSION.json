@@ -1,21 +1,217 @@
 {
   "schemaVersion": 1,
-  "preparedAt": "2026-10-08",
+  "preparedAt": "2026-10-09",
   "repository": "https://github.com/Ethoril/Outil-MJ-Warhammer",
   "developmentBranch": "codex/lot2-talents-v5",
   "engineCommit": "7477421e937d73ba4d3cf81b1c8582c0c8315544",
   "baseCommit": "28657e39477bbcbfeb0de826b3f1d05e525bb386",
   "applicationVersion": "3.12.3",
   "lastEngineVerification": {
+    "tests": 801,
+    "passed": 801,
+    "failed": 0,
+    "skipped": 0,
+    "date": "2026-10-09",
+    "scope": "local keyword/talent non-regression, live-source confirmation guards, explicit MJ Damaging 0=0; synthetic fixtures",
+    "browserSuites": [
+      "test:fiches-browser",
+      "test:references-browser"
+    ],
+    "independentBrowserSuites": [
+      "test:lot2-24-browser",
+      "node tests/lot2-v5-keyword-control-browser.mjs"
+    ],
+    "independentStoreTests": 32,
+    "newStage24Tests": 97,
+    "revision": "local commit containing this manifest",
+    "newKeywordAuditTests": 32
+  },
+  "nextStage": "2.4 remaining mechanical families, then separate 2.5 delivery acceptance",
+  "mockupApproved": true,
+  "sourceConversionOwner": "MJ dans Aides de jeu, conversion V5 actualisée",
+  "publicFolder": "docs/lot2/",
+  "pdfIncluded": false,
+  "applicationCodeInZip": false,
+  "engineCommitRole": "historical-initial-foundation",
+  "localIncrement": {
+    "date": "2026-10-09",
+    "baseCommit": "f659eec",
+    "revision": "local commit containing this manifest",
+    "remotePublished": false,
+    "completedStages": [
+      "2.1",
+      "2.2",
+      "2.3 representative integration",
+      "2.4 first useful catalogue wave"
+    ],
+    "activeTalentIds": [
+      "talent-accurate-shot",
+      "talent-strike-mighty-blow",
+      "talent-iron-jaw",
+      "talent-beat-blade",
+      "talent-furious-assault",
+      "talent-alley-cat",
+      "talent-rover",
+      "talent-cat-tongued",
+      "talent-public-speaker",
+      "talent-scale-sheer-surface",
+      "talent-fast-hands",
+      "talent-linguistics",
+      "talent-resistant",
+      "talent-dicer",
+      "talent-menacing",
+      "talent-strong-swimmer",
+      "talent-dealmaker",
+      "talent-field-dressing",
+      "talent-commanding-presence",
+      "talent-orientation",
+      "talent-gregarious",
+      "talent-bookish",
+      "talent-briber",
+      "talent-trapper",
+      "talent-super-numerate",
+      "talent-roughrider",
+      "talent-crack-the-whip",
+      "talent-nose-for-trouble",
+      "talent-pilot",
+      "talent-tunnel-fighter",
+      "talent-sprinter",
+      "talent-catfall",
+      "talent-panhandle",
+      "talent-inspiring",
+      "talent-iron-will",
+      "talent-contortionist",
+      "talent-carouser",
+      "talent-master-of-disguise",
+      "talent-old-salt",
+      "talent-numismatics",
+      "talent-strike-to-stun"
+    ],
+    "catalogueComplete": false,
+    "liveCloudVerification": false,
+    "report": "LOT2_RACCORDEMENT_2_4.md",
+    "independentControl": "LOT2_CONTROLE_2_4.md",
+    "activeContractCount": 41,
+    "catalogueTreatmentCount": 206,
+    "allEffectsCertified": false,
+    "ruleVersion": "v5-combat-2026-10-09.24.4"
+  },
+  "initialEngineVerification": {
     "tests": 468,
     "passed": 468,
     "newLot2Tests": 62,
     "date": "2026-10-08"
   },
-  "nextStage": "2.1",
-  "mockupApproved": true,
-  "sourceConversionOwner": "MJ dans Aides de jeu",
-  "publicFolder": "docs/lot2/",
-  "pdfIncluded": false,
-  "applicationCodeInZip": false
+  "talentSource": {
+    "count": 206,
+    "updatedAt": "2026-10-09",
+    "csvSha256": "4ef3ee500c6d4da8b26dbb30fbb751995954be66e822a7dc306acde379229d8f",
+    "changedDescriptionHashes": 7,
+    "initialConversionChangedDescriptionHashes": 19,
+    "changedTalentIds": [
+      "talent-trick-rider",
+      "talent-attractive",
+      "talent-break-and-enter",
+      "talent-impassioned-zeal",
+      "talent-small",
+      "talent-resistant",
+      "talent-jump-up"
+    ],
+    "revalidatedActiveContractIds": [
+      "talent-resistant"
+    ],
+    "otherSheetsRefreshedOnline": false
+  },
+  "handoffDocument": "PASSATION_PROCHAINE_FENETRE.md",
+  "confirmedDecisions": {
+    "date": "2026-10-09",
+    "mixedConditionPenalties": "MJ chooses per action between SL penalty and disadvantage",
+    "battementCritical": "remove all wounds and critical consequences; apply only Battement effects",
+    "fortune": {
+      "owner": "tool",
+      "scope": "stable character across encounters",
+      "initialization": "known current sheet balance or explicit MJ entry",
+      "undoableSpending": true,
+      "automaticSourceSheetWrites": false
+    },
+    "silentTakedown": {
+      "date": "2026-10-09",
+      "authority": "core V5 p135 procedure retained for Strike to Stun; p127 called-shot reference to clarify, no contradiction asserted",
+      "test": "Melee vs Endurance outside combat against unaware target; Advantage; no called shot",
+      "outcomes": "MJ manual; no ordinary combat critical or Momentum gain",
+      "publicSheetEdited": false
+    },
+    "unitsSL": {
+      "date": "2026-10-09",
+      "read": "literal units digit of retained roll",
+      "zeroValue": 0,
+      "initialSuccessRequired": true,
+      "initialSuccessPreservedAtZero": true,
+      "separateKeepReverseChoices": true,
+      "reroll": false
+    },
+    "resistantSession": "Advantage on other relevant threat resistance tests during session; automatic success once per session remains manual",
+    "smallHomebrew": {
+      "date": "2026-10-09",
+      "preserveAllTalentClauses": true,
+      "onlyChange": "stomp costs one Momentum instead of one V4 Advantage",
+      "automation": "manual reminders",
+      "automaticCharacterSizeOrWoundsMigration": false
+    }
+  },
+  "sourceAudit": {
+    "report": "ECARTS_LIVRE_V5_AIDES_DE_JEU.md",
+    "coreTalentsCompared": 166,
+    "catalogueCount": 206,
+    "otherSupplementTalentsNotVerified": 39,
+    "smallV4ReviewedSeparately": true,
+    "publicOnlineStateCertified": false,
+    "privatePdfIncluded": false,
+    "withdrawnFindings": [
+      "War Leader Fear wording",
+      "contradiction between strikes"
+    ],
+    "literalUnitsRuling": 0,
+    "publicTalentsCsvReadAfterMjCorrections": true
+  },
+  "firstStage24Verification": {
+    "tests": 763,
+    "passed": 763,
+    "failed": 0,
+    "skipped": 0,
+    "date": "2026-10-09",
+    "scope": "local development worktree; synthetic fixtures",
+    "browserSuites": [
+      "test:lot2-browser",
+      "test:lot2-23-browser",
+      "test:startup",
+      "test:fiches-browser",
+      "test:references-browser"
+    ],
+    "independentBrowserSuites": [
+      "tests/lot2-v5-23-control-browser.mjs",
+      "test:lot2-24-browser"
+    ],
+    "independentStoreTests": 30,
+    "newStage24Tests": 91,
+    "revision": "ef073c3"
+  },
+  "keywordAudit": {
+    "report": "LOT2_CONTROLE_MOTS_CLES.md",
+    "baselines": [
+      "6871764",
+      "09df6c2"
+    ],
+    "comparisons": 5740,
+    "unexpectedDifferences": 0,
+    "expectedAssommanteDifferences": 36,
+    "explicitLiteralDamagingDifferences": 22,
+    "keywordDescriptions": 55,
+    "equipmentDataUnchanged": true,
+    "independentTests": 32,
+    "literalDamagingUnits": "max(damage SL, final roll units digit 0 to 9); Undamaging cancels",
+    "knownLimit": "Called shot plus Partial needs explicitly arbitrated AP; no invented hit-location parity",
+    "sourceGuards": "only contractual Qualities evaluated, including suppressed criticals; unused gear and explicit AP arbitration remain valid",
+    "remotePublished": false
+  }
 }

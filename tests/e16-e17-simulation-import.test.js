@@ -8,7 +8,7 @@ const target = { id: 't', name: 'Cible', hp: 10, caracs: { E: 30 }, armor: { bod
 
 test('E16 simulation — copie isolée, abandon sans mutation et réutilisation E12', () => {
   const state = { revision: 2, participants: [actor, target], appliedResolutionIds: [] };
-  const simulation = simulateAction(state, { actorId: 'a', targetId: 't', action: { id: 'coup', type: 'attack', base: 60, damage: 4 }, roll: '42' });
+  const simulation = simulateAction(state, { v5: { kind: 'ranged' }, actorId: 'a', targetId: 't', action: { id: 'coup', type: 'attack', base: 60, damage: 4 }, roll: '42' });
   assert.equal(simulation.status, 'pending');
   assert.equal(simulation.preview.roll, 42);
   assert.equal(simulation.preview.baseRevision, 2);
@@ -20,7 +20,7 @@ test('E16 simulation — copie isolée, abandon sans mutation et réutilisation 
 
 test('E16 simulation — comparaison de cibles et application idempotente/stale', () => {
   const state = { revision: 0, participants: [actor, target, { ...target, id: 't2', name: 'Autre' }], appliedResolutionIds: [] };
-  const compared = compareSimulationTargets(state, { actorId: 'a', action: { type: 'attack', base: 60, damage: 2 }, roll: 40 }, ['t', 't2']);
+  const compared = compareSimulationTargets(state, { v5: { kind: 'ranged' }, actorId: 'a', action: { type: 'attack', base: 60, damage: 2 }, roll: 40 }, ['t', 't2']);
   assert.deepEqual(compared.simulations.map(item => item.preview.targetId), ['t', 't2']);
   const applied = applySimulation(compared.simulations[0], state);
   assert.equal(applied.status, 'applied');

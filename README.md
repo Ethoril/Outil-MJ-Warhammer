@@ -1,6 +1,8 @@
-# Outil MJ — Warhammer Fantasy Roleplay 4e (v3.12.3)
+# Outil MJ — Warhammer (v3.13.0)
 
-Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhammer Fantasy Roleplay 4e édition**.
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.15.0 préparée localement ; le site public conserve sa version publiée tant qu’un déploiement n’est pas autorisé.
+
+Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 
 📋 **Plan d’évolution** : [fonctionnement, interface et fonctionnalités](PLAN_EVOLUTION.md) — programme par étapes, critères de validation et migrations ; écran destiné aux joueurs hors périmètre.
 
@@ -16,12 +18,13 @@ Application web progressive (PWA) d'assistance au Maître de Jeu pour **Warhamme
   * Bouton « Retirer du combat » pour les PNJ à 0 PV ou moins ; les PJ restent en jeu.
   * Suivi d'initiative dynamique par glisser-déplacer.
   * Zones *Active* et *En attente / Réserve tactique*.
-  * Moteur de calcul de dégâts WFRP 4e (localisation automatique d100 inverse, déduction Endurance/Armure, plancher à 1, gestion des armes *Inoffensives*, Acharnement automatique et état *À Terre*). *Pointue* (+1 DR sur une attaque réussie) et *Imprécise* (−1 DR) modifient le DR de l'attaque, avant le test opposé et les dégâts.
+  * Moteur de combat V5 : opposition, Élan binaire, choix d’inversion sans relance, localisation, critiques indépendants du vainqueur, dégâts et États. Les qualités et talents raccordés exposent leurs contributions et les choix nécessaires avant application.
+  * 206 talents classés : 131 contrats moteur, 19 purement narratifs, 18 entièrement traités dans les fiches, 10 bonus de caractéristiques exclus et 28 réservés au lot 3. Fortune et usages de talents sont persistants, atomiques et annulables.
   * Mots-clés d'armes et d'armures lus dans l'onglet « Mots Clés Armes et Armures » des aides de jeu (noms officiels, 55 entrées), avec copie locale hors ligne.
   * Gestion automatique des états (*Hémorragique*, *Enflammé*, *Surpris*, *Sonné*, *Inconscient*...).
 * **Panneau de règles interactif** : Base de données de règles avec moteur de recherche en temps réel et sections auto-dépliables.
 * **Confort d'usage & PWA** :
-  * Annulation du dernier geste destructif (`⌘Z`), sur un niveau.
+  * Annulation et rétablissement des commandes locales, conservés après rechargement ; une modification externe du combat ferme l’historique applicable.
   * Raccourcis clavier globaux (`N` / `Espace` tour suivant, `D` sélection des dés, `1`/`2`/`3` navigation).
   * Thème sombre / clair / système mémorisé.
   * Historique d'événements structuré avec filtrage par type et combattant.
@@ -97,7 +100,7 @@ La configuration Firebase (`firebaseConfig`) dans `js/core/sync.js` est **public
 
 La sécurité est assurée par les **Firebase Security Rules** sur Realtime Database.
 
-Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). Les branches v1 et v2 restent lisibles uniquement par le compte propriétaire pour permettre la reprise, mais leurs écritures sont bloquées afin d’éviter qu’un ancien client ne remplace un état plus récent. La version 3.12.3 utilise `wfrp-sessions-v3/$uid/current`, isolé par compte, avec validation du schéma 3, de la révision et des reçus.
+Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). Les branches v1 et v2 restent lisibles uniquement par le compte propriétaire pour permettre la reprise, mais leurs écritures sont bloquées afin d’éviter qu’un ancien client ne remplace un état plus récent. La version 3.13.0 utilise `wfrp-sessions-v3/$uid/current`, isolé par compte, avec validation du schéma 3, de la révision et des reçus.
 
 Pour déployer uniquement ces règles sur le projet Firebase configuré :
 
@@ -118,3 +121,11 @@ Pour la connexion Google et la synchronisation sur téléphone Android, utiliser
 **Brave n'est pas pris en charge pour la connexion Google et la synchronisation.** L'échec a été constaté sur Brave Android : la fenêtre de connexion se ferme avec `auth/popup-closed-by-user`, même avec les protections du site désactivées. Cette limitation est acceptée ; aucun correctif spécifique Brave n'est planifié. L'ouverture du formulaire Google sous Brave Windows a été vérifiée, sans validation d'une connexion complète.
 
 Les contrôles navigateur automatisés utilisent Edge sur Windows. Le projet utilise des API modernes (modules ES, `<dialog>`, `structuredClone`, `:has()`). Les autres environnements ne sont pas garantis. Voir le [guide de connexion et de reprise](docs/GUIDE_FICHES_PJ_ET_REPRISE_V3.md) et la [recette du lot 1](docs/RECETTE_FICHES_PJ.md).
+
+## Clôture locale V5 : magie 3.15.0
+
+Le chantier courant conserve 277 contrats et un catalogue aligné sur la feuille publique du 14 octobre. Les trois clauses de talents restantes ont des preuves Store/UI ; les effets assistés et familles différées restent explicites. [Bilan](docs/lot3/LOT3_FINALISATION_MAGIE.md), [rapport](docs/lot3/LOT3_RAPPORT_CLOTURE.md), [recette complète](docs/lot3/LOT3_RECETTE_3_15.md), [nouveautés MJ](docs/lot3/LOT3_JOURNAL_3_15_0.md). Génération reproductible : node tools/check-lot3-generation.mjs ; les commandes de recette nécessitent Edge Windows. Paquet courant 3.15.0 dans tmp/lot3/release-path.json, aucune publication.
+
+## Historique du chantier V5 : magie 3.14.0
+
+La finalisation locale et le périmètre restant sont consignés dans [le bilan de magie](docs/lot3/LOT3_FINALISATION_MAGIE.md), avec [la recette 3.5](docs/lot3/LOT3_RECETTE_3_5.md). Les ingrédients sont exclus ; les 15 miracles sont seulement inventoriés. Le paquet de travail reste local et non publié.

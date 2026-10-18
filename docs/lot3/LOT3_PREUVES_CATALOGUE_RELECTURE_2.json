@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-14",
+  "versions": {
+    "before": {
+      "contentVersion": "references:0264a0a06ad56202486c5e0d4219263d790072833ccd04244daf4b43bf3fcd37",
+      "catalogVersion": "sha256:79c69082a939528aa549e4b64ba38b6bebb122c1bc6e0086405132851d66d26b",
+      "localRevision": "lot3-cloture-2026-10-14.1"
+    },
+    "after": {
+      "contentVersion": "references:91baffb889130b513c59df546f8c81ff9bf003fbc1ec47e1e23877959d4f7573",
+      "catalogVersion": "sha256:2ebb39e1fd936c250a8f3a90b99bf5c3afdad337d987b4bc7a7d54256eb2638f",
+      "localRevision": "2026-10-14-catalogue-v5-relecture-2",
+      "publicCsvSha256": "485e842dc14244c8cec6e48460042f490823f99c8c654d6df311924e9f936611"
+    }
+  },
+  "changes": [
+    {
+      "row": 3,
+      "column": 7,
+      "cell": "G3",
+      "name": "Égide d’Aqshy",
+      "field": "desc",
+      "before": "Vous vous enveloppez dans une cape ardente d’Aqshy, canalisant les flammes en une égide protectrice. \n • Vous êtes totalement immunisé aux dégâts de feu non magique. \n • Vous pouvez ignorer tous les États Enflammé que vous recevez. \n • Vous recevez le Trait de créature Protection (9+) contre les attaques de feu magiques, y compris la maleflamme, les attaques utilisant le Trait de créature Souffle (Feu), et les sorts du Domaine du Feu.",
+      "after": "La cape ardente immunise contre les dégâts de feu non magique et les États Enflammé. Contre les attaques de feu magique, elle accorde Protection (7+)."
+    },
+    {
+      "row": 11,
+      "column": 7,
+      "cell": "G11",
+      "name": "Mur de Feu",
+      "field": "desc",
+      "before": "- Crée un mur de flammes de (Bonus de Force Mentale) mètres de large, 1 mètre de haut et 1 mètre d’épaisseur.\n- +2 DR : le mur s'allonge de (Bonus de Force Mentale) mètres.\n- Toute créature traversant le mur reçoit 1 État Enflammé et subit un Projectile Magique avec des Dégâts égaux à votre Bonus de Force Mentale.",
+      "after": "Créez un mur de flammes long de votre Bonus de Force Mentale mètres, haut de 1 mètre et épais de 1 mètre. Chaque traversée inflige un Projectile magique avec Dégâts +4 et 1 Enflammé. La surpuissance de Zone multiplie la longueur du mur."
+    },
+    {
+      "row": 27,
+      "column": 7,
+      "cell": "G27",
+      "name": "Bouclier céruléen",
+      "field": "desc",
+      "before": "Vous vous enfermez dans une cage crépitante d’étincelles d’électricité et d’Azyr. Pendant la durée du sort, vous gagnez + DR PA à toutes les Localisations contre les Attaques de Corps à corps. Si attaqué par une arme en métal, l’attaquant subit des Dégâts égaux à votre Bonus de Force Mentale.",
+      "after": "Le bouclier accorde +3 PA à toutes les Localisations contre les armes en métal, y compris leurs projectiles. Un attaquant avec une arme de mêlée en métal subit 6 Dégâts au bras qui frappe."
+    },
+    {
+      "row": 29,
+      "column": 7,
+      "cell": "G29",
+      "name": "Le Second Signe d’Amul",
+      "field": "desc",
+      "before": "Gagnez +DR Points de Chance. Pour chaque +2 DR, gagnez +1 Point de Chance supplémentaire. Tous ces Points inutilisés à la fin de la Durée du Sort sont perdus.",
+      "after": "Vous gagnez 3 Points de Chance temporaires. Pour chaque +2 DR de surpuissance, vous gagnez 1 Point de Chance supplémentaire. Les points inutilisés disparaissent à la fin du sort."
+    },
+    {
+      "row": 66,
+      "column": 7,
+      "cell": "G66",
+      "name": "Toucher doré",
+      "field": "desc",
+      "before": "Après avoir lancé ce Sort, la prochaine créature vivante que vous touchez est transformée en statue d’or. \n La cible peut tenter un Test de Force Mentale Intermédiaire (+0) pour résister à la pétrification. \n Une fois transformée, la cible ne peut ni voir, ni entendre, ni ressentir quoi que ce soit, mais ne suffoque pas. \n La Durée est secrètement déterminée par le MJ. \n En tant que statue, la cible possède un Bonus d’Endurance de 10, mais les Blessures sont subies normalement. \n Si la statue subit des Blessures, le Sort prend immédiatement fin.",
+      "after": "La prochaine créature vivante touchée devient une statue d’or, sauf si elle réussit Force Mentale (+0 DR). Le MJ détermine secrètement une durée de Force Mentale × 1d10 minutes ; la surpuissance de Durée est possible. La statue ne perçoit rien et ne suffoque pas. Son Bonus d’Endurance vaut 10 ; les Blessures sont subies normalement et toute Blessure met fin au sort."
+    },
+    {
+      "row": 75,
+      "column": 7,
+      "cell": "G75",
+      "name": "Apothéose",
+      "field": "desc",
+      "before": "Vous infusez la cible d'une magie pure, lui permettant de récupérer un nombre de Blessures égal à votre Bonus de Force Mentale et lui octroyant temporairement le Trait de Créature Peur 1.\nSurpuissance :\n• Tous les +3 DR : La cible récupère à nouveau votre Bonus de Force Mentale en Blessures.\n• +6 DR : Vous soignez une Blessure Critique si vous réussissez un Test de Sociabilité Difficile (+0).\n• +10 DR : Vous ramenez la cible à la vie à son maximum de Blessures. Sa tête est entourée d’un halo magique. Elle meurt définitivement après un nombre de minutes égal à votre Bonus de Force Mentale ou si Apothéose est dissipé.",
+      "after": "Vous infusez la cible d'une magie pure, lui permettant de récupérer un nombre de Blessures égal à votre Bonus de Force Mentale et lui octroyant temporairement le Trait de Créature Peur 1.\nSurpuissance :\n• Tous les +3 DR : La cible récupère à nouveau votre Bonus de Force Mentale en Blessures.\n• +6 DR : Vous soignez une Blessure Critique si vous réussissez un Test de Sociabilité Intermédiaire (+0 DR).\n• +10 DR : Vous ramenez la cible à la vie à son maximum de Blessures. Sa tête est entourée d’un halo magique. Elle meurt définitivement après un nombre de minutes égal à votre Bonus de Force Mentale ou si Apothéose est dissipé."
+    },
+    {
+      "row": 76,
+      "column": 7,
+      "cell": "G76",
+      "name": "Destruction des Arcanes",
+      "field": "desc",
+      "before": "Vous invoquez les pouvoirs d'annihilation pour blesser un ennemi en armure et détruire ses objets magiques. La cible subit 1 Blessure au corps par tranche complète de 2 points d’armure portés (par exemple, 18 PA infligent 9 Blessures). Le Bonus d'Endurance s'applique, mais les Points d'Armure sont ignorés. De plus, un de ses objets magiques (déterminé aléatoirement) est détruit si vous réussissez un Test de Focalisation Difficile (+0).\nSurpuissance :\n• Chaque +1 DR : Détruit 1 point d'armure porté (aléatoire) après les dégâts.\n• +3 DR : Si vous réussissez un Test de Dextérité Moyen (+2 DR), vous choisissez l'objet magique détruit.\n• +8 DR : Augmente les dégâts du sort à 1 Blessure par point d'armure porté.",
+      "after": "Vous invoquez les pouvoirs d'annihilation pour blesser un ennemi en armure et détruire ses objets magiques. La cible subit 1 Blessure au corps par tranche complète de 2 points d’armure portés (par exemple, 18 PA infligent 9 Blessures). Le Bonus d'Endurance s'applique, mais les Points d'Armure sont ignorés. De plus, un de ses objets magiques (déterminé aléatoirement) est détruit si vous réussissez un Test de Focalisation Intermédiaire (+0 DR).\nSurpuissance :\n• Chaque +1 DR : Détruit 1 point d'armure porté (aléatoire) après les dégâts.\n• +3 DR : Si vous réussissez un Test de Dextérité Accessible (+2 DR), vous choisissez l'objet magique détruit.\n• +8 DR : Augmente les dégâts du sort à 1 Blessure par point d'armure porté."
+    },
+    {
+      "row": 81,
+      "column": 7,
+      "cell": "G81",
+      "name": "Convocation Ardente",
+      "field": "desc",
+      "before": "Vous invoquez un barrage incessant de flammes. Toutes les créatures présentes dans la Zone d’Effet subissent immédiatement un projectile magique infligeant +5 Dégâts et gagnent 1 État Enflammé. Chaque round suivant, elles subissent à nouveau ces dégâts et gagnent un État Enflammé supplémentaire, même si elles quittent la zone initiale. L’effet peut être annulé par immersion totale dans l'eau ou le sable.\nSurpuissance :\n• +5 DR : Les dégâts passent à +6 au deuxième round et augmentent de +1 à chaque round suivant. Vous gagnez du Yenlui (Sombre).\n• +8 DR : Un Test de Capacité de Combat Difficile (+0) permet d’exempter les cibles alliées des effets du sort.",
+      "after": "Vous invoquez un barrage incessant de flammes. Toutes les créatures présentes dans la Zone d’Effet subissent immédiatement un projectile magique infligeant +5 Dégâts et gagnent 1 État Enflammé. Chaque round suivant, elles subissent à nouveau ces dégâts et gagnent un État Enflammé supplémentaire, même si elles quittent la zone initiale. L’effet peut être annulé par immersion totale dans l'eau ou le sable.\nSurpuissance :\n• +5 DR : Les dégâts passent à +6 au deuxième round et augmentent de +1 à chaque round suivant. Vous gagnez du Yenlui (Sombre).\n• +8 DR : Un Test de Capacité de Combat Intermédiaire (+0 DR) permet d’exempter les cibles alliées des effets du sort."
+    },
+    {
+      "row": 83,
+      "column": 7,
+      "cell": "G83",
+      "name": "Glamour de Teclis",
+      "field": "desc",
+      "before": "Vous invoquez un labyrinthe illusoire de brume et d'ombres. Chaque round, les cibles doivent réussir un Test de Navigation Très Difficile (−3 DR) ou n’effectuer aucune action sauf errer dans une direction aléatoire à leur rythme de marche normal. Le sort est invisible aux autres, faisant apparaître les cibles comme hébétées. Si une cible échoue à 3 tests, vous pouvez contrôler sa direction pendant le reste de la durée du sort en réussissant un Test de Commandement Moyen (+2 DR). Chaque changement de direction nécessite un nouveau Test de Commandement.\nSurpuissance :\n• +3 DR : Les effets du sort durent Bonus d’Intelligence heures pour les cibles qui échouent à trois Tests de Navigation. Vous gagnez du Yenlui (Sombre).\n• +6 DR : Un Test d'Agilité Difficile (+0) permet d'exempter les cibles alliées des effets du sort.",
+      "after": "Vous invoquez un labyrinthe illusoire de brume et d'ombres. Chaque round, les cibles doivent réussir un Test de Navigation Très Difficile (−3 DR) ou n’effectuer aucune action sauf errer dans une direction aléatoire à leur rythme de marche normal. Le sort est invisible aux autres, faisant apparaître les cibles comme hébétées. Si une cible échoue à 3 tests, vous pouvez contrôler sa direction pendant le reste de la durée du sort en réussissant un Test de Commandement Accessible (+2 DR). Chaque changement de direction nécessite un nouveau Test de Commandement.\nSurpuissance :\n• +3 DR : Les effets du sort durent Bonus d’Intelligence heures pour les cibles qui échouent à trois Tests de Navigation. Vous gagnez du Yenlui (Sombre).\n• +6 DR : Un Test d'Agilité Intermédiaire (+0 DR) permet d'exempter les cibles alliées des effets du sort."
+    },
+    {
+      "row": 89,
+      "column": 1,
+      "cell": "A89",
+      "name": "Tempête",
+      "field": "nom",
+      "before": "empête",
+      "after": "Tempête"
+    },
+    {
+      "row": 89,
+      "column": 7,
+      "cell": "G89",
+      "name": "Tempête",
+      "field": "desc",
+      "before": "Vous invoquez depuis les cieux une tempête polychromatique d'énergie crépitante. Cette tempête se déplace comme un sort de vortex aléatoire, sauf qu'elle saute les étapes #1–2 et avance directement de 2d10 mètres selon l’étape #3 (voir Vents de Magie, page 21). Chaque round, les créatures dans la zone subissent un missile magique infligeant +4 Dégâts et doivent réussir un Test d'Athlétisme Moyen (+2 DR), sous peine de subir un malus de –20 en Capacité de Combat et Capacité de Tir pour la durée de la tempête. Les cibles volantes subissent à la place +5 Dégâts et leur Test d'Athlétisme souffre de –1 DR.\nSurpuissance :\n• +4 DR : De plus, les créatures doivent réussir un Test de Calme Difficile (+0) pour se déplacer. Les cibles volantes échouant à ce test chutent immédiatement de 50 mètres par round, et tous les Tests de Capacité de Tir subissent un malus de −3 DR.\n• +5 DR : Chaque round, la tempête inflige un missile magique infligeant +15 Dégâts aux bâtiments et machines de guerre dans la zone.\n• +8 DR : Un Test d'Initiative Difficile (+0) vous permet d’exempter les cibles amies des effets du sort.",
+      "after": "Vous invoquez depuis les cieux une tempête polychromatique d'énergie crépitante. Cette tempête se déplace comme un sort de vortex aléatoire, sauf qu'elle saute les étapes #1–2 et avance directement de 2d10 mètres selon l’étape #3 (voir Vents de Magie, page 21). Chaque round, les créatures dans la zone subissent un missile magique infligeant +4 Dégâts et doivent réussir un Test d'Athlétisme Accessible (+2 DR), sous peine de subir un malus de –20 en Capacité de Combat et Capacité de Tir pour la durée de la tempête. Les cibles volantes subissent à la place +5 Dégâts et leur Test d'Athlétisme souffre de –1 DR.\nSurpuissance :\n• +4 DR : De plus, les créatures doivent réussir un Test de Calme Intermédiaire (+0 DR) pour se déplacer. Les cibles volantes échouant à ce test chutent immédiatement de 50 mètres par round, et tous les Tests de Capacité de Tir subissent un malus de −3 DR.\n• +5 DR : Chaque round, la tempête inflige un missile magique infligeant +15 Dégâts aux bâtiments et machines de guerre dans la zone.\n• +8 DR : Un Test d'Initiative Intermédiaire (+0 DR) vous permet d’exempter les cibles amies des effets du sort."
+    },
+    {
+      "row": 92,
+      "column": 7,
+      "cell": "G92",
+      "name": "Incarnation de Wyssan",
+      "field": "desc",
+      "before": "Vous faites appel à la puissance sauvage de Ghur pour vous imprégner, vous abandonnant à ses délicieuses saveurs. Gagnez les Traits de créature suivants (voir page 338) : Arboricole, Arme (Bonus de Force +2), Armure 2, Belliqueux, Grand, Magique, Murmures (Bonus de Force +1), Peur 1, Rage. Tant que le Sort est actif, vous ne pouvez utiliser toutes vos Compétences Langue ou Savoir.",
+      "after": "Gagnez +1 Mouvement, +30 Force et Endurance, et les Traits Belliqueux, Morsure (Bonus de Force +1), Peur (1), Frénésie, Magique et Foulée (Bois). Les Compétences Langue et Savoir sont indisponibles pendant le sort."
+    },
+    {
+      "row": 98,
+      "column": 7,
+      "cell": "G98",
+      "name": "Langue des Bêtes",
+      "field": "desc",
+      "before": "Vous comprenez et pouvez communiquer avec toutes les créatures possédant le Trait Bestial. \n - Vous parlez par grognements, sifflements et rugissements adaptés aux bêtes concernées. \n - Les créatures ne sont pas obligées de répondre ou d’obéir, mais elles écoutent généralement. \n - Vous obtenez +2 DR aux Tests de Charmer Animal et Entraînement Animal. \n - Tant que le sort est actif, vous ne pouvez parler aucune langue civilisée et devez communiquer par gestes ou Langage (Bataille). \n - Vous ne pouvez pas lancer de sorts ni dissiper tant que le sort est actif.",
+      "after": "Vous comprenez et pouvez communiquer avec toutes les créatures possédant le Trait Bestial. \n - Vous parlez par grognements, sifflements et rugissements adaptés aux bêtes concernées. \n - Les créatures ne sont pas obligées de répondre ou d’obéir, mais elles écoutent généralement. \n - Vous obtenez +2 DR aux Tests de Charmer Animal et Entraînement Animal. \n - Tant que le sort est actif, vous ne pouvez parler aucune langue civilisée et devez communiquer par gestes. \n - Vous ne pouvez pas lancer de sorts ni dissiper tant que le sort est actif."
+    },
+    {
+      "row": 161,
+      "column": 7,
+      "cell": "G161",
+      "name": "Filet d’Amyntok",
+      "field": "desc",
+      "before": "La cible perd son Mouvement et gagne 1 Sonné. Pour récupérer de cet état, elle utilise son Intelligence au lieu de Résistance. Les créatures Bestiales sont immunisées.",
+      "after": "La cible ne peut plus se déplacer et gagne 1 Sonné. Elle ne peut pas perdre cet État Sonné tant que le sort dure. Elle utilise son Intelligence au lieu de Résistance pour récupérer après le sort. Les créatures Bestiales sont immunisées."
+    },
+    {
+      "row": 218,
+      "column": 7,
+      "cell": "G218",
+      "name": "Souffle",
+      "field": "desc",
+      "before": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus d’Intelligence mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds.",
+      "after": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus d’Initiative mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds."
+    },
+    {
+      "row": 224,
+      "column": 7,
+      "cell": "G224",
+      "name": "Vision dans l’obscurité",
+      "field": "desc",
+      "before": "Vous gagnez Vision dans le noir pendant Bonus d’Intelligence Rounds.",
+      "after": "Gagnez Vision dans le noir pendant votre Bonus d’Initiative Rounds."
+    },
+    {
+      "row": 226,
+      "column": 7,
+      "cell": "G226",
+      "name": "Carreau",
+      "field": "desc",
+      "before": "Vous concentrez la magie en un carreau destructeur. Carreau est un Projectile magique avec Dégit +4.",
+      "after": "Vous concentrez la magie en un carreau destructeur. Carreau est un Projectile magique avec Dégâts +4."
+    },
+    {
+      "row": 232,
+      "column": 7,
+      "cell": "G232",
+      "name": "Choc",
+      "field": "desc",
+      "before": "Votre cible reçoit 1 Etat Sonné",
+      "after": "La cible touchée gagne 1 Sonné jusqu’à la fin de votre prochain Tour."
+    },
+    {
+      "row": 249,
+      "column": 7,
+      "cell": "G249",
+      "name": "Source",
+      "field": "desc",
+      "before": "Tu touches le sol et de l'eau en jaillit au rythme de 1 demi-litre par Round, jusqu'à un total de ton Bonus d’Initiative en litres.",
+      "after": "L’eau jaillit du sol touché à raison de 1 pinte par Round, jusqu’à un total égal à votre Bonus d’Initiative en pintes."
+    },
+    {
+      "row": 259,
+      "column": 7,
+      "cell": "G259",
+      "name": "Ombres Étrangleuses",
+      "field": "desc",
+      "before": "Vous enroulez des tentacules d’ombre d’Ulgu autour du cou de vos ennemis. \n • S’ils ont besoin de respirer, ils gagnent +1 État Exténué. \n • Ils ne peuvent pas parler. \n • Ils sont soumis aux règles de la Suffocation (voir page 181).",
+      "after": "Vous enroulez des tentacules d’ombre d’Ulgu autour du cou de vos ennemis. \n • S’ils ont besoin de respirer, ils gagnent +1 État Exténué. \n • Ils ne peuvent pas parler. \n • Ils sont soumis aux règles de la Suffocation (voir page 169)."
+    },
+    {
+      "row": 275,
+      "column": 7,
+      "cell": "G275",
+      "name": "Linceul d’Invisibilité",
+      "field": "desc",
+      "before": "Vous enveloppez la cible d’un linceul d’Ulgu, la rendant invisible et imperceptible aux sens ordinaires. \n • Le Sort trompe automatiquement quiconque ne possède pas le Talent Seconde vue. \n • Ceux qui possèdent le Talent doivent réussir un Test de Perception Intermédiaire (+0) pour remarquer qu’une présence est proche, mais sans pouvoir localiser précisément la cible. \n • La cible reste perceptible aux autres sens. \n • Le Sort prend fin si la cible attire l’attention sur elle en faisant du bruit ou en attaquant.",
+      "after": "La cible devient invisible. Sans Seconde vue, la vue ordinaire est trompée ; les autres sens restent utilisables. Avec Seconde vue, un Test de Perception (+0 DR) opposé au Test d’incantation révèle une présence, sans la localiser précisément. Le sort cesse lorsque la cible attire l’attention par du bruit ou une attaque."
+    }
+  ],
+  "alreadyConform": [
+    "Colérique (WoM p.135)",
+    "Flamme Inextinguible (WoM p.136)",
+    "Esprit du Foyer : description (WoM p.136)"
+  ]
+}

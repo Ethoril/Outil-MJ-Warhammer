@@ -3,6 +3,7 @@
  * espaces. Il ne mute rien lui-même : l'avancement du tour et le retour dans
  * Jouer passent par les callbacks fournis par main.js.
  */
+import { showToast } from './toast.js';
 const TRACK_LIMIT = 8;
 // PV sous zéro affichés avec le signe moins U+2212.
 const hpText = participant => {
@@ -31,7 +32,24 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay } = {}) {
   const primary = node('button', 'combat-banner-primary');
   primary.type = 'button';
   inner.append(title, status, track, spacer, back, primary);
-  mount.replaceChildren(inner);
+  // D-15 : rappel tant que des Bmax sont divisées par le Fléau des Démons ; la restauration est une action MJ annulable.
+  const daemon = node('div', 'wrap combat-banner-reminder');
+  daemon.dataset.daemonbaneReminder = '';
+  daemon.setAttribute('role', 'status');
+  const daemonText = node('span', 'combat-banner-reminder-text');
+  const daemonRestore = node('button', 'ghost small combat-banner-restore', 'Restaurer les Bmax');
+  daemonRestore.type = 'button';
+  daemonRestore.dataset.action = 'restore-daemonbane';
+  daemon.append(daemonText, daemonRestore);
+  daemon.hidden = true;
+  mount.replaceChildren(inner, daemon);
+  daemonRestore.addEventListener('click', () => {
+    daemonRestore.disabled = true;
+    Promise.resolve(Store.restoreDaemonbaneMaxHp?.())
+      .then(result => { if (result === false || result?.ok === false) throw result?.error || new Error('Restauration impossible.'); })
+      .catch(error => showToast(`Restauration impossible : ${error?.message || 'réessayez.'}`, 'error'))
+      .finally(() => { daemonRestore.disabled = false; render(); });
+  });
 
   back.addEventListener('click', () => onGoToPlay?.());
   primary.addEventListener('click', () => onAdvance?.());
@@ -112,6 +130,12 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay } = {}) {
       primary.title = 'Commencer le combat (N)';
     }
     primary.disabled = participants.size === 0;
+
+    const reductions = Store.listDaemonbaneReductions?.() || [];
+    daemon.hidden = reductions.length === 0;
+    daemonText.textContent = reductions.length
+      ? `Fléau des Démons : Bmax divisées (${reductions.map(row => `${row.name} ${row.maxHp}/${row.originalMaxHp}`).join(', ')}). À restaurer en fin de rencontre.`
+      : '';
   }
 
   return {

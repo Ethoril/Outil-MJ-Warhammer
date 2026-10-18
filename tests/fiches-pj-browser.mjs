@@ -185,7 +185,7 @@ async function main() {
       { id: 'inoff-test', type: 'attack', note: 'Inoffensive recette', base: 90, mod: 0, damage: 3, qualities: ['inoffensive'], extensions: {} },
       { id: 'bow-test', type: 'attack', note: 'Arc de recette', base: 90, mod: 0, damage: 3, qualities: [], extensions: { equipment: bow, fiche: { charId: 'caelel', equipmentId: bow.id, role: 'attack', requiresLink: false } } }
     ] });
-    await Store.addParticipant({ id: 'visual-target', name: 'Cible recette', kind: 'PNJ', hp: 30, maxHp: 30, initiative: 10, caracs: { E: 0 }, armorLocations: { head: 0, body: 0, rightArm: 0, leftArm: 0, rightLeg: 0, leftLeg: 0 }, actions: [], states: [], zone: 'active' });
+    await Store.addParticipant({ id: 'visual-target', name: 'Cible recette', kind: 'PNJ', hp: 30, maxHp: 30, initiative: 10, caracs: { E: 0, CC: 30 }, armorLocations: { head: 0, body: 0, rightArm: 0, leftArm: 0, rightLeg: 0, leftLeg: 0 }, actions: [], states: [], zone: 'active' });
   }, { bow: weapon('bow-test', { name: 'Arc de recette', category: 'Arc', range: '50', keywords: [] }), arrows: weapon('arrows', { kind: 'ammunition', name: 'Flèches recette', category: 'Arc', damage: '', reach: '', range: '', keywords: [{ id: 'empaleuse', parameter: '' }] }) });
   const resolution = visual.locator('.workspace-resolution');
   await resolution.getByRole('button', { name: /Arc de recette/ }).first().click();
@@ -194,8 +194,13 @@ async function main() {
   await ammo.selectOption('arrows');
   await resolution.getByRole('button', { name: /Inoffensive recette/ }).first().click();
   await expect(resolution.getByRole('combobox', { name: 'Munition', exact: true })).toHaveCount(0, 'no ammunition on melee attack');
+  // The synthetic unbound action must now identify its skill and non-improvised weapon explicitly.
+  await resolution.getByRole('combobox', { name: 'Compétence de ce Test pour les talents', exact: true }).selectOption('skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65');
+  await resolution.getByRole('combobox', { name: 'Arme improvisée (Frappe assommante)', exact: true }).selectOption('false');
   await resolution.getByRole('button', { name: 'Cible recette', exact: true }).click();
   await resolution.locator('[data-roll-input="attack"]').fill('33');
+  await resolution.locator('[data-focus-key="defense-stat"]').selectOption('CC');
+  await resolution.locator('[data-roll-input="defense"]').fill('76');
   await resolution.getByRole('button', { name: 'Calculer', exact: true }).click();
   await resolution.locator('[data-roll-input="critical-location"]').fill('55');
   await resolution.getByRole('button', { name: 'Calculer', exact: true }).click();

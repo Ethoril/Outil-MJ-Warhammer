@@ -2,13 +2,13 @@
 
 Le lot 2 couvre le catalogue complet des talents utiles aux résolutions de l’outil MJ, avec priorité aux talents des PJ actuels. Le moteur commun applique exclusivement les règles V5 publiées dans Aides de jeu, y compris Avantage, Désavantage et Élan (Momentum). Le MJ prend en charge la conversion des talents dans le référentiel source. La durée des états fait partie du même chantier. Magie et prières automatisées restent au lot 3, application mobile au lot 4.
 
-Ce document est un cadrage de développement. L’inventaire classe les 206 talents par famille principale et propose neuf contrats représentatifs. Les clauses restantes sont à détailler ; aucun automatisme applicatif n’est activé.
+Ce document conserve le cadrage de développement initial. L’inventaire classe les 206 talents et propose neuf exemples préparatoires. État courant du 9 octobre 2026 : combat/États 2.1/2.2 et cinq contrats représentatifs 2.3 sont raccordés localement. Voir [LOT2_RACCORDEMENT_2_3.md](LOT2_RACCORDEMENT_2_3.md) et [LOT2_AVANCEMENT.md](LOT2_AVANCEMENT.md). Les autres clauses restent à contractualiser ; cet inventaire ne certifie pas tout le catalogue.
 
 ## Sources et état de départ
 
-Le référentiel local examiné contient 206 identités de talents avec IDs bilingues, sources, limites et spécialisations. Cet instantané précède la conversion des descriptions à la source annoncée par le MJ. Le futur catalogue mécanique doit contenir uniquement des descriptions V5 ; une référence bibliographique à un supplément V4 peut rester conservée comme provenance. Le PDF fourni par le MJ, WFRP5_Core_Rulebook_06_10_26.pdf, est la référence V5 lue pour les règles communes : pages 130–131, 163–169 et 184–187. Les contrats définitifs des talents seront établis depuis les descriptions V5 publiées dans Aides de jeu. Le moteur ne traduit pas les anciennes règles et ne déduit pas la mécanique d’un mot isolé ou de l’édition du livre cité.
+Le référentiel local examiné contient 206 identités de talents avec IDs bilingues, sources, limites et spécialisations. L’inventaire initial précédait la conversion annoncée par le MJ ; les textes et empreintes ont été actualisés le 9 octobre après conversion de la source V5. Le futur catalogue mécanique doit contenir uniquement des descriptions V5 ; une référence bibliographique à un supplément V4 peut rester conservée comme provenance. Le PDF fourni par le MJ, Livre de base V5 EN v2.pdf, est la référence V5 lue pour les règles communes : pages 130–131, 163–171, 173–176, 183–189 et 304–306. Les contrats définitifs des talents seront établis depuis les descriptions V5 publiées dans Aides de jeu. Le moteur ne traduit pas les anciennes règles et ne déduit pas la mécanique d’un mot isolé ou de l’édition du livre cité.
 
-Le code courant est celui de la branche de départ au commit 28657e39477bbcbfeb0de826b3f1d05e525bb386, version 3.12.3. La résolution est déjà pure, possède un aperçu et une application protégée par révision et identifiant. Le moteur doit étendre ces contrats et traiter les talents de l’attaquant comme ceux du défenseur.
+Le code de départ était celui du commit 28657e39477bbcbfeb0de826b3f1d05e525bb386, version 3.12.3. La résolution est déjà pure, possède un aperçu et une application protégée par révision et identifiant. Le moteur doit étendre ces contrats et traiter les talents de l’attaquant comme ceux du défenseur.
 
 Dur à cuire intervient déjà dans woundsMax à l’import : BE supplémentaire par acquisition historique. Le résumé V5 prévoit un ajout supplémentaire unique. Il faut réconcilier limite d’achat et acquisitions historiques, puis tracer ce bonus sans l’ajouter deux fois.
 
@@ -32,7 +32,7 @@ La fixture de Caelel contient dix talents : Dur à cuire, Lire/Écrire, Nomade, 
 | Attaques supplémentaires | Une seule dépense de Momentum pour une attaque supplémentaire par Tour, même après regagner Momentum, p. 168. Les limites propres à chaque talent se cumulent avec ce contrat |
 | Cumuls d’états | Instances d’un même état : pénalités cumulées. États différents : retenir la pénalité la plus élevée applicable, p. 184 |
 
-Le noyau actuel modifie surtout le seuil et cumule des malus de noms d’états. L’adoption V5 exige donc une réconciliation des jets et des pénalités, avant d’y raccorder les talents. Les nouvelles résolutions utilisent un seul système V5. Les comptes rendus historiques conservent leurs valeurs et leur source ; la reprise d’anciennes actions doit faire l’objet d’une migration explicite vers le contrat V5 actif, sans exécuter un second système de règles.
+Le noyau de départ modifiait surtout le seuil et cumulait des malus de noms d’états. Le raccordement 2.1 utilise désormais un seul système V5, avec pénalités réconciliées et conversions de modificateurs demandées au MJ. Les anciens reçus n’exigent aucune migration patrimoniale : à la demande du MJ, supprimer une rencontre purge ses traces liées, y compris dans les instantanés d’annulation. Une action reprise doit être recalculée avec le contrat V5 actif.
 
 Le livre décrit aussi des critiques défensifs, des critiques indépendants du gagnant de l’opposition et des Blessures courantes bornées à zéro, p. 164–165. Ces divergences avec le comportement historique doivent apparaître dans la matrice de compatibilité : activer quelques talents V5 ne vaut pas conformité complète de tout le combat à la V5.
 
@@ -77,7 +77,7 @@ Mâchoires d’acier applique une transformation similaire au premier événemen
 
 Inlassable ne retire pas Exténué : il modifie le niveau utilisé pour ses pénalités. L’exemple du catalogue, rang 2 et quatre instances, laisse une instance pénalisante. Le contrat de pénalité final sera établi depuis la description V5 actualisée dans Aides de jeu. Le moteur applique le nombre d’instances à ignorer ; il n’adapte pas la description V4 de l’ancien instantané.
 
-Battement crée un effet sur la cible jusqu’à la fin du prochain Tour de l’auteur après un choix de renoncer aux dégâts. Le contrat fournit restriction de défense et Avantage aux attaques de mêlée contre elle. Il dépend de la taille, de l’identité de l’auteur et d’une échéance liée à son Tour.
+Battement crée un effet sur la cible jusqu’à la fin du prochain Tour de l’auteur après un choix de renoncer aux dégâts. Arbitrage MJ du 9 octobre : supprimer toutes les Blessures et les conséquences du critique, puis appliquer uniquement les effets de Battement. Le contrat fournit restriction de défense et Avantage aux attaques de mêlée contre elle. Il dépend de la taille, de l’identité de l’auteur et d’une échéance liée à son Tour.
 
 ## Ordre de résolution
 
@@ -187,7 +187,7 @@ Le premier développement se déroule dans un worktree isolé, branche codex/lot
 
 ## Recette et séquence de développement
 
-La recette couvre personnages sans talents, rangs et spécialités, attaque et défense, choix absents, sources multiples, critiques, 01/05/96/00, quotas, annulation, échéances de l’auteur, fin de Round, récupération, exports et reprise cloud. Le rejeu d’un même événement ne consomme ni usage ni durée une seconde fois. Les résolutions historiques gardent leur règle.
+La recette couvre personnages sans talents, rangs et spécialités, attaque et défense, choix absents, sources multiples, critiques, 01/05/96/00, quotas, annulation, échéances de l’auteur, fin de Round, récupération, exports et reprise cloud. Le rejeu d’un même événement ne consomme ni usage ni durée une seconde fois. Le MJ autorise leur purge ; supprimer une rencontre purge son journal lié, ses archives et leurs copies dans les instantanés d’annulation. Aucun recalcul rétroactif de Blessures n’est nécessaire.
 
 Le développement suit six étapes : contrats et priorités PJ ; noyau V5 et opérations communes ; événements, états et durées ; catalogue utile ; interface et persistance ; recette métier et navigateur. La matrice finale distingue effets automatiques, effets assistés avec choix et rappels manuels.
 
