@@ -30,7 +30,7 @@ function supplemental(name) {
   return row;
 }
 
-test('E0 indépendant — les 15 miracles ont une source exacte, seuls les neuf Up in Arms restent à adapter', () => {
+test('E0 indépendant — les 15 miracles ont une source exacte, les neuf Up in Arms sont raccordés (ids du catalogue conservés)', () => {
   const miracles = registry.contracts.filter(row => row.type === 'miracle' && row.catalogueEntry);
   assert.equal(miracles.length, 15);
   for (const [name, title] of expected) {
@@ -39,14 +39,13 @@ test('E0 indépendant — les 15 miracles ont une source exacte, seuls les neuf 
     assert.equal(row.source.document, 'Up in arms.pdf');
     assert.equal(row.source.fileSha256, sourceHash);
     assert.equal(row.sourceReceipt.sourceBookSha256, sourceHash);
-    assert.equal(row.source.edition, 'V4');
+    assert.equal(row.source.edition, 'V4 EN');
     assert.equal(row.source.printedPage, 79);
-    assert.equal(row.source.sourceStatus, 'found-adaptation-blocked');
-    assert.equal(row.source.section, title);
-    assert.equal(row.status, 'blocked');
-    assert.deepEqual(row.effects, []);
+    assert.equal(row.source.sourceStatus, 'read-and-page-checked');
+    assert.equal(row.source.section, 'Miracles de Myrmidia - ' + title);
+    assert.equal(row.status, ['Commander la Légion', "Effrayer l'Ennemi", 'Compétence Martiale'].includes(name) ? 'assisted' : 'manual');
     assert.equal(row.clauses.find(clause => clause.id === 'catalogue-entry')?.mode, 'source-checked');
-    assert.equal(row.clauses.find(clause => clause.id === 'effect')?.mode, 'blocked');
+    assert.notEqual(row.clauses.find(clause => clause.id === 'effect')?.mode, 'blocked');
     assert.doesNotMatch(row.sourceDelta, /source (?:not found|non retrouvée)/i);
   }
   const base = miracles.filter(row => !expected.some(([name]) => name === row.catalogueName));
@@ -60,7 +59,7 @@ test('E0 indépendant — les 15 miracles ont une source exacte, seuls les neuf 
   assert.equal(inventory.counts.miraclesSourceNotFound, 0);
   assert.equal(inventory.counts.miraclesV5SourceFound, 6);
   assert.equal(inventory.counts.miraclesSupplementSourceFound, 9);
-  assert.equal(inventory.counts.miraclesV4AdaptationBlocked, 9);
+  assert.equal(inventory.counts.miraclesV4AdaptationBlocked, 0);
 });
 
 test('E0 indépendant — aucune confirmation client ne transforme un contrat bloqué en prière exécutable', () => {

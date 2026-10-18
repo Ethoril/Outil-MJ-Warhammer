@@ -215,17 +215,17 @@ test('Contrôle indépendant — six miracles Myrmidia utilisent les effets V5 E
   assert.deepEqual(sun.effects[0].perSuccessLevels, { every: 2, add: 1 });
   if (sun.status === 'implemented') assert.ok(sun.effects.some(effect => effect.type === 'condition' && effect.key === 'Blinded'));
 });
-test('Contrôle — neuf sources Up in Arms retrouvées restent bloquées pour adaptation V5', () => {
+test('Contrôle — neuf sources Up in Arms raccordées au module Myrmidia, plus aucun contrat bloqué', () => {
   const rows = getAllDivineContracts();
-  const supplemental = rows.filter(row => row.type === 'miracle' && row.source.sourceStatus === 'found-adaptation-blocked');
+  const supplemental = rows.filter(row => row.type === 'miracle' && row.source.document === 'Up in arms.pdf');
   assert.equal(supplemental.length, 9);
+  assert.equal(rows.some(row => row.status === 'blocked'), false);
   for (const row of supplemental) {
-    assert.equal(row.status, 'blocked', row.name);
-    assert.equal(row.source.document, 'Up in arms.pdf', row.name);
-    assert.equal(row.source.edition, 'V4', row.name);
+    assert.ok(['assisted', 'manual'].includes(row.status), row.name);
+    assert.equal(row.source.edition, 'V4 EN', row.name);
     assert.equal(row.source.printedPage, 79, row.name);
-    assert.deepEqual(row.effects, [], row.name);
-    assert.ok(row.needsInput.includes('v5-adaptation'), row.name);
+    assert.equal(row.needsInput.some(item => item === 'v5-adaptation'), false, row.name);
+    assert.ok(row.catalogueEntry, row.name);
   }
 });
 

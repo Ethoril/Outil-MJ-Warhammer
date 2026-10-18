@@ -170,6 +170,6 @@ test('registre : les livres de supplément cités par un contrat sont déclarés
   for (const contract of registry.contracts.filter(row => row.source?.document && row.source.fileSha256 !== registry.sourceManifest.v5EnglishBaseSha256 && row.source.sourceStatus !== 'found-adaptation-blocked'))
     assert.ok(books.some(book => book.document === contract.source.document && book.fileSha256 === contract.source.fileSha256), contract.id);
   assert.equal(registry.sourceManifest.complementCorpusSha256, createHash('sha256').update(readFileSync('docs/divin/DIVIN_CORPUS_LIVRES_COMPLEMENT.json', 'utf8'), 'utf8').digest('hex'));
-  assert.equal(registry.generatorVersion, 'divine-contracts-0.3.0');
+  assert.equal(registry.generatorVersion, 'divine-contracts-0.4.0');
 });
 

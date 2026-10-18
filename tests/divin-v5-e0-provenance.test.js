@@ -19,7 +19,7 @@ const expected = [
   ['Vindicte Vengeresse', 'Vengeful Wrath']
 ];
 
-test('nine supplemental miracles have their verified Up in Arms source and remain blocked for V5 adaptation', () => {
+test('nine supplemental miracles have their verified Up in Arms source and are connected to the Myrmidia module', () => {
   const sourceHash = '0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07';
   for (const [catalogueName, title] of expected) {
     const row = registry.contracts.find(item => item.type === 'miracle' && item.catalogueName === catalogueName);
@@ -27,16 +27,14 @@ test('nine supplemental miracles have their verified Up in Arms source and remai
     assert.equal(row.canonicalName, title);
     assert.equal(row.source.document, 'Up in arms.pdf');
     assert.equal(row.source.fileSha256, sourceHash);
-    assert.equal(row.source.edition, 'V4');
+    assert.equal(row.source.edition, 'V4 EN');
     assert.equal(row.source.printedPage, 79);
-    assert.equal(row.source.section, title);
-    assert.equal(row.source.sourceStatus, 'found-adaptation-blocked');
+    assert.equal(row.source.section, 'Miracles de Myrmidia - ' + title);
+    assert.equal(row.source.sourceStatus, 'read-and-page-checked');
     assert.equal(row.sourceReceipt.sourceBookSha256, sourceHash);
-    assert.equal(row.status, 'blocked');
-    assert.match(row.sourceDelta, /adaptation V4 vers V5/i);
+    assert.notEqual(row.status, 'blocked');
+    assert.match(row.sourceDelta, /décision MJ|Aucun type d’effet|Page 79|Le Talent Intrépide/i);
     assert.equal(row.clauses.find(clause => clause.id === 'catalogue-entry').mode, 'source-checked');
-    assert.equal(row.clauses.find(clause => clause.id === 'effect').mode, 'blocked');
-    assert.deepEqual(row.effects, []);
   }
   const { moduleMiracles, ...counts } = inventory.counts;
   assert.equal(typeof moduleMiracles, 'number');
@@ -47,7 +45,7 @@ test('nine supplemental miracles have their verified Up in Arms source and remai
     miraclesSourceNotFound: 0,
     miraclesV5SourceFound: 6,
     miraclesSupplementSourceFound: 9,
-    miraclesV4AdaptationBlocked: 9,
+    miraclesV4AdaptationBlocked: 0,
     talents: 1
   });
 });

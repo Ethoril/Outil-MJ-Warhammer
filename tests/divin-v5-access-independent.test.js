@@ -131,8 +131,9 @@ test('E3 indépendant — une autorisation de scène ne déborde pas sur une aut
 
 test('E3 indépendant — une dérogation ne masque jamais l’absence du contrat ou son blocage source', async () => {
   const resolve = await resolver();
-  const blocked = registry.contracts.find(row => row.status === 'blocked');
-  assert.ok(blocked, 'le registre conserve un contrat source bloqué comme cas adversarial');
+  // Plus aucun contrat bloqué dans le registre (les neuf d'Up in Arms sont raccordés) : cas adversarial synthétique.
+  assert.equal(registry.contracts.some(row => row.status === 'blocked'), false);
+  const blocked = { ...structuredClone(miracle), status: 'blocked' };
   const actor = { id: 'actor-a', talents: [], prayers: [] };
   const result = resolve(accessState([grant(blocked)]), { actor, subjectKey, contract: blocked, activeScene: null }).access;
   assert.equal(result.allowed, false, 'la résolution d’accès ne certifie pas un contrat bloqué');
@@ -386,14 +387,13 @@ test('E3 indépendant — révocation ou changement de scène rend les previews 
 });
 
 test('E3 indépendant — blocked V4 et contrat falsifié restent refusés même avec un grant concordant', async () => {
-  const { getAllDivineContracts } = await import('../js/core/v5-divine-store.js');
-  const blocked = getAllDivineContracts().find(row => row.status === 'blocked');
-  assert.ok(blocked);
+  // Plus aucun contrat bloqué dans le registre : un contrat inconnu est refusé de la même façon, un contrat marqué bloqué ne s'aperçoit pas.
   const store = await divineStore({ access: false, learned: false });
-  const grantResult = await store.grantDivineAccess('priest', blocked.id, {
+  const grantResult = await store.grantDivineAccess('priest', 'divine:miracle:contrat-inconnu', {
     scope: 'durable', reason: 'Ne doit pas contourner la source', baseRevision: store.getLocalRevision()
   });
-  assert.equal(grantResult.ok, false, 'un contrat source bloqué ne peut recevoir une dérogation');
+  assert.equal(grantResult.ok, false, 'un contrat sans source ne peut recevoir une dérogation');
+  assert.equal(store.previewDivineExecution({ ...structuredClone(miracle), status: 'blocked' }, prayerInput(45)).ready, false);
   const forged = structuredClone(battle);
   forged.effects = [{ type: 'characteristic-modifier', characteristic: 'CC', value: 999 }];
   assert.equal(store.previewDivineExecution(forged, prayerInput(45)).ready, false);

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatorVersion": "divine-contracts-0.3.0",
+  "generatorVersion": "divine-contracts-0.4.0",
   "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
   "sourceManifest": {
     "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
@@ -23,6 +23,11 @@
         "bookId": "L07",
         "document": "Lustria EN.pdf",
         "fileSha256": "975555bd937144d8e99236be2b38aa8b96bf06ac4072523c30c187e6504a0554"
+      },
+      {
+        "bookId": "L13",
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
       {
         "bookId": "L18",
@@ -1115,6 +1120,195 @@
         "sourceStatus": "read-and-page-checked",
         "printedPage": 224,
         "section": "Miracles de Myrmidia - Blazing Sun",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:commander-la-legion",
+      "catalogueEntry": {
+        "nom": "Commander la Légion",
+        "portee": "Voir texte",
+        "cible": "Tout allié",
+        "duree": "1 Round",
+        "effet": "Myrmidia porte vos ordres à travers le champ de bataille. Vous pouvez émettre un ordre à un allié dans votre ligne de vue. L'ordre doit être pertinent à la réalisation d'une lutte armée ou d'une stratégie en cours. Tout Test de Commandement que vous effectuez bénéficie d'un bonus de +10."
+      },
+      "v5Summary": "Portée imprimée « See text » et cible « Any ally » : lues comme la ligne de vue et tout allié (special). Le +10 V4 porte sur le Test : lu +1 DR (pas de +10 = +1 DR du tableau de difficulté V5, p.131), non sur la caractéristique. « Any Leadership Tests you make » : Tests du prêtre lui-même, tous ceux du Round liés à un combat armé (décision MJ) ; le moteur ne distingue pas le Test qui émet l’ordre. Le talent Présence imposante (Avantage au Commandement) reste distinct et cumulable.",
+      "status": "assisted",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - Command the Legion",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:effrayer-l-ennemi",
+      "catalogueEntry": {
+        "nom": "Effrayer l'Ennemi",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "1 Round",
+        "effet": "Vous incarnez Myrmidia dans son aspect le plus courroucé. Gagnez le Trait de Créature Terreur 1."
+      },
+      "v5Summary": "Le Trait est posé comme une étiquette, les Tests de Psychologie des ennemis restent joués par le MJ. Qui teste : tout ennemi qui voit le prêtre au lancement, même en plein combat (décision MJ), une fois pendant la durée. L’incohérence interne V5 p.184 / p.362 sur les Brisé par DR négatif s’applique telle quelle. Portée et cible « Vous » : seule la durée peut croître.",
+      "status": "assisted",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - Dismay Foe",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:en-bon-ordre",
+      "catalogueEntry": {
+        "nom": "En Bon Ordre",
+        "portee": "Soi-même",
+        "cible": "Alliés dans la zone d'effet (Bonus de Force Mentale en mètres)",
+        "duree": "Bonus de Force Mentale en Rounds",
+        "effet": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage."
+      },
+      "v5Summary": "Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower yards » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "status": "manual",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - In Good Order",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:connaitre-son-ennemi",
+      "catalogueEntry": {
+        "nom": "Connaître son Ennemi",
+        "portee": "Bonus de Volonté en mètres",
+        "cible": "1",
+        "duree": "Instantané",
+        "effet": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible."
+      },
+      "v5Summary": "Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower yards » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "status": "manual",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - Know Your Enemy",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:sur-un-terrain-mortel",
+      "catalogueEntry": {
+        "nom": "Sur un Terrain Mortel",
+        "portee": "Soi-même",
+        "cible": "Alliés dans la zone d'effet (Bonus de Volonté en mètres)",
+        "duree": "Bonus de Force Mentale en Rounds",
+        "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
+      },
+      "v5Summary": "Aucun effet existant n’empêche de recevoir un État : contrat manuel. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "status": "manual",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - On Deadly Ground",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:attaque-rapide",
+      "catalogueEntry": {
+        "nom": "Attaque Rapide",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "3 Rounds",
+        "effet": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale."
+      },
+      "v5Summary": "Le mécanisme d’attaque gratuite des talents (Frappe réactive) ne se déclenche pas au début de Round : contrat manuel. Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.",
+      "status": "manual",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - Quick Strike",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:devotion-de-la-guerriere",
+      "catalogueEntry": {
+        "nom": "Dévotion de la Guerrière",
+        "portee": "36 mètres",
+        "cible": "Voir texte",
+        "duree": "4 Rounds",
+        "effet": "Vos prières chantées remplissent le cœur des fidèles avec l'intrépidité de ses plus braves guerrières. Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi). Cet ennemi peut être un individu spécifique ou une espèce particulière."
+      },
+      "v5Summary": "Le Talent Intrépide du moteur est injecté sans choix d’ennemi par lancement : un Talent posé sans spécialisation vaudrait « Tout » (option C écartée par le MJ), donc contrat manuel plutôt qu’assisté. Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ. Cible « See text » : tous les Myrmidiens à portée, sans plafond. Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "status": "manual",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - Shieldmaiden’s Devotion",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:competence-martiale",
+      "catalogueEntry": {
+        "nom": "Compétence Martiale",
+        "portee": "24 mètres",
+        "cible": "Voir texte",
+        "duree": "4 Rounds",
+        "effet": "Vous incarnez chez vos alliés l’habileté martiale de Myrmidia. Tant que ce miracle est actif, tous les alliés à portée bénéficient d'un bonus de +10 à leur CC et CT."
+      },
+      "v5Summary": "Le +10 porte sur les caractéristiques, comme les Bénédictions de Bataille et de la Chasse (p.221) : aucune conversion (décision MJ : +10 CC et +10 CT, non +1 DR). Cumul avec ces Bénédictions selon les règles de cumul établies (DIV-05) ; la p.217 n’interdit que le cumul d’une même prière. Portée et cible : yards sources lus comme mètres de jeu (DIV-03), tous les alliés à portée.",
+      "status": "assisted",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - Skill of Combat",
+        "clauses": []
+      }
+    },
+    {
+      "id": "divine:miracle:vindicte-vengeresse",
+      "catalogueEntry": {
+        "nom": "Vindicte Vengeresse",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "6 Rounds",
+        "effet": "Vous êtes empli de l'indignation vertueuse de Myrmidia. Tant que ce miracle est actif, vous devez charger et attaquer l'ennemi impénitent le plus proche. Vous pouvez relancer tous vos jets de compétence de Mêlée tant que le miracle est actif."
+      },
+      "v5Summary": "Aucun type d’effet pour la relance de Tests ni pour la contrainte de comportement : contrat manuel. Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ). « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.",
+      "status": "manual",
+      "source": {
+        "document": "Up in arms.pdf",
+        "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 79,
+        "section": "Miracles de Myrmidia - Vengeful Wrath",
         "clauses": []
       }
     },
@@ -11005,27 +11199,21 @@
       "catalogueName": "Commander la Légion",
       "canonicalName": "Command the Legion",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "Command the Legion"
+        "section": "Miracles de Myrmidia - Command the Legion",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Commander la Légion",
-        "portee": "Voir texte",
-        "cible": "Tout allié",
-        "duree": "1 Round",
-        "effet": "Myrmidia porte vos ordres à travers le champ de bataille. Vous pouvez émettre un ordre à un allié dans votre ligne de vue. L'ordre doit être pertinent à la réalisation d'une lutte armée ou d'une stratégie en cours. Tout Test de Commandement que vous effectuez bénéficie d'un bonus de +10."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11034,25 +11222,68 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Portée imprimée « See text » et cible « Any ally » : lues comme la ligne de vue et tout allié (special). Le +10 V4 porte sur le Test : lu +1 DR (pas de +10 = +1 DR du tableau de difficulté V5, p.131), non sur la caractéristique. « Any Leadership Tests you make » : Tests du prêtre lui-même, tous ceux du Round liés à un combat armé (décision MJ) ; le moteur ne distingue pas le Test qui émet l’ordre. Le talent Présence imposante (Avantage au Commandement) reste distinct et cumulable.",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "special"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "special"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 1,
+          "unit": "rounds"
         }
       },
-      "extensions": [],
-      "effects": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Commandement": 1
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Command the Legion",
-        "effect": "Myrmidia porte vos ordres à travers le champ de bataille. Vous pouvez émettre un ordre à un allié dans votre ligne de vue. L'ordre doit être pertinent à la réalisation d'une lutte armée ou d'une stratégie en cours. Tout Test de Commandement que vous effectuez bénéficie d'un bonus de +10.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Myrmidia porte vos ordres sur le champ de bataille : vous pouvez donner un ordre à un allié dans votre ligne de vue, pourvu qu’il serve un combat armé ou une stratégie en cours. Vos Tests de Commandement gagnent +1 DR pendant le miracle.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11061,14 +11292,47 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-command-the-legion"
+          "id": "leadership-bonus",
+          "mode": "engine",
+          "text": "Les Tests de Commandement du prêtre gagnent +1 DR pendant la durée (le +10 V4 au Test se lit +1 DR, décision MJ).",
+          "sourceRef": "v5-command-the-legion"
+        },
+        {
+          "id": "relevant-order",
+          "mode": "manual",
+          "text": "L’ordre doit être pertinent pour un combat armé ou une stratégie en cours ; le moteur applique le bonus à tous les Tests de Commandement du Round, le MJ écarte ceux qui sont sans rapport.",
+          "sourceRef": "v5-command-the-legion"
+        },
+        {
+          "id": "line-of-sight",
+          "mode": "manual",
+          "text": "L’allié qui reçoit l’ordre doit être dans la ligne de vue du prêtre.",
+          "sourceRef": "v5-command-the-legion"
+        },
+        {
+          "id": "duration",
+          "mode": "engine",
+          "text": "Durée : 1 Round (+1 Round par tranche de +2 DR).",
+          "sourceRef": "v5-command-the-legion"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "ordered-ally",
+          "label": "Quel allié reçoit l’ordre, et est-il dans la ligne de vue du prêtre ?"
+        },
+        {
+          "field": "armed-struggle",
+          "label": "L’ordre sert-il bien un combat armé ou une stratégie en cours ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Commander la Légion",
+        "portee": "Voir texte",
+        "cible": "Tout allié",
+        "duree": "1 Round",
+        "effet": "Myrmidia porte vos ordres à travers le champ de bataille. Vous pouvez émettre un ordre à un allié dans votre ligne de vue. L'ordre doit être pertinent à la réalisation d'une lutte armée ou d'une stratégie en cours. Tout Test de Commandement que vous effectuez bénéficie d'un bonus de +10."
+      }
     },
     {
       "id": "divine:miracle:effrayer-l-ennemi",
@@ -11077,27 +11341,21 @@
       "catalogueName": "Effrayer l'Ennemi",
       "canonicalName": "Dismay Foe",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "Dismay Foe"
+        "section": "Miracles de Myrmidia - Dismay Foe",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Effrayer l'Ennemi",
-        "portee": "Vous",
-        "cible": "Vous",
-        "duree": "1 Round",
-        "effet": "Vous incarnez Myrmidia dans son aspect le plus courroucé. Gagnez le Trait de Créature Terreur 1."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11106,25 +11364,67 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Le Trait est posé comme une étiquette, les Tests de Psychologie des ennemis restent joués par le MJ. Qui teste : tout ennemi qui voit le prêtre au lancement, même en plein combat (décision MJ), une fois pendant la durée. L’incohérence interne V5 p.184 / p.362 sur les Brisé par DR négatif s’applique telle quelle. Portée et cible « Vous » : seule la durée peut croître.",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 1,
+          "unit": "rounds"
         }
       },
-      "extensions": [],
-      "effects": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Terreur (1)"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Dismay Foe",
-        "effect": "Vous incarnez Myrmidia dans son aspect le plus courroucé. Gagnez le Trait de Créature Terreur 1.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Vous incarnez Myrmidia sous son aspect le plus courroucé et gagnez le Trait de créature Terreur 1 pendant le miracle.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11133,14 +11433,37 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-dismay-foe"
+          "id": "terror-trait",
+          "mode": "engine",
+          "text": "Le prêtre gagne le Trait Terreur (1) pendant la durée (étiquette sans Test automatique).",
+          "sourceRef": "v5-dismay-foe"
+        },
+        {
+          "id": "terror-test",
+          "mode": "manual",
+          "text": "Tout ennemi qui voit le prêtre au lancement fait une fois pendant la durée le Test de Psychologie (Calme) de la Terreur (p.184, p.362) ; échec : États Brisé selon l’indice et les DR négatifs, plus la Peur de même indice (p.183).",
+          "sourceRef": "v5-dismay-foe"
+        },
+        {
+          "id": "duration",
+          "mode": "engine",
+          "text": "Durée : 1 Round (+1 Round par tranche de +2 DR).",
+          "sourceRef": "v5-dismay-foe"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "terror-witnesses",
+          "label": "Quels ennemis voient le prêtre au lancement et doivent faire leur Test de Psychologie ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Effrayer l'Ennemi",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "1 Round",
+        "effet": "Vous incarnez Myrmidia dans son aspect le plus courroucé. Gagnez le Trait de Créature Terreur 1."
+      }
     },
     {
       "id": "divine:miracle:en-bon-ordre",
@@ -11149,27 +11472,21 @@
       "catalogueName": "En Bon Ordre",
       "canonicalName": "In Good Order",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "manual",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "In Good Order"
+        "section": "Miracles de Myrmidia - In Good Order",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "En Bon Ordre",
-        "portee": "Soi-même",
-        "cible": "Alliés dans la zone d'effet (Bonus de Force Mentale en mètres)",
-        "duree": "Bonus de Force Mentale en Rounds",
-        "effet": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11178,25 +11495,56 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower yards » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "area",
+          "characteristicBonus": "FM",
+          "unit": "yards"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "characteristic-bonus",
+          "characteristic": "FM",
+          "unit": "rounds"
         }
       },
-      "extensions": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
       "effects": [],
       "targetRules": [],
       "labels": {
         "canonicalName": "In Good Order",
-        "effect": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Sachant la situation désespérée, vous priez pour que vos troupes ne soient pas disloquées : tant que le miracle dure, les alliés de la zone peuvent rompre le combat sans que l’ennemi gagne l’Élan ni une attaque gratuite en retour.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11205,14 +11553,47 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-in-good-order"
+          "id": "flee-exemption",
+          "mode": "manual",
+          "text": "Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163).",
+          "sourceRef": "v5-in-good-order"
+        },
+        {
+          "id": "broken-from-fleeing",
+          "mode": "manual",
+          "text": "Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163) ; seul le Désengagement n’est pas concerné.",
+          "sourceRef": "v5-in-good-order"
+        },
+        {
+          "id": "area",
+          "mode": "manual",
+          "text": "Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en yards (convention V5 des zones).",
+          "sourceRef": "v5-in-good-order"
+        },
+        {
+          "id": "duration",
+          "mode": "manual",
+          "text": "Durée : Bonus de Volonté en Rounds.",
+          "sourceRef": "v5-in-good-order"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "allies-in-area",
+          "label": "Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre) ?"
+        },
+        {
+          "field": "fleeing",
+          "label": "Quel allié rompt le combat (Fuite) et combien d’ennemis Engagés a-t-il ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "En Bon Ordre",
+        "portee": "Soi-même",
+        "cible": "Alliés dans la zone d'effet (Bonus de Force Mentale en mètres)",
+        "duree": "Bonus de Force Mentale en Rounds",
+        "effet": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage."
+      }
     },
     {
       "id": "divine:miracle:connaitre-son-ennemi",
@@ -11221,27 +11602,21 @@
       "catalogueName": "Connaître son Ennemi",
       "canonicalName": "Know Your Enemy",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "manual",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "Know Your Enemy"
+        "section": "Miracles de Myrmidia - Know Your Enemy",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Connaître son Ennemi",
-        "portee": "Bonus de Volonté en mètres",
-        "cible": "1",
-        "duree": "Instantané",
-        "effet": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11250,25 +11625,55 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower yards » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "characteristic",
+          "characteristic": "FM",
+          "unit": "yards"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "count",
+          "value": 1
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "instant"
         }
       },
-      "extensions": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
       "effects": [],
       "targetRules": [],
       "labels": {
         "canonicalName": "Know Your Enemy",
-        "effect": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Vous appelez Myrmidia pour connaître les forces et faiblesses d’un ennemi proche : le MJ vous laisse consulter ses caractéristiques, ses Traits, ses compétences et ses Talents.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11277,14 +11682,37 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-know-your-enemy"
+          "id": "reveal-profile",
+          "mode": "manual",
+          "text": "Le MJ révèle les caractéristiques, les Traits, les compétences et les Talents de l’ennemi visé.",
+          "sourceRef": "v5-know-your-enemy"
+        },
+        {
+          "id": "gm-secrets",
+          "mode": "manual",
+          "text": "Le MJ garde la main sur ce qui reste secret (identité, malédictions cachées).",
+          "sourceRef": "v5-know-your-enemy"
+        },
+        {
+          "id": "range",
+          "mode": "manual",
+          "text": "Portée : Volonté en yards (caractéristique entière).",
+          "sourceRef": "v5-know-your-enemy"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "enemy",
+          "label": "Quel ennemi est visé, dans la portée de Volonté yards ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Connaître son Ennemi",
+        "portee": "Bonus de Volonté en mètres",
+        "cible": "1",
+        "duree": "Instantané",
+        "effet": "Vous appelez Myrmidia à vous informer des forces et faiblesses d'un ennemi proche. Le MJ doit vous permettre d’examiner le profil, les traits, compétences et talents de la cible."
+      }
     },
     {
       "id": "divine:miracle:sur-un-terrain-mortel",
@@ -11293,27 +11721,21 @@
       "catalogueName": "Sur un Terrain Mortel",
       "canonicalName": "On Deadly Ground",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "manual",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "On Deadly Ground"
+        "section": "Miracles de Myrmidia - On Deadly Ground",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Sur un Terrain Mortel",
-        "portee": "Soi-même",
-        "cible": "Alliés dans la zone d'effet (Bonus de Volonté en mètres)",
-        "duree": "Bonus de Force Mentale en Rounds",
-        "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11322,25 +11744,56 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Aucun effet existant n’empêche de recevoir un État : contrat manuel. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "area",
+          "characteristicBonus": "FM",
+          "unit": "yards"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "characteristic-bonus",
+          "characteristic": "FM",
+          "unit": "rounds"
         }
       },
-      "extensions": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
       "effects": [],
       "targetRules": [],
       "labels": {
         "canonicalName": "On Deadly Ground",
-        "effect": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Vous bannissez l’idée de retraite de l’esprit de vos alliés : tant que le miracle dure, ils ne reçoivent pas l’État Brisé. Vous comptez parmi eux.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11349,14 +11802,41 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-on-deadly-ground"
+          "id": "no-broken",
+          "mode": "manual",
+          "text": "Les alliés de la zone, prêtre compris, ne reçoivent pas l’État Brisé tant que le miracle dure : à écarter à chaque acquisition (Terreur, Fuite, autres sources).",
+          "sourceRef": "v5-on-deadly-ground"
+        },
+        {
+          "id": "existing-broken",
+          "mode": "manual",
+          "text": "Les États Brisé déjà acquis restent : seule l’acquisition est empêchée.",
+          "sourceRef": "v5-on-deadly-ground"
+        },
+        {
+          "id": "duration-unattested",
+          "mode": "manual",
+          "text": "Durée : Bonus de Volonté en Rounds, valeur NON ATTESTÉE par la page 79 (voir l’écart).",
+          "sourceRef": "v5-on-deadly-ground"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "allies-in-area",
+          "label": "Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre), prêtre compris ?"
+        },
+        {
+          "field": "broken-attempts",
+          "label": "Quelle source tente de donner l’État Brisé (Terreur, Fuite, autre) pendant la durée ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Sur un Terrain Mortel",
+        "portee": "Soi-même",
+        "cible": "Alliés dans la zone d'effet (Bonus de Volonté en mètres)",
+        "duree": "Bonus de Force Mentale en Rounds",
+        "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
+      }
     },
     {
       "id": "divine:miracle:attaque-rapide",
@@ -11365,27 +11845,21 @@
       "catalogueName": "Attaque Rapide",
       "canonicalName": "Quick Strike",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "manual",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "Quick Strike"
+        "section": "Miracles de Myrmidia - Quick Strike",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Attaque Rapide",
-        "portee": "Vous",
-        "cible": "Vous",
-        "duree": "3 Rounds",
-        "effet": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11394,25 +11868,54 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Le mécanisme d’attaque gratuite des talents (Frappe réactive) ne se déclenche pas au début de Round : contrat manuel. Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 3,
+          "unit": "rounds"
         }
       },
-      "extensions": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
       "effects": [],
       "targetRules": [],
       "labels": {
         "canonicalName": "Quick Strike",
-        "effect": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Animé de la puissance de Myrmidia, vous anticipez les mouvements adverses : au début de chaque Round du miracle, vous pouvez tenter un Test d’Initiative Intermédiaire (+0 DR) pour une attaque gratuite hors de la séquence normale, avec l’arme de la main principale.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11421,14 +11924,41 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-quick-strike"
+          "id": "round-start-test",
+          "mode": "manual",
+          "text": "Au début de chaque Round du miracle (étape 2 de la séquence, p.161), Test d’Initiative Intermédiaire (+0 DR) ; une seule tentative par Round.",
+          "sourceRef": "v5-quick-strike"
+        },
+        {
+          "id": "free-attack",
+          "mode": "manual",
+          "text": "Sur réussite : une attaque de Mêlée ordinaire opposée, avec l’arme de la main principale, sans Action ni Mouvement ; l’Élan se gagne et se perd normalement (p.168).",
+          "sourceRef": "v5-quick-strike"
+        },
+        {
+          "id": "duration",
+          "mode": "manual",
+          "text": "Durée : 3 Rounds (+3 Rounds par tranche de +2 DR).",
+          "sourceRef": "v5-quick-strike"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "initiative-test",
+          "label": "Résultat du Test d’Initiative Intermédiaire (+0 DR) au début de chaque Round."
+        },
+        {
+          "field": "free-attack",
+          "label": "Cible de l’attaque gratuite et résultat du Test de Mêlée opposé."
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Attaque Rapide",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "3 Rounds",
+        "effet": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale."
+      }
     },
     {
       "id": "divine:miracle:devotion-de-la-guerriere",
@@ -11437,27 +11967,21 @@
       "catalogueName": "Dévotion de la Guerrière",
       "canonicalName": "Shieldmaiden’s Devotion",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "manual",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "Shieldmaiden’s Devotion"
+        "section": "Miracles de Myrmidia - Shieldmaiden’s Devotion",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Dévotion de la Guerrière",
-        "portee": "36 mètres",
-        "cible": "Voir texte",
-        "duree": "4 Rounds",
-        "effet": "Vos prières chantées remplissent le cœur des fidèles avec l'intrépidité de ses plus braves guerrières. Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi). Cet ennemi peut être un individu spécifique ou une espèce particulière."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11466,25 +11990,56 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Le Talent Intrépide du moteur est injecté sans choix d’ennemi par lancement : un Talent posé sans spécialisation vaudrait « Tout » (option C écartée par le MJ), donc contrat manuel plutôt qu’assisté. Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ. Cible « See text » : tous les Myrmidiens à portée, sans plafond. Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 36,
+          "unit": "yards"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "special"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 4,
+          "unit": "rounds"
         }
       },
-      "extensions": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
       "effects": [],
       "targetRules": [],
       "labels": {
         "canonicalName": "Shieldmaiden’s Devotion",
-        "effect": "Vos prières chantées remplissent le cœur des fidèles avec l'intrépidité de ses plus braves guerrières. Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi). Cet ennemi peut être un individu spécifique ou une espèce particulière.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi), l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11493,14 +12048,41 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-shieldmaiden-s-devotion"
+          "id": "fearless-enemy",
+          "mode": "manual",
+          "text": "Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi) contre l’ennemi choisi par le prêtre au lancement, le même pour tous, pendant la durée.",
+          "sourceRef": "v5-shieldmaiden-s-devotion"
+        },
+        {
+          "id": "fear-only",
+          "mode": "manual",
+          "text": "En V5 (p.119) le Talent protège de la Peur du groupe choisi, non de sa Terreur ni de l’Intimidation.",
+          "sourceRef": "v5-shieldmaiden-s-devotion"
+        },
+        {
+          "id": "duration",
+          "mode": "manual",
+          "text": "Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 yards (+36 par tranche).",
+          "sourceRef": "v5-shieldmaiden-s-devotion"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "enemy",
+          "label": "Quel ennemi (individu précis ou espèce) le prêtre choisit-il au lancement ?"
+        },
+        {
+          "field": "myrmidians",
+          "label": "Quels Myrmidiens sont à portée (36 yards) ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Dévotion de la Guerrière",
+        "portee": "36 mètres",
+        "cible": "Voir texte",
+        "duree": "4 Rounds",
+        "effet": "Vos prières chantées remplissent le cœur des fidèles avec l'intrépidité de ses plus braves guerrières. Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi). Cet ennemi peut être un individu spécifique ou une espèce particulière."
+      }
     },
     {
       "id": "divine:miracle:competence-martiale",
@@ -11509,27 +12091,21 @@
       "catalogueName": "Compétence Martiale",
       "canonicalName": "Skill of Combat",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "Skill of Combat"
+        "section": "Miracles de Myrmidia - Skill of Combat",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Compétence Martiale",
-        "portee": "24 mètres",
-        "cible": "Voir texte",
-        "duree": "4 Rounds",
-        "effet": "Vous incarnez chez vos alliés l’habileté martiale de Myrmidia. Tant que ce miracle est actif, tous les alliés à portée bénéficient d'un bonus de +10 à leur CC et CT."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11538,25 +12114,82 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Le +10 porte sur les caractéristiques, comme les Bénédictions de Bataille et de la Chasse (p.221) : aucune conversion (décision MJ : +10 CC et +10 CT, non +1 DR). Cumul avec ces Bénédictions selon les règles de cumul établies (DIV-05) ; la p.217 n’interdit que le cumul d’une même prière. Portée et cible : yards sources lus comme mètres de jeu (DIV-03), tous les alliés à portée.",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 24,
+          "unit": "yards"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "special"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 4,
+          "unit": "rounds"
         }
       },
-      "extensions": [],
-      "effects": [],
-      "targetRules": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "CC",
+          "value": 10,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "CT",
+          "value": 10,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
+      "targetRules": [
+        "ally",
+        "within-range"
+      ],
       "labels": {
         "canonicalName": "Skill of Combat",
-        "effect": "Vous incarnez chez vos alliés l’habileté martiale de Myrmidia. Tant que ce miracle est actif, tous les alliés à portée bénéficient d'un bonus de +10 à leur CC et CT.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "Vous incarnez en vos alliés l’habileté de Myrmidia : tous les alliés à portée gagnent +10 en CC et en CT pendant le miracle.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11565,14 +12198,43 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-skill-of-combat"
+          "id": "weapon-skill",
+          "mode": "engine",
+          "text": "Chaque allié désigné gagne +10 en Capacité de Combat (type characteristic-modifier).",
+          "sourceRef": "v5-skill-of-combat"
+        },
+        {
+          "id": "ballistic-skill",
+          "mode": "engine",
+          "text": "Chaque allié désigné gagne +10 en Capacité de Tir (type characteristic-modifier).",
+          "sourceRef": "v5-skill-of-combat"
+        },
+        {
+          "id": "allies",
+          "mode": "manual",
+          "text": "Cible « See text » : tous les alliés à portée, sans plafond ; le MJ désigne ceux qui sont à 24 yards ou moins.",
+          "sourceRef": "v5-skill-of-combat"
+        },
+        {
+          "id": "duration",
+          "mode": "engine",
+          "text": "Durée : 4 Rounds (+4 Rounds par tranche de +2 DR).",
+          "sourceRef": "v5-skill-of-combat"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "allies-in-range",
+          "label": "Quels alliés sont à portée (24 yards) ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Compétence Martiale",
+        "portee": "24 mètres",
+        "cible": "Voir texte",
+        "duree": "4 Rounds",
+        "effet": "Vous incarnez chez vos alliés l’habileté martiale de Myrmidia. Tant que ce miracle est actif, tous les alliés à portée bénéficient d'un bonus de +10 à leur CC et CT."
+      }
     },
     {
       "id": "divine:miracle:vindicte-vengeresse",
@@ -11581,27 +12243,21 @@
       "catalogueName": "Vindicte Vengeresse",
       "canonicalName": "Vengeful Wrath",
       "deity": "Myrmidia",
-      "status": "blocked",
+      "status": "manual",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
-        "edition": "V4",
-        "sourceStatus": "found-adaptation-blocked",
+        "edition": "V4 EN",
+        "sourceStatus": "read-and-page-checked",
         "printedPage": 79,
-        "section": "Vengeful Wrath"
+        "section": "Miracles de Myrmidia - Vengeful Wrath",
+        "clauses": []
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
         "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
-      },
-      "catalogueEntry": {
-        "nom": "Vindicte Vengeresse",
-        "portee": "Vous",
-        "cible": "Vous",
-        "duree": "6 Rounds",
-        "effet": "Vous êtes empli de l'indignation vertueuse de Myrmidia. Tant que ce miracle est actif, vous devez charger et attaquer l'ennemi impénitent le plus proche. Vous pouvez relancer tous vos jets de compétence de Mêlée tant que le miracle est actif."
       },
       "requiredTalent": {
         "id": "talent-invoke",
@@ -11610,25 +12266,54 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Source V4 retrouvée dans Up in Arms p.79; adaptation V4 vers V5 non réalisée et contrat maintenu bloqué.",
+      "sourceDelta": "Aucun type d’effet pour la relance de Tests ni pour la contrainte de comportement : contrat manuel. Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ). « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.",
       "params": {
         "range": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "targets": {
-          "kind": "catalogue-only"
+          "kind": "self"
         },
         "duration": {
-          "kind": "catalogue-only"
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
         }
       },
-      "extensions": [],
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "targets": {
+                "addBaseValue": true
+              }
+            },
+            {
+              "duration": {
+                "addBaseValue": true
+              }
+            }
+          ],
+          "sourceRef": "miracle-scaling",
+          "repeatable": true,
+          "restrictions": {
+            "youAndYouCannotIncreaseRangeOrTargets": true,
+            "instantDurationCannotIncrease": true
+          }
+        }
+      ],
       "effects": [],
       "targetRules": [],
       "labels": {
         "canonicalName": "Vengeful Wrath",
-        "effect": "Vous êtes empli de l'indignation vertueuse de Myrmidia. Tant que ce miracle est actif, vous devez charger et attaquer l'ennemi impénitent le plus proche. Vous pouvez relancer tous vos jets de compétence de Mêlée tant que le miracle est actif.",
-        "sourceStatus": "V4 source found; V5 adaptation blocked"
+        "effect": "L’indignation de Myrmidia vous emplit : pendant le miracle, vous devez charger et attaquer l’ennemi impénitent le plus proche, et vous pouvez relancer chaque Test de Mêlée une fois, le nouveau résultat tenant.",
+        "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
         {
@@ -11637,14 +12322,53 @@
           "sourceRef": "up-in-arms-p79"
         },
         {
-          "id": "effect",
-          "mode": "blocked",
-          "sourceRef": "v4-vengeful-wrath"
+          "id": "charge-and-attack",
+          "mode": "manual",
+          "text": "Le prêtre doit charger puis attaquer l’ennemi impénitent le plus proche (Charge V5 p.163) ; s’il est déjà Engagé, il ne peut pas charger.",
+          "sourceRef": "v5-vengeful-wrath"
+        },
+        {
+          "id": "unrepentant",
+          "mode": "manual",
+          "text": "Le MJ désigne l’ennemi impénitent à chaque scène ; la contrainte s’arrête si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient.",
+          "sourceRef": "v5-vengeful-wrath"
+        },
+        {
+          "id": "melee-reroll",
+          "mode": "manual",
+          "text": "Chaque Test de Mêlée du prêtre peut être relancé une fois ; le nouveau résultat tient (p.133).",
+          "sourceRef": "v5-vengeful-wrath"
+        },
+        {
+          "id": "no-frenzy-bonus",
+          "mode": "manual",
+          "text": "Aucun bonus de Frénésie : ni immunité à la Psychologie, ni attaque gratuite, ni +1 Dégât.",
+          "sourceRef": "v5-vengeful-wrath"
+        },
+        {
+          "id": "duration",
+          "mode": "manual",
+          "text": "Durée : 6 Rounds (+6 Rounds par tranche de +2 DR).",
+          "sourceRef": "v5-vengeful-wrath"
         }
       ],
       "needsInput": [
-        "v5-adaptation"
-      ]
+        {
+          "field": "unrepentant-enemy",
+          "label": "Quel ennemi le MJ désigne-t-il comme impénitent dans cette scène ?"
+        },
+        {
+          "field": "rerolls",
+          "label": "Quels Tests de Mêlée du prêtre sont relancés, et quel est le nouveau résultat ?"
+        }
+      ],
+      "catalogueEntry": {
+        "nom": "Vindicte Vengeresse",
+        "portee": "Vous",
+        "cible": "Vous",
+        "duree": "6 Rounds",
+        "effet": "Vous êtes empli de l'indignation vertueuse de Myrmidia. Tant que ce miracle est actif, vous devez charger et attaquer l'ennemi impénitent le plus proche. Vous pouvez relancer tous vos jets de compétence de Mêlée tant que le miracle est actif."
+      }
     },
     {
       "id": "divine:miracle:handrich:a-deal-s-a-deal",
@@ -25810,5 +26534,5 @@
       ]
     }
   ],
-  "sourceFingerprint": "sha256:6a3ca54e95fe77171a73baa52c5f076ced4ae9b19ccbd39b81d0fc21b08c7486"
+  "sourceFingerprint": "sha256:6994b1d6e3395c1e36ba2e92bfd0b35635ec69d7d40abca5e791103ca0d90866"
 }

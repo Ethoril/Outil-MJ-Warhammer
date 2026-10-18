@@ -1,6 +1,6 @@
 # Up in Arms p.79 : préparation de l'adaptation V5 des neuf miracles de Myrmidia
 
-18 octobre 2026. Document de préparation pour DIV-01 (voir `DIVIN_DECISIONS_MJ.md`). Il **ne valide aucun contrat** : les neuf contrats restent `blocked` dans `tools/build-v5-divine-contracts.mjs` (`sourceUpInArmsNine`) tant que le MJ n'a pas tranché les sélecteurs de la dernière section et qu'un contrôle indépendant n'a pas relu les valeurs. Aucun code, JSON généré ni catalogue n'est modifié par ce document.
+18 octobre 2026. Document de préparation pour DIV-01 (voir `DIVIN_DECISIONS_MJ.md`). **Statut : décisions prises, contrats raccordés.** Le MJ a tranché les 13 sélecteurs de la dernière section (option recommandée chaque fois) ; les neuf contrats ne sont plus `blocked` : `docs/divin/sources/miracles/myrmidia-up-in-arms.mjs` les remplace dans le générateur (mêmes ids `divine:miracle:<nom>` et même entrée de catalogue) : Commander la Légion, Effrayer l'Ennemi et Compétence Martiale `assisted`, les six autres `manual` avec clauses et rappels. Dévotion de la Guerrière est `manual` et non `assisted` comme prévu en §3.7 : le moteur ne sait pas fixer un ennemi précis par lancement, et Intrépide sans spécialisation vaudrait « Tout » (option C écartée). Les sections 1 à 6 ci-dessous restent le texte de préparation d'origine ; un contrôle indépendant des valeurs relues sur la page 79 reste à faire avant tout passage en « validé ».
 
 ## 1. Sources et méthode
 
@@ -232,7 +232,7 @@ Notation : P = portée, C = cible, D = durée. Les valeurs « catalogue » sont 
 | Compétence Martiale | `blocked` | `assisted` (ou `implemented`) | `characteristic-modifier` ×2 | Forme du bonus ; cumul avec les Bénédictions |
 | Vindicte Vengeresse | `blocked` | `manual` | aucun (`temporary-fortune` seulement pour l'option C) | Relance ; « impénitent » ; fin de la contrainte |
 
-Aucun miracle n'est `implemented` ni validable en l'état. Les contrats restent `blocked` jusqu'aux décisions ci-dessous et à un contrôle indépendant des valeurs relues sur la page 79.
+Aucun miracle n'est `implemented`. Statut réel après raccordement : voir l'en-tête (3 `assisted`, 6 `manual`) ; la colonne « Statut probable » est la prévision d'origine.
 
 ## 6. Questions pour le MJ (sélecteurs)
 
