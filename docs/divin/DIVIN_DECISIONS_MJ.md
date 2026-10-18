@@ -36,3 +36,16 @@ Les choix de politique ci-dessus sont clos; seules leurs déclinaisons de règle
 Réponse humaine explicite : « Bloquer ce cas pour une décision MJ explicite à chaque occurrence. »
 
 Conséquence : aucune seconde Action ni report automatique. La situation reste bloquée avec un besoin de décision MJ propre à cette occurrence. Une attestation de visibilité ne vaut pas autorisation d’Action supplémentaire. L’interface et le reçu distinguent cette décision des faits spatiaux et de la simple acquisition de l’État. Cet arbitrage ne clôt pas les autres cas de Brisé ni E6.
+
+## Up in Arms p.79 — arbitrages du 18 octobre 2026
+
+Source des options : [DIVIN_UP_IN_ARMS_ADAPTATIONS.md](DIVIN_UP_IN_ARMS_ADAPTATIONS.md) §6. Réponses explicites du MJ (sélecteurs) :
+
+| Question | Réponse |
+| --- | --- |
+| 6. Sur un Terrain Mortel, durée non imprimée | Bonus de Volonté en Rounds, marqué « non attesté » dans le contrat. |
+| 5. En Bon Ordre, étendue de l'exemption | Fuite seulement : pas d'Élan ni d'attaque gratuite pour l'adversaire ; le fuyard gagne quand même ses Brisé. |
+| 11. Vindicte Vengeresse, relance | Chaque Test de Mêlée relançable une fois, le nouveau résultat tient. |
+| 8. Attaque Rapide, attaque gratuite | Attaque de Mêlée ordinaire opposée, une fois par Round, Élan normal. |
+
+Questions 1-4, 7, 9, 10, 12, 13 : non encore posées. L'option recommandée du document sert de valeur de travail, **non confirmée par le MJ** ; à présenter avant tout passage en « validé ».
