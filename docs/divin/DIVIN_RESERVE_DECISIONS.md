@@ -37,3 +37,10 @@ Un lecteur distinct a relu la page 79 : les 9 contrats sont conformes aux valeur
 | # | Décision prise | Alternative | Pourquoi |
 | --- | --- | --- | --- |
 | R14 | Le parcours navigateur `divin-v5-e5-browser-independent.mjs` lisait l'état juste après le clic sur Annuler/Rétablir, sans attendre : il échouait sous charge machine, y compris sur la version publiée 3.16.1 (test seul en cause, pas le code). Des attentes explicites ont été ajoutées (test uniquement). | Laisser la course. | Un test instable masque les vraies régressions. |
+
+## Constats de la relecture finale (3.17.0)
+
+| # | Décision prise | Alternative | Pourquoi |
+| --- | --- | --- | --- |
+| R15 | Ordre périmé en mode automatique : une créature divine invoquée en cours de Round est ajoutée à la fin de l'ordre stocké et joue en fin de Round (moteur V5), à son rang d'initiative avec le chemin legacy. Identique à un participant ajouté à la main (vérifié sur la version publiée) : documenté, non corrigé. | Réordonner à l'invocation (touche aux moteurs de Tour partagés). | Ce n'est pas une régression ; le corriger changerait aussi l'ajout manuel de participants. |
+| R16 | Titre du README corrigé (« v3.13.0 » périmé depuis la 3.13). | — | Cohérence. |

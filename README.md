@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer (v3.13.0)
+# Outil MJ — Warhammer (v3.17.0)
 
 Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.17.0 : prières, bénédictions et miracles V5 (livre de base et suppléments) en plus des talents et de la magie.
 
