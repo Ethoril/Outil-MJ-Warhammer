@@ -5,7 +5,7 @@ import {previewDivineExecution,applyDivineExecution,expireDivineEffects} from '.
 import {refreshEffectLayers} from './v5-magic-effects.js';
 import {uid} from './models.js';
 import {resolveDivineAccess,createDivineAccessGrant,revokeDivineAccessGrant,consumeDivineAccessGrant,emptyDivineAccess} from './v5-divine-access.js';
-import {v5ResourceIdentity} from './v5-resources.js';
+import {v5ResourceIdentity,getV5Fortune} from './v5-resources.js';
 import {advanceGameClock,readCombatPosition} from './v5-game-time.js';
 import {validatePrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {acquireV5Conditions} from './v5-effects.js';
@@ -255,6 +255,8 @@ export function previewStoreDivine(state,contractId,input={}){
  const contract=getDivineContract(contractId),sourceError=validateDivineSources(contract);
  if(sourceError)return failure('blocked',sourceError);
  const ctx=context(state,contract,input);if(!ctx.actor)return ctx;
+ // Chance temporaire : une première invocation est libre ; ensuite, pas de réinvocation tant que le total de Chance (permanente et temporaire) n'est pas retombé à 0.
+ if((contract.effects||[]).some(effect=>effect.type==='temporary-fortune')&&(state.extensions?.v5?.divineExecutions||[]).some(row=>row.contractId===contractId&&row.actorId===ctx.actor.id)){const fortune=getV5Fortune(state,ctx.actor);if((fortune.balance??fortune.temporary)>0)return failure('blocked','Ce miracle ne peut pas être réinvoqué tant que le prêtre a encore des points de Chance.',[{field:'fortune',label:'Chance revenue à 0'}]);}
  const subjectKey=divineSubjectKey(state,ctx.actor);
  const clock=state.extensions?.v5?.gameClock||null,capSubject=prayerSubjectKey(state,ctx.actor);
  const roundAnchor={sceneId:state.activeScene?.status==='active'?state.activeScene.id:null,round:state.combat?.round};

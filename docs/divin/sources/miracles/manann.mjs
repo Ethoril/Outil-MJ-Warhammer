@@ -24,18 +24,23 @@ export const miracles = [
   name: 'Visage de l’homme noyé', canonicalName: "Drowned Man's Face", printedPage: 222,
   summary: 'La cible se noie sur place : ses poumons se remplissent d’eau salée pendant la durée. Elle subit Fatigué et les règles de noyade (p.169), même démon ou mort-vivant. À la fin du miracle, elle subit Étourdi pendant 1 Round.',
   params: { range: { kind: 'characteristic', characteristic: 'Soc', unit: 'yards' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
-  status: 'manual', effect: null,
+  status: 'assisted',
+  effects: [
+   { type: 'condition', key: 'Fatigued', level: 1 },
+   { type: 'expiry-condition', conditions: [{ key: 'Stunned', level: 1, rounds: 1 }] }
+  ],
   targetRules: ['démons et morts-vivants affectés'],
   needsInput: [
    { id: 'target', text: 'Quelle créature est la cible, et est-elle à portée ?' },
    { id: 'drowning-rules', text: 'Résolution de la noyade selon les règles de la p.169, tour par tour.' }
   ],
   clauses: [
-   { id: 'fatigued', mode: 'assisted', text: 'La cible gagne l’État Fatigué pendant la durée.' },
+   { id: 'fatigued', mode: 'engine', text: 'La cible gagne l’État Fatigué pendant la durée.' },
    { id: 'drowning', mode: 'manual', text: 'La cible se noie pendant la durée (règles p.169), y compris démons et morts-vivants.' },
-   { id: 'stunned-end', mode: 'assisted', text: 'À la fin du miracle, la cible gagne Étourdi pendant 1 Round.' },
+   { id: 'stunned-end', mode: 'engine', text: 'À la fin du miracle, la cible gagne Étourdi pendant 1 Round.' },
    { id: 'sl-extension', mode: 'assisted', text: 'Par tranche de +2 DR : portée, cibles ou durée augmentées de leur valeur initiale.' }
-  ]
+  ],
+  sourceDelta: 'Étourdi est traduit par l’État Sonné (niveau 1, 1 Round après la fin du miracle) et Fatigué par Exténué ; la fin du miracle suit l’échéance de l’effet, une fin anticipée par le MJ ne pose pas Sonné.'
  },
  {
   name: 'Vents favorables', canonicalName: 'Fair Winds', printedPage: 222,

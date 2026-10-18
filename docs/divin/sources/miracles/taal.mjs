@@ -96,18 +96,18 @@ export const miracles = [
     printedPage: 228,
     summary: 'Racines, lianes et plantes grimpantes saisissent toutes les cibles de la zone : chacune gagne l\'État Entravé (Entangled) avec une Force égale à votre Sociabilité.',
     params: { range, targets: { kind: 'area', characteristicBonus: 'Soc', unit: 'yards' }, duration: { kind: 'instant' } },
-    status: 'manual',
-    effect: null,
+    status: 'assisted',
+    effects: [{ type: 'condition', key: 'Entangled', level: 1, strengthFrom: { kind: 'characteristic', characteristic: 'Soc', target: 'source' } }],
     targetRules: [],
     needsInput: [
       { id: 'area-center', text: 'Point central de la zone dans la portée (Sociabilité yards).' },
       { id: 'area-targets', text: 'Créatures présentes dans la zone (rayon Bonus de Sociabilité yards).' }
     ],
     clauses: [
-      { id: 'entangled', mode: 'manual', text: 'Chaque cible de la zone gagne l\'État Entangled avec une Force égale à la Sociabilité du prêtre (valeur entière, pas le Bonus).' },
-      { id: 'instant', mode: 'manual', text: 'Durée instantanée : l\'État est posé une fois; sa durée ensuite relève des règles de l\'État.' }
+      { id: 'entangled', mode: 'engine', text: 'Chaque cible de la zone gagne l\'État Entangled avec une Force égale à la Sociabilité du prêtre (valeur entière, pas le Bonus).' },
+      { id: 'instant', mode: 'engine', text: 'Durée instantanée : l\'État est posé une fois; sa durée ensuite relève des règles de l\'État.' }
     ],
-    sourceDelta: 'État dont le niveau vaut la caractéristique Sociabilité entière : le moteur ne gère que des niveaux fixes.'
+    sourceDelta: 'État dont la Force vaut la caractéristique Sociabilité entière : l’État est posé au niveau 1 et la Force est portée par sa source (source.strength), avec rappel du Test de Force opposé.'
   },
   {
     name: 'Dent et griffe',

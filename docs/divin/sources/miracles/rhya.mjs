@@ -49,12 +49,14 @@ export const miracles = [
     name: 'Secours de Rhya', canonicalName: "Rhya's Succour", printedPage: 225,
     summary: 'Chaque cible retire 1 État. Si cela supprime tous les États qu’elle subissait, elle se sent reposée comme après une bonne nuit et gagne +1 DR à ses Tests lors de son prochain Tour.',
     params: { range: soc('characteristic', 'yards'), targets: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'targets' }, duration: { kind: 'instant' } },
-    status: 'manual', effect: null, targetRules: [],
+    status: 'assisted',
+    effects: [{ type: 'remove-condition', chosen: true, amount: 1, onAllRemoved: { testModifiers: { all: 1 } } }],
+    targetRules: [],
     needsInput: [{ id: 'condition-choice', text: 'État retiré par chaque cible (choix; aucun critère donné par la source).' }, { id: 'all-removed', text: 'Le retrait supprime-t-il tous les États de la cible ?' }],
     clauses: [
-      { id: 'remove-condition', mode: 'manual', text: 'Chaque cible retire 1 État (retrait d’État non géré par le moteur).' },
+      { id: 'remove-condition', mode: 'engine', text: 'Chaque cible retire 1 État (choisi par le MJ ; un État verrouillé ou à cause persistante n’est pas retirable).' },
       { id: 'rested', mode: 'manual', text: 'Si tous ses États sont retirés, la cible est reposée comme après un bon sommeil.' },
-      { id: 'next-turn-bonus', mode: 'manual', text: 'Dans ce cas, +1 DR à tous ses Tests lors de son prochain Tour.' }
+      { id: 'next-turn-bonus', mode: 'engine', text: 'Dans ce cas, +1 DR à tous ses Tests lors de son prochain Tour (en combat ; hors combat, à appliquer à la main).' }
     ]
   },
   {

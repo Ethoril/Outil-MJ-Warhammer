@@ -34,9 +34,13 @@ function registryOf(envelope) {
  * et le registre la combine au solde permanent.
  */
 const TEMPORARY_KEYS = Object.freeze({ fortune: 'remainingTempFortune', fate: 'remainingTempFate' });
+function temporaryLayers(subject) {
+  const v5 = record(subject) ? subject.extensions?.v5 : null;
+  return [v5?.spellEffects, v5?.divineEffects].flatMap(list => Array.isArray(list) ? list : []);
+}
 function temporaryOfSubject(subject, kind) {
-  const effects = record(subject) ? subject.extensions?.v5?.spellEffects : null;
-  if (!Array.isArray(effects)) return 0;
+  const effects = temporaryLayers(subject);
+  if (!effects.length) return 0;
   return effects.reduce((sum, effect) => sum + Math.max(0, Number(effect?.[TEMPORARY_KEYS[kind]]) || 0), 0);
 }
 /**
@@ -58,7 +62,7 @@ function consumeTemporary(participant, kind, amount) {
   if (!record(participant)) throw new TypeError('Participant invalide');
   const next = clone(participant);
   let remaining = Math.max(0, Number(amount) || 0), consumed = 0;
-  for (const effect of next.extensions?.v5?.spellEffects || []) {
+  for (const effect of temporaryLayers(next)) {
     if (remaining <= 0) break;
     const available = Math.max(0, Number(effect?.[TEMPORARY_KEYS[kind]]) || 0);
     const take = Math.min(available, remaining);

@@ -90,8 +90,9 @@ export const miracles = [
   name: 'Main de Morr', canonicalName: "Stay Morr's Hand", printedPage: 223,
   summary: 'Le prêtre touche les yeux d’une personne proche de la mort et demande à Morr de guider l’âme sans la prendre. La cible doit avoir 0 Blessure et être consentante. Pendant la durée, elle gagne Inconscient et ne se détériore plus (maladie, Blessures Critiques, poisons suspendus). Le miracle prend fin si des soins appropriés sont prodigués ou si le prêtre accomplit les derniers rites (environ une minute) ; dans ce cas, à la mort, l’âme passe le portail de Morr et le cadavre ne pourra plus être ciblé par la Nécromancie.',
   params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'hours' } },
-  status: 'manual', effect: null,
-  targetRules: ['cible à 0 Blessure', 'consentante'],
+  status: 'assisted',
+  effects: [{ type: 'condition', key: 'Unconscious', level: 1, lockConditions: true }],
+  targetRules: ['zeroWounds', 'consenting'],
   needsInput: [
    { id: 'wounds-zero', text: 'La cible est-elle bien à 0 Blessure ?' },
    { id: 'consent', text: 'La cible est-elle consentante ?' },
@@ -99,11 +100,11 @@ export const miracles = [
    { id: 'end-event', text: 'Des soins appropriés ont-ils été donnés, ou le prêtre accomplit-il les derniers rites ?' }
   ],
   clauses: [
-   { id: 'unconscious', mode: 'assisted', text: 'La cible gagne l’État Inconscient pendant la durée.' },
+   { id: 'unconscious', mode: 'engine', text: 'La cible gagne l’État Inconscient pendant la durée.' },
    { id: 'no-deterioration', mode: 'manual', text: 'La cible ne se détériore pas : maladie suspendue, Blessures Critiques ignorées, poisons suspendus, et effets similaires.' },
    { id: 'end-healing', mode: 'manual', text: 'Le miracle prend fin si des soins appropriés sont prodigués.' },
    { id: 'end-last-rites', mode: 'manual', text: 'Le prêtre peut y mettre fin par les derniers rites (environ 1 minute) : à la mort, l’âme franchit le portail de Morr et le cadavre est protégé de la Nécromancie.' }
   ],
-  sourceDelta: 'Le livre emploie « ignoring Critical Wounds and poisons, and similar » : l’étendue exacte du « et similaire » est laissée à l’arbitrage du MJ.'
+  sourceDelta: 'Le livre emploie « ignoring Critical Wounds and poisons, and similar » : l’étendue exacte du « et similaire » est laissée à l’arbitrage du MJ. Lecture MJ : Inconscient est verrouillé (non récupérable) tant que le miracle dure ; la suspension des maladies, Blessures Critiques et poisons reste un rappel.'
  }
 ];

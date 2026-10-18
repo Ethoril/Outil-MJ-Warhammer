@@ -173,7 +173,8 @@ function resolvePrayerChoices(contract, prayer, actor, input) {
     if (effect.strengthFrom) {
       const strength = strengthValue(effect.strengthFrom, actor, prayer);
       if (strength === null || strength < 1) return { error: 'La force de l’État ne peut pas être résolue ou est nulle.', needs: [need('contract.effects.strengthFrom', 'Caractéristique ou DR donnant une force d’État positive')] };
-      effect.level = strength;
+      // target:'source' : la force est celle de la source de l'État (Enchevêtré), son niveau reste inchangé.
+      if (effect.strengthFrom.target === 'source') effect.strength = strength; else effect.level = strength;
     }
     const progression = effect.perSuccessLevels;
     if (progression && Number.isSafeInteger(progression.every) && progression.every > 0 && Number.isSafeInteger(progression.add)) {
@@ -526,7 +527,7 @@ export function applyDivineExecution(state, contract, input = {}) {
   if ((preview.effects.length || timedManual) && appliedTargets.length) {
     if ((calendarLayerEffects.length || manualCalendarDuration) && !hasClockAnchor(input.clockAnchor))
       return { ...fail('needs-input', 'Horloge de jeu requise pour dater cette durée en minutes, heures ou jours.', [need('clockAnchor', 'Horloge de jeu de la partie')]), state: clone(state), receipt: null, executionId: input.executionId };
-    if (!input.expiry && layerEffects.some(effect => !isCalendarEffect(effect) && ((effect.duration && effect.duration.unit !== 'instant') || Number.isSafeInteger(effect.durationRounds))))
+    if (!input.expiry && layerEffects.some(effect => !isCalendarEffect(effect) && ((effect.duration && !['instant', 'session'].includes(effect.duration.unit)) || Number.isSafeInteger(effect.durationRounds))))
       return { ...fail('needs-input', 'Échéance explicite requise pour une prière temporaire.', [need('expiry', 'Instant d’expiration choisi')]), state: clone(state), receipt: null, executionId: input.executionId };
     if (timedManual && !manualCalendarDuration && !input.expiry) return { ...fail('needs-input', 'Échéance explicite requise pour suivre cette prière manuelle active.', [need('expiry', 'Instant d’expiration choisi')]), state: clone(state), receipt: null, executionId: input.executionId };
     const expiryError = validateExpiry(input.expiry);
@@ -545,7 +546,7 @@ export function applyDivineExecution(state, contract, input = {}) {
         const handler = effectHandler(effect.type);
         if (!handler?.applyInstant) continue;
         const layer = layers[layerEffects.findIndex(row => row === effect)];
-        const context = { contract, executionId: input.executionId, targetId: participant.id, index, layer, expiry: input.expiry, round: input.round, input, actor, prayer: preview.prayer };
+        const context = { contract, executionId: input.executionId, targetId: participant.id, index, layer, expiry: input.expiry, round: input.round, input, actor, prayer: preview.prayer, combat: state.combat };
         const result = handler.applyInstant(updated, effect, context);
         const row = handler.receipt?.(effect, context, result);
         if (row) effectReceipts.push(row);
@@ -614,6 +615,7 @@ export function expireDivineEffects(participant, transition = {}) {
   const next = clone(participant);
   const layers = next?.extensions?.v5?.divineEffects || [];
   const removed = [];
+  const expiredLayers = [];
   const expiredConditionStateIds = new Set();
   const keep = layers.filter(layer => {
     // Calendar deadlines are handled only by their explicit source-backed clock adapter.
@@ -628,6 +630,7 @@ export function expireDivineEffects(participant, transition = {}) {
     if (transition.round === expiry.round && expiry.turn !== undefined
       && (!Number.isSafeInteger(transition.turn) || transition.turn < expiry.turn)) return true;
     removed.push(layer.id);
+    expiredLayers.push(layer);
       if (Array.isArray(layer.conditionStateIds)) layer.conditionStateIds.forEach(id => expiredConditionStateIds.add(id));
     return false;
   });
@@ -635,6 +638,8 @@ export function expireDivineEffects(participant, transition = {}) {
   const unreferencedExpiredStateIds = new Set([...expiredConditionStateIds].filter(id => !retainedConditionStateIds.has(id)));
   if (unreferencedExpiredStateIds.size) next.states = (next.states || []).filter(state => !unreferencedExpiredStateIds.has(state.id));
   if (next?.extensions?.v5) next.extensions.v5.divineEffects = keep;
+  // Fin d'effet : certains types posent un État de suite (conditionsOnExpiry).
+  for (const layer of expiredLayers) effectHandler(layer.type)?.onExpire?.(next, layer, transition);
   return { participant: next, removed, status: removed.length ? 'expired' : 'unchanged' };
 }
 

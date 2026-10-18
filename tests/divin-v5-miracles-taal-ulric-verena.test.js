@@ -59,7 +59,7 @@ for (const [name, mod] of modules) {
         assert.ok(!ids.has(c.id), `clause dupliquée ${c.id}`);
         ids.add(c.id);
       }
-      if (m.effect !== null) assert.ok(engineEffectTypes.has(m.effect.type));
+      if (m.effect) assert.ok(engineEffectTypes.has(m.effect.type));
       for (const e of m.effects ?? []) assert.ok(engineEffectTypes.has(e.type));
       if (m.status === 'implemented') assert.ok(m.effect !== null && m.needsInput.length === 0 && m.clauses.every(c => c.mode === 'engine'));
       if (m.status === 'manual') assert.ok(m.needsInput.length > 0 || m.clauses.some(c => c.mode !== 'engine'));
