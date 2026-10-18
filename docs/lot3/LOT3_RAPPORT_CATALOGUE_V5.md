@@ -39,7 +39,7 @@ Cellules à reporter : NI 19, Portée 34, Cible 28, Durée 42, Description 121 (
 
 Les points 1 à 10 et les régressions de classement sont couverts par `tests/lot3-v5-retours-catalogue.test.js` (10 tests ; huit rouges initiaux observés). Les pages citées ont été relues dans les sources privées, sans copier les PDF ni leur texte intégral dans le dépôt.
 
-Matrice actuelle : **165 calculables / 49 données MJ nécessaires / 63 rappels / 0 restant**. Le lot 5B compte **27 conformes / 13 données MJ / 18 rappels**. Les classements portent sur les scénarios mesurés ; les clauses assistées ne deviennent pas automatiques. Les trois clauses de talents non vérifiées restent explicites.
+Matrice actuelle : **147 calculables / 49 données MJ nécessaires / 81 rappels / 0 restant**. Le lot 5B compte **27 conformes / 13 données MJ / 18 rappels**. Les classements portent sur les scénarios mesurés ; les clauses assistées ne deviennent pas automatiques. Les trois clauses de talents non vérifiées restent explicites.
 
 ## Versions
 

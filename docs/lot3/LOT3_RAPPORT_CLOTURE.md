@@ -12,7 +12,7 @@
 
 [Preuves par clause](LOT3_PREUVES_CLOTURE.json), tests/lot3-v5-cloture.test.js et tests/lot3-v5-cloture-ui-browser.mjs. Rouges constatés avant les correctifs Aqshy, limitation aux Tests étendus, générateur, puis choix et sortie UI ; logs cloture-regressions-red-final, cloture-frenzy-choice-red et cloture-frenzy-end-red dans tmp/lot3.
 
-Le suivi comporte **277 sorts : 165 conformes aux scénarios, 49 données MJ, 63 rappels** ; **54 clauses de talents : 9 conformes, 18 données MJ, 5 rappels, 22 hors périmètre, 0 anomalie, 0 non vérifié**. Ces totaux ne certifient pas toutes les clauses ni les situations de campagne.
+Le suivi comporte **277 sorts : 147 conformes aux scénarios, 49 données MJ, 81 rappels** ; **54 clauses de talents : 9 conformes, 18 données MJ, 5 rappels, 22 hors périmètre, 0 anomalie, 0 non vérifié**. Ces totaux ne certifient pas toutes les clauses ni les situations de campagne.
 
 ## Alignement et version
 

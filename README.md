@@ -1,6 +1,6 @@
 # Outil MJ — Warhammer (v3.13.0)
 
-Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.15.0 préparée localement ; le site public conserve sa version publiée tant qu’un déploiement n’est pas autorisé.
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.16.0 : prières, bénédictions et miracles V5 (livre de base et suppléments) en plus des talents et de la magie.
 
 Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 
@@ -129,3 +129,7 @@ Le chantier courant conserve 277 contrats et un catalogue aligné sur la feuille
 ## Historique du chantier V5 : magie 3.14.0
 
 La finalisation locale et le périmètre restant sont consignés dans [le bilan de magie](docs/lot3/LOT3_FINALISATION_MAGIE.md), avec [la recette 3.5](docs/lot3/LOT3_RECETTE_3_5.md). Les ingrédients sont exclus ; les 15 miracles sont seulement inventoriés. Le paquet de travail reste local et non publié.
+
+## Prières, bénédictions et miracles V5 (3.16.0)
+
+72 bénédictions (12 cultes) et 128 miracles (livre de base V5 et suppléments Archives of the Empire 3, Deft Steps Light Fingers, Power Behind the Throne Companion, Lustria, Up in Arms) sont déclarés par contrat sourcé dans le panneau « Prières divines » de Jouer. 49 miracles appliquent automatiquement leurs effets chiffrables (statuts « assisté » et « implémenté ») ; le reste s'affiche avec ses clauses et ses rappels MJ. Les 9 miracles de Myrmidia issus d'Up in Arms restent bloqués en attendant les arbitrages d'adaptation V4 vers V5 ([propositions](docs/divin/DIVIN_UP_IN_ARMS_ADAPTATIONS.md)). Cadrage : [docs/divin/PRIERES_CADRAGE_RESSERRE.md](docs/divin/PRIERES_CADRAGE_RESSERRE.md). Régénération des contrats : `node tools/build-v5-divine-contracts.mjs` puis `--check`.

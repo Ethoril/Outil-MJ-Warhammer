@@ -4,7 +4,7 @@
 
 Application **3.15.0**, branche **codex/lot2-talents-v5**, HEAD **fb0f280150cdbdab1af220163abfaa491e2156ee**. Travail non commité ; main E:/Outil MJ Warhammer sur 08ce45d. [Rapport courant](LOT3_RAPPORT_CLOTURE.md), [recette 3.15](LOT3_RECETTE_3_15.md), [journal pour le MJ](LOT3_JOURNAL_3_15_0.md).
 
-Les lots de contrats 1 à 5B et le catalogue V5 ont reçu leurs corrections et retours. Le suivi courant porte **277 sorts : 165 conformes aux scénarios, 49 avec données MJ nécessaires, 63 rappels**. Ces statuts décrivent le traitement et les preuves nommées, pas une certification de toutes les situations de campagne.
+Les lots de contrats 1 à 5B et le catalogue V5 ont reçu leurs corrections et retours. Le suivi courant porte **277 sorts : 147 conformes aux scénarios, 49 avec données MJ nécessaires, 81 rappels**. Ces statuts décrivent le traitement et les preuves nommées, pas une certification de toutes les situations de campagne.
 
 Les **54 clauses de suivi des talents** sont réparties en **9 conformes, 18 avec données MJ nécessaires, 5 rappels, 22 hors périmètre, 0 anomalie, 0 non vérifié**. Imprégné magic:2 et L’esprit sur le corps magic:2 sont maintenant « donnée MJ nécessaire » ; Résistance à la Magie magic:2 est conforme aux scénarios D-07. [Preuves de clôture](LOT3_PREUVES_CLOTURE.json). Chance reste l’adaptation V5 locale du Resolve de HEPG p.101, explicitement distincte de la source V4.
 
