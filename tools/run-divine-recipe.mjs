@@ -23,6 +23,7 @@ const commands=[
  ['divine-ui',node,['tests/divin-v5-browser.mjs']],
  ['source-ui',node,['tests/divin-v5-source-browser-independent.mjs']],
  ['form-ui',node,['tests/divin-v5-e3-e4-form-independent.mjs']],
+ ['prayer-form-ui',node,['tests/divin-v5-t5-browser.mjs']],
  ['time-ui',node,['tests/divin-v5-e5-browser-independent.mjs']],
  ['campaign-ui',node,['tests/divin-v5-campaign-browser.mjs']],
  ['campaign-ui-independent',node,['tests/divin-v5-campaign-ui-independent.mjs']],

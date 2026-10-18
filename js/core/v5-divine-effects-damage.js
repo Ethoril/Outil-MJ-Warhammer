@@ -203,6 +203,7 @@ function damageReceipt(effect, { targetId, actor }, result) {
   if (result.bonuses.fixed) parts.push(`${result.bonuses.fixed} fixe`);
   if (result.bonuses.characteristic) parts.push(`+${result.bonuses.characteristic} (caractéristique)`);
   if (result.DR && result.bonuses.successLevels) parts.push(`${result.DR} DR`);
+  if (result.bonuses.conditional) parts.push(`bonus ciblé +${result.bonuses.conditional}`);
   if (result.rawDamage !== undefined) parts.push(`BE ${result.be}, PA ${result.ap}${result.location ? ' (' + result.location + ')' : ''}`);
   if (result.bonuses.holyHatred) parts.push(`Haine sacrée +${result.bonuses.holyHatred}`);
   return { targetId, type: effect.type, result: clone(result),

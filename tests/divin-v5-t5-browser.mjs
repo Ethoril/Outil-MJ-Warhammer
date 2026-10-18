@@ -93,7 +93,7 @@ try{
  await panel.locator('.workspace-divine-receipt').waitFor();
  assert.match(await panel.locator('.workspace-divine-receipt').innerText(),/Goule : 8 Blessure\(s\) perdue\(s\)/);
  const log=(await fullState()).log.map(row=>row.text);
- assert.ok(log.some(line=>/ghoul perd 8 Blessure\(s\) \(1d10 = 6, 2 DR\)/.test(line)),'le journal garde dés, DR et Blessures perdues');
+ assert.ok(log.some(line=>/ghoul perd 8 Blessure\(s\) \(1d10 = 6, bonus ciblé \+2\)/.test(line)),'le journal garde dés, bonus et Blessures perdues');
  check('Dégâts directs : jet commun et jet propre saisis, projection nommée, application, reçu et journal avec dé, DR et Blessures perdues');
  await page.getByRole('button',{name:'Annuler',exact:true}).click();
  await waitFor(async()=>(await person('ghoul')).hp===20&&(await person('ally')).hp===20,'Annuler');
