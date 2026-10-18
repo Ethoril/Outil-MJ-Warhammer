@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:b02b59b84cba19a0f7ef84e499b66b1a666c4e623f98417856ce8c1a979f2c8e",
+  "sourceFingerprint": "sha256:f5acfc9d3fcab0a32841e73b78ab7dfabc46381f5dc326572f7db5ed04e233be",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -8148,7 +8148,7 @@
       "type": "miracle",
       "name": "Masque mortuaire",
       "deity": "Morr",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -8210,7 +8210,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Peur (1)"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Death Mask",
         "effect": "Le visage du prêtre devient cadavérique et il gagne le Trait Peur (Fear). Les morts-vivants n’en sont pas immunisés, quels que soient leurs Talents, Traits (Construct compris) ou autres effets.",
@@ -8219,7 +8232,7 @@
       "clauses": [
         {
           "id": "fear",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Le prêtre gagne Peur (Fear) pendant la durée.",
           "sourceRef": "v5-death-mask"
         },
@@ -9148,7 +9161,7 @@
       "type": "miracle",
       "name": "Grâce de Ranald",
       "deity": "Ranald",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -9211,7 +9224,35 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "Ag",
+          "value": 10,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-catfall",
+              "name": "Chute féline",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Ranald's Grace",
         "effect": "La cible gagne +10 en Agilité, +10 en Discrétion (Stealth) et le Talent Chute féline (Catfall) +1 pendant la durée.",
@@ -9232,7 +9273,7 @@
         },
         {
           "id": "catfall",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible gagne +1 niveau du Talent Chute féline (Catfall) pendant la durée.",
           "sourceRef": "v5-ranald-s-grace"
         }
@@ -10157,7 +10198,7 @@
       "type": "miracle",
       "name": "Endurance de l’anachorète",
       "deity": "Shallya",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -10222,7 +10263,30 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Impassible"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "special-state",
+          "ignoreConditionPenalties": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Anchorite's Endurance",
         "effect": "La cible ne ressent plus la douleur, gagne le Trait de créature Impassible (Painless) et ne subit aucune pénalité due aux États, pendant la durée.",
@@ -10231,14 +10295,14 @@
       "clauses": [
         {
           "id": "painless-trait",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible gagne le Trait de créature Painless pendant la durée.",
           "sourceRef": "v5-anchorite-s-endurance"
         },
         {
           "id": "condition-penalties",
-          "mode": "manual",
-          "text": "La cible ne subit aucune pénalité causée par les États (les États restent présents).",
+          "mode": "engine",
+          "text": "La cible ne subit aucune pénalité causée par les États (les États restent présents) ; Inconscient et Surpris gardent leurs restrictions.",
           "sourceRef": "v5-anchorite-s-endurance"
         },
         {
@@ -10867,6 +10931,29 @@
           "duration": {
             "unit": "instant"
           }
+        },
+        {
+          "type": "special-state",
+          "fearImmune": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Peur (1)"
+          ],
+          "casterOnly": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "labels": {
@@ -10883,13 +10970,13 @@
         },
         {
           "id": "fearless",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Ils gagnent le talent Fearless (Everything) tant que le miracle dure et que le prêtre reste dans leur ligne de vue.",
           "sourceRef": "v5-beacon-of-righteous-virtue"
         },
         {
           "id": "fear-greenskins",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Le prêtre cause la Peur chez les orques et les gobelins.",
           "sourceRef": "v5-beacon-of-righteous-virtue"
         },
@@ -11026,7 +11113,7 @@
       "type": "miracle",
       "name": "Marteau ardent de Sigmar",
       "deity": "Sigmar",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -11088,7 +11175,24 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "damageFrom": "Soc",
+          "hitConditions": [
+            "Enflammé"
+          ],
+          "designatedWeapon": true,
+          "weaponClass": "marteau de guerre",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Sigmar's Fiery Hammer",
         "effect": "Si vous maniez un marteau de guerre, il compte comme Magique, inflige +Bonus de Sociabilité Dégâts, et toute cible frappée reçoit +1 État Enflammé.",
@@ -11103,19 +11207,19 @@
         },
         {
           "id": "magical",
-          "mode": "manual",
+          "mode": "engine",
           "text": "L’arme compte comme Magique.",
           "sourceRef": "v5-sigmar-s-fiery-hammer"
         },
         {
           "id": "damage-bonus",
-          "mode": "manual",
-          "text": "L’arme inflige +Bonus de Sociabilité Dégâts (bonus de dégâts d’arme non géré par le moteur).",
+          "mode": "engine",
+          "text": "L’arme inflige +Bonus de Sociabilité Dégâts.",
           "sourceRef": "v5-sigmar-s-fiery-hammer"
         },
         {
           "id": "ablaze-on-hit",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Toute cible frappée reçoit +1 État Enflammé (Ablaze).",
           "sourceRef": "v5-sigmar-s-fiery-hammer"
         },
@@ -11543,7 +11647,7 @@
       "type": "miracle",
       "name": "Instincts animaux",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -11606,7 +11710,24 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-acute-sense",
+              "name": "Sens aiguisé",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Animal Instincts",
         "effect": "Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d'elle-même dès qu'une menace s'approche à moins de sa valeur de Perception en yards.",
@@ -11615,7 +11736,7 @@
       "clauses": [
         {
           "id": "acute-sense-plus-1",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "La cible gagne +1 au talent Sens aiguisé pour le sens choisi (talent temporaire).",
           "sourceRef": "v5-animal-instincts"
         },
@@ -11627,7 +11748,7 @@
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets au terme de la durée (Bonus de Sociabilité heures).",
           "sourceRef": "v5-animal-instincts"
         }
@@ -11763,7 +11884,7 @@
       "type": "miracle",
       "name": "Bondissant comme un cerf",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -11825,7 +11946,35 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "M",
+          "value": 1,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-strong-legs",
+              "name": "Jambes solides",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Leaping Stag",
         "effect": "Vous gagnez +1 Mouvement et le talent Jambes solides à +1, et réussissez automatiquement tous les tests d'Athlétisme faits pour sauter.",
@@ -11834,13 +11983,13 @@
       "clauses": [
         {
           "id": "movement-plus-1",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Caractéristique Mouvement +1 pendant la durée.",
           "sourceRef": "v5-leaping-stag"
         },
         {
           "id": "strong-legs-plus-1",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Talent Jambes solides +1 (temporaire).",
           "sourceRef": "v5-leaping-stag"
         },
@@ -12089,7 +12238,7 @@
       "type": "miracle",
       "name": "Dent et griffe",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12151,7 +12300,39 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-actions",
+          "actions": [
+            {
+              "id": "bite",
+              "name": "Morsure",
+              "damageFormula": "BF+3"
+            },
+            {
+              "id": "weapon",
+              "name": "Arme",
+              "damageFormula": "BF+4"
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Tooth and Claw",
         "effect": "Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Arme (Bonus de Force + 4); vos attaques sont Magiques.",
@@ -12160,29 +12341,24 @@
       "clauses": [
         {
           "id": "bite",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Trait Morsure (Bonus de Force + 3) pendant la durée.",
           "sourceRef": "v5-tooth-and-claw"
         },
         {
           "id": "weapon",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Trait Arme (Bonus de Force + 4) pendant la durée.",
           "sourceRef": "v5-tooth-and-claw"
         },
         {
           "id": "magical",
-          "mode": "manual",
-          "text": "Les attaques sont Magiques.",
+          "mode": "engine",
+          "text": "Les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).",
           "sourceRef": "v5-tooth-and-claw"
         }
       ],
-      "needsInput": [
-        {
-          "field": "attack-scope",
-          "label": "Portée de « Leurs attaques sont Magiques » : toutes les attaques du prêtre ou seulement Morsure/Arme (le texte dit « Their attacks »)."
-        }
-      ]
+      "needsInput": []
     },
     {
       "id": "divine:miracle:ulric:hoarfrost-s-chill",
@@ -12750,7 +12926,7 @@
       "type": "miracle",
       "name": "Morsure de l'hiver",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12812,7 +12988,29 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "value": 0,
+          "perSuccessLevels": {
+            "every": 1,
+            "add": 1,
+            "field": "value"
+          },
+          "hitConditions": [
+            "Exténué"
+          ],
+          "designatedWeapon": true,
+          "weaponClass": "hache",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Winter's Bite",
         "effect": "Si vous maniez une hache, elle devient Magique et inflige +DR Dégâts; toute cible touchée gagne l'État Fatigué. Les cibles touchées perdent leurs États Hémorragique (le sang gèle), et votre hache ne peut pas en causer.",
@@ -12821,19 +13019,19 @@
       "clauses": [
         {
           "id": "magical",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La hache brandie est considérée comme Magique.",
           "sourceRef": "v5-winter-s-bite"
         },
         {
           "id": "damage-plus-sl",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "+DR Dégâts avec la hache.",
           "sourceRef": "v5-winter-s-bite"
         },
         {
           "id": "fatigued",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "Toute cible touchée gagne un État Fatigué.",
           "sourceRef": "v5-winter-s-bite"
         },
@@ -12851,7 +13049,7 @@
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-winter-s-bite"
         }
@@ -13463,7 +13661,7 @@
       "type": "miracle",
       "name": "Sagesse de la chouette",
       "deity": "Verena",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -13536,6 +13734,33 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-acute-sense",
+              "name": "Sens aiguisé",
+              "specialization": "Vue",
+              "rank": 1
+            },
+            {
+              "id": "talent-menacing",
+              "name": "Menaçant",
+              "rank": 1
+            },
+            {
+              "id": "talent-night-vision",
+              "name": "Vision nocturne",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "labels": {
@@ -13558,25 +13783,25 @@
         },
         {
           "id": "acute-sense-sight",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Talent Sens aiguisé (Vue) +1 temporaire.",
           "sourceRef": "v5-wisdom-of-the-owl"
         },
         {
           "id": "menacing",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Talent Menaçant temporaire.",
           "sourceRef": "v5-wisdom-of-the-owl"
         },
         {
           "id": "night-vision",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Talent Vision nocturne temporaire.",
           "sourceRef": "v5-wisdom-of-the-owl"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-wisdom-of-the-owl"
         }

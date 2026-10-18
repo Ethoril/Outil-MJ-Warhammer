@@ -15,8 +15,9 @@ export const miracles = [
     printedPage: 227,
     summary: 'Pendant la durée, la cible touchée gagne le talent Sens aiguisé (un sens au choix) à +1. Si elle se repose, elle se réveille d\'elle-même dès qu\'une menace s\'approche à moins de sa valeur de Perception en yards.',
     params: { range: { kind: 'special' }, targets: one, duration: felHours },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
+    effects: [{ type: 'grant-talent', talents: [{ id: 'talent-acute-sense', name: 'Sens aiguisé', rank: 1 }] }],
     targetRules: [],
     needsInput: [
       { id: 'range-touch', text: 'Portée « Toucher » : contact avec la cible à confirmer par le MJ.' },
@@ -24,9 +25,9 @@ export const miracles = [
       { id: 'threat', text: 'Ce qui compte comme une menace approchant à moins de Perception yards (décision MJ).' }
     ],
     clauses: [
-      { id: 'acute-sense-plus-1', mode: 'manual', text: 'La cible gagne +1 au talent Sens aiguisé pour le sens choisi (talent temporaire).' },
+      { id: 'acute-sense-plus-1', mode: 'assisted', text: 'La cible gagne +1 au talent Sens aiguisé pour le sens choisi (talent temporaire).' },
       { id: 'rest-awakening', mode: 'manual', text: 'En repos, la cible se réveille automatiquement si une menace entre à moins de Perception yards.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets au terme de la durée (Bonus de Sociabilité heures).' }
+      { id: 'end', mode: 'engine', text: 'Fin des effets au terme de la durée (Bonus de Sociabilité heures).' }
     ],
     sourceDelta: 'Portée imprimée « Touch » : la grammaire params n\'a pas de contact, encodée en special.'
   },
@@ -57,15 +58,19 @@ export const miracles = [
     printedPage: 227,
     summary: 'Vous gagnez +1 Mouvement et le talent Jambes solides à +1, et réussissez automatiquement tous les tests d\'Athlétisme faits pour sauter.',
     params: { range: self, targets: self, duration: felRounds },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
+    effects: [
+      { type: 'characteristic-modifier', characteristic: 'M', value: 1 },
+      { type: 'grant-talent', talents: [{ id: 'talent-strong-legs', name: 'Jambes solides', rank: 1 }] }
+    ],
     targetRules: [],
     needsInput: [
       { id: 'leap-test', text: 'Quels tests d\'Athlétisme sont des sauts (réussite automatique) : décision MJ.' }
     ],
     clauses: [
-      { id: 'movement-plus-1', mode: 'manual', text: 'Caractéristique Mouvement +1 pendant la durée.' },
-      { id: 'strong-legs-plus-1', mode: 'manual', text: 'Talent Jambes solides +1 (temporaire).' },
+      { id: 'movement-plus-1', mode: 'engine', text: 'Caractéristique Mouvement +1 pendant la durée.' },
+      { id: 'strong-legs-plus-1', mode: 'engine', text: 'Talent Jambes solides +1 (temporaire).' },
       { id: 'auto-leap', mode: 'manual', text: 'Les tests d\'Athlétisme pour sauter réussissent automatiquement.' }
     ]
   },
@@ -115,16 +120,18 @@ export const miracles = [
     printedPage: 228,
     summary: 'Vous gagnez les Traits de créature Morsure (Bonus de Force + 3) et Arme (Bonus de Force + 4); vos attaques sont Magiques.',
     params: { range: self, targets: self, duration: felRounds },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
-    targetRules: [],
-    needsInput: [
-      { id: 'attack-scope', text: 'Portée de « Leurs attaques sont Magiques » : toutes les attaques du prêtre ou seulement Morsure/Arme (le texte dit « Their attacks »).' }
+    effects: [
+      { type: 'grant-actions', actions: [{ id: 'bite', name: 'Morsure', damageFormula: 'BF+3' }, { id: 'weapon', name: 'Arme', damageFormula: 'BF+4' }] },
+      { type: 'weapon-bonus', magical: true }
     ],
+    targetRules: [],
+    needsInput: [],
     clauses: [
-      { id: 'bite', mode: 'manual', text: 'Trait Morsure (Bonus de Force + 3) pendant la durée.' },
-      { id: 'weapon', mode: 'manual', text: 'Trait Arme (Bonus de Force + 4) pendant la durée.' },
-      { id: 'magical', mode: 'manual', text: 'Les attaques sont Magiques.' }
+      { id: 'bite', mode: 'engine', text: 'Trait Morsure (Bonus de Force + 3) pendant la durée.' },
+      { id: 'weapon', mode: 'engine', text: 'Trait Arme (Bonus de Force + 4) pendant la durée.' },
+      { id: 'magical', mode: 'engine', text: 'Les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).' }
     ],
     sourceDelta: 'Le texte imprimé dit « Their attacks are Magical » : portée exacte (attaques de ces Traits ou toutes) ambiguë.'
   }

@@ -122,9 +122,12 @@ export const miracles = [
     printedPage: 229,
     summary: 'Vous gagnez +20 en Intelligence et pouvez demander au MJ l\'issue la plus probable d\'une de vos décisions immédiates, compte tenu des faits connus. Vos pupilles se dilatent et votre regard devient perçant : vous gagnez les talents Sens aiguisé (Vue) à +1, Menaçant et Vision nocturne.',
     params: { range: self, targets: self, duration: felRounds },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
-    effects: [{ type: 'characteristic-modifier', characteristic: 'Int', value: 20 }],
+    effects: [
+      { type: 'characteristic-modifier', characteristic: 'Int', value: 20 },
+      { type: 'grant-talent', talents: [{ id: 'talent-acute-sense', name: 'Sens aiguisé', specialization: 'Vue', rank: 1 }, { id: 'talent-menacing', name: 'Menaçant', rank: 1 }, { id: 'talent-night-vision', name: 'Vision nocturne', rank: 1 }] }
+    ],
     targetRules: [],
     needsInput: [
       { id: 'decision', text: 'Décision immédiate soumise au MJ pour connaître l\'issue la plus probable (une seule).' }
@@ -132,10 +135,10 @@ export const miracles = [
     clauses: [
       { id: 'int-plus-20', mode: 'engine', text: 'Intelligence +20 pendant la durée (type characteristic-modifier).' },
       { id: 'likely-outcome', mode: 'manual', text: 'Question au MJ sur l\'issue la plus probable d\'une décision immédiate, avec les faits connus du personnage.' },
-      { id: 'acute-sense-sight', mode: 'manual', text: 'Talent Sens aiguisé (Vue) +1 temporaire.' },
-      { id: 'menacing', mode: 'manual', text: 'Talent Menaçant temporaire.' },
-      { id: 'night-vision', mode: 'manual', text: 'Talent Vision nocturne temporaire.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'acute-sense-sight', mode: 'assisted', text: 'Talent Sens aiguisé (Vue) +1 temporaire.' },
+      { id: 'menacing', mode: 'engine', text: 'Talent Menaçant temporaire.' },
+      { id: 'night-vision', mode: 'assisted', text: 'Talent Vision nocturne temporaire.' },
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
     sourceDelta: 'Seul +20 Int est un effet moteur; les trois talents temporaires et la question au MJ ne le sont pas, donc statut manual. « effects » transmet le modificateur pour le jour où les talents temporaires seront gérés.'
   }

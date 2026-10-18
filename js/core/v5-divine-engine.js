@@ -333,14 +333,14 @@ const layerId = (executionId, targetId, contract, effect, ordinal = 0) =>
   `${executionId}:${targetId}:${contract.id}:${effect.type}${ordinal ? ':' + (ordinal + 1) : ''}`;
 const sameTypeOrdinal = (effects, index) => effects.slice(0, index).filter(row => row.type === effects[index].type).length;
 
-function effectLayer(effect, { contract, actorId, targetId, executionId, expiry, clockAnchor, ordinal = 0 }) {
+function effectLayer(effect, { contract, actorId, targetId, executionId, expiry, clockAnchor, ordinal = 0, input }) {
   const layer = {
     id: layerId(executionId, targetId, contract, effect, ordinal),
     executionId, prayerId: contract.id, casterId: actorId, targetId,
     source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt),
     type: effect.type, expiry: clone(expiry)
   };
-  Object.assign(layer, effectHandler(effect.type)?.buildLayer?.(effect, { contract, actorId, targetId, executionId }));
+  Object.assign(layer, effectHandler(effect.type)?.buildLayer?.(effect, { contract, actorId, targetId, executionId, input }));
   if (effect.duration) layer.duration = clone(effect.duration);
   else if (Number.isSafeInteger(effect.durationRounds)) layer.duration = { value: effect.durationRounds, unit: 'rounds' };
   // Durée en minutes/heures/jours : échéance calendaire absolue ancrée sur l'horloge de l'aperçu, sans échéance de Round.
@@ -537,7 +537,7 @@ export function applyDivineExecution(state, contract, input = {}) {
       // clones into `next`; otherwise resolving Wrath below can mutate the
       // original caster when a different participant is the prayer's target.
       if (!appliedTargets.some(target => target.id === participant.id)) return clone(participant);
-      const layers = layerEffects.map((effect, index) => effectLayer(effect, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry || null, clockAnchor: input.clockAnchor, ordinal: sameTypeOrdinal(layerEffects, index) }));
+      const layers = layerEffects.map((effect, index) => effectLayer(effect, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry || null, clockAnchor: input.clockAnchor, ordinal: sameTypeOrdinal(layerEffects, index), input }));
       if (timedManual && !layers.length) layers.push(effectLayer({ type: 'manual-prayer-reminder', duration: manualCalendarDuration || clone(activeDuration) }, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry, clockAnchor: input.clockAnchor }));
       const updated = clone(participant);
       updated.extensions ||= {}; updated.extensions.v5 ||= {};

@@ -83,6 +83,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   const kind = settings.kind || (defending ? (/^(?:Ag|Esquive|Dodge)$/i.test(action.label) ? 'test' : 'melee') : inferV5Kind(action, normalized.attackContext));
   const levels = conditionLevels(actor), targetLevels = conditionLevels(target);
+  // Endurance de l'anachorète (p. 226) : malus et Désavantages d'États ignorés ; Inconscient, Surpris et la vue exigée restent des restrictions.
+  const ignoreConditions = actor.extensions?.v5?.specialStates?.ignoreConditionPenalties === true;
   const talentRole=defending?'defender':['attack','attaque'].includes(action.type)?'attacker':'actor';
   const contact=contactWeapon(normalized,actor,action,settings);action=contact.action;
   const talentModifiers=previewV5TalentTestModifiers(actor,{action,settings,kind,role:talentRole});
@@ -149,11 +151,11 @@ export function buildCombatTest(normalized, role = 'actor') {
     else if(!context.relatedToDebate)modifiers.push({id:'talent:argumentative',label:'Dispute sans rapport avec le Test',amount:-3,talentOrigins:[debate.source]});
   }
   const movement = kind === 'melee' ? true : context.involvesMovement;
-  if (levels.has('enchevetre')) {
+  if (levels.has('enchevetre') && !ignoreConditions) {
     if (movement == null) unresolved.push('Préciser si le Test implique un mouvement.');
     if (movement) relevant.set('enchevetre', levels.get('enchevetre'));
   }
-  if (levels.has('brise')) {
+  if (levels.has('brise') && !ignoreConditions) {
     const escape = kind !== 'test' ? false : context.runningOrHiding;
     if (escape == null) unresolved.push('Préciser si le Test sert à fuir ou se cacher.');
     if (escape === false) relevant.set('brise', levels.get('brise'));
@@ -163,20 +165,21 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(defending && (normalized.actor?.states || []).some(s=>s.source?.coldBreath && /extenue|fatigued/i.test(s.key || s.name)))modifiers.push({id:'spell-cold-defense',label:'Défense contre le Souffle froid',amount:1});
   if(flags?.clarityOfThought && mental) { relevant.set('sonne',0); for(let i=modifiers.length-1;i>=0;i--) if(modifiers[i].amount<0 && /psychology|mental.?mutation|mutation.?mental/i.test(modifiers[i].id)) modifiers.splice(i,1); }
   if(flags?.blockedSkillFamilies?.includes('language') && /langue|language/i.test(skillLabel) || flags?.blockedSkillFamilies?.includes('lore') && /savoir|lore|connaissance/i.test(skillLabel)) restrictions.push('Forme sauvage : Langues et Savoirs indisponibles.');
+  if (ignoreConditions) relevant.clear();
   const penalty = Math.max(0, ...relevant.values());
   const conditionDisadvantages = new Map();
-  if (levels.has('aterre')) {
+  if (levels.has('aterre') && !ignoreConditions) {
     if (movement == null) unresolved.push('Préciser si le Test implique un mouvement.');
     if (movement) conditionDisadvantages.set('prone', [{ id: 'prone', label: 'À terre' }]);
   }
   if (levels.has('aveugle')) {
     if (kind === 'ranged') restrictions.push('Un combattant Aveuglé ne peut pas effectuer de tir.');
-    if (kind === 'melee') conditionDisadvantages.set('blinded', Array.from({ length: levels.get('aveugle') }, (_, i) => ({ id: `blinded-${i}`, label: 'Aveuglé' })));
+    if (kind === 'melee' && !ignoreConditions) conditionDisadvantages.set('blinded', Array.from({ length: levels.get('aveugle') }, (_, i) => ({ id: `blinded-${i}`, label: 'Aveuglé' })));
     if (kind === 'test' && context.requiresSight === true) restrictions.push('Ce Test exige la vue : un combattant Aveuglé ne peut pas l’effectuer.');
-    if (kind === 'test' && context.reliesOnSight == null && context.requiresSight !== true) unresolved.push('Préciser si le Test repose sur la vue.');
-    if (kind === 'test' && context.reliesOnSight && context.requiresSight !== true) conditionDisadvantages.set('blinded', Array.from({ length: levels.get('aveugle') }, (_, i) => ({ id: `blinded-${i}`, label: 'Aveuglé' })));
+    if (kind === 'test' && context.reliesOnSight == null && context.requiresSight !== true && !ignoreConditions) unresolved.push('Préciser si le Test repose sur la vue.');
+    if (kind === 'test' && context.reliesOnSight && context.requiresSight !== true && !ignoreConditions) conditionDisadvantages.set('blinded', Array.from({ length: levels.get('aveugle') }, (_, i) => ({ id: `blinded-${i}`, label: 'Aveuglé' })));
   }
-  if (levels.has('souille')) {
+  if (levels.has('souille') && !ignoreConditions) {
     const fellowship = kind !== 'test' ? false : action.attr === 'Soc' ? true : context.usesFellowship;
     if (fellowship == null) unresolved.push('Préciser si le Test utilise la Sociabilité.');
     if (fellowship) conditionDisadvantages.set('besmirched', [{ id: 'besmirched', label: 'Souillé' }]);

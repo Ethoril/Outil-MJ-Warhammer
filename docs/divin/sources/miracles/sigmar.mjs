@@ -11,12 +11,15 @@ export const miracles = [
     name: 'Flambeau de Vertu', canonicalName: 'Beacon of Righteous Virtue', printedPage: 226,
     summary: 'Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Intrépide (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.',
     params: { range: { kind: 'self' }, targets: { kind: 'special' }, duration: rounds },
-    status: 'assisted', effects: [{ type: 'remove-condition', key: 'Broken', amount: 'all', duration: { unit: 'instant' } }], targetRules: ['ally', 'seesPriest'],
+    status: 'assisted',
+    effect: null,
+    effects: [{ type: 'remove-condition', key: 'Broken', amount: 'all', duration: { unit: 'instant' } }, { type: 'special-state', fearImmune: true }, { type: 'grant-trait', traits: ['Peur (1)'], casterOnly: true }],
+    targetRules: ['ally', 'seesPriest'],
     needsInput: [{ id: 'allies-in-sight', text: 'Alliés qui vous voient, et suivi de la ligne de vue pendant la durée.' }, { id: 'broken-conditions', text: 'États Brisé à retirer chez chaque allié.' }, { id: 'greenskins', text: 'Orques et gobelins affectés par la Peur.' }],
     clauses: [
       { id: 'remove-broken', mode: 'engine', text: 'Les alliés qui vous voient retirent immédiatement tous leurs États Brisé.' },
-      { id: 'fearless', mode: 'manual', text: 'Ils gagnent le talent Fearless (Everything) tant que le miracle dure et que le prêtre reste dans leur ligne de vue.' },
-      { id: 'fear-greenskins', mode: 'manual', text: 'Le prêtre cause la Peur chez les orques et les gobelins.' },
+      { id: 'fearless', mode: 'assisted', text: 'Ils gagnent le talent Fearless (Everything) tant que le miracle dure et que le prêtre reste dans leur ligne de vue.' },
+      { id: 'fear-greenskins', mode: 'assisted', text: 'Le prêtre cause la Peur chez les orques et les gobelins.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ],
     sourceDelta: 'Le livre ne précise pas si le prêtre est compté parmi les alliés, ni la portée de la ligne de vue; portée et cible imprimées : Vous / Vous.'
@@ -38,13 +41,16 @@ export const miracles = [
     name: 'Marteau ardent de Sigmar', canonicalName: "Sigmar's Fiery Hammer", printedPage: 227,
     summary: 'Si vous maniez un marteau de guerre, il compte comme Magique, inflige +Bonus de Sociabilité Dégâts, et toute cible frappée reçoit +1 État Enflammé.',
     params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: rounds },
-    status: 'manual', effect: null, targetRules: [],
+    status: 'assisted',
+    effect: null,
+    effects: [{ type: 'weapon-bonus', magical: true, damageFrom: 'Soc', hitConditions: ['Enflammé'], designatedWeapon: true, weaponClass: 'marteau de guerre' }],
+    targetRules: [],
     needsInput: [{ id: 'warhammer', text: 'Le prêtre manie-t-il un marteau de guerre ?' }, { id: 'hits', text: 'Cibles frappées par le marteau pendant la durée (pour l’État Enflammé).' }],
     clauses: [
       { id: 'weapon-restriction', mode: 'manual', text: 'Seul un marteau de guerre manié par le prêtre est concerné.' },
-      { id: 'magical', mode: 'manual', text: 'L’arme compte comme Magique.' },
-      { id: 'damage-bonus', mode: 'manual', text: 'L’arme inflige +Bonus de Sociabilité Dégâts (bonus de dégâts d’arme non géré par le moteur).' },
-      { id: 'ablaze-on-hit', mode: 'manual', text: 'Toute cible frappée reçoit +1 État Enflammé (Ablaze).' },
+      { id: 'magical', mode: 'engine', text: 'L’arme compte comme Magique.' },
+      { id: 'damage-bonus', mode: 'engine', text: 'L’arme inflige +Bonus de Sociabilité Dégâts.' },
+      { id: 'ablaze-on-hit', mode: 'engine', text: 'Toute cible frappée reçoit +1 État Enflammé (Ablaze).' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ]
   },

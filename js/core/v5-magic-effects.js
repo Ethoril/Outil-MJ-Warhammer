@@ -16,6 +16,7 @@ import { HIT_LOCATIONS } from '../data/shared/fiche/equipment.js';
 import { normalizeArmorLocations, locationProtection } from './equipment.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 import { isTargetDaemon, isTargetUndead } from './v5-magic-attributes.js';
+import { projectDivineGear } from './v5-divine-effects-gear.js';
 
 export const V5_MAGIC_EFFECTS_VERSION = 'v5-magic-effects-2026-10-10.1';
 /** Expressions chiffrées déclarées par un contrat ; aucun dé et aucune interprétation de prose. */
@@ -448,6 +449,7 @@ function recomputeLayerValues(next, effects) {
     v5.magicShieldBonusSl=Math.max(0,...effects.map(e=>Number(e.magicShieldBonusSl)||0));
     v5.damageCapToSlOnly=effects.some(e=>e.damageCapToSlOnly);
   }
+  projectDivineGear(next);
   return { effectiveWard, effectiveTestModifiers };
 }
 /** Impasse conserve la couche d'origine et son horloge ; seules ses valeurs sont momentanément inactives. */

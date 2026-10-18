@@ -7,7 +7,8 @@ export const paramUnits = new Set(['rounds', 'minutes', 'hours', 'days', 'yards'
 export const calendarDurationUnits = new Set(['minutes', 'hours', 'days']);
 
 // Types d'effet connus du moteur ; v5-divine-effect-handlers.js doit fournir un gestionnaire pour chacun.
-export const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
+export const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal',
+  'grant-trait', 'special-state', 'grant-actions', 'grant-talent', 'weapon-bonus', 'test-modifier']);
 effectTypes.add('direct-damage');
 
 // Source d'une force d'État : `{kind:'characteristic-bonus'|'characteristic', characteristic}` ou `{kind:'success-levels'}`.

@@ -58,7 +58,12 @@ export const miracles = [
   name: 'Grâce de Ranald', canonicalName: "Ranald's Grace", printedPage: 225,
   summary: 'La cible gagne +10 en Agilité, +10 en Discrétion (Stealth) et le Talent Chute féline (Catfall) +1 pendant la durée.',
   params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
-  status: 'manual', effect: null,
+  status: 'assisted',
+  effect: null,
+  effects: [
+   { type: 'characteristic-modifier', characteristic: 'Ag', value: 10 },
+   { type: 'grant-talent', talents: [{ id: 'talent-catfall', name: 'Chute féline', rank: 1 }] }
+  ],
   targetRules: [],
   needsInput: [
    { id: 'target', text: 'Quelle créature est touchée ?' },
@@ -67,7 +72,7 @@ export const miracles = [
   clauses: [
    { id: 'agility', mode: 'assisted', text: '+10 en Agilité pendant la durée (modificateur de caractéristique, appliquable par le moteur).' },
    { id: 'stealth', mode: 'manual', text: '+10 en Discrétion (compétence) pendant la durée, en plus du +10 d’Agilité.' },
-   { id: 'catfall', mode: 'manual', text: 'La cible gagne +1 niveau du Talent Chute féline (Catfall) pendant la durée.' }
+   { id: 'catfall', mode: 'engine', text: 'La cible gagne +1 niveau du Talent Chute féline (Catfall) pendant la durée.' }
   ],
   sourceDelta: 'Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) ; le moteur n’a pas de modificateur de compétence ni d’octroi temporaire de Talent, donc miracle manuel malgré la partie Agilité automatisable.'
  },
