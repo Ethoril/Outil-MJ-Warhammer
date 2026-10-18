@@ -2,6 +2,7 @@
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
+import {emptyDivineForm,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summarizeExecution,deadlineLines,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
 const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
@@ -23,8 +24,8 @@ function resolvedParamText(value){
  return unitText(value.value,value.unit);
 }
 export function createDivinePanel({Store,refresh}){
- let state={actorId:null,open:false,cult:'',targetIds:[],facts:{},choices:{range:0,targets:0,duration:0,effect:0}};
- function reset(actor){state={actorId:actor.id,open:state.open,cult:'',contractId:getAllDivineContracts().find(row=>row.type==='blessing')?.id,targetIds:[],facts:{},choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',canSpeak:null,accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
+ let state={actorId:null,open:false,cult:'',targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0}};
+ function reset(actor){state={actorId:actor.id,open:state.open,cult:'',contractId:getAllDivineContracts().find(row=>row.type==='blessing')?.id,targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',canSpeak:null,accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
  function change(key,value){state[key]=value;if(key!=='testOptionId')state.testOptionId='';state.preview=null;state.error='';refresh();}
  function invalidateEditedForm(input){
   const panel=input.closest('[data-divine-panel]');if(!panel)return;
@@ -45,23 +46,40 @@ export function createDivinePanel({Store,refresh}){
   const wrap=node('label','workspace-type',label),input=node('select');input.setAttribute('aria-label',label);input.dataset.focusKey='divine-'+(key||label);
   for(const [id,text] of options)input.append(new Option(text,id));input.value=value??'';input.addEventListener('change',()=>handler(input.value));wrap.append(input);container.append(wrap);return input;
  }
+ function formField(container,field,invalid){
+  const wrap=node('label','workspace-type',field.label),help=node('small','workspace-divine-help',field.help);help.id='divine-help-'+focusKey(field.id);
+  let input;
+  if(field.kind==='select'||field.kind==='tri'){
+   input=node('select');for(const [id,text] of field.kind==='tri'?[['','À préciser'],['true','Oui'],['false','Non']]:field.options)input.append(new Option(text,id));
+   input.value=fieldValue(state.form,field);if(field.empty)input.disabled=true;
+   input.addEventListener('change',()=>{setFieldValue(state.form,field,input.value);state.testOptionId='';state.preview=null;state.error='';refresh();});
+  }else if(field.kind==='check'){
+   input=node('input');input.type='checkbox';input.checked=fieldValue(state.form,field)===true;wrap.className='workspace-type workspace-recipient-check';
+   input.addEventListener('change',()=>{setFieldValue(state.form,field,input.checked);state.preview=null;state.error='';invalidateEditedForm(input);});
+  }else{
+   input=node('input');input.type='number';input.min=field.min??0;input.step='1';if(field.max!==undefined)input.max=field.max;input.value=fieldValue(state.form,field);
+   input.addEventListener('input',()=>{setFieldValue(state.form,field,input.value);state.testOptionId='';state.preview=null;state.error='';invalidateEditedForm(input);});
+  }
+  input.setAttribute('aria-label',field.label);input.setAttribute('aria-describedby',help.id);input.dataset.focusKey=focusKey(field.anchor);
+  if(invalid)input.setAttribute('aria-invalid','true');
+  wrap.append(input,help);container.append(wrap);return input;
+ }
+ function focusAnchor(panel,anchor){
+  const key=focusKey(anchor);const target=panel.querySelector('[data-focus-key="'+key+'"]')||panel.querySelector('[data-focus-key="divine-'+anchor+'"]');
+  if(target){target.scrollIntoView?.({block:'center'});target.focus();}
+ }
  const errorText=error=>error?.userFacing?error.message:(error?.message||'Commande divine non appliquée.');
  async function run(work){if(state.busy)return;state.busy=true;state.error='';refresh();try{await work();}catch(error){state.error=errorText(error);}finally{state.busy=false;refresh();}}
  function button(container,label,handler,disabled=false,key){const el=node('button','workspace-primary',label);el.type='button';el.disabled=disabled||state.busy;if(key)el.dataset.divineAction=key;el.addEventListener('click',handler);container.append(el);return el;}
  function prayerInput(actor,contract){
   const self=contract.params?.targets?.kind==='self' || contract.params?.sourceTarget==='You';
   const combat=Store.getCombat(),round=Number(combat.round)||1;
-  let duration=contract.params?.duration?.value;
-  if(contract.params?.duration?.characteristicBonus)duration=Math.floor(Number(actor.caracs?.[contract.params.duration.characteristicBonus])/10);
-  if(contract.params?.duration?.kind==='characteristic-bonus')duration=Math.floor(Number(actor.caracs?.[contract.params.duration.characteristic])/10);
-  if(contract.params?.duration?.formula==='BSoc' || /Fellowship Bonus/.test(contract.params?.duration?.sourceText||''))duration=Math.floor(Number(actor.caracs?.Soc)/10);
-  if(contract.type==='blessing')duration=(Number(duration)||6)+6*Number(state.choices.duration||0);
-  else if(Number.isFinite(duration))duration=duration*(1+Number(state.choices.duration||0));
-  const expiry=state.expiryPhase && Number.isSafeInteger(duration)&&duration>0?{phase:state.expiryPhase,round:round+duration-1,...(state.expiryPhase==='endOfTurn'?{actorId:actor.id}:{}),moment:'afterEffects'}:undefined;
-  return {actorId:actor.id,targetIds:self?[actor.id]:state.targetIds.slice(),roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
+  const targetIds=self?[actor.id]:state.targetIds.slice();
+  const expiry=buildExpiry({contract,actor,choices:state.choices,round,phase:state.expiryPhase,manualRounds:state.form.expiryRounds});
+  return {actorId:actor.id,targetIds,roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),
    testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
-   choices:clone(state.choices),facts:{targets:clone(state.facts)},...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
+   choices:clone(state.choices),...toEngineInput(state.form,{targetIds}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
  return {render(actor,participants=[]){
   if(!actor)return null;if(state.actorId!==actor.id)reset(actor);
@@ -74,8 +92,8 @@ export function createDivinePanel({Store,refresh}){
   for(const type of ['input','change','click'])panel.addEventListener(type,()=>{if(panel.open)state.open=true;},true);
   panel.append(node('summary','workspace-rubric','Prières divines · '+actor.name));
   const content=node('div','workspace-divine-content');panel.append(content);
-  if(cults.length>1)select(content,'Culte',state.cult,[['','Tous les cultes'],...cults.map(cult=>[cult,cult])],value=>{state.cult=value;state.targetIds=[];state.facts={};state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',(value?allContracts.filter(row=>row.deity===value):allContracts)[0]?.id);},'cult');
-  select(content,'Prière divine',contract.id,contracts.map(row=>[row.id,row.name+(row.type==='blessing'&&row.deity?' ('+row.deity+')':'')+' · '+(labels[row.status]||row.status)]),value=>{state.targetIds=[];state.facts={};state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',value);},'prayer');
+  if(cults.length>1)select(content,'Culte',state.cult,[['','Tous les cultes'],...cults.map(cult=>[cult,cult])],value=>{state.cult=value;state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',(value?allContracts.filter(row=>row.deity===value):allContracts)[0]?.id);},'cult');
+  select(content,'Prière divine',contract.id,contracts.map(row=>[row.id,row.name+(row.type==='blessing'&&row.deity?' ('+row.deity+')':'')+' · '+(labels[row.status]||row.status)]),value=>{state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',value);},'prayer');
   content.append(node('p','workspace-muted',(labels[contract.status]||contract.status)+' · '+(contract.deity||'Culte à préciser')));
   content.append(node('p','',contract.labels?.effect||''));
   if(contract.sourceDelta&&contract.status!=='blocked')content.append(node('p','workspace-muted','La règle V5 est présentée ici ; le texte du catalogue de consultation doit encore être actualisé.'));
@@ -143,34 +161,57 @@ export function createDivinePanel({Store,refresh}){
   const brokenVisibility=renderBrokenEscapeVisibilityControl({actor,value:state.brokenEscapeVisibility,onChange:value=>{state.brokenEscapeVisibility=value;state.preview=null;state.error='';refresh();},key:'prayer'});if(brokenVisibility)form.append(brokenVisibility);
   select(form,'Le personnage peut prononcer la prière',state.canSpeak===null?'':String(state.canSpeak),[['','À préciser'],['true','Oui'],['false','Non']],value=>change('canSpeak',value===''?null:value==='true'),'voice');
   field(form,'Jet de Prière (d100)','roll',{min:1,max:100});
-  const self=contract.params?.targets?.kind==='self'||contract.params?.sourceTarget==='You';
-  if(self)content.append(node('p','workspace-muted','Cible : le personnage priant.'));
-  else{
+  const effectTargets=isSelfTargeted(contract)?[actor]:participants.filter(row=>row.zone==='active'&&state.targetIds.includes(row.id));
+  const model=buildDivineForm(contract,{actor,targets:effectTargets,form:state.form,choices:state.choices}),descr=model.descr;
+  const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets}):[];
+  const blocking=new Set(needs.map(row=>row.anchor).filter(Boolean));
+  const factsGroup=(container,fields)=>{const group=node('div','workspace-divine-target-facts');for(const fact of fields)formField(group,fact,blocking.has(fact.anchor));container.append(group);};
+  if(descr.selfTargeted){
+   content.append(node('p','workspace-muted','Cible : le personnage priant.'));
+   if(model.factFields[actor.id])factsGroup(content,model.factFields[actor.id]);
+  }else{
    const targets=node('fieldset','workspace-resolution-row');targets.append(node('legend','','Destinataires de la prière'));
-   for(const participant of participants.filter(row=>row.zone==='active')){
+   if(descr.targetLimit!==null)targets.append(node('p','workspace-muted',`Jusqu’à ${descr.targetLimit} destinataire(s) avant extensions.`));
+   for(const [index,participant] of participants.filter(row=>row.zone==='active').entries()){
     const wrap=node('label','workspace-type'),check=node('input');check.type='checkbox';check.checked=state.targetIds.includes(participant.id);check.setAttribute('aria-label','Destinataire '+participant.name);
+    if(!index)check.dataset.focusKey='divine-targets';
     check.addEventListener('change',()=>{state.targetIds=check.checked?[...state.targetIds,participant.id]:state.targetIds.filter(id=>id!==participant.id);state.preview=null;refresh();});wrap.append(check,document.createTextNode(participant.name));targets.append(wrap);
-    if(check.checked){
-     const facts=state.facts[participant.id]||{},group=node('div','workspace-divine-target-facts');
-     const rules=[contract.params?.range?.kind==='touch'?['withinTouch','Cible à portée de contact']:['withinRange','Portée / zone confirmée'],...(contract.type==='miracle'&&contract.id.endsWith('soleil-flamboyant')?[['nonMyrmidian','Ne vénère pas Myrmidia'],['lookingAtPriest','Regarde le prêtre']]:[['ally','Allié admissible']])];
-     for(const [key,text] of rules)select(group,participant.name+' · '+text,facts[key]===undefined?'':String(facts[key]),[['','À préciser'],['true','Oui'],['false','Non']],value=>{state.facts[participant.id]={...facts,[key]:value===''?undefined:value==='true'};state.preview=null;refresh();},participant.id+'-'+key);
-     targets.append(group);
-    }
+    if(check.checked&&model.factFields[participant.id])factsGroup(targets,model.factFields[participant.id]);
    }
+   for(const text of model.warnings){const warning=node('p','workspace-field-error',text);warning.setAttribute('role','status');targets.append(warning);}
    content.append(targets);
   }
+  const durationField=model.effectFields.find(row=>row.id==='expiryRounds'),effectFields=model.effectFields.filter(row=>row!==durationField);
+  if(effectFields.length||model.info.length||model.notes.length){
+   const effects=node('fieldset','workspace-divine-effects');effects.append(node('legend','','Saisies des effets'));
+   for(const text of model.info)effects.append(node('p','workspace-muted',text));
+   for(const fieldDef of effectFields.filter(row=>row.scope==='global'))formField(effects,fieldDef,blocking.has(fieldDef.anchor));
+   for(const target of effectTargets){const rows=effectFields.filter(row=>row.targetId===target.id);if(!rows.length)continue;const group=node('div','workspace-divine-target-facts');for(const fieldDef of rows)formField(group,fieldDef,blocking.has(fieldDef.anchor));effects.append(group);}
+   if(model.notes.length)effects.append(node('p','workspace-muted','Conditions de cible à vérifier (rappels MJ) : '+model.notes.join(' · ')+'.'));
+   content.append(effects);
+  }
   const extension=node('details','workspace-v5-context-details');extension.append(node('summary','','Extensions de la prière'));
-  const declared=new Set((contract.extensions||[]).flatMap(row=>row.choices||[]).map(row=>row.param||Object.keys(row)[0]));
-  for(const [key,text] of [['range','Extensions de portée'],['targets','Extensions de destinataires'],['duration','Extensions de durée'],['effect','Extensions propres à l’effet']]){
-   if(!declared.has(key))continue;
-   const label=node('label','workspace-type',text),input=node('input');input.type='number';input.min='0';input.step='1';input.value=state.choices[key];input.setAttribute('aria-label',text);input.dataset.focusKey='divine-choice-'+key;
-   input.addEventListener('input',()=>{state.choices[key]=input.value===''?0:Number(input.value);state.preview=null;state.error='';invalidateEditedForm(input);});label.append(input);extension.append(label);
-  }content.append(extension);
-  const instant=contract.params?.duration?.unit==='instant'||contract.params?.duration?.kind==='instant';
-  if(!instant)select(content,'Fin de l’effet (choix du MJ)',state.expiryPhase,[['','À préciser'],['endOfTurn','Fin du Tour du prêtre'],['endOfRound','Fin de Round']],value=>change('expiryPhase',value),'expiry');
+  if(!model.extensions.length)extension.append(node('p','workspace-muted','Aucune extension (+2 DR) utilisable pour cette prière.'));
+  for(const row of model.extensions){
+   const label=node('label','workspace-type',row.label),input=node('input'),help=node('small','workspace-divine-help',row.help);help.id='divine-help-choice-'+row.key;input.type='number';input.min='0';input.step='1';input.value=state.choices[row.key];input.setAttribute('aria-label',row.label);input.setAttribute('aria-describedby',help.id);input.dataset.focusKey='divine-choice-'+row.key;
+   input.addEventListener('input',()=>{state.choices[row.key]=input.value===''?0:Number(input.value);state.preview=null;state.error='';invalidateEditedForm(input);});label.append(input,help);extension.append(label);
+  }
+  const budget=state.preview?.preview?.extensionBudget;
+  if(budget&&model.extensions.length)extension.append(node('p','workspace-muted',`Paliers de +2 DR dépensés : ${budget.spent} sur ${budget.available}.`));
+  if(blocking.has('extensions'))extension.open=true;
+  content.append(extension);
+  if(descr.expiryField)select(content,'Fin de l’effet (choix du MJ)',state.expiryPhase,[['','À préciser'],['endOfTurn','Fin du Tour du prêtre'],['endOfRound','Fin de Round']],value=>change('expiryPhase',value),'expiry');
+  if(durationField)formField(content,durationField,blocking.has('expiryRounds'));
+  if(descr.calendarDuration)content.append(node('p','workspace-muted','Durée en minutes, heures ou jours : l’échéance est calculée sur l’horloge de jeu au moment de l’aperçu.'));
   const actions=node('div','workspace-resolution-row');content.append(actions);
-  button(actions,'Calculer la prière',()=>{state.error='';try{state.preview=Store.previewDivineExecution(contract.id,prayerInput(actor,contract));}catch(error){state.error=errorText(error);}refresh();},false,'calculate');
-  button(actions,'Appliquer la prière',()=>run(async()=>{const result=await Store.applyDivineExecution(contract.id,{preview:state.preview});if(result?.ok===false || result?.ready===false)throw Error(result.error||'Prière non appliquée.');state.preview=null;state.roll='';state.wrathRoll='';state.wrathDurationRoll='';}),!state.preview?.ready,'apply');
+  button(actions,'Calculer la prière',()=>{state.error='';state.lastReceipt=null;try{state.preview=Store.previewDivineExecution(contract.id,prayerInput(actor,contract));}catch(error){state.error=errorText(error);}refresh();},false,'calculate');
+  button(actions,'Appliquer la prière',()=>run(async()=>{const result=await Store.applyDivineExecution(contract.id,{preview:state.preview});if(result?.ok===false || result?.ready===false)throw Error(result.error||'Prière non appliquée.');state.lastReceipt=summarizeExecution(result.receipt,{contract,participants});state.preview=null;state.roll='';state.wrathRoll='';state.wrathDurationRoll='';Object.assign(state.form,{damageRoll:'',damageRolls:{},removals:{},healCount:''});}),!state.preview?.ready,'apply');
+  if(state.lastReceipt){
+   const receipt=node('div','workspace-divine-receipt');receipt.setAttribute('role','status');receipt.append(node('p','workspace-rubric','Dernier résultat · '+state.lastReceipt.title));
+   if(state.lastReceipt.lines.length){const list=node('ul');for(const line of state.lastReceipt.lines)list.append(node('li','',line));receipt.append(list);}
+   for(const reminder of state.lastReceipt.reminders)receipt.append(node('p','workspace-muted',reminder));
+   content.append(receipt);
+  }
   if(state.preview){
    const result=state.preview,preview=result.preview;
    const outcome=node('div','workspace-divine-preview');outcome.setAttribute('role','status');
@@ -181,8 +222,31 @@ export function createDivinePanel({Store,refresh}){
     select(outcome,'Choix du jet favorable',state.testOptionId,preview.testOptions.map(option=>[option.id,option.id==='reverse'?`Inverser → ${option.result.roll}`:`Garder → ${option.result.roll}`]),value=>change('testOptionId',value),'test-option');
    if(preview?.resolvedParams)outcome.append(node('p','workspace-muted','Après extensions : '+Object.entries(preview.resolvedParams).map(([key,value])=>({range:'portée',targets:'cibles',duration:'durée'}[key]||key)+' '+resolvedParamText(value)).join(' · ')));
    if(result.error)outcome.append(node('p','workspace-field-error',result.error));
-   for(const missing of result.needsInput||[])outcome.append(node('p','workspace-muted',typeof missing==='string'?missing:missing.label||missing.field));
-   for(const reminder of preview?.reminders||[])outcome.append(node('p','workspace-muted',reminder));
+   if(needs.length){
+    const box=node('div','workspace-divine-needs');box.append(node('p','workspace-rubric','À fournir avant d’appliquer'));const list=node('ul');
+    for(const missing of needs){
+     const item=node('li');
+     if(missing.anchor){const link=node('button','workspace-divine-need-link',missing.label);link.type='button';link.addEventListener('click',()=>focusAnchor(panel,missing.anchor));item.append(link);}
+     else item.textContent=missing.label;
+     list.append(item);
+    }
+    box.append(list);outcome.append(box);
+   }
+   for(const text of deadlineLines(result,{actorName:actor.name}))outcome.append(node('p','workspace-muted',text));
+   const projected=(result.projectedEffects||[]).map(row=>describeEffectResult(row,{contract,participants})).filter(Boolean);
+   if(projected.length){
+    const box=node('div','workspace-divine-projection');box.append(node('p','workspace-rubric','Effets projetés · rien n’est encore appliqué'));const list=node('ul');
+    for(const line of projected)list.append(node('li','',line));box.append(list);outcome.append(box);
+   }
+   const alerts=[...(result.projectedEffects||[]).map(row=>row.result?.warning).filter(Boolean),...(result.status==='reminder'?['Effet laissé au rappel MJ : la prière sera consignée, rien d’autre n’est calculé.']:[])];
+   if(alerts.length){
+    const box=node('div','workspace-divine-warnings');box.append(node('p','workspace-rubric','Avertissements'));const list=node('ul');
+    for(const text of [...new Set(alerts)])list.append(node('li','',text));box.append(list);outcome.append(box);
+   }
+   if(preview?.reminders?.length){
+    const box=node('div','workspace-divine-reminders');box.append(node('p','workspace-rubric','Rappels du MJ'));const list=node('ul');
+    for(const reminder of preview.reminders)list.append(node('li','workspace-muted',reminder));box.append(list);outcome.append(box);
+   }
    if(preview?.wrath?.triggered){
     outcome.append(node('p','workspace-field-error','Courroux divin déclenché · +'+(10*preview.wrath.sinAtTest)+' au résultat de table.'));
     field(outcome,'Jet de Courroux (d100)','wrathRoll',{min:1,max:100});

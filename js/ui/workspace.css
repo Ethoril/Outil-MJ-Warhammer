@@ -454,6 +454,15 @@ dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto
 .workspace-divine label:has(>input[type=checkbox]) { flex-direction:row; align-items:center; }
 .workspace-divine input[type=checkbox] { width:auto; flex:none; }
 .workspace-divine-preview { border-left:3px solid var(--accent,#8a0707); padding-left:12px; }
+.workspace-divine-help { font-family:var(--font-ui); font-size:12px; font-weight:400; line-height:1.35; color:var(--muted); overflow-wrap:anywhere; }
+.workspace-divine-effects { display:grid; gap:10px; }
+.workspace-divine-effects > legend { padding:0 4px; }
+.workspace-divine [aria-invalid="true"] { outline:2px solid var(--accent,#8a0707); outline-offset:1px; }
+.workspace-divine-preview > div, .workspace-divine-receipt { display:grid; gap:4px; min-width:0; margin-top:8px; }
+.workspace-divine-receipt { border-left:3px solid var(--accent,#8a0707); padding-left:12px; }
+.workspace-divine-preview ul, .workspace-divine-receipt ul { margin:0; padding-left:20px; display:grid; gap:2px; }
+.workspace-divine-need-link { all:unset; box-sizing:border-box; max-width:100%; cursor:pointer; color:var(--accent-text,var(--accent,#8a0707)); font-weight:700; text-decoration:underline; text-underline-offset:2px; overflow-wrap:anywhere; }
+.workspace-divine-need-link:focus-visible { outline:2px solid var(--accent,#8a0707); outline-offset:2px; }
 
 /* Brisé : faits explicites et séquence de fuite sur toutes les fiches de combat. */
 .workspace-broken-escape { display:grid; gap:14px; min-width:0; }
