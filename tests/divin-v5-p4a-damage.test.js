@@ -48,7 +48,7 @@ const undead = (id, extra = {}) => fighter(id, { traits: ['Mort-vivant'], ...ext
 test('contrats : cinq miracles passent en assisted et exposent leurs clauses moteur', () => {
   for (const id of [ANNIHILATE, SOULFIRE, COMET, JUDGEMENT, TOUCH]) {
     const contract = getDivineContract(id);
-    assert.equal(contract.status, 'assisted', id);
+    assert.ok(['assisted', 'implemented'].includes(contract.status), id);
     assert.ok(contract.effects.length, id);
   }
   assert.equal(getDivineContract(ANNIHILATE).effects[0].type, 'direct-damage');

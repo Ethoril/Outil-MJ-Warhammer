@@ -203,7 +203,7 @@ test('E4 — un État de Prière résolu contribue au Test; les modificateurs de
   assert.equal(withModifier.preview.prayer.sl, withModifier.preview.prayer.details.baseSl - 1);
 });
 
-test('manual self/self miracles still enforce canonical targets and their sourced duration', () => {
+test('self/self miracles still enforce canonical targets and their sourced duration', () => {
   const spear = DIVINE_REGISTRY.contracts.find(row => row.canonicalName === 'Spear of Myrmidia');
   const priest = { ...actor, caracs: { Soc: 50 }, skills: [{ name: 'Pray', status: 'resolved', total: 50 }],
     talents: [{ id: spear.requiredTalent.id, status: 'resolved', rank: 1, specialization: 'Myrmidia' }],
@@ -215,9 +215,9 @@ test('manual self/self miracles still enforce canonical targets and their source
   assert.match(wrongTarget.error, /se cible elle-même/i);
 
   const self = previewDivineExecution(priest, spear, [priest], { canSpeak: true, roll: 23,
-    sourceFingerprint: fingerprint, round: 1, expiry: { phase: 'endOfRound', round: 5 } });
+    sourceFingerprint: fingerprint, round: 1, expiry: { phase: 'endOfRound', round: 5 }, facts: { weapon: { equipmentId: 'spear' } } });
   assert.equal(self.ready, true, self.error);
-  assert.equal(self.status, 'reminder');
+  assert.equal(self.status, 'ready');
   assert.equal(self.preview.resolvedParams.targets.unit, 'self');
 });
 

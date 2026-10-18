@@ -91,11 +91,14 @@ export const miracles = [
     name: 'Vaincre les impies', canonicalName: 'Vanquish the Unrighteous', printedPage: 227,
     summary: 'Les alliés choisis gagnent la Haine (Hatred, p.184) envers ' + foes + '. Après avoir tué un tel ennemi, la Haine accorde +2 DR aux Tests de combat au lieu de +1.',
     params: { range: { kind: 'self' }, targets: area, duration: rounds },
-    status: 'manual', effect: null, targetRules: [],
-    needsInput: [{ id: 'allies', text: 'Alliés choisis dans la zone.' }, { id: 'enemy-categories', text: 'Ennemis relevant des catégories visées (orques, gobelins, morts-vivants, associés au Chaos).' }, { id: 'kills', text: 'Ennemi de ces catégories tué par un allié (déclenche le bonus de +2 DR).' }],
+    status: 'assisted', effect: null,
+    effects: [{ type: 'grant-talent', talents: ['Orques', 'Gobelins', 'Morts-vivants', 'Associés au Chaos'].map(specialization => ({ id: 'talent-hatred', name: 'Haine', specialization, rank: 1 })) }],
+    targetRules: [],
+    needsInput: [{ id: 'allies', text: 'Alliés choisis dans la zone; le prêtre est-il compté (non précisé par la source) ?' }, { id: 'enemy-categories', text: 'Ennemis relevant des catégories visées (orques, gobelins, morts-vivants, associés au Chaos).' }, { id: 'kills', text: 'Ennemi de ces catégories tué par un allié (déclenche le bonus de +2 DR).' }],
     clauses: [
-      { id: 'hatred', mode: 'manual', text: 'Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184).' },
+      { id: 'hatred', mode: 'engine', text: 'Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184) : une ligne de Haine par groupe.' },
       { id: 'hatred-kill', mode: 'manual', text: 'Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.' },
+      { id: 'priest-counted', mode: 'manual', text: 'Le prêtre n’est pas expressément exclu ni inclus parmi les alliés : à trancher, rappel au MJ.' },
       { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ],

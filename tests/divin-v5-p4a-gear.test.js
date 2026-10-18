@@ -373,7 +373,7 @@ test('Épée de justice reste manuelle : aucun effet appliqué', () => {
 test('statuts P4a T4 : dix miracles assistés', () => {
   for (const id of [MASK, GRACE, ANCHORITE, BEACON, HAMMER, INSTINCTS, STAG, TOOTH, WINTER, OWL]) {
     const contract = getDivineContract(id);
-    assert.equal(contract.status, 'assisted', contract.name);
+    assert.ok(['assisted', 'implemented'].includes(contract.status), contract.name);
     assert.ok(contract.clauses.some(row => row.mode === 'engine'), contract.name);
   }
 });

@@ -15,20 +15,20 @@ export const miracles = [
     printedPage: 228,
     summary: 'Votre regard prend un éclat bleu acier et l\'air se refroidit autour de vous. Vous causez la Peur (p.183). Toutes les créatures de la zone, vous excepté, perdent leur Avantage au début de chaque Round.',
     params: { range: self, targets: { kind: 'special' }, duration: felRounds },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
+    effects: [{ type: 'grant-trait', traits: ['Peur (1)'], appliesTo: 'caster' }],
     targetRules: ['all-in-area-except-priest'],
     needsInput: [
       { id: 'area-radius', text: 'Rayon de la zone : le livre indique « Fellowship yards » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ.' },
-      { id: 'area-targets', text: 'Créatures présentes dans la zone.' },
-      { id: 'fear-level', text: 'Niveau de Peur causé (p.183) : non précisé par le miracle.' }
+      { id: 'area-targets', text: 'Créatures présentes dans la zone (perte d’Avantage au début de chaque Round).' }
     ],
     clauses: [
-      { id: 'fear', mode: 'manual', text: 'Le prêtre cause la Peur (règle p.183) pendant la durée.' },
-      { id: 'advantage-loss', mode: 'assisted', text: 'Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Avantage.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'fear', mode: 'engine', text: 'Le prêtre cause la Peur (règle p.183) pendant la durée.' },
+      { id: 'advantage-loss', mode: 'manual', text: 'Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Avantage.' },
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n\'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé.'
+    sourceDelta: 'Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n\'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé : Peur (1) retenue (arbitrage MJ, comme Masque mortuaire).'
   },
   {
     name: 'Hurlement du loup',

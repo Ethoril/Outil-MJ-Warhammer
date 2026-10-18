@@ -22,7 +22,7 @@ export const miracles = [
   name: 'Anéantir les morts-vivants', canonicalName: 'Destroy Undead', printedPage: 223,
   summary: 'Un feu noir jaillit du prêtre en cercle : toute cible dans la zone possédant le Trait Mort-vivant perd 1d10 Blessures, sans Bonus d’Endurance ni PA, plus 1 Blessure par DR. Un mort-vivant détruit ne peut plus, normalement, être relevé par Nécromancie.',
   params: { range: { kind: 'self' }, targets: { kind: 'area', characteristicBonus: 'Soc', unit: 'yards' }, duration: { kind: 'instant' } },
-  status: 'assisted',
+  status: 'implemented',
   effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, targetFilter: 'undead', killAtZeroNoReraise: true }],
   targetRules: ['Trait Mort-vivant (Undead) uniquement', 'zone centrée sur le prêtre'],
   needsInput: [
@@ -35,7 +35,7 @@ export const miracles = [
    { id: 'sl-wounds', mode: 'engine', text: 'Chaque DR ajoute 1 Blessure perdue.' },
    { id: 'no-reraise', mode: 'engine', text: 'Un mort-vivant détruit ne peut plus être relevé par Nécromancie dans les conditions normales.' }
   ],
-  sourceDelta: 'Portée imprimée tronquée (« Yo ») ; lue « You » par cohérence avec la zone centrée sur le prêtre et L06-prayers. Le livre dit « pour chaque SL » (et non « par +2 SL ») : 1 Blessure par DR retenue.'
+  sourceDelta: 'Note éditoriale : portée imprimée tronquée (« Yo ») ; lue « You » par cohérence avec la zone centrée sur le prêtre et L06-prayers. Le livre dit « pour chaque SL » (et non « par +2 SL ») : 1 Blessure par DR retenue.'
  },
  {
   name: 'Condamné', canonicalName: 'Dooming', printedPage: 223,

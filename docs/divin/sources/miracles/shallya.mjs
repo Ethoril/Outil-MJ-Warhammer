@@ -10,7 +10,7 @@ export const miracles = [
     name: 'Endurance de l’anachorète', canonicalName: "Anchorite's Endurance", printedPage: 226,
     summary: 'La cible ne ressent plus la douleur, gagne le Trait de créature Impassible (Painless) et ne subit aucune pénalité due aux États, pendant la durée.',
     params: { range: soc('characteristic', 'yards'), targets: one, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'assisted',
+    status: 'implemented',
     effect: null,
     effects: [{ type: 'grant-trait', traits: ['Impassible'] }, { type: 'special-state', ignoreConditionPenalties: true }],
     targetRules: [],
