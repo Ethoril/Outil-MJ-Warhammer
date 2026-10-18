@@ -75,8 +75,9 @@ export const miracles = [
     printedPage: 229,
     summary: 'Si vous maniez une épée, elle ignore les Points d\'Armure et devient Magique. Un adversaire frappé qui est un criminel (selon le MJ) doit réussir un test d\'Endurance Accessible (+2 DR) ou gagner l\'État Inconscient, pour au moins Bonus de Sociabilité rounds. Chaque crime commis contre un adversaire inconscient vous vaut +1 Point de Péché.',
     params: { range: self, targets: self, duration: felRounds },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
+    effects: [{ type: 'weapon-bonus', magical: true, designatedWeapon: true, weaponClass: 'épée' }],
     targetRules: ['wielding-sword'],
     needsInput: [
       { id: 'sword', text: 'Le prêtre manie-t-il une épée ?' },
@@ -86,13 +87,13 @@ export const miracles = [
     ],
     clauses: [
       { id: 'ignore-ap', mode: 'manual', text: 'L\'épée ignore les Points d\'Armure.' },
-      { id: 'magical', mode: 'manual', text: 'L\'épée est Magique.' },
+      { id: 'magical', mode: 'engine', text: 'L\'épée est Magique.' },
       { id: 'endurance-test', mode: 'assisted', text: 'Adversaire criminel frappé : test d\'Endurance Accessible (+2 DR), échec : État Inconscient.' },
       { id: 'unconscious-duration', mode: 'manual', text: 'L\'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé).' },
       { id: 'sin', mode: 'manual', text: '+1 Point de Péché pour le prêtre par crime commis sur un adversaire inconscient.' },
       { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: '« Fellowship Bonus Rounds » pour l\'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle.'
+    sourceDelta: '« Fellowship Bonus Rounds » pour l\'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L\'État Inconscient reste au rappel MJ : la cible du miracle est le prêtre seul (portée et cible « vous »), l\'adversaire frappé n\'est pas un participant adressable par le moteur.'
   },
   {
     name: 'La Vérité éclatera',

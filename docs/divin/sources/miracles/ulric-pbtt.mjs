@@ -145,9 +145,9 @@ export const miracles = [
     printedPage: 50,
     summary: 'Ulric envoie une violente tempête d\'éclats de glace sur vos ennemis. Toute personne touchée subit une attaque de Dégâts +5 et doit réussir un Test de Volonté Intermédiaire (+0) ou gagner un État Étourdi.',
     params: { range, targets: area, duration: { kind: 'instant' } },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
-    effects: [],
+    effects: [{ type: 'condition', key: 'Stunned', level: 1, when: { fact: 'willpowerFailed', label: 'a échoué à son Test de Volonté Intermédiaire (+0)' } }],
     targetRules: [],
     needsInput: [
       { id: 'area-targets', text: 'Créatures dans la zone (Bonus de Sociabilité yards), alliés compris : « anyone affected ».' },
@@ -156,7 +156,7 @@ export const miracles = [
     ],
     clauses: [
       { id: 'damage', mode: 'manual', text: 'Chaque cible subit une touche de Dégâts +5 (dégâts ordinaires, réduits par BE et PA).' },
-      { id: 'stunned', mode: 'manual', text: 'Test de Volonté Intermédiaire (+0) ; en cas d\'échec, un État Étourdi.' }
+      { id: 'stunned', mode: 'engine', text: 'Test de Volonté Intermédiaire (+0) ; en cas d\'échec, un État Étourdi.' }
     ],
     sourceDelta: 'La touche « Damage +5 » est un coup d\'arme ordinaire, pas des Blessures directes : l\'effet direct-damage (qui ignore BE et PA) la déformerait, et il n\'existe pas d\'effet de dégâts fixes réduits. Encodé manual.'
   }

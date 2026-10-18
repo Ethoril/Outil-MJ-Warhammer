@@ -29,7 +29,8 @@ export const miracles = [
     name: 'Tremblement de terre', canonicalName: 'Earthshudder', printedPage: 88,
     summary: 'Le prêtre invoque Taal trois fois et lève les bras : le Seigneur de la Nature fait gronder le tonnerre et trembler le sol. Chaque cible à moins de Bonus de Sociabilité yards d’un point visé doit réussir un Test d’Athlétisme Difficult (-10) ou gagne l’État À terre. Les structures artificielles dans la zone subissent 1d10 + DR dégâts.',
     params: { range: soc('characteristic', 'yards'), targets: area(), duration: { kind: 'instant' } },
-    status: 'manual', effect: null,
+    status: 'assisted',
+    effects: [{ type: 'condition', key: 'Prone', level: 1, when: { fact: 'athleticsFailed', label: 'a échoué à son Test d’Athlétisme Difficult (-10 en V4, -1 DR en V5)' } }],
     targetRules: [],
     needsInput: [
       { id: 'point', text: 'Quel point de la portée est visé (centre de la zone, Bonus de Sociabilité yards) ?' },
@@ -37,10 +38,10 @@ export const miracles = [
       { id: 'structures', text: 'Quelles structures artificielles sont dans la zone (1d10 + DR dégâts chacune) ?' }
     ],
     clauses: [
-      { id: 'athletics-test', mode: 'manual', text: 'Chaque cible dans la zone fait un Test d’Athlétisme Difficult (-10) ; échec : elle gagne l’État À terre.' },
+      { id: 'athletics-test', mode: 'engine', text: 'Chaque cible dans la zone fait un Test d’Athlétisme Difficult (-10) ; échec : elle gagne l’État À terre.' },
       { id: 'structure-damage', mode: 'manual', text: 'Chaque structure artificielle dans la zone subit 1d10 + DR dégâts (les éléments naturels ne sont pas touchés).' }
     ],
-    sourceDelta: 'Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. À terre dépend d’un Test d’Athlétisme par cible hors moteur : pas d’effet condition posé automatiquement. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR. Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).'
+    sourceDelta: 'Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).'
   },
   {
     name: 'Festin de la nature', canonicalName: "Nature's Repast", printedPage: 88,
@@ -111,7 +112,8 @@ export const miracles = [
     name: 'Vent sauvage', canonicalName: 'Wild Wind', printedPage: 88,
     summary: 'Le prêtre appelle le Seigneur de la Nature, qui lève un vent déchaîné en tourbillon. Le prêtre n’est pas affecté ; toutes les cibles de la zone sont malmenées par des vents irrésistibles : leurs Tests de Capacité de Combat ou d’Agilité subissent -2 DR, et chaque Round elles doivent réussir un Test d’Endurance Difficult (-10) pour éviter l’État À terre. Aucune attaque à distance n’est possible dans la zone ; seules les armes à poudre ou d’artillerie peuvent viser une cible dans la zone.',
     params: { range: self, targets: { kind: 'special' }, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null,
+    status: 'assisted',
+    effects: [{ type: 'condition', key: 'Prone', level: 1, when: { fact: 'toughnessFailed', label: 'a échoué à son Test d’Endurance Difficult (-10 en V4, -1 DR en V5) du premier Round' } }],
     targetRules: ['prêtre non affecté'],
     needsInput: [
       { id: 'area', text: 'Taille de la zone : le livre l’indique « X » sans valeur ; décision MJ.' },
@@ -121,7 +123,8 @@ export const miracles = [
     clauses: [
       { id: 'priest-unaffected', mode: 'manual', text: 'Le prêtre n’est pas affecté par le vent.' },
       { id: 'test-penalty', mode: 'manual', text: 'Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.' },
-      { id: 'prone-each-round', mode: 'manual', text: 'Chaque Round, chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.' },
+      { id: 'prone-first-round', mode: 'engine', text: 'Premier Round : chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre (résultat saisi par le MJ).' },
+      { id: 'prone-each-round', mode: 'manual', text: 'Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.' },
       { id: 'no-ranged', mode: 'manual', text: 'Aucune attaque à distance n’est possible dans la zone, sauf armes à poudre ou d’artillerie ; ces armes peuvent seules viser les cibles dans la zone.' }
     ],
     sourceDelta: 'Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme tous les Tests de CC ou d’Agilité (compétences ou caractéristique). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.'

@@ -83,7 +83,8 @@ export const miracles = [
   effects: [
    { type: 'condition', key: 'Blinded', level: 1 },
    { type: 'condition', key: 'Deafened', level: 1 },
-   { type: 'condition', key: 'Fatigued', level: 1 }
+   { type: 'condition', key: 'Fatigued', level: 1 },
+   { type: 'condition', key: 'Prone', level: 1, when: { fact: 'athleticsFailed', label: 'a échoué à son Test d’Athlétisme Accessible (+2 DR)' } }
   ],
   targetRules: [],
   needsInput: [
@@ -95,7 +96,7 @@ export const miracles = [
    { id: 'deafened', mode: 'engine', text: 'La cible gagne 1 État Assourdi.' },
    { id: 'fatigued', mode: 'engine', text: 'La cible gagne 1 État Fatigué.' },
    { id: 'athletics', mode: 'manual', text: 'Pour utiliser son Mouvement, la cible tente un Test d’Athlétisme Accessible (+2 DR).' },
-   { id: 'prone', mode: 'assisted', text: 'En cas d’échec au Test, la cible gagne aussi l’État À terre.' }
+   { id: 'prone', mode: 'engine', text: 'En cas d’échec au Test, la cible gagne aussi l’État À terre.' }
   ]
  },
  {

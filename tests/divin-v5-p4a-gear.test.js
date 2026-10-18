@@ -366,8 +366,11 @@ test('garde DIV-05 directe : traits et bonus d’arme identiques refusés, disti
   assert.doesNotThrow(() => finalizeDivineState(weapon({ magical: true }, { magical: true }), weapon({ magical: true }, { magical: true })));
 });
 
-test('Épée de justice reste manuelle : aucun effet appliqué', () => {
-  assert.equal(getDivineContract(SWORD).status, 'manual');
+test('Épée de justice (P4b T3) : arme magique assistée, Inconscient et PA laissés aux rappels', () => {
+  const contract = getDivineContract(SWORD);
+  assert.equal(contract.status, 'assisted');
+  assert.deepEqual(contract.effects.map(effect => effect.type), ['weapon-bonus']);
+  assert.ok(!contract.effects.some(effect => effect.type === 'condition'));
 });
 
 test('statuts P4a T4 : dix miracles assistés', () => {

@@ -28,7 +28,7 @@ import { knownMovement } from './v5-magic-effects.js';
 import { effectTypes, strengthSources, progressionFields } from './v5-divine-grammar.js';
 import { REMINDER_FLAGS } from './v5-magic-reminder-flags.js';
 import damageHandlers from './v5-divine-effects-damage.js';
-import conditionHandlers from './v5-divine-effects-conditions.js';
+import conditionHandlers, { whenProblem, whenNeeds, whenApplies, whenFactFields } from './v5-divine-effects-conditions.js';
 import gearHandlers from './v5-divine-effects-gear.js';
 import testsHandlers from './v5-divine-effects-tests.js';
 import summonHandlers from './v5-divine-effects-summon.js';
@@ -71,14 +71,16 @@ const coreHandlers = {
   condition: {
     validate(effect) {
       if (!effect.key && !effect.name) return 'condition exige key ou name.';
-      return strengthError(effect.strengthFrom);
+      return whenProblem(effect) ?? strengthError(effect.strengthFrom);
     },
-    needs(effect) {
-      const needs = [];
+    needs(effect, ctx) {
+      const needs = whenNeeds(effect, ctx);
       if (!effect.key && !effect.name) needs.push(need('contract.effects.condition', 'État sourcé requis'));
       if (strengthError(effect.strengthFrom)) needs.push(need('contract.effects.strengthFrom', 'Source de la force de l’État valide requise'));
       return needs;
     },
+    applies: whenApplies,
+    factFields: whenFactFields,
     buildLayer: effect => ({ conditions: [{ key: effect.key || effect.name, level: effect.level ?? 1 }] }),
     // Acquiert l'État sur la cible et le rattache à sa couche pour que la fin de l'effet le retire.
     applyInstant(participant, effect, { contract, executionId, index, layer, expiry, round }) {
