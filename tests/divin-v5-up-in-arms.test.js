@@ -19,7 +19,7 @@ const nine = [
   ['Connaître son Ennemi', 'Know Your Enemy', 'connaitre-son-ennemi', 'manual'],
   ['Sur un Terrain Mortel', 'On Deadly Ground', 'sur-un-terrain-mortel', 'manual'],
   ['Attaque Rapide', 'Quick Strike', 'attaque-rapide', 'manual'],
-  ['Dévotion de la Guerrière', 'Shieldmaiden’s Devotion', 'devotion-de-la-guerriere', 'manual'],
+  ['Dévotion de la Guerrière', 'Shieldmaiden’s Devotion', 'devotion-de-la-guerriere', 'assisted'],
   ['Compétence Martiale', 'Skill of Combat', 'competence-martiale', 'assisted'],
   ['Vindicte Vengeresse', 'Vengeful Wrath', 'vindicte-vengeresse', 'manual']
 ];
@@ -56,7 +56,7 @@ test('inventaire : plus aucun miracle bloqué, neuf miracles Up in Arms connect�
   assert.equal(inventory.counts.miraclesSupplementSourceFound, 9);
   assert.equal(inventory.counts.miraclesV4AdaptationBlocked, 0);
   assert.equal(inventory.sourceCounts.miraclesUpInArmsConnected, 9);
-  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 3, manual: 6 });
+  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 4, manual: 5 });
   assert.equal(registry.contracts.some(row => row.status === 'blocked'), false);
   assert.equal(inventory.items.filter(row => row.type === 'miracle' && row.source.document === 'Up in arms.pdf').length, 9);
 });
@@ -180,9 +180,9 @@ test('statuts honnêtes : un contrat manuel ne porte aucun effet appliqué, les 
       assert.ok(row.clauses.filter(clause => clause.id !== 'catalogue-entry').every(clause => clause.mode === 'manual'), name);
     }
   }
-  // Dévotion de la Guerrière : Intrépide sans choix d'ennemi vaudrait « Tout » (option C écartée) : donc manuel.
-  assert.equal(byName('Dévotion de la Guerrière').status, 'manual');
-  assert.match(byName('Dévotion de la Guerrière').sourceDelta, /Tout/);
+  // Dévotion de la Guerrière : assistée, l'ennemi est saisi au lancement (un Intrépide sans spécialisation ne s'applique à aucun ennemi : fait manquant talent.specialization).
+  assert.equal(byName('Dévotion de la Guerrière').status, 'assisted');
+  assert.match(byName('Dévotion de la Guerrière').sourceDelta, /talent.specialization/);
   assert.ok(byName('En Bon Ordre').clauses.some(clause => clause.id === 'broken-from-fleeing'));
   assert.ok(byName('Vindicte Vengeresse').clauses.some(clause => clause.id === 'unrepentant'));
   assert.ok(byName('Attaque Rapide').clauses.some(clause => clause.id === 'free-attack'));

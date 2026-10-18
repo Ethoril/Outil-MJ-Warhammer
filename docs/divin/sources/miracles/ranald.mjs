@@ -21,7 +21,9 @@ export const miracles = [
   name: 'Yeux de chat', canonicalName: "Cat's Eyes", printedPage: 224,
   summary: 'Ranald envoie un Serviteur divin en forme de chat, aux capacités d’un chat normal et invulnérable. Pendant la durée, le prêtre perçoit tout ce que perçoit le chat et dirige ses mouvements ; ses sens sont ceux du chat, il perd l’usage de ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens, ce qui le laisse vulnérable.',
   params: { range: { kind: 'characteristic', characteristic: 'Soc', unit: 'yards' }, targets: { kind: 'self' }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
-  status: 'manual', effect: null,
+  status: 'assisted',
+  effect: null,
+  effects: [{ type: 'summon-creature', appliesTo: 'caster', kind: 'sensor', name: 'Chat', traits: ['Invulnérable'] }],
   targetRules: ['prêtre uniquement'],
   needsInput: [
    { id: 'cat-position', text: 'Où apparaît le chat et jusqu’où le prêtre peut-il le diriger (portée Sociabilité yards) ?' },
@@ -29,11 +31,12 @@ export const miracles = [
    { id: 'priest-vulnerable', text: 'Le prêtre ne perçoit rien par ses propres sens pendant la durée.' }
   ],
   clauses: [
-   { id: 'cat-servant', mode: 'manual', text: 'Un chat Serviteur divin apparaît ; il a les capacités d’un chat normal et ne peut subir aucun dommage.' },
-   { id: 'control-and-senses', mode: 'manual', text: 'Le prêtre dirige le chat et perçoit tout ce qu’il perçoit.' },
-   { id: 'no-own-senses', mode: 'manual', text: 'Le prêtre n’a pas accès à ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens pendant la durée.' }
+   { id: 'cat-servant', mode: 'engine', text: 'Le moteur crée le chat comme simple capteur : aucun participant dans l’ordre du combat, ni initiative ni action, invulnérable, sans profil chiffré (le livre n’en donne pas).' },
+   { id: 'control-and-senses', mode: 'manual', text: 'Le prêtre dirige le chat et perçoit tout ce qu’il perçoit ; ses sens sont aussi aiguisés que ceux d’un chat.' },
+   { id: 'no-own-senses', mode: 'manual', text: 'Rappel : le prêtre n’a pas accès à ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens pendant la durée, ce qui le laisse vulnérable.' },
+   { id: 'end', mode: 'engine', text: 'Le chat disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l’expiration ou à la fin de la prière, ou à la mort du prêtre.' }
   ],
-  sourceDelta: 'Aucun profil chiffré du chat dans le livre (contrairement à l’aigle de Myrmidia). miracles.json ajoute « vulnérable » en clause : cela renvoie au prêtre, non au chat (le chat est invulnérable).'
+  sourceDelta: 'Aucun profil chiffré du chat dans le livre (contrairement à l’aigle de Myrmidia) : le capteur ne porte que le Trait Invulnérable, sans Perception ni Mouvement inventés. Le chat n’est pas dit intangible. miracles.json ajoute « vulnérable » en clause : cela renvoie au prêtre, non au chat (le chat est invulnérable).'
  },
  {
   name: 'Que la chance persiste', canonicalName: 'Cheat the Odds', printedPage: 224,

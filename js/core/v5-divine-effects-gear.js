@@ -17,6 +17,9 @@ const characteristicBonus = (participant, key) => {
   const score = Number(participant?.caracs?.[key]);
   return Number.isFinite(score) ? Math.floor(score / 10) : null;
 };
+const SPECIALIZATION_LABEL = 'Ennemi visé (espèce ou individu)';
+const SPECIALIZATION_MAX = 60;
+const cleanSpecialization = value => typeof value === 'string' ? value.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim() : '';
 const liveLayer = (participant, layer) => layer && (participant.extensions?.v5?.divineEffects || []).find(row => row.id === layer.id);
 
 const handlers = {
@@ -43,9 +46,28 @@ const handlers = {
       damageFormula: action.damageFormula, qualities: clone(action.qualities || []), extensions: { v5: { kind: 'melee', materialized: true } } })) })
   },
   'grant-talent': {
-    validate: effect => !Array.isArray(effect.talents) || !effect.talents.length
-      || !effect.talents.every(row => isRecord(row) && isText(row.id) && Number.isSafeInteger(row.rank ?? 1) && (row.rank ?? 1) >= 1) ? 'grant-talent exige talents [{id, rank}].' : null,
-    needs: effect => Array.isArray(effect.talents) && effect.talents.length ? [] : [need('contract.effects.talents', 'Talents sourcés requis')],
+    validate(effect) {
+      if (!Array.isArray(effect.talents) || !effect.talents.length
+        || !effect.talents.every(row => isRecord(row) && isText(row.id) && Number.isSafeInteger(row.rank ?? 1) && (row.rank ?? 1) >= 1)) return 'grant-talent exige talents [{id, rank}].';
+      return effect.specializationFrom !== undefined && effect.specializationFrom !== 'input' ? 'grant-talent : specializationFrom ne peut valoir que input.' : null;
+    },
+    needs(effect, { input } = {}) {
+      if (!Array.isArray(effect.talents) || !effect.talents.length) return [need('contract.effects.talents', 'Talents sourcés requis')];
+      if (effect.specializationFrom !== 'input') return [];
+      const text = cleanSpecialization(input?.talent?.specialization);
+      if (!text) return [need('talent.specialization', SPECIALIZATION_LABEL)];
+      return text.length > SPECIALIZATION_MAX ? [need('talent.specialization', `${SPECIALIZATION_LABEL} : ${SPECIALIZATION_MAX} caractères au plus`)] : [];
+    },
+    // Spécialisation saisie au lancement : figée ici (aperçu), l'application ne relit plus la saisie.
+    resolve(effect, { input } = {}) {
+      if (effect.specializationFrom !== 'input') return effect;
+      const missing = handlers['grant-talent'].needs(effect, { input });
+      if (missing.length) return { error: missing.map(row => row.label).join(' ; '), needs: missing };
+      const specialization = cleanSpecialization(input.talent.specialization);
+      const { specializationFrom, ...resolved } = effect;
+      return { ...resolved, talents: effect.talents.map(row => ({ ...row, specialization })) };
+    },
+    inputFields: effect => effect.specializationFrom === 'input' ? [{ path: 'talent.specialization', label: SPECIALIZATION_LABEL, kind: 'text', scope: 'effect' }] : [],
     buildLayer: effect => ({ grantedTalents: effect.talents.map(row => ({ id: row.id, rank: row.rank ?? 1, ...(row.name ? { name: row.name } : {}), ...(row.specialization ? { specialization: row.specialization } : {}) })) })
   },
   'weapon-bonus': {

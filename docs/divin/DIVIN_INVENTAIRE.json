@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:b04249f5693a30819a9fa02ec815c7a396b5491a21045dbddd02c3cfb50864d3",
+  "sourceFingerprint": "sha256:a653fa1df424698c910f7c74e58cc00e387f62e599a390befaf220845ff9af64",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -62,8 +62,8 @@
     },
     "miraclesUpInArmsConnected": 9,
     "upInArmsByStatus": {
-      "assisted": 3,
-      "manual": 6
+      "assisted": 4,
+      "manual": 5
     }
   },
   "notes": [
@@ -9195,7 +9195,7 @@
       "type": "miracle",
       "name": "Dévotion de la Guerrière",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -9267,7 +9267,25 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-fearless",
+              "name": "Intrépide",
+              "rank": 1
+            }
+          ],
+          "specializationFrom": "input",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Shieldmaiden’s Devotion",
         "effect": "Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi), l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.",
@@ -9281,8 +9299,14 @@
         },
         {
           "id": "fearless-enemy",
+          "mode": "engine",
+          "text": "Chaque Myrmidien désigné gagne le Talent Intrépide (Ennemi) contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.",
+          "sourceRef": "v5-shieldmaiden-s-devotion"
+        },
+        {
+          "id": "myrmidians",
           "mode": "manual",
-          "text": "Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi) contre l’ennemi choisi par le prêtre au lancement, le même pour tous, pendant la durée.",
+          "text": "Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 yards ou moins.",
           "sourceRef": "v5-shieldmaiden-s-devotion"
         },
         {
@@ -9293,16 +9317,12 @@
         },
         {
           "id": "duration",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 yards (+36 par tranche).",
           "sourceRef": "v5-shieldmaiden-s-devotion"
         }
       ],
       "needsInput": [
-        {
-          "field": "enemy",
-          "label": "Quel ennemi (individu précis ou espèce) le prêtre choisit-il au lancement ?"
-        },
         {
           "field": "myrmidians",
           "label": "Quels Myrmidiens sont à portée (36 yards) ?"
@@ -9543,7 +9563,7 @@
         {
           "id": "charge-and-attack",
           "mode": "manual",
-          "text": "Le prêtre doit charger puis attaquer l’ennemi impénitent le plus proche (Charge V5 p.163) ; s’il est déjà Engagé, il ne peut pas charger.",
+          "text": "Le prêtre doit charger puis attaquer l’ennemi impénitent le plus proche (Charge V5 p.163). On ne charge que si l’on n’est pas déjà Engagé : s’il l’est, il doit d’abord se Désengager (perdre l’Élan pour se déplacer sans pénalité, ou Test d’Esquive/Acrobaties opposé), puis il peut charger, y compris une autre cible.",
           "sourceRef": "v5-vengeful-wrath"
         },
         {
@@ -14707,7 +14727,7 @@
       "type": "miracle",
       "name": "Yeux de chat",
       "deity": "Ranald",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -14771,7 +14791,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "summon-creature",
+          "appliesTo": "caster",
+          "kind": "sensor",
+          "name": "Chat",
+          "traits": [
+            "Invulnérable"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Cat's Eyes",
         "effect": "Ranald envoie un Serviteur divin en forme de chat, aux capacités d’un chat normal et invulnérable. Pendant la durée, le prêtre perçoit tout ce que perçoit le chat et dirige ses mouvements ; ses sens sont ceux du chat, il perd l’usage de ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens, ce qui le laisse vulnérable.",
@@ -14780,20 +14816,26 @@
       "clauses": [
         {
           "id": "cat-servant",
-          "mode": "manual",
-          "text": "Un chat Serviteur divin apparaît ; il a les capacités d’un chat normal et ne peut subir aucun dommage.",
+          "mode": "engine",
+          "text": "Le moteur crée le chat comme simple capteur : aucun participant dans l’ordre du combat, ni initiative ni action, invulnérable, sans profil chiffré (le livre n’en donne pas).",
           "sourceRef": "v5-cat-s-eyes"
         },
         {
           "id": "control-and-senses",
           "mode": "manual",
-          "text": "Le prêtre dirige le chat et perçoit tout ce qu’il perçoit.",
+          "text": "Le prêtre dirige le chat et perçoit tout ce qu’il perçoit ; ses sens sont aussi aiguisés que ceux d’un chat.",
           "sourceRef": "v5-cat-s-eyes"
         },
         {
           "id": "no-own-senses",
           "mode": "manual",
-          "text": "Le prêtre n’a pas accès à ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens pendant la durée.",
+          "text": "Rappel : le prêtre n’a pas accès à ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens pendant la durée, ce qui le laisse vulnérable.",
+          "sourceRef": "v5-cat-s-eyes"
+        },
+        {
+          "id": "end",
+          "mode": "engine",
+          "text": "Le chat disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l’expiration ou à la fin de la prière, ou à la mort du prêtre.",
           "sourceRef": "v5-cat-s-eyes"
         }
       ],
