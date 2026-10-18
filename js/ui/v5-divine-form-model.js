@@ -4,12 +4,15 @@
  * Aucune branche par culte ou par nom de prière : tout vient des types d'effet et des règles du contrat.
  * - describeDivineForm(contract, {actor}) : ce que le contrat demande, indépendamment des cibles choisies.
  * - buildDivineForm(contract, {actor, targets, form}) : champs d'effet, faits de cible, extensions, avertissements.
- * - toEngineInput(form, {targetIds, fields}) : traduction du brouillon vers input.* attendu par le moteur.
+ * - toEngineInput(form, {targetIds, contract, actor}) : traduction du brouillon vers input.* attendu par le moteur.
+ * Les gestionnaires d'effet déclarent leurs saisies (handler.inputFields) et leurs faits de cible (handler.factFields) : voir
+ * v5-divine-effect-handlers.js ; ce modèle les lit sans connaître aucun type d'effet.
  * - classifyNeeds, describeEffectResult, summarizeExecution, deadlineLines : lecture de l'aperçu et du reçu.
  */
 import { calendarDurationUnits, targetRuleFactFields } from '../core/v5-divine-grammar.js';
 import { campaignDurationSeconds } from '../core/v5-game-time.js';
 import { spellObjectChoices } from '../core/equipment.js';
+import { effectHandler } from '../core/v5-divine-effect-handlers.js';
 
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
 const CHARACTERISTIC_KINDS = new Set(['characteristic', 'characteristic-bonus']);
@@ -67,13 +70,11 @@ export function targetFactFields(contract) {
   for (const rule of rules) if (targetRuleFactFields[rule]) add(targetRuleFactFields[rule], true);
   if (params.targets?.unit === 'allies') add('ally', true);
   for (const effect of contract?.effects || []) {
+    if (effect.type === 'direct-damage' && effect.targetFilter === 'undead') add('undead', true);
+    // Faits propres au type d'effet (handler.factFields) : [{field, label, help?, required?}], requis par défaut.
+    for (const row of effectHandler(effect.type)?.factFields?.(effect, { contract }) || [])
+      if (row?.field) add(row.field, row.required !== false, { custom: true, label: row.label, help: withSource(row.help ?? '', contract) });
     if (effect.type !== 'direct-damage') continue;
-    if (effect.targetFilter === 'undead') add('undead', true);
-    if (isRecord(effect.requiresFact) && effect.requiresFact.field) {
-      const label = String(effect.requiresFact.label || effect.requiresFact.field);
-      const short = label.split(/\s*[:(]/)[0].trim();
-      add(effect.requiresFact.field, true, { custom: true, label: short ? short[0].toUpperCase() + short.slice(1) : label, help: withSource(label + '.', contract) });
-    }
     const when = effect.conditionalBonus?.when;
     if (when === 'foe') { add('undead', false); add('ruinServant', false); }
     if (when === 'undead') add('undead', false);
@@ -156,6 +157,15 @@ export function describeDivineForm(contract, { actor } = {}) {
   };
 }
 
+// Genres de saisie déclarés par les gestionnaires -> genre de champ du panneau ('tri-state' : Oui / Non / À préciser).
+const FORM_KINDS = Object.freeze({ number: 'number', text: 'text', boolean: 'check', select: 'select', 'tri-state': 'tri' });
+
+/** Saisies déclarées par les effets du contrat (handler.inputFields), valides seulement : [{path, label, kind, scope, ...}]. */
+function handlerInputFields(contract, ctx) {
+  return (contract?.effects || []).flatMap(effect => effectHandler(effect.type)?.inputFields?.(effect, { contract, ...ctx }) || [])
+    .filter(def => isRecord(def) && typeof def.path === 'string' && def.path && typeof def.label === 'string' && FORM_KINDS[def.kind]);
+}
+
 const num = (value, label, extra) => ({ kind: 'number', label, value, ...extra });
 const nameOf = target => target?.name || target?.id;
 
@@ -199,6 +209,15 @@ export function buildDivineForm(contract, { actor, targets = [], form = emptyDiv
       label: `L’arme est bien de la classe attendue${weaponClass ? ` (${weaponClass})` : ''}`,
       help: withSource('Confirmation du MJ ; elle n’est jamais bloquante et est conservée dans le reçu.', contract) });
   }
+  // Saisies déclarées par les types d'effet : `engineField` = chemin pointé de l'entrée moteur (aussi la clé du besoin renvoyé par l'aperçu).
+  for (const def of handlerInputFields(contract, { actor, targets, choices })) {
+    const path = def.path.split('.');
+    const shared = { kind: FORM_KINDS[def.kind], help: def.source ? withSource(def.help ?? '', contract).trim() : def.help ?? '',
+      ...(def.min !== undefined ? { min: def.min } : {}), ...(def.max !== undefined ? { max: def.max } : {}), ...(def.options ? { options: def.options } : {}) };
+    if (def.scope === 'target') for (const target of targets) effectFields.push({ id: `${def.path}:${target.id}`, anchor: `${def.path}:${target.id}`, scope: 'target', targetId: target.id,
+      path: [...path, target.id], engineField: `${def.path}.${target.id}`, label: `${nameOf(target)} · ${def.label}`, ...shared });
+    else effectFields.push({ id: def.path, anchor: def.path, scope: 'global', path, engineField: def.path, label: def.label, ...shared });
+  }
   // Prière visant le prêtre : seuls les faits exigés sont demandés (ex. portée chiffrée sur soi).
   if (descr.expiryField && prayerDurationRounds(contract, actor, choices) === null)
     effectFields.push({ id: 'expiryRounds', anchor: 'expiryRounds', scope: 'global', kind: 'number', path: ['expiryRounds'], label: 'Durée retenue par le MJ (Rounds)', min: 1,
@@ -234,8 +253,24 @@ export function setFieldValue(form, field, value) {
 
 const optionalNumber = value => value === '' || value === undefined || value === null ? undefined : Number(value);
 
-/** Brouillon -> entrées moteur : damageRoll(s), removals, healCount, facts.targets et facts.weapon (cibles retenues seulement). */
-export function toEngineInput(form, { targetIds = [] } = {}) {
+// Valeur de brouillon -> valeur d'entrée moteur ; undefined : rien à transmettre.
+const engineValue = (kind, value) => {
+  if (kind === 'number') return optionalNumber(value);
+  if (kind === 'boolean') return value === true ? true : undefined;
+  if (kind === 'tri-state') return value === 'true' ? true : value === 'false' ? false : undefined;
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+};
+function setPath(target, path, value) {
+  let cursor = target;
+  for (const key of path.slice(0, -1)) { if (!isRecord(cursor[key])) cursor[key] = {}; cursor = cursor[key]; }
+  cursor[path[path.length - 1]] = value;
+}
+
+/**
+ * Brouillon -> entrées moteur : damageRoll(s), removals, healCount, facts.targets et facts.weapon (cibles retenues seulement),
+ * puis les saisies déclarées par les effets de `contract` (handler.inputFields), écrites au même chemin que dans le brouillon.
+ */
+export function toEngineInput(form, { targetIds = [], contract = null, actor = null } = {}) {
   const input = { facts: { targets: {} } };
   const damageRoll = optionalNumber(form.damageRoll);
   if (damageRoll !== undefined) input.damageRoll = damageRoll;
@@ -254,18 +289,29 @@ export function toEngineInput(form, { targetIds = [] } = {}) {
   const healCount = optionalNumber(form.healCount);
   if (healCount !== undefined) input.healCount = healCount;
   if (form.weaponId) input.facts.weapon = { equipmentId: form.weaponId, classConfirmed: form.weaponClassConfirmed === true };
+  for (const def of handlerInputFields(contract, { actor, targets: [] })) {
+    const path = def.path.split('.');
+    for (const key of def.scope === 'target' ? targetIds : [null]) {
+      const full = key === null ? path : [...path, key];
+      const value = engineValue(def.kind, readPath(form, full));
+      if (value !== undefined) setPath(input, full, value);
+    }
+  }
   return input;
 }
 
 const KNOWN_ANCHORS = { roll: 'roll', canSpeak: 'voice', targetIds: 'targets', expiry: 'expiry', healCount: 'healCount', damageRoll: 'damageRoll', wrathRoll: 'wrathRoll', testOptionId: 'test-option' };
 
 /** Rattache chaque `needsInput` renvoyé par l'aperçu à un champ du formulaire : [{field, label, anchor|null}]. */
-export function classifyNeeds(needs = [], { targets = [] } = {}) {
+export function classifyNeeds(needs = [], { targets = [], fields = [] } = {}) {
   const name = id => nameOf(targets.find(row => row.id === id)) || id;
   return needs.map(item => {
     const field = typeof item === 'string' ? item : item?.field || '';
     const label = typeof item === 'string' ? item : item?.label || item?.message || field;
     let match;
+    // Besoin d'une saisie déclarée par un type d'effet : son champ du formulaire (engineField).
+    const declared = fields.find(row => row.engineField === field);
+    if (declared) return { field, label, anchor: declared.anchor };
     if ((match = /^damageRolls\.(.+)$/.exec(field))) return { field, label, anchor: `damageRolls:${match[1]}` };
     if ((match = /^removals\.(.+)\.stateId$/.exec(field))) return { field, label, anchor: `removal:${match[1]}` };
     if (field === 'facts.weapon.equipmentId') return { field, label, anchor: 'weapon' };

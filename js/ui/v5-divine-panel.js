@@ -57,7 +57,7 @@ export function createDivinePanel({Store,refresh}){
    input=node('input');input.type='checkbox';input.checked=fieldValue(state.form,field)===true;wrap.className='workspace-type workspace-recipient-check';
    input.addEventListener('change',()=>{setFieldValue(state.form,field,input.checked);state.preview=null;state.error='';invalidateEditedForm(input);});
   }else{
-   input=node('input');input.type='number';input.min=field.min??0;input.step='1';if(field.max!==undefined)input.max=field.max;input.value=fieldValue(state.form,field);
+   input=node('input');input.type=field.kind==='text'?'text':'number';input.min=field.min??0;input.step='1';if(field.max!==undefined)input.max=field.max;input.value=fieldValue(state.form,field);
    input.addEventListener('input',()=>{setFieldValue(state.form,field,input.value);state.testOptionId='';state.preview=null;state.error='';invalidateEditedForm(input);});
   }
   input.setAttribute('aria-label',field.label);input.setAttribute('aria-describedby',help.id);input.dataset.focusKey=focusKey(field.anchor);
@@ -79,7 +79,7 @@ export function createDivinePanel({Store,refresh}){
   return {actorId:actor.id,targetIds,roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),
    testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
-   choices:clone(state.choices),...toEngineInput(state.form,{targetIds}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
+   choices:clone(state.choices),...toEngineInput(state.form,{targetIds,contract,actor}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
  return {render(actor,participants=[]){
   if(!actor)return null;if(state.actorId!==actor.id)reset(actor);
@@ -163,7 +163,7 @@ export function createDivinePanel({Store,refresh}){
   field(form,'Jet de Prière (d100)','roll',{min:1,max:100});
   const effectTargets=isSelfTargeted(contract)?[actor]:participants.filter(row=>row.zone==='active'&&state.targetIds.includes(row.id));
   const model=buildDivineForm(contract,{actor,targets:effectTargets,form:state.form,choices:state.choices}),descr=model.descr;
-  const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets}):[];
+  const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets,fields:model.effectFields}):[];
   const blocking=new Set(needs.map(row=>row.anchor).filter(Boolean));
   const factsGroup=(container,fields)=>{const group=node('div','workspace-divine-target-facts');for(const fact of fields)formField(group,fact,blocking.has(fact.anchor));container.append(group);};
   if(descr.selfTargeted){

@@ -1,11 +1,27 @@
 /**
- * Registre des types d'effet divins : {type -> {validate, needs, buildLayer, applyInstant, receipt}}.
+ * Registre des types d'effet divins : {type -> {validate, needs, resolve, applies, buildLayer, applyInstant, receipt, onExpire,
+ * inputFields, factFields, layerless}}. Tout est facultatif sauf ce que le type utilise.
  * - validate(effect) -> message d'erreur | null : contrôle du contrat à la génération.
- * - needs(effect, {targets}) -> [{field,label}] : faits manquants avant l'aperçu.
+ * - needs(effect, {targets, input, actor}) -> [{field,label}] : faits manquants avant l'aperçu.
+ * - resolve(effect, {actor, prayer, input, targets, contract}) -> effet résolu | {error, needs} : appelé UNE fois par effet et par
+ *   aperçu (prière réussie, contrat implemented/assisted), après durée, force d'État et perSuccessLevels. Reçoit une copie de l'effet,
+ *   renvoie l'effet à utiliser (valeurs dynamiques : Bonus de caractéristique, DR, taille de foule). Il est cloné, figé, puis stocké dans
+ *   `preview.effects` : buildLayer, applies, applyInstant et receipt ne voient plus que lui. Rien ne le recalcule à l'application.
+ * - applies(effect, participant, ctx) -> false pour exclure ce participant : filtre la couche ET applyInstant. ctx = {actorId, actor,
+ *   contract, prayer, input, targets}. Se combine avec `effect.appliesTo`.
  * - buildLayer(effect, ctx) -> champs ajoutés à la couche active (absent ou `layerless` : pas de couche).
  * - applyInstant(participant, effect, ctx) : mutation du participant à l'application ; retourne un résultat.
  * - receipt(effect, ctx, result) -> ligne de reçu | null.
- * Les types d'effet des tâches suivantes s'ajoutent dans les modules -damage, -conditions et -gear.
+ * - onExpire(participant, layer, transition) : à la fin de la couche.
+ * - inputFields(effect, {contract, actor, targets, choices}) -> [champ] : saisies du formulaire (lues par buildDivineForm).
+ *   champ = {path, label, kind: 'number'|'text'|'boolean'|'select'|'tri-state', scope: 'effect'|'target', help?, source?, min?, max?, options?}.
+ *   `path` : chemin pointé du brouillon, identique dans `input` du moteur (scope 'target' : l'identifiant de la cible s'y ajoute en dernier
+ *   segment). `source: true` ajoute « Source : … » à l'aide. `options` (select) : [[valeur, libellé]].
+ * - factFields(effect, {contract}) -> [{field, label, help?, required?, custom?}] : faits de cible (tri-état) lus dans
+ *   `input.facts.targets[id][field]`, ajoutés à ceux des règles du contrat.
+ * Champ d'effet générique : `effect.appliesTo` 'caster' | 'targets' (défaut 'targets' ; `casterOnly` : alias de 'caster').
+ * Durée : `{value, unit}` ou numérique résolue par le moteur `{base?, fromSuccessLevels?: true, unit}` (valeur = base + DR, ≥ 1).
+ * Chaque tâche ajoute ses types dans SON module (-tests, -damage, -conditions, -gear, -summon) et dans la grammaire.
  */
 import { healV5Wounds, acquireV5Conditions } from './v5-effects.js';
 import { knownMovement } from './v5-magic-effects.js';
@@ -14,6 +30,8 @@ import { REMINDER_FLAGS } from './v5-magic-reminder-flags.js';
 import damageHandlers from './v5-divine-effects-damage.js';
 import conditionHandlers from './v5-divine-effects-conditions.js';
 import gearHandlers from './v5-divine-effects-gear.js';
+import testsHandlers from './v5-divine-effects-tests.js';
+import summonHandlers from './v5-divine-effects-summon.js';
 
 const clone = value => structuredClone(value);
 const need = (field, label) => ({ field, label });
@@ -95,7 +113,7 @@ function strengthError(strengthFrom) {
   return null;
 }
 
-export const effectHandlers = Object.freeze({ ...coreHandlers, ...damageHandlers, ...conditionHandlers, ...gearHandlers });
+export const effectHandlers = Object.freeze({ ...coreHandlers, ...damageHandlers, ...conditionHandlers, ...gearHandlers, ...testsHandlers, ...summonHandlers });
 for (const type of effectTypes) if (!effectHandlers[type]) throw new Error(`Type d'effet divin sans gestionnaire : ${type}.`);
 for (const type of Object.keys(effectHandlers)) if (!effectTypes.has(type)) throw new Error(`Gestionnaire d'effet divin hors grammaire : ${type}.`);
 
@@ -114,7 +132,20 @@ export function progressionError(progression) {
 /** Contrôle générateur d'un effet de contrat : message d'erreur ou null. */
 export function validateEffect(effect) {
   if (!effect || typeof effect !== 'object' || !effectHandler(effect.type)) return `type d’effet non pris en charge par le moteur (attendu : ${[...effectTypes].join(', ')}).`;
-  return effectHandler(effect.type).validate?.(effect) ?? progressionError(effect.perSuccessLevels);
+  return effectHandler(effect.type).validate?.(effect) ?? progressionError(effect.perSuccessLevels) ?? scopeError(effect) ?? durationError(effect.duration);
+}
+
+/** `appliesTo` : 'caster' ou 'targets'. */
+function scopeError(effect) {
+  return effect.appliesTo === undefined || ['caster', 'targets'].includes(effect.appliesTo) ? null : 'appliesTo doit valoir caster ou targets.';
+}
+
+/** Durée numérique résolue par le moteur : {base?: entier, fromSuccessLevels?: true, unit} (sans value). */
+function durationError(duration) {
+  if (!duration || typeof duration !== 'object' || duration.value !== undefined || (duration.base === undefined && duration.fromSuccessLevels === undefined)) return null;
+  if (duration.base !== undefined && !Number.isSafeInteger(duration.base)) return 'duration.base doit être un entier.';
+  if (duration.fromSuccessLevels !== undefined && duration.fromSuccessLevels !== true) return 'duration.fromSuccessLevels ne peut valoir que true.';
+  return duration.unit === undefined || ['rounds', 'minutes', 'hours', 'days'].includes(duration.unit) ? null : 'duration.unit doit être rounds, minutes, hours ou days.';
 }
 
 /** Faits manquants avant d'appliquer un effet (type inconnu compris). */

@@ -98,7 +98,7 @@ function strengthValue(source, actor, prayer) {
   return source.kind === 'characteristic-bonus' ? Math.floor(score / 10) : score;
 }
 
-function resolvePrayerChoices(contract, prayer, actor, input) {
+function resolvePrayerChoices(contract, prayer, actor, input, targets = []) {
   const choices = Object.hasOwn(input, 'choices') ? input.choices : {};
   if (!objectValue(choices)) return { error: 'Les choix d’extension doivent être un objet de nombres entiers.',
     needs: [need('choices', 'Choix d’extension structurés')] };
@@ -164,13 +164,21 @@ function resolvePrayerChoices(contract, prayer, actor, input) {
       return { error: 'L’intensité de l’effet étendu est invalide.', needs: [need('choices.effect', 'Intensité résoluble')] };
     resolvedEffects[0].level = (resolvedEffects[0].level ?? 1) + amount;
   }
-  for (const effect of resolvedEffects) {
+  // Les effets ne sont résolus (crochet `handler.resolve`) que s'ils seront appliqués.
+  const resolvesEffects = prayer.success && ['implemented', 'assisted'].includes(contract.status);
+  for (const [effectIndex, effect] of resolvedEffects.entries()) {
     const declaredDuration = numericParam(contract.params?.duration, actor);
     const durationFollowsParameter = effect.duration?.sourceParameter === 'params.duration'
       || effect.duration?.unit === 'catalogue-duration'
       || (declaredDuration && effect.duration?.unit === declaredDuration.unit && effect.duration?.value === declaredDuration.value);
     if (durationFollowsParameter && resolvedParams.duration?.value !== null && resolvedParams.duration)
       effect.duration = { value: resolvedParams.duration.value, unit: resolvedParams.duration.unit };
+    // Durée numérique résolue par le moteur : `{base, fromSuccessLevels:true, unit}` -> `{value: base + DR, unit}` (nulle : échéance à arbitrer).
+    if (effect.duration && effect.duration.value === undefined && (effect.duration.fromSuccessLevels === true || effect.duration.base !== undefined)) {
+      const value = (effect.duration.base ?? 0) + (effect.duration.fromSuccessLevels === true ? Math.max(0, prayer.sl) : 0);
+      if (resolvesEffects && !(Number.isSafeInteger(value) && value >= 1)) return { error: 'La durée de l’effet, calculée depuis les DR, est nulle : échéance à arbitrer.', needs: [need('contract.effects.duration', 'Durée chiffrée par la source ou le MJ')] };
+      effect.duration = { value, unit: effect.duration.unit || 'rounds' };
+    }
     // Force d'État : la source remplace le niveau de base, la progression par DR s'y ajoute ensuite.
     if (effect.strengthFrom) {
       const strength = strengthValue(effect.strengthFrom, actor, prayer);
@@ -183,6 +191,13 @@ function resolvePrayerChoices(contract, prayer, actor, input) {
       const field = progression.field || 'level';
       const base = Number.isFinite(effect[field]) ? effect[field] : field === 'level' ? 1 : 0;
       effect[field] = base + Math.floor(Math.max(0, prayer.sl) / progression.every) * progression.add;
+    }
+    // Valeurs dynamiques du gestionnaire (Bonus de caractéristique, DR, taille de foule…) : une fois par effet, résultat figé.
+    const resolver = resolvesEffects ? effectHandler(effect.type)?.resolve : null;
+    if (resolver) {
+      const resolved = resolver(clone(effect), { actor, prayer, input, targets, contract });
+      if (resolved?.error) return { error: resolved.error, needs: resolved.needs || [need('contract.effects', 'Valeur de l’effet à résoudre')] };
+      if (resolved) resolvedEffects[effectIndex] = freeze(clone(resolved));
     }
   }
   return { resolvedParams, resolvedEffects, choices: counts, spent, budget };
@@ -330,6 +345,14 @@ function timedDuration(effect) {
 }
 const isCalendarEffect = effect => calendarSeconds(timedDuration(effect)) !== null;
 
+// Portée d'un effet : `appliesTo` ('caster' | 'targets', défaut 'targets'; `casterOnly` en alias), puis le prédicat `applies` du gestionnaire.
+// Filtre à la fois la couche et `applyInstant` d'un participant visé ; ctx = {actorId, actor, contract, prayer, input, targets}.
+const effectApplies = (effect, participant, ctx) => {
+  const scope = effect.appliesTo ?? (effect.casterOnly === true ? 'caster' : 'targets');
+  if (scope === 'caster' && participant?.id !== ctx.actorId) return false;
+  return effectHandler(effect.type)?.applies?.(effect, participant, ctx) !== false;
+};
+
 // Identifiant stable d'une couche ; un 2e effet du même type dans un contrat reçoit un suffixe d'ordre.
 const layerId = (executionId, targetId, contract, effect, ordinal = 0) =>
   `${executionId}:${targetId}:${contract.id}:${effect.type}${ordinal ? ':' + (ordinal + 1) : ''}`;
@@ -427,7 +450,7 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const effects = prayer.success && appliesEffects ? (contract.effects || []) : [];
   const effectTargets = targets?.length ? targets : [actor];
   const unresolvedEffects = effects.flatMap(effect => effectNeeds(effect, { targets: effectTargets, input, actor }));
-  const choiceResult = resolvePrayerChoices(contract, prayer, actor, input);
+  const choiceResult = resolvePrayerChoices(contract, prayer, actor, input, effectTargets);
   if (choiceResult.error) return { ...fail('needs-input', choiceResult.error, choiceResult.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt) }) };
   const targetProblem = validateTargetRules(contract, targets || [], input, choiceResult.resolvedParams, actor);
   if (targetProblem) return { ...fail('needs-input', targetProblem.error, targetProblem.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt), resolvedParams: clone(choiceResult.resolvedParams) }) };
@@ -527,6 +550,7 @@ export function applyDivineExecution(state, contract, input = {}) {
   // Durée manuelle en minutes/heures/jours : la couche de rappel porte l'échéance calendaire de la durée résolue.
   const manualCalendarDuration = timedManual && calendarSeconds(preview.resolvedParams.duration) !== null ? { value: preview.resolvedParams.duration.value, unit: preview.resolvedParams.duration.unit } : null;
   const calendarLayerEffects = layerEffects.filter(isCalendarEffect);
+  const appliesContext = { actorId, actor, contract, prayer: preview.prayer, input, targets: appliedTargets };
   if ((preview.effects.length || timedManual) && appliedTargets.length) {
     if ((calendarLayerEffects.length || manualCalendarDuration) && !hasClockAnchor(input.clockAnchor))
       return { ...fail('needs-input', 'Horloge de jeu requise pour dater cette durée en minutes, heures ou jours.', [need('clockAnchor', 'Horloge de jeu de la partie')]), state: clone(state), receipt: null, executionId: input.executionId };
@@ -540,15 +564,17 @@ export function applyDivineExecution(state, contract, input = {}) {
       // clones into `next`; otherwise resolving Wrath below can mutate the
       // original caster when a different participant is the prayer's target.
       if (!appliedTargets.some(target => target.id === participant.id)) return clone(participant);
-      const layers = layerEffects.map((effect, index) => effectLayer(effect, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry || null, clockAnchor: input.clockAnchor, ordinal: sameTypeOrdinal(layerEffects, index), input }));
+      // L'ordinal reste calculé sur tous les effets à couche : l'identifiant d'une couche ne dépend pas du filtre de portée.
+      const layered = layerEffects.map((effect, index) => ({ effect, index })).filter(({ effect }) => effectApplies(effect, participant, appliesContext));
+      const layers = layered.map(({ effect, index }) => effectLayer(effect, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry || null, clockAnchor: input.clockAnchor, ordinal: sameTypeOrdinal(layerEffects, index), input }));
       if (timedManual && !layers.length) layers.push(effectLayer({ type: 'manual-prayer-reminder', duration: manualCalendarDuration || clone(activeDuration) }, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry, clockAnchor: input.clockAnchor }));
       const updated = clone(participant);
       updated.extensions ||= {}; updated.extensions.v5 ||= {};
       updated.extensions.v5.divineEffects = [...(updated.extensions.v5.divineEffects || []), ...layers];
       for (const [index, effect] of preview.effects.entries()) {
         const handler = effectHandler(effect.type);
-        if (!handler?.applyInstant) continue;
-        const layer = layers[layerEffects.findIndex(row => row === effect)];
+        if (!handler?.applyInstant || !effectApplies(effect, participant, appliesContext)) continue;
+        const layer = layers[layered.findIndex(row => row.effect === effect)];
         const context = { contract, executionId: input.executionId, targetId: participant.id, targetName: participant.name, index, layer, expiry: input.expiry, round: input.round, input, actor, prayer: preview.prayer, combat: state.combat };
         const result = handler.applyInstant(updated, effect, context);
         const row = handler.receipt?.(effect, context, result);
@@ -570,7 +596,8 @@ export function applyDivineExecution(state, contract, input = {}) {
       sinBefore: preview.wrath.sinAtTest, sinAfter: preview.wrath.sinAfter,
       roll: preview.wrath.roll, modifiedRoll: preview.wrath.modifiedRoll, result: clone(preview.wrath.outcome),
       consequences: preview.wrath.consequences } : null,
-    appliedEffectIds: appliedTargets.flatMap(target => layerEffects.map((effect, index) => layerId(input.executionId, target.id, contract, effect, sameTypeOrdinal(layerEffects, index)))),
+    appliedEffectIds: appliedTargets.flatMap(target => layerEffects.flatMap((effect, index) => effectApplies(effect, target, appliesContext)
+      ? [layerId(input.executionId, target.id, contract, effect, sameTypeOrdinal(layerEffects, index))] : [])),
     effectReceipts,
     reminders: clone(preview.reminders), status: preview.status || previewResult.status
   };

@@ -89,6 +89,13 @@ const directDamage = {
   layerless: true,
   validate: directDamageError,
   needs: directDamageNeeds,
+  // Fait de cible exigé par le contrat (requiresFact) : saisi dans le formulaire par le mécanisme générique des gestionnaires.
+  factFields(effect) {
+    if (!isRecord(effect.requiresFact) || !effect.requiresFact.field) return [];
+    const label = String(effect.requiresFact.label || effect.requiresFact.field);
+    const short = label.split(/\s*[:(]/)[0].trim();
+    return [{ field: effect.requiresFact.field, label: short ? short[0].toUpperCase() + short.slice(1) : label, help: label + '.', required: true }];
+  },
   applyInstant(participant, effect, ctx) {
     const { input = {}, actor, prayer } = ctx;
     const before = clone(participant);

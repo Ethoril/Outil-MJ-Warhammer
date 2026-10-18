@@ -25,8 +25,8 @@ const handlers = {
   'grant-trait': {
     validate: effect => !Array.isArray(effect.traits) || !effect.traits.length || !effect.traits.every(isText) ? 'grant-trait exige traits (liste de textes).' : null,
     needs: effect => Array.isArray(effect.traits) && effect.traits.length && effect.traits.every(isText) ? [] : [need('contract.effects.traits', 'Traits sourcés requis')],
-    // `casterOnly` : le Trait ne va qu'au prêtre, même si le miracle vise aussi des alliés (Peur de Flambeau de Vertu).
-    buildLayer: (effect, { actorId, targetId }) => effect.casterOnly === true && targetId !== actorId ? {} : { traits: [...effect.traits] }
+    // Portée réservée au prêtre (`appliesTo: 'caster'`, ou son alias `casterOnly`, ex. Peur de Flambeau de Vertu) : filtrée par le moteur.
+    buildLayer: effect => ({ traits: [...effect.traits] })
   },
   'special-state': {
     validate(effect) {

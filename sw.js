@@ -36,6 +36,8 @@ const ASSETS_TO_CACHE = [
   './js/core/v5-divine-effects-damage.js',
   './js/core/v5-divine-effects-conditions.js',
   './js/core/v5-divine-effects-gear.js',
+  './js/core/v5-divine-effects-tests.js',
+  './js/core/v5-divine-effects-summon.js',
   './js/core/v5-divine-store.js',
   './js/core/v5-divine-prayer-caps.js',
   './js/core/v5-divine-access.js',
