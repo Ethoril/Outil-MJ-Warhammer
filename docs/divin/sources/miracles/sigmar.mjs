@@ -52,12 +52,14 @@ export const miracles = [
     name: 'Feu de l’âme', canonicalName: 'Soulfire', printedPage: 227,
     summary: 'Un feu sacré jaillit de votre corps : toutes les cibles de la zone subissent 1d10 Blessures sans TB ni PA. Celles qui ont le Trait Démon ou Mort-vivant reçoivent aussi un État Enflammé. Pour chaque DR, +1 Blessure infligée aux ' + foes + '.',
     params: { range: { kind: 'self' }, targets: area, duration: { kind: 'instant' } },
-    status: 'manual', effect: null, targetRules: [],
+    status: 'assisted', effect: null,
+    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, conditionalBonus: { when: 'foe', perSuccessLevel: 1 }, conditions: [{ key: 'Ablaze', level: 1, when: 'daemonOrUndead' }] }],
+    targetRules: [],
     needsInput: [{ id: 'damage-roll', text: 'Jet de 1d10 (par cible ou commun, source muette).' }, { id: 'targets-in-area', text: 'Créatures dans la zone, y compris alliés (source muette sur l’exclusion).' }, { id: 'creature-types', text: 'Traits Démon / Mort-vivant et statut orque, gobelin, mort-vivant ou serviteur du Chaos de chaque cible.' }],
     clauses: [
-      { id: 'area-damage', mode: 'manual', text: 'Toutes les cibles de la zone subissent 1d10 Blessures ignorant le BE et les PA (dégâts directs non gérés par le moteur).' },
-      { id: 'ablaze-daemon-undead', mode: 'manual', text: 'Les cibles ayant le Trait Daemon ou Undead gagnent aussi un État Enflammé.' },
-      { id: 'sl-extra', mode: 'manual', text: 'Pour chaque DR, +1 Blessure supplémentaire à tout orque, gobelin, mort-vivant ou serviteur des Puissances de la Ruine.' },
+      { id: 'area-damage', mode: 'engine', text: 'Toutes les cibles de la zone subissent 1d10 Blessures ignorant le BE et les PA (dégâts directs non gérés par le moteur).' },
+      { id: 'ablaze-daemon-undead', mode: 'engine', text: 'Les cibles ayant le Trait Daemon ou Undead gagnent aussi un État Enflammé.' },
+      { id: 'sl-extra', mode: 'engine', text: 'Pour chaque DR, +1 Blessure supplémentaire à tout orque, gobelin, mort-vivant ou serviteur des Puissances de la Ruine.' },
       { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.' }
     ],
     sourceDelta: 'Le gain est « par SL » imprimé, alors que la règle générale des miracles compte par tranche de +2 DR pour portée, cibles et durée; traité comme gain de dégâts distinct, explicitement écrit. Non précisé : les alliés dans la zone sont-ils touchés.'
@@ -66,13 +68,15 @@ export const miracles = [
     name: 'Comète à Deux Queues', canonicalName: 'Twin-tailed Comet', printedPage: 227,
     summary: 'Une comète s’abat sur une zone en ligne de vue et à portée contenant ceux que Sigmar juge ennemis. Tout dans la zone, sauf créatures invalides, subit 1d10 + DR Blessures sans TB ni PA et reçoit un État Enflammé. La zone doit être en extérieur. Si Sigmar ne trouve aucun ennemi, il vous frappe vous-même.',
     params: { range: soc('characteristic', 'yards'), targets: area, duration: { kind: 'instant' } },
-    status: 'manual', effect: null, targetRules: [],
+    status: 'assisted', effect: null,
+    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, conditions: [{ key: 'Ablaze', level: 1, when: 'always' }] }],
+    targetRules: [],
     needsInput: [{ id: 'target-area', text: 'Zone visée, en ligne de vue et à portée.' }, { id: 'outdoors', text: 'La zone est-elle en extérieur ?' }, { id: 'sigmar-foes', text: 'Ennemis de Sigmar présents dans la zone (arbitrage MJ); sinon le prêtre est frappé.' }, { id: 'invalid-creatures', text: 'Créatures invalides exclues (notion non définie par la source).' }, { id: 'damage-roll', text: 'Jet de 1d10 + DR.' }],
     clauses: [
       { id: 'targeting', mode: 'manual', text: 'Zone visible et à portée (Bonus de Sociabilité en yards au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.' },
       { id: 'outdoors-only', mode: 'manual', text: 'La zone ciblée doit être en extérieur.' },
-      { id: 'area-damage', mode: 'manual', text: 'Tout ce qui est dans la zone, sauf créatures invalides, subit 1d10 + DR Blessures ignorant BE et PA.' },
-      { id: 'ablaze', mode: 'manual', text: 'Chaque créature touchée reçoit un État Enflammé.' },
+      { id: 'area-damage', mode: 'engine', text: 'Tout ce qui est dans la zone, sauf créatures invalides, subit 1d10 + DR Blessures ignorant BE et PA.' },
+      { id: 'ablaze', mode: 'engine', text: 'Chaque créature touchée reçoit un État Enflammé.' },
       { id: 'backfire', mode: 'manual', text: 'Sans ennemi à frapper, Sigmar frappe le prêtre à la place.' }
     ],
     sourceDelta: 'Ambigu : « invalid creatures » n’est défini nulle part dans le passage; le « SL » ajouté aux dégâts est le DR du jet de prière; la zone « maximum » est lue comme un rayon plafonné au Bonus de Sociabilité en yards.'

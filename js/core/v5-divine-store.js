@@ -427,6 +427,9 @@ export function applyStoreDivine(state,contractId,input={}){
  next.log=[{id:captured.executionId+':log',kind:'effect',actorId:ctx.actor.id,actorName:ctx.actor.name,
   text:`${ctx.actor.name} · ${contract.name} · ${prayer.success?'prière réussie':'prière ratée'} (${prayer.sl} DR)${calculated.receipt.pendingWrath?' · Courroux à résoudre':''}${wrathSanction?' · Pensez à vos actes : cap +0 DR pendant huit jours':''}${wrathLesson?' · Leçons divines : −1 DR à Prière jusqu’à la fin du Round '+wrathLesson.expiry.round:''}`,
   detail:{kind:'divine',contractId:contract.id,executionId:captured.executionId,source:contract.source,reminders:calculated.receipt.reminders,...(access.mode==='grant'?{accessDecision:clone(next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId)?.accessDecision)}:{})}},...(next.log||[])].slice(0,300);
+ // Une ligne de journal par cible touchée (dégâts directs : dés et DR) ; les reçus d'effet portent leur texte dans `log`.
+ const effectLogs=(calculated.receipt.effectReceipts||[]).filter(row=>typeof row.log==='string').map((row,index)=>({id:`${captured.executionId}:effect:${index}`,kind:'effect',actorId:ctx.actor.id,actorName:ctx.actor.name,text:row.log,detail:{kind:'divine-effect',executionId:captured.executionId,targetId:row.targetId,type:row.type,result:clone(row.result)}}));
+ if(effectLogs.length)next.log=[next.log[0],...effectLogs,...next.log.slice(1)].slice(0,300);
  return {...calculated,state:next};
 }
 

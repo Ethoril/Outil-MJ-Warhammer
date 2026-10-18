@@ -150,11 +150,13 @@ function resolvePrayerChoices(contract, prayer, actor, input) {
   }
   if (increments.effect) {
     const effect = increments.effect;
-    if (effect.type !== 'condition' || effect.key !== contract.effects[0]?.key && effect.name !== contract.effects[0]?.name)
+    const healingExtension = effect.type === 'wound-heal' && contract.effects[0]?.type === 'wound-heal';
+    if (!healingExtension && (effect.type !== 'condition' || effect.key !== contract.effects[0]?.key && effect.name !== contract.effects[0]?.name))
       return { error: 'Cette extension d’effet ne correspond pas à l’effet structuré du contrat.', needs: [need('choices.effect', 'Correspondance explicite de l’effet')] };
   }
   const resolvedEffects = clone(contract.effects || []);
-  if (increments.effect) {
+  if (increments.effect?.type === 'wound-heal') resolvedEffects[0].extraHeals = increments.effect.count;
+  else if (increments.effect) {
     const amount = Number(increments.effect.add ?? increments.effect.value ?? increments.effect.level ?? 1) * increments.effect.count;
     if (!Number.isSafeInteger(amount) || !resolvedEffects[0] || !Number.isSafeInteger(resolvedEffects[0].level ?? 1))
       return { error: 'L’intensité de l’effet étendu est invalide.', needs: [need('choices.effect', 'Intensité résoluble')] };
@@ -420,7 +422,7 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     ...(contract.clauses || []).filter(clause => clause.mode !== 'engine' && clause.text).map(clause => clause.text));
   const effects = prayer.success && appliesEffects ? (contract.effects || []) : [];
   const effectTargets = targets?.length ? targets : [actor];
-  const unresolvedEffects = effects.flatMap(effect => effectNeeds(effect, { targets: effectTargets }));
+  const unresolvedEffects = effects.flatMap(effect => effectNeeds(effect, { targets: effectTargets, input, actor }));
   const choiceResult = resolvePrayerChoices(contract, prayer, actor, input);
   if (choiceResult.error) return { ...fail('needs-input', choiceResult.error, choiceResult.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt) }) };
   const targetProblem = validateTargetRules(contract, targets || [], input, choiceResult.resolvedParams, actor);
@@ -543,7 +545,7 @@ export function applyDivineExecution(state, contract, input = {}) {
         const handler = effectHandler(effect.type);
         if (!handler?.applyInstant) continue;
         const layer = layers[layerEffects.findIndex(row => row === effect)];
-        const context = { contract, executionId: input.executionId, targetId: participant.id, index, layer, expiry: input.expiry, round: input.round };
+        const context = { contract, executionId: input.executionId, targetId: participant.id, index, layer, expiry: input.expiry, round: input.round, input, actor, prayer: preview.prayer };
         const result = handler.applyInstant(updated, effect, context);
         const row = handler.receipt?.(effect, context, result);
         if (row) effectReceipts.push(row);

@@ -77,17 +77,17 @@ export const miracles = [
     printedPage: 228,
     summary: 'Le sang et la moelle de la cible gèlent : elle subit 1d10 Blessures sans Bonus d\'Endurance ni Points d\'Armure, plus 1 Blessure par DR. Si le MJ juge que la cible n\'est ni faible, ni lâche, ni fourbe, c\'est vous qui subissez l\'effet.',
     params: { range, targets: one, duration: { kind: 'instant' } },
-    status: 'manual',
-    effect: null,
+    status: 'assisted', effect: null,
+    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, requiresFact: { field: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe (sinon le prêtre subit l’effet : à résoudre à la main)' } }],
     targetRules: [],
     needsInput: [
       { id: 'target-judgement', text: 'Le MJ juge-t-il la cible faible, lâche ou fourbe ? Sinon le prêtre subit l\'effet.' },
       { id: 'sl', text: 'DR du test de Prière (1 Blessure supplémentaire par DR).' }
     ],
     clauses: [
-      { id: 'damage', mode: 'assisted', text: '1d10 Blessures ignorant Bonus d\'Endurance et PA, +1 Blessure par DR; relève d\'un jet de dégâts direct hors des types d\'effet du moteur.' },
+      { id: 'damage', mode: 'engine', text: '1d10 Blessures ignorant Bonus d\'Endurance et PA, +1 Blessure par DR.' },
       { id: 'redirect', mode: 'manual', text: 'Si la cible n\'est ni faible, ni lâche, ni fourbe (décision MJ), le prêtre subit le même effet.' },
-      { id: 'haine-sacree', mode: 'manual', text: 'Dégâts de miracle : bonus éventuels du talent Haine sacrée à examiner (déclencheur « miracle inflige des Blessures »).' }
+      { id: 'haine-sacree', mode: 'engine', text: 'Dégâts de miracle : +2 si le prêtre a le talent Haine sacrée (déclencheur « miracle inflige des Blessures »).' }
     ]
   },
   {

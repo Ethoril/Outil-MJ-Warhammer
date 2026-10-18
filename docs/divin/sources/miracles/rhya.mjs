@@ -61,15 +61,18 @@ export const miracles = [
     name: 'Caresse de Rhya', canonicalName: "Rhya's Touch", printedPage: 225,
     summary: 'Mains posées sur une cible blessée ou malade, vous choisissez : soigner un nombre de Blessures égal au Bonus de Sociabilité, ou guérir 1 maladie naturelle. Par tranche de +2 DR, un effet supplémentaire, identique ou non. L’effet demande au moins 10 minutes; une interruption impose de retenter.',
     params: { range: touch, targets: { kind: 'count', value: 1 }, duration: { kind: 'special' } },
-    status: 'manual', effect: null, targetRules: [],
+    status: 'assisted', effect: null,
+    effects: [{ type: 'wound-heal', value: { formula: 'BSoc' }, duration: { unit: 'instant' } }],
+    extensions: [{ everySuccessLevels: 2, choices: [{ range: { addBaseValue: true } }, { targets: { addBaseValue: true } }, { duration: { addBaseValue: true } }], effect: { type: 'wound-heal' }, sourceRef: 'miracle-scaling', repeatable: true, restrictions: { youAndYouCannotIncreaseRangeOrTargets: true, instantDurationCannotIncrease: true } }],
+    targetRules: [],
     needsInput: [{ id: 'effect-choice', text: 'Effet choisi pour chaque tranche (soin de Blessures ou maladie naturelle guérie).' }, { id: 'disease', text: 'Maladie visée et caractère naturel (fait MJ).' }, { id: 'uninterrupted', text: 'Les 10 minutes ont-elles été menées sans interruption ?' }],
     clauses: [
-      { id: 'heal-wounds', mode: 'assisted', text: 'Option : soigner Bonus de Sociabilité Blessures (valeur dépendante d’une caractéristique : effet wound-heal du moteur non applicable tel quel, valeur numérique requise).' },
+      { id: 'heal-wounds', mode: 'engine', text: 'Option : soigner Bonus de Sociabilité Blessures (formule BSoc lue sur le prêtre).' },
       { id: 'cure-disease', mode: 'manual', text: 'Option : guérir 1 maladie naturelle.' },
-      { id: 'extra-effects', mode: 'manual', text: 'Par +2 DR, un effet supplémentaire au choix, le même effet pouvant être répété.' },
+      { id: 'extra-effects', mode: 'assisted', text: 'Par +2 DR, un effet supplémentaire au choix, le même effet pouvant être répété : chaque extension de soin (choix « effet ») est appliquée ; si un effet est consacré à une maladie, indiquer le nombre de soins retenus (healCount).' },
       { id: 'slow', mode: 'manual', text: 'Effets manifestés après au moins 10 minutes; si interrompu, le miracle doit être retenté.' }
     ],
-    sourceDelta: 'Soin exprimé en Bonus de Sociabilité : le moteur (healing/wound-heal) exige une valeur numérique; non résolue ici.'
+    sourceDelta: 'Soin exprimé en Bonus de Sociabilité : formule BSoc résolue sur la fiche du prêtre à l’aperçu.'
   },
   {
     name: 'Union de Rhya', canonicalName: "Rhya's Union", printedPage: 226,
