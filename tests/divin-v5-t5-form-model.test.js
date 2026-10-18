@@ -215,6 +215,7 @@ test('de bout en bout : Feu de l’âme, Secours de Rhya et Marteau enflammé de
     const request = { ...filled.request, ...toEngineInput(filled.form, { targetIds }) };
     const preview = store.previewDivineExecution(contractId, request);
     assert.equal(preview.ready, true, `${preview.error} ${JSON.stringify(preview.needsInput)}`);
+    assert.ok(Array.isArray(preview.projectedEffects), 'l’aperçu projette les effets par cible sans rien appliquer');
     const result = await store.applyDivineExecution(contractId, { preview });
     assert.equal(result.ready, true, result.error);
     return { store, result };
@@ -226,6 +227,8 @@ test('de bout en bout : Feu de l’âme, Secours de Rhya et Marteau enflammé de
   assert.ok(fire.result.receipt.effectReceipts.every(row => describeEffectResult(row, { contract: getDivineContract(SOULFIRE), participants: people(fire.store) })));
   const succour = await run(SUCCOUR, ['foe'], ({ form }) => { form.removals.foe = 'st-broken'; });
   assert.deepEqual(people(succour.store).find(row => row.id === 'foe').states.map(row => row.id), ['st-deaf']);
+  assert.ok(JSON.parse(succour.store.getFullJSON()).log.some(row => /foe : État\(s\) retiré\(s\) : Brisé/.test(row.text)), 'le journal nomme l’État retiré');
+  assert.equal(succour.result.receipt.effectReceipts[0].result.removedNames[0], 'Brisé');
   const hammer = await run(HAMMER, ['priest'], ({ form }) => { form.weaponId = 'ham-1'; });
   const bonus = people(hammer.store).find(row => row.id === 'priest').extensions.v5.weaponBonuses.find(row => row.equipmentId);
   assert.equal(bonus.equipmentId, 'ham-1');
