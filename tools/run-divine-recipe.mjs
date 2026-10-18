@@ -24,6 +24,7 @@ const commands=[
  ['source-ui',node,['tests/divin-v5-source-browser-independent.mjs']],
  ['form-ui',node,['tests/divin-v5-e3-e4-form-independent.mjs']],
  ['prayer-form-ui',node,['tests/divin-v5-t5-browser.mjs']],
+ ['summon-ui',node,['tests/divin-v5-p4c-browser.mjs']],
  ['time-ui',node,['tests/divin-v5-e5-browser-independent.mjs']],
  ['campaign-ui',node,['tests/divin-v5-campaign-browser.mjs']],
  ['campaign-ui-independent',node,['tests/divin-v5-campaign-ui-independent.mjs']],
@@ -36,6 +37,7 @@ const commands=[
  ['magic-ui',node,['tests/browser-magic-v5-smoke.mjs']],
  ['combat-ui',node,['tests/lot2-combat-v5-browser.mjs']],
  ['divine-cloud','powershell',['-NoProfile','-ExecutionPolicy','Bypass','-File','tests/run-lot2-v5-25-emulators.ps1','-TestScript','tests/divin-v5-cloud-browser.mjs','-DatabasePort','19110','-AuthPort','19119','-HubPort','14410','-LoggingPort','14510']],
+ ['summon-cloud','powershell',['-NoProfile','-ExecutionPolicy','Bypass','-File','tests/run-lot2-v5-25-emulators.ps1','-TestScript','tests/divin-v5-p4c-cloud.mjs','-DatabasePort','19110','-AuthPort','19119','-HubPort','14410','-LoggingPort','14510']],
  ['build-offline',node,['tools/build-lot3-local-release.mjs']],
  ['offline',node,['tests/lot3-v5-35-release-browser.mjs']],
  ['diff','git',['-c','core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol','diff','--check']]
