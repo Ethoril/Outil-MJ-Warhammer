@@ -1,3 +1,4 @@
+import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 /**
  * Vue de séance E09.
  *
@@ -6,13 +7,16 @@
  * les données du Store, puis délègue les commandes au contrôleur applicatif.
  * Seul l'aperçu de résolution (lecture seule) est demandé directement au Store.
  */
+import { availableV5TalentActions } from '../core/v5-talent-actions.js';
 import { createV5TimedEffect } from '../core/v5-effects.js';
+import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { recoveryMethodsFor } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { equipmentAttackContext } from '../core/equipment.js';
 import { d100 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError } from './messages.js';
+import { formatV5Balance } from '../core/v5-resources.js';
 import { normalizeEffects } from '../core/effects.js';
 import { CAMP_LABELS, normalizeCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
 import { uid } from '../core/models.js';
@@ -20,6 +24,9 @@ import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
+import { getSpellContract, getAllSpellContracts } from '../core/v5-spell-contracts.js';
+import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
+import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
 
 export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'library']);
 
@@ -30,6 +37,20 @@ const SPACE_LABELS = Object.freeze({
 });
 
 const noop = () => {};
+
+/**
+ * Sort transmis à l'aperçu d'incantation : le caractère mineur se lit sur le domaine du contrat
+ * (« petty » / « elven-petty »), comme dans le moteur de contrats.
+ */
+export function magicCastingSpell(contract, { spellId = null, lore = null, channelType = 'winds' } = {}) {
+  const isPetty = contract?.domain === 'petty' || contract?.domain === 'elven-petty';
+  return {
+    ...(contract || { id: spellId, name: spellId, cn: 0 }),
+    wind: contract?.domain || lore || 'fire',
+    type: channelType === 'high' ? 'high' : (isPetty ? 'petty' : 'lore'),
+    isPetty
+  };
+}
 
 function node(tag, className, text) {
   const element = document.createElement(tag);
@@ -113,9 +134,13 @@ function hpBar(participant) {
 }
 
 // Clé du brouillon → nom du jet attendu par le moteur (criticalRolls).
-const CRITICAL_ERROR_FIELDS = Object.freeze({ criticalLocationRoll: 'location', criticalEffectRoll: 'effect', criticalSecondRoll: 'secondEffect', criticalEffectAlternativeRoll: 'effectAlternative', criticalSecondAlternativeRoll: 'secondEffectAlternative' });
-const DEFENDER_CRITICAL_FIELDS = Object.freeze({ defenderCriticalLocationRoll: 'location', defenderCriticalEffectRoll: 'effect', defenderCriticalEffectAlternativeRoll: 'effectAlternative' });
+const CRITICAL_ERROR_FIELDS = Object.freeze({ criticalInjureRoll:'injureEffect',criticalInjureSecondRoll:'injureSecondEffect',criticalInjureAlternativeRoll:'injureEffectAlternative',criticalInjureSecondAlternativeRoll:'injureSecondEffectAlternative',criticalLocationRoll: 'location', criticalEffectRoll: 'effect', criticalSecondRoll: 'secondEffect', criticalEffectAlternativeRoll: 'effectAlternative', criticalSecondAlternativeRoll: 'secondEffectAlternative' });
+const DEFENDER_CRITICAL_FIELDS = Object.freeze({ defenderCriticalSecondRoll:'secondEffect',defenderCriticalSecondAlternativeRoll:'secondEffectAlternative',defenderCriticalInjureSecondRoll:'injureSecondEffect',defenderCriticalInjureSecondAlternativeRoll:'injureSecondEffectAlternative',defenderCriticalInjureRoll:'injureEffect',defenderCriticalInjureAlternativeRoll:'injureEffectAlternative',defenderCriticalLocationRoll: 'location', defenderCriticalEffectRoll: 'effect', defenderCriticalEffectAlternativeRoll: 'effectAlternative' });
 const criticalRollError = () => userMessage(new ResolutionError('Jet invalide', 'INVALID_ROLL'), 'Jet invalide.');
+
+// D-18 : distance et visibilité de dissipation viennent de la saisie ; absentes, elles restent absentes (aucun repli à 0 ni « non »).
+const dispelDistance = value => Number.isFinite(value) ? value : undefined;
+const dispelVisible = value => value === true || value === 'true' ? true : value === false || value === 'false' ? false : undefined;
 
 function validRoll(value) {
   const text = String(value ?? '').trim();
@@ -262,14 +287,30 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return {
       actorId, actionKey: null, externalActionId: null, type: null, attackRoll: '', defenseStat: null, defenseBase: null, defenseSource: null, defenseRoll: '', protectionContext: {}, ammunitionId: '', ammunitionArbitrated: false,
       // Critique : jets saisis, effets décochés et erreurs de saisie par champ (l'aperçu reste affiché).
-      criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {}, defenderCriticalLocationRoll: '', defenderCriticalEffectRoll: '', defenderCriticalEffectAlternativeRoll: '', defenderCriticalDeclined: [],
+      criticalInjureRoll: '', criticalInjureSecondRoll: '', criticalInjureAlternativeRoll: '', criticalInjureSecondAlternativeRoll: '', defenderCriticalSecondRoll:'',defenderCriticalSecondAlternativeRoll:'',defenderCriticalInjureSecondRoll:'',defenderCriticalInjureSecondAlternativeRoll:'',defenderCriticalInjureRoll: '', defenderCriticalInjureAlternativeRoll: '', criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {}, defenderCriticalLocationRoll: '', defenderCriticalEffectRoll: '', defenderCriticalEffectAlternativeRoll: '', defenderCriticalDeclined: [],
       v5Kind: null, v5SlModifier: null, v5Advantages: 0, v5Disadvantages: 0, v5Choice: null, defenseChoice: null, charging: false, extraAttack: false, reactionId: null, reactionAction: null, aimed: false, beatBlade: false, actorSize: null, targetSize: null, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, v5Context: {}, defenseContext: {},
       preview: null, comparison: null, error: null, busy: false
     };
   }
   // Un nouvel aperçu (autre action, type, cible ou jet) repart de zéro côté critique.
   function resetCritical(draft) {
-    Object.assign(draft, { criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {}, defenderCriticalLocationRoll: '', defenderCriticalEffectRoll: '', defenderCriticalEffectAlternativeRoll: '', defenderCriticalDeclined: [] });
+    Object.assign(draft, { criticalInjureRoll: '', criticalInjureSecondRoll: '', criticalInjureAlternativeRoll: '', criticalInjureSecondAlternativeRoll: '', defenderCriticalSecondRoll:'',defenderCriticalSecondAlternativeRoll:'',defenderCriticalInjureSecondRoll:'',defenderCriticalInjureSecondAlternativeRoll:'',defenderCriticalInjureRoll: '', defenderCriticalInjureAlternativeRoll: '', criticalLocationRoll: '', criticalEffectRoll: '', criticalSecondRoll: '', criticalEffectAlternativeRoll: '', criticalSecondAlternativeRoll: '', criticalDeclined: [], criticalErrors: {}, defenderCriticalLocationRoll: '', defenderCriticalEffectRoll: '', defenderCriticalEffectAlternativeRoll: '', defenderCriticalDeclined: [] });
+  }
+  // Dés saisis pour UN lancer (incidents, perte de Focalisation, dés secondaires, vortex, 3d10, épuisement, test secondaire) :
+  // jamais réutilisés pour le lancer suivant, sinon la persistance du brouillon fait office de dé implicite.
+  const MAGIC_DICE_KEYS = ['magicFumbleLossRoll', 'magicMiscastRoll', 'magicMiscastRoll2', 'magicMajorRoll', 'magicSecondaryDurationRoll', 'magicSecondaryDamageRoll', 'magicSecondaryDistanceRoll', 'magicSecondaryLocation', 'magicResistanceRoll', 'magicVortexDirection', 'magicVortexWillpower', 'magicVortexDirectionRoll', 'magicVortexDistance', 'magicNoOtherTargets', 'magicRoll3d10', 'magicDurationAmount', 'magicDurationUnit', 'magicBurnoutRoll', 'magicCadaiTestRoll', 'magicCadaiMiscastRoll', 'magicCadaiBurnoutRoll', 'magicCadaiCorruptionRoll', 'magicCorruptionInitialRoll', 'magicExtraRoll1', 'magicExtraRoll2', 'magicExtraDuration1', 'magicExtraDuration2', 'magicExtraDamage1', 'magicExtraDamage2', 'magicExtraDistance1', 'magicExtraDistance2', 'magicExtraLocation1', 'magicExtraLocation2', 'magicDispelRoll', 'magicPersistentRestart', 'magicWardRoll'];
+  // Réponses propres à une attaque (nature, d10 de Protection, Test de Calme) : jamais reportées sur la suivante.
+  function forgetAttackAnswers(draft) {
+    const { attackNature, magicWardRoll, reductionCalm, ...context } = draft.v5Context || {};
+    draft.v5Context = context;
+    const { attackNature: defenseNature, ...defenseContext } = draft.defenseContext || {};
+    draft.defenseContext = defenseContext;
+  }
+  function resetMagicDice(draft) {
+    draft.magicCtRoll=null;
+    for (const key of MAGIC_DICE_KEYS) draft[key] = key === 'magicNoOtherTargets' ? false : null;
+    draft.magicTargetTests = {};
+    draft.magicSecondaryRolls = {};
   }
   // Autre jet de critique : ses effets repartent cochés (les cases décochées visaient l'ancien tirage).
   // La localisation change aussi les dégâts, donc l'existence du second critique.
@@ -335,7 +376,21 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function actorActions(participant) {
     if (!participant) return [];
     const lines = typeof Store.getDiceLines === 'function' ? Store.getDiceLines().filter(line => line.participantId === participant.id) : [];
-    let available = (participant.actions || []).length ? participant.actions : lines;
+    const isMagicUser = Boolean(
+      (participant.spells && participant.spells.length > 0) ||
+      (participant.skills || []).some(s => /focalisation|channelling|magick/i.test(s.name || s.nom || '')) ||
+      participant.extensions?.v5?.channelling ||
+      participant.extensions?.v5?.magic
+    );
+    const magicActions = isMagicUser ? [
+      ...(!beastFormRestriction(participant,'channel') ? [{ id: 'v5-magic:channelling', note: 'Focalisation V5', type: 'channelling', attr: 'FM', base: Number(participant.caracs?.FM) || 50, mod: 0, qualities: [] }] : []),
+      { id: 'v5-magic:dispel', note: 'Dissipation persistante V5', type: 'dispel', attr: 'Int', base: Number(participant.caracs?.Int) || 50, mod: 0, qualities: [] },
+      ...(!beastFormRestriction(participant,'cast') ? [{ id: 'v5-magic:cast', note: 'Incantation V5', type: 'cast', attr: 'Int', base: Number(participant.caracs?.Int) || 50, mod: 0, qualities: [] }] : [])
+    ] : [];
+    // Équipement lâché sous forme animale : ni armes ni attaques du lanceur, seulement celles de la créature.
+    const transformed = Boolean(participant.extensions?.v5?.beastForm);
+    const ownActions = ((participant.actions || []).length ? participant.actions : lines).filter(action => !transformed || (!['attack', 'attaque'].includes(action.type) && !action.extensions?.fiche?.equipmentId));
+    let available = [...ownActions, ...availableV5TalentActions(participant), ...(transformed ? beastFormActions(participant) : magicGrantedActions(participant)), ...magicActions];
     if (state.resolution.actorId === participant.id && state.resolution.reactionAction) {
       const bound = state.resolution.reactionAction;
       available = available.some(row => row.id === bound.id) ? available.map(row => row.id === bound.id ? bound : row) : [...available, bound];
@@ -372,7 +427,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const keys = actions.map(actionKey);
     if (!keys.includes(draft.actionKey)) draft.actionKey = keys[0] || null;
     const action = actions[keys.indexOf(draft.actionKey)] || null;
-    const type = draft.type || (action ? inferActionType(action) : null);
+    const type = draft.type || (action && ['channelling', 'cast', 'dispel'].includes(action.type) ? action.type : (action ? inferActionType(action) : null));
 
     const camp = participant => normalizeCamp(participant?.camp, participant?.kind);
     const others = active.filter(participant => participant.id !== actor?.id);
@@ -381,9 +436,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       allies: others.filter(participant => camp(participant) === camp(actor))
     };
     let target = null;
-    if (state.targetChoice && state.targetChoice !== 'none') target = others.find(participant => participant.id === state.targetChoice) || null;
-    if (!target && state.targetChoice !== 'none' && type !== 'skill') target = groups.adversaries[0] || others[0] || null;
-    if (draft.preview && draft.preview.targetId !== (target?.id || null)) { draft.preview = null; resetCritical(draft); }
+    if (state.targetChoice && state.targetChoice !== 'none') {
+      target = (state.targetChoice === actor?.id ? actor : others.find(participant => participant.id === state.targetChoice)) || null;
+    }
+    if (!target && state.targetChoice !== 'none' && !['skill', 'channelling'].includes(type)) {
+      target = groups.adversaries[0] || others[0] || (type === 'cast' ? actor : null);
+    }
+    if (draft.preview && !draft.preview.v5MagicKind && draft.preview.targetId !== (target?.id || null)) { draft.preview = null; resetCritical(draft); }
     const defense = ['attack','opposition'].includes(type) && target ? defenseChoice(target, type) : null;
     if (defense) {
       // Valeur pré-remplie pour une cible, une option et sa valeur : une autre combinaison (jet disparu,
@@ -745,8 +804,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       remove.dataset.workspaceAction = 'remove-state';
       remove.dataset.actorId = participant.id;
       remove.dataset.stateIndex = String(index);
-      remove.disabled = !callbacks.setStates;
-      if (callbacks.recoverState && recoveryMethodsFor(item).length) {
+      const lockedByMiscast = isMiscastConditionLocked(participant, item);
+      remove.disabled = !callbacks.setStates || lockedByMiscast;
+      if (lockedByMiscast) remove.title = 'Lié à un incident magique en cours : se retire à son terme';
+      if (callbacks.recoverState && !lockedByMiscast && recoveryMethodsFor(item).length) {
         const recover=button('Récupérer','workspace-state-recover',{'aria-label':`Récupérer ${item.name} de ${participant.name}`,'data-focus-key':`state-recover-${participant.id}-${index}`});
         recover.dataset.workspaceAction='recover-state';recover.dataset.actorId=participant.id;recover.dataset.stateIndex=String(index);entry.appendChild(recover);
       }
@@ -773,7 +834,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     momentumButton.disabled = !callbacks.setMomentum; body.appendChild(momentumButton);
     if (callbacks.getFortune || callbacks.editFortune) {
       const fortune = callbacks.getFortune?.(participant.id);
-      const fortuneButton = button('Fortune : ' + (fortune?.balance ?? '?'), 'workspace-secondary', {
+      const fortuneButton = button('Fortune : ' + formatV5Balance(fortune), 'workspace-secondary', {
         'aria-label': 'Modifier la Fortune de ' + participant.name, 'data-focus-key': 'fortune-' + participant.id });
       fortuneButton.dataset.workspaceAction = 'edit-fortune'; fortuneButton.dataset.actorId = participant.id;
       fortuneButton.disabled = !callbacks.editFortune; body.appendChild(fortuneButton);
@@ -816,10 +877,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (draft.v5SlModifier != null && !Number.isInteger(draft.v5SlModifier)) throw userError('Le modificateur V5 doit être un nombre entier de DR.');
     return { kind: draft.v5Kind || inferV5Kind({ ...context.action, type: context.type }, equipmentAttackContext(context.action.extensions?.equipment)),
       ...(draft.v5SlModifier != null ? { slModifier: draft.v5SlModifier } : context.action.extensions?.v5?.slModifier != null ? { slModifier: context.action.extensions.v5.slModifier } : {}),
-      choice: draft.v5Choice, charging: draft.charging, context: draft.v5Context,
+      choice: draft.v5Choice, charging: draft.charging, context: { ...(context.action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{}) },
       talentChoices: { ...(draft.talentChoices || {}), 'talent-beat-blade:replace-damage': draft.beatBlade === true },
+      fortuneReroll: draft.fortuneReroll === true,
+      ...(draft.fortuneRerollRoll != null && draft.fortuneRerollRoll !== '' ? { fortuneRerollRoll: Number(draft.fortuneRerollRoll) } : {}),
       extraAttack: draft.extraAttack === true, ...(draft.reactionId ? { reactionId: draft.reactionId } : {}), aimed: draft.aimed === true,
-      actorSize: draft.actorSize, targetSize: draft.targetSize,      advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'), disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré') };
+      actorSize: draft.actorSize, targetSize: draft.targetSize,
+      advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'), disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré') };
   }
   function defenseV5Input(context, draft) {
     if (draft.defenseSlModifier != null && !Number.isInteger(draft.defenseSlModifier)) throw userError('Le modificateur V5 de défense doit être un nombre entier de DR.');
@@ -829,10 +893,51 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       advantageSources: declaredSources(draft.defenseAdvantages, 'Avantage déclaré en défense'),
       disadvantageSources: declaredSources(draft.defenseDisadvantages, 'Désavantage déclaré en défense') };
   }
+  // U-01 : une opération ponctuelle ne s'applique qu'une fois par clé (créée au rendu) ; après succès elle reste consommée
+  // jusqu'à la prochaine saisie du MJ, y compris pour un second clic tardif qui trouverait la persistance déjà finie.
+  function magicOperationKey(name) {
+    const draft = state.resolution;
+    if (draft.magicOpSpent?.[name]) return null;
+    draft.magicOpKeys = draft.magicOpKeys || {};
+    return draft.magicOpKeys[name] ||= `op-${name}-${++magicOpSeq}`;
+  }
+  let magicOpSeq = 0;
+  async function runMagicSecondary(action, fallback, onSuccess = () => {}, baseRevision = Store.getLocalRevision(), operation = null) {
+    const draft = state.resolution;
+    if (draft.busy) return;
+    if (operation && (!operation.key || draft.magicOpKeys?.[operation.name] !== operation.key || draft.magicOpSpent?.[operation.name])) return;
+    if (previewIsStale(draft.preview)) { rejectStalePreview(); return; }
+    if (operation) draft.magicOpSpent = { ...draft.magicOpSpent, [operation.name]: true };
+    draft.busy = true; draft.error = null;
+    render();
+    try {
+      const result = await action(baseRevision);
+      if (result?.ok === false) throw userError(typeof result.error === 'string' ? result.error : result.error?.message || fallback);
+      draft.preview = null;
+      onSuccess();
+    } catch (error) {
+      draft.error = { field: 'general', message: userMessage(error, fallback) };
+      if (operation) draft.magicOpSpent = { ...draft.magicOpSpent, [operation.name]: false };
+    } finally {
+      draft.busy = false;
+      render();
+    }
+  }
+
   const resolutionHandlers = {
     select(patch) {
       const draft = state.resolution;
-      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','talentChoices','defenseTalentChoices']) if (key in patch) draft[key] = patch[key];
+      draft.magicOpSpent = {};
+      if ('magicSpellId' in patch && patch.magicSpellId !== draft.magicSpellId) {
+        draft.magicMjChoice = ''; draft.magicSpellFacts={}; draft.magicInteraction={};
+        resetMagicDice(draft);
+        for(const key of ['magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicArcaneArmorPoints'])draft[key]=0;
+        draft.magicArcaneEnhancedDamage=false;draft.magicArcaneChooseItem=false;draft.magicArcaneTargets={};draft.magicTargetTests={};draft.magicSecondaryTargets={};draft.magicAttributeTargets={};draft.magicChosenStats=[];draft.magicHogTier='base';draft.magicOvercastSpecific={};draft.magicUnmemorized=false;
+        draft.magicBeastKey='';draft.magicBeastTraits=[];draft.magicKadonMonster='';draft.magicKadonOther=false;draft.magicApoSteps=0;draft.magicApoCritical=false;draft.magicApoRaise=false;
+        if (!('magicTargetIds' in patch)) draft.magicTargetIds = [];
+      }
+      for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
+      for(const [key,value] of Object.entries(patch))if(/^magic[A-Z]/.test(key))draft[key]=value;
       draft.v5Choice = null; draft.defenseChoice = null;
       if ('targetId' in patch) {
         state.targetChoice = patch.targetId;
@@ -841,11 +946,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.defenseKind = null; draft.defenseSlModifier = null;
         draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {};
         draft.protectionContext = {};
+        draft.magicTargetIds = patch.targetId && patch.targetId !== 'none' ? [patch.targetId] : [];
       }
-      if ('actionKey' in patch && patch.actionKey !== draft.actionKey) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
+      const actionChanged = 'actionKey' in patch && patch.actionKey !== draft.actionKey;
+      if (actionChanged) { draft.v5Kind = null; draft.v5SlModifier = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false; draft.fortuneReroll = false; draft.fortuneRerollRoll = null; draft.actorSize = null; draft.targetSize = null; draft.v5Advantages = 0; draft.v5Disadvantages = 0; draft.v5Context = {}; draft.talentChoices = {}; draft.actionKey = patch.actionKey; draft.type = null; draft.ammunitionId = ''; draft.ammunitionArbitrated = false; draft.protectionContext = {}; }
       if ('protectionContext' in patch) draft.protectionContext = patch.protectionContext;
       if ('ammunitionId' in patch) draft.ammunitionId = patch.ammunitionId;
       if ('ammunitionArbitrated' in patch) draft.ammunitionArbitrated = patch.ammunitionArbitrated;
+      if (actionChanged || ('type' in patch && patch.type !== draft.type)) resetMagicDice(draft);
       if ('type' in patch) { draft.type = patch.type; draft.v5Kind = null; draft.charging = false; }
       if ('defenseStat' in patch) { draft.defenseStat = patch.defenseStat; draft.defenseBase = null; draft.defenseKind = null; draft.defenseSlModifier = null; draft.defenseAdvantages = 0; draft.defenseDisadvantages = 0; draft.defenseContext = {}; }
       resetCritical(draft);
@@ -856,11 +964,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     },
     input(field, value) {
       const draft = state.resolution;
+      const magicalDouble=value=>Number.isInteger(Number(value)) && Number(value)>0 && Number(value)<=100 && (Number(value)===100 || Number(value)%11===0);
+      const doubleBefore=magicalDouble(draft.attackRoll);
+      const miniBefore=draft.magicVortexDistance!=null && Number(draft.magicVortexDistance)<=8;
       draft[field] = value;
+      const miniAfter=draft.magicVortexDistance!=null && Number(draft.magicVortexDistance)<=8;
+      const layoutChanged=field==='magicVortexDistance' && miniBefore!==miniAfter || field==='attackRoll' && doubleBefore!==magicalDouble(value);
+      // Une saisie réarme les opérations ponctuelles consommées ; leurs boutons inactifs sont alors redessinés.
+      const rearm = Object.values(draft.magicOpSpent || {}).some(Boolean);
+      draft.magicOpSpent = {};
       draft.v5Choice = null; draft.defenseChoice = null;
       // Only the first keystroke after a result re-renders; the others just
       // feed the draft, so no character can be lost.
-      if (draft.preview || draft.comparison || draft.error) {
+      if (draft.preview || draft.comparison || draft.error || rearm || layoutChanged) {
         resetCritical(draft);
         draft.preview = null;
         draft.comparison = null;
@@ -913,6 +1029,24 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (!checked) draft[key].push(itemId);
       resolutionHandlers.calculate(`critical-item-${id}`);
     },
+    magicRevision(){return Store.getLocalRevision();},
+    getHighMagicExecutions(actorId){return Store.getHighMagicExecutions(actorId);},
+    magicOperationKey,
+    magicAdventure(revision,key){return runMagicSecondary(baseRevision=>Store.startMagicAdventure({baseRevision}),'Aventure non renouvelée.',undefined,revision,{name:'adventure',key});},
+    magicCorruptionRune(revision,key){const draft=state.resolution;return runMagicSecondary(baseRevision=>Store.rerollCorruptionWithCadai({baseRevision,actorId:playContext().actor.id,accessible:Boolean(draft.magicCadaiAccessible),castExecutionId:draft.magicCorruptionExecutionId,corruptionId:draft.magicCorruptionId || undefined,firstRoll:draft.magicCorruptionInitialRoll,reroll:draft.magicCadaiCorruptionRoll,slModifier:draft.magicCorruptionModifier}),'Relance de Corruption non appliquée.',()=>{draft.magicUseCadaiRune=false;draft.magicCadaiCorruptionRoll=null;draft.magicCorruptionInitialRoll=null;},revision,{name:'corruption-rune',key});},
+    magicMindOverBody(revision,key){return runMagicSecondary(baseRevision=>Store.activateMindOverBody(playContext().actor.id,{baseRevision}),'Activation non appliquée.',undefined,revision,{name:'mind-over-body',key});},
+    magicMeditation(revision,key){const draft=state.resolution;return runMagicSecondary(baseRevision=>Store.applyMagicMeditation({baseRevision,actorId:playContext().actor?.id,talentId:draft.magicMeditationId,name:draft.magicMeditationId,minutes:draft.magicMeditationMinutes,roll:draft.magicMeditationRoll,durationRolls:String(draft.magicMeditationDice || '').trim().split(/\s+/).filter(Boolean).map(Number)}),'Méditation non appliquée.',()=>{draft.magicMeditationMinutes=null;draft.magicMeditationRoll=null;draft.magicMeditationDice='';},revision,{name:'meditation',key});},
+    magicRune(mode,revision,key){const draft=state.resolution;return runMagicSecondary(baseRevision=>Store.deployCadaiRune({baseRevision,actorId:playContext().actor?.id,reset:mode==='reset',roll:draft.magicRuneKnowledgeRoll,conditionsConfirmed:draft.magicRuneMaterials}),'Rune non déployée.',()=>{if(mode!=='reset'){draft.magicRuneKnowledgeRoll=null;draft.magicRuneMaterials=false;}},revision,{name:mode==='reset'?'rune-reset':'rune-deploy',key});},
+    magicSpellInteraction(input,revision){ const ward=value=>{if(typeof value!=='string')return value;const dice=value.trim().split(/[\s,;]+/).filter(Boolean).map(Number);return dice.length===1?dice[0]:dice;};input={...input,wardRoll:ward(input.wardRoll),targetTests:Object.fromEntries(Object.entries(input.targetTests || {}).map(([id,data])=>[id,{...data,wardRoll:ward(data.wardRoll)}]))};return runMagicSecondary(baseRevision=>Store.applySpellInteraction({...input,baseRevision}),'Clause du sort impossible.',undefined,revision); },
+    magicRecovery(revision,key){return runMagicSecondary(baseRevision=>{const actorId=playContext().actor?.id;return Store.applyBurnoutRecovery(Store.previewBurnoutRecovery({actorId}),{actorId,baseRevision});},'Récupération impossible.',undefined,revision,{name:'recovery',key});},
+    advanceTalentMinutes(minutes){return runMagicSecondary(baseRevision=>Store.advanceTalentMinutes(minutes,{baseRevision}),'Durées non avancées.');},
+    startTalentSession(){return runMagicSecondary(baseRevision=>Store.startTalentSession({baseRevision}),'Séance non renouvelée.');},
+    situationalCritical(id,key,value){if(previewIsStale(state.resolution.preview)){rejectStalePreview();return;}const draft=state.resolution,context=draft.v5Context||{};draft.v5Context={...context,whirlwindRolls:{...context.whirlwindRolls,[id]:{...context.whirlwindRolls?.[id],[key]:value}}};resolutionHandlers.calculate();},
+    situationalCriticalChoose(id,key,value){if(previewIsStale(state.resolution.preview)){rejectStalePreview();return;}const draft=state.resolution,context=draft.v5Context||{};draft.v5Context={...context,whirlwindChoices:{...context.whirlwindChoices,[id]:{...context.whirlwindChoices?.[id],[key]:value}}};resolutionHandlers.calculate();},
+    criticalChoose(role,key,value){
+      if(previewIsStale(state.resolution.preview)){rejectStalePreview();return;}
+      const field=role==='defender'?'defenseTalentChoices':'talentChoices';state.resolution[field]={...state.resolution[field],[key]:value};resolutionHandlers.calculate();
+    },
     chooseV5(role, optionId) {
       if(previewIsStale(state.resolution.preview)){rejectStalePreview();return;}
       state.resolution[role === 'actor' ? 'v5Choice' : 'defenseChoice'] = optionId;
@@ -921,7 +1055,241 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     calculate(focusKey = null) {
       const context = playContext();
       const draft = state.resolution;
-      if (!context.actor || !context.action || typeof Store.previewResolution !== 'function' || draft.busy) return;
+      if (!context.actor || !context.action || draft.busy) return;
+      if (['channelling','cast','dispel'].includes(context.type)) {
+        draft.error = null;
+        draft.comparison = null;
+        try {
+          const rollRaw = String(draft.attackRoll).trim();
+          if (!validRoll(rollRaw)) throw Object.assign(new ResolutionError('Saisissez un jet sur d100 entre 1 et 100.', 'INVALID_ROLL'), { userFacing: true });
+          const secondaryRolls = {
+            ...(draft.magicSecondaryDurationRoll ? { duration1d10: draft.magicSecondaryDurationRoll, conditions1d10: draft.magicSecondaryDurationRoll } : {}),
+            ...(draft.magicSecondaryDamageRoll ? { damage1d10: draft.magicSecondaryDamageRoll, slLoss1d10: draft.magicSecondaryDamageRoll } : {}),
+            ...(draft.magicSecondaryDistanceRoll ? { distance1d10: draft.magicSecondaryDistanceRoll } : {}),
+            ...(draft.magicSecondaryLocation ? { location: draft.magicSecondaryLocation } : {}),
+            ...(draft.magicNoOtherTargets ? { noOtherTargets: true } : {})
+          };
+          // L-07 : jets supplémentaires de l'incident 91-95 (deux résultats de 1 à 90, sans modificateurs) et leurs dés secondaires.
+          if ([1, 2].some(n => draft['magicExtraRoll' + n] != null)) {
+            secondaryRolls.additionalRolls = [1, 2].map(n => draft['magicExtraRoll' + n] ?? null);
+            secondaryRolls.additionalSecondaryRolls = [1, 2].map(n => ({
+              ...(draft['magicExtraDuration' + n] != null ? { duration1d10: draft['magicExtraDuration' + n], conditions1d10: draft['magicExtraDuration' + n] } : {}),
+              ...(draft['magicExtraDamage' + n] != null ? { damage1d10: draft['magicExtraDamage' + n], slLoss1d10: draft['magicExtraDamage' + n] } : {}),
+              ...(draft['magicExtraDistance' + n] != null ? { distance1d10: draft['magicExtraDistance' + n] } : {}),
+              ...(draft['magicExtraLocation' + n] ? { location: draft['magicExtraLocation' + n] } : {})
+            }));
+          }
+          // HEPG p. 84 : une rune par jet distinct ; un champ rempli = une relance demandée (payée seulement si le jet sert).
+          const cadaiRerolls = draft.magicUseCadaiRune
+            ? [['test', draft.magicCadaiTestRoll], ['miscast', draft.magicCadaiMiscastRoll], ...(context.type === 'cast' ? [['burnout', draft.magicCadaiBurnoutRoll]] : [])]
+              .filter(([, roll]) => roll != null && roll !== '').map(([purpose, roll]) => ({ purpose, roll }))
+            : [];
+          const extraMagicInput={
+            senseFacts:draft.magicSenseFacts || {},requireExplicitDice:true,distraction:Boolean(draft.magicDistraction),yenluiPenalty:draft.magicYenluiPenalty,
+            magicDefianceTargets:draft.magicDefianceTargets || [],
+            suffusedBy:draft.magicSuffusedId?[{id:draft.magicSuffusedId,distance:draft.magicSuffusedDistance}]:[],
+            choice:draft.magicTestChoice || 'keep',
+            assistantId:draft.magicAssistantId,assistantLinked:Boolean(draft.magicAssistantLinked),
+            unmemorized:Boolean(draft.magicUnmemorized),overcastSpecific:draft.magicOvercastSpecific || undefined,
+            instinctiveDiction:Boolean(draft.magicInstinctiveDiction),miscastRoll2:draft.magicMiscastRoll2,miscastChoice:draft.magicMiscastChoice,
+            ...(cadaiRerolls.length ? {cadaiRerolls,cadaiAccessible:Boolean(draft.magicCadaiAccessible)} : {}),
+            burnoutRoll:draft.magicBurnoutRoll,warWizard:Boolean(draft.magicWarWizard),targetTests:draft.magicTargetTests || {},chosenLore:draft.magicChosenLore || null,
+            ...(draft.magicDispellerId ? {dispelReaction:{dispellerId:draft.magicDispellerId,roll:draft.magicDispelRoll,distance:dispelDistance(draft.magicDispelDistance),visible:dispelVisible(draft.magicDispelVisible)}} : {})
+          };
+          if (context.type === 'dispel') {
+            const effect=Store.listParticipants().flatMap(p=>p.extensions?.v5?.spellEffects || []).find(e=>e.id===draft.magicPersistentId);
+            if(!effect)throw new Error('Choisir un effet magique persistant.');
+            const preview=Store.previewDispelPersistent(effect,{dispellerId:context.actor.id,roll:Number(rollRaw),distance:dispelDistance(draft.magicPersistentDistance),visible:dispelVisible(draft.magicPersistentVisible),...(draft.magicPersistentRestart ? {restartAttempt:true} : {})});
+            draft.preview={...preview,v5MagicKind:'dispel',actorId:context.actor.id,baseRevision:Store.getLocalRevision()};
+          } else if (context.type === 'channelling') {
+            const magicInput = {
+              ...extraMagicInput,
+              actorId: context.actor.id,
+              mode: draft.magicChannelMode || 'channel',
+              type: draft.magicChannelType || 'winds',
+              wind: draft.magicLore || context.actor.extensions?.v5?.magic?.lore || 'fire',
+              roll: Number(rollRaw),
+              slModifier: draft.v5SlModifier || 0,
+              lossRoll: draft.magicFumbleLossRoll,
+              miscastRoll: draft.magicMiscastRoll,
+              ...(draft.magicMajorRoll ? { majorRoll: draft.magicMajorRoll } : {}),
+              ...(Object.keys(secondaryRolls).length ? { secondaryRolls } : {}),
+              advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'),
+              disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré')
+            };
+            const channellingPreview = Store.previewChannelling(magicInput);
+            draft.preview = {
+              ...channellingPreview,
+              v5MagicKind: 'channelling',
+              actorId: context.actor.id,
+              targetId: context.target?.id || null,
+              baseRevision: typeof Store.getLocalRevision === 'function' ? Store.getLocalRevision() : undefined,
+              magicInput
+            };
+          } else {
+            const contracts = getAllSpellContracts();
+            const firstActorSpell = context.actor.spells?.[0];
+            const defaultSpell = firstActorSpell
+              ? ((getSpellContract(firstActorSpell.id) || getSpellContract(firstActorSpell.name || firstActorSpell.nom || firstActorSpell))?.id || firstActorSpell.id || firstActorSpell.name || contracts[0]?.id)
+              : contracts[0]?.id;
+            const spellId = draft.magicSpellId || defaultSpell;
+            const contract = getSpellContract(spellId);
+            const channelType = contract?.domain === 'Qhaysh' || contract?.domain === 'Haute Magie' || /haute magie|high/i.test(contract?.type || '') ? 'high' : 'winds';
+            const isSelfSpell = /^vous$/i.test((contract?.target || '').trim()) || /^vous$/i.test((contract?.range || '').trim());
+            const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
+            const isAllyExcludingCaster = contract?.effects?.special === 'monstrous-regiment';
+            let defaultTargets;
+            if(contract?.effects?.excludeCaster){defaultTargets=[Store.listParticipants().find(p=>p.id!==context.actor.id&&p.zone==='active')?.id].filter(Boolean);}
+            else if (isSelfSpell) {
+              defaultTargets = [context.actor.id];
+            } else if (isAllyExcludingCaster) {
+              defaultTargets = context.groups.allies[0] ? [context.groups.allies[0].id] : [];
+            } else if (isAllyOnlySpell) {
+              const targetIsAlly = context.target && (context.target.id === context.actor.id || context.groups.allies.some(a => a.id === context.target.id));
+              defaultTargets = targetIsAlly ? [context.target.id] : [context.actor.id];
+            } else {
+              defaultTargets = context.target ? [context.target.id] : [context.actor.id];
+            }
+            const targetIds = Array.isArray(draft.magicTargetIds) && draft.magicTargetIds.length > 0
+              ? draft.magicTargetIds
+              : defaultTargets;
+            const hogTier = draft.magicHogTier || (Array.isArray(draft.magicChosenStats) && draft.magicChosenStats.length > 1 ? 'overcast6' : 'base');
+            const overcastChoices = {};
+            if (draft.magicOvercastDamage != null && draft.magicOvercastDamage !== 0) overcastChoices.damage = draft.magicOvercastDamage;
+            if (draft.magicOvercastTargets != null && draft.magicOvercastTargets !== 0) overcastChoices.targets = draft.magicOvercastTargets;
+            if (draft.magicOvercastRange != null && draft.magicOvercastRange !== 0) overcastChoices.range = draft.magicOvercastRange;
+            if (draft.magicOvercastDuration != null && draft.magicOvercastDuration !== 0) overcastChoices.duration = draft.magicOvercastDuration;
+            if (draft.magicOvercastAoe != null && draft.magicOvercastAoe !== 0) overcastChoices.aoe = draft.magicOvercastAoe;
+            if (draft.magicOvercastSpecial != null && draft.magicOvercastSpecial !== 0) overcastChoices.special = draft.magicOvercastSpecial;
+            if (contract?.effects?.special === 'hand-of-glory' && hogTier === 'overcast6' && !overcastChoices.special) {
+              overcastChoices.special = 6;
+            }
+            // A-01 / A-04 : options payées de Main de Gloire (+3, +8) et d'Apothéose (+3 par palier, +6, +10), dépense spéciale = leur coût.
+            const hogOptions = contract?.effects?.special === 'hand-of-glory' && (draft.magicHogRemoveBroken || draft.magicHogPurify)
+              ? { removeBroken: Boolean(draft.magicHogRemoveBroken), purify: Boolean(draft.magicHogPurify) } : null;
+            if (hogOptions) {
+              const six = hogTier === 'overcast6' || (Array.isArray(draft.magicChosenStats) && draft.magicChosenStats.length === 4);
+              overcastChoices.special = (six ? 6 : 0) + (hogOptions.removeBroken ? 3 : 0) + (hogOptions.purify ? 8 : 0);
+            }
+            const apotheoseOptions = contract?.effects?.special === 'apotheose' && (draft.magicApoSteps > 0 || draft.magicApoCritical || draft.magicApoRaise)
+              ? { extraHealSteps: draft.magicApoSteps || 0, criticalHeal: Boolean(draft.magicApoCritical), raiseDead: Boolean(draft.magicApoRaise) } : null;
+            if (apotheoseOptions) overcastChoices.special = apotheoseOptions.extraHealSteps * 3 + (apotheoseOptions.criticalHeal ? 6 : 0) + (apotheoseOptions.raiseDead ? 10 : 0);
+            // Forme bestiale (+2 DR par trait optionnel) et Kadon (+4 DR par trait ou autre cible) : dépense spéciale = coût des options.
+            const transformKind = contract?.effects?.special === 'transformation-of-kadon' ? 'kadon' : contract?.effects?.special === 'beast-form' ? 'beast' : null;
+            const beastTraits = transformKind && Array.isArray(draft.magicBeastTraits) ? draft.magicBeastTraits : [];
+            const kadonOtherTarget = transformKind === 'kadon' && Boolean(draft.magicKadonOther);
+            if (transformKind) {
+              const cost = transformationOvercastCost({ kind: transformKind, traits: beastTraits.length, otherTarget: kadonOtherTarget });
+              if (cost) overcastChoices.special = cost; else delete overcastChoices.special;
+            }
+            const deadTargetIds = contract?.effects?.special === 'apotheose' && draft.magicApoRaise ? targetIds.filter(id => draft.magicTargetTests?.[id]?.dead === true) : [];
+            const monsterStats = ['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Soc'];
+            const monsterKey = transformKind === 'kadon' && draft.magicKadonMonster && draft.magicKadonMonster !== 'manual' ? draft.magicKadonMonster : null;
+            const monsterProfile = transformKind === 'kadon' && draft.magicKadonMonster === 'manual' ? {
+              name: draft.magicMonsterName || undefined, size:draft.magicMonsterSize, M: draft.magicMonsterM, hp: draft.magicMonsterHp,
+              caracs: Object.fromEntries(monsterStats.map(stat => [stat, draft['magicMonster' + stat]])),
+              traits: String(draft.magicMonsterTraits || '').split(',').map(text => text.trim()).filter(Boolean)
+            } : null;
+            const arcaneOptions = contract?.effects?.special === 'arcane-unforgiving' ? {
+              armorPoints: draft.magicArcaneArmorPoints || 0,
+              enhancedDamage: Boolean(draft.magicArcaneEnhancedDamage),
+              chooseMagicItem: Boolean(draft.magicArcaneChooseItem)
+            } : null;
+            if (arcaneOptions) {
+              for (const key of ['damage', 'duration', 'aoe']) delete overcastChoices[key];
+              const cost = arcaneOptions.armorPoints + (arcaneOptions.enhancedDamage ? 8 : 0) + (arcaneOptions.chooseMagicItem ? 3 : 0);
+              if (cost) overcastChoices.special = cost; else delete overcastChoices.special;
+            }
+            const spellObj = magicCastingSpell(contract, { spellId, lore: draft.magicLore, channelType });
+            const castInput = {
+              ...extraMagicInput,
+              actorId: context.actor.id,
+              roll: Number(rollRaw),
+              slModifier: draft.v5SlModifier || 0,
+              ...(draft.magicCriticalChoice ? { criticalChoice: draft.magicCriticalChoice } : {}),
+              miscastRoll: draft.magicMiscastRoll,
+              ...(draft.magicMajorRoll ? { majorRoll: draft.magicMajorRoll } : {}),
+              ...(Object.keys(secondaryRolls).length ? { secondaryRolls } : {}),
+              overcastChoices,
+              advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'),
+              disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré')
+            };
+            const castPreview = Store.previewCasting(spellObj, castInput);
+            const chosenStats = Array.isArray(draft.magicChosenStats) && draft.magicChosenStats.length > 0
+              ? draft.magicChosenStats
+              : undefined;
+            const magicOptions = {
+              ...extraMagicInput,
+              actorId: context.actor.id,
+              targetIds,
+              roll: Number(rollRaw),
+              slModifier: draft.v5SlModifier || 0,
+              miscastRoll: draft.magicMiscastRoll,
+              ...(draft.magicMajorRoll ? { majorRoll: draft.magicMajorRoll } : {}),
+              ...(Object.keys(secondaryRolls).length ? { secondaryRolls } : {}),
+              ...(draft.magicCriticalChoice ? { criticalChoice: draft.magicCriticalChoice } : {}),
+              ...(draft.magicMjChoice ? { mjChoice: draft.magicMjChoice } : {}),
+              ...(draft.magicResistanceRoll != null ? {
+                resistanceRoll: draft.magicResistanceRoll,
+                fellowshipRoll: draft.magicResistanceRoll,
+                agilityRoll: draft.magicResistanceRoll,
+                enduranceRoll: draft.magicResistanceRoll
+              } : {}),
+              ...(draft.magicVortexDirection ? { direction: draft.magicVortexDirection } : {}),
+              ...(draft.magicVortexWillpower ? { willpowerSuccess: draft.magicVortexWillpower } : {}),
+              ...(draft.magicVortexDirectionRoll != null ? { directionRoll: draft.magicVortexDirectionRoll } : {}),
+              ...(draft.magicVortexDistance != null ? { distanceRoll: draft.magicVortexDistance } : {}),
+              castingPreview: castPreview,
+              castResult: castPreview,
+              castingSl: castPreview.testSl ?? 0,
+              totalCastingSl: castPreview.totalCastingSl ?? 0,
+              castRoll: Number(rollRaw),
+              ...(arcaneOptions ? { arcaneOptions, arcaneTargets: draft.magicArcaneTargets || {} } : {}),
+              overcastDamageBonus: castPreview.overcast?.benefits?.damage || 0,
+              overcastChoices,
+              attributeActive: true,
+              attributeTargets: draft.magicAttributeTargets || {},
+              secondaryTargets: draft.magicSecondaryTargets || {},
+              domainFacts: draft.magicSpellFacts || {},
+              ctRoll: draft.magicCtRoll,
+              secondaryRolls: { ...(draft.magicSecondaryRolls || {}), ...secondaryRolls },
+              hogTier,
+              chosenStats,
+              roll3d10: draft.magicRoll3d10,
+              ...(hogOptions ? { hogOptions, ...(draft.magicHealRoll != null ? { healRoll: draft.magicHealRoll } : {}) } : {}),
+              ...(apotheoseOptions ? { apotheoseOptions, ...(typeof draft.magicApoCriticalTest === 'boolean' ? { criticalHealTest: draft.magicApoCriticalTest } : {}) } : {}),
+              ...(monsterProfile ? { monsterProfile } : {}),
+              ...(Number.isInteger(draft.magicDurationAmount) && draft.magicDurationAmount > 0 ? { mjDuration: { amount: draft.magicDurationAmount, unit: draft.magicDurationUnit || 'rounds' } } : {}),
+              beastKey: draft.magicBeastKey || undefined,
+              ...(transformKind ? { beastTraits, ...(monsterKey ? { monsterKey } : {}), ...(kadonOtherTarget ? { kadonOtherTarget } : {}) } : {}),
+              ...(deadTargetIds.length ? { deadTargetIds } : {})
+            };
+            const spellPreview = contract
+              ? Store.previewSpellExecution(contract.id, magicOptions)
+              : null;
+            draft.preview = {
+              v5MagicKind: 'cast',
+              actorId: context.actor.id,
+              targetId: context.target?.id || null,
+              targetIds,
+              spellId: contract?.id || spellId,
+              contract,
+              castPreview,
+              spellPreview,
+              baseRevision: typeof Store.getLocalRevision === 'function' ? Store.getLocalRevision() : undefined,
+              operationId: spellPreview?.operationId || uid(),
+              magicOptions,
+              castInput
+            };
+          }
+        } catch (error) {
+          draft.preview = null;
+          draft.error = calculationError(error);
+        }
+        render(draft.error && draft.error.field !== 'general' ? `roll-${draft.error.field}` : focusKey);
+        return;
+      }
+      if (typeof Store.previewResolution !== 'function') return;
       const input = {
         actor: context.actor,
         action: { ...context.action, type: context.type },
@@ -929,7 +1297,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         roll: String(draft.attackRoll).trim(), protectionContext: draft.protectionContext, ammunitionId: draft.ammunitionId, ammunitionArbitrated: draft.ammunitionArbitrated
       };
       if (['attack','opposition'].includes(context.type) && context.target && String(draft.defenseRoll).trim()) {
-        input.defense = { roll: String(draft.defenseRoll).trim(), base: draft.defenseBase, mod: context.defense.option.mod || 0, qualities: context.defense.option.qualities || [], label: context.defense.option.statLabel };
+        input.defense = { extensions:context.defense.option.extensions,attr:context.defense.option.attr,roll: String(draft.defenseRoll).trim(), base: draft.defenseBase, mod: context.defense.option.mod || 0, qualities: context.defense.option.qualities || [], damage:context.defense.option.damage,damageFormula:context.defense.option.damageFormula, label: context.defense.option.statLabel };
       }
       // Seuls les jets de critique valides partent au moteur ; les autres montrent l'erreur sous leur champ.
       const criticalRolls = {};
@@ -984,7 +1352,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             const { option } = defenseChoice(target);
             const shown = option.value === 'Autre' || target.id === context.target?.id ? draft.defenseBase : null;
             if ((shown ?? option.base) == null || shown === '' || !Number.isInteger(Number(shown ?? option.base))) throw userError(`Précisez le score de défense de ${target.name} avant la comparaison.`);
-            input.defense = { roll: defenseRoll, base: (shown ?? option.base) ?? 0, mod: option.mod || 0, qualities: option.qualities || [], label: option.statLabel, v5: { ...defenseV5Input({ ...context, defense: { option } }, target.id === context.target?.id ? draft : { ...draft, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, defenseContext: {} }), choice: null } };
+            input.defense = { extensions:option.extensions,attr:option.attr,roll: defenseRoll, base: (shown ?? option.base) ?? 0, mod: option.mod || 0, qualities: option.qualities || [], label: option.statLabel, v5: { ...defenseV5Input({ ...context, defense: { option } }, target.id === context.target?.id ? draft : { ...draft, defenseKind: null, defenseSlModifier: null, defenseAdvantages: 0, defenseDisadvantages: 0, defenseContext: {} }), choice: null } };
           }
           input.v5 = { ...v5Input(context, draft), targetSize: target.id === context.target?.id ? draft.targetSize : null, choice: null };
           return { targetId: target.id, name: target.name, hp: target.hp, preview: Store.previewResolution(input) };
@@ -1019,23 +1387,49 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     },
     async apply() {
       const draft = state.resolution;
-      if (!draft.preview || !callbacks.applyResolution || draft.busy) return;
+      if (!draft.preview || (!callbacks.applyResolution && !draft.preview.v5MagicKind) || draft.busy) return;
       if(previewIsStale(draft.preview)){rejectStalePreview();return;}
       // Clic direct sur « Appliquer » après avoir tapé un jet de critique : l'aperçu est
       // d'abord recalculé et montré, rien n'est appliqué avec l'ancien.
-      if (criticalRollsChanged(draft)) { resolutionHandlers.calculate('apply'); return; }
+      if (!draft.preview.v5MagicKind && criticalRollsChanged(draft)) { resolutionHandlers.calculate('apply'); return; }
       draft.busy = true;
       render();
       let focusKey = 'apply';
       try {
-        const result = await callbacks.applyResolution(draft.preview);
+        let result;
+        if (draft.preview.v5MagicKind === 'dispel') {
+          result = await Store.applyDispelPersistent(draft.preview);
+        } else if (draft.preview.v5MagicKind === 'channelling') {
+          result = await Store.applyChannelling(draft.preview, { actorId: draft.preview.actorId });
+        } else if (draft.preview.v5MagicKind === 'cast') {
+          if (draft.preview.contract) {
+            result = await Store.applySpellExecution(draft.preview.spellId, {
+              ...draft.preview.magicOptions,
+              actorId: draft.preview.actorId,
+              targetIds: draft.preview.targetIds,
+              baseRevision: draft.preview.baseRevision,
+              operationId: draft.preview.operationId,
+              preview: draft.preview.spellPreview
+            });
+          } else {
+            result = await Store.applyCasting(draft.preview.castPreview, { actorId: draft.preview.actorId });
+          }
+        } else {
+          result = await callbacks.applyResolution(draft.preview);
+        }
+        if (result?.ok === false) throw userError(typeof result.error === 'string' ? result.error : result.error?.message || 'Résultat non enregistré : réessayez.');
         if (result?.status === 'stale') {
           draft.error = { field: 'general', message: 'La partie a changé depuis le calcul : recalculez.' };
+          focusKey = 'calculate';
+        } else if (result?.applied === false && result?.error) {
+          draft.error = { field: 'apply', message: result.error };
           focusKey = 'calculate';
         } else {
           draft.attackRoll = '';
           draft.defenseRoll = '';
           draft.v5Choice = null; draft.defenseChoice = null; draft.charging = false; draft.extraAttack = false; draft.reactionId = null; draft.reactionAction = null; draft.aimed = false; draft.beatBlade = false;
+          if (draft.preview.v5MagicKind) resetMagicDice(draft);
+          forgetAttackAnswers(draft);
           focusKey = 'roll-attack';
         }
         draft.preview = null;
@@ -1049,6 +1443,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     },
     cancel() {
       resetCritical(state.resolution);
+      resetMagicDice(state.resolution);
       state.resolution.preview = null;
       state.resolution.comparison = null;
       state.resolution.error = null;
@@ -1079,15 +1474,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const draft = state.resolution;
     center.appendChild(renderResolutionPanel({
       draft,
-      actor: context.actor,
+      actor: context.actor,participants:context.participants,
       actions: context.actions,
       actionKey: draft.actionKey,
       type: context.type,
       target: context.target,
       groups: context.groups,
       defense: context.defense,
-      canCalculate: typeof Store.previewResolution === 'function',
-      canApply: Boolean(callbacks.applyResolution),
+      canCalculate: typeof Store.previewResolution === 'function' || ['channelling', 'cast', 'dispel'].includes(context.type),
+      canApply: Boolean(callbacks.applyResolution || ['channelling', 'cast', 'dispel'].includes(context.type)),
       handlers: resolutionHandlers
     }));
 

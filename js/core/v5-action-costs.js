@@ -23,13 +23,14 @@ const ledgerOf = state => {
   for (const entry of ledger.quotaUsage) {
     only(entry, ['actorId', 'quotaId', 'scope', 'scopeKey', 'used']);
     id(entry.actorId, 'Acteur de quota'); id(entry.quotaId, 'Quota'); id(entry.scopeKey, 'Horloge de quota'); integer(entry.used, 'Usage de quota');
-    if (!['turn', 'round', 'encounter'].includes(entry.scope)) throw new TypeError('Portée de quota invalide');
+    if (!['turn', 'round', 'encounter','session'].includes(entry.scope)) throw new TypeError('Portée de quota invalide');
     const key = JSON.stringify([entry.actorId, entry.quotaId, entry.scope, entry.scopeKey]);
     if (quotas.has(key)) throw new TypeError('Quota enregistré en double'); quotas.add(key);
   }
   return clone(ledger);
 };
 function scopeKey(scope, clock, unresolved) {
+  if(scope==='session'){if(!clock.sessionId){unresolved.push({field:'clock.sessionId',reason:'Démarrez explicitement la séance pour ces quotas.'});return null;}return JSON.stringify([id(clock.sessionId,'Séance')]);}
   if (!clock.encounterId) { unresolved.push({ field: 'clock.encounterId', reason: 'Rencontre requise pour les usages' }); return null; }
   id(clock.encounterId, 'Rencontre');
   if (scope === 'encounter') return JSON.stringify([clock.encounterId]);
@@ -40,10 +41,11 @@ function scopeKey(scope, clock, unresolved) {
   if (!clock.turnId) { unresolved.push({ field: 'clock.turnId', reason: 'Identité du Tour requise' }); return null; }
   return JSON.stringify([clock.encounterId, id(clock.turnId, 'Tour')]);
 }
-function normalizeRequest({ actionId, actorId, costs = [], quotas = [], exemptions = [], extraAttack = false, clock = {} }) {
+function normalizeRequest({ actionId, actorId, costs = [], quotas = [], exemptions = [], extraAttack = false, clock = {},quotaActorId }) {
   id(actionId, 'Action'); id(actorId, 'Acteur');
   if (!Array.isArray(costs) || !Array.isArray(quotas) || !Array.isArray(exemptions) || typeof extraAttack !== 'boolean') throw new TypeError('Plan de coûts invalide');
-  only(clock, ['encounterId', 'round', 'turnId']);
+  only(clock, ['encounterId', 'round', 'turnId','sessionId']);
+  if(clock.sessionId!=null)id(clock.sessionId,'Séance');if(quotaActorId!=null)id(quotaActorId,'Identité des quotas de séance');
   if (clock.encounterId != null) id(clock.encounterId, 'Rencontre');
   if (clock.turnId != null) id(clock.turnId, 'Tour');
   if (clock.round != null) integer(clock.round, 'Round', 1);
@@ -60,10 +62,10 @@ function normalizeRequest({ actionId, actorId, costs = [], quotas = [], exemptio
   }
   for (const quota of quotas) {
     only(quota, ['id', 'scope', 'maximum', 'amount']); id(quota.id, 'Quota'); integer(quota.maximum, 'Maximum', 1); integer(quota.amount ?? 1, 'Usage', 1);
-    if (quota.id.startsWith('system:') || !['turn', 'round', 'encounter'].includes(quota.scope)) throw new TypeError('Quota réservé ou portée invalide');
+    if (quota.id.startsWith('system:') || !['turn', 'round', 'encounter','session'].includes(quota.scope)) throw new TypeError('Quota réservé ou portée invalide');
     if (quotaIds.has(quota.id)) throw new TypeError('Quota dupliqué'); quotaIds.add(quota.id);
   }
-  return clone({ actionId, actorId, costs, quotas, exemptions, extraAttack, clock });
+  return clone({ actionId, actorId, costs, quotas, exemptions, extraAttack, clock,...(quotaActorId?{quotaActorId}:{}) });
 }
 /** Balances and quota clocks must be declared; missing information is never zero. */
 export function previewV5ActionCosts({ state, ...raw } = {}) {
@@ -90,10 +92,11 @@ export function previewV5ActionCosts({ state, ...raw } = {}) {
   if (request.extraAttack && paid.some(cost => cost.resource === 'momentum')) quotas.push({ id: MOMENTUM_EXTRA_ATTACK_QUOTA, scope: 'turn', maximum: 1, amount: 1 });
   const usages = quotas.map(quota => {
     const key = scopeKey(quota.scope, request.clock, unresolved);
-    const entry = ledger.quotaUsage.find(row => row.actorId === request.actorId && row.quotaId === quota.id && row.scope === quota.scope && row.scopeKey === key);
+    const owner=quota.scope==='session'?request.quotaActorId||request.actorId:request.actorId;
+    const entry = ledger.quotaUsage.find(row => row.actorId === owner && row.quotaId === quota.id && row.scope === quota.scope && row.scopeKey === key);
     const used = entry?.used ?? 0, after = used + quota.amount; integer(after, 'Cumul d’usage');
     if (key && after > quota.maximum) unresolved.push({ field: `quota.${quota.id}`, reason: 'Quota épuisé' });
-    return { actorId: request.actorId, quotaId: quota.id, scope: quota.scope, scopeKey: key, before: used, after, maximum: quota.maximum };
+    return { actorId: owner, quotaId: quota.id, scope: quota.scope, scopeKey: key, before: used, after, maximum: quota.maximum };
   });
   return freeze({ ruleVersion: V5_ACTION_COST_RULE_VERSION, baseRevision: state.revision, actionId: request.actionId, actorId: request.actorId,
     ready: !duplicate && unresolved.length === 0, duplicate, request, paid, waived, balances, usages, unresolved,

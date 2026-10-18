@@ -67,6 +67,7 @@ async function seed(page, id) {
 async function profile(page, id) {
   return page.evaluate(async id => { const { Store } = await import('./js/main.js'); await Store.ready; return Store.getProfile(id); }, id);
 }
+async function bounded(promise,label,timeout=20000){let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Recette démarrage : attente bornée — '+label)),timeout);})]);}finally{clearTimeout(timer);}}
 let browser;
 try {
   await new Promise(done => server.listen(0, '127.0.0.1', done));
@@ -103,10 +104,12 @@ try {
   servePrevious = true;
   const upgrade = await browser.newContext({ serviceWorkers: 'allow' });
   const oldPage = await upgrade.newPage();
+  console.log('PWA : chargement du vrai cache 3.12.0');
   await oldPage.goto(url, { waitUntil: 'domcontentloaded' }); await ready(oldPage);
-  await oldPage.waitForFunction(() => !!navigator.serviceWorker.controller, { timeout: 20000 });
-  const oldProfile = await seed(oldPage, 'upgrade-preserved');
-  const oldState = await readDurable(oldPage);
+  await oldPage.waitForFunction(() => !!navigator.serviceWorker.controller, undefined, { timeout: 20000 });
+  console.log('PWA : ancien contrôleur actif, enregistrement du profil');
+  const oldProfile = await bounded(seed(oldPage, 'upgrade-preserved'),'profil ancien');
+  const oldState = await bounded(readDurable(oldPage),'IndexedDB ancienne');
   await configureFilter(upgrade, oldPage);
   await oldPage.reload({ waitUntil: 'domcontentloaded' });
   await oldPage.waitForTimeout(500);
@@ -114,18 +117,21 @@ try {
   assert.equal(await oldPage.locator('#btn-google-login-screen').getAttribute('data-firebase-bound'), null);
   assert.deepEqual(await readDurable(oldPage), oldState);
   servePrevious = false;
-  await oldPage.evaluate(async () => (await navigator.serviceWorker.getRegistration()).update());
-  await oldPage.waitForFunction(async () => !!(await navigator.serviceWorker.getRegistration())?.waiting, { timeout: 30000 });
-  await oldPage.close(); // Replacement activation after the last old controlled page closes.
+  console.log('PWA : demande de mise à jour 3.15.0');
+  await bounded(oldPage.evaluate(async () => (await navigator.serviceWorker.getRegistration()).update()),'mise à jour du Service Worker');
+  await oldPage.waitForFunction(async () => !!(await navigator.serviceWorker.getRegistration())?.waiting, undefined, { timeout: 30000 });
+  console.log('PWA : nouveau worker en attente, fermeture du dernier ancien onglet');
+  await bounded(oldPage.close(),'fermeture ancienne page');
   let activated = false;
   for (let attempt = 0; attempt < 200 && !activated; attempt += 1) {
     for (const worker of upgrade.serviceWorkers()) {
-      try { const names = await worker.evaluate(() => caches.keys()); activated = names.includes(currentCache) && !names.includes('wfrp-cache-v3.12.0'); } catch { /* old worker can terminate during activation */ }
+      try { const names = await bounded(worker.evaluate(() => caches.keys()),'sonde du worker en activation',500); activated = names.includes(currentCache) && !names.includes('wfrp-cache-v3.12.0'); } catch { /* old worker can terminate during activation */ }
       if (activated) break;
     }
     if (!activated) await new Promise(done => setTimeout(done, 50));
   }
   assert.ok(activated, 'replacement activates after last old controlled page closes');
+  console.log('PWA : nouveau cache actif, rechargement natif');
   const newPage = await upgrade.newPage(); await configureFilter(upgrade, newPage);
   await newPage.goto(url, { waitUntil: 'domcontentloaded' }); await ready(newPage);
   await newPage.waitForFunction(async current => {
@@ -139,6 +145,7 @@ try {
   console.log(`Upgrade réel 3.12.0 → ${APP_VERSION} : symptôme ancien reproduit, filtre maintenu, fermeture du dernier onglet, nouveau cache actif, profil et état local identiques.`);
 } finally {
   await browser?.close();
+  server.closeAllConnections();
   await new Promise(done => server.close(done));
 }
 

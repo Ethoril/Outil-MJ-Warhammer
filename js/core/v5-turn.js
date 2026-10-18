@@ -2,13 +2,15 @@
 import { effectiveOrder, nextTurn } from './turn-order.js';
 import { advanceV5Effects, acquireV5Conditions } from './v5-effects.js';
 import { getV5CriticalEffect } from '../data/v5-crits.js';
+import { processCombatTurnSpells, shieldAtTurnStart, recurringSpellHits, roundSpellEffects } from './v5-magic-turn.js';
 
 const kinds = { fireRoll: 'd10', bleedingDeathRoll: 'd10', fireCriticalRoll: 'd100', bleedingEnduranceTest: 'test', poisonEnduranceTest: 'test', recoveryTest: 'test', currentWounds: 'manual' };
 export function previewV5Turn(state, { inputs = {} } = {}) {
   const before = structuredClone(state);
   const combat = before.combat || {};
   if (!combat.round) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
-  const order = effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order });
+  // Le froid prend effet sur l'ordre automatique au prochain Round, jamais sur les Tours en cours.
+  const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,round:combat.round });
   const transition = nextTurn({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round });
   if (!transition.currentActorId) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
   const turn = before.activeScene?.extensions?.v5?.turnIndex ?? before.extensions?.v5?.turnIndex ?? 1;
@@ -54,13 +56,30 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     });
   };
   runPhase('endOfTurn', combat.round, combat.currentActorId, turn);
-  if (transition.round > combat.round) runPhase('endOfRound', combat.round, combat.currentActorId, turn);
+  const endedSpells=roundSpellEffects(participants,'endOfTurn',combat.round,inputs,combat.currentActorId);participants=endedSpells.participants;requests.push(...endedSpells.requests);effectLogs.push(...endedSpells.logs);
+  const closingSpells=roundSpellEffects(participants,'expiry',combat.round,inputs,combat.currentActorId);participants=closingSpells.participants;requests.push(...closingSpells.requests);effectLogs.push(...closingSpells.logs);
+  participants = processCombatTurnSpells(participants, transition.round, transition.currentActorId, { actorId: combat.currentActorId, round: combat.round });
+  const casterSpells=roundSpellEffects(participants,'endOfCasterTurn',combat.round,inputs,combat.currentActorId);participants=casterSpells.participants;requests.push(...casterSpells.requests);effectLogs.push(...casterSpells.logs);
+  if (transition.round > combat.round) {
+    runPhase('endOfRound', combat.round, combat.currentActorId, turn);
+    for (const [phase,round] of [['endOfRound',combat.round],['startOfRound',transition.round]]) {
+      const spells=roundSpellEffects(participants,phase,round,inputs); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);
+    }
+  }
+  if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
   runPhase('startOfTurn', transition.round, transition.currentActorId, turn + 1);
+  const startSpells=roundSpellEffects(participants,'startOfTurn',transition.round,inputs,transition.currentActorId);participants=startSpells.participants;requests.push(...startSpells.requests);effectLogs.push(...startSpells.logs);
+  participants = shieldAtTurnStart(participants, transition.currentActorId);
+  // Sorts à coups récurrents (Lames Azurées) : portés au début du Tour de l'adversaire désigné.
+  const recurring = recurringSpellHits(participants, transition.currentActorId, inputs);
+  participants = recurring.participants;
+  requests.push(...recurring.requests);
+  effectLogs.push(...recurring.logs);
   const nextActor = participants.find(participant => participant.id === transition.currentActorId);
   const uniqueRequests = requests.filter((request, index) => requests.findIndex(other => other.participantId === request.participantId && other.field === request.field) === index);
   const stateAfter = { ...before,
     ...(before.activeScene ? { activeScene: { ...before.activeScene, extensions: { ...(before.activeScene.extensions || {}), v5: { ...(before.activeScene.extensions?.v5 || {}), turnIndex: turn + 1 } } } } : {}),
-    extensions: { ...(before.extensions || {}), v5: { ...(before.extensions?.v5 || {}), turnIndex: turn + 1 } },
+    extensions: { ...(before.extensions || {}), v5: { ...(before.extensions?.v5 || {}), turnIndex: turn + 1,orderRound:transition.round } },
     combat: { ...combat, participants, ...transition },
     log: [{ id: `v5-turn:${before.localRevision || 0}:${turn}:management`,  kind: 'management', actorId: nextActor?.id, actorName: nextActor?.name,
       text: `▶ ${transition.round !== combat.round ? `Round ${transition.round} — ` : ''}Tour de ${nextActor?.name || '—'}` }, ...effectLogs, ...(before.log || [])].slice(0, 300) };

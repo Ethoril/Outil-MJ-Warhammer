@@ -79,7 +79,7 @@ export function normalizeState(raw, index = 0) {
     name = String(raw ?? '').trim();
   }
 
-  const key = stateKey(name);
+  const key = ['talent-active','talent-pending'].includes(source.kind) && typeof source.key==='string' && /^[a-z0-9:-]+$/.test(source.key) ? source.key : stateKey(name);
   const out = source;
   safeSet(out, 'id', stateId(raw, index, key));
   safeSet(out, 'key', key);
@@ -93,7 +93,9 @@ export function normalizeState(raw, index = 0) {
 /** Normalize all states; duplicate semantic entries remain separate occurrences. */
 export function normalizeEffects(states = []) {
   if (!Array.isArray(states)) return [];
-  return states.map((raw, index) => normalizeState(raw, index));
+  return states
+    .filter(raw => (typeof raw === 'string' && raw.trim()) || (isRecord(raw) && typeof (raw.name ?? raw.key ?? raw.id) === 'string' && String(raw.name ?? raw.key ?? raw.id).trim()))
+    .map((raw, index) => normalizeState(raw, index));
 }
 
 export const normalizeStates = normalizeEffects;

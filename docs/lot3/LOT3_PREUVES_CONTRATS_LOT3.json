@@ -1,0 +1,2371 @@
+{
+  "date": "2026-10-12",
+  "scope": 30,
+  "fixture": "tests/helpers/lot3-elven-fixture.js ; HEPG pp. 80–89 ; faits et dés synthétiques explicites ; expiration via horloge publique puis vrais Tours, variantes dans les tests",
+  "rows": [
+    {
+      "id": "spell-audit-2b775e439f702084e102",
+      "name": "Apothéose",
+      "page": 86,
+      "canonicalName": "Apothéose",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Apothéose (Apothéose) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 6,
+          "actions": [
+            {
+              "kind": "healing",
+              "healed": 6,
+              "summary": "Soin magique : +6 B (206/300)"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 206,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Peur (1)"
+          ]
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous infusez la cible d'une magie pure, lui permettant de récupérer un nombre de Blessures égal à votre Bonus de Force Mentale et lui octroyant temporairement le Trait de Créature Peur 1.\nSurpuissance :\n• Tous les +3 DR : La cible récupère à nouveau votre Bonus de Force Mentale en Blessures.\n• +6 DR : Vous soignez une Blessure Critique si vous réussissez un Test de Sociabilité Intermédiaire (+0 DR).\n• +10 DR : Vous ramenez la cible à la vie à son maximum de Blessures. Sa tête est entourée d’un halo magique. Elle meurt définitivement après un nombre de minutes égal à votre Bonus de Force Mentale ou si Apothéose est dissipé. Vous gagnez du Yenlui (Sombre).",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-a15f3920b0203346ccdd",
+      "name": "Destruction des Arcanes",
+      "page": 86,
+      "canonicalName": "Destruction des Arcanes",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Destruction des Arcanes (Destruction des Arcanes) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 2,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "arcane-unforgiving",
+              "ready": true,
+              "totalWornAp": 12,
+              "rawDamage": 6,
+              "targetBe": 4,
+              "finalDamage": 2,
+              "location": "Corps",
+              "destroyedAp": 0,
+              "armorDamageLocations": [],
+              "damageByLocation": {},
+              "armorBefore": {
+                "head": 2,
+                "body": 2,
+                "rightArm": 2,
+                "leftArm": 2,
+                "rightLeg": 2,
+                "leftLeg": 2
+              },
+              "armorAfter": {
+                "head": 2,
+                "body": 2,
+                "rightArm": 2,
+                "leftArm": 2,
+                "rightLeg": 2,
+                "leftLeg": 2
+              },
+              "focalisationTest": null,
+              "dexterityTest": null,
+              "destroyedMagicItem": null,
+              "magicItemDestroyed": false,
+              "overcast8": false,
+              "overcastCost": 0,
+              "requiresInventoryConfirmation": false,
+              "summary": "Destruction des Arcanes : 2 B au Corps (6 Dégâts − BE 4), 0 PA détruit(s)."
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 198,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous invoquez les pouvoirs d'annihilation pour blesser un ennemi en armure et détruire ses objets magiques. La cible subit 1 Blessure au corps par tranche complète de 2 points d’armure portés (par exemple, 18 PA infligent 9 Blessures). Le Bonus d'Endurance s'applique, mais les Points d'Armure sont ignorés. De plus, un de ses objets magiques (déterminé aléatoirement) est détruit si vous réussissez un Test de Focalisation Intermédiaire (+0 DR).\nSurpuissance :\n• Chaque +1 DR : Détruit 1 point d'armure porté (aléatoire) après les dégâts.\n• +3 DR : Si vous réussissez un Test de Dextérité Accessible (+2 DR), vous choisissez l'objet magique détruit.\n• +8 DR : Augmente les dégâts du sort à 1 Blessure par point d'armure porté.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-b59d9ff19f35c7a0d81c",
+      "name": "Coruscation de Finreir",
+      "page": 86,
+      "canonicalName": "Coruscation de Finreir",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Coruscation de Finreir (Coruscation de Finreir) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Foyer arcanique : bonus de 1 à 5 DR, d10/2 arrondi supérieur à chaque Round, destinataires dans BFM mètres déclarés ; rift/portail et Yenlui : reçus MJ, absence de terrain et registre de Yenlui."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Vol (Agilité)"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Foyer arcanique : bonus de 1 à 5 DR, d10/2 arrondi supérieur à chaque Round, destinataires dans BFM mètres déclarés ; rift/portail et Yenlui : reçus MJ, absence de terrain et registre de Yenlui."
+      ],
+      "reminders": "Vous gagnez Vol (Agilité) et un plancher de 5 PA à chaque localisation, sans addition à l’armure portée. En surpuissance, le foyer arcanique donne 1d10 / 2, arrondi supérieur, soit 1 à 5 DR aux Tests de lancement dans Bonus de Force Mentale mètres, relancés au début de chaque Round. +5 DR ouvrent une faille instable dans Bonus de Force Mentale mètres et font perdre 3 Yenlui ; +8 DR ouvrent un portail plus stable dans un terrain solide, pour une couleur choisie et la Haute Magie. Les lieux et le foyer sont déclarés par le MJ. Foyer arcanique : bonus de 1 à 5 DR, d10/2 arrondi supérieur à chaque Round, destinataires dans BFM mètres déclarés ; rift/portail et Yenlui : reçus MJ, absence de terrain et registre de Yenlui.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-b34cc617578ad5355ca6",
+      "name": "Malédiction d'Attraction des Flèches",
+      "page": 86,
+      "canonicalName": "Malédiction d'Attraction des Flèches",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Malédiction d'Attraction des Flèches (Malédiction d'Attraction des Flèches) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Relance d’un tir raté contre une cible maudite : d100 explicite via la clause active ; armes de guerre et munitions magiques admises, projectiles magiques exclus. Le résultat de la relance est un reçu de Test, l’attaque opposée est rejouée avec ce jet. +4 : le MJ retire PA et Défensif du bouclier pour cette opposition seulement (le bouclier peut bloquer), absence de lien bouclier/localisation dans la résolution. +6 CT +0 du lanceur calculé, localisation choisie par le MJ au prochain tir ; pas de ciblage spatial."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Relance d’un tir raté contre une cible maudite : d100 explicite via la clause active ; armes de guerre et munitions magiques admises, projectiles magiques exclus. Le résultat de la relance est un reçu de Test, l’attaque opposée est rejouée avec ce jet. +4 : le MJ retire PA et Défensif du bouclier pour cette opposition seulement (le bouclier peut bloquer), absence de lien bouclier/localisation dans la résolution. +6 CT +0 du lanceur calculé, localisation choisie par le MJ au prochain tir ; pas de ciblage spatial."
+      ],
+      "reminders": "Les tireurs peuvent relancer les attaques à distance ratées contre les cibles maudites, y compris munitions magiques et machines de guerre, mais pas les projectiles de sorts. +4 DR retirent les PA et Défensive des boucliers lorsqu’ils opposent un tir ; ils peuvent toujours bloquer l’attaque. Avec +6 DR et un Test de CT (+0 DR), vous choisissez les localisations touchées. Relance d’un tir raté contre une cible maudite : d100 explicite via la clause active ; armes de guerre et munitions magiques admises, projectiles magiques exclus. Le résultat de la relance est un reçu de Test, l’attaque opposée est rejouée avec ce jet. +4 : le MJ retire PA et Défensif du bouclier pour cette opposition seulement (le bouclier peut bloquer), absence de lien bouclier/localisation dans la résolution. +6 CT +0 du lanceur calculé, localisation choisie par le MJ au prochain tir ; pas de ciblage spatial.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-563c5b4f9e1f19479c70",
+      "name": "Impasse",
+      "page": 87,
+      "canonicalName": "Impasse",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Impasse (Impasse) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Une couche ou un sort réel désigné ; aucune suppression générale du lanceur. Objet : pouvoirs magiques negés, profil ordinaire conservé, reçu de fiche. Bonus géomantiques/Flux des options : propriétés spatiales absentes, reçus MJ."
+            },
+            {
+              "kind": "suppression",
+              "summary": "Suppression temporaire de la couche existante réellement désignée."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Une couche ou un sort réel désigné ; aucune suppression générale du lanceur. Objet : pouvoirs magiques negés, profil ordinaire conservé, reçu de fiche. Bonus géomantiques/Flux des options : propriétés spatiales absentes, reçus MJ."
+      ],
+      "reminders": "Vous invoquez une résonance bourdonnante d’anti-magie pour neutraliser la sorcellerie ennemie. Un sort persistant ou objet magique de votre choix est temporairement annulé. Les armes et armures magiques continuent de fonctionner comme des objets normaux. Vous pouvez à la place cibler un lanceur de sorts et rendre temporairement inutilisable l'un de ses sorts, à condition d’avoir vu ce sort utilisé auparavant (ou d’avoir lu le grimoire de la cible).\nSurpuissance :\n• +6 DR : Le bonus aux Tests de Focalisation et d’Incantation généré par une Pierre Gardienne, un Cercle Oghamique, une Pierre de Harde ou une Jonction Tellurique est annulé (voir Vents de Magie p.194-197). Les Pivots Arcaniques ne peuvent être annulés. Vous gagnez du Yenlui (Lumière).\n• +9 DR : La propriété d'un Pivot Arcanique permettant de contrôler les Flux Magiques est annulée (voir Tempêtes de Magie, Vents de Magie p.192). Vous gagnez du Yenlui (Lumière). Une couche ou un sort réel désigné ; aucune suppression générale du lanceur. Objet : pouvoirs magiques negés, profil ordinaire conservé, reçu de fiche. Bonus géomantiques/Flux des options : propriétés spatiales absentes, reçus MJ.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-c9f8252ccca1e4581ee1",
+      "name": "Drain de Magie",
+      "page": 87,
+      "canonicalName": "Drain de Magie",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Drain de Magie (Drain de Magie) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Zone et exemptions déclarées ; Protections de créature/objets ordinaires ne sont pas dissipés au lancement de base. +7 bénédictions/miracles et +10 objets, Protections de créature et interdiction de magie 24 h : reçus MJ, absence de catégories de provenance et registre de pouvoirs de fiche. Le MJ lance le Test de Focalisation +0 de chaque lanceur ciblé et applique 24 h seulement sur échec ; aucune valeur de Protection permanente n’est écrasée."
+            },
+            {
+              "kind": "drain-magic",
+              "drainedReserveSl": 30,
+              "dispelledCount": 0,
+              "summary": "Drain de Magie : réserve vidée (30 DR) et 0 effet(s) magique(s) actif(s) dissipé(s) sur foe."
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Zone et exemptions déclarées ; Protections de créature/objets ordinaires ne sont pas dissipés au lancement de base. +7 bénédictions/miracles et +10 objets, Protections de créature et interdiction de magie 24 h : reçus MJ, absence de catégories de provenance et registre de pouvoirs de fiche. Le MJ lance le Test de Focalisation +0 de chaque lanceur ciblé et applique 24 h seulement sur échec ; aucune valeur de Protection permanente n’est écrasée."
+      ],
+      "reminders": "Vous expulsez la magie du monde en invoquant un vortex éthérique. Les sorts persistants dans la zone d'effet sont immédiatement dissipés sans Test Étendu, et la magie accumulée par les lanceurs en Focalisation est perdue. Les objets magiques et Traits de Créature Protection ne sont pas affectés.\nSurpuissance :\n• +5 DR : Vous augmentez la Zone d’Effet à Force Mentale mètres. Un Test d'Intelligence Difficile (−1 DR) permet d'exempter des cibles alliées (y compris vous-même) des effets du sort.\n• +7 DR : Les Bénédictions et Miracles persistants sont également dissipés. Vous gagnez du Yenlui (Lumière).\n• +10 DR : Les objets magiques perdent temporairement leurs pouvoirs et les Traits de Créature Protection sont annulés. Les lanceurs de sorts doivent réussir un Test de Focalisation Intermédiaire (+0 DR) ou perdre toute capacité à lancer des sorts pendant 24 heures. Zone et exemptions déclarées ; Protections de créature/objets ordinaires ne sont pas dissipés au lancement de base. +7 bénédictions/miracles et +10 objets, Protections de créature et interdiction de magie 24 h : reçus MJ, absence de catégories de provenance et registre de pouvoirs de fiche. Le MJ lance le Test de Focalisation +0 de chaque lanceur ciblé et applique 24 h seulement sur échec ; aucune valeur de Protection permanente n’est écrasée.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-cfaaeee15f9c384a3d64",
+      "name": "Convocation Ardente",
+      "page": 87,
+      "canonicalName": "Convocation Ardente",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Convocation Ardente (Convocation Ardente) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 5,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "missile",
+              "damage": 5,
+              "location": "Corps",
+              "summary": "Projectile magique : 5 B à Corps"
+            },
+            {
+              "kind": "mj-input",
+              "summary": "Les cibles initiales restent frappées même sorties de la zone ; immersion complète eau/sable déclarée par le MJ termine la couche."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 195,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [
+            {
+              "name": "Enflammé",
+              "key": "enflamme",
+              "level": 1,
+              "duration": null,
+              "source": {
+                "targetId": "foe"
+              },
+              "authorId": null,
+              "targetId": "foe",
+              "v5Timing": {
+                "acquiredRound": 1
+              }
+            }
+          ],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Les cibles initiales restent frappées même sorties de la zone ; immersion complète eau/sable déclarée par le MJ termine la couche."
+      ],
+      "reminders": "Vous invoquez un barrage incessant de flammes. Toutes les créatures présentes dans la Zone d’Effet subissent immédiatement un projectile magique infligeant +5 Dégâts et gagnent 1 État Enflammé. Chaque round suivant, elles subissent à nouveau ces dégâts et gagnent un État Enflammé supplémentaire, même si elles quittent la zone initiale. L’effet peut être annulé par immersion totale dans l'eau ou le sable.\nSurpuissance :\n• +5 DR : Les dégâts passent à +6 au deuxième round et augmentent de +1 à chaque round suivant. Vous gagnez du Yenlui (Sombre).\n• +8 DR : Un Test de Capacité de Combat Intermédiaire (+0 DR) permet d’exempter les cibles alliées des effets du sort. Les cibles initiales restent frappées même sorties de la zone ; immersion complète eau/sable déclarée par le MJ termine la couche.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-8de73bc191212e9c706a",
+      "name": "La Fortune est Capricieuse",
+      "page": 87,
+      "canonicalName": "La Fortune est Capricieuse",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de La Fortune est Capricieuse (La Fortune est Capricieuse) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "fortune-is-fickle",
+              "summary": "La Fortune est Capricieuse : doubles = maladresses obligatoires, critiques et atténuations interdits"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous invoquez des esprits invisibles qui perturbent un lanceur de sorts en le gênant constamment. Tout double obtenu par la cible sur ses Tests de Focalisation ou d’Incantation provoque automatiquement un Fiasco, indépendamment des Talents, ingrédients ou autres aides utilisées. Ses Tests d’Incantation ne peuvent pas provoquer de Coups Critiques et ses tentatives de Dissipation échouent automatiquement si elle obtient un double. Les personnages dotés de Seconde Vue peuvent percevoir ces esprits comme des élémentaires malveillants de Qhaysh.\nSurpuissance :\n• +4 DR : Toutes les actions non magiques de la cible échouent automatiquement lorsqu'elle obtient un double, même si le test était réussi.\n• +6 DR : Les doubles obtenus aux Tests de Focalisation ou d’Incantation de la cible provoquent un résultat sur la Table des Fiascos Majeurs. Vous gagnez du Yenlui (Sombre).",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-0425d78b7f031880a4d5",
+      "name": "Glamour de Teclis",
+      "page": 88,
+      "canonicalName": "Glamour de Teclis",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Glamour de Teclis (Glamour de Teclis) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Navigation −3 à chaque Round. Les trois échecs sont déclarés par le MJ, sans compteur dédié ; la clause de direction exige cette déclaration et Commandement +2. Errance/trajectoire et direction : absence de plateau."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Navigation −3 à chaque Round. Les trois échecs sont déclarés par le MJ, sans compteur dédié ; la clause de direction exige cette déclaration et Commandement +2. Errance/trajectoire et direction : absence de plateau."
+      ],
+      "reminders": "Vous invoquez un labyrinthe illusoire de brume et d'ombres. Chaque round, les cibles doivent réussir un Test de Navigation Très Difficile (−3 DR) ou n’effectuer aucune action sauf errer dans une direction aléatoire à leur rythme de marche normal. Le sort est invisible aux autres, faisant apparaître les cibles comme hébétées. Si une cible échoue à 3 tests, vous pouvez contrôler sa direction pendant le reste de la durée du sort en réussissant un Test de Commandement Accessible (+2 DR). Chaque changement de direction nécessite un nouveau Test de Commandement.\nSurpuissance :\n• +3 DR : Les effets du sort durent Bonus d’Intelligence heures pour les cibles qui échouent à trois Tests de Navigation. Vous gagnez du Yenlui (Sombre).\n• +6 DR : Un Test d'Agilité Intermédiaire (+0 DR) permet d'exempter les cibles alliées des effets du sort. Navigation −3 à chaque Round. Les trois échecs sont déclarés par le MJ, sans compteur dédié ; la clause de direction exige cette déclaration et Commandement +2. Errance/trajectoire et direction : absence de plateau.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-2ed6371e92779deb6236",
+      "name": "Bannissement Majeur",
+      "page": 88,
+      "canonicalName": "Bannissement Majeur",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Bannissement Majeur (Bannissement Majeur) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Présence et Taille pour chaque frappe périodique, d100 de localisation et Protections saisis. Familles de magie, objets et réinvocation : reçus MJ, catégories non enregistrées."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Mort-vivant"
+          ]
+        }
+      ],
+      "assisted": [
+        "Présence et Taille pour chaque frappe périodique, d100 de localisation et Protections saisis. Familles de magie, objets et réinvocation : reçus MJ, catégories non enregistrées."
+      ],
+      "reminders": "Vous irradiez des flots du plus pur Qhaysh pour bannir le mal et les ténèbres. Chaque round, les créatures Démoniaques et Mort-vivantes dans la Zone d’Effet subissent un projectile magique infligeant +8 Dégâts (ou +15 Dégâts si elles sont de Taille Grande ou supérieure). Les créatures Instables subissent le double des Dégâts. Les Démons détruits par ce sort ne peuvent être réinvoqués pendant 1001 jours. Les Morts-vivants détruits ne peuvent jamais être réanimés. De plus, vous pouvez gratuitement tenter de dissiper chaque sort de Sorcellerie, Démonologie, Nécromancie, Magie Noire ou Chaos dans la Zone d’Effet.\nSurpuissance :\n• Pour chaque +1 DR, vous bénéficiez d’un bonus de +1 DR aux Tests de Dissipation.\n• +4 DR : Les objets magiques possédant des enchantements maléfiques ou chaotiques cessent de fonctionner pendant la durée du sort si vous réussissez un Test de Sociabilité Accessible (+2 DR).\n• +7 DR : Les Dégâts augmentent à +15 (ou +30 si la cible est de Taille Grande ou supérieure). Vous gagnez du Yenlui (Lumineux). Présence et Taille pour chaque frappe périodique, d100 de localisation et Protections saisis. Familles de magie, objets et réinvocation : reçus MJ, catégories non enregistrées.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-1c1dcaf3632d91591839",
+      "name": "Main de Gloire",
+      "page": 88,
+      "canonicalName": "Main de Gloire",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Main de Gloire (Main de Gloire) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "hand-of-glory",
+              "tier": "base",
+              "summary": "+15 à CC. Même bonus pour tous les alliés. Bmax inchangé."
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 65,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous invoquez les noms de héros elfiques légendaires pour guider et renforcer vos alliés. Les personnages alliés gagnent temporairement 3d10 à l'une des caractéristiques suivantes : CC, CT, Force, Endurance, Initiative ou Agilité. Lancez une fois et appliquez le même bonus à tous. Alternativement, le Mouvement des cibles affectées peut être augmenté de 2. Les Blessures restent identiques, même si l'Endurance est augmentée.\nSurpuissance :\n• +3 DR : Les personnages alliés dans un rayon de Bonus de Sociabilité mètres retirent toutes leurs Conditions Brisé.\n• +6 DR : À la place des effets normaux, augmentez toutes les quatre caractéristiques de 3d10 (un seul jet, même bonus pour toutes les caractéristiques) et le Mouvement de 2.\n• +8 DR : Les alliés dans un rayon de Bonus de Sociabilité mètres retirent toutes leurs Conditions Brisé et Fatigué, récupèrent 1d10 Blessures et gagnent Immunité à la Psychologie (WFRP, p.340) pour la durée du sort. Vous gagnez du Yenlui (Lumineux).",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-02d65bc6ca9781fccd6e",
+      "name": "Œil Invisible",
+      "page": 88,
+      "canonicalName": "Œil Invisible",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Œil Invisible (Œil Invisible) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Perception = Langue (Magick), Acuité visuelle, Vol 120 ; solide infranchissable. Portée de commande et vision, déplacements : MJ. Retour volontaire au corps : œil détruit et Surpris, via clause active."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            },
+            {
+              "kind": "summon",
+              "auxiliariesCount": 1,
+              "summary": "1 auxiliaire(s) invoqué(s) par mage."
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "hp": 3,
+          "maxHp": 3,
+          "caracs": {},
+          "states": [],
+          "traits": [
+            "Invisible",
+            "Acuité sensorielle (Vue)",
+            "Vol (120)"
+          ]
+        }
+      ],
+      "assisted": [
+        "Perception = Langue (Magick), Acuité visuelle, Vol 120 ; solide infranchissable. Portée de commande et vision, déplacements : MJ. Retour volontaire au corps : œil détruit et Surpris, via clause active."
+      ],
+      "reminders": "Vous créez un globe oculaire invisible flottant se déplaçant à votre commandement. L'œil possède une Perception égale à votre Langage (Magie), le Talent Sens Aiguisé (Vue) et le Trait Créature Vol (120). Vous voyez à travers l'œil en utilisant ses capacités à la place des vôtres, mais votre corps est en état de transe pendant la durée du sort. L'œil ne peut traverser les objets solides. S'il est détecté, il peut être détruit après avoir subi 3 Blessures. Si quelqu'un interagit avec vous durant ce sort, vous pouvez revenir à votre corps physique. L'œil est alors détruit et vous recevez la Condition Surpris.\nSurpuissance :\n• +4 DR : L'œil gagne Sens de la Magie, Seconde Vue et Vision Nocturne.\n• +8 DR : La portée du sort augmente à Intelligence miles. Perception = Langue (Magick), Acuité visuelle, Vol 120 ; solide infranchissable. Portée de commande et vision, déplacements : MJ. Retour volontaire au corps : œil détruit et Surpris, via clause active.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-a5b2850f503523faf3a9",
+      "name": "Bouclier de Saphery",
+      "page": 89,
+      "canonicalName": "Bouclier de Saphery",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Bouclier de Saphery (Bouclier de Saphery) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            },
+            {
+              "kind": "shield-of-saphery",
+              "threshold": 9,
+              "automaticSuccess": false,
+              "summary": "Bouclier de Saphery : Protection 9+ sur 1d10."
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous invoquez un champ protecteur étincelant autour de vos alliés. Les cibles amies dans la zone d'effet gagnent le Trait de Créature Protection 9+. Chaque fois que vous lancez un autre sort de Haute Magie, améliorez ce Trait de Protection de 1.\nSurpuissance :\n• Pour chaque +3 DR, améliorez encore le Trait de Protection de 1.\n• +4 DR : Modifiez la portée du sort à la moitié de votre Volonté en mètres.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-51719f4f179ad35ba71c",
+      "name": "Extinction de l'Âme",
+      "page": 89,
+      "canonicalName": "Extinction de l'Âme",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Extinction de l'Âme (Extinction de l'Âme) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 9,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "missile",
+              "damage": 9,
+              "location": "Corps",
+              "summary": "Projectile magique : 9 B à Corps"
+            },
+            {
+              "kind": "mj-input",
+              "summary": "Conséquences sur âmes/cadavres et Yenlui : reçus MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 191,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Conséquences sur âmes/cadavres et Yenlui : reçus MJ."
+      ],
+      "reminders": "Vous infligez un projectile magique +9. Les victimes tuées ne peuvent devenir Fantômes ni avoir leur âme liée dans un réceptacle. +3 DR réduisent leurs corps en poussière. +7 DR doublent portée et zone et portent les Dégâts à +11 ; vous gagnez Yenlui (Sombre). Conséquences sur âmes/cadavres et Yenlui : reçus MJ.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-1e7a5eaec18c122bde64",
+      "name": "Tempête",
+      "page": 89,
+      "canonicalName": "Tempête",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Tempête (Tempête) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Déplacement 2d10 et direction déclarés par la clause active ; occupations de zone à chaque Round. Chute des volants : 50 mètres par Round en cas de Calme raté, hauteur/atterrissage MJ. Bâtiments et machines : nature désignée, projectile +15."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Déplacement 2d10 et direction déclarés par la clause active ; occupations de zone à chaque Round. Chute des volants : 50 mètres par Round en cas de Calme raté, hauteur/atterrissage MJ. Bâtiments et machines : nature désignée, projectile +15."
+      ],
+      "reminders": "Vous invoquez depuis les cieux une tempête polychromatique d'énergie crépitante. Cette tempête se déplace comme un sort de vortex aléatoire, sauf qu'elle saute les étapes #1–2 et avance directement de 2d10 mètres selon l’étape #3 (voir Vents de Magie, page 21). Chaque round, les créatures dans la zone subissent un missile magique infligeant +4 Dégâts et doivent réussir un Test d'Athlétisme Accessible (+2 DR), sous peine de subir un malus de –20 en Capacité de Combat et Capacité de Tir pour la durée de la tempête. Les cibles volantes subissent à la place +5 Dégâts et leur Test d'Athlétisme souffre de –1 DR.\nSurpuissance :\n• +4 DR : De plus, les créatures doivent réussir un Test de Calme Intermédiaire (+0 DR) pour se déplacer. Les cibles volantes échouant à ce test chutent immédiatement de 50 mètres par round, et tous les Tests de Capacité de Tir subissent un malus de −3 DR.\n• +5 DR : Chaque round, la tempête inflige un missile magique infligeant +15 Dégâts aux bâtiments et machines de guerre dans la zone.\n• +8 DR : Un Test d'Initiative Intermédiaire (+0 DR) vous permet d’exempter les cibles amies des effets du sort. Déplacement 2d10 et direction déclarés par la clause active ; occupations de zone à chaque Round. Chute des volants : 50 mètres par Round en cas de Calme raté, hauteur/atterrissage MJ. Bâtiments et machines : nature désignée, projectile +15.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-4f6f3e757539548f2ef3",
+      "name": "Chemin entre les Mondes",
+      "page": 89,
+      "canonicalName": "Chemin entre les Mondes",
+      "domain": "high",
+      "ready": true,
+      "summary": "Exécution de Chemin entre les Mondes (Chemin entre les Mondes) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 8
+          },
+          "states": [],
+          "traits": [
+            "Éthéré"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte."
+      ],
+      "reminders": "Vous ouvrez les chemins entre les mondes à vos alliés. Les cibles amies gagnent le Trait de Créature Éthérée, et leur Mouvement est doublé.\nSurpuissance :\n• +5 DR : La durée du sort passe à un nombre de minutes égal à votre Bonus d’Intelligence si vous réussissez un Test de Volonté Difficile (−2 DR).\n• +8 DR : Les cibles présentes sur un nexus géomantique approprié peuvent emprunter les Chemins des Anciens pour rejoindre instantanément un autre nexus. Vous décidez du nexus de destination, sans limitation de distance. Nexus de géomancie et destination des Voies des Anciens : reçus MJ, absence de carte.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-f78d880ee98fbf56a383",
+      "name": "Enchantement Végétal (Ghyran & Chamon)",
+      "page": 81,
+      "canonicalName": "Enchantement Végétal (Ghyran & Chamon)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Enchantement Végétal (Ghyran & Chamon) (Enchantement Végétal (Ghyran & Chamon)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Plante et propriété enregistrées sur la fiche par le MJ ; aucune mutation d’inventaire ni compteur."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Enchantement Végétal (Ghyran & Chamon)"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Plante et propriété enregistrées sur la fiche par le MJ ; aucune mutation d’inventaire ni compteur."
+      ],
+      "reminders": "Vous insufflez une propriété magique permanente à une plante non-magique. Chaque plante ne peut recevoir qu’un seul enchantement, qui peut être dissipé. Choisissez une des améliorations suivantes : \n - Robuste : La plante devient résistante aux conditions environnementales difficiles (manque de lumière, sécheresse, températures extrêmes). \n - Nourricière : Les fruits, noix, racines ou feuilles de la plante sont plus nourrissants et pèsent deux fois moins pour satisfaire les besoins alimentaires. \n - Réceptacle : La plante peut abriter un démon mineur, un élémentaire mineur ou une âme, comme s’il s’agissait d’une Pierre de Pouvoir. Plante et propriété enregistrées sur la fiche par le MJ ; aucune mutation d’inventaire ni compteur.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-5518259547faac727f22",
+      "name": "Bannissement Mineur (Hysh & Shyish)",
+      "page": 81,
+      "canonicalName": "Bannissement Mineur (Hysh & Shyish)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Bannissement Mineur (Hysh & Shyish) (Bannissement Mineur (Hysh & Shyish)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "opposed-test",
+              "summary": "FM 4 contre Calme -3 : banni sans Blessure."
+            },
+            {
+              "kind": "mj-input",
+              "summary": "Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible."
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Mort-vivant"
+          ]
+        }
+      ],
+      "assisted": [
+        "Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible."
+      ],
+      "reminders": "Vous tentez d’expulser un fantôme, spectre, démon mineur ou bête démoniaque. Si vous remportez un Test Opposé de Volonté/Froideur, la cible est renvoyée dans son royaume d’origine. Exclut Spectre majeur/Grand Démon ; admissibilité déclarée. Bannissement sans dégâts, pas destruction ; réinvocation possible.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-21027918e8cdd5105379",
+      "name": "Alarme Magique (Azyr & Ulgu)",
+      "page": 82,
+      "canonicalName": "Alarme Magique (Azyr & Ulgu)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Alarme Magique (Azyr & Ulgu) (Alarme Magique (Azyr & Ulgu)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Entrées et nombre exact : événements spatiaux non enregistrés, reçus MJ ; aucun bonus de Perception/Intuition."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Alarme Magique (Azyr & Ulgu)"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Entrées et nombre exact : événements spatiaux non enregistrés, reçus MJ ; aucun bonus de Perception/Intuition."
+      ],
+      "reminders": "Vous définissez une zone sous surveillance magique. Dès qu’une créature ou un esprit de taille Minuscule ou plus grand entre dans la zone, vous en êtes immédiatement informé. Si vous dormez, vous vous réveillez instantanément. Vous connaissez le nombre exact d’intrusions mais pas leur nature. Entrées et nombre exact : événements spatiaux non enregistrés, reçus MJ ; aucun bonus de Perception/Intuition.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-eb0260b459041922b33d",
+      "name": "Masque de l'Esprit (Shyish & Ulgu)",
+      "page": 82,
+      "canonicalName": "Masque de l'Esprit (Shyish & Ulgu)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Masque de l'Esprit (Shyish & Ulgu) (Masque de l'Esprit (Shyish & Ulgu)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Tests adverses d’Intuition et sorts de lecture/divination −3 DR ; contexte de lecture déclaré. On peut contraindre à parler, jamais à dire vrai."
+            },
+            {
+              "kind": "test-modifiers",
+              "testModifiers": {
+                "Intuition adverse": -3
+              },
+              "summary": "Bonus/Malus de Tests : Intuition adverse -3 DR"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Tests adverses d’Intuition et sorts de lecture/divination −3 DR ; contexte de lecture déclaré. On peut contraindre à parler, jamais à dire vrai."
+      ],
+      "reminders": "Vous masquez vos pensées et émotions. Les Tests d’Intuition contre vous et les Tests de lancement des sorts visant à lire votre esprit ou à vous scruter à distance subissent −3 DR. Vous pouvez être contraint de parler, mais pas de dire la vérité. Tests adverses d’Intuition et sorts de lecture/divination −3 DR ; contexte de lecture déclaré. On peut contraindre à parler, jamais à dire vrai.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-8ec343b3587c1fc6e82e",
+      "name": "Purification du Corps (Ghyran & Hysh)",
+      "page": 82,
+      "canonicalName": "Purification du Corps (Ghyran & Hysh)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Purification du Corps (Ghyran & Hysh) (Purification du Corps (Ghyran & Hysh)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Affections et source des états Empoisonné : données de fiche ; reçu nominatif, aucun retrait global des poisons ni Sonné."
+            },
+            {
+              "kind": "affliction-receipt",
+              "summary": "Poison déclaré : affection unique purgée ; à reporter sur la fiche."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Affections et source des états Empoisonné : données de fiche ; reçu nominatif, aucun retrait global des poisons ni Sonné."
+      ],
+      "reminders": "Vous effectuez Résistance (+0 DR) pour soigner une maladie nommée ou retirer un poison de la cible. En cas de Maladresse, vous contractez vous-même cette maladie ou ce poison. Affections et source des états Empoisonné : données de fiche ; reçu nominatif, aucun retrait global des poisons ni Sonné.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-39d811c9777f34ff49fd",
+      "name": "Parler avec un Animal (Azyr & Ghur)",
+      "page": 82,
+      "canonicalName": "Parler avec un Animal (Azyr & Ghur)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Parler avec un Animal (Azyr & Ghur) (Parler avec un Animal (Azyr & Ghur)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Comportement amical non garanti, aucun bonus de Dressage/Charme animal ; conversation et intelligence de l’animal : MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Bestial"
+          ]
+        }
+      ],
+      "assisted": [
+        "Comportement amical non garanti, aucun bonus de Dressage/Charme animal ; conversation et intelligence de l’animal : MJ."
+      ],
+      "reminders": "Vous dialoguez avec un animal pendant Intelligence minutes, sans le rendre amical. La complexité dépend de son Intelligence. Charme peut remplacer Charme animal pour communiquer. Un observateur connaissant Anoqeyån peut comprendre par Langue (Magick) à +2 DR. Comportement amical non garanti, aucun bonus de Dressage/Charme animal ; conversation et intelligence de l’animal : MJ.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-dca3c261996a5dc4b87c",
+      "name": "Voix de Fer (Aqshy & Chamon)",
+      "page": 82,
+      "canonicalName": "Voix de Fer (Aqshy & Chamon)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Voix de Fer (Aqshy & Chamon) (Voix de Fer (Aqshy & Chamon)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Voix normale/cri portée triple, obstacles/bruit inopérants, pas les murmures. Auditeur hostile : Perception −1 peut neutraliser le bonus contre cet auditeur, via clause active."
+            },
+            {
+              "kind": "test-modifiers",
+              "testModifiers": {
+                "Intimidation": 1,
+                "Commandement": 1
+              },
+              "summary": "Bonus/Malus de Tests : Intimidation +1 DR, Commandement +1 DR"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Voix normale/cri portée triple, obstacles/bruit inopérants, pas les murmures. Auditeur hostile : Perception −1 peut neutraliser le bonus contre cet auditeur, via clause active."
+      ],
+      "reminders": "Votre parole normale ou criée porte trois fois plus loin, malgré obstacles et bruit. Intimidation et Commandement reçoivent +1 DR. Un auditeur hostile qui réussit Perception à −1 DR peut ignorer ce bonus. Les chuchotements sont exclus. Voix normale/cri portée triple, obstacles/bruit inopérants, pas les murmures. Auditeur hostile : Perception −1 peut neutraliser le bonus contre cet auditeur, via clause active.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-45b69abfe0a6e3d0d4d7",
+      "name": "Zone de Confort (Aqshy & Ghur)",
+      "page": 82,
+      "canonicalName": "Zone de Confort (Aqshy & Ghur)",
+      "domain": "elven-arcane",
+      "ready": true,
+      "summary": "Exécution de Zone de Confort (Aqshy & Ghur) (Zone de Confort (Aqshy & Ghur)) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Immunité Exposition froid/chaleur ; Nuée Minuscule/Petite ne peut attaquer. Taille, nuée et nature de l’attaque déclarées ; aucune Résistance +2."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Immunité Exposition froid/chaleur ; Nuée Minuscule/Petite ne peut attaquer. Taille, nuée et nature de l’attaque déclarées ; aucune Résistance +2."
+      ],
+      "reminders": "Vous créez une aura personnelle qui vous protège des nuisibles. Les créatures avec les Traits Taille (Minuscule ou Petite) et Nuée ne peuvent pas vous attaquer. Vous êtes immunisé contre les effets d’Exposition au Froid et à la Chaleur (WFRP, page 181) et subissez 1 point de dégâts de moins contre les attaques basées sur la chaleur ou le froid. Immunité Exposition froid/chaleur ; Nuée Minuscule/Petite ne peut attaquer. Taille, nuée et nature de l’attaque déclarées ; aucune Résistance +2.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-089fd14a120ef4e8e496",
+      "name": "Flèche Bénie",
+      "page": 80,
+      "canonicalName": "Flèche Bénie",
+      "domain": "elven-petty",
+      "ready": true,
+      "summary": "Exécution de Flèche Bénie (Flèche Bénie) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Flèche = exemplaire d’inventaire, pas participant/tireur. Le MJ utilise le reçu pour cette munition seulement, sans compteur dédié."
+            },
+            {
+              "kind": "quantified-reminder",
+              "summary": "fleches : 1 ; bonusDegats : 1"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Flèche Bénie"
+            }
+          ],
+          "quantifiedReminder": {
+            "fleches": 1,
+            "bonusDegats": 1
+          }
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Flèche = exemplaire d’inventaire, pas participant/tireur. Le MJ utilise le reçu pour cette munition seulement, sans compteur dédié."
+      ],
+      "reminders": "Vous imprégnez une flèche non magique de puissance mystique : \n - Devient une arme magique. \n - Inflige +1 Dégâts. Flèche = exemplaire d’inventaire, pas participant/tireur. Le MJ utilise le reçu pour cette munition seulement, sans compteur dédié.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-5674ce34f63394ab2117",
+      "name": "Calme",
+      "page": 80,
+      "canonicalName": "Calme",
+      "domain": "elven-petty",
+      "ready": true,
+      "summary": "Exécution de Calme (Calme) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "calm",
+              "fellowshipPassed": true,
+              "summary": "Calme (HEPG p. 80) : Préjugé, Animosité, Peur, Frénésie apaisés sur foe (traits innés préservés)."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Votre toucher apaise l’esprit du sujet : \n - Supprime les effets de Préjugé, Animosité, Peur et Frénésie. \n - Un Test de Sociabilité (+0) est requis pour que le sort fonctionne.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-dbb6a347c2fadbee05a1",
+      "name": "Doigt Vert",
+      "page": 80,
+      "canonicalName": "Doigt Vert",
+      "domain": "elven-petty",
+      "ready": true,
+      "summary": "Exécution de Doigt Vert (Doigt Vert) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "État végétal et temps de croissance : reçus MJ, pas de soins aux personnes ni accélération inventée."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Doigt Vert"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "État végétal et temps de croissance : reçus MJ, pas de soins aux personnes ni accélération inventée."
+      ],
+      "reminders": "Vous insufflez de la vie aux plantes dans la zone : \n - Les plantes vivantes poussent à leur taille et rendement maximum, même dans de mauvaises conditions. \n - Les plantes mortes reviennent à la vie en 1 jour sous leur état d’origine. État végétal et temps de croissance : reçus MJ, pas de soins aux personnes ni accélération inventée.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-f3c3fed0e01f9ae69de4",
+      "name": "Identifier une Maladie",
+      "page": 81,
+      "canonicalName": "Identifier une Maladie",
+      "domain": "elven-petty",
+      "ready": true,
+      "summary": "Exécution de Identifier une Maladie (Identifier une Maladie) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Maladies de fiche désignées par le MJ ; aucune guérison ni profil de maladie inventé."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Identifier une Maladie"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Maladies de fiche désignées par le MJ ; aucune guérison ni profil de maladie inventé."
+      ],
+      "reminders": "Vous détectez et identifiez toutes les maladies affectant une personne, un animal ou une plante. Vous obtenez le nom et les effets des afflictions. Maladies de fiche désignées par le MJ ; aucune guérison ni profil de maladie inventé.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-69007ef25dc30ca49815",
+      "name": "Enlever la Saleté",
+      "page": 81,
+      "canonicalName": "Enlever la Saleté",
+      "domain": "elven-petty",
+      "ready": true,
+      "summary": "Exécution de Enlever la Saleté (Enlever la Saleté) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Objets et surfaces désignés ; aucune mutation d’inventaire."
+            },
+            {
+              "kind": "quantified-reminder",
+              "summary": "diametreMax : 6"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ],
+          "quantifiedReminder": {
+            "diametreMax": 6
+          }
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Objets et surfaces désignés ; aucune mutation d’inventaire."
+      ],
+      "reminders": "Vous retirez toute saleté d’un objet, d’une personne ou d’un animal, le laissant parfaitement propre. \n Si lancé sur une surface, il nettoie une zone de Bonus de Volonté mètres de diamètre. Objets et surfaces désignés ; aucune mutation d’inventaire.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-5a1e754537165e21e5a1",
+      "name": "Révéler la Magie",
+      "page": 81,
+      "canonicalName": "Révéler la Magie",
+      "domain": "elven-petty",
+      "ready": true,
+      "summary": "Exécution de Révéler la Magie (Révéler la Magie) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Nature magique d’objet/créature déclarée ; couches actives déjà enregistrées lues par le moteur."
+            },
+            {
+              "kind": "visible-magic",
+              "summary": "Aura rendue visible, même cachée."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 200,
+          "maxHp": 300,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Nature magique d’objet/créature déclarée ; couches actives déjà enregistrées lues par le moteur."
+      ],
+      "reminders": "Vous rendez la magie visible dans la zone. \n - Les objets et créatures magiques brillent, même s’ils sont cachés. \n - Les magiciens ne sont pas détectés, sauf s’ils sont sous l’effet d’un sort. Nature magique d’objet/créature déclarée ; couches actives déjà enregistrées lues par le moteur.",
+      "status": "rappel"
+    }
+  ],
+  "statuses": {
+    "conforme": 19,
+    "anomalie": 0,
+    "donnée MJ nécessaire": 3,
+    "rappel": 8,
+    "hors périmètre": 0,
+    "non vérifié": 0
+  }
+}

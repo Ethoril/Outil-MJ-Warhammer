@@ -310,6 +310,26 @@
               "stack": "unique"
             }
           ]
+        },
+        {
+          "id": "situation-public-speaker",
+          "event": "talent.activate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "talentAction",
+              "op": "eq",
+              "value": "public-speaker"
+            }
+          ],
+          "effects": [
+            {
+              "op": "activateTalent",
+              "key": "talent-public-speaker",
+              "stackGroup": "talent-public-speaker",
+              "stack": "unique"
+            }
+          ]
         }
       ]
     },
@@ -380,6 +400,69 @@
               "stack": "unique"
             }
           ]
+        },
+        {
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "limitTestPenalty",
+              "key": "difficulty",
+              "amount": 3,
+              "stackGroup": "talent:difficulty",
+              "stack": "max"
+            }
+          ],
+          "id": "talent-scale-sheer-surface:3"
+        },
+        {
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "limitTestPenalty",
+              "key": "difficulty",
+              "amount": 3,
+              "stackGroup": "talent:difficulty",
+              "stack": "max"
+            }
+          ],
+          "id": "talent-scale-sheer-surface:4"
+        },
+        {
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillGroupId",
+              "op": "eq",
+              "value": "skill-group-45_73_63_61_6c_61_64_65"
+            }
+          ],
+          "effects": [
+            {
+              "op": "limitTestPenalty",
+              "key": "difficulty",
+              "amount": 3,
+              "stackGroup": "talent:difficulty",
+              "stack": "max"
+            }
+          ],
+          "id": "talent-scale-sheer-surface:5"
         }
       ]
     },
@@ -697,6 +780,108 @@
               "stack": "unique"
             }
           ]
+        },
+        {
+          "id": "talent-resistant:actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "test"
+            },
+            {
+              "field": "preRollTalent",
+              "op": "eq",
+              "value": "resistant"
+            },
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "forceTestSuccess",
+              "key": "talent-resistant",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-resistant:attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "test"
+            },
+            {
+              "field": "preRollTalent",
+              "op": "eq",
+              "value": "resistant"
+            },
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "forceTestSuccess",
+              "key": "talent-resistant",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-resistant:defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "kind",
+              "op": "eq",
+              "value": "test"
+            },
+            {
+              "field": "preRollTalent",
+              "op": "eq",
+              "value": "resistant"
+            },
+            {
+              "field": "resistingThreat",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "threatId",
+              "op": "matchesSpecialization"
+            }
+          ],
+          "effects": [
+            {
+              "op": "forceTestSuccess",
+              "key": "talent-resistant",
+              "stackGroup": "talent-resistant",
+              "stack": "unique"
+            }
+          ]
         }
       ]
     },
@@ -845,7 +1030,7 @@
       "talentId": "talent-strong-swimmer",
       "edition": "V5",
       "status": "validated",
-      "ruleVersion": "talent-v5-2026-10-09.24",
+      "ruleVersion": "talent-v5-2026-10-09.24.5",
       "source": {
         "effectHash": "sha256:5cb2766f13b22cfcf825523a71056097a9165f79e527fc8e7f9413f1494884d3",
         "reference": "Livre de base V5, p. 127 ; achat : p. 191"
@@ -905,6 +1090,81 @@
               "op": "grantAdvantage",
               "stackGroup": "talent-strong-swimmer",
               "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "modifySL-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "pursuit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifySL",
+              "amount": 2,
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "add"
+            }
+          ]
+        },
+        {
+          "id": "modifySL-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "pursuit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifySL",
+              "amount": 2,
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "add"
+            }
+          ]
+        },
+        {
+          "id": "modifySL-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-4e_61_74_61_74_69_6f_6e-base"
+            },
+            {
+              "field": "pursuit",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifySL",
+              "amount": 2,
+              "stackGroup": "talent-strong-swimmer",
+              "stack": "add"
             }
           ]
         }
@@ -1607,6 +1867,27 @@
               "stack": "unique"
             }
           ]
+        },
+        {
+          "id": "talent-roughrider:additional:1",
+          "event": "situation.calculate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "situation",
+              "op": "eq",
+              "value": "pursuitMounted"
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyQuantity",
+              "key": "movement",
+              "amount": 1,
+              "stackGroup": "talent:movement:modifyQuantity",
+              "stack": "add"
+            }
+          ]
         }
       ]
     },
@@ -1675,6 +1956,27 @@
               "op": "grantAdvantage",
               "stackGroup": "talent-crack-the-whip",
               "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "talent-crack-the-whip:additional:1",
+          "event": "situation.calculate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "situation",
+              "op": "eq",
+              "value": "pursuitVehicle"
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyQuantity",
+              "key": "movement",
+              "amount": 1,
+              "stackGroup": "talent:movement:modifyQuantity",
+              "stack": "add"
             }
           ]
         }
@@ -2712,6 +3014,27 @@
           "choice": {
             "id": "talent-old-salt:sl"
           }
+        },
+        {
+          "id": "talent-old-salt:additional:1",
+          "event": "situation.calculate",
+          "role": "actor",
+          "when": [
+            {
+              "field": "situation",
+              "op": "eq",
+              "value": "crewOcean"
+            }
+          ],
+          "effects": [
+            {
+              "op": "modifyQuantity",
+              "key": "crew",
+              "amount": 1,
+              "stackGroup": "talent:crew:modifyQuantity",
+              "stack": "add"
+            }
+          ]
         }
       ]
     },
@@ -2720,7 +3043,7 @@
       "talentId": "talent-numismatics",
       "edition": "V5",
       "status": "validated",
-      "ruleVersion": "talent-v5-2026-10-09.24.2",
+      "ruleVersion": "talent-v5-2026-10-09.24.5",
       "source": {
         "effectHash": "sha256:d39e413e1d2c577484c2e38e97634bf09dce60b90be75971f2c4bdb0e60b6dfd",
         "reference": "Livre de base V5, p. 123 ; achat : p. 191"
@@ -2821,6 +3144,78 @@
           "choice": {
             "id": "talent-numismatics:sl"
           }
+        },
+        {
+          "id": "grantAdvantage-actor",
+          "event": "test.beforeRoll",
+          "role": "actor",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-53_61_76_6f_69_72-48_e9_72_61_6c_64_69_71_75_65"
+            },
+            {
+              "field": "identifyingHeraldry",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-numismatics",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "grantAdvantage-attacker",
+          "event": "test.beforeRoll",
+          "role": "attacker",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-53_61_76_6f_69_72-48_e9_72_61_6c_64_69_71_75_65"
+            },
+            {
+              "field": "identifyingHeraldry",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-numismatics",
+              "stack": "unique"
+            }
+          ]
+        },
+        {
+          "id": "grantAdvantage-defender",
+          "event": "test.beforeRoll",
+          "role": "defender",
+          "when": [
+            {
+              "field": "skillId",
+              "op": "eq",
+              "value": "skill-53_61_76_6f_69_72-48_e9_72_61_6c_64_69_71_75_65"
+            },
+            {
+              "field": "identifyingHeraldry",
+              "op": "eq",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "op": "grantAdvantage",
+              "stackGroup": "talent-numismatics",
+              "stack": "unique"
+            }
+          ]
         }
       ]
     }

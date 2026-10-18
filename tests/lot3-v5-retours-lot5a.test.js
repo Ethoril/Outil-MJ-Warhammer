@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {getSpellContract,resolveAuxiliarySummons} from '../js/core/v5-spell-contracts.js';
+import {fixture,execute,input,contractFor,subject} from './helpers/lot3-catalogue-fixture.js';
+import {sourceCases as elfCases,fixture as elfFixture,spellInput} from './helpers/lot3-elven-fixture.js';
+import {normalizeLoreId} from '../js/core/v5-magic-attributes.js';
+const category=name=>{const cells=fs.readFileSync('docs/lot3/LOT3_MATRICE_CONTRATS_V5.md','utf8').split('\n').find(l=>l.includes('| '+getSpellContract(name).name+' |')).split('|').map(s=>s.trim());return cells[9];};
+test('Retour Lot5A : catégories exactes, toutes variantes et destinataires mesurables explorés',()=>{for(const name of ['Coruscation de Finreir','Aura ordinaire','Chaleur Desséchante','Lumière aveuglante',"Portail d'Ombre","Pas d'Ombre",'Perturbant','Inscription'])assert.ok(category(name).startsWith('Contrat à effet calculable'),name+' : '+category(name));});
+test('Retour Lot5A — WoM pp.75,100 : rappels Miroir et Armure propres à leur source',()=>{assert.match(contractFor('Miroir Mystique').assistedClauses.join(' '),/miroir|réflexion/i);assert.doesNotMatch(contractFor('Miroir Mystique').assistedClauses.join(' '),/Protection\s*\(4\)/);assert.match(contractFor('Armure d’étain').assistedClauses.join(' '),/PA.*métall/i);assert.doesNotMatch(contractFor('Armure d’étain').assistedClauses.join(' '),/Protection\s*\(4\)/);});
+test('Retour Lot5A — WoM pp.99,100,135,136 : faits sans calcul rendus optionnels, Polir seulement requis si option',async()=>{for(const [name,field] of [['Tempête de Flammes','minutesToDawn'],['Polir et Exalter','glassLens'],['Essais et Erreurs','skill'],['Colérique','ireSubject'],['Forge de Tarnus','sourceFire'],['Miroir Mystique','reflection'],['Miroir Mystique','knownTarget']]){const {store}=await fixture({foe:{camp:name==='Essais et Erreurs'?'pj':'ennemi'}}),i=input(name);delete i.domainFacts[field];assert.equal(store.previewSpellExecution(contractFor(name).id,i).ready,true,name+' sans '+field);}const {store}=await fixture(),i=input('Polir et Exalter',{overcastSpecific:{astronomy:1}});delete i.domainFacts.glassLens;assert.equal(store.previewSpellExecution(contractFor('Polir et Exalter').id,i).ready,false);});
+test('Retour Lot5A — WoM p.101 : Shemtek sûre annonce seulement BI éclairs sans Sonné ni Peur',async()=>{const {store}=await fixture(),p=await execute(store,'Tempête de Shemtek',{domainFacts:{...input('Tempête de Shemtek').domainFacts,catalogueMode:'safe'}}),text=p.targetResults.flatMap(r=>r.actions).map(a=>a.summary).join(' ');assert.doesNotMatch(text,/2×BI|lanceur\s*1\s*Sonné/);assert.match(text,/sans Sonné.*Peur/);assert.equal(subject(store,'mage').states.length,0);});
+test('Retour Lot5A — HEPG p.87 : Œil Invisible reçoit les PV du contrat, une seule source',async()=>{const c=structuredClone(getSpellContract('Œil Invisible'));c.effects.summon.hp=9;const {store}=await fixture();const aux=resolveAuxiliarySummons({contract:c,caster:subject(store,'mage')}).auxiliaries;assert.equal(aux[0].hp,9);assert.equal(aux[0].maxHp,9);});
+test('Retour Lot5A — HEPG pp.81–82 : vrai Vent de couleur étranger refusé, huit arcanes',async()=>{for(const row of elfCases.slice(16,24)){const {store}=await elfFixture(row),c=getSpellContract(row[0]),foreign=['fire','heavens','metal','beasts','life','light','death','shadow'].find(l=>!c.wind.map(normalizeLoreId).includes(l));assert.equal(store.previewSpellExecution(c.id,spellInput(row,store,{chosenLore:foreign})).ready,false,row[0]+' : '+foreign);}});
+test('Retour Lot5A — HEPG p.86 : Attraction, TestCT des localisations à+0DR',()=>assert.equal(getSpellContract('Malédiction d’Attraction des Flèches').effects.optionRules.locations.test.modifierSl,0));
+test('Retour Lot5A — décision MJ 13/10, WoM p.75 et V5 p.253 : Écaille et Robe distinctes, sans alias à arbitrer',()=>{
+ const scale=getSpellContract('Écaille d’acier'),robe=getSpellContract('Robe scintillante');
+ assert.notEqual(scale.id,robe.id);assert.notEqual(scale.canonicalName,robe.canonicalName);
+ assert.equal(scale.sharedWith,null);assert.equal(robe.sharedWith,null);
+ assert.equal(scale.page,75);assert.equal(scale.cn,5);assert.equal(scale.effects.ward,9);
+ assert.equal(robe.page,253);assert.equal(robe.cn,6);assert.equal(robe.effects.apModifiers.all,2);
+ for(const c of [scale,robe])assert.doesNotMatch(c.reminders,/ancienprofil|identique àGlitteringRobe|alias.*valider|doublon.*arbitrer/i);
+});

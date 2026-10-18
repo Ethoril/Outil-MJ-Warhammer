@@ -170,21 +170,22 @@ test('Contrôle 2.4 — Dur à cuire et dix bonus de caractéristiques ne sont j
 
 test('Contrôle 2.4 — les 206 identités ont des clauses lisibles, mixtes et source suspendue distinctes',()=>{
  const catalogue=getReferenceCatalogue();assert.equal(coverage.items.length,206);assert.equal(new Set(coverage.items.map(row=>row.talentId)).size,206);
- for(const row of catalogue.talents){const item=v5TalentCoverage(row.id);assert.equal(item.status,'verified');assert.ok(item.clauses.length>0);for(const clause of item.clauses){assert.ok(['automatic','assisted','reminder','excluded','deferred'].includes(clause.mode));assert.ok(clause.text?.trim());}}
- const publicSpeaker=v5TalentCoverage('talent-public-speaker');assert.ok(publicSpeaker.clauses.some(row=>row.mode==='automatic'));assert.ok(publicSpeaker.clauses.some(row=>row.mode==='reminder'));
- const resistant=v5TalentCoverage('talent-resistant');assert.ok(resistant.clauses.some(row=>row.mode==='automatic'));assert.ok(resistant.clauses.some(row=>row.mode==='reminder'));
- assert.ok(v5TalentCoverage('talent-strong-minded').clauses.every(row=>row.mode==='reminder'));
+ for(const row of catalogue.talents){const item=v5TalentCoverage(row.id);assert.equal(item.status,'verified');assert.ok(item.clauses.length>0);for(const clause of item.clauses){assert.ok(['automatic','assisted','reminder','excluded','deferred','owned','pending'].includes(clause.mode));assert.ok(clause.text?.trim());}}
+ const publicSpeaker=v5TalentCoverage('talent-public-speaker');assert.ok(publicSpeaker.clauses.some(row=>row.mode==='automatic'));assert.ok(publicSpeaker.clauses.some(row=>row.mode==='assisted'));assert.ok(publicSpeaker.clauses.some(row=>row.mode==='reminder'));assert.ok(!publicSpeaker.clauses.some(row=>row.mode==='pending'));
+ const resistant=v5TalentCoverage('talent-resistant');assert.ok(resistant.clauses.some(row=>row.mode==='automatic'));assert.ok(resistant.clauses.some(row=>row.mode==='assisted'));
+ assert.ok(v5TalentCoverage('talent-strong-minded').clauses.some(row=>row.mode==='assisted'));
  const changed=v5TalentCoverage('talent-public-speaker',{talents:catalogue.talents.map(row=>row.id==='talent-public-speaker'?{...row,description:row.description+' divergence synthétique'}:row)});assert.equal(changed.status,'sourceChanged');assert.ok(changed.clauses.every(row=>!['automatic','assisted'].includes(row.mode)));
- const absent=v5TalentCoverage('talent-public-speaker',{talents:[]});assert.equal(absent.status,'sourceUnavailable');assert.ok(absent.clauses.every(row=>row.mode==='reminder'));
+ const absent=v5TalentCoverage('talent-public-speaker',{talents:[]});assert.equal(absent.status,'sourceUnavailable');assert.ok(absent.clauses.every(row=>!['automatic','assisted'].includes(row.mode)));
 });
 
 test('Contrôle 2.4 — dix caractéristiques déjà intégrées et magie/prière restent séparées des automatiques',()=>{
  assert.equal(coverage.items.filter(row=>row.clauses.some(clause=>clause.mode==='excluded')).length,10);
- for(const id of ['talent-arcane-magic','talent-bless','talent-invoke','talent-chaos-magic','talent-petty-magic'])assert.ok(v5TalentCoverage(id).clauses.every(row=>row.mode==='deferred'));
- assert.ok(v5TalentCoverage('talent-hardy').clauses.every(row=>row.mode==='reminder'));
- assert.ok(v5TalentCoverage('talent-small').clauses.every(row=>row.mode==='reminder'));
- assert.ok(v5TalentCoverage('talent-riposte').clauses.every(row=>row.mode==='reminder'));
- assert.ok(v5TalentCoverage('talent-reaction-strike').clauses.every(row=>row.mode==='reminder'));
+ for(const id of ['talent-bless','talent-invoke','talent-chaos-magic'])assert.ok(v5TalentCoverage(id).clauses.some(row=>row.mode==='deferred'));
+ assert.ok(v5TalentCoverage('talent-arcane-magic').clauses.some(row=>row.mode==='automatic'));assert.ok(v5TalentCoverage('talent-petty-magic').clauses.every(row=>row.mode==='owned'));
+ assert.ok(v5TalentCoverage('talent-hardy').clauses.every(row=>row.mode==='owned'));
+ assert.ok(v5TalentCoverage('talent-small').clauses.some(row=>row.mode==='assisted'));
+ assert.ok(v5TalentCoverage('talent-riposte').clauses.some(row=>row.mode==='automatic'));
+ assert.ok(v5TalentCoverage('talent-reaction-strike').clauses.some(row=>row.mode==='assisted'));assert.ok(!v5TalentCoverage('talent-reaction-strike').clauses.some(row=>row.mode==='pending'));assert.deepEqual(coverage.items.filter(row=>row.clauses.some(c=>c.mode==='pending')).map(row=>row.talentId),[]);
 });
 
 const imported=(charId,fingerprint,talents,extra={})=>({kind:'PJ',ficheSnapshot:{charId,source:{fingerprint},coverage:{talents:'present'},talents},...extra});
@@ -285,10 +286,10 @@ test('Contrôle 2.4 — arbitrage MJ unités0 conserve réussite et choix DR, pu
  await reloaded.redo();assert.ok(envelope(reloaded).appliedResolutionIds.includes(raw.resolutionId));assert.equal(reloaded.getLog()[0].detail.test.success,true);assert.equal(reloaded.getLog()[0].detail.test.zeroOutcome,'marginalSuccess');
 });
 
-test('Contrôle 2.4 — Petit homebrew demeure rappel sans recalcul PV/taille ni mécanique de talent',async()=>{
- const small=v5TalentCoverage('talent-small');assert.equal(small.status,'verified');assert.ok(small.clauses.every(row=>row.mode==='reminder'));assert.match(small.description,/coût 1 Momentum/);assert.doesNotMatch(small.description,/coût 1 Avantage V4/);
+test('Contrôle 2.4 — Petit homebrew raccordé sans recalcul PV/taille, avec rappel des décisions MJ',async()=>{
+ const small=v5TalentCoverage('talent-small');assert.equal(small.status,'verified');assert.ok(small.clauses.some(row=>row.mode==='assisted'));assert.ok(!small.clauses.some(row=>row.mode==='pending'));assert.match(small.description,/coût 1 Momentum/);assert.doesNotMatch(small.description,/coût 1 Avantage V4/);
  const ctx=await setup({actorTalents:[owned('talent-small')],actor:{extensions:{v5:{hasMomentum:false},fiche:{size:'Petite'}}}});const before=structuredClone(person(ctx,ctx.actorId));
  const p=ctx.store.previewResolution(testInput(ctx,'control24-small-manual','Charme',{roll:20,v5:{kind:'test',actorSize:'small',targetSize:'average'}}));assert.equal(p.test.score,50);assert.equal(p.sl,3);assert.equal(p.input.v5.actorSize,'small');assert.ok(!proposals(p).some(row=>row.origins?.some(origin=>origin.talentId==='talent-small')));assert.equal((await ctx.store.applyResolution(p)).status,'applied');
  const after=person(ctx,ctx.actorId);assert.equal(after.hp,before.hp);assert.equal(after.maxHp,before.maxHp);assert.deepEqual(after.caracs,before.caracs);assert.deepEqual(after.states,before.states);assert.equal(after.extensions.fiche.size,before.extensions.fiche.size);assert.equal(after.extensions.v5.hasMomentum,false);
- const baseline=await setup();const mechanics={v5:{kind:'melee',actorSize:'small',targetSize:'average'}};const withSmall=ctx.store.previewResolution(hitInput(ctx,'control24-small-hit',mechanics)),withoutSmall=baseline.store.previewResolution(hitInput(baseline,'control24-baseline-hit',mechanics));assert.deepEqual(withSmall.score,withoutSmall.score);assert.deepEqual(withSmall.damage,withoutSmall.damage);assert.ok(!proposals(withSmall).some(row=>row.origins?.some(origin=>origin.talentId==='talent-small')));
+ const baseline=await setup();const mechanics={v5:{kind:'melee',actorSize:2,targetSize:3}};const withSmall=ctx.store.previewResolution(hitInput(ctx,'control24-small-hit',mechanics)),withoutSmall=baseline.store.previewResolution(hitInput(baseline,'control24-baseline-hit',mechanics));assert.equal(withSmall.score.base,withoutSmall.score.base+10);assert.ok(proposals(withSmall).some(row=>row.origins?.some(origin=>origin.talentId==='talent-small')));assert.equal(person(ctx,ctx.actorId).maxHp,before.maxHp);assert.deepEqual(person(ctx,ctx.actorId).caracs,before.caracs);
 });

@@ -7,7 +7,7 @@ import { showToast } from './toast.js';
  * ou avance le combat, disponible dès que le bandeau de combat est visible.
  */
 export function initKeyboardShortcuts(Store, CombatEngine, goToSpace, { advanceTurn = () => CombatEngine.nextTurn(), isCombatVisible = () => false } = {}) {
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', async (e) => {
     const targetTag = e.target.tagName;
     const isInput = targetTag === 'INPUT' || targetTag === 'TEXTAREA' || targetTag === 'SELECT' || e.target.isContentEditable;
 
@@ -16,12 +16,12 @@ export function initKeyboardShortcuts(Store, CombatEngine, goToSpace, { advanceT
       if (isInput) return;
       e.preventDefault();
       if (e.shiftKey) {
-        const ok = Store.redo?.();
+        const ok = await Store.redo?.();
         if (ok) showToast('↷ Action rétablie (⌘⇧Z)', 'info');
         return;
       }
       if (Store.canUndo()) {
-        const ok = Store.undo();
+        const ok = await Store.undo();
         if (ok) showToast('⏪ Action annulée (⌘Z)', 'info');
       } else {
         showToast('Aucune action à annuler', 'info');

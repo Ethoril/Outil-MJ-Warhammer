@@ -1,6 +1,6 @@
 {
   "name": "outil-mj-warhammer",
-  "version": "3.12.3",
+  "version": "3.15.0",
   "type": "module",
   "scripts": {
     "test": "node --test",
@@ -13,7 +13,16 @@
     "test:cloud-migration": "node tests/cloud-sparse-v2-emulator.mjs",
     "test:lot2-browser": "node tests/lot2-combat-v5-browser.mjs",
     "test:lot2-23-browser": "node tests/lot2-v5-23-browser.mjs",
-    "test:lot2-24-browser": "node tests/lot2-v5-24-control-browser.mjs"
+    "test:lot2-24-browser": "node tests/lot2-v5-24-control-browser.mjs",
+    "test:lot2-talents-browser": "node tests/lot2-v5-remaining-talents-browser.mjs",
+    "test:lot2-25": "node --test tests/lot2-v5-25-acceptance.test.js tests/lot2-v5-25-shared-state.test.js",
+    "test:lot2-25-cloud": "powershell -NoProfile -ExecutionPolicy Bypass -File tests/run-lot2-v5-25-emulators.ps1",
+    "test:lot2-25-browser": "node tests/lot2-v5-25-browser-runner.mjs",
+    "test:magic-browser": "node tests/browser-magic-v5-smoke.mjs",
+    "test:magic-finalization": "node --test tests/lot3-v5-finalization.test.js",
+    "test:magic-cloud": "powershell -NoProfile -ExecutionPolicy Bypass -File tests/run-lot2-v5-25-emulators.ps1 -TestScript tests/lot3-v5-35-cloud-browser.mjs",
+    "build:magic-local": "node tools/build-lot3-local-release.mjs",
+    "test:magic-release": "node tests/lot3-v5-35-release-browser.mjs"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.4",

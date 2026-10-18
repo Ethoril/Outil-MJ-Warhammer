@@ -261,7 +261,10 @@ async function main() {
     const action = resolution.getByRole('button', { name: /Épée de recette.*48/ }).first();
     await expect(action).toHaveAttribute('aria-pressed', 'true');
     await expect(resolution.getByRole('combobox', { name: 'Type d’action' })).toHaveValue('attack');
+    // The V5 melee opposition requires the defender's chosen Test and roll.
+    await resolution.locator('[data-focus-key="defense-stat"]').selectOption('CC');
     await resolution.locator('[data-roll-input="attack"]').fill('42');
+    await resolution.locator('[data-roll-input="defense"]').fill('89');
     await resolution.getByRole('button', { name: 'Calculer' }).click();
     await expect(resolution.locator('.workspace-result')).toContainText('DR');
     await resolution.getByRole('button', { name: /^Appliquer \d+ dégâts à / }).click();
@@ -272,13 +275,13 @@ async function main() {
     // A manual PV change is one command: undo and redo must restore the same
     // deterministic value in the actor sheet.
     const actorSheet = page.locator('.workspace-sheet-actor');
-    await actorSheet.getByRole('button', { name: /\+1 PV pour/ }).click();
-    await expect(actorSheet).toContainText('PV 15/14');
+    await actorSheet.getByRole('button', { name: /−1 PV pour/ }).click();
+    await expect(actorSheet).toContainText('PV 13/14');
     await page.locator('#btn-undo').click();
     await expect(actorSheet).toContainText('PV 14/14');
     await openAppMenu(page);
     await page.locator('#btn-redo').click();
-    await expect(actorSheet).toContainText('PV 15/14');
+    await expect(actorSheet).toContainText('PV 13/14');
     // Sans caractéristique I, la grille affiche l'initiative.
     await expect(actorSheet.locator('.workspace-carac').filter({ hasText: /^I/ }).locator('dd')).toHaveText(/^\d+$/);
 
@@ -286,7 +289,7 @@ async function main() {
     const side = page.locator('.workspace-side');
     await side.getByRole('tab', { name: 'Journal' }).click();
     const sideLog = page.locator('#workspace-side-panel-log');
-    await expect(sideLog).toContainText('Attaque — réussite');
+    await expect(sideLog).toContainText('Attaque — touché');
     await expect(sideLog).toContainText(/Dégâts : \d+ arme/);
     await expect(sideLog).toContainText('Type : Attaque');
     await expect(sideLog).not.toContainText(/resolutionId|actionType|targetScore/);
@@ -367,7 +370,7 @@ async function main() {
     await expect(page.locator('.workspace-space-library')).toContainText(secondName);
     await openWorkspaceSpace(page, 'play');
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(1);
-    await expect(page.locator('.workspace-track')).toContainText('PV 15/14');
+    await expect(page.locator('.workspace-track')).toContainText('PV 13/14');
 
     await openWorkspaceSpace(page, 'prepare');
     await page.locator('.workspace-encounter-card').getByRole('button', { name: /^Supprimer/ }).click();
@@ -386,6 +389,6 @@ async function main() {
 }
 
 main().catch(error => {
-  console.error(`✖ test:browser — ${error.message}`);
+  console.error(`✖ test:browser — ${error.stack || error.message}`);
   process.exitCode = 1;
 });

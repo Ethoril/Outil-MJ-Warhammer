@@ -1,0 +1,4977 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-09",
+  "policy": "Tri par clause : fiction en rappel, valeurs/progression dans les fiches, mécanique mesurable dans le moteur. Pending signifie mécanique identifiée mais non raccordée ; ce statut ne signifie jamais narratif ni automatisé.",
+  "items": [
+    {
+      "talentId": "talent-trick-rider",
+      "name": "Acrobaties équestres",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:40fbf3e7d9d6dd92f20f0b04c3b0fd70d89f1a59104a44cb16c42b1e6a8a06ff"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-trick-rider:0",
+          "text": "test.beforeRoll · actor · suppressTestPenalty mounted"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-trick-rider:1",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty mounted"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-trick-rider:2",
+          "text": "test.beforeRoll · defender · suppressTestPenalty mounted"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Autoriser Représentation à cheval ; l’Esquive montée utilise sa pénalité propre."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-suave",
+      "name": "Affable",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:1565fb1de8f9c02df3e78cf706ca0d9a64974e6de464d232db856d5959a72a8e"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-animal-affinity",
+      "name": "Affinité avec les animaux",
+      "source": {
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191",
+        "effectHash": "sha256:a4a0ad544fa50bbbd2064821b5d8a711316a64b36780bb0db7eb6710344424ef"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Les animaux sauvages vous considèrent généralement comme un élément inoffensif de leur environnement et ne vous attaquent normalement pas tant que vous ne vous montrez pas agressif."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-ambidextrous",
+      "name": "Ambidextre",
+      "source": {
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191",
+        "effectHash": "sha256:6e316d2fea8aee8dbaddee709cbc7e1249a1a37d1e8778b3f184b93fb73c7e11"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-ambidextrous:0",
+          "text": "test.beforeRoll · actor · suppressTestPenalty offHand"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-ambidextrous:1",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty offHand"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-ambidextrous:2",
+          "text": "test.beforeRoll · defender · suppressTestPenalty offHand"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-pure-soul",
+      "name": "Âme pure",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:92387b4ae70e9fe5349478f580f87dfa85d2f9d3cb4cdaa819f961df498417ce"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Vous pouvez accumuler deux fois le nombre normal de Points de Corruption avant de devoir effectuer un Test pour résister à la mutation."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-gunner",
+      "name": "Artilleur",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:49193b1561f30dd8a54985e4ec0d05865cb7adc8985fab1db5719e6d26a22053"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "suppress-dangerous",
+          "text": "action.before · attacker · suppressQuality dangereuse"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-artistic",
+      "name": "Artiste",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:7c1fa68e3ac8af5b8e7a3d57068358b2e82d62cbc3f77f88f7e62a9060d24747"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Achats d’Art hors carrière et nouvelles formes d’art."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-martial-arts",
+      "name": "Arts martiaux",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 68",
+        "effectHash": "sha256:0b690528a8016e78d900f865060ae230d6c31563f1ed3099d4784150cc42ed49"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "unarmed",
+          "text": "action.before · attacker · suppressQuality inoffensive"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-martial-arts:activate:martial-arts",
+          "text": "talent.activate · actor · activateTalent talent-martial-arts"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-furious-assault",
+      "name": "Assaut féroce",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:864e1ad7fd0b62fa94bc7a1596d1bc8d0a521efe3704561c174262d5a04b10ee"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "after-melee-hit",
+          "text": "action.afterAttack · attacker · grantExtraAttack"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-animal-assistant",
+      "name": "Assistant animal",
+      "source": {
+        "reference": "Archives of the Empire 3 (V4), p. 81",
+        "effectHash": "sha256:02b5e8399488c74e88e1d851f29ec3fc9d14f91bdbbf163a7083dac1d3444287"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Réservé aux familiers de pouvoir animaux. Vous pouvez assister le lanceur de sorts lié à votre âme pour Focalisation, Langue (Magick), Survie en extérieur et les Tests de Perception de nature magique. L’assistance confère l’Avantage V5 au lanceur de sorts (inversion du d100 si favorable), même si le familier ne connaît pas la Compétence."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magical-assistant",
+      "name": "Assistant magique",
+      "source": {
+        "reference": "Winds of Magic (V4), p. 186",
+        "effectHash": "sha256:82849d837127b7825c6262a47c50b34bf5d6bbf7f7b2e4855773c85a68c261e4"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Réservé aux Familiers de Pouvoir ; aucune autre espèce ne peut l’acquérir. Le familier aide son créateur aux Tests de Focalisation, Savoir (Magie), Langue (Magick), ainsi qu’aux Tests de Recherche portant sur une découverte ou innovation magique. Son assistance accorde un bonus fixe de +2 DR au lieu de l’Avantage V5 de l’assistance normale, sans accorder cet Avantage en plus."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-attractive",
+      "name": "Attirant",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:de3cda54841e3af42418f3dd189d863ddb2e5069682643dd6486db7a8fb09a0e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-blather",
+      "name": "Baratiner",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:d4a4f54d39614fc274572a02ab89e82c4619bedb2e3f85c7c9fbafcecb993445"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-blather:activate",
+          "text": "talent.activate · actor · activateTalent talent-blather"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-beat-blade",
+      "name": "Battement",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:8a69c53432d97d2cc3b99491b684df096cd8f6a635a675916f81505a7cc6add3"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "replace-damage",
+          "text": "action.afterAttack · attacker · replaceDamage, createActiveEffect talent-beat-blade"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-lileath-s-blessing",
+      "name": "Bénédiction de Lileath",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 83",
+        "effectHash": "sha256:a6b8f58b88711b706d76c83f6d450f9d19c990656c80dce7d71301eba0e290ac"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "+1 DR par acquisition à tout Test de Focalisation (Qhaysh), réussi ou non. Chaque acquisition permet en outre d’ignorer une fois la limite qui réserve normalement le bénéfice au meilleur de plusieurs sorts donnant le même bonus : vous pouvez cumuler une source supplémentaire de ce bonus. S’applique aux sorts de Haute Magie et de magie de couleur."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-bless",
+      "name": "Béni",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:8f0f36dbe7340bef60ab3081e891466e203f4c5b4612a64cdfa96a517f111e6e"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Vous connaissez toutes les Bénédictions de la divinité choisie ; une seule divinité normalement. Incompatible dans les deux sens avec Focalisation, Magie des Arcanes, Magie du Chaos, Résistance à la Magie, Magie mineure et Sorcier !. Désapprentissage : 100 PX, perte des Bénédictions et éventuelle défaveur divine décidée par le MJ."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-blessed-by-isha",
+      "name": "Béni par Isha",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 83",
+        "effectHash": "sha256:08790cbbf9ede8c430ca339673549767fffe9a3c39554af91cec76b1f55f0700"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Réservé aux Elfes ayant reçu la bénédiction de l’Éternelle Reine à Ulthuan (Asur) ou d’Ariel à Athel Loren (Asrai), après leur noviciat d’Isha. Permet d’apprendre Haute Magie (High Magic)."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-striding-gait",
+      "name": "Bon marcheur",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:74b9509b48e2d4d2a2c14d2ea732f05bf0463dd4ab73664cc1b80a394ff4b874"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.beforeRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.beforeRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.beforeRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-striding-gait:4",
+          "text": "test.beforeRoll · actor · suppressTestPenalty terrainMovement"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-striding-gait:5",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty terrainMovement"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-striding-gait:6",
+          "text": "test.beforeRoll · defender · suppressTestPenalty terrainMovement"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-striding-gait:7",
+          "text": "situation.calculate · actor · ignoreQuantityPenalty terrainMovement"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-strong-legs",
+      "name": "Bonnes jambes",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:c9207dd58cfa6b2ccdf5979fcc6f3805fac1c5f6e1188dd1744f36211e130ccc"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-tinker",
+      "name": "Bricoleur",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:10dab6dc29da8dbbc31ad6d375f492904bc5260c97fedd81ca5e1f6ad59313cc"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-tinker:4",
+          "text": "situation.calculate · actor · divideQuantity duration"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-stone-soup",
+      "name": "Brouet",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:21a268fe51cec895f09724bbfd7c2acae106f408831c4d367fc011590aa87b6b"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Si un membre du groupe fait un Test de recherche de nourriture, il trouve toujours de quoi vous nourrir en plus des personnes normalement nourries par son résultat, même si le Test échoue."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-kingpin",
+      "name": "Caïd",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:ce75443e75d089fd3b039ae2222d7b5072d0ecff7d8af5785f03b36dc0f4bceb"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Criminel ne fait plus naître les soupçons des représentants de la loi et ne vous interdit plus certaines Carrières. La plupart des autres criminels vous respectent, sauf ceux suffisamment préparés qui visent votre position."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-roughrider",
+      "name": "Cavalier émérite",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:b610ce81d9c63dbc323e14d0103c4f8cb1a860d50f8f895a1ef1c0828c0f6413"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-roughrider:additional:1",
+          "text": "situation.calculate · actor · modifyQuantity movement"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Action/Mouvement de la monture sans Test ; mouvement décidé par le MJ."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-luck",
+      "name": "Chanceux",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:bfca9f34589673ecdb132465a5da04d8317f6a2d899416e49510df11729ae50b"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "=+1 au maximum de points de Chance par acquisition, jusqu’à +3 avec trois acquisitions."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-berserk-charge",
+      "name": "Charge berserk",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:f64abb39d17875794e4574088eb714ee87b6b5e83cf599db8be8a4313b08fdf6"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "damage",
+          "text": "damage.beforeProtection · attacker · modifyDamage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-alley-cat",
+      "name": "Chat de gouttière",
+      "source": {
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191",
+        "effectHash": "sha256:56f9b5b704310e1b53c9b925a9177246a6221d4c31b0e1ca2e92f2a9aa78ce45"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Trajet le plus rapide ou le plus discret dans une ville connue."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-surgery",
+      "name": "Chirurgie",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:ddc119f38f12e513067609680c2f4b16ac854320f0d346c23fdfbe73b9986e5f"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Soigner les critiques exigeant Chirurgie selon leurs clauses de soins."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-crack-the-whip",
+      "name": "Claquer le fouet",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:5b58763a8d9d768781428a6050302dc4101e8d6e3ec582d333bf22ba0766ed0e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-crack-the-whip:additional:1",
+          "text": "situation.calculate · actor · modifyQuantity movement"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Action/Mouvement des animaux sans Test ; mouvement décidé par le MJ."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-stout-hearted",
+      "name": "Cœur vaillant",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:1cffe406a344ae063423dff8edf00795306f829fe254e24b5ad1e8235da0e15e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "reduce-brise",
+          "text": "condition.beforeAcquire · defender · reduceConditionAcquisition brise"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-dirty-fighting",
+      "name": "Combat déloyal",
+      "implementationNotes": "Choix de remplacer les dégâts d’un Coup ciblé au Corps à mains nues par Coup bas (1 Blessure et Sonné).",
+      "source": {
+        "reference": "Livre de base V5, p. 118 ; achat : p. 191",
+        "effectHash": "sha256:826afee68741191cd6c1ddf0642828a7d117f32660deb6b72893233c94fe80e3"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-dirty-fighting",
+          "text": "talent.activate · actor · activateTalent talent-dirty-fighting"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-combat-reflexes",
+      "name": "Combat instinctif",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:124585a5cd8e035aaf13d146b279340c8da913f6e28fa445f5ac6874e028f4ce"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-combat-reflexes:activate:combat-reflexes",
+          "text": "talent.activate · actor · activateTalent talent-combat-reflexes"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-in-fighter",
+      "name": "Combattant au contact",
+      "implementationNotes": "Suppression de l’allonge adverse ; opposition pour entrer au contact, arme improvisée et sortie payée en Élan.",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:a2242353a584c1571c1ba13f9dcd560660e5ffe5cf87e5b1a4d854d99880bf80"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-in-fighter",
+          "text": "talent.activate · actor · activateTalent talent-in-fighter"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-enclosed-fighter",
+      "name": "Combattant en espace clos",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:74fe0e34389b033f28af75f1e1e4a011ed0943e12ab3619c5a0f81b7135a3c36"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-enclosed-fighter:0",
+          "text": "test.beforeRoll · actor · suppressTestPenalty confined"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-enclosed-fighter:1",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty confined"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-enclosed-fighter:2",
+          "text": "test.beforeRoll · defender · suppressTestPenalty confined"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Autoriser Esquive même dans un espace normalement trop exigu."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-crew-commander",
+      "name": "Commandant d'Équipage",
+      "source": {
+        "reference": "Up in Arms (V4), p. 140 ; Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:b33bdef05d20b41300e39bdbada59615b34538df1023250350bb096ed3546c9e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-crew-commander:activation",
+          "text": "talent.activate · actor · activateTalent talent-crew-commander"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Le MJ désigne le tireur et confirme la portée de voix de son arme à équipage."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-concoct",
+      "name": "Concocter",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:66cd620cc42235456282d296c6bd37be7022b78f9dbf5f8bd8edb802442cde63"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Une fois par séance, bénéficiez d’une Activité Artisanat gratuite pour Métier (Apothicaire, Herboriste ou Empoisonneur) sans Atelier ; outils et matières premières restent nécessaires. La création expire au début de la prochaine période de repos, même si elle n’a pas été achevée."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-contortionist",
+      "name": "Contorsionniste",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:510c231496f32a065060526e09427bb7bb2222ee71ff845d2ab36f6ef62d5888"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Autoriser le passage par une ouverture difficile."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-battle-rage",
+      "name": "Contrôle de la Frénésie",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:343e39d6a25e1ecb0489b94ca193e892de554e197667ead3245ac1e5ea98b45d"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-battle-rage:actor",
+          "text": "test.beforeRoll · actor · forceTestSuccess talent-battle-rage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-battle-rage:attacker",
+          "text": "test.beforeRoll · attacker · forceTestSuccess talent-battle-rage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-battle-rage:defender",
+          "text": "test.beforeRoll · defender · forceTestSuccess talent-battle-rage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-supportive",
+      "name": "Coopératif",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:7170faee460a9cace822c489d13783cc7470bab47669400e3bba70fcde931525"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-supportive:3",
+          "text": "test.beforeRoll · actor · suppressTestPenalty status"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-supportive:4",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty status"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-supportive:5",
+          "text": "test.beforeRoll · defender · suppressTestPenalty status"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sturdy",
+      "name": "Costaud",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:ea32ef1e370d45ea0d9903bea95972ae5cdbef9cda5f47ea98b63c028cfcd3c2"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Pour calculer votre capacité d'Encombrement, comptez votre Bonus de Force deux fois."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-drilled",
+      "name": "Coude-à-coude",
+      "implementationNotes": "Permission de Désengagement gratuit quand l’auteur est aussi Engagé avec cet adversaire ; don d’Élan raccordé.",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:afbe5eb5714976d56ea29934bbbaa4eeeb45a42f8c3d178dc206e55e8ec0f34e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-drilled:activate:drilled",
+          "text": "talent.activate · actor · activateTalent talent-drilled"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-drilled-disengage",
+          "text": "talent.activate · actor · activateTalent talent-drilled-disengage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-drilled-help",
+          "text": "talent.activate · actor · activateTalent talent-drilled-help"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-strike-mighty-blow",
+      "name": "Coup puissant",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:541b83ce4a9bce37565b529477f60c9eb5fb2c5eb05836f4e077457e8b3be897"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "ordinary",
+          "text": "damage.beforeProtection · attacker · modifyDamage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "boosted",
+          "text": "damage.beforeProtection · attacker · modifyDamage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-dragon-belcher",
+      "name": "Cracheur de dragon",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:e63dd4c848fe25668be37ab5ab0d4e3ad9b71d372c38cdb4b76bd31317cb5333"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-dragon-belcher:broken",
+          "text": "condition.beforeAcquire · attacker · increaseConditionAcquisition brise"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-criminal",
+      "name": "Criminel",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:7a86099ec053e007f177e41ab1252b7be6cf767bc9ec8329bcca4772b28b33f8"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Doublez les gains d’une Activité Revenus réussie issue d’une entreprise criminelle. Les forces de l’ordre se méfient de vous et les criminels vous reconnaissent. Vous ne pouvez entrer dans une carrière dont le parcours ne contient pas Criminel. Avec l’accord du MJ, 100 PX permettent de retirer ce talent."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sword-dancing",
+      "name": "Danse des épées",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 68–69",
+        "effectHash": "sha256:b7db0bb3c3c6bd59a41c665ac237221b2c1a9b5dac002d2c07a085db07af0c08"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Apprenez Ritual of Cleansing. Chaque technique supplémentaire coûte 100 PX × nombre de techniques déjà connues. Pour une technique, faites un Test de Corps à corps (À deux mains) et atteignez son seuil de DR ; échec : perdez votre Élan (Momentum) ; échec stupéfiant : table Oops! en plus. Difficulté : Yenlui équilibré/lumineux, (+0) ; sombre, Très difficile (−3 DR). Techniques : Cleansing (1 DR), rituel de plusieurs minutes pour déplacer Yenlui vers lumineux au lever du soleil ou sombre au coucher ; Phoenix (1), lancer de l'épée hors engagement à Bonus de Force + Bonus de Force Mentale yards, dégâts de l'arme et Pénétrante, +1 yard et +1 dégât par DR obtenu au Test ; Sun (1), +1 niveau de War Leader pendant Bonus de Force Mentale Rounds, chaque DR obtenu au Test ajoute un niveau ou un Round ; Frost (1), ignorez 1 PA pendant Bonus de Capacité de Combat Rounds, +10 aux jets de Blessure critique par DR obtenu au Test ; Storm (1), opposez les tirs avec Corps à corps (À deux mains) pendant Bonus d'Initiative Rounds, +1 Round par DR obtenu au Test ; Rain (2), +1 DR à Esquive pendant Bonus d'Agilité Rounds, chaque DR obtenu au Test ajoute +1 DR à Esquive et un Round ; Shadows of Loec (2), déplacement jusqu'à DR × Mouvement yards (minimum 5), terrain normal, ennemis auparavant engagés : Initiative (+0) ou Surpris ; Hawk (3), cible à une distance maximale de votre Bonus de Force Mentale en yards : Résistance (−1 DR) ou 10 + DR dégâts ignorant PA mais pas Bonus d'Endurance et 2 états Assourdi, +1 yard et +1 cible par DR obtenu au Test ; Falling Water (3), une attaque contre chaque ennemi engagé à portée de l'arme, trois contre ceux avec Swarm ; Final Stroke (4), cible : Esquive Très difficile (−3 DR) ou coup inévitable à +4 dégâts, +1 dégât par DR obtenu au Test."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magic-defiance",
+      "name": "Défiance magique",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 80",
+        "effectHash": "sha256:8891b0f2e43a5b7e12e60a3d0708f64013b0b90c31851480af4c03d4e6db5868"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Vous pouvez inverser les dés de tout Test exigé par les effets d’un sort. Une fois par aventure, dépenser 1 point de Chance annule les effets d’un sort lancé avec succès sur vous."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-demolisher",
+      "name": "Démolisseur",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:7c362759fef134cb0e4d96416d898f8dc48449351c3bb3d80171b72fb7110bf7"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-demolisher:4",
+          "text": "combat.beforeTests · attacker · reduceCover cover"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-demolisher:5",
+          "text": "situation.calculate · actor · modifyQuantity materialDamage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-disarm",
+      "name": "Désarmer",
+      "implementationNotes": "Remplacement des dégâts après +4 DR, tailles/arme liée, d10 de distance et direction explicites, Élan pour attraper.",
+      "source": {
+        "reference": "Livre de base V5, p. 118 ; achat : p. 191",
+        "effectHash": "sha256:8bae2d4f86f2d9f309090ad93725956bd0c3fb2eff6554b315606539a56bf757"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-disarm",
+          "text": "talent.activate · actor · activateTalent talent-disarm"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-doomed",
+      "name": "Destinée",
+      "source": {
+        "reference": "Livre de base V5, p. 118 ; achat : p. 191",
+        "effectHash": "sha256:8c445290578ae89a249639ecd8d8ab0b975ab89f180d67ee69d537380a5d3408"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Définissez votre Destinée avec le MJ. Si vous mourez de la manière prédite, tous les personnages alliés récupèrent immédiatement tous leurs Points de Chance et votre prochain personnage commence avec +1 Point de Destin."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-detect-artefact",
+      "name": "Détection d'artefact",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:e4ead14dbf792261754b6ca96cb30e582e98c3697139e8c97bcf8f70edf5db3d"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "En touchant un objet, vous savez automatiquement s’il contient de l’énergie magique. Avec Seconde vue, un Test d’Intuition réussi permet aussi de déterminer ses pouvoirs exacts, son activation et son nombre de charges."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-resolute",
+      "name": "Déterminé",
+      "implementationNotes": "Test de Calme après acquisition d’un État pour conserver l’Élan.",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:437412a7c2e3a0c7ebf3567303526e23237c196f0decc6f0815b207dbf10b762"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-resolute",
+          "text": "talent.activate · actor · activateTalent talent-resolute"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-instinctive-diction",
+      "name": "Diction instinctive",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:7bbf8c4f867f8366a592bc5e423302e27411ba8a9cf2e076ccd80d48399da0bd"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Si vous devez effectuer un jet sur la table des Incantations imparfaites mineures, vous pouvez réduire le résultat de 20 ; sous 01, aucun effet ne se produit. Aucun effet sur les Incantations imparfaites majeures."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-shadow",
+      "name": "Discret",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:88b7108b70a911294f2b056fca26d8499db91a69a21cd774361904038f0d66cb"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Si une personne que vous suivez réussit son Test de Perception pour vous repérer, choisissez : poursuivre et être repéré, ou perdre sa trace et rester inaperçu."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-distract",
+      "name": "Distraire",
+      "source": {
+        "reference": "Livre de base V5, p. 118 ; achat : p. 191",
+        "effectHash": "sha256:2718922efad5c492a1c3be37109914dcc28b10a9ee7dde0f8fe1e9b06abfc97a"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-distract:activation",
+          "text": "talent.activate · actor · activateTalent talent-distract"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-nimble-fingered",
+      "name": "Doigts de fée",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:605959606008556dfe827540c3cd611f751bf596d118fc6d560ec886bd5ebcda"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-gifts-of-khaine",
+      "name": "Dons de Khaine",
+      "source": {
+        "reference": "Temple of Spite (édition non nommée, compatible V5), p. 68",
+        "effectHash": "sha256:4069376320ad2875b4e07b27c55eef37050a9d8fd7b3d765da90d24df0b929fb"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Un don choisi par acquisition. Après avoir causé des dégâts avec une Compétence de Corps à corps, Test de Capacité de Combat Intermédiaire (+0 DR) pour activer un don en Action gratuite ; +2 DR si le coup tue. Dons : Cri de guerre (5 DR), Terreur contre les adversaires à portée d’arme ; Danse funeste (2), +2 DR aux Tests d’Esquive jusqu’au prochain Tour ; Dague de Khaine (2), arme Dévastatrice, Magique et Précise jusqu’à la fin du prochain Tour de son porteur ; Tourment éternel (4, après un coup mortel), ni résurrection nécromantique ni contact magique avec l’âme, et +1 point de Chance ; Main de Khaine (2), Test opposé Représentation (Danse)/Calme, cible Surprise si victoire ; Lame cachée (3), attaque gratuite supplémentaire à la dague avec Corps à corps (Base) ; Dard final (3), l’arme inflige Empoisonné à chaque dégât pendant 6 Rounds ; Toucher de Khaine (3), +3 DR aux Tests de Corps à corps jusqu’à la fin du prochain Tour. Tout Haut Elfe utilisant un don passe automatiquement à l’état Yenlui Sombre."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-super-numerate",
+      "name": "Doué en calcul",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:d78d71b54e626e80698c176eb4ec0dc3386649d22e608f77dbdab250b8697055"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Calcul sans outil et estimation du temps tant que conscient."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-hardy",
+      "name": "Dur à cuire",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:163d4dc8da7bd11742e21e3694e7b8be036f36442d45d5965fe1a644f92c1007"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Ajoutez une fois supplémentaire votre Bonus d’Endurance au calcul de votre maximum de Points de Blessure."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-break-and-enter",
+      "name": "Effraction",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:c12357d4d90ab7e7d6149a1e3e9ce83186c085bb9ce50d3d2d6981c1661c1a9f"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor-2",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker-2",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender-2",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-frightening",
+      "name": "Effrayant",
+      "implementationNotes": "Peur 1/2, réussites de Psychologie par cible et Tour, blocage du gain d’Élan et Avantage de mêlée.",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:11b80977267d43250dd758ad263c77bfb2a64b426b7379f2d1d4176c64e1a08e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-frightening",
+          "text": "talent.activate · actor · activateTalent talent-frightening"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-implacable",
+      "name": "Endurci",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:c26129e0d05dc0be3189e8a40294241867b02d14d036b7ebb94d65fdf03eae2d"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "reduce-hemorragique",
+          "text": "condition.beforeAcquire · defender · reduceConditionAcquisition hemorragique"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-argumentative",
+      "name": "Ergoteur",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:fa12df6114466187b03300f5d879d38b406d1807f24d2a1eeacb69dbd6ee644a"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-argumentative:activate",
+          "text": "talent.activate · actor · activateTalent talent-argumentative"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-embezzle",
+      "name": "Escroquer",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:f779b4a9cdbd9dbda3163dcd1e9bfe75c97a1ce350a157701bab84aa78679646"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Pour Gagner de l’argent en jeu ou avec une Activité Revenus, utilisez Subornation ou Évaluation à la place de la Compétence de revenus normale : en cas de succès, doublez vos gains ; en cas d’échec, vos irrégularités sont découvertes et vous ne gagnez rien."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-inspiring",
+      "name": "Exaltant",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:cb16f5827ce8f6a372e3df7f51b47f6587a65f4d7b9b4cd0516e1b247ea96bcc"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-panhandle",
+      "name": "Faire la manche",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:229269ab6bf2bd44837a46408906934f3b6741c5dd24d55423f1302efca03fcd"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Trouver un abri urbain inconfortable."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-feint",
+      "name": "Feinte",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:b77ebc9be9f9b2b9cbf0195e946d5126ef894cd346f5d55280922bbd0836de32"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-feint:0",
+          "text": "action.before · attacker · forceDefenseSkill intuition"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-impassioned-zeal",
+      "name": "Ferveur ardente",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:3360cd6f6571e07dc4d71f6931d729d3ac188f98f4adc53a629f4b43d1954e8a"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor-2",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker-2",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender-2",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantDisadvantage-actor",
+          "text": "test.beforeRoll · actor · grantDisadvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantDisadvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantDisadvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantDisadvantage-defender",
+          "text": "test.beforeRoll · defender · grantDisadvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-forgefire",
+      "name": "Feu de forge",
+      "implementationNotes": "Aura à portée du BFM, Pénétrante temporaire et PA métallique supplémentaire ignoré.",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:78a453736157410796964193628d1167546b35a7306203cb3e9b92cc6c1f380b"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-forgefire",
+          "text": "talent.activate · actor · activateTalent talent-forgefire"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-glorious-demise",
+      "name": "Fin glorieuse",
+      "implementationNotes": "Réaction avant Inconscient ; 1 Fortune si Sonné ; attaque immédiate sans consommer le prochain Tour.",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:a5e7929864f2a47a0b5df8848f627eb0c0dd3d1c01fd4eafefc3045e5793c911"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-glorious-demise",
+          "text": "talent.activate · actor · activateTalent talent-glorious-demise"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-flagellant",
+      "name": "Flagellant",
+      "implementationNotes": "Entrée en Frénésie sans Test sur Blessure si accès préalable ; suppression des pénalités critiques raccordée.",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:d4ca4967ad9b4bea9cd10875a3c459a000f0d234c8749f848ced6d40538cbdd7"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-flagellant:1",
+          "text": "test.beforeRoll · actor · suppressTestPenalty critical"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-flagellant:2",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty critical"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-flagellant:3",
+          "text": "test.beforeRoll · defender · suppressTestPenalty critical"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-flagellant",
+          "text": "talent.activate · actor · activateTalent talent-flagellant"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-nose-for-trouble",
+      "name": "Flairer les ennuis",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:635e212b4a02bfd45a9c2eb6700232e8ada9f5322c26109b4a8df0eff6f139e6"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Trouver combats, paris ou boissons."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-liquid-fortification",
+      "name": "Fortification liquide",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 80",
+        "effectHash": "sha256:29ae3b7fc414eb7eced21aabfd3a00e02725b9d3b79272001bebeb0e741f7f28"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Bonus temporaires de caractéristiques +10 F/E exclus du moteur conformément au périmètre demandé ; durée d’une heure après la dernière boisson à suivre sur la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-strike-to-stun",
+      "name": "Frappe assommante",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:eacdf97f21d75376b090b13e8d0ba4216d97f6f6e45c4932abef9036802e011e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "improvised-pummel",
+          "text": "action.before · attacker · addQuality assommante"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "silent-takedown-advantage",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "manual-approved",
+          "text": "Neutralisation silencieuse hors combat (livre p. 135, décision MJ) : Test opposé assisté ; BF Blessures et Inconscient à la victoire, Sonné et alarme à la défaite à arbitrer manuellement."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-strike-to-injure",
+      "name": "Frappe blessante",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:87b63150e322426703c34b8a9b7d4c172e2965e06e9fa444da6f9a8e28db0d0b"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strike-to-injure:0",
+          "text": "test.beforeRoll · actor · suppressTestPenalty calledShot"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strike-to-injure:1",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty calledShot"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strike-to-injure:2",
+          "text": "test.beforeRoll · defender · suppressTestPenalty calledShot"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strike-to-injure:3",
+          "text": "critical.beforeTable · attacker · chooseCriticalRoll severity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strike-to-injure:4",
+          "text": "critical.beforeTable · defender · chooseCriticalRoll severity"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-careful-strike",
+      "name": "Frappe précise",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:16aaf09768fd605f29ff6a7bebf927e33e19117459b676389468dd090cc88bdb"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-careful-strike:0",
+          "text": "test.beforeRoll · attacker · limitTestPenalty calledShot"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-reaction-strike",
+      "name": "Frappe réactive",
+      "implementationNotes": "Charge identifiée, Test d’Initiative puis attaque de main directrice avant le chargeur, quota une par Round.",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:49c20c6bab567634b1759cbe18beca4a410b35c031b2feb7545b0a44a56df8b1"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-reaction-strike",
+          "text": "talent.activate · actor · activateTalent talent-reaction-strike"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-frenzy",
+      "name": "Frénésie",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:e60964322a6c5b4c582605f36d4004040320461cb5378eb5aafe0487964c7a96"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-frenzy:activation",
+          "text": "talent.activate · actor · activateTalent talent-frenzy"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-frenzy:activate:end-frenzy",
+          "text": "talent.activate · actor · activateTalent talent-end-frenzy"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-flee",
+      "name": "Fuite !",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:f2f6bcc4f8e23a2ca9f57c55f2b419378ea547096a5816b8695b7bccf49876ad"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.beforeRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.beforeRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.beforeRoll · defender · modifySL"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-kingsguard",
+      "name": "Garde royal",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 80",
+        "effectHash": "sha256:cec2ac64c4d8721b33a6c353136b0c0497ee4d622ef20eff72a1edb0875013ee"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-kingsguard:0",
+          "text": "combat.beforeTests · defender · incomingPenalty kingsguard"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-master-orator",
+      "name": "Grand orateur",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:679e706636b1c090af450c29fe61a1b5c406fa816c1e22e6f42f28600bb2c8e7"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Qualifier le plaidoyer devant l’assemblée et le Savoir adéquat."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-large",
+      "name": "Grande taille",
+      "implementationNotes": "Bonus BF aux attaques normales de mêlée, −2 DR à la défense de plus petit, Force opposée selon l’écart, poids défensif 2, Peur/Désengagement et Piétinement payé en Élan.",
+      "source": {
+        "reference": "Archives of the Empire 2 (V4), p. 20",
+        "effectHash": "sha256:b61512ac3524b1febdb75090d1b3738697230e9de1d6fc2c597dce1e68757f63"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-large",
+          "text": "talent.activate · actor · activateTalent talent-large"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-stomp",
+          "text": "talent.activate · actor · activateTalent talent-stomp"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-large-disengage",
+          "text": "talent.activate · actor · activateTalent talent-large-disengage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "defensive-weight",
+          "text": "situation.calculate · actor · modifyQuantity combatWeight"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-large-fear",
+          "text": "talent.activate · actor · activateTalent talent-large-fear"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Taille et maximum de Blessures importés, sans recalcul."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-scale-sheer-surface",
+      "name": "Grimpeur",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:da3bb00fd35f774e9772592f4e6da48034847b424c5e3c8744b5bf4783afbabb"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-scale-sheer-surface:3",
+          "text": "test.beforeRoll · actor · limitTestPenalty difficulty"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-scale-sheer-surface:4",
+          "text": "test.beforeRoll · attacker · limitTestPenalty difficulty"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-scale-sheer-surface:5",
+          "text": "test.beforeRoll · defender · limitTestPenalty difficulty"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-warrior-born",
+      "name": "Guerrier né",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:fb4368b7c55d4c3e3c479845123ce051523a2207b180f98bcca7d1c6f2dbbcd1"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-river-guide",
+      "name": "Guide fluvial",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:2091a408e0db1ebaafbb67a667c03a38049a932465b2882c391d5b3d8d4766a4"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Aucun Test pour naviguer en eaux dangereuses, sauf difficulté Difficile (−1 DR) ou plus sévère. Avec la compétence Savoir (Région) appropriée, aucun Test n'est requis : vous connaissez une route sûre."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-hatred",
+      "name": "Haine",
+      "implementationNotes": "Psychologie de contrôle à la rencontre et tentatives en fin de Round après le premier ; bonus et immunités de groupe raccordés.",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:aee651097ca4cdda8cec7eddd45b1380815fb267f4d335c51f312933ab0f0a17"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.beforeRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.beforeRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.beforeRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-hatred:4",
+          "text": "test.beforeRoll · actor · forceTestSuccess hatred-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-hatred:5",
+          "text": "test.beforeRoll · attacker · forceTestSuccess hatred-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-hatred:6",
+          "text": "test.beforeRoll · defender · forceTestSuccess hatred-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-hatred",
+          "text": "talent.activate · actor · activateTalent talent-hatred"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Le MJ qualifie l’action concrète qui détruit le groupe haï au plus vite."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-holy-hatred",
+      "name": "Haine sacrée",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:f1f38bcfd4a086b1908cea2600cd5ad693d45310cfd657c9a1abbfb6ff665ac7"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Lorsqu’un Miracle inflige des Blessures, vous pouvez infliger +2 Blessures."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-aethyric-attunement",
+      "name": "Harmonisation aethyrique",
+      "source": {
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191",
+        "effectHash": "sha256:09ded3a1abc23bbb89c62f9a1d96d8df16c7194b8cedc1d74e36191fbc897f95"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Sur la table des Incantations imparfaites mineures, lancez deux fois et choisissez le résultat. La seconde acquisition étend ce bénéfice à la table des Incantations imparfaites majeures."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-harpooner",
+      "name": "Harponneur",
+      "implementationNotes": "Projectiles Empaleuse fichés : Mouvement réduit de 1 par projectile, minimum 1 ; suivi et retrait explicites.",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:86f71e4748bde07954d5fa8ee5e1dbf534cd08103f6f382c49ade10f8e71820c"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-harpooner:0",
+          "text": "critical.beforeTable · attacker · modifyCriticalRoll harpooner"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-remove-bolt",
+          "text": "talent.activate · actor · activateTalent talent-remove-bolt"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-high-magic",
+      "name": "Haute Magie",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 83",
+        "effectHash": "sha256:258078fe86e49c699c138dfbbf1c756785742b99b00982d155981ec8f235174b"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Nécessite Focalisation (Qhaysh) et Béni par Isha. L’absence d’accès à un Vent ne pénalise plus le lancement des sorts des Domaines des Bêtes, Mort, Feu, Cieux, Vie, Lumière, Métal et Ombres. Lorsqu’un sort est lancé avec succès, ajoutez votre niveau de Haute Magie aux DR utilisables pour la Surincantation des sorts de Haute Magie. Autorise leur mémorisation : coût par sort supplémentaire selon les sorts déjà connus, jusqu’à 1× le Bonus d’Intelligence : 200 PX ; jusqu’à 2× : 400 PX ; jusqu’à 3× : 600 PX ; jusqu’à 4× : 800 PX ; puis +200 PX par tranche supplémentaire."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-secret-identity",
+      "name": "Identité secrète",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:647f69b204bb726de0032d0e00d3250bda4941efd88c78009def1e745feb5b7c"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Adoptez une identité d'une carrière choisie pour une rencontre, une journée ou une aventure, sans Test pour maintenir la supercherie ; vous en avez la classe et le statut. Vous pouvez faire les Activités Banque ou Revenus sous cette identité. Pour Revenus : Test de revenu Intermédiaire (+0 DR), avec Divertissement (Interprétation) ou la compétence de revenu de l'identité. Avec Embezzle, Subornation ou Évaluation peuvent remplacer cette compétence en cas de détournement. Un échec révèle la ruse ; conséquences fixées par le MJ."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-mimic",
+      "name": "Imitation",
+      "source": {
+        "reference": "Livre de base V5, p. 122–123 ; achat : p. 191",
+        "effectHash": "sha256:1b35207cb727c9e92bb5501497f38dd65c0a4e58bd7633e131baa60bb03c598d"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor-2",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker-2",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender-2",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Accent après une journée, qualité d’une imitation et bénéfice social contextualisé."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-coolheaded",
+      "name": "Imperturbable",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:2bfd808b70e1d2daf8b706b05f1805b3693194f0f75f1cb73151a3647559acdb"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-relentless",
+      "name": "Impitoyable",
+      "implementationNotes": "Test après Désengagement adverse pour poursuivre avec Mouvement supplémentaire ; permission de Désengagement.",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:ee337a312c0e8a48217e0ee0766fbd51d2fc098577ba38e92254c5d9d7e643b0"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.beforeRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.beforeRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.beforeRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-relentless",
+          "text": "talent.activate · actor · activateTalent talent-relentless"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-suffuse-with",
+      "name": "Imprégné",
+      "source": {
+        "reference": "Winds of Magic (V4), p. 186",
+        "effectHash": "sha256:91da30b698fc8a25083c99344a715e107280bb7a211a08e6b6498749076d3cc6"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Les sorts réussis du domaine associé au Vent, lancés à 8 yards ou moins de vous, gagnent +1 DR ; ce bonus ne se cumule pas avec d'autres porteurs du même Vent. Votre Focalisation de ce Vent remplace : Aqshy, Force Mentale pour entrer en Frénésie, dont vous pouvez bénéficier ; Azyr, Perception ; Chamon, Évaluation ; Ghur, Emprise sur les animaux et Savoir (Bêtes) ; Ghyran, Savoir (Plantes, Animaux, Herbes) et Soin aux animaux ; Hysh, Recherche ; Shyish, Intimidation ; Ulgu, Discrétion. Les personnes ayant Seconde vue perçoivent le Vent autour de vous."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-unshakeable",
+      "name": "Inébranlable",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:46fc3668040d929d3fc0ce3ac802462f1fee3802c4f8d255bccf1adc9498e6ea"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-unshakeable:1",
+          "text": "test.beforeRoll · actor · forceTestSuccess blackpowder-broken-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-unshakeable:2",
+          "text": "test.beforeRoll · attacker · forceTestSuccess blackpowder-broken-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-unshakeable:3",
+          "text": "test.beforeRoll · defender · forceTestSuccess blackpowder-broken-immunity"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-strong-back",
+      "name": "Infatigable",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:ae62289d716d3f674967ff6fb4a6b1d927581ce6c35d5b5560ea08c226c532bd"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.beforeRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.beforeRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.beforeRoll · defender · modifySL"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Encombrement transportable +1 au niveau 1, +3 au niveau 2 : valeur dérivée à gérer par la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-tireless",
+      "name": "Inlassable",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 81",
+        "effectHash": "sha256:8fa14000611b2d55f1e4ba890dd098339e91916a7c4b719e6e958dcded00b721"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "ignoreConditionPenalty-actor",
+          "text": "test.beforeRoll · actor · ignoreConditionPenalty extenue"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "ignoreConditionPenalty-attacker",
+          "text": "test.beforeRoll · attacker · ignoreConditionPenalty extenue"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "ignoreConditionPenalty-defender",
+          "text": "test.beforeRoll · defender · ignoreConditionPenalty extenue"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-beneath-notice",
+      "name": "Insignifiant",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:19d68f792e0aebd03c611ca67a1b5cd6f00add3e7d23f94f8eaff596e1853881"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Correctement vêtu et en faisant l’effort de vous fondre parmi vos supérieurs sociaux, vous passez pour quelqu’un qui doit être là ; une explication plausible suffit normalement aux gardes. Ce bénéfice cesse si vous attirez l’attention par un incident ou en brandissant une arme."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-schemer",
+      "name": "Intrigant",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:2d01047f4ea7671e899d23155df6c68f4f3f72b383ef739a94a2d462cad36c71"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-invoke",
+      "name": "Invocation",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:b5dc62251be4ab9970d4a7d08f93ebbd16009a52093efe686d8dbe3e3148aeba"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Choisissez une divinité : un Miracle de son culte est appris immédiatement. Miracles supplémentaires : 100 PX si 0–5 sont déjà connus ; 200 PX pour 6–10 ; 300 PX pour 11–15 ; 400 PX pour 16–20 ; 500 PX à partir de 21. Normalement une seule divinité. Incompatible dans les deux sens avec Focalisation, Magie des arcanes, Magie du Chaos, Résistance à la Magie, Magie mineure et Sorcier !. Abandon pour 100 PX : perte de tous les Miracles et profond courroux divin, conséquences fixées par le MJ."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-youngblood",
+      "name": "Jeune sang",
+      "source": {
+        "reference": "Archives of the Empire 1 (V4), p. 78",
+        "effectHash": "sha256:162a9b734f00e44a492f5e4c77a576004846510a8b44df9c6943090dc2419632"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Statut inférieur entre Eonir et éventuelle perte du talent lors de l’admission : statut et progression dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-mind-over-body",
+      "name": "L’esprit sur le corps",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 101",
+        "effectHash": "sha256:8dea4623b136fc5274767216859634e31f893abe995720cc8e352d8372516fac"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Méditation d’au moins 20 minutes puis Test de Prière Intermédiaire (+0). Si réussi, effets pendant 1d10 + DRd10 heures. Niveau 1 : Trait Insensible à la douleur et aucun état causé par la douleur. Niveau 2 : vision mentale des formes, sans couleurs, expressions ni fins détails sauf objets fabriqués ; Métier (Forgeron) sans malus de cécité et immunité à Aveuglé, même magique ou divine. Niveau 3 : permet de dépenser un point de Chance pour ignorer les pénalités des Blessures Critiques lors des Tests étendus, notamment de fabrication."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-speedreader",
+      "name": "Lecture rapide",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:9cd544403919c6f96bad070864efe3c823f693d69d9b0c1934a12f09787413b0"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "multiplySL-actor",
+          "text": "test.afterRoll · actor · multiplySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "multiplySL-attacker",
+          "text": "test.afterRoll · attacker · multiplySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "multiplySL-defender",
+          "text": "test.afterRoll · defender · multiplySL"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-linguistics",
+      "name": "Linguistique",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:09edd2d849eea2045f57b0e1839d06d44e1411e034d581949211a19109e9d670"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Langues de communication et coût des Augmentations dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-lip-reading",
+      "name": "Lire sur les lèvres",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:16dab13e103bb1f57fc32a718c4feebdbd71e3ed2521a84c2c08eb4d91167d1a"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Si vous voyez la bouche du locuteur sans obstruction, un Test d’Intuition Intermédiaire (+0 DR) permet de comprendre ses paroles."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-read-write",
+      "name": "Lire/Écrire",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:de00d2be694cdb6f62c9cac90a9f3c8b4c60d15fc5c9c640f27604c4f4d14a55"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Vous pouvez lire et écrire toute langue que vous savez parler."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-long-memory",
+      "name": "Longue mémoire",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 80",
+        "effectHash": "sha256:254cdc8c488e917459b6d9f37d6a9419c91d735230979920d66f56a32463862e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Mémoire parfaite des événements vécus dans la campagne ; le MJ qualifie les souvenirs plus anciens et la difficulté."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-old-salt",
+      "name": "Loup de mer",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:d93c5e0565fa2c558a59a7aeef035be4c6c9bfff750a8ba2b5f40f5e7ba80e61"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-old-salt:additional:1",
+          "text": "situation.calculate · actor · modifyQuantity crew"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-iron-jaw",
+      "name": "Mâchoires d'acier",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:bd879ea3b5c0af1e27f51c1e49f8384d2f100e60d9bd992c7d081721f8ab4ca6"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "first-stunned-acquisition",
+          "text": "condition.beforeAcquire · defender · reduceConditionAcquisition sonne"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-war-wizard",
+      "name": "Mage de guerre",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:db464acb100d31b28c7dd6ac638246c67591f8b186dea704bd48b1ddaee42024"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "En Action gratuite, perdez Momentum pour tenter un sort de NI 5 ou moins. Aucun autre Test lié à l'incantation n'est permis ce Tour, y compris Focalisation."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-arcane-magic",
+      "name": "Magie des Arcanes",
+      "source": {
+        "reference": "Livre de base V5, p. 115 ; achat : p. 191",
+        "effectHash": "sha256:55ab1c76324bc82463b9d558fdcddf17991075347d9e72a5e9e99c57b10926fd"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Choisissez un Domaine : vous gagnez un Sort et pouvez en mémoriser d’autres. Coût par nouveau Sort selon le nombre déjà connu : 0–5 =100 PX ; 6–10 =200 ; 11–15 =300 ; 16–20 =400 ; 21+ =500. Un seul Domaine normalement ; un Domaine sombre supplémentaire est possible avec l’accord du MJ selon votre formation. Désapprentissage : 100 PX et perte de tous les Sorts liés."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-rune-magic",
+      "name": "Magie des runes",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 80",
+        "effectHash": "sha256:cfc421894c96dccbac12bb15104538c414a26a126f4bbd4bc499e6d92cfaa774"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Chaque achat apprend une nouvelle rune des listes pp. 125–129, jamais une rune majeure. Respectez les formes ou la rune précise imposées par votre carrière. L'Activité Forge Rune permet de la graver sur un objet. Tests de fabrication de runes réussis : +1 DR par niveau."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-master-rune-magic",
+      "name": "Magie des Runes de Maître",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 80",
+        "effectHash": "sha256:4f61ebc74fd380b7b918b81554800e86fb67e9fac2443a43bb48b494efb2a435"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Chaque acquisition apprend une nouvelle rune majeure choisie p. 125–129, dans les formes de runes imposées par le talent lorsqu’elles sont précisées. Permet son inscription par l’Activité Forger une rune, selon les règles p. 119. La première acquisition apprend aussi les trois Runes du Destin p. 130. +1 DR par acquisition aux Tests réussis de Forge runique."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-chaos-magic",
+      "name": "Magie du Chaos",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:17d87e1b9b3abcb7b0796b3773139fa0461e8cc802972584b6a7f454605e5a66"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Choisissez un Domaine du Chaos : gagnez un Sort et +1 Corruption à chaque nouveau Sort obtenu. Coût par Sort supplémentaire selon le nombre déjà connu : 0–5 =100 PX ; 6–10 =200 ; 11–15 =300 ; 16–20 =400 ; 21+ =500. Un seul Domaine normalement. Ce talent ne peut jamais être désappris."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-petty-magic",
+      "name": "Magie mineure",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:e66b42de1ffa5dc3f9ec1085be99c1273ffc998486bba50a810622e9c86a0b86"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Apprenez immédiatement trois sorts de Magie mineure au choix. Coût de chaque sort supplémentaire selon le nombre déjà connu : jusqu’à 5, 50 PX ; 6–10, 100 PX ; 11–15, 150 PX ; 16–20, 200 PX ; 21 ou plus, 250 PX. Abandonner ce talent coûte 100 PX et fait immédiatement perdre tous les sorts qui lui sont liés."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magnum-opus",
+      "name": "Magnum opus",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:f000e8a03d45783872dd1131011c7b0882be7e542c046e2e77947311bb71fb0c"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "À chaque acquisition, créez un chef-d’œuvre extraordinaire avec une Compétence Art ou Métier. Il impressionne ses témoins et procure des bonus fixés par le MJ, généralement en Sociabilité. Sa vente rapporte au moins dix fois la valeur normale. Chaque nouvelle acquisition produit une nouvelle œuvre."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-fast-hands",
+      "name": "Mains agiles",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:c0850e6d9d1109e91be1749758ee45afeabac717eb940b6ff28a17f533dbeb88"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "touch-opponent-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Autoriser Escamotage pour divertir ou pour un Test de contact ; sorts de contact au lot 3."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-craftsman",
+      "name": "Maître artisan",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:c654e1f504ce4d2299c9f754b082db0c2cf42f266898c3deb9305222b1202449"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Achats de Métier hors carrière et spécialités."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-master-of-disguise",
+      "name": "Maître en déguisement",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:228d2b2508bef20973e572967aa5b2647a94d305bbfd5a219eb7170c7fdb0d33"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Vêtements, posture et expressions crédibles."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-dicer",
+      "name": "Maîtrise des dés",
+      "source": {
+        "reference": "Livre de base V5, p. 118 ; achat : p. 191",
+        "effectHash": "sha256:e77a44585baeb894cb4337798f2fa640a7b096dc1608741882e2eca5b3ecacc3"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-combat-master",
+      "name": "Maîtrise du combat",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:e79795b700d8759b14e89e1c6b8f67c2dc145a4fc6198ff4754e36277576be56"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-combat-master:1",
+          "text": "situation.calculate · actor · modifyQuantity combatWeight"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-dual-wielder",
+      "name": "Maniement de deux armes",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:a85f050fefd1b889d2e30f458d95e3c64940f7de8dddb63de21f1fff9e8fc38d"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-dual-wielder:1",
+          "text": "action.before · attacker · addQuality parade"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-dual-whirlwind",
+          "text": "talent.activate · actor · activateTalent talent-dual-whirlwind"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-waterman",
+      "name": "Marinier",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:86544cd2e74c6d126a899f4f9c663138b33c90d45caa31e3acbeab117ac9b32a"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-waterman:4",
+          "text": "situation.calculate · actor · modifyQuantity crew"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-bludgeoner",
+      "name": "Matraqueur",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:377196d2b284bb44ced767c08dfbbc3096d25bedc71fb86d2a7b943b4288786a"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-bludgeoner:0",
+          "text": "condition.beforeAcquire · attacker · increaseConditionAcquisition sonne"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-short-fuse",
+      "name": "Mèche courte",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 81",
+        "effectHash": "sha256:1ebdd557f1748715d44172c95d12329d1ec96c96d595d6bc3c042ce220210e1f"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-short-fuse:0",
+          "text": "action.before · attacker · modifyQuality explosion"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-cadai-meditation",
+      "name": "Méditation Cadai",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 101",
+        "effectHash": "sha256:2308b895665230960449a35c13994cc2f45f5e6049b80b307aea2f703c7f1f9b"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Chaque jour, méditez au moins une heure puis effectuez un Test de Prière Accessible (+2 DR). Si vous réussissez, vous pouvez passer à l’état Yenlui (Lumineux)."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-menacing",
+      "name": "Menaçant",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:56bc31d7217b1915ab77df15686201d994fc89fdf47b2b67019e8a8535099c94"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Les voleurs raisonnables évitent normalement ce personnage."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-cat-tongued",
+      "name": "Menteur",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:234ea1a408e980ef8f6329a2731369ecccfc3d7c00540ccdfa6a5efa4d904517"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-strong-swimmer",
+      "name": "Nageur endurant",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:5cb2766f13b22cfcf825523a71056097a9165f79e527fc8e7f9413f1494884d3"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.beforeRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.beforeRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.beforeRoll · defender · modifySL"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-wealthy",
+      "name": "Nanti",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:4ce042096102f94f808b571642df73b91a294f84c2058bc784f90e37a2c7e1d7"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Quand vous obtenez de l'argent par votre carrière, en jeu ou via une Activité Revenus, recevez 1 couronne d'or supplémentaire. Au niveau 2, ce total devient 3 couronnes d'or supplémentaires."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-dealmaker",
+      "name": "Négociateur",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:9f6f2f09c2d1cbc8eaded6f32dc798ed0e088b90923239e5a24ccd99f6f5fbdd"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Reconnaître une offre définitive."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-noble-blood",
+      "name": "Noblesse",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:76a35a4455b3d67933845429ea732ba297f675e0b26b0cb45178ca66511deb1b"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Si vous êtes habillé convenablement, votre statut est toujours considéré comme supérieur d’au moins un Échelon à celui d’autrui, sauf s’il possède aussi Noblesse : comparaison normale. Vous pouvez entrer dans la Carrière Noble comme si elle appartenait à votre Classe actuelle."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-carouser",
+      "name": "Noctambule",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:913a87cb0a23fc9e40fda57343e267ca77a68f25640d229a55109a6ef5172032"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Aucun effet négatif en consommation modérée ; le MJ qualifie l’excès."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-rover",
+      "name": "Nomade",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:e3cf9bf918016381b49dfb40f3bbbf6c0fd0b2993a023b8def0b6e9f82ba0786"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Trajets, gibier, eau et abri."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-numismatics",
+      "name": "Numismate",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:d39e413e1d2c577484c2e38e97634bf09dce60b90be75971f2c4bdb0e60b6dfd"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "choose-sl-units-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-strong-minded",
+      "name": "Obstiné",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:36ce5cedd37beda9eb5c87ed354208c97abfd7c4de0ca964d9a9e89a54b5671b"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strong-minded:actor",
+          "text": "test.beforeRoll · actor · ignoreNegativeModifiers talent-strong-minded"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strong-minded:attacker",
+          "text": "test.beforeRoll · attacker · ignoreNegativeModifiers talent-strong-minded"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-strong-minded:defender",
+          "text": "test.beforeRoll · defender · ignoreNegativeModifiers talent-strong-minded"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-eye-of-the-storm",
+      "name": "Œil de la tempête",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 105",
+        "effectHash": "sha256:8270b0306c4203c9ac712b9ed69076fb68d7d19261afda0b3bab89fc45b08589"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Après au moins 20 minutes de contemplation, réussissez un Test de Prière Intermédiaire (+0) : les effets durent 1d10 + DRd10 heures. Acquisition 1 : distractions incapables d’interrompre votre Focalisation. Acquisition 2 : récupération d’Exténué en moitié moins de temps et ses pénalités ignorées pour Focalisation et Incantation. Acquisition 3 : sur une table de météo, ajoutez ou retranchez 1 à chaque jet de dé."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-hunter-s-eye",
+      "name": "Œil du chasseur",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:4fd7653391d3c64c1ab6417d6527d669e3f7d68e54a8b015bdd54c492413deb3"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "En voyage dans des terres suffisamment giboyeuses, avec le temps et l’équipement nécessaires, vous chassez automatiquement de quoi nourrir votre personnage et un nombre d’autres personnes égal à votre Bonus d’Initiative. Les règles normales de recherche de nourriture permettent d’en obtenir davantage."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-public-speaker",
+      "name": "Orateur",
+      "implementationNotes": "Commandement après Charme collectif : Action, cibles et retrait Brisé liés au résultat.",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:6e558eeece6c5afbebb040dec84ba7b25ecda098a6f70b772455bac4970f506c"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-public-speaker",
+          "text": "talent.activate · actor · activateTalent talent-public-speaker"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Rassembler et lire la foule ; l’Action résultante et les cibles restent désignées par le MJ."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-perfect-pitch",
+      "name": "Oreille absolue",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:c16b244cebd1814a82033106817ee09186c3d11fd28bc48f9c4af3f513f46c70"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor-2",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker-2",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender-2",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Apprendre un morceau après une écoute."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-soul-pact",
+      "name": "Pacte de l’âme",
+      "source": {
+        "reference": "Temple of Spite (édition non nommée, compatible V5), p. 63–64",
+        "effectHash": "sha256:fa0dff0ddde945d9f5188032795890afc02b937eb2d890f9e95224157c6d725f"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Réservé aux Elfes. Chaque achat conclut un autre pacte ; l'entité exige des sacrifices croissants pour protéger corps et âme du Dhar. Sur un sort de Magie noire qui inflige des dégâts avec des DR au-delà de son NI, dépensez 3 DR pour un effet de votre pacte, compatible avec les effets de surincantation : Hekarti, un coup supplémentaire au corps de dégâts égaux au NI de base ignorant les PA, ou ignorez Incantations imparfaites et gain de Corruption pendant 1d10 Tours ; Slaanesh, 3 cibles à une distance maximale de votre Bonus de Force Mentale en yards font un Test de Calme Difficile (−2 DR), puis celles qui échouent doivent le réussir avant toute action hostile contre vous pendant 2d10 Rounds, sinon elles deviennent Surprises ; Tzeentch, appliquez un résultat de Incantation imparfaite mineure à une autre créature à une distance maximale de votre Bonus de Force Mentale en yards ; démon non aligné, gagnez le Trait Daemonic 8+ jusqu'au Round suivant."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-field-dressing",
+      "name": "Pansement de fortune",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:dce8b76e07740a3dafe7c4dc73408e0a8f03ba47ae10d998e17aa26334846229"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Créer attelles et bandages avec les matériaux disponibles."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-step-aside",
+      "name": "Pas de côté",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:88b4150b6b23bcb9057ef77c8976196704afad3d7fca363e8106474a18318b93"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Après une défense réussie avec Esquive, vous pouvez vous déplacer jusqu'à 2 yards et ne plus être engagé. Les adversaires n'obtiennent pas d'attaque gratuite."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-fisherman",
+      "name": "Pêcheur",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:0b7f891243744c5771e674f08c26794303ff45358534395c5839a92edad8ebfd"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Avec une étendue d’eau suffisante et l’équipement adapté, pêchez assez pour nourrir votre personnage et un nombre d’autres personnes égal à votre Bonus d’Initiative. Les règles ordinaires de recherche de nourriture permettent d’obtenir davantage."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magical-sense",
+      "name": "Perception de la Magie",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:55deb6f2d600741fb3773358fece2d2bdc2b48400ff4961adcf1c97324fdaac0"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Vous détectez immédiatement tout lancement de sort à une distance en yards égale à votre Perception, avec seulement sa direction approximative, sans identifier la magie. Si vous avez Seconde vue ou percevez autrement les Vents, Avantage V5 aux Tests pour discerner leurs mouvements ou variations."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-tenacious",
+      "name": "Persévérant",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:21cc580b1251357de21c1165f797e583e473eafb5531b5fbc9b1e433072e8d07"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "reduce-extenue",
+          "text": "condition.beforeAcquire · defender · reduceConditionAcquisition extenue"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-savvy",
+      "name": "Perspicace",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:d1164abeded6f269de41d019bf51b227e063588ecaa430fa5d88fd49aed15cf6"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-small",
+      "name": "Petit",
+      "implementationNotes": "Règle homebrew de Taille validée : seuil +10, −2 DR par écart en défense de mêlée, Dévastatrice/Percutante temporaire et multiplication avant BE/PA, Force opposée, Peur/Terreur et Piétinement à 1 Élan ; Frappes Mortelles supprimées, aucune migration de Taille/Blessures.",
+      "source": {
+        "reference": "Livre de base V4 (FR), p. 143",
+        "effectHash": "sha256:985ad43b65cdc8c51d93e093fac92ac1b47f3ac1da276bb527c2d163a378915c"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "small-size-homebrew",
+          "text": "talent.activate · actor · activateTalent talent-small"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Taille et maximum de Blessures importés, sans recalcul."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-pharmacist",
+      "name": "Pharmacologie",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:472895401d41e0366183c0078ba9558783ede16e9e77d6ad9265a0b32eeeac95"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Lorsque vous fabriquez un remède alchimique, vous produisez une dose supplémentaire."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sea-legs",
+      "name": "Pied marin",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:0718c62ede998c01df41861d7fd316dc670719bde590333b7bc3b72ca8117c72"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Le MJ exige un Test de mal de mer uniquement si les conditions le justifient."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-pilot",
+      "name": "Pilote",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:cf0e27d074597a419312f6958f129d36000551a8e21f4b1935cdf245f7e16b4b"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-shieldsman",
+      "name": "Porte-bouclier",
+      "implementationNotes": "Protection d’allié adjacent ou remplacement des dégâts pour repousser après opposition gagnée ; Élan et quota par Round.",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:5bd45a5e7183a73f942314df805b6678a1ad1132c4e021fa1403c13f9fcc295f"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-shieldsman",
+          "text": "talent.activate · actor · activateTalent talent-shieldsman"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-shield-ally",
+          "text": "talent.activate · actor · activateTalent talent-shield-ally"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-commanding-presence",
+      "name": "Présence imposante",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:7e4f348eb53cbbf043f5e1e8632fcf52d5e008dfd5c57b00d2c41dd03c610edd"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Autorité raisonnable en situation de crise."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-well-prepared",
+      "name": "Prévoyant",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:6ed05b8bf282ac422a038f0dfd33c5c75777e34d0214c8ac314c6c84927ba740"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Une fois par séance, sortez de vos poches un équipement d'Encombrement 0 utile à la situation, raisonnablement achetable récemment et crédible. Payez son prix à chaque usage ; impossible sans argent. Dépensez des points de Chance pour des usages supplémentaires dans la séance."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-ancestral-grudge",
+      "name": "Rancune Ancestrale",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 78",
+        "effectHash": "sha256:e28b9fcdfeaa806c3e505760ba9a8c4f5058542a2ade9559f855b1a53e206679"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Choisissez une culture ou faction et inscrivez-la dans votre Livre des Rancunes. Vous lui portez une Rancune de Sang impossible à satisfaire ; chaque victoire significative contre elle rapporte 50 PX (destruction de ses œuvres, récupération de biens volés, nombreux ennemis tués, etc.)."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-tunnel-fighter",
+      "name": "Rat d'égout",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:1f84aa698237349522cac218cd0ba20ea5865940ae039f7feaed59fb15fe16e7"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Estimation de profondeur et distances sous terre."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-rapid-reload",
+      "name": "Rechargement rapide",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:a46cabb7498faa9b82dfdb22910f118af8426883ca0d0b2afb7916ea862cff98"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-rapid-reload:0",
+          "text": "action.before · attacker · modifyQuality recharge"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-lightning-reflexes",
+      "name": "Réflexes foudroyants",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:d14e82de873f884bc80aaaaf0e05e6e639c79f437c0daf6e96eecd2c900d0618"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-reversal",
+      "name": "Renversement",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:63a20add70a445d52c1a4819d6ce602f64346f91c5a26fa0d56ec0767cd2dc99"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-reversal:0",
+          "text": "momentum.beforeLoss · defender · preventMomentumLoss oppositionLost"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-reversal:1",
+          "text": "momentum.beforeLoss · defender · preventMomentumLoss woundsLost"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-reversal:2",
+          "text": "momentum.beforeLoss · defender · preventMomentumLoss conditionAcquired"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-resistant",
+      "name": "Résistance",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:50dbc748caa6756bb2506f36a045587479a33845cbab23eca630e8b2a639f9d5"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-resistant:actor",
+          "text": "test.beforeRoll · actor · forceTestSuccess talent-resistant"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-resistant:attacker",
+          "text": "test.beforeRoll · attacker · forceTestSuccess talent-resistant"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-resistant:defender",
+          "text": "test.beforeRoll · defender · forceTestSuccess talent-resistant"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-magic-resistance",
+      "name": "Résistance à la Magie",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:26b59747b3239e653130fadbb5cb020006774febe721c39ea063796b2a36b0cc"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Réduisez de 3 les DR de tout sort qui devrait vous affecter. Incompatible dans les deux sens avec Focalisation, Magie des arcanes, Béni, Magie du Chaos, Invocation, Magie mineure et Sorcier !."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-entrenchment",
+      "name": "Retranchement",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 79",
+        "effectHash": "sha256:920cdcd02661b982dc3653e9858489797bd560de17e878d1963c106e34ebe741"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-entrenchment:0",
+          "text": "test.afterRoll · actor · modifySL entrenchment"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-entrenchment:1",
+          "text": "test.afterRoll · attacker · modifySL entrenchment"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-entrenchment:2",
+          "text": "test.afterRoll · defender · modifySL entrenchment"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-entrenchment:3",
+          "text": "combat.beforeTests · defender · improveCover cover"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-riposte",
+      "name": "Riposte",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:3f70ba54eec81b7e306c798ded0a9e2fd8ab656a4ca5aff974b34caf97f53f81"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-riposte:0",
+          "text": "damage.beforeProtection · defender · riposte riposte"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-robust",
+      "name": "Robuste",
+      "source": {
+        "reference": "Livre de base V5, p. 124 ; achat : p. 191",
+        "effectHash": "sha256:8d086b6e4d0c1121aa67ef42e18820e9bb873cfa9aa5f1520f1f0d7cd58f9abb"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-robust:recovery",
+          "text": "healing.afterTest · actor · modifyHealing wounds"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sanctuary-of-the-mind",
+      "name": "Sanctuaire de l’esprit",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 109",
+        "effectHash": "sha256:bca08dd555dec1cc0f17913633e62d4435901ccec4f202939fd53ca8f0ff00cd"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Après au moins 20 minutes de contemplation, réussissez un Test de Prière Intermédiaire (+0). Effets pendant 1d10 + DR d10 heures : niveau 1, immunité aux points de Corruption issus de l'incantation ; niveau 2, +1 DR aux Tests de Recherche ; niveau 3, ignorez les modificateurs négatifs des états Yenlui."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-blood-of-aenarion",
+      "name": "Sang d'Aenarion",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 51",
+        "effectHash": "sha256:3c6801adaea457d4045e801cb547804f8ee0dbfddb0232c5480f74888f5a9777"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "À la création, gagnez +1 Destin et choisissez : prodige magique (coût des Sorts en PX divisé par deux) ou martial (coût divisé par deux de Combat instinctif, Véloce, Réflexes foudroyants, Tireur de précision, Vivacité, Très fort et Guerrier né). Chaque fin de semaine, réussissez un Test de Calme Accessible (+2 DR) ou gagnez la Psychologie Yenlui (Sombre). À la création, tirez aussi la mutation mentale de la table dédiée : elle compte comme une Psychologie, pas comme une mutation pour les limites ou effets de règles. Table 1d100 : 01–20 Hollow Heart ; 21–40 Profane Urgency ; 41–60 Thrill Hunter ; 61–74 Tortured Visions ; 75–89 Unending Malice ; 90–00 Unholy Rage. Effets de ces Psychologies : livre de base V4, p. 185."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-fearless",
+      "name": "Sans peur",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:7ab0814f0f23f8f6f1d76c9e59c1b6ea776899568825d3ca0c4fb85df5a474e3"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-fearless:1",
+          "text": "test.beforeRoll · actor · forceTestSuccess fear-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-fearless:2",
+          "text": "test.beforeRoll · attacker · forceTestSuccess fear-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-fearless:3",
+          "text": "test.beforeRoll · defender · forceTestSuccess fear-immunity"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-underminer",
+      "name": "Sapeur",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 81",
+        "effectHash": "sha256:6291aab8bfe92ccb63ddd47e66028b4aac8857b34c2ab37e9b9d5c93eb4d8715"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:3",
+          "text": "test.beforeRoll · actor · suppressTestPenalty proneAttack"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:4",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty proneAttack"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:5",
+          "text": "test.beforeRoll · defender · suppressTestPenalty proneAttack"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:6",
+          "text": "test.beforeRoll · actor · suppressTestPenalty belowTarget"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:7",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty belowTarget"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:8",
+          "text": "test.beforeRoll · defender · suppressTestPenalty belowTarget"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:9",
+          "text": "test.beforeRoll · attacker · modifySL sapper-hidden"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-underminer:11",
+          "text": "combat.beforeTests · defender · suppressProneBonus target-prone"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-jump-up",
+      "name": "Saut carpé",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:3c336494fb164df25ca76ec9e96e43bd7c241fc0460495448e63037f3c655001"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-savant",
+      "name": "Savant",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:71eaa7447ca9594442aaed1a2cd5cba60fa8ff550a19804c459a3c9a79cbf627"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "grantAdvantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Spécialité de Savoir possédée, une acquisition par spécialité."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-etiquette",
+      "name": "Savoir-vivre",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:f5f456844e1383a30c6037e5c8741c13a548de84af8504b457d113b874006756"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Avec la tenue et le comportement appropriés, vous vous intégrez au groupe social choisi. Le MJ peut vous avertir si vous adoptez un comportement que ce groupe jugerait déplacé."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-second-sight",
+      "name": "Seconde vue",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:15003f781b21e4906069f31e1a532bf163bbb77b113ad2f550f727f37ddf1830"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Vous pouvez percevoir les Vents de Magie selon les règles de perception magique, p. 236."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-war-leader",
+      "name": "Seigneur de guerre",
+      "implementationNotes": "Substitution du Calme allié contre la Peur par le Commandement, jusqu’à fin de bataille ou invalidation de l’auteur.",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:b401dac08f0e1ee9c42047a9f77a894b09c6bedffd2e24eaa4983a94c80fa0bc"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-war-leader",
+          "text": "talent.activate · actor · activateTalent talent-war-leader"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-end-battle",
+          "text": "talent.activate · actor · activateTalent talent-end-battle"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-acute-sense",
+      "name": "Sens aiguisé",
+      "source": {
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191",
+        "effectHash": "sha256:d4bc99c6050829e464886853d1872d1078ac0e903c2f32d119f9993f9d934b96"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Un de vos cinq sens est particulièrement développé : le MJ peut autoriser des Tests de Perception pour déceler des détails normalement imperceptibles avec ce sens. Répétable, avec un nouveau sens à chaque acquisition ; une acquisition par sens."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-orientation",
+      "name": "Sens de l'orientation",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:ba1ec7d019cdf1596a32be084c77693b749cac9b0661431ae200e1ac7ca70109"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Trouver le nord avec des signes familiers."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sixth-sense",
+      "name": "Sixième sens",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:2e29bc0dca1159d1370b0d99a062a5c56dcccad4517825bc8fbe1cacb46374a2"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Au moment de déclencher un piège ou de subir un danger caché, un Test d'Intuition Intermédiaire (+0 DR) réussi permet de détecter ce danger à la dernière seconde."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-gregarious",
+      "name": "Sociable",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:022623676f890b7f909aecbdba116345fec48871ff18c866efed0e22abfaefce"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Trouver les lieux où circulent les rumeurs."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-witch",
+      "name": "Sorcier !",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:2bb5372883d388deac68d77ec62dd294e4bfdbad316ab37652b8d9c1c8c7c8c4"
+      },
+      "clauses": [
+        {
+          "scope": "lot3",
+          "status": "deferred",
+          "text": "Gagnez un sort d'un domaine de Couleur ou de Sorcellerie, sans devoir posséder le talent Arcane Magic correspondant ; sa Focalisation et Langue (Magick) deviennent des compétences de Base. Un sort supplémentaire coûte 200 PX, puis chaque suivant coûte 100 PX de plus (300, 400…). Risque d'attirer les répurgateurs et de compliquer l'entrée dans une tradition magique. Payez 100 PX pour perdre ce talent et tous ses sorts associés. Chaque sort supplémentaire rend aussi sa Focalisation et Langue (Magick) correspondantes accessibles comme compétences de Base."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-catfall",
+      "name": "Souplesse féline",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:854f9b8faddfec3bbbebd2f08b6cc94230a528338147709cbb51f9ea76353e25"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Chute volontaire : autoriser le Test d’Athlétisme qui réduit les dégâts de chute selon la règle de chute."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sprinter",
+      "name": "Sprinter",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:7e3c91b96267d54d312b14ad3a3b59c7471053b2b460f537c6407a4c3da0c941"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-bookish",
+      "name": "Studieux",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:ec99d80aabee02b852cf13e53a0b5d92bb92157da70861c2199dd4b50a810aac"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-briber",
+      "name": "Suborneur",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:aaedab100a6c04917f8c634ea5520d890240c7a4b7d4ad1f46afd6c62b6f71aa"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Reconnaître l’acceptation et le montant d’un pot-de-vin."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-maverick",
+      "name": "Tête brûlée",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 80",
+        "effectHash": "sha256:2c35a1ff3da084513d48d6cdb329dacff455d2c61f0a30d559b261f83e94c7e0"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-maverick:3",
+          "text": "test.beforeRoll · actor · suppressTestPenalty flying"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-maverick:4",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty flying"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-maverick:5",
+          "text": "test.beforeRoll · defender · suppressTestPenalty flying"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-deadeye-shot",
+      "name": "Tir mortel",
+      "source": {
+        "reference": "Livre de base V5, p. 117 ; achat : p. 191",
+        "effectHash": "sha256:ce09d4df90bd59bbee1c13f7bd4f847b5290c6037851e30d11ffe84dbcf62bde"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-deadeye-shot:0",
+          "text": "test.beforeRoll · attacker · limitTestPenalty calledShot"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-accurate-shot",
+      "name": "Tir précis",
+      "source": {
+        "reference": "Livre de base V5, p. 114 ; achat : p. 191",
+        "effectHash": "sha256:7b9d4ef667a338ef20ea21f3587a206de729db1ce9b9502cd2027aae29691080"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "ordinary",
+          "text": "damage.beforeProtection · attacker · modifyDamage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "boosted",
+          "text": "damage.beforeProtection · attacker · modifyDamage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-fast-shot",
+      "name": "Tir rapide",
+      "implementationNotes": "Tir de Pistol chargé avant le premier Tour, sans engagement, ordre d’Initiative et Action du Round consommée.",
+      "source": {
+        "reference": "Livre de base V5, p. 119 ; achat : p. 191",
+        "effectHash": "sha256:517b0fd471183d57a8c14f1287898e010db79501e8e048c7bb721707f34e7507"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-fast-shot",
+          "text": "talent.activate · actor · activateTalent talent-fast-shot"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sure-shot",
+      "name": "Tir sûr",
+      "source": {
+        "reference": "Livre de base V5, p. 127 ; achat : p. 191",
+        "effectHash": "sha256:b5dcebc579e4e69b8e3b759a0dd612c96cface4c30591dda86bc8806e8ee9bfc"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "damage",
+          "text": "damage.beforeProtection · attacker · modifyDamage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sure-shot:1",
+          "text": "protection.before · attacker · ignoreArmourFlaw partielle"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sure-shot:2",
+          "text": "protection.before · attacker · ignoreArmourFlaw points-faibles"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sharpshooter",
+      "name": "Tireur d'élite",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:cbc20055e8d140cea7054a96c80f1b3a07f2a6714c83fa6140199c1662a13972"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sharpshooter:0",
+          "text": "test.beforeRoll · actor · suppressTestPenalty cover"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sharpshooter:1",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty cover"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sharpshooter:2",
+          "text": "test.beforeRoll · defender · suppressTestPenalty cover"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sharpshooter:3",
+          "text": "test.beforeRoll · actor · suppressTestPenalty targetProne"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sharpshooter:4",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty targetProne"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sharpshooter:5",
+          "text": "test.beforeRoll · defender · suppressTestPenalty targetProne"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-marksman",
+      "name": "Tireur de précision",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:6765a87940cb9cbfce71cbc3c7bdda887e5b17b1534e67f2325c20caa14a47be"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sniper",
+      "name": "Tireur embusqué",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:9c3c15c451c31a923279b2c5845b88197178c2400eeb8033416e29e554b18389"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sniper:0",
+          "text": "test.beforeRoll · actor · suppressTestPenalty longRange, limitTestPenalty extremeRange"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sniper:1",
+          "text": "test.beforeRoll · attacker · suppressTestPenalty longRange, limitTestPenalty extremeRange"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-sniper:2",
+          "text": "test.beforeRoll · defender · suppressTestPenalty longRange, limitTestPenalty extremeRange"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-tower-of-memories",
+      "name": "Tour des souvenirs",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:d5c86ca7205a1e9d5d65508be501ee00bc2d779cdcad15d465fa555214510b60"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Mémoire parfaite de nombreux faits."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-whirlwind-of-death",
+      "name": "Tourbillon de mort",
+      "implementationNotes": "1 Fortune, opposition unique, dégâts/localisation communs à tous les engagés, alliés compris ; pas de critique du jet, critiques d’excédent par cible.",
+      "source": {
+        "reference": "Dwarf Player’s Guide (V4), p. 81",
+        "effectHash": "sha256:c1add86ea7a65b8afa3b0a2ac95b60332fed9f8754039c7ecde456358b0fec2e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-whirlwind",
+          "text": "talent.activate · actor · activateTalent talent-whirlwind-of-death"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-trapper",
+      "name": "Trappeur",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:22ce870ac53b230aaf1b5307e38dd5367f4b23962806a43c0026734048cb51f3"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        },
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Construire un petit piège après préparation."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-master-tradesman",
+      "name": "Travailleur qualifié",
+      "source": {
+        "reference": "Livre de base V5, p. 122 ; achat : p. 191",
+        "effectHash": "sha256:dc0ce38062a02a12d3e25bbad7a7cefcaf04f9206b39ad9d18ec13f0afc6dc25"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-actor",
+          "text": "test.afterRoll · actor · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-attacker",
+          "text": "test.afterRoll · attacker · chooseSLUnits"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "chooseSLUnits-defender",
+          "text": "test.afterRoll · defender · chooseSLUnits"
+        },
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Acquisitions par spécialité de Métier."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-very-strong",
+      "name": "Très fort",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:e60ee1e00efb8890fa51ea63a0a5eab2d452b609fbc0346c2ad54027202444b4"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-very-resilient",
+      "name": "Très résistant",
+      "source": {
+        "reference": "Livre de base V5, p. 128 ; achat : p. 191",
+        "effectHash": "sha256:fd70e4adbc35227d0af97aa003ad3bc00930791a890ac75ce311c9c172e56a58"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-cardsharp",
+      "name": "Tricheur",
+      "implementationNotes": "Double de Pari opposé : relance explicite du jet adverse et suppression de son bénéfice d’Escamotage.",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:0c444d761edcc90d11002d306b8da2d41ad47db403d64c1fe39887cef1d0d131"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-cardsharp",
+          "text": "talent.activate · actor · activateTalent talent-cardsharp"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-slayer",
+      "name": "Tueur",
+      "source": {
+        "reference": "Livre de base V5, p. 126 ; achat : p. 191",
+        "effectHash": "sha256:8b62ed134302349558ffd15102e8c6755c4c263f47108e04375525b970b92554"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-slayer:0",
+          "text": "combat.beforeTests · defender · grantMomentum charge"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-uncouth-uranai",
+      "name": "Uranai rustre",
+      "source": {
+        "reference": "High Elf Player’s Guide (V4), p. 57",
+        "effectHash": "sha256:c48d34ce1af40fc087cda340fbdae33718941e98ba4ea73ba867eb2f62ab23f8"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Lors des interactions avec les Hauts Elfes de Caledor, Ellyrion, Avelorn ou Saphery, réduisez votre Standing de 1. Ceux des royaumes extérieurs et d'Eataine n'ont pas ce préjugé."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-fleet-footed",
+      "name": "Véloce",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:efd1371d3d372989ada70f382048802cb0715855fdaac9962d4ff0126a8c381c"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Gagnez +1 à votre Attribut de Mouvement."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-vice",
+      "name": "Vice",
+      "implementationNotes": "−2 DR de Sociabilité envers témoins ; −2 DR par jour d’abstinence en Psychologie ; compulsion et Exténué, fin explicitement testée.",
+      "source": {
+        "reference": "Archives of the Empire 2 (V4), p. 20",
+        "effectHash": "sha256:60c1ee72c17de503da15709f3919313c7478bbb56d675f3a94b18ca303181b69"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-actor",
+          "text": "test.afterRoll · actor · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-attacker",
+          "text": "test.afterRoll · attacker · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "modifySL-defender",
+          "text": "test.afterRoll · defender · modifySL"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-vice",
+          "text": "talent.activate · actor · activateTalent talent-vice"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-satisfy-vice",
+          "text": "talent.activate · actor · activateTalent talent-satisfy-vice"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-vice-exhausted",
+          "text": "talent.activate · actor · activateTalent talent-vice-exhausted"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-combat-aware",
+      "name": "Vigilance",
+      "implementationNotes": "Lier le résultat de Perception à l’acquisition de Surpris identifiée ; réussite automatique conditionnelle raccordée.",
+      "source": {
+        "reference": "Livre de base V5, p. 116 ; achat : p. 191",
+        "effectHash": "sha256:7dc5a8ed0bff9c6b04a9644d75c5d72e29cab4a7e29f6f6e2e4b0628f150f96b"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-combat-aware:1",
+          "text": "test.beforeRoll · actor · forceTestSuccess surprise-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-combat-aware:2",
+          "text": "test.beforeRoll · attacker · forceTestSuccess surprise-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "talent-combat-aware:3",
+          "text": "test.beforeRoll · defender · forceTestSuccess surprise-immunity"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "situation-combat-aware",
+          "text": "talent.activate · actor · activateTalent talent-combat-aware"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-night-vision",
+      "name": "Vision nocturne",
+      "source": {
+        "reference": "Livre de base V5, p. 123 ; achat : p. 191",
+        "effectHash": "sha256:7c8dea068a4a725e3b0b1361c9b7c6d3fedafe61f5facc77629b9946d393fe35"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Avec au moins une faible source de lumière naturelle ou équivalente, vous voyez clairement jusqu’à 20 yards ; augmentez aussi de 20 yards la portée effective d’éclairage de toute source lumineuse."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-holy-visions",
+      "name": "Visions sacrées",
+      "source": {
+        "reference": "Livre de base V5, p. 120 ; achat : p. 191",
+        "effectHash": "sha256:915b08c39f741cba6d1d4d894c7230fceffd1b2645bab849ee652cdb4ee90ca8"
+      },
+      "clauses": [
+        {
+          "scope": "narrative",
+          "status": "reminder",
+          "text": "Vous reconnaissez automatiquement un lieu sacré en y entrant, percevez les Bénédictions, Miracles et sorts de Magie du Chaos lancés dans votre ligne de vue, et sentez le pouvoir divin d’un objet en le touchant."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-sharp",
+      "name": "Vivacité",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:54c0d095789ca4adc72bb4350cc98414d172cdfbfb6798892c11dead0752fd2d"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "excluded",
+          "text": "Bonus de caractéristique déjà compris dans la fiche."
+        }
+      ]
+    },
+    {
+      "talentId": "talent-iron-will",
+      "name": "Volonté de fer",
+      "source": {
+        "reference": "Livre de base V5, p. 121 ; achat : p. 191",
+        "effectHash": "sha256:11140b3921f78094eb7e7a9f1f6c89fc51053ebd416ba8ec3fdc64039705dd5e"
+      },
+      "clauses": [
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-actor",
+          "text": "test.beforeRoll · actor · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-attacker",
+          "text": "test.beforeRoll · attacker · grantAdvantage"
+        },
+        {
+          "scope": "engine",
+          "status": "implemented",
+          "contractClauseId": "advantage-defender",
+          "text": "test.beforeRoll · defender · grantAdvantage"
+        }
+      ]
+    },
+    {
+      "talentId": "talent-seasoned-traveller",
+      "name": "Voyageur aguerri",
+      "source": {
+        "reference": "Livre de base V5, p. 125 ; achat : p. 191",
+        "effectHash": "sha256:984bc764b6d6544ccd0f45326695e4f49035c3f1d766896d739c371b798e0b10"
+      },
+      "clauses": [
+        {
+          "scope": "sheet",
+          "status": "owned",
+          "text": "Vous pouvez toujours augmenter le Savoir (Région) correspondant à la région où vous séjournez, même hors de votre carrière actuelle."
+        }
+      ]
+    }
+  ]
+}

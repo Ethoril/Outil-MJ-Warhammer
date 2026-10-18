@@ -1,4 +1,6 @@
-# Catalogue utile 2.4 — première vague locale
+# Catalogue utile 2.4 — rapport historique de première vague
+
+**État courant :** [tri complet des 206 talents](LOT2_TRI_TALENTS.md), 131 contrats et 382 clauses raccordées ; Petit inclus après arbitrages, 2.4 terminé dans le périmètre convenu. Version mécanique .24.6. Ce rapport conserve la portée de la première vague, pas le bilan courant.
 
 État du 9 octobre 2026 sur `codex/lot2-talents-v5`, après le raccordement représentatif 2.3. La version applicative reste 3.12.3. Cet incrément traite les 206 identités du catalogue par clauses et raccorde 41 contrats de talents, dont certains seulement pour une partie de leur description. Il ne certifie pas tous leurs effets et ne constitue pas la recette de livraison 2.5.
 

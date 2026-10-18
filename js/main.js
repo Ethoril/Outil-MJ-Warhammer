@@ -131,8 +131,9 @@ const refreshHistoryButtons = () => {
   if (btnUndo) btnUndo.disabled = !Store.canUndo();
   if (btnRedo) btnRedo.disabled = !Store.canRedo?.();
 };
-btnUndo?.addEventListener('click', () => { if (Store.undo()) refreshHistoryButtons(); });
-btnRedo?.addEventListener('click', () => { if (Store.redo?.()) refreshHistoryButtons(); });
+refreshHistoryButtons();
+btnUndo?.addEventListener('click', async () => { await Store.undo(); refreshHistoryButtons(); });
+btnRedo?.addEventListener('click', async () => { await Store.redo?.(); refreshHistoryButtons(); });
 
 // L’espace de travail local est disponible immédiatement. L’adaptateur distant
 // est chargé ensuite afin qu’un SDK lent ou indisponible ne bloque pas l’interface.

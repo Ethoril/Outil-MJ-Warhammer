@@ -1,0 +1,3678 @@
+{
+  "date": "2026-10-12",
+  "scope": 48,
+  "fixture": "tests/helpers/lot3-arcane-fixture.js ; paramètres indépendants des contrats, V5 pp. 240–245 ; durées longues via horloge publique puis vraie fin de Tour",
+  "rows": [
+    {
+      "id": "spell-audit-fa62c46f6feb6223ddca",
+      "name": "Arme aethyrique",
+      "page": 242,
+      "canonicalName": "Aethyric Arms",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Arme aethyrique (Aethyric Arms) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Arme à une ou deux mains selon p. 301 ; valeur de compétence déclarée par le joueur. Lance sans Charge, lance et épée bâtarde à une main : adaptations de profil à confirmer pour l’attaque. La fiche permanente reste intacte."
+            },
+            {
+              "kind": "conjured-weapon",
+              "profile": {
+                "name": "Épée",
+                "damage": 4,
+                "hands": 1,
+                "reach": "average",
+                "qualities": []
+              },
+              "score": 50,
+              "summary": "Épée aethyrique : 50, dégâts BF + 4, 1 main(s), allonge average. Lance sans Charge / lance ou épée bâtarde à une main : adapter le profil conformément à p. 301."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Arme à une ou deux mains selon p. 301 ; valeur de compétence déclarée par le joueur. Lance sans Charge, lance et épée bâtarde à une main : adaptations de profil à confirmer pour l’attaque. La fiche permanente reste intacte."
+      ],
+      "reminders": "Vous invoquez une arme de mêlée Magique choisie dans le tableau V5 p. 301. Elle utilise son profil d’arme, ses Dégâts et la compétence appropriée, pendant Bonus de Force Mentale Rounds. Arme à une ou deux mains selon p. 301 ; valeur de compétence déclarée par le joueur. Lance sans Charge, lance et épée bâtarde à une main : adaptations de profil à confirmer pour l’attaque. La fiche permanente reste intacte.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-e7c9bfa7679182272032",
+      "name": "Armure aethyrique",
+      "page": 242,
+      "canonicalName": "Aethyric Armour",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Armure aethyrique (Aethyric Armour) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Tu gagnes +1 Point d'Armure à toutes les Localisations en te considérant couverte d’une magie protectrice.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-794916395d79b8852143",
+      "name": "Bouclier anti-flèches",
+      "page": 243,
+      "canonicalName": "Arrow Shield",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Bouclier anti-flèches (Arrow Shield) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Le MJ déclare les occupants de la zone et la provenance des projectiles ; métal seul et sort sans matière organique passent."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Le MJ déclare les occupants de la zone et la provenance des projectiles ; métal seul et sort sans matière organique passent."
+      ],
+      "reminders": "Tous les projectiles constitués de matiére organique, comme des flaches en bois, sont automatiquement détruits s'ils entrent dans la Zone d'Effet, n'infligeant aucun Dégât à leur cible. Les projectiles constitués uniquement de matiére non organique, comme les couteaux de lancer ou les munitions de pistolet, ne sont pas affectés. Le MJ déclare les occupants de la zone et la provenance des projectiles ; métal seul et sort sans matière organique passent.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-82212a5f989edf00e57c",
+      "name": "Explosion",
+      "page": 243,
+      "canonicalName": "Blast",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Explosion (Blast) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 3,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "missile",
+              "damage": 3,
+              "location": "Corps",
+              "summary": "Projectile magique : 3 B à Corps"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 37,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Tu focalises la magie en une onde de choc explosive. Il s’agit d’un Projectile magique de +3 Dégâts qui cible quiconque se trouve dans la Zone d’Effet.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-f44d90e9c50d6dafb769",
+      "name": "Carreau",
+      "page": 243,
+      "canonicalName": "Bolt",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Carreau (Bolt) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 4,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "missile",
+              "damage": 4,
+              "location": "Corps",
+              "summary": "Projectile magique : 4 B à Corps"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 36,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous concentrez la magie en un carreau destructeur. Carreau est un Projectile magique avec Dégâts +4.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-aab091ac8e2ef3e58f83",
+      "name": "Souffle",
+      "page": 243,
+      "canonicalName": "Breath",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Souffle (Breath) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 5,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "breath",
+              "summary": "Souffle fire : CT 3 DR, Esquive -4 DR."
+            },
+            {
+              "kind": "mj-input",
+              "summary": "Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 35,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [
+            {
+              "name": "Enflammé",
+              "key": "enflamme",
+              "level": 1,
+              "duration": null,
+              "source": {
+                "targetId": "foe"
+              },
+              "authorId": null,
+              "targetId": "foe",
+              "v5Timing": {
+                "acquiredRound": 1
+              }
+            }
+          ],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds."
+      ],
+      "reminders": "Choisissez une cible à 20 + Bonus de Force Mentale mètres et effectuez CT (+0 DR), opposé à l’Esquive de la cible et des voisins dans Bonus d’Initiative mètres. Ceux qui ne battent pas votre résultat sont touchés. Base Bonus de Force Mentale Dégâts : Métal +4 et dommages aux objets ; Bêtes/Lumière +2 et Exténué, frappe en dernier et adversaires +1 DR en défense jusqu’au retrait de cet Exténué ; Cieux +2, ignore les PA métalliques et Sonné ; Feu +5 et Enflammé ; Mort/Vie +2 et Empoisonné ; Ombres, pas de Dégâts mais fumée et suffocation pendant Bonus de Force Mentale Rounds. Cible principale à 20+BFM mètres, voisins dans BI ; distances et visibilité déclarées par le MJ. Acide : armes/armures endommagées de 1, reçu à reporter sur la fiche. Froid : frappe en dernier et défense adverse +1 tant qu’Exténué demeure. Fumée : zone opaque et suffocation BFM Rounds.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-396e945394bfb4227633",
+      "name": "Pont",
+      "page": 243,
+      "canonicalName": "Bridge",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Pont (Bridge) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Maximum BFM × BFM mètres ; +BFM à la longueur ou largeur par +2 DR dépensés. Implantation et franchissement sont joués par le MJ, faute de positions."
+            },
+            {
+              "kind": "quantified-reminder",
+              "summary": "longueur : 6 ; largeur : 6"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Pont"
+            }
+          ],
+          "quantifiedReminder": {
+            "longueur": 6,
+            "largeur": 6
+          }
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Maximum BFM × BFM mètres ; +BFM à la longueur ou largeur par +2 DR dépensés. Implantation et franchissement sont joués par le MJ, faute de positions."
+      ],
+      "reminders": "Vous créez un pont de magie dont la longueur et la largeur maximales sont chacune Bonus de Force Mentale mètres. Chaque +2 DR permet d’augmenter une de ces dimensions de Bonus de Force Mentale mètres. Maximum BFM × BFM mètres ; +BFM à la longueur ou largeur par +2 DR dépensés. Implantation et franchissement sont joués par le MJ, faute de positions.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-cf7618e2430973dff22f",
+      "name": "Attaques en chaine",
+      "page": 243,
+      "canonicalName": "Chain Attack",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Attaques en chaine (Chain Attack) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 4,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "missile",
+              "damage": 4,
+              "location": "Corps",
+              "summary": "Projectile magique : 4 B à Corps"
+            },
+            {
+              "kind": "mj-input",
+              "summary": "Ordre choisi par le MJ ; chaque rebond doit être la cible la plus proche dans BFM mètres. Le seuil lit les Blessures réellement causées après Protection ; maximum BFM rebonds, +1 par +2 DR dépensés."
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 36,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Ordre choisi par le MJ ; chaque rebond doit être la cible la plus proche dans BFM mètres. Le seuil lit les Blessures réellement causées après Protection ; maximum BFM rebonds, +1 par +2 DR dépensés."
+      ],
+      "reminders": "Un projectile magique +4 frappe la première cible. S’il inflige plus de Blessures réelles que son BE, il passe à la cible la plus proche à Bonus de Force Mentale mètres de la précédente, en perdant 1 Dégât par rebond. Jusqu’à Bonus de Force Mentale rebonds sont permis, plus un par +2 DR. Si les Blessures infligées sont égales ou inférieures au BE, la chaîne s’arrête. Ordre choisi par le MJ ; chaque rebond doit être la cible la plus proche dans BFM mètres. Le seuil lit les Blessures réellement causées après Protection ; maximum BFM rebonds, +1 par +2 DR dépensés.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-62cff06f8241557df5a0",
+      "name": "Sang corrosif",
+      "page": 243,
+      "canonicalName": "Corrosive Blood",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Sang corrosif (Corrosive Blood) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "V5 p. 357 : après Blessures, les engagés subissent le même d10 de dégâts, avec BE/PA. Le MJ désigne les engagés, renseigne le dé et les localisations via la clause active ; aucun tirage automatique. Mode heures : parasites/maladies hors données du combat, reçu pour la fiche."
+            },
+            {
+              "kind": "trait-receipt",
+              "summary": "Sang corrosif : après Blessures, même d10 de dégâts à tous les engagés (V5 p. 357)."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Sang corrosif"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "V5 p. 357 : après Blessures, les engagés subissent le même d10 de dégâts, avec BE/PA. Le MJ désigne les engagés, renseigne le dé et les localisations via la clause active ; aucun tirage automatique. Mode heures : parasites/maladies hors données du combat, reçu pour la fiche."
+      ],
+      "reminders": "Vous gagnez Sang corrosif pendant BE Rounds. Autre formulation : pendant BE heures, les petits parasites qui vous mordent meurent sans transmettre de maladie ; Pourriture du sang et maladies similaires sont purgées. V5 p. 357 : après Blessures, les engagés subissent le même d10 de dégâts, avec BE/PA. Le MJ désigne les engagés, renseigne le dé et les localisations via la clause active ; aucun tirage automatique. Mode heures : parasites/maladies hors données du combat, reçu pour la fiche.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-85e1f5eca02f6197e313",
+      "name": "Vision dans l’obscurité",
+      "page": 243,
+      "canonicalName": "Dark Vision",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Vision dans l’obscurité (Dark Vision) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Vision dans le noir"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Gagnez Vision dans le noir pendant votre Bonus d’Initiative Rounds.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-ae767217be738062d38e",
+      "name": "Perturbant",
+      "page": 244,
+      "canonicalName": "Distracting",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Perturbant (Distracting) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "V5 p. 358 : −2 DR à tous les Tests des vivants dans BE mètres, une fois seulement. Le MJ signale sortie/entrée de la zone."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            },
+            {
+              "kind": "secondary-recipients",
+              "summary": "Perturbant : aucun ennemi engagé ou créature affectée désigné, rien n'est appliqué à cette catégorie."
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Perturbant"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "V5 p. 358 : −2 DR à tous les Tests des vivants dans BE mètres, une fois seulement. Le MJ signale sortie/entrée de la zone."
+      ],
+      "reminders": "Vous vous enveloppez de magie, qui tourbillonne autour de vous, perturbant vos ennemis. Tant que le Sort est actif, vous gagnez le Trait de créature Perturbant (voir page 341). V5 p. 358 : −2 DR à tous les Tests des vivants dans BE mètres, une fois seulement. Le MJ signale sortie/entrée de la zone.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-bb1e1d73e3dabd5c6155",
+      "name": "Dôme",
+      "page": 244,
+      "canonicalName": "Dome",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Dôme (Dome) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Tu crées un dôme d’énergie magique au-dessus des têtes, bloquant les attaques de l’extérieur. \n\nQuiconque se trouve dans la Zone d’Effet gagne Protection (6+) (on lance 1d10 et sur 6+ l'attaque est ignorée) contre les Attaques magiques ou à distance provenant de l’extérieur du dôme. Les personnes à l’intérieur peuvent attaquer des cibles situées à l’extérieur du dôme normalement, et le dôme ne gêne pas le déplacement.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-6cf38400c15616a1e447",
+      "name": "Chute",
+      "page": 244,
+      "canonicalName": "Drop",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Chute (Drop) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Objet lâché sur échec de Dex +0 ; retrait de main et récupération de l’objet à jouer, sans modification de la fiche. −1 DR par palier propre de +2 DR."
+            },
+            {
+              "kind": "item-receipt",
+              "summary": "Objet tenu lâché : blade. À jouer sans réécrire la fiche."
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Objet lâché sur échec de Dex +0 ; retrait de main et récupération de l’objet à jouer, sans modification de la fiche. −1 DR par palier propre de +2 DR."
+      ],
+      "reminders": "Vous faites lâcher un objet tenu à une cible qui échoue à Dextérité (+0 DR). Chaque +2 DR de surpuissance impose −1 DR supplémentaire à ce Test. Objet lâché sur échec de Dex +0 ; retrait de main et récupération de l’objet à jouer, sans modification de la fiche. −1 DR par palier propre de +2 DR.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-51983021f6e1811e4d2e",
+      "name": "Enchevêtrement",
+      "page": 244,
+      "canonicalName": "Entangle",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Enchevêtrement (Entangle) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [
+            {
+              "name": "Enchevêtré",
+              "source": {
+                "strength": 60,
+                "targetId": "foe"
+              },
+              "level": 1,
+              "key": "enchevetre",
+              "duration": null,
+              "authorId": null,
+              "targetId": "foe",
+              "v5Timing": {
+                "acquiredRound": 1
+              },
+              "removeOnSpellExpiry": true,
+              "recoveryDuringSpell": true
+            }
+          ],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "À Bonus de Force Mentale mètres, la cible gagne 1 Enchevêtré de Force égale à votre Force Mentale. L’état peut être retiré normalement et disparaît au plus tard après Bonus de Force Mentale Rounds ; la surpuissance n’ajoute pas d’états supplémentaires.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-f4793a46d544b047664e",
+      "name": "Effrayant",
+      "page": 244,
+      "canonicalName": "Fearsome",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Effrayant (Fearsome) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Peur (1)"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ."
+      ],
+      "reminders": "En vous recouvrant de magie, vous devenez effrayant et intimidant. Gagnez Peur 1. Pour chaque +3 DR, vous pouvez augmenter votre valeur de Peur de 1. Tests étendus de Psychologie des témoins : procédure Peur p. 183, personnes exposées désignées par le MJ.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-ae8e2e830efa1a8e9e39",
+      "name": "Envol",
+      "page": 244,
+      "canonicalName": "Flight",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Envol (Flight) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "V5 p. 358 : déplacement jusqu’à Athlétisme mètres ; obstacles ignorés, Charge possible. En vol : −2 DR aux tirs, cibles volantes à une bande de portée plus loin ; position, hauteur et chute sont déclarées par le MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Vol (50)"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "V5 p. 358 : déplacement jusqu’à Athlétisme mètres ; obstacles ignorés, Charge possible. En vol : −2 DR aux tirs, cibles volantes à une bande de portée plus loin ; position, hauteur et chute sont déclarées par le MJ."
+      ],
+      "reminders": "Vous gagnez Vol (Athlétisme), V5 p. 358, pendant Bonus de Force Mentale Rounds. V5 p. 358 : déplacement jusqu’à Athlétisme mètres ; obstacles ignorés, Charge possible. En vol : −2 DR aux tirs, cibles volantes à une bande de portée plus loin ; position, hauteur et chute sont déclarées par le MJ.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-735d64df742bd5bea600",
+      "name": "Bouclier magique",
+      "page": 244,
+      "canonicalName": "Magic Shield",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Bouclier magique (Magic Shield) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous vous entourez d'une bande de magie protectrice. Tant que le Sort est actif, ajoutez +(Bonus de Force Mentale) DR quand vous tentez de dissiper un Sort.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-e190962ef2b18f282171",
+      "name": "Déplacement d’objet",
+      "page": 244,
+      "canonicalName": "Move Object",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Déplacement d’objet (Move Object) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Dimension maximale 1+DR final mètres, déplacement BFM mètres ; Force effective FM. Obstruction : FM/Force opposées via la clause active. Destination physique jouée par le MJ ; +BFM de déplacement par +2 DR."
+            },
+            {
+              "kind": "quantified-reminder",
+              "summary": "dimensionMax : 13 ; force : 60 ; distance : 6"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ],
+          "quantifiedReminder": {
+            "dimensionMax": 13,
+            "force": 60,
+            "distance": 6
+          }
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Dimension maximale 1+DR final mètres, déplacement BFM mètres ; Force effective FM. Obstruction : FM/Force opposées via la clause active. Destination physique jouée par le MJ ; +BFM de déplacement par +2 DR."
+      ],
+      "reminders": "Vous déplacez un objet non conscient dont aucune dimension ne dépasse 1 + DR final mètres. Votre Force pour le manipuler est votre Force Mentale ; il se déplace de Bonus de Force Mentale mètres, puis Bonus de Force Mentale mètres supplémentaires par +2 DR. Un obstacle vivant peut opposer Force à votre Force Mentale. Dimension maximale 1+DR final mètres, déplacement BFM mètres ; Force effective FM. Obstruction : FM/Force opposées via la clause active. Destination physique jouée par le MJ ; +BFM de déplacement par +2 DR.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-dc347004ab09a8f426f1",
+      "name": "Aura ordinaire",
+      "page": 244,
+      "canonicalName": "Mundane Aura",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Aura ordinaire (Mundane Aura) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Toutes les auras du corps et possessions masquées ; la tentative effective de Focalisation met fin à la couche, même ratée."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Toutes les auras du corps et possessions masquées ; la tentative effective de Focalisation met fin à la couche, même ratée."
+      ],
+      "reminders": "Vous drainez tous les Vents de la Magie de votre corps et de vos Possessions, retirant toute aura magique. Pour la durée du Sort, vous semblez ordinaire pour les Talents Perception de la magie et similaire. Vous n’avez effectivement aucune capacité magique et votre nature magique ne peut être détectée d’aucune façon. Tant que le Sort est actif, vous ne pouvez lancer aucun autre Sort. Aura ordinaire est instantanément dissipé si vous effectuez un Test de Focalisation. Toutes les auras du corps et possessions masquées ; la tentative effective de Focalisation met fin à la couche, même ratée.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-919e1a3725cbf5db5228",
+      "name": "Poussée",
+      "page": 245,
+      "canonicalName": "Push",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Poussée (Push) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 3,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "rolled-damage",
+              "summary": "Dégâts : d10 = 7, 3 B après BE/PA."
+            },
+            {
+              "kind": "mj-input",
+              "summary": "Zone de rayon BFM au maximum ; chaque cible prend son d10 moins BE, puis À Terre. Collision avec une créature de taille égale ou inférieure : À Terre sans dégâts ; les collisions physiques sont désignées par le MJ. +BFM de distance par +2 DR."
+            },
+            {
+              "kind": "quantified-reminder",
+              "summary": "repousse : 6"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ],
+          "quantifiedReminder": {
+            "repousse": 6
+          }
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 37,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [
+            {
+              "name": "À Terre",
+              "key": "a-terre",
+              "level": 1,
+              "duration": null,
+              "source": {
+                "targetId": "foe"
+              },
+              "authorId": null,
+              "targetId": "foe",
+              "v5Timing": {
+                "acquiredRound": 1
+              }
+            }
+          ],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Zone de rayon BFM au maximum ; chaque cible prend son d10 moins BE, puis À Terre. Collision avec une créature de taille égale ou inférieure : À Terre sans dégâts ; les collisions physiques sont désignées par le MJ. +BFM de distance par +2 DR."
+      ],
+      "reminders": "Les occupants dans Bonus de Force Mentale mètres sont repoussés de Bonus de Force Mentale mètres, subissent 1d10 Dégâts ignorant les PA mais conservant le BE, puis gagnent À Terre. Une créature de taille égale ou inférieure heurtée par une victime tombe À Terre sans subir de Dégâts. Chaque +2 DR augmente le recul de Bonus de Force Mentale mètres. Zone de rayon BFM au maximum ; chaque cible prend son d10 moins BE, puis À Terre. Collision avec une créature de taille égale ou inférieure : À Terre sans dégâts ; les collisions physiques sont désignées par le MJ. +BFM de distance par +2 DR.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-87efe2179db254dc1c52",
+      "name": "Téléportation",
+      "page": 245,
+      "canonicalName": "Teleport",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Téléportation (Teleport) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Destination dans BFM+DR final mètres, obstacles ignorés ; déplacement joué par le MJ, sans coordonnées dans le combat."
+            },
+            {
+              "kind": "quantified-reminder",
+              "summary": "distanceMax : 18"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ],
+          "quantifiedReminder": {
+            "distanceMax": 18
+          }
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Destination dans BFM+DR final mètres, obstacles ignorés ; déplacement joué par le MJ, sans coordonnées dans le combat."
+      ],
+      "reminders": "Vous vous téléportez jusqu’à Bonus de Force Mentale + DR final mètres, en franchissant les obstacles, espaces et dangers. Destination dans BFM+DR final mètres, obstacles ignorés ; déplacement joué par le MJ, sans coordonnées dans le combat.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-f3f48ec9d52501e334da",
+      "name": "Terrifiant",
+      "page": 245,
+      "canonicalName": "Terrifying",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Terrifiant (Terrifying) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Psychologie et Brisé des témoins : procédure Terreur p. 184 ; les personnes exposées sont désignées par le MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Terreur (1)"
+          ]
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Psychologie et Brisé des témoins : procédure Terreur p. 184 ; les personnes exposées sont désignées par le MJ."
+      ],
+      "reminders": "Vous gagnez Terreur (1) pendant Bonus de Force Mentale Rounds. Chaque +3 DR permet d’augmenter la Terreur de 1. Psychologie et Brisé des témoins : procédure Terreur p. 184 ; les personnes exposées sont désignées par le MJ.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-2cad07f0544b8171c474",
+      "name": "Protection",
+      "page": 245,
+      "canonicalName": "Ward",
+      "domain": "arcane",
+      "ready": true,
+      "summary": "Exécution de Protection (Ward) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous gagnez Protection (7+) pendant Bonus de Force Mentale Rounds.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-f3a5a9b592d8080d915a",
+      "name": "Amitié animale",
+      "page": 240,
+      "canonicalName": "Animal Friend",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Amitié animale (Animal Friend) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Bestial et strictement plus petit ; confiance/amitié, pas d’ordre forcé ni de bonus de Dressage inventé. Le comportement est joué par le MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": [
+            "Bestial",
+            "Taille (Petite)"
+          ]
+        }
+      ],
+      "assisted": [
+        "Bestial et strictement plus petit ; confiance/amitié, pas d’ordre forcé ni de bonus de Dressage inventé. Le comportement est joué par le MJ."
+      ],
+      "reminders": "Tu te lies d’amitié avec une créature plus petite que toi et possédant le Trait de créature Bestial (un animal non sentient).\n\n L'animal a totalement confiance en toi et te considère comme une amie. Bestial et strictement plus petit ; confiance/amitié, pas d’ordre forcé ni de bonus de Dressage inventé. Le comportement est joué par le MJ.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-185eb044aaf83db121cb",
+      "name": "Repères",
+      "page": 240,
+      "canonicalName": "Bearings",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Repères (Bearings) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Repères"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous détectez l’influx des Vents de la Magie depuis leur source. Vous savez dans quelle direction se trouve le Nord.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-df57fc9d0ee5540ba318",
+      "name": "Pas léger",
+      "page": 240,
+      "canonicalName": "Careful Step",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Pas léger (Careful Step) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Pistage adverse −3 DR en terrain rural ; terrain et poursuivant sont hors données spatiales du combat. Aucun bonus personnel de Pistage."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Pistage adverse −3 DR en terrain rural ; terrain et poursuivant sont hors données spatiales du combat. Aucun bonus personnel de Pistage."
+      ],
+      "reminders": "Pendant Agilité minutes, votre passage n’endommage aucune matière organique. Les Tests de Pistage pour vous suivre en terrain rural subissent −3 DR. Pistage adverse −3 DR en terrain rural ; terrain et poursuivant sont hors données spatiales du combat. Aucun bonus personnel de Pistage.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-34649d5ed33e59774b6d",
+      "name": "Conservation",
+      "page": 240,
+      "canonicalName": "Conserve",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Conservation (Conserve) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "quantified-reminder",
+              "summary": "rationJoursMax : 1 ; conservationJours : 6"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Conservation"
+            }
+          ],
+          "quantifiedReminder": {
+            "rationJoursMax": 1,
+            "conservationJours": 6
+          }
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous préservez jusqu’à une journée de rations pendant Bonus de Force Mentale jours. Elles ne pourrissent pas, mais restent vulnérables à l’eau, au feu et au poison.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-8aac1d14cb9af8a9ca70",
+      "name": "Fléchette",
+      "page": 240,
+      "canonicalName": "Dart",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Fléchette (Dart) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 1,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "missile",
+              "damage": 1,
+              "location": "Corps",
+              "summary": "Projectile magique : 1 B à Corps"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 39,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous faites voler une petite fléchette d'énergie magique depuis vos doigts. Il s’agit d’un Projectile magique avec Dégât +0.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-83f169b7defd9afd0f12",
+      "name": "Éblouissant",
+      "page": 240,
+      "canonicalName": "Dazzle",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Éblouissant (Dazzle) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [
+            {
+              "name": "Aveuglé",
+              "key": "aveugle",
+              "level": 1,
+              "duration": null,
+              "source": {
+                "targetId": "foe"
+              },
+              "authorId": null,
+              "targetId": "foe",
+              "v5Timing": {
+                "acquiredRound": 1
+              }
+            }
+          ],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "La cible gagne un État Aveuglé, puis un autre État Aveuglé au début de chaque Round pour la durée du Sort.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-e2261b62b40aac5617ff",
+      "name": "Drain",
+      "page": 240,
+      "canonicalName": "Drain",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Drain (Drain) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 2,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "missile",
+              "damage": 2,
+              "location": "Corps",
+              "summary": "Projectile magique : 2 B à Corps"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 11,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 38,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous touchez vos cibles, drainant leur vie. Ce Sort est considéré comme un Projectile magique avec Dégât +0 qui ignore les PA. Puis vous Guérissez 1 Point de Blessure.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-23411b764227e4e46124",
+      "name": "Tendre l'oreille",
+      "page": 241,
+      "canonicalName": "Eavesdrop",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Tendre l'oreille (Eavesdrop) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Écoute de la voix à distance comme à côté de la cible ; aucun +2 Perception. Ce qui est dit est joué par le MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Écoute de la voix à distance comme à côté de la cible ; aucun +2 Perception. Ce qui est dit est joué par le MJ."
+      ],
+      "reminders": "Vous pouvez entendre ce que vos cibles disent comme si vous vous teniez juste à côté d'elles. Écoute de la voix à distance comme à côté de la cible ; aucun +2 Perception. Ce qui est dit est joué par le MJ.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-0c30ca6069090d1dcad3",
+      "name": "Coup de vent",
+      "page": 241,
+      "canonicalName": "Gust",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Coup de vent (Gust) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Coup de vent"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous créez une brève rafale de vent, mais suffisamment forte pour éteindre une bougie, faire claquer une porte ouverte ou balayer quelques pages sur le sol.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-9c613a7e477fa7c34cba",
+      "name": "Lumière",
+      "page": 241,
+      "canonicalName": "Light",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Lumière (Light) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous créez une lumière de torche sur votre personne. Force Mentale (+2 DR) permet de modifier son intensité à celle d’une lanterne ou d’une bougie.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-74b5a147a1a8c79675c6",
+      "name": "Flamme magique",
+      "page": 241,
+      "canonicalName": "Magic Flame",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Flamme magique (Magic Flame) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Flamme naturelle, chaleur et objets inflammables ; le lanceur n’est pas brûlé. L’objet allumé est désigné par le MJ."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Flamme naturelle, chaleur et objets inflammables ; le lanceur n’est pas brûlé. L’objet allumé est désigné par le MJ."
+      ],
+      "reminders": "Tu allumes une petite flamme dans ta paume. \n\nElle ne te brûlera pas, mais émettra de la chaleur et pourra enflammer des objets inflammables, comme si elle était une flamme naturelle. Flamme naturelle, chaleur et objets inflammables ; le lanceur n’est pas brûlé. L’objet allumé est désigné par le MJ.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-49ae1884122d85c6c037",
+      "name": "Feux follets",
+      "page": 241,
+      "canonicalName": "Marsh Lights",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Feux follets (Marsh Lights) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Maximum Bonus d’Intelligence feux ; ligne de vue requise pour le contrôle, une Action, FM +2. Coordonnées et trajectoire à jouer, aucun bonus de combat inventé."
+            },
+            {
+              "kind": "quantified-reminder",
+              "summary": "nombreMax : 6"
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ],
+          "quantifiedReminder": {
+            "nombreMax": 6
+          }
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Maximum Bonus d’Intelligence feux ; ligne de vue requise pour le contrôle, une Action, FM +2. Coordonnées et trajectoire à jouer, aucun bonus de combat inventé."
+      ],
+      "reminders": "Vous créez jusqu’à Bonus d’Intelligence lumières, semblables à des torches ou lanternes. Pour votre Action, Force Mentale (+2 DR) permet de les diriger à allure de marche en ligne droite, tant qu’elles sont visibles. Elles traversent les obstacles ; changer de direction exige un nouveau Test. Maximum Bonus d’Intelligence feux ; ligne de vue requise pour le contrôle, une Action, FM +2. Coordonnées et trajectoire à jouer, aucun bonus de combat inventé.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-d552737ed29cf25254d1",
+      "name": "Murmures",
+      "page": 241,
+      "canonicalName": "Murmured Whisper",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Murmures (Murmured Whisper) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Murmures"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Tu projètes ta voix vers un point situé à une distance en mètres égale à ta Force Mentale, sans tenir compte de la Ligne de vue. Ta voix résonne depuis ce point, et tous ceux à portée de voix l’entendront.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-8e7a9d9e6fa38518c01c",
+      "name": "Serrure ouverte",
+      "page": 241,
+      "canonicalName": "Open Lock",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Serrure ouverte (Open Lock) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Serrure ouverte"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Une serrure non magique que tu touches se déverrouille immédiatement.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-a6e61c346f2676acabd3",
+      "name": "Créer un petit animal",
+      "page": 241,
+      "canonicalName": "Produce Small Animal",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Créer un petit animal (Produce Small Animal) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Si aucun animal approprié, aucun animal produit. Tempérament non garanti ; le MJ joue l’animal ou ajoute un profil sourcé séparément."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Créer un petit animal"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Si aucun animal approprié, aucun animal produit. Tempérament non garanti ; le MJ joue l’animal ou ajoute un profil sourcé séparément."
+      ],
+      "reminders": "Vous fouillez dans un sac, une poche ou un chapeau, ou sous un rocher, une souche creuse ou dans un terrier, créant un petit animal d’un type que l’on peut s’attendre à trouver à proximité, tel qu'un lapin, une colombe ou un rat. S’il n’y a pas d’animal local approprié, le Sort n’a aucun effet. Le caractère de l’animal n’est pas garanti. Si aucun animal approprié, aucun animal produit. Tempérament non garanti ; le MJ joue l’animal ou ajoute un profil sourcé séparément.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-40734919abb6091b481a",
+      "name": "Protection contre la pluie",
+      "page": 241,
+      "canonicalName": "Protection from Rain",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Protection contre la pluie (Protection from Rain) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Protection contre la pluie"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous restez au sec malgré la pluie, la grêle, le grésil, la neige et autres précipitations provenant du ciel, mais pas l'eau stagnante.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-a0e2669e7941cb1105d3",
+      "name": "Purification de l'eau",
+      "page": 241,
+      "canonicalName": "Purify Water",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Purification de l'eau (Purify Water) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Purification de l'eau"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous purifiez toute l'eau à l'intérieur d'un réceptacle, éliminant les impuretés non magiques, poison ou polluants, pour obtenir une eau potable fraîche et claire. Si le liquide est composé principalement d'eau (bière ou vin), il devient de l'eau pure sans alcool.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-073bc9fd1dd77c47ba2e",
+      "name": "Putréfaction",
+      "page": 242,
+      "canonicalName": "Rot",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Putréfaction (Rot) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Nourriture/tissu et volume du poing : MJ. Un PA physique seulement pour le cuir, aucune couche magique détruite. Fiche d’inventaire à confirmer."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Nourriture/tissu et volume du poing : MJ. Un PA physique seulement pour le cuir, aucune couche magique détruite. Fiche d’inventaire à confirmer."
+      ],
+      "reminders": "Vous faites pourrir un volume de matières organiques de la taille d’un poing environ. Denrées alimentaires périssent, vêtements se désagrègent, cuir se racornit (perdant 1 PA à 1 Localisation), selon décision du MJ. Nourriture/tissu et volume du poing : MJ. Un PA physique seulement pour le cuir, aucune couche magique détruite. Fiche d’inventaire à confirmer.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-982e3bdf7ecca6726824",
+      "name": "Choc",
+      "page": 242,
+      "canonicalName": "Shock",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Choc (Shock) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [
+            {
+              "name": "Sonné",
+              "key": "sonne",
+              "level": 1,
+              "duration": null,
+              "source": {
+                "targetId": "foe"
+              },
+              "authorId": null,
+              "targetId": "foe",
+              "v5Timing": {
+                "acquiredRound": 1
+              },
+              "removeOnSpellExpiry": true,
+              "recoveryDuringSpell": false,
+              "v5Recovery": {
+                "kind": "spell"
+              }
+            }
+          ],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "La cible touchée gagne 1 Sonné jusqu’à la fin de votre prochain Tour.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-682f4e63db3ad19b1595",
+      "name": "Sommeil",
+      "page": 242,
+      "canonicalName": "Sleep",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Sommeil (Sleep) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [
+            {
+              "name": "À Terre",
+              "key": "a-terre",
+              "level": 1,
+              "duration": null,
+              "source": {
+                "targetId": "foe"
+              },
+              "authorId": null,
+              "targetId": "foe",
+              "v5Timing": {
+                "acquiredRound": 1
+              },
+              "removeOnSpellExpiry": true,
+              "recoveryDuringSpell": true
+            }
+          ],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Vous touchez votre adversaire, le plongeant dans un profond sommeil. Si la cible possède un État À Terre, elle gagne l'État Inconscient lorsqu'elle s'endort. Elle reste inconsciente pour la durée du Sort, bien que les bruits forts, le fait de la déplacer ou de la bousculer la réveille instantanément. Si votre cible se tient debout ou assise, elle commence à se réveiller en touchant le sol, gagnant l'État À Terre, mais en demeurant consciente. Si votre cible ne résiste pas et qu'elle est suffisamment fatiguée, elle plongera dans un profond sommeil réparateur lorsque le Sort prendra fin.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-fbb07a4dc85d97f63ca2",
+      "name": "En catimini",
+      "page": 242,
+      "canonicalName": "Sly Hands",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de En catimini (Sly Hands) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "mage",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Téléportation dans la main ; la position réelle et les mains libres ne sont pas enregistrées. Aucun modificateur d’Escamotage inventé."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur mage"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Téléportation dans la main ; la position réelle et les mains libres ne sont pas enregistrées. Aucun modificateur d’Escamotage inventé."
+      ],
+      "reminders": "Vous téléportez un petit objet – pas plus gros que votre poing – proche de votre personne entre vos mains. Téléportation dans la main ; la position réelle et les mains libres ne sont pas enregistrées. Aucun modificateur d’Escamotage inventé.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-384626befdca5e3476b6",
+      "name": "Bruits",
+      "page": 242,
+      "canonicalName": "Sounds",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Bruits (Sounds) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Bruits vagues, aucun message intelligible ; point dans FM mètres, sans ligne de vue, FM +2 pour modifier."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Bruits vagues, aucun message intelligible ; point dans FM mètres, sans ligne de vue, FM +2 pour modifier."
+      ],
+      "reminders": "Vous produisez des bruits discrets à un point à portée, même hors de vue, sans message intelligible. Force Mentale (+2 DR) permet de déplacer leur origine ou de modifier leur volume. Bruits vagues, aucun message intelligible ; point dans FM mètres, sans ligne de vue, FM +2 pour modifier.",
+      "status": "conforme"
+    },
+    {
+      "id": "spell-audit-534271d7ffdcece68244",
+      "name": "Source",
+      "page": 242,
+      "canonicalName": "Spring",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Source (Spring) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "1 pinte par Round, au maximum Bonus d’Initiative pintes ; reçus calculés depuis l’horloge, aucun stock d’eau ni compteur d’inventaire."
+            },
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Source"
+            }
+          ]
+        }
+      ],
+      "timedLayer": true,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "1 pinte par Round, au maximum Bonus d’Initiative pintes ; reçus calculés depuis l’horloge, aucun stock d’eau ni compteur d’inventaire."
+      ],
+      "reminders": "L’eau jaillit du sol touché à raison de 1 pinte par Round, jusqu’à un total égal à votre Bonus d’Initiative en pintes. 1 pinte par Round, au maximum Bonus d’Initiative pintes ; reçus calculés depuis l’horloge, aucun stock d’eau ni compteur d’inventaire.",
+      "status": "rappel"
+    },
+    {
+      "id": "spell-audit-d4fec30763bbcd2c6690",
+      "name": "Secousse",
+      "page": 242,
+      "canonicalName": "Twitch",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Secousse (Twitch) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "mj-input",
+              "summary": "Mouvement léger d’objet ; objet tenu lâché seulement sur échec de Dex +2. Aucun malus de Dex ni résistance Endurance."
+            },
+            {
+              "kind": "item-receipt",
+              "summary": "Objet tenu lâché : blade. À jouer sans réécrire la fiche."
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [
+        "Mouvement léger d’objet ; objet tenu lâché seulement sur échec de Dex +2. Aucun malus de Dex ni résistance Endurance."
+      ],
+      "reminders": "Vous déplacez légèrement un objet. Quelque chose peut tomber d'une étagère, ou un livre peut se refermer en claquant. Mouvement léger d’objet ; objet tenu lâché seulement sur échec de Dex +2. Aucun malus de Dex ni résistance Endurance.",
+      "status": "donnée MJ nécessaire"
+    },
+    {
+      "id": "spell-audit-39693ef0623fc104bb75",
+      "name": "Alerte",
+      "page": 242,
+      "canonicalName": "Warning",
+      "domain": "petty",
+      "ready": true,
+      "summary": "Exécution de Alerte (Warning) par mage sur 1 cible(s).",
+      "targets": [
+        {
+          "id": "foe",
+          "woundsLost": 0,
+          "healed": 0,
+          "actions": [
+            {
+              "kind": "effects",
+              "summary": "Effets appliqués sur foe"
+            },
+            {
+              "kind": "narrative",
+              "summary": "Rappel narratif : Alerte"
+            }
+          ]
+        }
+      ],
+      "timedLayer": false,
+      "participants": [
+        {
+          "id": "mage",
+          "hp": 10,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        },
+        {
+          "id": "foe",
+          "hp": 40,
+          "maxHp": 50,
+          "caracs": {
+            "CC": 50,
+            "CT": 50,
+            "F": 40,
+            "E": 40,
+            "I": 50,
+            "Ag": 50,
+            "Dex": 50,
+            "Int": 60,
+            "FM": 60,
+            "Soc": 50,
+            "M": 4
+          },
+          "states": [],
+          "traits": []
+        }
+      ],
+      "assisted": [],
+      "reminders": "Tu concentres la magie dans un objet, remarquant immédiatement s’il a été empoisonné ou piégé.",
+      "status": "rappel"
+    }
+  ],
+  "statuses": {
+    "conforme": 24,
+    "anomalie": 0,
+    "donnée MJ nécessaire": 8,
+    "rappel": 16,
+    "hors périmètre": 0,
+    "non vérifié": 0
+  }
+}

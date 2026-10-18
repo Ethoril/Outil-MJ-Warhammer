@@ -1,0 +1,5708 @@
+{
+  "date": "2026-10-13",
+  "identities": 55,
+  "statuses": {
+    "conforme": 24,
+    "anomalie": 0,
+    "donnée MJ nécessaire": 12,
+    "rappel": 19,
+    "hors périmètre": 0,
+    "non vérifié": 0
+  },
+  "proof": "Assertions indépendantes et recettes nommées dans les quatre fichiers de Domaine ; 182 tests et 19 retours ; aucun fait ni dé inventé dans le moteur",
+  "limits": "Les reçus ci-dessous jouent la base. Les variants, échecs, coûts, fins de Tour, Protection et Undo sont prouvés par les tests ; clauses assistées détaillées par identité.",
+  "rows": [
+    {
+      "id": "spell-audit-6810b1074a16e340400d",
+      "name": "Corps de Feu",
+      "source": "WoM p. 134",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Empoignades réelles et Blessures de mêlée déclarées ; aucune immunité au feu ni bonus F/E."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Empoignades réelles et Blessures de mêlée déclarées ; aucune immunité au feu ni bonus F/E."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-c0be30bce9349904668c",
+      "name": "Tête Brûlante",
+      "source": "WoM p. 134",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 4,
+            "healed": 0,
+            "fearOfCaster": {
+              "casterId": "mage",
+              "rating": 1
+            },
+            "actions": [
+              {
+                "kind": "missile",
+                "damage": 4,
+                "location": "Bras Droit",
+                "summary": "Projectile magique : 4 B à Bras Droit"
+              },
+              {
+                "kind": "mj-input",
+                "summary": "Ligne droite jusqu’à FM, occupants déclarés. Esquive +0 : projectile +0, sinon +4 ; toujours 1 Enflammé. Peur (1) du lanceur seulement après au moins 1 Blessure. La trajectoire et les occupants sont déclarés par le MJ."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              },
+              {
+                "kind": "mj-input",
+                "summary": "Traiter mage comme Peur (1) : Test et restrictions contre ce lanceur à jouer."
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 196,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Ligne droite jusqu’à FM, occupants déclarés. Esquive +0 : projectile +0, sinon +4 ; toujours 1 Enflammé. Peur (1) du lanceur seulement après au moins 1 Blessure. La trajectoire et les occupants sont déclarés par le MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-4c0895e2fce4919e07b8",
+      "name": "Flamme Captivante",
+      "source": "WoM p. 134",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Torche : un observateur aléatoire. +2 DR, feu moyen : deux ; +4 DR, grand feu : tous. Calme +0 ou 3 Sonné ; cible oblivieuse au reste, toute attaque retire les Sonné de ce sort. Le tirage et le nombre des observateurs restent MJ."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [
+              {
+                "name": "Sonné",
+                "key": "sonne",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                },
+                "removeOnSpellExpiry": true,
+                "recoveryDuringSpell": true
+              },
+              {
+                "name": "Sonné",
+                "key": "sonne",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                },
+                "removeOnSpellExpiry": true,
+                "recoveryDuringSpell": true
+              },
+              {
+                "name": "Sonné",
+                "key": "sonne",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                },
+                "removeOnSpellExpiry": true,
+                "recoveryDuringSpell": true
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Torche : un observateur aléatoire. +2 DR, feu moyen : deux ; +4 DR, grand feu : tous. Calme +0 ou 3 Sonné ; cible oblivieuse au reste, toute attaque retire les Sonné de ce sort. Le tirage et le nombre des observateurs restent MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": "Attaque : retirer seulement les Sonné acquis par ce sort, conserver les Sonné antérieurs (p.134)."
+    },
+    {
+      "id": "spell-audit-f705336ace54eb668297",
+      "name": "Colérique",
+      "source": "WoM p. 135",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Préjugé BFM heures contre une personne nommée ou pointée ; amis : Calme +2 pour résister. +4 DR : Animosité BFM jours ; +8 DR : Haine BFM semaines. La résistance psychologique ultérieure reste MJ ; aucun malus général de Calme ou Sociabilité."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": [
+              "Préjugé (personne déclarée)"
+            ]
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Préjugé BFM heures contre une personne nommée ou pointée ; amis : Calme +2 pour résister. +4 DR : Animosité BFM jours ; +8 DR : Haine BFM semaines. La résistance psychologique ultérieure reste MJ ; aucun malus général de Calme ou Sociabilité."
+      ],
+      "paramChanges": [
+        {
+          "field": "duration",
+          "catalogue": "(Bonus de Force Mentale) heures/jours/semaines",
+          "contract": "Bonus de Force Mentale heures"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-b0a9a6a66ec61efb847a",
+      "name": "Tempête de Flammes",
+      "source": "WoM p. 135",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 8,
+            "healed": 0,
+            "quantified": {
+              "diametre": 2,
+              "hauteur": 2
+            },
+            "actions": [
+              {
+                "kind": "missile",
+                "damage": 8,
+                "location": "Bras Droit",
+                "summary": "Projectile magique : 8 B à Bras Droit"
+              },
+              {
+                "kind": "mj-input",
+                "summary": "Pilier de 2 mètres de diamètre et hauteur ; +2 DR : diamètre +1 mètre et hauteur +2 mètres. Projectile +8, 3 Enflammé, projeté hors zone, À Terre. Zone jusqu’à dissipation ou prochaine aube, entrée réservée aux immunisés au feu magique. Terrain, projection, admission et disparition à l’aube : reçus MJ, pas de couche spatiale persistante."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "diametre : 2 ; hauteur : 2"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 192,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              },
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              },
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              },
+              {
+                "name": "À Terre",
+                "key": "a-terre",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Pilier de 2 mètres de diamètre et hauteur ; +2 DR : diamètre +1 mètre et hauteur +2 mètres. Projectile +8, 3 Enflammé, projeté hors zone, À Terre. Zone jusqu’à dissipation ou prochaine aube, entrée réservée aux immunisés au feu magique. Terrain, projection, admission et disparition à l’aube : reçus MJ, pas de couche spatiale persistante."
+      ],
+      "paramChanges": [
+        {
+          "field": "duration",
+          "catalogue": "Instantané",
+          "contract": "Spécial"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-aa61a8080acb58d59176",
+      "name": "Forge de Tarnus",
+      "source": "WoM p. 136",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Forge éteinte touchée ; Métier (Forgeron) +1 DR à cette forge, y compris fabrication d’objets magiques. Le destinataire du bonus est le forgeron déclaré par le MJ, pas un bonus à tous les métiers."
+              },
+              {
+                "kind": "test-modifiers",
+                "testModifiers": {
+                  "Métier (Forgeron)": 1
+                },
+                "summary": "Bonus/Malus de Tests : Métier (Forgeron) +1 DR"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Forge éteinte touchée ; Métier (Forgeron) +1 DR à cette forge, y compris fabrication d’objets magiques. Le destinataire du bonus est le forgeron déclaré par le MJ, pas un bonus à tous les métiers."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-10e36faf613cb77d9b96",
+      "name": "Ignition",
+      "source": "WoM p. 136",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Objet ou personne : 2 Enflammé. Si la cible est déjà Enflammé, on peut répartir 3 nouveaux États entre les autres à 2 mètres. La répartition reste un reçu MJ, sans trois États inventés par destinataire."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              },
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Objet ou personne : 2 Enflammé. Si la cible est déjà Enflammé, on peut répartir 3 nouveaux États entre les autres à 2 mètres. La répartition reste un reçu MJ, sans trois États inventés par destinataire."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-a809e4423ab2d513a419",
+      "name": "Flamme Inextinguible",
+      "source": "WoM p. 136",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Feu normal jusqu’à la taille d’un feu de camp ; BFM heures. +2/+4/+6 DR : jours/semaines/mois. Aucun combustible consommé ; morceaux séparés restent inextinguibles. Formule inverse : éteint un feu de même taille. Aucun autre sort ni dissipation ne peut annuler. Le feu de terrain et cette interdiction restent MJ, sans couche dissipable prétendant représenter le feu."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Feu normal jusqu’à la taille d’un feu de camp ; BFM heures. +2/+4/+6 DR : jours/semaines/mois. Aucun combustible consommé ; morceaux séparés restent inextinguibles. Formule inverse : éteint un feu de même taille. Aucun autre sort ni dissipation ne peut annuler. Le feu de terrain et cette interdiction restent MJ, sans couche dissipable prétendant représenter le feu."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "(Demi-Bonus d’Initiative) mètres",
+          "contract": "Moitié de l’Initiative mètres"
+        },
+        {
+          "field": "duration",
+          "catalogue": "(Bonus de Force Mentale) heures, jours, semaines ou mois",
+          "contract": "Bonus de Force Mentale heures"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-e807e7e99dda4a8b6d7b",
+      "name": "Flamme Attisée",
+      "source": "WoM p. 136",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "degatsFeuBonus": 42,
+              "enflammeSupplementaire": 1
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Matière non inflammable, même eau ou pierre, devient inflammable. Matière déjà inflammable : +DR final aux dégâts de feu et 1 Enflammé supplémentaire à chaque attribution. Déclencheurs et matière de terrain : reçus MJ, aucune Blessure au lancement."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "degatsFeuBonus : 42 ; enflammeSupplementaire : 1"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Matière non inflammable, même eau ou pierre, devient inflammable. Matière déjà inflammable : +DR final aux dégâts de feu et 1 Enflammé supplémentaire à chaque attribution. Déclencheurs et matière de terrain : reçus MJ, aucune Blessure au lancement."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-1ff633a16c5ae071238c",
+      "name": "Esprit du Foyer",
+      "source": "WoM p. 136",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Mains plongées dans un feu : 6 dégâts moins BE. Auxiliaire M3, CC=FM du lanceur, attaque +6, Peur (1), rayon 12 mètres du feu ; directions verbales. Immobile si autre sort ou conversation. Seulement mouvement et attaque, pas d’Élan. Dégâts infligés ajoutent 1 Enflammé. Indestructible sauf au moins une pinte d’eau ; conversation, distance au feu, Peur et eau : MJ."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              },
+              {
+                "kind": "summon",
+                "auxiliariesCount": 1,
+                "summary": "1 auxiliaire(s) invoqué(s) par mage."
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 198,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "name": "Esprit du Foyer 1",
+            "hp": 0,
+            "maxHp": null,
+            "caracs": {
+              "CC": 60,
+              "M": 3
+            },
+            "armor": {
+              "head": 0,
+              "body": 0,
+              "arms": 0,
+              "legs": 0
+            },
+            "states": [],
+            "traits": [
+              "Détruit par une pinte d’eau ou plus."
+            ]
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Mains plongées dans un feu : 6 dégâts moins BE. Auxiliaire M3, CC=FM du lanceur, attaque +6, Peur (1), rayon 12 mètres du feu ; directions verbales. Immobile si autre sort ou conversation. Seulement mouvement et attaque, pas d’Élan. Dégâts infligés ajoutent 1 Enflammé. Indestructible sauf au moins une pinte d’eau ; conversation, distance au feu, Peur et eau : MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": "Une pinte d’eau, pas une quantité arrondie à50cl ; Enflammé seulement si dégâts infligés, pas tout coup réussi (p.136)."
+    },
+    {
+      "id": "spell-audit-7b8004bc0fcc0f3e14fd",
+      "name": "Tempête Magmatique",
+      "source": "WoM p. 136",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 12,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "WoM p. 137 : mouvement ≤8 mètres, mini-vortex de zone BFM, d10 et 2d10 propres, un seul déplacement puis dispersion ; occupants et trajectoires déclarés."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              },
+              {
+                "kind": "vortex-hit",
+                "summary": "Tempête Magmatique — foe : −12 B, Enflammé, Enflammé.",
+                "detail": {
+                  "spellId": "spell-audit-7b8004bc0fcc0f3e14fd",
+                  "targetId": "foe",
+                  "raw": 18,
+                  "location": "Bras Droit",
+                  "woundsLost": 12,
+                  "conditions": [
+                    "Enflammé",
+                    "Enflammé"
+                  ],
+                  "thrown": null,
+                  "sun": null,
+                  "stage": "main"
+                }
+              }
+            ]
+          },
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": []
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 188,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              },
+              {
+                "name": "Enflammé",
+                "key": "enflamme",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "WoM p. 137 : mouvement ≤8 mètres, mini-vortex de zone BFM, d10 et 2d10 propres, un seul déplacement puis dispersion ; occupants et trajectoires déclarés."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-9064959bae55a503f97d",
+      "name": "Goût de Feu",
+      "source": "WoM p. 137",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Plat épicé : Résistance +4 pour éviter les séquelles digestives ; cruche d’un quart de gallon transformée en alcool ; flacon d’une pinte transformé en huile inflammable. Unités exactes du livre ; aucun bonus à tous les Tests de Résistance. Contenants, aliments et Test digestif : MJ."
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Plat épicé : Résistance +4 pour éviter les séquelles digestives ; cruche d’un quart de gallon transformée en alcool ; flacon d’une pinte transformé en huile inflammable. Unités exactes du livre ; aucun bonus à tous les Tests de Résistance. Contenants, aliments et Test digestif : MJ."
+      ],
+      "paramChanges": [
+        {
+          "field": "target",
+          "catalogue": "1 pot, cruche ou flasque",
+          "contract": "1 pot, cruche ou flacon"
+        }
+      ],
+      "catalogueContradiction": "Quart de gallon et pinte exacts, pas1L/0,5L ; Résistance V5+4 contre les séquelles, sans bonus général permanent (p.137)."
+    },
+    {
+      "id": "spell-audit-aa9e579ab8d66509dc68",
+      "name": "Chaleur Desséchante",
+      "source": "WoM p. 137",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "degatsFeuBonus": 42
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Ennemis dans zone FM : 1 Exténué par Round avec course, charge ou fuite. Retirer armure et vêtements retire un État ainsi gagné. Tout feu, même une bougie, ajoute 1 Enflammé et +DR final de dégâts. Événements des Rounds suivants, vêtements, feu et sortie de zone : reçus MJ ; aucun malus aux alliés."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "degatsFeuBonus : 42"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Ennemis dans zone FM : 1 Exténué par Round avec course, charge ou fuite. Retirer armure et vêtements retire un État ainsi gagné. Tout feu, même une bougie, ajoute 1 Enflammé et +DR final de dégâts. Événements des Rounds suivants, vêtements, feu et sortie de zone : reçus MJ ; aucun malus aux alliés."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "ZdE (Bonus de Volonté mètres)",
+          "contract": "ZdE Force Mentale mètres"
+        }
+      ],
+      "catalogueContradiction": "État V5 Exténué, pas Épuisé ; le bonus de dégâts emploie le DR final Test+réserve (p.137)."
+    },
+    {
+      "id": "spell-audit-99e2026972796489b53d",
+      "name": "Arc de T’Essla",
+      "source": "WoM p. 101",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 10,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "missile",
+                "damage": 10,
+                "location": "Bras Droit",
+                "summary": "Projectile magique : 10 B à Bras Droit"
+              },
+              {
+                "kind": "mj-input",
+                "summary": "Projectile +10 et un Aveuglé."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 190,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [
+              {
+                "name": "Aveuglé",
+                "key": "aveugle",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Projectile +10 et un Aveuglé."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-a32f72905d66a3a968d0",
+      "name": "Orage de Thorsen",
+      "source": "WoM p. 101",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 8,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "WoM p. 100 : projection BFM en direction aléatoire, collision 7 Dégâts, À Terre après arrêt ; positions/obstacles déclarés."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              },
+              {
+                "kind": "vortex-hit",
+                "summary": "Orage de Thorsen — foe : −8 B, À Terre.",
+                "detail": {
+                  "spellId": "spell-audit-a32f72905d66a3a968d0",
+                  "targetId": "foe",
+                  "raw": 14,
+                  "location": "Bras Droit",
+                  "woundsLost": 8,
+                  "conditions": [
+                    "À Terre"
+                  ],
+                  "thrown": {
+                    "direction": "SE",
+                    "distance": 6,
+                    "collision": false
+                  },
+                  "sun": null,
+                  "stage": "main"
+                }
+              }
+            ]
+          },
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": []
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 192,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [
+              {
+                "name": "À Terre",
+                "key": "a-terre",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "WoM p. 100 : projection BFM en direction aléatoire, collision 7 Dégâts, À Terre après arrêt ; positions/obstacles déclarés."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-238687e50578854a7577",
+      "name": "Polir et Exalter",
+      "source": "WoM p. 100",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Nettoie un objet de verre. Pour lentille ou vitre : +2 DR Astronomie +2 ; +4 DR Perception visuelle avec Seconde vue +2. Aucun bonus sans payer la surpuissance ; utilisateur de la vitre déclaré par le MJ."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Nettoie un objet de verre. Pour lentille ou vitre : +2 DR Astronomie +2 ; +4 DR Perception visuelle avec Seconde vue +2. Aucun bonus sans payer la surpuissance ; utilisateur de la vitre déclaré par le MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": "Bonus V4+20 deviennent +2DR ; les deux options restent payées séparément à2 et4DR (p.100)."
+    },
+    {
+      "id": "spell-audit-f7da4d7c6fdb8fe3a9eb",
+      "name": "Projection Spirituelle",
+      "source": "WoM p. 100",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Corps endormi, esprit invisible, déplacement normal ; voit et entend mais ne parle ni ne lance de sort ; traverse la matière, ne manipule rien. Retour tardif : Test contre Exposition modérée à la Corruption. Corps, visibilité, matière, retour et Corruption : reçus MJ ; blocage d’incantation appliqué."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Corps endormi, esprit invisible, déplacement normal ; voit et entend mais ne parle ni ne lance de sort ; traverse la matière, ne manipule rien. Retour tardif : Test contre Exposition modérée à la Corruption. Corps, visibilité, matière, retour et Corruption : reçus MJ ; blocage d’incantation appliqué."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-6ad4bdfb95386bf99d34",
+      "name": "Arche de Saphir",
+      "source": "WoM p. 100",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "largeur": 4,
+              "hauteur": 3
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Arche 4 mètres de large, 3 de haut, jusqu’à fin du prochain Round. Traversants en limbes jusqu’au prochain lancement, sans passage du temps perçu. Mort du lanceur : expulsion à l’origine, 1 Sonné et À Terre. Traversants, limbes, origine et mort : reçus MJ, aucun participant supprimé."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "largeur : 4 ; hauteur : 3"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Arche 4 mètres de large, 3 de haut, jusqu’à fin du prochain Round. Traversants en limbes jusqu’au prochain lancement, sans passage du temps perçu. Mort du lanceur : expulsion à l’origine, 1 Sonné et À Terre. Traversants, limbes, origine et mort : reçus MJ, aucun participant supprimé."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "(Moitié de Force Mentale) mètres",
+          "contract": "Moitié de la Force Mentale mètres"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-dea61c700abdd0cd6d52",
+      "name": "Lames Azurées",
+      "source": "WoM p. 98",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Trois frappes de 8, non esquivables et non parables, chaque Tour adversaire engagé. Très Longue ou Massive : hors portée ; Longue : simultanée ; courte : après frappes. Allonges et adversaires déclarés."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              },
+              {
+                "kind": "secondary-recipients",
+                "summary": "Lames Azurées : aucun ennemi engagé ou créature affectée désigné, rien n'est appliqué à cette catégorie."
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": [
+              "Lames Azurées (3 coups de 8 Dégâts contre chaque adversaire engagé, à chacun de ses Tours)"
+            ]
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Trois frappes de 8, non esquivables et non parables, chaque Tour adversaire engagé. Très Longue ou Massive : hors portée ; Longue : simultanée ; courte : après frappes. Allonges et adversaires déclarés."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-057c530a414afe861b52",
+      "name": "Malédiction du Destin",
+      "source": "WoM p. 99",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Tous Tests −1 pendant 1 jour, une seule malédiction sur une cible, ligne de vue. +6 DR : portée 1 mile, perte définitive de 1 Destin ; sans Destin, prochain Critique reçu =100 pendant la durée. Destin, Critique futur, unicité et ligne de vue : reçus MJ."
+              },
+              {
+                "kind": "test-modifiers",
+                "testModifiers": {
+                  "Tous les Tests": -1
+                },
+                "summary": "Bonus/Malus de Tests : Tous les Tests -1 DR"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Tous Tests −1 pendant 1 jour, une seule malédiction sur une cible, ligne de vue. +6 DR : portée 1 mile, perte définitive de 1 Destin ; sans Destin, prochain Critique reçu =100 pendant la durée. Destin, Critique futur, unicité et ligne de vue : reçus MJ."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "Moitié de (Bonus de Force Mentale) mètres",
+          "contract": "Moitié de la Force Mentale mètres"
+        }
+      ],
+      "catalogueContradiction": "Pénalité V4−10 devient −1DR à tous les Tests, une seule malédiction (p.99)."
+    },
+    {
+      "id": "spell-audit-1dff03df104fe2ecca88",
+      "name": "Divination",
+      "source": "WoM p. 99",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Moment propice : Intelligence +0 secret MJ pour la précision. Objet perdu déjà vu : direction seule. Un dé futur précisément désigné ±10, une seule application active. Dé secret, futur événement et consommation : reçus MJ ; aucun +1 DR à tous les jets."
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Moment propice : Intelligence +0 secret MJ pour la précision. Objet perdu déjà vu : direction seule. Un dé futur précisément désigné ±10, une seule application active. Dé secret, futur événement et consommation : reçus MJ ; aucun +1 DR à tous les jets."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-63167a0e2f46e5aa509b",
+      "name": "Ennemi Anticipé",
+      "source": "WoM p. 99",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "alerteRounds": 5
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Ne peut être Surpris. Avertissement du MJ BI Rounds avant le danger ; peut fuir ou préparer. Avertissement et immunité événementielle restent MJ ; aucun Surpris déjà présent retiré au lancement."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "alerteRounds : 5"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Ne peut être Surpris. Avertissement du MJ BI Rounds avant le danger ; peut fuir ou préparer. Avertissement et immunité événementielle restent MJ ; aucun Surpris déjà présent retiré au lancement."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-16dda13008d66b0f4942",
+      "name": "Prémonition Fantastique",
+      "source": "WoM p. 99",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Un Round : alliés mages, hors lanceur, relancent leur premier échec à chaque Focalisation, lancer et dissipation. Inverse : ennemis font deux jets et gardent le pire. Premier échec par Test, relances et destinataires : reçus MJ ; aucun dé implicite."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Un Round : alliés mages, hors lanceur, relancent leur premier échec à chaque Focalisation, lancer et dissipation. Inverse : ennemis font deux jets et gardent le pire. Premier échec par Test, relances et destinataires : reçus MJ ; aucun dé implicite."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "ZdE (Bonus de Force Mentale) mètres",
+          "contract": "ZdE Force Mentale mètres"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-36a24f2350192473de3d",
+      "name": "Destin Illuminé",
+      "source": "WoM p. 99",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "questions": 1
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Une question oui/non sur l’intention dans l’heure prochaine ; +2 DR : une question de plus. Au Contact, Fatalité et malédictions/présages actifs, symboles et inverses. Informations secrètes : MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "questions : 1"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              },
+              {
+                "kind": "narrative",
+                "summary": "Rappel narratif : Destin Illuminé"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Une question oui/non sur l’intention dans l’heure prochaine ; +2 DR : une question de plus. Au Contact, Fatalité et malédictions/présages actifs, symboles et inverses. Informations secrètes : MJ."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "Moitié de (Bonus d’Intelligence) mètres ou Contact",
+          "contract": "Moitié de l’Intelligence mètres ou Contact"
+        }
+      ],
+      "catalogueContradiction": "Fatalité personnelle (Dooming), distincte des malédictions et présages également révélés (p.99)."
+    },
+    {
+      "id": "spell-audit-a45f5dd6a4e2c8abe777",
+      "name": "Lentille du Ciel",
+      "source": "WoM p. 100",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "visionMiles": 3,
+              "navigationProchainTest": 2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Vision claire jusqu’à 3 miles ; Perception à longue distance +2 DR. Nuages et brouillard ignorés, obscurité conservée. Observation des étoiles : prochain Test de Navigation +2 DR. Contexte stellaire et consommation du prochain Test : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "visionMiles : 3 ; navigationProchainTest : 2"
+              },
+              {
+                "kind": "test-modifiers",
+                "testModifiers": {
+                  "Perception (Longue distance)": 2
+                },
+                "summary": "Bonus/Malus de Tests : Perception (Longue distance) +2 DR"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Vision claire jusqu’à 3 miles ; Perception à longue distance +2 DR. Nuages et brouillard ignorés, obscurité conservée. Observation des étoiles : prochain Test de Navigation +2 DR. Contexte stellaire et consommation du prochain Test : reçus MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-e879321f96778abd0eee",
+      "name": "Que les Quatre Vents Soufflent !",
+      "source": "WoM p. 100",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "groupes": 4,
+              "projection": 6
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Quatre vortex ou groupes désignés. Projection BFM mètres ; +2 DR : +BFM mètres. Collision avec obstacle ou personnage : 7 dégâts, BE et PA ordinaires, puis arrêt. Tous À Terre à l’arrêt. Trajectoire, quatre groupes et cibles : MJ ; collision déclarée individuellement."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "groupes : 4 ; projection : 6"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [
+              {
+                "name": "À Terre",
+                "key": "a-terre",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "targetId": "foe"
+                },
+                "authorId": null,
+                "targetId": "foe",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Quatre vortex ou groupes désignés. Projection BFM mètres ; +2 DR : +BFM mètres. Collision avec obstacle ou personnage : 7 dégâts, BE et PA ordinaires, puis arrêt. Tous À Terre à l’arrêt. Trajectoire, quatre groupes et cibles : MJ ; collision déclarée individuellement."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-7be7d9e80cf032f58905",
+      "name": "Mistral de la Stratosphère",
+      "source": "WoM p. 100",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 8,
+            "healed": 0,
+            "quantified": {
+              "gelPoucesParRound": 1,
+              "recuperationCaracsParHeure": 10
+            },
+            "actions": [
+              {
+                "kind": "secondary-test",
+                "summary": "Résistance : échec (-7 DR)."
+              },
+              {
+                "kind": "damage",
+                "damage": 8,
+                "summary": "Dégâts du sort : 8 B"
+              },
+              {
+                "kind": "mj-input",
+                "summary": "Direction déclarée ; 12 dégâts sans PA, avec BE, seulement premier Round pour chaque cible. Résistance −2 chaque Round ou premier stade d’Exposition au Froid. Eau : gel 1 pouce par Round ; caractéristiques perdues récupérées à 10 points par heure. Nouvelles directions, récurrence du Test, Exposition et récupération : reçus MJ, pas de dégâts répétés implicitement."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "gelPoucesParRound : 1 ; recuperationCaracsParHeure : 10"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 192,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Direction déclarée ; 12 dégâts sans PA, avec BE, seulement premier Round pour chaque cible. Résistance −2 chaque Round ou premier stade d’Exposition au Froid. Eau : gel 1 pouce par Round ; caractéristiques perdues récupérées à 10 points par heure. Nouvelles directions, récurrence du Test, Exposition et récupération : reçus MJ, pas de dégâts répétés implicitement."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-6180045ff1dcc0a083ba",
+      "name": "Miroir Mystique",
+      "source": "WoM p. 100",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Communication par miroir ou eau calme dans FM miles avec personne connue ou nommée ; chacun voit/entend l’autre. Échoue si aucune surface réfléchissante dans le regard du destinataire. Communication et surfaces : MJ, aucun bonus de Protection."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              },
+              {
+                "kind": "narrative",
+                "summary": "Rappel narratif : Miroir Mystique"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Communication par miroir ou eau calme dans FM miles avec personne connue ou nommée ; chacun voit/entend l’autre. Échoue si aucune surface réfléchissante dans le regard du destinataire. Communication et surfaces : MJ, aucun bonus de Protection."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-1a1fd05399f5ba9e3483",
+      "name": "Éclat Stellaire",
+      "source": "WoM p. 101",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "rayon": 60
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Zone FM suit le lanceur ; révèle invisibles, créatures cachées et portes ; bannit obscurité normale et magique. Révélation et déplacement spatial : reçus MJ, aucune cible inventée ni état Aveuglé supprimé."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "rayon : 60"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Zone FM suit le lanceur ; révèle invisibles, créatures cachées et portes ; bannit obscurité normale et magique. Révélation et déplacement spatial : reçus MJ, aucune cible inventée ni état Aveuglé supprimé."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-c121b6939525a10fe8d0",
+      "name": "Tempête de Shemtek",
+      "source": "WoM p. 101",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 6,
+            "healed": 0,
+            "quantified": {
+              "eclairs": 10
+            },
+            "actions": [
+              {
+                "kind": "missile",
+                "damage": 6,
+                "location": "Bras Droit",
+                "summary": "Projectile magique : 6 B à Bras Droit"
+              },
+              {
+                "kind": "mj-input",
+                "summary": "2 × BI éclairs distincts devant lanceur, projectile +6 ; lanceur 1 Sonné. Témoins sans Magie des Cieux : Test de Peur (1). Variante sûre : BI éclairs dans zone 2 × BFM, ni Sonné ni Peur. Témoins, groupes et nombre des destinataires : MJ ; une frappe par destinataire déclaré, aucune multiplication sur une cible."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "eclairs : 10"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [
+              {
+                "name": "Sonné",
+                "key": "sonne",
+                "level": 1,
+                "duration": null,
+                "source": {
+                  "spellId": "spell-audit-c121b6939525a10fe8d0",
+                  "authorId": "mage",
+                  "targetId": "mage"
+                },
+                "authorId": "mage",
+                "targetId": "mage",
+                "v5Timing": {
+                  "acquiredRound": 1
+                }
+              }
+            ],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 194,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "2 × BI éclairs distincts devant lanceur, projectile +6 ; lanceur 1 Sonné. Témoins sans Magie des Cieux : Test de Peur (1). Variante sûre : BI éclairs dans zone 2 × BFM, ni Sonné ni Peur. Témoins, groupes et nombre des destinataires : MJ ; une frappe par destinataire déclaré, aucune multiplication sur une cible."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "(Moitié de Force Mentale) mètres",
+          "contract": "Moitié de la Force Mentale mètres"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-c57d9b7f09ce468a8cf1",
+      "name": "Écaille d’acier",
+      "source": "WoM p. 75",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "WoM p. 75 : Écaille d’acier, distinct de Robe scintillante V5 p. 253. Protection 9, chaque sauvegarde réussie améliore de 1, jusqu’à 3. Progression après sauvegarde : reçu MJ, compteur non relié aux coups. La Protection initiale est appliquée."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "WoM p. 75 : Écaille d’acier, distinct de Robe scintillante V5 p. 253. Protection 9, chaque sauvegarde réussie améliore de 1, jusqu’à 3. Progression après sauvegarde : reçu MJ, compteur non relié aux coups. La Protection initiale est appliquée."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-ac6d497ddb63362ede92",
+      "name": "Inscription",
+      "source": "WoM p. 76",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "motsParRound": 12,
+              "delaiCorrosionRounds": 10,
+              "corrosionPA": 1
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "1 Round par douzaine de mots. +2 DR : rune secrète, révélée par le même sort d’un mage de Métal. Acide d’urgence contre armure métallique : projectile +2 ; 1 PA de la localisation détruit seulement après 10 Rounds sans lavage. Objet, rune, matériau, lavage et corrosion différée : reçus MJ ; aucune corrosion immédiate ou sur quatre localisations."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "motsParRound : 12 ; delaiCorrosionRounds : 10 ; corrosionPA : 1"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "1 Round par douzaine de mots. +2 DR : rune secrète, révélée par le même sort d’un mage de Métal. Acide d’urgence contre armure métallique : projectile +2 ; 1 PA de la localisation détruit seulement après 10 Rounds sans lavage. Objet, rune, matériau, lavage et corrosion différée : reçus MJ ; aucune corrosion immédiate ou sur quatre localisations."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-18c5b366ba44af1090b6",
+      "name": "Métal restauré",
+      "source": "WoM p. 76",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Répare toute taille si au moins trois quarts de l’objet restent ; pièces manquantes remplacées. Alternative : souder deux métaux ; peut aider Métier sans bonus chiffré prescrit ; armure soudée gagne Peu fiable et Encombrant. Inventaire physique : reçu MJ, aucun PA restauré arbitrairement."
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Répare toute taille si au moins trois quarts de l’objet restent ; pièces manquantes remplacées. Alternative : souder deux métaux ; peut aider Métier sans bonus chiffré prescrit ; armure soudée gagne Peu fiable et Encombrant. Inventaire physique : reçu MJ, aucun PA restauré arbitrairement."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-357c37ae011f24eec697",
+      "name": "Armure d’étain",
+      "source": "WoM p. 74",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Armures métalliques réellement portées : −2 PA par localisation, minimum zéro, pendant BFM Rounds ; PA non métalliques conservés. Matériau de chaque localisation à déclarer."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 0,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Armures métalliques réellement portées : −2 PA par localisation, minimum zéro, pendant BFM Rounds ; PA non métalliques conservés. Matériau de chaque localisation à déclarer."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-76c5bbded39271c10dbc",
+      "name": "Franchir l’inconnu",
+      "source": "WoM p. 74",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "details": 1
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Propriétés d’un objet comme étudié un jour ; santé d’une créature et plus haute caractéristique physique connues. +2 DR : un détail caché supplémentaire. Objet magique touché : usage temporaire de Détection des Artefacts. Informations, Contact et talent de fiche : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "details : 1"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Propriétés d’un objet comme étudié un jour ; santé d’une créature et plus haute caractéristique physique connues. +2 DR : un détail caché supplémentaire. Objet magique touché : usage temporaire de Détection des Artefacts. Informations, Contact et talent de fiche : reçus MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-f7d674c87d088668bbe9",
+      "name": "Malédiction de rouille",
+      "source": "WoM p. 74",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "encombrementMax": 1
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Objet métallique non magique, Encombrement jusqu’à 1 ; +2 DR : +1. Ruine permanente. +4 DR : non-métal fragile pendant BFM minutes. Composants mixtes, fixations et bris : MJ ; aucune perte de Blessures inventée."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "encombrementMax : 1"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Objet métallique non magique, Encombrement jusqu’à 1 ; +2 DR : +1. Ruine permanente. +4 DR : non-métal fragile pendant BFM minutes. Composants mixtes, fixations et bris : MJ ; aucune perte de Blessures inventée."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-8dcc8a8ece4fc5479749",
+      "name": "Défaut de Forme",
+      "source": "WoM p. 75",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "attaqueDR": -1,
+              "defenseContreLenteDR": 2,
+              "multiplicateurRecharge": 2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Arme au moins partiellement métallique : Qualités bénéfiques supprimées, attaque −1 DR. Dangereuse : maladresse sur 8, 9 ou doubles ; Recharge doublée ; Lente : +2 DR aux défenseurs. Arme magique non altérée ; +4 DR neutralise ses enchantements temporairement. Modifications par arme : reçus MJ, aucun malus à toutes les armes."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "attaqueDR : -1 ; defenseContreLenteDR : 2 ; multiplicateurRecharge : 2"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Arme au moins partiellement métallique : Qualités bénéfiques supprimées, attaque −1 DR. Dangereuse : maladresse sur 8, 9 ou doubles ; Recharge doublée ; Lente : +2 DR aux défenseurs. Arme magique non altérée ; +4 DR neutralise ses enchantements temporairement. Modifications par arme : reçus MJ, aucun malus à toutes les armes."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-f9df1e72718a5fdd78a9",
+      "name": "Globe doré de Gehenna",
+      "source": "WoM p. 75",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "zone": 12
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Vortex aléatoire zone 2 × BFM, Toucher doré sur occupants : FM +0 résiste, durée FM × d10 minutes secret, BE10, Blessure termine statue. Direction, distance, occupants, chaque durée et récurrence du vortex : MJ ; aucun projectile ni profil de statue inventé."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "zone : 12"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Vortex aléatoire zone 2 × BFM, Toucher doré sur occupants : FM +0 résiste, durée FM × d10 minutes secret, BE10, Blessure termine statue. Direction, distance, occupants, chaque durée et récurrence du vortex : MJ ; aucun projectile ni profil de statue inventé."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-50b0374b107f316dbe8b",
+      "name": "Cage dorée",
+      "source": "WoM p. 75",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "barreDemiPouce": 0.5,
+              "ecartPouces": 6,
+              "forceEvasionDR": -2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Barres d’un demi-pouce, espaces de 6 pouces ; Force −2 pour tordre ou outils adaptés. Minuscules et Petits peuvent passer. Extérieurs ne peuvent entrer ; armes et projectiles passent. Cage perce murs et plafond. Évasion, tailles et terrain : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "barreDemiPouce : 0.5 ; ecartPouces : 6 ; forceEvasionDR : -2"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Barres d’un demi-pouce, espaces de 6 pouces ; Force −2 pour tordre ou outils adaptés. Minuscules et Petits peuvent passer. Extérieurs ne peuvent entrer ; armes et projectiles passent. Cage perce murs et plafond. Évasion, tailles et terrain : reçus MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": "Barres0,5pouce et espacements6pouces exacts ; mesures françaises approximatives à remplacer (p.75)."
+    },
+    {
+      "id": "spell-audit-d095965d4c2b711878c5",
+      "name": "Toucher doré",
+      "source": "WoM p. 75",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "bonusEnduranceStatue": 10
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Prochain être vivant touché : FM +0 résiste. Statue, durée FM × d10 minutes secrète ; ne voit, entend ni sent, ne suffoque pas ; BE10, Blessures ordinaires, toute Blessure termine. Profil BE, perception, toucher ultérieur et fin sur Blessure : reçus MJ ; aucune Endurance inventée."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "bonusEnduranceStatue : 10"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Prochain être vivant touché : FM +0 résiste. Statue, durée FM × d10 minutes secrète ; ne voit, entend ni sent, ne suffoque pas ; BE10, Blessures ordinaires, toute Blessure termine. Profil BE, perception, toucher ultérieur et fin sur Blessure : reçus MJ ; aucune Endurance inventée."
+      ],
+      "paramChanges": [
+        {
+          "field": "duration",
+          "catalogue": "(Force Mentale × 1d10) minutes",
+          "contract": "Spécial"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-42734932981d76e8bb91",
+      "name": "Blindage d’oracier",
+      "source": "WoM p. 76",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "surfacePA": 4,
+              "corruptionNiveauxRetires": 2,
+              "dissipationDR": 1
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Surface inerte seulement : PA+4 et immunité aux phénomènes naturels. Derrière cet abri : Corruption abaissée de deux niveaux, Dissipation +1 DR. Surface, abri et occupant : reçus MJ ; aucun bonus permanent au participant."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "surfacePA : 4 ; corruptionNiveauxRetires : 2 ; dissipationDR : 1"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Surface inerte seulement : PA+4 et immunité aux phénomènes naturels. Derrière cet abri : Corruption abaissée de deux niveaux, Dissipation +1 DR. Surface, abri et occupant : reçus MJ ; aucun bonus permanent au participant."
+      ],
+      "paramChanges": [
+        {
+          "field": "duration",
+          "catalogue": "(Bonus de Force Mentale) minutes",
+          "contract": "Force Mentale minutes"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-c373ee526f929985fcb4",
+      "name": "Nœud défait",
+      "source": "WoM p. 76",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "indices": 1
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Problème soluble par déduction : un indice MJ ; +2 DR : un indice supplémentaire. Tests de Savoir pertinents +2 DR. Pertinence et contenu de l’indice : MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "indices : 1"
+              },
+              {
+                "kind": "test-modifiers",
+                "testModifiers": {
+                  "Savoir (Déduction)": 2
+                },
+                "summary": "Bonus/Malus de Tests : Savoir (Déduction) +2 DR"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Problème soluble par déduction : un indice MJ ; +2 DR : un indice supplémentaire. Tests de Savoir pertinents +2 DR. Pertinence et contenu de l’indice : MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-1e9030cde1ec28c121a3",
+      "name": "Blindage de météorite",
+      "source": "WoM p. 76",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Protection (4) pendant un Round, poids nul et compatible avec armure ordinaire."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Protection (4) pendant un Round, poids nul et compatible avec armure ordinaire."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-43c69e5518f0449f3ca7",
+      "name": "Réfraction prismatique de Habermas",
+      "source": "WoM p. 77",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "fluideProchaineIncantationDR": 1,
+              "fluideEvaporationRounds": 2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Tous présents, y compris lanceur : Focalisation et lancer −1 DR. À expiration, couleurs inoffensives ; choisir un Vent pour un fluide +1 DR à une incantation liée, évaporation après deux Rounds. Destinataires de zone déclarés ; fluide et futur jet : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "fluideProchaineIncantationDR : 1 ; fluideEvaporationRounds : 2"
+              },
+              {
+                "kind": "test-modifiers",
+                "testModifiers": {
+                  "Focalisation": -1,
+                  "Langue (Magick)": -1
+                },
+                "summary": "Bonus/Malus de Tests : Focalisation -1 DR, Langue (Magick) -1 DR"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Tous présents, y compris lanceur : Focalisation et lancer −1 DR. À expiration, couleurs inoffensives ; choisir un Vent pour un fluide +1 DR à une incantation liée, évaporation après deux Rounds. Destinataires de zone déclarés ; fluide et futur jet : reçus MJ."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "ZdE (Bonus de Force Mentale) mètres",
+          "contract": "ZdE Force Mentale mètres"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-89482782b2c4f269951c",
+      "name": "Boussole d’Argent de Puchta",
+      "source": "WoM p. 77",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "navigationMagiqueDR": 2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "WoM p. 53 : vers concentration magique, Navigation +2 DR pour forte/extrême saturation, foyer, tempête ou lieu magique. Priorité : Foyer, Malepierre, Jonction, Objet, Ligne, Mage. Seulement plus puissante source d’un type ; utilisable par tous. Boussole, direction et phénomène : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "navigationMagiqueDR : 2"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "WoM p. 53 : vers concentration magique, Navigation +2 DR pour forte/extrême saturation, foyer, tempête ou lieu magique. Priorité : Foyer, Malepierre, Jonction, Objet, Ligne, Mage. Seulement plus puissante source d’un type ; utilisable par tous. Boussole, direction et phénomène : reçus MJ."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "ZdE (Bonus de Force Mentale) mètres",
+          "contract": "ZdE Force Mentale mètres"
+        },
+        {
+          "field": "duration",
+          "catalogue": "(Bonus de Force Mentale) minutes",
+          "contract": "Force Mentale minutes"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-3a59b6d9bc0366651a26",
+      "name": "Réplique de Levorg",
+      "source": "WoM p. 77",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "encombrementMax": 4
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Objet inanimé non magique, Encombrement jusqu’à 4 ; +2 DR : +1. 1d10 heures secrètes puis disparition ; facsimilé reconnaissable par artisan. Alternative 1d10 pièces d’or, plus 1d10 par +2 DR, interdite au Collège. Chimie simple : ni nourriture, explosif, ingrédient ni catalyseur. Inventaire, disparition et dés des pièces : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "encombrementMax : 4"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Objet inanimé non magique, Encombrement jusqu’à 4 ; +2 DR : +1. 1d10 heures secrètes puis disparition ; facsimilé reconnaissable par artisan. Alternative 1d10 pièces d’or, plus 1d10 par +2 DR, interdite au Collège. Chimie simple : ni nourriture, explosif, ingrédient ni catalyseur. Inventaire, disparition et dés des pièces : reçus MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-127db67763b96e24b6e7",
+      "name": "Essais et Erreurs",
+      "source": "WoM p. 77",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "prochainTestDR": 2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Vous ou allié : compétence choisie, prochain Test +2 DR une seule utilisation ; +2 DR : une relance unique de ce Test. Destinataire, consommation du prochain Test et relance : reçus MJ ; aucun bonus à tous les Tests de la durée."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "prochainTestDR : 2"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Vous ou allié : compétence choisie, prochain Test +2 DR une seule utilisation ; +2 DR : une relance unique de ce Test. Destinataire, consommation du prochain Test et relance : reçus MJ ; aucun bonus à tous les Tests de la durée."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": "Une relance unique du prochain Test désigné, pas un Test supplémentaire indépendant (p.77)."
+    },
+    {
+      "id": "spell-audit-d34c31ab62cf7820d380",
+      "name": "Bête Indomptée",
+      "source": "WoM p. 147",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "chevaucherDR": -2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Animal domestique fuit ou attaque son ancien maître selon MJ ; Charme Animal dissuade mais ne dompte pas ; cavalier Chevaucher −2 ou projeté. +4 DR : humain résiste FM −1 ; poils et parole perdue ; d10 chaque Round : 1–3 distrait, 4–6 panique direction aléatoire, 7–9 amical, 10 enragé et Peur 1 sauf mages Bêtes. Les deux effets jusqu’à dissipation ; comportement et tours spatiaux : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "chevaucherDR : -2"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Animal domestique fuit ou attaque son ancien maître selon MJ ; Charme Animal dissuade mais ne dompte pas ; cavalier Chevaucher −2 ou projeté. +4 DR : humain résiste FM −1 ; poils et parole perdue ; d10 chaque Round : 1–3 distrait, 4–6 panique direction aléatoire, 7–9 amical, 10 enragé et Peur 1 sauf mages Bêtes. Les deux effets jusqu’à dissipation ; comportement et tours spatiaux : reçus MJ."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "Toucher",
+          "contract": "Contact"
+        },
+        {
+          "field": "target",
+          "catalogue": "1 animal domestique ou 1 humain",
+          "contract": "1"
+        }
+      ],
+      "catalogueContradiction": "Humain : pelage épais et parole perdue ; comportement d10, jusqu’à dissipation. Terminologie FM/Chevaucher/Charme animal V5 (p.147)."
+    },
+    {
+      "id": "spell-audit-e298c9c28e0c2969dc61",
+      "name": "Régiment Monstrueux de Merciw",
+      "source": "WoM p. 148",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Alliés hors lanceur : F et E +30, plafond 100 ; durée BF Rounds. Aucun gain automatique de Bmax ni soin."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 70,
+              "E": 70,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Alliés hors lanceur : F et E +30, plafond 100 ; durée BF Rounds. Aucun gain automatique de Bmax ni soin."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "Volonté en mètres",
+          "contract": "Force Mentale mètres"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-d83800f3d2a5770c45de",
+      "name": "Pulvérisation Musquée",
+      "source": "WoM p. 148",
+      "status": "rappel",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "foe",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "dureeJours": 1,
+              "localisationDR": 2,
+              "territoire": 6,
+              "calmeDR": 2
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Cible ou objet : odeur, localisation +2 DR. Alternative territoire BFM : animaux sauvages seulement affamés ou menacés et Calme +2 pour entrer ; monstres non affectés. Un jour, plus un jour par +2 DR, non lavable. Localisation, territoire, odeur et durée hors combat : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "dureeJours : 1 ; localisationDR : 2 ; territoire : 6 ; calmeDR : 2"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur foe"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Cible ou objet : odeur, localisation +2 DR. Alternative territoire BFM : animaux sauvages seulement affamés ou menacés et Calme +2 pour entrer ; monstres non affectés. Un jour, plus un jour par +2 DR, non lavable. Localisation, territoire, odeur et durée hors combat : reçus MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-c628312e4212cd7504a3",
+      "name": "Passage Rapide",
+      "source": "WoM p. 148",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "M+1 ; Escalade et Foulée d’un terrain. Déjà possédés : un niveau temporaire plus un par +2 DR ; éviter Enchevêtré +1 DR. Terrain, niveau supplémentaire conditionnel et Tests d’Enchevêtrement : reçus MJ."
+              },
+              {
+                "kind": "test-modifiers",
+                "testModifiers": {
+                  "Éviter Enchevêtré": 1
+                },
+                "summary": "Bonus/Malus de Tests : Éviter Enchevêtré +1 DR"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 5
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "M+1 ; Escalade et Foulée d’un terrain. Déjà possédés : un niveau temporaire plus un par +2 DR ; éviter Enchevêtré +1 DR. Terrain, niveau supplémentaire conditionnel et Tests d’Enchevêtrement : reçus MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": "Bonus V4+10 devient +1DR pour éviter Enchevêtré ; Foulée d’un terrain et niveaux conditionnels (p.148)."
+    },
+    {
+      "id": "spell-audit-8f55719475db1d9ecf87",
+      "name": "Invocation de Monture",
+      "source": "WoM p. 148",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "heures": 6
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Animal local ordinaire choisi par MJ (cerf, sanglier, ours), combat mais conserve instinct de préservation. Chevaucher adapté à la valeur réelle de Langue (Magick). Profil complet, monture auxiliaire et compétence remplacée : données MJ, pas de profil inventé."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "heures : 6"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Animal local ordinaire choisi par MJ (cerf, sanglier, ours), combat mais conserve instinct de préservation. Chevaucher adapté à la valeur réelle de Langue (Magick). Profil complet, monture auxiliaire et compétence remplacée : données MJ, pas de profil inventé."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-b2e8310fa7fe73d324e5",
+      "name": "Transformation de Kadon",
+      "source": "WoM p. 149",
+      "status": "donnée MJ nécessaire",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Monstre Grande ou Énorme choisi par MJ. Conserve Int et FM ; autres caractéristiques, compétences et talents remplacés par profil. Pas d’incantation. +4 DR : un trait optionnel ou autre cible de Contact ; FM opposée si non consentante. Profil, taille, compétences manquantes, cible et dés requis ; profil saisi incomplet interdit."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              },
+              {
+                "kind": "transformation",
+                "summary": "Transformation en Griffon pendant 6 Rounds. M 6, F 50, E 50, Ag 60, Dex – ; 80 Blessures (Blessures du profil du livre : 80). Absent : CT, Dex (Tests impossibles). Équipement lâché."
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 80,
+            "maxHp": 80,
+            "caracs": {
+              "CC": 50,
+              "F": 50,
+              "E": 50,
+              "I": 45,
+              "Ag": 60,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 15,
+              "M": 6
+            },
+            "armor": {
+              "head": 1,
+              "body": 1,
+              "rightArm": 1,
+              "leftArm": 1,
+              "rightLeg": 1,
+              "leftLeg": 1
+            },
+            "states": [],
+            "traits": [
+              "Vol (80)",
+              "Vision nocturne",
+              "Taille (Énorme)"
+            ]
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Monstre Grande ou Énorme choisi par MJ. Conserve Int et FM ; autres caractéristiques, compétences et talents remplacés par profil. Pas d’incantation. +4 DR : un trait optionnel ou autre cible de Contact ; FM opposée si non consentante. Profil, taille, compétences manquantes, cible et dés requis ; profil saisi incomplet interdit."
+      ],
+      "paramChanges": [
+        {
+          "field": "range",
+          "catalogue": "Vous ou Toucher",
+          "contract": "Vous ou Contact"
+        },
+        {
+          "field": "target",
+          "catalogue": "Vous ou 1 (max)",
+          "contract": "Vous ou 1 (maximum)"
+        }
+      ],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-dc7c06bfab704f8f6877",
+      "name": "Capuche Vengeresse",
+      "source": "WoM p. 149",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Chaque frappe non magique : Calme +0 ; réussite réduit dégâts de BFM +DR du Calme. Si réduits à zéro : tir vers une cible aléatoire à 2 mètres, mêlée renvoyée sur attaquant sans opposition. Redirection et nouvelle cible : reçus MJ ; réduction calculée."
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": [
+              "Déviation si dégâts réduits à 0"
+            ]
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Chaque frappe non magique : Calme +0 ; réussite réduit dégâts de BFM +DR du Calme. Si réduits à zéro : tir vers une cible aléatoire à 2 mètres, mêlée renvoyée sur attaquant sans opposition. Redirection et nouvelle cible : reçus MJ ; réduction calculée."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    },
+    {
+      "id": "spell-audit-9aade1cb4cb204224e39",
+      "name": "Manteau d’Hiver",
+      "source": "WoM p. 149",
+      "status": "conforme",
+      "scenario": "Base synthétique : DR12+réserve30, attribut coupé, caracs connues, choix et dés explicitement fournis",
+      "observed": {
+        "ready": true,
+        "targets": [
+          {
+            "id": "mage",
+            "woundsLost": 0,
+            "healed": 0,
+            "quantified": {
+              "critiqueRecuModificateur": -10
+            },
+            "actions": [
+              {
+                "kind": "mj-input",
+                "summary": "Immunité à l’Exposition au Froid ; Critiques reçus −10 sur leur table ; Agilité et Sociabilité −10. Exposition et score final de Critique : reçus MJ."
+              },
+              {
+                "kind": "quantified-reminder",
+                "summary": "critiqueRecuModificateur : -10"
+              },
+              {
+                "kind": "effects",
+                "summary": "Effets appliqués sur mage"
+              }
+            ]
+          }
+        ],
+        "participants": [
+          {
+            "id": "mage",
+            "name": "mage",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 40,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 40,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "rightArm": 2,
+              "leftArm": 2,
+              "rightLeg": 2,
+              "leftLeg": 2
+            },
+            "states": [],
+            "traits": []
+          },
+          {
+            "id": "foe",
+            "name": "foe",
+            "hp": 200,
+            "maxHp": 300,
+            "caracs": {
+              "CC": 50,
+              "CT": 50,
+              "F": 40,
+              "E": 40,
+              "I": 50,
+              "Ag": 50,
+              "Dex": 50,
+              "Int": 60,
+              "FM": 60,
+              "Soc": 50,
+              "M": 4
+            },
+            "armor": {
+              "head": 2,
+              "body": 2,
+              "arms": 2,
+              "legs": 2
+            },
+            "states": [],
+            "traits": []
+          }
+        ]
+      },
+      "assistedClauses": [
+        "Immunité à l’Exposition au Froid ; Critiques reçus −10 sur leur table ; Agilité et Sociabilité −10. Exposition et score final de Critique : reçus MJ."
+      ],
+      "paramChanges": [],
+      "catalogueContradiction": null
+    }
+  ]
+}

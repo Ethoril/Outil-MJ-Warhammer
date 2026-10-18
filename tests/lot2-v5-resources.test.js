@@ -23,7 +23,7 @@ test('Fortune V5 — fiche current Chance strict, maximum Destin absent/current 
   assert.equal(ficheSnapshot('synthetic', { destin: 8 }).resources, undefined);
   const subject = actor('a', { extensions: { ficheId: 'synthetic' }, ficheSnapshot: ficheSnapshot('synthetic', { chance: '2', destin: 8 }) });
   const input = envelope([subject]), before = structuredClone(input);
-  assert.deepEqual(getV5Fortune(input, subject), { characterId: 'fiche:synthetic', balance: null, sourceBalance: 2, initializedFrom: null });
+  assert.deepEqual(getV5Fortune(input, subject), { characterId: 'fiche:synthetic', balance: null, permanent: null, temporary: 0, sourceBalance: 2, initializedFrom: null });
   const initialized = setV5Fortune(input, subject, 2, { source: 'fiche' });
   assert.equal(getV5Fortune(initialized, subject).balance, 2);
   assert.throws(() => setV5Fortune(initialized, subject, 2, { source: 'fiche' }), /initialisation/);

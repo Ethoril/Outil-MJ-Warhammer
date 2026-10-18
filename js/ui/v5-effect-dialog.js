@@ -1,5 +1,6 @@
 /** Explicit V5 effect inputs: values survive each preview and no die is drawn implicitly. */
 import { userMessage, userError } from './messages.js';
+import { formatV5Balance } from '../core/v5-resources.js';
 
 const BOOLEAN_FIELDS = new Set(['minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery']);
 const el = (tag, text, className = '') => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
@@ -43,7 +44,7 @@ export function chooseV5RecoveryMethod({ participantName, condition, getFortune,
     let fortune = typeof getFortune === 'function' ? getFortune() : { balance: null }, selected = null;
     const refreshFortune = () => {
       fortune = typeof getFortune === 'function' ? getFortune() : fortune;
-      fortuneHint.textContent = fortune.balance === null ? 'Fortune : solde courant inconnu. Initialisez le compteur avant une dépense.' : 'Fortune disponible : ' + fortune.balance + ' · coût de cette récupération : 1 point.';
+      fortuneHint.textContent = fortune.balance === null ? 'Fortune : solde courant inconnu. Initialisez le compteur avant une dépense.' : 'Fortune disponible : ' + formatV5Balance(fortune) + ' · coût de cette récupération : 1 point.';
       const option = Array.from(select.options).find(row => row.value === 'fortune'); if (option) option.disabled = fortune.balance === null || fortune.balance < 1;
       fortuneEdit.hidden = typeof editFortune !== 'function'; fortuneEdit.textContent = fortune.balance === null ? 'Initialiser Fortune' : 'Modifier Fortune';
       confirm.disabled = select.value === 'fortune' && (fortune.balance === null || fortune.balance < 1);
@@ -79,7 +80,7 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, t
       fields.replaceChildren();prior.replaceChildren();readers=[];alert.hidden=true;
       const pendingKeys=new Set((current.requests||[]).map(keyFor));
       const answered=[];
-      for(const [participantId,values] of Object.entries(inputs))for(const [field,value]of Object.entries(values||{}))if(!pendingKeys.has(`${participantId}:${field}`)&&labels.has(`${participantId}:${field}`))answered.push(`${labels.get(`${participantId}:${field}`)} : ${typeof value==='object'?`${value.success?'Réussite':'Échec'}, ${value.sl} DR`:String(value)}`);
+      for(const [participantId,values] of Object.entries(inputs))for(const [field,value]of Object.entries(values||{}))if(!pendingKeys.has(`${participantId}:${field}`)&&labels.has(`${participantId}:${field}`))answered.push(`${labels.get(`${participantId}:${field}`)} : ${Array.isArray(value)?(value.length?value.join(', '):'Aucune cible'):typeof value==='object'?`${value.success?'Réussite':'Échec'}, ${value.sl} DR`:String(value)}`);
       if(answered.length){const detail=el('details');detail.open=true;detail.append(el('summary','Résultats déjà renseignés'));answered.forEach(text=>detail.append(el('p',text)));prior.append(detail);}
       const groups=new Map();let manual=false,index=0;
       for(const request of current.requests||[]) {
@@ -89,7 +90,14 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, t
         const wrapper=el('div',null,'v5-effect-field');const label=el('label',`${request.label}${request.bonus?` (+${request.bonus} à la gravité)` : ''}`);const id=`v5-effect-input-${++index}`;label.htmlFor=id;wrapper.append(label);
         let kind=BOOLEAN_FIELDS.has(request.field)?'boolean':request.field==='recoveryMoment'?'moment':request.kind;
         const value=getValue(request);
-        if(kind==='manual') {
+        if(kind==='targets'){
+          const select=document.createElement('select');select.multiple=true;select.setAttribute('aria-label',request.label);select.append(new Option('Aucune cible traversée','none'));
+          for(const [id,name] of request.options || [])select.append(new Option(name,id));
+          const previous=getValue(request);for(const option of select.options)option.selected=Array.isArray(previous)?previous.length===0?option.value==='none':previous.includes(option.value):false;
+          wrapper.append(select);readers.push(()=>{const values=[...select.selectedOptions].map(o=>o.value);if(!values.length || values.includes('none')&&values.length>1)throw userError('Sélectionnez les destinataires ou « Aucune cible traversée ».');setValue(request,values.includes('none')?[]:values);});
+        } else if(kind==='wards'){
+          const input=document.createElement('input');input.type='text';input.setAttribute('aria-label',request.label);input.value=getValue(request) ?? '';wrapper.append(input);readers.push(()=>{if(!/^\s*(?:10|[1-9])(?:\s+(?:10|[1-9]))*\s*$/.test(input.value))throw userError('Un d10 par Protection, séparé par des espaces.');const dice=input.value.trim().split(/\s+/).map(Number);setValue(request,dice.length===1?dice[0]:dice);});
+        } else if(kind==='manual') {
           manual=true;wrapper.append(el('p','Corrigez cette donnée dans la fiche, puis recalculez. Aucun effet n’a encore été enregistré.','workspace-muted'));
         } else if(kind==='boolean'||kind==='moment') {
           const select=el('select');select.id=id;
@@ -101,7 +109,7 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, t
           readers.push(()=>{const amount=Number(sl.value);if(!success.value||sl.value===''||!Number.isSafeInteger(amount))throw userError(`Saisissez la réussite et les DR : ${request.label}.`);const passed=success.value==='true';if(passed&&amount<0||!passed&&amount>0)throw userError('La réussite et les DR indiqués sont incompatibles.');setValue(request,{success:passed,sl:amount});});
         } else {
           const input=el('input');input.id=id;input.type='text';input.inputMode='numeric';input.autocomplete='off';input.value=value??'';input.setAttribute('aria-label',request.label);
-          const maximum=kind==='d10'?10:kind==='d100'?100:Number.MAX_SAFE_INTEGER;const minimum=kind==='d10'||kind==='d100'||request.field==='currentRound'?1:0;
+          const maximum=kind==='d8'?8:kind==='d10'?10:kind==='2d10'?20:kind==='d100'?100:Number.MAX_SAFE_INTEGER;const minimum=kind==='2d10'?2:kind==='d8'||kind==='d10'||kind==='d100'||request.field==='currentRound'?1:0;
           const row=el('div',null,'row');row.append(input);
           if(kind==='d10'||kind==='d100') {
             const roll=el('button',`Lancer ${kind}`,'ghost');roll.type='button';roll.setAttribute('aria-label',`Lancer ${kind} : ${request.label}`);roll.disabled=drawn.has(keyFor(request));

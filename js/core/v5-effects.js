@@ -1,7 +1,9 @@
+import {activeMagicTalent} from './v5-magic-talents.js';
 /** Pure V5 Conditions and explicit combat clocks, core pp.184–187. No dice draw. */
 import { normalizeEffects, normalizeState } from './effects.js';
 import { withMomentum } from './v5-combat-rules.js';
 import { armourProtection } from './equipment.js';
+import { isMiscastConditionLocked } from './v5-magic-miscasts.js';
 export const V5_EFFECT_RULE_VERSION = 'v5-effects-2026-10-09.1';
 export const V5_CONDITION_KEYS = Object.freeze(['enflamme','souille','hemorragique','aveugle','brise','assourdi','enchevetre','extenue','empoisonne','a-terre','sonne','surpris','inconscient']);
 const UNIQUE = new Set(['souille','a-terre','surpris','inconscient']);
@@ -57,6 +59,10 @@ export function acquireV5Conditions(participant,acquisitions=[],context={}) {
   const next=clone(participant);let states=normalizeEffects(next.states), acquiredInstances=0, acquiredStunned=false;const removed=[],needsInput=[],reminders=[];
   const add=raw=>{
     const key=keyOf(raw);
+    if(key==='surpris' && next.extensions?.v5?.specialStates?.cannotBeSurprised){reminders.push('Ennemi Anticipé : Surpris refusé.');return;}
+    if((next.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===key)){reminders.push('Immunité : '+(typeof raw==='string'?raw:raw?.name||key)+' ignoré.');return;}
+    const meditation=activeMagicTalent(next,'mind-over-body');
+    if(meditation && (context.painRelated===true || key==='aveugle' && meditation.magicTalentRank>=2))return;
     const amount=typeof raw==='string'?1:raw?.level??1;
     integer(amount,'Nombre d’États');if(!amount)return;
     if(UNIQUE.has(key)&&states.some(state=>keyOf(state)===key))return;
@@ -116,6 +122,8 @@ export function expireV5Effects(participant,transition={}) {
   return createReceipt(participant,next,{removed});
 }
 const recoveryLocked = (state,participant,options) => {
+  if(isMiscastConditionLocked(participant,state))return true;
+  if(state.spellEffectId && !state.recoveryDuringSpell && (participant.extensions?.v5?.spellEffects || []).some(e => e.id === state.spellEffectId)) return true;
   const kind=state.v5Recovery?.kind;
   if(!kind)return false;
   if(kind==='noBleeding')return levels(normalizeEffects(participant.states),'hemorragique')>0;
@@ -132,7 +140,7 @@ export function recoverV5Condition(participant,condition,options={}) {
   const candidates=states.filter(state=>keyOf(state)===key&&(!selected||state.id===selected.id));
   if(!candidates.length)return createReceipt(participant,{...next,states});
   const method=fold(options.method),needsInput=[],reminders=[];
-  const eligible=state=>(!selected||state.id===selected.id)&&(method==='fortune'||!recoveryLocked(state,next,options));
+  const eligible=state=>(!selected||state.id===selected.id)&&!isMiscastConditionLocked(next,state)&&!(state.spellEffectId && !state.recoveryDuringSpell && (next.extensions?.v5?.spellEffects || []).some(e=>e.id===state.spellEffectId))&&(method==='fortune'||!recoveryLocked(state,next,options));
   if(!candidates.some(eligible))return createReceipt(participant,{...next,states},{reminders:['La cause ou les soins requis empêchent encore cette récupération.']});
   let amount=0;
   const tested=(allowed)=>{
@@ -169,6 +177,7 @@ export function recoverV5Condition(participant,condition,options={}) {
   }
   else if(key==='enflamme')tested(['athletics']);
   else if(key==='enchevetre')tested(['opposed-strength']);
+  else if(key==='sonne' && candidates.some(s=>s.recoveryStat==='Int')) tested(['intelligence']);
   else if(['sonne','assourdi'].includes(key)&&method==='endurance')tested(['endurance']);
   else if(key==='empoisonne')tested(['endurance','heal']);
   else if(['aveugle','inconscient'].includes(key)&&method==='cause-ended'){
@@ -227,6 +236,15 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
   if(!PHASES.has(transition.phase))throw new TypeError('Phase V5 invalide');
   integer(transition.round,'Round courant');
   const before=clone(participant);
+  // WoM p. 146 : une statue d'ambre ne subit ni dégâts ni maladie/poison, ses soins restent possibles par les commandes de soin.
+  if(participant.extensions?.v5?.specialStates?.amberTrance){
+    const frozen=clone(participant);
+    if(transition.phase==='endOfRound'){
+      for(const state of frozen.states || [])if(Number.isSafeInteger(state.v5Timing?.expiry?.round))state.v5Timing.expiry.round++;
+      if(Number.isSafeInteger(frozen.extensions.v5.poisonDeathDueRound))frozen.extensions.v5.poisonDeathDueRound++;
+    }
+    return createReceipt(before,frozen,{reminders:['Transe d’Ambre : conséquences dommageables et poison suspendus.']});
+  }
   let next=expireV5Effects(participant,{...transition,moment:'beforeEffects'}).participant;
   next.states=normalizeEffects(next.states);
   const needsInput=[],reminders=[],criticalRequests=[],removed=[],recoveryHandled=new Set();let death=false,acquiredInstances=0;

@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {resolve} from 'node:path';
+const env={...process.env,PLAYWRIGHT_EXECUTABLE_PATH:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(process.platform==='win32'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':undefined)};
+if(env.PLAYWRIGHT_EXECUTABLE_PATH===undefined)delete env.PLAYWRIGHT_EXECUTABLE_PATH;
+const browser=['tests/browser-smoke.mjs','tests/browser-startup.mjs','tests/browser-references-smoke.mjs','tests/browser-magic-v5-smoke.mjs','tests/lot2-combat-v5-browser.mjs',...fs.readdirSync('tests').filter(n=>/^lot3-.*-browser\.mjs$/.test(n)&&!n.includes('-35-cloud-')&&!n.includes('-35-release-')).sort().map(n=>'tests/'+n)];
+const node=(args,log)=>({file:process.execPath,args,command:'node '+args.join(' '),log});
+const commands=[node(['tools/check-lot3-generation.mjs'],'cloture-generation.log'),node(['--test'],'cloture-node.log'),...browser.map(file=>node([file],file.includes('cloture-ui')?'cloture-ui.log':'cloture-'+file.split('/').at(-1).replace('.mjs','')+'.log')),{file:'powershell.exe',args:['-NoProfile','-ExecutionPolicy','Bypass','-File','tests/run-lot2-v5-25-emulators.ps1','-TestScript','tests/lot3-v5-35-cloud-browser.mjs'],command:'powershell -NoProfile -ExecutionPolicy Bypass -File tests/run-lot2-v5-25-emulators.ps1 -TestScript tests/lot3-v5-35-cloud-browser.mjs',log:'cloture-cloud.log'},node(['tools/build-lot3-local-release.mjs'],'cloture-build-release.log'),node(['tests/lot3-v5-35-release-browser.mjs'],'cloture-release-browser.log'),{file:'git',args:['diff','--check'],command:'git diff --check',log:'cloture-diff-check.log'}];
+fs.mkdirSync('tmp/lot3',{recursive:true});const receipt={version:'3.15.0',date:new Date().toISOString().slice(0,10),commands:[],passed:false};
+for(const command of commands){console.log('RUN '+command.command);const start=Date.now();let out,exitCode=0;
+ try{const commandEnv={...env};if(command.file==='powershell.exe')for(const key of Object.keys(commandEnv))if(key.toLowerCase()==='psmodulepath')delete commandEnv[key];out=execFileSync(command.file,command.args,{cwd:resolve('.'),env:commandEnv,encoding:'utf8',maxBuffer:50*1024*1024,timeout:300000,stdio:['ignore','pipe','pipe']});}
+ catch(error){exitCode=error.status??1;out=String(error.stdout||'')+'\n'+String(error.stderr||error.message);}
+ fs.writeFileSync('tmp/lot3/'+command.log,out);receipt.commands.push({command:command.command,exitCode,seconds:Math.round((Date.now()-start)/10)/100,log:'tmp/lot3/'+command.log});receipt.passed=receipt.commands.length===commands.length&&exitCode===0;fs.writeFileSync('tmp/lot3/cloture-final-recipe-receipt.json',JSON.stringify(receipt,null,2)+'\n');console.log('RESULT '+exitCode+' '+command.command);if(exitCode){console.log(out.slice(-2400));process.exitCode=exitCode;break;}}
+if(receipt.passed)console.log('Recette complète 3.15.0 : '+commands.length+' commandes vertes.');

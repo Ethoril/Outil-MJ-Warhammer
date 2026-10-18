@@ -148,7 +148,7 @@
 .workspace-track-item.is-target { box-shadow: 0 0 0 2px var(--text); }
 .workspace-track-top { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
 .workspace-track-marker { flex: none; width: 1ch; color: var(--accent-text); font-family: var(--font-ui); font-size: 12.5px; }
-.workspace-track-name { flex: 1; min-width: 0; font-size: 16.5px; line-height: 1.15; overflow-wrap: anywhere; }
+.workspace-track-name { flex: 1 1 140px; min-width: 90px; font-size: 16.5px; line-height: 1.15; overflow-wrap: anywhere; }
 .workspace-track-item.is-actor .workspace-track-name { color: var(--accent-text); }
 .workspace-track-role { flex: none; font-family: var(--font-ui); font-size: 12.5px; color: var(--muted); }
 .workspace-track-hp { flex: none; font-family: var(--font-ui); font-size: 14px; font-weight: 700; }
@@ -161,8 +161,8 @@
 .workspace-hp-bar.is-crit .workspace-hp-fill { background: var(--hp-crit); }
 
 .workspace-bench { margin-top: 16px; display: grid; gap: 6px; }
-.workspace-bench-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px dashed var(--border); border-radius: var(--radius); }
-.workspace-bench-label { min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
+.workspace-bench-item { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px dashed var(--border); border-radius: var(--radius); }
+.workspace-bench-label { flex: 1 1 100%; min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
 .workspace-bench-label .num { font-family: var(--font-ui); font-size: 12.5px; white-space: nowrap; }
 .workspace-bench-item button { flex: none; min-height: 32px; padding: 5px 9px; font-size: 13.5px; }
 
@@ -224,7 +224,7 @@
 .workspace-state-form .workspace-field-error { flex-basis: 100%; }
 
 /* Résolution */
-.workspace-resolution { display: grid; gap: 12px; }
+.workspace-resolution { display: grid; gap: 12px; min-width: 0; }
 .workspace-resolution > .workspace-rubric { margin: 0; }
 .workspace-resolution-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 6px 10px; align-items: start; }
 .workspace-resolution-row > .workspace-rubric { margin: 8px 0 0; font-size: 12px; }
@@ -372,8 +372,8 @@
 .fiche-sync-entry select { max-width: 100%; }
 .fiche-sync-actions label { display: block; margin: 6px 0; }
 
-.workspace-v5-context { display:flex; flex-wrap:wrap; gap:8px 16px; padding:10px 0; }
-.workspace-v5-context h4, .workspace-v5-context p { flex-basis:100%; }
+.workspace-v5-context { display:flex; flex-wrap:wrap; gap:8px 16px; padding:10px 0; min-width:0; max-width:100%; }
+.workspace-v5-context h4, .workspace-v5-context p { flex-basis:100%; min-width:0; overflow-wrap:anywhere; }
 .workspace-v5-context input[type=number] { width:5em; max-width:100%; }
 .workspace-v5-choice-group { border:0; padding:0; margin:0 0 12px; min-width:0; }
 .workspace-v5-choice-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
@@ -385,10 +385,12 @@
 .workspace-v5-calculations p { margin-top:6px; }
 @media (max-width:480px) { .workspace-v5-choice-cards { grid-template-columns:1fr; } }
 
-.workspace-v5-context-details { flex-basis:100%; min-width:0; }
+.workspace-v5-context-details { flex-basis:100%; min-width:0; max-width:100%; }
 .workspace-v5-context-details summary { cursor:pointer; }
 .workspace-v5-context .workspace-type { flex-wrap:wrap; min-width:0; max-width:100%; }
-.workspace-v5-context select { max-width:100%; }
+.workspace-v5-context select { min-width:0; max-width:100%; box-sizing:border-box; }
+.workspace-v5-magic > .workspace-type { flex:1 1 220px; }
+.workspace-v5-magic select { width:100%; }
 .workspace-v5-choice:has(input:focus-visible) { outline:2px solid var(--text); outline-offset:2px; }
 
 /* Critical rows keep their range and full effect legible in the narrow rules pane. */
@@ -431,3 +433,11 @@ dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto
 .workspace-state-form label select { flex:none; width:100%; }
 .workspace-state-origin { white-space:normal; }
 .workspace-state-chip:has(.workspace-state-origin) { flex-wrap:wrap; max-width:100%; border-radius:8px; }
+
+/* Options propres à Destruction des Arcanes. */
+.workspace-arcane-options { flex-basis:100%; display:grid; gap:8px; }
+.workspace-arcane-options > legend { font-weight:600; margin-bottom:6px; }
+.workspace-arcane-options .workspace-arcane-toggle { display:flex; flex-direction:row; align-items:center; gap:8px; }
+.workspace-v5-context .workspace-type.workspace-recipient-check, .workspace-v5-context-details > .workspace-type.workspace-recipient-check { flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; }
+.workspace-recipient-check input[type=checkbox] { flex:none; width:auto; margin:0; }
+.workspace-arcane-toggle input[type=checkbox] { flex:none; width:auto; margin:0; }

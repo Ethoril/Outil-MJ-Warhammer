@@ -34,10 +34,16 @@ Décision explicite du MJ après le premier audit, le 9 octobre 2026 : lecture l
 
 ## Petit conservé en homebrew
 
-Toutes les clauses de Petit sont conservées pour la table. Seule modification : le Piétinement coûte **un Élan/Momentum au lieu d’un Avantage V4**. Ne pas migrer les Blessures, la Taille ou les fiches des PJ. Rappel manuel tant que les mécaniques concernées ne sont pas raccordées et éprouvées.
+Petit est conservé comme homebrew de table avec Piétinement à **un Élan/Momentum**. Arbitrages complémentaires du MJ : multiplicateur avant BE/PA ; Frappes Mortelles supprimées intégralement. Les clauses restantes sont raccordées et éprouvées, sans migration des Blessures, de la Taille ou des fiches des PJ.
 
 ## Corrections de source et signalements retirés
 
-Le MJ a corrigé Ferveur ardente, Saut carpé, Effraction, Attirant et Acrobaties équestres ; Résistance précise les autres Tests avec Avantage « durant la session ». Les sept modifications, Petit compris, ont été relues dans le CSV public. Le quota de réussite automatique de Résistance par séance reste distinct et manuel.
+Le MJ a corrigé Ferveur ardente, Saut carpé, Effraction, Attirant et Acrobaties équestres ; Résistance précise les autres Tests avec Avantage « durant la session ». Les sept modifications, Petit compris, ont été relues dans le CSV public. Le quota de réussite automatique de Résistance par séance reste distinct ; il est désormais raccordé à la séance explicitement démarrée et à son registre durable.
 
 Seigneur de guerre suit la Peur psychologique définie par le livre ; aucun problème de formulation n’est retenu. Les deux frappes ne se contredisent pas. Ces signalements sont retirés du document d’écarts.
+
+## Tri et nouveaux arbitrages du 9 octobre
+
+Décisions explicites du MJ : effets narratifs en rappels ; progression/valeurs dérivées dans les fiches, Dur à cuire déjà importé ; bonus de caractéristiques exclus. Matraqueur ajoute les Sonné supplémentaires lorsque le seuil d’Assommante V5 est atteint et supprime l’ancien bonus au Test de Force. Commandant d’Équipage exige une Action de Commandement réussie et remplace la compétence pour la prochaine attaque seulement. Raccordements et recettes dans [le bilan courant](LOT2_TRI_TALENTS.md).
+
+Petit est raccordé et éprouvé selon les réponses explicites du MJ : multiplication des Dégâts avant BE/PA et suppression intégrale des Frappes Mortelles. Piétinement à 1 Élan, rapports de Taille dans les deux sens, Force opposée et Peur/Terreur V5. Aucune migration de Taille/Blessures. 2.4 et 2.5 sont terminés localement dans le périmètre convenu. La version 3.13.0 est prête à publier sur autorisation ; voir [la recette et livraison](LOT2_RECETTE_2_5.md). Le MJ corrigera le texte dans Aides de jeu ; conserver entre-temps la source exacte et l’exception approuvée, puis revalider après actualisation.

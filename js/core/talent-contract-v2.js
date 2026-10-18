@@ -3,11 +3,13 @@ import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from './talent-contracts.js';
 import { previewV5ActionCosts } from './v5-action-costs.js';
 import { createV5TimedEffect } from './v5-effects.js';
 export const TALENT_CONTRACT_V2_SCHEMA_VERSION = 2;
-const EVENTS = new Set(['test.beforeRoll','test.afterRoll','damage.beforeProtection','condition.beforeAcquire','momentum.beforeLoss','action.before','action.afterAttack']);
+const EVENTS = new Set(['test.beforeRoll','test.afterRoll','damage.beforeProtection','condition.beforeAcquire','momentum.beforeLoss','action.before','action.afterAttack','critical.beforeTable','protection.before','talent.activate','combat.beforeTests','situation.calculate','healing.afterTest']);
 const ROLES = new Set(['actor','attacker','defender']);
 const FIELDS = new Set(['kind','skillId','skillGroupId','specialization','specializationId','lying','influencingGroup','touchingOpponent','resistingThreat','threatId','runningOrJumping','falling','begging','inCombat','resistingInfluence','escapingBonds','breakingEntry','resistingPoisonOrAlcohol','onOcean','estimatingObject','test.success','test.roll','test.sl','silentTakedown','calledShot','outsideCombat','targetUnaware','aimed','charging','terrain','weapon.group','weapon.reach','weapon.isMelee','weapon.improvised','weapon.pummel','actor.id','actor.size','target.id','target.size','condition.id','condition.instances','momentum.lossReason','attack.success','attack.hit','attack.usedAdvantageV5']);
-const NUMERIC = new Set(['modifySL','modifyDamage','reduceConditionAcquisition']);
-const UNIQUE = new Set(['grantAdvantage','grantDisadvantage','preventMomentumLoss','suppressQuality','addQuality','grantExtraAttack']);
+const EXTRA_FIELDS = ['attributeId','repairing','hasSkillAdvance','arguingBeforeAssembly','musicSpecialization','clowning','winningHigherStatusFavour','causeId','denouncingOrLyingAboutCause','targetAttracted','onRiverOrLake','pursuit','pursuitRole','opposedTest','enemyGroup','recallingEvent','socialTest','targetEonir','resistingVice','breakingObject','airshipFlight','extendedTest','seasickness','identifyingHeraldry','weapon.hack','weapon.crewed','weapon.unarmed','emergingBelowSurprisedTarget','buildingCover','weapon.impale','oppositionWon','talentAction','preRollTalent','actor.hasMomentum','target.hasMomentum','receivedCharge','chargedByLargerEnemy','guardedAlly','coverPenalty','involvesMovement','psychologyKind','blackpowderBrokenTest','avoidingSurprise','normallyAllowedSurpriseTest','dualWielding','weapon.dagger','situation','recoveryTest'];
+EXTRA_FIELDS.forEach(field=>FIELDS.add(field));
+const NUMERIC = new Set(['modifySL','modifyDamage','reduceConditionAcquisition','ignoreConditionPenalty','multiplySL','limitTestPenalty','improveCover','modifyQuality','increaseConditionAcquisition','modifyCriticalRoll','incomingPenalty','reduceCover','modifyQuantity','divideQuantity','modifyHealing']);
+const UNIQUE = new Set(['grantAdvantage','grantDisadvantage','preventMomentumLoss','suppressQuality','addQuality','grantExtraAttack','suppressTestPenalty','chooseCriticalRoll','ignoreArmourFlaw','riposte','activateTalent','forceTestSuccess','ignoreNegativeModifiers','forceDefenseSkill','grantMomentum','suppressProneBonus','ignoreQuantityPenalty']);
 const clone = structuredClone;
 const isRecord = value => value && typeof value === 'object' && !Array.isArray(value);
 const id = (value, label) => { if (typeof value !== 'string' || !value.trim()) throw new TypeError(`${label} requis`); };
@@ -21,15 +23,18 @@ function validateEffect(effect, event) {
   if (NUMERIC.has(op)) {
     only(effect,['op','amount','key','stackGroup','stack']);
     if (!['max','add'].includes(effect.stack)) throw new TypeError('Cumul numérique requis');
-    if (!(integer(effect.amount) || isRecord(effect.amount) && integer(effect.amount.base) && integer(effect.amount.perRank))) throw new TypeError('Quantité déclarative invalide');
-    if (isRecord(effect.amount)) only(effect.amount,['base','perRank']);
+    if (!(integer(effect.amount) || isRecord(effect.amount) && integer(effect.amount.base) && integer(effect.amount.perRank) && (effect.amount.maximum === undefined || integer(effect.amount.maximum)))) throw new TypeError('Quantité déclarative invalide');
+    if (isRecord(effect.amount)) only(effect.amount,['base','perRank','maximum']);
     if (op === 'reduceConditionAcquisition') { id(effect.key,'État réduit'); if (typeof effect.amount === 'number' ? effect.amount < 0 : effect.amount.base < 0 || effect.amount.perRank < 0) throw new TypeError('Réduction négative'); }
-    if (({modifySL:'test.beforeRoll',modifyDamage:'damage.beforeProtection',reduceConditionAcquisition:'condition.beforeAcquire'})[op] !== event) throw new TypeError('Phase numérique invalide');
+    const phases={modifySL:['test.beforeRoll','test.afterRoll'],modifyDamage:['damage.beforeProtection'],reduceConditionAcquisition:['condition.beforeAcquire'],ignoreConditionPenalty:['test.beforeRoll'],multiplySL:['test.afterRoll'],limitTestPenalty:['test.beforeRoll'],improveCover:['combat.beforeTests'],modifyQuality:['action.before'],increaseConditionAcquisition:['condition.beforeAcquire'],modifyCriticalRoll:['critical.beforeTable'],incomingPenalty:['combat.beforeTests'],reduceCover:['combat.beforeTests'],modifyQuantity:['situation.calculate'],divideQuantity:['situation.calculate'],modifyHealing:['healing.afterTest']};
+    if(!phases[op].includes(event))throw new TypeError('Phase numérique invalide');
+    if(op==='ignoreConditionPenalty')id(effect.key,'État de pénalité');
+    if(op==='multiplySL' && (!integer(effect.amount)||effect.amount<1))throw new TypeError('Multiplicateur de DR positif requis');
   } else if (UNIQUE.has(op)) {
     only(effect,['op','key','stackGroup','stack']);
     if (effect.stack !== 'unique') throw new TypeError('Cumul unique requis');
     if (['preventMomentumLoss','suppressQuality','addQuality'].includes(op)) id(effect.key,'Cible d’opération');
-    const phase = {grantAdvantage:'test.beforeRoll',grantDisadvantage:'test.beforeRoll',preventMomentumLoss:'momentum.beforeLoss',suppressQuality:'action.before',addQuality:'action.before',grantExtraAttack:'action.before'}[op];
+    const phase = {grantAdvantage:'test.beforeRoll',grantDisadvantage:'test.beforeRoll',preventMomentumLoss:'momentum.beforeLoss',suppressQuality:'action.before',addQuality:'action.before',grantExtraAttack:'action.before',suppressTestPenalty:'test.beforeRoll',chooseCriticalRoll:'critical.beforeTable',ignoreArmourFlaw:'protection.before',riposte:'damage.beforeProtection',activateTalent:'talent.activate',forceTestSuccess:'test.beforeRoll',ignoreNegativeModifiers:'test.beforeRoll',forceDefenseSkill:'action.before',grantMomentum:'combat.beforeTests',suppressProneBonus:'combat.beforeTests',ignoreQuantityPenalty:'situation.calculate'}[op];
     if (phase !== event && !(op === 'grantExtraAttack' && event === 'action.afterAttack')) throw new TypeError('Phase unique invalide');
     if (op === 'preventMomentumLoss' && !['oppositionLost','meleeTestFailed','woundsLost','conditionAcquired','combatPause','combatEnd'].includes(effect.key)) throw new TypeError('Motif d’Élan non couvert');
   } else if (op === 'chooseSLUnits') {
@@ -132,7 +137,7 @@ export function evaluateTalentContractsV2({ contracts, acquisitions, sourceHashe
       }
       if (missing.size) {unresolved.push({...origin,fields:[...missing]});trace.push({...origin,status:'requiresContext'});continue;}
       trace.push({...origin,status:'applicable'});
-      for (const effect of effects) {if(isRecord(effect.amount)){effect.amount=effect.amount.base+effect.amount.perRank*acquisition.rank;if(!integer(effect.amount))throw new TypeError('Quantité hors plage sûre');}proposals.push({...effect,origins:[origin]});}
+      for (const effect of effects) {if(isRecord(effect.amount)){effect.amount=Math.min(effect.amount.maximum??Infinity,effect.amount.base+effect.amount.perRank*acquisition.rank);if(!integer(effect.amount))throw new TypeError('Quantité hors plage sûre');}proposals.push({...effect,origins:[origin]});}
       costs.push(...clone(clause.costs||[])); exemptions.push(...clone(clause.exemptions||[])); quotas.push(...clone(clause.quotas||[]));
     }
   }

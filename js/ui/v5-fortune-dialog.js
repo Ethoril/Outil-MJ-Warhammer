@@ -2,18 +2,24 @@
 import { userMessage, userError } from './messages.js';
 const el = (tag, text, className = '') => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
 
+/** La boîte édite le solde permanent : le temporaire (couches d'effets) s'annonce mais ne s'enregistre jamais. */
+export function fortuneDialogState(fortune) {
+  const temporary = fortune.temporary > 0 ? ' (dont ' + fortune.temporary + ' temporaire' + (fortune.temporary > 1 ? 's' : '') + ')' : '';
+  return { amount: fortune.permanent ?? '', summary: fortune.balance === null ? 'Le solde courant doit être initialisé.' : 'Solde courant : ' + fortune.balance + temporary + '.' };
+}
+
 export function openV5FortuneDialog({ participantName, fortune, submit, getCurrentRevision } = {}) {
   if (!fortune || typeof submit !== 'function') throw new TypeError('Compteur de Fortune requis');
   return new Promise(resolve => {
     const opener = document.activeElement, dialog = el('dialog', null, 'tool-sheet v5-effect-dialog'), form = el('form');
     const heading = el('h2', 'Fortune — ' + participantName); heading.id = 'v5-fortune-title'; dialog.setAttribute('aria-labelledby', heading.id);
-    const summary = el('p', fortune.balance === null ? 'Le solde courant doit être initialisé.' : 'Solde courant : ' + fortune.balance + '.');
+    const state = fortuneDialogState(fortune), summary = el('p', state.summary);
     const hint = el('p', 'Ce solde est conservé entre les rencontres. Une annulation restaure aussi la Fortune.', 'workspace-muted');
     const sourceLabel = el('label', 'Initialiser depuis'), source = el('select'); source.setAttribute('aria-label', 'Initialiser Fortune depuis');
     source.append(new Option('Saisie MJ', 'mj'));
     if (fortune.balance === null && fortune.sourceBalance !== null) source.append(new Option('Solde courant connu de la fiche (' + fortune.sourceBalance + ')', 'fiche'));
     sourceLabel.append(source); sourceLabel.hidden = fortune.balance !== null || fortune.sourceBalance === null;
-    const amountLabel = el('label', 'Points de Fortune disponibles'), amount = el('input'); amount.type = 'number'; amount.step = '1'; amount.min = '0'; amount.required = true; amount.inputMode = 'numeric'; amount.setAttribute('aria-label', 'Points de Fortune disponibles'); amount.value = fortune.balance ?? ''; amountLabel.append(amount);
+    const amountLabel = el('label', fortune.temporary > 0 ? 'Points de Fortune disponibles (permanents)' : 'Points de Fortune disponibles'), amount = el('input'); amount.type = 'number'; amount.step = '1'; amount.min = '0'; amount.required = true; amount.inputMode = 'numeric'; amount.setAttribute('aria-label', 'Points de Fortune disponibles'); amount.value = state.amount; amountLabel.append(amount);
     const error = el('p', '', 'v5-effect-error'); error.setAttribute('role', 'alert'); error.hidden = true;
     const controls = el('div', null, 'row'), confirm = el('button', fortune.balance === null ? 'Initialiser Fortune' : 'Enregistrer Fortune'), cancel = el('button', 'Annuler', 'ghost'); confirm.type = 'submit'; cancel.type = 'button'; controls.append(confirm, cancel);
     form.append(heading, summary, sourceLabel, amountLabel, hint, error, controls); dialog.append(form); document.body.append(dialog);
