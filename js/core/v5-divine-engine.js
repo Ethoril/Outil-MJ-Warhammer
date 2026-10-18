@@ -597,7 +597,7 @@ export function applyDivineExecution(state, contract, input = {}) {
     if (!handler?.createParticipants || layerIndex < 0 || !owner || !effectApplies(effect, owner, appliesContext)) continue;
     const layerKey = layerId(input.executionId, actorId, contract, effect, sameTypeOrdinal(layerEffects, layerIndex));
     const layer = (owner.extensions?.v5?.divineEffects || []).find(row => row.id === layerKey);
-    const context = { contract, executionId: input.executionId, targetId: actorId, actorId, actor: owner, index, layer, expiry: input.expiry, round: input.round, input };
+    const context = { contract, executionId: input.executionId, targetId: actorId, actorId, actor: owner, index, layer, expiry: input.expiry, round: input.round, input, participants: asParticipants(next) };
     const created = (handler.createParticipants(effect, context) || []).filter(row => !asParticipants(next).some(existing => existing.id === row.id));
     if (!created.length) continue;
     next = replaceParticipants(next, [...asParticipants(next), ...created.map(clone)]);

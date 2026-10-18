@@ -340,20 +340,103 @@ test('expiration au changement de Round : la créature qui ouvre le Round suivan
   assert.equal(stateOf(store).extensions.v5.gameClock.combat.round, 3);
 });
 
-test('fin manuelle (endDivinePrayer) : retrait immédiat même si la créature est l’acteur courant ; la main passe à l’acteur suivant', async () => {
+test('fin manuelle (endDivinePrayer) : créature acteur courant = couche retirée, créature marquée endedPending, retirée à la commande suivante', async () => {
   const { store, engine } = await fixture();
   const result = await cast(store, WOLF);
   const id = wolfId(store);
   await walk(store, engine, 1);
   assert.equal(store.getCombat().currentActorId, id);
-  const round = store.getCombat().round;
+  const round = store.getCombat().round, before = world(store);
   await store.endDivinePrayer(result.receipt.executionId, { reason: 'Fin décidée par le MJ' });
-  assert.equal(wolves(store).length, 0); assert.equal(layersOf(store).length, 0);
-  assert.equal(store.getCombat().currentActorId, 'ally'); assert.equal(store.getCombat().round, round);
-  assert.deepEqual(stateOf(store).combat.order, ['priest', 'ally', 'foe']);
-  await store.undo();
-  assert.equal(store.getCombat().currentActorId, id); assert.equal(wolves(store).length, 1);
+  assert.equal(layersOf(store).length, 0);
+  assert.equal(wolves(store).length, 1); assert.equal(wolves(store)[0].extensions.v5.divineSummon.endedPending, true);
+  assert.equal(store.getCombat().currentActorId, id); assert.equal(store.getCombat().round, round);
+  assert.equal(endLines(store).length, 0);
+  assert.equal(await store.undo(), true); assert.deepEqual(world(store), before);
+  assert.equal(layersOf(store).length, 1); assert.equal(wolves(store)[0].extensions.v5.divineSummon.endedPending, undefined);
+  assert.equal(await store.redo(), true); assert.equal(wolves(store)[0].extensions.v5.divineSummon.endedPending, true);
   assert.deepEqual(await walk(store, engine, 2), ['1:ally', '1:foe']);
+  assert.equal(wolves(store).length, 0); assert.deepEqual(stateOf(store).combat.order, ['priest', 'ally', 'foe']);
+  assert.equal(endLines(store).length, 1);
+});
+
+test('fin manuelle : créature acteur courant mais absente de combat.order (setRoundTurn) : la main passe au successeur, pas à order[0]', async () => {
+  const { store, engine } = await fixture();
+  const result = await cast(store, WOLF);
+  const id = wolfId(store);
+  assert.deepEqual(stateOf(store).combat.order, ['priest', 'ally', 'foe'], 'l’ordre n’est persisté qu’au premier Tour');
+  await store.setRoundTurn(1, id);
+  assert.equal(store.getCombat().currentActorId, id);
+  await store.endDivinePrayer(result.receipt.executionId, { reason: 'Fin décidée par le MJ' });
+  assert.equal(store.getCombat().currentActorId, id, 'la main ne revient pas au prêtre');
+  const after = world(store);
+  assert.equal(await store.undo(), true); assert.equal(layersOf(store).length, 1);
+  assert.equal(await store.redo(), true); assert.deepEqual(world(store), after);
+  assert.deepEqual(await walk(store, engine, 2), ['1:ally', '1:foe']);
+  assert.equal(wolves(store).length, 0);
+});
+
+test('fin manuelle : créature dernière du Round et courante : le Round avance ensuite, le prêtre ne rejoue pas', async () => {
+  const { store, engine } = await fixture({ ally: { initiative: 50 }, foe: { initiative: 40 } });
+  const result = await cast(store, WOLF);
+  const id = wolfId(store);
+  assert.deepEqual(await walk(store, engine, 3), ['1:ally', '1:foe', `1:${id}`]);
+  await store.endDivinePrayer(result.receipt.executionId, { reason: 'Fin décidée par le MJ' });
+  assert.equal(store.getCombat().round, 1); assert.equal(store.getCombat().currentActorId, id);
+  assert.deepEqual(await walk(store, engine, 2), ['2:priest', '2:ally']);
+  assert.equal(wolves(store).length, 0);
+});
+
+test('fin manuelle en ordre manuel (nextTurn de l’engine et legacy store.nextTurn) : la créature courante dernière du Round ne fait pas rejouer le prêtre', async () => {
+  for (const mode of ['engine', 'legacy']) {
+    const { store, engine } = await fixture();
+    await store.setOrderMode('manual');
+    const result = await cast(store, WOLF);
+    const id = wolfId(store);
+    if (mode === 'engine') await walk(store, engine, 3); else for (let i = 0; i < 3; i++) await store.nextTurn();
+    assert.equal(store.getCombat().currentActorId, id, mode);
+    const round = store.getCombat().round;
+    await store.endDivinePrayer(result.receipt.executionId, { reason: 'Fin décidée par le MJ' });
+    assert.equal(store.getCombat().currentActorId, id, mode); assert.equal(store.getCombat().round, round, mode);
+    assert.equal(wolves(store).length, 1, mode);
+    if (mode === 'engine') await walk(store, engine, 1); else await store.nextTurn();
+    assert.equal(wolves(store).length, 0, mode);
+    assert.equal(store.getCombat().round, round + 1, mode);
+    assert.equal(store.getCombat().currentActorId, 'priest', mode);
+  }
+});
+
+test('fin manuelle : créature qui n’est pas l’acteur courant = retrait immédiat, acteur courant intact ; Undo/Redo', async () => {
+  const { store } = await fixture();
+  const result = await cast(store, WOLF);
+  const before = world(store);
+  assert.equal(store.getCombat().currentActorId, 'priest');
+  await store.endDivinePrayer(result.receipt.executionId, { reason: 'Fin décidée par le MJ' });
+  const after = world(store);
+  assert.equal(wolves(store).length, 0); assert.equal(layersOf(store).length, 0);
+  assert.equal(store.getCombat().currentActorId, 'priest');
+  assert.equal(endLines(store).length, 1);
+  assert.equal(await store.undo(), true); assert.deepEqual(world(store), before); assert.equal(wolves(store).length, 1);
+  assert.equal(await store.redo(), true); assert.deepEqual(world(store), after);
+});
+
+test('Loups numérotés : deux créatures divines de même profil -> « Loup », « Loup 2 », « Loup 3 » ; identifiants inchangés', async () => {
+  const { store } = await fixture();
+  const names = () => wolves(store).map(row => row.name);
+  await cast(store, WOLF);
+  assert.deepEqual(names(), ['Loup']);
+  await cast(store, SHORT, { expiry: expiry(2) });
+  await cast(store, HOWL);
+  assert.deepEqual(names().sort(), ['Loup', 'Loup 2', 'Loup 3']);
+  assert.ok(wolves(store).every(row => row.id.startsWith('divine-summon:')));
+});
+
+test('position d’apparition : au-delà de 200 caractères, le besoin est refusé clairement', () => {
+  const effect = { type: 'summon-creature', appliesTo: 'caster', kind: 'creature', choice: 'beast', requiresPosition: true };
+  const needs = position => effectNeeds(effect, { input: { summon: { beastKey: 'wolf', position } } });
+  assert.deepEqual(needs('a'.repeat(200)), []);
+  assert.equal(needs('a'.repeat(201))[0].field, 'summon.position'); assert.match(needs('a'.repeat(201))[0].label, /trop longue/);
+  assert.match(effectHandlers['summon-creature'].resolve(effect, { input: { summon: { beastKey: 'wolf', position: 'a'.repeat(201) } } }).error, /trop longue/);
 });
 
 test('Undo/Redo en chaîne (prière, Tour, fin de prière) : état identique à chaque étape', async () => {
@@ -488,10 +571,9 @@ test('sweepDivineSummons : propriétaire absent de la liste, couche d’une autr
   }
 });
 
-test('sweepDivineSummons : l’acteur courant est marqué (protectCurrent) puis retiré à la commande suivante ; protectCurrent:false le retire aussitôt', () => {
-  const make = () => ({ combat: { round: 2, currentActorId: 'W', order: ['A', 'W', 'B'], participants: [...roster(), row('B')] },
-    activeScene: { participants: [...roster(), row('B')] }, log: [] });
-  const state = make();
+test('sweepDivineSummons : l’acteur courant est marqué (endedPending) puis retiré à la commande suivante', () => {
+  const state = { combat: { round: 2, currentActorId: 'W', order: ['A', 'W', 'B'], participants: [...roster(), row('B')] },
+    activeScene: { participants: [...roster(), row('B')] }, log: [] };
   sweepDivineSummons(state);
   assert.deepEqual(state.combat.participants.map(r => r.id), ['A', 'P', 'W', 'B']);
   assert.equal(state.combat.participants.find(r => r.id === 'W').extensions.v5.divineSummon.endedPending, true);
@@ -503,10 +585,6 @@ test('sweepDivineSummons : l’acteur courant est marqué (protectCurrent) puis 
   assert.deepEqual(state.combat.participants.map(r => r.id), ['A', 'P', 'B']);
   assert.deepEqual(state.combat.order, ['A', 'B']);
   assert.deepEqual(state.activeScene.participants.map(r => r.id), ['A', 'P', 'B']);
-  const immediate = make();
-  sweepDivineSummons(immediate, { protectCurrent: false });
-  assert.deepEqual(immediate.combat.order, ['A', 'B']);
-  assert.equal(immediate.combat.currentActorId, 'B', 'la main passe à l’acteur suivant, pas à order[0]');
 });
 
 test('sweepDivineSummons : un état sans invocation divine reste identique (invocations magiques comprises)', () => {

@@ -26,6 +26,16 @@ const beastKeyOf = (effect, input) => effect.profile?.key ?? effect.profile ?? i
 // Identifiant déterministe : seuls [A-Za-z0-9:_-] (les identifiants de contrat et d'exécution peuvent en porter d'autres).
 const safe = value => String(value).replace(/[^A-Za-z0-9:_-]/g, '_');
 
+const POSITION_MAX = 200;
+// Même numérotation que les invocations magiques et les rencontres : « Loup », « Loup 2 », « Loup 3 »… parmi les créatures divines présentes.
+function numberedName(name, participants = []) {
+  const used = participants.filter(row => row?.extensions?.v5?.divineSummon).map(row => row.name);
+  if (!used.includes(name)) return name;
+  let max = 1;
+  for (const other of used) if (other.startsWith(name + ' ') && /^\d+$/.test(other.slice(name.length + 1))) max = Math.max(max, Number(other.slice(name.length + 1)));
+  return `${name} ${max + 1}`;
+}
+
 const handler = {
   validate(effect) {
     if (effect.appliesTo !== 'caster' && effect.casterOnly !== true) return 'summon-creature exige appliesTo "caster".';
@@ -46,6 +56,7 @@ const handler = {
     if (effect.kind === 'creature' && !SUMMON_BEAST_KEYS.includes(beastKeyOf(effect, input)))
       needs.push(need(effect.choice === 'beast' ? 'summon.beastKey' : 'contract.effects.profile', `Bête invoquée (liste fermée : ${BEAST_LABEL})`));
     if (effect.requiresPosition === true && !isText(input?.summon?.position)) needs.push(need('summon.position', 'Position d’apparition de la créature'));
+    else if (effect.requiresPosition === true && input.summon.position.trim().length > POSITION_MAX) needs.push(need('summon.position', `Position d’apparition trop longue (${POSITION_MAX} caractères au plus)`));
     return needs;
   },
   // Le profil complet est figé à l'aperçu : l'application ne recalcule rien.
@@ -62,13 +73,13 @@ const handler = {
   },
   buildLayer: effect => ({ summon: { kind: effect.kind, ...(effect.kind === 'creature' ? { profileKey: effect.profile?.key ?? effect.profile } : {}) } }),
   // Participant ordinaire, créé par le moteur juste après les couches : ctx = {contract, executionId, index, actorId, actor, layer, round}.
-  createParticipants(effect, { contract, executionId, index, actorId, actor, layer, round }) {
+  createParticipants(effect, { contract, executionId, index, actorId, actor, layer, round, participants }) {
     if (!enabled || !layer) return [];
     const link = { executionId, contractId: contract.id, ownerId: actorId, layerId: layer.id, kind: effect.kind,
       ...(effect.kind === 'creature' ? { profileKey: effect.profile.key } : {}), createdRound: Number.isSafeInteger(round) && round >= 1 ? round : 1, onEnd: 'remove' };
     const base = { id: `divine-summon:${safe(executionId)}:${safe(contract.id)}:${index}`, camp: actor?.camp || 'neutre', ownerId: actorId, link };
     return [effect.kind === 'sensor' ? summonSensorParticipant({ ...base, name: effect.name, traits: effect.traits })
-      : summonCreatureParticipant(effect.profile, { ...base, position: effect.position })];
+      : summonCreatureParticipant(effect.profile, { ...base, name: numberedName(effect.profile.name, participants), position: effect.position })];
   },
   inputFields: effect => [
     ...(effect.choice === 'beast' ? [{ path: 'summon.beastKey', label: 'Bête invoquée', kind: 'select', scope: 'effect',

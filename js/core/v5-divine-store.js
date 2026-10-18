@@ -452,6 +452,12 @@ export function setStoreDivineSin(state,actorId,value,{reason}={}){
  return next;
 }
 
+/**
+ * Fin manuelle : retire les couches de la prière, puis balaie ses créatures comme à l'expiration. Une créature qui est l'acteur courant
+ * reste (marquée `divineSummon.endedPending`) jusqu'à la commande suivante, une fois la main passée : `removeFromCombat` ne sait pas
+ * désigner le successeur d'un acteur absent de `combat.order` ni faire avancer le Round, et le prêtre rejouerait son Tour. Une
+ * créature qui n'est pas l'acteur courant est retirée aussitôt.
+ */
 export function endStoreDivinePrayer(state,executionId,{reason}={}){
  if(typeof reason!=='string'||!reason.trim())throw ruleError('Indiquez la raison de la fin de cette prière.');
  const next=clone(state);let removed=0;
@@ -464,7 +470,7 @@ export function endStoreDivinePrayer(state,executionId,{reason}={}){
   removed+=ending.length;participant.extensions.v5.divineEffects=kept;
  }
  if(!removed)throw ruleError('Cette prière ne possède plus d’effet actif.');
- sweepDivineSummons(next,{protectCurrent:false});
+ sweepDivineSummons(next);
  const receipt=(next.extensions?.v5?.divineExecutions||[]).find(row=>row.executionId===executionId);if(receipt)receipt.endedByMJ=reason.trim();
  next.log=[{id:executionId+':end',kind:'effect',text:'Prière terminée par le MJ · '+reason.trim()},...(next.log||[])].slice(0,300);
  return next;
@@ -477,16 +483,16 @@ const ownsSummon=(owner,link)=>(owner?.extensions?.v5?.divineEffects||[]).some(l
  * Retire (en place) les créatures invoquées par un miracle dont la couche `summon-creature` a disparu du prêtre (même liste), dans le
  * combat, la scène active et les scènes suspendues : order, acteur courant, lignes de dés et journal suivent dans la même commande.
  * Une créature qui est l'acteur courant n'est pas retirée mais marquée `divineSummon.endedPending` (retrait à la commande suivante, une
- * fois la main passée : jamais de Tour rejoué ni sauté) ; `protectCurrent:false` (fin manuelle, qui n'avance pas l'horloge) la retire aussitôt.
+ * fois la main passée : jamais de Tour rejoué ni sauté), que la couche ait expiré ou que le MJ ait terminé la prière.
  */
-export function sweepDivineSummons(state,{protectCurrent=true}={}){
+export function sweepDivineSummons(state){
  const lists=[state?.combat?.participants,state?.activeScene?.participants,...(state?.suspendedScenes||[]).map(scene=>scene?.participants)];
  const orphans=list=>Array.isArray(list)?list.filter(row=>{const link=summonLink(row);return link&&!ownsSummon(list.find(item=>item.id===link.ownerId),link);}):[];
  if(!lists.some(list=>orphans(list).length))return state;
  const deferred=new Set(),removed=new Map();
  const combatList=orphans(lists[0]);
  for(const creature of combatList){
-  if(protectCurrent&&state.combat.currentActorId===creature.id){summonLink(creature).endedPending=true;deferred.add(creature.id);continue;}
+  if(state.combat.currentActorId===creature.id){summonLink(creature).endedPending=true;deferred.add(creature.id);continue;}
   const transition=creature.zone==='active'?removeFromCombat({participants:state.combat.participants,order:state.combat.order||[],currentActorId:state.combat.currentActorId,participantId:creature.id}):null;
   state.combat.participants=state.combat.participants.filter(row=>row.id!==creature.id);
   state.combat.order=transition?transition.order:(state.combat.order||[]).filter(id=>id!==creature.id);
