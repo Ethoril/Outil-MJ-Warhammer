@@ -1,2 +1,179 @@
-/** Gestionnaires d'effet divins (T4) : {type -> {validate, needs, buildLayer, applyInstant, receipt}}, voir v5-divine-effect-handlers.js. */
-export default {};
+/**
+ * Gestionnaires d'effet divins (T4) : Traits, États spéciaux, Actions, Talents, bonus d'arme et modificateurs de Test.
+ * Les couches portent la donnée ; Traits, actions, bonus d'arme et Talents n'étant pas lus gratuitement par le recalcul des valeurs,
+ * `projectDivineGear` les reconstruit depuis `divineEffects` (appelée par recomputeLayerValues) : fin d'effet, Undo et synchro
+ * nettoient donc seuls ce qu'ils ont posé.
+ */
+const clone = value => structuredClone(value);
+const need = (field, label) => ({ field, label });
+const isText = value => typeof value === 'string' && value.trim() !== '';
+const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
+const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+const specialStateKeys = new Set(['fearImmune', 'terrorAsFear', 'ignoreConditionPenalties', 'cannotRaiseUndead']);
+// Talents dont le moteur lit un contrat mécanique : seuls ceux-là sont injectés pour de vrai (les autres restent une étiquette).
+export const injectableTalentIds = new Set(['talent-fearless', 'talent-strong-legs', 'talent-menacing', 'talent-catfall', 'talent-drilled', 'talent-hatred', 'talent-frenzy']);
+const weaponFacts = input => input?.facts?.weapon;
+const characteristicBonus = (participant, key) => {
+  const score = Number(participant?.caracs?.[key]);
+  return Number.isFinite(score) ? Math.floor(score / 10) : null;
+};
+const liveLayer = (participant, layer) => layer && (participant.extensions?.v5?.divineEffects || []).find(row => row.id === layer.id);
+const noTestKeyAmbiguity = key => !/^(pray|prayer|priere)\s*\(/i.test(fold(key));
+
+const handlers = {
+  'grant-trait': {
+    validate: effect => !Array.isArray(effect.traits) || !effect.traits.length || !effect.traits.every(isText) ? 'grant-trait exige traits (liste de textes).' : null,
+    needs: effect => Array.isArray(effect.traits) && effect.traits.length && effect.traits.every(isText) ? [] : [need('contract.effects.traits', 'Traits sourcés requis')],
+    // `casterOnly` : le Trait ne va qu'au prêtre, même si le miracle vise aussi des alliés (Peur de Flambeau de Vertu).
+    buildLayer: (effect, { actorId, targetId }) => effect.casterOnly === true && targetId !== actorId ? {} : { traits: [...effect.traits] }
+  },
+  'special-state': {
+    validate(effect) {
+      const keys = Object.keys(effect).filter(key => specialStateKeys.has(key));
+      if (!keys.length) return `special-state exige l’un de ${[...specialStateKeys].join(', ')}.`;
+      return keys.some(key => effect[key] !== true) ? 'special-state : chaque drapeau doit valoir true.' : null;
+    },
+    needs: effect => Object.keys(effect).some(key => specialStateKeys.has(key)) ? [] : [need('contract.effects.specialState', 'État spécial sourcé requis')],
+    buildLayer: effect => ({ specialState: Object.fromEntries(Object.keys(effect).filter(key => specialStateKeys.has(key)).map(key => [key, true])) })
+  },
+  'grant-actions': {
+    validate: effect => !Array.isArray(effect.actions) || !effect.actions.length
+      || !effect.actions.every(action => isRecord(action) && isText(action.id) && isText(action.name) && isText(action.damageFormula)) ? 'grant-actions exige actions [{id, name, damageFormula}].' : null,
+    needs: effect => Array.isArray(effect.actions) && effect.actions.length ? [] : [need('contract.effects.actions', 'Actions sourcées requises')],
+    buildLayer: effect => ({ grantedActions: effect.actions.map(action => ({ id: action.id, note: action.name, type: 'attack', attr: action.attr || 'CC',
+      damageFormula: action.damageFormula, qualities: clone(action.qualities || []), extensions: { v5: { kind: 'melee', materialized: true } } })) })
+  },
+  'grant-talent': {
+    validate: effect => !Array.isArray(effect.talents) || !effect.talents.length
+      || !effect.talents.every(row => isRecord(row) && isText(row.id) && Number.isSafeInteger(row.rank ?? 1) && (row.rank ?? 1) >= 1) ? 'grant-talent exige talents [{id, rank}].' : null,
+    needs: effect => Array.isArray(effect.talents) && effect.talents.length ? [] : [need('contract.effects.talents', 'Talents sourcés requis')],
+    buildLayer: effect => ({ grantedTalents: effect.talents.map(row => ({ id: row.id, rank: row.rank ?? 1, ...(row.name ? { name: row.name } : {}), ...(row.specialization ? { specialization: row.specialization } : {}) })) })
+  },
+  'weapon-bonus': {
+    validate(effect) {
+      if (effect.damage !== undefined && !Number.isFinite(effect.damage)) return 'weapon-bonus : damage doit être un nombre.';
+      if (effect.replaceDamageBonus !== undefined && !Number.isFinite(effect.replaceDamageBonus)) return 'weapon-bonus : replaceDamageBonus doit être un nombre.';
+      if (effect.damageFrom !== undefined && !isText(effect.damageFrom)) return 'weapon-bonus : damageFrom doit nommer une caractéristique.';
+      for (const key of ['qualities', 'hitConditions']) if (effect[key] !== undefined && (!Array.isArray(effect[key]) || !effect[key].every(isText))) return `weapon-bonus : ${key} doit être une liste de textes.`;
+      return ['magical', 'qualities', 'hitConditions', 'damage', 'damageFrom', 'replaceDamageBonus', 'damageFormula', 'value'].some(key => effect[key] !== undefined) ? null : 'weapon-bonus exige au moins un bonus.';
+    },
+    // Contrôle souple (A10) : l'arme désignée est demandée, sa classe (marteau, hache…) n'est jamais vérifiée ni bloquante.
+    needs: (effect, { input } = {}) => effect.designatedWeapon === true && !isText(weaponFacts(input)?.equipmentId)
+      ? [need('facts.weapon.equipmentId', `Arme maniée par le prêtre${effect.weaponClass ? ` (${effect.weaponClass})` : ''}`)] : [],
+    buildLayer: (effect, { contract }) => ({ weaponBonus: {
+      spellName: contract?.name,
+      ...(effect.magical === true ? { magical: true } : {}),
+      ...(Number.isFinite(effect.damage) ? { damage: effect.damage } : {}),
+      ...(Number.isFinite(effect.replaceDamageBonus) ? { replaceDamageBonus: effect.replaceDamageBonus } : {}),
+      ...(effect.damageFormula ? { damageFormula: effect.damageFormula } : {}),
+      ...(effect.qualities?.length ? { qualities: [...effect.qualities] } : {}),
+      ...(effect.hitConditions?.length ? { hitConditions: [...effect.hitConditions] } : {}),
+      ...(effect.onWoundsOnly === true ? { onWoundsOnly: true } : {}),
+      ...(effect.unarmedOnly === true ? { unarmedOnly: true } : {}),
+      ...(effect.ranged === true ? { ranged: true } : {}),
+      ...(effect.weaponClass ? { weaponClass: effect.weaponClass } : {})
+    }, ...(Number.isFinite(effect.value) ? { weaponDamageProgression: effect.value } : {}) }),
+    // Bonus dépendant du prêtre ou de la désignation : résolu à l'application, écrit sur la couche vivante.
+    applyInstant(participant, effect, { layer, input }) {
+      const live = liveLayer(participant, layer);
+      if (!live?.weaponBonus) return null;
+      const result = {};
+      const fromCharacteristic = effect.damageFrom ? characteristicBonus(participant, effect.damageFrom) : 0;
+      const progression = Number.isFinite(live.weaponDamageProgression) ? live.weaponDamageProgression : 0;
+      if (fromCharacteristic === null) throw Object.assign(new Error(`Caractéristique ${effect.damageFrom} inconnue pour le bonus d’arme.`), { code: 'DIVINE_WEAPON_BONUS' });
+      if (effect.damageFrom || progression) {
+        live.weaponBonus.damage = (live.weaponBonus.damage || 0) + fromCharacteristic + progression;
+        result.damage = live.weaponBonus.damage;
+      }
+      delete live.weaponDamageProgression;
+      if (effect.designatedWeapon === true) {
+        const weapon = weaponFacts(input);
+        live.weaponBonus.equipmentId = weapon.equipmentId;
+        live.weaponBonus.classConfirmed = weapon.classConfirmed === true;
+        result.equipmentId = weapon.equipmentId;
+        result.classConfirmed = live.weaponBonus.classConfirmed;
+      }
+      return result;
+    },
+    receipt: (effect, { targetId }, result) => result ? { targetId, type: effect.type, result: clone(result) } : null
+  },
+  'test-modifier': {
+    validate(effect) {
+      if (!isRecord(effect.modifiers) || !Object.keys(effect.modifiers).length) return 'test-modifier exige modifiers {clé: DR}.';
+      if (!Object.values(effect.modifiers).every(Number.isSafeInteger)) return 'test-modifier : chaque DR doit être un entier.';
+      return Object.keys(effect.modifiers).every(noTestKeyAmbiguity) ? null : 'test-modifier : clé de Test ambiguë (Prière spécialisée).';
+    },
+    needs: effect => isRecord(effect.modifiers) && Object.keys(effect.modifiers).length && Object.values(effect.modifiers).every(Number.isSafeInteger)
+      && Object.keys(effect.modifiers).every(noTestKeyAmbiguity) ? [] : [need('contract.effects.modifiers', 'Modificateurs de Test sourcés et sans ambiguïté requis')],
+    buildLayer: effect => ({ testModifiers: { ...effect.modifiers } })
+  }
+};
+export default handlers;
+
+/**
+ * Projection dérivée des couches divines vers la fiche : Traits (temporaryTraits et alias `traits`), bonus d'arme, actions
+ * matérialisées et Talents réellement injectés. Idempotente ; sans couche divine concernée, ne touche à rien.
+ */
+export function projectDivineGear(next) {
+  const v5 = next?.extensions?.v5;
+  if (!v5) return next;
+  const layers = (Array.isArray(v5.divineEffects) ? v5.divineEffects : []).filter(isRecord);
+  projectTraits(next, v5, layers);
+  projectWeaponBonuses(v5, layers);
+  projectActions(next, layers);
+  projectTalents(next, layers);
+  return next;
+}
+
+function projectTraits(next, v5, layers) {
+  const wanted = [...new Set(layers.flatMap(layer => Array.isArray(layer.traits) ? layer.traits.filter(isText) : []))];
+  const previous = Array.isArray(v5.divineTraits) ? v5.divineTraits : [];
+  if (!wanted.length && !previous.length) return;
+  if (!Array.isArray(v5.baseTraits)) v5.baseTraits = Array.isArray(next.traits) ? [...next.traits] : Array.isArray(next.extensions?.traits) ? [...next.extensions.traits] : [];
+  const others = new Set([...(v5.spellEffects || []).flatMap(effect => effect?.traits || []), ...(v5.miscastEffects || []).flatMap(effect => effect?.traitsGained || [])]);
+  const kept = (Array.isArray(v5.temporaryTraits) ? v5.temporaryTraits : []).filter(trait => !previous.includes(trait) || others.has(trait));
+  v5.temporaryTraits = [...new Set([...kept, ...wanted])];
+  next.traits = [...new Set([...v5.baseTraits, ...v5.temporaryTraits])].filter(isText);
+  if (wanted.length) v5.divineTraits = wanted; else delete v5.divineTraits;
+}
+
+function projectWeaponBonuses(v5, layers) {
+  const own = layers.filter(layer => isRecord(layer.weaponBonus));
+  const rows = Array.isArray(v5.weaponBonuses) ? v5.weaponBonuses : [];
+  if (!own.length && !rows.some(row => row?.divineEffectId)) return;
+  const ids = new Set(layers.map(layer => layer.id));
+  const kept = rows.filter(row => !row?.divineEffectId && !ids.has(row?.effectId));
+  const bonuses = [...kept, ...own.map(layer => ({ effectId: layer.id, divineEffectId: layer.id, ...clone(layer.weaponBonus) }))];
+  if (bonuses.length) v5.weaponBonuses = bonuses; else delete v5.weaponBonuses;
+}
+
+// « BF+3 » -> 3 : la formule d'une action de Force garde son bonus fixe dans `damage` (voir damage.js).
+const damageBonusOf = formula => Number(String(formula).match(/^BF\s*([+-]\s*\d+)?$/i)?.[1]?.replace(/\s+/g, '') || 0);
+
+function projectActions(next, layers) {
+  const wanted = layers.flatMap(layer => (Array.isArray(layer.grantedActions) ? layer.grantedActions : []).map(action => ({ ...clone(action), id: `divine-action:${layer.id}:${action.id}`,
+    extensions: { ...action.extensions, v5: { ...action.extensions?.v5, divineEffectId: layer.id } } })));
+  const actions = Array.isArray(next.actions) ? next.actions : [];
+  const ids = new Set(wanted.map(action => action.id));
+  const stale = actions.some(action => action?.extensions?.v5?.divineEffectId && !ids.has(action.id));
+  if (!wanted.length && !stale) return;
+  const base = Number((next.extensions.v5.baseCaracs || next.baseCaracs)?.CC ?? next.caracs?.CC);
+  const present = new Set(actions.map(action => action?.id));
+  next.actions = [...actions.filter(action => !action?.extensions?.v5?.divineEffectId || ids.has(action.id)),
+    ...wanted.filter(action => !present.has(action.id)).map(action => ({ ...action, base: Number.isFinite(base) ? base : 0, mod: 0, damage: damageBonusOf(action.damageFormula) }))];
+}
+
+// Talents injectés : seulement la liste blanche à contrat mécanique, rattachés à leur couche pour partir avec elle.
+function projectTalents(next, layers) {
+  const wanted = layers.flatMap(layer => (Array.isArray(layer.grantedTalents) ? layer.grantedTalents : [])
+    .filter(row => injectableTalentIds.has(row.id)).map(row => ({ layerId: layer.id, ...row })));
+  const talents = Array.isArray(next.talents) ? next.talents : [];
+  const marked = row => typeof row?.divineEffectId === 'string';
+  if (!wanted.length && !talents.some(marked)) return;
+  const kept = talents.filter(row => !marked(row));
+  const injected = wanted
+    .filter(row => !kept.some(own => own?.status === 'resolved' && own.id === row.id && Number(own.rank) >= row.rank && (own.specialization || own.specialty || null) === (row.specialization || null)))
+    .map(row => ({ id: row.id, name: row.name || row.id, status: 'resolved', rank: row.rank, ...(row.specialization ? { specialization: row.specialization } : {}), divineEffectId: row.layerId, temporary: true }));
+  next.talents = [...kept, ...injected];
+}

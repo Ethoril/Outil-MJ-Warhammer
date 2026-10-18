@@ -164,12 +164,17 @@ function projectPrayerLesson(state,subjectKey,lesson,{operation='add'}={}){
  return {ok:true,state:next,removed,needsInput:[]};
 }
 const reducedRow=row=>row&&Object.fromEntries(['nom','portee','cible','duree','effet'].map(key=>[key,row[key]||'']));
+// Bonus d'arme divin et magique visant la même arme (ou toute arme) avec un même type de bonus de dégâts : cumul à arbitrer.
+const weaponBonusKeys=['damage','replaceDamageBonus','damageFormula'];
+const overlappingWeaponBonus=(left,right)=>Boolean(left&&right)&&(!left.equipmentId||!right.equipmentId||left.equipmentId===right.equipmentId)&&weaponBonusKeys.some(key=>left[key]!==undefined&&right[key]!==undefined);
 function unresolvedCombination(state){
  for(const target of parts(state)){
   const spells=target.extensions?.v5?.spellEffects||[],divine=target.extensions?.v5?.divineEffects||[];
   for(const layer of divine)for(const spell of spells){
    if(Object.keys(layer.statModifiers||{}).some(key=>Number(layer.statModifiers[key])&&Number(spell.statModifiers?.[key])))return 'Le cumul d’un bonus divin et magique sur la même caractéristique reste à arbitrer (DIV-05).';
    if(Object.keys(layer.testModifiers||{}).some(key=>Number(layer.testModifiers[key])&&Number(spell.testModifiers?.[key])))return 'Le cumul d’un modificateur de Test divin et magique sur la même cible de Test reste à arbitrer (DIV-05).';
+   if((layer.traits||[]).some(trait=>(spell.traits||[]).includes(trait)))return 'Le cumul d’un Trait divin et magique identique reste à arbitrer (DIV-05).';
+   if(overlappingWeaponBonus(layer.weaponBonus,spell.weaponBonus))return 'Le cumul d’un bonus d’arme divin et magique sur la même arme reste à arbitrer (DIV-05).';
    if(Object.keys(layer.apModifiers||{}).length && (Object.keys(spell.apModifiers||{}).length||Number(spell.apBonus)||Number(spell.armorBonus)))return 'Le cumul de PA divins et magiques reste à arbitrer (DIV-05).';
   }
  }

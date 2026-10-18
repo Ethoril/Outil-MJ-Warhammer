@@ -118,8 +118,9 @@ export const miracles = [
     printedPage: 228,
     summary: 'Si vous maniez une hache, elle devient Magique et inflige +DR Dégâts; toute cible touchée gagne l\'État Fatigué. Les cibles touchées perdent leurs États Hémorragique (le sang gèle), et votre hache ne peut pas en causer.',
     params: { range: self, targets: self, duration: felRounds },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
+    effects: [{ type: 'weapon-bonus', magical: true, value: 0, perSuccessLevels: { every: 1, add: 1, field: 'value' }, hitConditions: ['Exténué'], designatedWeapon: true, weaponClass: 'hache' }],
     targetRules: ['wielding-axe'],
     needsInput: [
       { id: 'axe', text: 'Le prêtre manie-t-il une hache ?' },
@@ -127,12 +128,12 @@ export const miracles = [
       { id: 'targets-struck', text: 'Cibles touchées par la hache à chaque coup.' }
     ],
     clauses: [
-      { id: 'magical', mode: 'manual', text: 'La hache brandie est considérée comme Magique.' },
-      { id: 'damage-plus-sl', mode: 'assisted', text: '+DR Dégâts avec la hache.' },
-      { id: 'fatigued', mode: 'assisted', text: 'Toute cible touchée gagne un État Fatigué.' },
+      { id: 'magical', mode: 'engine', text: 'La hache brandie est considérée comme Magique.' },
+      { id: 'damage-plus-sl', mode: 'engine', text: '+DR Dégâts avec la hache.' },
+      { id: 'fatigued', mode: 'engine', text: 'Toute cible touchée gagne un État Fatigué.' },
       { id: 'remove-bleeding', mode: 'manual', text: 'Toute cible touchée perd ses États Hémorragique.' },
       { id: 'no-bleeding', mode: 'manual', text: 'La hache ne peut causer aucun État Hémorragique.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
     sourceDelta: '« +SL Damage » : SL du test de Prière présumé, non précisé; Fatigué : un seul État par coup.'
   }

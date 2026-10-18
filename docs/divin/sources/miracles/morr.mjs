@@ -6,13 +6,15 @@ export const miracles = [
   name: 'Masque mortuaire', canonicalName: 'Death Mask', printedPage: 223,
   summary: 'Le visage du prêtre devient cadavérique et il gagne le Trait Peur (Fear). Les morts-vivants n’en sont pas immunisés, quels que soient leurs Talents, Traits (Construct compris) ou autres effets.',
   params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' } },
-  status: 'manual', effect: null,
+  status: 'assisted',
+  effect: null,
+  effects: [{ type: 'grant-trait', traits: ['Peur (1)'] }],
   targetRules: ['prêtre uniquement'],
   needsInput: [
    { id: 'fear-resolution', text: 'Quelles créatures doivent résister à la Peur, et les morts-vivants présents ignorent-ils bien leur immunité ?' }
   ],
   clauses: [
-   { id: 'fear', mode: 'manual', text: 'Le prêtre gagne Peur (Fear) pendant la durée.' },
+   { id: 'fear', mode: 'engine', text: 'Le prêtre gagne Peur (Fear) pendant la durée.' },
    { id: 'undead-not-immune', mode: 'manual', text: 'Les morts-vivants ne sont pas immunisés contre cette Peur, malgré tout Talent, Trait ou effet.' }
   ]
  },

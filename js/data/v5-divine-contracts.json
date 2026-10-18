@@ -3,7 +3,7 @@
   "generatorVersion": "divine-contracts-0.2.0",
   "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
   "sourceManifest": {
-    "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+    "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
     "miraclesCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
     "v5EnglishBaseSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
     "authoritativeEdition": "V5 EN"
@@ -1219,7 +1219,7 @@
       "id": "divine:miracle:ranald:ranald-s-grace",
       "catalogueEntry": null,
       "v5Summary": "Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) ; le moteur n’a pas de modificateur de compétence ni d’octroi temporaire de Talent, donc miracle manuel malgré la partie Agilité automatisable.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1339,7 +1339,7 @@
       "id": "divine:miracle:sigmar:beacon-of-righteous-virtue",
       "catalogueEntry": null,
       "v5Summary": "Le livre ne précise pas si le prêtre est compté parmi les alliés, ni la portée de la ligne de vue; portée et cible imprimées : Vous / Vous.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1414,7 +1414,7 @@
       "id": "divine:miracle:taal:animal-instincts",
       "catalogueEntry": null,
       "v5Summary": "Portée imprimée « Touch » : la grammaire params n'a pas de contact, encodée en special.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1459,7 +1459,7 @@
       "id": "divine:miracle:taal:tooth-and-claw",
       "catalogueEntry": null,
       "v5Summary": "Le texte imprimé dit « Their attacks are Magical » : portée exacte (attaques de ces Traits ou toutes) ambiguë.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1534,7 +1534,7 @@
       "id": "divine:miracle:ulric:winter-s-bite",
       "catalogueEntry": null,
       "v5Summary": "« +SL Damage » : SL du test de Prière présumé, non précisé; Fatigué : un seul État par coup.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1609,7 +1609,7 @@
       "id": "divine:miracle:verena:wisdom-of-the-owl",
       "catalogueEntry": null,
       "v5Summary": "Seul +20 Int est un effet moteur; les trois talents temporaires et la question au MJ ne le sont pas, donc statut manual. « effects » transmet le modificateur pour le jour où les talents temporaires seront gérés.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1655,7 +1655,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -1768,7 +1768,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -1871,7 +1871,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -1984,7 +1984,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2087,7 +2087,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2190,7 +2190,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2293,7 +2293,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2406,7 +2406,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2509,7 +2509,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2622,7 +2622,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2735,7 +2735,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2838,7 +2838,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2933,7 +2933,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3036,7 +3036,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3149,7 +3149,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3252,7 +3252,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3355,7 +3355,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3450,7 +3450,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3563,7 +3563,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3676,7 +3676,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3779,7 +3779,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3892,7 +3892,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3995,7 +3995,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4098,7 +4098,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4211,7 +4211,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4314,7 +4314,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4417,7 +4417,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4530,7 +4530,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4626,7 +4626,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4729,7 +4729,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4817,7 +4817,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4920,7 +4920,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5023,7 +5023,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5119,7 +5119,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5222,7 +5222,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5310,7 +5310,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5405,7 +5405,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5518,7 +5518,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5631,7 +5631,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5744,7 +5744,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5857,7 +5857,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5960,7 +5960,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6063,7 +6063,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6176,7 +6176,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6279,7 +6279,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6382,7 +6382,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6495,7 +6495,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6608,7 +6608,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6711,7 +6711,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6824,7 +6824,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6937,7 +6937,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7050,7 +7050,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7163,7 +7163,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7266,7 +7266,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7361,7 +7361,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7464,7 +7464,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7577,7 +7577,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7680,7 +7680,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7783,7 +7783,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7896,7 +7896,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7995,7 +7995,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -8097,7 +8097,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -8213,7 +8213,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -8315,7 +8315,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -8415,7 +8415,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -8517,7 +8517,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -8618,7 +8618,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -8690,7 +8690,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -8762,7 +8762,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -8834,7 +8834,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -8906,7 +8906,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -8978,7 +8978,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -9050,7 +9050,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -9122,7 +9122,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -9194,7 +9194,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -9266,7 +9266,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -9386,7 +9386,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -9507,7 +9507,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -9623,7 +9623,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -9724,7 +9724,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -9882,7 +9882,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -9973,7 +9973,7 @@
       "catalogueName": "Masque mortuaire",
       "canonicalName": "Death Mask",
       "deity": "Morr",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -9984,7 +9984,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10037,7 +10037,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Peur (1)"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "prêtre uniquement"
@@ -10050,7 +10063,7 @@
       "clauses": [
         {
           "id": "fear",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Le prêtre gagne Peur (Fear) pendant la durée.",
           "sourceRef": "v5-death-mask"
         },
@@ -10086,7 +10099,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10203,7 +10216,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10318,7 +10331,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10428,7 +10441,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10550,7 +10563,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10678,7 +10691,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10785,7 +10798,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10903,7 +10916,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11003,7 +11016,7 @@
       "catalogueName": "Grâce de Ranald",
       "canonicalName": "Ranald's Grace",
       "deity": "Ranald",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -11014,7 +11027,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11068,7 +11081,35 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "Ag",
+          "value": 10,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-catfall",
+              "name": "Chute féline",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Ranald's Grace",
@@ -11090,7 +11131,7 @@
         },
         {
           "id": "catfall",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible gagne +1 niveau du Talent Chute féline (Catfall) pendant la durée.",
           "sourceRef": "v5-ranald-s-grace"
         }
@@ -11124,7 +11165,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11258,7 +11299,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11373,7 +11414,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11490,7 +11531,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11589,7 +11630,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11712,7 +11753,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11823,7 +11864,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11941,7 +11982,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12033,7 +12074,7 @@
       "catalogueName": "Endurance de l’anachorète",
       "canonicalName": "Anchorite's Endurance",
       "deity": "Shallya",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12044,7 +12085,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12100,7 +12141,30 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Impassible"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "special-state",
+          "ignoreConditionPenalties": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Anchorite's Endurance",
@@ -12110,14 +12174,14 @@
       "clauses": [
         {
           "id": "painless-trait",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible gagne le Trait de créature Painless pendant la durée.",
           "sourceRef": "v5-anchorite-s-endurance"
         },
         {
           "id": "condition-penalties",
-          "mode": "manual",
-          "text": "La cible ne subit aucune pénalité causée par les États (les États restent présents).",
+          "mode": "engine",
+          "text": "La cible ne subit aucune pénalité causée par les États (les États restent présents) ; Inconscient et Surpris gardent leurs restrictions.",
           "sourceRef": "v5-anchorite-s-endurance"
         },
         {
@@ -12156,7 +12220,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12276,7 +12340,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12382,7 +12446,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12494,7 +12558,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12612,7 +12676,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12703,7 +12767,7 @@
       "catalogueName": "Flambeau de Vertu",
       "canonicalName": "Beacon of Righteous Virtue",
       "deity": "Sigmar",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12714,7 +12778,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12767,7 +12831,31 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "fearImmune": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Peur (1)"
+          ],
+          "casterOnly": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Beacon of Righteous Virtue",
@@ -12783,13 +12871,13 @@
         },
         {
           "id": "fearless",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Ils gagnent le talent Fearless (Everything) tant que le miracle dure et que le prêtre reste dans leur ligne de vue.",
           "sourceRef": "v5-beacon-of-righteous-virtue"
         },
         {
           "id": "fear-greenskins",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Le prêtre cause la Peur chez les orques et les gobelins.",
           "sourceRef": "v5-beacon-of-righteous-virtue"
         },
@@ -12833,7 +12921,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12933,7 +13021,7 @@
       "catalogueName": "Marteau ardent de Sigmar",
       "canonicalName": "Sigmar's Fiery Hammer",
       "deity": "Sigmar",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12944,7 +13032,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -12997,7 +13085,24 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "damageFrom": "Soc",
+          "hitConditions": [
+            "Enflammé"
+          ],
+          "designatedWeapon": true,
+          "weaponClass": "marteau de guerre",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Sigmar's Fiery Hammer",
@@ -13013,19 +13118,19 @@
         },
         {
           "id": "magical",
-          "mode": "manual",
+          "mode": "engine",
           "text": "L’arme compte comme Magique.",
           "sourceRef": "v5-sigmar-s-fiery-hammer"
         },
         {
           "id": "damage-bonus",
-          "mode": "manual",
-          "text": "L’arme inflige +Bonus de Sociabilité Dégâts (bonus de dégâts d’arme non géré par le moteur).",
+          "mode": "engine",
+          "text": "L’arme inflige +Bonus de Sociabilité Dégâts.",
           "sourceRef": "v5-sigmar-s-fiery-hammer"
         },
         {
           "id": "ablaze-on-hit",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Toute cible frappée reçoit +1 État Enflammé (Ablaze).",
           "sourceRef": "v5-sigmar-s-fiery-hammer"
         },
@@ -13065,7 +13170,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13184,7 +13289,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13319,7 +13424,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13429,7 +13534,7 @@
       "catalogueName": "Instincts animaux",
       "canonicalName": "Animal Instincts",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -13440,7 +13545,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13494,7 +13599,24 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-acute-sense",
+              "name": "Sens aiguisé",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Animal Instincts",
@@ -13504,7 +13626,7 @@
       "clauses": [
         {
           "id": "acute-sense-plus-1",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "La cible gagne +1 au talent Sens aiguisé pour le sens choisi (talent temporaire).",
           "sourceRef": "v5-animal-instincts"
         },
@@ -13516,7 +13638,7 @@
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets au terme de la durée (Bonus de Sociabilité heures).",
           "sourceRef": "v5-animal-instincts"
         }
@@ -13554,7 +13676,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13659,7 +13781,7 @@
       "catalogueName": "Bondissant comme un cerf",
       "canonicalName": "Leaping Stag",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -13670,7 +13792,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13723,7 +13845,35 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "M",
+          "value": 1,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-strong-legs",
+              "name": "Jambes solides",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Leaping Stag",
@@ -13733,13 +13883,13 @@
       "clauses": [
         {
           "id": "movement-plus-1",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Caractéristique Mouvement +1 pendant la durée.",
           "sourceRef": "v5-leaping-stag"
         },
         {
           "id": "strong-legs-plus-1",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Talent Jambes solides +1 (temporaire).",
           "sourceRef": "v5-leaping-stag"
         },
@@ -13775,7 +13925,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13892,7 +14042,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13986,7 +14136,7 @@
       "catalogueName": "Dent et griffe",
       "canonicalName": "Tooth and Claw",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -13997,7 +14147,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14050,7 +14200,39 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-actions",
+          "actions": [
+            {
+              "id": "bite",
+              "name": "Morsure",
+              "damageFormula": "BF+3"
+            },
+            {
+              "id": "weapon",
+              "name": "Arme",
+              "damageFormula": "BF+4"
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Tooth and Claw",
@@ -14060,29 +14242,24 @@
       "clauses": [
         {
           "id": "bite",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Trait Morsure (Bonus de Force + 3) pendant la durée.",
           "sourceRef": "v5-tooth-and-claw"
         },
         {
           "id": "weapon",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Trait Arme (Bonus de Force + 4) pendant la durée.",
           "sourceRef": "v5-tooth-and-claw"
         },
         {
           "id": "magical",
-          "mode": "manual",
-          "text": "Les attaques sont Magiques.",
+          "mode": "engine",
+          "text": "Les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).",
           "sourceRef": "v5-tooth-and-claw"
         }
       ],
-      "needsInput": [
-        {
-          "field": "attack-scope",
-          "label": "Portée de « Leurs attaques sont Magiques » : toutes les attaques du prêtre ou seulement Morsure/Arme (le texte dit « Their attacks »)."
-        }
-      ]
+      "needsInput": []
     },
     {
       "id": "divine:miracle:ulric:hoarfrost-s-chill",
@@ -14102,7 +14279,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14218,7 +14395,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14339,7 +14516,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14443,7 +14620,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14553,7 +14730,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14666,7 +14843,7 @@
       "catalogueName": "Morsure de l'hiver",
       "canonicalName": "Winter's Bite",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -14677,7 +14854,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14730,7 +14907,29 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "value": 0,
+          "perSuccessLevels": {
+            "every": 1,
+            "add": 1,
+            "field": "value"
+          },
+          "hitConditions": [
+            "Exténué"
+          ],
+          "designatedWeapon": true,
+          "weaponClass": "hache",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "wielding-axe"
@@ -14743,19 +14942,19 @@
       "clauses": [
         {
           "id": "magical",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La hache brandie est considérée comme Magique.",
           "sourceRef": "v5-winter-s-bite"
         },
         {
           "id": "damage-plus-sl",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "+DR Dégâts avec la hache.",
           "sourceRef": "v5-winter-s-bite"
         },
         {
           "id": "fatigued",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "Toute cible touchée gagne un État Fatigué.",
           "sourceRef": "v5-winter-s-bite"
         },
@@ -14773,7 +14972,7 @@
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-winter-s-bite"
         }
@@ -14811,7 +15010,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14920,7 +15119,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -15039,7 +15238,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -15155,7 +15354,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -15293,7 +15492,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -15402,7 +15601,7 @@
       "catalogueName": "Sagesse de la chouette",
       "canonicalName": "Wisdom of the Owl",
       "deity": "Verena",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -15413,7 +15612,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -15477,6 +15676,33 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-acute-sense",
+              "name": "Sens aiguisé",
+              "specialization": "Vue",
+              "rank": 1
+            },
+            {
+              "id": "talent-menacing",
+              "name": "Menaçant",
+              "rank": 1
+            },
+            {
+              "id": "talent-night-vision",
+              "name": "Vision nocturne",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -15500,25 +15726,25 @@
         },
         {
           "id": "acute-sense-sight",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Talent Sens aiguisé (Vue) +1 temporaire.",
           "sourceRef": "v5-wisdom-of-the-owl"
         },
         {
           "id": "menacing",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Talent Menaçant temporaire.",
           "sourceRef": "v5-wisdom-of-the-owl"
         },
         {
           "id": "night-vision",
-          "mode": "manual",
+          "mode": "assisted",
           "text": "Talent Vision nocturne temporaire.",
           "sourceRef": "v5-wisdom-of-the-owl"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-wisdom-of-the-owl"
         }
@@ -15546,7 +15772,7 @@
         "section": "Haine sacrée"
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
+        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
         "talentId": "talent-holy-hatred",
         "description": "Lorsqu’un Miracle inflige des Blessures, vous pouvez infliger +2 Blessures."
       },
@@ -15577,5 +15803,5 @@
       ]
     }
   ],
-  "sourceFingerprint": "sha256:d0f84ec1d498462fcfca577a402deeb1f005b7ccdae28d3cf8cd9ed09c23c06c"
+  "sourceFingerprint": "sha256:f96885ee1e7f47def82e1cbdafac3eae6a037bf95e79245f6b350e471f0e0980"
 }

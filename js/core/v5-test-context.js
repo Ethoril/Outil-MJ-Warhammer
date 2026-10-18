@@ -119,6 +119,8 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     });
   }
 
+  // Endurance de l'anachorète (p. 226) : malus et Désavantages d'États ignorés, restrictions (Inconscient, Surpris, vue exigée) conservées.
+  const ignoreConditions = actor?.extensions?.v5?.specialStates?.ignoreConditionPenalties === true;
   const movementKeys = ['aterre', 'enchevetre'];
   const needsBoolean = (field, label) => {
     if (typeof context[field] !== 'boolean') {
@@ -128,18 +130,18 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     return context[field];
   };
   let movement = null;
-  if (movementKeys.some(key => levels[key])) {
+  if (!ignoreConditions && movementKeys.some(key => levels[key])) {
     movement = needsBoolean('involvesMovement', 'Préciser si le Test implique un mouvement.');
   }
   let runningOrHiding = null;
-  if (levels.brise) {
+  if (levels.brise && !ignoreConditions) {
     runningOrHiding = needsBoolean('runningOrHiding', 'Préciser si le Test sert à courir/fuir ou à se cacher.');
   }
   let requiresSight = null;
   let reliesOnSight = null;
   if (levels.aveugle) {
     requiresSight = needsBoolean('requiresSight', 'Préciser si la tâche exige strictement la vue.');
-    if (requiresSight !== true) reliesOnSight = needsBoolean('reliesOnSight', 'Préciser si la tâche repose fortement sur la vue.');
+    if (requiresSight !== true && !ignoreConditions) reliesOnSight = needsBoolean('reliesOnSight', 'Préciser si la tâche repose fortement sur la vue.');
   }
   let isAction = null;
   if (levels.surpris || levels.inconscient) {
@@ -164,6 +166,14 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   }
   if (levels.brise && runningOrHiding === false) slPenaltyCandidates.push({ key: 'brise', amount: levels.brise });
   if (levels.enchevetre && movement === true) slPenaltyCandidates.push({ key: 'enchevetre', amount: levels.enchevetre });
+  if (ignoreConditions) {
+    slPenaltyCandidates.length = 0;
+    if (['sonne', 'extenue', 'empoisonne', 'brise', 'enchevetre', 'aterre', 'souille', 'aveugle'].some(key => levels[key])) ignoredPenaltySources.push({
+      id: 'anchorite-endurance:conditions',
+      label: 'Endurance de l’anachorète ignore les pénalités causées par les États; ils restent actifs.',
+      source: { document: 'Livre de base V5 EN v2', printedPage: 226, citation: 'Livre de base V5 EN v2, p. 226', rule: 'Anchorite’s Endurance' }
+    });
+  }
   const worstSlPenalty = slPenaltyCandidates.sort((a, b) => b.amount - a.amount || a.key.localeCompare(b.key))[0];
 
   const disadvantageCandidates = [];
@@ -172,6 +182,7 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   if (levels.aveugle && requiresSight === false && reliesOnSight === true) {
     disadvantageCandidates.push({ key: 'aveugle', count: levels.aveugle });
   }
+  if (ignoreConditions) disadvantageCandidates.length = 0;
   const worstDisadvantage = disadvantageCandidates.sort((a, b) => b.count - a.count || a.key.localeCompare(b.key))[0];
   const hasSlPenalty = Boolean(worstSlPenalty);
   const hasDisadvantage = Boolean(worstDisadvantage);
