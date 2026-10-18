@@ -8,7 +8,6 @@ const clone = value => structuredClone(value);
 const need = (field, label) => ({ field, label });
 const isText = value => typeof value === 'string' && value.trim() !== '';
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
-const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
 const specialStateKeys = new Set(['fearImmune', 'terrorAsFear', 'ignoreConditionPenalties', 'cannotRaiseUndead']);
 // Talents dont le moteur lit un contrat mécanique : seuls ceux-là sont injectés pour de vrai (les autres restent une étiquette).
@@ -19,7 +18,6 @@ const characteristicBonus = (participant, key) => {
   return Number.isFinite(score) ? Math.floor(score / 10) : null;
 };
 const liveLayer = (participant, layer) => layer && (participant.extensions?.v5?.divineEffects || []).find(row => row.id === layer.id);
-const noTestKeyAmbiguity = key => !/^(pray|prayer|priere)\s*\(/i.test(fold(key));
 
 const handlers = {
   'grant-trait': {
@@ -97,16 +95,6 @@ const handlers = {
       return result;
     },
     receipt: (effect, { targetId }, result) => result ? { targetId, type: effect.type, result: clone(result) } : null
-  },
-  'test-modifier': {
-    validate(effect) {
-      if (!isRecord(effect.modifiers) || !Object.keys(effect.modifiers).length) return 'test-modifier exige modifiers {clé: DR}.';
-      if (!Object.values(effect.modifiers).every(Number.isSafeInteger)) return 'test-modifier : chaque DR doit être un entier.';
-      return Object.keys(effect.modifiers).every(noTestKeyAmbiguity) ? null : 'test-modifier : clé de Test ambiguë (Prière spécialisée).';
-    },
-    needs: effect => isRecord(effect.modifiers) && Object.keys(effect.modifiers).length && Object.values(effect.modifiers).every(Number.isSafeInteger)
-      && Object.keys(effect.modifiers).every(noTestKeyAmbiguity) ? [] : [need('contract.effects.modifiers', 'Modificateurs de Test sourcés et sans ambiguïté requis')],
-    buildLayer: effect => ({ testModifiers: { ...effect.modifiers } })
   }
 };
 export default handlers;

@@ -12,18 +12,18 @@ export const miracles = [
   {
     name: 'Cœur d’aurochs', canonicalName: "Auroch's Heart", printedPage: 88,
     summary: 'Le prêtre prie Taal d’emplir un personnage de la constitution d’un bœuf sauvage : la cible gagne +Bonus de Sociabilité DR à tous les Tests d’Endurance jusqu’à la fin du miracle.',
-    params: { range: { kind: 'touch' }, targets: one, duration: { kind: 'special', label: 'Fellowship Bonus + 3 Rounds' } },
-    status: 'manual', effect: null,
+    params: { range: { kind: 'touch' }, targets: one, duration: soc('characteristic-bonus', 'rounds') },
+    status: 'assisted',
+    effects: [{ type: 'test-modifier', modifiers: { 'Résistance': { fromCharacteristicBonus: 'Soc' } }, durationBonus: 3 }],
     targetRules: ['withinTouch'],
     needsInput: [
-      { id: 'target', text: 'Quelle créature est touchée ?' },
-      { id: 'bonus', text: 'Bonus de Sociabilité du prêtre (DR ajoutés aux Tests d’Endurance de la cible).' }
+      { id: 'target', text: 'Quelle créature est touchée ?' }
     ],
     clauses: [
-      { id: 'toughness-bonus', mode: 'manual', text: 'La cible gagne +Bonus de Sociabilité du prêtre en DR à ses Tests d’Endurance jusqu’à la fin du miracle.' },
-      { id: 'duration', mode: 'manual', text: 'Durée : Bonus de Sociabilité + 3 Rounds ; le MJ termine la prière à l’échéance.' }
+      { id: 'toughness-bonus', mode: 'engine', text: 'La cible gagne +Bonus de Sociabilité du prêtre en DR à ses Tests d’Endurance jusqu’à la fin du miracle.' },
+      { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité + 3 Rounds (échéance suivie par le moteur).' }
     ],
-    sourceDelta: 'Le bonus est « +Fellowship Bonus » en DR : valeur dépendant du prêtre, non fixe, donc non couvrable par un test-modifier (entier fixe). « Toughness Tests » : lu comme les Tests d’Endurance (compétence), le livre ne dit pas si cela inclut les Tests de caractéristique d’Endurance. Durée « Fellowship Bonus + 3 Rounds » encodée en special.'
+    sourceDelta: 'Le bonus est « +Fellowship Bonus » en DR : valeur résolue à l’aperçu depuis le Bonus de Sociabilité du prêtre et figée. « Toughness Tests » : lu comme les Tests de la compétence Résistance (clé « Endurance » normalisée), le livre ne dit pas si cela inclut les Tests de caractéristique d’Endurance. Durée « Fellowship Bonus + 3 Rounds » : Bonus de Sociabilité du paramètre de durée + 3 (durationBonus), le +3 compté aussi dans chaque extension de durée.'
   },
   {
     name: 'Tremblement de terre', canonicalName: 'Earthshudder', printedPage: 88,
@@ -111,7 +111,8 @@ export const miracles = [
     name: 'Vent sauvage', canonicalName: 'Wild Wind', printedPage: 88,
     summary: 'Le prêtre appelle le Seigneur de la Nature, qui lève un vent déchaîné en tourbillon. Le prêtre n’est pas affecté ; toutes les cibles de la zone sont malmenées par des vents irrésistibles : leurs Tests de Capacité de Combat ou d’Agilité subissent -2 DR, et chaque Round elles doivent réussir un Test d’Endurance Difficult (-10) pour éviter l’État À terre. Aucune attaque à distance n’est possible dans la zone ; seules les armes à poudre ou d’artillerie peuvent viser une cible dans la zone.',
     params: { range: self, targets: { kind: 'special' }, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null,
+    status: 'assisted',
+    effects: [{ type: 'test-modifier', categories: { cc: -2, ag: -2 } }],
     targetRules: ['prêtre non affecté'],
     needsInput: [
       { id: 'area', text: 'Taille de la zone : le livre l’indique « X » sans valeur ; décision MJ.' },
@@ -120,11 +121,11 @@ export const miracles = [
     ],
     clauses: [
       { id: 'priest-unaffected', mode: 'manual', text: 'Le prêtre n’est pas affecté par le vent.' },
-      { id: 'test-penalty', mode: 'manual', text: 'Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.' },
+      { id: 'test-penalty', mode: 'engine', text: 'Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.' },
       { id: 'prone-each-round', mode: 'manual', text: 'Chaque Round, chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.' },
       { id: 'no-ranged', mode: 'manual', text: 'Aucune attaque à distance n’est possible dans la zone, sauf armes à poudre ou d’artillerie ; ces armes peuvent seules viser les cibles dans la zone.' }
     ],
-    sourceDelta: 'Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme tous les Tests de CC ou d’Agilité (compétences ou caractéristique). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.'
+    sourceDelta: 'Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme les Tests de toutes les compétences liées à CC ou à Agilité (catégories du catalogue, Prière exclue ; les Tests de caractéristique brute restent à la main). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.'
   },
   {
     name: 'Voie de la nature', canonicalName: 'Wilderness Way', printedPage: 88,

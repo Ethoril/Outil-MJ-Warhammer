@@ -80,18 +80,18 @@ export const miracles = [
     name: 'Tous ensemble', canonicalName: 'Rally Round', printedPage: 25,
     summary: 'Le prêtre entonne un chant de Ranald et la foule le reprend. Tous les alliés dans la zone gagnent +2 DR aux Tests d’Endurance et de Calme, avec +1 DR de plus par tranche de 10 personnes dans la foule. Le miracle n’affecte pas les personnages de Statut Argent ou Or.',
     params: { range: self, targets: { kind: 'area', characteristic: 'Soc', unit: 'yards' }, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null,
+    status: 'assisted',
+    effects: [{ type: 'test-modifier', modifiers: { 'Résistance': { base: 2, perGroup: { size: 10, add: 1 } }, 'Calme': { base: 2, perGroup: { size: 10, add: 1 } } } }],
     targetRules: ['ally', 'ni Statut Argent ni Or'],
     needsInput: [
-      { id: 'allies', text: 'Quels alliés sont dans la zone (Sociabilité yards autour du prêtre) et aucun n’est de Statut Argent ou Or ?' },
-      { id: 'crowd', text: 'Combien de personnes dans la foule (+1 DR par tranche de 10) ?' }
+      { id: 'allies', text: 'Quels alliés sont dans la zone (Sociabilité yards autour du prêtre) et aucun n’est de Statut Argent ou Or ?' }
     ],
     clauses: [
-      { id: 'endurance-cool', mode: 'manual', text: 'Chaque allié affecté gagne +2 DR aux Tests d’Endurance et de Calme.' },
-      { id: 'crowd-scaling', mode: 'manual', text: '+1 DR supplémentaire par tranche de 10 personnes dans la foule.' },
+      { id: 'endurance-cool', mode: 'engine', text: 'Chaque allié affecté gagne +2 DR aux Tests d’Endurance et de Calme.' },
+      { id: 'crowd-scaling', mode: 'engine', text: '+1 DR supplémentaire par tranche de 10 personnes dans la foule (taille saisie par le MJ).' },
       { id: 'status-exclusion', mode: 'manual', text: 'Les personnages de Statut Argent ou Or ne sont pas affectés.' }
     ],
-    sourceDelta: 'Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Le bonus dépend de la taille de la foule, donc non couvert par test-modifier à valeur fixe.'
+    sourceDelta: 'Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.'
   },
   {
     name: 'Sous ma protection', canonicalName: 'Under My Protection', printedPage: 25,

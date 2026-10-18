@@ -74,19 +74,21 @@ export const miracles = [
  {
   name: 'Ruissellement', canonicalName: 'Trickle Down', printedPage: 47,
   summary: 'D’une pièce d’or et de la promesse d’une richesse à venir, le prêtre fait goûter la générosité de Handrich à ceux qu’il veut se concilier. Un Test de Charme réussi devant des gens de Statut inférieur gagne +1 DR par DR du Test de Prière.',
-  params: { range: soc('characteristic', 'yards'), targets: soc('characteristic-bonus', 'targets'), duration: soc('characteristic-bonus', 'rounds') },
-  status: 'manual', effect: null,
+  params: { range: soc('characteristic', 'yards'), targets: { kind: 'self' }, duration: soc('characteristic-bonus', 'rounds') },
+  status: 'assisted',
+  effects: [{ type: 'test-modifier', modifiers: { 'Charme': { fromSuccessLevels: true } }, appliesTo: 'caster' }],
   targetRules: ['Statut inférieur à celui du prêtre'],
   needsInput: [
    { id: 'targets', text: 'Quelles personnes sont visées (Bonus de Sociabilité personnes) et sont-elles de Statut inférieur ?' },
-   { id: 'pray-dr', text: 'DR du Test de Prière (bonus égal au Test de Charme).' },
    { id: 'charm-test', text: 'Résultat du Test de Charme tenté pendant la durée.' }
   ],
   clauses: [
-   { id: 'charm-bonus', mode: 'manual', text: 'Un Test de Charme réussi devant des personnes de Statut inférieur gagne +1 DR par DR du Test de Prière du miracle.' },
+   { id: 'charm-bonus', mode: 'engine', text: 'Les Tests de Charme du prêtre gagnent +1 DR par DR du Test de Prière du miracle (valeur figée à l’aperçu).' },
+   { id: 'charm-condition', mode: 'manual', text: 'Le bonus ne vaut que pour un Test de Charme réussi devant des personnes de Statut inférieur : le MJ écarte les autres Tests de Charme.' },
+   { id: 'beneficiary', mode: 'manual', text: 'Le texte ne dit pas clairement qui reçoit le bonus : lu comme le prêtre seul (les personnes visées sont les témoins) ; doute à confirmer par le MJ.' },
    slExtension, afterTest, profit
   ],
-  sourceDelta: delta
+  sourceDelta: delta + ' Cible imprimée « Fellowship Bonus targets » : lue comme les témoins, le bénéficiaire du bonus étant le prêtre seul (lecture non confirmée par le MJ) ; encodée self.'
  },
  {
   name: 'Revirement de fortune', canonicalName: 'Twist of Fortune', printedPage: 47,
