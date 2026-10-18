@@ -22,7 +22,7 @@ for (const type of ['remove-condition', 'expiry-condition', 'temporary-fortune']
 // Tests de compétence (v5-divine-effects-tests.js).
 for (const type of ['test-modifier']) effectTypes.add(type);
 // Invocations (v5-divine-effects-summon.js).
-for (const type of []) effectTypes.add(type);
+for (const type of ['summon-creature']) effectTypes.add(type);
 
 // Source d'une force d'État : `{kind:'characteristic-bonus'|'characteristic', characteristic}` ou `{kind:'success-levels'}`.
 export const strengthSources = new Set(['characteristic-bonus', 'characteristic', 'success-levels']);

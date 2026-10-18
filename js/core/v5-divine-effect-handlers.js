@@ -13,6 +13,11 @@
  * - applyInstant(participant, effect, ctx) : mutation du participant à l'application ; retourne un résultat.
  * - receipt(effect, ctx, result) -> ligne de reçu | null.
  * - onExpire(participant, layer, transition) : à la fin de la couche.
+ * - createParticipants(effect, ctx) -> [participant] : participants ORDINAIRES créés dans la même commande atomique (invocations), appelé
+ *   par applyDivineExecution juste après les couches des cibles, avant le reçu. Seuls les effets à couche, portés par le prêtre
+ *   (appliesTo 'caster'), l'atteignent. ctx = {contract, executionId, index (rang de l'effet), actorId, actor (prêtre à jour), layer (sa
+ *   couche de cet effet), round, expiry, input}. Un participant dont l'id existe déjà n'est pas recréé ; `receipt(effect, ctx, créés)`
+ *   reçoit les participants créés ; leurs ids vont dans `receipt.summonedIds`. Ni `combat.order` ni l'acteur courant ne sont touchés.
  * - inputFields(effect, {contract, actor, targets, choices}) -> [champ] : saisies du formulaire (lues par buildDivineForm).
  *   champ = {path, label, kind: 'number'|'text'|'boolean'|'select'|'tri-state', scope: 'effect'|'target', help?, source?, min?, max?, options?}.
  *   `path` : chemin pointé du brouillon, identique dans `input` du moteur (scope 'target' : l'identifiant de la cible s'y ajoute en dernier

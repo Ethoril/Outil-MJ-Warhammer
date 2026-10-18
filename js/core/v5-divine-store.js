@@ -9,6 +9,7 @@ import {v5ResourceIdentity,getV5Fortune} from './v5-resources.js';
 import {advanceGameClock,readCombatPosition} from './v5-game-time.js';
 import {validatePrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {acquireV5Conditions} from './v5-effects.js';
+import {removeFromCombat} from './turn-order.js';
 
 const clone=value=>structuredClone(value);
 const text=value=>typeof value==='string'&&value.trim()?value.trim():null;
@@ -463,13 +464,51 @@ export function endStoreDivinePrayer(state,executionId,{reason}={}){
   removed+=ending.length;participant.extensions.v5.divineEffects=kept;
  }
  if(!removed)throw ruleError('Cette prière ne possède plus d’effet actif.');
+ sweepDivineSummons(next,{protectCurrent:false});
  const receipt=(next.extensions?.v5?.divineExecutions||[]).find(row=>row.executionId===executionId);if(receipt)receipt.endedByMJ=reason.trim();
  next.log=[{id:executionId+':end',kind:'effect',text:'Prière terminée par le MJ · '+reason.trim()},...(next.log||[])].slice(0,300);
  return next;
 }
 
+// Seul un lien complet (propriétaire, couche, exécution) est celui du moteur : une autre forme de `divineSummon` n'est jamais balayée.
+const summonLink=row=>{const link=row?.extensions?.v5?.divineSummon;return ['ownerId','layerId','executionId'].every(key=>typeof link?.[key]==='string'&&link[key])?link:null;};
+const ownsSummon=(owner,link)=>(owner?.extensions?.v5?.divineEffects||[]).some(layer=>layer?.type==='summon-creature'&&layer.id===link.layerId&&layer.executionId===link.executionId);
+/**
+ * Retire (en place) les créatures invoquées par un miracle dont la couche `summon-creature` a disparu du prêtre (même liste), dans le
+ * combat, la scène active et les scènes suspendues : order, acteur courant, lignes de dés et journal suivent dans la même commande.
+ * Une créature qui est l'acteur courant n'est pas retirée mais marquée `divineSummon.endedPending` (retrait à la commande suivante, une
+ * fois la main passée : jamais de Tour rejoué ni sauté) ; `protectCurrent:false` (fin manuelle, qui n'avance pas l'horloge) la retire aussitôt.
+ */
+export function sweepDivineSummons(state,{protectCurrent=true}={}){
+ const lists=[state?.combat?.participants,state?.activeScene?.participants,...(state?.suspendedScenes||[]).map(scene=>scene?.participants)];
+ const orphans=list=>Array.isArray(list)?list.filter(row=>{const link=summonLink(row);return link&&!ownsSummon(list.find(item=>item.id===link.ownerId),link);}):[];
+ if(!lists.some(list=>orphans(list).length))return state;
+ const deferred=new Set(),removed=new Map();
+ const combatList=orphans(lists[0]);
+ for(const creature of combatList){
+  if(protectCurrent&&state.combat.currentActorId===creature.id){summonLink(creature).endedPending=true;deferred.add(creature.id);continue;}
+  const transition=creature.zone==='active'?removeFromCombat({participants:state.combat.participants,order:state.combat.order||[],currentActorId:state.combat.currentActorId,participantId:creature.id}):null;
+  state.combat.participants=state.combat.participants.filter(row=>row.id!==creature.id);
+  state.combat.order=transition?transition.order:(state.combat.order||[]).filter(id=>id!==creature.id);
+  if(transition)state.combat.currentActorId=transition.currentActorId;else if(state.combat.currentActorId===creature.id)state.combat.currentActorId=state.combat.order[0]||null;
+  removed.set(creature.id,creature);
+ }
+ for(const list of lists.slice(1))for(const creature of orphans(list)){
+  if(deferred.has(creature.id))continue;
+  list.splice(list.findIndex(row=>row.id===creature.id),1);removed.set(creature.id,creature);
+ }
+ if(!removed.size)return state;
+ if(Array.isArray(state.diceLines))state.diceLines=state.diceLines.filter(line=>!removed.has(line.participantId)).map(line=>removed.has(line.targetId)?{...line,targetId:null}:line);
+ const known=new Set((state.log||[]).map(entry=>entry?.id));
+ const entries=[...removed.values()].map(creature=>({id:`divine-summon-end:${summonLink(creature).executionId}:${creature.id}`,kind:'effect',actorId:creature.id,actorName:creature.name,
+  text:`${creature.name} disparaît · fin de l’invocation divine`})).filter(entry=>!known.has(entry.id));
+ if(entries.length)state.log=[...entries,...(state.log||[])].slice(0,300);
+ return state;
+}
+
 /** Commande de finalisation : valide les combinaisons et recalcule les couches sans déduire de phases d'une différence d'état. */
 export function finalizeDivineState(before,next){
+ sweepDivineSummons(next);
  const conflict=unresolvedCombination(next);if(conflict)throw ruleError(conflict);
  if(!parts(next).some(row=>row.extensions?.v5?.divineEffects?.length) && !parts(before).some(row=>row.extensions?.v5?.divineEffects?.length))return next;
  next.combat.participants=parts(next).map(participant=>{

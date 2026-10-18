@@ -44,6 +44,7 @@ const ASSETS_TO_CACHE = [
   './js/core/v5-broken-escape.js',
   './js/core/v5-test-context.js',
   './js/data/v5-divine-contracts.json',
+  './js/data/divine-summon-profiles.js',
   './js/ui/v5-divine-panel.js',
   './js/ui/v5-divine-form-model.js',
   './js/ui/v5-broken-escape-panel.js',

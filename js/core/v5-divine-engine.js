@@ -10,7 +10,7 @@ import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
 import {effectHandler,effectNeeds,isLayerlessEffect} from './v5-divine-effect-handlers.js';
 
-export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-17.1';
+export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-18.1';
 const clone = value => structuredClone(value);
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 const freeze = value => {
@@ -587,6 +587,24 @@ export function applyDivineExecution(state, contract, input = {}) {
       return updated;
     }));
   }
+  // Crochet `createParticipants` (invocations) : de vrais participants créés dans la même commande, après les couches du prêtre, sans
+  // toucher à l'ordre ni à l'acteur courant. Un identifiant déjà présent n'est pas recréé (la protection principale reste `duplicate`).
+  const summonedIds = [];
+  for (const [index, effect] of preview.effects.entries()) {
+    const handler = effectHandler(effect.type);
+    const layerIndex = layerEffects.indexOf(effect);
+    const owner = asParticipants(next).find(row => row.id === actorId);
+    if (!handler?.createParticipants || layerIndex < 0 || !owner || !effectApplies(effect, owner, appliesContext)) continue;
+    const layerKey = layerId(input.executionId, actorId, contract, effect, sameTypeOrdinal(layerEffects, layerIndex));
+    const layer = (owner.extensions?.v5?.divineEffects || []).find(row => row.id === layerKey);
+    const context = { contract, executionId: input.executionId, targetId: actorId, actorId, actor: owner, index, layer, expiry: input.expiry, round: input.round, input };
+    const created = (handler.createParticipants(effect, context) || []).filter(row => !asParticipants(next).some(existing => existing.id === row.id));
+    if (!created.length) continue;
+    next = replaceParticipants(next, [...asParticipants(next), ...created.map(clone)]);
+    summonedIds.push(...created.map(row => row.id));
+    const row = handler.receipt?.(effect, context, created);
+    if (row) effectReceipts.push(row);
+  }
   const afterActor = asParticipants(next).find(row => row.id === actorId);
   if (preview.wrath.triggered) {
     afterActor.extensions ||= {}; afterActor.extensions.v5 ||= {}; afterActor.extensions.v5.divine ||= {};
@@ -602,7 +620,7 @@ export function applyDivineExecution(state, contract, input = {}) {
       consequences: preview.wrath.consequences } : null,
     appliedEffectIds: appliedTargets.flatMap(target => layerEffects.flatMap((effect, index) => effectApplies(effect, target, appliesContext)
       ? [layerId(input.executionId, target.id, contract, effect, sameTypeOrdinal(layerEffects, index))] : [])),
-    effectReceipts,
+    effectReceipts, ...(summonedIds.length ? { summonedIds } : {}),
     reminders: clone(preview.reminders), status: preview.status || previewResult.status
   };
   next.extensions ||= {}; next.extensions.v5 ||= {};
