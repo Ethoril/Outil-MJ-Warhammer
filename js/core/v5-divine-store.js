@@ -332,7 +332,7 @@ export function previewStoreDivine(state,contractId,input={}){
   else wrathConditionPreview=projection.preview;
  }
  const result=calculated.ready?preview:{...preview,...calculated,preview:calculated.preview||preview.preview};
- return rememberPreview({...result,...(wrathConditionPreview?{wrathConditionPreview}:{}),contractId,contract:clone(contract),baseRevision:state.localRevision||0,baseStateFingerprint:stateFingerprint(state),baseClockFingerprint:JSON.stringify(clock),input:captured,access:clone(access),
+ return rememberPreview({...result,...(wrathConditionPreview?{wrathConditionPreview}:{}),...(calculated.ready?{projectedEffects:clone(calculated.receipt?.effectReceipts||[])}:{}),contractId,contract:clone(contract),baseRevision:state.localRevision||0,baseStateFingerprint:stateFingerprint(state),baseClockFingerprint:JSON.stringify(clock),input:captured,access:clone(access),
   executionId:captured.executionId,sourceReceipt:clone(contract.sourceReceipt),wrathTableResult,wrathLessonDuration:clone(captured.wrathLessonDuration||null),ruleVersion:preview.ruleVersion});
 }
 

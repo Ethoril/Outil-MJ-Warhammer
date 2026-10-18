@@ -546,7 +546,7 @@ export function applyDivineExecution(state, contract, input = {}) {
         const handler = effectHandler(effect.type);
         if (!handler?.applyInstant) continue;
         const layer = layers[layerEffects.findIndex(row => row === effect)];
-        const context = { contract, executionId: input.executionId, targetId: participant.id, index, layer, expiry: input.expiry, round: input.round, input, actor, prayer: preview.prayer, combat: state.combat };
+        const context = { contract, executionId: input.executionId, targetId: participant.id, targetName: participant.name, index, layer, expiry: input.expiry, round: input.round, input, actor, prayer: preview.prayer, combat: state.combat };
         const result = handler.applyInstant(updated, effect, context);
         const row = handler.receipt?.(effect, context, result);
         if (row) effectReceipts.push(row);

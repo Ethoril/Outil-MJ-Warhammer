@@ -50,9 +50,10 @@ const removeCondition = {
   applyInstant(participant, effect, { contract, executionId, targetId, input, combat }) {
     const choice = removalChoice(input, targetId);
     if (effect.chosen && (choice?.none === true || !(participant.states || []).length)) return { removed: [], remaining: (participant.states || []).length };
+    const names = new Map((participant.states || []).map(row => [row.id, row.name || row.key]));
     const receipt = recoverV5Condition(participant, effect.chosen ? choice.stateId : effect.key, { method: 'divine-removal', amount: removalAmount(effect) });
     Object.assign(participant, receipt.participant);
-    const result = { removed: clone(receipt.removed), remaining: (participant.states || []).length };
+    const result = { removed: clone(receipt.removed), removedNames: receipt.removed.map(row => names.get(row.id) || row.key), remaining: (participant.states || []).length };
     if (receipt.reminders.length) result.reminders = clone(receipt.reminders);
     // Dernier État retiré : la couche de repos (ex. +1 DR) n'existe que si le Tour suivant de la cible est calculable.
     if (effect.onAllRemoved && receipt.removed.length && !result.remaining) {
@@ -68,7 +69,8 @@ const removeCondition = {
     }
     return result;
   },
-  receipt: (effect, { targetId }, result) => ({ targetId, type: effect.type, result: clone(result) })
+  receipt: (effect, { targetId, targetName, actor }, result) => ({ targetId, type: effect.type, result: clone(result),
+    log: `${actor?.name || 'Le prêtre'} · ${targetName || targetId} : ${result.removed.length ? 'État(s) retiré(s) : ' + result.removed.map((row, index) => `${result.removedNames?.[index] || row.key}${row.level > 1 ? ' ×' + row.level : ''}`).join(', ') : 'aucun État retiré'}` })
 };
 
 function expiryConditionsProblem(effect) {

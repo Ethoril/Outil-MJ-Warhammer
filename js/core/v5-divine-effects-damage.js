@@ -150,7 +150,8 @@ const woundHeal = {
     Object.assign(participant, healed);
     return { ...clone(receipt), amount, slots, chosen };
   },
-  receipt: (effect, { targetId }, result) => ({ targetId, type: effect.type, result: clone(result) })
+  receipt: (effect, { targetId, targetName, actor }, result) => ({ targetId, type: effect.type, result: clone(result),
+    log: `${actor?.name || 'Le prêtre'} · ${targetName || targetId} récupère ${result.hpDelta ?? 0} Blessure(s) (${result.amount} × ${result.chosen}/${result.slots} effet(s))` })
 };
 
 // `wound-heal` remplace ici le gestionnaire du socle (même contrat, soin chiffré inchangé).
