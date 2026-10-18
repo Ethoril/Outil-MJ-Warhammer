@@ -114,10 +114,12 @@ try {
   // Undo and redo through visible controls restore one coherent position/clock pair.
   const beforeUndo = await page.evaluate(() => window.__E5__.current());
   await page.getByRole('button', { name: 'Annuler' }).click();
+  await page.waitForFunction(expected => window.__E5__.Store.getCombat().currentActorId === expected, afterRound.combat.currentActorId);
   const undone = await page.evaluate(() => window.__E5__.current());
   assert.deepEqual(undone.extensions.v5.gameClock, afterRound.extensions.v5.gameClock, 'Undo de la mutation de position restaure le snapshot pré-management complet');
   assert.deepEqual(undone.combat, afterRound.combat);
   await page.getByRole('button', { name: 'Rétablir' }).click();
+  await page.waitForFunction(expected => window.__E5__.Store.getCombat().currentActorId === expected, beforeUndo.combat.currentActorId);
   const redone = await page.evaluate(() => window.__E5__.current());
   assert.deepEqual(redone.extensions.v5.gameClock, beforeUndo.extensions.v5.gameClock, 'Redo rétablit ensemble le snapshot et sa clock');
   assert.deepEqual(redone.combat, beforeUndo.combat);

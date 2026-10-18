@@ -31,3 +31,9 @@ Un lecteur distinct a relu la page 79 : les 9 contrats sont conformes aux valeur
 | R11 | Dévotion de la Guerrière passe « assisté » : l'ennemi visé est saisi par le MJ au lancement en texte libre (1 à 60 caractères, refusé au-delà), le talent Intrépide est posé avec cette spécialisation sur les Myrmidiens à portée désignés par le MJ (sans plafond). | Liste fermée d'ennemis ; chaque bénéficiaire choisit le sien (écarté par vous, Q9). | Texte libre : le livre dit « individu ou espèce » sans liste. |
 | R12 | Yeux de chat passe « assisté » : capteur « Chat » hors de l'ordre d'initiative, trait Invulnérable seulement (le livre ne donne ni profil chiffré ni « intangible » pour le chat). Le prêtre perçoit par les sens du chat : rappel MJ. | Rester en rappel. | Même mécanique que l'Œil de l'aigle, sans risque supplémentaire. |
 | R13 | Vindicte Vengeresse : la clause de charge est reformulée d'après V5 p.163 (un prêtre Engagé peut se Désengager puis charger). | Ancienne clause (inexacte). | Fidélité à la règle V5. |
+
+## Qualité de la recette
+
+| # | Décision prise | Alternative | Pourquoi |
+| --- | --- | --- | --- |
+| R14 | Le parcours navigateur `divin-v5-e5-browser-independent.mjs` lisait l'état juste après le clic sur Annuler/Rétablir, sans attendre : il échouait sous charge machine, y compris sur la version publiée 3.16.1 (test seul en cause, pas le code). Des attentes explicites ont été ajoutées (test uniquement). | Laisser la course. | Un test instable masque les vraies régressions. |
