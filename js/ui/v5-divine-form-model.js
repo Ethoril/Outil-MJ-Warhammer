@@ -213,7 +213,7 @@ export function buildDivineForm(contract, { actor, targets = [], form = emptyDiv
   for (const def of handlerInputFields(contract, { actor, targets, choices })) {
     const path = def.path.split('.');
     const shared = { kind: FORM_KINDS[def.kind], help: def.source ? withSource(def.help ?? '', contract).trim() : def.help ?? '',
-      ...(def.min !== undefined ? { min: def.min } : {}), ...(def.max !== undefined ? { max: def.max } : {}), ...(def.options ? { options: def.options } : {}) };
+      ...(def.min !== undefined ? { min: def.min } : {}), ...(def.max !== undefined ? { max: def.max } : {}), ...(def.options ? { options: def.options.some(([value]) => value === '') ? def.options : [['', 'À préciser'], ...def.options] } : {}) };
     if (def.scope === 'target') for (const target of targets) effectFields.push({ id: `${def.path}:${target.id}`, anchor: `${def.path}:${target.id}`, scope: 'target', targetId: target.id,
       path: [...path, target.id], engineField: `${def.path}.${target.id}`, label: `${nameOf(target)} · ${def.label}`, ...shared });
     else effectFields.push({ id: def.path, anchor: def.path, scope: 'global', path, engineField: def.path, label: def.label, ...shared });
@@ -360,9 +360,21 @@ export function describeEffectResult(row, { contract, participants = [] } = {}) 
       return `${who} : bonus d’arme sur ${result.equipmentId || 'l’arme du prêtre'}${Number.isFinite(result.damage) ? `, dégâts +${result.damage}` : ''}${result.equipmentId && result.classConfirmed === false ? ' · classe d’arme non confirmée' : ''}`;
     case 'condition':
       return `${who} : force de l’État ${result.strength}`;
+    case 'summon-creature':
+      return result.kind === 'sensor' ? `Invocation : ${result.name}, capteur hors de l’ordre du combat, invulnérable`
+        : `Invocation : ${result.name} (profil ${result.profileKey}) · ${result.wounds} Blessure(s)${result.woundsFormula ? ` (${result.woundsFormula})` : ''}`;
     default:
       return null;
   }
+}
+
+/** Libellé d'une couche d'invocation du prêtre (`summon-creature`) pour « Prières actives » ; null pour toute autre couche. */
+export function summonLayerLabel(layer, participants = []) {
+  if (layer?.type !== 'summon-creature') return null;
+  const created = participants.find(item => item.extensions?.v5?.divineSummon?.layerId === layer.id);
+  const sensor = layer.summon?.kind === 'sensor';
+  if (sensor) return `Invocation : ${created ? `${created.name} (capteur)` : 'capteur'}`;
+  return `Invocation : ${created?.name || layer.summon?.profileKey || 'créature'}`;
 }
 
 /** Lignes d'un reçu appliqué (ou d'une projection d'aperçu) : DR, dés, Blessures perdues, États retirés. */

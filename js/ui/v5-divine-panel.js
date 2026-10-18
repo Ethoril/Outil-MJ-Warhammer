@@ -2,7 +2,7 @@
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
-import {emptyDivineForm,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summarizeExecution,deadlineLines,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
+import {emptyDivineForm,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
 const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
@@ -109,7 +109,7 @@ export function createDivinePanel({Store,refresh}){
    const list=node('details','workspace-v5-context-details');list.append(node('summary','','Prières actives du personnage'));field(list,'Raison de fin de prière','endReason',{type:'text'});
    for(const id of [...new Set(active.map(layer=>layer.executionId))]){
     const layers=active.filter(layer=>layer.executionId===id),name=contracts.find(row=>row.id===layers[0].prayerId)?.name||'Prière';
-    list.append(node('p','',name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', ')));
+    list.append(node('p','',[name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', '),...layers.map(layer=>summonLayerLabel(layer,participants)).filter(Boolean)].join(' · ')));
     button(list,'Terminer '+name,()=>run(async()=>{const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }

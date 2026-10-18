@@ -107,13 +107,13 @@ test('E0 indépendant — la recette refuse un cwd externe avant de créer un re
   }
 });
 
-test('Source indépendante p.224 — Œil de l’aigle décrit l’aigle spectral et les capacités employées, sans automatisation', () => {
+test('Source indépendante p.224 — Œil de l’aigle décrit l’aigle spectral et les capacités employées ; seule la création du capteur est automatisée', () => {
   const eagle = registry.contracts.find(row => row.type === 'miracle' && row.canonicalName === "Eagle's Eye");
   assert.ok(eagle);
   assert.equal(eagle.source.document, 'Livre de base V5 EN v2.pdf');
   assert.equal(eagle.source.printedPage, 224);
-  assert.equal(eagle.status, 'manual');
-  assert.deepEqual(eagle.effects, []);
+  assert.equal(eagle.status, 'assisted');
+  assert.deepEqual(eagle.effects.map(effect => [effect.type, effect.kind, effect.appliesTo]), [['summon-creature', 'sensor', 'caster']]);
   assert.deepEqual(eagle.params, {
     range: { kind: 'characteristic', characteristic: 'Soc', unit: 'yards' },
     targets: { kind: 'self' },
@@ -131,5 +131,6 @@ test('Source indépendante p.224 — Œil de l’aigle décrit l’aigle spectra
   assert.match(eagle.labels.effect, /vulnérable/i);
   assert.doesNotMatch(eagle.labels.effect, /sans accès à ses autres sens|sans accès à ses talents/i);
   assert.doesNotMatch(eagle.sourceDelta, /sans accès à ses autres sens|sans accès à ses talents/i);
-  assert.equal(eagle.clauses.find(clause => clause.id === 'effect')?.mode, 'manual');
+  assert.equal(eagle.clauses.find(clause => clause.id === 'effect')?.mode, 'assisted');
+  assert.equal(eagle.clauses.find(clause => clause.id === 'eagle-sight')?.mode, 'manual');
 });

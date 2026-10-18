@@ -37,20 +37,20 @@ export const miracles = [
     printedPage: 227,
     summary: 'Taal répond à votre prière en envoyant un animal sauvage adapté à l\'environnement; il agit selon vos souhaits pendant la durée. Des exemples d\'animaux se trouvent aux pages 325-327.',
     params: { range, targets: one, duration: felMinutes },
-    status: 'manual',
-    effect: null,
+    status: 'assisted',
+    effects: [{ type: 'summon-creature', appliesTo: 'caster', kind: 'creature', choice: 'beast', requiresPosition: true }],
     targetRules: [],
     needsInput: [
-      { id: 'environment', text: 'Environnement et animal sauvage adapté (profil p.325-327) choisi avec le MJ.' },
-      { id: 'animal-position', text: 'Position d\'apparition de l\'animal dans la portée.' },
-      { id: 'animal-control', text: 'Qui joue l\'animal et comment ses actions sont ordonnées.' }
+      { id: 'environment', text: 'Environnement du lieu : le MJ choisit parmi les six bêtes du bestiaire (sanglier, chien, rat géant, araignée géante, cheval, loup) celle qui convient.' },
+      { id: 'animal-position', text: 'Position d\'apparition de l\'animal dans la portée (Sociabilité yards).' }
     ],
     clauses: [
-      { id: 'summon-animal', mode: 'manual', text: 'Invocation d\'un animal sauvage adapté au lieu, à portée (Sociabilité yards).' },
-      { id: 'obedience', mode: 'manual', text: 'L\'animal agit selon les désirs du prêtre pendant toute la durée.' },
-      { id: 'end', mode: 'manual', text: 'Durée de Bonus de Sociabilité minutes; le livre ne dit pas ce que devient l\'animal ensuite.' }
+      { id: 'summon-animal', mode: 'engine', text: 'Le moteur crée l\'animal choisi par le MJ dans la liste fermée des six bêtes du bestiaire (pp.325-327), avec son profil de base, du camp du prêtre et contrôlé par le MJ.' },
+      { id: 'animal-placement', mode: 'manual', text: 'L\'animal apparaît à portée (Sociabilité yards) : la position saisie est notée sur la créature, le MJ la place.' },
+      { id: 'obedience', mode: 'manual', text: 'L\'animal agit selon les désirs du prêtre pendant toute la durée : le MJ joue l\'animal en suivant les souhaits du prêtre.' },
+      { id: 'end', mode: 'engine', text: 'Durée de Bonus de Sociabilité minutes (horloge de campagne) ; à l\'échéance, ou à la fin de la prière, l\'animal disparaît (arbitrage MJ : le livre est muet).' }
     ],
-    sourceDelta: 'Le livre ne dit pas ce qu\'il advient de l\'animal à la fin de la durée.'
+    sourceDelta: 'Le livre ne dit pas ce qu\'il advient de l\'animal à la fin de la durée : arbitrage MJ, il disparaît. « Animal sauvage adapté à l\'environnement » : liste fermée des six bêtes du bestiaire, choisie par le MJ.'
   },
   {
     name: 'Bondissant comme un cerf',

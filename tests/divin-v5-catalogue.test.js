@@ -76,8 +76,8 @@ test('the six V5 Myrmidia miracles retain authoritative effects and structured p
     type: 'armor-bonus', value: 1, locations: 'all',
     duration: { value: null, sourceParameter: 'params.duration', unit: 'rounds', requiresResolvedExpiry: true }
   });
-  // P4b T4 : Fureur, Inspirant et Lance sont assistés ; Bouclier et Soleil restent implémentés ; l’Œil de l’aigle reste manuel.
-  assert.deepEqual([fury, inspiring, spear, shield, sun, eagle].map(row => row.status), ['assisted', 'assisted', 'assisted', 'implemented', 'implemented', 'manual']);
+  // P4b T4 : Fureur, Inspirant et Lance sont assistés ; Bouclier et Soleil restent implémentés ; l’Œil de l’aigle devient assisté (P4c : capteur invoqué).
+  assert.deepEqual([fury, inspiring, spear, shield, sun, eagle].map(row => row.status), ['assisted', 'assisted', 'assisted', 'implemented', 'implemented', 'assisted']);
   assert.deepEqual([fury, inspiring, spear].map(row => row.effects[0].type), ['grant-talent', 'grant-talent', 'weapon-bonus']);
   assert.deepEqual([fury, inspiring].map(row => row.effects[0].talents[0].id), ['talent-frenzy', 'talent-drilled']);
   assert.deepEqual(spear.effects[0].qualities, ['devastatrice']);

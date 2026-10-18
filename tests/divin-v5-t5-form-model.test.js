@@ -46,6 +46,7 @@ function autofill(contract, store, { targetIds }) {
     if (field.kind === 'number') setFieldValue(form, field, field.min ?? 1);
     if (field.kind === 'select') setFieldValue(form, field, field.options.find(([value]) => value && value !== '__none')?.[0] ?? '');
     if (field.kind === 'check') setFieldValue(form, field, true);
+    if (field.kind === 'text') setFieldValue(form, field, 'devant le prêtre');
   }
   for (const fields of Object.values(model.factFields)) for (const field of fields) setFieldValue(form, field, field.field === 'ally' && !field.required ? 'false' : 'true');
   const expiry = model.descr.expiryField ? buildExpiry({ contract, actor, choices: {}, round: 1, phase: 'endOfRound', manualRounds: form.expiryRounds }) : undefined;

@@ -31,11 +31,11 @@ test('Œil de l’aigle — résumé et delta correspondent aux lectures V5 p.22
     assert.doesNotMatch(text, /sans acc[eè]der [àa] ses autres sens/i, `${label}: aucune confusion avec Yeux du chat`);
   }
 
-  assert.equal(eagle.status, 'manual');
+  assert.equal(eagle.status, 'assisted');
   assert.deepEqual(eagle.params, {
     range: { kind: 'characteristic', characteristic: 'Soc', unit: 'yards' },
     targets: { kind: 'self' },
     duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'rounds' },
   });
-  assert.deepEqual(eagle.effects, []);
+  assert.deepEqual(eagle.effects.map(effect => [effect.type, effect.kind]), [['summon-creature', 'sensor']]);
 });

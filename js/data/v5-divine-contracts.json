@@ -1091,7 +1091,7 @@
         "effet": "Vous faites appel à Myrmidia pour envoyer un Serviteur divin vous accordant la connaissance de vos ennemis. Un aigle spectral se manifeste, planant dans le ciel au-dessus. L’aigle ressemble et possède les capacités d’un aigle normal, mais ne peut pas physiquement affecter le monde, ou être blessé en aucune manière. Pendant que le Miracle est actif, vous pouvez voir à travers les yeux de l’aigle et contrôler son vol, surveillant le champ de bataille et espionnant vos ennemis. Votre vision est perçante, mais vous n’avez accès à aucun de vos propres Talents, tels que Vision nocturne. Pendant que vous regardez à travers les yeux de l’aigle, vous ne pouvez pas le faire par vos propres yeux, ce qui vous laisse potentiellement vulnérable."
       },
       "v5Summary": "Écart : le catalogue indique un aigle ordinaire sans profil détaillé; V5 précise un aigle spectral aux capacités normales, intangible, incapable d’affecter physiquement le monde et invulnérable, avec Perception 55, Sens aiguisé (Vue) et Vol 80. Le prêtre utilise les capacités de l’aigle à la place des siennes, contrôle son vol et voit par ses yeux, sans voir par les siens pendant l’utilisation, ce qui le laisse potentiellement vulnérable.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -2395,8 +2395,8 @@
     {
       "id": "divine:miracle:taal:king-of-the-wild",
       "catalogueEntry": null,
-      "v5Summary": "Le livre ne dit pas ce qu'il advient de l'animal à la fin de la durée.",
-      "status": "manual",
+      "v5Summary": "Le livre ne dit pas ce qu'il advient de l'animal à la fin de la durée : arbitrage MJ, il disparaît. « Animal sauvage adapté à l'environnement » : liste fermée des six bêtes du bestiaire, choisie par le MJ.",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -2560,8 +2560,8 @@
     {
       "id": "divine:miracle:ulric:howl-of-the-wolf",
       "catalogueEntry": null,
-      "v5Summary": "Le texte donne « Willpower 35 » (Volonté) : clé de caractéristique du moteur à confirmer. Cible « Special ».",
-      "status": "manual",
+      "v5Summary": "Le texte donne « Willpower 35 » (Volonté) : lu comme la caractéristique FM du moteur. Cible « Special ». Arbitrages MJ : le profil de base vient du bestiaire de Forme bestiale (Loup, p.327), complété par les valeurs de la source ; le loup est contrôlé par le MJ et disparaît à la fin.",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -10995,7 +10995,7 @@
       "catalogueName": "Œil de l’aigle",
       "canonicalName": "Eagle's Eye",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -11069,7 +11069,27 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "summon-creature",
+          "appliesTo": "caster",
+          "kind": "sensor",
+          "name": "Aigle spectral",
+          "traits": [
+            "Perception 55",
+            "Sens aiguisé (Vue)",
+            "Vol (80)",
+            "Intangible",
+            "Invulnérable"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Eagle's Eye",
@@ -11084,7 +11104,37 @@
         },
         {
           "id": "effect",
+          "mode": "assisted",
+          "sourceRef": "v5-eagle-s-eye"
+        },
+        {
+          "id": "summon-eagle",
+          "mode": "engine",
+          "text": "Le moteur crée l’aigle spectral comme simple capteur : aucun participant dans l’ordre du combat, ni initiative ni action, invulnérable, avec Perception 55, Sens aiguisé (Vue), Vol 80 et intangible (arbitrage MJ).",
+          "sourceRef": "v5-eagle-s-eye"
+        },
+        {
+          "id": "eagle-control",
           "mode": "manual",
+          "text": "Le prêtre contrôle le vol de l’aigle : le MJ suit ses instructions de déplacement.",
+          "sourceRef": "v5-eagle-s-eye"
+        },
+        {
+          "id": "eagle-sight",
+          "mode": "manual",
+          "text": "Rappel : le prêtre voit par les yeux de l’aigle et utilise ses capacités à la place des siennes, sans voir par les siens pendant l’utilisation, ce qui le laisse potentiellement vulnérable.",
+          "sourceRef": "v5-eagle-s-eye"
+        },
+        {
+          "id": "eagle-intangible",
+          "mode": "manual",
+          "text": "L’aigle est intangible : il ne peut pas affecter physiquement le monde.",
+          "sourceRef": "v5-eagle-s-eye"
+        },
+        {
+          "id": "end",
+          "mode": "engine",
+          "text": "L’aigle disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l’expiration ou à la fin de la prière, ou à la mort du prêtre.",
           "sourceRef": "v5-eagle-s-eye"
         }
       ],
@@ -23474,7 +23524,7 @@
       "catalogueName": "Roi de la Nature",
       "canonicalName": "King of the Wild",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -23496,7 +23546,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le livre ne dit pas ce qu'il advient de l'animal à la fin de la durée.",
+      "sourceDelta": "Le livre ne dit pas ce qu'il advient de l'animal à la fin de la durée : arbitrage MJ, il disparaît. « Animal sauvage adapté à l'environnement » : liste fermée des six bêtes du bestiaire, choisie par le MJ.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -23541,7 +23591,21 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "summon-creature",
+          "appliesTo": "caster",
+          "kind": "creature",
+          "choice": "beast",
+          "requiresPosition": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "minutes",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "King of the Wild",
@@ -23551,35 +23615,37 @@
       "clauses": [
         {
           "id": "summon-animal",
+          "mode": "engine",
+          "text": "Le moteur crée l'animal choisi par le MJ dans la liste fermée des six bêtes du bestiaire (pp.325-327), avec son profil de base, du camp du prêtre et contrôlé par le MJ.",
+          "sourceRef": "v5-king-of-the-wild"
+        },
+        {
+          "id": "animal-placement",
           "mode": "manual",
-          "text": "Invocation d'un animal sauvage adapté au lieu, à portée (Sociabilité yards).",
+          "text": "L'animal apparaît à portée (Sociabilité yards) : la position saisie est notée sur la créature, le MJ la place.",
           "sourceRef": "v5-king-of-the-wild"
         },
         {
           "id": "obedience",
           "mode": "manual",
-          "text": "L'animal agit selon les désirs du prêtre pendant toute la durée.",
+          "text": "L'animal agit selon les désirs du prêtre pendant toute la durée : le MJ joue l'animal en suivant les souhaits du prêtre.",
           "sourceRef": "v5-king-of-the-wild"
         },
         {
           "id": "end",
-          "mode": "manual",
-          "text": "Durée de Bonus de Sociabilité minutes; le livre ne dit pas ce que devient l'animal ensuite.",
+          "mode": "engine",
+          "text": "Durée de Bonus de Sociabilité minutes (horloge de campagne) ; à l'échéance, ou à la fin de la prière, l'animal disparaît (arbitrage MJ : le livre est muet).",
           "sourceRef": "v5-king-of-the-wild"
         }
       ],
       "needsInput": [
         {
           "field": "environment",
-          "label": "Environnement et animal sauvage adapté (profil p.325-327) choisi avec le MJ."
+          "label": "Environnement du lieu : le MJ choisit parmi les six bêtes du bestiaire (sanglier, chien, rat géant, araignée géante, cheval, loup) celle qui convient."
         },
         {
           "field": "animal-position",
-          "label": "Position d'apparition de l'animal dans la portée."
-        },
-        {
-          "field": "animal-control",
-          "label": "Qui joue l'animal et comment ses actions sont ordonnées."
+          "label": "Position d'apparition de l'animal dans la portée (Sociabilité yards)."
         }
       ]
     },
@@ -25051,7 +25117,7 @@
       "catalogueName": "Hurlement du loup",
       "canonicalName": "Howl of the Wolf",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -25073,7 +25139,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le texte donne « Willpower 35 » (Volonté) : clé de caractéristique du moteur à confirmer. Cible « Special ».",
+      "sourceDelta": "Le texte donne « Willpower 35 » (Volonté) : lu comme la caractéristique FM du moteur. Cible « Special ». Arbitrages MJ : le profil de base vient du bestiaire de Forme bestiale (Loup, p.327), complété par les valeurs de la source ; le loup est contrôlé par le MJ et disparaît à la fin.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -25117,7 +25183,32 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "summon-creature",
+          "appliesTo": "caster",
+          "kind": "creature",
+          "profile": "wolf",
+          "overrides": {
+            "caracs": {
+              "CC": 45,
+              "FM": 35
+            },
+            "size": "large",
+            "traits": [
+              "Magique",
+              "Frénésie"
+            ],
+            "recomputeWounds": true
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Howl of the Wolf",
@@ -25127,41 +25218,37 @@
       "clauses": [
         {
           "id": "summon-wolf",
-          "mode": "manual",
-          "text": "Invocation d'un loup blanc (Serviteur divin mineur) à portée.",
+          "mode": "engine",
+          "text": "Le moteur crée le loup blanc (Serviteur divin mineur) : participant du camp du prêtre, contrôlé par le MJ, avec le profil du Loup du bestiaire (p.327) et les valeurs du miracle (CC 45, Volonté 35, Morsure +6, Frénésie, Magique, Taille Grande, Blessures par la formule des créatures de Taille Grande).",
           "sourceRef": "v5-howl-of-the-wolf"
         },
         {
-          "id": "wolf-stats",
+          "id": "wolf-placement",
           "mode": "manual",
-          "text": "Profil Loup (p.327) avec CC 45, Volonté 35, Morsure +6, Frénésie, Magique, Taille (Grande).",
+          "text": "Le loup apparaît à portée (Sociabilité yards) : le MJ place la créature.",
           "sourceRef": "v5-howl-of-the-wolf"
         },
         {
           "id": "wolf-combat",
           "mode": "manual",
-          "text": "Le loup combat les ennemis du prêtre pendant la durée.",
+          "text": "Le loup combat les ennemis du prêtre pendant la durée ; le MJ le joue (arbitrage MJ : contrôlé par le MJ).",
           "sourceRef": "v5-howl-of-the-wolf"
         },
         {
           "id": "end",
-          "mode": "manual",
-          "text": "Le loup disparaît à la fin de la durée (Bonus de Sociabilité rounds).",
+          "mode": "engine",
+          "text": "Le loup disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l'expiration ou à la fin manuelle de la prière, ou à la mort du prêtre.",
           "sourceRef": "v5-howl-of-the-wolf"
         }
       ],
       "needsInput": [
         {
           "field": "wolf-position",
-          "label": "Position d'apparition du loup dans la portée (Sociabilité yards)."
+          "label": "Position d'apparition du loup dans la portée (Sociabilité yards), notée par le MJ."
         },
         {
-          "field": "wolf-actor",
-          "label": "Qui joue le loup, initiative et cibles ennemies visées."
-        },
-        {
-          "field": "wolf-profile",
-          "label": "Profil de base du Loup p.327 à relever puis modifier (CC 45, Volonté 35)."
+          "field": "wolf-targets",
+          "label": "Ennemis visés par le loup : le MJ joue le loup et choisit ses cibles."
         }
       ]
     },
@@ -26534,5 +26621,5 @@
       ]
     }
   ],
-  "sourceFingerprint": "sha256:6994b1d6e3395c1e36ba2e92bfd0b35635ec69d7d40abca5e791103ca0d90866"
+  "sourceFingerprint": "sha256:b04249f5693a30819a9fa02ec815c7a396b5491a21045dbddd02c3cfb50864d3"
 }

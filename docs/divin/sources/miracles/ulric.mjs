@@ -36,21 +36,21 @@ export const miracles = [
     printedPage: 228,
     summary: 'Vous hurlez pour appeler Ulric, qui envoie un loup blanc, Serviteur divin mineur. Il combat vos ennemis pendant la durée puis disparaît en poussant un hurlement spectral. Profil du Loup (p.327), avec Capacité de Combat 45, Volonté 35 et les Traits Morsure +6, Frénésie, Magique et Taille (Grande).',
     params: { range, targets: { kind: 'special' }, duration: felRounds },
-    status: 'manual',
-    effect: null,
+    status: 'assisted',
+    effects: [{ type: 'summon-creature', appliesTo: 'caster', kind: 'creature', profile: 'wolf',
+      overrides: { caracs: { CC: 45, FM: 35 }, size: 'large', traits: ['Magique', 'Frénésie'], recomputeWounds: true } }],
     targetRules: [],
     needsInput: [
-      { id: 'wolf-position', text: 'Position d\'apparition du loup dans la portée (Sociabilité yards).' },
-      { id: 'wolf-actor', text: 'Qui joue le loup, initiative et cibles ennemies visées.' },
-      { id: 'wolf-profile', text: 'Profil de base du Loup p.327 à relever puis modifier (CC 45, Volonté 35).' }
+      { id: 'wolf-position', text: 'Position d\'apparition du loup dans la portée (Sociabilité yards), notée par le MJ.' },
+      { id: 'wolf-targets', text: 'Ennemis visés par le loup : le MJ joue le loup et choisit ses cibles.' }
     ],
     clauses: [
-      { id: 'summon-wolf', mode: 'manual', text: 'Invocation d\'un loup blanc (Serviteur divin mineur) à portée.' },
-      { id: 'wolf-stats', mode: 'manual', text: 'Profil Loup (p.327) avec CC 45, Volonté 35, Morsure +6, Frénésie, Magique, Taille (Grande).' },
-      { id: 'wolf-combat', mode: 'manual', text: 'Le loup combat les ennemis du prêtre pendant la durée.' },
-      { id: 'end', mode: 'manual', text: 'Le loup disparaît à la fin de la durée (Bonus de Sociabilité rounds).' }
+      { id: 'summon-wolf', mode: 'engine', text: 'Le moteur crée le loup blanc (Serviteur divin mineur) : participant du camp du prêtre, contrôlé par le MJ, avec le profil du Loup du bestiaire (p.327) et les valeurs du miracle (CC 45, Volonté 35, Morsure +6, Frénésie, Magique, Taille Grande, Blessures par la formule des créatures de Taille Grande).' },
+      { id: 'wolf-placement', mode: 'manual', text: 'Le loup apparaît à portée (Sociabilité yards) : le MJ place la créature.' },
+      { id: 'wolf-combat', mode: 'manual', text: 'Le loup combat les ennemis du prêtre pendant la durée ; le MJ le joue (arbitrage MJ : contrôlé par le MJ).' },
+      { id: 'end', mode: 'engine', text: 'Le loup disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l\'expiration ou à la fin manuelle de la prière, ou à la mort du prêtre.' }
     ],
-    sourceDelta: 'Le texte donne « Willpower 35 » (Volonté) : clé de caractéristique du moteur à confirmer. Cible « Special ».'
+    sourceDelta: 'Le texte donne « Willpower 35 » (Volonté) : lu comme la caractéristique FM du moteur. Cible « Special ». Arbitrages MJ : le profil de base vient du bestiaire de Forme bestiale (Loup, p.327), complété par les valeurs de la source ; le loup est contrôlé par le MJ et disparaît à la fin.'
   },
   {
     name: 'Peau de loup d\'hiver',
