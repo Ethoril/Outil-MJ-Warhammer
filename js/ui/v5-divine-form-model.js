@@ -421,7 +421,9 @@ export function prayerDurationRounds(contract, actor, choices = {}) {
   const choice = (contract.extensions || []).flatMap(row => row.choices || []).find(item => item.param === 'duration' || Object.hasOwn(item, 'duration'));
   const spec = choice?.duration ?? choice;
   const step = spec?.addBaseValue === true || choice?.addBaseValue === true ? base : Number(spec?.add ?? choice?.add ?? 0);
-  const total = base + (Number(choices.duration) || 0) * (Number.isFinite(step) ? step : 0);
+  // durationBonus (test-modifier) : Bonus + n, compté aussi dans chaque extension de durée.
+  const bonus = Math.max(0, ...(contract.effects || []).map(effect => Number.isSafeInteger(effect?.durationBonus) ? effect.durationBonus : 0));
+  const total = base + bonus + (Number(choices.duration) || 0) * ((Number.isFinite(step) ? step : 0) + bonus);
   return Number.isSafeInteger(total) && total >= 1 ? total : null;
 }
 

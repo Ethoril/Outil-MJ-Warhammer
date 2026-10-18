@@ -113,16 +113,17 @@ export const miracles = [
   summary: 'Dans un chant de résolution calme, le prêtre sent la puissance de Rhya déferler en lui, prêt à défendre ceux qui ont besoin de protection. Ce miracle ne peut être invoqué que pour défendre des enfants, ou un foyer ou une ferme occupés par ses habitants. Le prêtre gagne les Traits Immunité à la Psychologie et Impassible, et +2 DR aux Tests de Mêlée, de Force et d’Endurance.',
   params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: rounds },
   status: 'assisted', effect: null,
-  effects: [{ type: 'grant-trait', traits: ['Impassible'] }, { type: 'special-state', fearImmune: true }],
+  effects: [{ type: 'grant-trait', traits: ['Impassible'] }, { type: 'special-state', fearImmune: true }, { type: 'test-modifier', modifiers: { 'Corps à corps': 2, 'Résistance': 2 } }],
   targetRules: [],
   needsInput: [
    { id: 'defending', text: 'Le prêtre défend-il des enfants, ou un foyer ou une ferme occupés par ses habitants ? Sinon le miracle ne peut pas être invoqué.' },
-   { id: 'test-bonus', text: 'Tests de Mêlée, de Force ou d’Endurance faits pendant la durée (+2 DR chacun).' }
+   { id: 'force-test', text: 'Tests de Force (caractéristique) faits pendant la durée (+2 DR chacun).' }
   ],
   clauses: [
    { id: 'impassible', mode: 'engine', text: 'Le prêtre gagne le Trait de créature Impassible (Painless) pendant la durée.' },
    { id: 'psychology', mode: 'engine', text: 'Le prêtre est immunisé à la peur pendant la durée (drapeau fearImmune ; les autres Psychologies restent à la charge du MJ).' },
-   { id: 'test-bonus', mode: 'manual', text: '+2 DR aux Tests de Mêlée, de Force et d’Endurance du prêtre pendant la durée (le moteur ne lit les modificateurs de Test que pour Prière et « Tous les Tests »).' },
+   { id: 'test-bonus', mode: 'engine', text: '+2 DR aux Tests de Mêlée (Corps à corps) et d’Endurance (Résistance) du prêtre pendant la durée.' },
+   { id: 'force-test', mode: 'manual', text: '+2 DR aux Tests de Force du prêtre pendant la durée (le moteur ne porte que les modificateurs de compétences).' },
    { id: 'defend-only', mode: 'manual', text: 'Invocable uniquement pour défendre des enfants, ou un foyer ou une ferme occupés par ses habitants.' }
   ],
   sourceDelta: delta + ' « Immunity to Psychology » est mappée sur fearImmune (peur uniquement) ; Painless sur Impassible, comme pour Shallya.'

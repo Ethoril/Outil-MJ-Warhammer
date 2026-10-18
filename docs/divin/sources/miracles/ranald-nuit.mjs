@@ -127,7 +127,8 @@ export const miracles = [
     name: 'La pression retombe', canonicalName: 'The Heat Is Off', printedPage: 18,
     summary: 'Après un crime, pendant quelques heures, les gens se désintéressent étrangement du prêtre : les autorités détournent le regard et on se souvient mal de son passage. Avec les règles de patrouille du guet (p.92), on retranche 3 au score de présence du guet. Un nouveau crime met fin au miracle. Tous les Tests de Sociabilité du prêtre subissent -3 DR tant que le miracle dure.',
     params: { range: self, targets: self, duration: soc('characteristic-bonus', 'hours') },
-    status: 'manual', effect: null,
+    status: 'assisted',
+    effects: [{ type: 'test-modifier', categories: { soc: -3 } }],
     targetRules: ['prêtre uniquement'],
     needsInput: [
       { id: 'crime', text: 'Le prêtre vient-il de commettre un crime ? Un nouveau crime a-t-il été tenté pendant la durée (fin du miracle) ?' },
@@ -137,8 +138,8 @@ export const miracles = [
       { id: 'disinterest', mode: 'manual', text: 'Les gens se désintéressent du prêtre et se souviennent mal de sa venue ; les autorités détournent les yeux.' },
       { id: 'watch-minus-3', mode: 'manual', text: 'Règles de patrouille du guet : -3 au score de présence du guet.' },
       { id: 'ends-on-crime', mode: 'manual', text: 'Une nouvelle tentative de crime met fin au miracle.' },
-      { id: 'fellowship-penalty', mode: 'manual', text: 'Tous les Tests de Sociabilité du prêtre subissent -3 DR pendant la durée.' }
+      { id: 'fellowship-penalty', mode: 'engine', text: 'Tous les Tests de Sociabilité du prêtre subissent -3 DR pendant la durée.' }
     ],
-    sourceDelta: 'Le malus de -3 DR vise « tous les Tests basés sur Fellowship » (catégorie de Tests), non une compétence nommée : le test-modifier par clé de compétence ne le couvre pas ; resté manuel.'
+    sourceDelta: 'Le malus de -3 DR vise « tous les Tests basés sur Fellowship » : catégorie de Tests résolue en clés de compétences liées à Sociabilité (catalogue), Prière exclue (arbitrage MJ). Le guet et la fin du miracle sur nouveau crime restent des rappels.'
   }
 ];
