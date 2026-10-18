@@ -121,9 +121,12 @@ export function expireV5Effects(participant,transition={}) {
   });
   return createReceipt(participant,next,{removed});
 }
+// Verrou divin : l'État reste tant que la couche qui l'a posé (prière à verrou) est active.
+const divineLocked = (state,participant) => state.divineLock===true && (participant.extensions?.v5?.divineEffects || []).some(e => e.id === state.divineEffectId);
 const recoveryLocked = (state,participant,options) => {
   if(isMiscastConditionLocked(participant,state))return true;
   if(state.spellEffectId && !state.recoveryDuringSpell && (participant.extensions?.v5?.spellEffects || []).some(e => e.id === state.spellEffectId)) return true;
+  if(divineLocked(state,participant))return true;
   const kind=state.v5Recovery?.kind;
   if(!kind)return false;
   if(kind==='noBleeding')return levels(normalizeEffects(participant.states),'hemorragique')>0;
@@ -140,7 +143,7 @@ export function recoverV5Condition(participant,condition,options={}) {
   const candidates=states.filter(state=>keyOf(state)===key&&(!selected||state.id===selected.id));
   if(!candidates.length)return createReceipt(participant,{...next,states});
   const method=fold(options.method),needsInput=[],reminders=[];
-  const eligible=state=>(!selected||state.id===selected.id)&&!isMiscastConditionLocked(next,state)&&!(state.spellEffectId && !state.recoveryDuringSpell && (next.extensions?.v5?.spellEffects || []).some(e=>e.id===state.spellEffectId))&&(method==='fortune'||!recoveryLocked(state,next,options));
+  const eligible=state=>(!selected||state.id===selected.id)&&!isMiscastConditionLocked(next,state)&&!(state.spellEffectId && !state.recoveryDuringSpell && (next.extensions?.v5?.spellEffects || []).some(e=>e.id===state.spellEffectId))&&!divineLocked(state,next)&&(method==='fortune'||!recoveryLocked(state,next,options));
   if(!candidates.some(eligible))return createReceipt(participant,{...next,states},{reminders:['La cause ou les soins requis empêchent encore cette récupération.']});
   let amount=0;
   const tested=(allowed)=>{
@@ -155,6 +158,7 @@ export function recoverV5Condition(participant,condition,options={}) {
     amount=result.success?Math.max(1,result.sl):0;return true;
   };
   if(method==='fortune')amount=1;
+  else if(method==='divine-removal')amount=options.amount===undefined?1:integer(options.amount,'États retirés');
   else if(key==='a-terre'&&method==='stand-up')amount=1;
   else if(key==='souille'&&method==='clean')amount=1;
   else if(key==='extenue'&&method==='rest'){

@@ -54,7 +54,7 @@ for (const mod of modules) {
       assert.ok(STATUSES.includes(miracle.status), miracle.name);
       assert.ok(Array.isArray(miracle.targetRules) && Array.isArray(miracle.needsInput) && Array.isArray(miracle.clauses));
       for (const key of ['range', 'targets', 'duration']) assert.ok(validParam(miracle.params?.[key]), `${miracle.name}.params.${key}`);
-      if (miracle.effect !== null) assert.ok(ENGINE_EFFECT_TYPES.includes(miracle.effect.type), miracle.name);
+      if (miracle.effect) assert.ok(ENGINE_EFFECT_TYPES.includes(miracle.effect.type), miracle.name);
       for (const effect of miracle.effects || []) assert.ok(ENGINE_EFFECT_TYPES.includes(effect.type), miracle.name);
       if (miracle.status === 'implemented') assert.ok(miracle.effect || miracle.effects?.length, `${miracle.name} implémenté sans effet`);
       if (miracle.status === 'assisted') assert.ok(miracle.effect || miracle.effects?.length, `${miracle.name} assisté sans effet`);

@@ -10,6 +10,7 @@
 import { healV5Wounds, acquireV5Conditions } from './v5-effects.js';
 import { knownMovement } from './v5-magic-effects.js';
 import { effectTypes, strengthSources, progressionFields } from './v5-divine-grammar.js';
+import { REMINDER_FLAGS } from './v5-magic-reminder-flags.js';
 import damageHandlers from './v5-divine-effects-damage.js';
 import conditionHandlers from './v5-divine-effects-conditions.js';
 import gearHandlers from './v5-divine-effects-gear.js';
@@ -65,7 +66,7 @@ const coreHandlers = {
     applyInstant(participant, effect, { contract, executionId, index, layer, expiry, round }) {
       const beforeIds = new Set((participant.states || []).map(row => row.id));
       const acquired = acquireV5Conditions(participant, [{ name: effect.key || effect.name, level: effect.level ?? 1,
-        source: { kind: 'divine', prayerId: contract.id, executionId } }], { round: expiry?.round ?? round });
+        source: { kind: 'divine', prayerId: contract.id, executionId, ...(effect.strength === undefined ? {} : { strength: effect.strength }) } }], { round: expiry?.round ?? round });
       if (!acquired.ready) throw Object.assign(new Error('Données requises pour appliquer la Condition divine.'), { code: 'DIVINE_CONDITION_INPUT', needsInput: acquired.needsInput });
       Object.assign(participant, acquired.participant);
       const ids = (participant.states || []).filter(row => !beforeIds.has(row.id)).map((row, stateIndex) => {
@@ -76,10 +77,12 @@ const coreHandlers = {
       const live = layer && (participant.extensions?.v5?.divineEffects || []).find(row => row.id === layer.id);
       if (live) {
         live.conditionStateIds = ids;
-        participant.states = (participant.states || []).map(row => ids.includes(row.id) ? { ...row, divineEffectId: layer.id, divineExecutionId: executionId } : row);
+        participant.states = (participant.states || []).map(row => ids.includes(row.id) ? { ...row, divineEffectId: layer.id, divineExecutionId: executionId, ...(effect.lockConditions ? { divineLock: true } : {}) } : row);
       }
       return null;
-    }
+    },
+    receipt: (effect, { targetId }) => effect.strength === undefined ? null
+      : { targetId, type: effect.type, result: { strength: effect.strength, reminder: REMINDER_FLAGS.entangledStrength(effect.strength) } }
   },
   healing,
   'wound-heal': healing

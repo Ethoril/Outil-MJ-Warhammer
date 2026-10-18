@@ -13,12 +13,14 @@ export const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'c
 export const strengthSources = new Set(['characteristic-bonus', 'characteristic', 'success-levels']);
 // Champs d'effet que `perSuccessLevels: {every, add, field}` peut faire croître.
 export const progressionFields = new Set(['level', 'value', 'wounds', 'count']);
+// États, verrous et Chance temporaire (js/core/v5-divine-effects-conditions.js).
+for (const type of ['remove-condition', 'expiry-condition', 'temporary-fortune']) effectTypes.add(type);
 
 // Règle de contrat (texte de `targetRules`) -> clé du fait fourni dans `input.facts.targets[id]`.
 // Toute autre règle devient une note (`targetNotes`), jamais appliquée.
 export const targetRuleFactFields = Object.freeze({
   'non-Myrmidian': 'nonMyrmidian', 'looking-at-priest': 'lookingAtPriest', 'within-range': 'withinRange', ally: 'ally',
   undead: 'undead', ruinServant: 'ruinServant', withinTouch: 'withinTouch', seesPriest: 'seesPriest',
-  zeroWounds: 'zeroWounds', consenting: 'consenting', criminal: 'criminal'
+  zeroWounds: 'zeroWounds', consenting: 'consenting', criminal: 'criminal', 'denies-crime': 'deniesCrime'
 });
 export const targetRuleFacts = new Set(Object.keys(targetRuleFactFields));

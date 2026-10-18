@@ -54,16 +54,16 @@ export const miracles = [
     printedPage: 229,
     summary: 'Vous demandez à Verena de juger un criminel présumé. Si la cible a commis un crime et affirme le contraire, elle gagne l\'État Entravé (Entangled), impossible à retirer pendant la durée. Si votre accusation était fausse, Verena vous reproche votre manque de sagesse : vous lancez immédiatement sur la table Colère des dieux.',
     params: { range: felBonusYards, targets: one, duration: felRounds },
-    status: 'manual',
-    effect: null,
-    targetRules: [],
+    status: 'assisted',
+    effects: [{ type: 'condition', key: 'Entangled', level: 1, lockConditions: true }],
+    targetRules: ['criminal', 'denies-crime'],
     needsInput: [
       { id: 'crime', text: 'La cible a-t-elle commis un crime (décision MJ) ?' },
       { id: 'denial', text: 'La cible nie-t-elle ce crime ?' },
       { id: 'false-accusation', text: 'L\'accusation était-elle fausse ? Si oui : jet sur la table Colère des dieux.' }
     ],
     clauses: [
-      { id: 'entangled', mode: 'manual', text: 'Si la cible a commis le crime et le nie, elle gagne l\'État Entangled impossible à retirer pendant la durée.' },
+      { id: 'entangled', mode: 'engine', text: 'Si la cible a commis le crime et le nie, elle gagne l\'État Entangled impossible à retirer pendant la durée.' },
       { id: 'false-accusation-wrath', mode: 'manual', text: 'Accusation fausse : jet immédiat sur la table Colère des dieux (règle de colère, p.218-219).' },
       { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],

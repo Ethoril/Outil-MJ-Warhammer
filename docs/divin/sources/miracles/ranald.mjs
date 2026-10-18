@@ -39,18 +39,20 @@ export const miracles = [
   name: 'Que la chance persiste', canonicalName: 'Cheat the Odds', printedPage: 224,
   summary: 'Le prêtre gagne +1 point de Fortune, conservé jusqu’à la fin de la session ; +1 point par +2 DR. Il ne peut pas réinvoquer ce miracle tant qu’il n’est pas retombé à 0 point de Fortune.',
   params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: { kind: 'special', label: 'Until session end' } },
-  status: 'manual', effect: null,
+  status: 'assisted',
+  effects: [{ type: 'temporary-fortune', count: 1, perSuccessLevels: { every: 2, add: 1, field: 'count' }, duration: { unit: 'session' } }],
   targetRules: ['prêtre uniquement'],
   needsInput: [
    { id: 'fortune-zero', text: 'Le prêtre est-il à 0 point de Fortune (réinvocation) ?' },
    { id: 'success-levels', text: 'Nombre de DR obtenus (points de Fortune gagnés : 1 + 1 par +2 DR).' }
   ],
   clauses: [
-   { id: 'fortune-gain', mode: 'manual', text: 'Le prêtre gagne +1 point de Fortune, qui dure jusqu’à la fin de la session.' },
-   { id: 'sl-fortune', mode: 'assisted', text: 'Par tranche de +2 DR : +1 point de Fortune supplémentaire.' },
-   { id: 'reinvoke-lock', mode: 'manual', text: 'Interdit de réinvoquer ce miracle avant d’atteindre 0 point de Fortune.' }
+   { id: 'fortune-gain', mode: 'engine', text: 'Le prêtre gagne +1 point de Fortune, qui dure jusqu’à la fin de la session.' },
+   { id: 'sl-fortune', mode: 'engine', text: 'Par tranche de +2 DR : +1 point de Fortune supplémentaire.' },
+   { id: 'reinvoke-lock', mode: 'engine', text: 'Interdit de réinvoquer ce miracle avant d’atteindre 0 point de Fortune.' },
+   { id: 'session-end', mode: 'manual', text: 'Les points temporaires durent jusqu’à la fin de la session : le MJ termine la prière à ce moment (aucune échéance automatique).' }
   ],
-  sourceDelta: 'Le livre ne dit pas si les points gagnés dépassent le maximum de Fortune du personnage, ni s’ils se perdent à la fin de la session s’ils n’ont pas été dépensés (lecture : ils persistent jusqu’à la fin de la session).'
+  sourceDelta: 'Le livre ne dit pas si les points gagnés dépassent le maximum de Fortune du personnage, ni s’ils se perdent à la fin de la session s’ils n’ont pas été dépensés (lecture : ils persistent jusqu’à la fin de la session). Lecture MJ : points temporaires sans plafond, portés par une couche séparée et dépensés avant la Chance permanente ; la réinvocation est refusée tant que le total de Chance reste supérieur à 0.'
  },
  {
   name: 'Grâce de Ranald', canonicalName: "Ranald's Grace", printedPage: 225,

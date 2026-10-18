@@ -10,11 +10,11 @@ export const miracles = [
   {
     name: 'Flambeau de Vertu', canonicalName: 'Beacon of Righteous Virtue', printedPage: 226,
     summary: 'Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Intrépide (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.',
-    params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: rounds },
-    status: 'manual', effect: null, targetRules: [],
+    params: { range: { kind: 'self' }, targets: { kind: 'special' }, duration: rounds },
+    status: 'assisted', effects: [{ type: 'remove-condition', key: 'Broken', amount: 'all', duration: { unit: 'instant' } }], targetRules: ['ally', 'seesPriest'],
     needsInput: [{ id: 'allies-in-sight', text: 'Alliés qui vous voient, et suivi de la ligne de vue pendant la durée.' }, { id: 'broken-conditions', text: 'États Brisé à retirer chez chaque allié.' }, { id: 'greenskins', text: 'Orques et gobelins affectés par la Peur.' }],
     clauses: [
-      { id: 'remove-broken', mode: 'manual', text: 'Les alliés qui vous voient retirent immédiatement tous leurs États Brisé.' },
+      { id: 'remove-broken', mode: 'engine', text: 'Les alliés qui vous voient retirent immédiatement tous leurs États Brisé.' },
       { id: 'fearless', mode: 'manual', text: 'Ils gagnent le talent Fearless (Everything) tant que le miracle dure et que le prêtre reste dans leur ligne de vue.' },
       { id: 'fear-greenskins', mode: 'manual', text: 'Le prêtre cause la Peur chez les orques et les gobelins.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
