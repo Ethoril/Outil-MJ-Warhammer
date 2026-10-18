@@ -1,0 +1,206 @@
+{
+ "count": 10,
+ "source_table": "Blessings by Cult, p.220",
+ "cults": [
+  {
+   "culte": "Manann",
+   "pages_miracles": "222-223",
+   "benedictions": [
+    "Blessing of Battle",
+    "Blessing of Breath",
+    "Blessing of Courage",
+    "Blessing of Hardiness",
+    "Blessing of Savagery",
+    "Blessing of Tenacity"
+   ],
+   "miracles": [
+    "Becalm",
+    "Drowned Man's Face",
+    "Fair Winds",
+    "Manann's Bounty",
+    "Sea Legs",
+    "Waterwalk"
+   ]
+  },
+  {
+   "culte": "Morr",
+   "pages_miracles": "223",
+   "benedictions": [
+    "Blessing of Breath",
+    "Blessing of Courage",
+    "Blessing of Fortune",
+    "Blessing of Righteousness",
+    "Blessing of Tenacity",
+    "Blessing of Wisdom"
+   ],
+   "miracles": [
+    "Death Mask",
+    "Destroy Undead",
+    "Dooming",
+    "Last Rites",
+    "Portal's Threshold",
+    "Stay Morr's Hand"
+   ]
+  },
+  {
+   "culte": "Myrmidia",
+   "pages_miracles": "224",
+   "benedictions": [
+    "Blessing of Battle",
+    "Blessing of Conscience",
+    "Blessing of Courage",
+    "Blessing of Fortune",
+    "Blessing of Protection",
+    "Blessing of Righteousness"
+   ],
+   "miracles": [
+    "Blazing Sun",
+    "Eagle's Eye",
+    "Fury's Call",
+    "Inspiring",
+    "Shield of Myrmidia",
+    "Spear of Myrmidia"
+   ]
+  },
+  {
+   "culte": "Ranald",
+   "pages_miracles": "224-225",
+   "benedictions": [
+    "Blessing of Charisma",
+    "Blessing of Conscience",
+    "Blessing of Finesse",
+    "Blessing of Fortune",
+    "Blessing of Protection",
+    "Blessing of Wit"
+   ],
+   "miracles": [
+    "An Invitation",
+    "Cat's Eyes",
+    "Cheat the Odds",
+    "Ranald's Grace",
+    "Trickster's Glamour",
+    "You Saw Nothing"
+   ]
+  },
+  {
+   "culte": "Rhya",
+   "pages_miracles": "225-226",
+   "benedictions": [
+    "Blessing of Breath",
+    "Blessing of Conscience",
+    "Blessing of Grace",
+    "Blessing of Healing",
+    "Blessing of Protection",
+    "Blessing of Recuperation"
+   ],
+   "miracles": [
+    "Rhya's Children",
+    "Rhya's Harvest",
+    "Rhya's Shelter",
+    "Rhya's Succour",
+    "Rhya's Touch",
+    "Rhya's Union"
+   ]
+  },
+  {
+   "culte": "Shallya",
+   "pages_miracles": "226",
+   "benedictions": [
+    "Blessing of Breath",
+    "Blessing of Conscience",
+    "Blessing of Healing",
+    "Blessing of Protection",
+    "Blessing of Recuperation",
+    "Blessing of Tenacity"
+   ],
+   "miracles": [
+    "Anchorite's Endurance",
+    "Balm to a Wounded Mind",
+    "Bitter Catharsis",
+    "Martyr",
+    "Shallya's Tears",
+    "Unblemished Innocence"
+   ]
+  },
+  {
+   "culte": "Sigmar",
+   "pages_miracles": "226-227",
+   "benedictions": [
+    "Blessing of Battle",
+    "Blessing of Courage",
+    "Blessing of Hardiness",
+    "Blessing of Might",
+    "Blessing of Protection",
+    "Blessing of Righteousness"
+   ],
+   "miracles": [
+    "Beacon of Righteous Virtue",
+    "Heed Not the Witch",
+    "Sigmar's Fiery Hammer",
+    "Soulfire",
+    "Twin-tailed Comet",
+    "Vanquish the Unrighteous"
+   ]
+  },
+  {
+   "culte": "Taal",
+   "pages_miracles": "227-228",
+   "benedictions": [
+    "Blessing of Battle",
+    "Blessing of Breath",
+    "Blessing of Conscience",
+    "Blessing of Hardiness",
+    "Blessing of The Hunt",
+    "Blessing of Savagery"
+   ],
+   "miracles": [
+    "Animal Instincts",
+    "King of the Wild",
+    "Leaping Stag",
+    "Lord of the Hunt",
+    "Tanglefoot",
+    "Tooth and Claw"
+   ]
+  },
+  {
+   "culte": "Ulric",
+   "pages_miracles": "228",
+   "benedictions": [
+    "Blessing of Battle",
+    "Blessing of Courage",
+    "Blessing of Hardiness",
+    "Blessing of Might",
+    "Blessing of Savagery",
+    "Blessing of Tenacity"
+   ],
+   "miracles": [
+    "Hoarfrost's Chill",
+    "Howl of the Wolf",
+    "Pelt of the Winter Wolf",
+    "The Snow King's Judgement",
+    "Ulric's Fury",
+    "Winter's Bite"
+   ]
+  },
+  {
+   "culte": "Verena",
+   "pages_miracles": "229",
+   "benedictions": [
+    "Blessing of Conscience",
+    "Blessing of Courage",
+    "Blessing of Fortune",
+    "Blessing of Righteousness",
+    "Blessing of Wisdom",
+    "Blessing of Wit"
+   ],
+   "miracles": [
+    "As Verena Is My Witness",
+    "Blind Justice",
+    "Shackles of Truth",
+    "Sword of Justice",
+    "Truth Will Out",
+    "Wisdom of the Owl"
+   ]
+  }
+ ]
+}

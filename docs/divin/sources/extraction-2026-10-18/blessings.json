@@ -1,0 +1,257 @@
+{
+ "count": 19,
+ "meta": {
+  "table_par_culte": "p.220",
+  "succes": "chaque +2 SL: +6 yards de portée, +1 cible ou +6 rounds de durée (pas de durée pour Instant)"
+ },
+ "blessings": [
+  {
+   "nom_en": "Blessing of Battle",
+   "nom_fr": "Bénédiction de Bataille",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Capacité de Combat.",
+   "clauses": [
+    "+10 WS"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Breath",
+   "nom_fr": "Bénédiction de Souffle",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible n'a plus besoin de respirer et ignore les règles d'Étouffement.",
+   "clauses": [
+    "ignore Suffocation"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Charisma",
+   "nom_fr": "Bénédiction de Charisme",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Sociabilité.",
+   "clauses": [
+    "+10 Fel"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Conscience",
+   "nom_fr": "Bénédiction de Conscience",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible doit réussir un Test de Calme Accessible (+2 SL) pour enfreindre un interdit de sa divinité ; sinon elle est honteuse et n'agit pas.",
+   "clauses": [
+    "Cool Test Average (+2 SL)"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Courage",
+   "nom_fr": "Bénédiction de Courage",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Volonté.",
+   "clauses": [
+    "+10 WP"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Finesse",
+   "nom_fr": "Bénédiction de Finesse",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Dextérité.",
+   "clauses": [
+    "+10 Dex"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Fortune",
+   "nom_fr": "Bénédiction de Chance",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible peut relancer son prochain Test raté ; le second résultat s'impose.",
+   "clauses": [
+    "reroll next failed Test"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Grace",
+   "nom_fr": "Bénédiction de Grâce",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Agilité.",
+   "clauses": [
+    "+10 Ag"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Hardiness",
+   "nom_fr": "Bénédiction de Vigueur",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Endurance.",
+   "clauses": [
+    "+10 T"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Healing",
+   "nom_fr": "Bénédiction de Guérison",
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Instant",
+   "effet_fr": "La cible regagne 1 Blessure.",
+   "clauses": [
+    "+1 Wound"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of The Hunt",
+   "nom_fr": "Bénédiction de La Chasse",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Capacité de Tir.",
+   "clauses": [
+    "+10 BS"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Might",
+   "nom_fr": "Bénédiction de Puissance",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Force.",
+   "clauses": [
+    "+10 S"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Protection",
+   "nom_fr": "Bénédiction de Protection",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "Les ennemis doivent réussir un Test de Calme Accessible (+2 SL) pour attaquer la cible ; sinon ils choisissent une autre cible ou action.",
+   "clauses": [
+    "Cool Test Average (+2 SL) pour les ennemis"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Recuperation",
+   "nom_fr": "Bénédiction de Convalescence",
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Instant",
+   "effet_fr": "La cible réduit d'un jour la durée d'une maladie ; une seule tentative par maladie et par personne.",
+   "clauses": [
+    "-1 jour de maladie",
+    "une fois par maladie et par personne"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Righteousness",
+   "nom_fr": "Bénédiction de Droiture",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "L'arme de la cible est considérée comme Magique.",
+   "clauses": [
+    "weapon Magical"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Savagery",
+   "nom_fr": "Bénédiction de Sauvagerie",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.",
+   "clauses": [
+    "roll twice on Critical, keep best"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Tenacity",
+   "nom_fr": "Bénédiction de Ténacité",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "Instant",
+   "effet_fr": "La cible retire 1 État (sauf Entaché).",
+   "clauses": [
+    "remove 1 Condition except Besmirched"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Wisdom",
+   "nom_fr": "Bénédiction de Sagesse",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Intelligence.",
+   "clauses": [
+    "+10 Int"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  },
+  {
+   "nom_en": "Blessing of Wit",
+   "nom_fr": "Bénédiction de Vivacité",
+   "portee": "6 yards",
+   "cible": "1",
+   "duree": "6 rounds",
+   "effet_fr": "La cible gagne +10 en Initiative.",
+   "clauses": [
+    "+10 I"
+   ],
+   "page_imprimee": 221,
+   "page_physique": 221
+  }
+ ]
+}

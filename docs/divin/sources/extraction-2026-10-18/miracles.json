@@ -1,0 +1,989 @@
+{
+ "count": 60,
+ "meta": {
+  "regle_succes": "+2 SL: ajouter la valeur initiale de Portée/Cibles/Durée ; pas pour Instant ni 'You'",
+  "difficulte": "non indiquée par miracle: Test de Prière (Pray) standard"
+ },
+ "miracles": [
+  {
+   "culte": "Manann",
+   "nom_en": "Becalm",
+   "nom_fr": "Encalminé",
+   "page_imprimee": 222,
+   "page_physique": 222,
+   "portee": "Fellowship Bonus miles",
+   "cible": "1 sailing vessel within line of sight",
+   "duree": "1 hour",
+   "difficulte": null,
+   "effet_fr": "Le vent déserte les voiles d'un navire, qui est totalement encalminé ; une zone de calme de Fellowship yards l'entoure malgré la tempête et suit le navire s'il avance à la rame.",
+   "clauses": [
+    "zone = Fellowship yards",
+    "durée 1 heure"
+   ]
+  },
+  {
+   "culte": "Manann",
+   "nom_en": "Drowned Man's Face",
+   "nom_fr": "Visage de l'homme noyé",
+   "page_imprimee": 222,
+   "page_physique": 222,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Les poumons de la cible se remplissent d'eau salée : elle subit Fatigued et se noie (voir p.169), même démons et morts-vivants. À la fin, elle est Stunned 1 Round.",
+   "clauses": [
+    "Fatigued",
+    "noyade p.169",
+    "Stunned 1 Round à la fin"
+   ]
+  },
+  {
+   "culte": "Manann",
+   "nom_en": "Fair Winds",
+   "nom_fr": "Vents favorables",
+   "page_imprimee": 222,
+   "page_physique": 222,
+   "portee": "Initiative Bonus miles",
+   "cible": "1 sailing vessel within line of sight",
+   "duree": "1 hour",
+   "difficulte": null,
+   "effet_fr": "Le navire file à vitesse maximale quel que soit vent ou courant ; les Tests de Navigation (Sail) gagnent +1 SL.",
+   "clauses": [
+    "+1 SL Sail Tests",
+    "vitesse max"
+   ]
+  },
+  {
+   "culte": "Manann",
+   "nom_en": "Manann's Bounty",
+   "nom_fr": "Générosité de Manann",
+   "page_imprimee": 222,
+   "page_physique": 222,
+   "portee": "Special",
+   "cible": "Special",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "En plongeant la main dans l'eau, vous pêchez de quoi nourrir 1 personne (2 en mer) ; +1 personne par +2 SL.",
+   "clauses": [
+    "1 personne (2 en mer)",
+    "+1 par +2 SL"
+   ]
+  },
+  {
+   "culte": "Manann",
+   "nom_en": "Sea Legs",
+   "nom_fr": "Mer déchaînée",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "La cible est trempée d'eau salée et tangue comme sur un pont de tempête : elle gagne Blinded, Deafened et Fatigued (un de chaque) et doit réussir un Test d'Athlétisme Accessible (+2 SL) pour se déplacer, sinon Prone.",
+   "clauses": [
+    "Blinded+Deafened+Fatigued",
+    "Athletics Average (+2 SL) pour Move",
+    "échec: Prone"
+   ]
+  },
+  {
+   "culte": "Manann",
+   "nom_en": "Waterwalk",
+   "nom_fr": "Marcher sur les eaux",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus minutes",
+   "difficulte": null,
+   "effet_fr": "Vous marchez sur l'eau comme sur le sol, mais seulement sur des étendues d'au moins 10 yards de large.",
+   "clauses": [
+    "étendue >= 10 yards"
+   ]
+  },
+  {
+   "culte": "Morr",
+   "nom_en": "Death Mask",
+   "nom_fr": "Masque mortuaire",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Votre visage devient cadavérique et vous gagnez Fear ; les morts-vivants n'y sont pas immunisés, quels que soient Talents ou Traits.",
+   "clauses": [
+    "gain Fear",
+    "ignore immunité des morts-vivants"
+   ]
+  },
+  {
+   "culte": "Morr",
+   "nom_en": "Destroy Undead",
+   "nom_fr": "Anéantir les morts-vivants",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "You (texte tronqué 'Yo' dans l'extraction)",
+   "cible": "AoE (Fellowship Bonus yards)",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Un feu noir jaillit de vous : toute cible Undead perd 1d10 Blessures sans TB ni PA, +1 Blessure par SL ; les morts détruits ne peuvent plus être relevés par Nécromancie.",
+   "clauses": [
+    "1d10 Wounds ignorant TB/AP",
+    "+1 Wound par SL",
+    "pas de réanimation"
+   ]
+  },
+  {
+   "culte": "Morr",
+   "nom_en": "Dooming",
+   "nom_fr": "Condamné",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Vous voyez le Destin (Doom) de la cible, souvent lié à sa mort ; une seule fois par personnage, qui peut alors acheter le Talent Doomed avec de l'XP comme s'il était dans sa carrière.",
+   "clauses": [
+    "une seule fois par personnage",
+    "accès Talent Doomed"
+   ]
+  },
+  {
+   "culte": "Morr",
+   "nom_en": "Last Rites",
+   "nom_fr": "Rites funéraires",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "1 yard",
+   "cible": "1",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Un requiem sur un cadavre envoie l'âme au royaume de Morr et empêche toute Nécromancie sur le corps ; un ennemi Construct et Undead est détruit.",
+   "clauses": [
+    "cadavre protégé de la Nécromancie",
+    "détruit Construct+Undead"
+   ]
+  },
+  {
+   "culte": "Morr",
+   "nom_en": "Portal's Threshold",
+   "nom_fr": "Seuil du Portail",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "Touch",
+   "cible": "Special",
+   "duree": "Until sunrise",
+   "difficulte": null,
+   "effet_fr": "Une ligne tracée au sol (jusqu'à 8 yards) devient un portail d'ombre : les Undead doivent réussir un Test de Calme Intermédiaire (+0 SL) pour la franchir ; les Undead Construct ne le peuvent pas.",
+   "clauses": [
+    "ligne <= 8 yards",
+    "Cool Challenging (+0 SL)",
+    "Undead+Construct bloqués"
+   ]
+  },
+  {
+   "culte": "Morr",
+   "nom_en": "Stay Morr's Hand",
+   "nom_fr": "Main de Morr",
+   "page_imprimee": 223,
+   "page_physique": 223,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Fellowship Bonus hours",
+   "difficulte": null,
+   "effet_fr": "Sur une cible consentante à 0 Blessure, elle devient Unconscious et ne se détériore plus (maladies, Critiques, poisons suspendus) jusqu'à fin du Miracle, soins appropriés ou rites funéraires (~1 minute) qui l'achèvent.",
+   "clauses": [
+    "cible à 0 Wounds, consentante",
+    "Unconscious",
+    "fin par soins ou last rites"
+   ]
+  },
+  {
+   "culte": "Myrmidia",
+   "nom_en": "Blazing Sun",
+   "nom_fr": "Soleil flamboyant",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "Special",
+   "cible": "Special",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Un éclair d'or aveugle les non-Myrmidiens qui regardent vers vous : 1 État Blinded, +1 par +2 SL.",
+   "clauses": [
+    "1 Blinded",
+    "+1 Blinded par +2 SL"
+   ]
+  },
+  {
+   "culte": "Myrmidia",
+   "nom_en": "Eagle's Eye",
+   "nom_fr": "Œil de l'aigle",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "Fellowship yards",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Un aigle spectral invulnérable vole au-dessus ; vous voyez par ses yeux (Perception 55, Acute Sense Sight, Fly 80) et le dirigez, mais ne voyez plus par les vôtres.",
+   "clauses": [
+    "Perception 55",
+    "Acute Sense (Sight)",
+    "Fly 80",
+    "aveugle de vos propres yeux"
+   ]
+  },
+  {
+   "culte": "Myrmidia",
+   "nom_en": "Fury's Call",
+   "nom_fr": "Appel à la Fureur",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "You",
+   "cible": "AoE (Fellowship Bonus yards)",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Vos alliés dans la zone reçoivent le Trait Frenzy (voir p.358).",
+   "clauses": [
+    "Frenzy"
+   ]
+  },
+  {
+   "culte": "Myrmidia",
+   "nom_en": "Inspiring",
+   "nom_fr": "Inspirant",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "You",
+   "cible": "AoE (Fellowship Bonus yards)",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Les alliés dans la zone gagnent le Talent Drilled.",
+   "clauses": [
+    "Talent Drilled"
+   ]
+  },
+  {
+   "culte": "Myrmidia",
+   "nom_en": "Shield of Myrmidia",
+   "nom_fr": "Bouclier de Myrmidia",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "Fellowship yards",
+   "cible": "Fellowship Bonus",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Vos alliés sont enveloppés de filaments de lumière : +1 Point d'Armure sur toutes les Localisations.",
+   "clauses": [
+    "+1 AP toutes Locations"
+   ]
+  },
+  {
+   "culte": "Myrmidia",
+   "nom_en": "Spear of Myrmidia",
+   "nom_fr": "Lance de Myrmidia",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Si vous maniez une lance, elle gagne la Qualité Damaging et compte comme Magique.",
+   "clauses": [
+    "Damaging",
+    "Magical"
+   ]
+  },
+  {
+   "culte": "Ranald",
+   "nom_en": "An Invitation",
+   "nom_fr": "Invitation",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "1 yard",
+   "cible": "1",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Un moyen de fermeture d'une porte, fenêtre ou trappe cède (serrure, loquet, corde) ; +1 moyen par +2 SL.",
+   "clauses": [
+    "+1 fermeture par +2 SL"
+   ]
+  },
+  {
+   "culte": "Ranald",
+   "nom_en": "Cat's Eyes",
+   "nom_fr": "Yeux de chat",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "Fellowship yards",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Un chat Divin Servant invulnérable perçoit pour vous et vous le dirigez ; vous perdez vos propres sens (et Talents sensoriels comme Night Vision) pendant la durée.",
+   "clauses": [
+    "sens du chat uniquement",
+    "pas de Night Vision",
+    "vulnérable"
+   ]
+  },
+  {
+   "culte": "Ranald",
+   "nom_en": "Cheat the Odds",
+   "nom_fr": "Que la chance persiste",
+   "page_imprimee": 224,
+   "page_physique": 224,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Special",
+   "difficulte": null,
+   "effet_fr": "Vous gagnez +1 point de Fortune jusqu'à la fin de la session, +1 par +2 SL ; impossible de réinvoquer avant d'être à 0 point de Fortune.",
+   "clauses": [
+    "+1 Fortune",
+    "+1 par +2 SL",
+    "jusqu'à fin de session",
+    "réinvocation seulement à 0 Fortune"
+   ]
+  },
+  {
+   "culte": "Ranald",
+   "nom_en": "Ranald's Grace",
+   "nom_fr": "Grâce de Ranald",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "La cible gagne +10 en Agilité, +10 en Discrétion (Stealth) et le Talent Catfall.",
+   "clauses": [
+    "+10 Ag",
+    "+10 Stealth",
+    "+1 Catfall"
+   ]
+  },
+  {
+   "culte": "Ranald",
+   "nom_en": "Trickster's Glamour",
+   "nom_fr": "Riche, pauvre, mendiant, voleur",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "1 yard",
+   "cible": "1",
+   "duree": "Fellowship Bonus minutes",
+   "difficulte": null,
+   "effet_fr": "Par cible, choisir une illusion : bourse vide, bourse pleine, tenue modeste, tenue riche, ou un objet de valeur imperceptible ; +1 effet par +2 SL.",
+   "clauses": [
+    "5 options",
+    "+1 effet par +2 SL"
+   ]
+  },
+  {
+   "culte": "Ranald",
+   "nom_en": "You Saw Nothing",
+   "nom_fr": "Vous ne m'avez pas vu, n'est-ce pas ?",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "La cible passe inaperçue tant qu'elle ne fait rien d'attirant (toucher, attaquer, parler fort, lancer un sort) ; invocable seulement si personne ne vous regarde directement.",
+   "clauses": [
+    "passe inaperçue",
+    "rompue par action voyante"
+   ]
+  },
+  {
+   "culte": "Rhya",
+   "nom_en": "Rhya's Children",
+   "nom_fr": "Enfants de Rhya",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "You",
+   "cible": "AoE (Fellowship yards)",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "En extérieur hors agglomération, vous sentez la présence et le passage de toutes les créatures vivantes dans la zone.",
+   "clauses": [
+    "extérieur seulement",
+    "zone Fellowship yards"
+   ]
+  },
+  {
+   "culte": "Rhya",
+   "nom_en": "Rhya's Harvest",
+   "nom_fr": "Récolte de Rhya",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "Touch",
+   "cible": "Special",
+   "duree": "1 Round",
+   "difficulte": null,
+   "effet_fr": "Fruits, légumes et champignons poussent là où vous touchez : assez pour nourrir 1 personne par Round.",
+   "clauses": [
+    "1 personne/Round"
+   ]
+  },
+  {
+   "culte": "Rhya",
+   "nom_en": "Rhya's Shelter",
+   "nom_fr": "Abri de Rhya",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Special",
+   "difficulte": null,
+   "effet_fr": "En extérieur hors agglomération, vous trouvez un abri naturel parfait, protégé du vent et de la pluie, pour 1 personne (+1 par +2 SL) ; introuvable après le départ.",
+   "clauses": [
+    "1 personne +1 par +2 SL",
+    "extérieur seulement"
+   ]
+  },
+  {
+   "culte": "Rhya",
+   "nom_en": "Rhya's Succour",
+   "nom_fr": "Secours de Rhya",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "Fellowship yards",
+   "cible": "Fellowship Bonus",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Chaque cible retire 1 État ; si cela les retire tous, elles sont reposées et gagnent +1 SL à leurs Tests au prochain Tour.",
+   "clauses": [
+    "remove 1 Condition",
+    "+1 SL au prochain Tour si tous retirés"
+   ]
+  },
+  {
+   "culte": "Rhya",
+   "nom_en": "Rhya's Touch",
+   "nom_fr": "Caresse de Rhya",
+   "page_imprimee": 225,
+   "page_physique": 225,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Special",
+   "difficulte": null,
+   "effet_fr": "Au choix : soigner Fellowship Bonus Blessures ou guérir 1 maladie naturelle ; +1 effet par +2 SL (répétable). Dure au moins 10 minutes, à refaire si interrompu.",
+   "clauses": [
+    "heal FB Wounds ou cure 1 maladie",
+    "+1 effet par +2 SL",
+    "10 minutes minimum"
+   ]
+  },
+  {
+   "culte": "Rhya",
+   "nom_en": "Rhya's Union",
+   "nom_fr": "Union de Rhya",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "Touch",
+   "cible": "Special",
+   "duree": "Fellowship Bonus hours",
+   "difficulte": null,
+   "effet_fr": "Vous bénissez l'union de deux âmes : si c'est biologiquement possible, le couple conçoit un enfant pendant la durée.",
+   "clauses": [
+    "conception"
+   ]
+  },
+  {
+   "culte": "Shallya",
+   "nom_en": "Anchorite's Endurance",
+   "nom_fr": "Endurance de l'anachorète",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "La cible ne ressent aucune douleur, gagne le Trait Painless et ne subit aucune pénalité due aux États.",
+   "clauses": [
+    "Painless",
+    "ignore pénalités des Conditions"
+   ]
+  },
+  {
+   "culte": "Shallya",
+   "nom_en": "Balm to a Wounded Mind",
+   "nom_fr": "Baume pour un esprit blessé",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Fellowship Bonus minutes",
+   "difficulte": null,
+   "effet_fr": "Tous les Traits Psychologiques de la cible sont supprimés pendant la durée, puis elle dort jusqu'au lever du soleil ; une cible réticente peut résister par un Test de Calme Intermédiaire (+0 SL).",
+   "clauses": [
+    "remove Psychology Traits",
+    "sommeil jusqu'au lever du soleil",
+    "Cool Challenging (+0 SL) pour résister"
+   ]
+  },
+  {
+   "culte": "Shallya",
+   "nom_en": "Bitter Catharsis",
+   "nom_fr": "Amère catharsis",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Vous aspirez un poison ou une maladie de la cible ; +1 par +2 SL ; pour chacun, vous subissez 1d10 - Fellowship Bonus Blessures.",
+   "clauses": [
+    "purge poison/maladie",
+    "+1 par +2 SL",
+    "vous subissez 1d10 - FB Wounds par cas"
+   ]
+  },
+  {
+   "culte": "Shallya",
+   "nom_en": "Martyr",
+   "nom_fr": "Martyr",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Tous les dégâts subis par la cible sont encaissés par vous, en ajoutant votre Bonus de Sociabilité à votre BE pour le calcul.",
+   "clauses": [
+    "transfert de dégâts",
+    "BE + FB pour le calcul"
+   ]
+  },
+  {
+   "culte": "Shallya",
+   "nom_en": "Shallya's Tears",
+   "nom_fr": "Larmes de Shallya",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Special",
+   "difficulte": null,
+   "effet_fr": "Vous priez 10 - Fellowship Bonus Rounds puis guérissez 1 Blessure Critique de la cible (+1 par +2 SL) ; annulé si interrompu ; ne rattache pas les membres amputés.",
+   "clauses": [
+    "10 - FB Rounds de prière",
+    "heal 1 Critical",
+    "+1 par +2 SL"
+   ]
+  },
+  {
+   "culte": "Shallya",
+   "nom_en": "Unblemished Innocence",
+   "nom_fr": "Innocence immaculée",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "La cible perd 1 Point de Corruption gagné durant la dernière session (+1 par +2 SL) ; sur Fumble, vous et la cible gagnez 1d10 Corruption.",
+   "clauses": [
+    "-1 Corruption (dernière session)",
+    "+1 par +2 SL",
+    "Fumble: 1d10 Corruption chacun"
+   ]
+  },
+  {
+   "culte": "Sigmar",
+   "nom_en": "Beacon of Righteous Virtue",
+   "nom_fr": "Flambeau de Vertu",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Les alliés qui vous voient retirent tous leurs États Broken et gagnent Fearless (Everything) tant que vous restez dans leur ligne de vue ; vous causez Fear aux orques et gobelins.",
+   "clauses": [
+    "remove Broken",
+    "Fearless (Everything)",
+    "Fear vs orcs/goblins"
+   ]
+  },
+  {
+   "culte": "Sigmar",
+   "nom_en": "Heed Not the Witch",
+   "nom_fr": "N'écoutez point la Sorcière",
+   "page_imprimee": 226,
+   "page_physique": 226,
+   "portee": "You",
+   "cible": "You with AoE (Fellowship Bonus yards)",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Les sorts visant quiconque ou n'importe quoi dans la zone subissent -2 SL aux Tests d'Incantation, en plus des autres pénalités.",
+   "clauses": [
+    "-2 SL Casting Tests"
+   ]
+  },
+  {
+   "culte": "Sigmar",
+   "nom_en": "Sigmar's Fiery Hammer",
+   "nom_fr": "Marteau ardent de Sigmar",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Un marteau de guerre devient Magique, inflige +Fellowship Bonus Dégâts et enflamme la cible touchée (+1 Ablaze).",
+   "clauses": [
+    "Magical",
+    "+FB Damage",
+    "+1 Ablaze"
+   ]
+  },
+  {
+   "culte": "Sigmar",
+   "nom_en": "Soulfire",
+   "nom_fr": "Feu de l'âme",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "You",
+   "cible": "AoE (Fellowship Bonus yards)",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Un feu sacré explose : 1d10 Blessures sans TB ni PA ; Daemon/Undead gagnent aussi Ablaze ; +1 Blessure par SL contre orques, gobelins, morts-vivants et serviteurs du Chaos.",
+   "clauses": [
+    "1d10 Wounds ignorant TB/AP",
+    "Ablaze vs Daemon/Undead",
+    "+1 Wound par SL vs ennemis désignés"
+   ]
+  },
+  {
+   "culte": "Sigmar",
+   "nom_en": "Twin-tailed Comet",
+   "nom_fr": "Comète à Deux Queues",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "Fellowship yards",
+   "cible": "AoE (Fellowship Bonus yards, maximum)",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Une comète s'abat sur une zone en ligne de vue contenant des ennemis de Sigmar : 1d10 + SL Blessures sans TB ni PA et Ablaze ; extérieur seulement ; sans ennemi, Sigmar vous frappe.",
+   "clauses": [
+    "1d10 + SL Wounds ignorant TB/AP",
+    "Ablaze",
+    "extérieur uniquement",
+    "retourné contre vous sans ennemi"
+   ]
+  },
+  {
+   "culte": "Sigmar",
+   "nom_en": "Vanquish the Unrighteous",
+   "nom_fr": "Vaincre les impies",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "You",
+   "cible": "AoE (Fellowship Bonus yards)",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Les alliés gagnent Hatred contre orques, gobelins, morts-vivants et alliés du Chaos ; après avoir tué un tel ennemi, Hatred donne +2 SL au lieu de +1.",
+   "clauses": [
+    "Hatred (p.184)",
+    "+2 SL après kill"
+   ]
+  },
+  {
+   "culte": "Taal",
+   "nom_en": "Animal Instincts",
+   "nom_fr": "Instincts animaux",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Fellowship Bonus hours",
+   "difficulte": null,
+   "effet_fr": "La cible gagne +1 Acute Sense (au choix) et, au repos, se réveille si une menace approche à moins de Perception yards.",
+   "clauses": [
+    "+1 Acute Sense (Any One)",
+    "éveil à Perception yards"
+   ]
+  },
+  {
+   "culte": "Taal",
+   "nom_en": "King of the Wild",
+   "nom_fr": "Roi de la Nature",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus minutes",
+   "difficulte": null,
+   "effet_fr": "Un animal sauvage adapté au lieu répond à votre appel et agit selon vos désirs (exemples p.325-327).",
+   "clauses": [
+    "invoque un animal p.325-327"
+   ]
+  },
+  {
+   "culte": "Taal",
+   "nom_en": "Leaping Stag",
+   "nom_fr": "Bondissant comme un cerf",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Vous gagnez +1 Mouvement et le Talent Strong Legs, et réussissez automatiquement les Tests d'Athlétisme pour sauter.",
+   "clauses": [
+    "+1 Movement",
+    "+1 Strong Legs",
+    "auto-réussite Athletics Leaping"
+   ]
+  },
+  {
+   "culte": "Taal",
+   "nom_en": "Lord of the Hunt",
+   "nom_fr": "Seigneur de la Chasse",
+   "page_imprimee": 227,
+   "page_physique": 227,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus hours",
+   "difficulte": null,
+   "effet_fr": "Vous ne perdez plus la piste d'une proie (animal vu ou individu connu) sauf moyen surnaturel ; piste coupée à l'entrée d'une agglomération ; +1 SL aux Tests concernant la proie.",
+   "clauses": [
+    "+1 SL Tests vs proie",
+    "piste coupée en agglomération"
+   ]
+  },
+  {
+   "culte": "Taal",
+   "nom_en": "Tanglefoot",
+   "nom_fr": "Enchevêtrement",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "Fellowship yards",
+   "cible": "AoE (Fellowship Bonus yards)",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Racines et lianes saisissent toutes les cibles de la zone : État Entangled avec une Force égale à votre Sociabilité.",
+   "clauses": [
+    "Entangled, Force = Fellowship"
+   ]
+  },
+  {
+   "culte": "Taal",
+   "nom_en": "Tooth and Claw",
+   "nom_fr": "Dent et griffe",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Vous gagnez les Traits Bite (BF + 3) et Weapon (BF + 4) ; vos attaques sont Magiques.",
+   "clauses": [
+    "Bite (SB+3)",
+    "Weapon (SB+4)",
+    "Magical"
+   ]
+  },
+  {
+   "culte": "Ulric",
+   "nom_en": "Hoarfrost's Chill",
+   "nom_fr": "Frisson du givre",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "You",
+   "cible": "AoE (Fellowship yards)",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Vous causez Fear (p.183) et tous dans la zone sauf vous perdent leur Avantage au début de chaque Round.",
+   "clauses": [
+    "Fear p.183",
+    "perte d'Advantage chaque Round"
+   ]
+  },
+  {
+   "culte": "Ulric",
+   "nom_en": "Howl of the Wolf",
+   "nom_fr": "Hurlement du loup",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "Fellowship yards",
+   "cible": "Special",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Un loup blanc (Divin Servant) combat vos ennemis : profil de Loup (p.327) avec WS 45, WP 35 et Traits Bite +6, Frenzy, Magical, Size (Large).",
+   "clauses": [
+    "WS 45",
+    "WP 35",
+    "Bite +6, Frenzy, Magical, Large"
+   ]
+  },
+  {
+   "culte": "Ulric",
+   "nom_en": "Pelt of the Winter Wolf",
+   "nom_fr": "Peau de loup d'hiver",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "Touch",
+   "cible": "1",
+   "duree": "Fellowship Bonus hours",
+   "difficulte": null,
+   "effet_fr": "La cible ne subit aucune pénalité mécanique du froid, tout en en ressentant l'inconfort.",
+   "clauses": [
+    "immunité mécanique au froid"
+   ]
+  },
+  {
+   "culte": "Ulric",
+   "nom_en": "The Snow King's Judgement",
+   "nom_fr": "Jugement du Roi de la neige",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Sang et moelle de la cible gèlent : 1d10 Blessures sans TB ni PA, +1 par SL ; si le MJ juge la cible ni faible, ni lâche, ni fourbe, vous subissez l'effet.",
+   "clauses": [
+    "1d10 Wounds ignorant TB/AP",
+    "+1 Wound par SL",
+    "retourné contre vous si cible innocente"
+   ]
+  },
+  {
+   "culte": "Ulric",
+   "nom_en": "Ulric's Fury",
+   "nom_fr": "Fureur d'Ulric",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "Fellowship yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Un allié peut faire un Test de Frénésie gratuit à son Tour ; la Frénésie ajoute +1d10 Dégâts au premier coup au corps à corps (rejet sur 10) au lieu d'une attaque gratuite.",
+   "clauses": [
+    "free Frenzy Test (p.184)",
+    "+1d10 Damage premier coup",
+    "10 relance et cumule"
+   ]
+  },
+  {
+   "culte": "Ulric",
+   "nom_en": "Winter's Bite",
+   "nom_fr": "Morsure de l'hiver",
+   "page_imprimee": 228,
+   "page_physique": 228,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Une hache devient Magique, inflige +SL Dégâts et Fatigued à la cible touchée ; elle supprime les Bleeding de la cible et ne peut pas en causer.",
+   "clauses": [
+    "Magical",
+    "+SL Damage",
+    "Fatigued",
+    "retire/empêche Bleeding"
+   ]
+  },
+  {
+   "culte": "Verena",
+   "nom_en": "As Verena Is My Witness",
+   "nom_fr": "Verena est mon témoin",
+   "page_imprimee": 229,
+   "page_physique": 229,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Tant que vous ne dites que la vérité, tous vos auditeurs vous croient sincère (sans forcément adhérer à vos conclusions).",
+   "clauses": [
+    "crédibilité de la vérité"
+   ]
+  },
+  {
+   "culte": "Verena",
+   "nom_en": "Blind Justice",
+   "nom_fr": "Justice aveugle",
+   "page_imprimee": 229,
+   "page_physique": 229,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Test de Perception Intermédiaire (+0 SL) pour percer illusions et faux-semblants magiques ; Test d'Intuition Accessible (+2 SL) pour détecter un menteur (ne détecte que ce que le locuteur sait faux).",
+   "clauses": [
+    "Perception Challenging (+0 SL)",
+    "Intuition Average (+2 SL)"
+   ]
+  },
+  {
+   "culte": "Verena",
+   "nom_en": "Shackles of Truth",
+   "nom_fr": "Entraves à la vérité",
+   "page_imprimee": 229,
+   "page_physique": 229,
+   "portee": "Fellowship Bonus yards",
+   "cible": "1",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Si la cible a commis un crime qu'elle nie, elle gagne Entangled impossible à retirer ; si l'accusation était fausse, vous lancez sur la table Wrath of the Gods.",
+   "clauses": [
+    "Entangled non retirable",
+    "accusation fausse: Wrath of the Gods"
+   ]
+  },
+  {
+   "culte": "Verena",
+   "nom_en": "Sword of Justice",
+   "nom_fr": "Épée de justice",
+   "page_imprimee": 229,
+   "page_physique": 229,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Une épée ignore les Points d'Armure et est Magique ; les criminels touchés font un Test d'Endurance Accessible (+2 SL) ou sont Unconscious au moins FB Rounds ; +1 Point de Péché par crime commis sur un inconscient.",
+   "clauses": [
+    "ignore AP",
+    "Magical",
+    "Endurance Average (+2 SL)",
+    "+1 Sin par crime"
+   ]
+  },
+  {
+   "culte": "Verena",
+   "nom_en": "Truth Will Out",
+   "nom_fr": "La Vérité éclatera",
+   "page_imprimee": 229,
+   "page_physique": 229,
+   "portee": "Fellowship Bonus yards",
+   "cible": "1",
+   "duree": "Instant",
+   "difficulte": null,
+   "effet_fr": "Une question posée à la cible reçoit une réponse vraie et complète ; elle résiste par Test de Calme Accessible (+2 SL) opposé à votre SL ; +2 SL cacher du mineur, +4 SL du significatif, +6 SL mentir.",
+   "clauses": [
+    "Opposed Cool Average (+2 SL)",
+    "+2/+4/+6 SL paliers de dissimulation"
+   ]
+  },
+  {
+   "culte": "Verena",
+   "nom_en": "Wisdom of the Owl",
+   "nom_fr": "Sagesse de la chouette",
+   "page_imprimee": 229,
+   "page_physique": 229,
+   "portee": "You",
+   "cible": "You",
+   "duree": "Fellowship Bonus Rounds",
+   "difficulte": null,
+   "effet_fr": "Vous gagnez +20 en Intelligence, pouvez demander au MJ l'issue la plus probable d'une décision immédiate, et gagnez Acute Sense (Sight), Menacing et Night Vision.",
+   "clauses": [
+    "+20 Int",
+    "+1 Acute Sense (Sight)",
+    "Menacing",
+    "Night Vision"
+   ]
+  }
+ ]
+}
