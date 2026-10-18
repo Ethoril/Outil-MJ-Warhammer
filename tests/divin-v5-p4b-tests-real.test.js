@@ -105,7 +105,7 @@ test('Rage de Rhya : +2 Corps à corps et Résistance en plus des Traits, la For
 
 test('Vent sauvage : -2 sur Corps à corps et sur les compétences d’Agilité, jamais sur Prière', async () => {
   const store = await fixture('Taal');
-  await cast(store, WIND, { targetIds: ['ally'] });
+  await cast(store, WIND, { targetIds: ['ally'], facts: { targets: { ally: { toughnessFailed: false } } } });
   const applied = mods(store, 'ally');
   assert.equal(applied['Corps à corps'], -2);
   assert.equal(applied.Athlétisme, -2);

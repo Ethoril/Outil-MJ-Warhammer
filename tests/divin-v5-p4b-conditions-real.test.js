@@ -76,7 +76,7 @@ test('Tremblement de terre : À terre si Athlétisme raté, ignoré sinon, bloqu
 
 test('Tempête de glace : Étourdi si Volonté ratée', async () => {
   const store = await fixture('Ulric');
-  await run(store, STORM, 'willpowerFailed', { ally: false, foe: true });
+  await run(store, STORM, 'willpowerFailed', { ally: false, foe: true }, { locationChoices: { ally: 'body', foe: 'body' } });
   assert.equal(stateOf(store, 'ally', /étourdi|stun|sonn/i), undefined);
   assert.ok(stateOf(store, 'foe', /étourdi|stun|sonn/i));
 });

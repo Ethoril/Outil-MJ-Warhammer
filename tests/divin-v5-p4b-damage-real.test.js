@@ -46,12 +46,12 @@ test('contrats : six miracles assistés, les clauses restantes sont celles qui n
   const remaining = id => getDivineContract(id).clauses.filter(clause => clause.mode !== 'engine').map(clause => clause.id);
   for (const id of [FIST, ICE, DEMAND, PURITY, COMET, JUDGEMENT]) assert.equal(getDivineContract(id).status, 'assisted', id);
   assert.deepEqual(getDivineContract(FIST).effects.map(row => row.type), ['ordinary-damage']);
-  assert.deepEqual(getDivineContract(ICE).effects.map(row => row.type), ['ordinary-damage']);
+  assert.deepEqual(getDivineContract(ICE).effects.map(row => row.type), ['ordinary-damage', 'condition']);
   assert.deepEqual(getDivineContract(DEMAND).effects.map(row => row.type), ['condition', 'direct-damage']);
   assert.deepEqual(getDivineContract(COMET).effects.map(row => row.appliesTo), [undefined, 'caster']);
   assert.deepEqual(getDivineContract(JUDGEMENT).effects.map(row => row.appliesTo), [undefined, 'caster']);
   assert.deepEqual(remaining(FIST), ['no-sin-corruption', 'solkan-purity']);
-  assert.deepEqual(remaining(ICE), ['stunned']);
+  assert.deepEqual(remaining(ICE), []);
   assert.ok(!remaining(COMET).includes('backfire') && !remaining(JUDGEMENT).includes('redirect') && !remaining(DEMAND).includes('wounds'));
 });
 
@@ -68,8 +68,9 @@ test('Poing de vengeance : 1d10 + Bonus de Volonté, PA ignorés, BE déduit, Ha
 test('Tempête de glace : Dégâts +5 ordinaires, BE et PA de la Localisation, minimum 1, par cible', async () => {
   const bare = { head: 1, body: 0, arms: 0, legs: 0 };
   const store = await fixture('Ulric', [fighter('a', { armor: bare }), fighter('b', { armor: bare }), fighter('c', { armor: { head: 9, body: 9, arms: 9, legs: 9 } })]);
-  assert.deepEqual(needsOf(store, ICE, input(['a', 'b'])), ['locationRolls.a', 'locationRolls.b']);
-  await cast(store, ICE, input(['a', 'b', 'c'], { locationRolls: { a: 10, b: 45 }, locationChoices: { c: 'body' } }));
+  const stun = { a: { willpowerFailed: false }, b: { willpowerFailed: false }, c: { willpowerFailed: false } };
+  assert.deepEqual(needsOf(store, ICE, input(['a', 'b'], {}, stun)), ['locationRolls.a', 'locationRolls.b']);
+  await cast(store, ICE, input(['a', 'b', 'c'], { locationRolls: { a: 10, b: 45 }, locationChoices: { c: 'body' } }, stun));
   assert.deepEqual(['a', 'b', 'c'].map(id => person(store, id).hp), [20 - 1, 20 - 2, 20 - 1], '5 − BE 3 − PA (Tête 1, Corps 0), minimum 1 sous 9 PA');
 });
 

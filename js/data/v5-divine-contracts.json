@@ -1001,8 +1001,8 @@
         "duree": "(Bonus de Sociabilité) Rounds",
         "effet": "Vos Prières passionnées inspirent à vos alliés un mépris féroce de leurs ennemis. Tous les alliés affectés reçoivent le Trait Psychologique Haine à l’égard de tous ceux qui les engagent en combat."
       },
-      "v5Summary": "Écart : l’entrée catalogue décrit une Haine psychologique contre les ennemis qui engagent; V5 accorde Frénésie aux alliés dans la zone.",
-      "status": "manual",
+      "v5Summary": "Écart : l’entrée catalogue décrit une Haine psychologique contre les ennemis qui engagent; V5 accorde aux alliés dans la zone le Trait de créature Frénésie (p.358), non le Talent. Le moteur pose le Talent Frénésie, de règle équivalente (Test de Force Mentale pour entrer en Frénésie).",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1044,7 +1044,7 @@
         "effet": "Vos Prières exaltantes inspirent la discipline et la coordination à l’intérieur de vos rangs. Les cibles affectées gagnent +1 Talent Coude-à-coude."
       },
       "v5Summary": "Écart : le catalogue accorde Coude-à-coude; V5 accorde le talent Drillé.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1065,7 +1065,7 @@
         "effet": "Si vous portez une lance, elle gagne l’Atout Percutante, et est considérée comme Magique."
       },
       "v5Summary": "Écart : le catalogue indique Percutante; V5 indique Dévastatrice.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1166,8 +1166,8 @@
     {
       "id": "divine:miracle:handrich:trickle-down",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5.",
-      "status": "manual",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Cible imprimée « Fellowship Bonus targets » : lue comme les témoins, le bénéficiaire du bonus étant le prêtre seul (lecture non confirmée par le MJ) ; encodée self.",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -1301,8 +1301,8 @@
     {
       "id": "divine:miracle:morr:destroy-undead",
       "catalogueEntry": null,
-      "v5Summary": "Portée imprimée tronquée (« Yo ») ; lue « You » par cohérence avec la zone centrée sur le prêtre et L06-prayers. Le livre dit « pour chaque SL » (et non « par +2 SL ») : 1 Blessure par DR retenue.",
-      "status": "assisted",
+      "v5Summary": "Note éditoriale : portée imprimée tronquée (« Yo ») ; lue « You » par cohérence avec la zone centrée sur le prêtre et L06-prayers. Le livre dit « pour chaque SL » (et non « par +2 SL ») : 1 Blessure par DR retenue.",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1481,8 +1481,8 @@
     {
       "id": "divine:miracle:ranald:the-heat-is-off",
       "catalogueEntry": null,
-      "v5Summary": "Le malus de -3 DR vise « tous les Tests basés sur Fellowship » (catégorie de Tests), non une compétence nommée : le test-modifier par clé de compétence ne le couvre pas ; resté manuel.",
-      "status": "manual",
+      "v5Summary": "Le malus de -3 DR vise « tous les Tests basés sur Fellowship » : catégorie de Tests résolue en clés de compétences liées à Sociabilité (catalogue), Prière exclue (arbitrage MJ). Le guet et la fin du miracle sur nouveau crime restent des rappels.",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -1556,8 +1556,8 @@
     {
       "id": "divine:miracle:ranald:rally-round",
       "catalogueEntry": null,
-      "v5Summary": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Le bonus dépend de la taille de la foule, donc non couvert par test-modifier à valeur fixe.",
-      "status": "manual",
+      "v5Summary": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -1751,7 +1751,7 @@
     {
       "id": "divine:miracle:rhya:rhya-s-demand",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : le moteur direct-damage exige des dés et ne convient pas.",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.",
       "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
@@ -1962,7 +1962,7 @@
       "id": "divine:miracle:sigmar:vanquish-the-unrighteous",
       "catalogueEntry": null,
       "v5Summary": "Le livre dit « alliés choisis » dans le texte mais la cible imprimée est la zone entière; le prêtre est-il compté n’est pas précisé.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1976,7 +1976,7 @@
     {
       "id": "divine:miracle:solkan:absolute-purity",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le moteur ne filtre pas les cibles impures : le MJ ne désigne que celles qui subissent les dégâts.",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le moteur filtre les cibles : Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche, sinon fait MJ « impure » (Péché, Corruption, Talent de Magie Arcane, du Chaos ou Mineure) ; une cible déclarée non impure est ignorée.",
       "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
@@ -1991,8 +1991,8 @@
     {
       "id": "divine:miracle:solkan:fist-of-vengeance",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte dit « Damage, ignoring AP » : dégâts ordinaires, non Blessures directes ; le Bonus d’Endurance reste donc déduit. L’effet direct-damage du moteur ignore aussi la TB et n’ajoute pas de Bonus de Volonté : non utilisé.",
-      "status": "manual",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte dit « Damage, ignoring AP » : dégâts ordinaires, non Blessures directes ; le Bonus d’Endurance reste donc déduit. Encodé ordinary-damage : 1d10 + Bonus de Volonté, PA ignorés, Bonus d’Endurance déduit, minimum 1 Blessure ; la Haine sacrée ajoute +2 sur les Blessures réellement perdues.",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -2066,8 +2066,8 @@
     {
       "id": "divine:miracle:taal:auroch-s-heart",
       "catalogueEntry": null,
-      "v5Summary": "Le bonus est « +Fellowship Bonus » en DR : valeur dépendant du prêtre, non fixe, donc non couvrable par un test-modifier (entier fixe). « Toughness Tests » : lu comme les Tests d’Endurance (compétence), le livre ne dit pas si cela inclut les Tests de caractéristique d’Endurance. Durée « Fellowship Bonus + 3 Rounds » encodée en special.",
-      "status": "manual",
+      "v5Summary": "Le bonus est « +Fellowship Bonus » en DR : valeur résolue à l’aperçu depuis le Bonus de Sociabilité du prêtre et figée. « Toughness Tests » : lu comme les Tests de la compétence Résistance (clé « Endurance » normalisée), le livre ne dit pas si cela inclut les Tests de caractéristique d’Endurance. Durée « Fellowship Bonus + 3 Rounds » : Bonus de Sociabilité du paramètre de durée + 3 (durationBonus), le +3 compté aussi dans chaque extension de durée.",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -2081,8 +2081,8 @@
     {
       "id": "divine:miracle:taal:earthshudder",
       "catalogueEntry": null,
-      "v5Summary": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. À terre dépend d’un Test d’Athlétisme par cible hors moteur : pas d’effet condition posé automatiquement. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR. Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
-      "status": "manual",
+      "v5Summary": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -2156,8 +2156,8 @@
     {
       "id": "divine:miracle:taal:wild-wind",
       "catalogueEntry": null,
-      "v5Summary": "Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme tous les Tests de CC ou d’Agilité (compétences ou caractéristique). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.",
-      "status": "manual",
+      "v5Summary": "Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme les Tests de toutes les compétences liées à CC ou à Agilité (catégories du catalogue, Prière exclue ; les Tests de caractéristique brute restent à la main). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -2336,8 +2336,8 @@
     {
       "id": "divine:miracle:ulric:ice-storm",
       "catalogueEntry": null,
-      "v5Summary": "La touche « Damage +5 » est un coup d'arme ordinaire, pas des Blessures directes : l'effet direct-damage (qui ignore BE et PA) la déformerait, et il n'existe pas d'effet de dégâts fixes réduits. Encodé manual.",
-      "status": "manual",
+      "v5Summary": "La touche « Damage +5 » est un coup d'arme ordinaire, pas des Blessures directes : il est donc encodé ordinary-damage fixe : 5 dégâts réduits par le Bonus d'Endurance et les PA de la Localisation (d100 ou choix MJ), minimum 1 ; « Dégâts +5 » est lu comme 5 dégâts fixes, sans Bonus de Force ajouté (lecture à confirmer). L'Étourdi sur Volonté ratée reste au rappel MJ.",
+      "status": "assisted",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
         "fileSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
@@ -2351,8 +2351,8 @@
     {
       "id": "divine:miracle:ulric:hoarfrost-s-chill",
       "catalogueEntry": null,
-      "v5Summary": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé.",
-      "status": "manual",
+      "v5Summary": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé : Peur (1) retenue (arbitrage MJ, comme Masque mortuaire).",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -2456,8 +2456,8 @@
     {
       "id": "divine:miracle:verena:sword-of-justice",
       "catalogueEntry": null,
-      "v5Summary": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle.",
-      "status": "manual",
+      "v5Summary": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L'État Inconscient reste au rappel MJ : la cible du miracle est le prêtre seul (portée et cible « vous »), l'adversaire frappé n'est pas un participant adressable par le moteur.",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -10331,7 +10331,7 @@
       "catalogueName": "Appel à la Fureur",
       "canonicalName": "Fury's Call",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -10361,7 +10361,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Écart : l’entrée catalogue décrit une Haine psychologique contre les ennemis qui engagent; V5 accorde Frénésie aux alliés dans la zone.",
+      "sourceDelta": "Écart : l’entrée catalogue décrit une Haine psychologique contre les ennemis qui engagent; V5 accorde aux alliés dans la zone le Trait de créature Frénésie (p.358), non le Talent. Le moteur pose le Talent Frénésie, de règle équivalente (Test de Force Mentale pour entrer en Frénésie).",
       "params": {
         "range": {
           "kind": "self"
@@ -10405,11 +10405,28 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-frenzy",
+              "name": "Frénésie",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Fury's Call",
-        "effect": "Les alliés dans la zone gagnent Frénésie.",
+        "effect": "Les alliés dans la zone reçoivent le Trait de créature Frénésie (p.358).",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -10420,7 +10437,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "assisted",
           "sourceRef": "v5-fury-s-call"
         }
       ],
@@ -10549,7 +10566,7 @@
       "catalogueName": "Inspirant",
       "canonicalName": "Inspiring",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -10623,7 +10640,24 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-drilled",
+              "name": "Coude-à-coude",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Inspiring",
@@ -10638,7 +10672,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "assisted",
           "sourceRef": "v5-inspiring"
         }
       ],
@@ -10651,7 +10685,7 @@
       "catalogueName": "Lance de Myrmidia",
       "canonicalName": "Spear of Myrmidia",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -10723,7 +10757,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "qualities": [
+            "devastatrice"
+          ],
+          "designatedWeapon": true,
+          "weaponClass": "lance",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Spear of Myrmidia",
@@ -10738,7 +10788,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "assisted",
           "sourceRef": "v5-spear-of-myrmidia"
         }
       ],
@@ -11992,7 +12042,7 @@
       "catalogueName": "Ruissellement",
       "canonicalName": "Trickle Down",
       "deity": "Handrich",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -12017,7 +12067,7 @@
         "specialization": "Handrich"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Cible imprimée « Fellowship Bonus targets » : lue comme les témoins, le bénéficiaire du bonus étant le prêtre seul (lecture non confirmée par le MJ) ; encodée self.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -12025,9 +12075,7 @@
           "unit": "yards"
         },
         "targets": {
-          "kind": "characteristic-bonus",
-          "characteristic": "Soc",
-          "unit": "targets"
+          "kind": "self"
         },
         "duration": {
           "kind": "characteristic-bonus",
@@ -12063,7 +12111,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Charme": {
+              "fromSuccessLevels": true
+            }
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "Statut inférieur à celui du prêtre"
@@ -12076,8 +12140,20 @@
       "clauses": [
         {
           "id": "charm-bonus",
+          "mode": "engine",
+          "text": "Les Tests de Charme du prêtre gagnent +1 DR par DR du Test de Prière du miracle (valeur figée à l’aperçu).",
+          "sourceRef": "v5-trickle-down"
+        },
+        {
+          "id": "charm-condition",
           "mode": "manual",
-          "text": "Un Test de Charme réussi devant des personnes de Statut inférieur gagne +1 DR par DR du Test de Prière du miracle.",
+          "text": "Le bonus ne vaut que pour un Test de Charme réussi devant des personnes de Statut inférieur : le MJ écarte les autres Tests de Charme.",
+          "sourceRef": "v5-trickle-down"
+        },
+        {
+          "id": "beneficiary",
+          "mode": "manual",
+          "text": "Le texte ne dit pas clairement qui reçoit le bonus : lu comme le prêtre seul (les personnes visées sont les témoins) ; doute à confirmer par le MJ.",
           "sourceRef": "v5-trickle-down"
         },
         {
@@ -12103,10 +12179,6 @@
         {
           "field": "targets",
           "label": "Quelles personnes sont visées (Bonus de Sociabilité personnes) et sont-elles de Statut inférieur ?"
-        },
-        {
-          "field": "pray-dr",
-          "label": "DR du Test de Prière (bonus égal au Test de Charme)."
         },
         {
           "field": "charm-test",
@@ -12985,6 +13057,21 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "condition",
+          "key": "Prone",
+          "level": 1,
+          "when": {
+            "fact": "athleticsFailed",
+            "label": "a échoué à son Test d’Athlétisme Accessible (+2 DR)"
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -13020,7 +13107,7 @@
         },
         {
           "id": "prone",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "En cas d’échec au Test, la cible gagne aussi l’État À terre.",
           "sourceRef": "v5-sea-legs"
         }
@@ -13515,7 +13602,7 @@
       "catalogueName": "Anéantir les morts-vivants",
       "canonicalName": "Destroy Undead",
       "deity": "Morr",
-      "status": "assisted",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -13537,7 +13624,7 @@
         "specialization": "Morr"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Portée imprimée tronquée (« Yo ») ; lue « You » par cohérence avec la zone centrée sur le prêtre et L06-prayers. Le livre dit « pour chaque SL » (et non « par +2 SL ») : 1 Blessure par DR retenue.",
+      "sourceDelta": "Note éditoriale : portée imprimée tronquée (« Yo ») ; lue « You » par cohérence avec la zone centrée sur le prêtre et L06-prayers. Le livre dit « pour chaque SL » (et non « par +2 SL ») : 1 Blessure par DR retenue.",
       "params": {
         "range": {
           "kind": "self"
@@ -15464,7 +15551,7 @@
       "canonicalName": "The Heat Is Off",
       "deity": "Ranald",
       "aspect": "Night Prowler",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -15489,7 +15576,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le malus de -3 DR vise « tous les Tests basés sur Fellowship » (catégorie de Tests), non une compétence nommée : le test-modifier par clé de compétence ne le couvre pas ; resté manuel.",
+      "sourceDelta": "Le malus de -3 DR vise « tous les Tests basés sur Fellowship » : catégorie de Tests résolue en clés de compétences liées à Sociabilité (catalogue), Prière exclue (arbitrage MJ). Le guet et la fin du miracle sur nouveau crime restent des rappels.",
       "params": {
         "range": {
           "kind": "self"
@@ -15531,7 +15618,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "categories": {
+            "soc": -3
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "prêtre uniquement"
@@ -15562,7 +15662,7 @@
         },
         {
           "id": "fellowship-penalty",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Tous les Tests de Sociabilité du prêtre subissent -3 DR pendant la durée.",
           "sourceRef": "v5-the-heat-is-off"
         }
@@ -16048,7 +16148,7 @@
       "canonicalName": "Rally Round",
       "deity": "Ranald",
       "aspect": "Protector",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -16073,7 +16173,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Le bonus dépend de la taille de la foule, donc non couvert par test-modifier à valeur fixe.",
+      "sourceDelta": "Zone imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.",
       "params": {
         "range": {
           "kind": "self"
@@ -16117,7 +16217,33 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Résistance": {
+              "base": 2,
+              "perGroup": {
+                "size": 10,
+                "add": 1
+              }
+            },
+            "Calme": {
+              "base": 2,
+              "perGroup": {
+                "size": 10,
+                "add": 1
+              }
+            }
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [
         "ally"
       ],
@@ -16132,14 +16258,14 @@
       "clauses": [
         {
           "id": "endurance-cool",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Chaque allié affecté gagne +2 DR aux Tests d’Endurance et de Calme.",
           "sourceRef": "v5-rally-round"
         },
         {
           "id": "crowd-scaling",
-          "mode": "manual",
-          "text": "+1 DR supplémentaire par tranche de 10 personnes dans la foule.",
+          "mode": "engine",
+          "text": "+1 DR supplémentaire par tranche de 10 personnes dans la foule (taille saisie par le MJ).",
           "sourceRef": "v5-rally-round"
         },
         {
@@ -16153,10 +16279,6 @@
         {
           "field": "allies",
           "label": "Quels alliés sont dans la zone (Sociabilité yards autour du prêtre) et aucun n’est de Statut Argent ou Or ?"
-        },
-        {
-          "field": "crowd",
-          "label": "Combien de personnes dans la foule (+1 DR par tranche de 10) ?"
         }
       ]
     },
@@ -17752,7 +17874,7 @@
         "specialization": "Rhya"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : le moteur direct-damage exige des dés et ne convient pas.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité yards pour les victimes, puis « Fellowship Yards » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.",
       "params": {
         "range": {
           "kind": "self"
@@ -17802,6 +17924,18 @@
           "duration": {
             "unit": "instant"
           }
+        },
+        {
+          "type": "direct-damage",
+          "fixed": 1,
+          "perSuccessLevel": 1,
+          "requiresFact": {
+            "field": "humanoid",
+            "label": "humanoïde touché (sans sacrifice à Rhya ni à une puissance de la nature alliée depuis le dernier équinoxe de printemps)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
         }
       ],
       "targetRules": [],
@@ -17819,14 +17953,14 @@
         },
         {
           "id": "who-is-hit",
-          "mode": "manual",
-          "text": "Seuls les humanoïdes sans sacrifice à Rhya (ou à une puissance de la nature alliée) depuis le dernier équinoxe de printemps sont touchés.",
+          "mode": "assisted",
+          "text": "Seuls les humanoïdes sans sacrifice à Rhya (ou à une puissance de la nature alliée) depuis le dernier équinoxe de printemps sont touchés (fait MJ saisi par cible).",
           "sourceRef": "v5-rhya-s-demand"
         },
         {
           "id": "wounds",
-          "mode": "manual",
-          "text": "Chaque humanoïde touché perd 1 Blessure, +1 par DR obtenu au Test de Prière.",
+          "mode": "engine",
+          "text": "Chaque humanoïde touché perd 1 Blessure, +1 par DR obtenu au Test de Prière (perte fixe, sans BE ni PA).",
           "sourceRef": "v5-rhya-s-demand"
         },
         {
@@ -18322,6 +18456,19 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Corps à corps": 2,
+            "Résistance": 2
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -18345,8 +18492,14 @@
         },
         {
           "id": "test-bonus",
+          "mode": "engine",
+          "text": "+2 DR aux Tests de Mêlée (Corps à corps) et d’Endurance (Résistance) du prêtre pendant la durée.",
+          "sourceRef": "v5-rhya-s-rage"
+        },
+        {
+          "id": "force-test",
           "mode": "manual",
-          "text": "+2 DR aux Tests de Mêlée, de Force et d’Endurance du prêtre pendant la durée (le moteur ne lit les modificateurs de Test que pour Prière et « Tous les Tests »).",
+          "text": "+2 DR aux Tests de Force du prêtre pendant la durée (le moteur ne porte que les modificateurs de compétences).",
           "sourceRef": "v5-rhya-s-rage"
         },
         {
@@ -18362,8 +18515,8 @@
           "label": "Le prêtre défend-il des enfants, ou un foyer ou une ferme occupés par ses habitants ? Sinon le miracle ne peut pas être invoqué."
         },
         {
-          "field": "test-bonus",
-          "label": "Tests de Mêlée, de Force ou d’Endurance faits pendant la durée (+2 DR chacun)."
+          "field": "force-test",
+          "label": "Tests de Force (caractéristique) faits pendant la durée (+2 DR chacun)."
         }
       ]
     },
@@ -19072,7 +19225,7 @@
       "catalogueName": "Endurance de l’anachorète",
       "canonicalName": "Anchorite's Endurance",
       "deity": "Shallya",
-      "status": "assisted",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -20393,6 +20546,31 @@
           "duration": {
             "unit": "instant"
           }
+        },
+        {
+          "type": "direct-damage",
+          "dice": {
+            "count": 1,
+            "sides": 10
+          },
+          "perSuccessLevel": 1,
+          "conditions": [
+            {
+              "key": "Ablaze",
+              "level": 1,
+              "when": "always"
+            }
+          ],
+          "appliesTo": "caster",
+          "casterWhen": {
+            "field": "foe",
+            "label": "ennemi de Sigmar (fait MJ)",
+            "value": true,
+            "match": "none"
+          },
+          "duration": {
+            "unit": "instant"
+          }
         }
       ],
       "targetRules": [],
@@ -20428,8 +20606,8 @@
         },
         {
           "id": "backfire",
-          "mode": "manual",
-          "text": "Sans ennemi à frapper, Sigmar frappe le prêtre à la place.",
+          "mode": "engine",
+          "text": "Sans ennemi à frapper (aucune cible désignée n’est un ennemi de Sigmar, fait MJ par cible), Sigmar frappe le prêtre à la place : mêmes dégâts et même État Enflammé sur lui.",
           "sourceRef": "v5-twin-tailed-comet"
         }
       ],
@@ -20463,7 +20641,7 @@
       "catalogueName": "Vaincre les impies",
       "canonicalName": "Vanquish the Unrighteous",
       "deity": "Sigmar",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -20529,7 +20707,43 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Orques",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Gobelins",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Morts-vivants",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Associés au Chaos",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Vanquish the Unrighteous",
@@ -20539,14 +20753,20 @@
       "clauses": [
         {
           "id": "hatred",
-          "mode": "manual",
-          "text": "Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184).",
+          "mode": "engine",
+          "text": "Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184) : une ligne de Haine par groupe.",
           "sourceRef": "v5-vanquish-the-unrighteous"
         },
         {
           "id": "hatred-kill",
           "mode": "manual",
           "text": "Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.",
+          "sourceRef": "v5-vanquish-the-unrighteous"
+        },
+        {
+          "id": "priest-counted",
+          "mode": "manual",
+          "text": "Le prêtre n’est pas expressément exclu ni inclus parmi les alliés : à trancher, rappel au MJ.",
           "sourceRef": "v5-vanquish-the-unrighteous"
         },
         {
@@ -20565,7 +20785,7 @@
       "needsInput": [
         {
           "field": "allies",
-          "label": "Alliés choisis dans la zone."
+          "label": "Alliés choisis dans la zone; le prêtre est-il compté (non précisé par la source) ?"
         },
         {
           "field": "enemy-categories",
@@ -20609,7 +20829,7 @@
         "specialization": "Solkan"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le moteur ne filtre pas les cibles impures : le MJ ne désigne que celles qui subissent les dégâts.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le moteur filtre les cibles : Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche, sinon fait MJ « impure » (Péché, Corruption, Talent de Magie Arcane, du Chaos ou Mineure) ; une cible déclarée non impure est ignorée.",
       "params": {
         "range": {
           "kind": "self"
@@ -20658,6 +20878,15 @@
             "count": 1,
             "sides": 10
           },
+          "targetFilter": {
+            "traits": [
+              "Mort-vivant",
+              "Démon",
+              "Lanceur de sorts"
+            ],
+            "fact": "impure",
+            "label": "impure : Péché, Corruption ou Talent de Magie Arcane, du Chaos ou Mineure (fait MJ)"
+          },
           "duration": {
             "unit": "instant"
           }
@@ -20678,8 +20907,8 @@
         },
         {
           "id": "who-is-hit",
-          "mode": "manual",
-          "text": "Seules sont touchées les créatures impures (Traits Mort-vivant, Démon ou Lanceur de sorts, Péché ou Corruption, Talent de Magie Arcane, du Chaos ou Mineure) ; le prêtre, ses alliés et les passants le sont aussi s’ils répondent à ces critères.",
+          "mode": "assisted",
+          "text": "Seules sont touchées les créatures impures (Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche ; sinon Péché ou Corruption, Talent de Magie Arcane, du Chaos ou Mineure, fait saisi par le MJ) ; le prêtre, ses alliés et les passants le sont aussi s’ils répondent à ces critères.",
           "sourceRef": "v5-absolute-purity"
         },
         {
@@ -20726,7 +20955,7 @@
       "catalogueName": "Poing de vengeance",
       "canonicalName": "Fist of Vengeance",
       "deity": "Solkan",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -20751,7 +20980,7 @@
         "specialization": "Solkan"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte dit « Damage, ignoring AP » : dégâts ordinaires, non Blessures directes ; le Bonus d’Endurance reste donc déduit. L’effet direct-damage du moteur ignore aussi la TB et n’ajoute pas de Bonus de Volonté : non utilisé.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte dit « Damage, ignoring AP » : dégâts ordinaires, non Blessures directes ; le Bonus d’Endurance reste donc déduit. Encodé ordinary-damage : 1d10 + Bonus de Volonté, PA ignorés, Bonus d’Endurance déduit, minimum 1 Blessure ; la Haine sacrée ajoute +2 sur les Blessures réellement perdues.",
       "params": {
         "range": {
           "kind": "characteristic-bonus",
@@ -20794,7 +21023,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "ordinary-damage",
+          "dice": {
+            "count": 1,
+            "sides": 10
+          },
+          "bonusFrom": "FM",
+          "ignoreAp": true,
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Fist of Vengeance",
@@ -20804,8 +21046,8 @@
       "clauses": [
         {
           "id": "damage",
-          "mode": "manual",
-          "text": "La cible subit 1d10 + Bonus de Volonté de dégâts, qui ignorent les Points d’Armure (le Bonus d’Endurance reste déduit).",
+          "mode": "engine",
+          "text": "La cible subit 1d10 + Bonus de Volonté de dégâts, qui ignorent les Points d’Armure (le Bonus d’Endurance reste déduit, minimum 1).",
           "sourceRef": "v5-fist-of-vengeance"
         },
         {
@@ -21395,7 +21637,7 @@
       "catalogueName": "Cœur d’aurochs",
       "canonicalName": "Auroch's Heart",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -21420,7 +21662,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le bonus est « +Fellowship Bonus » en DR : valeur dépendant du prêtre, non fixe, donc non couvrable par un test-modifier (entier fixe). « Toughness Tests » : lu comme les Tests d’Endurance (compétence), le livre ne dit pas si cela inclut les Tests de caractéristique d’Endurance. Durée « Fellowship Bonus + 3 Rounds » encodée en special.",
+      "sourceDelta": "Le bonus est « +Fellowship Bonus » en DR : valeur résolue à l’aperçu depuis le Bonus de Sociabilité du prêtre et figée. « Toughness Tests » : lu comme les Tests de la compétence Résistance (clé « Endurance » normalisée), le livre ne dit pas si cela inclut les Tests de caractéristique d’Endurance. Durée « Fellowship Bonus + 3 Rounds » : Bonus de Sociabilité du paramètre de durée + 3 (durationBonus), le +3 compté aussi dans chaque extension de durée.",
       "params": {
         "range": {
           "kind": "touch"
@@ -21430,8 +21672,9 @@
           "value": 1
         },
         "duration": {
-          "kind": "special",
-          "label": "Fellowship Bonus + 3 Rounds"
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "rounds"
         }
       },
       "extensions": [
@@ -21462,7 +21705,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Résistance": {
+              "fromCharacteristicBonus": "Soc"
+            }
+          },
+          "durationBonus": 3,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [
         "withinTouch"
       ],
@@ -21474,14 +21733,14 @@
       "clauses": [
         {
           "id": "toughness-bonus",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible gagne +Bonus de Sociabilité du prêtre en DR à ses Tests d’Endurance jusqu’à la fin du miracle.",
           "sourceRef": "v5-auroch-s-heart"
         },
         {
           "id": "duration",
-          "mode": "manual",
-          "text": "Durée : Bonus de Sociabilité + 3 Rounds ; le MJ termine la prière à l’échéance.",
+          "mode": "engine",
+          "text": "Durée : Bonus de Sociabilité + 3 Rounds (échéance suivie par le moteur).",
           "sourceRef": "v5-auroch-s-heart"
         }
       ],
@@ -21489,10 +21748,6 @@
         {
           "field": "target",
           "label": "Quelle créature est touchée ?"
-        },
-        {
-          "field": "bonus",
-          "label": "Bonus de Sociabilité du prêtre (DR ajoutés aux Tests d’Endurance de la cible)."
         }
       ]
     },
@@ -21503,7 +21758,7 @@
       "catalogueName": "Tremblement de terre",
       "canonicalName": "Earthshudder",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -21528,7 +21783,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. À terre dépend d’un Test d’Athlétisme par cible hors moteur : pas d’effet condition posé automatiquement. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR. Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
+      "sourceDelta": "Portée imprimée « Fellowship yards » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité yards. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -21572,7 +21827,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "condition",
+          "key": "Prone",
+          "level": 1,
+          "when": {
+            "fact": "athleticsFailed",
+            "label": "a échoué à son Test d’Athlétisme Difficult (-10 en V4, -1 DR en V5)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Earthshudder",
@@ -21582,7 +21850,7 @@
       "clauses": [
         {
           "id": "athletics-test",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Chaque cible dans la zone fait un Test d’Athlétisme Difficult (-10) ; échec : elle gagne l’État À terre.",
           "sourceRef": "v5-earthshudder"
         },
@@ -22079,7 +22347,7 @@
       "catalogueName": "Vent sauvage",
       "canonicalName": "Wild Wind",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -22104,7 +22372,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme tous les Tests de CC ou d’Agilité (compétences ou caractéristique). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.",
+      "sourceDelta": "Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme les Tests de toutes les compétences liées à CC ou à Agilité (catégories du catalogue, Prière exclue ; les Tests de caractéristique brute restent à la main). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.",
       "params": {
         "range": {
           "kind": "self"
@@ -22146,7 +22414,36 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "categories": {
+            "cc": -2,
+            "ag": -2
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "condition",
+          "key": "Prone",
+          "level": 1,
+          "when": {
+            "fact": "toughnessFailed",
+            "label": "a échoué à son Test d’Endurance Difficult (-10 en V4, -1 DR en V5) du premier Round"
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "prêtre non affecté"
@@ -22165,14 +22462,20 @@
         },
         {
           "id": "test-penalty",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.",
+          "sourceRef": "v5-wild-wind"
+        },
+        {
+          "id": "prone-first-round",
+          "mode": "engine",
+          "text": "Premier Round : chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre (résultat saisi par le MJ).",
           "sourceRef": "v5-wild-wind"
         },
         {
           "id": "prone-each-round",
           "mode": "manual",
-          "text": "Chaque Round, chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.",
+          "text": "Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.",
           "sourceRef": "v5-wild-wind"
         },
         {
@@ -23766,7 +24069,7 @@
       "catalogueName": "Tempête de glace",
       "canonicalName": "Ice Storm",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
         "fileSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
@@ -23791,7 +24094,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "La touche « Damage +5 » est un coup d'arme ordinaire, pas des Blessures directes : l'effet direct-damage (qui ignore BE et PA) la déformerait, et il n'existe pas d'effet de dégâts fixes réduits. Encodé manual.",
+      "sourceDelta": "La touche « Damage +5 » est un coup d'arme ordinaire, pas des Blessures directes : il est donc encodé ordinary-damage fixe : 5 dégâts réduits par le Bonus d'Endurance et les PA de la Localisation (d100 ou choix MJ), minimum 1 ; « Dégâts +5 » est lu comme 5 dégâts fixes, sans Bonus de Force ajouté (lecture à confirmer). L'Étourdi sur Volonté ratée reste au rappel MJ.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -23835,7 +24138,27 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "ordinary-damage",
+          "fixed": 5,
+          "duration": {
+            "unit": "instant"
+          }
+        },
+        {
+          "type": "condition",
+          "key": "Stunned",
+          "level": 1,
+          "when": {
+            "fact": "willpowerFailed",
+            "label": "a échoué à son Test de Volonté Intermédiaire (+0)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Ice Storm",
@@ -23845,13 +24168,13 @@
       "clauses": [
         {
           "id": "damage",
-          "mode": "manual",
-          "text": "Chaque cible subit une touche de Dégâts +5 (dégâts ordinaires, réduits par BE et PA).",
+          "mode": "engine",
+          "text": "Chaque cible subit une touche de Dégâts +5 (dégâts ordinaires, réduits par BE et PA, minimum 1).",
           "sourceRef": "v5-ice-storm"
         },
         {
           "id": "stunned",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Test de Volonté Intermédiaire (+0) ; en cas d'échec, un État Étourdi.",
           "sourceRef": "v5-ice-storm"
         }
@@ -23862,8 +24185,8 @@
           "label": "Créatures dans la zone (Bonus de Sociabilité yards), alliés compris : « anyone affected »."
         },
         {
-          "field": "damage-roll",
-          "label": "Dégâts +5 : touche normale (Bonus d'Endurance et PA applicables, pas des Blessures directes) à résoudre par le MJ."
+          "field": "location",
+          "label": "Localisation de la touche de chaque cible (d100, ou localisation choisie par le MJ) : les PA de la Localisation s'appliquent."
         },
         {
           "field": "willpower-test",
@@ -23878,7 +24201,7 @@
       "catalogueName": "Frisson du givre",
       "canonicalName": "Hoarfrost's Chill",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -23900,7 +24223,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé.",
+      "sourceDelta": "Cible imprimée « AoE (Fellowship yards) » sans « Bonus », contrairement aux autres zones; la grammaire params n'a pas de zone en caractéristique entière, encodée en special. Niveau de Peur non précisé : Peur (1) retenue (arbitrage MJ, comme Masque mortuaire).",
       "params": {
         "range": {
           "kind": "self"
@@ -23942,7 +24265,21 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Peur (1)"
+          ],
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "all-in-area-except-priest"
@@ -23955,19 +24292,19 @@
       "clauses": [
         {
           "id": "fear",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Le prêtre cause la Peur (règle p.183) pendant la durée.",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
           "id": "advantage-loss",
-          "mode": "assisted",
+          "mode": "manual",
           "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Avantage.",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-hoarfrost-s-chill"
         }
@@ -23979,11 +24316,7 @@
         },
         {
           "field": "area-targets",
-          "label": "Créatures présentes dans la zone."
-        },
-        {
-          "field": "fear-level",
-          "label": "Niveau de Peur causé (p.183) : non précisé par le miracle."
+          "label": "Créatures présentes dans la zone (perte d’Avantage au début de chaque Round)."
         }
       ]
     },
@@ -24294,7 +24627,26 @@
           "perSuccessLevel": 1,
           "requiresFact": {
             "field": "judgement",
-            "label": "verdict MJ : cible faible, lâche ou fourbe (sinon le prêtre subit l’effet : à résoudre à la main)"
+            "onFalse": "skip",
+            "label": "verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
+        },
+        {
+          "type": "direct-damage",
+          "dice": {
+            "count": 1,
+            "sides": 10
+          },
+          "perSuccessLevel": 1,
+          "appliesTo": "caster",
+          "casterWhen": {
+            "field": "judgement",
+            "label": "verdict MJ : cible faible, lâche ou fourbe",
+            "value": false,
+            "match": "any"
           },
           "duration": {
             "unit": "instant"
@@ -24316,8 +24668,8 @@
         },
         {
           "id": "redirect",
-          "mode": "manual",
-          "text": "Si la cible n'est ni faible, ni lâche, ni fourbe (décision MJ), le prêtre subit le même effet.",
+          "mode": "engine",
+          "text": "Si la cible n'est ni faible, ni lâche, ni fourbe (verdict MJ), elle est épargnée et le prêtre subit le même effet (même jet de dégâts).",
           "sourceRef": "v5-the-snow-king-s-judgement"
         },
         {
@@ -24985,7 +25337,7 @@
       "catalogueName": "Épée de justice",
       "canonicalName": "Sword of Justice",
       "deity": "Verena",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -25007,7 +25359,7 @@
         "specialization": "Verena"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle.",
+      "sourceDelta": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L'État Inconscient reste au rappel MJ : la cible du miracle est le prêtre seul (portée et cible « vous »), l'adversaire frappé n'est pas un participant adressable par le moteur.",
       "params": {
         "range": {
           "kind": "self"
@@ -25049,7 +25401,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "designatedWeapon": true,
+          "weaponClass": "épée",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "wielding-sword"
@@ -25068,7 +25433,7 @@
         },
         {
           "id": "magical",
-          "mode": "manual",
+          "mode": "engine",
           "text": "L'épée est Magique.",
           "sourceRef": "v5-sword-of-justice"
         },
@@ -25445,5 +25810,5 @@
       ]
     }
   ],
-  "sourceFingerprint": "sha256:1323a4dfca1da0328b289848d60bb912421cad40ea851123e1043f82147aca6c"
+  "sourceFingerprint": "sha256:6a3ca54e95fe77171a73baa52c5f076ced4ae9b19ccbd39b81d0fc21b08c7486"
 }

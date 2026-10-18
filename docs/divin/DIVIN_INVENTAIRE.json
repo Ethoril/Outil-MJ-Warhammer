@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:1323a4dfca1da0328b289848d60bb912421cad40ea851123e1043f82147aca6c",
+  "sourceFingerprint": "sha256:6a3ca54e95fe77171a73baa52c5f076ced4ae9b19ccbd39b81d0fc21b08c7486",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -7761,7 +7761,7 @@
       "type": "miracle",
       "name": "Appel à la Fureur",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -7833,10 +7833,27 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-frenzy",
+              "name": "Frénésie",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Fury's Call",
-        "effect": "Les alliés dans la zone gagnent Frénésie.",
+        "effect": "Les alliés dans la zone reçoivent le Trait de créature Frénésie (p.358).",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -7847,7 +7864,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "assisted",
           "sourceRef": "v5-fury-s-call"
         }
       ],
@@ -7969,7 +7986,7 @@
       "type": "miracle",
       "name": "Inspirant",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -8041,7 +8058,24 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-drilled",
+              "name": "Coude-à-coude",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Inspiring",
         "effect": "Les alliés dans la zone gagnent le talent Drillé.",
@@ -8055,7 +8089,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "assisted",
           "sourceRef": "v5-inspiring"
         }
       ],
@@ -8066,7 +8100,7 @@
       "type": "miracle",
       "name": "Lance de Myrmidia",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -8136,7 +8170,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "qualities": [
+            "devastatrice"
+          ],
+          "designatedWeapon": true,
+          "weaponClass": "lance",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Spear of Myrmidia",
         "effect": "Votre lance gagne la qualité Dévastatrice et est considérée comme Magique.",
@@ -8150,7 +8200,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "assisted",
           "sourceRef": "v5-spear-of-myrmidia"
         }
       ],
@@ -9322,7 +9372,7 @@
       "type": "miracle",
       "name": "Ruissellement",
       "deity": "Handrich",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -9353,9 +9403,7 @@
           "unit": "yards"
         },
         "targets": {
-          "kind": "characteristic-bonus",
-          "characteristic": "Soc",
-          "unit": "targets"
+          "kind": "self"
         },
         "duration": {
           "kind": "characteristic-bonus",
@@ -9391,7 +9439,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Charme": {
+              "fromSuccessLevels": true
+            }
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Trickle Down",
         "effect": "D’une pièce d’or et de la promesse d’une richesse à venir, le prêtre fait goûter la générosité de Handrich à ceux qu’il veut se concilier. Un Test de Charme réussi devant des gens de Statut inférieur gagne +1 DR par DR du Test de Prière.",
@@ -9400,8 +9464,20 @@
       "clauses": [
         {
           "id": "charm-bonus",
+          "mode": "engine",
+          "text": "Les Tests de Charme du prêtre gagnent +1 DR par DR du Test de Prière du miracle (valeur figée à l’aperçu).",
+          "sourceRef": "v5-trickle-down"
+        },
+        {
+          "id": "charm-condition",
           "mode": "manual",
-          "text": "Un Test de Charme réussi devant des personnes de Statut inférieur gagne +1 DR par DR du Test de Prière du miracle.",
+          "text": "Le bonus ne vaut que pour un Test de Charme réussi devant des personnes de Statut inférieur : le MJ écarte les autres Tests de Charme.",
+          "sourceRef": "v5-trickle-down"
+        },
+        {
+          "id": "beneficiary",
+          "mode": "manual",
+          "text": "Le texte ne dit pas clairement qui reçoit le bonus : lu comme le prêtre seul (les personnes visées sont les témoins) ; doute à confirmer par le MJ.",
           "sourceRef": "v5-trickle-down"
         },
         {
@@ -9427,10 +9503,6 @@
         {
           "field": "targets",
           "label": "Quelles personnes sont visées (Bonus de Sociabilité personnes) et sont-elles de Statut inférieur ?"
-        },
-        {
-          "field": "pray-dr",
-          "label": "DR du Test de Prière (bonus égal au Test de Charme)."
         },
         {
           "field": "charm-test",
@@ -10262,6 +10334,21 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "condition",
+          "key": "Prone",
+          "level": 1,
+          "when": {
+            "fact": "athleticsFailed",
+            "label": "a échoué à son Test d’Athlétisme Accessible (+2 DR)"
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "labels": {
@@ -10296,7 +10383,7 @@
         },
         {
           "id": "prone",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "En cas d’échec au Test, la cible gagne aussi l’État À terre.",
           "sourceRef": "v5-sea-legs"
         }
@@ -10763,7 +10850,7 @@
       "type": "miracle",
       "name": "Anéantir les morts-vivants",
       "deity": "Morr",
-      "status": "assisted",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12592,7 +12679,7 @@
       "name": "La pression retombe",
       "deity": "Ranald",
       "aspect": "Night Prowler",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -12657,7 +12744,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "categories": {
+            "soc": -3
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "The Heat Is Off",
         "effect": "Après un crime, pendant quelques heures, les gens se désintéressent étrangement du prêtre : les autorités détournent le regard et on se souvient mal de son passage. Avec les règles de patrouille du guet (p.92), on retranche 3 au score de présence du guet. Un nouveau crime met fin au miracle. Tous les Tests de Sociabilité du prêtre subissent -3 DR tant que le miracle dure.",
@@ -12684,7 +12784,7 @@
         },
         {
           "id": "fellowship-penalty",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Tous les Tests de Sociabilité du prêtre subissent -3 DR pendant la durée.",
           "sourceRef": "v5-the-heat-is-off"
         }
@@ -13139,7 +13239,7 @@
       "name": "Tous ensemble",
       "deity": "Ranald",
       "aspect": "Protector",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -13206,7 +13306,33 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Résistance": {
+              "base": 2,
+              "perGroup": {
+                "size": 10,
+                "add": 1
+              }
+            },
+            "Calme": {
+              "base": 2,
+              "perGroup": {
+                "size": 10,
+                "add": 1
+              }
+            }
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Rally Round",
         "effect": "Le prêtre entonne un chant de Ranald et la foule le reprend. Tous les alliés dans la zone gagnent +2 DR aux Tests d’Endurance et de Calme, avec +1 DR de plus par tranche de 10 personnes dans la foule. Le miracle n’affecte pas les personnages de Statut Argent ou Or.",
@@ -13215,14 +13341,14 @@
       "clauses": [
         {
           "id": "endurance-cool",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Chaque allié affecté gagne +2 DR aux Tests d’Endurance et de Calme.",
           "sourceRef": "v5-rally-round"
         },
         {
           "id": "crowd-scaling",
-          "mode": "manual",
-          "text": "+1 DR supplémentaire par tranche de 10 personnes dans la foule.",
+          "mode": "engine",
+          "text": "+1 DR supplémentaire par tranche de 10 personnes dans la foule (taille saisie par le MJ).",
           "sourceRef": "v5-rally-round"
         },
         {
@@ -13236,10 +13362,6 @@
         {
           "field": "allies",
           "label": "Quels alliés sont dans la zone (Sociabilité yards autour du prêtre) et aucun n’est de Statut Argent ou Or ?"
-        },
-        {
-          "field": "crowd",
-          "label": "Combien de personnes dans la foule (+1 DR par tranche de 10) ?"
         }
       ]
     },
@@ -14786,6 +14908,18 @@
           "duration": {
             "unit": "instant"
           }
+        },
+        {
+          "type": "direct-damage",
+          "fixed": 1,
+          "perSuccessLevel": 1,
+          "requiresFact": {
+            "field": "humanoid",
+            "label": "humanoïde touché (sans sacrifice à Rhya ni à une puissance de la nature alliée depuis le dernier équinoxe de printemps)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
         }
       ],
       "labels": {
@@ -14802,14 +14936,14 @@
         },
         {
           "id": "who-is-hit",
-          "mode": "manual",
-          "text": "Seuls les humanoïdes sans sacrifice à Rhya (ou à une puissance de la nature alliée) depuis le dernier équinoxe de printemps sont touchés.",
+          "mode": "assisted",
+          "text": "Seuls les humanoïdes sans sacrifice à Rhya (ou à une puissance de la nature alliée) depuis le dernier équinoxe de printemps sont touchés (fait MJ saisi par cible).",
           "sourceRef": "v5-rhya-s-demand"
         },
         {
           "id": "wounds",
-          "mode": "manual",
-          "text": "Chaque humanoïde touché perd 1 Blessure, +1 par DR obtenu au Test de Prière.",
+          "mode": "engine",
+          "text": "Chaque humanoïde touché perd 1 Blessure, +1 par DR obtenu au Test de Prière (perte fixe, sans BE ni PA).",
           "sourceRef": "v5-rhya-s-demand"
         },
         {
@@ -15275,6 +15409,19 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Corps à corps": 2,
+            "Résistance": 2
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "labels": {
@@ -15297,8 +15444,14 @@
         },
         {
           "id": "test-bonus",
+          "mode": "engine",
+          "text": "+2 DR aux Tests de Mêlée (Corps à corps) et d’Endurance (Résistance) du prêtre pendant la durée.",
+          "sourceRef": "v5-rhya-s-rage"
+        },
+        {
+          "id": "force-test",
           "mode": "manual",
-          "text": "+2 DR aux Tests de Mêlée, de Force et d’Endurance du prêtre pendant la durée (le moteur ne lit les modificateurs de Test que pour Prière et « Tous les Tests »).",
+          "text": "+2 DR aux Tests de Force du prêtre pendant la durée (le moteur ne porte que les modificateurs de compétences).",
           "sourceRef": "v5-rhya-s-rage"
         },
         {
@@ -15314,8 +15467,8 @@
           "label": "Le prêtre défend-il des enfants, ou un foyer ou une ferme occupés par ses habitants ? Sinon le miracle ne peut pas être invoqué."
         },
         {
-          "field": "test-bonus",
-          "label": "Tests de Mêlée, de Force ou d’Endurance faits pendant la durée (+2 DR chacun)."
+          "field": "force-test",
+          "label": "Tests de Force (caractéristique) faits pendant la durée (+2 DR chacun)."
         }
       ]
     },
@@ -15992,7 +16145,7 @@
       "type": "miracle",
       "name": "Endurance de l’anachorète",
       "deity": "Shallya",
-      "status": "assisted",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -17258,6 +17411,31 @@
           "duration": {
             "unit": "instant"
           }
+        },
+        {
+          "type": "direct-damage",
+          "dice": {
+            "count": 1,
+            "sides": 10
+          },
+          "perSuccessLevel": 1,
+          "conditions": [
+            {
+              "key": "Ablaze",
+              "level": 1,
+              "when": "always"
+            }
+          ],
+          "appliesTo": "caster",
+          "casterWhen": {
+            "field": "foe",
+            "label": "ennemi de Sigmar (fait MJ)",
+            "value": true,
+            "match": "none"
+          },
+          "duration": {
+            "unit": "instant"
+          }
         }
       ],
       "labels": {
@@ -17292,8 +17470,8 @@
         },
         {
           "id": "backfire",
-          "mode": "manual",
-          "text": "Sans ennemi à frapper, Sigmar frappe le prêtre à la place.",
+          "mode": "engine",
+          "text": "Sans ennemi à frapper (aucune cible désignée n’est un ennemi de Sigmar, fait MJ par cible), Sigmar frappe le prêtre à la place : mêmes dégâts et même État Enflammé sur lui.",
           "sourceRef": "v5-twin-tailed-comet"
         }
       ],
@@ -17325,7 +17503,7 @@
       "type": "miracle",
       "name": "Vaincre les impies",
       "deity": "Sigmar",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -17389,7 +17567,43 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Orques",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Gobelins",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Morts-vivants",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Associés au Chaos",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Vanquish the Unrighteous",
         "effect": "Les alliés choisis gagnent la Haine (Hatred, p.184) envers orques, gobelins, morts-vivants et serviteurs des Puissances de la Ruine. Après avoir tué un tel ennemi, la Haine accorde +2 DR aux Tests de combat au lieu de +1.",
@@ -17398,14 +17612,20 @@
       "clauses": [
         {
           "id": "hatred",
-          "mode": "manual",
-          "text": "Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184).",
+          "mode": "engine",
+          "text": "Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184) : une ligne de Haine par groupe.",
           "sourceRef": "v5-vanquish-the-unrighteous"
         },
         {
           "id": "hatred-kill",
           "mode": "manual",
           "text": "Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.",
+          "sourceRef": "v5-vanquish-the-unrighteous"
+        },
+        {
+          "id": "priest-counted",
+          "mode": "manual",
+          "text": "Le prêtre n’est pas expressément exclu ni inclus parmi les alliés : à trancher, rappel au MJ.",
           "sourceRef": "v5-vanquish-the-unrighteous"
         },
         {
@@ -17424,7 +17644,7 @@
       "needsInput": [
         {
           "field": "allies",
-          "label": "Alliés choisis dans la zone."
+          "label": "Alliés choisis dans la zone; le prêtre est-il compté (non précisé par la source) ?"
         },
         {
           "field": "enemy-categories",
@@ -17513,6 +17733,15 @@
             "count": 1,
             "sides": 10
           },
+          "targetFilter": {
+            "traits": [
+              "Mort-vivant",
+              "Démon",
+              "Lanceur de sorts"
+            ],
+            "fact": "impure",
+            "label": "impure : Péché, Corruption ou Talent de Magie Arcane, du Chaos ou Mineure (fait MJ)"
+          },
           "duration": {
             "unit": "instant"
           }
@@ -17532,8 +17761,8 @@
         },
         {
           "id": "who-is-hit",
-          "mode": "manual",
-          "text": "Seules sont touchées les créatures impures (Traits Mort-vivant, Démon ou Lanceur de sorts, Péché ou Corruption, Talent de Magie Arcane, du Chaos ou Mineure) ; le prêtre, ses alliés et les passants le sont aussi s’ils répondent à ces critères.",
+          "mode": "assisted",
+          "text": "Seules sont touchées les créatures impures (Traits Mort-vivant, Démon ou Lanceur de sorts lus sur la fiche ; sinon Péché ou Corruption, Talent de Magie Arcane, du Chaos ou Mineure, fait saisi par le MJ) ; le prêtre, ses alliés et les passants le sont aussi s’ils répondent à ces critères.",
           "sourceRef": "v5-absolute-purity"
         },
         {
@@ -17578,7 +17807,7 @@
       "type": "miracle",
       "name": "Poing de vengeance",
       "deity": "Solkan",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -17644,7 +17873,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "ordinary-damage",
+          "dice": {
+            "count": 1,
+            "sides": 10
+          },
+          "bonusFrom": "FM",
+          "ignoreAp": true,
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Fist of Vengeance",
         "effect": "Le prêtre appelle Solkan à frapper ceux qui bravent sa volonté : une déflagration écrase la cible et lui inflige 1d10 + Bonus de Volonté de dégâts, qui ignorent les PA.",
@@ -17653,8 +17895,8 @@
       "clauses": [
         {
           "id": "damage",
-          "mode": "manual",
-          "text": "La cible subit 1d10 + Bonus de Volonté de dégâts, qui ignorent les Points d’Armure (le Bonus d’Endurance reste déduit).",
+          "mode": "engine",
+          "text": "La cible subit 1d10 + Bonus de Volonté de dégâts, qui ignorent les Points d’Armure (le Bonus d’Endurance reste déduit, minimum 1).",
           "sourceRef": "v5-fist-of-vengeance"
         },
         {
@@ -18222,7 +18464,7 @@
       "type": "miracle",
       "name": "Cœur d’aurochs",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -18255,8 +18497,9 @@
           "value": 1
         },
         "duration": {
-          "kind": "special",
-          "label": "Fellowship Bonus + 3 Rounds"
+          "kind": "characteristic-bonus",
+          "characteristic": "Soc",
+          "unit": "rounds"
         }
       },
       "extensions": [
@@ -18287,7 +18530,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Résistance": {
+              "fromCharacteristicBonus": "Soc"
+            }
+          },
+          "durationBonus": 3,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Auroch's Heart",
         "effect": "Le prêtre prie Taal d’emplir un personnage de la constitution d’un bœuf sauvage : la cible gagne +Bonus de Sociabilité DR à tous les Tests d’Endurance jusqu’à la fin du miracle.",
@@ -18296,14 +18555,14 @@
       "clauses": [
         {
           "id": "toughness-bonus",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible gagne +Bonus de Sociabilité du prêtre en DR à ses Tests d’Endurance jusqu’à la fin du miracle.",
           "sourceRef": "v5-auroch-s-heart"
         },
         {
           "id": "duration",
-          "mode": "manual",
-          "text": "Durée : Bonus de Sociabilité + 3 Rounds ; le MJ termine la prière à l’échéance.",
+          "mode": "engine",
+          "text": "Durée : Bonus de Sociabilité + 3 Rounds (échéance suivie par le moteur).",
           "sourceRef": "v5-auroch-s-heart"
         }
       ],
@@ -18311,10 +18570,6 @@
         {
           "field": "target",
           "label": "Quelle créature est touchée ?"
-        },
-        {
-          "field": "bonus",
-          "label": "Bonus de Sociabilité du prêtre (DR ajoutés aux Tests d’Endurance de la cible)."
         }
       ]
     },
@@ -18323,7 +18578,7 @@
       "type": "miracle",
       "name": "Tremblement de terre",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -18390,7 +18645,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "condition",
+          "key": "Prone",
+          "level": 1,
+          "when": {
+            "fact": "athleticsFailed",
+            "label": "a échoué à son Test d’Athlétisme Difficult (-10 en V4, -1 DR en V5)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Earthshudder",
         "effect": "Le prêtre invoque Taal trois fois et lève les bras : le Seigneur de la Nature fait gronder le tonnerre et trembler le sol. Chaque cible à moins de Bonus de Sociabilité yards d’un point visé doit réussir un Test d’Athlétisme Difficult (-10) ou gagne l’État À terre. Les structures artificielles dans la zone subissent 1d10 + DR dégâts.",
@@ -18399,7 +18667,7 @@
       "clauses": [
         {
           "id": "athletics-test",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Chaque cible dans la zone fait un Test d’Athlétisme Difficult (-10) ; échec : elle gagne l’État À terre.",
           "sourceRef": "v5-earthshudder"
         },
@@ -18861,7 +19129,7 @@
       "type": "miracle",
       "name": "Vent sauvage",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -18926,7 +19194,36 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "categories": {
+            "cc": -2,
+            "ag": -2
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "condition",
+          "key": "Prone",
+          "level": 1,
+          "when": {
+            "fact": "toughnessFailed",
+            "label": "a échoué à son Test d’Endurance Difficult (-10 en V4, -1 DR en V5) du premier Round"
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Wild Wind",
         "effect": "Le prêtre appelle le Seigneur de la Nature, qui lève un vent déchaîné en tourbillon. Le prêtre n’est pas affecté ; toutes les cibles de la zone sont malmenées par des vents irrésistibles : leurs Tests de Capacité de Combat ou d’Agilité subissent -2 DR, et chaque Round elles doivent réussir un Test d’Endurance Difficult (-10) pour éviter l’État À terre. Aucune attaque à distance n’est possible dans la zone ; seules les armes à poudre ou d’artillerie peuvent viser une cible dans la zone.",
@@ -18941,14 +19238,20 @@
         },
         {
           "id": "test-penalty",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.",
+          "sourceRef": "v5-wild-wind"
+        },
+        {
+          "id": "prone-first-round",
+          "mode": "engine",
+          "text": "Premier Round : chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre (résultat saisi par le MJ).",
           "sourceRef": "v5-wild-wind"
         },
         {
           "id": "prone-each-round",
           "mode": "manual",
-          "text": "Chaque Round, chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.",
+          "text": "Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.",
           "sourceRef": "v5-wild-wind"
         },
         {
@@ -20470,7 +20773,7 @@
       "type": "miracle",
       "name": "Tempête de glace",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
         "fileSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
@@ -20537,7 +20840,27 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "ordinary-damage",
+          "fixed": 5,
+          "duration": {
+            "unit": "instant"
+          }
+        },
+        {
+          "type": "condition",
+          "key": "Stunned",
+          "level": 1,
+          "when": {
+            "fact": "willpowerFailed",
+            "label": "a échoué à son Test de Volonté Intermédiaire (+0)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Ice Storm",
         "effect": "Ulric envoie une violente tempête d'éclats de glace sur vos ennemis. Toute personne touchée subit une attaque de Dégâts +5 et doit réussir un Test de Volonté Intermédiaire (+0) ou gagner un État Étourdi.",
@@ -20546,13 +20869,13 @@
       "clauses": [
         {
           "id": "damage",
-          "mode": "manual",
-          "text": "Chaque cible subit une touche de Dégâts +5 (dégâts ordinaires, réduits par BE et PA).",
+          "mode": "engine",
+          "text": "Chaque cible subit une touche de Dégâts +5 (dégâts ordinaires, réduits par BE et PA, minimum 1).",
           "sourceRef": "v5-ice-storm"
         },
         {
           "id": "stunned",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Test de Volonté Intermédiaire (+0) ; en cas d'échec, un État Étourdi.",
           "sourceRef": "v5-ice-storm"
         }
@@ -20563,8 +20886,8 @@
           "label": "Créatures dans la zone (Bonus de Sociabilité yards), alliés compris : « anyone affected »."
         },
         {
-          "field": "damage-roll",
-          "label": "Dégâts +5 : touche normale (Bonus d'Endurance et PA applicables, pas des Blessures directes) à résoudre par le MJ."
+          "field": "location",
+          "label": "Localisation de la touche de chaque cible (d100, ou localisation choisie par le MJ) : les PA de la Localisation s'appliquent."
         },
         {
           "field": "willpower-test",
@@ -20577,7 +20900,7 @@
       "type": "miracle",
       "name": "Frisson du givre",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -20639,7 +20962,21 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Peur (1)"
+          ],
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Hoarfrost's Chill",
         "effect": "Votre regard prend un éclat bleu acier et l'air se refroidit autour de vous. Vous causez la Peur (p.183). Toutes les créatures de la zone, vous excepté, perdent leur Avantage au début de chaque Round.",
@@ -20648,19 +20985,19 @@
       "clauses": [
         {
           "id": "fear",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Le prêtre cause la Peur (règle p.183) pendant la durée.",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
           "id": "advantage-loss",
-          "mode": "assisted",
+          "mode": "manual",
           "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Avantage.",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-hoarfrost-s-chill"
         }
@@ -20672,11 +21009,7 @@
         },
         {
           "field": "area-targets",
-          "label": "Créatures présentes dans la zone."
-        },
-        {
-          "field": "fear-level",
-          "label": "Niveau de Peur causé (p.183) : non précisé par le miracle."
+          "label": "Créatures présentes dans la zone (perte d’Avantage au début de chaque Round)."
         }
       ]
     },
@@ -20973,7 +21306,26 @@
           "perSuccessLevel": 1,
           "requiresFact": {
             "field": "judgement",
-            "label": "verdict MJ : cible faible, lâche ou fourbe (sinon le prêtre subit l’effet : à résoudre à la main)"
+            "onFalse": "skip",
+            "label": "verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)"
+          },
+          "duration": {
+            "unit": "instant"
+          }
+        },
+        {
+          "type": "direct-damage",
+          "dice": {
+            "count": 1,
+            "sides": 10
+          },
+          "perSuccessLevel": 1,
+          "appliesTo": "caster",
+          "casterWhen": {
+            "field": "judgement",
+            "label": "verdict MJ : cible faible, lâche ou fourbe",
+            "value": false,
+            "match": "any"
           },
           "duration": {
             "unit": "instant"
@@ -20994,8 +21346,8 @@
         },
         {
           "id": "redirect",
-          "mode": "manual",
-          "text": "Si la cible n'est ni faible, ni lâche, ni fourbe (décision MJ), le prêtre subit le même effet.",
+          "mode": "engine",
+          "text": "Si la cible n'est ni faible, ni lâche, ni fourbe (verdict MJ), elle est épargnée et le prêtre subit le même effet (même jet de dégâts).",
           "sourceRef": "v5-the-snow-king-s-judgement"
         },
         {
@@ -21628,7 +21980,7 @@
       "type": "miracle",
       "name": "Épée de justice",
       "deity": "Verena",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -21690,7 +22042,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "weapon-bonus",
+          "magical": true,
+          "designatedWeapon": true,
+          "weaponClass": "épée",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Sword of Justice",
         "effect": "Si vous maniez une épée, elle ignore les Points d'Armure et devient Magique. Un adversaire frappé qui est un criminel (selon le MJ) doit réussir un test d'Endurance Accessible (+2 DR) ou gagner l'État Inconscient, pour au moins Bonus de Sociabilité rounds. Chaque crime commis contre un adversaire inconscient vous vaut +1 Point de Péché.",
@@ -21705,7 +22070,7 @@
         },
         {
           "id": "magical",
-          "mode": "manual",
+          "mode": "engine",
           "text": "L'épée est Magique.",
           "sourceRef": "v5-sword-of-justice"
         },
