@@ -34,7 +34,7 @@ for (const voie of ['glm', 'sonnet', 'direct']) {
   console.log(`  Tâches avec hors-périmètre : ${rows.filter(task => (task.hors_perimetre || []).length).length}`);
   console.log(`  Lignes livrées : ${lines} ; retouchées par Claude : ${sum(rows.map(task => task.lignes_retouchees_par_claude))}`);
   console.log(`  Défauts trouvés après coup : ${defects.length} (bloquants : ${defects.filter(d => d.gravite === 'bloquant').length})${lines ? ` soit ${(1000 * defects.length / lines).toFixed(1)} pour 1000 lignes` : ''}`);
-  console.log(`  Verdict qualité moyen : ${(sum(rows.map(task => Number(task.verdict_qualite))) / rows.length).toFixed(1)}/5`);
+  console.log(`  Verdict qualité moyen : ${(sum(rows.map(task => parseInt(task.verdict_qualite, 10))) / rows.length).toFixed(1)}/5`);
 }
 const familles = new Map();
 for (const task of log.taches.filter(row => row.voie === 'glm')) {

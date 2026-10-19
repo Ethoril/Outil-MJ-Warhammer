@@ -2,13 +2,14 @@
   "version": 1,
   "ouverte": "2026-10-19",
   "abonnement": {
-    "formule": "à renseigner par le MJ (ex. Max)",
+    "formule": "Claude Team, siège standard",
     "prix_periode_usd": null,
     "periode": "mois",
     "quota_tokens_periode": null,
     "quota_fenetre_tokens": null,
-    "note": "quota observé dans l'écran d'usage Claude ; la limite de fenêtre est celle qui a provoqué les 429",
-    "seuil_rentabilite": 0.5
+    "note": "crédits d'usage supplémentaire plafonnés à 1,00 EUR/mois et épuisés à 99 % le 19/10 : c'est la limite qui provoque les 429",
+    "seuil_rentabilite": 0.5,
+    "mesure": "pourcentages lus par l'outil get_usage (fenêtre de 5 h et hebdomadaire) avant et après chaque tâche ; le quota en tokens n'est pas exposé"
   },
   "schema_tache": {
     "id": "identifiant court, ex. p5-t1",
@@ -44,7 +45,11 @@
       }
     ],
     "verdict_qualite": "1 à 5, avec une phrase",
-    "remarque": ""
+    "remarque": "",
+    "usage_5h_avant_apres": "[pct, pct] lu par get_usage",
+    "usage_hebdo_avant_apres": "[pct, pct]",
+    "contexte_orchestrateur_avant_apres": "[tokens, tokens] du contexte de session (get_usage)",
+    "modele_orchestrateur": "modèle de la session principale"
   },
   "reference_sonnet_b2": [
     {
@@ -132,5 +137,63 @@
       "evenement": "429 spend limit pendant un sous-agent Claude (T5 interface, puis plan P4c)"
     }
   ],
-  "taches": []
+  "taches": [
+    {
+      "id": "p5-t1-droiture",
+      "voie": "glm",
+      "famille": "module-effets",
+      "risque": "faible",
+      "objectif": "Bénédiction de Droiture : arme désignée de la CIBLE considérée comme Magique (4 contrats)",
+      "acceptation": "node --test tests/divin-v5-p5-droiture.test.js tests/divin-v5-blessings-cults.test.js tests/divin-v5-p4b-gear-real.test.js tests/divin-v5-p4b-gear.test.js tests/divin-v5-t5-form-model.test.js && node tools/build-v5-divine-contracts.mjs --check",
+      "fichiers_autorises": [
+        "tools/build-v5-divine-contracts.mjs",
+        "js/data/v5-divine-contracts.json",
+        "docs/divin/DIVIN_INVENTAIRE.json",
+        "js/core/v5-divine-effects-gear.js",
+        "js/ui/v5-divine-form-model.js"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        32,
+        37
+      ],
+      "usage_hebdo_avant_apres": [
+        57,
+        58
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        725000,
+        742564
+      ],
+      "b1_avant": 14979568,
+      "b1_apres": 14935577,
+      "b2_tokens": null,
+      "b2_cout_usd": 1.0135,
+      "b2_cout_reel_usd": null,
+      "b2_detail": {
+        "tokens_entree": 701731,
+        "tokens_sortie": 7063,
+        "etapes": 19,
+        "issue": "price_limit (plafond 1 USD atteint, interrompu)"
+      },
+      "duree_s": 81,
+      "duree_bout_en_bout_s": null,
+      "tours": 19,
+      "iterations": 0,
+      "reussite_premier_essai": false,
+      "hors_perimetre": [],
+      "lignes_livrees": 21,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "travail_claude_apres": [
+        "régénération du registre (une commande, non faite par GLM car interrompu)",
+        "2 erreurs dans MES tests corrigées (échéance Round 7→6 ; adversaire sans arme dans le jeu de test générique)",
+        "1 test ancien (catalogue) qui épinglait Droiture manuelle mis à jour",
+        "registre régénéré dans un worktree CRLF : empreintes fausses, recalculées dans le worktree LF (piège d'environnement, pas de GLM)"
+      ],
+      "verdict_qualite": "4 — code correct et minimal (3 fichiers, 21 lignes), compris du premier coup ; mais coût d'entrée énorme (700 k tokens lus) et arrêt au plafond avant d'avoir vérifié lui-même.",
+      "remarque": "Le coût plafond (1,01 USD) ne compte pas le cache Mistral ; coût réel à lire dans la console. La plupart des tokens d'entrée viennent de la relecture du contexte à chaque étape (fichiers de 400+ lignes). Mesure de quota : la fenêtre de 5 h est passée de 32 à 37 % pendant la tâche, MAIS elle inclut tout le travail de l'orchestrateur Opus (spécification, tests, vérification, suite complète)."
+    }
+  ]
 }
