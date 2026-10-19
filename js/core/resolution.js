@@ -922,11 +922,16 @@ export function applyResolution(preview, currentState) {
     if(typeof change.momentum==='boolean')updated=withMomentum(updated,change.momentum);nextState.participants=participantListWithUpdate(nextState,live.id,updated);
   }
   for(const p of Array.isArray(nextState.participants)?nextState.participants:Object.values(nextState.participants))nextState.participants=participantListWithUpdate(nextState,p.id,refreshV5TalentEffects(p,{round:preview.input.round,resolutionId:preview.resolutionId}));
-  // Coup Critique infligé par l'attaquant : les couches divines « consumeOn: critical » (Sauvagerie) prennent fin dans la même commande.
-  if (preview.attack && (preview.critical?.details || preview.critical?.second) && preview.input.actor?.id) {
-    const live = participantById(nextState, preview.input.actor.id);
-    const consumed = live && consumeDivineLayers(live, 'critical');
-    if (consumed) nextState.participants = participantListWithUpdate(nextState, live.id, refreshEffectLayers(consumed, live));
+  // Coup Critique infligé par l'attaquant (cible principale ou secondaire) ou par le défenseur : les couches divines « consumeOn: critical » (Sauvagerie) prennent fin dans la même commande.
+  if (preview.attack) {
+    const inflicters = [];
+    if ((preview.critical?.details || preview.critical?.second || (preview.secondaryTargets || []).some(row => row.critical?.details || row.critical?.second)) && preview.input.actor?.id) inflicters.push(preview.input.actor.id);
+    if ((preview.defenderCritical?.details || preview.defenderCritical?.second) && preview.targetId) inflicters.push(preview.targetId);
+    for (const id of inflicters) {
+      const live = participantById(nextState, id);
+      const consumed = live && consumeDivineLayers(live, 'critical');
+      if (consumed) nextState.participants = participantListWithUpdate(nextState, live.id, refreshEffectLayers(consumed, live));
+    }
   }
   nextState.revision = currentState.revision + 1;
   nextState.appliedResolutionIds = [...appliedIds, preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);
