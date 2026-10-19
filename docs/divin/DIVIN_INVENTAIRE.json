@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:23550fb448e91f0c402c7a7550c944d5287ef9df7e625c381db315797af27978",
+  "sourceFingerprint": "sha256:5dff340a15187210ef79fd6c928f690139a5ca9c2d7a37310855dae4ead469f6",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -1258,7 +1258,7 @@
       "type": "blessing",
       "name": "Bénédiction de Ténacité",
       "deity": "Manann",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1327,9 +1327,21 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "remove-condition",
+          "chosen": true,
+          "amount": 1,
+          "excludeKeys": [
+            "souille"
+          ],
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible retire 1 État (sauf Entaché).",
+        "effect": "La cible retire 1 État choisi (sauf Souillé et les États verrouillés).",
         "access": "Béni (Manann)"
       },
       "clauses": [
@@ -1340,7 +1352,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:tenacity"
         }
       ],
@@ -1776,7 +1788,7 @@
       "type": "blessing",
       "name": "Bénédiction de Ténacité",
       "deity": "Morr",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1845,9 +1857,21 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "remove-condition",
+          "chosen": true,
+          "amount": 1,
+          "excludeKeys": [
+            "souille"
+          ],
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible retire 1 État (sauf Entaché).",
+        "effect": "La cible retire 1 État choisi (sauf Souillé et les États verrouillés).",
         "access": "Béni (Morr)"
       },
       "clauses": [
@@ -1858,7 +1882,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:tenacity"
         }
       ],
@@ -3693,7 +3717,7 @@
       "type": "blessing",
       "name": "Bénédiction de Ténacité",
       "deity": "Shallya",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -3762,9 +3786,21 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "remove-condition",
+          "chosen": true,
+          "amount": 1,
+          "excludeKeys": [
+            "souille"
+          ],
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible retire 1 État (sauf Entaché).",
+        "effect": "La cible retire 1 État choisi (sauf Souillé et les États verrouillés).",
         "access": "Béni (Shallya)"
       },
       "clauses": [
@@ -3775,7 +3811,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:tenacity"
         }
       ],
@@ -5624,7 +5660,7 @@
       "type": "blessing",
       "name": "Bénédiction de Ténacité",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -5693,9 +5729,21 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "remove-condition",
+          "chosen": true,
+          "amount": 1,
+          "excludeKeys": [
+            "souille"
+          ],
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible retire 1 État (sauf Entaché).",
+        "effect": "La cible retire 1 État choisi (sauf Souillé et les États verrouillés).",
         "access": "Béni (Ulric)"
       },
       "clauses": [
@@ -5706,7 +5754,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:tenacity"
         }
       ],
@@ -7699,7 +7747,7 @@
       "type": "blessing",
       "name": "Bénédiction de Ténacité",
       "deity": "Solkan",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -7777,9 +7825,21 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "remove-condition",
+          "chosen": true,
+          "amount": 1,
+          "excludeKeys": [
+            "souille"
+          ],
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible retire 1 État (sauf Entaché).",
+        "effect": "La cible retire 1 État choisi (sauf Souillé et les États verrouillés).",
         "access": "Béni (Solkan)"
       },
       "clauses": [
@@ -7790,7 +7850,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:tenacity"
         },
         {

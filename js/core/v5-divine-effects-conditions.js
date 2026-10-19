@@ -46,6 +46,8 @@ function nextTurnExpiry(combat, targetId) {
 function removalProblem(effect) {
   if (Boolean(effect.key) === Boolean(effect.chosen)) return 'remove-condition exige key ou chosen (l’un des deux).';
   if (effect.amount !== undefined && effect.amount !== 'all' && !positive(effect.amount)) return 'remove-condition : amount doit valoir « all » ou un entier positif.';
+  if (effect.excludeKeys !== undefined && (!effect.chosen || !Array.isArray(effect.excludeKeys) || !effect.excludeKeys.every(key => typeof key === 'string' && key)))
+    return 'remove-condition : excludeKeys exige chosen et une liste de clés d’État.';
   const rested = effect.onAllRemoved;
   if (rested !== undefined && (!record(rested?.testModifiers) || !Object.values(rested.testModifiers).every(Number.isFinite)))
     return 'remove-condition : onAllRemoved exige des testModifiers numériques.';
@@ -65,6 +67,7 @@ const removeCondition = {
       if (choice?.none === true) continue;
       if (typeof choice?.stateId !== 'string') { needs.push(need(field, `État retiré chez ${target.name || target.id}`)); continue; }
       if (!target.states.some(state => state.id === choice.stateId)) { needs.push(need(field, `État introuvable chez ${target.name || target.id}`)); continue; }
+      if ((effect.excludeKeys || []).includes(target.states.find(state => state.id === choice.stateId).key)) { needs.push(need(field, `État exclu chez ${target.name || target.id} : en choisir un autre`)); continue; }
       const dry = recoverV5Condition(target, choice.stateId, { method: 'divine-removal', amount: removalAmount(effect) });
       if (!dry.removed.length) needs.push(need(field, `État verrouillé ou non récupérable chez ${target.name || target.id} : en choisir un autre`));
     }
@@ -73,6 +76,7 @@ const removeCondition = {
   applyInstant(participant, effect, { contract, executionId, targetId, input, combat }) {
     const choice = removalChoice(input, targetId);
     if (effect.chosen && (choice?.none === true || !(participant.states || []).length)) return { removed: [], remaining: (participant.states || []).length };
+    if (effect.chosen && (effect.excludeKeys || []).includes((participant.states || []).find(row => row.id === choice?.stateId)?.key)) return { removed: [], remaining: (participant.states || []).length };
     const names = new Map((participant.states || []).map(row => [row.id, row.name || row.key]));
     const receipt = recoverV5Condition(participant, effect.chosen ? choice.stateId : effect.key, { method: 'divine-removal', amount: removalAmount(effect) });
     Object.assign(participant, receipt.participant);
