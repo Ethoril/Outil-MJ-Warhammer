@@ -1,6 +1,6 @@
-# Outil MJ — Warhammer (v3.17.1)
+# Outil MJ — Warhammer (v3.18.0)
 
-Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.17.1 : prières, bénédictions et miracles V5 (livre de base et suppléments) en plus des talents et de la magie.
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.18.0 : prières, bénédictions et miracles V5 (livre de base et suppléments) en plus des talents et de la magie.
 
 Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 
