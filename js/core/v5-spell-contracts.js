@@ -3,6 +3,7 @@ import {randomVortexStep} from './v5-magic-turn.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
 import {spellAttackNature,previewMagicProtection} from './v5-magic-combat.js';
 import {getV5Fortune} from './v5-resources.js';
+import { consumeDivineLayers } from './v5-divine-effects-gear.js';
 import { previewDispelCasting, markDispelReactionUsed } from './v5-magic-dispel.js';
 import { magicTalentRank, applyMagicAttempt, suffusedCastingBonus, magicalSenseReceipts, effectiveSkillScore, baseCharacteristicScore } from './v5-magic-talents.js';
 /**
@@ -23,6 +24,7 @@ import {
   currentMagicRound,
   knownMovement,
   rebaseMagicLayers,
+  refreshEffectLayers,
   DURATION_UNIT_LABELS
 } from './v5-magic-effects.js';
 import {spellFormulaValue} from './v5-magic-effects.js';
@@ -3406,6 +3408,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
   }
 
   const appliedTargets = [];
+  let criticalWoundInflicted = false;
 
   // 6. Appliquer sur chaque cible principale (uniquement lorsque spellSuccess === true)
   for (const tRes of preview.targetResults) {
@@ -3435,7 +3438,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     if(tRes.vortexParticipant){
       const next=tRes.vortexParticipant,ids=new Set((target.extensions?.v5?.spellEffects || []).map(e=>e.id));target.hp=next.hp;target.states=structuredClone(next.states || []);
       if(next.extensions?.v5?.dead)target.extensions.v5.dead=true;
-      if(tRes.criticalWound)target.extensions.v5.criticalWounds=[...(target.extensions.v5.criticalWounds || []),{...tRes.criticalWound,round:currentRound}];
+      if(tRes.criticalWound){target.extensions.v5.criticalWounds=[...(target.extensions.v5.criticalWounds || []),{...tRes.criticalWound,round:currentRound}];criticalWoundInflicted=true;}
       for(const layer of next.extensions?.v5?.spellEffects || [])if(!ids.has(layer.id))Object.assign(target,applySpellEffects(target,layer,{round:currentRound,caster:actor}).participant);
       participants[pIdx]=target;appliedTargets.push({targetId:target.id,targetName:target.name,newHp:target.hp,woundsLost:tRes.woundsLost,actions:tRes.actions});continue;
     }
@@ -3474,6 +3477,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
 
     // Blessure Critique d'incantation (critical-wound)
     if (tRes.criticalWound) {
+      criticalWoundInflicted = true;
       target.extensions = target.extensions || {};
       target.extensions.v5 = target.extensions.v5 || {};
       target.extensions.v5.criticalWounds = [
@@ -3617,6 +3621,14 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
       criticalWound: tRes.criticalWound || null,
       unstoppableForce: Boolean(tRes.unstoppableForce)
     });
+  }
+
+  // Blessure Critique d'incantation infligée par le lanceur : les couches divines « consumeOn: critical » (Sauvagerie) prennent fin, comme pour une attaque.
+  if (criticalWoundInflicted) {
+    const cIdx = participants.findIndex(p => p.id === actor.id);
+    const casterLive = cIdx !== -1 ? participants[cIdx] : null;
+    const consumed = casterLive && consumeDivineLayers(casterLive, 'critical');
+    if (consumed) participants[cIdx] = refreshEffectLayers(consumed, casterLive);
   }
 
   // S-07 : États et Blessures des destinataires secondaires désignés (ennemis engagés, attaquant).
