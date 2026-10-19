@@ -12,7 +12,8 @@ const median = values => {
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 };
 const sum = values => values.filter(Number.isFinite).reduce((total, value) => total + value, 0);
-const b1 = task => (Number.isFinite(task.b1_avant) && Number.isFinite(task.b1_apres)) ? task.b1_avant - task.b1_apres : null;
+const b1 = task => Array.isArray(task.contexte_orchestrateur_avant_apres) ? task.contexte_orchestrateur_avant_apres[1] - task.contexte_orchestrateur_avant_apres[0]
+  : (Number.isFinite(task.b1_avant) && Number.isFinite(task.b1_apres)) ? task.b1_avant - task.b1_apres : null;
 const rate = (items, predicate) => items.length ? Math.round(100 * items.filter(predicate).length / items.length) : null;
 
 const reference = log.reference_sonnet_b2;
