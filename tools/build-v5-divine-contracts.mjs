@@ -96,7 +96,7 @@ if (cultTalent('Invocation', 'Myrmidia').catalogueTalentId !== 'talent-49_6e_76_
 const statBlessing = (characteristic, label) => ({ effect: { type: 'characteristic-modifier', characteristic, value: 10 }, label: `La cible gagne +10 en ${label}.` });
 const blessingLibrary = {
  battle: { name: 'Bataille', ...statBlessing('CC', 'Capacité de Combat') },
- breath: { name: 'Souffle', effect: null, label: 'La cible n’a plus besoin de respirer et ignore les règles d’Étouffement.' },
+ breath: { name: 'Souffle', effect: { type: 'special-state', doesNotBreathe: true }, label: 'La cible n’a plus besoin de respirer et ignore les règles d’Étouffement. Le moteur ne lit que l’étouffement des sorts (nuage, ombres) : noyade, fumée et gaz restent à arbitrer par le MJ.' },
  charisma: { name: 'Charisme', ...statBlessing('Soc', 'Sociabilité') },
  conscience: { name: 'Conscience', effect: null, label: 'Pour rompre un commandement, test de Calme Accessible (+2 DR); en cas d’échec, honte et Action non effectuée.' },
  courage: { name: 'Courage', ...statBlessing('FM', 'Force Mentale') },

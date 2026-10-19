@@ -67,14 +67,14 @@ test('la feuille de personnage résout Béni (culte) vers le talent d’accès d
   }
 });
 
-test('effets : 15 effets calculables, 4 rappels MJ; Soin et Tenacity/Convalescence sont instantanés', () => {
+test('effets : 16 effets calculables, 3 rappels MJ; Soin et Tenacity/Convalescence sont instantanés', () => {
   const effects = new Map();
   for (const row of blessings) effects.set(row.id.split(':')[3], row.status);
   assert.equal(effects.size, 19);
   assert.deepEqual([...effects].filter(([, status]) => status === 'implemented').map(([key]) => key).sort(),
-    ['battle', 'charisma', 'courage', 'finesse', 'fortune', 'grace', 'hardiness', 'healing', 'hunt', 'might', 'righteousness', 'savagery', 'tenacity', 'wisdom', 'wit']);
+    ['battle', 'breath', 'charisma', 'courage', 'finesse', 'fortune', 'grace', 'hardiness', 'healing', 'hunt', 'might', 'righteousness', 'savagery', 'tenacity', 'wisdom', 'wit']);
   assert.deepEqual([...effects].filter(([, status]) => status === 'manual').map(([key]) => key).sort(),
-    ['breath', 'conscience', 'protection', 'recuperation']);
+    ['conscience', 'protection', 'recuperation']);
   for (const row of blessings.filter(item => ['healing', 'recuperation', 'tenacity'].includes(item.id.split(':')[3]))) {
     assert.deepEqual(row.params.duration, { kind: 'instant' });
     assert.equal(JSON.stringify(row.extensions).includes('"duration"'), false, 'une durée Instant ne s’étend pas');

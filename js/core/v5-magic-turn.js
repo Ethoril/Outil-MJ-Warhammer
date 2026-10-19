@@ -294,6 +294,8 @@ export function randomVortexStep(participants,caster,effect,{inputs={},initial=n
 }
 
 /** Clauses de Round déclarées par les contrats : présence et dés fournis par le MJ, même commande que la fin de Tour. */
+// Lu sur les couches divines elles-mêmes : `specialStates` n'est recalculé qu'après coup.
+const doesNotBreathe = participant => (participant.extensions?.v5?.divineEffects || []).some(layer => layer.specialState?.doesNotBreathe === true);
 export function roundSpellEffects(participants, phase, round, inputs = {}, actorId = null) {
   const result = structuredClone(participants), requests = [], logs = [], guided=new Set();
   for (const target of result) for (const effect of unsuppressedSpellEffects(target.extensions?.v5?.spellEffects || [])) {
@@ -384,7 +386,8 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
       damageSpec={formula:String((bfm+base)*multiplier),magicMissile:true};
     }
     let lost = 0, healed = 0;
-    if (spec.suffocation && phase!=='expiry') {
+    // Bénédiction de Souffle (`doesNotBreathe`) : la cible ignore l'Étouffement, la couche reste posée et reprend à l'expiration de la bénédiction.
+    if (spec.suffocation && phase!=='expiry' && !doesNotBreathe(target)) {
       lost = Math.min(1,Number(target.hp));
       if (target.hp === 0) {
         effect.suffocationZeroRounds=(effect.suffocationZeroRounds || 0)+1;

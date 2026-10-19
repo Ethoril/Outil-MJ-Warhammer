@@ -3470,7 +3470,7 @@
       "name": "Bénédiction de Souffle",
       "deity": "Manann",
       "catalogueName": "Bénédiction de Souffle",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -3548,9 +3548,18 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "doesNotBreathe": true,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement.",
+        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement. Le moteur ne lit que l’étouffement des sorts (nuage, ombres) : noyade, fumée et gaz restent à arbitrer par le MJ.",
         "access": "Béni (Manann)"
       },
       "clauses": [
@@ -3561,7 +3570,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:breath"
         }
       ],
@@ -4024,7 +4033,7 @@
       "name": "Bénédiction de Souffle",
       "deity": "Morr",
       "catalogueName": "Bénédiction de Souffle",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -4102,9 +4111,18 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "doesNotBreathe": true,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement.",
+        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement. Le moteur ne lit que l’étouffement des sorts (nuage, ombres) : noyade, fumée et gaz restent à arbitrer par le MJ.",
         "access": "Béni (Morr)"
       },
       "clauses": [
@@ -4115,7 +4133,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:breath"
         }
       ],
@@ -5341,7 +5359,7 @@
       "name": "Bénédiction de Souffle",
       "deity": "Rhya",
       "catalogueName": "Bénédiction de Souffle",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -5419,9 +5437,18 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "doesNotBreathe": true,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement.",
+        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement. Le moteur ne lit que l’étouffement des sorts (nuage, ombres) : noyade, fumée et gaz restent à arbitrer par le MJ.",
         "access": "Béni (Rhya)"
       },
       "clauses": [
@@ -5432,7 +5459,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:breath"
         }
       ],
@@ -5947,7 +5974,7 @@
       "name": "Bénédiction de Souffle",
       "deity": "Shallya",
       "catalogueName": "Bénédiction de Souffle",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -6025,9 +6052,18 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "doesNotBreathe": true,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement.",
+        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement. Le moteur ne lit que l’étouffement des sorts (nuage, ombres) : noyade, fumée et gaz restent à arbitrer par le MJ.",
         "access": "Béni (Shallya)"
       },
       "clauses": [
@@ -6038,7 +6074,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:breath"
         }
       ],
@@ -7329,7 +7365,7 @@
       "name": "Bénédiction de Souffle",
       "deity": "Taal",
       "catalogueName": "Bénédiction de Souffle",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -7407,9 +7443,18 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "doesNotBreathe": true,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement.",
+        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement. Le moteur ne lit que l’étouffement des sorts (nuage, ombres) : noyade, fumée et gaz restent à arbitrer par le MJ.",
         "access": "Béni (Taal)"
       },
       "clauses": [
@@ -7420,7 +7465,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:breath"
         }
       ],
@@ -26866,5 +26911,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:6632c039ea30a63c4c36770ec358c4230365ad8c5020e8bf4d5561fdeaeb81c5"
+  "sourceFingerprint": "sha256:03ae67e11141907446bcd6504be3033d03a729d1b4a00d6876524bd9d5772bc7"
 }
