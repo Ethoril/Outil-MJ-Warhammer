@@ -7,7 +7,8 @@ import { validateV5ReactionInput, registerV5ReactionOpportunities } from './v5-r
 import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from './v5-action-costs.js';
 import { projectV5Resources, commitV5Resources } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
-import { defaultResolutionId } from './resolution.js';
+import { defaultResolutionId, previewResolution } from './resolution.js';
+import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll } from './v5-divine-effects-conditions.js';
 const clone = structuredClone;
 export function v5StoreActionClock(envelope) {
   const scene = envelope.activeScene;
@@ -86,10 +87,20 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const fortuneReroll = Boolean(context.fortuneReroll || v5.fortuneReroll || supplied.fortuneReroll);
   const rawReroll = context.fortuneRerollRoll ?? v5.fortuneRerollRoll ?? supplied.fortuneRerollRoll;
   const hasValidReroll = rawReroll !== null && rawReroll !== undefined && rawReroll !== '' && Number.isInteger(Number(rawReroll)) && Number(rawReroll) >= 1 && Number(rawReroll) <= 100;
-  let initialRollBeforeFortune = null;
+  let initialRollBeforeFortune = null, freeReroll = false;
   if (fortuneReroll) {
     if (!costs.some(c => c.id === 'system:fortune-reroll')) {
       costs.push({ id: 'system:fortune-reroll', resource: 'fortune', amount: 1 });
+      // Bénédiction de Chance : relance gratuite du prochain Test échoué (le Test d'origine est évalué avant d'y substituer la relance).
+      if (freeRerollLayers(actor).length) {
+        const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, ...plainContext } = context;
+        const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, ...plainSupplied } = supplied;
+        const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
+          actor: supplied.actor?.id === actorId ? supplied.actor : actor, target: state.participants.find(p => p.id === targetId) || supplied.target || null,
+          round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision, v5State: state, v5Clock: clock,
+          v5: { ...v5, context: plainContext, fortuneReroll: undefined, fortuneRerollRoll: undefined } });
+        if (original.success === false) { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll', sourceId: FREE_REROLL_SOURCE }); }
+      }
     }
     initialRollBeforeFortune = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
     if (hasValidReroll) {
@@ -111,7 +122,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     target: paid.participants.find(item => item.id === targetId) || supplied.target || null,
     round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision,
     v5State: paid, v5Clock: clock, authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
-    fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune };
+    fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll };
 }
 export function annotateV5StoreActionPreview(preview, input) {
   if (input.reactionValidation?.ready === false) preview = { ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
@@ -119,7 +130,8 @@ export function annotateV5StoreActionPreview(preview, input) {
     if (input.fortuneRerollRoll === null) {
       preview = { ...preview, unresolved: [...(preview.unresolved || []), 'Relance de Fortune : saisir le nouveau jet d100 (1 à 100).'] };
     }
-    preview = { ...preview, fortuneReroll: { active: true, used: Boolean(input.fortuneRerollRoll !== null), initialRoll: input.initialRollBeforeFortune, rerollRoll: input.fortuneRerollRoll } };
+    preview = { ...preview, fortuneReroll: { active: true, used: Boolean(input.fortuneRerollRoll !== null), initialRoll: input.initialRollBeforeFortune, rerollRoll: input.fortuneRerollRoll,
+      ...(input.freeReroll ? { free: true, reminder: 'Bénédiction de Chance : relance gratuite' } : {}) } };
   }
   if(input.secondaryTalentRequests?.length){
     const plans=input.secondaryTalentRequests.map(request=>previewV5ActionCosts({...request,state:input.v5State}));
@@ -160,7 +172,18 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
     const request = preview.actionCostPlan?.request;
     if (!request || !request.extraAttack || request.actorId !== reaction.opportunity.actorId || ['costs', 'quotas', 'exemptions'].some(field => JSON.stringify(request[field]) !== JSON.stringify(reaction.opportunity[field]))) return { status: 'manual', reason: 'Le coût et le quota doivent correspondre à la réaction proposée.', state: current };
   }
-  const resolve = state => commitV5StoreTalentUsages(preview, resolveAction(state), state);
+  // Relance gratuite : exemption vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
+  const free = preview.actionCostPlan?.request?.exemptions?.some(row => row.sourceId === FREE_REROLL_SOURCE);
+  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId)).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
+  const resolve = state => {
+    const result = commitV5StoreTalentUsages(preview, resolveAction(state), state);
+    if (free && result.status === 'applied') {
+      const actorId = preview.actionCostPlan.request.actorId, participants = clone(result.state.participants), actor = participants.find(p => p.id === actorId);
+      consumeFreeReroll(actor);
+      return { ...result, state: { ...result.state, participants } };
+    }
+    return result;
+  };
   if (!preview.actionCostPlan) return resolve(current);
   const committed = commitV5ActionCosts(preview.actionCostPlan, current, { resolveAction: resolve });
   if (committed.status !== 'applied') {

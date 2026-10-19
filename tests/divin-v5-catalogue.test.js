@@ -29,7 +29,7 @@ test('source pins and divine access talents remain attached to V5 source pages',
 test('six Myrmidia blessings have source-backed effects, parameters and +2 SL extensions', () => {
   const expected = [
     ['battle', 'CC', 10], ['conscience', null, null], ['courage', 'FM', 10],
-    ['fortune', null, null], ['protection', null, null]
+    ['protection', null, null]
   ];
   for (const [key, characteristic, value] of expected) {
     const row = blessing(key);
@@ -48,6 +48,8 @@ test('six Myrmidia blessings have source-backed effects, parameters and +2 SL ex
     assert.deepEqual(row.extensions[0].choices.map(choice => Object.keys(choice)[0]), ['range', 'targets', 'duration']);
     assert.deepEqual(row.effects[0] ? [row.effects[0].characteristic, row.effects[0].value] : [null, null], [characteristic, value]);
   }
+  // Chance (P5, arbitrage MJ du 19 oct.) : relance gratuite du prochain Test échoué, sans dépense de Chance.
+  assert.deepEqual(blessing('fortune').effects, [{ type: 'free-reroll', duration: { value: 6, unit: 'rounds' } }]);
   // Droiture (P5, arbitrage MJ du 19 oct.) : arme désignée de la cible considérée comme Magique.
   assert.deepEqual(blessing('righteousness').effects, [{ type: 'weapon-bonus', magical: true, designatedWeapon: true, weaponOwner: 'target', duration: { value: 6, unit: 'rounds' } }]);
   assert.match(blessing('conscience').labels.effect, /Accessible \(\+2 DR\)/);

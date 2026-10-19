@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:7ac666689a165bf040686761f6b6b68c0c89169cd3a42a198b08b226d3106488",
+  "sourceFingerprint": "sha256:6632c039ea30a63c4c36770ec358c4230365ad8c5020e8bf4d5561fdeaeb81c5",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -409,7 +409,7 @@
       "type": "blessing",
       "name": "Bénédiction de Chance",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -486,9 +486,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Myrmidia)"
       },
       "clauses": [
@@ -499,7 +507,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -1590,7 +1598,7 @@
       "type": "blessing",
       "name": "Bénédiction de Chance",
       "deity": "Morr",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1667,9 +1675,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Morr)"
       },
       "clauses": [
@@ -1680,7 +1696,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -2342,7 +2358,7 @@
       "type": "blessing",
       "name": "Bénédiction de Chance",
       "deity": "Ranald",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -2419,9 +2435,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Ranald)"
       },
       "clauses": [
@@ -2432,7 +2456,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -6022,7 +6046,7 @@
       "type": "blessing",
       "name": "Bénédiction de Chance",
       "deity": "Verena",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -6099,9 +6123,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Verena)"
       },
       "clauses": [
@@ -6112,7 +6144,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -6577,7 +6609,7 @@
       "type": "blessing",
       "name": "Bénédiction de Chance",
       "deity": "Handrich",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -6663,9 +6695,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Handrich)"
       },
       "clauses": [
@@ -6676,7 +6716,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
