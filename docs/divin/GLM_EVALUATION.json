@@ -358,6 +358,52 @@
       "defauts_trouves_apres": [],
       "verdict_qualite": "5 — modification d'une ligne : plus rapide et moins chère à faire soi-même qu'à spécifier (1,8 k tokens de contexte).",
       "remarque": "Illustre la règle du skill : un changement d'une ligne coûte plus à déléguer qu'à faire."
+    },
+    {
+      "id": "p5-t5-char-fortune",
+      "voie": "glm",
+      "famille": "tests-depuis-spec",
+      "risque": "faible",
+      "objectif": "Tests de caractérisation de la relance par la Chance (avant le chantier « relance gratuite » de la bénédiction de Chance)",
+      "acceptation": "node tmp/check-fortune-mutations.mjs (passe sur le code actuel ET détecte 4 mutations)",
+      "fichiers_autorises": [
+        "tests/p5-char-fortune-reroll.test.js"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        48,
+        51
+      ],
+      "usage_hebdo_avant_apres": [
+        59,
+        60
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        797050,
+        810775
+      ],
+      "b2_tokens": null,
+      "b2_cout_usd": 0.3522,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 229674,
+        "tokens_sortie": 6971,
+        "etapes": 12,
+        "issue": "finished, critère vert du premier coup"
+      },
+      "duree_s": 51,
+      "tours": 12,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_livrees": 157,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — 5 tests, 30 assertions sur des résultats observables, 4 mutations sur 4 détectées, premier essai, 51 s.",
+      "remarque": "Famille « tests depuis une spécification » avec critère par mutations : contexte de lecture réduit (lignes indiquées), coût d'entrée bien plus faible (230 k contre 700 k à 1,1 M)."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
