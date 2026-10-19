@@ -43,7 +43,7 @@ test('E0 indépendant — les 15 miracles ont une source exacte, les neuf Up in 
     assert.equal(row.source.printedPage, 79);
     assert.equal(row.source.sourceStatus, 'read-and-page-checked');
     assert.equal(row.source.section, 'Miracles de Myrmidia - ' + title);
-    assert.equal(row.status, ['Commander la Légion', "Effrayer l'Ennemi", 'Compétence Martiale', 'Dévotion de la Guerrière'].includes(name) ? 'assisted' : 'manual');
+    assert.equal(row.status, ['Commander la Légion', "Effrayer l'Ennemi", 'Compétence Martiale', 'Dévotion de la Guerrière', 'Sur un Terrain Mortel'].includes(name) ? 'assisted' : 'manual');
     assert.equal(row.clauses.find(clause => clause.id === 'catalogue-entry')?.mode, 'source-checked');
     assert.notEqual(row.clauses.find(clause => clause.id === 'effect')?.mode, 'blocked');
     assert.doesNotMatch(row.sourceDelta, /source (?:not found|non retrouvée)/i);
