@@ -32,9 +32,19 @@ Les deux comptent : B1 limite la longueur de la session, B2 consomme le quota An
 - **I5 — Délai** : durée réelle de bout en bout (spécification + exécution + vérification).
 - **I6 — Domaine d'usage** : types de tâches où GLM est utile (tests rédigés à partir d'une spec, modules d'effets isolés, refactors mécaniques, génération de données) et où il ne l'est pas.
 
-## Règle de décision proposée (à valider par le MJ)
+## Règle de décision (validée par le MJ le 19 octobre, avec ses deux précisions)
 
-GLM est **utile** si, sur au moins 6 tâches comparables : réussite au premier essai ≥ 60 %, aucun hors-périmètre non signalé, défauts par 1000 lignes ≤ ceux de la voie Sonnet, et B1 médian ≤ celui de Sonnet. Il est **utile mais cantonné** s'il tient ces critères uniquement sur certaines familles de tâches (à nommer). Sinon on le retire de la boucle.
+GLM est **utile** si, sur au moins 6 tâches comparables, les trois conditions tiennent :
+
+1. **Qualité relative à Sonnet** : son taux de réussite au premier essai est au moins égal à celui de la voie Sonnet mesuré sur des tâches comparables de la même évaluation (pas un seuil fixe de 60 %), sans hors-périmètre non signalé, avec autant ou moins de défauts par 1000 lignes que Sonnet.
+2. **Coût relatif à l'abonnement Claude** : le coût GLM (USD réels Mistral) est nettement inférieur à la valeur de la part du quota Claude qu'il fait économiser. Formule :
+   - valeur d'un token de quota = prix de l'abonnement sur la période ÷ tokens utilisables sur la période (paramètres `abonnement` du JSON, à renseigner : prix et quota observé dans l'écran d'usage) ;
+   - quota économisé par tâche = B2 médian de la voie Sonnet comparable (tokens que Sonnet aurait consommés) − B1 supplémentaire éventuel de l'orchestrateur pour la voie GLM ;
+   - **critère** : coût GLM ≤ `seuil_rentabilite` × (quota économisé × valeur d'un token), avec `seuil_rentabilite` = 0,5 par défaut (GLM doit coûter au plus la moitié de la valeur du quota épargné). Le seuil est modifiable par le MJ.
+   - Un second indicateur, indépendant du prix : **part de la limite de la fenêtre d'usage épargnée** (B2 Sonnet évité ÷ quota de la fenêtre), puisque l'atteinte de la limite bloque le travail (429 rencontrés deux fois dans cette session).
+3. **Efficacité de l'orchestrateur** : B1 médian GLM ≤ B1 médian Sonnet (sinon l'économie de quota se paie en contexte de session).
+
+Il est **utile mais cantonné** s'il ne tient ces critères que sur certaines familles de tâches (à nommer). Sinon on le retire de la boucle.
 
 ## Mesures de référence : sous-agents Claude de cette session (B2)
 

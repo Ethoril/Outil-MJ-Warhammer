@@ -43,3 +43,23 @@ for (const task of log.taches.filter(row => row.voie === 'glm')) {
   familles.set(task.famille, entry);
 }
 if (familles.size) console.log('\nGLM par famille (réussites au premier essai) : ' + [...familles].map(([name, value]) => `${name} ${value.ok}/${value.n}`).join(' ; '));
+
+// Critères de décision : qualité relative à Sonnet, coût relatif à l'abonnement, efficacité de l'orchestrateur.
+const glm = log.taches.filter(task => task.voie === 'glm');
+const sonnet = log.taches.filter(task => task.voie === 'sonnet');
+if (glm.length) {
+  const a = log.abonnement || {};
+  const sonnetB2 = median((sonnet.length ? sonnet : reference).map(task => task.b2_tokens ?? task.tokens));
+  const extraB1 = (median(glm.map(b1)) ?? 0) - (median(sonnet.map(b1)) ?? 0);
+  const saved = Math.max(0, sonnetB2 - Math.max(0, extraB1));
+  const glmCost = median(glm.map(task => task.b2_cout_reel_usd ?? task.b2_cout_usd));
+  console.log('\nCritères de décision');
+  console.log(`  Qualité : premier essai GLM ${rate(glm, t => t.reussite_premier_essai)} % contre Sonnet ${sonnet.length ? rate(sonnet, t => t.reussite_premier_essai) + ' %' : 'non mesuré (aucune tâche Sonnet comparable enregistrée)'}`);
+  if (Number.isFinite(a.prix_periode_usd) && Number.isFinite(a.quota_tokens_periode)) {
+    const value = saved * a.prix_periode_usd / a.quota_tokens_periode;
+    const verdict = glmCost <= (a.seuil_rentabilite ?? 0.5) * value ? 'RENTABLE' : 'NON RENTABLE';
+    console.log(`  Coût : GLM médian ${glmCost?.toFixed(3)} USD contre valeur du quota épargné ${value.toFixed(3)} USD (seuil ${a.seuil_rentabilite ?? 0.5}) : ${verdict}`);
+  } else console.log(`  Coût : renseigner abonnement.prix_periode_usd et abonnement.quota_tokens_periode dans le JSON (quota épargné par tâche ≈ ${saved} tokens, GLM médian ${glmCost} USD)`);
+  if (Number.isFinite(a.quota_fenetre_tokens)) console.log(`  Fenêtre d'usage épargnée par tâche : ${(100 * saved / a.quota_fenetre_tokens).toFixed(1)} %`);
+  console.log(`  Orchestrateur : B1 médian GLM ${median(glm.map(b1))} contre Sonnet ${sonnet.length ? median(sonnet.map(b1)) : 'non mesuré'}`);
+}

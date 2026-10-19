@@ -1,6 +1,15 @@
 {
   "version": 1,
   "ouverte": "2026-10-19",
+  "abonnement": {
+    "formule": "à renseigner par le MJ (ex. Max)",
+    "prix_periode_usd": null,
+    "periode": "mois",
+    "quota_tokens_periode": null,
+    "quota_fenetre_tokens": null,
+    "note": "quota observé dans l'écran d'usage Claude ; la limite de fenêtre est celle qui a provoqué les 429",
+    "seuil_rentabilite": 0.5
+  },
   "schema_tache": {
     "id": "identifiant court, ex. p5-t1",
     "voie": "glm | sonnet | direct",
@@ -8,7 +17,9 @@
     "risque": "faible | moyen | eleve",
     "objectif": "une phrase",
     "acceptation": "commande exécutable",
-    "fichiers_autorises": ["liste fermée"],
+    "fichiers_autorises": [
+      "liste fermée"
+    ],
     "b1_avant": "total_tokens restant avant la tâche (orchestrateur)",
     "b1_apres": "total_tokens restant après vérification et compte rendu",
     "b2_tokens": "tokens du sous-agent Claude (notification de fin), sinon null",
@@ -19,31 +30,107 @@
     "tours": "nombre d'étapes/tours de l'agent",
     "iterations": "nombre de relances après le premier essai (0 = premier essai suffisant)",
     "reussite_premier_essai": "booléen : la commande d'acceptation passe sans relance",
-    "hors_perimetre": ["fichiers modifiés hors liste"],
+    "hors_perimetre": [
+      "fichiers modifiés hors liste"
+    ],
     "lignes_livrees": "lignes ajoutées + supprimées dans le diff",
     "lignes_retouchees_par_claude": "lignes que j'ai corrigées moi-même",
     "reprise": "booléen : j'ai repris la main (la tâche est comptée comme échec de délégation)",
-    "defauts_trouves_apres": [{"source": "moi | controleur | tests | table", "gravite": "bloquant | a-corriger | documente", "resume": ""}],
+    "defauts_trouves_apres": [
+      {
+        "source": "moi | controleur | tests | table",
+        "gravite": "bloquant | a-corriger | documente",
+        "resume": ""
+      }
+    ],
     "verdict_qualite": "1 à 5, avec une phrase",
     "remarque": ""
   },
   "reference_sonnet_b2": [
-    {"tache": "P4a T1 socle", "tokens": 303126, "outils": 101, "duree_s": 896},
-    {"tache": "P4a T2 degats", "tokens": 227864, "outils": 56, "duree_s": 875},
-    {"tache": "P4a T4 equipement", "tokens": 320960, "outils": 80, "duree_s": 979},
-    {"tache": "P4b T1 test-modifier", "tokens": 227747, "outils": 60, "duree_s": 710},
-    {"tache": "P4b T2 degats ordinaires", "tokens": 247787, "outils": 68, "duree_s": 1094},
-    {"tache": "P4b T3 etats conditionnes", "tokens": 171636, "outils": 46, "duree_s": 670},
-    {"tache": "P4b T4 contrats seuls", "tokens": 174642, "outils": 57, "duree_s": 516},
-    {"tache": "P4c B1 moteur invocations", "tokens": 281484, "outils": 89, "duree_s": 949},
-    {"tache": "P4c B2+B3 contrats et UI", "tokens": 188892, "outils": 59, "duree_s": 577},
-    {"tache": "Correctif fin manuelle", "tokens": 128566, "outils": 43, "duree_s": 422},
-    {"tache": "Lot de finition", "tokens": 139740, "outils": 38, "duree_s": 483},
-    {"tache": "R6 cible implicite", "tokens": 181846, "outils": 60, "duree_s": 884},
-    {"tache": "R4 defaut de Tour magique", "tokens": 138940, "outils": 50, "duree_s": 2273}
+    {
+      "tache": "P4a T1 socle",
+      "tokens": 303126,
+      "outils": 101,
+      "duree_s": 896
+    },
+    {
+      "tache": "P4a T2 degats",
+      "tokens": 227864,
+      "outils": 56,
+      "duree_s": 875
+    },
+    {
+      "tache": "P4a T4 equipement",
+      "tokens": 320960,
+      "outils": 80,
+      "duree_s": 979
+    },
+    {
+      "tache": "P4b T1 test-modifier",
+      "tokens": 227747,
+      "outils": 60,
+      "duree_s": 710
+    },
+    {
+      "tache": "P4b T2 degats ordinaires",
+      "tokens": 247787,
+      "outils": 68,
+      "duree_s": 1094
+    },
+    {
+      "tache": "P4b T3 etats conditionnes",
+      "tokens": 171636,
+      "outils": 46,
+      "duree_s": 670
+    },
+    {
+      "tache": "P4b T4 contrats seuls",
+      "tokens": 174642,
+      "outils": 57,
+      "duree_s": 516
+    },
+    {
+      "tache": "P4c B1 moteur invocations",
+      "tokens": 281484,
+      "outils": 89,
+      "duree_s": 949
+    },
+    {
+      "tache": "P4c B2+B3 contrats et UI",
+      "tokens": 188892,
+      "outils": 59,
+      "duree_s": 577
+    },
+    {
+      "tache": "Correctif fin manuelle",
+      "tokens": 128566,
+      "outils": 43,
+      "duree_s": 422
+    },
+    {
+      "tache": "Lot de finition",
+      "tokens": 139740,
+      "outils": 38,
+      "duree_s": 483
+    },
+    {
+      "tache": "R6 cible implicite",
+      "tokens": 181846,
+      "outils": 60,
+      "duree_s": 884
+    },
+    {
+      "tache": "R4 defaut de Tour magique",
+      "tokens": 138940,
+      "outils": 50,
+      "duree_s": 2273
+    }
   ],
   "limites_quota_rencontrees": [
-    {"date": "2026-10-18", "evenement": "429 spend limit pendant un sous-agent Claude (T5 interface, puis plan P4c)"}
+    {
+      "date": "2026-10-18",
+      "evenement": "429 spend limit pendant un sous-agent Claude (T5 interface, puis plan P4c)"
+    }
   ],
   "taches": []
 }
