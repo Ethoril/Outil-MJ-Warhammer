@@ -126,7 +126,7 @@ export function extensionFields(contract) {
 }
 
 /** Ce que le contrat demande, sans tenir compte des cibles choisies. */
-export function describeDivineForm(contract, { actor } = {}) {
+export function describeDivineForm(contract, { actor, targets = [] } = {}) {
   const params = contract?.params || {};
   const effects = contract?.effects || [];
   const damage = effects.find(effect => effect.type === 'direct-damage' && effect.dice);
@@ -150,7 +150,9 @@ export function describeDivineForm(contract, { actor } = {}) {
     damage: damage ? { dice: damage.dice, perSuccessLevel: damage.perSuccessLevel ?? 0, conditionalBonus: damage.conditionalBonus || null } : null,
     heal: heal && (contract.extensions || []).some(row => row.effect?.type === 'wound-heal') ? { extendable: true } : null,
     removal: removal ? { chosen: removal.chosen === true, key: removal.key || null, amount: removal.amount ?? 1, onAllRemoved: removal.onAllRemoved || null } : null,
-    weapon: weapon ? { weaponClass: weapon.weaponClass || null, options: spellObjectChoices(actor, { weaponsOnly: true }) } : null,
+    // Arme désignée du prêtre (miracles) ou de la cible (bénédiction de Droiture) : options de la fiche de son propriétaire.
+    weapon: weapon ? { weaponClass: weapon.weaponClass || null, owner: weapon.weaponOwner === 'target' ? 'target' : 'priest',
+      options: weapon.weaponOwner === 'target' ? [...new Map(targets.flatMap(target => spellObjectChoices(target, { weaponsOnly: true })).map(row => [row.id, row])).values()] : spellObjectChoices(actor, { weaponsOnly: true }) } : null,
     calendarDuration: calendarDurationUnits.has(durationUnit),
     instant,
     // Fin de l'effet choisie par le MJ : seulement pour une durée en Rounds ou à préciser.
@@ -177,7 +179,7 @@ const nameOf = target => target?.name || target?.id;
  * `targets` : participants visés (le prêtre lui-même si la prière le vise). `form` : brouillon courant.
  */
 export function buildDivineForm(contract, { actor, targets = [], form = emptyDivineForm(), choices = {} } = {}) {
-  const descr = describeDivineForm(contract, { actor });
+  const descr = describeDivineForm(contract, { actor, targets });
   const effectFields = [];
   if (descr.damage) {
     const { count, sides } = descr.damage.dice;
@@ -204,8 +206,8 @@ export function buildDivineForm(contract, { actor, targets = [], form = emptyDiv
       help: withSource('Laisser vide : tous les effets soignent des Blessures. Réduire si un effet est consacré à autre chose (maladie : rappel MJ).', contract) });
   }
   if (descr.weapon) {
-    const { weaponClass, options } = descr.weapon;
-    effectFields.push({ id: 'weapon', anchor: 'weapon', scope: 'global', kind: 'select', path: ['weaponId'], label: 'Arme maniée par le prêtre',
+    const { weaponClass, owner, options } = descr.weapon;
+    effectFields.push({ id: 'weapon', anchor: 'weapon', scope: 'global', kind: 'select', path: ['weaponId'], label: owner === 'target' ? 'Arme maniée par la cible' : 'Arme maniée par le prêtre',
       options: [['', options.length ? 'Choisir une arme' : 'Aucune arme dans la fiche'], ...options.map(row => [row.id, row.label])], empty: !options.length,
       help: withSource(`Arme de l’équipement de la fiche qui reçoit le bonus${weaponClass ? ` (attendu : ${weaponClass})` : ''}.`, contract) });
     effectFields.push({ id: 'weaponClass', anchor: 'weaponClass', scope: 'global', kind: 'check', path: ['weaponClassConfirmed'],

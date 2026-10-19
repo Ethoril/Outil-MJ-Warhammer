@@ -80,7 +80,7 @@ const handlers = {
     },
     // Contrôle souple (A10) : l'arme désignée est demandée, sa classe (marteau, hache…) n'est jamais vérifiée ni bloquante.
     needs: (effect, { input } = {}) => effect.designatedWeapon === true && !isText(weaponFacts(input)?.equipmentId)
-      ? [need('facts.weapon.equipmentId', `Arme maniée par le prêtre${effect.weaponClass ? ` (${effect.weaponClass})` : ''}`)] : [],
+      ? [need('facts.weapon.equipmentId', `${effect.weaponOwner === 'target' ? 'Arme maniée par la cible' : 'Arme maniée par le prêtre'}${effect.weaponClass ? ` (${effect.weaponClass})` : ''}`)] : [],
     buildLayer: (effect, { contract }) => ({ weaponBonus: {
       spellName: contract?.name,
       ...(effect.magical === true ? { magical: true } : {}),

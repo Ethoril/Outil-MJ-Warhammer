@@ -27,7 +27,7 @@ async function fixture(contract) {
   const store = createStore({ persistence: memory(), storage: null }); await store.ready;
   const states = [{ id: 'st-deaf', key: 'assourdi', name: 'Assourdi', level: 1 }, { id: 'st-broken', key: 'brise', name: 'Brisé', level: 1 }];
   const snapshot = { schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'priest', order: ['priest', 'foe', 'friend'],
-    participants: [priestFor(contract), fighter('foe', { traits: ['Mort-vivant'], states }), fighter('friend', { kind: 'PJ', camp: 'pj', states: clone(states) })] },
+    participants: [priestFor(contract), fighter('foe', { traits: ['Mort-vivant'], states, equipment: [{ id: 'foe-sword', name: 'Épée', kind: 'weapon', category: 'Épée' }] }), fighter('friend', { kind: 'PJ', camp: 'pj', states: clone(states) })] },
     log: [], diceLines: [], extensions: { v5: { turnIndex: 1 } } };
   snapshot.extensions.v5.gameClock = createGameClock(snapshot);
   await store.loadFromJSON(snapshot);

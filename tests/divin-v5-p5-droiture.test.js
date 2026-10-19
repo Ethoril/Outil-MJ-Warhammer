@@ -30,7 +30,7 @@ async function fixture() {
   await store.loadFromJSON(snapshot);
   return store;
 }
-const expiry = { phase: 'endOfTurn', round: 7, actorId: 'priest' };
+const expiry = { phase: 'endOfTurn', round: 6, actorId: 'priest' };
 const input = (more = {}) => ({ actorId: 'priest', targetIds: ['ally'], roll: 45, canSpeak: true, choices: { range: 0, targets: 0, duration: 0 }, expiry,
   facts: { targets: { ally: { withinRange: true } } }, ...more });
 
