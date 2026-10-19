@@ -404,6 +404,47 @@
       "defauts_trouves_apres": [],
       "verdict_qualite": "5 — 5 tests, 30 assertions sur des résultats observables, 4 mutations sur 4 détectées, premier essai, 51 s.",
       "remarque": "Famille « tests depuis une spécification » avec critère par mutations : contexte de lecture réduit (lignes indiquées), coût d'entrée bien plus faible (230 k contre 700 k à 1,1 M)."
+    },
+    {
+      "id": "p5-t6-char-critique",
+      "voie": "sonnet",
+      "famille": "tests-depuis-spec",
+      "risque": "faible",
+      "objectif": "Tests de caractérisation du choix de gravité de critique (Frappe blessante), avant le chantier Sauvagerie",
+      "acceptation": "node tmp/check-crit-mutations.mjs (passe sur le code actuel ET détecte 3 mutations)",
+      "fichiers_autorises": [
+        "tests/p5-char-critical-injure.test.js"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        51,
+        53
+      ],
+      "usage_hebdo_avant_apres": [
+        60,
+        60
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        810775,
+        820486
+      ],
+      "b2_tokens": 31005,
+      "b2_detail": {
+        "appels_outils": 8
+      },
+      "duree_s": 47,
+      "tours": 8,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_livrees": 119,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — 15 tests (fonction pure + Store), 31 assertions, 3 mutations sur 3 détectées, premier essai, 47 s.",
+      "remarque": "Comparable à p5-t5 (GLM) : même famille, même forme de prompt et de critère. Les deux voies réussissent au premier essai ; Sonnet plus exhaustif (15 tests contre 5), GLM plus économe en lignes."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
