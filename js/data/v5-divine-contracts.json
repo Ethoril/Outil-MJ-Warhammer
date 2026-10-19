@@ -3029,7 +3029,7 @@
       "name": "Bénédiction de Chance",
       "deity": "Myrmidia",
       "catalogueName": "Bénédiction de Chance",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -3107,9 +3107,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Myrmidia)"
       },
       "clauses": [
@@ -3120,7 +3128,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -4217,7 +4225,7 @@
       "name": "Bénédiction de Chance",
       "deity": "Morr",
       "catalogueName": "Bénédiction de Chance",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -4295,9 +4303,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Morr)"
       },
       "clauses": [
@@ -4308,7 +4324,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -4983,7 +4999,7 @@
       "name": "Bénédiction de Chance",
       "deity": "Ranald",
       "catalogueName": "Bénédiction de Chance",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -5061,9 +5077,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Ranald)"
       },
       "clauses": [
@@ -5074,7 +5098,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -8703,7 +8727,7 @@
       "name": "Bénédiction de Chance",
       "deity": "Verena",
       "catalogueName": "Bénédiction de Chance",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -8781,9 +8805,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Verena)"
       },
       "clauses": [
@@ -8794,7 +8826,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -9268,7 +9300,7 @@
       "name": "Bénédiction de Chance",
       "deity": "Handrich",
       "catalogueName": "Bénédiction de Chance",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -9355,9 +9387,17 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "La cible peut relancer son prochain Test échoué; le nouveau résultat tient.",
+        "effect": "La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.",
         "access": "Béni (Handrich)"
       },
       "clauses": [
@@ -9368,7 +9408,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:fortune"
         }
       ],
@@ -26781,5 +26821,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:3e44baf42a86727e0d9139be8ada0fb4cf4152fffd76a7819b83de06b4b54316"
+  "sourceFingerprint": "sha256:b1219ad3a7ce92a25fed869dca67a2a23b6eeaab10761e93eda6e5bec96ca365"
 }

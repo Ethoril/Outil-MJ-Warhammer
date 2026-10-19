@@ -101,7 +101,7 @@ const blessingLibrary = {
  conscience: { name: 'Conscience', effect: null, label: 'Pour rompre un commandement, test de Calme Accessible (+2 DR); en cas d’échec, honte et Action non effectuée.' },
  courage: { name: 'Courage', ...statBlessing('FM', 'Force Mentale') },
  finesse: { name: 'Finesse', ...statBlessing('Dex', 'Dextérité') },
- fortune: { name: 'Chance', effect: null, label: 'La cible peut relancer son prochain Test échoué; le nouveau résultat tient.' },
+ fortune: { name: 'Chance', effect: { type: 'free-reroll' }, label: 'La cible peut relancer gratuitement (sans Point de Chance) son prochain Test échoué; le nouveau résultat tient. Relance offerte seulement si le Test d’origine est un échec, une seule fois pendant la durée.' },
  grace: { name: 'Grâce', ...statBlessing('Ag', 'Agilité') },
  hardiness: { name: 'Vigueur', ...statBlessing('E', 'Endurance') },
  healing: { name: 'Guérison', effect: { type: 'wound-heal', value: 1 }, label: 'La cible regagne 1 Blessure.', touch: true, instant: true },

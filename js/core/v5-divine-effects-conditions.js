@@ -136,4 +136,18 @@ const temporaryFortune = {
   buildLayer: effect => ({ tempFortunePoints: effect.count, remainingTempFortune: effect.count })
 };
 
-export default { 'remove-condition': removeCondition, 'expiry-condition': expiryCondition, 'temporary-fortune': temporaryFortune };
+// Relance gratuite (Bénédiction de Chance) : la couche porte un compteur imbriqué, consommé par la résolution (v5-store-action.js).
+const freeReroll = {
+  validate: () => null,
+  buildLayer: () => ({ freeReroll: { remaining: 1 } })
+};
+export const FREE_REROLL_SOURCE = 'divine-free-reroll';
+export const freeRerollLayers = participant => (participant?.extensions?.v5?.divineEffects || []).filter(layer => layer?.type === 'free-reroll' && layer.freeReroll?.remaining > 0);
+export function consumeFreeReroll(participant) {
+  const layer = freeRerollLayers(participant)[0];
+  if (!layer) return false;
+  layer.freeReroll = { ...layer.freeReroll, remaining: layer.freeReroll.remaining - 1 };
+  return true;
+}
+
+export default { 'remove-condition': removeCondition, 'expiry-condition': expiryCondition, 'temporary-fortune': temporaryFortune, 'free-reroll': freeReroll };
