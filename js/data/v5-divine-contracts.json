@@ -3791,7 +3791,7 @@
       "name": "Bénédiction de Sauvagerie",
       "deity": "Manann",
       "catalogueName": "Bénédiction de Sauvagerie",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -3869,7 +3869,22 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-strike-to-injure",
+              "rank": 1
+            }
+          ],
+          "consumeOn": "critical",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
         "effect": "Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.",
         "access": "Béni (Manann)"
@@ -3882,7 +3897,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:savagery"
         }
       ],
@@ -7722,7 +7737,7 @@
       "name": "Bénédiction de Sauvagerie",
       "deity": "Taal",
       "catalogueName": "Bénédiction de Sauvagerie",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -7800,7 +7815,22 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-strike-to-injure",
+              "rank": 1
+            }
+          ],
+          "consumeOn": "critical",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
         "effect": "Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.",
         "access": "Béni (Taal)"
@@ -7813,7 +7843,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:savagery"
         }
       ],
@@ -8277,7 +8307,7 @@
       "name": "Bénédiction de Sauvagerie",
       "deity": "Ulric",
       "catalogueName": "Bénédiction de Sauvagerie",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -8355,7 +8385,22 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-strike-to-injure",
+              "rank": 1
+            }
+          ],
+          "consumeOn": "critical",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
         "effect": "Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.",
         "access": "Béni (Ulric)"
@@ -8368,7 +8413,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:savagery"
         }
       ],
@@ -26781,5 +26826,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:3e44baf42a86727e0d9139be8ada0fb4cf4152fffd76a7819b83de06b4b54316"
+  "sourceFingerprint": "sha256:7ac666689a165bf040686761f6b6b68c0c89169cd3a42a198b08b226d3106488"
 }

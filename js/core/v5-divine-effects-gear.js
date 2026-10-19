@@ -11,7 +11,7 @@ const isRecord = value => Boolean(value && typeof value === 'object' && !Array.i
 
 const specialStateKeys = new Set(['fearImmune', 'terrorAsFear', 'ignoreConditionPenalties', 'cannotRaiseUndead']);
 // Talents dont le moteur lit un contrat mécanique : seuls ceux-là sont injectés pour de vrai (les autres restent une étiquette).
-export const injectableTalentIds = new Set(['talent-fearless', 'talent-strong-legs', 'talent-menacing', 'talent-catfall', 'talent-drilled', 'talent-hatred', 'talent-frenzy']);
+export const injectableTalentIds = new Set(['talent-fearless', 'talent-strong-legs', 'talent-menacing', 'talent-catfall', 'talent-drilled', 'talent-hatred', 'talent-frenzy', 'talent-strike-to-injure']);
 const weaponFacts = input => input?.facts?.weapon;
 const characteristicBonus = (participant, key) => {
   const score = Number(participant?.caracs?.[key]);
@@ -54,6 +54,7 @@ const handlers = {
     validate(effect) {
       if (!Array.isArray(effect.talents) || !effect.talents.length
         || !effect.talents.every(row => isRecord(row) && isText(row.id) && Number.isSafeInteger(row.rank ?? 1) && (row.rank ?? 1) >= 1)) return 'grant-talent exige talents [{id, rank}].';
+      if (effect.consumeOn !== undefined && effect.consumeOn !== 'critical') return 'grant-talent : consumeOn ne peut valoir que critical.';
       return effect.specializationFrom !== undefined && effect.specializationFrom !== 'input' ? 'grant-talent : specializationFrom ne peut valoir que input.' : null;
     },
     needs(effect, { input } = {}) {
@@ -73,7 +74,9 @@ const handlers = {
       return { ...resolved, talents: effect.talents.map(row => ({ ...row, specialization })) };
     },
     inputFields: effect => effect.specializationFrom === 'input' ? [{ path: 'talent.specialization', label: SPECIALIZATION_LABEL, kind: 'text', scope: 'effect' }] : [],
-    buildLayer: effect => ({ grantedTalents: effect.talents.map(row => ({ id: row.id, rank: row.rank ?? 1, ...(row.name ? { name: row.name } : {}), ...(row.specialization ? { specialization: row.specialization } : {}) })) })
+    // `consumeOn: 'critical'` : la couche prend fin au prochain Coup Critique infligé par son porteur (voir consumeDivineLayers).
+    buildLayer: effect => ({ grantedTalents: effect.talents.map(row => ({ id: row.id, rank: row.rank ?? 1, ...(row.name ? { name: row.name } : {}), ...(row.specialization ? { specialization: row.specialization } : {}) })),
+      ...(effect.consumeOn ? { consumeOn: effect.consumeOn } : {}) })
   },
   'weapon-bonus': {
     validate(effect) {
@@ -138,6 +141,18 @@ export function projectDivineGear(next) {
   projectWeaponBonuses(v5, layers);
   projectActions(next, layers);
   projectTalents(next, layers);
+  return next;
+}
+
+/**
+ * Couches divines consommées par un événement (`consumeOn`, ex. Sauvagerie au Coup Critique infligé). Renvoie une copie du participant
+ * sans ces couches, ou null s'il n'en porte aucune ; l'appelant recalcule ensuite les valeurs effectives (refreshEffectLayers).
+ */
+export function consumeDivineLayers(participant, event) {
+  const layers = participant?.extensions?.v5?.divineEffects;
+  if (!Array.isArray(layers) || !layers.some(layer => layer?.consumeOn === event)) return null;
+  const next = clone(participant);
+  next.extensions.v5.divineEffects = next.extensions.v5.divineEffects.filter(layer => layer?.consumeOn !== event);
   return next;
 }
 

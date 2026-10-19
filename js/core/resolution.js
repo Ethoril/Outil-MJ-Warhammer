@@ -28,6 +28,8 @@ import { buildCombatTest, hasMomentum, withMomentum, conditionLevels, inferV5Kin
 import { evaluateV5Talents, previewV5TalentConditions, currentV5TalentHashes, V5_TALENT_IDS } from './v5-talents.js';
 import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION } from '../data/v5-crits.js';
 import { previewV5ActionQualities, v5ActionQualityContext, previewV5WeaponConditions, v5QualityMechanicalStatus } from './v5-talent-qualities.js';
+import { consumeDivineLayers } from './v5-divine-effects-gear.js';
+import { refreshEffectLayers } from './v5-magic-effects.js';
 import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
@@ -920,6 +922,12 @@ export function applyResolution(preview, currentState) {
     if(typeof change.momentum==='boolean')updated=withMomentum(updated,change.momentum);nextState.participants=participantListWithUpdate(nextState,live.id,updated);
   }
   for(const p of Array.isArray(nextState.participants)?nextState.participants:Object.values(nextState.participants))nextState.participants=participantListWithUpdate(nextState,p.id,refreshV5TalentEffects(p,{round:preview.input.round,resolutionId:preview.resolutionId}));
+  // Coup Critique infligé par l'attaquant : les couches divines « consumeOn: critical » (Sauvagerie) prennent fin dans la même commande.
+  if (preview.attack && (preview.critical?.details || preview.critical?.second) && preview.input.actor?.id) {
+    const live = participantById(nextState, preview.input.actor.id);
+    const consumed = live && consumeDivineLayers(live, 'critical');
+    if (consumed) nextState.participants = participantListWithUpdate(nextState, live.id, refreshEffectLayers(consumed, live));
+  }
   nextState.revision = currentState.revision + 1;
   nextState.appliedResolutionIds = [...appliedIds, preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);
   const resolution = clone(preview);

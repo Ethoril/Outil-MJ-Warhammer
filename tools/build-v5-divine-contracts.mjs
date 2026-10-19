@@ -110,7 +110,7 @@ const blessingLibrary = {
  protection: { name: 'Protection', effect: null, label: 'Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.' },
  recuperation: { name: 'Convalescence', effect: null, label: 'La cible réduit d’un jour la durée d’une maladie; une seule tentative par maladie et par personne.', touch: true, instant: true },
  righteousness: { name: 'Droiture', effect: { type: 'weapon-bonus', magical: true, designatedWeapon: true, weaponOwner: 'target' }, label: 'L’arme de la cible est considérée comme Magique.' },
- savagery: { name: 'Sauvagerie', effect: null, label: 'Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.' },
+ savagery: { name: 'Sauvagerie', effect: { type: 'grant-talent', talents: [{ id: 'talent-strike-to-injure', rank: 1 }], consumeOn: 'critical' }, label: 'Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.' },
  tenacity: { name: 'Ténacité', effect: { type: 'remove-condition', chosen: true, amount: 1, excludeKeys: ['souille'] }, label: 'La cible retire 1 État choisi (sauf Souillé et les États verrouillés).', instant: true },
  wisdom: { name: 'Sagesse', ...statBlessing('Int', 'Intelligence') },
  wit: { name: 'Vivacité', ...statBlessing('I', 'Initiative') }
