@@ -17,7 +17,7 @@ const nine = [
   ["Effrayer l'Ennemi", 'Dismay Foe', 'effrayer-l-ennemi', 'assisted'],
   ['En Bon Ordre', 'In Good Order', 'en-bon-ordre', 'manual'],
   ['Connaître son Ennemi', 'Know Your Enemy', 'connaitre-son-ennemi', 'manual'],
-  ['Sur un Terrain Mortel', 'On Deadly Ground', 'sur-un-terrain-mortel', 'manual'],
+  ['Sur un Terrain Mortel', 'On Deadly Ground', 'sur-un-terrain-mortel', 'assisted'],
   ['Attaque Rapide', 'Quick Strike', 'attaque-rapide', 'manual'],
   ['Dévotion de la Guerrière', 'Shieldmaiden’s Devotion', 'devotion-de-la-guerriere', 'assisted'],
   ['Compétence Martiale', 'Skill of Combat', 'competence-martiale', 'assisted'],
@@ -56,7 +56,7 @@ test('inventaire : plus aucun miracle bloqué, neuf miracles Up in Arms connect�
   assert.equal(inventory.counts.miraclesSupplementSourceFound, 9);
   assert.equal(inventory.counts.miraclesV4AdaptationBlocked, 0);
   assert.equal(inventory.sourceCounts.miraclesUpInArmsConnected, 9);
-  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 4, manual: 5 });
+  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 5, manual: 4 });
   assert.equal(registry.contracts.some(row => row.status === 'blocked'), false);
   assert.equal(inventory.items.filter(row => row.type === 'miracle' && row.source.document === 'Up in arms.pdf').length, 9);
 });
