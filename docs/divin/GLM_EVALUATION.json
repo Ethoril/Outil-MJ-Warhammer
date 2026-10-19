@@ -223,7 +223,7 @@
       ],
       "modele_orchestrateur": "claude-opus-5-5",
       "usage_5h_avant_apres": [
-        39,
+        37,
         39
       ],
       "usage_hebdo_avant_apres": [
@@ -231,7 +231,7 @@
         58
       ],
       "contexte_orchestrateur_avant_apres": [
-        759365,
+        742564,
         764543
       ],
       "b1_avant": null,
@@ -257,7 +257,7 @@
         "aucun hormis la régénération LF dans le worktree principal (fins de ligne)"
       ],
       "verdict_qualite": "5 — code minimal (6 lignes) et juste, a lui-même régénéré et lancé l'acceptation ; worktree LF préparé à l'avance (leçon de la tâche GLM).",
-      "remarque": "Comparabilité imparfaite : Ténacité est un peu plus simple que Droiture (pas de modification du formulaire) et la tâche a profité d'un worktree en LF préparé, ce qui a évité le piège d'empreintes. Mesure du quota : aucun point de % visible (5 h et semaine inchangés) pour 66 k tokens Sonnet ; le contexte de l'orchestrateur a augmenté de 5,2 k tokens (rapport court).",
+      "remarque": "Comparabilité imparfaite : Ténacité est un peu plus simple que Droiture (pas de modification du formulaire) et la tâche a profité d'un worktree en LF préparé, ce qui a évité le piège d'empreintes. Mesure du quota : aucun point de % visible (5 h et semaine inchangés) pour 66 k tokens Sonnet ; le contexte de l'orchestrateur a augmenté de 5,2 k tokens (rapport court). Correction d'équité : B1 et fenêtre de 5 h mesurés désormais depuis le DÉBUT de la phase de spécification (écriture du test et du worktree comprises), comme pour les tâches GLM : contexte +22,0 k, fenêtre 37→39 %.",
       "code_correct_premier_essai": true,
       "erreurs_orchestrateur": []
     },
@@ -319,5 +319,6 @@
       "verdict_qualite": "5 — code minimal et juste (12 lignes), a lui-même régénéré et lancé l'acceptation, et a identifié précisément le défaut de MON test (store.js:1729-1736, vérifié sans miracle) au lieu d'improviser.",
       "remarque": "Le contexte de l'orchestrateur compte la phase de spécification (+16,5 k) et l'exécution/vérification (+3,5 k). La fenêtre de 5 h a pris 5 points pendant la SPÉCIFICATION (Opus) et 1 point pendant l'exécution GLM + vérification. Coût réel Mistral à relever dans la console."
     }
-  ]
+  ],
+  "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
 }
