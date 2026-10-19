@@ -128,3 +128,13 @@ test('Chance : le prêtre peut réinvoquer la bénédiction une fois la précéd
   const again = s.previewDivineExecution(id, input({ expiry: { phase: 'endOfTurn', round: 12, actorId: 'priest', moment: 'afterEffects' } }));
   assert.equal(again.ready, true, again.error);
 });
+
+test('D3 (contrôle indépendant) : avec la bénédiction, un jet initial absent ou invalide ne lève pas d’erreur ; la relance reste payante', async () => {
+  const s = await fixture();
+  for (const roll of [null, '', 'abc', '0', '101']) {
+    const apercu = preview(s, { roll, reroll: 24 });
+    assert.notEqual(apercu.fortuneReroll?.free, true, `jet initial ${JSON.stringify(roll)} : gratuité impossible à établir`);
+    assert.ok(apercu.actionCosts.paid.some(c => c.resource === 'fortune' && c.amount === 1), `jet initial ${JSON.stringify(roll)} : relance payante`);
+  }
+  assert.equal(remaining(s), 1, 'la relance gratuite reste disponible');
+});

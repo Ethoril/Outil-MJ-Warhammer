@@ -92,7 +92,9 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     if (!costs.some(c => c.id === 'system:fortune-reroll')) {
       costs.push({ id: 'system:fortune-reroll', resource: 'fortune', amount: 1 });
       // Bénédiction de Chance : relance gratuite du prochain Test échoué (le Test d'origine est évalué avant d'y substituer la relance).
-      if (freeRerollLayers(actor).length) {
+      // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
+      const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
+      if (freeRerollLayers(actor).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
         const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, ...plainContext } = context;
         const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, ...plainSupplied } = supplied;
         const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
