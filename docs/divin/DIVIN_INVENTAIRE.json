@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:d202fc4353288388d8fbee2346ad6ca17e86ca3b5e9dd23a9ce11815cb3f9984",
+  "sourceFingerprint": "sha256:3e44baf42a86727e0d9139be8ada0fb4cf4152fffd76a7819b83de06b4b54316",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -23173,7 +23173,7 @@
       "type": "talent",
       "name": "Haine sacrée",
       "deity": null,
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -23205,13 +23205,11 @@
       "clauses": [
         {
           "id": "miracle-damage-bonus",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "talent-holy-hatred"
         }
       ],
-      "needsInput": [
-        "miracle-damage-hook"
-      ]
+      "needsInput": []
     }
   ]
 }
