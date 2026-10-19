@@ -3,11 +3,11 @@
   "generatorVersion": "divine-contracts-0.4.0",
   "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
   "sourceManifest": {
-    "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+    "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
     "miraclesCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
     "v5EnglishBaseSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
     "authoritativeEdition": "V5 EN",
-    "complementCorpusSha256": "10d11b7b4c9e7bffa87767b71eeb42c9007cd7f2f8e31c2aaedc0372044b3031",
+    "complementCorpusSha256": "b9f10d70233a7aeed054232710e1ae6864e5d13893e5d0793e6aa7571a976364",
     "supplementBooks": [
       {
         "bookId": "L02",
@@ -2727,7 +2727,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2840,7 +2840,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -2943,7 +2943,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3056,7 +3056,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3159,7 +3159,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3262,7 +3262,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3376,7 +3376,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3489,7 +3489,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3592,7 +3592,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3705,7 +3705,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3818,7 +3818,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -3921,7 +3921,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4016,7 +4016,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4119,7 +4119,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4232,7 +4232,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4335,7 +4335,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4449,7 +4449,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4544,7 +4544,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4657,7 +4657,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4770,7 +4770,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4873,7 +4873,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -4986,7 +4986,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5089,7 +5089,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5192,7 +5192,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5305,7 +5305,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5408,7 +5408,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5511,7 +5511,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5624,7 +5624,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5720,7 +5720,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5823,7 +5823,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -5911,7 +5911,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6014,7 +6014,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6117,7 +6117,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6213,7 +6213,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6316,7 +6316,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6404,7 +6404,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6499,7 +6499,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6612,7 +6612,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6725,7 +6725,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6838,7 +6838,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -6951,7 +6951,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7054,7 +7054,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7168,7 +7168,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7281,7 +7281,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7384,7 +7384,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7487,7 +7487,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7600,7 +7600,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7713,7 +7713,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7816,7 +7816,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -7929,7 +7929,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8042,7 +8042,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8155,7 +8155,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8268,7 +8268,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8371,7 +8371,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8466,7 +8466,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8569,7 +8569,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8682,7 +8682,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8785,7 +8785,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -8899,7 +8899,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9012,7 +9012,7 @@
           "section": "Bénédictions par culte",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9134,7 +9134,7 @@
           "section": "Bénédiction de Charisme",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9256,7 +9256,7 @@
           "section": "Bénédiction de Chance",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9368,7 +9368,7 @@
           "section": "Bénédiction de Vigueur",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9490,7 +9490,7 @@
           "section": "Bénédiction de Protection",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9602,7 +9602,7 @@
           "section": "Bénédiction de Sagesse",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9724,7 +9724,7 @@
           "section": "Bénédiction de Vivacité",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9846,7 +9846,7 @@
           "section": "Bénédiction de Bataille",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -9977,7 +9977,7 @@
           "section": "Bénédiction de Conscience",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10098,7 +10098,7 @@
           "section": "Bénédiction de Courage",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10229,7 +10229,7 @@
           "section": "Bénédiction de Vigueur",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10360,7 +10360,7 @@
           "section": "Bénédiction de Puissance",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10491,7 +10491,7 @@
           "section": "Bénédiction de Ténacité",
           "clauses": []
         },
-        "catalogueSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0"
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
       },
       "requiredTalent": {
         "id": "talent-bless",
@@ -10581,7 +10581,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10700,7 +10700,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10816,7 +10816,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -10935,7 +10935,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11051,7 +11051,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11203,7 +11203,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -11305,7 +11305,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -11447,7 +11447,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -11578,7 +11578,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -11708,7 +11708,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -11827,7 +11827,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -11951,7 +11951,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -12073,7 +12073,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -12220,7 +12220,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -12372,7 +12372,7 @@
       },
       "sourceReceipt": {
         "catalogueCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
       },
@@ -12505,7 +12505,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -12621,7 +12621,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -12753,7 +12753,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -12894,7 +12894,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -13045,7 +13045,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -13180,7 +13180,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -13323,7 +13323,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13443,7 +13443,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13592,7 +13592,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13708,7 +13708,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13809,7 +13809,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -13982,7 +13982,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14084,7 +14084,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "975555bd937144d8e99236be2b38aa8b96bf06ac4072523c30c187e6504a0554",
         "sourceBookId": "L07",
@@ -14209,7 +14209,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "975555bd937144d8e99236be2b38aa8b96bf06ac4072523c30c187e6504a0554",
         "sourceBookId": "L07",
@@ -14339,7 +14339,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14454,7 +14454,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14585,7 +14585,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14700,7 +14700,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14810,7 +14810,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -14932,7 +14932,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -15073,7 +15073,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15186,7 +15186,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15294,7 +15294,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15408,7 +15408,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15512,7 +15512,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15624,7 +15624,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15734,7 +15734,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15844,7 +15844,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -15962,7 +15962,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16081,7 +16081,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16180,7 +16180,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16299,7 +16299,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16403,7 +16403,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16538,7 +16538,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16655,7 +16655,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16777,7 +16777,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -16881,7 +16881,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17000,7 +17000,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17142,7 +17142,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17268,7 +17268,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17384,7 +17384,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17508,7 +17508,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17624,7 +17624,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17734,7 +17734,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -17843,7 +17843,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -17950,7 +17950,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -18090,7 +18090,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -18220,7 +18220,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -18358,7 +18358,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -18492,7 +18492,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -18607,7 +18607,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -18723,7 +18723,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -18866,7 +18866,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -18992,7 +18992,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -19115,7 +19115,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -19241,7 +19241,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -19401,7 +19401,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -19518,7 +19518,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -19617,7 +19617,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -19740,7 +19740,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -19865,7 +19865,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -19996,7 +19996,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20099,7 +20099,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20234,7 +20234,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20354,7 +20354,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20460,7 +20460,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20572,7 +20572,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20690,7 +20690,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20792,7 +20792,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -20946,7 +20946,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -21057,7 +21057,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -21195,7 +21195,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -21336,7 +21336,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -21515,7 +21515,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -21678,7 +21678,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -21829,7 +21829,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -21958,7 +21958,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -22098,7 +22098,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -22244,7 +22244,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -22374,7 +22374,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
         "sourceBookId": "L02",
@@ -22511,7 +22511,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -22632,7 +22632,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -22757,7 +22757,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -22863,7 +22863,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -22981,7 +22981,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -23092,7 +23092,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -23221,7 +23221,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -23381,7 +23381,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
         "sourceBookId": "L04",
@@ -23493,7 +23493,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -23624,7 +23624,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -23756,7 +23756,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -23889,7 +23889,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -24006,7 +24006,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -24125,7 +24125,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -24257,7 +24257,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
@@ -24360,7 +24360,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
@@ -24491,7 +24491,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
@@ -24593,7 +24593,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
@@ -24716,7 +24716,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
@@ -24857,7 +24857,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
@@ -24959,7 +24959,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
         "sourceBookId": "L18",
@@ -25091,7 +25091,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -25217,7 +25217,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -25359,7 +25359,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -25463,7 +25463,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -25608,7 +25608,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -25732,7 +25732,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -25888,7 +25888,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -25997,7 +25997,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -26116,7 +26116,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -26248,7 +26248,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -26399,7 +26399,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -26519,7 +26519,7 @@
         "clauses": []
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "catalogueSnapshotVersion": "references:3755f725aedded0b38face136e08c2214af15e9c299412702185c67740ff56ac",
         "sourceBookSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
       },
@@ -26679,7 +26679,7 @@
         "section": "Haine sacrée"
       },
       "sourceReceipt": {
-        "referenceSnapshotSha256": "94ccf10c104e63cbb29fc7885d9c972fd493d6daaa9fe62d9e60c06a3afddfd0",
+        "referenceSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b",
         "talentId": "talent-holy-hatred",
         "description": "Lorsqu’un Miracle inflige des Blessures, vous pouvez infliger +2 Blessures."
       },
@@ -26710,5 +26710,5 @@
       ]
     }
   ],
-  "sourceFingerprint": "sha256:8c04b2f9955be4f77c26daa3f61dd9d6a769d044c636b83979385cd67d3acfd9"
+  "sourceFingerprint": "sha256:23550fb448e91f0c402c7a7550c944d5287ef9df7e625c381db315797af27978"
 }
