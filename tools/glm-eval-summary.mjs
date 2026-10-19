@@ -55,11 +55,13 @@ if (glm.length) {
   const glmCost = median(glm.map(task => task.b2_cout_reel_usd ?? task.b2_cout_usd));
   console.log('\nCritères de décision');
   console.log(`  Qualité : premier essai GLM ${rate(glm, t => t.reussite_premier_essai)} % contre Sonnet ${sonnet.length ? rate(sonnet, t => t.reussite_premier_essai) + ' %' : 'non mesuré (aucune tâche Sonnet comparable enregistrée)'}`);
-  if (Number.isFinite(a.prix_periode_usd) && Number.isFinite(a.quota_tokens_periode)) {
-    const value = saved * a.prix_periode_usd / a.quota_tokens_periode;
-    const verdict = glmCost <= (a.seuil_rentabilite ?? 0.5) * value ? 'RENTABLE' : 'NON RENTABLE';
-    console.log(`  Coût : GLM médian ${glmCost?.toFixed(3)} USD contre valeur du quota épargné ${value.toFixed(3)} USD (seuil ${a.seuil_rentabilite ?? 0.5}) : ${verdict}`);
-  } else console.log(`  Coût : renseigner abonnement.prix_periode_usd et abonnement.quota_tokens_periode dans le JSON (quota épargné par tâche ≈ ${saved} tokens, GLM médian ${glmCost} USD)`);
-  if (Number.isFinite(a.quota_fenetre_tokens)) console.log(`  Fenêtre d'usage épargnée par tâche : ${(100 * saved / a.quota_fenetre_tokens).toFixed(1)} %`);
+  const weekly = rows => median(rows.map(task => Array.isArray(task.usage_hebdo_avant_apres) ? task.usage_hebdo_avant_apres[1] - task.usage_hebdo_avant_apres[0] : NaN));
+  const glmCostEur = median(glm.map(task => task.b2_cout_reel_eur));
+  const sonnetWeekly = weekly(sonnet);
+  if (Number.isFinite(a.valeur_1pct_hebdo_eur) && Number.isFinite(sonnetWeekly) && Number.isFinite(glmCostEur)) {
+    const value = sonnetWeekly * a.valeur_1pct_hebdo_eur;
+    console.log(`  Coût : GLM médian ${glmCostEur.toFixed(2)} € contre valeur du quota hebdomadaire épargné ${value.toFixed(3)} € (${sonnetWeekly} pt de % hebdo × ${a.valeur_1pct_hebdo_eur} €, seuil ${a.seuil_rentabilite}) : ${glmCostEur <= a.seuil_rentabilite * value ? 'RENTABLE' : 'NON RENTABLE'}`);
+  } else console.log(`  Coût : GLM médian ${glmCostEur} € ; points de % hebdo d'une tâche Sonnet comparable : ${sonnetWeekly ?? 'non mesuré'} (1 % hebdo vaut ${a.valeur_1pct_hebdo_eur} €)`);
+  console.log(`  Fenêtre de 5 h : GLM médian ${median(glm.map(t => t.usage_5h_avant_apres?.[1] - t.usage_5h_avant_apres?.[0]))} pt contre Sonnet ${median(sonnet.map(t => t.usage_5h_avant_apres?.[1] - t.usage_5h_avant_apres?.[0])) ?? 'non mesuré'} pt`);
   console.log(`  Orchestrateur : B1 médian GLM ${median(glm.map(b1))} contre Sonnet ${sonnet.length ? median(sonnet.map(b1)) : 'non mesuré'}`);
 }
