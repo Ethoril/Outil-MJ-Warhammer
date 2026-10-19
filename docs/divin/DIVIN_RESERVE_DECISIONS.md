@@ -44,3 +44,11 @@ Un lecteur distinct a relu la page 79 : les 9 contrats sont conformes aux valeur
 | --- | --- | --- | --- |
 | R15 | Ordre périmé en mode automatique : une créature divine invoquée en cours de Round est ajoutée à la fin de l'ordre stocké et joue en fin de Round (moteur V5), à son rang d'initiative avec le chemin legacy. Identique à un participant ajouté à la main (vérifié sur la version publiée) : documenté, non corrigé. | Réordonner à l'invocation (touche aux moteurs de Tour partagés). | Ce n'est pas une régression ; le corriger changerait aussi l'ajout manuel de participants. |
 | R16 | Titre du README corrigé (« v3.13.0 » périmé depuis la 3.13). | — | Cohérence. |
+
+## Correctifs P4d (cible implicite, Tour des invocations magiques)
+
+| # | Décision prise | Alternative | Pourquoi |
+| --- | --- | --- | --- |
+| R17 | Cible implicite du prêtre pour les invocations (Hurlement du loup, Roi de la Nature, Œil de l'aigle, Yeux de chat), portée par un drapeau `implicitTarget` du gestionnaire d'effet (pas par `appliesTo` seul ni par un nom). Commander la Légion, Trickle Down, Hoarfrost's Chill et les autres contrats « du prêtre » ne changent pas. Les cases « Destinataires » restent affichées, facultatives et annotées. | Règle sur `appliesTo` seul (aurait changé d'autres miracles) ; masquer les cases. | Zéro changement pour les autres contrats (vérifié par tests écrits avant le correctif). |
+| R18 | Défaut de Tour des invocations magiques corrigé par report du retrait : une invocation magique orpheline qui est l'acteur courant (sans être le premier de l'ordre) reste jusqu'à la commande suivante. Elle garde donc un Tour « à vide » que le MJ termine. Si elle est le premier de l'ordre, l'ancien comportement (correct) est conservé. | Réassigner au successeur de l'ordre effectif (sauterait son traitement de début de Tour et toucherait les moteurs de Tour partagés). | Même principe que les créatures divines ; fuzz 12 000 pas sans violation. Un seul test de caractérisation modifié (celui qui épinglait le défaut). |
+| R19 | Résiduel non corrigé : la fin ANTICIPÉE d'un sort d'invocation déclarée pendant le Tour de l'invocation fait encore rejouer le lanceur (retrait immédiat vers le premier de l'ordre), comportement épinglé par le test C9 de la caractérisation. | Reporter aussi ce retrait (modifier le test C9). | Hors du défaut demandé ; à décider. |
