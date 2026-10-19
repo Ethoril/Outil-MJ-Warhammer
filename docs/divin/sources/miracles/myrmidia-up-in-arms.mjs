@@ -86,18 +86,20 @@ export const miracles = [
     name: 'Sur un Terrain Mortel', canonicalName: 'On Deadly Ground', printedPage: 79,
     summary: 'Vous bannissez l’idée de retraite de l’esprit de vos alliés : tant que le miracle dure, ils ne reçoivent pas l’État Brisé. Vous comptez parmi eux.',
     params: { range: self, targets: willpowerArea, duration: willpowerRounds },
-    status: 'manual',
+    status: 'assisted',
+    effect: null,
+    effects: [{ type: 'grant-immunity', conditions: ['Brisé'] }],
     targetRules: [],
     needsInput: [
       { id: 'allies-in-area', text: 'Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre), prêtre compris ?' },
       { id: 'broken-attempts', text: 'Quelle source tente de donner l’État Brisé (Terreur, Fuite, autre) pendant la durée ?' }
     ],
     clauses: [
-      { id: 'no-broken', mode: 'manual', text: 'Les alliés de la zone, prêtre compris, ne reçoivent pas l’État Brisé tant que le miracle dure : à écarter à chaque acquisition (Terreur, Fuite, autres sources).' },
-      { id: 'existing-broken', mode: 'manual', text: 'Les États Brisé déjà acquis restent : seule l’acquisition est empêchée.' },
+      { id: 'no-broken', mode: 'engine', text: 'Les alliés de la zone, prêtre compris, ne reçoivent pas l’État Brisé tant que le miracle dure : à écarter à chaque acquisition (Terreur, Fuite, autres sources).' },
+      { id: 'existing-broken', mode: 'engine', text: 'Les États Brisé déjà acquis restent : seule l’acquisition est empêchée.' },
       { id: 'duration-unattested', mode: 'manual', text: 'Durée : Bonus de Volonté en Rounds, valeur NON ATTESTÉE par la page 79 (voir l’écart).' }
     ],
-    sourceDelta: 'Aucun effet existant n’empêche de recevoir un État : contrat manuel. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. ' + v4Unit
+    sourceDelta: 'Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. ' + v4Unit
   },
   {
     name: 'Attaque Rapide', canonicalName: 'Quick Strike', printedPage: 79,

@@ -1216,8 +1216,8 @@
         "duree": "Bonus de Force Mentale en Rounds",
         "effet": "Sachant que la victoire ne peut être obtenue que si vos forces tiennent bon, vous appelez Myrmidia pour bannir toute idée de retraite dans l'esprit de vos alliés. Tant que le miracle est actif, vos alliés ne reçoivent pas la Condition Brisé."
       },
-      "v5Summary": "Aucun effet existant n’empêche de recevoir un État : contrat manuel. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
-      "status": "manual",
+      "v5Summary": "Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -11875,7 +11875,7 @@
       "catalogueName": "Sur un Terrain Mortel",
       "canonicalName": "On Deadly Ground",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -11898,7 +11898,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Aucun effet existant n’empêche de recevoir un État : contrat manuel. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "sourceDelta": "Effet grant-immunity : Brisé refusé à l’acquisition pour les cibles désignées. Page 79 : portée « Self », cible « You », et la ligne Durée contient « Allies within AoE (Willpower yards) » sans aucune durée (la cible a glissé dans la ligne Durée). Durée non attestée, retenue en Bonus de Volonté en Rounds comme En Bon Ordre et le catalogue (décision MJ) ; zone lue en Bonus de Volonté (convention V5 des zones, décision MJ). Le prêtre est bénéficiaire ; les Brisé déjà acquis restent. Aucun erratum trouvé dans les 17 livres du corpus. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
           "kind": "self"
@@ -11942,7 +11942,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-immunity",
+          "conditions": [
+            "Brisé"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "On Deadly Ground",
@@ -11957,13 +11970,13 @@
         },
         {
           "id": "no-broken",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les alliés de la zone, prêtre compris, ne reçoivent pas l’État Brisé tant que le miracle dure : à écarter à chaque acquisition (Terreur, Fuite, autres sources).",
           "sourceRef": "v5-on-deadly-ground"
         },
         {
           "id": "existing-broken",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les États Brisé déjà acquis restent : seule l’acquisition est empêchée.",
           "sourceRef": "v5-on-deadly-ground"
         },
@@ -26770,5 +26783,5 @@
       ]
     }
   ],
-  "sourceFingerprint": "sha256:5dff340a15187210ef79fd6c928f690139a5ca9c2d7a37310855dae4ead469f6"
+  "sourceFingerprint": "sha256:d202fc4353288388d8fbee2346ad6ca17e86ca3b5e9dd23a9ce11815cb3f9984"
 }

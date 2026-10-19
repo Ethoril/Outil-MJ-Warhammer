@@ -14,7 +14,7 @@ export const calendarDurationUnits = new Set(['minutes', 'hours', 'days']);
 // par un commentaire pour que deux tâches qui ajoutent des types en parallèle ne produisent pas de conflit de fusion.
 export const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
 // Traits, États spéciaux, actions, Talents, bonus d'arme (v5-divine-effects-gear.js).
-for (const type of ['grant-trait', 'special-state', 'grant-actions', 'grant-talent', 'weapon-bonus']) effectTypes.add(type);
+for (const type of ['grant-trait', 'special-state', 'grant-actions', 'grant-talent', 'weapon-bonus', 'grant-immunity']) effectTypes.add(type);
 // Dégâts directs (v5-divine-effects-damage.js).
 for (const type of ['direct-damage', 'ordinary-damage']) effectTypes.add(type);
 // États, verrous et Chance temporaire (v5-divine-effects-conditions.js).

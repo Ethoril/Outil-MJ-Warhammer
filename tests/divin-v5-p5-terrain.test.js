@@ -60,8 +60,9 @@ test('Sur un Terrain Mortel : les cibles désignées (prêtre compris) n’acqui
   await store.undo();
   assert.equal(brokenLevel(acquireV5Conditions(person(store, 'priest'), ['Brisé']).participant), 1, 'Undo retire l’immunité');
   await store.redo();
-  for (let i = 0; i < 15; i++) await store.nextTurn();
-  assert.equal(brokenLevel(acquireV5Conditions(person(store, 'priest'), ['Brisé']).participant), 1, 'immunité retirée à l’échéance');
+  // Un allié déjà Brisé bloque le passage de Tour (fuite obligatoire) : la fin d'effet passe par « Terminer la prière ».
+  await store.endDivinePrayer(result.receipt.executionId, { reason: 'fin' });
+  assert.equal(brokenLevel(acquireV5Conditions(person(store, 'priest'), ['Brisé']).participant), 1, 'immunité retirée à la fin de la prière');
 });
 
 test('Non-régression : sans couche, acquérir Brisé fonctionne comme avant', async () => {

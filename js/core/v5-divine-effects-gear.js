@@ -38,6 +38,11 @@ const handlers = {
     needs: effect => Object.keys(effect).some(key => specialStateKeys.has(key)) ? [] : [need('contract.effects.specialState', 'État spécial sourcé requis')],
     buildLayer: effect => ({ specialState: Object.fromEntries(Object.keys(effect).filter(key => specialStateKeys.has(key)).map(key => [key, true])) })
   },
+  'grant-immunity': {
+    validate: effect => !Array.isArray(effect.conditions) || !effect.conditions.length || !effect.conditions.every(isText) ? 'grant-immunity exige conditions (liste de textes).' : null,
+    needs: effect => Array.isArray(effect.conditions) && effect.conditions.length ? [] : [need('contract.effects.conditions', 'Conditions sourcées requises')],
+    buildLayer: effect => ({ immunities: { conditions: [...effect.conditions] } })
+  },
   'grant-actions': {
     validate: effect => !Array.isArray(effect.actions) || !effect.actions.length
       || !effect.actions.every(action => isRecord(action) && isText(action.id) && isText(action.name) && isText(action.damageFormula)) ? 'grant-actions exige actions [{id, name, damageFormula}].' : null,

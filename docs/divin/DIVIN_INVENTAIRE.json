@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:5dff340a15187210ef79fd6c928f690139a5ca9c2d7a37310855dae4ead469f6",
+  "sourceFingerprint": "sha256:d202fc4353288388d8fbee2346ad6ca17e86ca3b5e9dd23a9ce11815cb3f9984",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -62,8 +62,8 @@
     },
     "miraclesUpInArmsConnected": 9,
     "upInArmsByStatus": {
-      "assisted": 4,
-      "manual": 5
+      "assisted": 5,
+      "manual": 4
     }
   },
   "notes": [
@@ -9063,7 +9063,7 @@
       "type": "miracle",
       "name": "Sur un Terrain Mortel",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -9135,7 +9135,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-immunity",
+          "conditions": [
+            "Brisé"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "On Deadly Ground",
         "effect": "Vous bannissez l’idée de retraite de l’esprit de vos alliés : tant que le miracle dure, ils ne reçoivent pas l’État Brisé. Vous comptez parmi eux.",
@@ -9149,13 +9162,13 @@
         },
         {
           "id": "no-broken",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les alliés de la zone, prêtre compris, ne reçoivent pas l’État Brisé tant que le miracle dure : à écarter à chaque acquisition (Terreur, Fuite, autres sources).",
           "sourceRef": "v5-on-deadly-ground"
         },
         {
           "id": "existing-broken",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les États Brisé déjà acquis restent : seule l’acquisition est empêchée.",
           "sourceRef": "v5-on-deadly-ground"
         },
