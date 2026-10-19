@@ -300,7 +300,7 @@
         "tokens_sortie": 23070,
         "etapes": 30,
         "issue": "finished, s'est arrêté sur un blocage correctement diagnostiqué (test impossible)",
-        "plafond": 2.0,
+        "plafond": 2,
         "console_mistral": "cumul passé de 0,27 € à 0,49 € (relevé du MJ) : ≈ 0,22 € pour cette tâche (plafond affiché 1,69 USD)"
       },
       "duree_s": 176,
@@ -553,6 +553,50 @@
       "defauts_trouves_apres": [],
       "verdict_qualite": "5 — correctif ciblé et lisible dans un fichier partagé sensible, premier essai, 29 s, ~0,14 USD plafond.",
       "remarque": "Contexte et fenêtre comprennent aussi le correctif D3 fait directement juste après (garde de 2 lignes + test)."
+    },
+    {
+      "id": "p5-t10-sauvagerie-sort",
+      "voie": "glm",
+      "famille": "correctif-borne",
+      "risque": "moyen",
+      "objectif": "Sauvagerie consommée quand le porteur inflige une Blessure Critique d'incantation (applySpellExecution)",
+      "acceptation": "node --test tests/divin-v5-p5-sauvagerie-spell.test.js tests/divin-v5-p5-sauvagerie-consume.test.js tests/divin-v5-p5-sauvagerie.test.js tests/lot3-v5-magic-33.test.js",
+      "fichiers_autorises": [
+        "js/core/v5-spell-contracts.js"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        83,
+        84
+      ],
+      "usage_hebdo_avant_apres": [
+        65,
+        65
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        107905,
+        116341
+      ],
+      "b2_cout_usd": 0.5282,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 361059,
+        "tokens_sortie": 5155,
+        "etapes": 19
+      },
+      "duree_s": 309,
+      "tours": 19,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_livrees": 14,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — correctif ciblé (drapeau + consommation après la boucle, deux chemins de critique), premier essai, suite complète verte hors test environnemental.",
+      "remarque": "Contexte avant = après écriture du test d'acceptation (environ 12 000 tokens de B1 en amont, lecture du code et test). Entrée GLM 361 k tokens : l'agent a lu plus que les lignes citées (fichier de 3600 lignes). Il signale une course entre ses propres éditions parallèles, rattrapée. Contrôle réseau : une connexion IPv6 Cloudflare 2a06:98c1:3200::90:83 ne correspondant pas aux adresses résolues d'api.mistral.ai au moment du contrôle ; signalée au MJ, délégations GLM suspendues en attendant."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
