@@ -224,11 +224,10 @@ test('C2 la couche expire au passage au round 8 si le lanceur n’a pas fini son
 });
 
 // ---------- C3 / C9 : acteur courant ou suivant qui expire ----------
-test('C3 monture prochain acteur lors de l’expiration : currentActorId réassigné à order[0], le Round n’avance pas', async () => {
-  // DÉFAUT EXISTANT (non corrigé) : le lanceur (I 60) finit son Tour du round 7, la monture (I 15) est l'acteur suivant,
-  // la couche expire dans la même commande, removeExpiredSummons retire la monture et repose currentActorId sur
-  // order[0] = le lanceur. Résultat : succès (pas de V5_CLOCK_POSITION_CONFLICT), mais le round reste 7, le lanceur
-  // rejoue et l'adversaire (foe) saute son Tour du round 7.
+test('C3 monture prochain acteur lors de l’expiration : gardée courante (orpheline), retirée à la commande suivante, sans Tour rejoué ni sauté', async () => {
+  // DÉFAUT CORRIGÉ (chantier p4d-r4) : auparavant removeExpiredSummons retirait la monture courante et reposait currentActorId sur
+  // order[0] = le lanceur, qui rejouait dans le même Round pendant que foe sautait son Tour. Désormais l'invocation orpheline qui est
+  // l'acteur courant (hors tête d'ordre) reste jusqu'à la commande suivante, comme sweepDivineSummons côté divin.
   const { store, engine, horse } = await destrier({ foe: { initiative: 5 } });
   await endTurn(engine);                                  // la monture entre dans l'ordre, courante
   assert.equal(json(store).combat.currentActorId, horse.id);
@@ -239,14 +238,18 @@ test('C3 monture prochain acteur lors de l’expiration : currentActorId réassi
   await endTurn(engine);                                  // ne doit pas rejeter
   const after = json(store);
   assert.equal(after.localRevision, before.localRevision + 1);
-  assert.equal(auxOf(store).length, 0);
-  assert.deepEqual(after.combat.order, ['mage', 'foe']);
-  assert.equal(after.combat.round, 7, 'le round n’avance pas');
-  assert.equal(after.combat.currentActorId, 'mage', 'le lanceur rejoue ; foe n’a pas joué au round 7');
-  assert.equal(after.extensions.v5.gameClock.combat.currentActorId, 'mage');
+  assert.deepEqual(auxOf(store).map(a => a.id), [horse.id], 'orpheline mais acteur courant : retirée au Tour suivant');
+  assert.deepEqual(after.combat.order, ['mage', horse.id, 'foe']);
+  assert.equal(after.combat.round, 7);
+  assert.equal(after.combat.currentActorId, horse.id, 'le successeur du lanceur est bien la monture : le lanceur ne rejoue pas');
+  assert.equal(after.extensions.v5.gameClock.combat.currentActorId, horse.id);
   assert.equal(after.extensions.v5.gameClock.combat.round, 7);
-  assert.equal(after.extensions.v5.turnIndex, before.extensions.v5.turnIndex + 1, 'le Tour est tout de même compté');
-  await store.undo();
+  assert.equal(after.extensions.v5.turnIndex, before.extensions.v5.turnIndex + 1);
+  await endTurn(engine);
+  assert.equal(json(store).combat.currentActorId, 'foe', 'foe joue son Tour du round 7');
+  assert.equal(auxOf(store).length, 0);
+  assert.deepEqual(json(store).combat.order, ['mage', 'foe']);
+  await store.undo(); await store.undo();
   assert.equal(json(store).combat.currentActorId, 'mage');
   assert.deepEqual(auxOf(store).map(a => a.id), [horse.id]);
 });

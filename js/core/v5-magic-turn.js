@@ -18,12 +18,19 @@ export function endSpellEffectsOnEvent(participants,actorId,event){
  });
 }
 
-/** Une invocation liée disparaît avec sa couche : expiration, fin déclarée ou dissipation, dans la même transaction. */
-export function removeExpiredSummons(envelope) {
+/**
+ * Une invocation liée disparaît avec sa couche : expiration, fin déclarée ou dissipation, dans la même transaction.
+ * Une invocation orpheline qui est l'acteur courant, sans être le premier de l'ordre, n'est pas retirée mais gardée jusqu'à la commande
+ * suivante, une fois la main passée (comme sweepDivineSummons côté divin) : lui substituer order[0] ferait rejouer le Tour du lanceur et
+ * sauter celui de l'acteur suivant. Premier de l'ordre, elle cède la main au premier survivant, qui est bien son successeur (personne
+ * n'a encore joué dans ce Round). `deferCurrent:false` : retrait immédiat (clause de fin déclarée depuis le Tour de l'invocation).
+ */
+export function removeExpiredSummons(envelope,{deferCurrent=true}={}) {
   const combat=envelope.combat;if(!combat?.participants)return envelope;
   const participants=combat.participants.filter(p=>{
     const data=p.extensions?.v5;
     if(!data?.summonCastExecutionId)return true;
+    if(deferCurrent && p.id===combat.currentActorId && (combat.order || [])[0]!==p.id)return true;
     const owner=combat.participants.find(x=>x.id===data.summonOwnerId);
     return owner?.extensions?.v5?.spellEffects?.some(e=>e.castExecutionId===data.summonCastExecutionId && e.spellId===data.summonedBySpellId);
   });
@@ -208,7 +215,7 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
     }
   }
   next.log=[{kind:'effect',actorId:caster.id,text:`${effect.spellName} — ${target.name} : ${summary}`},...(next.log || [])].slice(0,300);
-  return {ready:true,baseRevision:state.localRevision,state:removeExpiredSummons(next),summary,damage,conditions,test};
+  return {ready:true,baseRevision:state.localRevision,state:removeExpiredSummons(next,{deferCurrent:false}),summary,damage,conditions,test};
 }
 
 /** WoM pp. 20–21 : trajectoire proposée, occupants réels déclarés, chaque frappe absorbée/protégée une seule fois. */
