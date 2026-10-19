@@ -63,3 +63,10 @@ Verdict du contrôleur : publiable, sous condition de bump de version (fait). R�
 | R21 | Deux gestes manuels sur une invocation orpheline courante sortent de la règle : la déplacer avant le lanceur dans l'ordre (retrait immédiat), ou la mettre au banc (le Tour suivant tombe sur le premier de l'ordre). Comportement générique de tout acteur courant. | Documenté. | — |
 | R22 | Des cibles superflues passées à Hurlement du loup / Roi de la Nature donnent le même état qu'aucune cible, sauf `divineEffects: []` sur la cible superflue (sans couche). Œil de l'aigle et Yeux de chat refusent toujours une autre cible que le prêtre. | Documenté. | Refuser les cibles superflues. |
 | R23 | Le libellé « aucune case à cocher » s'affiche au-dessus de cases « Destinataires » facultatives restées visibles (cosmétique). | Documenté. | Masquer les cases (casserait le parcours navigateur existant). |
+
+## Bénédiction de Souffle (19 octobre, soir)
+
+| # | Décision prise | Alternative | Pourquoi |
+| --- | --- | --- | --- |
+| R24 | Souffle automatisé pour Manann ET Morr (même effet de bibliothèque) : drapeau `doesNotBreathe`, l'étouffement d'un vortex ne retire plus de Blessures pendant la durée ; la couche d'étouffement reste posée, inerte, et reprend à l'expiration si la cible est encore dans le nuage. Noyade, fumée, gaz : rappel MJ. | Retirer la couche d'étouffement à la bénédiction. | Fidèle au texte (« n'a pas besoin de respirer », pour la durée) ; aucun autre lecteur d'étouffement dans le moteur. |
+| R25 | Défaut préexistant trouvé, NON corrigé : la mort par asphyxie (E/10 Rounds à 0 Blessure dans un vortex à étouffement) est inatteignable, `roundSpellEffects` saute les cibles à 0 Blessure avant le compteur `suffocationZeroRounds` (v5-magic-turn.js). | Le corriger (moteur des sorts au Tour, partagé). | Hors périmètre ; à décider. |

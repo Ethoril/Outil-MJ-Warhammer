@@ -597,6 +597,52 @@
       "defauts_trouves_apres": [],
       "verdict_qualite": "5 — correctif ciblé (drapeau + consommation après la boucle, deux chemins de critique), premier essai, suite complète verte hors test environnemental.",
       "remarque": "Contexte avant = après écriture du test d'acceptation (environ 12 000 tokens de B1 en amont, lecture du code et test). Entrée GLM 361 k tokens : l'agent a lu plus que les lignes citées (fichier de 3600 lignes). Il signale une course entre ses propres éditions parallèles, rattrapée. Contrôle réseau : une connexion IPv6 Cloudflare 2a06:98c1:3200::90:83 ne correspondant pas aux adresses résolues d'api.mistral.ai au moment du contrôle ; signalée au MJ, délégations GLM suspendues en attendant."
+    },
+    {
+      "id": "p5-t11-souffle",
+      "voie": "sonnet",
+      "famille": "module-effets",
+      "risque": "moyen",
+      "objectif": "Bénédiction de Souffle automatique : la cible ignore l'étouffement du vortex pendant la durée (drapeau special-state doesNotBreathe)",
+      "acceptation": "node --test tests/divin-v5-p5-souffle.test.js puis suite complète et --check du générateur",
+      "fichiers_autorises": [
+        "tools/build-v5-divine-contracts.mjs",
+        "js/core/v5-divine-*.js",
+        "js/core/v5-magic-turn.js",
+        "tests/divin-v5-p5-souffle.test.js",
+        "fichiers générés"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        84,
+        88
+      ],
+      "usage_hebdo_avant_apres": [
+        65,
+        66
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        118000,
+        137408
+      ],
+      "b2_tokens": 125613,
+      "b2_detail": {
+        "appels_outils": 38,
+        "duree_agent_s": 289
+      },
+      "duree_s": 302,
+      "tours": 38,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_livrees": 93,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — effet déclaratif générique, garde de 3 lignes dans le lecteur d'étouffement, test écrit d'abord par l'agent, décompte de test mis à jour, Morr signalé ; suite complète verte hors test environnemental.",
+      "remarque": "Le test d'acceptation a été écrit par Sonnet (pas par l'orchestrateur, contrairement aux tâches GLM) : B1 plus faible côté spécification. Pas de contrôleur indépendant (garde liée à un drapeau nouveau, sans effet hors bénédiction). L'agent a trouvé un défaut préexistant : mort par asphyxie inatteignable (R25)."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
