@@ -51,7 +51,9 @@
     "usage_5h_avant_apres": "[pct, pct] lu par get_usage",
     "usage_hebdo_avant_apres": "[pct, pct]",
     "contexte_orchestrateur_avant_apres": "[tokens, tokens] du contexte de session (get_usage)",
-    "modele_orchestrateur": "modèle de la session principale"
+    "modele_orchestrateur": "modèle de la session principale",
+    "code_correct_premier_essai": "booléen : le code de l'agent satisfait le critère (une fois corrigées les erreurs du test écrit par l'orchestrateur), sans retouche",
+    "erreurs_orchestrateur": "erreurs imputables à Claude (test faux, test impacté oublié dans la commande d'acceptation, environnement)"
   },
   "reference_sonnet_b2": [
     {
@@ -197,7 +199,14 @@
       ],
       "verdict_qualite": "4 — code correct et minimal (3 fichiers, 21 lignes), compris du premier coup ; mais coût d'entrée énorme (700 k tokens lus) et arrêt au plafond avant d'avoir vérifié lui-même.",
       "remarque": "Le coût plafond (1,01 USD) ne compte pas le cache Mistral ; coût réel à lire dans la console. La plupart des tokens d'entrée viennent de la relecture du contexte à chaque étape (fichiers de 400+ lignes). Mesure de quota : la fenêtre de 5 h est passée de 32 à 37 % pendant la tâche, MAIS elle inclut tout le travail de l'orchestrateur Opus (spécification, tests, vérification, suite complète). Coût réel ≈ 0,20 € (≈ 5 fois moins que le plafond affiché, grâce au cache à 88 %). Contexte de l'orchestrateur : +17,6 k tokens pour l'ensemble (spécification, test, vérification, correction des tests).",
-      "b2_cout_reel_eur": 0.2
+      "b2_cout_reel_eur": 0.2,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [
+        "échéance du test (Round 7 au lieu de 6)",
+        "jeu de test générique sans arme pour l'adversaire",
+        "test catalogue impacté absent de la commande d'acceptation",
+        "worktree en CRLF (empreintes fausses)"
+      ]
     },
     {
       "id": "p5-t2-tenacite",
@@ -248,7 +257,67 @@
         "aucun hormis la régénération LF dans le worktree principal (fins de ligne)"
       ],
       "verdict_qualite": "5 — code minimal (6 lignes) et juste, a lui-même régénéré et lancé l'acceptation ; worktree LF préparé à l'avance (leçon de la tâche GLM).",
-      "remarque": "Comparabilité imparfaite : Ténacité est un peu plus simple que Droiture (pas de modification du formulaire) et la tâche a profité d'un worktree en LF préparé, ce qui a évité le piège d'empreintes. Mesure du quota : aucun point de % visible (5 h et semaine inchangés) pour 66 k tokens Sonnet ; le contexte de l'orchestrateur a augmenté de 5,2 k tokens (rapport court)."
+      "remarque": "Comparabilité imparfaite : Ténacité est un peu plus simple que Droiture (pas de modification du formulaire) et la tâche a profité d'un worktree en LF préparé, ce qui a évité le piège d'empreintes. Mesure du quota : aucun point de % visible (5 h et semaine inchangés) pour 66 k tokens Sonnet ; le contexte de l'orchestrateur a augmenté de 5,2 k tokens (rapport court).",
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": []
+    },
+    {
+      "id": "p5-t3-terrain",
+      "voie": "glm",
+      "famille": "module-effets",
+      "risque": "faible",
+      "objectif": "Nouvel effet générique grant-immunity ; Sur un Terrain Mortel empêche l'acquisition de Brisé",
+      "acceptation": "node --test tests/divin-v5-p5-terrain.test.js tests/divin-v5-up-in-arms.test.js tests/divin-v5-p4b-gear.test.js tests/divin-v5-p4a-socle.test.js tests/divin-v5-t5-form-model.test.js && node tools/build-v5-divine-contracts.mjs --check",
+      "fichiers_autorises": [
+        "js/core/v5-divine-grammar.js",
+        "js/core/v5-divine-effects-gear.js",
+        "docs/divin/sources/miracles/myrmidia-up-in-arms.mjs",
+        "js/data/v5-divine-contracts.json",
+        "docs/divin/DIVIN_INVENTAIRE.json"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        44,
+        45
+      ],
+      "usage_hebdo_avant_apres": [
+        59,
+        59
+      ],
+      "usage_5h_phase_specification": [
+        39,
+        44
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        764543,
+        784547
+      ],
+      "b2_tokens": null,
+      "b2_cout_usd": 1.6876,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 1132916,
+        "tokens_sortie": 23070,
+        "etapes": 30,
+        "issue": "finished, s'est arrêté sur un blocage correctement diagnostiqué (test impossible)",
+        "plafond": 2.0
+      },
+      "duree_s": 176,
+      "tours": 30,
+      "iterations": 0,
+      "reussite_premier_essai": false,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [
+        "test d'acceptation impossible : boucle de Tours avec un allié déjà Brisé (fuite obligatoire)",
+        "test E0 impacté oublié dans la commande d'acceptation"
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 12,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — code minimal et juste (12 lignes), a lui-même régénéré et lancé l'acceptation, et a identifié précisément le défaut de MON test (store.js:1729-1736, vérifié sans miracle) au lieu d'improviser.",
+      "remarque": "Le contexte de l'orchestrateur compte la phase de spécification (+16,5 k) et l'exécution/vérification (+3,5 k). La fenêtre de 5 h a pris 5 points pendant la SPÉCIFICATION (Opus) et 1 point pendant l'exécution GLM + vérification. Coût réel Mistral à relever dans la console."
     }
   ]
 }

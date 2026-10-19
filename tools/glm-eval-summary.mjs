@@ -29,7 +29,8 @@ for (const voie of ['glm', 'sonnet', 'direct']) {
   if (voie === 'glm') console.log(`  B2 coût plafond cumulé : ${sum(rows.map(task => task.b2_cout_usd)).toFixed(2)} USD (réel : ${sum(rows.map(task => task.b2_cout_reel_usd)).toFixed(2)} USD)`);
   else console.log(`  B2 médian : ${median(rows.map(task => task.b2_tokens))} tokens`);
   console.log(`  Durée de bout en bout médiane : ${median(rows.map(task => task.duree_bout_en_bout_s))} s`);
-  console.log(`  Réussite au premier essai : ${rate(rows, task => task.reussite_premier_essai)} %`);
+  console.log(`  Réussite au premier essai : ${rate(rows, task => task.reussite_premier_essai)} % ; code correct du premier coup : ${rate(rows, task => task.code_correct_premier_essai)} %`);
+  console.log(`  Erreurs imputables à l'orchestrateur : ${sum(rows.map(task => (task.erreurs_orchestrateur || []).length))}`);
   console.log(`  Itérations moyennes : ${(sum(rows.map(task => task.iterations)) / rows.length).toFixed(2)}`);
   console.log(`  Reprises par Claude : ${rows.filter(task => task.reprise).length}`);
   console.log(`  Tâches avec hors-périmètre : ${rows.filter(task => (task.hors_perimetre || []).length).length}`);
