@@ -8,7 +8,7 @@ import {v5ResourceIdentity} from './v5-resources.js';
 import {resolveV5ConditionTestContext} from './v5-test-context.js';
 import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
-import {effectHandler,effectNeeds,isLayerlessEffect} from './v5-divine-effect-handlers.js';
+import {effectHandler,effectNeeds,isLayerlessEffect,hasImplicitCasterTarget} from './v5-divine-effect-handlers.js';
 
 export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-18.1';
 const clone = value => structuredClone(value);
@@ -213,6 +213,8 @@ function validateTargetRules(contract, targets, input, resolvedParams = {}, acto
     // can be implicit in preview; selected targets must always match the source.
     if (resolvedParams.targets?.unit === 'self' && targets.length && (targets.length !== 1 || targets[0]?.id !== actor?.id))
     return { error: 'La prière se cible elle-même; choisissez uniquement le prêtre auteur.', needs: [need('targetIds', 'Cible propre du contrat')] };
+    // Tous les effets sont portés par le prêtre (invocations, capteurs) : il est la cible implicite, ni cible explicite ni fait de portée.
+    if (hasImplicitCasterTarget(contract)) return null;
     if (!targets.length) {
       if (resolvedParams.targets?.unit === 'self') return null;
       if (rules.length || resolvedParams.range?.unit === 'touch' || resolvedParams.targets?.unit === 'yards' || resolvedParams.targets?.unit === 'allies'
@@ -538,7 +540,7 @@ export function applyDivineExecution(state, contract, input = {}) {
   const previewResult = previewDivineExecution(actor, contract, targets, { ...input, participants,divineAccessState:canonicalAccess,divineSubjectKey:subjectKey,divineActiveScene:canonicalScene });
   if (!previewResult.ready) return { ...previewResult, state: clone(state), receipt: null, executionId: input.executionId };
   const preview = previewResult.preview;
-  if (preview.success && preview.effects.length && !targets.length && preview.resolvedParams.targets?.unit !== 'self')
+  if (preview.success && preview.effects.length && !targets.length && preview.resolvedParams.targets?.unit !== 'self' && !hasImplicitCasterTarget(contract))
     return { ...fail('needs-input', 'Choisissez les cibles avant application.', [need('targetIds', 'Cibles explicites du contrat')]), state: clone(state), receipt: null, executionId: input.executionId, preview };
   let next = clone(state);
   const designated = preview.success && (['implemented', 'assisted'].includes(contract.status) || contract.status === 'manual' && previewResult.status === 'reminder') ? (targets.length ? targets : [actor]) : [];

@@ -24,6 +24,8 @@
  *   segment). `source: true` ajoute « Source : … » à l'aide. `options` (select) : [[valeur, libellé]].
  * - factFields(effect, {contract}) -> [{field, label, help?, required?, custom?}] : faits de cible (tri-état) lus dans
  *   `input.facts.targets[id][field]`, ajoutés à ceux des règles du contrat.
+ * - implicitTarget (booléen) : l'effet, porté par le prêtre (appliesTo 'caster'), n'a pas besoin de cible désignée. Quand TOUS les effets
+ *   d'un contrat le déclarent (hasImplicitCasterTarget), la prière n'exige ni cible explicite ni fait de portée : le prêtre est la cible.
  * Champ d'effet générique : `effect.appliesTo` 'caster' | 'targets' (défaut 'targets' ; `casterOnly` : alias de 'caster').
  * Durée : `{value, unit}` ou numérique résolue par le moteur `{base?, fromSuccessLevels?: true, unit}` (valeur = base + DR, ≥ 1).
  * Chaque tâche ajoute ses types dans SON module (-tests, -damage, -conditions, -gear, -summon) et dans la grammaire.
@@ -126,6 +128,9 @@ for (const type of Object.keys(effectHandlers)) if (!effectTypes.has(type)) thro
 
 export const effectHandler = type => Object.hasOwn(effectHandlers, type) ? effectHandlers[type] : null;
 export const isLayerlessEffect = effect => effectHandler(effect?.type)?.layerless === true;
+/** Tous les effets du contrat sont portés par le prêtre et se passent de cible désignée (invocations, capteurs). */
+export const hasImplicitCasterTarget = contract => Array.isArray(contract?.effects) && contract.effects.length > 0
+  && contract.effects.every(effect => (effect.appliesTo === 'caster' || effect.casterOnly === true) && effectHandler(effect.type)?.implicitTarget === true);
 
 /** Progression `perSuccessLevels` : {every, add, field = 'level'} (entiers, `field` dans la grammaire). */
 export function progressionError(progression) {

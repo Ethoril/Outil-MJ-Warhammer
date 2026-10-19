@@ -12,7 +12,7 @@
 import { calendarDurationUnits, targetRuleFactFields } from '../core/v5-divine-grammar.js';
 import { campaignDurationSeconds } from '../core/v5-game-time.js';
 import { spellObjectChoices } from '../core/equipment.js';
-import { effectHandler } from '../core/v5-divine-effect-handlers.js';
+import { effectHandler, hasImplicitCasterTarget } from '../core/v5-divine-effect-handlers.js';
 
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
 const CHARACTERISTIC_KINDS = new Set(['characteristic', 'characteristic-bonus']);
@@ -56,6 +56,8 @@ const needsDistance = params => (NUMERIC_KINDS.has(params?.range?.kind) && !(par
 
 /** Faits de cible demandés par le contrat : [{field, label, help, required, custom?}], dans l'ordre d'affichage. */
 export function targetFactFields(contract) {
+  // Le prêtre est la cible implicite (invocations) : aucun fait de portée ni de cible à fournir.
+  if (hasImplicitCasterTarget(contract)) return [];
   const params = contract?.params || {};
   const rules = contract?.targetRules || (contract?.extensions || []).flatMap(row => row.targetRules || []);
   const rows = new Map();
@@ -141,6 +143,7 @@ export function describeDivineForm(contract, { actor } = {}) {
   return {
     contractId: contract?.id,
     selfTargeted: isSelfTargeted(contract),
+    implicitTarget: hasImplicitCasterTarget(contract),
     areaTargets: targetsParam.kind === 'area' || targetsParam.unit === 'yards' || targetsParam.unit === 'allies',
     targetLimit,
     targetFacts: targetFactFields(contract),

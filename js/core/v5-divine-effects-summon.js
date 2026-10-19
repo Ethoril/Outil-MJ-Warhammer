@@ -37,6 +37,8 @@ function numberedName(name, participants = []) {
 }
 
 const handler = {
+  // Invocation portée par le prêtre : aucune cible désignée requise (hasImplicitCasterTarget).
+  implicitTarget: true,
   validate(effect) {
     if (effect.appliesTo !== 'caster' && effect.casterOnly !== true) return 'summon-creature exige appliesTo "caster".';
     if (!kinds.has(effect.kind)) return 'summon-creature exige kind creature ou sensor.';

@@ -220,6 +220,28 @@ try{
  await waitFor(async()=>(await summons()).length===0,'capteur retiré à l’échéance');await noDuplicate('capteur expiré',0);
  check('Œil de l’aigle : capteur absent de la piste et de l’ordre, ne prend jamais la main, retiré à l’échéance');
 
+ // 4. Sans cocher de cible : le prêtre est la cible implicite (Hurlement du loup, Roi de la Nature), aucun fait de portée demandé.
+ for(const contractId of [HOWL,KING]){
+  await loadState();panel=await choose(await openPanel(),contractId);
+  assert.equal(await panel.getByRole('combobox',{name:/zone confirmée/}).count(),0,'aucun fait « Portée / zone confirmée » à renseigner ('+contractId+')');
+  assert.equal(await panel.getByRole('checkbox',{checked:true}).count(),0,'aucun destinataire coché ('+contractId+')');
+  await baseFields(panel);
+  if(contractId===HOWL)await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).selectOption('endOfTurn');
+  else{
+   const beast=panel.getByRole('combobox',{name:'Bête invoquée',exact:true}),options=await beast.locator('option').evaluateAll(list=>list.map(o=>o.value).filter(Boolean));
+   await beast.selectOption(options[0]);await panel.getByRole('textbox',{name:'Position d’apparition',exact:true}).fill('Devant la prêtresse');
+  }
+  preview=await calculate(panel);
+  assert.doesNotMatch(await preview.innerText(),/cibles? explicites?/i,'l’aperçu ne réclame pas de cible ('+contractId+')');
+  await waitFor(async()=>!await panel.locator('[data-divine-action="apply"]').isDisabled(),'prêt sans cible ('+contractId+')');
+  assert.equal((await summons()).length,0,'aperçu inerte');
+  await apply(panel);await waitFor(async()=>(await summons()).length===1,'créature créée sans cible ('+contractId+')');
+  const created=(await summons())[0];
+  assert.equal(created.extensions.v5.divineSummon.ownerId,'priest');assert.equal((await layersOf()).length,1,'la couche est sur le prêtre');
+  assert.equal(created.extensions.v5.divineSummon.layerId,(await layersOf())[0].id);await noDuplicate('sans cible '+contractId,1);
+ }
+ check('Hurlement du loup et Roi de la Nature sans cocher de cible : aucun fait de portée, aperçu prêt, créature et couche sur le prêtre');
+
  assert.deepEqual(errors,[],'aucune erreur navigateur');receipt.passed=true;
 }catch(error){receipt.error=error.stack;if(page)await page.screenshot({path:resolve(output,'failure.png'),fullPage:true}).catch(()=>{});throw error;
 }finally{receipt.completedAt=new Date().toISOString();writeFileSync(resolve(output,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');await browser?.close();await new Promise(done=>server.close(done));}

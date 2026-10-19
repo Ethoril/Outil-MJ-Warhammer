@@ -171,6 +171,7 @@ export function createDivinePanel({Store,refresh}){
    if(model.factFields[actor.id])factsGroup(content,model.factFields[actor.id]);
   }else{
    const targets=node('fieldset','workspace-resolution-row');targets.append(node('legend','','Destinataires de la prière'));
+   if(descr.implicitTarget)targets.append(node('p','workspace-muted','Facultatif : le prêtre est la cible implicite de cette prière, aucune case à cocher.'));
    if(descr.targetLimit!==null)targets.append(node('p','workspace-muted',`Jusqu’à ${descr.targetLimit} destinataire(s) avant extensions.`));
    for(const [index,participant] of participants.filter(row=>row.zone==='active').entries()){
     const wrap=node('label','workspace-type'),check=node('input');check.type='checkbox';check.checked=state.targetIds.includes(participant.id);check.setAttribute('aria-label','Destinataire '+participant.name);
