@@ -2905,5 +2905,110 @@
     "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
     "risk": "moyen",
     "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-075",
+    "sourceBook": "L06",
+    "printedPage": 119,
+    "label": "Coude-à-coude : couvrir la retraite",
+    "summaryFr": "Un allié peut se Désengager gratuitement d’un adversaire aussi engagé avec le porteur du talent ; engagement commun attesté.",
+    "mechanic": "Un allié peut se Désengager gratuitement d’un adversaire aussi engagé avec le porteur du talent ; engagement commun attesté.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-situations.js:79"
+    ],
+    "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
+    "risk": "moyen",
+    "limit": "Circuit de talent avec faits explicites, sans lecteur générique de Trait."
+  },
+  {
+    "id": "C0-L06-076",
+    "sourceBook": "L06",
+    "printedPage": 119,
+    "label": "Flagellant : Frénésie sur blessure",
+    "summaryFr": "Si une autre capacité autorise Frénésie, une Blessure reçue permet d’y entrer sans Test.",
+    "mechanic": "Si une autre capacité autorise Frénésie, une Blessure reçue permet d’y entrer sans Test.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-situations.js:32"
+    ],
+    "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
+    "risk": "moyen",
+    "limit": "Circuit de talent avec faits explicites, sans lecteur générique de Trait."
+  },
+  {
+    "id": "C0-L06-077",
+    "sourceBook": "L06",
+    "printedPage": 357,
+    "label": "À Sang-froid V5",
+    "summaryFr": "Avantage aux Tests de Calme, donc aussi aux résistances de Psychologie utilisant cette compétence ; maintien initial de Surpris distinct.",
+    "mechanic": "Avantage aux Tests de Calme, donc aussi aux résistances de Psychologie utilisant cette compétence ; maintien initial de Surpris distinct.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:202"
+    ],
+    "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
+    "risk": "moyen",
+    "limit": "Étiquette transportée, effet générique de ce Trait non prouvé."
+  },
+  {
+    "id": "C0-L09-010",
+    "sourceBook": "L09",
+    "printedPage": 46,
+    "label": "À Sang-froid : variante Temple of Spite",
+    "summaryFr": "Inverse les Tests de Calme ratés au lieu de leur donner l’Avantage ; version à choisir explicitement.",
+    "mechanic": "Inverse les Tests de Calme ratés au lieu de leur donner l’Avantage ; version à choisir explicitement.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:202"
+    ],
+    "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
+    "risk": "moyen",
+    "limit": "Étiquette transportée, effet générique de ce Trait non prouvé."
+  },
+  {
+    "id": "C0-L11-018",
+    "sourceBook": "L11",
+    "printedPage": 15,
+    "label": "Borrowed Courage",
+    "summaryFr": "Le gobelin monté sur une araignée géante ne subit pas Effrayé envers les elfes.",
+    "mechanic": "Le gobelin monté sur une araignée géante ne subit pas Effrayé envers les elfes.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés."
+  },
+  {
+    "id": "C0-L11-019",
+    "sourceBook": "L11",
+    "printedPage": 61,
+    "label": "Endless Malice : témoins",
+    "summaryFr": "Après proie tuée ou incapacitée, Volonté ou prochain Mouvement/Action consacrés à la déchirer ; critique si inconsciente, Peur 2 des témoins.",
+    "mechanic": "Après proie tuée ou incapacitée, Volonté ou prochain Mouvement/Action consacrés à la déchirer ; critique si inconsciente, Peur 2 des témoins.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés."
+  },
+  {
+    "id": "C0-L02-006",
+    "sourceBook": "L02",
+    "printedPage": 81,
+    "label": "Mort du compagnon lié",
+    "summaryFr": "Mort non naturelle : Calme −20, ou 0 pour un elfe, sinon 2d10 Blessures directes ; traumatisme psychologique. Règle réciproque pour le familier, avec issue de Destin décrite par la source.",
+    "mechanic": "Mort non naturelle : Calme −20, ou 0 pour un elfe, sinon 2d10 Blessures directes ; traumatisme psychologique. Règle réciproque pour le familier, avec issue de Destin décrite par la source.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-magic-reminder-flags.js:33"
+    ],
+    "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés."
   }
 ]

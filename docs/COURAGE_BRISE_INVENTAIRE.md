@@ -6,7 +6,7 @@ Socle : L06 V5 ; L05 sert aux noms français. Les suppléments gardent leurs for
 
 Statuts : engine = clause calculée ; assisted = calcul limité à un circuit ou à des faits/actions MJ ; reminder = donnée ou rappel sans circuit générique établi ; absent = clause non raccordée dans le périmètre vérifié. Un Trait affiché ne vaut pas exécution. Les limites sont détaillées dans le JSON.
 
-193 entrées : engine 7, assisted 51, reminder 32, absent 103.
+200 entrées : engine 7, assisted 53, reminder 34, absent 106.
 
 | ID | Livre, page imprimée | Règle | Statut | Preuve actuelle |
 | --- | --- | --- | --- | --- |
@@ -203,20 +203,27 @@ Statuts : engine = clause calculée ; assisted = calcul limité à un circuit ou
 | C0-L17-025 | L17 p. 149 | Le Bœuf reste debout | assisted | js/data/v5-spell-contracts.json:6990 ; js/core/v5-spell-contracts.js:2326 |
 | C0-L06-074 | L06 p. 158 | Poursuite V5 | absent | js/core/v5-broken-escape.js:19 |
 | C0-L17-026 | L17 p. 125 | Désespoir après sort | reminder | js/core/v5-spell-contracts.js:153 |
+| C0-L06-075 | L06 p. 119 | Coude-à-coude : couvrir la retraite | assisted | js/core/v5-talent-situations.js:79 |
+| C0-L06-076 | L06 p. 119 | Flagellant : Frénésie sur blessure | assisted | js/core/v5-talent-situations.js:32 |
+| C0-L06-077 | L06 p. 357 | À Sang-froid V5 | reminder | js/core/v5-divine-effects-gear.js:202 |
+| C0-L09-010 | L09 p. 46 | À Sang-froid : variante Temple of Spite | reminder | js/core/v5-divine-effects-gear.js:202 |
+| C0-L11-018 | L11 p. 15 | Borrowed Courage | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L11-019 | L11 p. 61 | Endless Malice : témoins | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L02-006 | L02 p. 81 | Mort du compagnon lié | absent | js/core/v5-magic-reminder-flags.js:33 |
 
 ## Couverture consultée
 
 - L06 : passages des pages physiques 3, 4, 5, 6, 115, 119, 120, 124, 126, 128, 133, 143, 145, 155, 157, 158, 159, 163, 168, 169, 181, 183, 184, 185, 186, 189, 218, 223, 224, 226, 228, 238, 244, 245, 246, 247, 248, 252, 255, 256, 257, 258, 259, 260, 304, 309, 356, 357, 358, 359, 360, 361, 362, 363 ; repérage lexical puis passages ciblés, divergences conservées.
 - L01 : passages des pages physiques 1, 2, 28, 31, 32, 33, 58, 66, 82, 83, 84, 85, 86, 87, 88, 90, 92 ; recherche lexicale et pages ciblées relues.
-- L02 : passages des pages physiques 2, 3, 55, 62, 63, 64, 65, 74, 87 ; recherche lexicale et pages ciblées relues.
+- L02 : passages des pages physiques 2, 3, 55, 62, 63, 64, 65, 74, 87, 81 ; recherche lexicale et pages ciblées relues.
 - L03 : passages des pages physiques 2, 3, 30, 91 ; renvois à des talents et récits ; aucune nouvelle règle C0 isolée.
 - L04 : passages des pages physiques 2, 3, 25, 88, 100, 127 ; recherche lexicale et pages ciblées relues.
 - L05 : passages des pages physiques 168, 170, 190, 193, 194 ; repères français ; pagination physique = imprimée + 2 sur les pages contrôlées.
 - L07 : passages des pages physiques 91, 128, 130, 137, 144, 150, 151, 166, 180, 181, 183, 205 ; recherche lexicale et pages ciblées relues.
 - L08 : passages des pages physiques 37, 48, 49, 80, 86, 88, 107, 113, 114 ; recherche lexicale et pages ciblées relues.
-- L09 : passages des pages physiques 33, 44, 51, 52, 59, 63, 66, 67, 68, 116 ; recherche lexicale et pages ciblées relues.
+- L09 : passages des pages physiques 33, 44, 51, 52, 59, 63, 66, 67, 68, 116, 46 ; recherche lexicale et pages ciblées relues.
 - L10 : passages des pages physiques 2, 19, 38, 50, 51, 68, 74, 86 ; profils et récits ; aucune nouvelle clause chiffrée C0 isolée dans les passages consultés.
-- L11 : passages des pages physiques 41, 45, 70, 75, 77, 81, 90, 91, 100, 107, 116, 135, 136, 137 ; repérage lexical puis passages ciblés, divergences conservées.
+- L11 : passages des pages physiques 41, 45, 70, 75, 77, 81, 90, 91, 100, 107, 116, 135, 136, 137, 15, 61 ; repérage lexical puis passages ciblés, divergences conservées.
 - L12 : passages des pages physiques 6, 9, 82, 83, 89, 96, 100, 101 ; repérage lexical puis passages ciblés, divergences conservées.
 - L13 : passages des pages physiques 79, 106, 107, 117, 127, 132, 134, 140, 141 ; repérage lexical puis passages ciblés, divergences conservées.
 - L14 : passages des pages physiques 50, 80 ; repérage lexical puis passages ciblés, divergences conservées.
@@ -245,6 +252,7 @@ Statuts : engine = clause calculée ; assisted = calcul limité à un circuit ou
 - **C0-Q17** : Portées en caractéristiques entières, pourcentages V4 et Avantage : adapter explicitement les nouvelles règles aux conventions V5, en conservant les décisions divines existantes.
 - **C0-Q18** : Moral de masse, séquelles psychologiques, rançonnement des PJ, rancunes et drogues sont des sous-systèmes à arbitrer ; un bouton générique d’État n’en démontre aucune automatisation.
 - **C0-Q19** : Masque mortuaire et Givre d’Ulric ne précisent pas l’indice de Peur ; les contrats divins possèdent déjà leurs décisions MJ. Ne pas en déduire l’indice de toutes les autres sources.
+- **C0-Q20** : À Sang-froid : Avantage de Calme dans L06 p.357, inversion dans L09 p.46. Quelle règle utiliser pour les profils du supplément ?
 
 ## Validation et portée
 
