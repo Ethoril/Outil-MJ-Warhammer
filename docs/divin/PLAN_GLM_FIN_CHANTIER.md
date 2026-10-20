@@ -6,7 +6,7 @@ Plan written by the orchestrator (Claude) for a single long GLM 5.3 session. Eve
 
 - Steps in order. For EACH step: (1) write the new test file(s) FIRST and run them: they must FAIL for the expected reason; (2) implement; (3) run the step's acceptance command; (4) run the full suite `node --test --test-concurrency=4` (≈3240 tests; one known environmental failure is acceptable ONLY if it is `E0 indépendant — la recette refuse un cwd externe` and only in a fresh worktree); (5) `git add -A && git commit -m "<type>(divin): <French summary> (GLM 5.3)"`. Then next step.
 - Allowed files are listed per step. Generated files `js/data/v5-divine-contracts.json` and `docs/divin/DIVIN_INVENTAIRE.json` change ONLY through `node tools/build-v5-divine-contracts.mjs` (then `--check` must pass).
-- Existing tests: never edit one, EXCEPT the ones a step explicitly names, and count tests (`tests/divin-v5-blessings-cults.test.js`, `tests/divin-v5-catalogue.test.js`) when a status changes manual → assisted/implemented: update only the expected list/count, nothing else, and say so in the commit message.
+- Existing tests: never edit one, EXCEPT (a) the ones a step explicitly names, and (b) AMENDMENT 20/10 after the first run: any existing assertion that pins the status, the effect list or a status count of the contract the step changes (known: `tests/divin-v5-blessings-cults.test.js`, `tests/divin-v5-catalogue.test.js`, `tests/divin-v5-up-in-arms.test.js`, `tests/divin-v5-e0-independent.test.js`; there may be others): update ONLY that pinned value/list/count for that contract, nothing else, and list each such edit in the commit message.
 - NEVER change a game rule or existing behaviour to make a test pass. If an expectation below looks impossible or wrong, or a step needs a file outside its list: write the reason in `tmp/glm-fin-chantier/BLOCKED-<step>.md`, `git checkout -- .` for that step, and go to the next step.
 - No new dependency, no reformatting, no `git stash`, no push, edit files one at a time (never parallel edits on one file).
 - Code style: match the surrounding code; short French comments only where the existing code has them; generic declarative effects (never a case keyed on a prayer name).
@@ -14,7 +14,7 @@ Plan written by the orchestrator (Claude) for a single long GLM 5.3 session. Eve
 - Handler contract: read `js/core/v5-divine-effect-handlers.js` lines 1-35 once (needs / resolve / buildLayer / applyInstant / inputFields / receipt / appliesTo / perSuccessLevels). New effect types are registered in `js/core/v5-divine-grammar.js` `effectTypes`.
 - Final message (short): one line per step: DONE (commit hash) or BLOCKED (reason), then the last full-suite summary.
 
-## Step 1 — R19/R20: deferred removal of an orphan magic summon after a spell interaction
+## Step 1 — R19/R20 (DONE, commit 06d1eda): deferred removal of an orphan magic summon after a spell interaction
 
 Today `previewSpellInteraction` ends with `removeExpiredSummons(next,{deferCurrent:false})` (`js/core/v5-magic-turn.js` ~line 218): ending a summoning spell early (or any interaction) during the summon's own Turn removes it immediately and gives the Turn back to `order[0]` (the caster plays again, the next combatant is skipped). GM-approved rule (same as R18): an orphan summon that is the current actor (and not first in order) stays until the next command, then the Turn passes to its normal successor.
 
