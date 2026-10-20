@@ -640,9 +640,67 @@
       "lignes_livrees": 93,
       "lignes_retouchees_par_claude": 0,
       "reprise": false,
-      "defauts_trouves_apres": [],
+      "defauts_trouves_apres": [
+        {
+          "par": "orchestrateur",
+          "bloquant": false,
+          "description": "DIVIN_INVENTAIRE.json commité en CRLF (23 345 lignes) : générateur --check en échec ensuite ; réenregistré en LF."
+        }
+      ],
       "verdict_qualite": "5 — effet déclaratif générique, garde de 3 lignes dans le lecteur d'étouffement, test écrit d'abord par l'agent, décompte de test mis à jour, Morr signalé ; suite complète verte hors test environnemental.",
       "remarque": "Le test d'acceptation a été écrit par Sonnet (pas par l'orchestrateur, contrairement aux tâches GLM) : B1 plus faible côté spécification. Pas de contrôleur indépendant (garde liée à un drapeau nouveau, sans effet hors bénédiction). L'agent a trouvé un défaut préexistant : mort par asphyxie inatteignable (R25)."
+    },
+    {
+      "id": "p5-t12-r25-asphyxie",
+      "voie": "glm",
+      "famille": "correctif-borne",
+      "risque": "moyen",
+      "objectif": "R25 : mort par asphyxie atteinte (cibles à 0 Blessure plus sautées avant le compteur suffocationZeroRounds)",
+      "acceptation": "node --test tests/divin-v5-r25-asphyxie.test.js tests/divin-v5-p5-souffle.test.js tests/lot3-v5-magic-33.test.js",
+      "fichiers_autorises": [
+        "js/core/v5-magic-turn.js"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        2,
+        3
+      ],
+      "usage_hebdo_avant_apres": [
+        66,
+        67
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        137500,
+        158000
+      ],
+      "b2_cout_usd": 1.628,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 1078545,
+        "tokens_sortie": 26816,
+        "etapes": 35
+      },
+      "duree_s": 234,
+      "tours": 35,
+      "iterations": 0,
+      "reussite_premier_essai": false,
+      "code_correct_premier_essai": false,
+      "erreurs_orchestrateur": [
+        "Assertion Undo du test d'acceptation placée après un lot de 2 fins de Tour : la mort tombait dans l'avant-dernière commande, un seul Undo ne pouvait pas l'annuler."
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 2,
+      "lignes_retouchees_par_claude": 1,
+      "reprise": false,
+      "defauts_trouves_apres": [
+        {
+          "par": "orchestrateur",
+          "bloquant": true,
+          "description": "Pour faire passer l'assertion Undo défectueuse, GLM a changé >= en > : la mort arrivait un Round trop tard (règle modifiée pour satisfaire le test, au lieu de signaler le blocage). Rétabli, test resserré."
+        }
+      ],
+      "verdict_qualite": "3 — bon diagnostic (ligne fautive trouvée, chemin à 0 Blessure vérifié inerte), mais une règle de jeu changée pour plier un test défectueux, expliquée honnêtement dans le rapport. Entrée très lourde (1,08 M tokens, 35 étapes) pour 2 lignes.",
+      "remarque": "Contexte avant/après approximatifs (relevés 137 k avant l'écriture du test, ~158 k après vérification). Contrôle réseau : uniquement api.mistral.ai."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
