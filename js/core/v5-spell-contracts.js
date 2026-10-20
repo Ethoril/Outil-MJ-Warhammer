@@ -4,6 +4,10 @@ import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
 import {spellAttackNature,previewMagicProtection} from './v5-magic-combat.js';
 import {getV5Fortune} from './v5-resources.js';
 import { consumeDivineLayers } from './v5-divine-effects-gear.js';
+const spellCriticalSeverityReminder = actor => {
+  const bonus = (actor?.extensions?.v5?.divineEffects || []).reduce((sum, layer) => sum + (Number(layer?.criticalSeverityBonus) || 0), 0);
+  return bonus ? ` (${bonus > 0 ? '+' : ''}${bonus} à la gravité : Morsure du Loup)` : '';
+};
 import { previewDispelCasting, markDispelReactionUsed } from './v5-magic-dispel.js';
 import { magicTalentRank, applyMagicAttempt, suffusedCastingBonus, magicalSenseReceipts, effectiveSkillScore, baseCharacteristicScore } from './v5-magic-talents.js';
 /**
@@ -1970,7 +1974,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       targetReceipt.actions.push({
         kind: 'critical-wound',
         location: critLocation,
-        summary: `Blessure Critique infligée (${critLocation})`
+        summary: `Blessure Critique infligée (${critLocation})${spellCriticalSeverityReminder(actor)}`
       });
     }
 
@@ -3085,7 +3089,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if(movement.trajectory.direction!=='disappears'){
       const owner=sourceVortex.participants.find(p=>p.id===actor.id);Object.assign(owner,applySpellEffects(owner,controller,{round,caster:actor}).participant);
     }
-    for(const person of sourceVortex.participants){let receipt=targetResults.find(r=>r.targetId===person.id);if(!receipt && person.id!==actor.id && JSON.stringify(person)===JSON.stringify(people.find(p=>p.id===person.id)))continue;if(!receipt){receipt={targetId:person.id,targetName:person.name,actions:[],woundsLost:0,woundsHealed:0};targetResults.push(receipt);}const original=people.find(p=>p.id===person.id);receipt.vortexParticipant=person;receipt.woundsLost=Math.max(0,original.hp-person.hp);receipt.finalHp=person.hp;if(effectiveCriticalChoice==='critical-wound' && sourceVortex.logs.some(l=>l.detail?.targetId===person.id)){receipt.criticalWoundTriggered=true;receipt.criticalWound={location:sourceVortex.logs.find(l=>l.detail?.targetId===person.id)?.detail?.location || 'Corps',spellId:contract.id,spellName:contract.name,casterId:actor.id};receipt.actions.push({kind:'critical-wound',summary:'Blessure Critique d’incantation : sévérité à résoudre avec les dés explicites.'});}receipt.actions.push(...sourceVortex.logs.filter(l=>l.detail?.targetId===person.id).map(l=>({kind:'vortex-hit',summary:l.text,detail:l.detail})));}
+    for(const person of sourceVortex.participants){let receipt=targetResults.find(r=>r.targetId===person.id);if(!receipt && person.id!==actor.id && JSON.stringify(person)===JSON.stringify(people.find(p=>p.id===person.id)))continue;if(!receipt){receipt={targetId:person.id,targetName:person.name,actions:[],woundsLost:0,woundsHealed:0};targetResults.push(receipt);}const original=people.find(p=>p.id===person.id);receipt.vortexParticipant=person;receipt.woundsLost=Math.max(0,original.hp-person.hp);receipt.finalHp=person.hp;if(effectiveCriticalChoice==='critical-wound' && sourceVortex.logs.some(l=>l.detail?.targetId===person.id)){receipt.criticalWoundTriggered=true;receipt.criticalWound={location:sourceVortex.logs.find(l=>l.detail?.targetId===person.id)?.detail?.location || 'Corps',spellId:contract.id,spellName:contract.name,casterId:actor.id};receipt.actions.push({kind:'critical-wound',summary:'Blessure Critique d’incantation : sévérité à résoudre avec les dés explicites.'+spellCriticalSeverityReminder(actor)});}receipt.actions.push(...sourceVortex.logs.filter(l=>l.detail?.targetId===person.id).map(l=>({kind:'vortex-hit',summary:l.text,detail:l.detail})));}
     sourceVortex.trajectory=movement.trajectory;
   }
   // 7. Gestion du Vortex Magique si applicable
