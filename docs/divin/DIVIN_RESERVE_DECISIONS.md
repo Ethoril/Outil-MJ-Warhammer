@@ -93,3 +93,23 @@ Verdict du contrôleur : publiable, sous condition de bump de version (fait). R�
 | R36 | Attaque Rapide : attaque gratuite hors séquence, une par Round, sans Élan, Test d’Initiative (+0) et arme de la main principale saisis dans le panneau ; le moment « début de Round » reste au MJ. | Déclenchement automatique en début de Round. | Le moteur n’ouvre pas d’attaque hors Tour automatiquement. |
 | R37 | Fureur d’Ulric : Frénésie accordée pendant la durée ; l’attaque gratuite de Frénésie est refusée au porteur ; +1d10 explosif saisi par le MJ au premier coup de mêlée TOUCHÉ de chaque Tour. Le Test de Frénésie « gratuit » suit l’action existante « Entrer en Frénésie ». | Bonus aussi sur un coup manqué. | « premier coup qu’il porte » lu comme coup qui touche. |
 | R38 | Registre des Blessures Critiques : chaque critique d’attaque (principal, second, défensif, Tourbillon) ou de sort est enregistré avec un identifiant ; Larmes de Shallya en retire 1 (+1 par +2 DR) choisi par le MJ ; les États du critique restent ; effet appliqué à l’invocation (rappel : prière de 10 − BSoc Rounds, interrompue = rien). | Retirer aussi les États ; différer l’effet. | Le texte guérit la Blessure, pas ses États ; pas de prière longue dans le moteur. |
+
+## Arbitrages du MJ du 20 octobre (soir), par sélecteurs
+
+Confirmés tels quels : R1 (la créature finit son Tour), R2 (conservées au Recommencer), R3 (le prêtre KO garde ses créatures), R9 (Intimidation en rappel), R21 (gestes manuels génériques), R24 (Souffle : couche inerte), R28 (désignation à l’invocation), R37 (Fureur : coup qui touche).
+
+À implémenter (plan de fin de projet, phase A) :
+- R8 : harmoniser sur « Sans peur [Ennemi] » partout.
+- R11 : Dévotion de la Guerrière : liste des ennemis présents + texte libre en secours.
+- R15 : un participant ajouté en cours de Round est inséré à son rang d’Initiative pour les Tours non joués.
+- R22 : refuser les cibles superflues de Hurlement du loup et Roi de la Nature.
+- R17/R23 : masquer les cases « Destinataires » pour les invocations à cible implicite.
+- R26 : rappel « +20 Morsure du Loup » dans le reçu d’un critique de sort.
+- R30 : Fortune généreuse proposée quand l’inversion change un échec en réussite (toujours sur demande).
+- R33 : Faire monter les enjeux : réussite portée à +6 DR au moins, échec à −6 DR au plus.
+- R36 : rappel d’Attaque Rapide en début de Round.
+- R38 : Larmes de Shallya propose au retrait les États issus du critique guéri (liaison critique → États).
+- D4 (Chance) : relance gratuite si l’acteur PERD le Test opposé, même si son propre Test est réussi.
+- Registre des Blessures Critiques : affiché sur la fiche du participant, avec un bouton « Guérir » manuel.
+
+Hors périmètre retenus : Courroux complet, Brisé avancé, magie (Haie, Sorcellerie, Démonologie, Nécromancie, Chaos ×3, Vampires, Elfes noirs, Grande Gueule, Runes naines, compléments des Collèges ; source V5 EN puis suppléments), bestiaires (livre de base, Imperial Zoo, autres suppléments), audit exhaustif en fin de plan SANS implantation automatique : sélecteur par règle (implanter ou non ; règle complète ou adaptée) pour préserver les règles maison.
