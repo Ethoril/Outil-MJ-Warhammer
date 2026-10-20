@@ -71,7 +71,7 @@ const shots=async prefix=>{
 /** Lance Hurlement du loup par gestes (prêtre cible, à portée, fin du Tour du prêtre). */
 const castHowl=async({roll=45}={})=>{
  const panel=await choose(await openPanel(),HOWL);
- await panel.getByRole('checkbox',{name:'Destinataire Prêtresse',exact:true}).check();
+ assert.equal(await panel.getByRole('checkbox',{name:/^Destinataire /}).count(),0,'cible implicite : aucune case à cocher');
  const range=panel.getByRole('combobox',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await range.count())await range.selectOption('true');
  await baseFields(panel,roll);
  await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).selectOption('endOfTurn');
@@ -107,7 +107,8 @@ try{
  check('Hurlement du loup : aperçu inerte, loup CC 45 / FM 35 / 24 Blessures créé une seule fois, couche sur le prêtre, ligne unique dans la piste');
  await shots('howl-actif');
  panel=await openPanel();
- assert.equal(await panel.locator(`[aria-label="Destinataire ${wolf.name}"]`).count(),1,'le loup est ciblable dans le panneau');
+ await choose(panel,'divine:blessing:myrmidia:battle');
+ assert.equal(await panel.locator(`[aria-label="Destinataire ${wolf.name}"]`).count(),1,'le loup est ciblable par une bénédiction normale');
  const actives=panel.locator('details.workspace-v5-context-details').filter({hasText:'Prières actives du personnage'});
  if(!await actives.evaluate(el=>el.open))await actives.locator('summary').click();
  assert.ok((await actives.innerText()).includes('Invocation : '+wolf.name));
@@ -158,7 +159,7 @@ try{
 
  // 2. Roi de la Nature : animal parmi la liste fermée, position saisie, durée en minutes sur l'horloge de campagne.
  await loadState();panel=await choose(await openPanel(),KING);
- await panel.getByRole('checkbox',{name:'Destinataire Prêtresse',exact:true}).check();
+ assert.equal(await panel.getByRole('checkbox',{name:/^Destinataire /}).count(),0,'cible implicite : aucune case à cocher');
  const kingRange=panel.getByRole('combobox',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await kingRange.count())await kingRange.selectOption('true');
  await baseFields(panel);
  assert.equal(await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).count(),0,'durée en minutes : pas de fin de Round à choisir');
@@ -205,7 +206,7 @@ try{
 
  // 3. Œil de l'aigle : capteur hors ordre, absent de la piste des Tours.
  await loadState();panel=await choose(await openPanel(),EAGLE);
- const eagleSelf=panel.getByRole('checkbox',{name:'Destinataire Prêtresse',exact:true});if(await eagleSelf.count())await eagleSelf.check();
+ assert.equal(await panel.getByRole('checkbox',{name:/^Destinataire /}).count(),0,'Œil de l’aigle : aucune case à cocher');
  const eagleRange=panel.getByRole('combobox',{name:'Prêtresse · Portée / zone confirmée',exact:true});if(await eagleRange.count())await eagleRange.selectOption('true');
  await baseFields(panel);await panel.getByRole('combobox',{name:'Fin de l’effet (choix du MJ)',exact:true}).selectOption('endOfRound');
  preview=await calculate(panel);assert.match(await preview.innerText(),/capteur hors de l’ordre du combat/);

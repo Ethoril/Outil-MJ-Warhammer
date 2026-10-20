@@ -166,12 +166,13 @@ export function createDivinePanel({Store,refresh}){
   const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets,fields:model.effectFields}):[];
   const blocking=new Set(needs.map(row=>row.anchor).filter(Boolean));
   const factsGroup=(container,fields)=>{const group=node('div','workspace-divine-target-facts');for(const fact of fields)formField(group,fact,blocking.has(fact.anchor));container.append(group);};
-  if(descr.selfTargeted){
+  if(descr.implicitTarget){
+   content.append(node('p','workspace-muted','Cible : le prêtre (cible implicite).'));
+  }else if(descr.selfTargeted){
    content.append(node('p','workspace-muted','Cible : le personnage priant.'));
    if(model.factFields[actor.id])factsGroup(content,model.factFields[actor.id]);
   }else{
    const targets=node('fieldset','workspace-resolution-row');targets.append(node('legend','','Destinataires de la prière'));
-   if(descr.implicitTarget)targets.append(node('p','workspace-muted','Facultatif : le prêtre est la cible implicite de cette prière, aucune case à cocher.'));
    if(descr.targetLimit!==null)targets.append(node('p','workspace-muted',`Jusqu’à ${descr.targetLimit} destinataire(s) avant extensions.`));
    for(const [index,participant] of participants.filter(row=>row.zone==='active').entries()){
     const wrap=node('label','workspace-type'),check=node('input');check.type='checkbox';check.checked=state.targetIds.includes(participant.id);check.setAttribute('aria-label','Destinataire '+participant.name);
