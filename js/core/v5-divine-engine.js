@@ -213,8 +213,13 @@ function validateTargetRules(contract, targets, input, resolvedParams = {}, acto
     // can be implicit in preview; selected targets must always match the source.
     if (resolvedParams.targets?.unit === 'self' && targets.length && (targets.length !== 1 || targets[0]?.id !== actor?.id))
     return { error: 'La prière se cible elle-même; choisissez uniquement le prêtre auteur.', needs: [need('targetIds', 'Cible propre du contrat')] };
-    // Tous les effets sont portés par le prêtre (invocations, capteurs) : il est la cible implicite, ni cible explicite ni fait de portée.
-    if (hasImplicitCasterTarget(contract)) return null;
+    // Tous les effets sont portés par le prêtre (invocations, capteurs) : il est la cible implicite, ni cible explicite ni fait de portée ;
+    // comme pour une cible propre, une cible superflue (autre que le prêtre seul) est refusée (R22).
+    if (hasImplicitCasterTarget(contract)) {
+      if (targets.length && (targets.length !== 1 || targets[0]?.id !== actor?.id))
+        return { error: 'La prière se cible elle-même; choisissez uniquement le prêtre auteur.', needs: [need('targetIds', 'Cible propre du contrat')] };
+      return null;
+    }
     if (!targets.length) {
       if (resolvedParams.targets?.unit === 'self') return null;
       if (rules.length || resolvedParams.range?.unit === 'touch' || resolvedParams.targets?.unit === 'yards' || resolvedParams.targets?.unit === 'allies'

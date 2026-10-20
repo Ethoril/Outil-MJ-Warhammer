@@ -150,7 +150,7 @@ test('Roi de la Nature sans cible ni fait : le prêtre porte la couche, l’anim
   assert.equal(summoned(store)[0].extensions.v5.divineSummon.ownerId, 'priest');
 });
 
-test('Hurlement du loup et Roi de la Nature : cibles et faits superflus restent acceptés, même résultat', async () => {
+test('Hurlement du loup et Roi de la Nature : le prêtre seul reste accepté, faits superflus ignorés, même résultat (A2)', async () => {
   for (const [id, more] of [[HOWL, {}], [KING, KING_MORE]]) {
     const bare = await fixture(), extra = await fixture();
     const a = bare.previewDivineExecution(id, input([], more)), b = extra.previewDivineExecution(id, withFacts(['priest'], more));

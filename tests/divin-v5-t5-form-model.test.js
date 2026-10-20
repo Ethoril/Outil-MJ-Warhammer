@@ -200,7 +200,7 @@ test('le moteur accepte ce que le formulaire produit : tous les miracles et bén
   for (const contract of getAllDivineContracts().filter(row => row.status !== 'blocked' && ['blessing', 'miracle'].includes(row.type))) {
     const store = await fixture(contract);
     const descr = describeDivineForm(contract, { actor: people(store).find(row => row.id === 'priest') });
-    const targetIds = descr.selfTargeted ? ['priest'] : ['foe'];
+    const targetIds = descr.implicitTarget ? [] : descr.selfTargeted ? ['priest'] : ['foe'];
     const { request } = autofill(contract, store, { targetIds });
     const preview = store.previewDivineExecution(contract.id, request);
     if (!preview.ready) unusable.push(`${contract.id} : ${preview.error} ${JSON.stringify(preview.needsInput)}`);
