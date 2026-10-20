@@ -842,12 +842,12 @@
       ],
       "modele_orchestrateur": "claude-opus-5-5",
       "usage_5h_avant_apres": [
-        null,
-        null
+        8,
+        10
       ],
       "usage_hebdo_avant_apres": [
         67,
-        null
+        67
       ],
       "contexte_orchestrateur_avant_apres": [
         222000,
@@ -873,6 +873,62 @@
       "defauts_trouves_apres": [],
       "verdict_qualite": "5 — plan directif suivi à la lettre, 13 étapes, premier essai, suite complète verte.",
       "remarque": "B1 inclut l'écartement de Larmes de Shallya (pas de registre des Blessures Critiques d'attaque dans le moteur) et le choix du modèle de zone."
+    },
+    {
+      "id": "p5-t17-fortune-genereuse",
+      "voie": "glm",
+      "famille": "module-effets",
+      "risque": "eleve",
+      "objectif": "Miracle Fortune généreuse (Ranald) automatique : effet générique reverse-dice, inversion des dés au prochain Test demandé, lu par v5-store-action.js",
+      "acceptation": "node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-bountiful-fortune.test.js (+ Chance, Écraser les faibles, caractérisation, décomptes)",
+      "fichiers_autorises": [
+        "docs/divin/sources/miracles/ranald-joueur.mjs",
+        "js/core/v5-divine-effects-conditions.js",
+        "js/core/v5-divine-grammar.js",
+        "js/core/v5-store-action.js",
+        "fichiers générés"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        10,
+        12
+      ],
+      "usage_hebdo_avant_apres": [
+        67,
+        68
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        236500,
+        262000
+      ],
+      "b2_cout_usd": 1.9815,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 1353721,
+        "tokens_sortie": 19614,
+        "etapes": 41
+      },
+      "duree_s": null,
+      "tours": 41,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": false,
+      "erreurs_orchestrateur": [
+        "Plan proposant un marqueur d'exemption, impossible (exemption sans coût refusée) : GLM a trouvé une autre voie."
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 94,
+      "lignes_retouchees_par_claude": 6,
+      "reprise": false,
+      "defauts_trouves_apres": [
+        {
+          "par": "orchestrateur",
+          "bloquant": false,
+          "description": "Relance gratuite et inversion dans la même résolution : retour anticipé, la faveur d'inversion n'était pas consommée ; consommation unifiée (6 lignes)."
+        }
+      ],
+      "verdict_qualite": "4 — a contourné proprement un plan défectueux, bonne gestion de la double reconstruction de l'entrée ; un cas combiné oublié ; 41 étapes, proche du plafond.",
+      "remarque": "Sans contrôleur indépendant ; la suite complète reste verte."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
