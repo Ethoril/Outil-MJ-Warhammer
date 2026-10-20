@@ -1,4 +1,4 @@
-# Passation — chantier prières, miracles et bénédictions (19 octobre 2026)
+# Passation — chantier prières, miracles et bénédictions (mise à jour du 20 octobre 2026)
 
 ## Message à copier dans la nouvelle fenêtre
 
@@ -12,15 +12,15 @@ selon les règles de la passation.
 
 ## Où en est-on
 
-- **Production** : 3.18.0 si la publication du 19/10 a abouti (vérifier `js/version.js` sur https://ethoril.github.io/Outil-MJ-Warhammer/), sinon 3.17.1. `main` = branche `codex/divin-v5` poussée en avance rapide.
+- **Production** : 3.19.0, publiée le 20/10 (main 9fb4e04, vérifiée en ligne). Ajouts : Protection (Test réussi retenu par ennemi), Souffle, Morsure du Loup, Écraser les faibles, Fortune généreuse, N’écoutez point la Sorcière, Malice de Ranald (Tests opposés seulement), Sauvagerie sur critique de sort, mort par asphyxie. `main` = branche `codex/divin-v5` poussée en avance rapide.
 - **Dépôt de travail** : `C:/Users/arnot/.codex/worktrees/divin-v5/Outil MJ Warhammer` (branche `codex/divin-v5`, fichiers en LF). Le checkout `E:/Outil MJ Warhammer` (branche `main`) se met à jour par `git pull --ff-only`.
 - **Contenu livré** : talents (lot 2), magie (lot 3, 277 sorts), prières : 72 bénédictions (12 cultes, 15 effets automatiques sur 19), 128 miracles (livre de base et suppléments), invocations divines (loup, Roi de la Nature, aigle, chat), interface de saisie pilotée par contrat, correctif du Tour des invocations magiques.
 - **Tests** : `node --test --test-concurrency=4` (≈3200 verts) ; recette complète `node tools/run-divine-recipe.mjs` (25 commandes) ; générateur `node tools/build-v5-divine-contracts.mjs` puis `--check`.
 
 ## Reste à faire (par valeur à la table)
 
-1. **Bénédictions en rappel** : Souffle (aucun lecteur d'étouffement hors vortex), Conscience (déclencheur narratif), Protection (test de Calme imposé à l'attaquant : touche la résolution, risque élevé), Convalescence (pas de modèle de maladie).
-2. **~70 miracles en rappel** : surtout narratifs ; quelques-uns demanderaient relances spécifiques, soins de Blessures Critiques, Corruption, stase. Voir l'inventaire du plan P5 (relancer un agent de planification en lecture seule si besoin).
+1. **Bénédictions en rappel** : Conscience et Convalescence seulement (narratives).
+2. **~63 miracles en rappel** (écartés faute de modèle : Larmes de Shallya, Faire monter les enjeux ; candidats restants : Attaque rapide, Fureur d’Ulric, En bon ordre) : surtout narratifs ; quelques-uns demanderaient relances spécifiques, soins de Blessures Critiques, Corruption, stase. Voir l'inventaire du plan P5 (relancer un agent de planification en lecture seule si besoin).
 3. **Résiduels documentés** (réserve R19-R23, P5 D4-D6) : interaction de sort pendant le Tour d'une invocation magique orpheline ; ordre périmé d'un participant ajouté en cours de Round (moteur V5) ; Chance : la gratuité se juge sur le Test propre de l'acteur (pas sur l'opposition) ; coût d'un aperçu supplémentaire avec la bénédiction de Chance ; un sort qui inflige un critique ne consomme pas Sauvagerie.
 4. **Hors périmètre, en réserve** : Courroux complet et Brisé avancé, créatures/PNJ, autres traditions, audit exhaustif des 2694 pages.
 5. **Recette à la table par le MJ** (ergonomie générale) quand tout sera fait.
@@ -31,6 +31,7 @@ selon les règles de la passation.
 - **Chantier à risque** (code de combat partagé : resolution.js, store.js, moteurs de Tour, v5-store-action.js) : tests de caractérisation d'abord (vérifiés par mutations quand c'est possible), puis le code, puis un contrôleur indépendant (agent `verifier` distinct), puis la recette complète.
 - **Worktrees** : un par agent parallèle, préparés en LF (`git -c core.autocrlf=false rm -q --cached -r . && git -c core.autocrlf=false reset -q --hard`, puis jonction `node_modules`). Un worktree CRLF fausse les empreintes du registre.
 - **Jamais `git stash`** entre agents parallèles (liste partagée) : l'écrire dans chaque brief.
+- **Depuis le 20/10 : GLM pour TOUT le codage** (quota hebdomadaire Claude à 70 % le mardi). Prompts directifs : plan pas à pas, emplacements cherchables par commentaire ou lignes précises, tests de décompte à signaler sans les modifier ; une consigne ouverte (« trouve les bugs », « étends ») épuise le plafond sans résultat.
 - **Sous-agents Claude en Sonnet** ; rapports courts demandés (moins de 15-25 lignes) pour épargner le contexte de l'orchestrateur.
 - **GLM 5.3** (skill `deleguer-glm`, autorisé sur ce projet) : tâches bornées avec test d'acceptation écrit avant, contexte resserré (lignes précises), plafond 2 USD, worktree LF ; journaliser chaque tâche dans `docs/divin/GLM_EVALUATION.json` (usage 5 h et hebdo lus par `get_usage` avant/après, contexte de l'orchestrateur, coût Mistral réel donné par le MJ) ; synthèse `node tools/glm-eval-summary.mjs`.
 - **Décisions prises sans le MJ** : les consigner dans `docs/divin/DIVIN_RESERVE_DECISIONS.md` et les présenter ensuite en sélecteurs.
