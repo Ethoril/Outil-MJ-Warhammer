@@ -70,3 +70,10 @@ Verdict du contrôleur : publiable, sous condition de bump de version (fait). R�
 | --- | --- | --- | --- |
 | R24 | Souffle automatisé pour Manann ET Morr (même effet de bibliothèque) : drapeau `doesNotBreathe`, l'étouffement d'un vortex ne retire plus de Blessures pendant la durée ; la couche d'étouffement reste posée, inerte, et reprend à l'expiration si la cible est encore dans le nuage. Noyade, fumée, gaz : rappel MJ. | Retirer la couche d'étouffement à la bénédiction. | Fidèle au texte (« n'a pas besoin de respirer », pour la durée) ; aucun autre lecteur d'étouffement dans le moteur. |
 | R25 | Défaut préexistant trouvé, CORRIGÉ le 20/10 (GLM, tâche T12) : la mort par asphyxie (E/10 Rounds à 0 Blessure dans un vortex à étouffement) est inatteignable, `roundSpellEffects` saute les cibles à 0 Blessure avant le compteur `suffocationZeroRounds` (v5-magic-turn.js). | Le corriger (moteur des sorts au Tour, partagé). | Hors périmètre ; à décider. |
+
+## Miracles d'Ulric automatisés (20 octobre, GLM)
+
+| # | Décision prise | Alternative | Pourquoi |
+| --- | --- | --- | --- |
+| R26 | Morsure du Loup : +20 à la gravité de tout critique infligé par le prêtre (attaque, second critique, riposte, Tourbillon, défense). Les critiques d'incantation, saisis à la main, ne sont pas majorés automatiquement. | Majorer aussi les critiques de sort. | La gravité des critiques de sort n'est pas calculée par le moteur. |
+| R27 | Écraser les faibles : relance gratuite (sans Point de Chance, par le bouton de relance habituel) d'une attaque ratée, mêlée ou distance, une fois par Round. Avec la bénédiction de Chance active, la relance par Round est utilisée en premier. La restriction « faibles et lâches » du titre n'est pas filtrée. | Exiger un Point de Chance ; filtrer la cible. | Le texte dit seulement « relancer une attaque ratée » ; le titre est d'ambiance. |

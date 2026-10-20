@@ -759,6 +759,72 @@
       ],
       "verdict_qualite": "4 — conception propre (effet générique déclaratif, lecteur unique), contrat et générateur bien tenus ; deux sites de critique oubliés, trouvés par relecture du diff.",
       "remarque": "Pas de contrôleur indépendant (bonus nul sans la couche ; suite complète verte). B1 inclut la recherche du candidat parmi les miracles en rappel (~15 k)."
+    },
+    {
+      "id": "p5-t14-ecraser-les-faibles",
+      "voie": "glm",
+      "famille": "module-effets",
+      "risque": "eleve",
+      "objectif": "Miracle Écraser les faibles (Ulric) automatique : options perRound/attacksOnly de l'effet free-reroll, lues par v5-store-action.js",
+      "acceptation": "node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-crush-the-weak.test.js (+ Chance, caractérisation de la relance, décomptes)",
+      "fichiers_autorises": [
+        "docs/divin/sources/miracles/ulric-pbtt.mjs",
+        "js/core/v5-divine-effects-conditions.js",
+        "js/core/v5-store-action.js",
+        "fichiers générés"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        6,
+        8
+      ],
+      "usage_hebdo_avant_apres": [
+        67,
+        67
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        194500,
+        219000
+      ],
+      "b2_cout_usd": 2.414,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "essai_1": {
+          "tokens_entree": 1396115,
+          "tokens_sortie": 13945,
+          "etapes": 33,
+          "usd": 2.0159,
+          "issue": "plafond de prix atteint en lecture, rien implémenté"
+        },
+        "essai_2": {
+          "tokens_entree": 261566,
+          "tokens_sortie": 7245,
+          "etapes": 12,
+          "usd": 0.3981,
+          "issue": "réussi"
+        }
+      },
+      "duree_s": 240,
+      "tours": 45,
+      "iterations": 1,
+      "reussite_premier_essai": false,
+      "code_correct_premier_essai": false,
+      "erreurs_orchestrateur": [
+        "Premier prompt trop ouvert (« étendre l'effet ») : GLM a tout exploré et brûlé le plafond. Le second, avec un plan pas à pas et des lignes exactes, a réussi en 12 étapes."
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 41,
+      "lignes_retouchees_par_claude": 2,
+      "reprise": false,
+      "defauts_trouves_apres": [
+        {
+          "par": "orchestrateur",
+          "bloquant": false,
+          "description": "Avec Chance et Écraser les faibles actives, une attaque ratée consommait d'abord la relance unique de Chance ; priorité donnée à la relance par Round (2 lignes)."
+        }
+      ],
+      "verdict_qualite": "4 — code propre et conforme au plan, Chance inchangée ; le succès dépend d'un prompt très directif (l'orchestrateur conçoit, GLM exécute).",
+      "remarque": "Fichier de combat partagé (v5-store-action.js) : pas de contrôleur indépendant, garde explicite (options absentes = comportement d'avant, prouvé par les tests Chance et la caractérisation p5-char-fortune-reroll)."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
