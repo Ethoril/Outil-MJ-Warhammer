@@ -180,7 +180,7 @@ test('statuts honnêtes : un contrat manuel ne porte aucun effet appliqué, les 
       assert.ok(row.clauses.filter(clause => clause.id !== 'catalogue-entry').every(clause => clause.mode === 'manual'), name);
     }
   }
-  // Dévotion de la Guerrière : assistée, l'ennemi est saisi au lancement (un Intrépide sans spécialisation ne s'applique à aucun ennemi : fait manquant talent.specialization).
+  // Dévotion de la Guerrière : assistée, l'ennemi est saisi au lancement (un Sans peur [Ennemi] sans spécialisation ne s'applique à aucun ennemi : fait manquant talent.specialization).
   assert.equal(byName('Dévotion de la Guerrière').status, 'assisted');
   assert.match(byName('Dévotion de la Guerrière').sourceDelta, /talent.specialization/);
   assert.ok(byName('En Bon Ordre').clauses.some(clause => clause.id === 'broken-from-fleeing'));

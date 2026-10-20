@@ -9,7 +9,7 @@ const foes = 'orques, gobelins, morts-vivants et serviteurs des Puissances de la
 export const miracles = [
   {
     name: 'Flambeau de Vertu', canonicalName: 'Beacon of Righteous Virtue', printedPage: 226,
-    summary: 'Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Intrépide (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.',
+    summary: 'Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Sans peur (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.',
     params: { range: { kind: 'self' }, targets: { kind: 'special' }, duration: rounds },
     status: 'assisted',
     effect: null,

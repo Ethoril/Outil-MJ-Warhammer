@@ -43,7 +43,7 @@ async function cast(store, contractId, more = {}) {
 }
 const talentRows = rows => rows.map(row => [row.id, row.specialization, row.rank, row.temporary]);
 
-test('Dévotion de la Guerrière : assistée, grant-talent Intrépide dont l’ennemi vient de la saisie', () => {
+test('Dévotion de la Guerrière : assistée, grant-talent Sans peur [Ennemi] dont l’ennemi vient de la saisie', () => {
   const contract = getDivineContract(DEVOTION);
   assert.equal(contract.status, 'assisted');
   assert.deepEqual(contract.effects.map(effect => [effect.type, effect.specializationFrom, effect.talents.map(row => row.id)]), [['grant-talent', 'input', ['talent-fearless']]]);
@@ -52,7 +52,7 @@ test('Dévotion de la Guerrière : assistée, grant-talent Intrépide dont l’e
   assert.ok(contract.clauses.some(row => row.id === 'fear-only' && row.mode === 'manual'));
 });
 
-test('Dévotion de la Guerrière : ennemi saisi figé à l’aperçu, Intrépide (ennemi) sur l’allié, retiré à l’échéance, Undo et Redo', async () => {
+test('Dévotion de la Guerrière : ennemi saisi figé à l’aperçu, Sans peur [Ennemi] sur l’allié, retiré à l’échéance, Undo et Redo', async () => {
   const store = await fixture();
   const s0 = world(store);
   const { preview } = await cast(store, DEVOTION, { ...allyFacts, talent: { specialization: '  Gobelins \n des  collines ' } });

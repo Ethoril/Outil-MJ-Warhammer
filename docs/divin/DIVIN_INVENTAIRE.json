@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:f7a64c99d871b32b0c2d3ce6496b08b6e8ffc97dc0092a8353fda39a28dffdb7",
+  "sourceFingerprint": "sha256:07c001f4f45c8acf0d20d8ed9af7ade3d4d660cd1d8aef0c497d08a55d9c4ce2",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -9613,7 +9613,7 @@
           "talents": [
             {
               "id": "talent-fearless",
-              "name": "Intrépide",
+              "name": "Sans peur",
               "rank": 1
             }
           ],
@@ -9628,7 +9628,7 @@
       ],
       "labels": {
         "canonicalName": "Shieldmaiden’s Devotion",
-        "effect": "Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi), l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.",
+        "effect": "Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Sans peur [Ennemi], l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.",
         "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
@@ -9640,7 +9640,7 @@
         {
           "id": "fearless-enemy",
           "mode": "engine",
-          "text": "Chaque Myrmidien désigné gagne le Talent Intrépide (Ennemi) contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.",
+          "text": "Chaque Myrmidien désigné gagne le Talent Sans peur [Ennemi] contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.",
           "sourceRef": "v5-shieldmaiden-s-devotion"
         },
         {
@@ -17894,7 +17894,7 @@
       ],
       "labels": {
         "canonicalName": "Beacon of Righteous Virtue",
-        "effect": "Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Intrépide (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.",
+        "effect": "Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Sans peur (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [

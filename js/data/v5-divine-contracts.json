@@ -1258,7 +1258,7 @@
         "duree": "4 Rounds",
         "effet": "Vos prières chantées remplissent le cœur des fidèles avec l'intrépidité de ses plus braves guerrières. Tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi). Cet ennemi peut être un individu spécifique ou une espèce particulière."
       },
-      "v5Summary": "Le Talent Intrépide du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Intrépide sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "v5Summary": "Le Talent Sans peur du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Sans peur [Ennemi] sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
@@ -12395,7 +12395,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le Talent Intrépide du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Intrépide sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
+      "sourceDelta": "Le Talent Sans peur du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Sans peur [Ennemi] sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
       "params": {
         "range": {
           "kind": "fixed",
@@ -12445,7 +12445,7 @@
           "talents": [
             {
               "id": "talent-fearless",
-              "name": "Intrépide",
+              "name": "Sans peur",
               "rank": 1
             }
           ],
@@ -12464,7 +12464,7 @@
       ],
       "labels": {
         "canonicalName": "Shieldmaiden’s Devotion",
-        "effect": "Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi), l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.",
+        "effect": "Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Sans peur [Ennemi], l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.",
         "sourceStatus": "V4 EN supplement L13 source checked"
       },
       "clauses": [
@@ -12476,7 +12476,7 @@
         {
           "id": "fearless-enemy",
           "mode": "engine",
-          "text": "Chaque Myrmidien désigné gagne le Talent Intrépide (Ennemi) contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.",
+          "text": "Chaque Myrmidien désigné gagne le Talent Sans peur [Ennemi] contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.",
           "sourceRef": "v5-shieldmaiden-s-devotion"
         },
         {
@@ -21220,7 +21220,7 @@
       ],
       "labels": {
         "canonicalName": "Beacon of Righteous Virtue",
-        "effect": "Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Intrépide (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.",
+        "effect": "Tous les alliés qui vous voient retirent aussitôt tous leurs États Brisé et gagnent le talent Sans peur (Tout) tant que le miracle dure et que vous restez dans leur ligne de vue. Vous causez la Peur aux orques et aux gobelins.",
         "sourceStatus": "V5 base source checked"
       },
       "clauses": [
@@ -27083,5 +27083,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:f7a64c99d871b32b0c2d3ce6496b08b6e8ffc97dc0092a8353fda39a28dffdb7"
+  "sourceFingerprint": "sha256:07c001f4f45c8acf0d20d8ed9af7ade3d4d660cd1d8aef0c497d08a55d9c4ce2"
 }

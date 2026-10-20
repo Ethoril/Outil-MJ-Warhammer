@@ -123,21 +123,21 @@ export const miracles = [
   },
   {
     name: 'Dévotion de la Guerrière', canonicalName: 'Shieldmaiden’s Devotion', printedPage: 79,
-    summary: 'Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Intrépide (Ennemi), l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.',
+    summary: 'Vos prières chantées emplissent les fidèles de l’intrépidité des plus braves Guerrières : tous les Myrmidiens à portée gagnent le Talent Sans peur [Ennemi], l’ennemi étant un individu précis ou une espèce, choisi par le prêtre.',
     params: { range: { kind: 'fixed', value: 36, unit: 'yards' }, targets: special, duration: rounds(4) },
     status: 'assisted',
-    effects: [{ type: 'grant-talent', talents: [{ id: 'talent-fearless', name: 'Intrépide', rank: 1 }], specializationFrom: 'input' }],
+    effects: [{ type: 'grant-talent', talents: [{ id: 'talent-fearless', name: 'Sans peur', rank: 1 }], specializationFrom: 'input' }],
     targetRules: ['ally', 'within-range'],
     needsInput: [
       { id: 'myrmidians', text: 'Quels Myrmidiens sont à portée (36 yards) ?' }
     ],
     clauses: [
-      { id: 'fearless-enemy', mode: 'engine', text: 'Chaque Myrmidien désigné gagne le Talent Intrépide (Ennemi) contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.' },
+      { id: 'fearless-enemy', mode: 'engine', text: 'Chaque Myrmidien désigné gagne le Talent Sans peur [Ennemi] contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.' },
       { id: 'myrmidians', mode: 'manual', text: 'Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 yards ou moins.' },
       { id: 'fear-only', mode: 'manual', text: 'En V5 (p.119) le Talent protège de la Peur du groupe choisi, non de sa Terreur ni de l’Intimidation.' },
       { id: 'duration', mode: 'engine', text: 'Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 yards (+36 par tranche).' }
     ],
-    sourceDelta: 'Le Talent Intrépide du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Intrépide sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. ' + v4Unit
+    sourceDelta: 'Le Talent Sans peur du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Sans peur [Ennemi] sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. ' + v4Unit
   },
   {
     name: 'Compétence Martiale', canonicalName: 'Skill of Combat', printedPage: 79,

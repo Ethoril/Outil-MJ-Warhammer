@@ -33,7 +33,7 @@ test('nine supplemental miracles have their verified Up in Arms source and are c
     assert.equal(row.source.sourceStatus, 'read-and-page-checked');
     assert.equal(row.sourceReceipt.sourceBookSha256, sourceHash);
     assert.notEqual(row.status, 'blocked');
-    assert.match(row.sourceDelta, /décision MJ|Aucun type d’effet|Page 79|Le Talent Intrépide/i);
+    assert.match(row.sourceDelta, /décision MJ|Aucun type d’effet|Page 79|Le Talent Sans peur/i);
     assert.equal(row.clauses.find(clause => clause.id === 'catalogue-entry').mode, 'source-checked');
   }
   const { moduleMiracles, ...counts } = inventory.counts;
