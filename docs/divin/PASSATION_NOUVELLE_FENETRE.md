@@ -12,7 +12,7 @@ selon les règles de la passation.
 
 ## Où en est-on
 
-- **Production** : 3.19.0, publiée le 20/10 (main 9fb4e04, vérifiée en ligne). Ajouts : Protection (Test réussi retenu par ennemi), Souffle, Morsure du Loup, Écraser les faibles, Fortune généreuse, N’écoutez point la Sorcière, Malice de Ranald (Tests opposés seulement), Sauvagerie sur critique de sort, mort par asphyxie. `main` = branche `codex/divin-v5` poussée en avance rapide.
+- **Production** : 3.20.0, publiée le 20/10 au soir (main e5f32d0, vérifiée en ligne) : plan GLM de fin de chantier (docs/divin/PLAN_GLM_FIN_CHANTIER.md, 7 étapes faites). Avant, 3.19.0 (9fb4e04). Ajouts : Protection (Test réussi retenu par ennemi), Souffle, Morsure du Loup, Écraser les faibles, Fortune généreuse, N’écoutez point la Sorcière, Malice de Ranald (Tests opposés seulement), Sauvagerie sur critique de sort, mort par asphyxie. `main` = branche `codex/divin-v5` poussée en avance rapide.
 - **Dépôt de travail** : `C:/Users/arnot/.codex/worktrees/divin-v5/Outil MJ Warhammer` (branche `codex/divin-v5`, fichiers en LF). Le checkout `E:/Outil MJ Warhammer` (branche `main`) se met à jour par `git pull --ff-only`.
 - **Contenu livré** : talents (lot 2), magie (lot 3, 277 sorts), prières : 72 bénédictions (12 cultes, 15 effets automatiques sur 19), 128 miracles (livre de base et suppléments), invocations divines (loup, Roi de la Nature, aigle, chat), interface de saisie pilotée par contrat, correctif du Tour des invocations magiques.
 - **Tests** : `node --test --test-concurrency=4` (≈3200 verts) ; recette complète `node tools/run-divine-recipe.mjs` (25 commandes) ; générateur `node tools/build-v5-divine-contracts.mjs` puis `--check`.
@@ -20,7 +20,7 @@ selon les règles de la passation.
 ## Reste à faire (par valeur à la table)
 
 1. **Bénédictions en rappel** : Conscience et Convalescence seulement (narratives).
-2. **~63 miracles en rappel** (écartés faute de modèle : Larmes de Shallya, Faire monter les enjeux ; candidats restants : Attaque rapide, Fureur d’Ulric, En bon ordre) : surtout narratifs ; quelques-uns demanderaient relances spécifiques, soins de Blessures Critiques, Corruption, stase. Voir l'inventaire du plan P5 (relancer un agent de planification en lecture seule si besoin).
+2. **Miracles en rappel** : seulement des narratifs (et Faire monter les enjeux, sans paliers en V5). Résiduels R19/R20 corrigés ; R21 générique. Reste surtout la **recette à la table par le MJ**. : surtout narratifs ; quelques-uns demanderaient relances spécifiques, soins de Blessures Critiques, Corruption, stase. Voir l'inventaire du plan P5 (relancer un agent de planification en lecture seule si besoin).
 3. **Résiduels documentés** (réserve R19-R23, P5 D4-D6) : interaction de sort pendant le Tour d'une invocation magique orpheline ; ordre périmé d'un participant ajouté en cours de Round (moteur V5) ; Chance : la gratuité se juge sur le Test propre de l'acteur (pas sur l'opposition) ; coût d'un aperçu supplémentaire avec la bénédiction de Chance ; un sort qui inflige un critique ne consomme pas Sauvagerie.
 4. **Hors périmètre, en réserve** : Courroux complet et Brisé avancé, créatures/PNJ, autres traditions, audit exhaustif des 2694 pages.
 5. **Recette à la table par le MJ** (ergonomie générale) quand tout sera fait.
