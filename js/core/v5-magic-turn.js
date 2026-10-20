@@ -304,7 +304,7 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
     if(phase==='expiry' && !(Number.isFinite(effect.expiresAtRound) && (round>effect.expiresAtRound || round>=effect.expiresAtRound && actorId===effect.casterId)))continue;
     const caster = result.find(p => p.id === effect.casterId);
     if (!caster) {logs.push({kind:'effect',text:effect.spellName+' : auteur retiré du combat, effet périodique à résoudre par le MJ.'});continue;}
-    if(Number(target.hp)<=0 && (spec.damage || spec.missile || spec.projectile || spec.suffocation))continue;
+    if(Number(target.hp)<=0 && (spec.damage || spec.missile || spec.projectile))continue;
     if(spec.vortex){if(phase!=='endOfCasterTurn'||actorId!==caster.id||round<=effect.appliedAtRound)continue;const step=randomVortexStep(result,caster,effect,{inputs,round,prefix:'spell:'+effect.id+':vortex:'});requests.push(...step.requests);logs.push(...step.logs);for(const p of step.participants)Object.assign(result.find(x=>x.id===p.id),p);continue;}
     if(spec.quantityPerRound){
       const quantity=Math.min(spellFormulaValue(spec.quantityMaxFormula,caster),Math.max(0,round-effect.appliedAtRound+1)*spec.quantityPerRound);

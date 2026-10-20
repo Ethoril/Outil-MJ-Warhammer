@@ -21,9 +21,9 @@ test('R25 : à 0 Blessure dans le nuage, la cible (BE 3) meurt après 3 Rounds d
   assert.equal(level(subject(store, 'foe'), 'Inconscient'), 1);
   assert.equal(dead(store), false, 'pas morte en tombant à 0');
   await rounds(engine, 2);
-  assert.equal(dead(store), false, 'pas morte avant 3 Rounds à 0');
-  await rounds(engine, 2);
-  assert.equal(dead(store), true, 'morte d’asphyxie');
+  assert.equal(dead(store), false, 'pas morte après 2 Rounds à 0');
+  await rounds(engine, 1);
+  assert.equal(dead(store), true, 'morte d’asphyxie au 3e Round à 0');
   await store.undo();
   assert.equal(dead(store), false, 'Undo annule la mort');
 });
@@ -32,6 +32,6 @@ test('R25 : BE 1, la mort arrive au premier Round passé à 0', async () => {
   const { store, engine } = await fixture(10);
   await rounds(engine, 1);
   assert.equal(dead(store), false);
-  await rounds(engine, 2);
-  assert.equal(dead(store), true);
+  await rounds(engine, 1);
+  assert.equal(dead(store), true, 'morte au 1er Round à 0');
 });
