@@ -6,7 +6,7 @@ import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
  *
  * Le composant ne persiste aucun état d'interface et ne modifie jamais le Store
  * directement. `actions` sert de frontière avec main.js : le composant affiche
- * les données du Store, puis délègue les commandes au contrôleur applicatif.
+ * les données du Store, puis délègue les commandes au contrôleur applicatif (ou à une commande publique du Store).
  * Seul l'aperçu de résolution (lecture seule) est demandé directement au Store.
  */
 import { availableV5TalentActions } from '../core/v5-talent-actions.js';
@@ -379,6 +379,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     setStates: typeof actions.setStates === 'function' ? actions.setStates : null,
     acquireStates: typeof actions.acquireStates === 'function' ? actions.acquireStates : null,
     recoverState: typeof actions.recoverState === 'function' ? actions.recoverState : null,
+    healCriticalWound: typeof actions.healCriticalWound === 'function' ? actions.healCriticalWound : Store.healCriticalWound?.bind(Store),
     applyResolution: typeof actions.applyResolution === 'function' ? actions.applyResolution : null,
     addProfileToCombat: typeof actions.addProfileToCombat === 'function' ? actions.addProfileToCombat : null
   };
@@ -848,6 +849,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     add.disabled = !callbacks.acquireStates && !callbacks.setStates;
     list.appendChild(add);
     states.appendChild(list);
+    const criticals = participant.extensions?.v5?.criticalWounds || [];
+    if (criticals.length) {
+      const registry = node('div', 'workspace-critical-wounds');
+      registry.appendChild(rubric('Blessures Critiques', 'p'));
+      for (const critical of criticals) {
+        const row = node('div', 'workspace-inline-actions');
+        row.appendChild(node('span', '', `${critical.name || 'Blessure Critique'} · ${critical.location || 'Localisation inconnue'} · Round ${critical.round ?? '?'}`));
+        const heal = button('Guérir', 'workspace-secondary', { 'aria-label': `Guérir ${critical.name || 'Blessure Critique'} de ${participant.name}` });
+        heal.dataset.workspaceAction = 'heal-critical'; heal.dataset.actorId = participant.id; heal.dataset.criticalId = critical.id;
+        heal.disabled = !callbacks.healCriticalWound; row.appendChild(heal); registry.appendChild(row);
+      }
+      states.appendChild(registry);
+    }
     if (formOpen) states.appendChild(renderStateForm(participant));
     const momentumButton = button(`Élan : ${hasMomentum(participant) ? 'oui' : 'non'}`, 'workspace-secondary', {
       'aria-label': `Modifier l’Élan de ${participant.name}`, 'aria-pressed': String(hasMomentum(participant)),
@@ -1819,6 +1833,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           added=createV5TimedEffect(added,{authorId:readCombat(Store).currentActorId||participantId,targetId:participantId,expiry});
         }
         updateStates(participantId, [added], `state-add-${participantId}`, true);
+        break;
+      }
+      case 'heal-critical': {
+        if (!participant || !callbacks.healCriticalWound) break;
+        target.disabled = true;
+        Promise.resolve().then(() => callbacks.healCriticalWound(participantId, target.dataset.criticalId)).then(() => render(), error => {
+          state.resolution.error = { field: 'general', message: userMessage(error, 'Blessure Critique non guérie.') }; render();
+        });
         break;
       }
       case 'recover-state': {

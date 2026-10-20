@@ -1607,6 +1607,20 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         return setV5Fortune(draft, subject, amount, { source: captured.source || 'mj', characterId });
       });
     },
+    healCriticalWound(participantId, criticalId) {
+      return api.executeCommand('heal-critical-wound', draft => {
+        const participant = (draft.combat?.participants || []).find(row => row.id === participantId);
+        if (!participant) throw new TypeError('Participant introuvable');
+        const records = participant.extensions?.v5?.criticalWounds || [];
+        const critical = records.find(row => row.id === criticalId);
+        if (!critical) throw new TypeError('Blessure Critique introuvable');
+        participant.extensions.v5.criticalWounds = records.filter(row => row.id !== criticalId);
+        draft.log = [{ id: uid(), kind: 'management', actorId: participantId, actorName: participant.name,
+          text: `${participant.name} : Blessure Critique guérie manuellement · ${critical.name || criticalId}`,
+          detail: { kind: 'heal-critical-wound', critical: cloneValue(critical) } }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      });
+    },
     recoverCondition(id, condition, options = {}) {
       const captured = cloneValue(options);
       return commitV5Effect('recover-condition-v5', id, (participant, draft) => recoverV5Condition(participant, condition, v5EffectContext(draft, captured)), options);

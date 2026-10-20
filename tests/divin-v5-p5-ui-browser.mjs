@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const mime = { '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
+const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
 const CALM_LABEL = 'Test de Calme de l’attaquant (Bénédiction de Protection)';
 const REVERSE_LABEL = 'Inverser les dés de ce Test (Fortune généreuse : 82 devient 28)';
 const QUICK_LABEL = 'Attaque rapide (Myrmidia) : attaque gratuite hors séquence';
@@ -143,6 +143,29 @@ try {
   await page.evaluate(() => window.__render({ actorCamp: 'pj', targetCamp: 'ennemi', actorQuick: false }));
   check(await quickCheckbox.count() === 0, 'acteur sans couche freeAttack : aucune case « Attaque rapide »');
 
+  // A11 : fiche réelle, commande publique du Store observée, puis Annuler par un geste.
+  await context.route('https://**', route => route.abort());
+  const appPage = await context.newPage();
+  appPage.on('pageerror', error => pageErrors.push(error.message));
+  await appPage.goto(`http://127.0.0.1:${port}/index.html`);
+  await appPage.waitForFunction(() => document.querySelector('#app-content')?.style.display === 'block');
+  await appPage.evaluate(async () => {
+    const {Store} = await import('/js/main.js');
+    await Store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'guard',order:['guard'],participants:[
+      {id:'guard',name:'Garde',kind:'PJ',camp:'pj',zone:'active',hp:20,maxHp:20,caracs:{I:40,CC:40,E:30},states:[{id:'bleed',key:'hemorragique',name:'Hémorragique',level:1}],
+        extensions:{v5:{criticalWounds:[{id:'c1',name:'Entaille',location:'Bras gauche',round:2,stateIds:['bleed']}]}}}
+    ]},log:[],diceLines:[],extensions:{v5:{turnIndex:1}}});
+  });
+  await appPage.getByRole('tab',{name:'Jouer',exact:true}).click();
+  const registry=appPage.locator('.workspace-critical-wounds');
+  check(await registry.count()===1 && /Entaille.*Bras gauche.*Round 2/.test(await registry.innerText()),'A11 : nom, localisation et Round visibles sur la fiche');
+  await appPage.getByRole('button',{name:'Guérir Entaille de Garde',exact:true}).click();
+  await registry.waitFor({state:'detached',timeout:7000});
+  check(await appPage.evaluate(async()=>{const {Store}=await import('/js/main.js');await Store.whenIdle();return Store.listParticipants()[0].states.some(s=>s.id==='bleed') && Store.getLog().some(l=>l.detail?.kind==='heal-critical-wound' && l.actorId==='guard' && l.detail.critical?.id==='c1');}),'A11 : le bouton appelle la commande et conserve les États');
+  await appPage.getByRole('button',{name:'Annuler',exact:true}).click();
+  await registry.waitFor();
+  check(await registry.count()===1,'A11 : Annuler restaure le registre dans la fiche');
+  await appPage.close();
   check(pageErrors.length === 0, 'aucune erreur de page pendant le rendu (' + (pageErrors[0] || 'rien à signaler') + ')');
   await context.close();
 } finally {
