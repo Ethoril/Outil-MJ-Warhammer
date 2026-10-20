@@ -56,6 +56,13 @@ const handlers = {
     needs: effect => Number.isSafeInteger(effect.amount) && effect.amount > 0 ? [] : [need('contract.effects.amount', 'Pénalité d’incantation sourcée requise')],
     buildLayer: effect => ({ castingSlPenalty: effect.amount })
   },
+  // Dissuasion d’attaque (ex. Bénédiction de Protection) : un ennemi qui vise le porteur doit réussir un Test (`skill`, +`slBonus` DR) ;
+  // le MJ saisit le résultat dans `v5.context.protectionCalm`, lu par resolution.js au moment de l’attaque.
+  'attack-deterrent': {
+    validate: effect => isText(effect.skill) && Number.isSafeInteger(effect.slBonus) ? null : 'attack-deterrent exige skill (texte non vide) et slBonus (entier).',
+    needs: effect => isText(effect.skill) && Number.isSafeInteger(effect.slBonus) ? [] : [need('contract.effects.skill', 'Test de dissuasion sourcé requis')],
+    buildLayer: effect => ({ attackDeterrent: { skill: effect.skill, slBonus: effect.slBonus } })
+  },
   'grant-actions': {
     validate: effect => !Array.isArray(effect.actions) || !effect.actions.length
       || !effect.actions.every(action => isRecord(action) && isText(action.id) && isText(action.name) && isText(action.damageFormula)) ? 'grant-actions exige actions [{id, name, damageFormula}].' : null,

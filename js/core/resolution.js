@@ -526,6 +526,14 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Preserve every protection consulted, including pieces/criticals it suppresses.
   const protectionReceipts = [];
   const unresolved = [...(normalized.combatPrelude?.unresolved||[]),...actorPlan.unresolved, ...(defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(defenderPlan?.restrictions || [])];
+  // Bénédiction de Protection : un ennemi qui attaque le porteur doit réussir un Test de Calme Accessible (+2 DR) ; le MJ saisit le résultat dans v5.context.protectionCalm.
+  const attackDeterrentLayer = attackType(action.type) && actor?.camp !== target?.camp
+    ? (target?.extensions?.v5?.divineEffects || []).find(layer => layer?.attackDeterrent) : null;
+  if (attackDeterrentLayer) {
+    const calm = context.protectionCalm;
+    if (calm?.success === false) unresolved.push('Bénédiction de Protection : Test de Calme échoué, l’attaquant doit choisir une autre cible ou une autre Action.');
+    else if (calm?.success !== true) unresolved.push('Bénédiction de Protection : saisir le Test de Calme Accessible (+2 DR) de l’attaquant.');
+  }
   if (attackType(action.type) && context.calledShot === true && !CALLED_SHOT_LOCATIONS[context.calledShotLocation]) unresolved.push('Coup ciblé : préciser la localisation visée.');
   const actorSkillId = action.extensions?.fiche?.skillId ?? context.skillId;
   const actorSkill = context.silentTakedown === true ? getReferenceCatalogue().skills.find(row => row.id === actorSkillId) : null;

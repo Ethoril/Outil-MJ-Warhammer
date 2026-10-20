@@ -29,7 +29,7 @@ test('source pins and divine access talents remain attached to V5 source pages',
 test('six Myrmidia blessings have source-backed effects, parameters and +2 SL extensions', () => {
   const expected = [
     ['battle', 'CC', 10], ['conscience', null, null], ['courage', 'FM', 10],
-    ['protection', null, null]
+    ['protection', undefined, undefined]
   ];
   for (const [key, characteristic, value] of expected) {
     const row = blessing(key);
@@ -54,6 +54,8 @@ test('six Myrmidia blessings have source-backed effects, parameters and +2 SL ex
   assert.deepEqual(blessing('righteousness').effects, [{ type: 'weapon-bonus', magical: true, designatedWeapon: true, weaponOwner: 'target', duration: { value: 6, unit: 'rounds' } }]);
   assert.match(blessing('conscience').labels.effect, /Accessible \(\+2 DR\)/);
   assert.match(blessing('protection').labels.effect, /Calme Accessible \(\+2 DR\)/);
+  // Protection (P5) : Test de Calme Accessible de l’attaquant, saisi par le MJ.
+  assert.deepEqual(blessing('protection').effects.map(({ type, skill, slBonus }) => ({ type, skill, slBonus })), [{ type: 'attack-deterrent', skill: 'Calme', slBonus: 2 }]);
   assert.match(blessing('protection').labels.effect, /attaquer/);
 });
 

@@ -3155,7 +3155,7 @@
       "name": "Bénédiction de Protection",
       "deity": "Myrmidia",
       "catalogueName": "Bénédiction de Protection",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -3233,9 +3233,19 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "attack-deterrent",
+          "skill": "Calme",
+          "slBonus": 2,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un Test de Calme Accessible (+2 DR) ; sinon il choisit une autre cible ou Action. Le moteur demande le résultat du Test de Calme de l’attaquant (saisi par le MJ) ; sans résultat ou sur un échec, l’attaque reste inapplicable.",
         "access": "Béni (Myrmidia)"
       },
       "clauses": [
@@ -3246,7 +3256,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:protection"
         }
       ],
@@ -5158,7 +5168,7 @@
       "name": "Bénédiction de Protection",
       "deity": "Ranald",
       "catalogueName": "Bénédiction de Protection",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -5236,9 +5246,19 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "attack-deterrent",
+          "skill": "Calme",
+          "slBonus": 2,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un Test de Calme Accessible (+2 DR) ; sinon il choisit une autre cible ou Action. Le moteur demande le résultat du Test de Calme de l’attaquant (saisi par le MJ) ; sans résultat ou sur un échec, l’attaque reste inapplicable.",
         "access": "Béni (Ranald)"
       },
       "clauses": [
@@ -5249,7 +5269,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:protection"
         }
       ],
@@ -5798,7 +5818,7 @@
       "name": "Bénédiction de Protection",
       "deity": "Rhya",
       "catalogueName": "Bénédiction de Protection",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -5876,9 +5896,19 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "attack-deterrent",
+          "skill": "Calme",
+          "slBonus": 2,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un Test de Calme Accessible (+2 DR) ; sinon il choisit une autre cible ou Action. Le moteur demande le résultat du Test de Calme de l’attaquant (saisi par le MJ) ; sans résultat ou sur un échec, l’attaque reste inapplicable.",
         "access": "Béni (Rhya)"
       },
       "clauses": [
@@ -5889,7 +5919,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:protection"
         }
       ],
@@ -6300,7 +6330,7 @@
       "name": "Bénédiction de Protection",
       "deity": "Shallya",
       "catalogueName": "Bénédiction de Protection",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -6378,9 +6408,19 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "attack-deterrent",
+          "skill": "Calme",
+          "slBonus": 2,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un Test de Calme Accessible (+2 DR) ; sinon il choisit une autre cible ou Action. Le moteur demande le résultat du Test de Calme de l’attaquant (saisi par le MJ) ; sans résultat ou sur un échec, l’attaque reste inapplicable.",
         "access": "Béni (Shallya)"
       },
       "clauses": [
@@ -6391,7 +6431,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:protection"
         }
       ],
@@ -7050,7 +7090,7 @@
       "name": "Bénédiction de Protection",
       "deity": "Sigmar",
       "catalogueName": "Bénédiction de Protection",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -7128,9 +7168,19 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "attack-deterrent",
+          "skill": "Calme",
+          "slBonus": 2,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un Test de Calme Accessible (+2 DR) ; sinon il choisit une autre cible ou Action. Le moteur demande le résultat du Test de Calme de l’attaquant (saisi par le MJ) ; sans résultat ou sur un échec, l’attaque reste inapplicable.",
         "access": "Béni (Sigmar)"
       },
       "clauses": [
@@ -7141,7 +7191,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:protection"
         }
       ],
@@ -9647,7 +9697,7 @@
       "name": "Bénédiction de Protection",
       "deity": "Handrich",
       "catalogueName": "Bénédiction de Protection",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -9734,9 +9784,19 @@
           "instantDurationCannotIncrease": true
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "attack-deterrent",
+          "skill": "Calme",
+          "slBonus": 2,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
       "labels": {
-        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.",
+        "effect": "Pour attaquer la cible, chaque ennemi doit réussir un Test de Calme Accessible (+2 DR) ; sinon il choisit une autre cible ou Action. Le moteur demande le résultat du Test de Calme de l’attaquant (saisi par le MJ) ; sans résultat ou sur un échec, l’attaque reste inapplicable.",
         "access": "Béni (Handrich)"
       },
       "clauses": [
@@ -9747,7 +9807,7 @@
         },
         {
           "id": "effect",
-          "mode": "manual",
+          "mode": "engine",
           "sourceRef": "blessing:protection"
         }
       ],
@@ -26949,5 +27009,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:4d2d77f465ad9ece8b997de766bc1357ffd2488c97ac02e7e8109763c6d7a090"
+  "sourceFingerprint": "sha256:636181013c5ccf3690dc20d4f34882821b0d624180eaff75509cbed1b2d36059"
 }

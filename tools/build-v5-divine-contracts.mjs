@@ -107,7 +107,7 @@ const blessingLibrary = {
  healing: { name: 'Guérison', effect: { type: 'wound-heal', value: 1 }, label: 'La cible regagne 1 Blessure.', touch: true, instant: true },
  hunt: { name: 'La Chasse', ...statBlessing('CT', 'Capacité de Tir') },
  might: { name: 'Puissance', ...statBlessing('F', 'Force') },
- protection: { name: 'Protection', effect: null, label: 'Pour attaquer la cible, chaque ennemi doit réussir un test de Calme Accessible (+2 DR); sinon il choisit une autre cible ou Action.' },
+ protection: { name: 'Protection', effect: { type: 'attack-deterrent', skill: 'Calme', slBonus: 2 }, label: 'Pour attaquer la cible, chaque ennemi doit réussir un Test de Calme Accessible (+2 DR) ; sinon il choisit une autre cible ou Action. Le moteur demande le résultat du Test de Calme de l’attaquant (saisi par le MJ) ; sans résultat ou sur un échec, l’attaque reste inapplicable.' },
  recuperation: { name: 'Convalescence', effect: null, label: 'La cible réduit d’un jour la durée d’une maladie; une seule tentative par maladie et par personne.', touch: true, instant: true },
  righteousness: { name: 'Droiture', effect: { type: 'weapon-bonus', magical: true, designatedWeapon: true, weaponOwner: 'target' }, label: 'L’arme de la cible est considérée comme Magique.' },
  savagery: { name: 'Sauvagerie', effect: { type: 'grant-talent', talents: [{ id: 'talent-strike-to-injure', rank: 1 }], consumeOn: 'critical' }, label: 'Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.' },
