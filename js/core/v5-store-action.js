@@ -10,6 +10,8 @@ import { effectiveOrder } from './turn-order.js';
 import { defaultResolutionId, previewResolution } from './resolution.js';
 import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll, reverseDiceLayers, consumeReverseDice } from './v5-divine-effects-conditions.js';
 const clone = structuredClone;
+// Même lecture que attackType() de resolution.js : « attack » ou « attaque » (fiches importées).
+const isAttackType = type => ['attack', 'attaque'].includes(String(type || '').trim().toLocaleLowerCase());
 export function v5StoreActionClock(envelope) {
   const scene = envelope.activeScene;
   const encounterId = scene?.encounterId || scene?.id || envelope.extensions?.v5?.combatId;
@@ -107,7 +109,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
       // Bénédiction de Chance : relance gratuite du prochain Test échoué (le Test d'origine est évalué avant d'y substituer la relance).
       // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
       const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
-      if (freeRerollLayers(actor, { round: state.round, attack: supplied.action?.type === 'attack' }).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
+      if (freeRerollLayers(actor, { round: state.round, attack: isAttackType(supplied.action?.type) }).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
         const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, ...plainContext } = context;
         const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, ...plainSupplied } = supplied;
         const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
@@ -189,7 +191,7 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   }
   // Relance gratuite : exemption vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const free = preview.actionCostPlan?.request?.exemptions?.some(row => row.sourceId === FREE_REROLL_SOURCE);
-  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: current.round, attack: preview.input?.action?.type === 'attack' }).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
+  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: current.round, attack: isAttackType(preview.input?.action?.type) }).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
   // Fortune généreuse : inversion vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const reversed = preview.input?.v5?.reverseDiceApplied === true;
   const reverseActorId = preview.input?.actorId || preview.input?.actor?.id;
@@ -199,7 +201,7 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
     if (result.status !== 'applied' || (!free && !reversed)) return result;
     // Relance gratuite et inversion des dés peuvent servir dans la même résolution : chacune consomme sa propre couche.
     const participants = clone(result.state.participants);
-    if (free) consumeFreeReroll(participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: state.round, attack: preview.input?.action?.type === 'attack' });
+    if (free) consumeFreeReroll(participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: state.round, attack: isAttackType(preview.input?.action?.type) });
     if (reversed) consumeReverseDice(participants.find(p => p.id === reverseActorId));
     return { ...result, state: { ...result.state, participants } };
   };
