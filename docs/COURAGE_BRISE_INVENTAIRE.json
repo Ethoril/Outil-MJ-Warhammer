@@ -1,0 +1,2909 @@
+[
+  {
+    "id": "C0-L06-001",
+    "sourceBook": "L06",
+    "printedPage": 183,
+    "label": "Psychologie : Test de Calme",
+    "summaryFr": "Psychologie : Test de Calme : Résister par Calme ; difficulté MJ ; réussite valable pour la rencontre, sauf changement des circonstances.",
+    "mechanic": "Résister par Calme ; difficulté MJ ; réussite valable pour la rencontre, sauf changement des circonstances.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:7"
+    ],
+    "proposedAutomation": "Généraliser le déclenchement aux Traits de créature, en conservant les faits MJ.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-002",
+    "sourceBook": "L06",
+    "printedPage": 183,
+    "label": "Peur : sources et Test étendu",
+    "summaryFr": "Peur : sources et Test étendu : Allié connu exempt ; une tentative par Round ; indice maximal des sources ; atteindre ce total de DR libère des sources de même indice ou inférieur.",
+    "mechanic": "Allié connu exempt ; une tentative par Round ; indice maximal des sources ; atteindre ce total de DR libère des sources de même indice ou inférieur.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Unifier les sources génériques avec le suivi déjà utilisé par Grande taille ; arbitrer les divergences de seuil.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-003",
+    "sourceBook": "L06",
+    "printedPage": 183,
+    "label": "Peur : conséquences",
+    "summaryFr": "Peur : conséquences : La victime ne gagne plus d’Élan ; la source bénéficie de l’Avantage en mêlée contre elle.",
+    "mechanic": "La victime ne gagne plus d’Élan ; la source bénéficie de l’Avantage en mêlée contre elle.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:55"
+    ],
+    "proposedAutomation": "Étendre ces lecteurs aux Peurs posées par les sorts et Traits, avec auteur identifié.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-004",
+    "sourceBook": "L06",
+    "printedPage": 184,
+    "label": "Terreur : première rencontre",
+    "summaryFr": "Terreur : première rencontre : Calme à la première rencontre ; allié connu exempt ; réussite immunisant contre toute Terreur de la rencontre ; échec donnant indice plus les DR négatifs après le premier en États Brisé.",
+    "mechanic": "Calme à la première rencontre ; allié connu exempt ; réussite immunisant contre toute Terreur de la rencontre ; échec donnant indice plus les DR négatifs après le premier en États Brisé.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-small.js:65"
+    ],
+    "proposedAutomation": "Créer un circuit générique de Terreur ; arbitrer la contradiction avec p.362.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-005",
+    "sourceBook": "L06",
+    "printedPage": 184,
+    "label": "Terreur : suite",
+    "summaryFr": "Terreur : suite : Après le Test initial, la source provoque une Peur de même indice.",
+    "mechanic": "Après le Test initial, la source provoque une Peur de même indice.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-small.js:65"
+    ],
+    "proposedAutomation": "Faire suivre explicitement Terreur puis Peur pour toutes les sources.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-006",
+    "sourceBook": "L06",
+    "printedPage": 183,
+    "label": "Animosité et Peur",
+    "summaryFr": "Animosité et Peur : Peur et Terreur priment sur la compulsion d’Animosité.",
+    "mechanic": "Peur et Terreur priment sur la compulsion d’Animosité.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:7"
+    ],
+    "proposedAutomation": "Ajouter une priorité explicite entre Psychologies sans imposer la conduite narrative.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-007",
+    "sourceBook": "L06",
+    "printedPage": 184,
+    "label": "Haine",
+    "summaryFr": "Haine : Contre le groupe haï : immunité à Peur et Intimidation, mais pas à Terreur ; la réussite du contrôle ne supprime pas ces immunités.",
+    "mechanic": "Contre le groupe haï : immunité à Peur et Intimidation, mais pas à Terreur ; la réussite du contrôle ne supprime pas ces immunités.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Conserver la spécialisation MJ et vérifier toutes les origines de Peur.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-008",
+    "sourceBook": "L06",
+    "printedPage": 184,
+    "label": "Frénésie",
+    "summaryFr": "Frénésie : Immunité aux autres Psychologies ; obligation d’avancer et attaquer ; fin notamment sur Sonné ou Inconscient, puis Exténué.",
+    "mechanic": "Immunité aux autres Psychologies ; obligation d’avancer et attaquer ; fin notamment sur Sonné ou Inconscient, puis Exténué.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Raccorder le Trait générique au même état actif que le Talent ; la conduite reste attestée MJ.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-009",
+    "sourceBook": "L06",
+    "printedPage": 184,
+    "label": "Acquérir un État",
+    "summaryFr": "Acquérir un État : L’acquisition d’un État fait perdre immédiatement l’Élan ; Brisé suit cette règle commune.",
+    "mechanic": "L’acquisition d’un État fait perdre immédiatement l’Élan ; Brisé suit cette règle commune.",
+    "currentStatus": "engine",
+    "evidence": [
+      "js/core/v5-effects.js:94"
+    ],
+    "proposedAutomation": "Conserver la transaction d’acquisition commune.",
+    "risk": "moyen",
+    "limit": "Automatisation limitée à la clause décrite."
+  },
+  {
+    "id": "C0-L06-010",
+    "sourceBook": "L06",
+    "printedPage": 184,
+    "label": "Cumul des pénalités",
+    "summaryFr": "Cumul des pénalités : Occurrences d’un même État additionnées ; entre États distincts, retenir la pire pénalité applicable.",
+    "mechanic": "Occurrences d’un même État additionnées ; entre États distincts, retenir la pire pénalité applicable.",
+    "currentStatus": "engine",
+    "evidence": [
+      "js/core/v5-test-context.js:167"
+    ],
+    "proposedAutomation": "Ne pas additionner les malus distincts en étendant C0.",
+    "risk": "moyen",
+    "limit": "Automatisation limitée à la clause décrite."
+  },
+  {
+    "id": "C0-L06-011",
+    "sourceBook": "L06",
+    "printedPage": 185,
+    "label": "Brisé : fuite obligatoire",
+    "summaryFr": "Brisé : fuite obligatoire : Pendant son Tour, employer Mouvement en Fuite et Action en Sprint tant qu’aucune cachette hors de vue de tout ennemi n’est confirmée.",
+    "mechanic": "Pendant son Tour, employer Mouvement en Fuite et Action en Sprint tant qu’aucune cachette hors de vue de tout ennemi n’est confirmée.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-broken-escape.js:19"
+    ],
+    "proposedAutomation": "Conserver la séquence et les attestations de visibilité ; compléter la fuite engagée.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-012",
+    "sourceBook": "L06",
+    "printedPage": 185,
+    "label": "Brisé : pénalité",
+    "summaryFr": "Brisé : pénalité : Malus de 1 DR par occurrence aux Tests qui ne concernent ni la course ni la dissimulation.",
+    "mechanic": "Malus de 1 DR par occurrence aux Tests qui ne concernent ni la course ni la dissimulation.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-test-context.js:137"
+    ],
+    "proposedAutomation": "Conserver le besoin explicite runningOrHiding ; ne pas inventer sa valeur.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-013",
+    "sourceBook": "L06",
+    "printedPage": 163,
+    "label": "Fuite : distance et Sprint",
+    "summaryFr": "Fuite : distance et Sprint : Le Mouvement permet Marche ou Course ; le Sprint ajoute Course plus DR d’Athlétisme à difficulté +2 DR.",
+    "mechanic": "Le Mouvement permet Marche ou Course ; le Sprint ajoute Course plus DR d’Athlétisme à difficulté +2 DR.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-broken-escape.js:37"
+    ],
+    "proposedAutomation": "La distance reste proposée ; position et trajet relèvent des faits MJ.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-014",
+    "sourceBook": "L06",
+    "printedPage": 163,
+    "label": "Fuite engagée",
+    "summaryFr": "Fuite engagée : Chaque ennemi engagé gagne Élan, peut le dépenser pour une attaque gratuite, et ajoute un Brisé au fuyard ; fuite possible même encerclé.",
+    "mechanic": "Chaque ennemi engagé gagne Élan, peut le dépenser pour une attaque gratuite, et ajoute un Brisé au fuyard ; fuite possible même encerclé.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-broken-escape.js:31"
+    ],
+    "proposedAutomation": "Lever le blocage seulement après transaction commune des adversaires, attaques gratuites et États.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-015",
+    "sourceBook": "L06",
+    "printedPage": 185,
+    "label": "Brisé : se cacher",
+    "summaryFr": "Brisé : se cacher : Une fois hors de vue, l’Action peut servir à une compétence améliorant la dissimulation.",
+    "mechanic": "Une fois hors de vue, l’Action peut servir à une compétence améliorant la dissimulation.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-broken-escape.js:74"
+    ],
+    "proposedAutomation": "Présenter les actions autorisées sans conclure automatiquement à la réussite de la cachette.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-016",
+    "sourceBook": "L06",
+    "printedPage": 186,
+    "label": "Ralliement personnel",
+    "summaryFr": "Ralliement personnel : Hors engagement, Calme en fin de Round retire un Brisé, puis un par DR après le premier.",
+    "mechanic": "Hors engagement, Calme en fin de Round retire un Brisé, puis un par DR après le premier.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-effects.js:176"
+    ],
+    "proposedAutomation": "Conserver le Test et la confirmation hors engagement ; ne pas récupérer pendant un Tour arbitraire.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-017",
+    "sourceBook": "L06",
+    "printedPage": 186,
+    "label": "Round entier caché",
+    "summaryFr": "Round entier caché : Un Round entier hors de vue de tous les ennemis retire une occurrence de Brisé.",
+    "mechanic": "Un Round entier hors de vue de tous les ennemis retire une occurrence de Brisé.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-effects.js:178"
+    ],
+    "proposedAutomation": "Tracer le Round complet et l’attestation MJ ; pas de retrait à la simple déclaration d’une cachette.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-018",
+    "sourceBook": "L06",
+    "printedPage": 169,
+    "label": "Commandement : rallier un allié",
+    "summaryFr": "Commandement : rallier un allié : Action gratuite si le meneur n’est pas Brisé ; une occurrence retirée, puis une par DR après le premier à répartir entre alliés.",
+    "mechanic": "Action gratuite si le meneur n’est pas Brisé ; une occurrence retirée, puis une par DR après le premier à répartir entre alliés.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-situations.js:28"
+    ],
+    "proposedAutomation": "Ajouter le geste générique, le budget et la répartition ; ne pas le confondre avec Orateur.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-019",
+    "sourceBook": "L06",
+    "printedPage": 169,
+    "label": "Intimidation en combat",
+    "summaryFr": "Intimidation en combat : Intimidation opposée à Calme crée Peur 1 plus un par DR après le premier ; groupe à −2 DR ; résistance du chef ou plus faible Calme selon organisation.",
+    "mechanic": "Intimidation opposée à Calme crée Peur 1 plus un par DR après le premier ; groupe à −2 DR ; résistance du chef ou plus faible Calme selon organisation.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Prévoir destinataires, organisation et source de Peur explicites ; respecter R9 déjà conservé en rappel.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-020",
+    "sourceBook": "L06",
+    "printedPage": 133,
+    "label": "Fortune et Brisé",
+    "summaryFr": "Fortune et Brisé : Dépenser un point permet de retirer une occurrence d’un État, donc de Brisé.",
+    "mechanic": "Dépenser un point permet de retirer une occurrence d’un État, donc de Brisé.",
+    "currentStatus": "engine",
+    "evidence": [
+      "js/core/v5-effects.js:159"
+    ],
+    "proposedAutomation": "Réutiliser la dépense atomique et Annuler.",
+    "risk": "moyen",
+    "limit": "Automatisation limitée à la clause décrite."
+  },
+  {
+    "id": "C0-L06-021",
+    "sourceBook": "L06",
+    "printedPage": 119,
+    "label": "Sans peur [Ennemi]",
+    "summaryFr": "Sans peur [Ennemi] : Immunité à la Peur du groupe choisi ; acquisitions distinctes pour des groupes différents.",
+    "mechanic": "Immunité à la Peur du groupe choisi ; acquisitions distinctes pour des groupes différents.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-talent-coverage.json:4514"
+    ],
+    "proposedAutomation": "Préserver le groupe explicite ; ne pas étendre cette immunité à Terreur.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-022",
+    "sourceBook": "L06",
+    "printedPage": 120,
+    "label": "Effrayant",
+    "summaryFr": "Effrayant : Peur 1, ou 2 en taille Grande ; le Talent demande des réussites cumulées, à raison d’un Test par Tour.",
+    "mechanic": "Peur 1, ou 2 en taille Grande ; le Talent demande des réussites cumulées, à raison d’un Test par Tour.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-talent-coverage.json:1496"
+    ],
+    "proposedAutomation": "Conserver ce circuit séparé tant que le MJ n’a pas arbitré sa différence avec la Peur générale en DR par Round.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-023",
+    "sourceBook": "L06",
+    "printedPage": 120,
+    "label": "Fuite ! : poursuite",
+    "summaryFr": "Fuite ! : poursuite : Bonus de 1 DR aux Tests de la proie dans une poursuite.",
+    "mechanic": "Bonus de 1 DR aux Tests de la proie dans une poursuite.",
+    "currentStatus": "engine",
+    "evidence": [
+      "js/data/v5-talent-coverage.json:1982"
+    ],
+    "proposedAutomation": "Conserver le contexte proie/poursuite du contrat.",
+    "risk": "moyen",
+    "limit": "Automatisation limitée à la clause décrite."
+  },
+  {
+    "id": "C0-L06-024",
+    "sourceBook": "L06",
+    "printedPage": 120,
+    "label": "Fuite ! : Mouvement supplémentaire",
+    "summaryFr": "Fuite ! : Mouvement supplémentaire : Après désengagement, possibilité d’un Mouvement supplémentaire pour s’éloigner en sprintant.",
+    "mechanic": "Après désengagement, possibilité d’un Mouvement supplémentaire pour s’éloigner en sprintant.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/data/v5-talent-coverage.json:1982"
+    ],
+    "proposedAutomation": "Raccorder un vrai reçu de Mouvement ; les clauses du contrat actuel n’exposent que les DR.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-025",
+    "sourceBook": "L06",
+    "printedPage": 120,
+    "label": "Fuite ! : Brisé",
+    "summaryFr": "Fuite ! : Brisé : Le choix de Fuir n’ajoute pas de Brisé au porteur du Talent.",
+    "mechanic": "Le choix de Fuir n’ajoute pas de Brisé au porteur du Talent.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-broken-escape.js:31"
+    ],
+    "proposedAutomation": "À intégrer au futur chemin de fuite engagée, actuellement refusé.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-026",
+    "sourceBook": "L06",
+    "printedPage": 124,
+    "label": "Orateur",
+    "summaryFr": "Orateur : Après avoir charmé le groupe, Commandement peut retirer ses États Brisé.",
+    "mechanic": "Après avoir charmé le groupe, Commandement peut retirer ses États Brisé.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "tests/lot2-v5-remaining-talents.test.js:70"
+    ],
+    "proposedAutomation": "Préserver le préalable Charme et les destinataires déjà tracés.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-027",
+    "sourceBook": "L06",
+    "printedPage": 128,
+    "label": "Inébranlable",
+    "summaryFr": "Inébranlable : Dispense du Test contre Brisé lorsque le personnage est pris pour cible par une arme à poudre noire.",
+    "mechanic": "Dispense du Test contre Brisé lorsque le personnage est pris pour cible par une arme à poudre noire.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-talent-coverage.json:2498"
+    ],
+    "proposedAutomation": "Conserver le contexte explicite de tir subi ; ne pas transformer en immunité générale à Brisé.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-028",
+    "sourceBook": "L06",
+    "printedPage": 128,
+    "label": "Seigneur de guerre",
+    "summaryFr": "Seigneur de guerre : Les alliés influencés utilisent Commandement au lieu de Calme contre Peur ; effet suspendu si le meneur meurt ou devient Brisé, Inconscient ou effrayé.",
+    "mechanic": "Les alliés influencés utilisent Commandement au lieu de Calme contre Peur ; effet suspendu si le meneur meurt ou devient Brisé, Inconscient ou effrayé.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "tests/lot2-v5-remaining-talents.test.js:71"
+    ],
+    "proposedAutomation": "Garder auteur, alliés influencés et fin de bataille identifiés.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-029",
+    "sourceBook": "L06",
+    "printedPage": 356,
+    "label": "Trait Peureux / Afraid",
+    "summaryFr": "Trait Peureux / Afraid : La cible désignée déclenche une Peur suivie par Test étendu ; pas de gain d’Élan et Avantage adverse tant qu’elle n’est pas surmontée.",
+    "mechanic": "La cible désignée déclenche une Peur suivie par Test étendu ; pas de gain d’Élan et Avantage adverse tant qu’elle n’est pas surmontée.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:6"
+    ],
+    "proposedAutomation": "Créer un lecteur générique du Trait et de sa cible ; les actions actuelles attendent un état de Talent.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-030",
+    "sourceBook": "L06",
+    "printedPage": 356,
+    "label": "Trait Belliqueux",
+    "summaryFr": "Trait Belliqueux : Immunité à Peur pendant que la créature possède Élan.",
+    "mechanic": "Immunité à Peur pendant que la créature possède Élan.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:55"
+    ],
+    "proposedAutomation": "Lire le Trait vivant et Élan à chaque contexte de Peur, sans immunité permanente.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-031",
+    "sourceBook": "L06",
+    "printedPage": 356,
+    "label": "Trait Bestial",
+    "summaryFr": "Trait Bestial : Feu blessant : Brisé ; perte de plus de la moitié des Blessures : tentative de fuite, sauf petits défendus, acculé ou Territorial, qui déclenchent Frénésie.",
+    "mechanic": "Feu blessant : Brisé ; perte de plus de la moitié des Blessures : tentative de fuite, sauf petits défendus, acculé ou Territorial, qui déclenchent Frénésie.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-magic-arbitrations.js:24"
+    ],
+    "proposedAutomation": "Relier feu, seuil de Blessures et attestations d’exception ; ne pas assimiler un simple libellé de Trait à son moteur.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-032",
+    "sourceBook": "L06",
+    "printedPage": 358,
+    "label": "Trait Peur",
+    "summaryFr": "Trait Peur : Le texte du Trait demande de dépasser l’indice en DR ; renvoi à la règle générale qui demande de l’atteindre.",
+    "mechanic": "Le texte du Trait demande de dépasser l’indice en DR ; renvoi à la règle générale qui demande de l’atteindre.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Arbitrage requis sur strictement supérieur ou supérieur ou égal avant généralisation.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-033",
+    "sourceBook": "L06",
+    "printedPage": 358,
+    "label": "Hurlement spectral",
+    "summaryFr": "Hurlement spectral : Dans la zone audible : dégâts directs et Assourdi, puis Calme à +2 DR ou Brisé ; attaque magique payée par Élan.",
+    "mechanic": "Dans la zone audible : dégâts directs et Assourdi, puis Calme à +2 DR ou Brisé ; attaque magique payée par Élan.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-talent-actions.js:40"
+    ],
+    "proposedAutomation": "Créer une action de créature avec audibilité, dés et cibles explicites.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-034",
+    "sourceBook": "L06",
+    "printedPage": 358,
+    "label": "Immunité à la Psychologie",
+    "summaryFr": "Immunité à la Psychologie : Le Trait ignore les règles de Psychologie ; sa présence seule dans une liste ne prouve pas une interception des Tests.",
+    "mechanic": "Le Trait ignore les règles de Psychologie ; sa présence seule dans une liste ne prouve pas une interception des Tests.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/resolution.js:503"
+    ],
+    "proposedAutomation": "Relier les Traits génériques au contexte de Test ; le lecteur actuel vise des drapeaux magiques.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-035",
+    "sourceBook": "L06",
+    "printedPage": 359,
+    "label": "Marque de Slaanesh",
+    "summaryFr": "Marque de Slaanesh : La marque confère Sans peur pour tous les ennemis.",
+    "mechanic": "La marque confère Sans peur pour tous les ennemis.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:14"
+    ],
+    "proposedAutomation": "Projeter le Talent effectif depuis la Marque, en gardant l’édition d’origine.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-036",
+    "sourceBook": "L06",
+    "printedPage": 360,
+    "label": "Taille et Peur V5",
+    "summaryFr": "Taille et Peur V5 : Une créature agressive cause Peur aux plus petites ; le paragraphe V5 ne crée pas ici la Terreur selon deux écarts de taille.",
+    "mechanic": "Une créature agressive cause Peur aux plus petites ; le paragraphe V5 ne crée pas ici la Terreur selon deux écarts de taille.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:17"
+    ],
+    "proposedAutomation": "Préserver la distinction avec Petit homebrew validé ; décision explicite avant rapprochement.",
+    "risk": "moyen",
+    "limit": "Des faits, actions ou cibles explicites restent nécessaires ; couverture partielle seulement."
+  },
+  {
+    "id": "C0-L06-037",
+    "sourceBook": "L06",
+    "printedPage": 361,
+    "label": "Trait Craintif / Skittish",
+    "summaryFr": "Trait Craintif / Skittish : Effet magique spectaculaire visible ou bruit violent : trois États Brisé.",
+    "mechanic": "Effet magique spectaculaire visible ou bruit violent : trois États Brisé.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-magic-arbitrations.js:24"
+    ],
+    "proposedAutomation": "Déclencheur déclaré MJ, immunités de dressage, puis acquisition atomique.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-038",
+    "sourceBook": "L06",
+    "printedPage": 362,
+    "label": "Trait Nuée",
+    "summaryFr": "Trait Nuée : Une Nuée ignore la Psychologie.",
+    "mechanic": "Une Nuée ignore la Psychologie.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Ne pas se contenter du Trait importé : relier l’immunité au lecteur commun.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-039",
+    "sourceBook": "L06",
+    "printedPage": 362,
+    "label": "Trait Terreur",
+    "summaryFr": "Trait Terreur : Test initial ; échec : indice plus chaque DR négatif en Brisé, puis Peur de même indice.",
+    "mechanic": "Test initial ; échec : indice plus chaque DR négatif en Brisé, puis Peur de même indice.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-talent-small.js:65"
+    ],
+    "proposedAutomation": "Arbitrer le décalage d’une occurrence avec le texte de p.184.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-040",
+    "sourceBook": "L06",
+    "printedPage": 363,
+    "label": "Dressage et Craintif",
+    "summaryFr": "Dressage et Craintif : Dressage Magie ignore Craintif pour les manifestations magiques ; dressage Guerre l’ignore pour les bruits violents.",
+    "mechanic": "Dressage Magie ignore Craintif pour les manifestations magiques ; dressage Guerre l’ignore pour les bruits violents.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-magic-arbitrations.js:24"
+    ],
+    "proposedAutomation": "Lire séparément les deux spécialités et la nature de la cause.",
+    "risk": "moyen",
+    "limit": "Aucun circuit générique complet établi dans les fichiers cités ; libellé, donnée ou rappel ne valent pas exécution."
+  },
+  {
+    "id": "C0-L06-041",
+    "sourceBook": "L06",
+    "printedPage": 115,
+    "label": "Rage de bataille",
+    "summaryFr": "Une autre capacité doit autoriser la Frénésie ; entrée sans Test et sortie sans Exténué.",
+    "mechanic": "Une autre capacité doit autoriser la Frénésie ; entrée sans Test et sortie sans Exténué.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-actions.js:148"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-042",
+    "sourceBook": "L06",
+    "printedPage": 124,
+    "label": "Déterminé",
+    "summaryFr": "Calme réussi pour conserver l’Élan lors de l’acquisition d’un État.",
+    "mechanic": "Calme réussi pour conserver l’Élan lors de l’acquisition d’un État.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-replacements.js:29"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-043",
+    "sourceBook": "L06",
+    "printedPage": 126,
+    "label": "Cœur vaillant",
+    "summaryFr": "Le premier lot d’États Brisé de la rencontre est réduit d’un.",
+    "mechanic": "Le premier lot d’États Brisé de la rencontre est réduit d’un.",
+    "currentStatus": "engine",
+    "evidence": [
+      "js/data/v5-talent-coverage.json:740"
+    ],
+    "proposedAutomation": "Conserver le circuit et contrôler les exceptions lors de son extension.",
+    "risk": "moyen",
+    "limit": "Clause nommée seulement, avec faits et jets requis."
+  },
+  {
+    "id": "C0-L06-044",
+    "sourceBook": "L06",
+    "printedPage": 124,
+    "label": "Acharné : poursuite",
+    "summaryFr": "Après désengagement ennemi, Test réussi pour Mouvement de poursuite et désengagement libre ; +1 DR aux Tests comme poursuivant.",
+    "mechanic": "Après désengagement ennemi, Test réussi pour Mouvement de poursuite et désengagement libre ; +1 DR aux Tests comme poursuivant.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-tests.js:20"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-045",
+    "sourceBook": "L06",
+    "printedPage": 145,
+    "label": "Ivresse et courage",
+    "summaryFr": "Un résultat d’ivresse donne +2 DR contre Peur ; un autre suspend les Animosités.",
+    "mechanic": "Un résultat d’ivresse donne +2 DR contre Peur ; un autre suspend les Animosités.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L06-046",
+    "sourceBook": "L06",
+    "printedPage": 155,
+    "label": "Racine étrange",
+    "summaryFr": "Si le Test d’ingestion n’est pas une Maladresse, +2 DR de Psychologie et Aveuglé pendant 2d10 heures ; effets renforcés d’ivresse en cas de Maladresse.",
+    "mechanic": "Si le Test d’ingestion n’est pas une Maladresse, +2 DR de Psychologie et Aveuglé pendant 2d10 heures ; effets renforcés d’ivresse en cas de Maladresse.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L06-047",
+    "sourceBook": "L06",
+    "printedPage": 157,
+    "label": "Monture non dressée à la guerre",
+    "summaryFr": "Désavantage aux Tests qui impliquent une telle monture en combat ; sa fuite probable reste une décision de scène.",
+    "mechanic": "Désavantage aux Tests qui impliquent une telle monture en combat ; sa fuite probable reste une décision de scène.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-broken-escape.js:19"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-048",
+    "sourceBook": "L06",
+    "printedPage": 181,
+    "label": "Symptôme Fièvre",
+    "summaryFr": "Les Tests de Psychologie, Agilité et Dextérité subissent −2 DR.",
+    "mechanic": "Les Tests de Psychologie, Agilité et Dextérité subissent −2 DR.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L06-049",
+    "sourceBook": "L06",
+    "printedPage": 189,
+    "label": "Corruption : moral vacillant",
+    "summaryFr": "Un échec contre Peur donne Brisé ; autres mutations mentales pouvant imposer Animosité ou Frénésie.",
+    "mechanic": "Un échec contre Peur donne Brisé ; autres mutations mentales pouvant imposer Animosité ou Frénésie.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L06-050",
+    "sourceBook": "L06",
+    "printedPage": 218,
+    "label": "Courroux : Crains ma colère",
+    "summaryFr": "Acquérir 1 + Péchés États Brisé, avant la diminution des Péchés.",
+    "mechanic": "Acquérir 1 + Péchés États Brisé, avant la diminution des Péchés.",
+    "currentStatus": "engine",
+    "evidence": [
+      "tests/divin-v5-brise-flee-sprint-independent.test.js:47"
+    ],
+    "proposedAutomation": "Conserver le circuit et contrôler les exceptions lors de son extension.",
+    "risk": "moyen",
+    "limit": "Clause nommée seulement, avec faits et jets requis."
+  },
+  {
+    "id": "C0-L06-051",
+    "sourceBook": "L06",
+    "printedPage": 223,
+    "label": "Masque mortuaire",
+    "summaryFr": "Peur du prêtre applicable aussi aux morts-vivants malgré leurs immunités ; indice non précisé dans ce passage.",
+    "mechanic": "Peur du prêtre applicable aussi aux morts-vivants malgré leurs immunités ; indice non précisé dans ce passage.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-divine-contracts.json:14726"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-052",
+    "sourceBook": "L06",
+    "printedPage": 224,
+    "label": "Fureur de Myrmidia",
+    "summaryFr": "Les alliés reçoivent le Trait Frénésie pendant le miracle.",
+    "mechanic": "Les alliés reçoivent le Trait Frénésie pendant le miracle.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:14"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-053",
+    "sourceBook": "L06",
+    "printedPage": 226,
+    "label": "Apaisement de Shallya",
+    "summaryFr": "Les Traits de Psychologie sont suspendus pendant le miracle, puis sommeil ; résistance du dormeur réticent par Calme.",
+    "mechanic": "Les Traits de Psychologie sont suspendus pendant le miracle, puis sommeil ; résistance du dormeur réticent par Calme.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:12"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-054",
+    "sourceBook": "L06",
+    "printedPage": 226,
+    "label": "Flambeau de vertu",
+    "summaryFr": "Les alliés qui voient le prêtre perdent tous leurs Brisé et gagnent Sans peur de tout tant qu’ils le voient ; Peur causée aux orques et gobelins.",
+    "mechanic": "Les alliés qui voient le prêtre perdent tous leurs Brisé et gagnent Sans peur de tout tant qu’ils le voient ; Peur causée aux orques et gobelins.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-divine-effects-conditions.js:244",
+      "js/core/v5-divine-effects-gear.js:14"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-055",
+    "sourceBook": "L06",
+    "printedPage": 228,
+    "label": "Givre d’Ulric",
+    "summaryFr": "Le prêtre cause Peur ; les autres dans la zone perdent leur Élan à chaque début de Round.",
+    "mechanic": "Le prêtre cause Peur ; les autres dans la zone perdent leur Élan à chaque début de Round.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-turn.js:31"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-056",
+    "sourceBook": "L06",
+    "printedPage": 228,
+    "label": "Fureur d’Ulric",
+    "summaryFr": "Test gratuit de Frénésie sur les Tours alliés ; remplace l’attaque gratuite par des dégâts explosifs sur la première touche de mêlée.",
+    "mechanic": "Test gratuit de Frénésie sur les Tours alliés ; remplace l’attaque gratuite par des dégâts explosifs sur la première touche de mêlée.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-divine-grammar.js:17"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-057",
+    "sourceBook": "L06",
+    "printedPage": 238,
+    "label": "Incident mineur : visions",
+    "summaryFr": "Psychologie Difficile −2 DR ou 1 Brisé.",
+    "mechanic": "Psychologie Difficile −2 DR ou 1 Brisé.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-effects.js:8"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-058",
+    "sourceBook": "L06",
+    "printedPage": 304,
+    "label": "Poudre noire",
+    "summaryFr": "Toute cible du tir, touchée ou non, teste Psychologie Accessible +2 DR ou reçoit 1 Brisé.",
+    "mechanic": "Toute cible du tir, touchée ou non, teste Psychologie Accessible +2 DR ou reçoit 1 Brisé.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-combat-rules.js:123"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-059",
+    "sourceBook": "L06",
+    "printedPage": 309,
+    "label": "Bière naine",
+    "summaryFr": "Consommation Très difficile −3 DR ; immunité à Peur pendant 1d10 heures.",
+    "mechanic": "Consommation Très difficile −3 DR ; immunité à Peur pendant 1d10 heures.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L06-060",
+    "sourceBook": "L06",
+    "printedPage": 244,
+    "label": "Effrayant : sort",
+    "summaryFr": "Peur 1 ; +1 d’indice par 3 DR supplémentaires.",
+    "mechanic": "Peur 1 ; +1 d’indice par 3 DR supplémentaires.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:13197",
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-061",
+    "sourceBook": "L06",
+    "printedPage": 245,
+    "label": "Terrifiant : sort",
+    "summaryFr": "Terreur 1 ; +1 d’indice par 3 DR supplémentaires.",
+    "mechanic": "Terreur 1 ; +1 d’indice par 3 DR supplémentaires.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:13601",
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-062",
+    "sourceBook": "L06",
+    "printedPage": 245,
+    "label": "Attribut des Bêtes V5",
+    "summaryFr": "Un sort réussi peut faire causer Peur pendant BFM Rounds.",
+    "mechanic": "Un sort réussi peut faire causer Peur pendant BFM Rounds.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-063",
+    "sourceBook": "L06",
+    "printedPage": 246,
+    "label": "Peau du chasseur et Wyssan",
+    "summaryFr": "Ces transformations accordent Peur 1 ; Wyssan ajoute Frénésie et Belliqueux.",
+    "mechanic": "Ces transformations accordent Peur 1 ; Wyssan ajoute Frénésie et Belliqueux.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:6564",
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-064",
+    "sourceBook": "L06",
+    "printedPage": 247,
+    "label": "Voile pourpre",
+    "summaryFr": "Peur 1 avec protection ; l’indice croît par surincantation.",
+    "mechanic": "Peur 1 avec protection ; l’indice croît par surincantation.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:11985",
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-065",
+    "sourceBook": "L06",
+    "printedPage": 255,
+    "label": "Destrier d’ombre",
+    "summaryFr": "Peur 1 tant que le destrier n’est pas au soleil.",
+    "mechanic": "Peur 1 tant que le destrier n’est pas au soleil.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:16544",
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-066",
+    "sourceBook": "L06",
+    "printedPage": 257,
+    "label": "Horreur obsédante",
+    "summaryFr": "Exténué à l’entrée ; Psychologie ratée donne encore Exténué et Brisé, verrouillés jusqu’à quitter la zone.",
+    "mechanic": "Exténué à l’entrée ; Psychologie ratée donne encore Exténué et Brisé, verrouillés jusqu’à quitter la zone.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-067",
+    "sourceBook": "L06",
+    "printedPage": 257,
+    "label": "Mauvais œil",
+    "summaryFr": "Intimidation opposée à Calme avec les DR de lancement ; victoire donne Peur 1 et Exténué, victoire de 6 DR donne aussi Brisé.",
+    "mechanic": "Intimidation opposée à Calme avec les DR de lancement ; victoire donne Peur 1 et Exténué, victoire de 6 DR donne aussi Brisé.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-068",
+    "sourceBook": "L06",
+    "printedPage": 259,
+    "label": "Crâne hurlant",
+    "summaryFr": "Après perte de Blessures, Psychologie à 0 DR ou Brisé.",
+    "mechanic": "Après perte de Blessures, Psychologie à 0 DR ou Brisé.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-069",
+    "sourceBook": "L06",
+    "printedPage": 260,
+    "label": "Attribut de Slaanesh",
+    "summaryFr": "Pendant un sort du domaine : +2 DR contre Peur/Terreur, −2 DR contre Animosité/Haine/Corruption.",
+    "mechanic": "Pendant un sort du domaine : +2 DR contre Peur/Terreur, −2 DR contre Animosité/Haine/Corruption.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L06-070",
+    "sourceBook": "L06",
+    "printedPage": 247,
+    "label": "Vortex d’âmes",
+    "summaryFr": "Toutes les cibles gagnent 1 Brisé ; les morts-vivants subissent en plus les dégâts propres au sort.",
+    "mechanic": "Toutes les cibles gagnent 1 Brisé ; les morts-vivants subissent en plus les dégâts propres au sort.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:153"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-071",
+    "sourceBook": "L06",
+    "printedPage": 248,
+    "label": "Cœurs enflammés",
+    "summaryFr": "Tous les Brisé et Exténué alliés sont retirés ; Test de Frénésie facultatif.",
+    "mechanic": "Tous les Brisé et Exténué alliés sont retirés ; Test de Frénésie facultatif.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:745"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-072",
+    "sourceBook": "L06",
+    "printedPage": 248,
+    "label": "Couronne de flamme",
+    "summaryFr": "Peur 1 et Chef de guerre ; surincantation pour augmenter l’un ou l’autre.",
+    "mechanic": "Peur 1 et Chef de guerre ; surincantation pour augmenter l’un ou l’autre.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:543",
+      "js/core/v5-talent-situations.js:99"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-073",
+    "sourceBook": "L06",
+    "printedPage": 252,
+    "label": "Protection de Phâ",
+    "summaryFr": "Les créatures interdites déjà dans la zone portent Brisé jusqu’à leur sortie ; pas une guérison librement disponible.",
+    "mechanic": "Les créatures interdites déjà dans la zone portent Brisé jusqu’à leur sortie ; pas une guérison librement disponible.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:2208"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L01-001",
+    "sourceBook": "L01",
+    "printedPage": 28,
+    "label": "Taille ogre V4",
+    "summaryFr": "Peur envers les humanoïdes hostiles ; Terreur envers les Petits. Comparer au choix local Petit avant adaptation.",
+    "mechanic": "Peur envers les humanoïdes hostiles ; Terreur envers les Petits. Comparer au choix local Petit avant adaptation.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-002",
+    "sourceBook": "L01",
+    "printedPage": 32,
+    "label": "Braingobbler",
+    "summaryFr": "Peur 2 pour BFM Rounds ; tête d’un proche de la victime : −20 à ses Tests contre cette Peur.",
+    "mechanic": "Peur 2 pour BFM Rounds ; tête d’un proche de la victime : −20 à ses Tests contre cette Peur.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-003",
+    "sourceBook": "L01",
+    "printedPage": 58,
+    "label": "Objets Dolorous et Bold Brass",
+    "summaryFr": "Dolorous donne Peur 1 ; Bold Brass immunise à Peur et donne +2 DR contre Terreur.",
+    "mechanic": "Dolorous donne Peur 1 ; Bold Brass immunise à Peur et donne +2 DR contre Terreur.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-004",
+    "sourceBook": "L01",
+    "printedPage": 66,
+    "label": "Amulet of Righteous Silver",
+    "summaryFr": "Immunité à Peur et +2 DR contre Terreur.",
+    "mechanic": "Immunité à Peur et +2 DR contre Terreur.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-005",
+    "sourceBook": "L01",
+    "printedPage": 85,
+    "label": "Fin de bataille de masse",
+    "summaryFr": "À l’échéance des Rounds de bataille, comparer les Puissances ; l’armée perdante fuit ou est détruite.",
+    "mechanic": "À l’échéance des Rounds de bataille, comparer les Puissances ; l’armée perdante fuit ou est détruite.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-006",
+    "sourceBook": "L01",
+    "printedPage": 86,
+    "label": "Bolster",
+    "summaryFr": "Un Test pertinent réussi rétablit la Puissance de l’armée selon ses DR, sans dépasser son niveau initial ; rallier est un exemple d’action.",
+    "mechanic": "Un Test pertinent réussi rétablit la Puissance de l’armée selon ses DR, sans dépasser son niveau initial ; rallier est un exemple d’action.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-007",
+    "sourceBook": "L01",
+    "printedPage": 86,
+    "label": "Hold This Ground",
+    "summaryFr": "Opposition étendue jusqu’au seuil de rupture ou cinq Rounds ; la résistance dégrade la Puissance et facilite progressivement le Test adverse.",
+    "mechanic": "Opposition étendue jusqu’au seuil de rupture ou cinq Rounds ; la résistance dégrade la Puissance et facilite progressivement le Test adverse.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-008",
+    "sourceBook": "L01",
+    "printedPage": 87,
+    "label": "Traumatismes de guerre",
+    "summaryFr": "Options MJ : Peur/Terreur persistante d’un type d’adversaire, Animosité ou Haine après défaite.",
+    "mechanic": "Options MJ : Peur/Terreur persistante d’un type d’adversaire, Animosité ou Haine après défaite.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-009",
+    "sourceBook": "L01",
+    "printedPage": 88,
+    "label": "Intruders : scène de bataille",
+    "summaryFr": "L’irruption démoniaque impose −20 aux autres scènes tant qu’elle n’est pas traitée.",
+    "mechanic": "L’irruption démoniaque impose −20 aux autres scènes tant qu’elle n’est pas traitée.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-010",
+    "sourceBook": "L01",
+    "printedPage": 90,
+    "label": "Engin de guerre Peur",
+    "summaryFr": "Un engin intact portant cette propriété donne −10 aux Tests de Puissance adverses.",
+    "mechanic": "Un engin intact portant cette propriété donne −10 aux Tests de Puissance adverses.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-011",
+    "sourceBook": "L01",
+    "printedPage": 92,
+    "label": "Psychologie durable : Terreur",
+    "summaryFr": "Cumuler les Brisé dus à Terreur ; atteindre la Volonté courante crée une phobie liée à la source, puis remet le compteur à zéro.",
+    "mechanic": "Cumuler les Brisé dus à Terreur ; atteindre la Volonté courante crée une phobie liée à la source, puis remet le compteur à zéro.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-012",
+    "sourceBook": "L01",
+    "printedPage": 92,
+    "label": "Psychologie durable : destin et ambition",
+    "summaryFr": "Échapper à la mort par Destin peut provoquer Animosité puis Haine ; ambition rendue impossible peut créer un traumatisme après échec de Calme.",
+    "mechanic": "Échapper à la mort par Destin peut provoquer Animosité puis Haine ; ambition rendue impossible peut créer un traumatisme après échec de Calme.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L01-013",
+    "sourceBook": "L01",
+    "printedPage": 92,
+    "label": "Récupération psychologique",
+    "summaryFr": "Guérison par jeu héroïque ou dépense prévue de Résilience ; activité de récupération avec Calme −30 modulé par les soins. Échec : inversion possible d’un Test la prochaine aventure.",
+    "mechanic": "Guérison par jeu héroïque ou dépense prévue de Résilience ; activité de récupération avec Calme −30 modulé par les soins. Échec : inversion possible d’un Test la prochaine aventure.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L02-001",
+    "sourceBook": "L02",
+    "printedPage": 62,
+    "label": "Fellstave",
+    "summaryFr": "Créatures du type choisi entrant dans les cent yards : Calme ou Brisé ; après récupération, Test d’Intuition lié à l’identification du sort.",
+    "mechanic": "Créatures du type choisi entrant dans les cent yards : Calme ou Brisé ; après récupération, Test d’Intuition lié à l’identification du sort.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L02-002",
+    "sourceBook": "L02",
+    "printedPage": 63,
+    "label": "Protection Pouch",
+    "summaryFr": "+1 DR de Calme contre le surnaturel, dont Peur/Terreur démoniaque ou morte-vivante ; une semaine plus prolongation par DR.",
+    "mechanic": "+1 DR de Calme contre le surnaturel, dont Peur/Terreur démoniaque ou morte-vivante ; une semaine plus prolongation par DR.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L02-003",
+    "sourceBook": "L02",
+    "printedPage": 87,
+    "label": "Face of the Wild",
+    "summaryFr": "Dépenser un DR canalisé pour Peur 1 jusqu’au prochain Tour.",
+    "mechanic": "Dépenser un DR canalisé pour Peur 1 jusqu’au prochain Tour.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L02-004",
+    "sourceBook": "L02",
+    "printedPage": 87,
+    "label": "Fervent Bellow",
+    "summaryFr": "Dépenser trois DR canalisés pour retirer 1 Brisé à un allié qui entend.",
+    "mechanic": "Dépenser trois DR canalisés pour retirer 1 Brisé à un allié qui entend.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L02-005",
+    "sourceBook": "L02",
+    "printedPage": 74,
+    "label": "Rhya’s Rage",
+    "summaryFr": "Protection des enfants ou du foyer habité ; immunité Psychologie, Insensible à la douleur et bonus martiaux pendant BSoc Rounds.",
+    "mechanic": "Protection des enfants ou du foyer habité ; immunité Psychologie, Insensible à la douleur et bonus martiaux pendant BSoc Rounds.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:14"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L04-001",
+    "sourceBook": "L04",
+    "printedPage": 25,
+    "label": "Moment of Clarity",
+    "summaryFr": "Le prêtre est immunisé à la Psychologie pendant BSoc Rounds.",
+    "mechanic": "Le prêtre est immunisé à la Psychologie pendant BSoc Rounds.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:12"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L04-002",
+    "sourceBook": "L04",
+    "printedPage": 25,
+    "label": "Rally Round",
+    "summaryFr": "Bonus de Calme et Endurance aux alliés de statut Bronze ; amplifié selon l’effectif, sans effet sur Argent/Or.",
+    "mechanic": "Bonus de Calme et Endurance aux alliés de statut Bronze ; amplifié selon l’effectif, sans effet sur Argent/Or.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-divine-contracts.json:17303"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L04-003",
+    "sourceBook": "L04",
+    "printedPage": 88,
+    "label": "Pax of Taal",
+    "summaryFr": "Animaux Bestiaux non corrompus apaisés ; un animal agressé cesse d’être protégé. Ne retire pas automatiquement Brisé.",
+    "mechanic": "Animaux Bestiaux non corrompus apaisés ; un animal agressé cesse d’être protégé. Ne retire pas automatiquement Brisé.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-divine-effects-gear.js:12"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L04-004",
+    "sourceBook": "L04",
+    "printedPage": 100,
+    "label": "Intimidation lors d’un vol",
+    "summaryFr": "Les PNJ cèdent selon l’opposition ; un PJ intimidé subit Peur plutôt qu’une remise obligatoire de ses biens.",
+    "mechanic": "Les PNJ cèdent selon l’opposition ; un PJ intimidé subit Peur plutôt qu’une remise obligatoire de ses biens.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-001",
+    "sourceBook": "L07",
+    "printedPage": 128,
+    "label": "Apothéose : variante Slann",
+    "summaryFr": "Peur 1 un Round ; un Slann peut augmenter l’indice par 2 DR supplémentaires.",
+    "mechanic": "Peur 1 un Round ; un Slann peut augmenter l’indice par 2 DR supplémentaires.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-002",
+    "sourceBook": "L07",
+    "printedPage": 130,
+    "label": "Nœud géomantique terrifiant",
+    "summaryFr": "Une fonction du nœud produit Terreur 3 contre une catégorie chaotique choisie ; portée et entretien dépendent du nœud.",
+    "mechanic": "Une fonction du nœud produit Terreur 3 contre une catégorie chaotique choisie ; portée et entretien dépendent du nœud.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-003",
+    "sourceBook": "L07",
+    "printedPage": 151,
+    "label": "Bénédictions de ponte",
+    "summaryFr": "Certaines pontes accordent Sans peur contre des groupes précis ou Haine des skavens ; association aux divinités à confirmer sur le tableau.",
+    "mechanic": "Certaines pontes accordent Sans peur contre des groupes précis ou Haine des skavens ; association aux divinités à confirmer sur le tableau.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-004",
+    "sourceBook": "L07",
+    "printedPage": 166,
+    "label": "Stationary Attacker",
+    "summaryFr": "Immunité Psychologie, mais interdiction des déplacements et de Fuite liés à cette capacité immobile.",
+    "mechanic": "Immunité Psychologie, mais interdiction des déplacements et de Fuite liés à cette capacité immobile.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-005",
+    "sourceBook": "L07",
+    "printedPage": 180,
+    "label": "Carnosaur : Blood Frenzy",
+    "summaryFr": "La première Blessure infligée en combat déclenche Frénésie jusqu’à la mort des ennemis détectés.",
+    "mechanic": "La première Blessure infligée en combat déclenche Frénésie jusqu’à la mort des ennemis détectés.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-006",
+    "sourceBook": "L07",
+    "printedPage": 181,
+    "label": "Dread Saurian : Fearsome Roar",
+    "summaryFr": "Prédateurs énormes/monstrueux : Calme −10 ou Peur et quitter les lieux ; autres : Calme −20 ou fuite.",
+    "mechanic": "Prédateurs énormes/monstrueux : Calme −10 ou Peur et quitter les lieux ; autres : Calme −20 ou fuite.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-007",
+    "sourceBook": "L07",
+    "printedPage": 183,
+    "label": "Attribut Waaagh!",
+    "summaryFr": "Tout sort du domaine retire tous les Brisé aux orques et gobelins dans Volonté yards.",
+    "mechanic": "Tout sort du domaine retire tous les Brisé aux orques et gobelins dans Volonté yards.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-008",
+    "sourceBook": "L07",
+    "printedPage": 205,
+    "label": "Malédiction magique d’exploration",
+    "summaryFr": "Calme raté provoque la fuite des visions ; récupération suivie d’Exténué.",
+    "mechanic": "Calme raté provoque la fuite des visions ; récupération suivie d’Exténué.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L07-009",
+    "sourceBook": "L07",
+    "printedPage": 205,
+    "label": "Nuage de spores",
+    "summaryFr": "Échec d’Endurance pour retenir sa respiration : dégâts directs et Frénésie automatique aux combats de l’aventure.",
+    "mechanic": "Échec d’Endurance pour retenir sa respiration : dégâts directs et Frénésie automatique aux combats de l’aventure.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L08-001",
+    "sourceBook": "L08",
+    "printedPage": 37,
+    "label": "Viridescent Palliative",
+    "summaryFr": "Pendant douze heures : Frénésie impossible, Animosité/Haine ignorées, relance de Calme contre Peur/Terreur ; interactions avec Yenlui.",
+    "mechanic": "Pendant douze heures : Frénésie impossible, Animosité/Haine ignorées, relance de Calme contre Peur/Terreur ; interactions avec Yenlui.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L08-002",
+    "sourceBook": "L08",
+    "printedPage": 48,
+    "label": "Obsession elfique",
+    "summaryFr": "Une fois par séance avec accord MJ, choisir l’issue d’un Test de Psychologie qui contrarie l’obsession ; pénalités contextuelles distinctes.",
+    "mechanic": "Une fois par séance avec accord MJ, choisir l’issue d’un Test de Psychologie qui contrarie l’obsession ; pénalités contextuelles distinctes.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L08-003",
+    "sourceBook": "L08",
+    "printedPage": 107,
+    "label": "Writhing Mists et Yenlui clair",
+    "summaryFr": "Dans le brouillard, les alliés gagnent Peur 1 avec la surincantation +3 DR et le Yenlui clair requis.",
+    "mechanic": "Dans le brouillard, les alliés gagnent Peur 1 avec la surincantation +3 DR et le Yenlui clair requis.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L08-004",
+    "sourceBook": "L08",
+    "printedPage": 113,
+    "label": "Aeskhaine Madness",
+    "summaryFr": "Frénésie permanente et pénalités d’Intelligence, Volonté, Sociabilité.",
+    "mechanic": "Frénésie permanente et pénalités d’Intelligence, Volonté, Sociabilité.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L08-005",
+    "sourceBook": "L08",
+    "printedPage": 114,
+    "label": "Prières privées à Khaine",
+    "summaryFr": "Résolution temporaire contre Tests de Prière ; risque d’Animosité, Haine ou Frénésie selon rite et Tests de Calme.",
+    "mechanic": "Résolution temporaire contre Tests de Prière ; risque d’Animosité, Haine ou Frénésie selon rite et Tests de Calme.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L08-006",
+    "sourceBook": "L08",
+    "printedPage": 80,
+    "label": "Calme",
+    "summaryFr": "Après le Test de Sociabilité du lanceur, retire les Psychologies désignées et Frénésie ; ne confondre ni Terreur ni Brisé avec cette liste.",
+    "mechanic": "Après le Test de Sociabilité du lanceur, retire les Psychologies désignées et Frénésie ; ne confondre ni Terreur ni Brisé avec cette liste.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:10866",
+      "js/core/v5-spell-contracts.js:2460"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L08-007",
+    "sourceBook": "L08",
+    "printedPage": 86,
+    "label": "Apothéose elfique",
+    "summaryFr": "Peur 1 un Round en plus du soin ; surincantations de soin et de critique distinctes.",
+    "mechanic": "Peur 1 un Round en plus du soin ; surincantations de soin et de critique distinctes.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:4461"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L08-008",
+    "sourceBook": "L08",
+    "printedPage": 88,
+    "label": "Main de gloire",
+    "summaryFr": "La variante à +3 DR retire tous les Brisé ; variante à +8 : autres soins, Exténué et immunité Psychologie pendant la durée.",
+    "mechanic": "La variante à +3 DR retire tous les Brisé ; variante à +8 : autres soins, Exténué et immunité Psychologie pendant la durée.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "tests/lot3-v5-delivery-2c.test.js:53"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L09-001",
+    "sourceBook": "L09",
+    "printedPage": 33,
+    "label": "Événements d’Arche noire",
+    "summaryFr": "Échec de Calme : Brisé dans un événement, Peur des Furies vingt-quatre heures dans un autre ; apparition spectrale sans indice explicite.",
+    "mechanic": "Échec de Calme : Brisé dans un événement, Peur des Furies vingt-quatre heures dans un autre ; apparition spectrale sans indice explicite.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-002",
+    "sourceBook": "L09",
+    "printedPage": 44,
+    "label": "Belliqueux : variante L09",
+    "summaryFr": "Immunité à Peur seulement avec Élan propre et absence d’Élan adverse ; différence avec L06.",
+    "mechanic": "Immunité à Peur seulement avec Élan propre et absence d’Élan adverse ; différence avec L06.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-003",
+    "sourceBook": "L09",
+    "printedPage": 59,
+    "label": "Witchbrew",
+    "summaryFr": "Frénésie et Haine de tout pendant 2d10 minutes ; sans ennemis, Calme −1 DR ou attaque du vivant le plus proche.",
+    "mechanic": "Frénésie et Haine de tout pendant 2d10 minutes ; sans ennemis, Calme −1 DR ou attaque du vivant le plus proche.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-004",
+    "sourceBook": "L09",
+    "printedPage": 63,
+    "label": "Complications du Dhar",
+    "summaryFr": "Certains résultats imposent Peur ou Haine du lanceur après Calme raté ; repérage des intervalles à confirmer visuellement.",
+    "mechanic": "Certains résultats imposent Peur ou Haine du lanceur après Calme raté ; repérage des intervalles à confirmer visuellement.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-005",
+    "sourceBook": "L09",
+    "printedPage": 66,
+    "label": "Poisoned Whispers",
+    "summaryFr": "Psychologie imposée à la victime ou à son entourage, résistance opposée au lanceur ; durées contradictoires dans le texte.",
+    "mechanic": "Psychologie imposée à la victime ou à son entourage, résistance opposée au lanceur ; durées contradictoires dans le texte.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-006",
+    "sourceBook": "L09",
+    "printedPage": 66,
+    "label": "Shroud of Despair",
+    "summaryFr": "Exténué selon les DR puis Calme à 0 DR ou Brisé dans la zone, pendant BFM Rounds.",
+    "mechanic": "Exténué selon les DR puis Calme à 0 DR ou Brisé dans la zone, pendant BFM Rounds.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-007",
+    "sourceBook": "L09",
+    "printedPage": 67,
+    "label": "Stolen Aspect",
+    "summaryFr": "Échec de Calme −3 DR : partage des Psychologies du lanceur ; durée limitée et difficulté à se blesser mutuellement.",
+    "mechanic": "Échec de Calme −3 DR : partage des Psychologies du lanceur ; durée limitée et difficulté à se blesser mutuellement.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-008",
+    "sourceBook": "L09",
+    "printedPage": 68,
+    "label": "Cry of War",
+    "summaryFr": "Don de Khaine accordant Terreur aux adversaires à portée de l’arme après le déclenchement requis ; indice et durée non précisés.",
+    "mechanic": "Don de Khaine accordant Terreur aux adversaires à portée de l’arme après le déclenchement requis ; indice et durée non précisés.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L09-009",
+    "sourceBook": "L09",
+    "printedPage": 116,
+    "label": "Battle Rage : formulation reprise",
+    "summaryFr": "Entrée en Frénésie sans Test si une autre capacité l’autorise, sans Exténué à la sortie.",
+    "mechanic": "Entrée en Frénésie sans Test si une autre capacité l’autorise, sans Exténué à la sortie.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-actions.js:148"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L11-001",
+    "sourceBook": "L11",
+    "printedPage": 41,
+    "label": "Bonebreaker détruit",
+    "summaryFr": "Tant que monté : immunité Psychologie du cavalier ; destruction : 5 Brisé au cavalier et 1 aux autres skavens à dix yards.",
+    "mechanic": "Tant que monté : immunité Psychologie du cavalier ; destruction : 5 Brisé au cavalier et 1 aux autres skavens à dix yards.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-002",
+    "sourceBook": "L11",
+    "printedPage": 41,
+    "label": "Unique Experiment",
+    "summaryFr": "Les Tests de Calme contre sa Peur ou Terreur sont Difficiles −10.",
+    "mechanic": "Les Tests de Calme contre sa Peur ou Terreur sont Difficiles −10.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-003",
+    "sourceBook": "L11",
+    "printedPage": 45,
+    "label": "Amibe et feu",
+    "summaryFr": "Immunité Psychologie, sauf feu approché qui provoque automatiquement Brisé ; ne peut effectuer les Tests des caractéristiques absentes.",
+    "mechanic": "Immunité Psychologie, sauf feu approché qui provoque automatiquement Brisé ; ne peut effectuer les Tests des caractéristiques absentes.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-004",
+    "sourceBook": "L11",
+    "printedPage": 70,
+    "label": "Skin Wolf : Endless Rage",
+    "summaryFr": "Frénésie toujours active.",
+    "mechanic": "Frénésie toujours active.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-005",
+    "sourceBook": "L11",
+    "printedPage": 75,
+    "label": "Great Taurus : Bloodrage",
+    "summaryFr": "Frénésie et Haine de tout toujours actives.",
+    "mechanic": "Frénésie et Haine de tout toujours actives.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-006",
+    "sourceBook": "L11",
+    "printedPage": 77,
+    "label": "Razorbills en nuée",
+    "summaryFr": "Le groupe gagne Nuée, dont immunité Psychologie ; la créature isolée reste Craintive.",
+    "mechanic": "Le groupe gagne Nuée, dont immunité Psychologie ; la créature isolée reste Craintive.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-007",
+    "sourceBook": "L11",
+    "printedPage": 81,
+    "label": "Carnosaur : Blood Frenzy",
+    "summaryFr": "Première Blessure infligée : Frénésie jusqu’à élimination des ennemis détectés.",
+    "mechanic": "Première Blessure infligée : Frénésie jusqu’à élimination des ennemis détectés.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-008",
+    "sourceBook": "L11",
+    "printedPage": 90,
+    "label": "Shard Dragon : Rabid Frenzy",
+    "summaryFr": "Première blessure reçue : Frénésie irrépressible et deux Tests de mêlée gratuits par Round.",
+    "mechanic": "Première blessure reçue : Frénésie irrépressible et deux Tests de mêlée gratuits par Round.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-009",
+    "sourceBook": "L11",
+    "printedPage": 91,
+    "label": "Breath of Nightmares",
+    "summaryFr": "Après Blessures sans armure : Terreur 2 résistée par Endurance ; les immunités Psychologie, Peur et Terreur ne dispensent pas de ce poison.",
+    "mechanic": "Après Blessures sans armure : Terreur 2 résistée par Endurance ; les immunités Psychologie, Peur et Terreur ne dispensent pas de ce poison.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-010",
+    "sourceBook": "L11",
+    "printedPage": 107,
+    "label": "Potion de fureur de Preyton",
+    "summaryFr": "Frénésie pendant 1d10 Rounds, sans sortie anticipée.",
+    "mechanic": "Frénésie pendant 1d10 Rounds, sans sortie anticipée.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-011",
+    "sourceBook": "L11",
+    "printedPage": 116,
+    "label": "Bouclier de poudre de revenant",
+    "summaryFr": "Les morts-vivants sont perçus tels que de leur vivant : leur Peur disparaît sauf si cette forme la causait déjà.",
+    "mechanic": "Les morts-vivants sont perçus tels que de leur vivant : leur Peur disparaît sauf si cette forme la causait déjà.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-012",
+    "sourceBook": "L11",
+    "printedPage": 116,
+    "label": "Wulfshowl",
+    "summaryFr": "Peur 2 envers loups, lions, chèvres et chimères.",
+    "mechanic": "Peur 2 envers loups, lions, chèvres et chimères.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-013",
+    "sourceBook": "L11",
+    "printedPage": 135,
+    "label": "Belliqueux : variante Zoo",
+    "summaryFr": "Plus d’Avantage que l’adversaire donne immunité à toute Psychologie, pas seulement Peur.",
+    "mechanic": "Plus d’Avantage que l’adversaire donne immunité à toute Psychologie, pas seulement Peur.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-014",
+    "sourceBook": "L11",
+    "printedPage": 136,
+    "label": "Fury",
+    "summaryFr": "Dépenser un Avantage pour Haine des adversaires proches ; trois pour Frénésie puis perte de tout Avantage.",
+    "mechanic": "Dépenser un Avantage pour Haine des adversaires proches ; trois pour Frénésie puis perte de tout Avantage.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-015",
+    "sourceBook": "L11",
+    "printedPage": 136,
+    "label": "Ghostly Howl : variante Zoo",
+    "summaryFr": "Hurlement gratuit coûtant deux Avantages, puis perte de tout Avantage ; portée Initiative, Assourdi et dégâts directs, Endurance +20 ou Brisé.",
+    "mechanic": "Hurlement gratuit coûtant deux Avantages, puis perte de tout Avantage ; portée Initiative, Assourdi et dégâts directs, Endurance +20 ou Brisé.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-016",
+    "sourceBook": "L11",
+    "printedPage": 136,
+    "label": "Taille : variante Zoo",
+    "summaryFr": "Une catégorie supérieure cause Peur ; deux ou plus causent Terreur selon l’écart. Ne remplace pas le texte V5.",
+    "mechanic": "Une catégorie supérieure cause Peur ; deux ou plus causent Terreur selon l’écart. Ne remplace pas le texte V5.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L11-017",
+    "sourceBook": "L11",
+    "printedPage": 137,
+    "label": "Territorial",
+    "summaryFr": "Combat jusqu’à la mort pour protéger son territoire ; pas de poursuite hors de celui-ci.",
+    "mechanic": "Combat jusqu’à la mort pour protéger son territoire ; pas de poursuite hors de celui-ci.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L12-001",
+    "sourceBook": "L12",
+    "printedPage": 82,
+    "label": "Gastromancie : Brisé ignoré",
+    "summaryFr": "Le sort supplémentaire du domaine de la Grande Gueule permet d’ignorer les Brisé pendant BFM Rounds, sans les retirer.",
+    "mechanic": "Le sort supplémentaire du domaine de la Grande Gueule permet d’ignorer les Brisé pendant BFM Rounds, sans les retirer.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L12-002",
+    "sourceBook": "L12",
+    "printedPage": 83,
+    "label": "Incident de gastromancie 61–65",
+    "summaryFr": "Le boucher entre en Frénésie.",
+    "mechanic": "Le boucher entre en Frénésie.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L12-003",
+    "sourceBook": "L12",
+    "printedPage": 89,
+    "label": "Hungry Troll",
+    "summaryFr": "Le gabarit affamé donne Frénésie ; il disparaît après un repas de taille moyenne ou supérieure pris sans dérangement.",
+    "mechanic": "Le gabarit affamé donne Frénésie ; il disparaît après un repas de taille moyenne ou supérieure pris sans dérangement.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L12-004",
+    "sourceBook": "L12",
+    "printedPage": 96,
+    "label": "Incident chamanique 51–55",
+    "summaryFr": "Dégâts au chamane ; orques/gobelins/hobgobelins proches : Endurance ou Blessure directe et Frénésie.",
+    "mechanic": "Dégâts au chamane ; orques/gobelins/hobgobelins proches : Endurance ou Blessure directe et Frénésie.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L12-005",
+    "sourceBook": "L12",
+    "printedPage": 100,
+    "label": "Attribut Grande Waaagh!",
+    "summaryFr": "Chaque sort retire les Brisé aux orques, gobelins et hobgobelins dans Volonté yards.",
+    "mechanic": "Chaque sort retire les Brisé aux orques, gobelins et hobgobelins dans Volonté yards.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L12-006",
+    "sourceBook": "L12",
+    "printedPage": 101,
+    "label": "WAAAGH!",
+    "summaryFr": "Les orques, gobelins et hobgobelins de la zone, alliés ou non, perdent tous les Brisé et gagnent des bonus de Calme/Endurance et d’Avantage pendant la durée.",
+    "mechanic": "Les orques, gobelins et hobgobelins de la zone, alliés ou non, perdent tous les Brisé et gagnent des bonus de Calme/Endurance et d’Avantage pendant la durée.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-001",
+    "sourceBook": "L13",
+    "printedPage": 79,
+    "label": "En bon ordre V4",
+    "summaryFr": "Les alliés quittent le combat sans gain d’Avantage ni attaque gratuite adverse ; le Brisé V5 n’est pas supprimé par cette phrase.",
+    "mechanic": "Les alliés quittent le combat sans gain d’Avantage ni attaque gratuite adverse ; le Brisé V5 n’est pas supprimé par cette phrase.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-divine-contracts.json:1177"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L13-002",
+    "sourceBook": "L13",
+    "printedPage": 79,
+    "label": "Aspect courroucé",
+    "summaryFr": "Le prêtre gagne Terreur 1, sans résolution générique automatique des témoins.",
+    "mechanic": "Le prêtre gagne Terreur 1, sans résolution générique automatique des témoins.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-divine-contracts.json:1177"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L13-003",
+    "sourceBook": "L13",
+    "printedPage": 79,
+    "label": "Tenez bon",
+    "summaryFr": "Empêche les nouvelles acquisitions de Brisé alliées ; durée imprimée douteuse, arbitrage local déjà conservé.",
+    "mechanic": "Empêche les nouvelles acquisitions de Brisé alliées ; durée imprimée douteuse, arbitrage local déjà conservé.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-divine-contracts.json:1177"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L13-004",
+    "sourceBook": "L13",
+    "printedPage": 79,
+    "label": "Dévotion de la Vierge guerrière",
+    "summaryFr": "Sans peur d’un ennemi choisi ; adaptation locale V5 limitée à Peur.",
+    "mechanic": "Sans peur d’un ennemi choisi ; adaptation locale V5 limitée à Peur.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-divine-contracts.json:1177"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L13-005",
+    "sourceBook": "L13",
+    "printedPage": 106,
+    "label": "Calmer la monture",
+    "summaryFr": "Au Tour du cavalier : Équitation à 0, retire un Brisé puis un par DR ; la monture dispose aussi de sa récupération de Calme selon la source.",
+    "mechanic": "Au Tour du cavalier : Équitation à 0, retire un Brisé puis un par DR ; la monture dispose aussi de sa récupération de Calme selon la source.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-006",
+    "sourceBook": "L13",
+    "printedPage": 107,
+    "label": "Dressage Guerre et bruit",
+    "summaryFr": "Les bruits de bataille sont ignorés pour Craintif ; une voix isolée ne suffit généralement pas à déclencher Brisé.",
+    "mechanic": "Les bruits de bataille sont ignorés pour Craintif ; une voix isolée ne suffit généralement pas à déclencher Brisé.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-007",
+    "sourceBook": "L13",
+    "printedPage": 117,
+    "label": "Traumatisme du mercenaire",
+    "summaryFr": "Un Brisé déclenche la reprise d’une dépendance préexistante chez le profil comportemental correspondant.",
+    "mechanic": "Un Brisé déclenche la reprise d’une dépendance préexistante chez le profil comportemental correspondant.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-008",
+    "sourceBook": "L13",
+    "printedPage": 127,
+    "label": "Fuite et coup gratuit V4",
+    "summaryFr": "Coup gratuit non opposé à +20 ; s’il touche, Calme ou Brisé selon les DR négatifs ; déplacement de course après le coup.",
+    "mechanic": "Coup gratuit non opposé à +20 ; s’il touche, Calme ou Brisé selon les DR négatifs ; déplacement de course après le coup.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-009",
+    "sourceBook": "L13",
+    "printedPage": 127,
+    "label": "Poursuite : distance",
+    "summaryFr": "Comparer le plus lent des fuyards au meilleur poursuivant ; distance initiale MJ, rattrapage à zéro, fuite réussie à dix.",
+    "mechanic": "Comparer le plus lent des fuyards au meilleur poursuivant ; distance initiale MJ, rattrapage à zéro, fuite réussie à dix.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-010",
+    "sourceBook": "L13",
+    "printedPage": 134,
+    "label": "Flee from Harm",
+    "summaryFr": "Deux Avantages de groupe permettent de quitter la mêlée sans pénalité ; remplace le désengagement du socle V4.",
+    "mechanic": "Deux Avantages de groupe permettent de quitter la mêlée sans pénalité ; remplace le désengagement du socle V4.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-011",
+    "sourceBook": "L13",
+    "printedPage": 140,
+    "label": "Fuite ! : variante Up in Arms",
+    "summaryFr": "Mouvement considéré supérieur d’un en fuite et comme proie ; formulation distincte du talent V5.",
+    "mechanic": "Mouvement considéré supérieur d’un en fuite et comme proie ; formulation distincte du talent V5.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-012",
+    "sourceBook": "L13",
+    "printedPage": 141,
+    "label": "Acharné : variante Up in Arms",
+    "summaryFr": "Coût de Flee from Harm réduit à un Avantage.",
+    "mechanic": "Coût de Flee from Harm réduit à un Avantage.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L13-013",
+    "sourceBook": "L13",
+    "printedPage": 141,
+    "label": "Cavalier accompli",
+    "summaryFr": "Utiliser la taille de la monture contre Peur/Terreur causée uniquement par la taille adverse.",
+    "mechanic": "Utiliser la taille de la monture contre Peur/Terreur causée uniquement par la taille adverse.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L14-001",
+    "sourceBook": "L14",
+    "printedPage": 50,
+    "label": "Mirkwine",
+    "summaryFr": "Surdosage : Frénésie à la place de l’ivresse ordinaire jusqu’à dissipation du vin ou neutralisation.",
+    "mechanic": "Surdosage : Frénésie à la place de l’ivresse ordinaire jusqu’à dissipation du vin ou neutralisation.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L15-001",
+    "sourceBook": "L15",
+    "printedPage": 79,
+    "label": "Cracheur de dragon",
+    "summaryFr": "Échec du Test de Calme après tir de Poudre noire : Brisé supplémentaire par rang du talent.",
+    "mechanic": "Échec du Test de Calme après tir de Poudre noire : Brisé supplémentaire par rang du talent.",
+    "currentStatus": "engine",
+    "evidence": [
+      "js/data/v5-talent-coverage.json:1100"
+    ],
+    "proposedAutomation": "Conserver le circuit et contrôler les exceptions lors de son extension.",
+    "risk": "moyen",
+    "limit": "Clause nommée seulement, avec faits et jets requis."
+  },
+  {
+    "id": "C0-L15-002",
+    "sourceBook": "L15",
+    "printedPage": 83,
+    "label": "Rancunes",
+    "summaryFr": "Animosité envers la cible d’une rancune ; Haine pour une rancune de sang. Les non-nains ne prennent pas cette Psychologie par simple rancune collective.",
+    "mechanic": "Animosité envers la cible d’une rancune ; Haine pour une rancune de sang. Les non-nains ne prennent pas cette Psychologie par simple rancune collective.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L15-003",
+    "sourceBook": "L15",
+    "printedPage": 95,
+    "label": "Pierre des serments",
+    "summaryFr": "Debout sur la pierre : +20 contre les déplacements forcés, dont les Tests empêchant Brisé.",
+    "mechanic": "Debout sur la pierre : +20 contre les déplacements forcés, dont les Tests empêchant Brisé.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L15-004",
+    "sourceBook": "L15",
+    "printedPage": 125,
+    "label": "Rune of Daunting",
+    "summaryFr": "Arme dégainée : indice de Peur égal au nombre de runes, ou augmentation correspondante d’un indice déjà possédé.",
+    "mechanic": "Arme dégainée : indice de Peur égal au nombre de runes, ou augmentation correspondante d’un indice déjà possédé.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L15-005",
+    "sourceBook": "L15",
+    "printedPage": 128,
+    "label": "Rune of Courage",
+    "summaryFr": "Alliés affectés : +10 aux Tests de Psychologie par rune.",
+    "mechanic": "Alliés affectés : +10 aux Tests de Psychologie par rune.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L15-006",
+    "sourceBook": "L15",
+    "printedPage": 130,
+    "label": "Rune of the Valiant",
+    "summaryFr": "Nains servant l’arme de guerre : +10 Volonté par rune.",
+    "mechanic": "Nains servant l’arme de guerre : +10 Volonté par rune.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L15-007",
+    "sourceBook": "L15",
+    "printedPage": 130,
+    "label": "Rune of Hearth and Home",
+    "summaryFr": "Nains à vingt-cinq yards de l’Enclume : résultat de Calme considéré comme 01 jusqu’à la fin du prochain Round.",
+    "mechanic": "Nains à vingt-cinq yards de l’Enclume : résultat de Calme considéré comme 01 jusqu’à la fin du prochain Round.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L16-001",
+    "sourceBook": "L16",
+    "printedPage": 11,
+    "label": "Master Rune of Dismay",
+    "summaryFr": "Cor une fois par jour : ennemis dans deux fois Endurance yards, non immunisés Psychologie, −10 à tous les Tests pendant un Round.",
+    "mechanic": "Cor une fois par jour : ennemis dans deux fois Endurance yards, non immunisés Psychologie, −10 à tous les Tests pendant un Round.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-001",
+    "sourceBook": "L17",
+    "printedPage": 24,
+    "label": "Incident : The Horror",
+    "summaryFr": "Calme −20 ou un Brisé ; ne reprend pas automatiquement la difficulté chiffrée V5.",
+    "mechanic": "Calme −20 ou un Brisé ; ne reprend pas automatiquement la difficulté chiffrée V5.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-002",
+    "sourceBook": "L17",
+    "printedPage": 58,
+    "label": "Stoicism de Hysh",
+    "summaryFr": "Résister à la Psychologie devient obligatoire lorsque possible ; +2 DR à ces Tests de Calme.",
+    "mechanic": "Résister à la Psychologie devient obligatoire lorsque possible ; +2 DR à ces Tests de Calme.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-003",
+    "sourceBook": "L17",
+    "printedPage": 130,
+    "label": "Red Mist d’Aqshy",
+    "summaryFr": "Surpris déclenche Calme +20 ; échec : Frénésie en combat, Animosité envers tous hors combat.",
+    "mechanic": "Surpris déclenche Calme +20 ; échec : Frénésie en combat, Animosité envers tous hors combat.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-004",
+    "sourceBook": "L17",
+    "printedPage": 142,
+    "label": "Savage Gaze de Ghur",
+    "summaryFr": "Défense par Volonté contre certains animaux ; Critique donne des Brisé selon les Blessures de la table de tête.",
+    "mechanic": "Défense par Volonté contre certains animaux ; Critique donne des Brisé selon les Blessures de la table de tête.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-005",
+    "sourceBook": "L17",
+    "printedPage": 142,
+    "label": "Claustrophobia de Ghur",
+    "summaryFr": "Entrer dans une construction : Calme +40 ou un Brisé.",
+    "mechanic": "Entrer dans une construction : Calme +40 ou un Brisé.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-006",
+    "sourceBook": "L17",
+    "printedPage": 146,
+    "label": "Attribut des Bêtes V4",
+    "summaryFr": "Sort du domaine réussi : option Peur 1 pendant 1d10 Rounds ; durée différente de L06.",
+    "mechanic": "Sort du domaine réussi : option Peur 1 pendant 1d10 Rounds ; durée différente de L06.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-007",
+    "sourceBook": "L17",
+    "printedPage": 147,
+    "label": "Beast Unbroken",
+    "summaryFr": "Réaction de l’animal ou de l’humanoïde maudit selon le dé ; plusieurs issues imposent fuite, mouvement aléatoire ou Peur 1 des auditeurs.",
+    "mechanic": "Réaction de l’animal ou de l’humanoïde maudit selon le dé ; plusieurs issues imposent fuite, mouvement aléatoire ou Peur 1 des auditeurs.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-008",
+    "sourceBook": "L17",
+    "printedPage": 170,
+    "label": "Axe of Unrelenting Fury",
+    "summaryFr": "Après Blessures infligées, Volonté avec malus cumulatif ; échec : Frénésie qui attaque aussi les proches, fin seulement par désarmement, Sonné ou Inconscient.",
+    "mechanic": "Après Blessures infligées, Volonté avec malus cumulatif ; échec : Frénésie qui attaque aussi les proches, fin seulement par désarmement, Sonné ou Inconscient.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-009",
+    "sourceBook": "L17",
+    "printedPage": 172,
+    "label": "Mail of Stolen Valour",
+    "summaryFr": "Échec de Calme déclenche fuite jusqu’à Volonté réussie ; l’armure ne protège plus durant cette fuite.",
+    "mechanic": "Échec de Calme déclenche fuite jusqu’à Volonté réussie ; l’armure ne protège plus durant cette fuite.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-010",
+    "sourceBook": "L17",
+    "printedPage": 176,
+    "label": "Howl of the Great Beast",
+    "summaryFr": "Un Avantage pour hurler gratuitement : vivants dans Initiative yards, trois Assourdi et Calme −10 ou trois Brisé ; réussite protège pour la rencontre.",
+    "mechanic": "Un Avantage pour hurler gratuitement : vivants dans Initiative yards, trois Assourdi et Calme −10 ou trois Brisé ; réussite protège pour la rencontre.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-011",
+    "sourceBook": "L17",
+    "printedPage": 186,
+    "label": "Familier d’Aqshy",
+    "summaryFr": "Frénésie permise en remplaçant Volonté par Focalisation Aqshy.",
+    "mechanic": "Frénésie permise en remplaçant Volonté par Focalisation Aqshy.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-talent-actions.js:33"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Le familier imprégné Aqshy possède un chemin d’activation existant ; pas de déclenchement psychologique générique automatique."
+  },
+  {
+    "id": "C0-L17-012",
+    "sourceBook": "L17",
+    "printedPage": 187,
+    "label": "États des familiers",
+    "summaryFr": "Brisé s’applique normalement aux familiers, contrairement à certaines immunités à d’autres États.",
+    "mechanic": "Brisé s’applique normalement aux familiers, contrairement à certaines immunités à d’autres États.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-013",
+    "sourceBook": "L17",
+    "printedPage": 217,
+    "label": "Weezer’s Drizzle",
+    "summaryFr": "Dans la bruine, −2 DR aux Tests pour entrer en Frénésie ; autres effets de froid et d’humidité distincts.",
+    "mechanic": "Dans la bruine, −2 DR aux Tests pour entrer en Frénésie ; autres effets de froid et d’humidité distincts.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-014",
+    "sourceBook": "L17",
+    "printedPage": 62,
+    "label": "Clarté mentale",
+    "summaryFr": "Les pénalités mentales et de Psychologie sont ignorées pendant la durée ; ce n’est pas une suppression permanente.",
+    "mechanic": "Les pénalités mentales et de Psychologie sont ignorées pendant la durée ; ce n’est pas une suppression permanente.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:2208"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L17-015",
+    "sourceBook": "L17",
+    "printedPage": 65,
+    "label": "Protection de Phâ : variante V4",
+    "summaryFr": "Les créatures interdites présentes deviennent Brisé jusqu’à sortie ; critères de corruption différents de L06.",
+    "mechanic": "Les créatures interdites présentes deviennent Brisé jusqu’à sortie ; critères de corruption différents de L06.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:2208"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L17-016",
+    "sourceBook": "L17",
+    "printedPage": 101,
+    "label": "Tempête de Shemtek",
+    "summaryFr": "Version normale : Peur 1 des témoins sans domaine Cieux ; version sûre : aucune Peur.",
+    "mechanic": "Version normale : Peur 1 des témoins sans domaine Cieux ; version sûre : aucune Peur.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:2870",
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L17-017",
+    "sourceBook": "L17",
+    "printedPage": 110,
+    "label": "Horreurs noires",
+    "summaryFr": "Ombre stationnaire causant Peur 1, jusqu’à Peur 4 par surincantation.",
+    "mechanic": "Ombre stationnaire causant Peur 1, jusqu’à Peur 4 par surincantation.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:15513"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L17-018",
+    "sourceBook": "L17",
+    "printedPage": 111,
+    "label": "Cor du Andar",
+    "summaryFr": "+2 DR Calme/Commandement alliés, −2 ennemis ; Peur 1 immédiate des ennemis, neutres inchangés.",
+    "mechanic": "+2 DR Calme/Commandement alliés, −2 ennemis ; Peur 1 immédiate des ennemis, neutres inchangés.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:15961"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L17-019",
+    "sourceBook": "L17",
+    "printedPage": 113,
+    "label": "Ombre vagabonde et destrier",
+    "summaryFr": "L’ombre sensorielle cause Peur 1 ; le destrier hors soleil aussi. Ces deux circuits n’automatisent pas les Tests des témoins.",
+    "mechanic": "L’ombre sensorielle cause Peur 1 ; le destrier hors soleil aussi. Ces deux circuits n’automatisent pas les Tests des témoins.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:16883"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L17-020",
+    "sourceBook": "L17",
+    "printedPage": 122,
+    "label": "Acceptation du destin",
+    "summaryFr": "Alliés : immunité Peur, Terreur traitée comme Peur ; variante ennemie : Calme ou fuite interdite.",
+    "mechanic": "Alliés : immunité Peur, Terreur traitée comme Peur ; variante ennemie : Calme ou fuite interdite.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:11130",
+      "js/core/v5-divine-effects-gear.js:12"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L17-021",
+    "sourceBook": "L17",
+    "printedPage": 122,
+    "label": "Soleil pourpre surincanté",
+    "summaryFr": "L’orbe ajouté à Cendres et Poussière cause Peur 2 et son toucher appelle un autre Test de mort.",
+    "mechanic": "L’orbe ajouté à Cendres et Poussière cause Peur 2 et son toucher appelle un autre Test de mort.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:153"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L17-022",
+    "sourceBook": "L17",
+    "printedPage": 124,
+    "label": "Vortex d’âmes et Voile pourpre",
+    "summaryFr": "Brisé direct du Vortex et Peur du Voile ; versions du socle remaniées conservées au catalogue.",
+    "mechanic": "Brisé direct du Vortex et Peur du Voile ; versions du socle remaniées conservées au catalogue.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:153"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L17-023",
+    "sourceBook": "L17",
+    "printedPage": 134,
+    "label": "Tête brûlante",
+    "summaryFr": "Toute cible ayant perdu des Blessures traite le lanceur comme Peur 1.",
+    "mechanic": "Toute cible ayant perdu des Blessures traite le lanceur comme Peur 1.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:223",
+      "js/core/v5-spell-contracts.js:3021"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  },
+  {
+    "id": "C0-L17-024",
+    "sourceBook": "L17",
+    "printedPage": 135,
+    "label": "Cœurs enflammés : variante V4",
+    "summaryFr": "Retire Brisé et Exténué mais ajoute trois talents selon le texte V4 ; version du catalogue basée sur le socle V5.",
+    "mechanic": "Retire Brisé et Exténué mais ajoute trois talents selon le texte V4 ; version du catalogue basée sur le socle V5.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:745"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "élevé",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L17-025",
+    "sourceBook": "L17",
+    "printedPage": 149,
+    "label": "Le Bœuf reste debout",
+    "summaryFr": "Retire DR + 1 Brisé alliés et dispense de Peur/Terreur durant la durée.",
+    "mechanic": "Retire DR + 1 Brisé alliés et dispense de Peur/Terreur durant la durée.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-spell-contracts.json:6990",
+      "js/core/v5-spell-contracts.js:2326"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Couverture limitée aux faits, cibles et choix explicites ; ne vaut pas moteur générique de Psychologie."
+  },
+  {
+    "id": "C0-L06-074",
+    "sourceBook": "L06",
+    "printedPage": 158,
+    "label": "Poursuite V5",
+    "summaryFr": "Comparer le poursuivant au Mouvement le plus élevé à la proie la plus lente ; victoire de six DR termine la poursuite ; rapport de deux entre les Mouvements peut la terminer d’office. Sinon facteurs de terrain et obstacles.",
+    "mechanic": "Comparer le poursuivant au Mouvement le plus élevé à la proie la plus lente ; victoire de six DR termine la poursuite ; rapport de deux entre les Mouvements peut la terminer d’office. Sinon facteurs de terrain et obstacles.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-broken-escape.js:19"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Aucun circuit spécifique identifié dans les lecteurs Psychologie/Brisé et les catalogues vérifiés ; le service générique d’États ne prouve pas ce déclenchement."
+  },
+  {
+    "id": "C0-L17-026",
+    "sourceBook": "L17",
+    "printedPage": 125,
+    "label": "Désespoir après sort",
+    "summaryFr": "Un Test de Calme supplémentaire raté provoque Exténué et Désespoir ; pendant une semaine, Exténué revient chaque matin.",
+    "mechanic": "Un Test de Calme supplémentaire raté provoque Exténué et Désespoir ; pendant une semaine, Exténué revient chaque matin.",
+    "currentStatus": "reminder",
+    "evidence": [
+      "js/core/v5-spell-contracts.js:153"
+    ],
+    "proposedAutomation": "Créer ou raccorder cette clause au service commun après arbitrage MJ, sans déduire les faits de scène.",
+    "risk": "moyen",
+    "limit": "Donnée ou rappel présent ; déclenchement, bénéficiaires et Tests non génériques."
+  }
+]
