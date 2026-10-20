@@ -24,7 +24,7 @@ Today `previewSpellInteraction` ends with `removeExpiredSummons(next,{deferCurre
 - Allowed: `js/core/v5-magic-turn.js`, `tests/p4c-char-magic.test.js`.
 - Acceptance: `node --test tests/p4c-char-magic.test.js tests/divin-v5-r25-asphyxie.test.js tests/lot3-v5-magic-33.test.js`.
 
-## Step 2 — En Bon Ordre (Myrmidia, `divine:miracle:en-bon-ordre`, Up in Arms p.79)
+## Step 2 (DONE 20/10) — En Bon Ordre (Myrmidia, `divine:miracle:en-bon-ordre`, Up in Arms p.79)
 
 Rule: while active, allies in the zone may disengage without the enemy gaining Momentum (Élan) or a free attack. The engine has no disengage action, so this is ASSISTED: designated allies (GM designation, like Sur un Terrain Mortel) carry a flag shown to the GM.
 
@@ -34,7 +34,7 @@ Rule: while active, allies in the zone may disengage without the enemy gaining M
 - Allowed: those two source files + new test + generated files + count tests.
 - Acceptance: `node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-en-bon-ordre.test.js tests/divin-v5-p5-terrain.test.js tests/divin-v5-p4c-contracts.test.js tests/divin-v5-t5-form-model.test.js`.
 
-## Step 3 — Attaque Rapide (Myrmidia, `divine:miracle:attaque-rapide`, Up in Arms p.79)
+## Step 3 (DONE 20/10) — Attaque Rapide (Myrmidia, `divine:miracle:attaque-rapide`, Up in Arms p.79)
 
 Rule: for 3 Rounds, at the start of each Round the priest may take an Initiative Test (+0) for a free attack outside the normal sequence with the main-hand weapon. Model: the Frenzy free attack (`js/core/v5-store-action.js` lines ~63-66 `freeAttackTalent==='frenzy'`; `js/core/v5-talent-attacks.js` `previewAttackPrelude`; UI checkbox `js/ui/resolution-panel.js` ~line 1354).
 
@@ -47,7 +47,7 @@ Rule: for 3 Rounds, at the start of each Round the priest may take an Initiative
 - Allowed: `js/core/v5-divine-effects-gear.js`, `js/core/v5-divine-grammar.js`, `js/core/v5-store-action.js`, `js/core/v5-talent-attacks.js`, `js/ui/resolution-panel.js`, the source file, new test, `tests/divin-v5-p5-ui-browser.mjs`, generated files, count tests.
 - Acceptance: `node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-attaque-rapide.test.js tests/lot2-v5-remaining-talents.test.js tests/divin-v5-p5-interactions.test.js && node tests/divin-v5-p5-ui-browser.mjs`.
 
-## Step 4 — Fureur d’Ulric (`divine:miracle:ulric:ulric-s-fury`, Livre de base V5 p.228)
+## Step 4 (DONE 20/10) — Fureur d’Ulric (`divine:miracle:ulric:ulric-s-fury`, Livre de base V5 p.228)
 
 Rule: an ally may take a free Frenzy Test during their Turns; instead of the usual Frenzy free attack, Frenzy adds +1d10 Damage to the FIRST melee hit they land in each of their Turns; on a 10, roll again and add, until a result below 10.
 
@@ -60,7 +60,7 @@ Rule: an ally may take a free Frenzy Test during their Turns; instead of the usu
 - Allowed: gear.js, grammar.js, v5-store-action.js, resolution.js, resolution-panel.js, workspace-view.js (only if needed to pass the context field), the source file, new test, generated files, count tests.
 - Acceptance: `node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-fureur-ulric.test.js tests/lot2-v5-remaining-talents.test.js tests/divin-v5-p5-wolf-bite.test.js tests/divin-v5-p5-protection.test.js`.
 
-## Step 5 — Registry of Critical Wounds (prerequisite of Step 6)
+## Step 5 (DONE 20/10) — Registry of Critical Wounds (prerequisite of Step 6)
 
 Today an attack critical becomes States + extra Wounds at apply time and leaves no record; spell criticals are recorded in `participant.extensions.v5.criticalWounds` WITHOUT an id (`js/core/v5-spell-contracts.js` ~lines 3438 and 3479). Make every critical wound a record with a stable id in `extensions.v5.criticalWounds`.
 
@@ -70,7 +70,7 @@ Today an attack critical becomes States + extra Wounds at apply time and leaves 
 - Allowed: resolution.js, v5-spell-contracts.js, new test.
 - Acceptance: `node --test tests/divin-v5-crit-registry.test.js tests/divin-v5-p5-sauvagerie-consume.test.js tests/divin-v5-p5-sauvagerie-spell.test.js tests/p5-char-critical-injure.test.js tests/lot3-v5-magic-33.test.js`.
 
-## Step 6 — Larmes de Shallya (`divine:miracle:shallya:shallya-s-tears`, source line ~64 of `docs/divin/sources/miracles/shallya.mjs`)
+## Step 6 (DONE 20/10) — Larmes de Shallya (`divine:miracle:shallya:shallya-s-tears`, source line ~64 of `docs/divin/sources/miracles/shallya.mjs`)
 
 Rule: after praying (10 − Fellowship Bonus) Rounds, heal 1 Critical Wound of the target, +1 per +2 SL; interrupted prayer → nothing; amputated limbs are not reattached.
 
@@ -83,7 +83,7 @@ Rule: after praying (10 − Fellowship Bonus) Rounds, heal 1 Critical Wound of t
 - Allowed: the effect module chosen, grammar.js, the source file, new test, generated files, count tests.
 - Acceptance: `node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-larmes-shallya.test.js tests/divin-v5-crit-registry.test.js tests/divin-v5-t5-form-model.test.js tests/divin-v5-p4c-contracts.test.js`.
 
-## Step 7 — Protection UI polish
+## Step 7 (DONE 20/10) — Protection UI polish
 
 In `js/ui/resolution-panel.js` (search `Bénédiction de Protection : résultat du Test de Calme`), do not show the select when the attacker id is already in the layer's `attackDeterrent.passedAttackerIds`. Extend `tests/divin-v5-p5-ui-browser.mjs` with that case.
 - Allowed: resolution-panel.js, the browser test.

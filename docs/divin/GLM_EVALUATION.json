@@ -1259,8 +1259,72 @@
       "tours": 20,
       "lignes_livrees": 40,
       "verdict_qualite": "5 — refonte propre du gestionnaire et lecteur unique dans buildCombatTest ; suite complète verte."
+    },
+    {
+      "id": "p5-t25-plan-fin-chantier",
+      "voie": "glm",
+      "famille": "plan-complet",
+      "risque": "eleve",
+      "objectif": "Plan de fin de chantier en 7 étapes confié à GLM (R19/R20, En Bon Ordre, Attaque Rapide, Fureur d'Ulric, registre des Blessures Critiques, Larmes de Shallya, retouche Protection)",
+      "acceptation": "par étape : tests d'abord, acceptation, suite complète, commit ; recette finale",
+      "fichiers_autorises": [
+        "par étape, voir docs/divin/PLAN_GLM_FIN_CHANTIER.md"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        null,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        73,
+        null
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        400000,
+        440000
+      ],
+      "b2_cout_usd": 46.6,
+      "b2_cout_reel_eur": 0.05,
+      "b2_detail": {
+        "sessions": "1 longue (12 USD plafond, étape 1 seule) puis 1 session par étape : 2 ok, 3 coupée puis ok, 4 coupée 3 fois, 5 ok, 6 coupée (reste repris), 7 ok",
+        "plafonds_atteints": 6
+      },
+      "duree_s": 9000,
+      "tours": null,
+      "iterations": null,
+      "reussite_premier_essai": false,
+      "code_correct_premier_essai": false,
+      "erreurs_orchestrateur": [
+        "Plan trop étroit sur les tests épinglant les statuts (étapes 2-3 bloquées au premier passage).",
+        "Session unique : contexte renvoyé à chaque tour, plafond atteint après une étape.",
+        "Plafond par étape trop bas au regard du coût réel."
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 900,
+      "lignes_retouchees_par_claude": 4,
+      "reprise": false,
+      "defauts_trouves_apres": [
+        {
+          "par": "orchestrateur",
+          "bloquant": false,
+          "description": "Test Shallya sur un jet double (55 = critique, 5 DR) : jet corrigé en 58."
+        },
+        {
+          "par": "orchestrateur",
+          "bloquant": true,
+          "description": "Fureur d'Ulric : bonus déclaré comme plan de talent sans source de talent (erreur à l'application) ; ligne retirée."
+        },
+        {
+          "par": "orchestrateur",
+          "bloquant": false,
+          "description": "Test Fureur : talentDamage absent quand nul ; lecture ?? 0."
+        }
+      ],
+      "verdict_qualite": "4 — 7 étapes livrées, arrêts propres sur blocage de plan (BLOCKED documentés) ; la reprise de travail sauvegardé marche ; les coupures venaient du plafond, pas du coût réel.",
+      "remarque": "Coût réel estimé à quelques centimes d'après la console (1,66 EUR à midi, 1,7 EUR le soir)."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
-  "cout_reel_note_20_10": "Console Mistral au 20/10 : 1,66 EUR cumulés pour T1-T14 (aucun détail par jour) ; environ 2/3 le matin du 20/10 (T12-T14), soit ~0,37 EUR réel par tâche contre 1,6 USD de plafond affiché : le cache divise le coût par ~4."
+  "cout_reel_note_20_10": "Console Mistral au 20/10 : 1,66 EUR cumulés pour T1-T14 (aucun détail par jour) ; environ 2/3 le matin du 20/10 (T12-T14), soit ~0,37 EUR réel par tâche contre 1,6 USD de plafond affiché : le cache divise le coût par ~4.",
+  "cout_reel_note_20_10_soir": "Console Mistral au soir du 20/10 : 1,7 EUR cumulés depuis le début (T1-T25), alors que les plafonds affichés par run-vibe cumulent plus de 40 USD. Le plafond n'est pas un coût : seuil de coupure à régler large."
 }
