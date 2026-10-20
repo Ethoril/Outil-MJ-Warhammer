@@ -1078,6 +1078,96 @@
       ],
       "verdict_qualite": "4 — gestionnaire complet et bien validé (doublons, cible unique, valeurs connues) ; défaut de formulaire non couvert par l'acceptation.",
       "remarque": ""
+    },
+    {
+      "id": "p5-t21-revue-independante",
+      "voie": "glm",
+      "famille": "revue",
+      "risque": "faible",
+      "objectif": "Revue indépendante en lecture seule du diff combat/prière depuis la 3.18.0 (181 lignes), défauts prouvés par script",
+      "acceptation": "rapport de défauts confirmés avec script de reproduction",
+      "fichiers_autorises": [
+        "tmp/review/"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        null,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        null,
+        null
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        320000,
+        326000
+      ],
+      "b2_cout_usd": 2.589,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 1764058,
+        "tokens_sortie": 27114,
+        "etapes": 28
+      },
+      "duree_s": null,
+      "tours": 28,
+      "iterations": 0,
+      "reussite_premier_essai": false,
+      "code_correct_premier_essai": false,
+      "erreurs_orchestrateur": [
+        "Revue ouverte (« trouver les bugs ») : même échec que T14, exploration jusqu'au plafond."
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 0,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": true,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "1 — plafond atteint sans rapport ; une seule piste exploitable dans son dernier message (type « attaque » non reconnu par attacksOnly), confirmée et corrigée par l'orchestrateur.",
+      "remarque": "Remplacée par T22 : scénarios d'interaction écrits par GLM à partir d'attendus fixés par l'orchestrateur."
+    },
+    {
+      "id": "p5-t22-interactions",
+      "voie": "glm",
+      "famille": "tests-depuis-spec",
+      "risque": "faible",
+      "objectif": "Tests d'interaction Chance / Écraser les faibles / Fortune généreuse sur un même jet (6 scénarios à attendus fixés)",
+      "acceptation": "node --test tests/divin-v5-p5-interactions.test.js ; deux mutants de consommation tués",
+      "fichiers_autorises": [
+        "tests/divin-v5-p5-interactions.test.js"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        null,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        null,
+        null
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        326000,
+        333000
+      ],
+      "b2_cout_usd": 0.5171,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 305584,
+        "tokens_sortie": 20291,
+        "etapes": 9
+      },
+      "duree_s": null,
+      "tours": 9,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_livrees": 200,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — 9 étapes, attendus respectés, mutants tués ; a corrigé une valeur de SON test (pas le produit) et l'a signalé.",
+      "remarque": ""
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
