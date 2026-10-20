@@ -148,6 +148,12 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
 }
 export function annotateV5StoreActionPreview(preview, input) {
+  // Indice seulement : la faveur reste disponible jusqu'à une inversion demandée et appliquée.
+  if (preview.success === false && input.v5?.reverseDice !== true && reverseDiceLayers(input.actor).length && Number.isInteger(preview.roll) && preview.roll >= 1 && preview.roll <= 100) {
+    const reversed = preview.roll === 100 ? 100 : (preview.roll % 10) * 10 + Math.floor(preview.roll / 10);
+    const alternative = previewResolution({ ...input, roll: reversed, dieRoll: reversed, enteredRoll: reversed });
+    if (alternative.success === true) preview = { ...preview, reverseDiceHint: { reversed, wouldSucceed: true } };
+  }
   if (input.reactionValidation?.ready === false) preview = { ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
   if (input.fortuneReroll) {
     if (input.fortuneRerollRoll === null) {
