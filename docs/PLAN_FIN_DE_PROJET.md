@@ -12,6 +12,10 @@ But : tout finir, y compris ce qui était hors périmètre. Arbitrages du MJ : `
 - **Publication** : une version par phase (ou par lot important), seulement sur feu vert du MJ.
 - **Journal** : chaque lot est ajouté à `docs/divin/GLM_EVALUATION.json`.
 
+## État au 20/10 (nuit)
+
+Arrêt sur crédits Mistral épuisés (402 « Out of credits »). Faits : A1, A2 (publiés en 3.20.1), inventaires B0 (`docs/divin/COURROUX_INVENTAIRE.*`, 69 entrées) et D0a (`docs/lot3/LOT4_TRADITIONS_BASE.*`, 7 traditions). À relancer : A3 à A12 (prompts dans `docs/PLAN_GLM_PHASE_A.md`), inventaires C0 (Brisé), D0b (traditions des suppléments), E0 (bestiaires), prompts dans le dépôt de l’orchestrateur (`%LOCALAPPDATA%\Temp\glm-inv\*.md` et `glm-a\prompt-A*.md`, à réécrire si perdus : ils reprennent les objectifs ci-dessous).
+
 ## Phase A — Arbitrages du chantier divin (12 lots)
 
 | Lot | Contenu | Emplacements | Risque |
