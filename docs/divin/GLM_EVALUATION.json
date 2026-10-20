@@ -929,6 +929,100 @@
       ],
       "verdict_qualite": "4 — a contourné proprement un plan défectueux, bonne gestion de la double reconstruction de l'entrée ; un cas combiné oublié ; 41 étapes, proche du plafond.",
       "remarque": "Sans contrôleur indépendant ; la suite complète reste verte."
+    },
+    {
+      "id": "p5-t18-protection",
+      "voie": "glm",
+      "famille": "module-effets",
+      "risque": "eleve",
+      "objectif": "Bénédiction de Protection (6 cultes) : effet générique attack-deterrent, Test de Calme de l'attaquant saisi par le MJ, attaque non applicable sinon (resolution.js)",
+      "acceptation": "node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-protection.test.js (+5)",
+      "fichiers_autorises": [
+        "tools/build-v5-divine-contracts.mjs",
+        "js/core/v5-divine-effects-gear.js",
+        "js/core/v5-divine-grammar.js",
+        "js/core/resolution.js",
+        "fichiers générés"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        12,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        68,
+        null
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        262000,
+        288000
+      ],
+      "b2_cout_usd": 0.4854,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 325387,
+        "tokens_sortie": 6777,
+        "etapes": 13
+      },
+      "duree_s": null,
+      "tours": 13,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [
+        "Deux tests de décompte/épinglage (blessings-cults, catalogue Myrmidia) non anticipés dans le prompt ; GLM s'est arrêté proprement sur le premier comme demandé."
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 30,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — plan suivi, arrêt correct sur le test de décompte au lieu de le modifier ; 13 étapes. Interface (sélecteur) ajoutée par l'orchestrateur (1 ligne).",
+      "remarque": "Tests de décompte mis à jour par l'orchestrateur (5 lignes)."
+    },
+    {
+      "id": "p5-t19-ui-browser",
+      "voie": "glm",
+      "famille": "tests-depuis-spec",
+      "risque": "faible",
+      "objectif": "Parcours navigateur de composant : sélecteur Protection et case Fortune généreuse dans renderResolutionPanel",
+      "acceptation": "node tests/divin-v5-p5-ui-browser.mjs ; mutant (lignes d'interface retirées) doit échouer",
+      "fichiers_autorises": [
+        "tests/divin-v5-p5-ui-browser.mjs"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        null,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        null,
+        null
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        288000,
+        300000
+      ],
+      "b2_cout_usd": 1.2244,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 826949,
+        "tokens_sortie": 15152,
+        "etapes": 23
+      },
+      "duree_s": null,
+      "tours": 23,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_livrees": 150,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — 9 contrôles, mutant tué, cas négatifs inclus ; a trouvé seul le type MIME JSON nécessaire au graphe de modules.",
+      "remarque": "Contrôle réseau : connexions de msedge (navigateur lancé par le test), pas de l'agent."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
