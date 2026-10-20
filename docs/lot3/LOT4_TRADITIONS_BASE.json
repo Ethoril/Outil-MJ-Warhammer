@@ -1,0 +1,1078 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "lot": "LOT4_TRADITIONS_BASE",
+  "goal": "Inventaire des traditions magiques du livre de base absentes du catalogue de sorts : Magie naturelle (Hedgecraft, avec l'appoint AOTE3), Sorcellerie (Witchcraft), Demonologie, Necromancie et les trois Domaines du Chaos (Nurgle, Slaanesh, Tzeentch).",
+  "referencePolicy": "L06 (Livre de base V5 EN) sert de socle ; L05 (Livre de base FR, V4) fournit les noms francais officiels ; L02 (Archives of the Empire 3) fournit les sorts Hedgecraft complementaires (pp. 60-65). Toutes les pages citees sont les pages imprimees ; dans L06 et L02, page physique = page imprimee ; dans L05, page physique = page imprimee + 2.",
+  "corpusNote": "docs/divin/DIVIN_CORPUS_LIVRES.json liste 17 livres (L01-L17), pas 18 ; l'identifiant L18 mentionne dans la commande n'existe pas dans le corpus. Aucun PDF supplementaire pertinent hors corpus n'a ete consulte.",
+  "sources": [
+    { "id": "L06", "file": "Livre de base V5 EN v2.pdf", "role": "socle V5 : Witch Magic pp. 255-257, Dark Magic p. 258, Chaos Magic pp. 259-260, regles generales pp. 234-238" },
+    { "id": "L05", "file": "Livre de base FR.pdf", "role": "noms francais (V4 FR) : Domaine de la Magie naturelle p. 254-255, Domaine de la Sorcellerie pp. 255-256, Magie noire p. 256, Magie du Chaos p. 257" },
+    { "id": "L02", "file": "Archives of the Empire 3.pdf", "role": "chapitre Minor Gods, Folk Worship & Hedgecraft pp. 56-64 : sorts Hedgecraft complementaires pp. 62-64" },
+    { "id": "L03", "file": "Archives of the Empire Volume 1.pdf", "role": "controle : aucune mention de Hedgecraft/Witchcraft/Demonologie comme sorts (grep negatif), seulement des references de background a la necromancie" }
+  ],
+  "catalogueAbsence": {
+    "verdict": "Les 7 traditions et leurs 42 sorts sont absents du catalogue courant.",
+    "evidence": [
+      "js/data/v5-spell-contracts.json : grep '\"domain\"' ne renvoie que 13 domaines (arcane, beasts, death, elven-arcane, elven-petty, fire, heavens, high, life, light, metal, petty, shadow) ; aucun hedgecraft/witchcraft/daemonology/necromancy/nurgle/slaanesh/tzeentch.",
+      "js/data/v5-spell-contracts.json : 277 contrats (grep '\"canonicalName\"'), aucun portant le nom d'un sort de ces traditions.",
+      "docs/lot3/LOT3_CADRAGE_MAGIE.md:18 : les sorts de sorcellerie, magie sombre et Chaos absents du catalogue ne sont pas ajoutes par l'audit Lot 3 (decision documentee d'exclusion).",
+      "docs/lot3/LOT3_SUIVI_EXHAUSTIF_MAGIE.json: les traditions n'apparaissent qu'en reference croisee (dissipation gratuite contre Sorcellerie, Demonologie, Necromancie, Magie noire ou Chaos), jamais comme sorts inventories."
+    ]
+  },
+  "traditions": [
+    {
+      "id": "hedgecraft",
+      "nameEn": "Lore of Hedgecraft",
+      "nameFr": "Le Domaine de la Magie naturelle",
+      "nameFrNote": "Intitule officiel L05 p. 254 ; l'appellation « Magie de la Haie » demandee n'apparait pas dans L05 (a arbitrer).",
+      "currentStatus": "Absent du catalogue : aucun contrat, aucun domaine (voir catalogueAbsence.evidence).",
+      "rules": {
+        "casting": "Lancers standards en Language (Magick) (L06 p. 235) ; tradition informelle transmise de maitre a eleve, hors Colleges, hors-la-loi dans l'Empire (L06 p. 234 ; L02 pp. 60-61 : les sorciers de village se dissimulent et preferent des explications naturelles).",
+        "ingredients": "Attribut du domaine (L06 p. 255) : les sorts ne peuvent pas etre lances sans ingredients, partie integrale du procede. Recherche : Test Savoir (Folklore) Accessible (+2 DR) apres 2 heures de travail -> 1 + DR ingredients ; ou achat 5 sous de cuivre l'unite. Materiaux locaux faciles a trouver mais prepares avec exigence. Variante V4 (L05 p. 254) : recuperation via Savoir (Herboristerie) en cherchant nourriture et herbes.",
+        "corruption": "Aucune regle propre de Corruption dans L06 ; regles generales seulement (Influence corruptrice -> table d'Incantations Imparfaites Majeures, L06 p. 237 ; entrees de table accordant des Points de Corruption, L06 p. 238).",
+        "familiars": "Aucune regle de familier dans L06 ni L05 pour cette tradition (grep negatif).",
+        "loreAttribute": "L06 p. 255 : les sorts exigent des ingredients (voir ci-dessus) ; pas d'autre attribut mecanique."
+      },
+      "spells": [
+        {
+          "nameEn": "Goodwill",
+          "nameFr": "Bonne Volonte",
+          "nameFrStatus": "officiel (L05 p. 254)",
+          "cn": 0,
+          "range": "Vous",
+          "target": "ZdE (Bonus de Sociabilite) metres",
+          "duration": "(Bonus de Force Mentale) minutes",
+          "source": "L06 p. 255",
+          "effectSummaryFr": "Une ambiance de bienveillance s'installe : tous les Tests de Sociabilite dans la zone gagnent +1 DR et les Psychologies Animosite et Haine restent sans effet.",
+          "mechanics": {
+            "area": "ZdE (Bonus de Sociabilite) metres",
+            "tests": "+1 DR aux Tests de Sociabilite dans la zone",
+            "conditions": "neutralise Animosite et Haine pour la duree"
+          },
+          "similarExistingContract": {
+            "name": "Coeurs Enflammes",
+            "canonicalName": "Flaming Hearts",
+            "evidence": "js/data/v5-spell-contracts.json:746",
+            "comment": "Plus proche buff collectif de moral existant ; Goodwill reste le seul bonus de Sociabilite en zone."
+          }
+        },
+        {
+          "nameEn": "Halatha's Joy",
+          "nameFr": "Joie de Halatha (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 0,
+          "range": "Toucher",
+          "target": "1",
+          "duration": "(Bonus de Sociabilite) heures",
+          "source": "L06 p. 255",
+          "effectSummaryFr": "Priere a une divinite de la fertilite : si c'est biologiquement possible, la cible concevra un enfant. Le sort se termine quand il sert.",
+          "mechanics": {
+            "other": "benediction de fertilite ; fin sur utilisation (interpretation a arbitrer)"
+          },
+          "similarExistingContract": {
+            "name": "Don de Vie",
+            "canonicalName": "Lifebloom",
+            "evidence": "js/data/v5-spell-contracts.json:7488",
+            "comment": "Correspondance thematique seulement (fecondite du vivant) ; aucun effet mecanique comparable."
+          }
+        },
+        {
+          "nameEn": "Mirkride",
+          "nameFr": "Chevaucher l'Obscurite",
+          "nameFrStatus": "officiel (L05 p. 254)",
+          "cn": 0,
+          "range": "Vous",
+          "target": "Vous",
+          "duration": "(Bonus de Force Mentale) minutes",
+          "source": "L06 p. 256",
+          "effectSummaryFr": "L'esprit quitte le corps et entre dans la Haie, espace entre monde materiel et royaume des esprits : temoin invisible et silencieux, incapable d'agir sur le monde. Le corps reste sur place, immobile et insensible.",
+          "mechanics": {
+            "conditions": "Esprit : Trait Ethere ; corps immobile/insense ; tout degat magique subi met fin au sort",
+            "other": "voit et interagit avec les esprits, creatures etheriques et demons, meme invisibles ; corps tue -> esprit errant pour l'eternite"
+          },
+          "similarExistingContract": {
+            "name": "Projection Spirituelle",
+            "canonicalName": "Projection Spirituelle",
+            "evidence": "js/data/v5-spell-contracts.json:2059",
+            "comment": "Meme squelette : esprit detache du corps immobile, perception hors du monde materiel."
+          }
+        },
+        {
+          "nameEn": "Nepenthe",
+          "nameFr": "Nepenthes",
+          "nameFrStatus": "officiel (L05 p. 254)",
+          "cn": 0,
+          "range": "Toucher",
+          "target": "Special",
+          "duration": "(Bonus de Force Mentale) heures",
+          "source": "L06 p. 256",
+          "effectSummaryFr": "Une brume argentee se condense en un philtre : qui le boit pendant la duree peut choisir d'oublier definitivement une personne.",
+          "mechanics": {
+            "other": "potion d'oubli ; oubli permanent et volontaire d'un individu designe"
+          },
+          "similarExistingContract": {
+            "name": "Effacement d'esprit",
+            "canonicalName": "Mindslip",
+            "evidence": "js/data/v5-spell-contracts.json:16156",
+            "comment": "Effacement de souvenir d'une personne ; Nepenthe le rend permanent et boisson."
+          }
+        },
+        {
+          "nameEn": "Nostrum",
+          "nameFr": "Panacee",
+          "nameFrStatus": "officiel (L05 p. 254)",
+          "cn": 0,
+          "range": "Toucher",
+          "target": "Special",
+          "duration": "(Bonus de Dexterite) heures",
+          "source": "L06 p. 256",
+          "effectSummaryFr": "Une decoction recoit un pouvoir magique : bue pendant la duree, elle soigne Bonus de Dexterite Blessures et guerrit une maladie ; +2 DR par maladie supplementaire.",
+          "mechanics": {
+            "damage": "soin de (Bonus de Dexterite) Blessures",
+            "other": "guerison d'1 maladie, +1 par tranche de +2 DR"
+          },
+          "similarExistingContract": {
+            "name": "Purification du Corps (Ghyran & Hysh)",
+            "canonicalName": "Purification du Corps (Ghyran & Hysh)",
+            "evidence": "js/data/v5-spell-contracts.json:10572",
+            "comment": "Seul contrat existant soignant une maladie ; Nostrum ajoute le soin de Blessures en potion."
+          }
+        },
+        {
+          "nameEn": "Part the Branches",
+          "nameFr": "Separer les branches",
+          "nameFrStatus": "officiel (L05 p. 255)",
+          "cn": 0,
+          "range": "Vous",
+          "target": "Vous",
+          "duration": "(Initiative) minutes",
+          "source": "L06 p. 256",
+          "effectSummaryFr": "Les pupilles se dilatent : le lanceur voit dans le monde des esprits et percoit toutes les creatures invisibles.",
+          "mechanics": {
+            "other": "vision des creatures invisibles"
+          },
+          "similarExistingContract": {
+            "name": "Percer le Voile",
+            "canonicalName": "Percer le Voile",
+            "evidence": "js/data/v5-spell-contracts.json:10090",
+            "comment": "Vision accrue traversant les occultations ; Part the Branches vise uniquement l'invisible."
+          }
+        },
+        {
+          "nameEn": "Protective Charm",
+          "nameFr": "Charme protecteur",
+          "nameFrStatus": "officiel (L05 p. 254)",
+          "cn": 0,
+          "range": "Toucher",
+          "target": "Special",
+          "duration": "(Bonus de Force Mentale) jours",
+          "source": "L06 p. 256",
+          "effectSummaryFr": "Une breloque ou un petit bibelot est empreinte de protection : son porteur gagne +2 DR pour resister aux effets magiques et a la Corruption.",
+          "mechanics": {
+            "tests": "+2 DR pour resister aux effets magiques et a la Corruption",
+            "other": "objet porte pendant (Bonus de Force Mentale) jours"
+          },
+          "similarExistingContract": {
+            "name": "Bouclier magique",
+            "canonicalName": "Magic Shield",
+            "evidence": "js/data/v5-spell-contracts.json:13852",
+            "comment": "Buff defensif personnel ; Protective Charm se transfere par objet et couvre la Corruption."
+          }
+        },
+        {
+          "nameEn": "Shepherd's Eye",
+          "nameFr": "Oeil du berger (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 0,
+          "range": "Special",
+          "target": "Special",
+          "duration": "Instantanee",
+          "source": "L06 p. 256",
+          "effectSummaryFr": "Scrying rustique : un reste organique d'une creature (laine, sang, excrément) plonge dans un bol d'eau ; apres 10 - Bonus d'Intelligence minutes de scrutation, des symboles revelent ou se trouve la creature.",
+          "mechanics": {
+            "tests": "scrutation pendant 10 - Bonus d'Intelligence minutes",
+            "other": "localisation d'une creature familiere ou non"
+          },
+          "similarExistingContract": {
+            "name": "Divination",
+            "canonicalName": "Divination",
+            "evidence": "js/data/v5-spell-contracts.json:2352",
+            "comment": "Seul contrat de scrying/localisation comparable ; Shepherd's Eye exige un lien organique."
+          }
+        }
+      ],
+      "aote3AdditionalSpells": [
+        {
+          "nameEn": "Dagger of the Art",
+          "nameFr": "Dague de l'Art (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 4,
+          "range": "Vous",
+          "target": "Vous",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L02 p. 62",
+          "effectSummaryFr": "Un batonnet de moins de vingt centimetres devient une dague magique, particulierement efficace contre les creatures Etherees et Corrompues.",
+          "mechanics": {
+            "damage": "SB + 8 contre les cibles Etherees ou Corrompues",
+            "tests": "Test de Focalisation Accessible (+0) chaque Round pour conserver la dague apres la duree"
+          },
+          "similarExistingContract": {
+            "name": "Arme enchantee",
+            "canonicalName": "Enchant Weapon",
+            "evidence": "js/data/v5-spell-contracts.json:3580",
+            "comment": "Enchantement d'arme non magique en arme Magique ; Dagger of the Art cible un type d'ennemis."
+          }
+        },
+        {
+          "nameEn": "Fellstave",
+          "nameFr": "Borne sinistre (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 9,
+          "range": "Voir texte",
+          "target": "Voir texte",
+          "duration": "1 mois",
+          "source": "L02 p. 62",
+          "effectSummaryFr": "Un poteau de bois sculpte de symboles protecteurs, plante en terre, rebousse pendant un mois un type de creatures choisi a l'apprentissage du sort.",
+          "mechanics": {
+            "conditions": "Brisé pour la creature type approchant a moins de 100 metres sans reussir un Test de Calme Accessible (+0)",
+            "other": "type choisi a l'apprentissage (beastmen, demons, orcs et gobelins, ogres, fomors, trolls, morts-vivants) ; apprentissages multiples possibles ; Test d'Intuition pour identifier la cause de la panique"
+          },
+          "similarExistingContract": {
+            "name": "Sanctifier",
+            "canonicalName": "Sanctify",
+            "evidence": "js/data/v5-spell-contracts.json:12039",
+            "comment": "Zone interdite a un type de creatures ; Fellstave est une barriere de terrain permanente et repoussante, pas un cercle trace."
+          }
+        },
+        {
+          "nameEn": "Invigorate",
+          "nameFr": "Revigorer (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 2,
+          "range": "Toucher",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L02 p. 63",
+          "effectSummaryFr": "Le corps de la cible est revigor : elle ignore tous les etats Extenué pendant la duree du sort.",
+          "mechanics": {
+            "conditions": "immunise contre Extenué pour la duree"
+          },
+          "similarExistingContract": {
+            "name": "Calme",
+            "canonicalName": "Calme",
+            "evidence": "js/data/v5-spell-contracts.json:10867",
+            "comment": "Retire des etats psychologiques au toucher ; Invigorer suspend Extenué sans le retirer."
+          }
+        },
+        {
+          "nameEn": "Lovelock",
+          "nameFr": "Philtre d'amour (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 10,
+          "range": "Toucher",
+          "target": "Voir texte",
+          "duration": "Jusqu'a minuit",
+          "source": "L02 p. 63",
+          "effectSummaryFr": "Du miel s'ecoule des levres du lanceur dans une coupe : qui le boit s'eprend de la premiere personne qu'il trouverait attirante.",
+          "mechanics": {
+            "other": "philtre d'amour ; effet sentimentale, cible finale non maitrisee par le lanceur"
+          },
+          "similarExistingContract": {
+            "name": "Glamour de Teclis",
+            "canonicalName": "Glamour de Teclis",
+            "evidence": "js/data/v5-spell-contracts.json:5107",
+            "comment": "Enchantement d'apparence/charme ; aucun contrat ne provoque d'attirance amoureuse (a arbitrer)."
+          }
+        },
+        {
+          "nameEn": "Protection Pouch",
+          "nameFr": "Sachet de protection (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 5,
+          "range": "Toucher",
+          "target": "Voir texte",
+          "duration": "1 semaine + 1 semaine par DR",
+          "source": "L02 p. 63",
+          "effectSummaryFr": "Un petit sachet confectionne dans la peau d'un animal est rempli d'herbes violettes : porte au cou, il apaise la peur du surnaturel et durcit contre maladies et poisons.",
+          "mechanics": {
+            "tests": "+1 DR aux Tests de Calme contre Peur/Terreur surnaturelles (morts-vivants, demons) ; +1 DR aux Tests de Resistance contre maladies et empoisonnements"
+          },
+          "similarExistingContract": {
+            "name": "Protection de Pha",
+            "canonicalName": "Pha's Protection",
+            "evidence": "js/data/v5-spell-contracts.json:8914",
+            "comment": "Buff protectif portable ; Protection Pouch cible la volonte et la sante, pas les degats."
+          }
+        },
+        {
+          "nameEn": "Sightstep",
+          "nameFr": "Pas imperceptible (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 7,
+          "range": "Vous",
+          "target": "Vous",
+          "duration": "(Bonus de Force Mentale) minutes",
+          "source": "L02 p. 64",
+          "effectSummaryFr": "Une courte invocation etouffe la nature magique du lanceur : le Talent Perceptions Magiques ne releve rien d'anormal et se cacher des esprits devient plus facile.",
+          "mechanics": {
+            "tests": "+2 DR aux Tests de Discrétion contre demons, esprits et etherés",
+            "other": "Perceptions Magiques ne detecte rien ; impossible d'incanter, dissiper ou focaliser pendant la duree"
+          },
+          "similarExistingContract": {
+            "name": "Aura ordinaire",
+            "canonicalName": "Mundane Aura",
+            "evidence": "js/data/v5-spell-contracts.json:12979",
+            "comment": "Meme principe : masquer son aura magique aux sens magiques."
+          }
+        },
+        {
+          "nameEn": "Silvertide",
+          "nameFr": "Maree d'argent (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 4,
+          "range": "Vous",
+          "target": "Vous",
+          "duration": "1d10 heures",
+          "source": "L02 p. 64",
+          "effectSummaryFr": "Un charme de chance fait affluer les pieces perdues : au terme de la duree, le lanceur a recupere 1d10 sous de cuivre.",
+          "mechanics": {
+            "other": "gain narratif de 1d10 sous de cuivre"
+          },
+          "similarExistingContract": {
+            "name": "L'Or du Fou",
+            "canonicalName": "Fool's Gold",
+            "evidence": "js/data/v5-spell-contracts.json:3723",
+            "comment": "Seul contrat generant de l'argent ; Silvertide produit de vraies pieces en petites quantites."
+          }
+        },
+        {
+          "nameEn": "The Ousting",
+          "nameFr": "L'Expulsion (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 8,
+          "range": "(Bonus de Force Mentale) metres",
+          "target": "1",
+          "duration": "1d10 ans",
+          "source": "L02 p. 64",
+          "effectSummaryFr": "Une malediction de bannissement ordonne a une creature de l'au-dela de la Haie de regagner son monde d'origine.",
+          "mechanics": {
+            "damage": "(Bonus de Force Mentale) Blessures ignorees par la cible sinon",
+            "tests": "Test de Force Mentale Accessible (+0) ; a 0 Blessure ou moins, bannissement pour la duree"
+          },
+          "similarExistingContract": {
+            "name": "Bannissement Mineur (Hysh & Shyish)",
+            "canonicalName": "Bannissement Mineur (Hysh & Shyish)",
+            "evidence": "js/data/v5-spell-contracts.json:10401",
+            "comment": "Expulsion d'esprits/demons par test oppose ; The Ousting passe par les Blessures puis bannit."
+          }
+        },
+        {
+          "nameEn": "Wyrd Ward",
+          "nameFr": "Protection contre le wyrd (proposition)",
+          "nameFrStatus": "propose - source EN V4",
+          "cn": 4,
+          "range": "Toucher",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) heures",
+          "source": "L02 p. 64",
+          "effectSummaryFr": "En touchant un sorcier et en prononcant cette malediction rapide, on coupe sa connexion aux energies magiques corrompues.",
+          "mechanics": {
+            "tests": "Test oppose de Force Mentale ; en cas de victoire, -2 DR aux Tests de Language (Magick) et de Focalisation pour les Domaines de Sorcellerie, Necromancie, Demonologie et du Chaos"
+          },
+          "similarExistingContract": {
+            "name": "Destruction des Arcanes",
+            "canonicalName": "Destruction des Arcanes",
+            "evidence": "js/data/v5-spell-contracts.json:4509",
+            "comment": "Neutralisation de magie adverse ; Wyrd Ward est un debuff durable cible sur les Domaines sombres."
+          }
+        }
+      ],
+      "openQuestions": [
+        "Libelle francais : conserver l'officiel « Domaine de la Magie naturelle » (L05 p. 254) ou adopter « Magie de la Haie » (intitule fourni, absent de L05) ? Selecteur MJ.",
+        "Les 9 sorts AOTE3 (L02) sont en V4 : conversion aux conventions V5 (DR, etats) a arbitrer valeur par valeur (ex. Invigorer et Felstave utilisent des bonus V4 +/-10).",
+        "Mirkride : la variante L02 p. 63 permet de lancer des sorts agissant sur le monde materiel depuis la Haie ; L06 p. 256 l'interdit (impossible d'affecter le monde). Quelle version retenir ? Selecteur MJ.",
+        "Halatha's Joy : que signifie « le sort se termine quand il sert » (tentative de conception ? rapport sexuel ? naissance ?) - arbitrage MJ.",
+        "Shepherd's Eye : duree de scrutation 10 - Bonus d'Intelligence minutes ; que se passe-t-il si la creature est protegee ou hors du Vieux Monde - arbitrage MJ.",
+        "Familiers : aucune regle pour cette tradition dans L06/L05 ; faut-il importer les familiers generiques de L17 (Winds of Magic V4, pp. 180-184) ou attendre un supplement V5 ? Selecteur MJ."
+      ]
+    },
+    {
+      "id": "witchcraft",
+      "nameEn": "Lore of Witchcraft",
+      "nameFr": "Le Domaine de la Sorcellerie",
+      "nameFrStatus": "officiel (L05 p. 255)",
+      "currentStatus": "Absent du catalogue : aucun contrat, aucun domaine (voir catalogueAbsence.evidence).",
+      "rules": {
+        "casting": "Domaine utilisable avec Focalisation (Dhar) ou Focalisation (Magick) (L06 p. 256) ; tradition souvent autodidacte, hors-la-loi, sorcellerie non autorisee passible de mort (L06 p. 234).",
+        "ingredients": "L06 p. 256 : les ingredients ne reduisent le niveau d'Incantation Imparfaite que si le jet sur la table donne 01-40 (on garde le resultat en cas de descente de table) ; herbes et parties d'animaux, cout = NI du sort en sous de cuivre ; ou 2 heures de cueillette avec Test Accessible (+2 DR) en Savoir (Herbes), Survie en exérieur ou Poser un piege -> 1 + DR ingredients.",
+        "corruption": "Aucune regle propre en V5 (L06). Regles generales : Influence corruptrice -> Incantation Imparfaite Majeure (L06 p. 237) ; entrees de table accordant des PC (L06 p. 238). Difference V4 documentee (L05 p. 255) : chaque jet sur une table d'Incantations Imparfaites par un sorcier dissident lui infligeait 1 Point de Corruption, et tout sort du domaine permettait d'infliger 1 Hemorragie a la cible - a arbitrer comme selecteur MJ.",
+        "familiars": "Mentionnes sans regles : « sorcieres ou leurs familiers » immunises contre Horreur hantante (L06 p. 257) ; aucune regle de familier dans L06 ni L05 (grep negatif, seuls usages de l'adjectif « familier »).",
+        "loreAttribute": "Aucun attribut de domaine en V5 ; la specificite porte sur les ingredients (voir ci-dessus)."
+      },
+      "spells": [
+        {
+          "nameEn": "Blight",
+          "nameFr": "Degradation",
+          "nameFrStatus": "officiel (L05 p. 255)",
+          "cn": 14,
+          "range": "(Bonus de Force Mentale) metres",
+          "target": "Special",
+          "duration": "Instantanee",
+          "source": "L06 p. 256",
+          "effectSummaryFr": "Une taverne, un puits, un champ ou un animal domestique est frappe de sterilite et de pourriture.",
+          "mechanics": {
+            "area": "cible speciale : taverne / puits / champ / animal domestique",
+            "conditions": "nourriture immangeable ; eau stagnante et saumatre ; cultures pourrissent en une nuit ; la bete malade ne produit plus rien et meurt en 24 - DR jours"
+          },
+          "similarExistingContract": {
+            "name": "Putrefaction",
+            "canonicalName": "Rot",
+            "evidence": "js/data/v5-spell-contracts.json:15196",
+            "comment": "Pourriture de matieres organiques en petit volume ; Don de Vie (Lifebloom, js/data/v5-spell-contracts.json:7488) est son inverse exact sur les memes cibles."
+          }
+        },
+        {
+          "nameEn": "Creeping Menace",
+          "nameFr": "Menace rampante",
+          "nameFrStatus": "officiel (L05 p. 256)",
+          "cn": 6,
+          "range": "(Force Mentale) metres",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 257",
+          "effectSummaryFr": "Une nuée de creatures rampantes (rats geants, araignees geantes ou equivalents) harcele la cible jusqu'a la fin du sort.",
+          "mechanics": {
+            "summon": "nuées (Trait Nueue ajoute au profil standard) Engageant la cible",
+            "tests": "Test d'Emprise sur les animaux Accessible (+0) en Action pour rediriger une ou plusieurs nuées",
+            "other": "a la fin du sort, les nuées restantes se dissolvent dans les ombres"
+          },
+          "similarExistingContract": {
+            "name": "Vol du Destin",
+            "canonicalName": "Flock of Doom",
+            "evidence": "js/data/v5-spell-contracts.json:5888",
+            "comment": "Invocation de nuée d'animaux offensifs en zone ; Creeping Menace invoque des nuées au corps-a-corps par type choisi."
+          }
+        },
+        {
+          "nameEn": "Curse of Crippling Pain",
+          "nameFr": "Malediction de douleur paralysante",
+          "nameFrStatus": "officiel (L05 p. 255)",
+          "cn": 10,
+          "range": "(Force Mentale) metres",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 257",
+          "effectSummaryFr": "En poignardant une poupée grossiere representant la cible, on lui inflige une douleur invalidante selon la localisation frappee.",
+          "mechanics": {
+            "conditions": "Corps : +1 Extenué et Test de Resistance Difficile (-20) sinon A Terre ; Tete : Sonné puis Test Accessible (+20) sinon Sonné supplementaire par DR negatif ; Membre : inutilisable comme ampute",
+            "tests": "Action + Test de Focalisation Accessible (+2 DR) pour poignarder une nouvelle localisation non affectee"
+          },
+          "similarExistingContract": {
+            "name": "Fletrissement des Membres",
+            "canonicalName": "Fletrissement des Membres",
+            "evidence": "js/data/v5-spell-contracts.json:11886",
+            "comment": "Membre rendu inutilisable au choix du lanceur ; la Malediction ajoute le choix Body/Head et le rituel de la poupée."
+          }
+        },
+        {
+          "nameEn": "Curse of Ill Fortune",
+          "nameFr": "Malediction de malchance",
+          "nameFrStatus": "officiel (L05 p. 255)",
+          "cn": 8,
+          "range": "(Force Mentale) metres ou (Bonus de Force Mentale) miles avec ingredient",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) minutes ou jours avec ingredient",
+          "source": "L06 p. 257",
+          "effectSummaryFr": "La guigne s'abat : lacets qui rompent, chaises qui cedent ; la cible subit -1 DR a tous ses Tests et ne peut plus depenser de Points de Chance.",
+          "mechanics": {
+            "tests": "-1 DR a tous les Tests ; Points de Chance inutilisables ; sans Chance, relances imposees des jets 01-05",
+            "other": "ingredient (possession ou cheveu de la cible) : ignore la ligne de vue, portee en miles, duree en jours"
+          },
+          "similarExistingContract": {
+            "name": "Malediction du Destin",
+            "canonicalName": "Malediction du Destin",
+            "evidence": "js/data/v5-spell-contracts.json:2291",
+            "comment": "Hex de -1 DR permanent sur une journee ; la version sorcellerie ajoute le blocage de Chance et l'extension par ingredient."
+          }
+        },
+        {
+          "nameEn": "Glamour",
+          "nameFr": "Glamour (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 4,
+          "range": "Toucher",
+          "target": "1 adulte",
+          "duration": "(Bonus de Force Mentale) heures",
+          "source": "L06 p. 257",
+          "effectSummaryFr": "L'apparence de la cible rajeunit ou vieillit a volonte, dans les limites normales de l'age adulte.",
+          "mechanics": {
+            "other": "modification d'apparence d'age, sans autre effet mecanique"
+          },
+          "similarExistingContract": {
+            "name": "Doppelganger",
+            "canonicalName": "Doppelganger",
+            "evidence": "js/data/v5-spell-contracts.json:15780",
+            "comment": "Changement d'apparence trompeur ; Glamour ne modifie que l'age apparent."
+          }
+        },
+        {
+          "nameEn": "Haunting Horror",
+          "nameFr": "Horreur hantante",
+          "nameFrStatus": "officiel (L05 p. 255)",
+          "cn": 8,
+          "range": "Toucher",
+          "target": "Special (un lieu)",
+          "duration": "(Force Mentale) jours",
+          "source": "L06 p. 257",
+          "effectSummaryFr": "Un lieu (maison, clairiere...) est hante : qui y entre subit une fatigue croissante et une angoisse persistante jusqu'a le quitter.",
+          "mechanics": {
+            "conditions": "+1 Extenué a l'entree ; sans reussite au Test de Calme Accessible (+0), +1 Extenué et Brisé jusqu'a sortie du lieu",
+            "other": "sorcières et leurs familiers immunises"
+          },
+          "similarExistingContract": {
+            "name": "Horreurs Noires",
+            "canonicalName": "Horreurs Noires",
+            "evidence": "js/data/v5-spell-contracts.json:15514",
+            "comment": "Hantison d'une zone par une presence effrayante ; Horreur hantante impose des etats au lieu de Peur."
+          }
+        },
+        {
+          "nameEn": "Make Hale",
+          "nameFr": "Bonne sante (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 4,
+          "range": "Toucher",
+          "target": "1",
+          "duration": "Instantanee",
+          "source": "L06 p. 257",
+          "effectSummaryFr": "Les mains du lanceur s'illuminent d'une apaisante lumiere jaune : la cible se detend et se repose.",
+          "mechanics": {
+            "damage": "soin de (Bonus de Force Mentale) Blessures",
+            "conditions": "retire 1 Extenué et 1 Sonné",
+            "other": "a +3 DR, la portee passe a (Bonus de Force Mentale) metres"
+          },
+          "similarExistingContract": {
+            "name": "Lumiere guerisseuse",
+            "canonicalName": "Healing Light",
+            "evidence": "js/data/v5-spell-contracts.json:9540",
+            "comment": "Soin de Blessures + retrait d'affections ; Make Hale retire precisement Extenué/Sonné."
+          }
+        },
+        {
+          "nameEn": "The Evil Eye",
+          "nameFr": "Mauvais oeil",
+          "nameFrStatus": "officiel (L05 p. 255)",
+          "cn": 6,
+          "range": "10 metres maximum",
+          "target": "1 maximum",
+          "duration": "Instantanee",
+          "source": "L06 p. 257",
+          "effectSummaryFr": "Les regards se verrouillent et la psyche de la cible se fletrit : Intimidation opposee contre Calme, le DR d'Incantation en plus.",
+          "mechanics": {
+            "tests": "Test oppose Intimidation/Calme + DR d'Incantation",
+            "conditions": "victoire : Peur (1) du lanceur et 1 Extenué, +1 Extenué par tranche de +3 DR ; victoire de 6 DR ou plus : Brisé"
+          },
+          "similarExistingContract": {
+            "name": "Effrayant",
+            "canonicalName": "Fearsome",
+            "evidence": "js/data/v5-spell-contracts.json:13198",
+            "comment": "Octroi de Peur ; The Evil Eye ajoute un test oppose et des etats de fatigue."
+          }
+        }
+      ],
+      "openQuestions": [
+        "Familiers : L06 p. 257 suppose des familiers de sorcière (immunite d'Horreur hantante) sans aucune regle ; faut-il importer L17 (WoM V4, pp. 180-184) ? Selecteur MJ.",
+        "Regles V4 contre V5 : L05 p. 255 imposait +1 Point de Corruption par Incantation Imparfaite et 1 Hemorragie infligeable par sort ; L06 p. 256 ne garde que la regle des ingredients (reduction seulement sur 01-40). Quelle base pour le moteur ? Selecteur MJ.",
+        "The Evil Eye : la Peur (1) obtenue est-elle une Psychologie permanente contre le lanceur ou limitee a la rencontre ? Arbitrage MJ.",
+        "Creeping Menace : que deviennent les nuées si le lanceur meurt avant la fin de la duree ? Le texte L06 ne le precise pas (contrairement aux sorts de Nécromancie)."
+      ]
+    },
+    {
+      "id": "daemonology",
+      "nameEn": "Lore of Daemonology",
+      "nameFr": "Le Domaine de Demonologie",
+      "nameFrStatus": "officiel (L05 p. 256)",
+      "currentStatus": "Absent du catalogue : aucun contrat, aucun domaine (voir catalogueAbsence.evidence).",
+      "rules": {
+        "casting": "Magie noire (Dhar) ; discipline interdite d'invocation, de liaison et de controle des demons (L06 p. 258). Pas d'ecole, frequentation le plus souvent fatale : l'ame passe aux Puissances de la Ruine.",
+        "ingredients": "Aucune regle d'ingredient propre (L06 p. 258) ; regle generale des ingredients (L06 p. 235) applicable.",
+        "corruption": "Aucune regle propre ; regles generales (L06 p. 237-238 : Influence corruptrice -> Incantation Imparfaite Majeure, entrees a Points de Corruption).",
+        "familiars": "Aucune regle de familier dans L06 ni L05 pour cette tradition.",
+        "loreAttribute": "Aucun attribut de domaine (L06 p. 258) - a arbitrer."
+      },
+      "spells": [
+        {
+          "nameEn": "Destroy Lesser Daemon",
+          "nameFr": "Destruction de Demon Mineur",
+          "nameFrStatus": "officiel (L05 p. 256)",
+          "cn": 6,
+          "range": "(Bonus de Force Mentale) metres",
+          "target": "1 demon de Taille (Moyenne) ou moins",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 258",
+          "effectSummaryFr": "Le sort desorganise le Dhar qui maintient le demon ensemble et draine son energie vers le lanceur.",
+          "mechanics": {
+            "tests": "Test oppose de Resistance Accessible (+4 DR) contre l'Incantation",
+            "damage": "victoire : destruction immediate du demon",
+            "other": "+10 a une Caracteristique du lanceur pour la duree (siphon d'energie profane)"
+          },
+          "similarExistingContract": {
+            "name": "Fleau des Demons",
+            "canonicalName": "Daemonbane",
+            "evidence": "js/data/v5-spell-contracts.json:9368",
+            "comment": "Anti-demon par arbitration d'Endurance comparee ; Destroy Lesser Daemon passe par un test oppose et vole de l'energie."
+          }
+        },
+        {
+          "nameEn": "Detect Daemon",
+          "nameFr": "Detection de demon",
+          "nameFrStatus": "officiel (L05 p. 256)",
+          "cn": 4,
+          "range": "(Force Mentale) metres",
+          "target": "Special",
+          "duration": "Instantanee",
+          "source": "L06 p. 258",
+          "effectSummaryFr": "Le sort capte les influences demoniaques des alentours : le lanceur sait immediatement si un demon manifeste se trouve a portee.",
+          "mechanics": {
+            "other": "detection automatique : demon invoque, lie a un artefact, possesseur, etc."
+          },
+          "similarExistingContract": {
+            "name": "Reveler la Magie",
+            "canonicalName": "Reveler la Magie",
+            "evidence": "js/data/v5-spell-contracts.json:11043",
+            "comment": "Detection magique en zone ; Detect Daemon est automatique et limite aux demons."
+          }
+        },
+        {
+          "nameEn": "Manifest Lesser Daemon",
+          "nameFr": "Manifestation de Demon Mineur",
+          "nameFrStatus": "officiel (L05 p. 256)",
+          "cn": 8,
+          "range": "(Bonus de Force Mentale) metres",
+          "target": "Special",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 258",
+          "effectSummaryFr": "Une dechirure s'ouvre brivement dans le tissu de la realite et un Demon Mineur s'y manifeste.",
+          "mechanics": {
+            "summon": "Demon Mineur (ex. Sanguinaire ou Daemonette, L06 p. 349)",
+            "tests": "Test oppose de Focalisation (Dhar)/Force Mentale avec le demon",
+            "other": "succes : le demon execute un unique ordre au pied de la lettre puis disparait ; echec : il attaque immediatement"
+          },
+          "similarExistingContract": {
+            "name": "Invocation de Monture",
+            "canonicalName": "Invocation de Monture",
+            "evidence": "js/data/v5-spell-contracts.json:6852",
+            "comment": "Plus proche invocation controlee du catalogue ; aucun contrat n'invoque de demon (a creer)."
+          }
+        },
+        {
+          "nameEn": "Octagram",
+          "nameFr": "Octogramme",
+          "nameFrStatus": "officiel (L05 p. 256)",
+          "cn": 10,
+          "range": "Toucher",
+          "target": "ZdE (diametre maximum : Bonus d'Intelligence metres)",
+          "duration": "(Force Mentale) minutes",
+          "source": "L06 p. 258",
+          "effectSummaryFr": "Un octogramme daube au sol et marque de symboles impies interdit tout passage aux creatures demoniaques.",
+          "mechanics": {
+            "area": "ZdE circulaire tracee au sol",
+            "conditions": "les creatures avec le Trait Demoniaque ne peuvent ni entrer ni sortir",
+            "other": "variante V4 (L05 p. 256) : sortie possible si la Force Mentale du demon est deux fois superieure a celle du lanceur"
+          },
+          "similarExistingContract": {
+            "name": "Sanctifier",
+            "canonicalName": "Sanctify",
+            "evidence": "js/data/v5-spell-contracts.json:12039",
+            "comment": "Cercle barriere anti-morts-vivants ; Octagramme en est le miroir demoniaque."
+          }
+        }
+      ],
+      "openQuestions": [
+        "Aucun attribut de domaine ni regle d'ingredient en V5 (L06 p. 258) : parite avec la Sorcellerie (ingredients) ou regle dediee ? Selecteur MJ.",
+        "Octogramme : la variante L05 p. 256 permet a un demon de Force Mentale double de forcer la barriere ; L06 p. 258 ne reprend pas cette clause. La garder ?",
+        "Manifest Lesser Daemon : comportement du demon si l'ordre ne peut etre acheve avant la fin de la duree - disparition ou attaque ? Arbitrage MJ.",
+        "Destroy Lesser Daemon : le bonus +10 a une Caracteristique dure le sort ; quelle Caracteristique est choisie (lanceur au lancer, MJ) ? Arbitrage MJ."
+      ]
+    },
+    {
+      "id": "necromancy",
+      "nameEn": "Lore of Necromancy",
+      "nameFr": "Le Domaine de Necromancie",
+      "nameFrStatus": "officiel (L05 p. 256)",
+      "currentStatus": "Absent du catalogue : aucun contrat, aucun domaine (voir catalogueAbsence.evidence).",
+      "rules": {
+        "casting": "Magie noire (Dhar) : maitriser la mort et viser l'immortalite en decoupant des cadavres (L06 p. 258) ; discipline heretique entre toutes, combatue par le culte de Morr (L06 p. 233).",
+        "ingredients": "Aucune regle d'ingredient propre (L06 p. 258) ; regle generale applicable (L06 p. 235).",
+        "corruption": "Aucune regle propre ; regles generales (L06 p. 237-238).",
+        "familiars": "Aucune regle de familier dans L06 ni L05 pour cette tradition.",
+        "loreAttribute": "Aucun attribut de domaine (L06 p. 258) - a arbitrer."
+      },
+      "spells": [
+        {
+          "nameEn": "Raise Dead",
+          "nameFr": "Relever les morts",
+          "nameFrStatus": "officiel (L05 p. 257)",
+          "cn": 7,
+          "range": "(Force Mentale) metres",
+          "target": "ZdE (Bonus de Force Mentale) metres",
+          "duration": "Jusqu'au lever du soleil",
+          "source": "L06 p. 258",
+          "effectSummaryFr": "Un flux massif de Dhar deverse dans la terre nue : de vieux os s'assemblent et sortent du sol.",
+          "mechanics": {
+            "summon": "1 + DR Squelettes en fin de Round, disposes a volonte dans la zone, avec l'etat A Terre",
+            "other": "controled total, ordres simples ; fin du sort si le lanceur meurt ou devient Inconscient ; +2 DR -> +1 Squelette"
+          },
+          "similarExistingContract": {
+            "name": "Invocation de Monture",
+            "canonicalName": "Invocation de Monture",
+            "evidence": "js/data/v5-spell-contracts.json:6852",
+            "comment": "Squelette d'invocation de creature controlee ; aucun contrat n'invoque de morts-vivants (a creer)."
+          }
+        },
+        {
+          "nameEn": "Reanimate",
+          "nameFr": "Reanimation",
+          "nameFrStatus": "officiel (L05 p. 257)",
+          "cn": 8,
+          "range": "(Force Mentale) metres",
+          "target": "ZdE (Bonus de Force Mentale) metres",
+          "duration": "Jusqu'au lever du soleil",
+          "source": "L06 p. 258",
+          "effectSummaryFr": "D'epais filaments de Dhar s'enfoncent dans les cadavres et leur redonnent un semblant de vie.",
+          "mechanics": {
+            "summon": "(Bonus de Force Mentale) + DR corps releves comme Zombies ou Squelettes, avec l'etat A Terre",
+            "other": "contrôle total, ordres simples ; fin du sort si le lanceur meurt ou devient Inconscient ; +2 DR -> (BFM+DR) creatures supplementaires"
+          },
+          "similarExistingContract": {
+            "name": "Contrainte des Esprits",
+            "canonicalName": "Contrainte des Esprits",
+            "evidence": "js/data/v5-spell-contracts.json:11447",
+            "comment": "Controle des creatures Mort-vivant/Ethere ; Reanimation les releve d'abord (invocation, voir Invocation de Monture, js/data/v5-spell-contracts.json:6852)."
+          }
+        },
+        {
+          "nameEn": "Screaming Skull",
+          "nameFr": "Crane hurlant",
+          "nameFrStatus": "officiel (L05 p. 256)",
+          "cn": 8,
+          "range": "(Force Mentale) metres",
+          "target": "Special",
+          "duration": "Instantanee",
+          "source": "L06 p. 259",
+          "effectSummaryFr": "Un crane noir entoure de feu verdatre s'elance en hurlant, traversant les obstacles sur sa trajectoire.",
+          "mechanics": {
+            "damage": "projectile magique +5, n'affecte que les cibles sans le Trait Mort-vivant",
+            "tests": "Test de Calme Accessible (+0) apres Blessure, sinon Brisé",
+            "area": "trajectoire en ligne droite sur toute la portee"
+          },
+          "similarExistingContract": {
+            "name": "Vortex d'ames",
+            "canonicalName": "Soul Vortex",
+            "evidence": "js/data/v5-spell-contracts.json:12144",
+            "comment": "Projectile magique de zone infligeant Brisé (et discriminant les morts-vivants a l'envers)."
+          }
+        },
+        {
+          "nameEn": "Vanhel's Call",
+          "nameFr": "L'appel de Vanhel",
+          "nameFrStatus": "officiel (L05 p. 256)",
+          "cn": 6,
+          "range": "(Force Mentale) metres",
+          "target": "Special",
+          "duration": "Instantanee",
+          "source": "L06 p. 259",
+          "effectSummaryFr": "De complexes flux de Dhar s'engouffrent dans les cibles mortes-vivantes et les emplissent d'une energique suractivite.",
+          "mechanics": {
+            "other": "(Bonus d'Intelligence) cibles Mort-vivant gagnent un Mouvement ou une Action gratuite (meme choix pour toutes), immediatement",
+            "tests": "+2 DR -> (Bonus d'Intelligence) cibles supplementaires"
+          },
+          "similarExistingContract": {
+            "name": "Pensee rapide",
+            "canonicalName": "Speed of Thought",
+            "evidence": "js/data/v5-spell-contracts.json:9066",
+            "comment": "Plus proche buff de tempo existant ; aucun contrat n'accorde d'Action/Mouvement gratuit (a creer)."
+          }
+        }
+      ],
+      "openQuestions": [
+        "Aucun attribut de domaine en V5 (L06 p. 258) : en definir un (ex. parite historique V4/VCIA) ou laisser sans ? Selecteur MJ.",
+        "Contrainte de fin : les sorts se terminent au lever du soleil ou sur mort/Inconscient du lanceur ; comment le moteur horloge ces fins ? Arbitrage MJ.",
+        "Relever les morts : le sort exige-t-il une terre nue (L06 parle de bare earth) - refus sur pave/planchers ? Arbitrage MJ.",
+        "Ou trouver les contingents de morts-vivants invoques : profils Squelettes/Zombies L06 pp. 339-340 a intégrer au moteur ?"
+      ]
+    },
+    {
+      "id": "nurgle",
+      "nameEn": "Lore of Nurgle",
+      "nameFr": "Le Domaine de Nurgle",
+      "nameFrStatus": "officiel (L05 p. 257)",
+      "currentStatus": "Absent du catalogue : aucun contrat, aucun domaine (voir catalogueAbsence.evidence).",
+      "rules": {
+        "casting": "Domaine du Chaos destine aux cultistes, « en plus des Sorts d'Arcane et du Domaine de Demonologie » (L06 p. 259) ; Khorne, seul, n'a pas de domaine.",
+        "ingredients": "Aucune regle d'ingredient propre ; regle generale applicable (L06 p. 235).",
+        "corruption": "Via l'attribut de domaine (Blessure Suppuree, ci-dessous) et les regles generales (L06 pp. 237-238).",
+        "familiars": "Aucune regle de familier dans L06 ni L05 pour ce domaine.",
+        "loreAttribute": "L06 p. 259 : pendant qu'un sort du Domaine de Nurgle est en vigueur, toute cible qui subit une Blessure doit tester si elle devient une Blessure Suppuree (regles L06 p. 180)."
+      },
+      "spells": [
+        {
+          "nameEn": "Festering Inflammation",
+          "nameFr": "Inflammation suppuree (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 5,
+          "range": "(Bonus de Force Mentale) metres",
+          "target": "1",
+          "duration": "Instantanee",
+          "source": "L06 p. 259",
+          "effectSummaryFr": "Des liquides septiques se condensent dans les Blessures de l'adversaire : l'une d'elles s'infecte.",
+          "mechanics": {
+            "conditions": "une Blessure de la cible devient une Blessure Suppuree (L06 p. 180)"
+          },
+          "similarExistingContract": {
+            "name": "Putrefaction",
+            "canonicalName": "Rot",
+            "evidence": "js/data/v5-spell-contracts.json:15196",
+            "comment": "Pourriture organique ; aucun contrat existant n'infecte une Blessure (a creer)."
+          }
+        },
+        {
+          "nameEn": "Miasma of Pestilence",
+          "nameFr": "Miasme de pestilence (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 6,
+          "range": "Vous",
+          "target": "ZdE (Bonus de Force Mentale) metres",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 259",
+          "effectSummaryFr": "Un voile de brume malade s'attarde autour du lanceur.",
+          "mechanics": {
+            "area": "ZdE (Bonus de Force Mentale) metres",
+            "tests": "Test de Resistance Difficile (-2 DR) pour les vivants, sinon Symptome Nausee (L06 p. 182)",
+            "other": "devoues de Nurgle et moines de la peste skavens immunises"
+          },
+          "similarExistingContract": {
+            "name": "Miasme mystifiant",
+            "canonicalName": "Mystifying Miasma",
+            "evidence": "js/data/v5-spell-contracts.json:16309",
+            "comment": "Nuage de zone imposant etats et tests ; l'un eblouit, l'autre rend malade."
+          }
+        },
+        {
+          "nameEn": "Stream of Corruption",
+          "nameFr": "Flot de Corruption",
+          "nameFrStatus": "officiel (L05 p. 257)",
+          "cn": 9,
+          "range": "Special",
+          "target": "Special",
+          "duration": "Instantanee",
+          "source": "L06 p. 259",
+          "effectSummaryFr": "La machoire se disloque et un jet d'immondices maladie gicle sur les ennemis.",
+          "mechanics": {
+            "damage": "attaque de Souffle non opposee de type Acide et Poison ; projectile magique egal au Bonus d'Endurance, ignore les PA",
+            "tests": "cibles blessees au-dela de leur Bonus d'Endurance : Test de Resistance Accessible (+0) sinon Pourriture du Sang (L06 p. 179)"
+          },
+          "similarExistingContract": {
+            "name": "Souffle",
+            "canonicalName": "Breath",
+            "evidence": "js/data/v5-spell-contracts.json:13468",
+            "comment": "Seule attaque de Souffle du catalogue ; Stream of Corruption est non opposee et ajoute la maladie."
+          }
+        }
+      ],
+      "openQuestions": [
+        "L05 p. 257 ne donne qu'un sort par Domaine du Chaos (V4) : les noms FR des six autres sorts sont des propositions a valider.",
+        "Attribut de domaine : la Blessure Suppuree suppose le registre des Blessures (L06 p. 180) dans le moteur - dependance a verifier.",
+        "Flot de Corruption : gestion du type d'attaque Souffle (Acide + Poison) absent des contrats actuels ; surpuissance V4 (L05 p. 257 : +2 degats par +2 DR) a reconvertir ou non."
+      ]
+    },
+    {
+      "id": "slaanesh",
+      "nameEn": "Lore of Slaanesh",
+      "nameFr": "Le Domaine de Slaanesh",
+      "nameFrStatus": "officiel (L05 p. 257)",
+      "currentStatus": "Absent du catalogue : aucun contrat, aucun domaine (voir catalogueAbsence.evidence).",
+      "rules": {
+        "casting": "Domaine du Chaos destine aux cultistes, en plus des Sorts d'Arcane et du Domaine de Demonologie (L06 p. 259) ; melange perverti des Vents Gris, d'Or et de Jade (L06 p. 260).",
+        "ingredients": "Aucune regle d'ingredient propre ; regle generale applicable (L06 p. 235).",
+        "corruption": "Via l'attribut de domaine et les regles generales (L06 pp. 237-238).",
+        "familiars": "Aucune regle de familier dans L06 ni L05 pour ce domaine.",
+        "loreAttribute": "L06 p. 260 : pendant qu'un sort du Domaine de Slaanesh est en vigueur, les cibles subissent -2 DR pour resister a Animosite, Haine et Corruption, mais gagnent +2 DR pour resister a Peur et Terreur."
+      },
+      "spells": [
+        {
+          "nameEn": "Acquiescence",
+          "nameFr": "Consentement",
+          "nameFrStatus": "officiel (L05 p. 257)",
+          "cn": 5,
+          "range": "Toucher",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 260",
+          "effectSummaryFr": "La magie inonde les sens de la cible de sensations euphoriques ; chaque Round, elle risque de perdre pied.",
+          "mechanics": {
+            "tests": "Test de Resistance Accessible (+0) en debut de Round",
+            "conditions": "echec : perte du Mouvement et de l'Action pour le Round"
+          },
+          "similarExistingContract": {
+            "name": "Danse du Desespoir",
+            "canonicalName": "Danse du Desespoir",
+            "evidence": "js/data/v5-spell-contracts.json:15295",
+            "comment": "Perte de controle des actions ; Acquiescement passe par un test de Resistance par Round."
+          }
+        },
+        {
+          "nameEn": "From Pain, Pleasure",
+          "nameFr": "De la douleur, le plaisir (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 6,
+          "range": "Toucher",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 260",
+          "effectSummaryFr": "Les sens de la cible se confondent : la douleur devient plaisir.",
+          "mechanics": {
+            "conditions": "Trait de creature Indolore pour la duree ; sur Blessure Critique, Test de Resistance Accessible (+20) sinon l'equipement tombe et la cible reste Impuissante"
+          },
+          "similarExistingContract": {
+            "name": "Regeneration",
+            "canonicalName": "Regenerate",
+            "evidence": "js/data/v5-spell-contracts.json:8456",
+            "comment": "Octroi d'un trait de creature benefique ; aucun contrat n'accorde Indolore (a creer)."
+          }
+        },
+        {
+          "nameEn": "Phantasmagoria",
+          "nameFr": "Phantasmagorie (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 8,
+          "range": "Vous",
+          "target": "ZdE (Bonus de Force Mentale) metres",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 260",
+          "effectSummaryFr": "Des visions a la fois enjoleuses et terrifiantes emplissent la zone autour du lanceur.",
+          "mechanics": {
+            "conditions": "le lanceur et ses allies gagnent le Trait Distraction pour la duree ; les cibles ne se distraient pas entre elles"
+          },
+          "similarExistingContract": {
+            "name": "Distraction",
+            "canonicalName": "Distracting",
+            "evidence": "js/data/v5-spell-contracts.json:13700",
+            "comment": "Octroi du meme Trait de creature ; Phantasmagoria l'etend a tous les allies en zone."
+          }
+        }
+      ],
+      "openQuestions": [
+        "L05 p. 257 ne donne qu'un sort par Domaine du Chaos (V4) : noms FR des six autres sorts a valider.",
+        "De la douleur, le plaisir : l'etat Impuissante (armes tombees) n'existe pas encore dans le moteur - a creer ou mapper.",
+        "Attribut de domaine : la modulation -2 DR/+2 DR suppose le suivi des Psychologies dans le moteur ; dependance a verifier."
+      ]
+    },
+    {
+      "id": "tzeentch",
+      "nameEn": "Lore of Tzeentch",
+      "nameFr": "Le Domaine de Tzeentch",
+      "nameFrStatus": "officiel (L05 p. 257)",
+      "currentStatus": "Absent du catalogue : aucun contrat, aucun domaine (voir catalogueAbsence.evidence).",
+      "rules": {
+        "casting": "Domaine du Chaos destine aux cultistes, en plus des Sorts d'Arcane et du Domaine de Demonologie (L06 p. 259) ; puise largement dans les Vents Gris, d'Or, Bleu et Rouge (L06 p. 260).",
+        "ingredients": "Aucune regle d'ingredient propre ; regle generale applicable (L06 p. 235).",
+        "corruption": "Via l'attribut de domaine (test de Corruption par cible affectee) et les regles generales (L06 pp. 237-238).",
+        "familiars": "Aucune regle de familier dans L06 ni L05 pour ce domaine.",
+        "loreAttribute": "L06 p. 260 : toute personne affectee par un sort du Domaine doit reussir un Test de Corruption ; echec : +1 Point de Corruption ; reussite : +1 Point de Chance utilisable jusqu'a la fin de la rencontre."
+      },
+      "spells": [
+        {
+          "nameEn": "Boon of Tzeentch",
+          "nameFr": "Don de Tzeentch (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 9,
+          "range": "Vous",
+          "target": "Vous",
+          "duration": "(Bonus d'Intelligence) jours",
+          "source": "L06 p. 260",
+          "effectSummaryFr": "Le Changeant ouvre l'esprit du lanceur a un savoir arcanique : il accede a un sort d'un autre Domaine.",
+          "mechanics": {
+            "other": "un sort de n'importe quel Domaine lance comme si memorise pour la duree ; non transcriptible en grimoire ; Focalisation via Dhar ou le Vent approprie ; toute Incantation Imparfaite : le sort quitte l'esprit et s'efface du grimoire"
+          },
+          "similarExistingContract": {
+            "name": "aucun",
+            "canonicalName": null,
+            "evidence": null,
+            "comment": "Aucun contrat existant n'emprunte temporairement un sort d'un autre Domaine ; a creer."
+          }
+        },
+        {
+          "nameEn": "Transformation of Tzeentch",
+          "nameFr": "Transformation de Tzeentch (proposition)",
+          "nameFrStatus": "propose - absent de L05",
+          "cn": 12,
+          "range": "(Bonus de Force Mentale) metres",
+          "target": "1",
+          "duration": "(Bonus de Force Mentale) Rounds",
+          "source": "L06 p. 260",
+          "effectSummaryFr": "Des liens de feu aethyrique jaillissent du sol et enserrent la cible dans un cocon d'energie.",
+          "mechanics": {
+            "conditions": "cible A Terre et Impuissante pour la duree",
+            "tests": "Test de Resistance Accessible (+0) a la fin de chaque Round, sinon +1 Point de Corruption"
+          },
+          "similarExistingContract": {
+            "name": "Labyrinthe de Cristal",
+            "canonicalName": "Labyrinthe de Cristal",
+            "evidence": "js/data/v5-spell-contracts.json:11555",
+            "comment": "Neutralisation de cible + exposition a la Corruption ; le Labyrinthe l'exile, la Transformation l'immobilise sur place."
+          }
+        },
+        {
+          "nameEn": "Treason of Tzeentch",
+          "nameFr": "Trahison de Tzeentch",
+          "nameFrStatus": "officiel (L05 p. 257)",
+          "cn": 6,
+          "range": "(Force Mentale) metres",
+          "target": "ZdE (Bonus d'Initiative) metres",
+          "duration": "(Bonus d'Intelligence) Rounds",
+          "source": "L06 p. 260",
+          "effectSummaryFr": "Des filaments de pensees traitres s'insinuent dans les esprits : la mefiance gronde entre alliés.",
+          "mechanics": {
+            "conditions": "cibles gagnent Animosite (Allies) ; ne peuvent pas transférer d'Avantage a leurs allies ; sur Critique, Test de Calme Difficile (-20) sinon la cible attaque son allie le plus proche"
+          },
+          "similarExistingContract": {
+            "name": "Traitre de Tarn",
+            "canonicalName": "Traitre de Tarn",
+            "evidence": "js/data/v5-spell-contracts.json:16783",
+            "comment": "Subversion d'allegeance par test oppose ; Trahison s'applique en zone a toutes les cibles."
+          }
+        }
+      ],
+      "openQuestions": [
+        "L05 p. 257 ne donne qu'un sort par Domaine du Chaos (V4) ; seule Trahison de Tzeentch a un nom FR officiel.",
+        "Don de Tzeentch : aucune regle V5 pour le cout d'apprentissage ou les limitations par Domaine ; interaction avec le verrou de la Magie elfique a definir. Selecteur MJ.",
+        "Attribut de domaine : le « Point de Chance jusqu'a la fin de la rencontre » exige un compteur dedie inexistant (cf. LOT3_RAPPORT_CONTRATS_LOT4.md sur la Corruption moderee) ; arbitrage MJ.",
+        "Trahison de Tzeentch : Animosite (Allies) - comportement des PNJ sous Animosite en combat a trancher."
+      ]
+    }
+  ],
+  "globalOpenQuestions": [
+    "Libelle « Magie de la Haie » : absent de L05 (officiel : Domaine de la Magie naturelle, p. 254) ; a trancher pour l'interface.",
+    "Familiers : aucune regle dans L06/L05 pour ces traditions ; seules regles du corpus : L17 Winds of Magic (V4) pp. 180-184, reserves aux mages des Colleges. Importer, adapter ou ignorer ? Selecteur MJ.",
+    "Corruption a l'incantation de Dhar : L06 n'impose aucun Point de Corruption par incantation (seuls l'attribut Tzeentch, les tables d'Incantations Imparfaites p. 238 et l'Influence corruptrice p. 237 en generent) ; la V4 (L05 p. 255) en imposait un par Incantation Imparfaite de Sorcellerie. Base a choisir. Selecteur MJ.",
+    "Les 19 noms FR proposes (4 du livre de base, 6 du Chaos, 9 d'AOTE3) doivent etre valides avant integration.",
+    "Les 9 sorts AOTE3 (L02, V4) doivent etre convertis aux conventions V5 (DR, etats, vocabulaire moteur) ; valeurs V4 (bonus +/-10, durees) non transposables telles quelles.",
+    "Chaos : L06 p. 259 presente 3 sorts par Domaine « pour la saveur » des cultistes ; integrer les 9 d'office ou par culte au cas par cas ? Selecteur MJ.",
+    "Demonologie et Nécromancie V5 n'ont ni attribut de domaine ni regle d'ingredient (L06 p. 258) : parite a decider. Selecteur MJ.",
+    "Aucun sort de ces traditions n'a de grimoire, de talendar ni de test existant dans le depot ; l'inventaire ne couvre que les donnees de regles, pas l'implementation."
+  ],
+  "counts": {
+    "traditions": 7,
+    "spellsTotal": 42,
+    "spellsL06": 30,
+    "spellsAote3L02": 9,
+    "spellsL03": 0,
+    "nameFrOfficial": 23,
+    "nameFrProposed": 19,
+    "allAbsentFromCatalogue": 42,
+    "openQuestionsGlobal": 8,
+    "openQuestionsPerTradition": 28
+  }
+}
