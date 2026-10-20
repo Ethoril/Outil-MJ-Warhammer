@@ -1284,7 +1284,7 @@
         440000
       ],
       "b2_cout_usd": 46.6,
-      "b2_cout_reel_eur": 0.05,
+      "b2_cout_reel_eur": null,
       "b2_detail": {
         "sessions": "1 longue (12 USD plafond, étape 1 seule) puis 1 session par étape : 2 ok, 3 coupée puis ok, 4 coupée 3 fois, 5 ok, 6 coupée (reste repris), 7 ok",
         "plafonds_atteints": 6
@@ -1321,10 +1321,10 @@
         }
       ],
       "verdict_qualite": "4 — 7 étapes livrées, arrêts propres sur blocage de plan (BLOCKED documentés) ; la reprise de travail sauvegardé marche ; les coupures venaient du plafond, pas du coût réel.",
-      "remarque": "Coût réel estimé à quelques centimes d'après la console (1,66 EUR à midi, 1,7 EUR le soir)."
+      "remarque": "Coût réel inconnu individuellement ; voir cout_reel_note_20_10_soir (≈1/7 du plafond, soit ~6-7 € pour ~46 USD de plafond)."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
   "cout_reel_note_20_10": "Console Mistral au 20/10 : 1,66 EUR cumulés pour T1-T14 (aucun détail par jour) ; environ 2/3 le matin du 20/10 (T12-T14), soit ~0,37 EUR réel par tâche contre 1,6 USD de plafond affiché : le cache divise le coût par ~4.",
-  "cout_reel_note_20_10_soir": "Console Mistral au soir du 20/10 : 1,7 EUR cumulés depuis le début (T1-T25), alors que les plafonds affichés par run-vibe cumulent plus de 40 USD. Le plafond n'est pas un coût : seuil de coupure à régler large."
+  "cout_reel_note_20_10_soir": "CORRIGÉ : console Mistral à 17,03 EUR cumulés (1,46 k requêtes) ; ~16,3 EUR le 20/10 dont ~8,5 EUR le soir. Décomposition : cache 81,05 M tokens × 0,12 €/M = 9,65 € ; entrée 3,71 M × 1,19 = 4,42 € ; sortie 0,78 M × 3,74 = 2,92 €. Rapport réel ≈ 1/7 du plafond USD affiché par run-vibe. Le chiffre de 1,7 € relevé plus tôt n’était pas à jour."
 }
