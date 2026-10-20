@@ -529,7 +529,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Bénédiction de Protection : un ennemi qui attaque le porteur doit réussir un Test de Calme Accessible (+2 DR) ; le MJ saisit le résultat dans v5.context.protectionCalm.
   const attackDeterrentLayer = attackType(action.type) && actor?.camp !== target?.camp
     ? (target?.extensions?.v5?.divineEffects || []).find(layer => layer?.attackDeterrent) : null;
-  if (attackDeterrentLayer) {
+  // Arbitrage MJ : un Test de Calme déjà réussi dispense cet ennemi de la bénédiction jusqu'à sa fin.
+  if (attackDeterrentLayer && !(attackDeterrentLayer.attackDeterrent.passedAttackerIds || []).includes(actor?.id)) {
     const calm = context.protectionCalm;
     if (calm?.success === false) unresolved.push('Bénédiction de Protection : Test de Calme échoué, l’attaquant doit choisir une autre cible ou une autre Action.');
     else if (calm?.success !== true) unresolved.push('Bénédiction de Protection : saisir le Test de Calme Accessible (+2 DR) de l’attaquant.');
@@ -943,6 +944,18 @@ export function applyResolution(preview, currentState) {
       const live = participantById(nextState, id);
       const consumed = live && consumeDivineLayers(live, 'critical');
       if (consumed) nextState.participants = participantListWithUpdate(nextState, live.id, refreshEffectLayers(consumed, live));
+    }
+  }
+  // Bénédiction de Protection : retenir le Test de Calme réussi pour cet attaquant jusqu'à la fin de la bénédiction.
+  if (preview.attack && preview.input.v5?.context?.protectionCalm?.success === true && preview.input.actor?.id && preview.targetId) {
+    const liveTarget = participantById(nextState, preview.targetId);
+    const layer = liveTarget && (liveTarget.extensions?.v5?.divineEffects || []).find(row => row?.attackDeterrent);
+    if (liveTarget && layer) {
+      const updated = clone(liveTarget);
+      const updatedLayer = updated.extensions.v5.divineEffects.find(row => row?.attackDeterrent);
+      updatedLayer.attackDeterrent = { ...updatedLayer.attackDeterrent,
+        passedAttackerIds: [...new Set([...(updatedLayer.attackDeterrent.passedAttackerIds || []), preview.input.actor.id])] };
+      nextState.participants = participantListWithUpdate(nextState, liveTarget.id, updated);
     }
   }
   nextState.revision = currentState.revision + 1;
