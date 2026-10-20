@@ -131,7 +131,7 @@ const expiryCondition = {
 };
 
 // Larmes de Shallya : retire du registre (extensions.v5.criticalWounds) les Blessures Critiques choisies ;
-// les États qu'elles avaient posés restent. Instant, sans couche ; count = 1, +1 par tranche de +2 DR (moteur).
+// les États liés restent sauf demande explicite du MJ. Instant, sans couche ; count = 1, +1 par tranche de +2 DR (moteur).
 // Le plafond dépend des DR : il n'est vérifiable qu'au crochet `resolve`, après la progression par DR.
 const CRITICAL_HEAL_SLOTS = ['first', 'second', 'third'];
 const HEAL_CRITICAL_REMINDERS = Object.freeze([
@@ -166,7 +166,7 @@ const healCritical = {
     return effect;
   },
   inputFields(effect, { targets = [] } = {}) {
-    const fields = [];
+    const fields = [{ path: 'criticalHealStates', label: 'Retirer aussi les États liés aux Blessures Critiques guéries', kind: 'boolean', scope: 'target' }];
     for (const target of targets) {
       const options = [['', 'Aucune'], ...criticalRecords(target).map(row => [row.id, `${row.name} (${row.location}, Round ${row.round})`])];
       for (const [index, slot] of CRITICAL_HEAL_SLOTS.entries())
@@ -177,12 +177,23 @@ const healCritical = {
   applyInstant(participant, effect, { input, targetId } = {}) {
     const chosen = chosenHeals(input, targetId ?? participant.id);
     const wounds = criticalRecords(participant), healed = wounds.filter(row => chosen.includes(row.id));
+    const removedStates = [], stateReminders = [];
+    if (input?.criticalHealStates?.[targetId ?? participant.id] === true) {
+      for (const id of new Set(healed.flatMap(row => row.stateIds || []))) {
+        const state = (participant.states || []).find(row => row.id === id);
+        if (!state) continue;
+        const recovery = recoverV5Condition(participant, id, { method: 'divine-removal', amount: Number.MAX_SAFE_INTEGER });
+        Object.assign(participant, recovery.participant);
+        removedStates.push(...recovery.removed.map(row => ({ ...row, name: state.name || state.key })));
+        stateReminders.push(...recovery.reminders);
+      }
+    }
     if (healed.length) {
       participant.extensions ||= {}; participant.extensions.v5 ||= {};
       participant.extensions.v5.criticalWounds = wounds.filter(row => !chosen.includes(row.id));
     }
     return { healedIds: healed.map(row => row.id), healed: healed.map(row => row.name), remaining: healed.length ? participant.extensions.v5.criticalWounds.length : wounds.length,
-      reminders: clone(HEAL_CRITICAL_REMINDERS) };
+      removedStates, reminders: [...HEAL_CRITICAL_REMINDERS, ...stateReminders] };
   },
   receipt: (effect, { targetId, targetName, actor }, result) => ({ targetId, type: effect.type, result: clone(result),
     log: `${actor?.name || 'Le prêtre'} · ${targetName || targetId} : ${result.healed.length ? 'Blessure(s) Critique(s) guérie(s) : ' + result.healed.join(', ') : 'aucune Blessure Critique guérie'}` })

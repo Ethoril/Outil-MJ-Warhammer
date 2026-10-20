@@ -399,15 +399,20 @@ function criticalApplication(items) {
 }
 
 /** Registre des Blessures Critiques d'attaque : un enregistrement stable par critique appliqué (principal puis secondaire). */
-function appendCriticalWoundRecords(participant, criticals, { resolutionId, authorId, round }) {
+function appendCriticalWoundRecords(participant, criticals, { resolutionId, authorId, round, beforeStates = [] }) {
   const present = (criticals || []).filter(detail => detail && !detail.pending);
   if (!present.length) return;
+  const previousIds = new Set(beforeStates.map(state => state.id));
+  const added = (participant.states || []).filter(state => !previousIds.has(state.id));
+  const criticalStates = added.filter(state => state.source?.kind === 'critical');
+  const stateIds = criticalStates.length ? added.filter(state => state.source?.kind === 'critical' || ['stunned-over-toughness', 'stunned-ended'].includes(state.source?.kind)).map(state => state.id) : [];
   participant.extensions ??= {};
   participant.extensions.v5 ??= {};
   participant.extensions.v5.criticalWounds = [...(participant.extensions.v5.criticalWounds || []),
     ...present.map((detail, index) => ({ id: `${resolutionId}:crit:${participant.id}:${index}`, source: 'attack',
       location: detail.location?.name ?? null, name: detail.effect?.name ?? null, effectRoll: detail.effectRoll ?? null,
-      round, resolutionId, authorId }))];
+      // Les acquisitions des deux critiques sont groupées : leurs États communs sont rattachés au premier enregistrement.
+      round, resolutionId, authorId, stateIds: index === 0 ? stateIds : [] }))];
 }
 
 /** Perte de PV proposée par un aperçu : dégâts de l'arme + Blessures en plus des critiques cochés. */
@@ -930,7 +935,7 @@ export function applyResolution(preview, currentState) {
       Object.assign(updated, receipt.participant);
     }
     appendCriticalWoundRecords(updated, [preview.critical?.details, preview.critical?.second],
-      { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, round: preview.input.round });
+      { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, round: preview.input.round, beforeStates: target.states || [] });
     nextState.participants = participantListWithUpdate(currentState, preview.targetId, updated);
   }
   const defenderEffects = preview.defenderCritical?.application;
@@ -945,7 +950,7 @@ export function applyResolution(preview, currentState) {
       Object.assign(updated, receipt.participant);
     }
     appendCriticalWoundRecords(updated, [preview.defenderCritical?.details, preview.defenderCritical?.second],
-      { resolutionId: preview.resolutionId, authorId: preview.input.target?.id, round: preview.input.round });
+      { resolutionId: preview.resolutionId, authorId: preview.input.target?.id, round: preview.input.round, beforeStates: liveActor.states || [] });
     nextState.participants = participantListWithUpdate(nextState, updated.id, updated);
   }
   if (preview.activeEffects?.length) {
@@ -954,7 +959,7 @@ export function applyResolution(preview, currentState) {
     const updated = { ...clone(live), states: [...(live.states || []), ...clone(preview.activeEffects)] };
     nextState.participants = participantListWithUpdate(nextState, live.id, updated);
   }
-  for(const row of preview.secondaryTargets||[]){const live=participantById(nextState,row.participantId);if(!live||JSON.stringify(live)!==JSON.stringify(row.before))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};const secondaryUpdated=clone(row.participant);appendCriticalWoundRecords(secondaryUpdated,[row.critical?.second],{resolutionId:preview.resolutionId,authorId:preview.input.actor?.id,round:preview.input.round});nextState.participants=participantListWithUpdate(nextState,live.id,secondaryUpdated);}
+  for(const row of preview.secondaryTargets||[]){const live=participantById(nextState,row.participantId);if(!live||JSON.stringify(live)!==JSON.stringify(row.before))return{status:'stale',requiresPreview:true,state:clone(currentState),resolution:clone(preview)};const secondaryUpdated=clone(row.participant);appendCriticalWoundRecords(secondaryUpdated,[row.critical?.second],{resolutionId:preview.resolutionId,authorId:preview.input.actor?.id,round:preview.input.round,beforeStates:live.states||[]});nextState.participants=participantListWithUpdate(nextState,live.id,secondaryUpdated);}
   for (const change of preview.momentum || []) {
     const live = participantById(nextState, change.participantId);
     if (live) nextState.participants = participantListWithUpdate(nextState, live.id, withMomentum(live, change.after));
