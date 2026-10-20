@@ -137,16 +137,26 @@ const temporaryFortune = {
 };
 
 // Relance gratuite (Bénédiction de Chance) : la couche porte un compteur imbriqué, consommé par la résolution (v5-store-action.js).
+// Écraser les faibles (Ulric) : relance d'attaque une fois par Round, compteur rechargé à chaque Round au lieu d'être décrémenté.
 const freeReroll = {
-  validate: () => null,
-  buildLayer: () => ({ freeReroll: { remaining: 1 } })
+  validate: effect => typeof effect.perRound === 'boolean' || effect.perRound === undefined
+    ? (typeof effect.attacksOnly === 'boolean' || effect.attacksOnly === undefined ? null : 'free-reroll exige attacksOnly (booléen).')
+    : 'free-reroll exige perRound (booléen).',
+  buildLayer: effect => ({ freeReroll: { remaining: 1, ...(effect.perRound ? { perRound: true } : {}), ...(effect.attacksOnly ? { attacksOnly: true } : {}) } })
 };
 export const FREE_REROLL_SOURCE = 'divine-free-reroll';
-export const freeRerollLayers = participant => (participant?.extensions?.v5?.divineEffects || []).filter(layer => layer?.type === 'free-reroll' && layer.freeReroll?.remaining > 0);
-export function consumeFreeReroll(participant) {
-  const layer = freeRerollLayers(participant)[0];
+export const freeRerollLayers = (participant, { round, attack } = {}) => (participant?.extensions?.v5?.divineEffects || []).filter(layer => {
+  if (layer?.type !== 'free-reroll' || !layer.freeReroll) return false;
+  if (layer.freeReroll.attacksOnly && attack !== true) return false;
+  return layer.freeReroll.perRound ? layer.freeReroll.usedRound !== round : layer.freeReroll.remaining > 0;
+});
+export function consumeFreeReroll(participant, { round, attack } = {}) {
+  // La relance rechargée chaque Round passe avant la relance unique (Chance), pour ne pas gaspiller cette dernière.
+  const layers = freeRerollLayers(participant, { round, attack }), layer = layers.find(row => row.freeReroll.perRound) || layers[0];
   if (!layer) return false;
-  layer.freeReroll = { ...layer.freeReroll, remaining: layer.freeReroll.remaining - 1 };
+  layer.freeReroll = layer.freeReroll.perRound
+    ? { ...layer.freeReroll, usedRound: round }
+    : { ...layer.freeReroll, remaining: layer.freeReroll.remaining - 1 };
   return true;
 }
 

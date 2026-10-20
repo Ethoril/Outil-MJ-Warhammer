@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:b00e53235ec0ef578ef57530e5c260ab68377d35117166240af5279651fa4176",
+  "sourceFingerprint": "sha256:03a6fded8dcab51068c48b2d8d011ad83ce75e81d3c99c6b684b1350f6527fb7",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -21221,7 +21221,7 @@
       "type": "miracle",
       "name": "Écraser les faibles",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
         "fileSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
@@ -21286,7 +21286,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "perRound": true,
+          "attacksOnly": true,
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Crush the Weak",
         "effect": "Vous êtes empli du mépris d'Ulric pour les faibles et les lâches. Une fois par Round, vous pouvez relancer une attaque ratée.",
@@ -21295,23 +21308,18 @@
       "clauses": [
         {
           "id": "reroll",
-          "mode": "manual",
-          "text": "Une fois par Round, relancer une attaque ratée.",
+          "mode": "engine",
+          "text": "Une fois par Round, relancer gratuitement une attaque ratée (mêlée ou distance), sans dépenser de Point de Chance.",
           "sourceRef": "v5-crush-the-weak"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-crush-the-weak"
         }
       ],
-      "needsInput": [
-        {
-          "field": "reroll",
-          "label": "Attaque ratée à relancer, une fois par Round (le moteur ne gère pas les relances)."
-        }
-      ]
+      "needsInput": []
     },
     {
       "id": "divine:miracle:ulric:frostbite",

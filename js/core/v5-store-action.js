@@ -94,7 +94,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
       // Bénédiction de Chance : relance gratuite du prochain Test échoué (le Test d'origine est évalué avant d'y substituer la relance).
       // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
       const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
-      if (freeRerollLayers(actor).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
+      if (freeRerollLayers(actor, { round: state.round, attack: supplied.action?.type === 'attack' }).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
         const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, ...plainContext } = context;
         const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, ...plainSupplied } = supplied;
         const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
@@ -176,12 +176,12 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   }
   // Relance gratuite : exemption vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const free = preview.actionCostPlan?.request?.exemptions?.some(row => row.sourceId === FREE_REROLL_SOURCE);
-  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId)).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
+  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: current.round, attack: preview.input?.action?.type === 'attack' }).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
   const resolve = state => {
     const result = commitV5StoreTalentUsages(preview, resolveAction(state), state);
     if (free && result.status === 'applied') {
       const actorId = preview.actionCostPlan.request.actorId, participants = clone(result.state.participants), actor = participants.find(p => p.id === actorId);
-      consumeFreeReroll(actor);
+      consumeFreeReroll(actor, { round: state.round, attack: preview.input?.action?.type === 'attack' });
       return { ...result, state: { ...result.state, participants } };
     }
     return result;

@@ -60,18 +60,16 @@ export const miracles = [
     printedPage: 50,
     summary: 'Vous êtes empli du mépris d\'Ulric pour les faibles et les lâches. Une fois par Round, vous pouvez relancer une attaque ratée.',
     params: { range: self, targets: self, duration: felRounds },
-    status: 'manual',
+    status: 'implemented',
     effect: null,
-    effects: [],
+    effects: [{ type: 'free-reroll', perRound: true, attacksOnly: true, appliesTo: 'caster' }],
     targetRules: [],
-    needsInput: [
-      { id: 'reroll', text: 'Attaque ratée à relancer, une fois par Round (le moteur ne gère pas les relances).' }
-    ],
+    needsInput: [],
     clauses: [
-      { id: 'reroll', mode: 'manual', text: 'Une fois par Round, relancer une attaque ratée.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'reroll', mode: 'engine', text: 'Une fois par Round, relancer gratuitement une attaque ratée (mêlée ou distance), sans dépenser de Point de Chance.' },
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'Le texte ne précise pas si la relance vaut pour toute attaque (mêlée et distance) ni si le second jet est définitif : lecture MJ.'
+    sourceDelta: 'La relance est modélisée comme une relance gratuite de Fortune d\'une attaque ratée (mêlée ou distance), une fois par Round, tant que la prière est active.'
   },
   {
     name: 'Engourdissement',
