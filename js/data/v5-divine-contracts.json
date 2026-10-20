@@ -1175,7 +1175,7 @@
         "effet": "Sachant que la situation est désespérée, vous priez pour que vos forces ne souffrent pas d'une déroute catastrophique. Tant que le miracle est actif, vos alliés peuvent rompre le combat sans permettre à l'ennemi d'en profiter pour attaquer gratuitement ou obtenir un avantage."
       },
       "v5Summary": "Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower yards » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. Page 79 (V4) : yards sources lues comme mètres de jeu, sans conversion (DIV-03).",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -11831,7 +11831,7 @@
       "catalogueName": "En Bon Ordre",
       "canonicalName": "In Good Order",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -11898,7 +11898,18 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "orderlyDisengage": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "In Good Order",
@@ -11910,6 +11921,12 @@
           "id": "catalogue-entry",
           "mode": "source-checked",
           "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "orderly-disengage",
+          "mode": "engine",
+          "text": "Les alliés désignés portent « En bon ordre » : Désengagement sans Élan ni attaque gratuite adverse (à appliquer par le MJ, le moteur ne gère pas le Désengagement).",
+          "sourceRef": "v5-in-good-order"
         },
         {
           "id": "flee-exemption",
@@ -27017,5 +27034,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:45dc20bbae45dd166b456bcc8b82f2b74cd633f9a4f7b67e407153efb6caab5f"
+  "sourceFingerprint": "sha256:1e68c0af6a030b99582eaf2b43dbb1b3d877df94bbaaaf19672a27d77864f3d4"
 }

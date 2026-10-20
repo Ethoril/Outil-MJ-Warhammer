@@ -15,7 +15,7 @@ const SHA = '0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07';
 const nine = [
   ['Commander la Légion', 'Command the Legion', 'commander-la-legion', 'assisted'],
   ["Effrayer l'Ennemi", 'Dismay Foe', 'effrayer-l-ennemi', 'assisted'],
-  ['En Bon Ordre', 'In Good Order', 'en-bon-ordre', 'manual'],
+  ['En Bon Ordre', 'In Good Order', 'en-bon-ordre', 'assisted'],
   ['Connaître son Ennemi', 'Know Your Enemy', 'connaitre-son-ennemi', 'manual'],
   ['Sur un Terrain Mortel', 'On Deadly Ground', 'sur-un-terrain-mortel', 'assisted'],
   ['Attaque Rapide', 'Quick Strike', 'attaque-rapide', 'manual'],
@@ -56,7 +56,7 @@ test('inventaire : plus aucun miracle bloqué, neuf miracles Up in Arms connect�
   assert.equal(inventory.counts.miraclesSupplementSourceFound, 9);
   assert.equal(inventory.counts.miraclesV4AdaptationBlocked, 0);
   assert.equal(inventory.sourceCounts.miraclesUpInArmsConnected, 9);
-  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 5, manual: 4 });
+  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 6, manual: 3 });
   assert.equal(registry.contracts.some(row => row.status === 'blocked'), false);
   assert.equal(inventory.items.filter(row => row.type === 'miracle' && row.source.document === 'Up in arms.pdf').length, 9);
 });

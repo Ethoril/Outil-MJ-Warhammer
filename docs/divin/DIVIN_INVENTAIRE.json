@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:45dc20bbae45dd166b456bcc8b82f2b74cd633f9a4f7b67e407153efb6caab5f",
+  "sourceFingerprint": "sha256:1e68c0af6a030b99582eaf2b43dbb1b3d877df94bbaaaf19672a27d77864f3d4",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -62,8 +62,8 @@
     },
     "miraclesUpInArmsConnected": 9,
     "upInArmsByStatus": {
-      "assisted": 5,
-      "manual": 4
+      "assisted": 6,
+      "manual": 3
     }
   },
   "notes": [
@@ -9014,7 +9014,7 @@
       "type": "miracle",
       "name": "En Bon Ordre",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -9086,7 +9086,18 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "orderlyDisengage": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "In Good Order",
         "effect": "Sachant la situation désespérée, vous priez pour que vos troupes ne soient pas disloquées : tant que le miracle dure, les alliés de la zone peuvent rompre le combat sans que l’ennemi gagne l’Élan ni une attaque gratuite en retour.",
@@ -9097,6 +9108,12 @@
           "id": "catalogue-entry",
           "mode": "source-checked",
           "sourceRef": "up-in-arms-p79"
+        },
+        {
+          "id": "orderly-disengage",
+          "mode": "engine",
+          "text": "Les alliés désignés portent « En bon ordre » : Désengagement sans Élan ni attaque gratuite adverse (à appliquer par le MJ, le moteur ne gère pas le Désengagement).",
+          "sourceRef": "v5-in-good-order"
         },
         {
           "id": "flee-exemption",

@@ -52,13 +52,15 @@ export const miracles = [
     name: 'En Bon Ordre', canonicalName: 'In Good Order', printedPage: 79,
     summary: 'Sachant la situation désespérée, vous priez pour que vos troupes ne soient pas disloquées : tant que le miracle dure, les alliés de la zone peuvent rompre le combat sans que l’ennemi gagne l’Élan ni une attaque gratuite en retour.',
     params: { range: self, targets: willpowerArea, duration: willpowerRounds },
-    status: 'manual',
+    status: 'assisted',
+    effects: [{ type: 'special-state', orderlyDisengage: true }],
     targetRules: [],
     needsInput: [
       { id: 'allies-in-area', text: 'Quels alliés sont dans la zone (Bonus de Volonté yards autour du prêtre) ?' },
       { id: 'fleeing', text: 'Quel allié rompt le combat (Fuite) et combien d’ennemis Engagés a-t-il ?' }
     ],
     clauses: [
+      { id: 'orderly-disengage', mode: 'engine', text: 'Les alliés désignés portent « En bon ordre » : Désengagement sans Élan ni attaque gratuite adverse (à appliquer par le MJ, le moteur ne gère pas le Désengagement).' },
       { id: 'flee-exemption', mode: 'manual', text: 'Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163).' },
       { id: 'broken-from-fleeing', mode: 'manual', text: 'Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163) ; seul le Désengagement n’est pas concerné.' },
       { id: 'area', mode: 'manual', text: 'Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en yards (convention V5 des zones).' },
