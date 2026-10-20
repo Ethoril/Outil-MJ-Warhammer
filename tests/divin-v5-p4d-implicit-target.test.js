@@ -118,7 +118,7 @@ test('caractérisation : Œil de l’aigle et Yeux de chat refusent toujours une
 
 test('règle : seuls les quatre contrats d’invocation/capteur portent la cible implicite du prêtre', () => {
   const implicit = getAllDivineContracts().filter(contract => hasImplicitCasterTarget(contract)).map(contract => contract.id).sort();
-  assert.deepEqual(implicit, [CAT, EAGLE, HOWL, KING].sort());
+  assert.deepEqual(implicit, [CAT, EAGLE, HOWL, KING, 'divine:miracle:attaque-rapide'].sort());
   assert.equal(hasImplicitCasterTarget({ effects: [] }), false);
   assert.equal(hasImplicitCasterTarget({ effects: [{ type: 'summon-creature', appliesTo: 'caster' }, { type: 'condition' }] }), false, 'un effet de cibles désactive la règle');
   assert.equal(hasImplicitCasterTarget({ effects: [{ type: 'summon-creature', appliesTo: 'targets' }] }), false);

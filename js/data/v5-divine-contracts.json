@@ -1237,8 +1237,8 @@
         "duree": "3 Rounds",
         "effet": "Infusé par le pouvoir de Myrmidia, vous bénéficiez de réflexes accrus et pouvez anticiper les mouvements de votre adversaire. Au début de chaque Round tant que le miracle est actif, vous pouvez tenter un Test d'Initiative Intermédiaire (+0 DR) pour obtenir une attaque gratuite en dehors de la séquence normale. Cette attaque se fait avec l'arme que vous portez dans votre main principale."
       },
-      "v5Summary": "Le mécanisme d’attaque gratuite des talents (Frappe réactive) ne se déclenche pas au début de Round : contrat manuel. Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.",
-      "status": "manual",
+      "v5Summary": "Attaque gratuite hors séquence modélisée sur celle de Frénésie (effet free-attack : Test d’Initiative Intermédiaire (+0 DR) réussi et arme de la main principale saisis dans le panneau d’attaque, une par Round, sans Élan). Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -12234,7 +12234,7 @@
       "catalogueName": "Attaque Rapide",
       "canonicalName": "Quick Strike",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -12257,7 +12257,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le mécanisme d’attaque gratuite des talents (Frappe réactive) ne se déclenche pas au début de Round : contrat manuel. Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.",
+      "sourceDelta": "Attaque gratuite hors séquence modélisée sur celle de Frénésie (effet free-attack : Test d’Initiative Intermédiaire (+0 DR) réussi et arme de la main principale saisis dans le panneau d’attaque, une par Round, sans Élan). Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.",
       "params": {
         "range": {
           "kind": "self"
@@ -12299,7 +12299,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-attack",
+          "scope": "round",
+          "test": {
+            "attr": "I",
+            "slModifier": 0
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Quick Strike",
@@ -12314,8 +12330,8 @@
         },
         {
           "id": "round-start-test",
-          "mode": "manual",
-          "text": "Au début de chaque Round du miracle (étape 2 de la séquence, p.161), Test d’Initiative Intermédiaire (+0 DR) ; une seule tentative par Round.",
+          "mode": "engine",
+          "text": "Au début de chaque Round du miracle (étape 2 de la séquence, p.161), Test d’Initiative Intermédiaire (+0 DR), une seule tentative par Round ; sur réussite, une attaque gratuite hors de la séquence normale avec l’arme de la main principale (case « Attaque rapide » de l’attaque : Test réussi et arme de main requis, une attaque par Round, sans Élan).",
           "sourceRef": "v5-quick-strike"
         },
         {
@@ -12326,7 +12342,7 @@
         },
         {
           "id": "duration",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Durée : 3 Rounds (+3 Rounds par tranche de +2 DR).",
           "sourceRef": "v5-quick-strike"
         }
@@ -27034,5 +27050,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:1e68c0af6a030b99582eaf2b43dbb1b3d877df94bbaaaf19672a27d77864f3d4"
+  "sourceFingerprint": "sha256:888d895e12e42b9e365325af693f276ca60bfb34c41aa817e091f127e1ac9aa4"
 }

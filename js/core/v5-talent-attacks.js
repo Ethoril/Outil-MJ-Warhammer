@@ -16,6 +16,10 @@ export function previewAttackPrelude(n){
   if(!plan.proposals.length||!trigger||trigger.gloriousWindowClosed===true||c.immediateReaction!==true||trigger.v5Timing?.acquiredRound!==n.v5Clock.round||n.v5.kind!=='melee')unresolved.push('Fin glorieuse : nouvel État identifié et attaque immédiate avant mise hors combat requis.');
   glorious=!unresolved.length;
  }
+ if(id==='divine-free-attack'){
+  if(c.freeAttackTest?.success!==true)unresolved.push('Attaque rapide : Test d’Initiative Intermédiaire (+0 DR) réussi requis.');
+  if(c.mainHand!==true)unresolved.push('Attaque rapide : arme de la main principale requise.');
+ }
  if(id==='fast-shot'){
   const plan=situationPlan(n.actor,id);plans.push(plan);const pistol=n.action.qualities.some(q=>q.id==='pistolet'),order=c.fastShotActorIds;
   if(!plan.proposals.length||!pistol||n.v5.kind!=='ranged'||c.weaponLoaded!==true||c.actorEngaged!==false||c.beforeFirstTurn!==true||!Array.isArray(order)||!order.includes(n.actor.id)||new Set(order).size!==order.length)unresolved.push('Tir rapide : Pistol chargé, hors engagement, avant le premier Tour et tireurs déclarés requis.');

@@ -107,18 +107,19 @@ export const miracles = [
     name: 'Attaque Rapide', canonicalName: 'Quick Strike', printedPage: 79,
     summary: 'Animé de la puissance de Myrmidia, vous anticipez les mouvements adverses : au début de chaque Round du miracle, vous pouvez tenter un Test d’Initiative Intermédiaire (+0 DR) pour une attaque gratuite hors de la séquence normale, avec l’arme de la main principale.',
     params: { range: self, targets: self, duration: rounds(3) },
-    status: 'manual',
+    status: 'assisted',
+    effects: [{ type: 'free-attack', scope: 'round', test: { attr: 'I', slModifier: 0 }, appliesTo: 'caster' }],
     targetRules: [],
     needsInput: [
       { id: 'initiative-test', text: 'Résultat du Test d’Initiative Intermédiaire (+0 DR) au début de chaque Round.' },
       { id: 'free-attack', text: 'Cible de l’attaque gratuite et résultat du Test de Mêlée opposé.' }
     ],
     clauses: [
-      { id: 'round-start-test', mode: 'manual', text: 'Au début de chaque Round du miracle (étape 2 de la séquence, p.161), Test d’Initiative Intermédiaire (+0 DR) ; une seule tentative par Round.' },
+      { id: 'round-start-test', mode: 'engine', text: 'Au début de chaque Round du miracle (étape 2 de la séquence, p.161), Test d’Initiative Intermédiaire (+0 DR), une seule tentative par Round ; sur réussite, une attaque gratuite hors de la séquence normale avec l’arme de la main principale (case « Attaque rapide » de l’attaque : Test réussi et arme de main requis, une attaque par Round, sans Élan).' },
       { id: 'free-attack', mode: 'manual', text: 'Sur réussite : une attaque de Mêlée ordinaire opposée, avec l’arme de la main principale, sans Action ni Mouvement ; l’Élan se gagne et se perd normalement (p.168).' },
-      { id: 'duration', mode: 'manual', text: 'Durée : 3 Rounds (+3 Rounds par tranche de +2 DR).' }
+      { id: 'duration', mode: 'engine', text: 'Durée : 3 Rounds (+3 Rounds par tranche de +2 DR).' }
     ],
-    sourceDelta: 'Le mécanisme d’attaque gratuite des talents (Frappe réactive) ne se déclenche pas au début de Round : contrat manuel. Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.'
+    sourceDelta: 'Attaque gratuite hors séquence modélisée sur celle de Frénésie (effet free-attack : Test d’Initiative Intermédiaire (+0 DR) réussi et arme de la main principale saisis dans le panneau d’attaque, une par Round, sans Élan). Intermédiaire (+0) V4 = Intermédiaire (+0 DR) V5 sans conversion. Attaque gratuite : Mêlée ordinaire opposée, une fois par Round, Élan normal (décision MJ) ; elle s’ajoute à l’attaque supplémentaire à l’Élan (p.168), sans l’exclure. Portée et cible « Vous » : seule la durée peut croître.'
   },
   {
     name: 'Dévotion de la Guerrière', canonicalName: 'Shieldmaiden’s Devotion', printedPage: 79,

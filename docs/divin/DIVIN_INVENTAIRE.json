@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:1e68c0af6a030b99582eaf2b43dbb1b3d877df94bbaaaf19672a27d77864f3d4",
+  "sourceFingerprint": "sha256:888d895e12e42b9e365325af693f276ca60bfb34c41aa817e091f127e1ac9aa4",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -62,8 +62,8 @@
     },
     "miraclesUpInArmsConnected": 9,
     "upInArmsByStatus": {
-      "assisted": 6,
-      "manual": 3
+      "assisted": 7,
+      "manual": 2
     }
   },
   "notes": [
@@ -9402,7 +9402,7 @@
       "type": "miracle",
       "name": "Attaque Rapide",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -9472,7 +9472,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-attack",
+          "scope": "round",
+          "test": {
+            "attr": "I",
+            "slModifier": 0
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Quick Strike",
         "effect": "Animé de la puissance de Myrmidia, vous anticipez les mouvements adverses : au début de chaque Round du miracle, vous pouvez tenter un Test d’Initiative Intermédiaire (+0 DR) pour une attaque gratuite hors de la séquence normale, avec l’arme de la main principale.",
@@ -9486,8 +9502,8 @@
         },
         {
           "id": "round-start-test",
-          "mode": "manual",
-          "text": "Au début de chaque Round du miracle (étape 2 de la séquence, p.161), Test d’Initiative Intermédiaire (+0 DR) ; une seule tentative par Round.",
+          "mode": "engine",
+          "text": "Au début de chaque Round du miracle (étape 2 de la séquence, p.161), Test d’Initiative Intermédiaire (+0 DR), une seule tentative par Round ; sur réussite, une attaque gratuite hors de la séquence normale avec l’arme de la main principale (case « Attaque rapide » de l’attaque : Test réussi et arme de main requis, une attaque par Round, sans Élan).",
           "sourceRef": "v5-quick-strike"
         },
         {
@@ -9498,7 +9514,7 @@
         },
         {
           "id": "duration",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Durée : 3 Rounds (+3 Rounds par tranche de +2 DR).",
           "sourceRef": "v5-quick-strike"
         }

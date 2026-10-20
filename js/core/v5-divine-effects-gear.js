@@ -63,6 +63,16 @@ const handlers = {
     needs: effect => isText(effect.skill) && Number.isSafeInteger(effect.slBonus) ? [] : [need('contract.effects.skill', 'Test de dissuasion sourcé requis')],
     buildLayer: effect => ({ attackDeterrent: { skill: effect.skill, slBonus: effect.slBonus } })
   },
+  // Attaque rapide (Myrmidia) : attaque gratuite hors séquence, une par Round ; Test d'Initiative (+0 DR) réussi et arme de
+  // la main principale saisis dans le panneau d'attaque (lus par v5-store-action.js et v5-talent-attacks.js).
+  'free-attack': {
+    validate: effect => effect.scope !== 'round' || !isRecord(effect.test) || !isText(effect.test.attr) || !Number.isSafeInteger(effect.test.slModifier)
+      ? 'free-attack exige scope \'round\' et test {attr, slModifier}.' : null,
+    needs: effect => effect.scope === 'round' && isRecord(effect.test) && isText(effect.test.attr) && Number.isSafeInteger(effect.test.slModifier)
+      ? [] : [need('contract.effects.freeAttack', 'Test d’Initiative sourcé requis')],
+    implicitTarget: true,
+    buildLayer: effect => ({ freeAttack: { scope: effect.scope, test: clone(effect.test) } })
+  },
   'grant-actions': {
     validate: effect => !Array.isArray(effect.actions) || !effect.actions.length
       || !effect.actions.every(action => isRecord(action) && isText(action.id) && isText(action.name) && isText(action.damageFormula)) ? 'grant-actions exige actions [{id, name, damageFormula}].' : null,

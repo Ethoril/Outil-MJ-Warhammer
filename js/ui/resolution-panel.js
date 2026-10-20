@@ -1355,6 +1355,15 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if(type==='attack'&&(actor.states||[]).some(s=>s.key==='frenzy')){
     const label=node('label','workspace-type');const check=document.createElement('input');check.type='checkbox';check.checked=current.freeAttackTalent==='frenzy';check.setAttribute('aria-label','Attaque gratuite de Frénésie');check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'frenzy':undefined}}));label.append(check,'Attaque gratuite de Frénésie (une par Round)');v5.append(label);
   }
+  // Attaque rapide (Myrmidia) : attaque gratuite hors séquence, proposée seulement si l’acteur porte la couche freeAttack du miracle.
+  if(type==='attack'&&(actor.extensions?.v5?.divineEffects||[]).some(layer=>layer?.freeAttack)){
+    const quick=current.freeAttackTalent==='divine-free-attack';
+    const label=node('label','workspace-type');const check=document.createElement('input');check.type='checkbox';check.checked=quick;check.setAttribute('aria-label','Attaque rapide (Myrmidia) : attaque gratuite hors séquence');check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'divine-free-attack':undefined}}));label.append(check,'Attaque rapide (Myrmidia) : attaque gratuite hors séquence');v5.append(label);
+    if(quick){
+      const test=node('label','workspace-type','Test d’Initiative (+0 DR) de l’Attaque rapide');const select=document.createElement('select');select.setAttribute('aria-label','Test d’Initiative (+0 DR) de l’Attaque rapide');select.append(new Option('À saisir',''),new Option('Échec','fail'),new Option('Réussite','pass'));const saved=current.freeAttackTest;select.value=saved?(saved.success?'pass':'fail'):'';select.addEventListener('change',()=>handlers.select({v5Context:{...current,freeAttackTest:select.value===''?undefined:{success:select.value==='pass'}}}));test.append(select);v5.append(test);
+      const hand=node('label','workspace-type');const handCheck=document.createElement('input');handCheck.type='checkbox';handCheck.checked=current.mainHand===true;handCheck.setAttribute('aria-label','Attaque rapide : arme de la main principale');handCheck.addEventListener('change',()=>handlers.select({v5Context:{...current,mainHand:handCheck.checked}}));hand.append(handCheck,'Attaque rapide : arme de la main principale');v5.append(hand);
+    }
+  }
   if(type==='skill'&&hasV5Talent(actor,'talent-robust')){
     contextField(v5,'actor','recoveryTest','Ce Test sert à récupérer des Blessures');
     if(current.recoveryTest){const wrap=node('label','workspace-type','Blessures normalement récupérées par ce Test'),input=document.createElement('input');input.type='number';input.min='0';input.step='1';input.value=current.recoveredWounds??'';input.setAttribute('aria-label',wrap.textContent);input.addEventListener('change',()=>handlers.select({v5Context:{...current,recoveredWounds:input.value===''?undefined:Number(input.value)}}));wrap.append(input);v5.append(wrap);

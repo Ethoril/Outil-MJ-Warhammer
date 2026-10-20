@@ -8,6 +8,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const mime = { '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
 const CALM_LABEL = 'Test de Calme de l’attaquant (Bénédiction de Protection)';
 const REVERSE_LABEL = 'Inverser les dés de ce Test (Fortune généreuse : 82 devient 28)';
+const QUICK_LABEL = 'Attaque rapide (Myrmidia) : attaque gratuite hors séquence';
 
 function startServer() {
   const server = createServer((req, res) => {
@@ -65,7 +66,12 @@ try {
         roll: () => {}, calculate: () => {}, compare: () => {}, choose: () => {}, apply: () => {}, cancel: () => {}
       };
       const actor = { id: 'actor', name: 'Attaquant', camp: spec.actorCamp, caracs: { CC: 50, Ag: 40, E: 40, F: 40 } };
-      if (spec.actorDivine) actor.extensions = { v5: { divineEffects: [{ id: 'l1', reverseDice: { remaining: 1 } }] } };
+      if (spec.actorDivine || spec.actorQuick) {
+        const layers = [];
+        if (spec.actorDivine) layers.push({ id: 'l1', reverseDice: { remaining: 1 } });
+        if (spec.actorQuick) layers.push({ id: 'l2', freeAttack: { scope: 'round', test: { attr: 'I', slModifier: 0 } } });
+        actor.extensions = { v5: { divineEffects: layers } };
+      }
       const target = { id: 'target', name: 'Cible', camp: spec.targetCamp, caracs: { CC: 45, Ag: 40, E: 40, F: 40 } };
       if (spec.targetDivine) target.extensions = { v5: { divineEffects: [{ id: 'l1', attackDeterrent: { skill: 'Calme', slBonus: 2, ...(spec.passedActor ? { passedAttackerIds: ['actor'] } : {}), ...(spec.passedOther ? { passedAttackerIds: ['other'] } : {}) } }] } };
       const actions = [{ id: 'a1', type: 'attack', attr: 'CC', note: 'Attaque', base: 50, damage: 5 }];
@@ -125,6 +131,17 @@ try {
     'cocher la case appelle handlers.select avec reverseDice: true');
   await page.evaluate(() => window.__render({ actorCamp: 'pj', targetCamp: 'ennemi', actorDivine: false }));
   check(await reverseCheckbox.count() === 0, 'acteur sans couche reverseDice : aucune case « Inverser les dés »');
+
+  // e) Attaque rapide (Myrmidia) : case affichée seulement si l’acteur porte la couche freeAttack du miracle.
+  const quickCheckbox = page.locator(`input[type="checkbox"][aria-label="${QUICK_LABEL}"]`);
+  await page.evaluate(() => window.__render({ actorCamp: 'pj', targetCamp: 'ennemi', actorQuick: true }));
+  check(await quickCheckbox.count() === 1, 'acteur avec la couche freeAttack : la case « Attaque rapide » est affichée');
+  await quickCheckbox.check();
+  call = await lastCall();
+  check(call?.kind === 'select' && call.payload?.extraAttack === true && call.payload?.v5Context?.freeAttackTalent === 'divine-free-attack',
+    'cocher la case appelle handlers.select avec extraAttack et freeAttackTalent \'divine-free-attack\'');
+  await page.evaluate(() => window.__render({ actorCamp: 'pj', targetCamp: 'ennemi', actorQuick: false }));
+  check(await quickCheckbox.count() === 0, 'acteur sans couche freeAttack : aucune case « Attaque rapide »');
 
   check(pageErrors.length === 0, 'aucune erreur de page pendant le rendu (' + (pageErrors[0] || 'rien à signaler') + ')');
   await context.close();

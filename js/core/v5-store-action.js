@@ -47,7 +47,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const supplied = reactionValidation.input;
   const actorId = supplied.actorId || supplied.actor?.id, targetId = supplied.targetId || supplied.target?.id;
   const resolutionId = supplied.resolutionId || supplied.id || defaultResolutionId({ id: actorId }, supplied.action || {}, targetId ? { id: targetId } : null, supplied.baseRevision ?? state.revision, Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll)), v5 = supplied.v5 || {};
-  if(['glorious-demise','reaction-strike'].includes(v5.context?.freeAttackTalent))v5.extraAttack=true;
+  if(['glorious-demise','reaction-strike','divine-free-attack'].includes(v5.context?.freeAttackTalent))v5.extraAttack=true;
   if(v5.context?.freeAttackTalent==='fast-shot')v5.extraAttack=false;
   if(v5.context?.talentAction==='stomp')v5.extraAttack=true;
   const costs = [...(v5.costs || [])];
@@ -63,6 +63,11 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(v5.extraAttack&&context.freeAttackTalent==='frenzy'){
     if(!(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s)))throw new TypeError('Attaque gratuite de Frénésie non disponible.');
     quotas.push({id:'talent:frenzy-extra-attack',scope:'round',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-frenzy'});
+  }
+  // Attaque rapide (Myrmidia) : couche freeAttack requise ; une attaque gratuite par Round, sans Élan.
+  if(v5.extraAttack&&context.freeAttackTalent==='divine-free-attack'){
+    if(!(actor.extensions?.v5?.divineEffects||[]).some(layer=>layer?.freeAttack))throw new TypeError('Attaque rapide non disponible.');
+    quotas.push({id:'divine:free-attack',scope:'round',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'divine-free-attack'});
   }
   const secondaryTalentRequests=[];
   const defender=state.participants.find(p=>p.id===targetId),defenderContext=supplied.defense?.v5?.context||{},defenderSelected=defenderContext.preRollTalent;
