@@ -1023,6 +1023,61 @@
       "defauts_trouves_apres": [],
       "verdict_qualite": "5 — 9 contrôles, mutant tué, cas négatifs inclus ; a trouvé seul le type MIME JSON nécessaire au graphe de modules.",
       "remarque": "Contrôle réseau : connexions de msedge (navigateur lancé par le test), pas de l'agent."
+    },
+    {
+      "id": "p5-t20-malice-de-ranald",
+      "voie": "glm",
+      "famille": "module-effets",
+      "risque": "faible",
+      "objectif": "Miracle Malice de Ranald assisté : effet générique characteristic-match (resolve fige les écarts, inputFields à deux listes)",
+      "acceptation": "node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-mischief.test.js (+3)",
+      "fichiers_autorises": [
+        "js/core/v5-divine-effect-handlers.js",
+        "js/core/v5-divine-grammar.js",
+        "docs/divin/sources/miracles/ranald-trompeur.mjs",
+        "fichiers générés"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        17,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        69,
+        null
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        300000,
+        320000
+      ],
+      "b2_cout_usd": 0.8048,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 541354,
+        "tokens_sortie": 10660,
+        "etapes": 22
+      },
+      "duree_s": null,
+      "tours": 22,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": false,
+      "erreurs_orchestrateur": [
+        "Test de contrat formulaire/moteur (t5-form-model) non listé dans l'acceptation : le remplissage par défaut proposait deux fois CC."
+      ],
+      "hors_perimetre": [],
+      "lignes_livrees": 100,
+      "lignes_retouchees_par_claude": 10,
+      "reprise": false,
+      "defauts_trouves_apres": [
+        {
+          "par": "suite complète",
+          "bloquant": false,
+          "description": "Les deux listes proposaient CC par défaut : formulaire non soumissible tel quel ; ordre des options décalé pour la seconde (10 lignes)."
+        }
+      ],
+      "verdict_qualite": "4 — gestionnaire complet et bien validé (doublons, cible unique, valeurs connues) ; défaut de formulaire non couvert par l'acceptation.",
+      "remarque": ""
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
