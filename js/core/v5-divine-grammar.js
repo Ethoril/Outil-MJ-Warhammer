@@ -12,7 +12,7 @@ export const calendarDurationUnits = new Set(['minutes', 'hours', 'days']);
 // Types d'effet connus du moteur ; v5-divine-effect-handlers.js doit fournir un gestionnaire pour chacun.
 // Socle : types de v5-divine-effect-handlers.js. Chaque module d'effet déclare les siens sur SA ligne ; les lignes sont séparées
 // par un commentaire pour que deux tâches qui ajoutent des types en parallèle ne produisent pas de conflit de fusion.
-export const effectTypes = new Set(['characteristic-modifier', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
+export const effectTypes = new Set(['characteristic-modifier', 'characteristic-match', 'armor-bonus', 'condition', 'healing', 'wound-heal']);
 // Traits, États spéciaux, actions, Talents, bonus d'arme (v5-divine-effects-gear.js).
 for (const type of ['grant-trait', 'special-state', 'grant-actions', 'grant-talent', 'weapon-bonus', 'grant-immunity', 'critical-severity-bonus', 'casting-penalty', 'attack-deterrent']) effectTypes.add(type);
 // Dégâts directs (v5-divine-effects-damage.js).

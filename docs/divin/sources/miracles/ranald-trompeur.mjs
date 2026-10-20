@@ -66,17 +66,17 @@ export const miracles = [
     name: 'Malice de Ranald', canonicalName: "Ranald's Mischief", printedPage: 24,
     summary: 'Le prêtre singe et moque un adversaire pour rééquilibrer un affrontement : deux de ses Caractéristiques sont temporairement égalées à celles de l’adversaire, pour un Test opposé avec lui. Deux jets de 1d10 désignent les Caractéristiques touchées (relancer les doublons) : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 au choix.',
     params: { range: { kind: 'fixed', value: 12, unit: 'yards' }, targets: one, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null,
+    status: 'assisted', effect: null,
+    effects: [{ type: 'characteristic-match', count: 2, appliesTo: 'caster' }],
     targetRules: [],
     needsInput: [
-      { id: 'opponent', text: 'Quel adversaire est visé et dans quel Test opposé ?' },
-      { id: 'rolls', text: 'Deux jets de 1d10 pour les Caractéristiques (doublons relancés) ; pour 9-0, laquelle est choisie ?' }
+      { id: 'opposed-test', text: 'Dans quel Test opposé avec l’adversaire désigné l’égalisation est-elle rappelée ?' }
     ],
     clauses: [
-      { id: 'two-characteristics', mode: 'manual', text: 'Deux Caractéristiques du prêtre sont égalées à celles de l’adversaire, pour les Tests opposés avec lui.' },
-      { id: 'table-roll', mode: 'manual', text: 'Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons.' }
+      { id: 'two-characteristics', mode: 'engine', text: 'Deux Caractéristiques du prêtre sont égalées à celles de l’adversaire désigné (valeurs figées au lancement, couche retirée à la fin de la prière).' },
+      { id: 'table-roll', mode: 'manual', text: 'Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons. Le MJ saisit les deux Caractéristiques tirées.' }
     ],
-    sourceDelta: 'La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée.'
+    sourceDelta: 'La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée. Automatisée par l’effet characteristic-match : valeurs figées au lancement ; « pour un Test opposé avec lui » reste un rappel MJ.'
   },
   {
     name: 'Visage oublié', canonicalName: 'Unremembered Face', printedPage: 24,

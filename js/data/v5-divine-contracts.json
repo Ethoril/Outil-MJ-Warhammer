@@ -1840,8 +1840,8 @@
     {
       "id": "divine:miracle:ranald:ranald-s-mischief",
       "catalogueEntry": null,
-      "v5Summary": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée.",
-      "status": "manual",
+      "v5Summary": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée. Automatisée par l’effet characteristic-match : valeurs figées au lancement ; « pour un Test opposé avec lui » reste un rappel MJ.",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -17892,7 +17892,7 @@
       "canonicalName": "Ranald's Mischief",
       "deity": "Ranald",
       "aspect": "Deceiver",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -17917,7 +17917,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée.",
+      "sourceDelta": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée. Automatisée par l’effet characteristic-match : valeurs figées au lancement ; « pour un Test opposé avec lui » reste un rappel MJ.",
       "params": {
         "range": {
           "kind": "fixed",
@@ -17962,7 +17962,19 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "characteristic-match",
+          "count": 2,
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Ranald's Mischief",
@@ -17972,25 +17984,21 @@
       "clauses": [
         {
           "id": "two-characteristics",
-          "mode": "manual",
-          "text": "Deux Caractéristiques du prêtre sont égalées à celles de l’adversaire, pour les Tests opposés avec lui.",
+          "mode": "engine",
+          "text": "Deux Caractéristiques du prêtre sont égalées à celles de l’adversaire désigné (valeurs figées au lancement, couche retirée à la fin de la prière).",
           "sourceRef": "v5-ranald-s-mischief"
         },
         {
           "id": "table-roll",
           "mode": "manual",
-          "text": "Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons.",
+          "text": "Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons. Le MJ saisit les deux Caractéristiques tirées.",
           "sourceRef": "v5-ranald-s-mischief"
         }
       ],
       "needsInput": [
         {
-          "field": "opponent",
-          "label": "Quel adversaire est visé et dans quel Test opposé ?"
-        },
-        {
-          "field": "rolls",
-          "label": "Deux jets de 1d10 pour les Caractéristiques (doublons relancés) ; pour 9-0, laquelle est choisie ?"
+          "field": "opposed-test",
+          "label": "Dans quel Test opposé avec l’adversaire désigné l’égalisation est-elle rappelée ?"
         }
       ]
     },
@@ -27009,5 +27017,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:636181013c5ccf3690dc20d4f34882821b0d624180eaff75509cbed1b2d36059"
+  "sourceFingerprint": "sha256:30e23f0b72038a9ab6bc5c52b898adbb3bf0e06ed2a1548de4393c7d8c896d10"
 }

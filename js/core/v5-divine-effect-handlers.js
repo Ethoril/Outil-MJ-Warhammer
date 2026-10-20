@@ -42,6 +42,9 @@ import summonHandlers from './v5-divine-effects-summon.js';
 
 const clone = value => structuredClone(value);
 const need = (field, label) => ({ field, label });
+// Caractéristiques égalables par la Malice de Ranald (M exclue : jamais par défaut, un M inconnu bloquerait l'aperçu).
+const MATCH_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
+const knownCarac = (actor, carac) => Number.isFinite(Number(actor?.caracs?.[carac]));
 const healingAmount = effect => effect.value ?? effect.wounds;
 
 const healing = {
@@ -69,6 +72,59 @@ const coreHandlers = {
       return needs;
     },
     buildLayer: effect => ({ statModifiers: { [effect.characteristic]: effect.value } })
+  },
+  // Malice de Ranald : deux Caractéristiques du prêtre sont égalées à celles de l'adversaire désigné.
+  // `count` Caractéristiques sont choisies par le MJ (input.characteristicMatch) ; la couche va au prêtre (appliesTo 'caster'),
+  // les valeurs sont figées à l'aperçu : statModifiers = cible - prêtre (le texte égalise, il ne fait pas que monter).
+  'characteristic-match': {
+    validate: effect => Number.isSafeInteger(effect.count) && effect.count > 0 ? null : `${effect.type} exige count entier positif.`,
+    needs(effect, { targets = [], input, actor } = {}) {
+      const needs = [];
+      const match = input?.characteristicMatch || {};
+      if (!MATCH_CARACS.includes(match.first)) needs.push(need('characteristicMatch.first', 'Première Caractéristique égalée à choisir (d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 au choix)'));
+      if (!MATCH_CARACS.includes(match.second)) needs.push(need('characteristicMatch.second', 'Seconde Caractéristique égalée à choisir'));
+      if (MATCH_CARACS.includes(match.first) && match.first === match.second)
+        needs.push(need('characteristicMatch.second', 'Deux Caractéristiques distinctes requises (relancer les doublons)'));
+      const chosen = [match.first, match.second].filter(c => MATCH_CARACS.includes(c) && match.first !== match.second);
+      if (targets.length !== 1) needs.push(need('targetIds', 'Exactement un adversaire désigné requis'));
+      else if (chosen.length === 2) {
+        for (const carac of chosen) {
+          if (!knownCarac(targets[0], carac)) needs.push(need(`targets.${targets[0]?.id}.caracs.${carac}`, `Caractéristique ${carac} connue de l’adversaire requise`));
+          if (actor && !knownCarac(actor, carac)) needs.push(need(`actor.caracs.${carac}`, `Caractéristique ${carac} connue du prêtre requise`));
+        }
+      }
+      return needs;
+    },
+    resolve(effect, { actor, input, targets = [] } = {}) {
+      const match = input?.characteristicMatch || {};
+      const chosen = [match.first, match.second];
+      if (!MATCH_CARACS.includes(chosen[0]) || !MATCH_CARACS.includes(chosen[1]))
+        return { error: 'Les deux Caractéristiques égalées doivent être choisies.', needs: [need('characteristicMatch.first', 'Première Caractéristique égalée (d10)'), need('characteristicMatch.second', 'Seconde Caractéristique égalée')] };
+      if (chosen[0] === chosen[1])
+        return { error: 'Les deux Caractéristiques égalées doivent être distinctes.', needs: [need('characteristicMatch.second', 'Deux Caractéristiques distinctes (relancer les doublons)')] };
+      if (targets.length !== 1)
+        return { error: 'Exactement un adversaire désigné est requis.', needs: [need('targetIds', 'Adversaire désigné unique')] };
+      const target = targets[0];
+      const statModifiers = {};
+      for (const carac of chosen) {
+        const delta = Number(target?.caracs?.[carac]) - Number(actor?.caracs?.[carac]);
+        if (!Number.isFinite(delta))
+          return { error: `La Caractéristique ${carac} doit être connue du prêtre et de l’adversaire.`, needs: [need(`targets.${target?.id}.caracs.${carac}`, `Caractéristique ${carac} des deux combattants requise`)] };
+        statModifiers[carac] = delta;
+      }
+      return { ...effect, statModifiers };
+    },
+    buildLayer: effect => ({ statModifiers: { ...effect.statModifiers } }),
+    // Listes ordonnées selon la table du d10 (CC, I, Int, Soc, puis « au choix ») ; la seconde commence à I pour que les deux choix
+    // proposés par défaut soient distincts.
+    inputFields: () => {
+      const tableOrder = ['CC', 'I', 'Int', 'Soc', ...MATCH_CARACS.filter(carac => !['CC', 'I', 'Int', 'Soc'].includes(carac))];
+      const options = list => list.map(carac => [carac, carac]);
+      return [
+        { path: 'characteristicMatch.first', label: 'Première Caractéristique égalée (d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 au choix)', kind: 'select', scope: 'effect', options: options(tableOrder) },
+        { path: 'characteristicMatch.second', label: 'Seconde Caractéristique égalée (doublon : relancer)', kind: 'select', scope: 'effect', options: options([...tableOrder.slice(1), tableOrder[0]]) }
+      ];
+    }
   },
   'armor-bonus': {
     validate: effect => Number.isFinite(effect.value) ? null : `${effect.type} exige value.`,
