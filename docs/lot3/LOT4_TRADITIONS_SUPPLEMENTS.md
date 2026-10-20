@@ -275,7 +275,7 @@ Preuve de périmètre des runes : `docs/lot3/LOT3_CADRAGE_MAGIE.md:159`. Aucun m
 - L05 : passages/pages 168 ; Référence française seulement ; pas de nouvelle tradition par traduction.
 - L06 : passages/pages 230, 240, 241, 242, 243, 244, 245 ; Socle de comparaison des contrats, pas un supplément à ajouter ici.
 - L07 : passages/pages 81, 128, 129, 183 ; 5 sorts nouveaux ; variantes des contrats Haute Magie et Waaagh! conservées explicitement.
-- L08 : passages/pages 80, 81, 82, 86, 87, 88, 89, 102, 103, 106, 107, 110, 111 ; 30 entrées Vaul/mer/Hoeth nouvelles ; 30 mineurs/arcanes/Haute Magie déjà catalogués non dupliqués.
+- L08 : passages/pages 80, 81, 82, 86, 87, 88, 89, 102, 103, 106, 107, 110, 111 ; 29 entrées Vaul/mer/Hoeth nouvelles ; 30 mineurs/arcanes/Haute Magie déjà catalogués non dupliqués.
 - L09 : passages/pages 64, 65, 66, 67 ; 24 sorts de magie noire manquants ; pactes à confirmer.
 - L10 : passages/pages 3, 9, 15, 50, 51, 68, 74, 83 ; Guide Sylvania : aucun nouveau cartouche de sort trouvé par repérage CN ; attente de la source Vampires.
 - L11 : passages/pages 135, 136, 137 ; Bestiaire et alchimie, pas de nouveau cartouche CN identifié.
