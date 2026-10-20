@@ -1168,6 +1168,97 @@
       "defauts_trouves_apres": [],
       "verdict_qualite": "5 — 9 étapes, attendus respectés, mutants tués ; a corrigé une valeur de SON test (pas le produit) et l'a signalé.",
       "remarque": ""
+    },
+    {
+      "voie": "glm",
+      "famille": "correctif-borne",
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        22,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        70,
+        null
+      ],
+      "b2_cout_reel_eur": null,
+      "duree_s": null,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "remarque": "",
+      "id": "p5-t23-protection-par-ennemi",
+      "risque": "eleve",
+      "objectif": "Protection : Test réussi retenu par ennemi (arbitrage MJ), preview et apply dans resolution.js",
+      "acceptation": "node --test tests/divin-v5-p5-protection.test.js (+2)",
+      "fichiers_autorises": [
+        "js/core/resolution.js"
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        340000,
+        350000
+      ],
+      "b2_cout_usd": 0.1546,
+      "b2_detail": {
+        "tokens_entree": 100447,
+        "tokens_sortie": 3169,
+        "etapes": 7
+      },
+      "tours": 7,
+      "lignes_livrees": 14,
+      "verdict_qualite": "5 — 7 étapes, 0,15 USD : prompt avec emplacements cherchables par commentaire."
+    },
+    {
+      "voie": "glm",
+      "famille": "module-effets",
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        22,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        70,
+        null
+      ],
+      "b2_cout_reel_eur": null,
+      "duree_s": null,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "remarque": "",
+      "id": "p5-t24-malice-regle-complete",
+      "risque": "eleve",
+      "objectif": "Malice de Ranald : décalage du score dans les seuls Tests opposés contre l'adversaire (buildCombatTest), fiche inchangée",
+      "acceptation": "node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-mischief.test.js (+3)",
+      "fichiers_autorises": [
+        "js/core/v5-divine-effect-handlers.js",
+        "js/core/v5-combat-rules.js",
+        "docs/divin/sources/miracles/ranald-trompeur.mjs",
+        "fichiers générés"
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        350000,
+        362000
+      ],
+      "b2_cout_usd": 0.8298,
+      "b2_detail": {
+        "tokens_entree": 563440,
+        "tokens_sortie": 9316,
+        "etapes": 20
+      },
+      "tours": 20,
+      "lignes_livrees": 40,
+      "verdict_qualite": "5 — refonte propre du gestionnaire et lecteur unique dans buildCombatTest ; suite complète verte."
     }
   ],
   "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
