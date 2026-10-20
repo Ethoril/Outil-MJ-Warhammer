@@ -92,16 +92,14 @@ export const miracles = [
     name: 'Faire monter les enjeux', canonicalName: 'Up the Stakes', printedPage: 19,
     summary: 'Le prêtre prie Ranald d’amplifier les effets de sa chance : le Test de la cible est fait normalement, mais une réussite devient automatiquement un Succès Retentissant et un échec un Échec Cuisant.',
     params: { range: felBonusYards, targets: one, duration: { kind: 'fixed', value: 1, unit: 'rounds' } },
-    status: 'manual', effect: null,
+    status: 'implemented', effect: null,
+    effects: [{ type: 'sl-extreme', magnitude: 6 }],
     targetRules: [],
-    needsInput: [
-      { id: 'target', text: 'Qui fait le Test amplifié (le texte parle du prêtre : « Take any Test as normal ») ?' },
-      { id: 'test', text: 'Quel Test est fait pendant le Round et quel est son résultat (réussite : Succès Retentissant ; échec : Échec Cuisant) ?' }
-    ],
+    needsInput: [],
     clauses: [
-      { id: 'astounding', mode: 'manual', text: 'Une réussite devient automatiquement un Succès Retentissant.' },
-      { id: 'impressive-failure', mode: 'manual', text: 'Un échec devient automatiquement un Échec Cuisant.' }
+      { id: 'astounding', mode: 'engine', text: 'Le prochain Test réussi de la cible est porté à au moins +6 DR.' },
+      { id: 'impressive-failure', mode: 'engine', text: 'Le prochain Test échoué de la cible est porté à au plus −6 DR.' }
     ],
-    sourceDelta: 'Cible imprimée « 1 » mais le texte dit « tout Test que vous faites » : ambigu entre le prêtre et la cible désignée. Les noms français « Succès Retentissant » (Astounding Success) et « Échec Cuisant » (Impressive Failure) sont des traductions retenues faute de repère dans les modules existants.'
+    sourceDelta: 'Arbitrage MJ R33 du 20 octobre 2026 : prochain Test de la cible désignée, réussite DR ≥ +6 et échec DR ≤ −6. Usage unique consommé à la résolution ; expiration normale si inutilisé.'
   }
 ];

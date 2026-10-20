@@ -1600,8 +1600,8 @@
     {
       "id": "divine:miracle:ranald:up-the-stakes",
       "catalogueEntry": null,
-      "v5Summary": "Cible imprimée « 1 » mais le texte dit « tout Test que vous faites » : ambigu entre le prêtre et la cible désignée. Les noms français « Succès Retentissant » (Astounding Success) et « Échec Cuisant » (Impressive Failure) sont des traductions retenues faute de repère dans les modules existants.",
-      "status": "manual",
+      "v5Summary": "Arbitrage MJ R33 du 20 octobre 2026 : prochain Test de la cible désignée, réussite DR ≥ +6 et échec DR ≤ −6. Usage unique consommé à la résolution ; expiration normale si inutilisé.",
+      "status": "implemented",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -15925,7 +15925,7 @@
       "canonicalName": "Up the Stakes",
       "deity": "Ranald",
       "aspect": "Gamester",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -15950,7 +15950,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Cible imprimée « 1 » mais le texte dit « tout Test que vous faites » : ambigu entre le prêtre et la cible désignée. Les noms français « Succès Retentissant » (Astounding Success) et « Échec Cuisant » (Impressive Failure) sont des traductions retenues faute de repère dans les modules existants.",
+      "sourceDelta": "Arbitrage MJ R33 du 20 octobre 2026 : prochain Test de la cible désignée, réussite DR ≥ +6 et échec DR ≤ −6. Usage unique consommé à la résolution ; expiration normale si inutilisé.",
       "params": {
         "range": {
           "kind": "characteristic-bonus",
@@ -15995,7 +15995,18 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "sl-extreme",
+          "magnitude": 6,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Up the Stakes",
@@ -16005,27 +16016,18 @@
       "clauses": [
         {
           "id": "astounding",
-          "mode": "manual",
-          "text": "Une réussite devient automatiquement un Succès Retentissant.",
+          "mode": "engine",
+          "text": "Le prochain Test réussi de la cible est porté à au moins +6 DR.",
           "sourceRef": "v5-up-the-stakes"
         },
         {
           "id": "impressive-failure",
-          "mode": "manual",
-          "text": "Un échec devient automatiquement un Échec Cuisant.",
+          "mode": "engine",
+          "text": "Le prochain Test échoué de la cible est porté à au plus −6 DR.",
           "sourceRef": "v5-up-the-stakes"
         }
       ],
-      "needsInput": [
-        {
-          "field": "target",
-          "label": "Qui fait le Test amplifié (le texte parle du prêtre : « Take any Test as normal ») ?"
-        },
-        {
-          "field": "test",
-          "label": "Quel Test est fait pendant le Round et quel est son résultat (réussite : Succès Retentissant ; échec : Échec Cuisant) ?"
-        }
-      ]
+      "needsInput": []
     },
     {
       "id": "divine:miracle:ranald:distant-sounds",
@@ -27083,5 +27085,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:07c001f4f45c8acf0d20d8ed9af7ade3d4d660cd1d8aef0c497d08a55d9c4ce2"
+  "sourceFingerprint": "sha256:3a2cf7c00abcd8a52aa822a6ef0272782763280274966a12bec81c52d0de9512"
 }

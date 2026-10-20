@@ -9,6 +9,7 @@ import { projectV5Resources, commitV5Resources } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
 import { defaultResolutionId, previewResolution } from './resolution.js';
 import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll, reverseDiceLayers, consumeReverseDice } from './v5-divine-effects-conditions.js';
+import { slExtremeLayers, consumeSlExtreme } from './v5-divine-effects-tests.js';
 const clone = structuredClone;
 // Même lecture que attackType() de resolution.js : « attack » ou « attaque » (fiches importées).
 const isAttackType = type => ['attack', 'attaque'].includes(String(type || '').trim().toLocaleLowerCase());
@@ -207,14 +208,17 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   // Fortune généreuse : inversion vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const reversed = preview.input?.v5?.reverseDiceApplied === true;
   const reverseActorId = preview.input?.actorId || preview.input?.actor?.id;
+  const extreme = Boolean(preview.slExtreme);
+  if (extreme && !slExtremeLayers(current.participants.find(p => p.id === reverseActorId)).length) return { status: 'manual', reason: 'Faire monter les enjeux : faveur indisponible.', state: current };
   if (reversed && !reverseDiceLayers(current.participants.find(p => p.id === reverseActorId)).length) return { status: 'manual', reason: 'Fortune généreuse : plus d\'inversion disponible.', state: current };
   const resolve = state => {
     const result = commitV5StoreTalentUsages(preview, resolveAction(state), state);
-    if (result.status !== 'applied' || (!free && !reversed)) return result;
+    if (result.status !== 'applied' || (!free && !reversed && !extreme)) return result;
     // Relance gratuite et inversion des dés peuvent servir dans la même résolution : chacune consomme sa propre couche.
     const participants = clone(result.state.participants);
     if (free) consumeFreeReroll(participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: state.round, attack: isAttackType(preview.input?.action?.type) });
     if (reversed) consumeReverseDice(participants.find(p => p.id === reverseActorId));
+    if (extreme) consumeSlExtreme(participants.find(p => p.id === reverseActorId));
     return { ...result, state: { ...result.state, participants } };
   };
   if (!preview.actionCostPlan) return resolve(current);

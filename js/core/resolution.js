@@ -20,6 +20,7 @@ import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
+import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
 import { selectV5Test, resolveV5Opposition, reverseV5Roll } from './v5-roll.js';
 import { buildV5RollDecision } from './v5-decision.js';
@@ -496,6 +497,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const magicFlags=actor?.extensions?.v5?.specialStates,psychologyKind=normalized.v5.context?.psychologyKind;
   const magicFearImmune=magicFlags?.fearTerrorImmunity && ['fear','terror'].includes(psychologyKind) || magicFlags?.fearImmune && (psychologyKind==='fear' || psychologyKind==='terror' && magicFlags?.terrorAsFear);
   if(magicFearImmune)actorTest={...actorTest,success:true,sl:Math.max(0,actorTest.sl),fumble:false,critical:false};
+  const extremeLayer = normalized.noTestAction ? null : slExtremeLayers(actor)[0];
+  const slExtreme = extremeLayer ? { before: actorTest.sl, after: actorTest.success ? Math.max(actorTest.sl, extremeLayer.slExtreme.magnitude) : Math.min(actorTest.sl, -extremeLayer.slExtreme.magnitude) } : null;
+  if (slExtreme) actorTest = { ...actorTest, sl: slExtreme.after };
   const roll = actorTest.roll, targetScore = actorTest.score, success = actorTest.success, sl = actorTest.sl;
   const penalties = { value: actorPlan.penalty, names: actorPlan.penaltyStates };
   const slBonus = actorTest.details.modifiers.filter(item => item.id.startsWith('quality-')).reduce((sum, item) => sum + item.amount, 0);
@@ -806,6 +810,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     status: 'preview',
     ruleVersion: V5_COMBAT_RULE_VERSION,
     test: actorTest,
+    ...(slExtreme ? { slExtreme } : {}),
     defenderTest,
     momentum,
     conditionChanges,

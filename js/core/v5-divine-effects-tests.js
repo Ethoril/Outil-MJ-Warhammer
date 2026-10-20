@@ -119,7 +119,19 @@ function expand(effect, evaluated) {
   return table;
 }
 
+export const slExtremeLayers = participant => (participant?.extensions?.v5?.divineEffects || []).filter(layer => layer.type === 'sl-extreme' && layer.slExtreme?.remaining > 0);
+export function consumeSlExtreme(participant) {
+  const layer = slExtremeLayers(participant)[0];
+  if (!layer) return false;
+  layer.slExtreme = { ...layer.slExtreme, remaining: layer.slExtreme.remaining - 1 };
+  return true;
+}
+
 export default {
+  'sl-extreme': {
+    validate: effect => Number.isSafeInteger(effect.magnitude) && effect.magnitude > 0 ? null : 'sl-extreme exige magnitude entier positif.',
+    buildLayer: effect => ({ slExtreme: { remaining: 1, magnitude: effect.magnitude } })
+  },
   'test-modifier': {
     validate: structureError,
     needs(effect, { input } = {}) {

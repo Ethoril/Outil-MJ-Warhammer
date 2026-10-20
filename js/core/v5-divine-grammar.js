@@ -20,7 +20,7 @@ for (const type of ['direct-damage', 'ordinary-damage']) effectTypes.add(type);
 // États, verrous et Chance temporaire (v5-divine-effects-conditions.js).
 for (const type of ['remove-condition', 'expiry-condition', 'heal-critical', 'temporary-fortune', 'free-reroll', 'reverse-dice']) effectTypes.add(type);
 // Tests de compétence (v5-divine-effects-tests.js).
-for (const type of ['test-modifier']) effectTypes.add(type);
+for (const type of ['test-modifier', 'sl-extreme']) effectTypes.add(type);
 // Invocations (v5-divine-effects-summon.js).
 for (const type of ['summon-creature']) effectTypes.add(type);
 
