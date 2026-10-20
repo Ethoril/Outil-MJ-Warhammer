@@ -130,6 +130,64 @@ const expiryCondition = {
   }
 };
 
+// Larmes de Shallya : retire du registre (extensions.v5.criticalWounds) les Blessures Critiques choisies ;
+// les États qu'elles avaient posés restent. Instant, sans couche ; count = 1, +1 par tranche de +2 DR (moteur).
+// Le plafond dépend des DR : il n'est vérifiable qu'au crochet `resolve`, après la progression par DR.
+const CRITICAL_HEAL_SLOTS = ['first', 'second', 'third'];
+const HEAL_CRITICAL_REMINDERS = Object.freeze([
+  'Prière de (10 − Bonus de Sociabilité) Rounds avant l’effet ; interrompue, aucun effet.',
+  'Ne rattache pas les membres amputés.'
+]);
+const criticalRecords = participant => (participant?.extensions?.v5?.criticalWounds || []).filter(row => typeof row?.id === 'string' && row.id);
+const chosenHeals = (input, targetId) => CRITICAL_HEAL_SLOTS.map(slot => input?.criticalHeals?.[slot]?.[targetId]).filter(id => typeof id === 'string' && id);
+const healCritical = {
+  layerless: true,
+  validate: effect => positive(effect.count) ? null : 'heal-critical exige count (entier positif).',
+  needs(effect, { targets = [], input } = {}) {
+    if (!positive(effect.count)) return [need('contract.effects.count', 'Nombre de Blessures Critiques guéries sourcé requis')];
+    const needs = [];
+    for (const target of targets) {
+      const records = criticalRecords(target);
+      if (!records.length) continue;
+      const label = target.name || target.id, chosen = chosenHeals(input, target.id);
+      if (!chosen.length) { needs.push(need(`criticalHeals.first.${target.id}`, `Blessure Critique guérie chez ${label} : en choisir au moins une`)); continue; }
+      if (chosen.some(id => !records.some(row => row.id === id))) { needs.push(need(`criticalHeals.first.${target.id}`, `Blessure Critique introuvable chez ${label} : choisir une Blessure du registre`)); continue; }
+      if (new Set(chosen).size !== chosen.length) { needs.push(need(`criticalHeals.second.${target.id}`, `Blessures Critiques guéries distinctes chez ${label} : la même ne peut l’être deux fois`)); }
+    }
+    return needs;
+  },
+  resolve(effect, { targets = [], input } = {}) {
+    for (const target of targets) {
+      const chosen = chosenHeals(input, target.id);
+      if (chosen.length && chosen.length > effect.count)
+        return { error: `Plus de Blessures Critiques choisies que guéries chez ${target.name || target.id}.`,
+          needs: [need(`criticalHeals.third.${target.id}`, `Plus de Blessures Critiques choisies que guéries (${effect.count} au total, +1 par tranche de +2 DR) chez ${target.name || target.id}`)] };
+    }
+    return effect;
+  },
+  inputFields(effect, { targets = [] } = {}) {
+    const fields = [];
+    for (const target of targets) {
+      const options = [['', 'Aucune'], ...criticalRecords(target).map(row => [row.id, `${row.name} (${row.location}, Round ${row.round})`])];
+      for (const [index, slot] of CRITICAL_HEAL_SLOTS.entries())
+        fields.push({ path: `criticalHeals.${slot}`, label: `Blessure Critique guérie n° ${index + 1}/3 (selon les DR)`, kind: 'select', scope: 'target', options });
+    }
+    return fields;
+  },
+  applyInstant(participant, effect, { input, targetId } = {}) {
+    const chosen = chosenHeals(input, targetId ?? participant.id);
+    const wounds = criticalRecords(participant), healed = wounds.filter(row => chosen.includes(row.id));
+    if (healed.length) {
+      participant.extensions ||= {}; participant.extensions.v5 ||= {};
+      participant.extensions.v5.criticalWounds = wounds.filter(row => !chosen.includes(row.id));
+    }
+    return { healedIds: healed.map(row => row.id), healed: healed.map(row => row.name), remaining: healed.length ? participant.extensions.v5.criticalWounds.length : wounds.length,
+      reminders: clone(HEAL_CRITICAL_REMINDERS) };
+  },
+  receipt: (effect, { targetId, targetName, actor }, result) => ({ targetId, type: effect.type, result: clone(result),
+    log: `${actor?.name || 'Le prêtre'} · ${targetName || targetId} : ${result.healed.length ? 'Blessure(s) Critique(s) guérie(s) : ' + result.healed.join(', ') : 'aucune Blessure Critique guérie'}` })
+};
+
 const temporaryFortune = {
   validate: effect => positive(effect.count) ? null : 'temporary-fortune exige count (entier positif).',
   needs: effect => positive(effect.count) ? [] : [need('contract.effects.count', 'Points de Chance temporaires sourcés requis')],
@@ -172,4 +230,4 @@ export function consumeReverseDice(participant) {
   layer.reverseDice = { ...layer.reverseDice, remaining: layer.reverseDice.remaining - 1 };
   return true;
 }
-export default { 'remove-condition': removeCondition, 'expiry-condition': expiryCondition, 'temporary-fortune': temporaryFortune, 'free-reroll': freeReroll, 'reverse-dice': reverseDice };
+export default { 'remove-condition': removeCondition, 'expiry-condition': expiryCondition, 'heal-critical': healCritical, 'temporary-fortune': temporaryFortune, 'free-reroll': freeReroll, 'reverse-dice': reverseDice };

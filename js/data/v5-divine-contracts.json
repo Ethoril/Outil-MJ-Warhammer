@@ -20881,7 +20881,7 @@
       "catalogueName": "Larmes de Shallya",
       "canonicalName": "Shallya's Tears",
       "deity": "Shallya",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -20944,7 +20944,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "heal-critical",
+          "count": 1,
+          "perSuccessLevels": {
+            "every": 2,
+            "add": 1,
+            "field": "count"
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Shallya's Tears",
@@ -20955,25 +20971,25 @@
         {
           "id": "prayer-time",
           "mode": "manual",
-          "text": "Le prêtre prie 10 - Bonus de Sociabilité rounds avant l’effet.",
+          "text": "Le prêtre prie (10 − Bonus de Sociabilité) Rounds avant l’effet.",
           "sourceRef": "v5-shallya-s-tears"
         },
         {
           "id": "heal-critical",
-          "mode": "manual",
-          "text": "Guérit 1 Blessure Critique de la cible; +1 par tranche de +2 DR (soin de Blessures Critiques non géré par le moteur).",
+          "mode": "engine",
+          "text": "Guérit 1 Blessure Critique de la cible ; +1 par tranche de +2 DR. La Blessure guérie est retirée du registre ; les États posés par le critique restent.",
           "sourceRef": "v5-shallya-s-tears"
         },
         {
           "id": "interruption",
           "mode": "manual",
-          "text": "Prière interrompue : aucun bénéfice pour la cible.",
+          "text": "Prière interrompue : aucun effet pour la cible.",
           "sourceRef": "v5-shallya-s-tears"
         },
         {
           "id": "no-reattach",
           "mode": "manual",
-          "text": "Ne rattache pas les parties du corps amputées.",
+          "text": "Ne rattache pas les membres amputés.",
           "sourceRef": "v5-shallya-s-tears"
         }
       ],
@@ -27050,5 +27066,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:888d895e12e42b9e365325af693f276ca60bfb34c41aa817e091f127e1ac9aa4"
+  "sourceFingerprint": "sha256:712cb4ee1692bcf0eb2d7f8fabfa0abe9448e46268416b754bd0abf03aaef7f9"
 }

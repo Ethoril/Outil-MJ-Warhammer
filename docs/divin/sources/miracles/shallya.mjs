@@ -64,13 +64,15 @@ export const miracles = [
     name: 'Larmes de Shallya', canonicalName: "Shallya's Tears", printedPage: 226,
     summary: 'Vous priez pendant 10 moins votre Bonus de Sociabilité rounds, puis guérissez 1 Blessure Critique de la cible; +1 Blessure Critique par tranche de +2 DR. Si la prière est interrompue, la cible ne reçoit rien. Ne rattache pas les membres amputés.',
     params: { range: touch, targets: one, duration: { kind: 'special' } },
-    status: 'manual', effect: null, targetRules: [],
+    status: 'assisted', effect: null,
+    effects: [{ type: 'heal-critical', count: 1, perSuccessLevels: { every: 2, add: 1, field: 'count' } }],
+    targetRules: [],
     needsInput: [{ id: 'critical-wounds', text: 'Blessures Critiques guéries (1 + 1 par +2 DR) et lesquelles.' }, { id: 'prayer-rounds', text: 'Rounds de prière : 10 - Bonus de Sociabilité.' }, { id: 'uninterrupted', text: 'La prière est-elle restée ininterrompue ?' }],
     clauses: [
-      { id: 'prayer-time', mode: 'manual', text: 'Le prêtre prie 10 - Bonus de Sociabilité rounds avant l’effet.' },
-      { id: 'heal-critical', mode: 'manual', text: 'Guérit 1 Blessure Critique de la cible; +1 par tranche de +2 DR (soin de Blessures Critiques non géré par le moteur).' },
-      { id: 'interruption', mode: 'manual', text: 'Prière interrompue : aucun bénéfice pour la cible.' },
-      { id: 'no-reattach', mode: 'manual', text: 'Ne rattache pas les parties du corps amputées.' }
+      { id: 'prayer-time', mode: 'manual', text: 'Le prêtre prie (10 − Bonus de Sociabilité) Rounds avant l’effet.' },
+      { id: 'heal-critical', mode: 'engine', text: 'Guérit 1 Blessure Critique de la cible ; +1 par tranche de +2 DR. La Blessure guérie est retirée du registre ; les États posés par le critique restent.' },
+      { id: 'interruption', mode: 'manual', text: 'Prière interrompue : aucun effet pour la cible.' },
+      { id: 'no-reattach', mode: 'manual', text: 'Ne rattache pas les membres amputés.' }
     ]
   },
   {
