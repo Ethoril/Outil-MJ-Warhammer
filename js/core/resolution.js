@@ -333,6 +333,10 @@ function attackLocation(normalized, roll) {
   return selected ? { roll: null, ...selected, calledShot: true } : null;
 }
 
+/** Bonus de gravité des couches divines actives de celui qui INFLIGE le critique (ex. Morsure du loup) ; les critiques subis ne les lisent pas. */
+const divineCriticalSeverityBonus = inflicter => (inflicter?.extensions?.v5?.divineEffects || [])
+  .reduce((sum, layer) => sum + (Number(layer?.criticalSeverityBonus) || 0), 0);
+
 /** V5 severity: entered d100 plus +10 per excess Wound; no global cap at 100. */
 function criticalSeverity(location, base, severityBonus, { inoffensive = false, alternative = null } = {}) {
   const bonus = Number(severityBonus) || 0;
@@ -516,7 +520,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const activeEffects = beatTalents.proposals.filter(row => row.op === 'createActiveEffect').map(row => ({
     ...clone(row.timedEffect), id: normalized.resolutionId + ':' + row.key, key: row.key, name: 'Battement', level: 1, duration: null }));
   const talentCriticalRolls=criticalAttack?prepareCritical(actor,normalized.criticalRolls,normalized.v5,'attacker',inoffensive,['first']):normalized.criticalRolls;
-  let criticalFirst = criticalAttack && !replacement ? criticalDetails(talentCriticalRolls, criticalLocation, 0, inoffensive) : null;
+  let criticalFirst = criticalAttack && !replacement ? criticalDetails(talentCriticalRolls, criticalLocation, divineCriticalSeverityBonus(actor), inoffensive) : null;
   let damage = null;
   let protection = null;
   // Preserve every protection consulted, including pieces/criticals it suppresses.
@@ -599,7 +603,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   const hpBefore = Math.max(0, Number(target?.hp) || 0);
   const excess = damage ? Math.max(0, damage.finalDamage - hpBefore) : 0;
-  const second = !replacement && knownHp(target) && (excess>0||normalized.combatPrelude?.whirlwind?.active&&damage&&damage.finalDamage>=hpBefore) ? secondCritical(reverseV5Roll(roll), prepareCritical(actor,normalized.criticalRolls,normalized.v5,'attacker',inoffensive,['second']), excess * 10, inoffensive, location) : null;
+  const second = !replacement && knownHp(target) && (excess>0||normalized.combatPrelude?.whirlwind?.active&&damage&&damage.finalDamage>=hpBefore) ? secondCritical(reverseV5Roll(roll), prepareCritical(actor,normalized.criticalRolls,normalized.v5,'attacker',inoffensive,['second']), excess * 10 + divineCriticalSeverityBonus(actor), inoffensive, location) : null;
   let criticalBlock = criticalFirst || second ? { kind: 'Critique', expanded: criticalClassification.élargi,
     acharnement: false, details: criticalFirst, ...(second ? { second, excessWounds: excess } : {}),
     ...(weapon?.status === 'manual' ? { secondHint: { locationRoll: reverseV5Roll(roll), location } } : {}) } : null;
@@ -615,7 +619,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if (!(opposed?.winner==='defender'&&normalized.defense?.v5?.context?.specialAttack==='shieldsman')&&context.silentTakedown !== true && ['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
     const critLocation = normalized.defenderCriticalRolls?.location != null ? locationOf(normalized.defenderCriticalRolls.location) : null;
     const defenderRolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>q.id==='inoffensive'),['first']);
-    const details = criticalDetails(defenderRolls, critLocation, 0, normalized.defense.qualities.some(q => q.id === 'inoffensive'));
+    const details = criticalDetails(defenderRolls, critLocation, divineCriticalSeverityBonus(target), normalized.defense.qualities.some(q => q.id === 'inoffensive'));
     const guard = critLocation ? locationProtection(actor, { location: critLocation, attackRoll: defenderTest.roll,
       hitLocationRoll: critLocation.roll, critical: true, ranged: false, qualities: normalized.defense.qualities,
       nature: defenderNature() }) : null;
@@ -644,7 +648,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const riposteExcess=defenderDamage&&knownHp(actor)?Math.max(0,defenderDamage.finalDamage-Number(actor.hp)):0;
   if(riposteExcess>0){
     const rolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>q.id==='inoffensive'),['second']);
-    const extra=secondCritical(reverseV5Roll(defenderTest.roll),rolls,riposteExcess*10,normalized.defense.qualities.some(q=>q.id==='inoffensive'),defenderDamage.location);
+    const extra=secondCritical(reverseV5Roll(defenderTest.roll),rolls,riposteExcess*10+divineCriticalSeverityBonus(target),normalized.defense.qualities.some(q=>q.id==='inoffensive'),defenderDamage.location);
     defenderCritical={...(defenderCritical||{kind:'Critique',targetId:actor.id,details:null}),second:extra,excessWounds:riposteExcess};
     defenderCritical.items=criticalItems(defenderCritical.details,extra,normalized.defenderCriticalDeclined);defenderCritical.application=criticalApplication(defenderCritical.items);
   }
@@ -749,7 +753,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const dealt=computeDamage({weaponDamage,strengthBonus,damageBonus,sl:opposed.netSl,roll,targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:victimInput.action.qualities,damageMultiplier:small.multiplier,approvedQualities:small.approvedQualities});
       const excess=Math.max(0,dealt.finalDamage-Number(victim.hp)),enemy=victim.camp!==actor.camp;
       const rawRolls=context.whirlwindRolls?.[id]||{},settings={...normalized.v5,talentChoices:{...normalized.v5.talentChoices,...context.whirlwindChoices?.[id]}};
-      const second=enemy&&dealt.finalDamage>=Number(victim.hp)?secondCritical(reverseV5Roll(roll),prepareCritical(actor,normalizeCriticalRolls(rawRolls),settings,'attacker',inoffensive,['second']),excess*10,inoffensive,location):null;
+      const second=enemy&&dealt.finalDamage>=Number(victim.hp)?secondCritical(reverseV5Roll(roll),prepareCritical(actor,normalizeCriticalRolls(rawRolls),settings,'attacker',inoffensive,['second']),excess*10+divineCriticalSeverityBonus(actor),inoffensive,location):null;
       if(second?.pending)unresolved.push(victim.name+' : gravité réelle du critique de Tourbillon requise.');
       const critical=second?{kind:'Critique',second,excessWounds:excess,items:criticalItems(null,second,context.whirlwindDeclined?.[id]||[])}:null;if(critical)critical.application=criticalApplication(critical.items);
       const words=previewV5WeaponConditions({qualities:action.qualities,hit:true,location,target:victim,actor,damage:dealt,resolutionId:normalized.resolutionId+':'+id});

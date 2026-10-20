@@ -22,18 +22,16 @@ export const miracles = [
     printedPage: 50,
     summary: 'Votre prière rugie vous octroie la sauvagerie d\'Ulric : vous ajoutez +20 au jet de gravité de toute Blessure Critique que vous infligez pendant la durée.',
     params: { range: self, targets: one, duration: felRounds },
-    status: 'manual',
+    status: 'implemented',
     effect: null,
-    effects: [],
+    effects: [{ type: 'critical-severity-bonus', amount: 20, appliesTo: 'caster' }],
     targetRules: [],
-    needsInput: [
-      { id: 'critical-rolls', text: 'Blessures Critiques infligées par le prêtre pendant la durée : +20 à ajouter au jet de gravité (d100) à la main.' }
-    ],
+    needsInput: [],
     clauses: [
-      { id: 'crit-bonus', mode: 'manual', text: '+20 au jet de gravité de chaque Blessure Critique infligée par le prêtre.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'crit-bonus', mode: 'engine', text: '+20 au jet de gravité de chaque Blessure Critique infligée par le prêtre (premier critique, second critique, critique de défense) ; les Blessures Critiques qu\'il subit sont inchangées.' },
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'Portée imprimée « Touch (You) » avec cible « 1 » : lu comme le prêtre lui-même (encodé self / 1). Le moteur n\'a aucun effet sur les jets de Blessure Critique (test-modifier ne porte que sur les Tests), d\'où manual.'
+    sourceDelta: 'Portée imprimée « Touch (You) » avec cible « 1 » : lu comme le prêtre lui-même (encodé self / 1). Le bonus de gravité est porté par une couche divine sur le prêtre, lue par le moteur de résolution pour tout critique qu\'il inflige, en attaque comme en défense ; les critiques qu\'il subit ne la lisent pas.'
   },
   {
     name: 'Hurlement de bataille',

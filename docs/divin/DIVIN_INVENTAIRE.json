@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:03ae67e11141907446bcd6504be3033d03a729d1b4a00d6876524bd9d5772bc7",
+  "sourceFingerprint": "sha256:b00e53235ec0ef578ef57530e5c260ab68377d35117166240af5279651fa4176",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -20990,7 +20990,7 @@
       "type": "miracle",
       "name": "Morsure du loup",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
         "fileSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
@@ -21056,7 +21056,19 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "critical-severity-bonus",
+          "amount": 20,
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Wolf's Bite",
         "effect": "Votre prière rugie vous octroie la sauvagerie d'Ulric : vous ajoutez +20 au jet de gravité de toute Blessure Critique que vous infligez pendant la durée.",
@@ -21065,23 +21077,18 @@
       "clauses": [
         {
           "id": "crit-bonus",
-          "mode": "manual",
-          "text": "+20 au jet de gravité de chaque Blessure Critique infligée par le prêtre.",
+          "mode": "engine",
+          "text": "+20 au jet de gravité de chaque Blessure Critique infligée par le prêtre (premier critique, second critique, critique de défense) ; les Blessures Critiques qu'il subit sont inchangées.",
           "sourceRef": "v5-wolf-s-bite"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-wolf-s-bite"
         }
       ],
-      "needsInput": [
-        {
-          "field": "critical-rolls",
-          "label": "Blessures Critiques infligées par le prêtre pendant la durée : +20 à ajouter au jet de gravité (d100) à la main."
-        }
-      ]
+      "needsInput": []
     },
     {
       "id": "divine:miracle:ulric:howl-of-battle",

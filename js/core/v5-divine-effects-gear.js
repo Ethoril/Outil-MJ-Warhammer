@@ -43,6 +43,13 @@ const handlers = {
     needs: effect => Array.isArray(effect.conditions) && effect.conditions.length ? [] : [need('contract.effects.conditions', 'Conditions sourcées requises')],
     buildLayer: effect => ({ immunities: { conditions: [...effect.conditions] } })
   },
+  // Bonus au jet de gravité des Blessures Critiques infligées par le porteur de la couche (attaque, défense, second critique) ;
+  // lu par resolution.js, qui ne regarde que les couches de celui qui inflige le critique.
+  'critical-severity-bonus': {
+    validate: effect => Number.isFinite(effect.amount) ? null : 'critical-severity-bonus exige amount (nombre).',
+    needs: effect => Number.isFinite(effect.amount) ? [] : [need('contract.effects.amount', 'Bonus de gravité sourcé requis')],
+    buildLayer: effect => ({ criticalSeverityBonus: effect.amount })
+  },
   'grant-actions': {
     validate: effect => !Array.isArray(effect.actions) || !effect.actions.length
       || !effect.actions.every(action => isRecord(action) && isText(action.id) && isText(action.name) && isText(action.damageFormula)) ? 'grant-actions exige actions [{id, name, damageFormula}].' : null,
