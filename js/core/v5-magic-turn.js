@@ -215,7 +215,7 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
     }
   }
   next.log=[{kind:'effect',actorId:caster.id,text:`${effect.spellName} — ${target.name} : ${summary}`},...(next.log || [])].slice(0,300);
-  return {ready:true,baseRevision:state.localRevision,state:removeExpiredSummons(next,{deferCurrent:false}),summary,damage,conditions,test};
+  return {ready:true,baseRevision:state.localRevision,state:removeExpiredSummons(next),summary,damage,conditions,test};
 }
 
 /** WoM pp. 20–21 : trajectoire proposée, occupants réels déclarés, chaque frappe absorbée/protégée une seule fois. */

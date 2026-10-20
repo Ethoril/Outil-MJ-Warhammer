@@ -322,16 +322,23 @@ test('C9 chiens sans initiative : jamais dans combat.order ; expiration sans eff
   assert.ok(combat.order.includes(combat.currentActorId));
 });
 
-test('C9 invocation retirée alors qu’elle est l’acteur courant (fin anticipée) : currentActorId = order[0]', async () => {
+test('C9 invocation retirée alors qu’elle est l’acteur courant (fin anticipée) : gardée jusqu’à la commande suivante, puis Tour de son successeur', async () => {
   const { store, engine, c, horse } = await destrier({ foe: { initiative: 5 } });
   await endTurn(engine);
   assert.equal(json(store).combat.currentActorId, horse.id);
   const [layer] = layersOf(store, c.id);
   await store.applySpellInteraction({ effectId: layer.id, targetId: 'foe', kind: 'end' });
+  const kept = json(store).combat;
+  assert.ok(kept.order.includes(horse.id), 'l’invocation orpheline reste dans l’ordre');
+  assert.equal(kept.currentActorId, horse.id, 'elle reste l’acteur courant, sans Tour rendu au lanceur');
+  await endTurn(engine);
   const combat = json(store).combat;
-  assert.deepEqual(combat.order, ['mage', 'foe']);
-  assert.equal(combat.currentActorId, 'mage', 'order[0], pas l’acteur suivant de la monture');
-  await store.undo();
-  assert.equal(json(store).combat.currentActorId, horse.id);
-  assert.ok(json(store).combat.order.includes(horse.id));
+  assert.equal(auxOf(store).length, 0, 'retirée à la commande suivante');
+  assert.ok(!combat.order.includes(horse.id));
+  assert.equal(combat.currentActorId, 'foe', 'son successeur joue, pas le lanceur');
+  await store.undo(); await store.undo();
+  const undone = json(store).combat;
+  assert.deepEqual(auxOf(store).map(a => a.id), [horse.id]);
+  assert.ok(undone.order.includes(horse.id));
+  assert.equal(undone.currentActorId, horse.id);
 });
