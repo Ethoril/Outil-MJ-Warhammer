@@ -674,7 +674,7 @@
         158000
       ],
       "b2_cout_usd": 1.628,
-      "b2_cout_reel_eur": null,
+      "b2_cout_reel_eur": 0.37,
       "b2_detail": {
         "tokens_entree": 1078545,
         "tokens_sortie": 26816,
@@ -731,7 +731,7 @@
         194500
       ],
       "b2_cout_usd": 1.5876,
-      "b2_cout_reel_eur": null,
+      "b2_cout_reel_eur": 0.37,
       "b2_detail": {
         "tokens_entree": 1097892,
         "tokens_sortie": 11490,
@@ -787,7 +787,7 @@
         219000
       ],
       "b2_cout_usd": 2.414,
-      "b2_cout_reel_eur": null,
+      "b2_cout_reel_eur": 0.37,
       "b2_detail": {
         "essai_1": {
           "tokens_entree": 1396115,
@@ -825,7 +825,56 @@
       ],
       "verdict_qualite": "4 — code propre et conforme au plan, Chance inchangée ; le succès dépend d'un prompt très directif (l'orchestrateur conçoit, GLM exécute).",
       "remarque": "Fichier de combat partagé (v5-store-action.js) : pas de contrôleur indépendant, garde explicite (options absentes = comportement d'avant, prouvé par les tests Chance et la caractérisation p5-char-fortune-reroll)."
+    },
+    {
+      "id": "p5-t16-heed-not-the-witch",
+      "voie": "glm",
+      "famille": "module-effets",
+      "risque": "moyen",
+      "objectif": "Miracle N'écoutez point la Sorcière (Sigmar) assisté : effet générique casting-penalty lu au lancement des sorts",
+      "acceptation": "node tools/build-v5-divine-contracts.mjs --check && node --test tests/divin-v5-p5-heed-not-the-witch.test.js (+ 4 fichiers de non-régression)",
+      "fichiers_autorises": [
+        "docs/divin/sources/miracles/sigmar.mjs",
+        "js/core/v5-divine-effects-gear.js",
+        "js/core/v5-divine-grammar.js",
+        "js/core/v5-spell-contracts.js",
+        "fichiers générés"
+      ],
+      "modele_orchestrateur": "claude-opus-5-5",
+      "usage_5h_avant_apres": [
+        null,
+        null
+      ],
+      "usage_hebdo_avant_apres": [
+        67,
+        null
+      ],
+      "contexte_orchestrateur_avant_apres": [
+        222000,
+        236500
+      ],
+      "b2_cout_usd": 0.3128,
+      "b2_cout_reel_eur": null,
+      "b2_detail": {
+        "tokens_entree": 206701,
+        "tokens_sortie": 5326,
+        "etapes": 13
+      },
+      "duree_s": null,
+      "tours": 13,
+      "iterations": 0,
+      "reussite_premier_essai": true,
+      "code_correct_premier_essai": true,
+      "erreurs_orchestrateur": [],
+      "hors_perimetre": [],
+      "lignes_livrees": 49,
+      "lignes_retouchees_par_claude": 0,
+      "reprise": false,
+      "defauts_trouves_apres": [],
+      "verdict_qualite": "5 — plan directif suivi à la lettre, 13 étapes, premier essai, suite complète verte.",
+      "remarque": "B1 inclut l'écartement de Larmes de Shallya (pas de registre des Blessures Critiques d'attaque dans le moteur) et le choix du modèle de zone."
     }
   ],
-  "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent."
+  "protocole_note": "B1 et points de fenêtre comptés depuis le début de la spécification jusqu'à la fin de la vérification, pour les deux voies. La spécification et la vérification par l'orchestrateur (Opus) pèsent souvent plus que l'exécution par l'agent.",
+  "cout_reel_note_20_10": "Console Mistral au 20/10 : 1,66 EUR cumulés pour T1-T14 (aucun détail par jour) ; environ 2/3 le matin du 20/10 (T12-T14), soit ~0,37 EUR réel par tâche contre 1,6 USD de plafond affiché : le cache divise le coût par ~4."
 }
