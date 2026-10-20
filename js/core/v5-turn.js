@@ -142,6 +142,12 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   const divineClock=expireDivineAtClock(stateAfter,{fromClock:clock,toClock:clockResult.clock,receipt:clockResult.receipt});
   if(!divineClock.ok)return {status:'requires-input',ready:false,baseRevision:before.localRevision||0,requests:[],error:divineClock.needsInput.map(row=>row.message).join(' '),needsInput:divineClock.needsInput};
   stateAfter=divineClock.state;
+  if (transition.round > combat.round) {
+    const reminders = stateAfter.combat.participants.filter(participant => participant.zone === 'active' && (participant.extensions?.v5?.divineEffects || []).some(layer => layer.freeAttack))
+      .map(participant => ({ id: `divine-free-attack:${transition.round}:${participant.id}`, kind: 'reminder', actorId: participant.id,
+        text: `Attaque Rapide disponible pour ${participant.name} (Test d’Initiative +0, main principale).` }));
+    stateAfter.log = [...reminders, ...(stateAfter.log || [])].slice(0, 300);
+  }
   return { status: uniqueRequests.length ? 'requires-input' : 'ready', ready: !uniqueRequests.length,
     baseRevision: before.localRevision || 0, inputs: structuredClone(inputs), requests: uniqueRequests, receipts, transition, phases: clockResult.validatedPhases, clockReceipt: clockResult.receipt, state: stateAfter };
 }
