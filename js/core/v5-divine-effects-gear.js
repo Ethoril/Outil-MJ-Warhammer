@@ -73,6 +73,10 @@ const handlers = {
     implicitTarget: true,
     buildLayer: effect => ({ freeAttack: { scope: effect.scope, test: clone(effect.test) } })
   },
+  'frenzy-fury': {
+    validate: () => null,
+    buildLayer: () => ({ frenzyFury: { lastTurnId: null } })
+  },
   'grant-actions': {
     validate: effect => !Array.isArray(effect.actions) || !effect.actions.length
       || !effect.actions.every(action => isRecord(action) && isText(action.id) && isText(action.name) && isText(action.damageFormula)) ? 'grant-actions exige actions [{id, name, damageFormula}].' : null,

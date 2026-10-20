@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:712cb4ee1692bcf0eb2d7f8fabfa0abe9448e46268416b754bd0abf03aaef7f9",
+  "sourceFingerprint": "sha256:f7a64c99d871b32b0c2d3ce6496b08b6e8ffc97dc0092a8353fda39a28dffdb7",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -22421,7 +22421,7 @@
       "type": "miracle",
       "name": "Fureur d'Ulric",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -22486,7 +22486,32 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-frenzy",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "frenzy-fury",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Ulric's Fury",
         "effect": "Un allié peut faire gratuitement un test de Frénésie (p.184) pendant ses Tours. Au lieu de l'attaque gratuite habituelle, la Frénésie ajoute +1d10 Dégâts au premier coup au corps à corps qu'il porte lors de son Tour; sur un 10, il relance et ajoute de nouveau, jusqu'à obtenir moins de 10.",
@@ -22500,20 +22525,20 @@
           "sourceRef": "v5-ulric-s-fury"
         },
         {
-          "id": "replaces-free-attack",
-          "mode": "manual",
-          "text": "La Frénésie ne donne pas l'attaque gratuite habituelle : elle ajoute +1d10 Dégâts au premier coup de mêlée du Tour.",
+          "id": "fury",
+          "mode": "engine",
+          "text": "Frénésie accordée ; en Frénésie, +1d10 Dégâts explosifs au premier coup de mêlée touché de chaque Tour, au lieu de l'attaque gratuite",
           "sourceRef": "v5-ulric-s-fury"
         },
         {
           "id": "exploding-d10",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "Sur un 10 au d10, relancer et ajouter, jusqu'à obtenir moins de 10.",
           "sourceRef": "v5-ulric-s-fury"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-ulric-s-fury"
         }
@@ -22522,14 +22547,6 @@
         {
           "field": "ally",
           "label": "Allié ciblé dans la portée (Sociabilité yards)."
-        },
-        {
-          "field": "frenzy-test",
-          "label": "Résultat du test de Frénésie gratuit à chaque Tour (règle p.184)."
-        },
-        {
-          "field": "first-hit",
-          "label": "Premier coup au corps à corps porté pendant le Tour : touche confirmée."
         }
       ]
     },

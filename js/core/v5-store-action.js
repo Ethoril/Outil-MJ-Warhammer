@@ -61,6 +61,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     quotas.push({id:'talent:'+selected+(selected==='resistant'?':'+encodeURIComponent(acquired.specialization):''),scope:'session',maximum:1});quotaActorId=v5ResourceIdentity(envelope,actor)||'instance:'+actorId;
   }
   if(v5.extraAttack&&context.freeAttackTalent==='frenzy'){
+    if((actor.extensions?.v5?.divineEffects||[]).some(layer=>layer?.frenzyFury))throw new TypeError('Fureur d’Ulric : la Frénésie ajoute 1d10 Dégâts au premier coup au lieu de l’attaque gratuite.');
     if(!(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s)))throw new TypeError('Attaque gratuite de Frénésie non disponible.');
     quotas.push({id:'talent:frenzy-extra-attack',scope:'round',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-frenzy'});
   }

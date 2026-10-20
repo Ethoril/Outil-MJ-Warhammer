@@ -97,21 +97,20 @@ export const miracles = [
     printedPage: 228,
     summary: 'Un allié peut faire gratuitement un test de Frénésie (p.184) pendant ses Tours. Au lieu de l\'attaque gratuite habituelle, la Frénésie ajoute +1d10 Dégâts au premier coup au corps à corps qu\'il porte lors de son Tour; sur un 10, il relance et ajoute de nouveau, jusqu\'à obtenir moins de 10.',
     params: { range, targets: one, duration: felRounds },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
+    effects: [{ type: 'grant-talent', talents: [{ id: 'talent-frenzy', rank: 1 }] }, { type: 'frenzy-fury' }],
     targetRules: ['ally'],
     needsInput: [
-      { id: 'ally', text: 'Allié ciblé dans la portée (Sociabilité yards).' },
-      { id: 'frenzy-test', text: 'Résultat du test de Frénésie gratuit à chaque Tour (règle p.184).' },
-      { id: 'first-hit', text: 'Premier coup au corps à corps porté pendant le Tour : touche confirmée.' }
+      { id: 'ally', text: 'Allié ciblé dans la portée (Sociabilité yards).' }
     ],
     clauses: [
       { id: 'free-frenzy', mode: 'manual', text: 'Test de Frénésie gratuit à chaque Tour de l\'allié pendant la durée (règle p.184).' },
-      { id: 'replaces-free-attack', mode: 'manual', text: 'La Frénésie ne donne pas l\'attaque gratuite habituelle : elle ajoute +1d10 Dégâts au premier coup de mêlée du Tour.' },
-      { id: 'exploding-d10', mode: 'assisted', text: 'Sur un 10 au d10, relancer et ajouter, jusqu\'à obtenir moins de 10.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'fury', mode: 'engine', text: 'Frénésie accordée ; en Frénésie, +1d10 Dégâts explosifs au premier coup de mêlée touché de chaque Tour, au lieu de l\'attaque gratuite' },
+      { id: 'exploding-d10', mode: 'engine', text: 'Sur un 10 au d10, relancer et ajouter, jusqu\'à obtenir moins de 10.' },
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'Le texte ne dit pas si le d10 explosif s\'applique à chaque Tour ni si le test de Frénésie suit l\'état de Frénésie habituel (durée/fin) : à trancher par le MJ.'
+    sourceDelta: 'Le texte laisse au MJ le rythme du d10 explosif (premier coup de mêlée touché de chaque Tour) et remplace l\'attaque gratuite de Frénésie ; le moteur injecte Frénésie et saisit le d10 explosif au premier coup touché du Tour.'
   },
   {
     name: 'Morsure de l\'hiver',

@@ -527,7 +527,14 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const beatTalents = evaluateV5Talents(actor, { event: 'action.afterAttack', role: 'attacker', context: talentContext,
     choices: normalized.v5.talentChoices || {}, excludeTalents: [V5_TALENT_IDS.furiousAssault] });
   const frenzyDamage=actorPlan.kind==='melee'&&(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s))?1:0;
-  const damageBonus = (normalized.combatPrelude?.large?.damageBonus||0)+frenzyDamage+damageTalents.proposals.filter(row => row.op === 'modifyDamage').reduce((sum, row) => sum + row.amount, 0);
+  // Fureur d’Ulric : en Frénésie, +1d10 explosif (relancé et ajouté sur 10) au premier coup de mêlée touché du Tour, au lieu de l’attaque gratuite.
+  const furyLayer=frenzyDamage&&hit?(actor.extensions?.v5?.divineEffects||[]).find(layer=>layer?.frenzyFury):null;
+  const furyTurnId=normalized.v5Clock?.turnId??null;
+  const furyDue=Boolean(furyLayer)&&furyLayer.frenzyFury.lastTurnId!==furyTurnId;
+  const furyDice=context.ulricFuryDice;
+  const furyValid=Array.isArray(furyDice)&&furyDice.length>0&&furyDice.every((die,index)=>Number.isInteger(die)&&die>=1&&die<=10&&(index<furyDice.length-1?die===10:die<10));
+  const furyDamage=furyDue&&furyValid?furyDice.reduce((sum,die)=>sum+die,0):0;
+  const damageBonus = (normalized.combatPrelude?.large?.damageBonus||0)+frenzyDamage+furyDamage+damageTalents.proposals.filter(row => row.op === 'modifyDamage').reduce((sum, row) => sum + row.amount, 0);
   let replacement = beatTalents.proposals.find(row => row.op === 'replaceDamage');
   const activeEffects = beatTalents.proposals.filter(row => row.op === 'createActiveEffect').map(row => ({
     ...clone(row.timedEffect), id: normalized.resolutionId + ':' + row.key, key: row.key, name: 'Battement', level: 1, duration: null }));
@@ -538,6 +545,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   // Preserve every protection consulted, including pieces/criticals it suppresses.
   const protectionReceipts = [];
   const unresolved = [...(normalized.combatPrelude?.unresolved||[]),...actorPlan.unresolved, ...(defenderPlan?.unresolved || []), ...actorPlan.restrictions, ...(defenderPlan?.restrictions || [])];
+  if(furyDue&&!furyValid)unresolved.push('Fureur d’Ulric : saisir le d10 de dégâts (relancer et ajouter sur 10).');
   // Bénédiction de Protection : un ennemi qui attaque le porteur doit réussir un Test de Calme Accessible (+2 DR) ; le MJ saisit le résultat dans v5.context.protectionCalm.
   const attackDeterrentLayer = attackType(action.type) && actor?.camp !== target?.camp
     ? (target?.extensions?.v5?.divineEffects || []).find(layer => layer?.attackDeterrent) : null;
@@ -813,6 +821,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     defenderCritical,defenderDamage,
     actionType: action.type,
     attack: attackType(action.type),
+    ulricFury: furyDue&&furyValid?{turnId:furyTurnId}:null,
     score: { base: actorTest.score, mod: actorTest.details.totalModifier, statePenalty: penalties.value, penaltyStates: penalties.names, target: targetScore },
     roll,
     success,
@@ -972,6 +981,17 @@ export function applyResolution(preview, currentState) {
       updatedLayer.attackDeterrent = { ...updatedLayer.attackDeterrent,
         passedAttackerIds: [...new Set([...(updatedLayer.attackDeterrent.passedAttackerIds || []), preview.input.actor.id])] };
       nextState.participants = participantListWithUpdate(nextState, liveTarget.id, updated);
+    }
+  }
+  // Fureur d’Ulric : marquer le Tour du premier coup de mêlée touché (le d10 n’est plus redemandé ce Tour).
+  if (preview.ulricFury && preview.input.actor?.id) {
+    const liveActor = participantById(nextState, preview.input.actor.id);
+    const layer = liveActor && (liveActor.extensions?.v5?.divineEffects || []).find(row => row?.frenzyFury);
+    if (liveActor && layer) {
+      const updated = clone(liveActor);
+      const updatedLayer = updated.extensions.v5.divineEffects.find(row => row?.frenzyFury);
+      updatedLayer.frenzyFury = { ...updatedLayer.frenzyFury, lastTurnId: preview.ulricFury.turnId };
+      nextState.participants = participantListWithUpdate(nextState, liveActor.id, updated);
     }
   }
   nextState.revision = currentState.revision + 1;

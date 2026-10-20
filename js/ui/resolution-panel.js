@@ -1355,6 +1355,12 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if(type==='attack'&&(actor.states||[]).some(s=>s.key==='frenzy')){
     const label=node('label','workspace-type');const check=document.createElement('input');check.type='checkbox';check.checked=current.freeAttackTalent==='frenzy';check.setAttribute('aria-label','Attaque gratuite de Frénésie');check.addEventListener('change',()=>handlers.select({extraAttack:check.checked,v5Context:{...current,freeAttackTalent:check.checked?'frenzy':undefined}}));label.append(check,'Attaque gratuite de Frénésie (une par Round)');v5.append(label);
   }
+  // Fureur d’Ulric : d10 de dégâts explosif (relancé et ajouté sur 10) du premier coup de mêlée touché du Tour, saisi en Frénésie.
+  if(type==='attack'&&(actor.states||[]).some(s=>s.key==='frenzy')&&(actor.extensions?.v5?.divineEffects||[]).some(layer=>layer?.frenzyFury)){
+    const label=node('label','workspace-type','Fureur d’Ulric : d10 de dégâts (ex. 10,4)');const input=document.createElement('input');input.type='text';input.value=(draft.v5Context?.ulricFuryDice||[]).join(',');input.setAttribute('aria-label',label.textContent);
+    input.addEventListener('change',()=>{const text=input.value.trim();const dice=text===''?[]:text.split(',').map(part=>Number(part.trim())).filter(part=>Number.isInteger(part));handlers.select({v5Context:{...draft.v5Context,ulricFuryDice:text===''?undefined:dice}});});
+    label.append(input);v5.append(label);
+  }
   // Attaque rapide (Myrmidia) : attaque gratuite hors séquence, proposée seulement si l’acteur porte la couche freeAttack du miracle.
   if(type==='attack'&&(actor.extensions?.v5?.divineEffects||[]).some(layer=>layer?.freeAttack)){
     const quick=current.freeAttackTalent==='divine-free-attack';

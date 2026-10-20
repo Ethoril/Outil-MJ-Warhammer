@@ -2605,8 +2605,8 @@
     {
       "id": "divine:miracle:ulric:ulric-s-fury",
       "catalogueEntry": null,
-      "v5Summary": "Le texte ne dit pas si le d10 explosif s'applique à chaque Tour ni si le test de Frénésie suit l'état de Frénésie habituel (durée/fin) : à trancher par le MJ.",
-      "status": "manual",
+      "v5Summary": "Le texte laisse au MJ le rythme du d10 explosif (premier coup de mêlée touché de chaque Tour) et remplace l'attaque gratuite de Frénésie ; le moteur injecte Frénésie et saisit le d10 explosif au premier coup touché du Tour.",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -25955,7 +25955,7 @@
       "catalogueName": "Fureur d'Ulric",
       "canonicalName": "Ulric's Fury",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -25977,7 +25977,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le texte ne dit pas si le d10 explosif s'applique à chaque Tour ni si le test de Frénésie suit l'état de Frénésie habituel (durée/fin) : à trancher par le MJ.",
+      "sourceDelta": "Le texte laisse au MJ le rythme du d10 explosif (premier coup de mêlée touché de chaque Tour) et remplace l'attaque gratuite de Frénésie ; le moteur injecte Frénésie et saisit le d10 explosif au premier coup touché du Tour.",
       "params": {
         "range": {
           "kind": "characteristic",
@@ -26022,7 +26022,32 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-frenzy",
+              "rank": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "frenzy-fury",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [
         "ally"
       ],
@@ -26039,20 +26064,20 @@
           "sourceRef": "v5-ulric-s-fury"
         },
         {
-          "id": "replaces-free-attack",
-          "mode": "manual",
-          "text": "La Frénésie ne donne pas l'attaque gratuite habituelle : elle ajoute +1d10 Dégâts au premier coup de mêlée du Tour.",
+          "id": "fury",
+          "mode": "engine",
+          "text": "Frénésie accordée ; en Frénésie, +1d10 Dégâts explosifs au premier coup de mêlée touché de chaque Tour, au lieu de l'attaque gratuite",
           "sourceRef": "v5-ulric-s-fury"
         },
         {
           "id": "exploding-d10",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "Sur un 10 au d10, relancer et ajouter, jusqu'à obtenir moins de 10.",
           "sourceRef": "v5-ulric-s-fury"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-ulric-s-fury"
         }
@@ -26061,14 +26086,6 @@
         {
           "field": "ally",
           "label": "Allié ciblé dans la portée (Sociabilité yards)."
-        },
-        {
-          "field": "frenzy-test",
-          "label": "Résultat du test de Frénésie gratuit à chaque Tour (règle p.184)."
-        },
-        {
-          "field": "first-hit",
-          "label": "Premier coup au corps à corps porté pendant le Tour : touche confirmée."
         }
       ]
     },
@@ -27066,5 +27083,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:712cb4ee1692bcf0eb2d7f8fabfa0abe9448e46268416b754bd0abf03aaef7f9"
+  "sourceFingerprint": "sha256:f7a64c99d871b32b0c2d3ce6496b08b6e8ffc97dc0092a8353fda39a28dffdb7"
 }
