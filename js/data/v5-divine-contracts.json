@@ -2110,8 +2110,8 @@
     {
       "id": "divine:miracle:sigmar:heed-not-the-witch",
       "catalogueEntry": null,
-      "v5Summary": "Le livre ne précise pas si un sort lancé depuis l’intérieur de la zone vers l’extérieur est pénalisé.",
-      "status": "manual",
+      "v5Summary": "Le livre ne précise pas si un sort lancé depuis l’intérieur de la zone vers l’extérieur est pénalisé ; la zone suit le prêtre, le MJ redésigne les participants porteurs si besoin.",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -21138,7 +21138,7 @@
       "catalogueName": "N’écoutez point la Sorcière",
       "canonicalName": "Heed Not the Witch",
       "deity": "Sigmar",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -21160,7 +21160,7 @@
         "specialization": "Sigmar"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le livre ne précise pas si un sort lancé depuis l’intérieur de la zone vers l’extérieur est pénalisé.",
+      "sourceDelta": "Le livre ne précise pas si un sort lancé depuis l’intérieur de la zone vers l’extérieur est pénalisé ; la zone suit le prêtre, le MJ redésigne les participants porteurs si besoin.",
       "params": {
         "range": {
           "kind": "self"
@@ -21204,7 +21204,18 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "casting-penalty",
+          "amount": 2,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Heed Not the Witch",
@@ -21214,8 +21225,8 @@
       "clauses": [
         {
           "id": "casting-penalty",
-          "mode": "manual",
-          "text": "Les Tests d’Incantation de sorts visant une personne ou un lieu de la zone subissent -2 DR, cumulé avec les autres pénalités.",
+          "mode": "engine",
+          "text": "Le moteur applique -2 DR au Test d’Incantation d’un sort dont les cibles incluent au moins un participant désigné de la zone (une seule fois, quel que soit le nombre de porteurs) ; un sort visant un simple lieu de la zone sans participant reste à l’appréciation du MJ.",
           "sourceRef": "v5-heed-not-the-witch"
         },
         {
@@ -21235,10 +21246,6 @@
         {
           "field": "spell-target",
           "label": "Le sort lancé vise-t-il quelqu’un ou un lieu dans la zone ?"
-        },
-        {
-          "field": "casting-test",
-          "label": "Test d’Incantation concerné (à pénaliser de -2 DR)."
         }
       ]
     },
@@ -26926,5 +26933,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:03a6fded8dcab51068c48b2d8d011ad83ce75e81d3c99c6b684b1350f6527fb7"
+  "sourceFingerprint": "sha256:e21b5c94f4710403218b8001ec30b14e42922fab84a5e48654cb4eda18c2f45a"
 }

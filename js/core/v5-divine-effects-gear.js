@@ -50,6 +50,12 @@ const handlers = {
     needs: effect => Number.isFinite(effect.amount) ? [] : [need('contract.effects.amount', 'Bonus de gravité sourcé requis')],
     buildLayer: effect => ({ criticalSeverityBonus: effect.amount })
   },
+  // Pénalité divine au Test d'Incantation d'un sort visant un porteur de la couche ; lu par v5-spell-contracts.js.
+  'casting-penalty': {
+    validate: effect => Number.isSafeInteger(effect.amount) && effect.amount > 0 ? null : 'casting-penalty exige amount (entier positif).',
+    needs: effect => Number.isSafeInteger(effect.amount) && effect.amount > 0 ? [] : [need('contract.effects.amount', 'Pénalité d’incantation sourcée requise')],
+    buildLayer: effect => ({ castingSlPenalty: effect.amount })
+  },
   'grant-actions': {
     validate: effect => !Array.isArray(effect.actions) || !effect.actions.length
       || !effect.actions.every(action => isRecord(action) && isText(action.id) && isText(action.name) && isText(action.damageFormula)) ? 'grant-actions exige actions [{id, name, damageFormula}].' : null,

@@ -1297,6 +1297,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   // 4. Réserve et résolution stricte du test d'incantation
   const readingTargets=effectiveTargets.filter(t=>t.extensions?.v5?.specialStates?.mindMask);
   if(readingTargets.some(t=>options.targetTests?.[t.id]?.readingMagic===true))options={...options,slModifiers:[...(options.slModifiers || []),{id:'mind-mask-reading',label:'Masque de l’Esprit : lecture/divination',amount:-3}]};
+  // N’écoutez point la Sorcière : pénalité divine (maximum, une seule fois) portée par les cibles désignées.
+  const divineCastingPenalty=Math.max(0,...effectiveTargets.flatMap(t=>(t.extensions?.v5?.divineEffects || []).map(row=>Number(row.castingSlPenalty) || 0)));
+  if(divineCastingPenalty>0)options={...options,slModifiers:[...(options.slModifiers || []),{id:'divine-casting-penalty',label:'N’écoutez point la Sorcière : sort visant la zone',amount:-divineCastingPenalty}]};
   const reserve = getChannellingReserve(actor);
   const expectedReserveType = contract.domain === 'high' ? 'high' : 'winds';
   const matchingReserveSl = reserve.type === expectedReserveType ? (Number(reserve.sl) || 0) : 0;

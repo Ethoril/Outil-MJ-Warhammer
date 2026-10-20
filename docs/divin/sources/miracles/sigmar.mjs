@@ -28,14 +28,14 @@ export const miracles = [
     name: 'N’écoutez point la Sorcière', canonicalName: 'Heed Not the Witch', printedPage: 226,
     summary: 'Tout sort visant quiconque ou n’importe quel endroit de la zone subit -2 DR à son Test d’Incantation, en plus des autres pénalités.',
     params: { range: { kind: 'self' }, targets: area, duration: rounds },
-    status: 'manual', effect: null, targetRules: [],
-    needsInput: [{ id: 'spell-target', text: 'Le sort lancé vise-t-il quelqu’un ou un lieu dans la zone ?' }, { id: 'casting-test', text: 'Test d’Incantation concerné (à pénaliser de -2 DR).' }],
+    status: 'assisted', effect: null, effects: [{ type: 'casting-penalty', amount: 2 }], targetRules: [],
+    needsInput: [{ id: 'spell-target', text: 'Le sort lancé vise-t-il quelqu’un ou un lieu dans la zone ?' }],
     clauses: [
-      { id: 'casting-penalty', mode: 'manual', text: 'Les Tests d’Incantation de sorts visant une personne ou un lieu de la zone subissent -2 DR, cumulé avec les autres pénalités.' },
+      { id: 'casting-penalty', mode: 'engine', text: 'Le moteur applique -2 DR au Test d’Incantation d’un sort dont les cibles incluent au moins un participant désigné de la zone (une seule fois, quel que soit le nombre de porteurs) ; un sort visant un simple lieu de la zone sans participant reste à l’appréciation du MJ.' },
       { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en yards.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ],
-    sourceDelta: 'Le livre ne précise pas si un sort lancé depuis l’intérieur de la zone vers l’extérieur est pénalisé.'
+    sourceDelta: 'Le livre ne précise pas si un sort lancé depuis l’intérieur de la zone vers l’extérieur est pénalisé ; la zone suit le prêtre, le MJ redésigne les participants porteurs si besoin.'
   },
   {
     name: 'Marteau ardent de Sigmar', canonicalName: "Sigmar's Fiery Hammer", printedPage: 227,
