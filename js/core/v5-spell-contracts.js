@@ -3441,7 +3441,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     if(tRes.vortexParticipant){
       const next=tRes.vortexParticipant,ids=new Set((target.extensions?.v5?.spellEffects || []).map(e=>e.id));target.hp=next.hp;target.states=structuredClone(next.states || []);
       if(next.extensions?.v5?.dead)target.extensions.v5.dead=true;
-      if(tRes.criticalWound){target.extensions.v5.criticalWounds=[...(target.extensions.v5.criticalWounds || []),{...tRes.criticalWound,round:currentRound}];criticalWoundInflicted=true;}
+      if(tRes.criticalWound){target.extensions.v5.criticalWounds=[...(target.extensions.v5.criticalWounds || []),{...tRes.criticalWound,id:`${opKey}:crit:${target.id}`,source:'spell',round:currentRound}];criticalWoundInflicted=true;}
       for(const layer of next.extensions?.v5?.spellEffects || [])if(!ids.has(layer.id))Object.assign(target,applySpellEffects(target,layer,{round:currentRound,caster:actor}).participant);
       participants[pIdx]=target;appliedTargets.push({targetId:target.id,targetName:target.name,newHp:target.hp,woundsLost:tRes.woundsLost,actions:tRes.actions});continue;
     }
@@ -3485,7 +3485,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
       target.extensions.v5 = target.extensions.v5 || {};
       target.extensions.v5.criticalWounds = [
         ...(target.extensions.v5.criticalWounds || []),
-        { ...tRes.criticalWound, round: currentRound }
+        { ...tRes.criticalWound, id: `${opKey}:crit:${target.id}`, source: 'spell', round: currentRound }
       ];
     }
 
