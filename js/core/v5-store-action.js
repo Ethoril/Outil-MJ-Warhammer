@@ -113,7 +113,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if (fortuneReroll) {
     if (!costs.some(c => c.id === 'system:fortune-reroll')) {
       costs.push({ id: 'system:fortune-reroll', resource: 'fortune', amount: 1 });
-      // Bénédiction de Chance : relance gratuite du prochain Test échoué (le Test d'origine est évalué avant d'y substituer la relance).
+      // Bénédiction de Chance (D4) : échec propre ou opposition perdue ; le Test d'origine est évalué avant la relance.
       // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
       const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
       if (freeRerollLayers(actor, { round: state.round, attack: isAttackType(supplied.action?.type) }).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
@@ -123,7 +123,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
           actor: supplied.actor?.id === actorId ? supplied.actor : actor, target: state.participants.find(p => p.id === targetId) || supplied.target || null,
           round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision, v5State: state, v5Clock: clock,
           v5: { ...v5, context: plainContext, fortuneReroll: undefined, fortuneRerollRoll: undefined } });
-        if (original.success === false) { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll', sourceId: FREE_REROLL_SOURCE }); }
+        if (original.success === false || original.opposition?.winner === 'defender') { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll', sourceId: FREE_REROLL_SOURCE }); }
       }
     }
     initialRollBeforeFortune = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);

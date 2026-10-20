@@ -30,9 +30,9 @@ async function fixture({ bless = true, fortune = 3 } = {}) {
   return s;
 }
 
-// Caracterisation D4 : avant arbitrage, une reussite propre perdant une opposition reste payante.
+// Arbitrage D4 : la perte du Test oppose ouvre aussi la relance gratuite.
 const cases=[
- {name:'reussite propre, opposition perdue',roll:34,defense:80,defRoll:25,winner:'defender',success:true,free:false,balance:2,remaining:1},
+ {name:'reussite propre, opposition perdue',roll:34,defense:80,defRoll:25,winner:'defender',success:true,free:true,balance:3,remaining:0},
  {name:'reussite propre, opposition gagnee',roll:34,defense:20,defRoll:65,winner:'attacker',success:true,free:false,balance:2,remaining:1},
  {name:'echec propre sans opposition',roll:82,success:false,free:true,balance:3,remaining:0},
  {name:'reussite sans opposition',roll:34,success:true,free:false,balance:2,remaining:1},
