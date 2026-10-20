@@ -67,7 +67,7 @@ try {
       const actor = { id: 'actor', name: 'Attaquant', camp: spec.actorCamp, caracs: { CC: 50, Ag: 40, E: 40, F: 40 } };
       if (spec.actorDivine) actor.extensions = { v5: { divineEffects: [{ id: 'l1', reverseDice: { remaining: 1 } }] } };
       const target = { id: 'target', name: 'Cible', camp: spec.targetCamp, caracs: { CC: 45, Ag: 40, E: 40, F: 40 } };
-      if (spec.targetDivine) target.extensions = { v5: { divineEffects: [{ id: 'l1', attackDeterrent: { skill: 'Calme', slBonus: 2 } }] } };
+      if (spec.targetDivine) target.extensions = { v5: { divineEffects: [{ id: 'l1', attackDeterrent: { skill: 'Calme', slBonus: 2, ...(spec.passedActor ? { passedAttackerIds: ['actor'] } : {}), ...(spec.passedOther ? { passedAttackerIds: ['other'] } : {}) } }] } };
       const actions = [{ id: 'a1', type: 'attack', attr: 'CC', note: 'Attaque', base: 50, damage: 5 }];
       const section = renderResolutionPanel({
         draft: { v5Context: {} },
@@ -110,7 +110,13 @@ try {
   await page.evaluate(() => window.__render({ actorCamp: 'pj', targetCamp: 'pj', targetDivine: true }));
   check(await calmSelect.count() === 0, 'attaquant et cible du même camp : aucun sélecteur de Test de Calme de l’attaquant');
 
-  // c) Acteur porteur (ou non) d’une faveur d’inversion reverseDice.
+  // c) Attaquant déjà enregistré (ou non) dans passedAttackerIds de la couche attackDeterrent.
+  await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true, passedActor: true }));
+  check(await calmSelect.count() === 0, 'attaquant déjà dans passedAttackerIds : aucun sélecteur de Test de Calme de l’attaquant');
+  await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true, passedOther: true }));
+  check(await calmSelect.count() === 1, 'passedAttackerIds ne contenant que l’attaquant : le sélecteur de Test de Calme de l’attaquant reste affiché');
+
+  // d) Acteur porteur (ou non) d’une faveur d’inversion reverseDice.
   await page.evaluate(() => window.__render({ actorCamp: 'pj', targetCamp: 'ennemi', actorDivine: true }));
   check(await reverseCheckbox.count() === 1, 'acteur avec une couche reverseDice : la case « Inverser les dés » est affichée');
   await reverseCheckbox.check();
