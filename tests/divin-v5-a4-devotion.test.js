@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createStore} from '../js/core/store.js';
+import {getDivineContract} from '../js/core/v5-divine-store.js';
+import {buildDivineForm,emptyDivineForm,setFieldValue,toEngineInput} from '../js/ui/v5-divine-form-model.js';
+const contract=getDivineContract('divine:miracle:devotion-de-la-guerriere');
+const person=(id,camp='pj',zone='active')=>({id,name:id,camp,zone,kind:'PJ',hp:20,maxHp:20,states:[],caracs:{Soc:60,FM:50,I:40,M:4},skills:[{name:'Prière',status:'resolved',total:60}],talents:[{id:'talent-invoke',status:'resolved',rank:1,specialization:'Myrmidia'}],prayers:[{name:contract.catalogueName,status:'resolved'}],extensions:{v5:{divine:{sin:0}}}});
+test('A4 : seuls les ennemis actifs sont suggérés, sans perdre la saisie libre',async()=>{
+ const participants=[person('priest'),person('ally'),person('Brigand','ennemi'),person('Orque','ennemi'),person('Réserve','ennemi','bench')];
+ const actor=participants[0],form=emptyDivineForm();
+ const model=buildDivineForm(contract,{actor,participants,targets:[participants[1]],form});
+ const select=model.effectFields.find(f=>f.kind==='select'&&f.path.join('.')==='talent.specialization');
+ assert.ok(select,'liste des ennemis présents');
+ assert.deepEqual(select.options,[['','Autre (saisie libre)'],['Brigand','Brigand'],['Orque','Orque']]);
+ const text=model.effectFields.find(f=>f.kind==='text'&&f.path.join('.')==='talent.specialization');assert.ok(text);
+ assert.notEqual(select.id,text.id,'identifiants de champs distincts');
+ const store=createStore({storage:null,persistence:{async load(){return null;},async saveAtomic(){return {ok:true};}}});await store.ready;
+ await store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'priest',order:participants.filter(p=>p.zone==='active').map(p=>p.id),participants},log:[],diceLines:[],extensions:{v5:{turnIndex:1}}});
+ const preview=()=>store.previewDivineExecution(contract.id,{actorId:'priest',targetIds:['ally'],roll:45,canSpeak:true,expiry:{phase:'endOfTurn',round:4,actorId:'priest'},...toEngineInput(form,{targetIds:['ally'],contract,actor}),facts:{targets:{ally:{ally:true,withinRange:true}}}});
+ setFieldValue(form,select,'Brigand');const chosen=preview();assert.equal(chosen.ready,true,JSON.stringify(chosen.needsInput));
+ setFieldValue(form,text,'Brigand');const typed=preview();assert.deepEqual(chosen.preview.effects,typed.preview.effects);
+ setFieldValue(form,select,'');setFieldValue(form,text,'Gobelins des collines');assert.equal(preview().preview.effects[0].talents[0].specialization,'Gobelins des collines');
+});

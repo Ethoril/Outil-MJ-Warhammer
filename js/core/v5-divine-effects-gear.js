@@ -107,7 +107,15 @@ const handlers = {
       const { specializationFrom, ...resolved } = effect;
       return { ...resolved, talents: effect.talents.map(row => ({ ...row, specialization })) };
     },
-    inputFields: effect => effect.specializationFrom === 'input' ? [{ path: 'talent.specialization', label: SPECIALIZATION_LABEL, kind: 'text', scope: 'effect' }] : [],
+    inputFields(effect, { actor, participants = [] } = {}) {
+      if (effect.specializationFrom !== 'input') return [];
+      const names = [...new Set(participants.filter(row => row.zone === 'active' && row.camp && actor?.camp && row.camp !== actor.camp).map(row => row.name).filter(isText))];
+      const text = { path: 'talent.specialization', label: SPECIALIZATION_LABEL, kind: 'text', scope: 'effect' };
+      if (!participants.length) return [text];
+      return [
+        { id: 'talent.specializationChoice', path: 'talent.specialization', label: 'Ennemi présent', kind: 'select', scope: 'effect',
+          options: [['', 'Autre (saisie libre)'], ...names.map(name => [name, name])], help: 'Choisir un ennemi présent ou saisir librement une espèce ou un individu.' }, text];
+    },
     // `consumeOn: 'critical'` : la couche prend fin au prochain Coup Critique infligé par son porteur (voir consumeDivineLayers).
     buildLayer: effect => ({ grantedTalents: effect.talents.map(row => ({ id: row.id, rank: row.rank ?? 1, ...(row.name ? { name: row.name } : {}), ...(row.specialization ? { specialization: row.specialization } : {}) })),
       ...(effect.consumeOn ? { consumeOn: effect.consumeOn } : {}) })

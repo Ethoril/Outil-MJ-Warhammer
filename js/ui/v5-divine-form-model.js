@@ -178,7 +178,7 @@ const nameOf = target => target?.name || target?.id;
  * Champs d'effet et faits pour les cibles retenues.
  * `targets` : participants visés (le prêtre lui-même si la prière le vise). `form` : brouillon courant.
  */
-export function buildDivineForm(contract, { actor, targets = [], form = emptyDivineForm(), choices = {} } = {}) {
+export function buildDivineForm(contract, { actor, targets = [], participants = [], form = emptyDivineForm(), choices = {} } = {}) {
   const descr = describeDivineForm(contract, { actor, targets });
   const effectFields = [];
   if (descr.damage) {
@@ -215,13 +215,13 @@ export function buildDivineForm(contract, { actor, targets = [], form = emptyDiv
       help: withSource('Confirmation du MJ ; elle n’est jamais bloquante et est conservée dans le reçu.', contract) });
   }
   // Saisies déclarées par les types d'effet : `engineField` = chemin pointé de l'entrée moteur (aussi la clé du besoin renvoyé par l'aperçu).
-  for (const def of handlerInputFields(contract, { actor, targets, choices })) {
+  for (const def of handlerInputFields(contract, { actor, targets, participants, choices })) {
     const path = def.path.split('.');
     const shared = { kind: FORM_KINDS[def.kind], help: def.source ? withSource(def.help ?? '', contract).trim() : def.help ?? '',
       ...(def.min !== undefined ? { min: def.min } : {}), ...(def.max !== undefined ? { max: def.max } : {}), ...(def.options ? { options: def.options.some(([value]) => value === '') ? def.options : [['', 'À préciser'], ...def.options] } : {}) };
     if (def.scope === 'target') for (const target of targets) effectFields.push({ id: `${def.path}:${target.id}`, anchor: `${def.path}:${target.id}`, scope: 'target', targetId: target.id,
       path: [...path, target.id], engineField: `${def.path}.${target.id}`, label: `${nameOf(target)} · ${def.label}`, ...shared });
-    else effectFields.push({ id: def.path, anchor: def.path, scope: 'global', path, engineField: def.path, label: def.label, ...shared });
+    else effectFields.push({ id: def.id || def.path, anchor: def.id || def.path, scope: 'global', path, engineField: def.path, label: def.label, ...shared });
   }
   // Prière visant le prêtre : seuls les faits exigés sont demandés (ex. portée chiffrée sur soi).
   if (descr.expiryField && prayerDurationRounds(contract, actor, choices) === null)
