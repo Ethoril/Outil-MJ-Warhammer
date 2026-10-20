@@ -66,6 +66,25 @@ export function insertReinforcement(order, participantId, currentActorId = null)
   return current;
 }
 
+/** Register new active participants in a frozen V5 Round, preserving the Turns already ordered. */
+export function insertParticipantsByInitiative(combat, participants) {
+  const previous = activeIds(combat.participants || []);
+  const newcomers = activeParticipants(participants).filter(participant => !previous.has(participant.id));
+  if (!newcomers.length) return combat.order || [];
+  const ranked = initiativeOrder(participants, combat.round), rank = id => ranked.indexOf(id);
+  const order = effectiveOrder(participants.filter(participant => previous.has(participant.id)), { mode: ORDER_MODES.MANUAL, order: combat.order });
+  for (const id of ranked.filter(id => newcomers.some(participant => participant.id === id))) {
+    const current = order.indexOf(combat.currentActorId);
+    // A rank that has passed is inserted before the current actor: it waits for the next Round.
+    const earlier = current >= 0 && rank(id) < rank(combat.currentActorId);
+    const start = earlier ? 0 : current + 1, end = earlier ? current : order.length;
+    let position = end;
+    for (let index = start; index < end; index++) if (rank(order[index]) > rank(id)) { position = index; break; }
+    order.splice(position, 0, id);
+  }
+  return order;
+}
+
 /** Change initiative sorting mode without triggering a turn or end-of-turn effect. */
 export function setOrderMode(participants, { mode = ORDER_MODES.AUTOMATIC, order = [], currentActorId = null } = {}) {
   const nextOrder = effectiveOrder(participants, { mode, order });
