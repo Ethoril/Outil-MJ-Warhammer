@@ -1840,7 +1840,7 @@
     {
       "id": "divine:miracle:ranald:ranald-s-mischief",
       "catalogueEntry": null,
-      "v5Summary": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée. Automatisée par l’effet characteristic-match : valeurs figées au lancement ; « pour un Test opposé avec lui » reste un rappel MJ.",
+      "v5Summary": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » : règle complète du MJ (20 oct.), l’égalisation vaut pendant la durée dans tout Test opposé réalisé spécifiquement contre cet adversaire. Automatisée par l’effet characteristic-match : la fiche ne change pas, le score du Test opposé est décalé de l’écart lu au moment du Test.",
       "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
@@ -17917,7 +17917,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée. Automatisée par l’effet characteristic-match : valeurs figées au lancement ; « pour un Test opposé avec lui » reste un rappel MJ.",
+      "sourceDelta": "La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » : règle complète du MJ (20 oct.), l’égalisation vaut pendant la durée dans tout Test opposé réalisé spécifiquement contre cet adversaire. Automatisée par l’effet characteristic-match : la fiche ne change pas, le score du Test opposé est décalé de l’écart lu au moment du Test.",
       "params": {
         "range": {
           "kind": "fixed",
@@ -17985,7 +17985,7 @@
         {
           "id": "two-characteristics",
           "mode": "engine",
-          "text": "Deux Caractéristiques du prêtre sont égalées à celles de l’adversaire désigné (valeurs figées au lancement, couche retirée à la fin de la prière).",
+          "text": "Deux Caractéristiques du prêtre prennent la valeur de celles de l’adversaire désigné pendant la durée, dans tout Test opposé réalisé contre lui : la fiche ne change pas, le score du Test est décalé de l’écart (adversaire − prêtre), valeurs lues au moment du Test (couche retirée à la fin de la prière).",
           "sourceRef": "v5-ranald-s-mischief"
         },
         {
@@ -27017,5 +27017,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:30e23f0b72038a9ab6bc5c52b898adbb3bf0e06ed2a1548de4393c7d8c896d10"
+  "sourceFingerprint": "sha256:45dc20bbae45dd166b456bcc8b82f2b74cd633f9a4f7b67e407153efb6caab5f"
 }

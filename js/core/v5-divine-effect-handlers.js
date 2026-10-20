@@ -75,7 +75,7 @@ const coreHandlers = {
   },
   // Malice de Ranald : deux Caractéristiques du prêtre sont égalées à celles de l'adversaire désigné.
   // `count` Caractéristiques sont choisies par le MJ (input.characteristicMatch) ; la couche va au prêtre (appliesTo 'caster'),
-  // les valeurs sont figées à l'aperçu : statModifiers = cible - prêtre (le texte égalise, il ne fait pas que monter).
+  // sans toucher sa fiche : l'égal vaut dans tout Test opposé contre cet adversaire, valeurs lues au moment du Test.
   'characteristic-match': {
     validate: effect => Number.isSafeInteger(effect.count) && effect.count > 0 ? null : `${effect.type} exige count entier positif.`,
     needs(effect, { targets = [], input, actor } = {}) {
@@ -95,7 +95,7 @@ const coreHandlers = {
       }
       return needs;
     },
-    resolve(effect, { actor, input, targets = [] } = {}) {
+    resolve(effect, { input, targets = [] } = {}) {
       const match = input?.characteristicMatch || {};
       const chosen = [match.first, match.second];
       if (!MATCH_CARACS.includes(chosen[0]) || !MATCH_CARACS.includes(chosen[1]))
@@ -104,17 +104,9 @@ const coreHandlers = {
         return { error: 'Les deux Caractéristiques égalées doivent être distinctes.', needs: [need('characteristicMatch.second', 'Deux Caractéristiques distinctes (relancer les doublons)')] };
       if (targets.length !== 1)
         return { error: 'Exactement un adversaire désigné est requis.', needs: [need('targetIds', 'Adversaire désigné unique')] };
-      const target = targets[0];
-      const statModifiers = {};
-      for (const carac of chosen) {
-        const delta = Number(target?.caracs?.[carac]) - Number(actor?.caracs?.[carac]);
-        if (!Number.isFinite(delta))
-          return { error: `La Caractéristique ${carac} doit être connue du prêtre et de l’adversaire.`, needs: [need(`targets.${target?.id}.caracs.${carac}`, `Caractéristique ${carac} des deux combattants requise`)] };
-        statModifiers[carac] = delta;
-      }
-      return { ...effect, statModifiers };
+      return { ...effect, opponentId: targets[0].id, characteristics: chosen };
     },
-    buildLayer: effect => ({ statModifiers: { ...effect.statModifiers } }),
+    buildLayer: effect => ({ characteristicMatch: { opponentId: effect.opponentId, characteristics: [...effect.characteristics] } }),
     // Listes ordonnées selon la table du d10 (CC, I, Int, Soc, puis « au choix ») ; la seconde commence à I pour que les deux choix
     // proposés par défaut soient distincts.
     inputFields: () => {

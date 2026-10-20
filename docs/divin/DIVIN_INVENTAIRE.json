@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:30e23f0b72038a9ab6bc5c52b898adbb3bf0e06ed2a1548de4393c7d8c896d10",
+  "sourceFingerprint": "sha256:45dc20bbae45dd166b456bcc8b82f2b74cd633f9a4f7b67e407153efb6caab5f",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -14820,7 +14820,7 @@
         {
           "id": "two-characteristics",
           "mode": "engine",
-          "text": "Deux Caractéristiques du prêtre sont égalées à celles de l’adversaire désigné (valeurs figées au lancement, couche retirée à la fin de la prière).",
+          "text": "Deux Caractéristiques du prêtre prennent la valeur de celles de l’adversaire désigné pendant la durée, dans tout Test opposé réalisé contre lui : la fiche ne change pas, le score du Test est décalé de l’écart (adversaire − prêtre), valeurs lues au moment du Test (couche retirée à la fin de la prière).",
           "sourceRef": "v5-ranald-s-mischief"
         },
         {

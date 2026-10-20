@@ -69,6 +69,17 @@ export function v5ShieldDefense(normalized) {
   return { confirmed, rangedDodgeAllowed: confirmed && rating >= 2, rating: confirmed ? rating : null,
     unresolved: contextConfirmed && !sourceCovered ? 'Bouclier : source de Protectrice non couverte ; arbitrage MJ requis.' : null };
 }
+// Malice de Ranald : pendant la durée, dans tout Test opposé contre l’adversaire désigné, deux Caractéristiques du prêtre prennent
+// la valeur de l’adversaire ; la fiche ne change pas, le score du Test est décalé de l’écart lu au moment du Test.
+export function characteristicMatchShift(tester, opponent, action) {
+  const carac = action?.attr;
+  if (!carac) return 0;
+  const matched = (tester?.extensions?.v5?.divineEffects || [])
+    .some(layer => layer?.characteristicMatch?.opponentId === opponent?.id && layer.characteristicMatch.characteristics?.includes(carac));
+  if (!matched) return 0;
+  const delta = Number(opponent?.caracs?.[carac]) - Number(tester?.caracs?.[carac]);
+  return Number.isFinite(delta) ? delta : 0;
+}
 export function buildCombatTest(normalized, role = 'actor') {
   const defending = role === 'defender';
   const actor = defending ? normalized.target : normalized.actor;
@@ -77,6 +88,11 @@ export function buildCombatTest(normalized, role = 'actor') {
   const crewSkill=!defending?pendingCrewSkill(actor,action,normalized.v5.context):null;if(crewSkill)action={...action,base:crewSkill.base};
   const settings = defending ? normalized.defense.v5 || {} : normalized.v5 || {};
   const warLeader=warLeaderSubstitution(normalized,actor,action,settings);if(warLeader)action={...action,base:warLeader.commandBase};
+  // Test opposé uniquement : la Malice de Ranald décale le score du prêtre contre l’adversaire désigné, la fiche reste intacte.
+  if (defending || normalized.defense) {
+    const mischief = characteristicMatchShift(actor, target, action);
+    if (mischief) action = { ...action, base: action.base + mischief };
+  }
   if(!defending&&normalized.noTestAction){
     const test=structuredClone(previewV5Test({score:0,roll:1,kind:'test'})),first=test.options[0];first.result={...first.result,success:true,sl:0,critical:false,fumble:false,automatic:true,noTest:true,details:{...first.result.details,doubled:false}};test.options=[{...first,id:'keep'}];test.choiceRequired=false;test.forcedInversion=false;
     return{test,talentPlans:[],talentSLChoices:[],kind:'test',penalty:0,penaltyStates:[],unresolved:[],restrictions:(actor.states||[]).some(s=>['inconscient','surpris'].includes(s.key))?['Inconscient ou Surpris : ce choix de talent est indisponible.']:[],charging:false,qualityBonus:0};

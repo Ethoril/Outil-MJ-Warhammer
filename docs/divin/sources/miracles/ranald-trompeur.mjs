@@ -73,10 +73,10 @@ export const miracles = [
       { id: 'opposed-test', text: 'Dans quel Test opposé avec l’adversaire désigné l’égalisation est-elle rappelée ?' }
     ],
     clauses: [
-      { id: 'two-characteristics', mode: 'engine', text: 'Deux Caractéristiques du prêtre sont égalées à celles de l’adversaire désigné (valeurs figées au lancement, couche retirée à la fin de la prière).' },
+      { id: 'two-characteristics', mode: 'engine', text: 'Deux Caractéristiques du prêtre prennent la valeur de celles de l’adversaire désigné pendant la durée, dans tout Test opposé réalisé contre lui : la fiche ne change pas, le score du Test est décalé de l’écart (adversaire − prêtre), valeurs lues au moment du Test (couche retirée à la fin de la prière).' },
       { id: 'table-roll', mode: 'manual', text: 'Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons. Le MJ saisit les deux Caractéristiques tirées.' }
     ],
-    sourceDelta: 'La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » sans préciser si l’égalisation vaut pour tous les Tests opposés pendant la durée : lecture MJ, tous les Tests opposés avec lui pendant la durée. Automatisée par l’effet characteristic-match : valeurs figées au lancement ; « pour un Test opposé avec lui » reste un rappel MJ.'
+    sourceDelta: 'La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » : règle complète du MJ (20 oct.), l’égalisation vaut pendant la durée dans tout Test opposé réalisé spécifiquement contre cet adversaire. Automatisée par l’effet characteristic-match : la fiche ne change pas, le score du Test opposé est décalé de l’écart lu au moment du Test.'
   },
   {
     name: 'Visage oublié', canonicalName: 'Unremembered Face', printedPage: 24,
