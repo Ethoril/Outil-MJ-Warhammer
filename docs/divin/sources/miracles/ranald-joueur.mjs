@@ -14,16 +14,16 @@ export const miracles = [
     name: 'Fortune généreuse', canonicalName: 'Bountiful Fortune', printedPage: 19,
     summary: 'D’un geste des doigts croisés, le prêtre accorde à plusieurs compagnons le droit d’inverser l’ordre des dés de pourcentage au prochain Test qu’ils feront (82 devient 28). Cette faveur est perdue si elle n’est pas utilisée dans la durée.',
     params: { range: felBonusYards, targets: soc('characteristic-bonus', 'allies'), duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null,
+    status: 'implemented',
+    effect: null,
+    effects: [{ type: 'reverse-dice' }],
     targetRules: ['ally'],
-    needsInput: [
-      { id: 'allies', text: 'Quels compagnons sont désignés (Bonus de Sociabilité alliés, à portée) ?' },
-      { id: 'used', text: 'Chaque allié a-t-il utilisé son inversion sur son prochain Test avant la fin de la durée ?' }
-    ],
+    needsInput: [],
     clauses: [
-      { id: 'reverse-dice', mode: 'manual', text: 'Chaque allié désigné peut inverser les dés de pourcentage de son prochain Test (une fois).' },
-      { id: 'boon-expires', mode: 'manual', text: 'La faveur non utilisée dans la durée est perdue.' }
-    ]
+      { id: 'reverse-dice', mode: 'engine', text: 'Chaque allié désigné peut inverser les dés de pourcentage de son prochain Test (une fois).' },
+      { id: 'boon-expires', mode: 'engine', text: 'La faveur non utilisée dans la durée est perdue.' }
+    ],
+    sourceDelta: 'L\'inversion est modélisée comme une couche divine à usage unique (reverse-dice), consommée quand l\'allié demande l\'inversion (v5.reverseDice: true) à la résolution de son prochain Test ; la couche disparaît avec la fin de la prière.'
   },
   {
     name: 'Crise de confiance', canonicalName: 'Crisis of Confidence', printedPage: 19,

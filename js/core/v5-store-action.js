@@ -8,7 +8,7 @@ import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from 
 import { projectV5Resources, commitV5Resources } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
 import { defaultResolutionId, previewResolution } from './resolution.js';
-import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll } from './v5-divine-effects-conditions.js';
+import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll, reverseDiceLayers, consumeReverseDice } from './v5-divine-effects-conditions.js';
 const clone = structuredClone;
 export function v5StoreActionClock(envelope) {
   const scene = envelope.activeScene;
@@ -84,6 +84,19 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   if(['reaction-strike','glorious-demise'].includes(context.freeAttackTalent)){const id=context.freeAttackTalent;quotas.push({id:'talent:'+id+(id==='glorious-demise'?':'+context.triggerConditionId:''),scope:id==='reaction-strike'?'round':'encounter',maximum:1});for(const cost of costs.filter(c=>c.resource==='momentum'))exemptions.push({costId:cost.id,sourceId:'talent-'+id});if(id==='glorious-demise'&&(actor.states||[]).find(s=>s.id===context.triggerConditionId)?.key==='sonne')costs.push({id:'talent:glorious:fortune',resource:'fortune',amount:1});}
   if(context.freeAttackTalent==='fast-shot')quotas.push({id:'talent:fast-shot',scope:'round',maximum:1});
   if(context.specialAttack==='whirlwind-of-death')costs.push({id:'talent:whirlwind:fortune',resource:'fortune',amount:1});
+  // Fortune généreuse (Ranald) : inversion demandée des dés de pourcentage du prochain Test (82 devient 28), couche à usage unique consommée par la résolution.
+  // Le marqueur v5.reverseDiceApplied survit dans l'entrée normalisée et empêche la double inversion quand l'entrée est reconstruite à l'application.
+  let reverseDiceApplied = false;
+  if (v5.reverseDice === true && v5.reverseDiceApplied !== true) {
+    const rawReverse = supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll;
+    if (reverseDiceLayers(actor).length && rawReverse !== null && rawReverse !== undefined && rawReverse !== '' && Number.isInteger(Number(rawReverse)) && Number(rawReverse) >= 1 && Number(rawReverse) <= 100) {
+      const original = Number(rawReverse), reversed = original === 100 ? 100 : (original % 10) * 10 + Math.floor(original / 10);
+      supplied.roll = reversed;
+      if (supplied.dieRoll !== undefined) supplied.dieRoll = reversed;
+      if (supplied.enteredRoll !== undefined) supplied.enteredRoll = reversed;
+      reverseDiceApplied = v5.reverseDiceApplied = true;
+    }
+  }
   const fortuneReroll = Boolean(context.fortuneReroll || v5.fortuneReroll || supplied.fortuneReroll);
   const rawReroll = context.fortuneRerollRoll ?? v5.fortuneRerollRoll ?? supplied.fortuneRerollRoll;
   const hasValidReroll = rawReroll !== null && rawReroll !== undefined && rawReroll !== '' && Number.isInteger(Number(rawReroll)) && Number(rawReroll) >= 1 && Number(rawReroll) <= 100;
@@ -124,7 +137,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
     target: paid.participants.find(item => item.id === targetId) || supplied.target || null,
     round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision,
     v5State: paid, v5Clock: clock, authorNextTurnEnd: authorNextTurnEnd(envelope, actorId), actionCostPlan, secondaryTalentRequests, reactionValidation,
-    fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll };
+    fortuneReroll, fortuneRerollRoll: hasValidReroll ? Number(rawReroll) : null, initialRollBeforeFortune, freeReroll, reverseDiceApplied, ...(reverseDiceApplied ? { reverseDice: { used: true } } : {}) };
 }
 export function annotateV5StoreActionPreview(preview, input) {
   if (input.reactionValidation?.ready === false) preview = { ...preview, unresolved: [...(preview.unresolved || []), input.reactionValidation.reason] };
@@ -177,14 +190,18 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   // Relance gratuite : exemption vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const free = preview.actionCostPlan?.request?.exemptions?.some(row => row.sourceId === FREE_REROLL_SOURCE);
   if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: current.round, attack: preview.input?.action?.type === 'attack' }).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
+  // Fortune généreuse : inversion vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
+  const reversed = preview.input?.v5?.reverseDiceApplied === true;
+  const reverseActorId = preview.input?.actorId || preview.input?.actor?.id;
+  if (reversed && !reverseDiceLayers(current.participants.find(p => p.id === reverseActorId)).length) return { status: 'manual', reason: 'Fortune généreuse : plus d\'inversion disponible.', state: current };
   const resolve = state => {
     const result = commitV5StoreTalentUsages(preview, resolveAction(state), state);
-    if (free && result.status === 'applied') {
-      const actorId = preview.actionCostPlan.request.actorId, participants = clone(result.state.participants), actor = participants.find(p => p.id === actorId);
-      consumeFreeReroll(actor, { round: state.round, attack: preview.input?.action?.type === 'attack' });
-      return { ...result, state: { ...result.state, participants } };
-    }
-    return result;
+    if (result.status !== 'applied' || (!free && !reversed)) return result;
+    // Relance gratuite et inversion des dés peuvent servir dans la même résolution : chacune consomme sa propre couche.
+    const participants = clone(result.state.participants);
+    if (free) consumeFreeReroll(participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: state.round, attack: preview.input?.action?.type === 'attack' });
+    if (reversed) consumeReverseDice(participants.find(p => p.id === reverseActorId));
+    return { ...result, state: { ...result.state, participants } };
   };
   if (!preview.actionCostPlan) return resolve(current);
   const committed = commitV5ActionCosts(preview.actionCostPlan, current, { resolveAction: resolve });

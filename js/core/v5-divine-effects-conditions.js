@@ -160,4 +160,16 @@ export function consumeFreeReroll(participant, { round, attack } = {}) {
   return true;
 }
 
-export default { 'remove-condition': removeCondition, 'expiry-condition': expiryCondition, 'temporary-fortune': temporaryFortune, 'free-reroll': freeReroll };
+export const REVERSE_DICE_SOURCE = 'divine-reverse-dice';
+const reverseDice = {
+  validate: () => null,
+  buildLayer: () => ({ reverseDice: { remaining: 1 } })
+};
+export const reverseDiceLayers = participant => (participant?.extensions?.v5?.divineEffects || []).filter(layer => layer?.type === 'reverse-dice' && layer.reverseDice?.remaining > 0);
+export function consumeReverseDice(participant) {
+  const layer = reverseDiceLayers(participant)[0];
+  if (!layer) return false;
+  layer.reverseDice = { ...layer.reverseDice, remaining: layer.reverseDice.remaining - 1 };
+  return true;
+}
+export default { 'remove-condition': removeCondition, 'expiry-condition': expiryCondition, 'temporary-fortune': temporaryFortune, 'free-reroll': freeReroll, 'reverse-dice': reverseDice };

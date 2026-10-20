@@ -18,7 +18,7 @@ for (const type of ['grant-trait', 'special-state', 'grant-actions', 'grant-tale
 // Dégâts directs (v5-divine-effects-damage.js).
 for (const type of ['direct-damage', 'ordinary-damage']) effectTypes.add(type);
 // États, verrous et Chance temporaire (v5-divine-effects-conditions.js).
-for (const type of ['remove-condition', 'expiry-condition', 'temporary-fortune', 'free-reroll']) effectTypes.add(type);
+for (const type of ['remove-condition', 'expiry-condition', 'temporary-fortune', 'free-reroll', 'reverse-dice']) effectTypes.add(type);
 // Tests de compétence (v5-divine-effects-tests.js).
 for (const type of ['test-modifier']) effectTypes.add(type);
 // Invocations (v5-divine-effects-summon.js).

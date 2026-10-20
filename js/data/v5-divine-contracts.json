@@ -1538,6 +1538,21 @@
       }
     },
     {
+      "id": "divine:miracle:ranald:bountiful-fortune",
+      "catalogueEntry": null,
+      "v5Summary": "L'inversion est modélisée comme une couche divine à usage unique (reverse-dice), consommée quand l'allié demande l'inversion (v5.reverseDice: true) à la résolution de son prochain Test ; la couche disparaît avec la fin de la prière.",
+      "status": "implemented",
+      "source": {
+        "document": "Deft Steps Light Fingers.pdf",
+        "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
+        "edition": "WFRP 4e édition, Cubicle 7, mise à jour du 23 janvier 2025",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 19,
+        "section": "Miracles de Ranald - Bountiful Fortune",
+        "clauses": []
+      }
+    },
+    {
       "id": "divine:miracle:ranald:crisis-of-confidence",
       "catalogueEntry": null,
       "v5Summary": "Le livre vise un Test « Fellowship-based » (basé sur la Sociabilité) : la liste exacte des compétences concernées n’est pas donnée, le MJ tranche. Le malus est de -20 (points de pourcentage), non des DR.",
@@ -15265,7 +15280,7 @@
       "canonicalName": "Bountiful Fortune",
       "deity": "Ranald",
       "aspect": "Gamester",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -15290,7 +15305,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": null,
+      "sourceDelta": "L'inversion est modélisée comme une couche divine à usage unique (reverse-dice), consommée quand l'allié demande l'inversion (v5.reverseDice: true) à la résolution de son prochain Test ; la couche disparaît avec la fin de la prière.",
       "params": {
         "range": {
           "kind": "characteristic-bonus",
@@ -15336,7 +15351,17 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "reverse-dice",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [
         "ally"
       ],
@@ -15348,27 +15373,18 @@
       "clauses": [
         {
           "id": "reverse-dice",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Chaque allié désigné peut inverser les dés de pourcentage de son prochain Test (une fois).",
           "sourceRef": "v5-bountiful-fortune"
         },
         {
           "id": "boon-expires",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La faveur non utilisée dans la durée est perdue.",
           "sourceRef": "v5-bountiful-fortune"
         }
       ],
-      "needsInput": [
-        {
-          "field": "allies",
-          "label": "Quels compagnons sont désignés (Bonus de Sociabilité alliés, à portée) ?"
-        },
-        {
-          "field": "used",
-          "label": "Chaque allié a-t-il utilisé son inversion sur son prochain Test avant la fin de la durée ?"
-        }
-      ]
+      "needsInput": []
     },
     {
       "id": "divine:miracle:ranald:crisis-of-confidence",
@@ -26933,5 +26949,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:e21b5c94f4710403218b8001ec30b14e42922fab84a5e48654cb4eda18c2f45a"
+  "sourceFingerprint": "sha256:4d2d77f465ad9ece8b997de766bc1357ffd2488c97ac02e7e8109763c6d7a090"
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:e21b5c94f4710403218b8001ec30b14e42922fab84a5e48654cb4eda18c2f45a",
+  "sourceFingerprint": "sha256:4d2d77f465ad9ece8b997de766bc1357ffd2488c97ac02e7e8109763c6d7a090",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -12275,7 +12275,7 @@
       "name": "Fortune généreuse",
       "deity": "Ranald",
       "aspect": "Gamester",
-      "status": "manual",
+      "status": "implemented",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -12344,7 +12344,17 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "reverse-dice",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Bountiful Fortune",
         "effect": "D’un geste des doigts croisés, le prêtre accorde à plusieurs compagnons le droit d’inverser l’ordre des dés de pourcentage au prochain Test qu’ils feront (82 devient 28). Cette faveur est perdue si elle n’est pas utilisée dans la durée.",
@@ -12353,27 +12363,18 @@
       "clauses": [
         {
           "id": "reverse-dice",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Chaque allié désigné peut inverser les dés de pourcentage de son prochain Test (une fois).",
           "sourceRef": "v5-bountiful-fortune"
         },
         {
           "id": "boon-expires",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La faveur non utilisée dans la durée est perdue.",
           "sourceRef": "v5-bountiful-fortune"
         }
       ],
-      "needsInput": [
-        {
-          "field": "allies",
-          "label": "Quels compagnons sont désignés (Bonus de Sociabilité alliés, à portée) ?"
-        },
-        {
-          "field": "used",
-          "label": "Chaque allié a-t-il utilisé son inversion sur son prochain Test avant la fin de la durée ?"
-        }
-      ]
+      "needsInput": []
     },
     {
       "id": "divine:miracle:ranald:crisis-of-confidence",
