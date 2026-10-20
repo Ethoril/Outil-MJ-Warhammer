@@ -1,0 +1,5537 @@
+{
+  "schemaVersion": 1,
+  "scope": "Inventaire documentaire des ajouts manquants au catalogue local de 277 sorts ; aucun raccordement moteur.",
+  "baselineCommit": "f6daf2e",
+  "spells": [
+    {
+      "id": "D0b-L01-001",
+      "kind": "spell",
+      "book": "L01",
+      "page": 32,
+      "nameEn": "Bonecrusher",
+      "lore": "Great Maw",
+      "cn": 5,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +4 ignorant l’armure, +20 sur le jet de gravité critique.",
+      "mechanics": [
+        "projectile",
+        "ignoreAP",
+        "criticalSeverity"
+      ],
+      "similarExistingContract": "Carreau",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L01-002",
+      "kind": "spell",
+      "book": "L01",
+      "page": 32,
+      "nameEn": "Bullgorger",
+      "lore": "Great Maw",
+      "cn": 5,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "+2 au Bonus de Force pour dégâts et efforts ; repas à la fin ou Exténué ; résistance de Calme à préciser.",
+      "mechanics": [
+        "statBonus",
+        "expiryMeal",
+        "condition"
+      ],
+      "similarExistingContract": "Forme Sauvage de Wyssan",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L01-003",
+      "kind": "spell",
+      "book": "L01",
+      "page": 32,
+      "nameEn": "Braingobbler",
+      "lore": "Great Maw",
+      "cn": 5,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Peur 2 ; si l’ingrédient est la tête d’un proche de l’adversaire, celui-ci résiste avec −20.",
+      "mechanics": [
+        "fear",
+        "ingredientRelation"
+      ],
+      "similarExistingContract": "Effrayant",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L01-004",
+      "kind": "spell",
+      "book": "L01",
+      "page": 33,
+      "nameEn": "Taste Death",
+      "lore": "Great Maw",
+      "cn": 2,
+      "range": "soi",
+      "target": "soi",
+      "duration": "instantanée",
+      "effectSummaryFr": "Connaître la cause générale et l’ancienneté d’un décès en mangeant la chair ; pas l’identité du meurtrier.",
+      "mechanics": [
+        "informationMJ",
+        "corpse"
+      ],
+      "similarExistingContract": "Goût de la Mort",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L01-005",
+      "kind": "spell",
+      "book": "L01",
+      "page": 33,
+      "nameEn": "Trollguts",
+      "lore": "Great Maw",
+      "cn": 6,
+      "range": "Bonus d’Endurance yards",
+      "target": "1",
+      "duration": "Bonus d’Endurance Rounds",
+      "effectSummaryFr": "Donne Régénération ; à chaque soin, un non-ogre risque une altération cosmétique après échec d’Endurance.",
+      "mechanics": [
+        "regeneration",
+        "species",
+        "secondaryTest"
+      ],
+      "similarExistingContract": "Régénération",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L01-006",
+      "kind": "spell",
+      "book": "L01",
+      "page": 33,
+      "nameEn": "The Maw",
+      "lore": "Great Maw",
+      "cn": 11,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Fosse à dégâts répétés ; Esquive détermine chute et dégâts, trois Enchevêtré Force 60 dans la fosse ; critique à la fermeture.",
+      "mechanics": [
+        "zone",
+        "dodge",
+        "entangled",
+        "endTurnDamage",
+        "closureCritical"
+      ],
+      "similarExistingContract": "Crevasse",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L01-007",
+      "kind": "spell",
+      "book": "L01",
+      "page": 33,
+      "nameEn": "Feast of the Fallen",
+      "lore": "Great Maw",
+      "cn": 9,
+      "range": "soi",
+      "target": "spécial",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Accorde Vampirique à des bénéficiaires ; les dégâts de mêlée soignent. Non-ogres : risque de Sonné ; nourriture infectée : résistance pénalisée.",
+      "mechanics": [
+        "lifeDrain",
+        "species",
+        "disease",
+        "secondaryTest"
+      ],
+      "similarExistingContract": "Vol de Vie",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-001",
+      "kind": "spell",
+      "book": "L02",
+      "page": 62,
+      "nameEn": "Dagger of the Art",
+      "lore": "Hedgecraft",
+      "cn": 4,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Bâtonnet changé en dague magique ; BF+8 contre Éthéré ou Corrompu ; maintien par Focalisation à 0 chaque Round.",
+      "mechanics": [
+        "weapon",
+        "conditionalDamage",
+        "maintenance"
+      ],
+      "similarExistingContract": "Arme aethyrique",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-002",
+      "kind": "spell",
+      "book": "L02",
+      "page": 62,
+      "nameEn": "Fellstave",
+      "lore": "Hedgecraft",
+      "cn": 9,
+      "range": "100 yards autour du pieu",
+      "target": "type appris",
+      "duration": "1 mois",
+      "effectSummaryFr": "Calme ou Brisé à l’entrée ; Intuition après récupération pour reconnaître la source, avec formulation à confirmer.",
+      "mechanics": [
+        "zone",
+        "fear",
+        "broken",
+        "secondaryTest"
+      ],
+      "similarExistingContract": "Horreurs Noires",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-003",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Goodwill",
+      "lore": "Hedgecraft",
+      "cn": 0,
+      "range": "soi",
+      "target": "zone BSoc yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "+10 aux Tests de Sociabilité dans la zone ; Animosité et Haine sans effet.",
+      "mechanics": [
+        "socialBonus",
+        "suppressPsychology"
+      ],
+      "similarExistingContract": "Calme",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-004",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Invigorate",
+      "lore": "Hedgecraft",
+      "cn": 2,
+      "range": "contact",
+      "target": "1",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Ignore Exténué pendant la durée, sans retirer les occurrences.",
+      "mechanics": [
+        "ignoreCondition"
+      ],
+      "similarExistingContract": "Clarté d’esprit",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-005",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Lovelock",
+      "lore": "Hedgecraft",
+      "cn": 10,
+      "range": "contact",
+      "target": "philtre",
+      "duration": "jusqu’à minuit",
+      "effectSummaryFr": "Le buveur s’éprend du premier individu qui pourrait lui plaire ; appréciation et réaction de scène MJ.",
+      "mechanics": [
+        "item",
+        "attractionMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-006",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Mirkride",
+      "lore": "Hedgecraft",
+      "cn": 0,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Esprit invisible et immatériel séparé du corps ; corps À terre, retour à échéance ou contact, esprit perdu si le corps meurt.",
+      "mechanics": [
+        "projection",
+        "ethereal",
+        "bodyLink"
+      ],
+      "similarExistingContract": "Projection Spirituelle",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-007",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Nepenthe",
+      "lore": "Hedgecraft",
+      "cn": 0,
+      "range": "contact",
+      "target": "breuvage",
+      "duration": "BFM heures ; effet permanent",
+      "effectSummaryFr": "Le buveur oublie un individu qu’il choisit.",
+      "mechanics": [
+        "memory",
+        "permanentMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-008",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Nostrum",
+      "lore": "Hedgecraft",
+      "cn": 0,
+      "range": "contact",
+      "target": "breuvage",
+      "duration": "BFM heures",
+      "effectSummaryFr": "Boire restaure BFM Blessures et guérit une maladie choisie, plus une par deux DR supplémentaires.",
+      "mechanics": [
+        "item",
+        "healing",
+        "disease",
+        "overcast"
+      ],
+      "similarExistingContract": "Don de Vie",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-009",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Part the Branches",
+      "lore": "Hedgecraft",
+      "cn": 0,
+      "range": "soi",
+      "target": "soi",
+      "duration": "Volonté minutes",
+      "effectSummaryFr": "Perçoit esprits, invisibles et démons.",
+      "mechanics": [
+        "spiritSight"
+      ],
+      "similarExistingContract": "Percer le Voile",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-010",
+      "kind": "spell",
+      "book": "L02",
+      "page": 63,
+      "nameEn": "Protection Pouch",
+      "lore": "Hedgecraft",
+      "cn": 5,
+      "range": "contact",
+      "target": "amulette",
+      "duration": "1 semaine + 1 par DR",
+      "effectSummaryFr": "+1 DR Calme contre effets surnaturels et +1 DR Endurance contre maladie ou empoisonnement.",
+      "mechanics": [
+        "item",
+        "testModifier",
+        "conditionalResistance"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-011",
+      "kind": "spell",
+      "book": "L02",
+      "page": 64,
+      "nameEn": "Protective Charm",
+      "lore": "Hedgecraft",
+      "cn": 0,
+      "range": "contact",
+      "target": "charme",
+      "duration": "BFM jours",
+      "effectSummaryFr": "Donne Résistance à la Magie si le porteur ne la possède pas déjà.",
+      "mechanics": [
+        "item",
+        "grantTalent"
+      ],
+      "similarExistingContract": "Protection",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-012",
+      "kind": "spell",
+      "book": "L02",
+      "page": 64,
+      "nameEn": "Sightstep",
+      "lore": "Hedgecraft",
+      "cn": 7,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Dissimule la nature magique et aide la discrétion contre esprits/démons/éthérés ; interdit lancement, dissipation et canalisation.",
+      "mechanics": [
+        "detection",
+        "stealth",
+        "magicLock"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-013",
+      "kind": "spell",
+      "book": "L02",
+      "page": 64,
+      "nameEn": "Silvertide",
+      "lore": "Hedgecraft",
+      "cn": 4,
+      "range": "soi",
+      "target": "soi",
+      "duration": "1d10 heures",
+      "effectSummaryFr": "Trouve progressivement 1d10 sous ; reçu de butin plutôt que création immédiate d’argent.",
+      "mechanics": [
+        "lootMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-014",
+      "kind": "spell",
+      "book": "L02",
+      "page": 64,
+      "nameEn": "The Ousting",
+      "lore": "Hedgecraft",
+      "cn": 8,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "1d10 années",
+      "effectSummaryFr": "Volonté ou perte de BFM Blessures ; à zéro, Éthéré/Démon banni pour la durée.",
+      "mechanics": [
+        "willpowerTest",
+        "damage",
+        "banish"
+      ],
+      "similarExistingContract": "Bannissement",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-015",
+      "kind": "spell",
+      "book": "L02",
+      "page": 64,
+      "nameEn": "Wyrd Ward",
+      "lore": "Hedgecraft",
+      "cn": 4,
+      "range": "contact",
+      "target": "1",
+      "duration": "BFM heures",
+      "effectSummaryFr": "Après opposition de Volonté gagnée, −2 DR aux lancements et canalisations des traditions sombres précisées.",
+      "mechanics": [
+        "opposition",
+        "loreFilter",
+        "testPenalty"
+      ],
+      "similarExistingContract": "Fléau des Démons",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L02-016",
+      "kind": "ritual",
+      "book": "L02",
+      "page": 80,
+      "nameEn": "Spirit-Bonding Ritual",
+      "lore": "Any Lore",
+      "cn": 30,
+      "range": "proximité",
+      "target": "animal doué",
+      "duration": "permanent jusqu’à séparation/mort",
+      "effectSummaryFr": "Rituel d’attachement d’un familier : dressage et semaine d’accord préalables ; échec retire Dressé Magie ; CN doublé par familier existant.",
+      "mechanics": [
+        "ritual",
+        "familiar",
+        "campaignTime",
+        "requirements"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-001",
+      "kind": "spell",
+      "book": "L12",
+      "page": 82,
+      "nameEn": "Bilebrew",
+      "lore": "Great Maw",
+      "cn": 6,
+      "range": "soi",
+      "target": "ogres alliés dans zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Haine envers la cible ou le groupe choisi par le boucher.",
+      "mechanics": [
+        "hatred",
+        "targetGroup"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-002",
+      "kind": "spell",
+      "book": "L12",
+      "page": 82,
+      "nameEn": "Bloodgruel",
+      "lore": "Great Maw",
+      "cn": 5,
+      "range": "soi",
+      "target": "soi",
+      "duration": "instantanée",
+      "effectSummaryFr": "Endurance +40 : soigne un plus les DR ; échec contracte la Courante Galopante.",
+      "mechanics": [
+        "healing",
+        "secondaryTest",
+        "disease"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-003",
+      "kind": "spell",
+      "book": "L12",
+      "page": 82,
+      "nameEn": "Get Some Guts",
+      "lore": "Great Maw",
+      "cn": 6,
+      "range": "soi",
+      "target": "ogres dans zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Les bénéficiaires ignorent Brisé pendant la durée sans le retirer.",
+      "mechanics": [
+        "ignoreBroken",
+        "species"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-004",
+      "kind": "spell",
+      "book": "L12",
+      "page": 82,
+      "nameEn": "Toothcracker",
+      "lore": "Great Maw",
+      "cn": 8,
+      "range": "soi",
+      "target": "ogres alliés dans zone Volonté yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Endurance du boucher ou perte de dents ; +20 Calme/Endurance et un PA partout pour les bénéficiaires.",
+      "mechanics": [
+        "secondaryTest",
+        "injury",
+        "testBonus",
+        "armor"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-001",
+      "kind": "spell",
+      "book": "L09",
+      "page": 64,
+      "nameEn": "Arnzipal’s Black Horror",
+      "lore": "Dark Magic",
+      "cn": 13,
+      "range": "Volonté yards ou vortex aléatoire",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Force −1 DR ou trois Blessures ; Maladresse : Destin ou disparition mortelle. Vortex déplacé de 1d10+5 yards par Round.",
+      "mechanics": [
+        "vortex",
+        "strengthTest",
+        "directWounds",
+        "fateMJ"
+      ],
+      "similarExistingContract": "Cendres et Poussière",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-002",
+      "kind": "spell",
+      "book": "L09",
+      "page": 64,
+      "nameEn": "Arnzipal’s Dimensional Door",
+      "lore": "Dark Magic",
+      "cn": 10,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Relie deux lieux par un portail ; incident remplace la table par une ouverture chaotique et un démon mineur.",
+      "mechanics": [
+        "portal",
+        "miscastReplacement",
+        "summon"
+      ],
+      "similarExistingContract": "Portail d’Ombre",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-003",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Bladewind",
+      "lore": "Dark Magic",
+      "cn": 9,
+      "range": "2 × BSoc yards",
+      "target": "zone BSoc yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile BFM+4 sur chaque cible ; mêlée −1 DR ou armure ignorée.",
+      "mechanics": [
+        "projectile",
+        "secondaryTest",
+        "conditionalIgnoreAP"
+      ],
+      "similarExistingContract": "Explosion",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-004",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Chillwind",
+      "lore": "Dark Magic",
+      "cn": 10,
+      "range": "Sociabilité yards",
+      "target": "zone BSoc yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Projectile +8 sans armure ; Endurance ou Exténué par Round, −3 DR aux tirs dans la zone.",
+      "mechanics": [
+        "projectile",
+        "ignoreAP",
+        "periodicTest",
+        "condition",
+        "rangedPenalty"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-005",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Dark Hand of Destruction",
+      "lore": "Dark Magic",
+      "cn": 7,
+      "range": "contact",
+      "target": "1 maximum",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +12 ignorant et détruisant l’armure non magique de la localisation.",
+      "mechanics": [
+        "projectile",
+        "ignoreAP",
+        "destroyArmor"
+      ],
+      "similarExistingContract": "Toucher doré",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-006",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Darkstar Cloak",
+      "lore": "Dark Magic",
+      "cn": 8,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Double les DR de canalisation Dhar ; toucher la cape expose autrui à la Corruption mineure.",
+      "mechanics": [
+        "channellingMultiplier",
+        "corruption"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-007",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Death Spasm",
+      "lore": "Dark Magic",
+      "cn": 6,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +4 sans armure ; victime blessée frappe tous ceux à un yard avec sa CC brute et sans talent/trait.",
+      "mechanics": [
+        "projectile",
+        "forcedAttacks",
+        "noTalentTrait"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-008",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Disturbing Voices",
+      "lore": "Dark Magic",
+      "cn": 7,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "1d10 heures",
+      "effectSummaryFr": "Tirer trois corruptions mentales et appliquer leurs effets temporairement.",
+      "mechanics": [
+        "randomTable",
+        "temporaryMutation"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-009",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Dominion",
+      "lore": "Dark Magic",
+      "cn": 10,
+      "range": "Sociabilité yards",
+      "target": "zone BFM yards",
+      "duration": "BSoc Rounds",
+      "effectSummaryFr": "Début de Tour dans la zone : Calme −3 DR requis pour se déplacer, attaquer ou lancer sans permission de la sorcière.",
+      "mechanics": [
+        "turnGate",
+        "coolTest",
+        "controlMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-010",
+      "kind": "spell",
+      "book": "L09",
+      "page": 65,
+      "nameEn": "Doombolt",
+      "lore": "Dark Magic",
+      "cn": 7,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +8 ; Savoir Magie facultatif à 0 pour +4 dégâts, échec provoquant incident majeur.",
+      "mechanics": [
+        "projectile",
+        "optionalTest",
+        "miscast"
+      ],
+      "similarExistingContract": "Carreau",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-011",
+      "kind": "spell",
+      "book": "L09",
+      "page": 66,
+      "nameEn": "Grasping Darkness",
+      "lore": "Dark Magic",
+      "cn": 9,
+      "range": "Intelligence yards",
+      "target": "1",
+      "duration": "spéciale",
+      "effectSummaryFr": "Enchevêtré égal à BI−BF cible ; résistance opposée en début de Tour ; corps contrôlé tant qu’entravé, Tests physiques −2 DR.",
+      "mechanics": [
+        "conditionFormula",
+        "opposition",
+        "controlMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-012",
+      "kind": "spell",
+      "book": "L09",
+      "page": 66,
+      "nameEn": "Memory Leech",
+      "lore": "Dark Magic",
+      "cn": 10,
+      "range": "contact",
+      "target": "1",
+      "duration": "permanente",
+      "effectSummaryFr": "Calme −1 DR ; chaque DR négatif retire un talent ou remet une compétence à sa base ; la sorcière peut accéder aux apprentissages volés.",
+      "mechanics": [
+        "randomLoss",
+        "skills",
+        "talents",
+        "permanentMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-013",
+      "kind": "spell",
+      "book": "L09",
+      "page": 66,
+      "nameEn": "Paralysing Nightmares",
+      "lore": "Dark Magic",
+      "cn": 6,
+      "range": "contact",
+      "target": "1",
+      "duration": "1d10 nuits",
+      "effectSummaryFr": "Chaque réveil donne Exténué, −15 Volonté et Sociabilité, exposition mineure ; Calme avant sommeil pour cesser.",
+      "mechanics": [
+        "campaignTime",
+        "periodicCondition",
+        "stats",
+        "corruption"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-014",
+      "kind": "spell",
+      "book": "L09",
+      "page": 66,
+      "nameEn": "Poisoned Whispers",
+      "lore": "Dark Magic",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "1 puis entourage éventuel",
+      "duration": "spéciale, contradictoire",
+      "effectSummaryFr": "Impose une Psychologie à la victime ou à ses proches ; résistance opposée de Calme. Durée en Rounds et récupération quotidienne discordantes.",
+      "mechanics": [
+        "psychology",
+        "opposition",
+        "zone"
+      ],
+      "similarExistingContract": "Calme",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-015",
+      "kind": "spell",
+      "book": "L09",
+      "page": 66,
+      "nameEn": "Power of Darkness",
+      "lore": "Dark Magic",
+      "cn": 8,
+      "range": "BFM yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "+10 Force/Initiative aux alliés ; +2 DR de canalisation Dhar à la sorcière ; exposition mineure à la fin.",
+      "mechanics": [
+        "statModifiers",
+        "channelling",
+        "expiryCorruption"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-016",
+      "kind": "spell",
+      "book": "L09",
+      "page": 66,
+      "nameEn": "Shroud of Despair",
+      "lore": "Dark Magic",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Exténué selon les DR de lancement ; Calme à 0 ou un Brisé.",
+      "mechanics": [
+        "fatigued",
+        "broken",
+        "secondaryTest"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-017",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Skies Made Subservient",
+      "lore": "Dark Magic",
+      "cn": 10,
+      "range": "spéciale",
+      "target": "spéciale",
+      "duration": "BFM heures",
+      "effectSummaryFr": "Contrôle les conditions météo et le vent ; table Sea of Claws extérieure au corpus mentionnée.",
+      "mechanics": [
+        "weatherMJ"
+      ],
+      "similarExistingContract": "Orage de Thorsen",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-018",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Soul Stealer",
+      "lore": "Dark Magic",
+      "cn": 9,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +0 sans Endurance ni armure ; par deux Blessures, transfère une Blessure maximale et soigne la sorcière.",
+      "mechanics": [
+        "projectile",
+        "ignoreTBAP",
+        "maxWoundsTransfer"
+      ],
+      "similarExistingContract": "Vol de Vie",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-019",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Stricken Voices",
+      "lore": "Dark Magic",
+      "cn": 9,
+      "range": "Volonté yards",
+      "target": "1 puis BFM cibles proches",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Projectile +0 sans armure ; les cibles suffoquent jusqu’à Endurance −1 DR en début de Tour.",
+      "mechanics": [
+        "projectile",
+        "suffocation",
+        "startTurnTest"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-020",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Stolen Aspect",
+      "lore": "Dark Magic",
+      "cn": 7,
+      "range": "Volonté yards",
+      "target": "1 maximum",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Calme −3 DR ou Psychologies partagées ; Calme pour s’agresser ; accès du lanceur aux souvenirs.",
+      "mechanics": [
+        "psychology",
+        "secondaryTest",
+        "memoriesMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-021",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Unravelling Will",
+      "lore": "Dark Magic",
+      "cn": 7,
+      "range": "contact",
+      "target": "1",
+      "duration": "1d10 minutes",
+      "effectSummaryFr": "−4 DR aux Tests de Volonté.",
+      "mechanics": [
+        "testPenalty"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-022",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Witch Flight",
+      "lore": "Dark Magic",
+      "cn": 9,
+      "range": "Volonté yards",
+      "target": "soi",
+      "duration": "instantanée",
+      "effectSummaryFr": "Transport par tourbillon ; créatures de taille moyenne ou moindre proches du départ et de l’arrivée : Athlétisme ou À terre.",
+      "mechanics": [
+        "movementMJ",
+        "zone",
+        "secondaryTest",
+        "prone"
+      ],
+      "similarExistingContract": "Envol",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-023",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Withering Presence",
+      "lore": "Dark Magic",
+      "cn": 8,
+      "range": "contact",
+      "target": "1",
+      "duration": "1d10 heures",
+      "effectSummaryFr": "−5 DR de Sociabilité ; Calme −2 DR à chaque heure pour terminer.",
+      "mechanics": [
+        "testPenalty",
+        "campaignTime",
+        "recovery"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L09-024",
+      "kind": "spell",
+      "book": "L09",
+      "page": 67,
+      "nameEn": "Word of Pain",
+      "lore": "Dark Magic",
+      "cn": 7,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Calme ou Endurance −1 DR, pénalisé des DR de lancement ; échec pénalise tous les Tests selon la marge.",
+      "mechanics": [
+        "choiceTest",
+        "oppositionSL",
+        "globalPenalty"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L07-001",
+      "kind": "spell",
+      "book": "L07",
+      "page": 81,
+      "nameEn": "Shroud of Fog",
+      "lore": "Shadows",
+      "cn": 8,
+      "range": "soi",
+      "target": "zone BFM miles",
+      "duration": "Volonté minutes",
+      "effectSummaryFr": "Brouillard non magique, visibilité dix yards, non dissipable.",
+      "mechanics": [
+        "weatherMJ",
+        "visibility"
+      ],
+      "similarExistingContract": "Horreurs Noires",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L07-002",
+      "kind": "spell",
+      "book": "L07",
+      "page": 128,
+      "nameEn": "Uproot the Mountains",
+      "lore": "High Magic",
+      "cn": 8,
+      "range": "ligne de vue",
+      "target": "relief",
+      "duration": "1 Round",
+      "effectSummaryFr": "Athlétisme −30 pour agir et bouger ; surincantation déplace le relief et permet une avalanche.",
+      "mechanics": [
+        "terrainMJ",
+        "turnGate",
+        "damage"
+      ],
+      "similarExistingContract": "Crevasse",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L07-003",
+      "kind": "spell",
+      "book": "L07",
+      "page": 129,
+      "nameEn": "Earth Line",
+      "lore": "High Magic Slann",
+      "cn": 10,
+      "range": "ligne de vue",
+      "target": "ligne tellurique",
+      "duration": "instantanée",
+      "effectSummaryFr": "Endurance −20 ou dégâts 15 sans armure le long de la ligne ; variantes de pont et défrichage.",
+      "mechanics": [
+        "leyline",
+        "secondaryTest",
+        "damage"
+      ],
+      "similarExistingContract": "Pont",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L07-004",
+      "kind": "spell",
+      "book": "L07",
+      "page": 129,
+      "nameEn": "Ruination of Cities",
+      "lore": "High Magic Slann",
+      "cn": 12,
+      "range": "ligne de vue",
+      "target": "1 bâtiment",
+      "duration": "instantanée",
+      "effectSummaryFr": "Effondrement ; Esquive −20 ou dégâts 20 et ensevelissement/suffocation ; variantes structures fortifiées et crevasses.",
+      "mechanics": [
+        "buildingMJ",
+        "damage",
+        "suffocation"
+      ],
+      "similarExistingContract": "Crevasse",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L07-005",
+      "kind": "spell",
+      "book": "L07",
+      "page": 129,
+      "nameEn": "Mental Blast",
+      "lore": "High Magic Slann",
+      "cn": 7,
+      "range": "ligne de vue",
+      "target": "zone BFM yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Dégâts BI+6 sans armure, encore +6 contre démons/morts-vivants ; Intelligence +20 ou Sonné. Variantes majeures d’Itza et sacrifice du Slann.",
+      "mechanics": [
+        "projectile",
+        "traitFilter",
+        "secondaryTest",
+        "stunned",
+        "overcastMJ"
+      ],
+      "similarExistingContract": "Explosion",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-001",
+      "kind": "spell",
+      "book": "L08",
+      "page": 102,
+      "nameEn": "Artist’s Touch",
+      "lore": "Vaul",
+      "cn": 0,
+      "range": "contact",
+      "target": "1 objet",
+      "duration": "instantanée",
+      "effectSummaryFr": "Objet non magique en fabrication : qualité Élégant.",
+      "mechanics": [
+        "craft",
+        "itemQuality"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-002",
+      "kind": "spell",
+      "book": "L08",
+      "page": 102,
+      "nameEn": "Patience of Vaul",
+      "lore": "Vaul",
+      "cn": 0,
+      "range": "contact",
+      "target": "1 objet",
+      "duration": "instantanée",
+      "effectSummaryFr": "Objet non magique en fabrication : total de DR requis divisé par quatre sans dégrader sa qualité.",
+      "mechanics": [
+        "craft",
+        "extendedTest"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-003",
+      "kind": "spell",
+      "book": "L08",
+      "page": 102,
+      "nameEn": "Vaul’s Grace",
+      "lore": "Vaul",
+      "cn": 7,
+      "range": "contact",
+      "target": "1 objet",
+      "duration": "instantanée",
+      "effectSummaryFr": "Arme ou armure non magique en fabrication : Légère ; les autres qualités restent déterminées normalement.",
+      "mechanics": [
+        "craft",
+        "itemQuality"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-004",
+      "kind": "spell",
+      "book": "L08",
+      "page": 102,
+      "nameEn": "Vaul’s Rage",
+      "lore": "Vaul",
+      "cn": 5,
+      "range": "BFM yards",
+      "target": "forge ou feu, maximum un",
+      "duration": "instantanée",
+      "effectSummaryFr": "Explosion : dégâts +6 sans armure, deux Enflammé, Esquive ou À terre/Sonné dans le premier rayon ; effets réduits au second, artisan/outils épargnés.",
+      "mechanics": [
+        "zone",
+        "damage",
+        "conditions",
+        "exception"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-005",
+      "kind": "spell",
+      "book": "L08",
+      "page": 102,
+      "nameEn": "Divination of Flames",
+      "lore": "Vaul",
+      "cn": 4,
+      "range": "BI yards",
+      "target": "forge ou feu, maximum un",
+      "duration": "BI heures",
+      "effectSummaryFr": "Sacrifice d’objet ; observe les créatures près de la forge ; surincantations sous Yenlui clair pour invisibles ou ciblage sans vue.",
+      "mechanics": [
+        "sacrifice",
+        "remoteSight",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-006",
+      "kind": "spell",
+      "book": "L08",
+      "page": 103,
+      "nameEn": "Divination of Stones",
+      "lore": "Vaul",
+      "cn": 6,
+      "range": "BI miles",
+      "target": "gisements MJ",
+      "duration": "BI heures",
+      "effectSummaryFr": "Sacrifice d’objet ; localisation et quantité de minéraux, aide à la fabrication ; option ithilmar sous Yenlui clair.",
+      "mechanics": [
+        "sacrifice",
+        "resourceMJ",
+        "craft"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-007",
+      "kind": "spell",
+      "book": "L08",
+      "page": 103,
+      "nameEn": "Fires of Perfection",
+      "lore": "Vaul",
+      "cn": 9,
+      "range": "contact",
+      "target": "1 objet",
+      "duration": "instantanée",
+      "effectSummaryFr": "Sacrifice de vue ; ignore défauts et malédictions de fabrication ; option pour ajouter un autre sort de Vaul.",
+      "mechanics": [
+        "blindness",
+        "craft",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-008",
+      "kind": "spell",
+      "book": "L08",
+      "page": 103,
+      "nameEn": "Wisdom of the Skysteel",
+      "lore": "Vaul",
+      "cn": 11,
+      "range": "contact",
+      "target": "1 objet",
+      "duration": "une activité",
+      "effectSummaryFr": "Sacrifice de vue ; permet fabriquer l’ithilmar avec réduction d’encombrement ; options magique ou fragilisation.",
+      "mechanics": [
+        "blindness",
+        "craft",
+        "encumbrance",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-009",
+      "kind": "spell",
+      "book": "L08",
+      "page": 103,
+      "nameEn": "Fortress of Hotek",
+      "lore": "Vaul",
+      "cn": 14,
+      "range": "BFM yards",
+      "target": "une forge ou bâtiment",
+      "duration": "BFM heures",
+      "effectSummaryFr": "Sacrifice de vue ; choisir barrière de feu, protection, fonte du métal ou renfort des portes ; défenses additionnelles par surincantation.",
+      "mechanics": [
+        "blindness",
+        "buildingMJ",
+        "choiceEffect",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-010",
+      "kind": "spell",
+      "book": "L08",
+      "page": 106,
+      "nameEn": "Fishbonding",
+      "lore": "High Elf Sea Magic",
+      "cn": 0,
+      "range": "Volonté yards",
+      "target": "1 poisson admissible",
+      "duration": "Volonté minutes",
+      "effectSummaryFr": "Améliore l’attitude d’un poisson non magique non prédateur ; monture possible selon compétence.",
+      "mechanics": [
+        "attitudeMJ",
+        "species"
+      ],
+      "similarExistingContract": "Amitié animale",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-011",
+      "kind": "spell",
+      "book": "L08",
+      "page": 106,
+      "nameEn": "Stormsense",
+      "lore": "High Elf Sea Magic",
+      "cn": 0,
+      "range": "Initiative miles",
+      "target": "tempêtes",
+      "duration": "instantanée",
+      "effectSummaryFr": "Connaître direction, intensité, déplacement et caractère magique des tempêtes proches.",
+      "mechanics": [
+        "weatherInformationMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-012",
+      "kind": "spell",
+      "book": "L08",
+      "page": 106,
+      "nameEn": "Ocean’s Fury",
+      "lore": "High Elf Sea Magic",
+      "cn": 8,
+      "range": "soi",
+      "target": "zone BFM miles",
+      "duration": "3 × BFM minutes",
+      "effectSummaryFr": "Tempête non dissipable gagnant trois degrés successifs d’intensité.",
+      "mechanics": [
+        "weatherMJ",
+        "campaignTime"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-013",
+      "kind": "spell",
+      "book": "L08",
+      "page": 106,
+      "nameEn": "Spirits of the Waves",
+      "lore": "High Elf Sea Magic",
+      "cn": 5,
+      "range": "2 × Sociabilité yards",
+      "target": "zone 2 × BSoc yards",
+      "duration": "BSoc minutes",
+      "effectSummaryFr": "Élémental de vent : direction par concentration ou vortex aléatoire ; effets sur gréement, visibilité et vent ; nombre accru par trois DR.",
+      "mechanics": [
+        "summon",
+        "vortex",
+        "shipRulesExternal"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-014",
+      "kind": "spell",
+      "book": "L08",
+      "page": 106,
+      "nameEn": "Armour of Mathlann",
+      "lore": "High Elf Sea Magic",
+      "cn": 10,
+      "range": "Volonté yards",
+      "target": "1 navire",
+      "duration": "Volonté minutes",
+      "effectSummaryFr": "Sacrifice de deux Exténué ; armure de coque 2 ; options taille, armure 3 ou protection du gréement/équipage.",
+      "mechanics": [
+        "shipArmor",
+        "sacrifice",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-015",
+      "kind": "spell",
+      "book": "L08",
+      "page": 106,
+      "nameEn": "Call of the Seas",
+      "lore": "High Elf Sea Magic",
+      "cn": 14,
+      "range": "Volonté yards",
+      "target": "Merwyrm",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Sacrifice Exténué/Blessures ; apparition retardée d’un Merwyrm non contrôlé ; options amitié et permanence modifiant Yenlui.",
+      "mechanics": [
+        "summon",
+        "delayed",
+        "profileExternal",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-016",
+      "kind": "spell",
+      "book": "L08",
+      "page": 107,
+      "nameEn": "Cloak of Mathlann",
+      "lore": "High Elf Sea Magic",
+      "cn": 11,
+      "range": "Volonté yards",
+      "target": "1 navire",
+      "duration": "Volonté minutes",
+      "effectSummaryFr": "Sacrifice Exténué/Blessure ; −3 DR pour percevoir ou viser le navire, sillage repérable ; options de taille.",
+      "mechanics": [
+        "ship",
+        "stealth",
+        "sacrifice",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-017",
+      "kind": "spell",
+      "book": "L08",
+      "page": 107,
+      "nameEn": "Mistress of the Deep",
+      "lore": "High Elf Sea Magic",
+      "cn": 9,
+      "range": "Sociabilité yards",
+      "target": "océanide",
+      "duration": "BSoc Rounds",
+      "effectSummaryFr": "Sacrifice Exténué/Blessure ; chant forçant Calme −10 chaque Round à vingt yards, sinon attiré et Sans défense ; profils alternatifs à choisir.",
+      "mechanics": [
+        "summon",
+        "coolTest",
+        "helpless",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-018",
+      "kind": "spell",
+      "book": "L08",
+      "page": 107,
+      "nameEn": "Waterlungs",
+      "lore": "High Elf Sea Magic",
+      "cn": 7,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "BFM heures",
+      "effectSummaryFr": "Sacrifice d’Exténué ; respiration aquatique, options sens aquatiques ou suffocation dans l’air.",
+      "mechanics": [
+        "breathing",
+        "sacrifice",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-019",
+      "kind": "spell",
+      "book": "L08",
+      "page": 107,
+      "nameEn": "Writhing Mists",
+      "lore": "High Elf Sea Magic",
+      "cn": 6,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Sacrifice d’Exténué ; tirs ennemis −20, discrétion alliée +20 ; concentration ; variantes déplacement du nuage et Peur 1.",
+      "mechanics": [
+        "zone",
+        "stealth",
+        "concentration",
+        "Yenlui"
+      ],
+      "similarExistingContract": "Horreurs Noires",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-020",
+      "kind": "spell",
+      "book": "L08",
+      "page": 110,
+      "nameEn": "Divine Stylus",
+      "lore": "Hoeth",
+      "cn": 0,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Écrit en lumière les langues connues ; lettres durant BFM heures, sans dessins.",
+      "mechanics": [
+        "writing",
+        "light"
+      ],
+      "similarExistingContract": "Inscription",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-021",
+      "kind": "spell",
+      "book": "L08",
+      "page": 110,
+      "nameEn": "Enlightenment",
+      "lore": "Hoeth",
+      "cn": 0,
+      "range": "BFM yards",
+      "target": "1 animal",
+      "duration": "BI minutes",
+      "effectSummaryFr": "+20 Intelligence et Volonté ; retire Bestial/Craintif temporairement.",
+      "mechanics": [
+        "statModifiers",
+        "removeTraits"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-022",
+      "kind": "spell",
+      "book": "L08",
+      "page": 110,
+      "nameEn": "Arcane Insight",
+      "lore": "Hoeth",
+      "cn": 8,
+      "range": "contact",
+      "target": "1 objet",
+      "duration": "instantanée",
+      "effectSummaryFr": "Révèle propriétés magiques et malédictions ; Intelligence pour sa création, recherche étendue pour les artefacts complexes.",
+      "mechanics": [
+        "informationMJ",
+        "secondaryTest"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-023",
+      "kind": "spell",
+      "book": "L08",
+      "page": 110,
+      "nameEn": "Greater Spirit Bond",
+      "lore": "Hoeth",
+      "cn": 4,
+      "range": "soi",
+      "target": "familier existant",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Étend télépathie et Traits de compagnon à Volonté miles ; aide au lancement exclue à cette distance.",
+      "mechanics": [
+        "familiar",
+        "remoteLink"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-024",
+      "kind": "spell",
+      "book": "L08",
+      "page": 110,
+      "nameEn": "Crucible of Light",
+      "lore": "Hoeth",
+      "cn": 6,
+      "range": "contact",
+      "target": "1 épée",
+      "duration": "BI minutes",
+      "effectSummaryFr": "Recherche étendue sacrifiée ; épée magique Rapide, options de qualités, talents et permanence en fabrication.",
+      "mechanics": [
+        "weapon",
+        "research",
+        "Yenlui"
+      ],
+      "similarExistingContract": "Arme enchantée",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-025",
+      "kind": "spell",
+      "book": "L08",
+      "page": 110,
+      "nameEn": "Mnemonic Control",
+      "lore": "Hoeth",
+      "cn": 6,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Recherche étendue requise ; prochain Savoir/langue non magique réussi avec les DR du lancement si connaissance plausible ; options lancement ou effacement d’un souvenir.",
+      "mechanics": [
+        "nextTest",
+        "research",
+        "memoryMJ",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-026",
+      "kind": "spell",
+      "book": "L08",
+      "page": 111,
+      "nameEn": "Psychic Sending",
+      "lore": "Hoeth",
+      "cn": 7,
+      "range": "Volonté miles",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Recherche étendue ; message d’une minute à une connaissance ; variantes image ou destinataire au nom connu.",
+      "mechanics": [
+        "communicationMJ",
+        "research",
+        "Yenlui"
+      ],
+      "similarExistingContract": "Télépathie",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-027",
+      "kind": "spell",
+      "book": "L08",
+      "page": 111,
+      "nameEn": "Sacred Wards",
+      "lore": "Hoeth",
+      "cn": 11,
+      "range": "contact",
+      "target": "zone BI yards",
+      "duration": "BI heures",
+      "effectSummaryFr": "Recherche étendue ; mot de passe et choix oubli, pureté, observation ou vérité ; une seule pose, renouvellement CN0, option semaines.",
+      "mechanics": [
+        "zone",
+        "choiceEffect",
+        "research",
+        "renewal",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-028",
+      "kind": "spell",
+      "book": "L08",
+      "page": 111,
+      "nameEn": "Soulcraft",
+      "lore": "Hoeth",
+      "cn": 10,
+      "range": "BFM yards",
+      "target": "1 fantôme",
+      "duration": "instantanée",
+      "effectSummaryFr": "Lie un esprit à une pierre ou ligne tellurique ; résistance de Calme augmentant le CN ; fenêtre d’une heure pour un mort récent.",
+      "mechanics": [
+        "soulBindingMJ",
+        "resistanceCN"
+      ],
+      "similarExistingContract": "Âme Emprisonnée",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L08-029",
+      "kind": "spell",
+      "book": "L08",
+      "page": 111,
+      "nameEn": "The Primary Words",
+      "lore": "Hoeth",
+      "cn": 15,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BI heures",
+      "effectSummaryFr": "Recherche étendue ; langage primordial pour communication simple ; options espèces anciennes, esprits/élémentaux/démons.",
+      "mechanics": [
+        "communicationMJ",
+        "research",
+        "Yenlui"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L14-001",
+      "kind": "creature-spell",
+      "book": "L14",
+      "page": 83,
+      "nameEn": "Phoenix Reborn",
+      "lore": "Fire — capacité de créature",
+      "cn": 2,
+      "range": "soi",
+      "target": "soi",
+      "duration": "instantanée puis 2d10 Rounds",
+      "effectSummaryFr": "Action spéciale à la mort avec Langue Magique 50 ; réussite permet renaissance après le brasier, à Blessures aléatoires selon les DR.",
+      "mechanics": [
+        "creatureSpell",
+        "death",
+        "delay",
+        "healing"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-005",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "Behave!",
+      "lore": "Little Waaagh",
+      "cn": 2,
+      "range": "Volonté yards",
+      "target": "1 maximum",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Squig, loup géant, araignée ou snotling suit les ordres comme un chien dressé.",
+      "mechanics": [
+        "species",
+        "controlMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-006",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "Cunnin’ Words",
+      "lore": "Little Waaagh",
+      "cn": 0,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Le destinataire comprend le chamane dans sa propre langue.",
+      "mechanics": [
+        "communicationMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-007",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "Curse of Da Bad Moon",
+      "lore": "Little Waaagh",
+      "cn": 9,
+      "range": "BFM yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Ennemis : un Exténué et dépenses de Chance interdites.",
+      "mechanics": [
+        "fatigued",
+        "fortuneLock"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-008",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "Gift of the Spider-God",
+      "lore": "Little Waaagh",
+      "cn": 3,
+      "range": "soi",
+      "target": "gobelins des forêts dans zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Donne Venin à 0, ou à −10 si déjà présent.",
+      "mechanics": [
+        "species",
+        "venom"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-009",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "Gork’ll Fix It",
+      "lore": "Little Waaagh",
+      "cn": 5,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Un Exténué pendant la durée.",
+      "mechanics": [
+        "fatigued"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-010",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "The Great Green Spite",
+      "lore": "Little Waaagh",
+      "cn": 20,
+      "range": "BFM yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Les touches des gobelins contre les ennemis dans la zone deviennent critiques ; hobgobelins si chamane hobgobelin.",
+      "mechanics": [
+        "species",
+        "autoCritical"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-011",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "Itchy Nuisance",
+      "lore": "Little Waaagh",
+      "cn": 4,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "−1 DR général, −2 si armure métallique.",
+      "mechanics": [
+        "globalPenalty",
+        "material"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-012",
+      "kind": "spell",
+      "book": "L12",
+      "page": 98,
+      "nameEn": "Mork Wants Ya!",
+      "lore": "Little Waaagh",
+      "cn": 9,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Force opposée à 80 ou dégâts 10 puis chute de 2d10 yards.",
+      "mechanics": [
+        "opposition",
+        "damage",
+        "fall"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-013",
+      "kind": "spell",
+      "book": "L12",
+      "page": 99,
+      "nameEn": "Night Shroud",
+      "lore": "Little Waaagh",
+      "cn": 5,
+      "range": "BF yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Aveuglé et Perception ou À terre pour se déplacer ; Vision nocturne/noir exemptées.",
+      "mechanics": [
+        "zone",
+        "blinded",
+        "prone",
+        "traitFilter"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-014",
+      "kind": "spell",
+      "book": "L12",
+      "page": 99,
+      "nameEn": "Nikkit!",
+      "lore": "Little Waaagh",
+      "cn": 3,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Vol distant avec Escamotage 55 ; Perception peut voir le butin revenir.",
+      "mechanics": [
+        "remoteSkill",
+        "theftMJ"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-015",
+      "kind": "spell",
+      "book": "L12",
+      "page": 99,
+      "nameEn": "Sneaky Stabbin’",
+      "lore": "Little Waaagh",
+      "cn": 8,
+      "range": "soi",
+      "target": "orques/gobelins dans zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Les frappes gagnent Empaleuse et Pénétrante.",
+      "mechanics": [
+        "weaponQualities",
+        "species"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-016",
+      "kind": "spell",
+      "book": "L12",
+      "page": 99,
+      "nameEn": "Vindictive Glare",
+      "lore": "Little Waaagh",
+      "cn": 7,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +4 ; cible blessée : Calme à 0 ou Sonné.",
+      "mechanics": [
+        "projectile",
+        "secondaryTest",
+        "stunned"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-017",
+      "kind": "spell",
+      "book": "L12",
+      "page": 100,
+      "nameEn": "‘Ard as Nails",
+      "lore": "Big Waaagh",
+      "cn": 3,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Haine des ennemis, pénalités des États/maladies ignorées, +2 DR aux Tests d’Endurance.",
+      "mechanics": [
+        "hatred",
+        "ignorePenalties",
+        "testBonus"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-018",
+      "kind": "spell",
+      "book": "L12",
+      "page": 100,
+      "nameEn": "Bash ‘Em Lads!",
+      "lore": "Big Waaagh",
+      "cn": 6,
+      "range": "BFM yards",
+      "target": "alliés admissibles",
+      "duration": "instantanée",
+      "effectSummaryFr": "Répartit les Avantages selon les DR ; adaptation à l’Avantage de groupe et variante Lustria.",
+      "mechanics": [
+        "advantage",
+        "species",
+        "distribution"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5.",
+      "otherSources": [
+        {
+          "book": "L07",
+          "page": 183,
+          "variation": "Distribution selon 1+DR, espèces orque/gobelin."
+        }
+      ]
+    },
+    {
+      "id": "D0b-L12-019",
+      "kind": "spell",
+      "book": "L12",
+      "page": 100,
+      "nameEn": "Brainbursta",
+      "lore": "Big Waaagh",
+      "cn": 5,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "À terre et Sonné selon DR ; si Sonné dépasse BE, Calme +20 ou critique tête.",
+      "mechanics": [
+        "conditions",
+        "threshold",
+        "critical"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-020",
+      "kind": "spell",
+      "book": "L12",
+      "page": 100,
+      "nameEn": "‘Eadbutt",
+      "lore": "Big Waaagh",
+      "cn": 6,
+      "range": "BFM yards",
+      "target": "Vous selon cartouche, adversaire selon prose",
+      "duration": "BFM Rounds selon cartouche",
+      "effectSummaryFr": "Projectile à la tête +1, +6 si cible harmonisée/percevant la magie ; cartouche différent de Lustria.",
+      "mechanics": [
+        "projectile",
+        "head",
+        "talentFilter",
+        "sourceConflict"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5.",
+      "otherSources": [
+        {
+          "book": "L07",
+          "page": 183,
+          "variation": "Cible 1, durée instantanée."
+        }
+      ]
+    },
+    {
+      "id": "D0b-L12-021",
+      "kind": "spell",
+      "book": "L12",
+      "page": 100,
+      "nameEn": "‘Ere We Go!",
+      "lore": "Big Waaagh",
+      "cn": 7,
+      "range": "soi",
+      "target": "orques dans zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Deux Avantages réservés à la mêlée ; hobgobelins à la place si lanceur hobgobelin ; variante de groupe.",
+      "mechanics": [
+        "advantage",
+        "species"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-022",
+      "kind": "spell",
+      "book": "L12",
+      "page": 100,
+      "nameEn": "The Evil Sun",
+      "lore": "Big Waaagh",
+      "cn": 12,
+      "range": "BFM yards",
+      "target": "zone Volonté yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Dégâts 8+DR par Round ; Endurance ou Enflammé.",
+      "mechanics": [
+        "zone",
+        "periodicDamage",
+        "secondaryTest"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-023",
+      "kind": "spell",
+      "book": "L12",
+      "page": 100,
+      "nameEn": "Fists of Gork",
+      "lore": "Big Waaagh",
+      "cn": 2,
+      "range": "soi",
+      "target": "soi",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Abandonne objets tenus ; seules attaques des poings, mêlée bagarre 55 et dégâts +9.",
+      "mechanics": [
+        "weaponReplacement",
+        "skillOverride"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5.",
+      "otherSources": [
+        {
+          "book": "L07",
+          "page": 183,
+          "variation": "Même attaque des poings."
+        }
+      ]
+    },
+    {
+      "id": "D0b-L12-024",
+      "kind": "spell",
+      "book": "L12",
+      "page": 101,
+      "nameEn": "Foot of Gork",
+      "lore": "Big Waaagh",
+      "cn": 10,
+      "range": "BFM yards",
+      "target": "zone BFM yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "À terre et dégâts 8 sans armure ; Esquive −10 réduit à 4.",
+      "mechanics": [
+        "zone",
+        "ignoreAP",
+        "prone",
+        "secondaryTest"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-025",
+      "kind": "spell",
+      "book": "L12",
+      "page": 101,
+      "nameEn": "Gaze of Mork",
+      "lore": "Big Waaagh",
+      "cn": 5,
+      "range": "Volonté yards",
+      "target": "ligne",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +4 sur les vivants de la ligne et bâtiments à Endurance limitée.",
+      "mechanics": [
+        "lineMJ",
+        "projectile",
+        "building"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-026",
+      "kind": "spell",
+      "book": "L12",
+      "page": 101,
+      "nameEn": "The Hand of Gork",
+      "lore": "Big Waaagh",
+      "cn": 9,
+      "range": "Volonté yards",
+      "target": "1d10 créatures groupées",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Déplace un groupe dans la portée ; entrée immédiate en mêlée donne Avantage.",
+      "mechanics": [
+        "movementMJ",
+        "multiTarget",
+        "advantage"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L12-027",
+      "kind": "spell",
+      "book": "L12",
+      "page": 101,
+      "nameEn": "Mork Save Us!",
+      "lore": "Big Waaagh",
+      "cn": 8,
+      "range": "BFM yards",
+      "target": "alliés admissibles",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Donne Protection 10 ou améliore la protection existante selon les DR ; limite différente de Lustria.",
+      "mechanics": [
+        "ward",
+        "species",
+        "sourceConflict"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5.",
+      "otherSources": [
+        {
+          "book": "L07",
+          "page": 183,
+          "variation": "Protection peut atteindre 7+, contrairement au texte L12."
+        }
+      ]
+    },
+    {
+      "id": "D0b-L12-028",
+      "kind": "spell",
+      "book": "L12",
+      "page": 101,
+      "nameEn": "WAAAGH!",
+      "lore": "Big Waaagh",
+      "cn": 12,
+      "range": "soi",
+      "target": "tous orques/gobelins apparentés dans zone Volonté yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Avantage pour mêlée/tir, retrait de tous les Brisé, +2 DR Calme/Endurance ; alliés et ennemis concernés.",
+      "mechanics": [
+        "advantage",
+        "removeBroken",
+        "testBonus",
+        "species"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L16-001",
+      "kind": "ritual",
+      "book": "L16",
+      "page": 86,
+      "nameEn": "Rouse Idol of Gork (or Mork)",
+      "lore": "Waaagh Magic",
+      "cn": 100,
+      "range": "idole présente",
+      "target": "1 idole",
+      "duration": "non précisée",
+      "effectSummaryFr": "Anime une idole Grande ; CN200 Énorme, CN400 Monstrueuse ; Endurance à chaque Round de canalisation ou perte définitive de Force/Endurance.",
+      "mechanics": [
+        "ritual",
+        "construct",
+        "permanentCost"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-001",
+      "kind": "spell",
+      "book": "L17",
+      "page": 26,
+      "nameEn": "Belligerence of the Bloodmarsh",
+      "lore": "Arcane",
+      "cn": 2,
+      "range": "BFM yards",
+      "target": "1 bête des marais",
+      "duration": "instantanée",
+      "effectSummaryFr": "Donne le Trait Frénésie si absent.",
+      "mechanics": [
+        "creatureFilter",
+        "grantTrait"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-002",
+      "kind": "spell",
+      "book": "L17",
+      "page": 26,
+      "nameEn": "Collapse Construct",
+      "lore": "Arcane",
+      "cn": 6,
+      "range": "BFM yards",
+      "target": "1 construction",
+      "duration": "instantanée",
+      "effectSummaryFr": "Opposition Volonté/Endurance ; victoire rend la créature inerte.",
+      "mechanics": [
+        "opposition",
+        "construct"
+      ],
+      "similarExistingContract": "Bannissement",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-003",
+      "kind": "spell",
+      "book": "L17",
+      "page": 26,
+      "nameEn": "Decipher Curse",
+      "lore": "Arcane",
+      "cn": 4,
+      "range": "Volonté yards",
+      "target": "objet",
+      "duration": "instantanée",
+      "effectSummaryFr": "Identifie bienfait, malédiction et déclencheur ; Intelligence ou exposition modérée à la Corruption.",
+      "mechanics": [
+        "informationMJ",
+        "secondaryTest",
+        "corruption"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-004",
+      "kind": "spell",
+      "book": "L17",
+      "page": 26,
+      "nameEn": "Disrupt Magic",
+      "lore": "Arcane",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "1 lanceur",
+      "duration": "instantanée",
+      "effectSummaryFr": "Avant achèvement d’une canalisation ou d’un rituel : Volonté opposée, puis échec du sort et incident mineur si victoire.",
+      "mechanics": [
+        "reactionTiming",
+        "opposition",
+        "miscast"
+      ],
+      "similarExistingContract": "Drain de Magie",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-005",
+      "kind": "spell",
+      "book": "L17",
+      "page": 26,
+      "nameEn": "Fly-Infested Rotweed",
+      "lore": "Arcane",
+      "cn": 4,
+      "range": "BFM yards",
+      "target": "1 bête des marais",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Donne Perturbant.",
+      "mechanics": [
+        "creatureFilter",
+        "grantTrait"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-006",
+      "kind": "spell",
+      "book": "L17",
+      "page": 26,
+      "nameEn": "Lifebloom Silt",
+      "lore": "Arcane",
+      "cn": 4,
+      "range": "BFM yards",
+      "target": "1 bête des marais",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Double les Blessures régénérées.",
+      "mechanics": [
+        "creatureFilter",
+        "regeneration"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-007",
+      "kind": "spell",
+      "book": "L17",
+      "page": 27,
+      "nameEn": "Silence",
+      "lore": "Arcane",
+      "cn": 4,
+      "range": "soi",
+      "target": "zone BFM yards",
+      "duration": "BFM minutes",
+      "effectSummaryFr": "Zone sans sons traversants ni internes ; lancement de sorts à −3 DR.",
+      "mechanics": [
+        "zone",
+        "sound",
+        "castingPenalty"
+      ],
+      "similarExistingContract": "Silence (catalogue p.111, autre formulation)",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5.",
+      "nameCollision": "Le catalogue nomme Silence un sort des Ombres p.111 ; cette entrée arcane p.27 possède CN4 et autre zone."
+    },
+    {
+      "id": "D0b-L17-008",
+      "kind": "spell",
+      "book": "L17",
+      "page": 27,
+      "nameEn": "Succour Magical Servant",
+      "lore": "Arcane",
+      "cn": 2,
+      "range": "BFM yards",
+      "target": "construction ou familier propre",
+      "duration": "instantanée",
+      "effectSummaryFr": "Soigne BE Blessures, deux fois BE avec +3 DR.",
+      "mechanics": [
+        "healing",
+        "ownership",
+        "overcast"
+      ],
+      "similarExistingContract": "Don de Vie",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-009",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 28,
+      "nameEn": "Bind Monstrous Beast",
+      "lore": "Beasts",
+      "cn": "Blessures de la bête",
+      "range": "conditions de site ; voir résumé",
+      "target": "bête au repaire",
+      "duration": "BFM jours",
+      "effectSummaryFr": "Repaire à portée de Volonté ; sacrifices d’Endurance/Exténué à la canalisation puis Volonté opposée pour contrôler.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-010",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 28,
+      "nameEn": "Bind Spirit Within Power Stone",
+      "lore": "Eight Winds",
+      "cn": 32,
+      "range": "conditions de site ; voir résumé",
+      "target": "esprit et pierre",
+      "duration": "spéciale",
+      "effectSummaryFr": "Lie un esprit mineur à une pierre ; CN divisé par deux à jonction ou fulcrum ; bénéfices selon l’esprit.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-011",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 28,
+      "nameEn": "Carve Ogham Stone",
+      "lore": "Any",
+      "cn": 50,
+      "range": "conditions de site ; voir résumé",
+      "target": "monolithe",
+      "duration": "non précisée",
+      "effectSummaryFr": "Prépare un granite gravé avec Langue Magique et Art ; propriété attraction, confinement ou atténuation ; fatigue possible par Round.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-012",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 28,
+      "nameEn": "Create Power Stone",
+      "lore": "Eight Winds",
+      "cn": 64,
+      "range": "conditions de site ; voir résumé",
+      "target": "1 pierre",
+      "duration": "permanente",
+      "effectSummaryFr": "Deux apprentis, 1d10 heures de préparation ; CN divisé par deux à jonction ou fulcrum ; crée une pierre du Vent.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-013",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 29,
+      "nameEn": "Conjuration of the Bloody Hidesman",
+      "lore": "Beasts",
+      "cn": 85,
+      "range": "conditions de site ; voir résumé",
+      "target": "élémentaire incarné",
+      "duration": "BFM jours",
+      "effectSummaryFr": "Totem de huit grands animaux et forte saturation ; contrôle Volonté/Force, fatigue de canalisation, souffle de Ghur si échec.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-014",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 29,
+      "nameEn": "Conjuration of the Incarnate Elemental of Death",
+      "lore": "Death",
+      "cn": 90,
+      "range": "conditions de site ; voir résumé",
+      "target": "élémentaire incarné",
+      "duration": "BFM jours",
+      "effectSummaryFr": "Sablier de poudre d’os royaux et saturation requise ; contrôle ; échec : dégâts directs/À terre autour du lanceur.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-015",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 30,
+      "nameEn": "Conjuration of Jack O’ Cinders",
+      "lore": "Fire",
+      "cn": 85,
+      "range": "conditions de site ; voir résumé",
+      "target": "élémentaire incarné",
+      "duration": "BFM jours",
+      "effectSummaryFr": "Grand brasier et saturation requise ; contrôle ; échec donne quatre Enflammé aux personnes proches.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-016",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 30,
+      "nameEn": "Corrupt Waystone",
+      "lore": "Dark Lore",
+      "cn": 60,
+      "range": "conditions de site ; voir résumé",
+      "target": "pierre gardienne",
+      "duration": "non précisée",
+      "effectSummaryFr": "Corrompt sa fonction et perturbe le flux des lignes ; fatigue de canalisation ; conséquences environnementales MJ.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-017",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 30,
+      "nameEn": "Create Construct",
+      "lore": "Any",
+      "cn": 60,
+      "range": "conditions de site ; voir résumé",
+      "target": "1 construction",
+      "duration": "non précisée",
+      "effectSummaryFr": "Forme matérielle préalable ; coût de CN modifié par Traits ; perte définitive de Force/Endurance possible à chaque Round.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-018",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 31,
+      "nameEn": "Minor Elementals",
+      "lore": "Any",
+      "cn": "deux fois le CN de construction",
+      "range": "conditions de site ; voir résumé",
+      "target": "1 élémentaire mineur",
+      "duration": "BFM jours",
+      "effectSummaryFr": "Variante de construction sans coque, Taille Petit, Magique et Imprégnation du Vent ; contrôle opposé ; durée accrue sous saturation.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-019",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 31,
+      "nameEn": "Create Familiar",
+      "lore": "Any",
+      "cn": 45,
+      "range": "conditions de site ; voir résumé",
+      "target": "1 familier",
+      "duration": "permanente",
+      "effectSummaryFr": "Sacrifice définitif d’une Blessure, Destin ou Résilience ; vaisseau et modificateurs de forme ; deuxième familier CN80 et sacrifice doublé.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-020",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 32,
+      "nameEn": "Create Waystone Property",
+      "lore": "Any",
+      "cn": 40,
+      "range": "conditions de site ; voir résumé",
+      "target": "pierre d’une ligne planifiée",
+      "duration": "non précisée",
+      "effectSummaryFr": "Crée amplification, confinement, atténuation ou réfraction ; fatigue de canalisation et risque de perturber le réseau.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-021",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 32,
+      "nameEn": "Cursecraft",
+      "lore": "Any",
+      "cn": "50 ou 25 traditions sombres",
+      "range": "conditions de site ; voir résumé",
+      "target": "objet",
+      "duration": "permanente",
+      "effectSummaryFr": "Bienfait associé à une malédiction choisie avec MJ ; Blessure sacrifiée définitivement et exposition modérée.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-022",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 32,
+      "nameEn": "Imbue Staff",
+      "lore": "Eight Winds",
+      "cn": 35,
+      "range": "conditions de site ; voir résumé",
+      "target": "bâton",
+      "duration": "permanente",
+      "effectSummaryFr": "Chance ou Résolution sacrifiée ; transforme le bâton en bâton enchanté.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-023",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 32,
+      "nameEn": "Invocate Daemon",
+      "lore": "Daemonology",
+      "cn": "Volonté du démon",
+      "range": "conditions de site ; voir résumé",
+      "target": "démon dans octagramme",
+      "duration": "BI jours",
+      "effectSummaryFr": "Octagramme préalable, nom et sacrifices ; manifestation sans obéissance garantie ; coût corporel possible chaque Round.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-024",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 33,
+      "nameEn": "Materialise the Living Swamp",
+      "lore": "Death/Life/Shadows/Hedgecraft/Witchcraft",
+      "cn": 40,
+      "range": "conditions de site ; voir résumé",
+      "target": "bête des marais",
+      "duration": "BFM jours",
+      "effectSummaryFr": "Pierre-cœur et matière organique, saturation requise ; perte définitive possible par Round ; créature contrôlée et révocable.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-025",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 33,
+      "nameEn": "Remove Curse",
+      "lore": "Any",
+      "cn": 40,
+      "range": "conditions de site ; voir résumé",
+      "target": "objet maudit identifié",
+      "duration": "permanente",
+      "effectSummaryFr": "Après identification, retire bienfaits et maléfices ; conserve arme magique ; Calme ou Corruption par Round.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-026",
+      "kind": "ritual",
+      "book": "L17",
+      "page": 33,
+      "nameEn": "The Crossed Scythes",
+      "lore": "Death",
+      "cn": "Volonté de l’entité",
+      "range": "conditions de site ; voir résumé",
+      "target": "seuil gravé",
+      "duration": "non précisée",
+      "effectSummaryFr": "Gravure étendue puis rituel ; empêche la sortie du mort-vivant : Calme ou Exténué, Endurance et Blessures pour Construction.",
+      "mechanics": [
+        "ritual",
+        "requirements",
+        "sacrifice",
+        "consequence"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-027",
+      "kind": "spell",
+      "book": "L17",
+      "page": 217,
+      "nameEn": "A Bite of Midges",
+      "lore": "Mòna — Marsh Magic",
+      "cn": 5,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Dégâts +2 en fin de Round aux sang-chauds ; Endurance +20 ou Aveuglé/Exténué.",
+      "mechanics": [
+        "zone",
+        "periodicDamage",
+        "species",
+        "condition"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-028",
+      "kind": "spell",
+      "book": "L17",
+      "page": 217,
+      "nameEn": "Despondent Slough",
+      "lore": "Mòna — Marsh Magic",
+      "cn": 6,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "jusqu’au retrait des entraves",
+      "effectSummaryFr": "Enchevêtré Force Intelligence, accru par deux DR ; Calme +20 chaque Round entravé ou Exténué.",
+      "mechanics": [
+        "entangled",
+        "periodicTest"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-029",
+      "kind": "spell",
+      "book": "L17",
+      "page": 217,
+      "nameEn": "Inculcate Mizzle",
+      "lore": "Mòna — Marsh Magic",
+      "cn": 9,
+      "range": "soi",
+      "target": "zone BFM miles",
+      "duration": "BFM heures",
+      "effectSummaryFr": "Pluie froide : Endurance +40 ou Exténué hors Fimir ; −2 DR Poudre noire, Feu et entrée en Frénésie.",
+      "mechanics": [
+        "weatherMJ",
+        "species",
+        "testPenalty"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-030",
+      "kind": "spell",
+      "book": "L17",
+      "page": 217,
+      "nameEn": "Mystic Mist",
+      "lore": "Mòna — Marsh Magic",
+      "cn": 4,
+      "range": "Volonté yards",
+      "target": "zone BFM yards",
+      "duration": "BFM Rounds",
+      "effectSummaryFr": "Même effet que Miasme mystifiant mais CN4 pour Mòna.",
+      "mechanics": [
+        "variant"
+      ],
+      "similarExistingContract": "Miasme mystifiant",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-031",
+      "kind": "spell",
+      "book": "L17",
+      "page": 217,
+      "nameEn": "O Mere Be More",
+      "lore": "Mòna — Marsh Magic",
+      "cn": 20,
+      "range": "soi",
+      "target": "zone Volonté yards",
+      "duration": "BFM années",
+      "effectSummaryFr": "En bordure de marais, étend celui-ci ; le texte le présente comme un travail encore imparfait.",
+      "mechanics": [
+        "terrainMJ",
+        "unperfected"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-032",
+      "kind": "spell",
+      "book": "L17",
+      "page": 217,
+      "nameEn": "Turned Around",
+      "lore": "Mòna — Marsh Magic",
+      "cn": 4,
+      "range": "BFM yards",
+      "target": "1",
+      "duration": "BFM heures",
+      "effectSummaryFr": "La cible ne doit pas savoir qu’elle est maudite ; −3 DR Navigation dans un marais.",
+      "mechanics": [
+        "awarenessFact",
+        "navigationPenalty"
+      ],
+      "similarExistingContract": null,
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "id": "D0b-L17-033",
+      "kind": "spell",
+      "book": "L17",
+      "page": 218,
+      "nameEn": "Skin of Bone and Bark",
+      "lore": "Life + Beasts",
+      "cn": "1 Ghyran et 3 Ghur",
+      "range": "l’un des deux lanceurs",
+      "target": "1",
+      "duration": "plus haut BFM Rounds",
+      "effectSummaryFr": "Deux magisters contribuent dans le même Round ; +20 Endurance au bénéficiaire.",
+      "mechanics": [
+        "jointCasting",
+        "twoWinds",
+        "statModifier"
+      ],
+      "similarExistingContract": "Écorce",
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    }
+  ],
+  "runes": [
+    {
+      "id": "D0b-R-001",
+      "name": "Rune of Cleaving",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 10,
+      "effectSummaryFr": "+1 dégât par rune.",
+      "mechanics": [
+        "damage"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-002",
+      "name": "Rune of Retribution",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 12,
+      "effectSummaryFr": "+20 à la gravité critique par rune.",
+      "mechanics": [
+        "criticalSeverity"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-003",
+      "name": "Rune of Cutting",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 10,
+      "effectSummaryFr": "Ignore deux PA par rune à la touche.",
+      "mechanics": [
+        "ignoreAP"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-004",
+      "name": "Rune of Daunting",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 14,
+      "effectSummaryFr": "Arme dégainée : Peur selon nombre de runes, ajout à l’indice préexistant.",
+      "mechanics": [
+        "fear"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-005",
+      "name": "Rune of Fire",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 16,
+      "effectSummaryFr": "Lumière et Enflammé sur dégâts ; deux/trois runes permettent une attaque à distance de zone sans dégâts mais avec Enflammé.",
+      "mechanics": [
+        "light",
+        "ablaze",
+        "rangedAttack"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-006",
+      "name": "Rune of Fury",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 15,
+      "effectSummaryFr": "Rangs de Maniement de deux armes ; l’arme compte comme deux pour ses attaques.",
+      "mechanics": [
+        "talent",
+        "twoWeapons"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-007",
+      "name": "Grudge Rune",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 10,
+      "effectSummaryFr": "+10 pour toucher et +1 dégât par rune contre l’ennemi de rancune de sang nommé ; changement possible à fin d’aventure après sa mort.",
+      "mechanics": [
+        "namedTarget",
+        "grudge",
+        "attackBonus"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-008",
+      "name": "Rune of Might",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 10,
+      "effectSummaryFr": "+3 dégâts par rune contre une cible plus grande.",
+      "mechanics": [
+        "size",
+        "damage"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-009",
+      "name": "Rune of Speed",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 10,
+      "effectSummaryFr": "+10 Initiative par rune tant que l’arme est portée au combat.",
+      "mechanics": [
+        "initiative"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-010",
+      "name": "Rune of Striking",
+      "book": "L15",
+      "page": 125,
+      "type": "arme",
+      "slRequired": 14,
+      "effectSummaryFr": "+10 de mêlée spécialisée par rune, pour cette arme seulement.",
+      "mechanics": [
+        "skillBonus",
+        "weaponFilter"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-011",
+      "name": "Master Rune of Alaric the Mad",
+      "book": "L15",
+      "page": 125,
+      "type": "arme maître",
+      "slRequired": 30,
+      "effectSummaryFr": "Ignore PA et autres bénéfices de l’armure.",
+      "mechanics": [
+        "ignoreArmor"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-012",
+      "name": "Master Rune of Breaking",
+      "book": "L15",
+      "page": 125,
+      "type": "arme maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Attaque ou opposition de mêlée réussie détruit l’arme magique utilisée par l’adversaire dans son Test.",
+      "mechanics": [
+        "opposition",
+        "destroyWeapon"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-013",
+      "name": "Master Rune of Flight",
+      "book": "L15",
+      "page": 126,
+      "type": "arme maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Arme de jet portée 3×BF, Précise et retour en main après dégâts.",
+      "mechanics": [
+        "rangedAttack",
+        "returnWeapon"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-014",
+      "name": "Master Rune of Skalf Blackhammer",
+      "book": "L15",
+      "page": 126,
+      "type": "arme maître",
+      "slRequired": 28,
+      "effectSummaryFr": "Toute attaque réussie compte comme critique.",
+      "mechanics": [
+        "autoCritical"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-015",
+      "name": "Master Rune of the Slayer",
+      "book": "L15",
+      "page": 126,
+      "type": "arme maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Contre le type choisi : inversion des jets d’attaque et de gravité critique.",
+      "mechanics": [
+        "enemyType",
+        "reverseDice"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-016",
+      "name": "Master Rune of Snorri Spangelhelm",
+      "book": "L15",
+      "page": 126,
+      "type": "arme maître",
+      "slRequired": 22,
+      "effectSummaryFr": "Échec de mêlée remplacé par réussite à zéro DR ; l’opposition peut encore gagner.",
+      "mechanics": [
+        "testOverride"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-017",
+      "name": "Master Rune of Haste",
+      "book": "L15",
+      "page": 126,
+      "type": "arme maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Rapide avec −30 à l’opposition en mêlée.",
+      "mechanics": [
+        "weaponQuality",
+        "defensePenalty"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-018",
+      "name": "Rune of Force",
+      "book": "L15",
+      "page": 126,
+      "type": "armure",
+      "slRequired": 14,
+      "effectSummaryFr": "Charge réussie : dégâts supplémentaires selon PA de la meilleure localisation, par rune ; le corps du texte nomme Impact.",
+      "mechanics": [
+        "charge",
+        "armorFormula"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-019",
+      "name": "Rune of Fortitude",
+      "book": "L15",
+      "page": 126,
+      "type": "armure",
+      "slRequired": 14,
+      "effectSummaryFr": "+10 Endurance par rune.",
+      "mechanics": [
+        "statModifier"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-020",
+      "name": "Rune of Iron",
+      "book": "L15",
+      "page": 126,
+      "type": "armure",
+      "slRequired": 12,
+      "effectSummaryFr": "+2 Blessures par rune ; retrait enlève ces Blessures et peut provoquer un critique.",
+      "mechanics": [
+        "maxWounds",
+        "unequipCritical"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-021",
+      "name": "Rune of Resistance",
+      "book": "L15",
+      "page": 126,
+      "type": "armure",
+      "slRequired": 12,
+      "effectSummaryFr": "+10 par rune pour opposer une attaque de mêlée.",
+      "mechanics": [
+        "defenseBonus"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-022",
+      "name": "Rune of Shielding",
+      "book": "L15",
+      "page": 126,
+      "type": "armure",
+      "slRequired": 12,
+      "effectSummaryFr": "Réduit de deux par rune les dégâts des tirs et sorts ; zéro ne cause pas de Blessure minimale.",
+      "mechanics": [
+        "damageReduction",
+        "minimumWoundException"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-023",
+      "name": "Rune of Stone",
+      "book": "L15",
+      "page": 126,
+      "type": "armure",
+      "slRequired": 10,
+      "effectSummaryFr": "+1 PA par rune ; armure portant seulement ces runes exemptée de Fierté.",
+      "mechanics": [
+        "armor",
+        "prideException"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-024",
+      "name": "Master Rune of Adamant",
+      "book": "L15",
+      "page": 126,
+      "type": "armure maître",
+      "slRequired": 22,
+      "effectSummaryFr": "Inversion possible du jet de gravité critique reçu.",
+      "mechanics": [
+        "reverseCritical"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-025",
+      "name": "Master Rune of Gromril",
+      "book": "L15",
+      "page": 126,
+      "type": "armure maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Supprime Faiblesses ; armure indestructible sauf défaut runique et résistante aux réductions de PA ; dégâts qui ignorent l’armure restent possibles.",
+      "mechanics": [
+        "armor",
+        "immunity",
+        "exception"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-026",
+      "name": "Master Rune of Steel",
+      "book": "L15",
+      "page": 127,
+      "type": "armure maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Dix Blessures perdues au maximum par instance de dégâts.",
+      "mechanics": [
+        "damageCap"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-027",
+      "name": "Rune of Clear Sight",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 8,
+      "effectSummaryFr": "À l’œil : ignore brumes ordinaires ; deux runes brumes magiques ; trois obscurité totale.",
+      "mechanics": [
+        "vision"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-028",
+      "name": "Rune of Truth",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 8,
+      "effectSummaryFr": "Au contact détecte contrefaçon ; deux détectent illusion, trois révèlent le procédé.",
+      "mechanics": [
+        "informationMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-029",
+      "name": "Rune of Far Sight",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 10,
+      "effectSummaryFr": "Vision à un, deux ou quatre miles selon nombre de runes.",
+      "mechanics": [
+        "vision"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-030",
+      "name": "Rune of the Furnace",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 10,
+      "effectSummaryFr": "Pas d’Enflammé ni exposition à chaleur ; réduction de quatre dégâts de feu par rune.",
+      "mechanics": [
+        "immunity",
+        "damageReduction"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-031",
+      "name": "Rune of Luck",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 10,
+      "effectSummaryFr": "Chance au-delà du maximum par rune ; retrait enlève ces points et récupération à la séance suivante seulement.",
+      "mechanics": [
+        "fortune",
+        "unequip",
+        "sessionQuota"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-032",
+      "name": "Rune of Restoration",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 10,
+      "effectSummaryFr": "Après une nuit en le portant, soin égal à BE par rune.",
+      "mechanics": [
+        "healing",
+        "campaignTime"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-033",
+      "name": "Rune of Spellbreaking",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 10,
+      "effectSummaryFr": "Dissipation par opposition de Maîtrise des runes contre un lancement visible dans Volonté yards ; une activation par rune et combat.",
+      "mechanics": [
+        "dispel",
+        "reaction",
+        "quota"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-034",
+      "name": "Rune of Spelleating",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 10,
+      "effectSummaryFr": "Après dissipation par Bris de sort, interdit le même sort au lanceur pour BFM Rounds, heures ou semaines selon nombre de runes.",
+      "mechanics": [
+        "spellLock",
+        "durationScale"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-035",
+      "name": "Rune of Warding",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman",
+      "slRequired": 15,
+      "effectSummaryFr": "−10 par rune aux attaques et lancements ciblant le porteur.",
+      "mechanics": [
+        "testPenalty"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-036",
+      "name": "Master Rune of Balance",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Inverser lancement ennemi visible ou opposition runique dans sa portée.",
+      "mechanics": [
+        "reverseDice",
+        "dispel"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-037",
+      "name": "Master Rune of Industry",
+      "book": "L15",
+      "page": 127,
+      "type": "talisman maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Une activité supplémentaire entre aventures.",
+      "mechanics": [
+        "endeavour"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-038",
+      "name": "Master Rune of Kingship",
+      "book": "L15",
+      "page": 128,
+      "type": "talisman maître",
+      "slRequired": 24,
+      "effectSummaryFr": "Inverser Charme/Intimidation/Commandement visant un nain ou groupe majoritairement nain.",
+      "mechanics": [
+        "reverseDice",
+        "species"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-039",
+      "name": "Master Rune of Passage",
+      "book": "L15",
+      "page": 128,
+      "type": "talisman maître",
+      "slRequired": 20,
+      "effectSummaryFr": "À la marche traverse solides immobiles ; pas animaux/morts-vivants, ni fin de déplacement dans un solide.",
+      "mechanics": [
+        "movementMJ",
+        "collisionException"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-040",
+      "name": "Master Rune of Spite",
+      "book": "L15",
+      "page": 128,
+      "type": "talisman maître",
+      "slRequired": 24,
+      "effectSummaryFr": "Après dégâts de mêlée reçus, agresseur subit 2d10 dégâts sur localisation aléatoire avec protections normales.",
+      "mechanics": [
+        "retaliation"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-041",
+      "name": "Rune of Alarm",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 8,
+      "effectSummaryFr": "Détecte entrée d’une créature Petite ou supérieure ; son, phrase ou message télépathique selon nombre de runes.",
+      "mechanics": [
+        "zone",
+        "detection",
+        "size"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-042",
+      "name": "Rune of Battle",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 18,
+      "effectSummaryFr": "Un Avantage initial par rune aux alliés affectés.",
+      "mechanics": [
+        "battleStart",
+        "advantage"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-043",
+      "name": "Rune of Courage",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 14,
+      "effectSummaryFr": "+10 de Psychologie par rune aux alliés affectés.",
+      "mechanics": [
+        "psychology"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-044",
+      "name": "Rune of Discovery",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 8,
+      "effectSummaryFr": "Lueur si matériau choisi présent dans la portée.",
+      "mechanics": [
+        "resourceMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-045",
+      "name": "Rune of Enemy Detection",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 8,
+      "effectSummaryFr": "Lueur si créature répondant à la description choisie entre dans la portée.",
+      "mechanics": [
+        "detection",
+        "factsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-046",
+      "name": "Rune of Locking",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 6,
+      "effectSummaryFr": "Protège serrures contre crochetage/force ; deux contre magie, trois même contre la clé sauf créateur/descendant ; contourner porte reste possible.",
+      "mechanics": [
+        "lock",
+        "tiers",
+        "exception"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-047",
+      "name": "Rune of Purification",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 10,
+      "effectSummaryFr": "+20 par rune contre toxines de l’air ou de l’eau.",
+      "mechanics": [
+        "resistance"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-048",
+      "name": "Rune of Retribution",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 8,
+      "effectSummaryFr": "Un Enflammé par rune à qui profane les morts dans la zone.",
+      "mechanics": [
+        "zone",
+        "triggerMJ",
+        "ablaze"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-049",
+      "name": "Rune of Sanctuary",
+      "book": "L15",
+      "page": 128,
+      "type": "protection",
+      "slRequired": 10,
+      "effectSummaryFr": "−1 DR par rune aux sorts visant le porteur ou des alliés dans Volonté yards.",
+      "mechanics": [
+        "castingPenalty",
+        "zone"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-050",
+      "name": "Rune of Slowness",
+      "book": "L15",
+      "page": 129,
+      "type": "protection",
+      "slRequired": 12,
+      "effectSummaryFr": "Réduit la course adverse pour engager un allié : quatre yards par rune, minimum marche.",
+      "mechanics": [
+        "movement",
+        "minimum"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-051",
+      "name": "Rune of Verminkill",
+      "book": "L15",
+      "page": 129,
+      "type": "protection",
+      "slRequired": 10,
+      "effectSummaryFr": "Rongeurs/skavens et apparentés perdent deux Blessures directes par rune à l’entrée ou au début du Tour.",
+      "mechanics": [
+        "species",
+        "zone",
+        "periodicWounds"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-052",
+      "name": "Master Rune of Expel Chaos",
+      "book": "L15",
+      "page": 129,
+      "type": "protection maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Inversion des résistances et tables de Corruption ; bonus d’Avantage virtuel contre Démon Instable.",
+      "mechanics": [
+        "corruption",
+        "reverseDice",
+        "unstable"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-053",
+      "name": "Master Rune of Grimnir",
+      "book": "L15",
+      "page": 129,
+      "type": "protection maître",
+      "slRequired": 22,
+      "effectSummaryFr": "Inverser les tirs adverses contre alliés affectés.",
+      "mechanics": [
+        "reverseDice"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-054",
+      "name": "Master Rune of Grungni",
+      "book": "L15",
+      "page": 129,
+      "type": "protection maître",
+      "slRequired": 22,
+      "effectSummaryFr": "Inverser les lancements adverses contre alliés affectés.",
+      "mechanics": [
+        "reverseDice"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-055",
+      "name": "Master Rune of Stromni Redbeard",
+      "book": "L15",
+      "page": 129,
+      "type": "protection maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Avantage initial allié ; portée douze yards, vingt-quatre sur bannière.",
+      "mechanics": [
+        "advantage",
+        "zone"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-056",
+      "name": "Master Rune of Valaya",
+      "book": "L15",
+      "page": 129,
+      "type": "protection maître",
+      "slRequired": 22,
+      "effectSummaryFr": "+1 Résistance magique ; Bris de sort étendu à la ligne de vue et aux sorts persistants.",
+      "mechanics": [
+        "magicResistance",
+        "dispel"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-057",
+      "name": "Rune of Accuracy",
+      "book": "L15",
+      "page": 129,
+      "type": "ingénierie",
+      "slRequired": 14,
+      "effectSummaryFr": "+10 pour toucher par rune.",
+      "mechanics": [
+        "attackBonus"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-058",
+      "name": "Rune of Burning",
+      "book": "L15",
+      "page": 129,
+      "type": "ingénierie",
+      "slRequired": 16,
+      "effectSummaryFr": "Un Enflammé par rune à la cible touchée.",
+      "mechanics": [
+        "ablaze"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-059",
+      "name": "Rune of Forging",
+      "book": "L15",
+      "page": 129,
+      "type": "ingénierie",
+      "slRequired": 10,
+      "effectSummaryFr": "Annule Maladresse ou incident de tir ; une activation par rune et aventure.",
+      "mechanics": [
+        "fumbleCancel",
+        "quota"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-060",
+      "name": "Rune of Penetrating",
+      "book": "L15",
+      "page": 129,
+      "type": "ingénierie",
+      "slRequired": 14,
+      "effectSummaryFr": "+2 dégâts par rune.",
+      "mechanics": [
+        "damage"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-061",
+      "name": "Rune of Reloading",
+      "book": "L15",
+      "page": 129,
+      "type": "ingénierie",
+      "slRequired": 12,
+      "effectSummaryFr": "Recharge réduite de deux par rune jusqu’à suppression ; minimum un pour Salve.",
+      "mechanics": [
+        "reload",
+        "salvoException"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-062",
+      "name": "Rune of Seeking",
+      "book": "L15",
+      "page": 129,
+      "type": "ingénierie",
+      "slRequired": 10,
+      "effectSummaryFr": "+20 pour toucher une cible volante par rune.",
+      "mechanics": [
+        "flyingTarget",
+        "attackBonus"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-063",
+      "name": "Rune of the Stalwart",
+      "book": "L15",
+      "page": 129,
+      "type": "ingénierie",
+      "slRequired": 14,
+      "effectSummaryFr": "Avantage initial aux servants nains ; perdu en quittant la pièce ou en s’engageant.",
+      "mechanics": [
+        "advantage",
+        "crew"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-064",
+      "name": "Rune of the Valiant",
+      "book": "L15",
+      "page": 130,
+      "type": "ingénierie",
+      "slRequired": 10,
+      "effectSummaryFr": "+10 Volonté par rune aux servants nains.",
+      "mechanics": [
+        "statModifier",
+        "crew"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-065",
+      "name": "Master Rune of Defence",
+      "book": "L15",
+      "page": 130,
+      "type": "ingénierie maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Servants considérés à couvert solide, −30 aux tirs.",
+      "mechanics": [
+        "cover",
+        "crew"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-066",
+      "name": "Master Rune of Disguise",
+      "book": "L15",
+      "page": 130,
+      "type": "ingénierie maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Pièce invisible jusqu’à tirer ; servants visibles et déplacement bruyant.",
+      "mechanics": [
+        "invisibility",
+        "exception"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-067",
+      "name": "Master Rune of Immolation",
+      "book": "L15",
+      "page": 130,
+      "type": "ingénierie maître",
+      "slRequired": 20,
+      "effectSummaryFr": "Action gratuite d’un servant nain détruit la pièce : quinze dégâts dans six yards et Enflammé aux survivants.",
+      "mechanics": [
+        "selfDestruct",
+        "zoneDamage",
+        "ablaze"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-068",
+      "name": "Master Rune of Skewering",
+      "book": "L15",
+      "page": 130,
+      "type": "ingénierie maître",
+      "slRequired": 22,
+      "effectSummaryFr": "Avant jet, une fois par aventure : tir considéré 01, critique et localisation choisie si touche.",
+      "mechanics": [
+        "testOverride",
+        "critical",
+        "quota"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-069",
+      "name": "Rune of Hearth and Home",
+      "book": "L15",
+      "page": 130,
+      "type": "destinée",
+      "slRequired": null,
+      "effectSummaryFr": "Nains dans vingt-cinq yards : jets de Calme considérés 01 jusqu’à fin du prochain Round.",
+      "mechanics": [
+        "coolOverride",
+        "zone"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-070",
+      "name": "Rune of Oath and Steel",
+      "book": "L15",
+      "page": 130,
+      "type": "destinée",
+      "slRequired": null,
+      "effectSummaryFr": "Nains dans vingt-cinq yards : armure portée +2 PA jusqu’à fin du prochain Round.",
+      "mechanics": [
+        "armor",
+        "zone"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-071",
+      "name": "Rune of Wrath and Ruin",
+      "book": "L15",
+      "page": 130,
+      "type": "destinée",
+      "slRequired": null,
+      "effectSummaryFr": "Ennemis dans vingt-cinq yards : douze dégâts sur localisation aléatoire, protections normales.",
+      "mechanics": [
+        "zoneDamage"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-072",
+      "name": "Rune of Retribution — Gazul",
+      "book": "L15",
+      "page": 138,
+      "type": "funéraire",
+      "slRequired": null,
+      "effectSummaryFr": "Runes murales : profanation ou Dhar déclenche deux Enflammé ; distincte du barème de protection p.128.",
+      "mechanics": [
+        "triggerMJ",
+        "ablaze"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-073",
+      "name": "Rune of Spirit Departure",
+      "book": "L15",
+      "page": 138,
+      "type": "funéraire",
+      "slRequired": null,
+      "effectSummaryFr": "Sur linceul : +2 CN aux sorts de Dhar visant les restes.",
+      "mechanics": [
+        "castingCN",
+        "burial"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-074",
+      "name": "Rune of Preservation",
+      "book": "L16",
+      "page": 7,
+      "type": "armure relique",
+      "slRequired": null,
+      "effectSummaryFr": "Retire Faiblesses de l’armure.",
+      "mechanics": [
+        "armorQuality"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-075",
+      "name": "Master Rune of Skaldour",
+      "book": "L16",
+      "page": 7,
+      "type": "armure maître relique",
+      "slRequired": null,
+      "effectSummaryFr": "Réduit les dégâts de quatre ; dégâts zéro ne blessent pas.",
+      "mechanics": [
+        "damageReduction"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-076",
+      "name": "Giantbane Master Rune",
+      "book": "L16",
+      "page": 7,
+      "type": "arme maître relique",
+      "slRequired": null,
+      "effectSummaryFr": "Inversion de l’attaque et du critique contre les géants.",
+      "mechanics": [
+        "enemyType",
+        "reverseDice"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-077",
+      "name": "Master Rune of Dismay",
+      "book": "L16",
+      "page": 11,
+      "type": "talisman maître relique",
+      "slRequired": null,
+      "effectSummaryFr": "Cor une fois par jour : −10 à tous les Tests des ennemis non immunisés Psychologie dans deux fois Endurance yards pendant un Round.",
+      "mechanics": [
+        "psychology",
+        "quota",
+        "zone"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-078",
+      "name": "Master Rune of Smiting",
+      "book": "L16",
+      "page": 11,
+      "type": "arme maître relique",
+      "slRequired": null,
+      "effectSummaryFr": "Une touche infligeant des dégâts produit deux fois les Blessures plus quatre.",
+      "mechanics": [
+        "woundMultiplier"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-079",
+      "name": "Rune of Hiding",
+      "book": "L16",
+      "page": 22,
+      "type": "rune seulement mentionnée",
+      "slRequired": null,
+      "effectSummaryFr": "Dissimule des abris ; aucune procédure de gravure ou formule dans ce passage.",
+      "mechanics": [
+        "narrativeMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-080",
+      "name": "Master Rune of the Goblin Slayer",
+      "book": "L16",
+      "page": 33,
+      "type": "arme maître spécialisée",
+      "slRequired": null,
+      "effectSummaryFr": "Inversion des attaques et critiques contre les gobelins ; instance de la rune de Tueur.",
+      "mechanics": [
+        "enemyType",
+        "reverseDice"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-081",
+      "name": "Rune of Light",
+      "book": "L16",
+      "page": 44,
+      "type": "installation",
+      "slRequired": null,
+      "effectSummaryFr": "Cristaux lumineux ; mots de commande d’allumage/extinction explicités p.46, aucun coût de gravure fourni.",
+      "mechanics": [
+        "light",
+        "commandWord"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "id": "D0b-R-082",
+      "name": "Rune of Opening",
+      "book": "L16",
+      "page": 46,
+      "type": "funéraire",
+      "slRequired": null,
+      "effectSummaryFr": "Permet aux prêtres de Gazul d’ouvrir les portes protégées pour l’inhumation ; barème absent.",
+      "mechanics": [
+        "accessMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    }
+  ],
+  "systems": [
+    {
+      "id": "D0b-SYS-01",
+      "book": "L01",
+      "page": 31,
+      "name": "Accès à la gastromancie",
+      "effectSummaryFr": "Ogres : Grande Gueule, Cieux, Mort ou Bêtes, Feu pour les Cracheurs de feu ; langue de lancement basée sur Endurance ; viande et ingrédients conditionnent coûts et risques.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-02",
+      "book": "L01",
+      "page": 32,
+      "name": "Attribut de la Grande Gueule",
+      "effectSummaryFr": "Après sort réussi, 1d10 : dix ou résultat au moins égal au CN soigne le CN en Blessures.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-03",
+      "book": "L12",
+      "page": 82,
+      "name": "Ingrédients et incidents de gastromancie",
+      "effectSummaryFr": "Ingrédients obligatoires selon ce livre, sans atténuation d’incident ; table propre p.83, +20 pour incident majeur. Divergence avec L01 à arbitrer.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-04",
+      "book": "L09",
+      "page": 64,
+      "name": "Attribut et pactes de magie noire",
+      "effectSummaryFr": "Après dégâts et DR au-delà du CN, dépenser trois DR pour un effet de pacte ; les associations de colonnes sont à confirmer avant adaptation.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-05",
+      "book": "L15",
+      "page": 80,
+      "name": "Apprentissage des runes",
+      "effectSummaryFr": "Un achat apprend une rune admissible ; rune de maître distincte, enseigne aussi les trois runes de Destinée ; listes limitées selon spécialisation.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-06",
+      "book": "L15",
+      "page": 123,
+      "name": "Gravure permanente",
+      "effectSummaryFr": "Objet physique, outils et atelier ; un Test étendu par semaine ou activité, difficulté 0 ordinaire ou −20 maître ; seuil propre à la rune ; objet ensuite magique.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-07",
+      "book": "L15",
+      "page": 123,
+      "name": "Règle des trois et cumul",
+      "effectSummaryFr": "Trois runes maximum ; répétitions ordinaires possibles ; répétitions sur même objet cumulées, sur objets différents seulement meilleur ensemble.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-08",
+      "book": "L15",
+      "page": 124,
+      "name": "Forme",
+      "effectSummaryFr": "Matériaux durables, supports adaptés ; pas d’autre objet magique sauf magie runique naine ; dérogations sous difficulté MJ.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-09",
+      "book": "L15",
+      "page": 124,
+      "name": "Fierté et Jalousie",
+      "effectSummaryFr": "À cent yards, seul le plus ancien objet de même combinaison fonctionne ; une seule rune de maître par objet et seule la plus ancienne instance d’une même maître fonctionne à proximité.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-10",
+      "book": "L15",
+      "page": 124,
+      "name": "Défauts runiques",
+      "effectSummaryFr": "Choix de +5 DR de progression contre défaut ; à première activation, détermine extinction, destruction, dégradation de l’objet ou coût de Chance.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-11",
+      "book": "L15",
+      "page": 128,
+      "name": "Supports de protection",
+      "effectSummaryFr": "Installation commune, portée de base six yards pour alliés nains ; extension à l’appréciation MJ, exceptions spécifiques conservées.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-12",
+      "book": "L15",
+      "page": 130,
+      "name": "Runes de Destinée",
+      "effectSummaryFr": "Uniquement sur Enclume du Destin ; Action avec Maîtrise des runes −20 au lieu de gravure étendue ; effet dissipable comme un sort.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-13",
+      "book": "L15",
+      "page": 136,
+      "name": "Accès des cultes ancestraux",
+      "effectSummaryFr": "Listes de runes propres à chaque culte ; détails pp.134–140, ne pas assimiler automatiquement à toute liste de Runesmith.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-14",
+      "book": "L16",
+      "page": 63,
+      "name": "Circonstances favorables",
+      "effectSummaryFr": "Événement de temps mort 92–94 : inversion des Tests de gravure de l’activité en cours.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-15",
+      "book": "L17",
+      "page": 27,
+      "name": "Rituels",
+      "effectSummaryFr": "Tradition, ingrédients obligatoires, conditions de site, sacrifices et conséquences propres ; grimoire multiplie le CN par quatre, deux mains libres.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-16",
+      "book": "L08",
+      "page": 102,
+      "name": "Magie de Vaul",
+      "effectSummaryFr": "Une seule amélioration par sort de Vaul et par objet sauf exception ; certaines options exigent Yenlui clair et sacrifice de vue.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "id": "D0b-SYS-17",
+      "book": "L08",
+      "page": 110,
+      "name": "Magie de Hoeth",
+      "effectSummaryFr": "Certains rites exigent un Test étendu de Recherche comme sacrifice ; prérequis et surincantation Yenlui propres à chaque rite.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
+      ],
+      "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    }
+  ],
+  "coverage": [
+    {
+      "book": "L01",
+      "pages": [
+        31,
+        32,
+        33
+      ],
+      "result": "7 sorts Grande Gueule manquants ; objets magiques hors catalogue de sorts."
+    },
+    {
+      "book": "L02",
+      "pages": [
+        62,
+        63,
+        64,
+        80,
+        87,
+        88
+      ],
+      "result": "15 sorts Hedgecraft et 1 rituel manquants ; manœuvres de canalisation pp.87–88 sont des procédures, non nouveaux sorts."
+    },
+    {
+      "book": "L03",
+      "pages": [
+        2
+      ],
+      "result": "Repérage CN : aucune nouvelle entrée isolée ; récits et profils ne créent pas de sort."
+    },
+    {
+      "book": "L04",
+      "pages": [
+        3,
+        25,
+        88
+      ],
+      "result": "Miracles déjà dans le chantier divin, pas de CN isolé ; hors ajout de sorts D0b."
+    },
+    {
+      "book": "L05",
+      "pages": [
+        168
+      ],
+      "result": "Noms français de référence, p.168 imprimée ; pas de nouvelle tradition par traduction."
+    },
+    {
+      "book": "L06",
+      "pages": [
+        230,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245
+      ],
+      "result": "Socle de comparaison des contrats, pas un supplément à ajouter ici."
+    },
+    {
+      "book": "L07",
+      "pages": [
+        81,
+        128,
+        129,
+        183
+      ],
+      "result": "5 sorts nouveaux ; variantes des contrats Haute Magie et Waaagh! conservées explicitement."
+    },
+    {
+      "book": "L08",
+      "pages": [
+        80,
+        81,
+        82,
+        86,
+        87,
+        88,
+        89,
+        102,
+        103,
+        106,
+        107,
+        110,
+        111
+      ],
+      "result": "30 entrées Vaul/mer/Hoeth nouvelles ; 30 mineurs/arcanes/Haute Magie déjà catalogués non dupliqués."
+    },
+    {
+      "book": "L09",
+      "pages": [
+        64,
+        65,
+        66,
+        67
+      ],
+      "result": "24 sorts de magie noire manquants ; pactes à confirmer."
+    },
+    {
+      "book": "L10",
+      "pages": [
+        3,
+        9,
+        15,
+        50,
+        51,
+        68,
+        74,
+        83
+      ],
+      "result": "Guide Sylvania : aucun nouveau cartouche de sort trouvé par repérage CN ; attente de la source Vampires."
+    },
+    {
+      "book": "L11",
+      "pages": [
+        135,
+        136,
+        137
+      ],
+      "result": "Bestiaire et alchimie, pas de nouveau cartouche CN identifié."
+    },
+    {
+      "book": "L12",
+      "pages": [
+        82,
+        83,
+        98,
+        99,
+        100,
+        101
+      ],
+      "result": "4 Grande Gueule et 24 Waaagh!, avec variantes L07."
+    },
+    {
+      "book": "L13",
+      "pages": [
+        79
+      ],
+      "result": "Miracles distincts déjà dans le catalogue divin ; pas de nouveau CN de sort identifié."
+    },
+    {
+      "book": "L14",
+      "pages": [
+        83
+      ],
+      "result": "1 lancement propre au phénix, croisé avec E0."
+    },
+    {
+      "book": "L15",
+      "pages": [
+        80,
+        95,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        136,
+        137,
+        138,
+        139,
+        140
+      ],
+      "result": "73 runes, supports et règles séparés ; listes d’accès cultuelles à vérifier au raccordement."
+    },
+    {
+      "book": "L16",
+      "pages": [
+        7,
+        11,
+        22,
+        32,
+        33,
+        44,
+        45,
+        46,
+        63,
+        86
+      ],
+      "result": "9 runes de reliques ou usages et 1 rituel d’idole."
+    },
+    {
+      "book": "L17",
+      "pages": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        62,
+        63,
+        64,
+        65,
+        74,
+        75,
+        76,
+        77,
+        86,
+        87,
+        88,
+        89,
+        98,
+        99,
+        100,
+        101,
+        110,
+        111,
+        112,
+        113,
+        122,
+        123,
+        124,
+        125,
+        134,
+        135,
+        136,
+        137,
+        146,
+        147,
+        148,
+        149,
+        217,
+        218
+      ],
+      "result": "8 arcanes, 18 rituels, 6 marais, 1 sort conjoint manquants ; titres des huit domaines rapprochés des noms français et pages, sans confondre les variantes V5."
+    }
+  ],
+  "openQuestions": [
+    {
+      "id": "D0b-Q01",
+      "question": "Le manifeste compte L01–L17, aucun L18. Fournir une éventuelle dix-huitième source avant de l’inclure."
+    },
+    {
+      "id": "D0b-Q02",
+      "question": "L10 Sylvania est un guide régional V5 : table des matières p.III et repérage CN sans nouvelle liste de sorts. Quel ouvrage contient le domaine des Vampires attendu ? Ne pas le fabriquer depuis les profils."
+    },
+    {
+      "id": "D0b-Q03",
+      "question": "Les renvois vers Sea of Claws, Death on the Reik Companion et certains suppléments de campagne ne sont pas tous dans ces dix-sept PDF. Profils, météo et navires dépendants restent à sourcer."
+    },
+    {
+      "id": "D0b-Q04",
+      "question": "Grande Gueule : L01 p.31 permet le lancement sans certains ingrédients contre blessures ; L12 p.82 les rend indispensables et leur retire l’atténuation d’incident. Quelle priorité ?"
+    },
+    {
+      "id": "D0b-Q05",
+      "question": "Bullgorger L01 p.32 écrit une difficulté nommée Difficile avec +20. Déterminer la résistance exacte avant conversion."
+    },
+    {
+      "id": "D0b-Q06",
+      "question": "Poisoned Whispers L09 p.66 oppose des durées de BSoc Rounds à une fin sur Test quotidien. Choisir la durée."
+    },
+    {
+      "id": "D0b-Q07",
+      "question": "Le tableau des pactes L09 p.64 sort avec des colonnes désalignées. Confirmer visuellement dieu/pacte/effet ; les effets ne sont pas attribués arbitrairement."
+    },
+    {
+      "id": "D0b-Q08",
+      "question": "‘Eadbutt : L12 p.100 annonce Vous et BFM Rounds, mais décrit un projectile ; L07 p.183 annonce une cible et instantané. Quel cartouche retenir ?"
+    },
+    {
+      "id": "D0b-Q09",
+      "question": "Bash ‘Em Lads! emploie 1+DR dans L07 p.183 et DR dans L12 p.100 ; Mork Save Us! peut atteindre Protection 7+ dans L07, mais pas dans L12 p.101."
+    },
+    {
+      "id": "D0b-Q10",
+      "question": "Les runes sont chiffrées en pourcentages V4 et Avantage. Définir leur adaptation Élan/Avantage V5, leur interaction avec les dés inversés et les talents déjà présents."
+    },
+    {
+      "id": "D0b-Q11",
+      "question": "Rune of Force p.126 nomme ensuite Rune of Impact ; Clear Sight devient Clear Seeing, Truth devient Disclosure, Far Sight devient Farseeing p.127. Confirmer ces identités sans créer des doublons."
+    },
+    {
+      "id": "D0b-Q12",
+      "question": "Rune of Retribution existe en arme p.125, protection p.128 et rite funéraire p.138 avec barèmes distincts. Les conserver séparées ; décider si la version funéraire est une variante."
+    },
+    {
+      "id": "D0b-Q13",
+      "question": "Les runes de reliques L16 n’ont pas de seuil de gravure publié dans les passages lus ; Rune of Hiding, Light et Opening sont surtout des usages narratifs. Ne pas inventer les seuils manquants."
+    },
+    {
+      "id": "D0b-Q14",
+      "question": "Magie de Vaul/Hoeth/mer : définir statut de rite ou sort, accès des prêtres, sacrifices de vue/Recherche et changements de Yenlui avant raccordement."
+    },
+    {
+      "id": "D0b-Q15",
+      "question": "Silence arcane L17 p.27 CN4 diffère du sort d’Ombres p.111 CN3 nommé Silence au catalogue. Il faut une identité séparée malgré la collision de noms."
+    },
+    {
+      "id": "D0b-Q16",
+      "question": "Feast of the Fallen L01 p.33 ne chiffre pas clairement la zone des bénéficiaires ; The Maw, les portails et les modifications de terrain nécessitent aussi des faits spatiaux MJ."
+    },
+    {
+      "id": "D0b-Q17",
+      "question": "Les variantes Slann des sorts déjà catalogués (L07 p.128) doivent rester des extensions explicites, sans remplacer les contrats elfiques ; méditations p.129 ne sont ni sorts ni rituels."
+    },
+    {
+      "id": "D0b-Q18",
+      "question": "Rituels : temps, apprentissage, sacrifices permanents et conséquences de rupture nécessitent un système distinct ; les schémas ci-présents inventorient les dépendances, pas un contrat exécutable complet."
+    },
+    {
+      "id": "D0b-Q19",
+      "question": "Les nouvelles règles sans durée chiffrée restent nulles ou décrites comme non précisées ; notamment les installations runiques et certaines créations permanentes."
+    },
+    {
+      "id": "D0b-Q20",
+      "question": "O Mere Be More L17 p.217 est présenté comme expérimental ; autoriser ou réserver cette magie de PNJ. Skin of Bone and Bark p.218 exige deux lanceurs le même Round."
+    },
+    {
+      "id": "D0b-Q21",
+      "question": "La liste d’accès des cultes p.134–140 est mentionnée, mais ne doit pas être généralisée depuis un exemple de prêtre : vérifier le culte choisi au futur chantier."
+    }
+  ]
+}
