@@ -36,20 +36,28 @@ test('Malice de Ranald : sans les deux Caractéristiques saisies, l’aperçu le
   assert.equal(s.previewDivineExecution(MISCHIEF, request(['CC', 'F'])).ready, true, '9-0 au choix : toute Caractéristique');
 });
 
-test('Malice de Ranald : CC et Int du prêtre égalées à celles de l’adversaire, figées ; fin de prière et Undo', async () => {
+// Règle complète fournie par le MJ (20 oct.) : « lors de tout Test opposé réalisé spécifiquement contre cet adversaire, deux de vos
+// caractéristiques prennent temporairement la même valeur que les siennes ». La fiche ne change pas ; le score du Test opposé est décalé
+// de l’écart (adversaire − prêtre) sur la Caractéristique concernée, valeurs lues au moment du Test.
+const attack = (s, actorId, targetId, base, id) => s.previewResolution({ resolutionId: id, actorId, targetId, roll: 45,
+  action: { type: 'attack', base, attr: 'CC', damage: 3 }, defense: { base: 60, attr: 'CC', roll: 50, v5: { kind: 'melee' } }, v5: { kind: 'melee' } });
+test('Malice de Ranald : seulement dans les Tests opposés contre l’adversaire ciblé ; fiche inchangée ; fin et Undo', async () => {
   const s = await fixture();
+  const state = JSON.parse(s.getFullJSON());
+  state.combat.participants.push({ ...state.combat.participants.find(p => p.id === 'foe'), id: 'foe2', name: 'foe2' }); state.combat.order.push('foe2');
+  await s.loadFromJSON(state);
   const preview = s.previewDivineExecution(MISCHIEF, request(['CC', 'Int']));
   assert.equal(preview.ready, true, `${preview.error} ${JSON.stringify(preview.needsInput)}`);
-  assert.equal(person(s, 'priest').caracs.CC, 40, 'l’aperçu ne modifie rien');
   const result = await s.applyDivineExecution(MISCHIEF, { preview });
   assert.equal(result.ready, true, result.error);
-  assert.equal(person(s, 'priest').caracs.CC, 70);
-  assert.equal(person(s, 'priest').caracs.Int, 30, 'égalée même à la baisse (texte littéral)');
-  assert.equal(person(s, 'priest').caracs.Soc, 60, 'autres Caractéristiques inchangées');
-  assert.equal(person(s, 'foe').caracs.CC, 70, 'l’adversaire ne change pas');
+  assert.equal(person(s, 'priest').caracs.CC, 40, 'fiche du prêtre inchangée');
+  assert.equal(attack(s, 'priest', 'foe', 40, 'a1').test.score, 70, 'attaque contre l’adversaire : CC égalée (40 → 70)');
+  assert.equal(attack(s, 'priest', 'foe2', 40, 'a2').test.score, 40, 'autre adversaire : inchangé');
+  assert.equal(attack(s, 'foe', 'priest', 60, 'd1').defenderTest.score, 90, 'défense contre l’adversaire : 60 + (70 − 40)');
+  assert.equal(attack(s, 'foe2', 'priest', 60, 'd2').defenderTest.score, 60, 'défense contre un autre : inchangée');
+  assert.equal(attack(s, 'foe', 'priest', 60, 'd3').test.score, 60, 'le Test de l’adversaire lui-même ne change pas');
   await s.endDivinePrayer(result.receipt.executionId, { reason: 'fin' });
-  assert.equal(person(s, 'priest').caracs.CC, 40);
-  assert.equal(person(s, 'priest').caracs.Int, 50);
+  assert.equal(attack(s, 'priest', 'foe', 40, 'a3').test.score, 40, 'fin de prière');
   await s.undo();
-  assert.equal(person(s, 'priest').caracs.CC, 70, 'Undo rétablit la prière');
+  assert.equal(attack(s, 'priest', 'foe', 40, 'a4').test.score, 70, 'Undo rétablit la prière');
 });

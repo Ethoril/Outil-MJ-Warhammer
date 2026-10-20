@@ -21,7 +21,7 @@ async function fixture() {
   const store = createStore({ persistence: { async load() { return saved && clone(saved); }, async saveAtomic({ state }) { saved = clone(state); return { ok: true }; } }, storage: null });
   await store.ready;
   const snapshot = { schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'priest', order: ['priest', 'foe', 'ally'],
-    participants: [actor('priest'), actor('ally', { initiative: 20 }), actor('foe', { initiative: 30, talents: [] })] },
+    participants: [actor('priest'), actor('ally', { initiative: 20 }), actor('foe', { initiative: 30, talents: [] }), actor('foe2', { camp: 'ennemi', initiative: 10, talents: [] })] },
     log: [], diceLines: [], extensions: { v5: { turnIndex: 1, combatId: 'prot' } } };
   snapshot.extensions.v5.gameClock = createGameClock(snapshot);
   await store.loadFromJSON(snapshot);
@@ -33,7 +33,7 @@ async function fixture() {
   await store.nextTurn();
   return { store, result };
 }
-const hit = (store, targetId, calm, id = 'h') => store.previewResolution({ resolutionId: id, actorId: 'foe', targetId, roll: 25,
+const hit = (store, targetId, calm, id = 'h', actorId = 'foe') => store.previewResolution({ resolutionId: id, actorId, targetId, roll: 25,
   action: { type: 'attack', base: 60, attr: 'CC', damage: 5 }, defense: { base: 30, roll: 82, v5: { kind: 'melee' } },
   v5: { kind: 'melee', ...(calm === undefined ? {} : { context: { protectionCalm: { success: calm } } }) } });
 const protectionNotes = preview => (preview.unresolved || []).filter(text => /Protection/.test(text));
@@ -62,4 +62,16 @@ test('Protection : Test de Calme réussi, l’attaque passe ; une cible non bén
   assert.equal(protectionNotes(hit(store, 'priest', undefined, 'h3')).length, 0, 'prêtre non béni');
   await store.endDivinePrayer(result.receipt.executionId, { reason: 'fin' });
   assert.equal(protectionNotes(hit(store, 'ally', undefined, 'h4')).length, 0, 'fin de prière');
+});
+
+// Arbitrage MJ (20 oct., R31) : un Test de Calme RÉUSSI vaut pour cet ennemi pendant toute la durée ; un échec ne l’engage pas.
+test('Protection : un Test réussi vaut pour cet ennemi jusqu’à la fin de la prière, pas pour un autre ; Undo l’oublie', async () => {
+  const { store } = await fixture();
+  assert.equal((await store.applyResolution(hit(store, 'ally', false, 'f1'))).status !== 'applied', true);
+  assert.equal(protectionNotes(hit(store, 'ally', undefined, 'f2')).length, 1, 'un échec n’est pas retenu');
+  assert.equal((await store.applyResolution(hit(store, 'ally', true, 'p1'))).status, 'applied');
+  assert.equal(protectionNotes(hit(store, 'ally', undefined, 'p2')).length, 0, 'même ennemi : plus de Test');
+  assert.equal(protectionNotes(hit(store, 'ally', undefined, 'o1', 'foe2')).length, 1, 'autre ennemi : Test exigé');
+  await store.undo();
+  assert.equal(protectionNotes(hit(store, 'ally', undefined, 'p3')).length, 1, 'Undo : le Test redevient nécessaire');
 });
