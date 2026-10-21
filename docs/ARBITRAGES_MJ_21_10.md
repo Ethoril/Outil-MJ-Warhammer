@@ -79,3 +79,10 @@ Ces décisions s’imposent aux lots des phases B à E de `docs/PLAN_FIN_DE_PROJ
 
 - Q12 **confirmé en connaissance de cause** : jamais de table de Courroux à 0 Péché (ni jet finissant par 0, ni maladresse). Conséquence acceptée : la table étant lue à d100 + 10 × Péché, **les résultats 01-10 deviennent inaccessibles** en jeu ; ils restent au registre, marqués « inaccessibles (arbitrage Q12) ».
 - **Migration autorisée des fixtures de tests** qui obtenaient un résultat bas par une maladresse à 0 Péché : elles passent par un autre chemin (Péché positif et résultat ≥ 11, ou pose directe d’une sanction sourcée), en conservant toutes leurs assertions mécaniques (expiration, CAS, preuve d’origine, périmètre, Leçons, plafonds). Liste de chaque fixture migrée dans le commit et le rapport.
+
+## Choix de l’exécutant, phase B (`docs/plans-gpt/CHOIX_EXECUTANT_PHASE_B.md`)
+
+- B-C01 : réglé par Q12 confirmé (aucune table à 0 Péché, maladresse comprise).
+- B-C02 homonymes : **choix de GPT confirmé** (Mathlann seul = elfe ; Khaine seul = humain ; « Khaine (elfique) » = elfe).
+- B-C03 Péchés stockés et prière elfe : **choix de GPT confirmé** (ignorés pendant la prière elfe, conservés sur la fiche).
+- B-C04 emplacement du code : choix technique de GPT conservé par l’orchestrateur (fonctions dans `v5-divine-engine.js`).
