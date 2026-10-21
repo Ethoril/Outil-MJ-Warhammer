@@ -10,7 +10,7 @@ import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
 import {effectHandler,effectNeeds,isLayerlessEffect,hasImplicitCasterTarget} from './v5-divine-effect-handlers.js';
 
-export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-18.1';
+export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-21.1';
 const clone = value => structuredClone(value);
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 const freeze = value => {
@@ -252,6 +252,47 @@ function validateTargetRules(contract, targets, input, resolvedParams = {}, acto
   return null;
 }
 
+// L08 p.93–99 ; Q10 du MJ étend l'exemption aux cultes elfes.
+// Khaine sans qualification désigne aussi un culte humain (L02 p.51).
+const elvenCults = new Set([
+  'Asuryan','Vaul','Isha','Kurnous','Hoeth','Lileath','Loec','Mathlann',
+  'Khaela Mensha Khaine','Khaine (elfique)','Khaine (elfe)','Ereth Khial',
+  'Anath Raema','Morai-Heg','Hekarti','Atharti','Ladrielle','Drakira',
+  'Nethu','Eldrazor','Ellinill','Addaioth','Hukon'
+].map(fold));
+const elfSinSource = Object.freeze({bookId:'L08',document:'Supplément Elfe - High elf Players Guide v2.pdf',printedPage:99,
+  fileSha256:'45e527e991a87cf48fb30af05277f6c849d72395079dcbbf100334270caf97cf'});
+export const isElvenDivineCult = cult => elvenCults.has(fold(cult));
+export function divineSinPolicy(contract) {
+  const cult = contract?.requiredTalent?.specialization || contract?.deity || null;
+  return {cult,exempt:isElvenDivineCult(cult),decisionId:'COURROUX-Q10-2026-10-21',source:elfSinSource};
+}
+const divineAccessIds = new Set(['talent-bless','talent-invoke',...DIVINE_REGISTRY.contracts.flatMap(row =>
+  [row.requiredTalent?.id,row.requiredTalent?.catalogueTalentId].filter(Boolean))]);
+export function actorDivineCults(actor) {
+  const cults = new Map();
+  for (const row of Array.isArray(actor?.talents) ? actor.talents : []) {
+    if (row?.status !== 'resolved' || !divineAccessIds.has(row.id) || !Number.isSafeInteger(Number(row.rank)) || Number(row.rank) < 1) continue;
+    const canonical = DIVINE_REGISTRY.contracts.find(contract => contract.requiredTalent?.catalogueTalentId === row.id)?.requiredTalent;
+    const cult = row.specialization ?? row.specialty ?? canonical?.specialization;
+    if (typeof cult === 'string' && cult.trim()) cults.set(fold(cult),cult.trim());
+  }
+  return [...cults.values()];
+}
+/** Le total historique partagé n'est pas effacé par une prière elfique. */
+export function resolveSinAdjustmentCult(actor,requestedCult) {
+  const cults = actorDivineCults(actor);
+  const requested = typeof requestedCult === 'string' ? requestedCult.trim() : null;
+  if (requestedCult !== undefined && !requested) return {ok:false,error:'Choisissez un culte valide pour cet ajustement.'};
+  if (requested && cults.length && !cults.some(cult => fold(cult) === fold(requested)))
+    return {ok:false,error:'Le culte choisi pour les Péchés n’est pas acquis sur cette fiche.'};
+  const policies = new Set(cults.map(isElvenDivineCult));
+  if (!requested && policies.size > 1) return {ok:false,error:'Plusieurs cultes de règles différentes : choisissez le culte de cet ajustement.'};
+  const cult = requested || (cults.length === 1 || policies.has(true) ? cults[0] : null);
+  if (isElvenDivineCult(cult)) return {ok:false,error:`${cult} : culte elfe exempt du Péché et du Courroux (L08 p.99, arbitrage Q10).`};
+  return {ok:true,cult};
+}
+
 function readSin(actor) {
   const sin = actor?.extensions?.v5?.divine?.sin;
   return Number.isSafeInteger(sin) && sin >= 0 ? sin : null;
@@ -422,7 +463,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const prayerModifiers=getPrayerSLModifiers(actor,input.prayerSLContext||{});
   if(!prayerModifiers.ok)return fail('needs-input','Le malus de Prière du Courroux doit être vérifié avant ce Test.',prayerModifiers.needsInput.map(row=>need(row.path,row.message)));
   const slModifiers=[...sheetModifiers,...conditionTestContext.slModifiers,...prayerModifiers.modifiers];
-  const sin = readSin(actor);
+  const sinPolicy = divineSinPolicy(contract);
+  const sin = sinPolicy.exempt ? 0 : readSin(actor);
   if (sin === null) return fail('needs-input', 'Le score de Péché doit être enregistré dans la fiche.', [need('actor.extensions.v5.divine.sin', 'Péché courant')]);
   if (input.roll === undefined) return fail('needs-input', 'Jet de Prière d100 explicite requis.', [need('roll', 'Résultat du jet d100')]);
   const activePrayer = [actor, ...(input.participants || [])].some(participant =>
@@ -446,8 +488,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   prayer=cappedPrayer.test;
   const resultRoll = prayer.roll;
   const unit = resultRoll % 10;
-  const sinTrigger = unit <= sin;
-  const wrathTriggered = prayer.fumble || sinTrigger;
+  const sinTrigger = !sinPolicy.exempt && unit <= sin;
+  const wrathTriggered = !sinPolicy.exempt && (prayer.fumble || sinTrigger);
   // `contract.reminders` : rappels permanents du culte ou de la prière (ex. Solkan : aucun Péché ni Corruption toléré).
   const reminders = [...(contract.reminders || [])];
   if (contract.status === 'manual') reminders.push('Prière résolue; effet laissé au rappel MJ selon le contrat source.');
@@ -486,7 +528,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     skill: 'Pray', skillScore, slModifiers, sinAtTest: sin,
     prayer, prayerSLAdjustment:cappedPrayer.status==='applied'?{rawSL:rawPrayerSL,effectiveSL:prayer.sl,caps:clone(cappedPrayer.caps)}:null,
     unit, success: prayer.success, conditionTestContext:clone(conditionTestContext),
-    wrath: { triggered: wrathTriggered, reason: prayer.fumble ? 'fumble' : sinTrigger ? 'sin-threshold' : null,
+    wrath: { triggered: wrathTriggered, reason: wrathTriggered ? (prayer.fumble ? 'fumble' : 'sin-threshold') : null,
+      ...(sinPolicy.exempt ? {exempt:true,exemption:clone(sinPolicy)} : {}),
       sinTrigger, sinAtTest: sin, sinAfter: wrathTriggered && wrathRoll && wrathResult && wrathConsequences ? Math.max(0, sin - 1) : sin,
       unit, roll: wrathRoll, modifiedRoll: wrathRoll === null ? null : wrathRoll + 10 * sin,
       outcome: wrathResult ? { ...clone(wrathResult), resultId: wrathResult.id } : null, consequences: wrathConsequences },

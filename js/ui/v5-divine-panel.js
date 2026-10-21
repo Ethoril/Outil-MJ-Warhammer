@@ -1,5 +1,6 @@
 /** Brouillon de prière conservé entre rendus ; seul le Store peut confirmer une conséquence. */
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
+import {divineSinPolicy} from '../core/v5-divine-engine.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
 import {emptyDivineForm,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
@@ -101,9 +102,13 @@ export function createDivinePanel({Store,refresh}){
   const source=contract.source;
   const sourceLabel=source?.document?`${source.document}${source.edition?' · '+source.edition:''}${source.printedPage?' · p. '+[].concat(source.printedPage).join(', '):''}`:'Source originale non retrouvée';
   content.append(node('p','workspace-muted','Source : '+sourceLabel+(source?.sourceStatus==='found-adaptation-blocked'?' · adaptation V4 retrouvée, contrat V5 bloqué jusqu’à arbitrage.':'')));
-  const sin=node('details','workspace-v5-context-details');sin.append(node('summary','','Péchés : '+(actor.extensions?.v5?.divine?.sin??'à renseigner')));content.append(sin);
-  field(sin,'Total de Péchés','sinEdit');field(sin,'Raison de l’ajustement des Péchés','sinReason',{type:'text'});
-  button(sin,'Enregistrer les Péchés',()=>run(async()=>{const result=await Store.setDivineSin(actor.id,Number(state.sinEdit),{reason:state.sinReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Péchés non enregistrés.');state.preview=null;}),state.sinEdit==='','sin');
+  if(divineSinPolicy(contract).exempt){
+   content.append(node('p','workspace-muted',`${contract.deity} : culte elfe exempt du Péché et du Courroux (Guide des Hauts Elfes, p. 99).`));
+  }else{
+   const sin=node('details','workspace-v5-context-details');sin.append(node('summary','','Péchés : '+(actor.extensions?.v5?.divine?.sin??'à renseigner')));content.append(sin);
+   field(sin,'Total de Péchés','sinEdit');field(sin,'Raison de l’ajustement des Péchés','sinReason',{type:'text'});
+   button(sin,'Enregistrer les Péchés',()=>run(async()=>{const result=await Store.setDivineSin(actor.id,Number(state.sinEdit),{reason:state.sinReason,cult:contract.deity,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Péchés non enregistrés.');state.preview=null;}),state.sinEdit==='','sin');
+  }
   const active=participants.flatMap(target=>(target.extensions?.v5?.divineEffects||[]).filter(layer=>layer.casterId===actor.id).map(layer=>({...layer,targetName:target.name})));
   if(active.length){
    const list=node('details','workspace-v5-context-details');list.append(node('summary','','Prières actives du personnage'));field(list,'Raison de fin de prière','endReason',{type:'text'});
