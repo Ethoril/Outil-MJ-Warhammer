@@ -1,7 +1,7 @@
 /** Adaptateur du domaine divin : contrats canoniques, sources actuelles et commandes du Store. */
 import registry from '../data/v5-divine-contracts.json' with {type:'json'};
 import {getReferenceCatalogue} from './reference-catalog.js';
-import {previewDivineExecution,applyDivineExecution,expireDivineEffects} from './v5-divine-engine.js';
+import {previewDivineExecution,applyDivineExecution,expireDivineEffects,resolveSinAdjustmentCult} from './v5-divine-engine.js';
 import {refreshEffectLayers} from './v5-magic-effects.js';
 import {uid} from './models.js';
 import {resolveDivineAccess,createDivineAccessGrant,revokeDivineAccessGrant,consumeDivineAccessGrant,emptyDivineAccess} from './v5-divine-access.js';
@@ -441,14 +441,15 @@ export function applyStoreDivine(state,contractId,input={}){
  return {...calculated,state:next};
 }
 
-export function setStoreDivineSin(state,actorId,value,{reason}={}){
+export function setStoreDivineSin(state,actorId,value,{reason,cult}={}){
  if(!Number.isSafeInteger(value)||value<0)throw ruleError('Le total de Péchés doit être un entier positif ou nul.');
  if(typeof reason!=='string'||!reason.trim())throw ruleError('Indiquez la raison de cet ajustement des Péchés.');
  if((state.extensions?.v5?.divineExecutions||[]).some(row=>row.actorId===actorId&&row.pendingWrath?.status==='pending'))throw ruleError('Résolvez d’abord le Courroux en attente avant de modifier les Péchés.');
  const next=clone(state),actor=parts(next).find(row=>row.id===actorId);if(!actor)throw ruleError('Personnage introuvable.');
+ const cultDecision=resolveSinAdjustmentCult(actor,cult);if(!cultDecision.ok)throw ruleError(cultDecision.error);
  const before=actor.extensions?.v5?.divine?.sin;
  actor.extensions??={};actor.extensions.v5??={};actor.extensions.v5.divine??={};actor.extensions.v5.divine.sin=value;
- next.log=[{id:'divine-sin:'+uid(),kind:'management',actorId,actorName:actor.name,text:`${actor.name} · Péchés ${before??'non renseigné'} → ${value} · ${reason.trim()}`},...(next.log||[])].slice(0,300);
+ next.log=[{id:'divine-sin:'+uid(),kind:'management',actorId,actorName:actor.name,text:`${actor.name} · Péchés ${before??'non renseigné'} → ${value}${cultDecision.cult?' · '+cultDecision.cult:''} · ${reason.trim()}`},...(next.log||[])].slice(0,300);
  return next;
 }
 

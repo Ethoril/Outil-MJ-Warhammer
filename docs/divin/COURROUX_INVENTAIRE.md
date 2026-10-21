@@ -134,3 +134,48 @@ Le manifeste déclare l'édition V5 EN autoritaire (`authoritativeEdition`) ; le
 - Les deux pages sans texte extractible du corpus (L01 p.93-94, etc. per `DIVIN_CORPUS_LIVRES.json`) ne portent aucune règle Courroux identifiée.
 - Cet inventaire ne modifie ni le registre généré (`js/data/v5-divine-contracts.json`) ni l'inventaire des contrats ; les numéros de ligne cités correspondent à l'état du worktree au 20 octobre 2026 et bougeront avec le code.
 - Negative sweeps effectués le 20 octobre 2026 sur les 17 PDF du corpus + L18 par `pdftotext -layout` puis grep insensible à la casse (`wrath of the gods`, `sin point`) ; seuls L01, L02, L04, L05, L06, L08, L10, L13, L18 contiennent des règles ou mentions Courroux/Péché.
+
+
+## Complément GPT du 21 octobre 2026 (L19-L26)
+
+20 entrées ajoutées, marquées `addedOn: "2026-10-21"` dans le JSON : 89 entrées au total. Les 69 statuts historiques restent la photographie B0 ; les ajouts sont tous classés absent avant implantation (aucune preuve moteur inventée). Les lots de réalisation sont dans `docs/plans-gpt/PLAN_GPT_PHASE_B.md`.
+
+Méthode : balayage textuel livre par livre avec pypdf 6.10.0, recherche de sin point(s), wrath of the gods, penance, absolution et strictures, puis lecture des pages positives. Le binaire `pdftotext` demandé est absent (`Get-Command pdftotext` échoue) ; remplacement sans nouvelle dépendance par le runtime PDF fourni. Journaux et extractions locales sous `tmp/gpt-phase-b/`. Ce repérage ciblé ne certifie pas une lecture exhaustive de chaque page ; images sans texte et alias inconnus peuvent échapper au balayage. Aucun rôle de lecteur indépendant revendiqué.
+
+| Livre | Pages physiques consultées après repérage | Résultat |
+| --- | --- | --- |
+| L19 Middenheim | 21, 22, 23, 73, 81, 112 | Commandements ulricains et exemple de pénitence. |
+| L20 Altdorf | 27, 217, 219 | Contexte des cultes et activité de pénitence chiffrée. |
+| L21 Empire in Ruins Companion | 6, 7, 13 | Relique réduisant le Courroux, fragment retirant les Péchés et profanation. |
+| L22 Horned Rat Companion | 39, 70, 71 | Livre perdu : Courroux quotidien ; lieu sanctifié à seuil MJ. P.70 : pénitence narrative. |
+| L23 Enemy in Shadows Companion | 64 | Fidèle de Ranald : narration uniquement, aucun nouveau calcul repéré. |
+| L24 Rough Nights & Hard Days | 91 (imprimée 90) | Trois cultes gnomes ; système religieux commun. Tableau et pied de page vérifiés visuellement. |
+| L25 Sea of Claws | 83, 87, 89, 91 | Abus de bénédictions navales, Péché dans deux miracles et restrictions de Stromfels. |
+| L26 Death on the Reik Companion | 45, 119 | Code séculier écarté ; retrait de Péché lors d’une procession funéraire. |
+
+La table L06 p.218-219 a été relue visuellement (rendu Poppler). 01-05 : Calme +2 ; 66-70 : trois Aveuglé ; 81-87 : dégâts sans BE/PA puis un Sonné et un par DR négatif ; 88 : un démon ; 121-125 : prochain renouvellement de Chance limité à un. Aucun retour aux variantes V4 FR. La ligne 51-55 n’explicite pas le contournement BE/PA : choix à consigner au lot dégâts après lecture des services existants.
+
+### Entrées ajoutées
+
+| ID | Source imprimée | Résumé | Lot |
+| --- | --- | --- | --- |
+| l19-021-ulric-strictures | L19 21, 22, 23, 73, 81 | Commandements ulricains, vœux et usages locaux : éléments de contexte soumis au MJ. | B17 |
+| l19-112-ulric-penance | L19 112 | Un Ulricain pénitent peut réhabiliter la fréquentation de la chapelle du palais. | B10 |
+| l20-027-cult-strictures | L20 27, 217 | Pratiques locales de Ranald et commandements sévères de Solkan. | B17 |
+| l20-219-penance-endeavour | L20 219 | Après pèlerinage, Prière à +2 DR : retirer un Péché, deux dès +4 DR ; échec : Exténué le premier jour suivant ; maladresse : Courroux. | B16 |
+| l21-006-shrine-pilgrimage | L21 6 | Le sanctuaire commun de Sigmar et Ulric offre un motif de pèlerinage aux pécheurs. | B10 |
+| l21-007-relic-wrath-modifier | L21 7 | Une relique peut donner de un à trois DR à Prière et réduire le Courroux de dix à trente ; total nul ou négatif : évité. | B18 |
+| l21-007-shining-rock-sin | L21 7 | Restituer le fragment sacré peut effacer les Péchés du dévot de Sigmar ou Ulric ; sans Péché, accès à Béni dans la carrière. | B17 |
+| l21-013-shrine-desecration | L21 13 | Les fanatiques profanant le sanctuaire accumulent des Péchés ; leurs prières peuvent provoquer le Courroux. | B17 |
+| l22-039-daily-wrath-tome | L22 39 | La perte du livre sacré skaven impose un Courroux quotidien jusqu’à récupération et réparation rituelle. | B18 |
+| l22-071-sanctified-ground | L22 71 | Un lieu sanctifié repousse certains pécheurs ou les blesse comme Enflammé ; repos et soins améliorés. | B18 |
+| l23-064-ranald-npc | L23 64 | Le comportement d’un fidèle de Ranald illustre ses commandements. | exclu-narratif |
+| l24-090-gnome-strictures | L24 90 | Les prêtres gnomes suivent le système religieux commun et les commandements d’Evawn, Mabyn ou Ringil. | B17 |
+| l25-083-manann-strictures | L25 83 | Les commandements de Manann comprennent des usages régionaux décidés par le MJ. | B17 |
+| l25-087-manann-overuse | L25 87 | Au-delà de trois navires bénis entre pleines lunes, chaque échec de Prière ajoute un Péché et dégrade l’humeur divine de 1d10. | B18 |
+| l25-087-blessed-voyage-sin | L25 87 | Voyage béni améliore l’humeur de Manann de 2d10 diminués du total de Péchés. | B18 |
+| l25-089-stromfels-penances | L25 89 | Commandements et exemples de pénitences de Stromfels ; les combattants jugés trop faibles accumulent des Péchés. | B10 |
+| l25-091-stromfels-access | L25 91 | Stromfels refuse Invocation dès deux Péchés et Béni dès cinq. | B08 |
+| l25-091-stromfels-mood-sin | L25 91 | Le miracle de Stromfels ignorant l’humeur de Manann ajoute le total de Péchés à son jet de table. | B18 |
+| l26-045-secular-code | L26 45 | Le code de conduite des bateliers emploie un terme ressemblant aux commandements religieux. | exclu-narratif |
+| l26-119-funeral-sin | L26 119 | Le MJ peut retirer un Péché aux fidèles éligibles aidant à porter un défunt au temple. | B17 |

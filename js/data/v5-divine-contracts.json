@@ -7,7 +7,7 @@
     "miraclesCsvSha256": "6bf08ed826679ff6d481765101d7df09d3bea4dab006952f55f4bf19089c43c6",
     "v5EnglishBaseSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
     "authoritativeEdition": "V5 EN",
-    "complementCorpusSha256": "b9f10d70233a7aeed054232710e1ae6864e5d13893e5d0793e6aa7571a976364",
+    "complementCorpusSha256": "b25c3f8ae5515eb8fabf4e710829fa2f6dda6971da4e752978523ad9c6ab3a75",
     "supplementBooks": [
       {
         "bookId": "L02",
@@ -27085,5 +27085,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:3a2cf7c00abcd8a52aa822a6ef0272782763280274966a12bec81c52d0de9512"
+  "sourceFingerprint": "sha256:e1606465353039c12ff5c59277d3af3c775cbdee2f606497bbcecbf664ea0772"
 }
