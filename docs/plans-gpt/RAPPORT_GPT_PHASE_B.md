@@ -1,6 +1,6 @@
 # Rapport GPT — Phase B Courroux (partiel)
 
-**Dernière session : session 4, arrêt après B13 demandé par le MJ, 21 octobre 2026.** B00–B13 acquis ; **prochain lot B14, non commencé**. Voir la table et la vérification finale en fin de rapport. B14–B18 et la clôture B19 restent ouverts : la phase B n’est pas complète. Les sections des sessions précédentes conservent leur état historique, notamment le blocage Q12 levé en session 2.
+**Dernière session : session 5 (Claude Pro), 21 octobre 2026 : B14 à B18 et clôture B19 exécutés** (voir la section « Session 5 — Claude Pro » en fin de rapport). Les sections des sessions 1 à 4 conservent leur état historique, notamment le blocage Q12 levé en session 2 et l’arrêt après B13 de la session 4.
 
 ## Session 1 — historique, branche gpt/phase-b
 
@@ -300,3 +300,53 @@ Liste consolidée des tests historiques modifiés dans cette session : `divin-v5
 Checkouts de référence observés propres : main **7ab5008**, codex/divin-v5 **d50f07e**. Le source a avancé pendant la session depuis 08e4362 ; cette avance concurrente n’a pas été fusionnée. Aucun changement effectué dans ces checkouts. Une intégration future devra réconcilier les services partagés et rejouer les contrôles pertinents. Aucun push, merge, déploiement, publication ou changement de version.
 
 **Arrêt demandé après B13. Prochain lot : B14.** B14–B18 ne sont pas exécutés et B19 reste ouvert : une recette technique verte ne certifie pas à elle seule toutes les clauses des 89 entrées. Les choix B-C30–B-C32 restent documentés pour la relecture MJ groupée, notamment la perte des avances communes de Prière et la fin de la sanction sociale après la deuxième pénitence temporaire.
+
+## Session 5 — Claude Pro : B14 à B18 et clôture B19
+
+21 octobre 2026. Branche `pro/phase-b5` (worktree dédié), départ `1d11eb0` (3.21.6). Aucun push, aucune publication, aucun changement de version, de dépendance, de service worker ni d'arbitrage. `npm ci` lancé une fois (node_modules absent). Manifeste des quatre catalogues protégés créé depuis `1d11eb0` (`git show`), puis comparaison finale par la recette : inchangés.
+
+| Lot | État / commit | Preuves |
+| --- | --- | --- |
+| B14 | FAIT — `e11ec42` (caractérisations `a91608b`, `a07b67c`) | 13 tests + 4 caractérisations ; navigateur 3 contrôles |
+| B15 | FAIT — `7e1529c` | 11 tests ; navigateur 3 contrôles |
+| B16 | FAIT — `1e6b3fd` | 11 tests ; navigateur 3 contrôles |
+| B17 | FAIT — `575d4d0` | 10 tests ; navigateur 3 contrôles |
+| B18 | FAIT — `6084194` | 19 tests (2 fichiers) ; navigateur 4 contrôles |
+| B19 | FAIT — commit de clôture (réalisation des 89 entrées, test de couverture, correctif UI) | recette 26/26, suite complète verte |
+
+**B14** : démon (88) et Serviteur divin (141–145) créés comme **un seul participant** confirmé par le MJ (profil, distance, position, cible ou camp et conduite) ; aucune valeur de profil inventée, aucune Action créée ; entrée dans l'ordre d'Initiative par le mécanisme commun, y compris depuis une récupération B04 (une ligne dans `store.js`, caractérisée à part). Choix B-C33 à B-C36.
+
+**B15** : 151+ enregistre le départ ; retour par commande MJ (Point de Destin temporaire d'abord, puis permanent, débité une seule fois, refus sans Destin) ; rejet 146–150 seulement proposé puis confirmé ou refusé par le MJ, avec garde contre les retraits et copies génériques ; `v5-divine-access.js` accepte la preuve d'un rejet issu d'un jugement. B-C37 à B-C40.
+
+**B16** : absolution (L06) et pénitence d'Altdorf (L20, +2 DR, 1 ou 2 Péchés retirés, Exténué sur échec, Courroux sur maladresse) par le moteur de Test de récupération B04 ; aucune Action consommée ; refus à zéro Péché. B-C41 à B-C45.
+
+**B17** : catalogue de douze événements sourcés (attribution, retrait, remise à zéro) avec confirmation et fait MJ, onze rappels (commandements, présages, strictures), et « Courroux décidé par le MJ » (Péché positif, sans Test de Prière). B-C46 à B-C49.
+
+**B18** : reliques (+1 à +3 DR, réduction du jet de Courroux, résultat ≤ 0 évité), suivi quotidien du livre skaven perdu, terre sanctifiée à seuil MJ, faits navals de Manann et Stromfels sans sous-système naval. B-C50 à B-C54.
+
+**B19** : `docs/divin/COURROUX_REALISATION.json` classe les 89 entrées (43 automatisées, 21 assistées, 11 rappels, 14 exclues motivées) avec lot, commit et preuve ; `tests/divin-v5-b19-coverage.test.js` en vérifie la complétude. La photographie B0 de l'inventaire est inchangée.
+
+### Vérifications finales
+
+- **Suite complète** : `node --test --test-concurrency=4`, **3674/3674**, zéro échec, 100 s (log `tmp/gpt-phase-b/b14/suite-final.log`). Les lots précédents avaient un seul échec connu : `E0 … cwd externe`, dû au reçu de recette absent d'un worktree neuf, résolu par la recette.
+- **Recette** : `node tools/run-divine-recipe.mjs`, **26/26 commandes vertes** (log `tmp/gpt-phase-b/b14/recipe4.log`). Trois premiers passages interrompus, tous corrigés : (1) un test historique à Store simulé sans les nouvelles méthodes → le panneau les appelle désormais de façon optionnelle ; (2) un sélecteur historique ambigu avec mes blocs imbriqués → déplacés hors du `<details>` des Péchés ; (3) manifeste de sources protégées absent, créé comme décrit.
+- Navigateur : `divin-v5-b14/b15/b16/b17/b18-browser.mjs` exécutés séparément (vrais champs, 1440 et 390 px sans débordement, IndexedDB natif, Annuler/Rétablir). Ils ne font pas partie des 26 commandes ; le parcours cloud n'a pas reçu de scénarios B14–B18 (non demandé par les acceptations, à ajouter si le MJ le souhaite).
+- Contrats générés : aucun changement (le générateur et `--check` restent verts).
+- Registre `docs/VARIABLES_PERSISTANTES_PJ.md` complété pour B15 (jugements, Destin), B16 (retrait de Péchés), B17 (événements), B18 (reliques, suivi quotidien, terres, faits navals). B14 : participant de combat, pas de variable durable.
+
+### Assertions de tests existants modifiées (B14)
+
+Statut de la ligne 88 (la note MJ ne suffit plus, profil, distance, position et cible requis) : `divin-v5-control.test.js` (cas 78), `divin-v5-e4-runtime-independent.test.js`, `divin-v5-store.test.js`, `divin-v5-wrath-calendar-independent.test.js` (statut `requires-input` au lieu de `needs-wrath-resolution`), `divin-v5-browser.mjs` et `divin-v5-e3-e4-form-independent.mjs` (champs d'apparition ; ce dernier vérifie en plus la création du démon). Aucune autre assertion existante modifiée ; B15 à B19 : aucune.
+
+### Choix d'interprétation et limites
+
+Choix B-C33 à B-C54 dans `CHOIX_EXECUTANT_PHASE_B.md`, pour relecture groupée du MJ. Limites assumées :
+
+- Le profil du démon et du serviteur est saisi par le MJ (le Bestiaire, phase E, n'est pas importé).
+- Le Courroux décidé par le MJ refuse les lignes 6–10 et 11–15 (elles exigent la preuve d'un vrai Test de Prière).
+- Un Courroux réduit par une relique dont le résultat serait positif mais sans jet 1–100 équivalent est refusé (le MJ tranche).
+- Le Courroux quotidien du livre skaven exige un culte connu du registre (aucun culte skaven).
+- Les sources L01, L02, L10, L13, L18, L19, L20, L24, L26 ont été exploitées via leurs résumés d'inventaire et pages indiquées ; seules L06, L20, L21, L22 et L25 ont été relues en texte pour cette session. Un seul exécutant, aucun lecteur indépendant.
+- Aucun téléphone physique testé.
+
+**Phase B : tous les lots B00 à B19 sont exécutés.** Ce vert certifie les contrôles nommés ci-dessus, pas le reste du chantier divin.
