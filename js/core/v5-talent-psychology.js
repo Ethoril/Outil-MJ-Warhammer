@@ -2,6 +2,8 @@ import{evaluateV5Talents,hasV5Talent,acquiredV5Talents,currentV5TalentHashes,pre
 import{getReferenceCatalogue}from'./reference-catalog.js';
 import{situationPlan,activeSource}from'./v5-talent-situations.js';
 import{acquireV5Conditions}from'./v5-effects.js';
+import{withMomentum}from'./v5-combat-rules.js';
+import{resolveV5Opposition}from'./v5-roll.js';
 const calmId=()=>getReferenceCatalogue().skills.find(s=>s.nom==='Calme')?.id;
 export function genericPsychologyOrigin(sourceKind='trait',meta={}){
  const hash=currentV5TalentHashes()['talent-large'];
@@ -157,6 +159,7 @@ export function previewPsychologyActivation(n,test){
 }
 export function psychologyTestRules(n,subject,action,settings,{kind,defending}){
  const c=settings.context||{},plans=[],modifiers=[],advantages=[],restrictions=[],unresolved=[];
+ if((action.extensions?.fiche?.skillId??c.skillId)===calmId()&&hasTrait(subject,/[àa] sang[- ]froid|cold[- ]blooded/i))advantages.push({id:'trait:cold-blooded',label:'À Sang-froid : Avantage aux Tests de Calme'});
  const terror=(subject.states||[]).find(s=>s.key==='terror-of-talent'&&activeSource(s));if(terror&&!(subject.states||[]).some(s=>s.key==='frenzy'&&activeSource(s))&&c.talentAction!=='overcome-terror'&&c.mandatoryTest!==true)restrictions.push('Terreur : résoudre le Test de Calme initial avant cette Action.');
  const fear=(subject.states||[]).find(s=>s.key==='fear-of-talent'&&activeSource(s)),target=defending?n.actor:n.target;
  if(!defending&&kind==='melee'&&!(target?.states||[]).some(s=>s.key==='frenzy'&&activeSource(s))&&(target?.states||[]).some(s=>s.key==='fear-of-talent'&&s.authorId===subject.id&&activeSource(s)))advantages.push({id:'talent:frightening',label:'Effrayant : Peur non surmontée'});
@@ -173,3 +176,56 @@ export function psychologyTestRules(n,subject,action,settings,{kind,defending}){
  }
  return{plans,modifiers,advantages,restrictions,unresolved};
 }
+const intFail=(error,field)=>({ready:false,error,needsInput:field?[{field,label:error}]:[],unresolved:[error],addedStates:[],participants:[]});
+/** Intimidation en combat (L06 p.169) : un groupe visé impose −2 DR à l'intimidateur. */
+export function combatIntimidationModifiers({targetGroup=false}={}){return targetGroup===true?[{id:'intimidation-group',label:'Intimidation d’un groupe (−2 DR)',amount:-2}]:[];}
+/** Défense d'un groupe : Calme du chef s'il est organisé, sinon le plus faible Calme. */
+export function groupIntimidationDefenceSl({organizedGroup,chiefSl,calmSls=[]}={}){
+ if(organizedGroup===true)return Number.isSafeInteger(chiefSl)?chiefSl:null;
+ const list=calmSls.filter(Number.isSafeInteger);return list.length?Math.min(...list):null;
+}
+/** Intimidation opposée à Calme : Peur 1 + (DR net − 1) envers l'intimidateur ; l'égalité revient à l'initiateur (V5). */
+export function previewCombatIntimidation({author,target,authorTest,defenceTest,encounterId='default-encounter',theft=false,resolutionId='combat-intimidation'}={}){
+ if(!author||!target)return intFail('Intimidateur et cible requis.','participants');
+ if(!Number.isSafeInteger(authorTest?.sl)||!Number.isSafeInteger(defenceTest?.sl))return intFail('DR d’Intimidation et de Calme requis.','tests');
+ const reminders=[];
+ if(theft)reminders.push('Vol : un PJ intimidé subit la Peur ; ses biens ne sont pas remis automatiquement.');
+ const out={reminders,forcedHandover:false,netSl:authorTest.sl-defenceTest.sl};
+ if(resolveV5Opposition(authorTest,defenceTest).winner!=='initiator')return{...out,ready:true,exempt:false,addedStates:[],needsInput:[],unresolved:[]};
+ if(isPsychologyImmune(target,{kind:'intimidate'}))return{...out,ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],needsInput:[],unresolved:[]};
+ const rating=1+Math.max(0,out.netSl-1);
+ const fear=previewGenericFearEncounter({author,target,rating,sourceKind:'intimidation',sourceLabel:`Intimidation (${rating})`,knownAlly:false,encounterId,resolutionId});
+ return{...fear,...out,reminders};
+}
+/** Hurlement spectral V5 (L06 p.358) : 1 Élan, dégâts directs, Assourdi, puis Calme +2 DR sinon Brisé. */
+export function previewGhostlyHowl({author,targets,damageRoll,calmTests,round}={}){
+ if(!author||!Array.isArray(targets)||!targets.length)return intFail('Auteur et cibles requis.','participants');
+ if(author.extensions?.v5?.hasMomentum!==true)return intFail('Hurlement spectral : un Élan à dépenser est requis.','momentum');
+ if(!Number.isSafeInteger(damageRoll)||damageRoll<1||damageRoll>10)return intFail('Jet de 1d10 de dégâts requis.','damageRoll');
+ const participants=[];
+ for(const t of targets){
+  const immune=isPsychologyImmune(t,{kind:'fear'});
+  const test=calmTests?.[t.id];
+  if(!immune&&(typeof test?.success!=='boolean'||!Number.isSafeInteger(test.sl)))return intFail('Test de Calme (+2 DR) requis pour '+t.id+'.','calmTests');
+  const conditions=[{name:'Assourdi',level:1,source:{kind:'ghostly-howl'}}];
+  if(!immune&&!test.success)conditions.push({name:'Brisé',level:1,source:{kind:'ghostly-howl'}});
+  const hit={...t,hp:Math.max(0,Number(t.hp)-damageRoll)};
+  participants.push(acquireV5Conditions(hit,conditions,{round,authorId:author.id}).participant);
+ }
+ return{ready:true,calmModifier:2,author:withMomentum(author,false),participants,needsInput:[],unresolved:[],addedStates:[]};
+}
+/** Craintif / Skittish : 3 Brisé devant un effet magique visible ou un bruit violent, sauf dressage adapté. */
+export function previewSkittishReaction({subject,trigger,visible=true,training=null,isolatedVoice=false,round}={}){
+ if(!subject)return intFail('Créature requise.','subject');
+ if(!['magic','noise'].includes(trigger))return intFail('Déclencheur explicite requis : effet magique ou bruit violent.','trigger');
+ const skittish=hasTrait(subject,/craintif|skittish/i);
+ const spared=!skittish||trigger==='magic'&&(visible===false||training==='Magie')||trigger==='noise'&&(training==='Guerre'||isolatedVoice===true);
+ if(spared)return{ready:true,reacted:false,participant:subject,needsInput:[],unresolved:[]};
+ const receipt=acquireV5Conditions(subject,[{name:'Brisé',level:3,source:{kind:'skittish'}}],{round});
+ return{ready:true,reacted:true,participant:receipt.participant,needsInput:[],unresolved:[]};
+}
+/** Animosité : supplantée dès qu'une Peur ou une Terreur est active. */
+export function isAnimosityOverridden(subject){return(subject?.states||[]).some(s=>['fear-of-talent','terror-of-talent'].includes(s.key));}
+export function untrainedMountDisadvantage({training}={}){return training==='Guerre'?null:{id:'mount:untrained-war',label:'Monture non dressée à la guerre : Désavantage'};}
+/** Cavalier accompli : taille de la monture si la Peur ou la Terreur ne vient que de la Taille adverse. */
+export function effectiveSizeAgainstFear({riderSize,mountSize,accomplishedRider=false,sizeOnlyCause=false}={}){return accomplishedRider===true&&sizeOnlyCause===true&&Number.isSafeInteger(mountSize)?mountSize:riderSize;}
