@@ -1,5 +1,9 @@
 # Rapport GPT — Phase B Courroux (partiel)
 
+**Dernière session : session 2, 21 octobre 2026. B01/Q12 débloqué et livré ; B03 livré. Prochain lot : B04.** B00 et B02 sont acquis depuis la session 1. B04–B18 et la clôture B19 restent ouverts : la phase B n’est pas complète. Les sections de session 1 ci-dessous conservent la preuve historique du blocage, levé par le complément MJ à la session 2.
+
+## Session 1 — historique, branche gpt/phase-b
+
 21 octobre 2026, Europe/Paris. **La phase B reste ouverte.** Complément d’inventaire et plan commités, B00 et B02 livrés ; B01 bloqué par la politique des tests existants. B03–B18 et la clôture exhaustive B19 ne sont pas exécutés dans cette session, selon la règle Volume du brief. Ce rapport ne signifie pas « Courroux complet ».
 
 ## Checkout et commits
@@ -95,3 +99,81 @@ Les 69 statuts B0 restent une photographie historique ; les 20 ajouts portent le
 ## Reprise
 
 Reprendre ce worktree et vérifier branche/HEAD/statut. Lire ce rapport, le plan commité et les choix. Premier lot non commencé : **B03** ; B01 reste une réserve explicite à débloquer avant de déclarer Q12 ou la phase B terminés. La recette verte valide le code livré et ses contrôles nommés, sans fermer les lots restants.
+
+## Session 2 — reprise autorisée, branche gpt/phase-b2
+
+Brief `BRIEF_GPT_PHASE_B_REPRISE.md` et complément MJ du 21/10 appliqués. Nouveau worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-b2-worktree`, branche `gpt/phase-b2`, départ propre `29d2221` de `codex/divin-v5` (inclut la fusion `6956d61`, la livraison précédente et les ajouts Gemini). L’ancien worktree GPT est conservé à `895ec40`. TEMP/TMP : `E:/Outil MJ Warhammer/tmp/gpt-phase-b2-runtime`, hors checkout et sur le même lecteur. Manifeste des quatre sources protégées établi à ce départ avant code.
+
+### Livraison et état courant
+
+| Lot | État / commit | Résultat ou suite |
+| --- | --- | --- |
+| B00 | FAIT — `104db28`, acquis au départ | Sorties et corpus complémentaire déjà fusionnés. |
+| B01 | FAIT — migrations `e8a2b7c`/`a75c3d5`, Q12 `5cf5b4f` | Aucun Courroux à zéro, y compris unités zéro et maladresse. Lignes 01–10 sourcées, marquées inaccessibles. |
+| B02 | FAIT — `7d2691a`, acquis au départ | Exemption elfique conservée. |
+| B03 | FAIT — `69030fd` | Blessures directes, Résistance, Sonné et conversion V5, vrais champs, application et persistance. 01–05 inaccessible sous Q12, aucun parcours de Calme annoncé. |
+| B04 | NON COMMENCÉ — prochain lot | États et récupération conditionnée. |
+| B05 | NON COMMENCÉ | Interdictions et Actions de Prière. |
+| B06 | NON COMMENCÉ | Compétences et malus calendaires. |
+| B07 | NON COMMENCÉ | Alliés et réprobation. |
+| B08 | NON COMMENCÉ | Talents, Solkan, Stromfels. |
+| B09 | NON COMMENCÉ | Renouvellement de Chance. |
+| B10 | NON COMMENCÉ | Pénitences et clôture MJ. |
+| B11 | NON COMMENCÉ | Possessions. |
+| B12 | NON COMMENCÉ | Hémorragie quotidienne. |
+| B13 | NON COMMENCÉ | Excommunication et rejet. |
+| B14 | NON COMMENCÉ | Démon et Serviteur divin. |
+| B15 | NON COMMENCÉ | Jugement dernier et Destin. |
+| B16 | NON COMMENCÉ | Absolution et Altdorf. |
+| B17 | NON COMMENCÉ | Événements et commandements. |
+| B18 | NON COMMENCÉ | Reliques et extensions du corpus. |
+| B19 | OUVERT | La recette technique ne vaut pas clôture exhaustive des 89 entrées. |
+
+Arrêt propre après B03 selon la règle Volume et le brief de reprise. Aucun blocage technique nouveau déclaré sur les lots non commencés.
+
+### Migration des fixtures et Q12
+
+Les sanctions historiques de plafond ont été capturées avec le moteur du départ `29d2221`, avant Q12 : `tests/fixtures/divine-wrath-historical.json`. Le helper `divine-wrath-history.mjs` les pose directement par commande Store et les valide avec le codec de production ; il ne fabrique aucun nouveau jet de table à zéro. Les cas réussis et ratés, couches de cibles, preuves et ancres sont conservés. Cette autorisation de migration et le nouveau périmètre B03 sont inscrits au plan avant le correctif Q12.
+
+Fixtures migrées :
+
+- `divin-v5-wrath-calendar-independent.test.js` : pose historique pour les plafonds, débordements et refus de persistance ; prière réelle à Péché positif pour les aperçus périmés et le contrôle exact de l’horloge. Assertions de durée, expiration, CAS, origine, sujets et miroirs, refus de falsification, persistance et Undo conservées.
+- `divin-v5-wrath-lessons-independent.test.js` : coexistence Leçons/plafond par sanction historique. Au second déclenchement, nouveau Péché explicite après le décrément, jet 1 + 10 : refus de cumul, absence de mutation et première couche conservés.
+- `divin-v5-wrath-browser.mjs` : pose historique via Store, puis mêmes gestes réels des Prières plafonnées et de leur expiration ; assertions et contrôles Undo/Redo/reload conservés. Comparaison pure sans l’horodatage d’export. Ajout d’un parcours Q12 à zéro.
+- `divin-v5-control.test.js` : borne 99/100/0 remplacée par 99/90/1, même résultat modifié 100 et mêmes contrôles de ligne imposée par le moteur.
+- `divin-v5-engine.test.js` : fixture de maladresse explicitement à un Péché, assertions inchangées.
+- `divin-v5-cloud-browser.mjs`, révélé par la recette finale, commit `a75c3d5` : les trois poses 06–10 passent par le même helper historique sourcé avec identifiants distincts et acteur réel hero. Les assertions de plafond effectif, ancre absolue, provenance RTDB, périmètre, sept/huit jours, IndexedDB, Undo/Redo, conflit hors ligne et branche gagnante restent inchangées. Seuls le mécanisme de préparation et ses libellés descriptifs évoluent ; aucune nouvelle table à zéro n’est simulée. Le serveur de test sert aussi les modules .mjs.
+
+La migration précède Q12 dans un commit séparé, vert avec l’ancien comportement : ciblage **121/121**, suite **3321/3321**, navigateur historique et recette **26/26**. La copie figée du reçu est `tmp/gpt-phase-b/fixtures-recipe-receipt.json`.
+
+Q12 : cinq des six nouveaux tests rouges avant code ; ciblage **131/131**, suite **3327/3327** ensuite. Le moteur impose Péché strictement positif pour le seuil et la maladresse ; la maladresse à zéro reste un échec de Prière, applicable sans table, sanction ni décrément. Cent jets à zéro, Péché positif, fausse ligne client, aperçu inerte/périmé, double clic, Undo/Redo et rechargement couverts. Génération déterministe en deux passages. Navigateur `divin-v5-wrath-browser.mjs` : cinq contrôles verts, dont le vrai formulaire Q12 à zéro.
+
+Premier passage de recette après B03 interrompu au cloud : l’ancienne fixture exigeait encore une table 06–10 à zéro, erreur « La ligne canonique6–10 doit être résolue ». Preuve figée `tmp/gpt-phase-b/q12-cloud-red.log` et reçu `session2-recipe-before-cloud-migration.json`. La migration supplémentaire ci-dessus est expressément autorisée par « et toute autre que la suite révèle » du brief de reprise. Après migration, exécution cloud ciblée verte : **45 contrôles**, deux contextes IndexedDB natifs et Auth/RTDB réels sur émulateurs localhost, aucune erreur navigateur. Log `tmp/gpt-phase-b/q12-cloud-migrated.log`. Aucun code produit changé dans ce complément de migration.
+
+### B03 et limites précises
+
+L06 EN V5 v2 p.218 relue visuellement par l’exécutant, sans lecteur indépendant revendiqué. Quatre contrats typés générés : 36–40, 51–55, 71–75, 81–87. Quantités évaluées depuis les Péchés avant décrément ; service de Blessures directes existant, moteur partagé de Tests V5 et acquisition canonique des États réutilisés. Résistance vient de la fiche résolue ou de son score de base E, avec Endurance courante, effets magiques et contexte des États. Difficultés source +2/0/−1/−2 ; à l’échec, un Sonné, plus un par DR négatif pour 81–87. Immunités et conversion au-delà du BE en Inconscient par le moteur V5 conservées ; aucun Inconscient V4 ajouté.
+
+Les dés manquants, hors bornes, compétence ambiguë/non résolue, choix de jet et arbitrage de contexte manquants bloquent. Le texte libre ne remplace aucune donnée. Panneau : dés, choix de Résistance, arbitrage des États et projection PV/États/Momentum avant application. Transaction réelle : prêtre seul, effet primaire réussi sur l’allié conservé, reçu et origine persistants. Même identifiant encore porté par un État refusé après éviction du journal. Les États ne reçoivent pas l’échéance de la Bénédiction ; leur récupération suit les règles V5 communes existantes. B04 traitera ses autres récupérations conditionnées.
+
+Choix **B-C05** : 51–55 emploie « Wounds » sans répéter l’exclusion BE/PA ; lecture en Blessures directes consignée avec raison et alternative pour relecture MJ groupée. **B-C06** : Test passif et acquisition canonique. L’adaptateur reste dans le module Store divin déjà précaché (contrainte B-C04), sans nouveau module runtime imposant une modification interdite du service worker.
+
+Tests B03 : neuf rouges avant code, puis test de collision supplémentaire rouge avant sa garde ; dix nouveaux tests verts. Parcours navigateur rouge avant les champs structurés, puis **trois contrôles verts** : dés obligatoires et aperçu inerte, application réelle de 51–55, Annuler/Rétablir et reload IndexedDB natif. Captures 390/1440 px inspectées, sans débordement horizontal ; pas de téléphone physique testé. Les neuf premiers nouveaux tests ont eu une correction de fixture : remplacement d’un appel inexistant adjustHp par la vraie commande updateParticipant, assertions de péremption et d’état inchangé conservées.
+
+### Vérification finale de session 2
+
+- Ciblage B03 et contrôles voisins : **98/98**. Log `tmp/gpt-phase-b/b3-targeted.log`.
+- Suite complète B03 : **3337/3337**, zéro échec, **95,196 s**, log `tmp/gpt-phase-b/b3-suite.log`. Dernière suite complète imposée après migration cloud : `node --test --test-concurrency=4`, **3337/3337**, zéro échec, **95,712 s**, log `tmp/gpt-phase-b/q12-cloud-fixture-suite.log`.
+- Deux régénérations comparées identiques, `node tools/build-v5-divine-contracts.mjs --check` vert ; aucun JSON dérivé édité à la main.
+- Parcours B03 exécuté séparément : `node tests/divin-v5-b3-damage-browser.mjs`, trois contrôles verts, reçu `tmp/gpt-phase-b/b3-browser/receipt.json`. Ce nouveau script n’est pas ajouté automatiquement aux 26 commandes de la recette existante.
+- **Recette finale verte : 26/26 commandes, 3337/3337 tests Node, zéro échec**, terminée le 21/10/2026 à 11:31:05 UTC. Commande `node tools/run-divine-recipe.mjs` ; reçu `tmp/divin/recipe-receipt.json`, copie figée `tmp/gpt-phase-b/session2-final-recipe-receipt.json`, log `tmp/gpt-phase-b/session2-final-recipe.log`. Parcours divins, magie/combat, deux scénarios cloud sur émulateurs localhost, construction et lecture hors ligne verts. Les quatre sources protégées sont identiques au manifeste établi avant code à `29d2221`.
+- Fichiers à risque partagés non modifiés : store.js, resolution.js, moteurs de Tour, v5-store-action.js. Pas de version, service worker, dépendance, arbitrage ou catalogue protégé modifié. Aucun push, merge, déploiement ou écriture externe.
+- Contrôle final des checkouts : main propre à `29d2221`, ancien worktree gpt/phase-b propre à `895ec40`, conservés. Le source codex/divin-v5 est propre mais a avancé pendant cette session à `67b3bad` ; cette avance concurrente n’a pas été intégrée ici. Les validations portent sur gpt/phase-b2 issu de `29d2221` : les contrôles pertinents seront à rejouer après intégration avec le source actualisé. Le code et les fixtures de cette session aboutissent à `a75c3d5` ; le présent rapport fait l’objet d’un commit séparé. LF et diff --check verts.
+
+### Assertions de tests existants modifiées en session 2
+
+- `divin-v5-b1-characterization.test.js`, commit `5cf5b4f` : statut, déclenchement et motif des deux cas à zéro (jets 20 et 99), conformément à Q12 ; caractérisation initiale conservée dans `6c495fb`. Cas à Péché positif inchangés.
+- `divin-v5-control.test.js`, commit `69030fd` : cas 81–87 sans note MJ, statut `requires-input` remplace `needs-wrath-resolution`, puisque les dés structurés sont désormais requis ; ajout de l’assertion du besoin wrathDamageRoll. Refus d’application, ligne calculée et refus du résultat client conservés.
+- Les migrations de fixtures expressément autorisées sont détaillées ci-dessus et dans `e8a2b7c`/`5cf5b4f`/`a75c3d5` ; aucune assertion mécanique indépendante affaiblie pour faire passer Q12.
+
+Reprise : utiliser ce nouveau worktree et relire plan/choix/rapport, vérifier branche, HEAD et état hérité. **Commencer par B04** ; B01 est livré. La recette verte couvre uniquement ses contrôles nommés ; B19 et l’intégration mécanique exhaustive restent ouverts.
