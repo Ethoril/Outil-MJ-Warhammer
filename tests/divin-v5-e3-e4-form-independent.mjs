@@ -141,7 +141,13 @@ try {
   assert.deepEqual(afterPrayerPreview,beforePrayerPreview,'le geste Calculer est en lecture seule, y compris lorsque le Courroux est déclenché');
   assert.match(await page.locator('.workspace-divine-preview').innerText(),/Courroux divin déclenché/);
   await page.locator('.workspace-divine-preview [aria-label="Jet de Courroux (d100)"]').fill('78');
-  await page.locator('.workspace-divine-preview [aria-label="Conséquences du Courroux traitées par le MJ"]').fill('Le MJ a traité la conséquence indiquée par le résultat 88.');
+  await page.locator('[data-divine-action="calculate"]').click();
+  await page.locator('.workspace-divine-preview [aria-label="Nom du profil confirmé"]').fill('Démon mineur');
+  await page.locator('.workspace-divine-preview [aria-label="Blessures du profil"]').fill('10');
+  await page.locator('.workspace-divine-preview [aria-label="Initiative du profil"]').fill('30');
+  await page.locator('.workspace-divine-preview [aria-label="Distance d’apparition (2d10 yards)"]').fill('8');
+  await page.locator('.workspace-divine-preview [aria-label="Position d’apparition confirmée"]').fill('Au fond de la salle');
+  await page.locator('.workspace-divine-preview [aria-label="Cible la plus proche désignée"]').selectOption('priest');
   await page.evaluate(()=>{
     const store=window.__TEST__.Store,original=store.previewDivineExecution;
     window.__TEST__.previewCalls=[];
@@ -158,9 +164,10 @@ try {
   const applied=await page.evaluate(()=>{
     const rows=window.__TEST__.Store.listParticipants();
     const priest=rows.find(p=>p.id==='priest'),ally=rows.find(p=>p.id==='ally');
-    return {sin:priest.extensions.v5.divine.sin,states:ally.states.map(s=>s.key||s.name),effects:ally.extensions?.v5?.divineEffects||[]};
+    return {sin:priest.extensions.v5.divine.sin,states:ally.states.map(s=>s.key||s.name),effects:ally.extensions?.v5?.divineEffects||[],summoned:rows.filter(p=>p.extensions?.v5?.divineWrathSummon).map(p=>p.name)};
   });
   assert.equal(applied.sin,0,'l’application du Courroux retire le Péché après résolution');
+  assert.deepEqual(applied.summoned,['Démon mineur'],'B14 : le démon confirmé par le MJ est créé comme participant');
   assert.ok(applied.states.some(key=>/aveugle|blind/i.test(key)),'l’effet du Soleil aveugle sa cible admissible; le démon du Courroux reste un rappel MJ distinct');
   await page.reload({waitUntil:'networkidle'}); await page.waitForSelector('[data-divine-panel]');
   const reloaded=await page.evaluate(()=>({sin:window.__TEST__.Store.listParticipants().find(p=>p.id==='priest').extensions.v5.divine.sin,

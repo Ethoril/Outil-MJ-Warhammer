@@ -93,4 +93,76 @@ const handler = {
       wounds: effect.profile.wounds, ...(effect.profile.woundsFormula ? { woundsFormula: effect.profile.woundsFormula } : {}) } : { name: effect.name }) } })
 };
 
+// B14 : démon inférieur (Courroux 88) et Serviteur divin (141–145). Le livre renvoie au Bestiaire sans profil ni valeur : le MJ confirme
+// le profil, la position et la cible ; rien n'est inventé, aucune Action n'est créée. Le participant n'a pas de lien `divineSummon` (aucune
+// couche d'invocation) : il reste en jeu jusqu'au retrait par le MJ.
+export const WRATH_SUMMON_RULES = Object.freeze({
+  'wrath:88-88': Object.freeze({ kind: 'demon', min: 2, max: 20, dice: '2d10', label: 'Démon inférieur' }),
+  'wrath:141-145': Object.freeze({ kind: 'servant', min: 1, max: 100, dice: 'd100', label: 'Serviteur divin' })
+});
+const WRATH_SUMMON_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
+const WRATH_SUMMON_CAMPS = Object.freeze(['allie', 'ennemi', 'neutre']);
+const TEXT_MAX = 200;
+const plain = value => value && typeof value === 'object' && !Array.isArray(value);
+
+function normalizedWrathProfile(profile) {
+  if (!plain(profile)) return { need: need('wrathSummonProfile', 'Profil confirmé par le MJ (nom, Blessures, Initiative)') };
+  const bad = message => ({ need: need('wrathSummonProfile', message) });
+  if (Object.keys(profile).some(key => !['name', 'wounds', 'initiative', 'caracs', 'traits'].includes(key))) return bad('Profil : seuls nom, Blessures, Initiative, caractéristiques et traits sont admis');
+  if (!isText(profile.name) || profile.name.trim().length > 80) return bad('Profil : nom requis (80 caractères au plus)');
+  if (!Number.isSafeInteger(profile.wounds) || profile.wounds < 1 || profile.wounds > 999) return bad('Profil : Blessures entières entre 1 et 999');
+  if (!Number.isSafeInteger(profile.initiative) || profile.initiative < 0 || profile.initiative > 999) return bad('Profil : Initiative entière entre 0 et 999');
+  const out = { name: profile.name.trim(), wounds: profile.wounds, initiative: profile.initiative };
+  if (profile.caracs !== undefined) {
+    if (!plain(profile.caracs) || Object.entries(profile.caracs).some(([key, value]) => !WRATH_SUMMON_CARACS.includes(key) || !Number.isSafeInteger(value) || value < 0 || value > 999)) return bad('Profil : caractéristiques connues, entières et positives');
+    out.caracs = Object.fromEntries(WRATH_SUMMON_CARACS.filter(key => Object.hasOwn(profile.caracs, key)).map(key => [key, profile.caracs[key]]));
+  }
+  if (profile.traits !== undefined) {
+    if (!Array.isArray(profile.traits) || profile.traits.length > 20 || !profile.traits.every(trait => isText(trait) && trait.trim().length <= 80)) return bad('Profil : traits en liste de textes courts');
+    out.traits = profile.traits.map(trait => trait.trim());
+  }
+  return { profile: out };
+}
+
+/** Plan figé d'une apparition du Courroux : {ready:true, plan} ou {ready:false, needs:[{field,label}]}. Pur : ne lit que ses arguments. */
+export function planWrathSummon(row, input = {}, { participants = [], actorId, executionId, wrath = {} } = {}) {
+  const rule = WRATH_SUMMON_RULES[row?.id];
+  if (!rule) return { ready: false, needs: [need('wrathTableResult', 'Ligne de Courroux sans apparition')] };
+  const needs = [];
+  const { profile, need: profileNeed } = normalizedWrathProfile(input.wrathSummonProfile);
+  if (profileNeed) needs.push(profileNeed);
+  const roll = input.wrathSummonDistanceRoll;
+  if (!Number.isSafeInteger(roll) || roll < rule.min || roll > rule.max) needs.push(need('wrathSummonDistanceRoll', `Distance en yards (${rule.dice}) : entier de ${rule.min} à ${rule.max}`));
+  const position = isText(input.wrathSummonPosition) ? input.wrathSummonPosition.trim() : null;
+  if (!position || position.length > TEXT_MAX) needs.push(need('wrathSummonPosition', `Position d’apparition confirmée (${TEXT_MAX} caractères au plus)`));
+  const id = `divine-wrath-summon:${safe(executionId)}`;
+  if (participants.some(other => other.id === id)) needs.push(need('executionId', 'Identifiant d’apparition déjà utilisé : nouvel identifiant requis'));
+  let targetId, camp, behavior;
+  if (rule.kind === 'demon') {
+    camp = 'ennemi';
+    targetId = input.wrathSummonTargetId;
+    if (!isText(targetId) || targetId === id || !participants.some(other => other.id === targetId)) needs.push(need('wrathSummonTargetId', 'Cible la plus proche désignée par le MJ (participant présent)'));
+  } else {
+    camp = input.wrathSummonCamp;
+    if (!WRATH_SUMMON_CAMPS.includes(camp)) needs.push(need('wrathSummonCamp', `Camp du serviteur choisi par le MJ (${WRATH_SUMMON_CAMPS.join(', ')})`));
+    behavior = isText(input.wrathSummonBehavior) ? input.wrathSummonBehavior.trim() : null;
+    if (!behavior || behavior.length > TEXT_MAX) needs.push(need('wrathSummonBehavior', `Conduite du serviteur selon le dieu (${TEXT_MAX} caractères au plus)`));
+  }
+  if (needs.length) return { ready: false, needs };
+  return { ready: true, plan: { id, ruleVersion: 1, originExecutionId: executionId, resultId: row.id, kind: rule.kind, ownerId: actorId, distanceRoll: roll, distanceYards: roll,
+    position, camp, profile, ...(targetId ? { targetId } : {}), ...(behavior ? { behavior } : {}), source: structuredClone(row.source),
+    wrathProof: { roll: wrath.roll, modifiedRoll: wrath.modifiedRoll, sinAtTest: wrath.sinAtTest, resultId: row.id } } };
+}
+
+/** Participant ordinaire du plan : valeurs du MJ seulement, ni armure ni Action inventées. */
+export function wrathSummonParticipant(plan, targetName) {
+  const notes = [`${WRATH_SUMMON_RULES[plan.resultId].label} du Courroux, apparu à ${plan.distanceYards} yards du prêtre.`, `Position : ${plan.position}.`,
+    ...(plan.kind === 'demon' ? [`Attaque la cible la plus proche désignée : ${targetName || plan.targetId}.`] : [`Conduite : ${plan.behavior}.`])].join(' ');
+  return { id: plan.id, name: plan.profile.name, kind: 'Créature', camp: plan.camp, zone: 'active', initiative: plan.profile.initiative,
+    hp: plan.profile.wounds, maxHp: plan.profile.wounds, caracs: structuredClone(plan.profile.caracs || {}), armor: { head: 0, body: 0, arms: 0, legs: 0 },
+    skills: [], actions: [], traits: [...(plan.profile.traits || [])], notes,
+    extensions: { v5: { divineWrathSummon: { executionId: plan.originExecutionId, resultId: plan.resultId, kind: plan.kind, ownerId: plan.ownerId,
+      distanceYards: plan.distanceYards, position: plan.position, ...(plan.targetId ? { targetId: plan.targetId } : {}), ...(plan.behavior ? { behavior: plan.behavior } : {}) } } } };
+}
+
 export default { 'summon-creature': handler };

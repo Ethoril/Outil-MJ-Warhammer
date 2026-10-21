@@ -145,7 +145,7 @@ test('E4 runtime indépendant — aperçu avec Courroux et Péché ne mutile pas
   assert.equal(edit.ok, true, edit.error);
   const before = snapshot(store);
   const preview = store.previewDivineExecution(BATTLE, prayer({ roll: 21, wrathRoll: 78,
-    wrathConsequences: 'Le MJ a résolu le rappel de la ligne 88.' }));
+    wrathSummonProfile: { name: 'Démon mineur', wounds: 10, initiative: 30 }, wrathSummonDistanceRoll: 8, wrathSummonPosition: 'Au fond de la salle', wrathSummonTargetId: 'priest' }));
   assert.equal(preview.ready, true, preview.error);
   assert.equal(preview.wrathTableResult?.id, 'wrath:88-88');
   assert.deepEqual(snapshot(store), before, 'Calculer ne consomme pas le Péché et ne modifie pas le sujet ou les cibles');

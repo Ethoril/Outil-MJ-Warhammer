@@ -267,14 +267,14 @@ test('Contrôle indépendant — adapter Store choisit la ligne à partir du d10
   const shield = getAllDivineContracts().find(row => row.canonicalName === 'Shield of Myrmidia');
   const actor = makeActor({ sin: 1, pray: 80 });
   const state = stateFor(actor);
-  const run = (prayRoll, wrathRoll, sin, note='MJ confirme le traitement') => {
+  const run = (prayRoll, wrathRoll, sin, note='MJ confirme le traitement', extra={}) => {
     const current = structuredClone(state);
     current.combat.participants[0].extensions.v5.divine.sin = sin;
     return previewStoreDivine(current, shield.id, { actorId: actor.id, targetIds: [actor.id], facts: factsFor(actor), canSpeak: true, roll: prayRoll, wrathRoll,
-      wrathConsequences: note, wrathResult: { resultId: 'forged:151-plus' }, expiry: { phase: 'endOfRound', round: 1 } });
+      wrathConsequences: note, wrathResult: { resultId: 'forged:151-plus' }, ...extra, expiry: { phase: 'endOfRound', round: 1 } });
   };
-  for (const [prayRoll,wrathRoll,sin,expected] of [[99,90,1,'wrath:96-100'],[99,91,1,'wrath:101-105'],[99,100,5,'wrath:146-150'],[99,91,6,'wrath:151-plus'],[99,78,1,'wrath:88-88'],[99,77,1,'wrath:81-87']]) {
-    const result = run(prayRoll,wrathRoll,sin);
+  for (const [prayRoll,wrathRoll,sin,expected,extra] of [[99,90,1,'wrath:96-100'],[99,91,1,'wrath:101-105'],[99,100,5,'wrath:146-150'],[99,91,6,'wrath:151-plus'],[99,78,1,'wrath:88-88',{ wrathSummonProfile: { name: 'Démon mineur', wounds: 10, initiative: 30 }, wrathSummonDistanceRoll: 8, wrathSummonPosition: 'Au fond de la salle', wrathSummonTargetId: actor.id }],[99,77,1,'wrath:81-87']]) {
+    const result = run(prayRoll,wrathRoll,sin,'MJ confirme le traitement',extra);
     assert.ok(result.preview?.wrath?.triggered, `Courroux manquant pour ${wrathRoll}+10x${sin}: ${result.error}`);
     assert.equal(result.wrathTableResult?.id, expected);
     assert.equal(result.input.wrathResult.resultId, expected, 'le résultat imposé par le formulaire est ignoré');

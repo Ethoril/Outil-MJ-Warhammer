@@ -92,7 +92,7 @@ test('previewStoreDivine avec Courroux et une cible distincte ne mutate pas le p
  const s=await fixture();await s.setDivineSin('priest',1,{reason:'Préparation pureté du preview'});
  const before=envelope(s);
  const preview=s.previewDivineExecution(SUN,input({roll:21,wrathRoll:78,
-  wrathConsequences:'Le MJ a traité la conséquence indiquée par le résultat 88.',
+  wrathSummonProfile:{name:'Démon mineur',wounds:10,initiative:30},wrathSummonDistanceRoll:8,wrathSummonPosition:'Au fond de la salle',wrathSummonTargetId:'ally',
   facts:{targets:{ally:{withinRange:true,nonMyrmidian:true,lookingAtPriest:true}}}}));
  assert.equal(preview.ready,true,preview.error);
  assert.equal(preview.preview.wrath.sinAfter,0);

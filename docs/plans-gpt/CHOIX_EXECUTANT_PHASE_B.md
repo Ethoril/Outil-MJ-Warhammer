@@ -116,3 +116,16 @@ B-C31 : 146–150 retire réellement Béni/Invocation du culte source et toutes 
 B-C32 : la difficulté sociale est au mieux Très difficile −3 DR envers les membres du culte source ; une difficulté plus dure reste plus dure. Les modificateurs positifs et l’avantage ne peuvent remonter le modificateur total au-dessus de −3. Critiques, réussite automatique, inversion et calcul partagé conservent leurs règles ; le plancher d’un critique ne devient pas une nouvelle difficulté. Les deux rôles d’une opposition sont raccordés. Un fait booléen MJ confirme l’appartenance de l’interlocuteur pour chaque culte actif ; aucune foi déduite de son nom. Sociabilité, compétences sociales identifiées (dont Intimidation sur Force) et interaction sociale explicitement désignée utilisent ce garde. Prière et Tests physiques ordinaires en sont exclus.
 
 Le journal de résolution est local selon le protocole existant : le cloud vérifie le calcul/journal sur son auteur B et la conservation du rejet partagé sur A. Il ne prétend pas synchroniser ce journal. Reload IndexedDB et Undo/Redo restaurent ensemble sanction, talents et avances ; les retraits génériques et copies sur un autre sujet sont refusés. Aucune assertion historique modifiée. Arrêt de session demandé par le MJ après B13 : B14 n’est pas commencé.
+
+## B14 — session 5 (Claude Pro) : démon inférieur et Serviteur divin
+
+L06 V5 EN p.218 (88) et p.219 (Serviteurs, 141–145) relues en texte. Le livre ne donne aucun profil : il renvoie au Bestiaire (« animal, humain ou démon à votre convenance »). Aucune valeur n'est donc inventée.
+
+| ID | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| B-C33 | L06 p.218 88, p.219 Serviteurs | D'où vient le profil du démon/serviteur ? | Saisi et confirmé par le MJ (nom, Blessures, Initiative, caractéristiques et traits facultatifs) ; ni armure, ni compétence, ni Action créées. | Le Bestiaire (phase E) n'est pas encore importé ; pas d'attaque automatique sans faits. | Liste fermée de profils après la phase E. |
+| B-C34 | L06 p.218 88 | Cible du démon ? | Le MJ désigne un participant présent (le prêtre admis) ; le démon est de camp `ennemi`, la cible est consignée dans le lien et les notes. | « Cible la plus proche » exige des faits spatiaux que l'outil ne possède pas. | Calcul de proximité si un jour des positions existent. |
+| B-C35 | L06 p.219 141–145 | Camp et conduite du serviteur ? | Camp (allié, ennemi, neutre) et conduite choisis par le MJ, sans défaut. | « Attaque, intervient, réprimande selon le dieu » : décision narrative. | — |
+| B-C36 | L06 p.218/219 | Durée de présence ? | Aucune : le participant reste jusqu'au retrait par le MJ ; pas de lien `divineSummon`, donc jamais balayé comme une invocation de miracle. | Le livre ne fixe pas de durée. | Durée saisie par le MJ. |
+
+Le dé de distance (2d10, d100) est saisi en total ; la distance en yards est ce total. Le participant entre dans l'ordre d'Initiative par le mécanisme commun (ordre automatique), y compris depuis une récupération B04 (raccord d'une ligne dans `applyDivineWrathRecovery`, store.js, caractérisé par `divin-v5-b14-recovery-characterization.test.js`). Le participant est un état de combat : aucune variable durable nouvelle au registre PJ.

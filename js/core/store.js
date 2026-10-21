@@ -2953,6 +2953,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         const block=brokenEscapeActionBlock(draft,actorId);
         if(block||isBrokenEscapeActor(actor)&&(typeof visible!=='boolean'||isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visible,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]})))throw Object.assign(new Error('Brisé : Prière de récupération indisponible pour ce Tour.'),{userFacing:true});
         execution=applyStoreDivineWrathRecovery(draft,captured);
+        if(execution?.state)registerNewV5Participants(draft,execution.state);
         recordV5ActionUsage(execution.state,actorId,execution.executionId);
         if(isBrokenEscapeActor(execution.state.combat.participants.find(row=>row.id===actorId)))recordV5EscapeVisibility(execution.state,actorId,visible,execution.executionId);
         return execution.state;

@@ -101,7 +101,7 @@ try {
     await store.setDivineSin(actor.id,1,{reason:'contrôle de règle, état initial explicite'});
     const targetIds=['ally'],facts={targets:{ally:{withinRange:true,nonMyrmidian:true,lookingAtPriest:true}}};
     const missing=store.previewDivineExecution(sunId,{actorId:actor.id,targetIds,canSpeak:true,roll:21,facts:{targets:{ally:{withinRange:true}}},wrathRoll:78});
-    const resolved=store.previewDivineExecution(sunId,{actorId:actor.id,targetIds,canSpeak:true,roll:21,facts,wrathRoll:78,wrathConsequences:'MJ a traité le résultat de table'});
+    const resolved=store.previewDivineExecution(sunId,{actorId:actor.id,targetIds,canSpeak:true,roll:21,facts,wrathRoll:78,wrathSummonProfile:{name:'Démon mineur',wounds:10,initiative:30},wrathSummonDistanceRoll:8,wrathSummonPosition:'Au fond de la salle',wrathSummonTargetId:'ally'});
     if(!resolved.ready)throw new Error(resolved.error||'Soleil/Courroux non résolu');
     const applied=await store.applyDivineExecution(sunId,{preview:resolved});
     const after=store.listParticipants(),priest=after.find(p=>p.id==='priest'),ally=after.find(p=>p.id==='ally');

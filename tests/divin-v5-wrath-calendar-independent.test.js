@@ -106,8 +106,8 @@ test('Courroux calendaire indépendant —16–20 automatisé, les lignes restan
       continue;
     }
     assert.equal(preview.ready,false);
-    assert.equal(preview.status,'needs-wrath-resolution');
-    assert.ok(preview.needsInput.some(need=>need.field==='wrathConsequences'));
+    assert.equal(preview.status,'requires-input');
+    assert.ok(preview.needsInput.some(need=>need.field==='wrathSummonProfile'));
   }
   const lessons=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:1}));
   assert.equal(lessons.ready,false);
