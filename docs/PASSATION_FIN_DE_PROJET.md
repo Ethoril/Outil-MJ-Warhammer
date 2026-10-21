@@ -20,11 +20,13 @@ Claude Pro en cours, intègre et publie ce qui est fini, et relance ce qui s'est
 
 | Phase | Worktree / branche | Fait et publié | En cours / reste |
 | --- | --- | --- | --- |
-| B Courroux | `E:\Outil MJ Warhammer\tmp\pro-phase-b5-worktree`, `pro/phase-b5` | B00-B15 | B16, B17, B18, clôture B19 |
-| C Brisé | `E:\Outil MJ Warhammer\tmp\pro-phase-c2-worktree`, `pro/phase-c2` | C01-C05 | C06 (clôture, test de couverture non commité) |
+| B Courroux | `E:\Outil MJ Warhammer\tmp\pro-phase-b5-worktree`, `pro/phase-b5` | B00-B17 | B18 (en cours, non commité), clôture B19 |
+| C Brisé | `E:\Outil MJ Warhammer\tmp\pro-phase-c2-worktree`, `pro/phase-c2` | C01-C06, **phase terminée** (3.22.0) | — (choix de l’exécutant à relire : `docs/plans-gpt/CHOIX_EXECUTANT_PHASE_C.md`) |
+| E Bestiaires | `E:\Outil MJ Warhammer\tmp\pro-phase-e-worktree`, `pro/phase-e` (depuis 3.22.0) | — | démarrage le 22/10 à 4 h 05 : plan de lots (complément L19-L26), puis lots ; prompt `%LOCALAPPDATA%\Temp\pro-phase-e\prompt.md` |
 | D Magie | `E:\Outil MJ Warhammer\tmp\pro-phase-d`, `pro/phase-d` | D1-D8 (socle, Magie naturelle + AOTE3, Sorcellerie, Démonologie, Nécromancie, Nurgle, Slaanesh) | Tzeentch D9 (en cours, non commité), puis lots suivants de `docs/plans-gpt/PLAN_PRO_PHASE_D.md` (orques, slann, elfes, Grande Gueule, compléments, conception des runes, familiers) |
 
-- Reprises lancées à 23 h 05 / 23 h 15 / 23 h 25 par `%LOCALAPPDATA%\Temp\pro-resume-2305.ps1` ; journaux `%LOCALAPPDATA%\Temp\pro-phase-<b5|d|c2>\run-2305.log` ; identifiant de session dans `session-id.txt` du même dossier.
+- **Veilleur** `%LOCALAPPDATA%\Temp\pro-watch.ps1` (masqué, journal `pro-watch.log`) : attend la fin des sessions, lit « resets Xam » dans le journal de chaque chantier, relance B, D et E (E sans `-Resume` au premier tour) à l’heure de remise à zéro + 5 min, espacés de 10 min, jusqu’à 4 tours ; journaux `%LOCALAPPDATA%\Temp\pro-phase-<b5|d|e>\run-w<tour>.log`, identifiant de session dans `session-id.txt`. Premier tour : 22/10, 4 h 05.
+- Suite complète dans le checkout C: : la lancer **sans** `TEMP` sur E:, sinon « E2 indépendant — preuve hors checkout » échoue (chemin relatif C:→E: impossible).
 - **Quota Pro** : trois chantiers parallèles le vident en ~20 min (fenêtre de 5 h). À l’arrêt (« You've hit your session limit · resets HH »), relancer après la remise à zéro avec `-Resume <id>` et un prompt court « continue » (`prompt-continue.md` du dossier) ; un lanceur `.ps1` démarré par `Start-Process powershell -WindowStyle Hidden` (sinon une fenêtre de terminal par commande). Voir le skill `deleguer-pro`, section « Mode complet ».
 - Autres exécutants possibles avec les mêmes briefs : GPT (`docs/plans-gpt/`), Gemini (`docs/plans-gemini/`) ; GLM sans crédits Mistral (coût réel ≈ 1/7 du plafond affiché).
 
