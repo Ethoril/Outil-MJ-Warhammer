@@ -68,3 +68,9 @@ Ces décisions s’imposent aux lots des phases B à E de `docs/PLAN_FIN_DE_PROJ
 - Noms français : **livre FR** quand il existe, sinon **proposition de l’exécutant** consignée, relue ensuite en sélecteurs groupés.
 - Import : **les 508 profils, livre par livre** (livre de base, puis Imperial Zoo, puis les autres), gabarits et prétirés inclus ; intitulés incohérents des prétirés signalés, caractéristiques jamais corrigées.
 - Notes d’exécutant sans arbitrage : Q04, Q08, Q10 (alias), Q16, Q17, Q18, Q19, Q22-Q29.
+
+## Corpus (21/10)
+
+- Ajoutés par le MJ : L19 Middenheim, L20 Altdorf, L21 Empire in Ruins Companion, L22 The Horned Rat Companion, L23 Enemy in Shadows Companion, L24 Rough Nights & Hard Days, L25 Sea of Claws, L26 Death on the Reik Companion (`docs/divin/DIVIN_CORPUS_LIVRES_COMPLEMENT.json`).
+- Ignorés (non acquis) : Ubersreik Adventures I-III, Salzenmund, Starter Set, Gamemaster’s Guide ; tout ce qui est supposé en venir est ignoré.
+- Les inventaires B0, C0, D0a, D0b, E0 ont été faits sans L19-L26 : un complément d’inventaire sur ces livres précède les lots des phases B à E.

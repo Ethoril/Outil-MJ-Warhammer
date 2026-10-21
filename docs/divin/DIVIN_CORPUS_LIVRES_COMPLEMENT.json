@@ -14,6 +14,101 @@
       "hashComputedAt": "2026-10-18",
       "sourceRole": "Supplément V4 (crédits imprimés : Warhammer Fantasy Roleplay 4th Edition, copyright 2021); sources de miracles de supplément à adapter au socle V5.",
       "editionProofStatus": "V4 établie par les crédits imprimés du livre."
+    },
+    {
+      "id": "L19",
+      "file": "WFRP-Middenheim-City-of-the-White-Wolf_18.01.2021.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/WFRP-Middenheim-City-of-the-White-Wolf_18.01.2021.pdf",
+      "bytes": 49356601,
+      "sha256": "3038d48bd4314e8e95f25fbf7cd1660b82321950f623ab33478666a944e063fb",
+      "physicalPages": 160,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
+    },
+    {
+      "id": "L20",
+      "file": "WFRP_Altdorf_Crown_of_the_Empire.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/WFRP_Altdorf_Crown_of_the_Empire.pdf",
+      "bytes": 78410826,
+      "sha256": "3bca350fa5fa62b8711733b9b78a83c47e2de2368c3c5d27b627d7e33c5c281e",
+      "physicalPages": 221,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
+    },
+    {
+      "id": "L21",
+      "file": "WFRP_Empire_in_Ruins_Companion.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/WFRP_Empire_in_Ruins_Companion.pdf",
+      "bytes": 41514400,
+      "sha256": "6df76acdd7f0b3fd1cb8af756bef086a6a46432f7a8c1c8cebd1f86e14701edd",
+      "physicalPages": 123,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
+    },
+    {
+      "id": "L22",
+      "file": "WFRP_The_Horned_Rat_Enemy_Within_Campaign_Director_s_Cut_Volume_4_Companion1.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/WFRP_The_Horned_Rat_Enemy_Within_Campaign_Director_s_Cut_Volume_4_Companion1.pdf",
+      "bytes": 34603124,
+      "sha256": "6ff87d4e8e367cf9a5be19d54b393707e8f27e291fca1f7f9022b370407eb47b",
+      "physicalPages": 128,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
+    },
+    {
+      "id": "L23",
+      "file": "Warhammer_Fantasy_Roleplay_Enemy_in_Shadows_Companion.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/Warhammer_Fantasy_Roleplay_Enemy_in_Shadows_Companion.pdf",
+      "bytes": 39060168,
+      "sha256": "062054bffa4ac2bc025dd347126a9da918b0ad01557c5556fd3a98b305e94803",
+      "physicalPages": 129,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
+    },
+    {
+      "id": "L24",
+      "file": "Warhammer_Fantasy_Roleplay_Rough_Nights__Hard_Days_PDF.pdf.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/Warhammer_Fantasy_Roleplay_Rough_Nights__Hard_Days_PDF.pdf.pdf",
+      "bytes": 66842847,
+      "sha256": "2bb70bb26c843ab9a0c0010502611095d8903b020e8a7a92423b4dc3f3aa94b8",
+      "physicalPages": 98,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
+    },
+    {
+      "id": "L25",
+      "file": "WFRP_Sea_Of_Claws_221021.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/WFRP_Sea_Of_Claws_221021.pdf",
+      "bytes": 92112368,
+      "sha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+      "physicalPages": 159,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
+    },
+    {
+      "id": "L26",
+      "file": "WFRP_Death_on_the_Reik_Companion.pdf",
+      "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/WFRP_Death_on_the_Reik_Companion.pdf",
+      "bytes": 71362385,
+      "sha256": "20567032f2a780530350bb0fd8b42ff0493297eb6a29df444be66a60f1cbac0d",
+      "physicalPages": 128,
+      "hashComputedAt": "2026-10-21",
+      "sourceRole": "Supplément V4 ajouté par le MJ le 21/10/2026 (phases B à F du plan de fin de projet) ; règles à adapter au socle V5.",
+      "editionProofStatus": "À établir par les crédits imprimés lors du premier inventaire."
     }
-  ]
+  ],
+  "excludedBooks": [
+    "Ubersreik Adventures I, II, III",
+    "Salzenmund: City of Salt and Silver",
+    "Starter Set",
+    "Gamemaster’s Guide"
+  ],
+  "excludedPolicy": "Non acquis par le MJ (21/10/2026) : tout ce qui est supposé en venir est ignoré."
 }
