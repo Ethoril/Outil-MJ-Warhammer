@@ -9,6 +9,7 @@ import {NURGLE} from './tradition-contracts/nurgle.mjs';
 import {SLAANESH} from './tradition-contracts/slaanesh.mjs';
 import {TZEENTCH} from './tradition-contracts/tzeentch.mjs';
 import {GRANDE_GUEULE} from './tradition-contracts/grande-gueule.mjs';
+import {WAAAGH_PETITE,WAAAGH_GRANDE} from './tradition-contracts/waaagh.mjs';
 
 export const TRADITION_SPELLS=[
  ...MAGIE_NATURELLE_L06,
@@ -19,5 +20,7 @@ export const TRADITION_SPELLS=[
  ...NURGLE,
  ...SLAANESH,
  ...TZEENTCH,
- ...GRANDE_GUEULE
+ ...GRANDE_GUEULE,
+ ...WAAAGH_PETITE,
+ ...WAAAGH_GRANDE
 ];

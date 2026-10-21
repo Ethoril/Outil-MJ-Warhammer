@@ -20018,5 +20018,1365 @@
     "ficheFollowUp": false,
     "isVortex": false,
     "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-du-calme",
+    "row": null,
+    "name": "Du calme !",
+    "canonicalName": "Behave!",
+    "page": 98,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 2,
+    "range": "Force Mentale mètres",
+    "target": "1 (maximum)",
+    "duration": "Bonus de Force Mentale minutes",
+    "sourceFingerprint": "sha256:6b50d0ecba810c02acf7b59e5c132d87858ddfd253d1c726b6e5cbbf7fab0547",
+    "treatment": "narrative",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration"
+      ]
+    },
+    "effects": {
+      "type": "narrative",
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman grogne contre une créature qui l’accompagne : un Squig, Loup géant, Araignée (toute taille) ou Snotling affecté suit ses ordres avec la discipline d’un chien bien dressé. Créatures concernées : Squig, Loup géant, Araignée de toute taille, Snotling (désignées par le MJ). Un seul sujet.",
+    "assistedClauses": [
+      "Créatures concernées : Squig, Loup géant, Araignée de toute taille, Snotling (désignées par le MJ). Un seul sujet."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-mots-malins",
+    "row": null,
+    "name": "Mots malins",
+    "canonicalName": "Cunnin’ Words",
+    "page": 98,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 0,
+    "range": "Force Mentale mètres",
+    "target": "1",
+    "duration": "Bonus de Force Mentale minutes",
+    "sourceFingerprint": "sha256:54f7a59714cacf44291f52dc4b0907a0b355a1a929d802be1ced7b56888ee484",
+    "treatment": "narrative",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "narrative",
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman appelle Mork pour que l’auditeur entende un discours civilisé plutôt que son babil : tout se passe comme s’il parlait la langue de l’auditeur. Compréhension seulement ; le sort n’accorde ni bonus social ni contrôle.",
+    "assistedClauses": [
+      "Compréhension seulement ; le sort n’accorde ni bonus social ni contrôle."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-malediction-de-la-mauvaise-lune",
+    "row": null,
+    "name": "Malédiction de la Mauvaise Lune",
+    "canonicalName": "Curse of Da Bad Moon",
+    "page": 98,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 9,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "ZdE Bonus de Force Mentale mètres",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:7ad7b6a3d5e57c196390f0b48db5b52d2c562bdd5389ccd061777c18dd3dfdac",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "condition",
+      "aoe": true,
+      "conditions": [
+        "Exténué"
+      ],
+      "specialState": {
+        "cannotUseFortune": true
+      },
+      "targetRule": {
+        "enemiesOnly": true
+      },
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman hurle au ciel et fait surgir une lune hideuse au visage gobelinoïde : les ennemis de la zone gagnent un Exténué et une malchance prononcée, sans Points de Chance pendant la durée. Ennemis de la zone seulement ; Exténué et interdiction de dépenser de la Chance pendant la durée.",
+    "assistedClauses": [
+      "Ennemis de la zone seulement ; Exténué et interdiction de dépenser de la Chance pendant la durée."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-don-du-dieu-araignee",
+    "row": null,
+    "name": "Don du Dieu-Araignée",
+    "canonicalName": "Gift of the Spider-God",
+    "page": 98,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 3,
+    "range": "Vous",
+    "target": "ZdE Bonus de Force Mentale mètres (Gobelins des forêts)",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:b6505bf484cb6132f4e9c2a1c568fa65884e188d6076cb39b2dd4ff089fc2ad1",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "traits",
+      "aoe": true,
+      "traits": [
+        "Venin (Intermédiaire)"
+      ],
+      "targetRule": {
+        "alliesOnly": true,
+        "requiredFact": "forestGoblin"
+      },
+      "facts": [
+        {
+          "key": "forestGoblin",
+          "label": "Cible : Gobelin des forêts allié",
+          "type": "boolean",
+          "perTarget": true,
+          "optional": true
+        },
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman siffle une invocation au Festin d’au-delà : les Gobelins des forêts alliés de la zone gagnent le Trait Venin de puissance Intermédiaire. Une cible qui a déjà le Trait Venin passe à la puissance Difficile (−1 DR) : à appliquer par le MJ (le moteur ajoute le Trait nommé).",
+    "assistedClauses": [
+      "Une cible qui a déjà le Trait Venin passe à la puissance Difficile (−1 DR) : à appliquer par le MJ (le moteur ajoute le Trait nommé)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-gork-va-arranger-ca",
+    "row": null,
+    "name": "Gork va arranger ça",
+    "canonicalName": "Gork’ll Fix It",
+    "page": 98,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 5,
+    "range": "Force Mentale mètres",
+    "target": "1",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:85522b1d061921ab55dd082a8d970137c598753ddc67742ebad60923b053feca",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "condition",
+      "conditions": [
+        "Exténué"
+      ],
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman pointe un doigt osseux sur un ennemi proche et le maudit au nom de Gork : la cible subit un état Exténué pour la durée. L’état Exténué dure le temps du sort.",
+    "assistedClauses": [
+      "L’état Exténué dure le temps du sort."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-la-grande-rancune-verte",
+    "row": null,
+    "name": "La Grande Rancune verte",
+    "canonicalName": "The Great Green Spite",
+    "page": 98,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 20,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "ZdE Bonus de Force Mentale mètres",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:0bd5d99b757df4111535f09b574deac3245169a5d1a78a5449178a7967fda51a",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "aoe": true,
+      "targetRule": {
+        "alliesOnly": true,
+        "requiredFact": "greenskin"
+      },
+      "specialState": {
+        "assistedReminder": "Chaque attaque de corps à corps ou à distance réussie d’un Gobelin allié contre un ennemi de la zone compte comme un Coup Critique pendant la durée. Si le lanceur est un Hobgobelin, l’effet vaut pour les Hobgobelins."
+      },
+      "facts": [
+        {
+          "key": "greenskin",
+          "label": "Cible : Orque, Gobelin ou Hobgobelin",
+          "type": "boolean",
+          "perTarget": true,
+          "optional": true
+        },
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman concentre la rancune accumulée des Gobelins proches en une malédiction très laide : pendant la durée, toute attaque réussie d’un Gobelin contre un ennemi de la zone compte comme un Coup Critique. Gobelins alliés de la zone (fait « Orque, Gobelin ou Hobgobelin » à saisir) ; la détermination du Critique est jouée par le MJ.",
+    "assistedClauses": [
+      "Gobelins alliés de la zone (fait « Orque, Gobelin ou Hobgobelin » à saisir) ; la détermination du Critique est jouée par le MJ."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-demangeaison",
+    "row": null,
+    "name": "Démangeaison",
+    "canonicalName": "Itchy Nuisance",
+    "page": 99,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 4,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:f55a74b9f502b7bc29e684feecf0879a7403a01b5e8716bf8b45d7a091ce3642",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "test-modifiers",
+      "testModifiers": {
+        "Tous les Tests": -1
+      },
+      "metalArmourTestModifiers": {
+        "Tous les Tests": -2
+      },
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman se gratte les aisselles en cacklant des malédictions d’hygiène et de mites fongiques : la cible subit −1 DR à tous ses Tests ; −2 DR si elle porte une armure de métal. Armure de métal lue sur la fiche de la cible (matière des pièces portées).",
+    "assistedClauses": [
+      "Armure de métal lue sur la fiche de la cible (matière des pièces portées)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-mork-te-veut",
+    "row": null,
+    "name": "Mork te veut !",
+    "canonicalName": "Mork Wants Ya!",
+    "page": 99,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 9,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:e04bc26950cbd72bba5311320748e8186ff84fe5699b1db3a492f153731e6c0f",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "damage",
+      "damage": {
+        "formula": "10",
+        "location": "Corps"
+      },
+      "opposedTest": {
+        "casterScore": 80,
+        "casterStat": "F",
+        "targetStat": "F",
+        "targetSkill": "Force",
+        "resistOnLoss": true,
+        "casterWinsTies": true
+      },
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman pince les doigts ; une grande main verte descend du ciel pour pincer la cible, qui doit gagner un Test de Force opposé à Force 80 pour s’en libérer ; sinon elle subit un coup de 10 au corps puis est lâchée de 2d10 mètres. Opposition : jet d100 de la main (Force 80) et jet d100 de la cible, saisis. Cible prise : dégâts 10 à la localisation Corps puis chute de 2d10 mètres (dégâts de chute à jouer par le MJ). Cible qui gagne l’opposition : aucun effet.",
+    "assistedClauses": [
+      "Opposition : jet d100 de la main (Force 80) et jet d100 de la cible, saisis. Cible prise : dégâts 10 à la localisation Corps puis chute de 2d10 mètres (dégâts de chute à jouer par le MJ). Cible qui gagne l’opposition : aucun effet."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-voile-de-la-nuit",
+    "row": null,
+    "name": "Voile de la nuit",
+    "canonicalName": "Night Shroud",
+    "page": 99,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 5,
+    "range": "Bonus de Force mètres",
+    "target": "ZdE Bonus de Force Mentale mètres",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:0dd838ee48f64e678d11d8dc30b96c4c1a9687e8e63ae0900cb687e373792606",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "condition",
+      "aoe": true,
+      "conditions": [
+        "Aveuglé"
+      ],
+      "targetRule": {
+        "exceptAnyTrait": [
+          "vision nocturne",
+          "vision dans le noir"
+        ]
+      },
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman lance un champignon à chapeau noir qui éclate en un nuage de ténèbres : quiconque y est plongé est Aveuglé ; qui s’y déplace réussit un Test de Perception Intermédiaire (+0 DR) ou tombe À Terre ; Vision nocturne ou Vision dans le noir immunisent. Se déplacer dans le nuage : Test de Perception Intermédiaire (+0 DR), échec : À Terre, à jouer par le MJ (aucun suivi du mouvement).",
+    "assistedClauses": [
+      "Se déplacer dans le nuage : Test de Perception Intermédiaire (+0 DR), échec : À Terre, à jouer par le MJ (aucun suivi du mouvement)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-chapardeur",
+    "row": null,
+    "name": "Chapardeur",
+    "canonicalName": "Nikkit!",
+    "page": 99,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 3,
+    "range": "Force Mentale mètres",
+    "target": "1",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:15717f161a011f7ef3b7d3230953f411d8e6198970377fb7a01b963fb021354a",
+    "treatment": "narrative",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "narrative",
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman fait surgir deux mains vertes qui tentent de faire les poches d’une cible à portée comme s’il avait Escamotage 55 ; la cible peut remarquer les mains et le butin avec un Test de Perception Intermédiaire (+0 DR). Escamotage 55 : jet du Chaman saisi par le MJ ; la cible teste Perception Intermédiaire (+0 DR) pour remarquer les mains qui reviennent.",
+    "assistedClauses": [
+      "Escamotage 55 : jet du Chaman saisi par le MJ ; la cible teste Perception Intermédiaire (+0 DR) pour remarquer les mains qui reviennent."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-coups-en-traitre",
+    "row": null,
+    "name": "Coups en traître",
+    "canonicalName": "Sneaky Stabbin’",
+    "page": 99,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 8,
+    "range": "Vous",
+    "target": "ZdE Bonus de Force Mentale mètres (Orques et Gobelins)",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:6b41c389620be5e909ada709b36760e030b43f642e5ea6b71e6ba28b1dab0568",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "aoe": true,
+      "targetRule": {
+        "alliesOnly": true,
+        "requiredFact": "greenskin"
+      },
+      "specialState": {
+        "assistedReminder": "Les coups portés par les cibles ont les Qualités Empaleuse et Perforante pendant la durée."
+      },
+      "facts": [
+        {
+          "key": "greenskin",
+          "label": "Cible : Orque, Gobelin ou Hobgobelin",
+          "type": "boolean",
+          "perTarget": true,
+          "optional": true
+        },
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman enchante ses alliés d’un pouvoir malicieux pour trouver les points faibles de l’ennemi : leurs coups gagnent les Qualités Empaleuse et Perforante. Orques et Gobelins alliés de la zone (fait à saisir) ; les Qualités sont appliquées par le MJ à chaque coup.",
+    "assistedClauses": [
+      "Orques et Gobelins alliés de la zone (fait à saisir) ; les Qualités sont appliquées par le MJ à chaque coup."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-regard-vengeur",
+    "row": null,
+    "name": "Regard vengeur",
+    "canonicalName": "Vindictive Glare",
+    "page": 99,
+    "domain": "little-waaagh",
+    "wind": null,
+    "type": "Domaine de la Petite Waaagh",
+    "cn": 7,
+    "range": "Force Mentale mètres",
+    "target": "ZdE Bonus de Force Mentale mètres",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:1b13cac0c0fda253cf89c23b12e3369b92336100d1d11bfef820cb5a1f848462",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "aoe",
+        "damage"
+      ]
+    },
+    "effects": {
+      "type": "magic-missile",
+      "aoe": true,
+      "missile": {
+        "damage": 4
+      },
+      "secondaryTest": {
+        "actor": "target",
+        "mandatory": true,
+        "skill": "Calme",
+        "stat": "FM",
+        "modifierSl": 0,
+        "rollField": "resistanceRoll",
+        "failCondition": "Sonné",
+        "failOnlyIfWounded": true
+      },
+      "facts": [
+        {
+          "key": "waaaghFortune",
+          "label": "Petite Waaagh : transformer 1 DR en Point de Chance (jusqu’à la fin de la rencontre)",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman envoie des éclairs verts de rancune pure qui sifflent et explosent parmi l’ennemi : projectile magique à Dégâts +4 sur tous les occupants de la zone ; qui perd des Blessures teste Calme Intermédiaire (+0 DR) ou est Sonné. Tous les occupants de la zone, alliés compris (le MJ exclut ceux qu’il juge à l’abri) ; Sonné seulement en cas de Blessures.",
+    "assistedClauses": [
+      "Tous les occupants de la zone, alliés compris (le MJ exclut ceux qu’il juge à l’abri) ; Sonné seulement en cas de Blessures."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-dur-comme-le-roc",
+    "row": null,
+    "name": "Dur comme le roc",
+    "canonicalName": "‘Ard as Nails",
+    "page": 100,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 3,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:e53aaab70f6ecf96cf189faf7c6156a1b6b03bf4c1d54a18b7960c2dc5fa387b",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "traits": [
+        "Haine (tous les ennemis)"
+      ],
+      "testModifiers": {
+        "carac:e": 2
+      },
+      "specialState": {
+        "assistedReminder": "La cible ignore les effets négatifs de tous les états et maladies dont elle souffre pendant la durée (les états restent comptés)."
+      }
+    },
+    "reminders": "Le Chaman imprègne une cible de Waaagh : elle devient belliqueuse et résistante, avec la Haine de tous ses ennemis, ignore les effets négatifs de ses états et maladies, et gagne +2 DR aux Tests fondés sur l’Endurance. Les effets ignorés sont appliqués par le MJ : le moteur ne suspend pas les pénalités d’états et de maladies.",
+    "assistedClauses": [
+      "Les effets ignorés sont appliqués par le MJ : le moteur ne suspend pas les pénalités d’états et de maladies."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-frappez-les-les-gars",
+    "row": null,
+    "name": "Frappez-les, les gars !",
+    "canonicalName": "Bash ‘Em Lads!",
+    "page": 100,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 6,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "Spécial",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:231deefc2d373bb2edd96fee22b7055d72d44f0e51ea90dfde5a88313812cebe",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "grantMomentum": true,
+      "targetRule": {
+        "alliesOnly": true,
+        "requiredFact": "greenskin"
+      },
+      "facts": [
+        {
+          "key": "greenskin",
+          "label": "Cible : Orque, Gobelin ou Hobgobelin",
+          "type": "boolean",
+          "perTarget": true,
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Les cris d’encouragement du Chaman emplissent ses alliés de ferveur : pour chaque DR du Test d’incantation, il peut accorder un Élan à un Orque, Gobelin ou Hobgobelin allié à portée. L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Au plus autant de cibles que de DR du Test d’incantation (limite à vérifier par le MJ) ; les cibles déjà en Élan sont inchangées. Lustria (L07 p. 183) écrit « 1 + DR » et limite aux Orques et Gobelins : le livre le plus récent (L12) fait foi.",
+    "assistedClauses": [
+      "L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Au plus autant de cibles que de DR du Test d’incantation (limite à vérifier par le MJ) ; les cibles déjà en Élan sont inchangées. Lustria (L07 p. 183) écrit « 1 + DR » et limite aux Orques et Gobelins : le livre le plus récent (L12) fait foi."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-eclate-cervelle",
+    "row": null,
+    "name": "Éclate-cervelle",
+    "canonicalName": "Brainbursta",
+    "page": 100,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 5,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:71e28f5870e1e35847afa9de60874a341236cba6e9988e7fc87806a505b26fc9",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "condition",
+      "conditions": [
+        "À Terre",
+        "Sonné"
+      ],
+      "conditionPerDr": "Sonné"
+    },
+    "reminders": "Le Chaman fusille sa cible du regard et la frappe d’une vague mentale de belligérance : elle est À Terre et Sonnée, plus un Sonné par DR du Test ; si elle a plus de Sonnés que son Bonus d’Endurance, Calme Accessible (+2 DR) ou Blessure Critique à la tête. Au-delà du Bonus d’Endurance en états Sonné : Test de Calme Accessible (+2 DR) de la cible, échec : Blessure Critique à la tête (jouée par le MJ ; le moteur ne compare pas le nombre de Sonné au Bonus d’Endurance).",
+    "assistedClauses": [
+      "Au-delà du Bonus d’Endurance en états Sonné : Test de Calme Accessible (+2 DR) de la cible, échec : Blessure Critique à la tête (jouée par le MJ ; le moteur ne compare pas le nombre de Sonné au Bonus d’Endurance)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-coup-de-boule",
+    "row": null,
+    "name": "Coup de boule",
+    "canonicalName": "‘Eadbutt",
+    "page": 100,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 6,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:ca5dfde130da51efa54b03b50dc3e22df94d66e9dc2869294d482baa0fdf9a1a",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "damage",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "magic-missile",
+      "missile": {
+        "damage": 1,
+        "fixedLocation": "HEAD",
+        "talentDamage": {
+          "talents": [
+            "aethyric-attunement",
+            "second-sight"
+          ],
+          "damage": 6
+        }
+      }
+    },
+    "reminders": "Le Chaman projette sa tête en avant, jetant une force verte maligne sur ceux qui sentent la magie : projectile magique qui frappe toujours la tête, à Dégâts +1, ou +6 si la cible a Attirance aethyrique ou Seconde vue. Localisation : Tête, toujours. Cartouche de L12 contradictoire avec son propre texte (« Vous », durée en Rounds) : cartouche de Lustria (L07 p. 183 : une cible, instantané) retenue, consigné.",
+    "assistedClauses": [
+      "Localisation : Tête, toujours. Cartouche de L12 contradictoire avec son propre texte (« Vous », durée en Rounds) : cartouche de Lustria (L07 p. 183 : une cible, instantané) retenue, consigné."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-allons-y",
+    "row": null,
+    "name": "Allons-y !",
+    "canonicalName": "‘Ere We Go!",
+    "page": 100,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 7,
+    "range": "Vous",
+    "target": "ZdE Bonus de Force Mentale mètres (Orques)",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:8383a3c11ce92177545bf131a5fc7dde14500db476e77a01e958cf06811ed3ef",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "aoe": true,
+      "grantMomentum": true,
+      "targetRule": {
+        "alliesOnly": true,
+        "requiredFact": "greenskin"
+      },
+      "facts": [
+        {
+          "key": "greenskin",
+          "label": "Cible : Orque, Gobelin ou Hobgobelin",
+          "type": "boolean",
+          "perTarget": true,
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman débite un flot de borborygmes à ses alliés et les emplit d’une vigueur agressive : les cibles de la zone gagnent l’Élan pour leurs Tests de corps à corps. L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Les cibles sont les Orques alliés de la zone (les Hobgobelins si le lanceur est un Hobgobelin).",
+    "assistedClauses": [
+      "L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Les cibles sont les Orques alliés de la zone (les Hobgobelins si le lanceur est un Hobgobelin)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-le-soleil-mauvais",
+    "row": null,
+    "name": "Le Soleil mauvais",
+    "canonicalName": "The Evil Sun",
+    "page": 101,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 12,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "ZdE Force Mentale mètres",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:33db67a32951a09db1a4e352653b81bf9f16d54a6352bab60a59b14323c878a2",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "aoe": true,
+      "roundEffect": {
+        "phase": "endOfRound",
+        "damage": {
+          "formula": "8 + DR"
+        },
+        "test": {
+          "skill": "Endurance",
+          "stat": "E",
+          "modifierSl": 0
+        },
+        "failConditions": [
+          "Enflammé"
+        ]
+      }
+    },
+    "reminders": "Chargé d’une puissance immense, le Chaman fait naître un noyau ardent à défenses et rictus ; ses cibles subissent 8 + DR de dégâts à chaque Round et réussissent un Test d’Endurance Intermédiaire (+0 DR) ou gagnent un état Enflammé. Chaque fin de Round : dégâts 8 + DR du Test d’incantation, localisation et Test d’Endurance saisis ; échec : un état Enflammé de plus. Alliés compris (la source ne distingue pas).",
+    "assistedClauses": [
+      "Chaque fin de Round : dégâts 8 + DR du Test d’incantation, localisation et Test d’Endurance saisis ; échec : un état Enflammé de plus. Alliés compris (la source ne distingue pas)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-poings-de-gork",
+    "row": null,
+    "name": "Poings de Gork",
+    "canonicalName": "Fists of Gork",
+    "page": 101,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 2,
+    "range": "Vous",
+    "target": "Vous",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:42718981e643b19a4e42220a194db2b3c7b1fb921ef9366a3966f17fec4cbbdf",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "duration"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "conjureWeapon": true,
+      "conjureWeaponProfile": {
+        "id": "gork-fists",
+        "name": "Poings de Gork",
+        "damage": 9,
+        "hands": 1,
+        "reach": "personal",
+        "qualities": []
+      },
+      "conjureWeaponScore": 55
+    },
+    "reminders": "Les poings noueux du Chaman grossissent et durcissent comme du fer : il doit lâcher ce qu’il tient et ne peut attaquer qu’à mains nues, avec Corps à corps (Bagarre) 55 et Arme (Poings) +9. Attaque créée : Corps à corps (Bagarre) 55, dégâts BF + 9. Les objets tenus sont lâchés par le MJ (rappel). Les poings sont comptés « Magique » comme toute arme conjurée du moteur (précision du moteur, pas du livre).",
+    "assistedClauses": [
+      "Attaque créée : Corps à corps (Bagarre) 55, dégâts BF + 9. Les objets tenus sont lâchés par le MJ (rappel). Les poings sont comptés « Magique » comme toute arme conjurée du moteur (précision du moteur, pas du livre)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-pied-de-gork",
+    "row": null,
+    "name": "Pied de Gork",
+    "canonicalName": "Foot of Gork",
+    "page": 101,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 10,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "ZdE Bonus de Force Mentale mètres",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:547a99ed850e640dfd7855595bfd4a265d89e38991ca90d72418970db47178ae",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "damage",
+      "aoe": true,
+      "damage": {
+        "formula": "8",
+        "ignoreAp": true
+      },
+      "conditions": [
+        "À Terre"
+      ],
+      "secondaryTest": {
+        "actor": "target",
+        "mandatory": true,
+        "skill": "Esquive",
+        "stat": "Ag",
+        "modifierSl": -1,
+        "rollField": "dodgeRoll",
+        "conditionsOnly": true,
+        "damageOnSuccess": 4
+      },
+      "facts": []
+    },
+    "reminders": "Le Chaman hurle au ciel en agitant les mains ; Gork répond d’un pied qui écrase tout : les cibles de la zone tombent À Terre et reçoivent un coup de 8 qui ignore les Points d’Armure, ou 4 avec un Test d’Esquive Difficile (−1 DR) réussi. À Terre dans tous les cas ; localisation aléatoire, Points d’Armure ignorés ; Esquive Difficile (−1 DR) saisie.",
+    "assistedClauses": [
+      "À Terre dans tous les cas ; localisation aléatoire, Points d’Armure ignorés ; Esquive Difficile (−1 DR) saisie."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-regard-de-mork",
+    "row": null,
+    "name": "Regard de Mork",
+    "canonicalName": "Gaze of Mork",
+    "page": 101,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 5,
+    "range": "Force Mentale mètres",
+    "target": "Spécial",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:51b0e78337c2a141263e92faf6d61aae18be539cfb209fdd7d367b9d636207fe",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "damage"
+      ]
+    },
+    "effects": {
+      "type": "magic-missile",
+      "missile": {
+        "damage": 4
+      },
+      "targetRule": {
+        "exceptAnyTrait": [
+          "mort-vivant",
+          "undead",
+          "demoniaque",
+          "daemonic",
+          "artificiel",
+          "construct",
+          "ethere",
+          "ethereal"
+        ]
+      }
+    },
+    "reminders": "Un rayon destructeur d’énergie fulgurante jaillit des yeux du Chaman et frappe tout sur sa ligne : toute créature vivante sur la ligne subit un projectile magique à Dégâts +4 ; les structures de Résistance 65 ou moins sont aussi endommagées. Ligne droite dans la direction du tir : cibles désignées par le MJ. Structures : dégâts à jouer par le MJ (Endurance 65 ou moins).",
+    "assistedClauses": [
+      "Ligne droite dans la direction du tir : cibles désignées par le MJ. Structures : dégâts à jouer par le MJ (Endurance 65 ou moins)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-la-main-de-gork",
+    "row": null,
+    "name": "La Main de Gork",
+    "canonicalName": "The Hand of Gork",
+    "page": 101,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 9,
+    "range": "Force Mentale mètres",
+    "target": "Spécial",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:bd49d729ab0574fcba8ccfe0d6db6c95fb0cbdfaba71679c24ceb67b799bf475",
+    "treatment": "narrative",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration"
+      ]
+    },
+    "effects": {
+      "type": "narrative"
+    },
+    "reminders": "Le Chaman conjure une énorme main verte éthérée qui saisit 1d10 cibles et les dépose quelque part à portée, à Bonus de Force Mentale mètres les unes des autres ; à l’atterrissage, elles gagnent l’Élan si elles engagent aussitôt le corps à corps. L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Nombre de cibles : 1d10 (dé joué par le MJ) ; positions non suivies ; l’Élan est accordé par le MJ à ceux qui engagent immédiatement.",
+    "assistedClauses": [
+      "L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Nombre de cibles : 1d10 (dé joué par le MJ) ; positions non suivies ; l’Élan est accordé par le MJ à ceux qui engagent immédiatement."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-mork-nous-protege",
+    "row": null,
+    "name": "Mork nous protège !",
+    "canonicalName": "Mork Save Us!",
+    "page": 101,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 8,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "Spécial",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:3ee73e2b92a8a7f4c77f21df26a01d5550d67d2d6d8416fae872d59dda888587",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "ward": 10,
+      "targetRule": {
+        "alliesOnly": true,
+        "requiredFact": "greenskin"
+      },
+      "facts": [
+        {
+          "key": "greenskin",
+          "label": "Cible : Orque, Gobelin ou Hobgobelin",
+          "type": "boolean",
+          "perTarget": true,
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Le Chaman implore Mork de protéger ses alliés : pour chaque DR du Test d’incantation, un Orque, Gobelin ou Hobgobelin allié à portée reçoit une Protection de 10+ ; une Protection existante s’améliore d’un cran. Une Protection déjà possédée est améliorée de 1, sans jamais dépasser 7+ ; au plus autant de cibles que de DR du Test (limite à vérifier par le MJ). L12 inclut les Hobgobelins, Lustria (L07 p. 183) seulement les Orques et Gobelins : L12 fait foi.",
+    "assistedClauses": [
+      "Une Protection déjà possédée est améliorée de 1, sans jamais dépasser 7+ ; au plus autant de cibles que de DR du Test (limite à vérifier par le MJ). L12 inclut les Hobgobelins, Lustria (L07 p. 183) seulement les Orques et Gobelins : L12 fait foi."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-waaagh",
+    "row": null,
+    "name": "WAAAGH !",
+    "canonicalName": "WAAAGH!",
+    "page": 101,
+    "domain": "big-waaagh",
+    "wind": null,
+    "type": "Domaine de la Grande Waaagh",
+    "cn": 12,
+    "range": "Vous",
+    "target": "ZdE Force Mentale mètres (tous les Orques, Gobelins et assimilés, alliés ou non)",
+    "duration": "Bonus de Force Mentale Rounds",
+    "sourceFingerprint": "sha256:215590f5112613251fe718d9bf8ae60553c1515aa6c34bd1eb5f5d255c6111f3",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "aoe": true,
+      "grantMomentum": true,
+      "removeConditions": [
+        "Brisé"
+      ],
+      "testModifiers": {
+        "Calme": 2,
+        "Endurance": 2
+      },
+      "targetRule": {
+        "requiredFact": "greenskin"
+      },
+      "facts": [
+        {
+          "key": "greenskin",
+          "label": "Cible : Orque, Gobelin ou Hobgobelin",
+          "type": "boolean",
+          "perTarget": true,
+          "optional": true
+        }
+      ]
+    },
+    "reminders": "Une vague irrépressible d’énergie magique émane du Chaman, accueillie par les rugissements de tous les Orques, Hobgobelins et Gobelins du voisinage : ils gagnent l’Élan, perdent leurs états Brisé et gagnent +2 DR aux Tests de Calme et d’Endurance. L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Alliés ou non : seuls les Orques, Gobelins et assimilés de la zone sont touchés (fait à saisir).",
+    "assistedClauses": [
+      "L’Avantage V4 devient l’Élan V5 (binaire) : le sort accorde l’Élan, jamais de points d’Avantage cumulés ni de Groupe d’Avantage. Alliés ou non : seuls les Orques, Gobelins et assimilés de la zone sont touchés (fait à saisir)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L12",
+    "edition": "Supplément V4 (Tribes and Tribulations), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
   }
 ]

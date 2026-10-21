@@ -667,6 +667,9 @@ export function applySpellEffects(participant, effectDefinition, options = {}) {
     }).filter(Boolean);
   }
 
+  // Élan accordé (Élan binaire V5 ; l'Avantage V4 des sorts d'orques et de gobelins devient un Élan).
+  if (effectDefinition.grantMomentum === true) next.extensions = { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}), hasMomentum: true } };
+
   // Niveaux d'états retirés (ex. Bonne santé : 1 Exténué et 1 Sonné, sans effacer les autres niveaux).
   if (effectDefinition.removeConditionLevels && typeof effectDefinition.removeConditionLevels === 'object' && Array.isArray(next.states)) {
     for (const [name, amount] of Object.entries(effectDefinition.removeConditionLevels)) {

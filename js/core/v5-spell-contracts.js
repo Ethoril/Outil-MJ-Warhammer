@@ -1,6 +1,7 @@
 import { uid } from './models.js';
 import {randomVortexStep} from './v5-magic-turn.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
+import {acquiredV5Talents} from './v5-talents.js';
 import {spellAttackNature,previewMagicProtection} from './v5-magic-combat.js';
 import {getV5Fortune} from './v5-resources.js';
 import { consumeDivineLayers } from './v5-divine-effects-gear.js';
@@ -1641,7 +1642,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   // Attributs facultatifs (« peut infliger ») : choix par cible, appliqué aux ennemis par défaut ; `attributeActive: false` les coupe tous.
   const attributeTargets=Object.fromEntries(effectiveTargets.map(t=>[t.id,typeof options.attributeTargets?.[t.id]==='boolean' ? options.attributeTargets[t.id] : isHostileTarget(actor,t)]));
   const loreKey=attributeLore==='high' ? chosenLore : attributeLore;
-  const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,options:{attributeTargets,attributeRolls:options.targetTests,duration:contract.duration}});
+  const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,castingSl:castingPreview?.totalCastingSl ?? 0,options:{attributeTargets,attributeRolls:options.targetTests,duration:contract.duration,waaaghFortune:domainFacts.waaaghFortune===true}});
   if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine : '+allLore.missingLabel+' requis ('+allLore.missingRolls.join(', ')+').',contract};
   // Règles de dégâts de l'attribut : Cieux et Métal ignorent les PA métalliques (même attribut coupé, comme avant), Métal les ajoute (V5 p. 252), Ombres ignore les PA non magiques (V5 p. 254).
   const loreDamage = {
@@ -1742,7 +1743,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const spec=effects.opposedTest,die=options.targetTests?.[target.id]?.opponentRoll,casterDie=domainFacts.opposedActorRoll;
       if(!Number.isInteger(die)||die<1||die>100||!Number.isInteger(casterDie)||casterDie<1||casterDie>100)return {ready:false,valid:false,status:'dice-required',error:'Deux d100 explicites du Test opposé requis.',contract};
       const skill=(target.skills || []).find(s=>spellSkillMatches(s,spec.targetSkill));
-      const casterTest=selectV5Test(previewV5Test({score:Number(actor.caracs[spec.casterStat]),roll:casterDie}),'keep'),targetTest=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die,slModifiers:spec.targetSlModifier?[{id:'opposition',label:'Difficulté de l’opposition',amount:spec.targetSlModifier}]:[]}),'keep');
+      const casterTest=selectV5Test(previewV5Test({score:spec.casterScore ?? Number(actor.caracs[spec.casterStat]),roll:casterDie}),'keep'),targetTest=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die,slModifiers:spec.targetSlModifier?[{id:'opposition',label:'Difficulté de l’opposition',amount:spec.targetSlModifier}]:[]}),'keep');
       targetReceipt.opposedTest={casterTest,targetTest,won:casterTest.sl>targetTest.sl || Boolean(spec.casterWinsTies) && casterTest.sl===targetTest.sl};
       if(spec.resistOnLoss && !targetReceipt.opposedTest.won){targetReceipt.resisted=true;targetReceipt.actions.push({kind:'resisted',summary:'FM opposée : '+casterTest.sl+' contre '+targetTest.sl+', sort évité.'});targetResults.push(targetReceipt);continue;}targetReceipt.banished=(effects.banishOnOpposedWin || effects.destroyOnOpposedWin) && targetReceipt.opposedTest.won;targetReceipt.destroyed=Boolean(effects.destroyOnOpposedWin && targetReceipt.banished);
       targetReceipt.actions.push({kind:'opposed-test',summary:'FM '+casterTest.sl+' contre '+spec.targetSkill+' '+targetTest.sl+' : '+(effects.destroyOnOpposedWin?(targetReceipt.destroyed?'détruit':'non détruit'):effects.banishOnOpposedWin?(targetReceipt.banished?'banni sans Blessure':'non banni'):targetReceipt.opposedTest.won?'effet appliqué':'effet résisté')+'.'});
@@ -1888,8 +1889,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         target,
         spell: {
           name: contract.name,
-          damage: (effects.primarySplash && target.id !== effectiveTargets[0]?.id ? effects.primarySplash.damage : secondaryTestSpec?.damageOnSuccess!==undefined && targetReceipt.resistanceTest?.resisted ? secondaryTestSpec.damageOnSuccess : baseMissileDamage)-(effects.chainAttack?targetResults.length:0),
-          location: effects.missile?.chosenLocation ? domainFacts.location : undefined
+          damage: (effects.primarySplash && target.id !== effectiveTargets[0]?.id ? effects.primarySplash.damage : secondaryTestSpec?.damageOnSuccess!==undefined && targetReceipt.resistanceTest?.resisted ? secondaryTestSpec.damageOnSuccess : effects.missile?.talentDamage && effects.missile.talentDamage.talents.some(id => acquiredV5Talents(target).some(t => t.talentId === 'talent-' + id)) ? effects.missile.talentDamage.damage : baseMissileDamage)-(effects.chainAttack?targetResults.length:0),
+          location: effects.missile?.fixedLocation ?? (effects.missile?.chosenLocation ? domainFacts.location : undefined)
         },
         roll,
         castingSl: sl,
@@ -2071,6 +2072,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     }
 
     const computedTestModifiers = { ...(effects.testModifiers || {}) };
+    // Malus aggravé contre une cible en armure de métal (ex. Démangeaison : −1 DR, −2 DR en armure de métal).
+    if (effects.metalArmourTestModifiers && isTargetWearingMetalArmor(target)) Object.assign(computedTestModifiers, effects.metalArmourTestModifiers);
     if (Number.isFinite(Number(effects.dodgeBonusSl)) && Number(effects.dodgeBonusSl) !== 0) {
       computedTestModifiers.Esquive = (Number(computedTestModifiers.Esquive) || 0) + Number(effects.dodgeBonusSl);
     }
@@ -2107,7 +2110,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     let computedTraits = [...(Array.isArray(effects.traits) ? effects.traits : [])];
     for (const entry of specificSteps('trait-rating')) computedTraits = raiseTraitRating(computedTraits, entry.trait, entry.steps * (Number(entry.per) || 1));
     const computedTalents = [...(Array.isArray(effects.talents) ? effects.talents : [])];
-    const computedConditions = [...(Array.isArray(effects.conditions) ? effects.conditions : []), ...(!targetReceipt.conditionsResisted ? effects.failConditions || [] : []), ...(secondaryFailCondition && !(secondaryTestSpec?.failOnlyIfWounded && !(targetReceipt.woundsLost>0)) ? [secondaryFailCondition] : []), ...(target.id === actor.id && Array.isArray(effects.selfConditions) ? effects.selfConditions : [])]
+    const computedConditions = [...(Array.isArray(effects.conditions) ? effects.conditions : []), ...(effects.conditionPerDr ? Array(Math.max(0, Math.min(20, Number(sl) || 0))).fill(effects.conditionPerDr) : []), ...(!targetReceipt.conditionsResisted ? effects.failConditions || [] : []), ...(secondaryFailCondition && !(secondaryTestSpec?.failOnlyIfWounded && !(targetReceipt.woundsLost>0)) ? [secondaryFailCondition] : []), ...(target.id === actor.id && Array.isArray(effects.selfConditions) ? effects.selfConditions : [])]
       .filter(name => !noSelfHarm || !NEGATIVE_CONDITIONS.has(fold(name)));
     const computedRemoveConditions = [...(Array.isArray(effects.removeConditions) ? effects.removeConditions : [])];
     const computedSpecialState = { ...(effects.specialState || {}), ...(effects.stateModes?.values[domainFacts[effects.stateModes?.fact]] || {}), ...(specialTag === 'twitch' ? { twitch: true } : {}) };
@@ -2239,8 +2242,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if (effects.killAtZero && Number(target.hp) === 0) { targetReceipt.kill = true; computedSpecialState.dead=true; computedSpecialState.cannotRaiseUndead=true; }
     const computedGrantedActions = [];
     if(effects.conjureWeapon === true){
-      const profile=ARCANE_WEAPON_PROFILES[effects.conjureWeaponKey||domainFacts.weaponKey],id='spell-weapon-'+uid();
-      const score=conjuredWeaponSkillScore(actor,profile.id) ?? domainFacts.weaponSkillScore;
+      const profile=effects.conjureWeaponProfile ? {qualities:[],...structuredClone(effects.conjureWeaponProfile)} : ARCANE_WEAPON_PROFILES[effects.conjureWeaponKey||domainFacts.weaponKey],id='spell-weapon-'+uid();
+      // Profil et valeur d'attaque propres au sort (ex. Poings de Gork : Corps à corps (Bagarre) 55, Arme +9).
+      const score=effects.conjureWeaponScore ?? conjuredWeaponSkillScore(actor,profile.id) ?? domainFacts.weaponSkillScore;
       const qualities=[...profile.qualities.map(q=>typeof q==='string'?{id:q}:structuredClone(q)),{id:'magique'}];
       if(profile.id==='garrote')for(const q of qualities)if(q.id==='immobilisante'){q.rating=Number(actor.caracs.F);q.parameter=String(q.rating);}
       computedGrantedActions.push({id,note:profile.name+' aethyrique',type:'attack',attr:'CC',base:score,damage:profile.damage ?? 0,damageFormula:profile.damage===null?'0':'BF'+(profile.damage?'+'+profile.damage:''),qualities,extensions:{v5:{weaponHands:profile.hands,weaponReach:profile.reach,magical:true,materialized:true}}});
@@ -2695,6 +2699,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       hasConditions ||
       hasRemoveConditions ||
       Boolean(effects.removeConditionLevels) ||
+      Boolean(effects.grantMomentum) ||
       hasSpecialState ||
       computedTempFortune > 0 ||
       computedTempFate > 0 ||
@@ -2732,6 +2737,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         conditions: hasConditions ? computedConditions : undefined,
         removeConditions: hasRemoveConditions ? computedRemoveConditions : undefined,
         removeConditionLevels: effects.removeConditionLevels,
+        grantMomentum: effects.grantMomentum,
         removeBrokenCount: computedRemoveBrokenCount > 0 ? computedRemoveBrokenCount : undefined,
         tempFortunePoints: computedTempFortune > 0 ? computedTempFortune : undefined,
         tempFatePoints: computedTempFate > 0 ? computedTempFate : undefined,
