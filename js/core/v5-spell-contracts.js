@@ -1642,7 +1642,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   const attributeTargets=Object.fromEntries(effectiveTargets.map(t=>[t.id,typeof options.attributeTargets?.[t.id]==='boolean' ? options.attributeTargets[t.id] : isHostileTarget(actor,t)]));
   const loreKey=attributeLore==='high' ? chosenLore : attributeLore;
   const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,options:{attributeTargets,attributeRolls:options.targetTests,duration:contract.duration}});
-  if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine de Tzeentch : d100 du Test de Corruption requis ('+allLore.missingRolls.join(', ')+').',contract};
+  if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine : '+allLore.missingLabel+' requis ('+allLore.missingRolls.join(', ')+').',contract};
   // Règles de dégâts de l'attribut : Cieux et Métal ignorent les PA métalliques (même attribut coupé, comme avant), Métal les ajoute (V5 p. 252), Ombres ignore les PA non magiques (V5 p. 254).
   const loreDamage = {
     ignoreMetalAp: Boolean(allLore?.damageRules?.ignoreMetalAp) || ['heavens','metal'].includes(loreKey),
@@ -1930,7 +1930,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const dmgRes = resolveSpellDamage({
         caster: actor,
         target,
-        formula: secondaryTestSpec?.damageOnSuccess!==undefined && targetReceipt.resistanceTest?.resisted ? String(secondaryTestSpec.damageOnSuccess) : dmgConf.formula || String(dmgConf.raw || 0),
+        formula: secondaryTestSpec?.damageOnSuccess!==undefined && targetReceipt.resistanceTest?.resisted ? String(Math.max(0, Number(secondaryTestSpec.damageOnSuccess) - (secondaryTestSpec.damageOnSuccessMinusSl ? Math.max(0, Number(targetReceipt.resistanceTest?.targetSl) || 0) : 0))) : dmgConf.formula || String(dmgConf.raw || 0),
         spell: { ...contract, ...dmgConf },
         roll,
         sl,
@@ -1995,7 +1995,10 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if ((effects.type === 'healing' || effects.healing) && effects.special !== 'verdant-apotheosis' && contract.name !== 'Apothéose Verdoyante') {
       let healAmount = 0;
       const healConf = effects.healing || {};
-      if (healConf.amount !== undefined) {
+      if (healConf.amountFact) {
+        // Valeur saisie par le MJ (Test résolu hors moteur), 0 = aucun soin.
+        healAmount = Math.max(0, Number(domainFacts[healConf.amountFact]) || 0);
+      } else if (healConf.amount !== undefined) {
         healAmount = Number(healConf.amount);
       } else if (healConf.amountFormula === 'BI') {
         healAmount = Math.max(1, Math.floor((Number(actor.caracs?.Int) || 30) / 10));

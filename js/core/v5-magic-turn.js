@@ -313,6 +313,8 @@ export function roundSpellEffects(participants, phase, round, inputs = {}, actor
     }
     const data = inputs[target.id] || {}, key = name => `spell:${effect.id}:${name}`;
     const ask = (name,kind,label) => requests.push({ participantId: target.id, participantName: target.name, field: key(name), kind, label: `${effect.spellName} — ${target.name} : ${label}` });
+    // Question booléenne libre de la clause (ex. repas pris, blessé en mêlée) : la clause est ignorée si la réponse vaut `skipWhen`.
+    if(spec.askFact){const answer=data[key(spec.askFact.key)];if(typeof answer!=='boolean'){ask(spec.askFact.key,'boolean',spec.askFact.label);continue;}if(answer===spec.askFact.skipWhen)continue;}
     if(spec.inside){if(typeof data[key('inside')]!=='boolean'){ask('inside','boolean','encore dans la fosse à la fermeture ?');continue;}if(!data[key('inside')])continue;}
     if(spec.table){
       const die=data[key('table')],table=spec.table;if(!Number.isInteger(die)||die<1||die>table.sides){ask('table','d'+table.sides,'table de résultat (d'+table.sides+')');continue;}

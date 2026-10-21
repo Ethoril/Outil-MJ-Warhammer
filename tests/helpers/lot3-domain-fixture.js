@@ -125,7 +125,7 @@ export async function verifySpell(c, patch = {}) {
     const receipt=p.overcastSpecific.find(e=>e.id===option.id);assert.equal(receipt.spent,option.cost);
     assert.ok(receipt.applied || receipt.reminder,'option calculée ou rappel chiffré explicite');
   }
-  for(const spec of c.effects.facts || []){
+  for(const spec of (c.effects.facts || []).filter(fact=>!fact.optional)){
     await store.loadFromJSON(initial);
     const input=inputFor(c,patch);if(spec.perTarget)delete input.targetTests.foe[spec.key];else delete input.domainFacts[spec.key];
     assert.equal(store.previewSpellExecution(c.id,input).ready,false,c.name+' : fait '+spec.key+' absent');

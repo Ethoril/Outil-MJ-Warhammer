@@ -27,7 +27,9 @@ export const LORE_ATTRIBUTES = Object.freeze({
   // Domaines du Chaos (V5 pp. 259-260, phase D) : pas de Vent unique.
   nurgle: Object.freeze({ id: 'nurgle', wind: null, name: 'Domaine de Nurgle' }),
   slaanesh: Object.freeze({ id: 'slaanesh', wind: null, name: 'Domaine de Slaanesh' }),
-  tzeentch: Object.freeze({ id: 'tzeentch', wind: null, name: 'Domaine de Tzeentch' })
+  tzeentch: Object.freeze({ id: 'tzeentch', wind: null, name: 'Domaine de Tzeentch' }),
+  // Magie des Ogres (Grande Gueule, AotE2 p. 32).
+  maw: Object.freeze({ id: 'maw', wind: null, name: 'Domaine de la Grande Gueule' })
 });
 
 /**
@@ -35,6 +37,7 @@ export const LORE_ATTRIBUTES = Object.freeze({
  */
 export function normalizeLoreId(rawLore) {
   const s = fold(rawLore);
+  if (/^maw$|great.?maw|grande.?gueule/.test(s)) return 'maw';
   if (/nurgle/.test(s)) return 'nurgle';
   if (/slaanesh/.test(s)) return 'slaanesh';
   if (/tzeentch/.test(s)) return 'tzeentch';
@@ -364,7 +367,17 @@ export function previewLoreAttribute({
             : { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: false, sl: test.sl }, corruptionGain: 1, summary: `${name} : Test de Corruption raté (${roll}), +1 Point de Corruption.` });
         }
       }
-      if (missingRolls.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, ready: false };
+      if (missingRolls.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, missingLabel: 'd100 du Test de Corruption', ready: false };
+      break;
+    }
+
+    case 'maw': {
+      // Grande Gueule (AotE2 p. 32) : après un sort réussi, d10 de l'offrande ; 10 ou au moins égal au NI : le lanceur récupère NI Blessures.
+      const roll = options.attributeRolls?.[caster?.id]?.mawRoll;
+      const cn = Number(spell.cn) || 0;
+      if (!Number.isInteger(roll) || roll < 1 || roll > 10) return { lore: 'maw', loreName: LORE_ATTRIBUTES.maw.name, casterEffects: null, targetEffects, damageRules, missingRolls: [caster?.id || 'lanceur'], missingLabel: 'd10 de l’offrande (Grande Gueule)', ready: false };
+      const heals = roll === 10 || roll >= cn;
+      casterEffects = { type: 'lore-attribute-maw', lore: 'maw', roll, healWounds: heals ? cn : 0, summary: heals ? `Offrande : d10 ${roll}, le lanceur récupère ${cn} Blessures.` : `Offrande : d10 ${roll}, aucun soin.` };
       break;
     }
 
@@ -424,6 +437,9 @@ export function applyLoreAttribute(state, preview, options = {}) {
     } else if (casterEffects.lore === 'heavens') {
       const res=applySpellEffects(caster,{spellId:options.spellId || 'lore-attribute-heavens',spellName:'Attribut des Cieux',tempFortunePoints:casterEffects.gainFortune,duration:'Spéciale',expiresAtNextTurnOf:caster.id,appliedAtTurnSerial:options.turnSerial ?? 0,cn:options.cn,castExecutionId:options.castExecutionId,casterId:caster.id},{...options,overcastDurationMultiplier:1});
       updatedParticipants.set(caster.id,res.participant);
+    } else if (casterEffects.lore === 'maw') {
+      if (casterEffects.healWounds > 0) caster.hp = Math.min(Number(caster.maxHp ?? Infinity), (Number(caster.hp) || 0) + casterEffects.healWounds);
+      updatedParticipants.set(caster.id, caster);
     } else if (casterEffects.lore === 'shadow') {
       // +2 DR Discrétion
       const res = applySpellEffects(caster, {
