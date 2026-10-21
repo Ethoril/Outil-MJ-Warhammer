@@ -45,3 +45,9 @@
 - **D-C51** — Nurgle : le moteur ne suit pas les Blessures individuelles ni leur état Suppuré (aucun registre) : la couche `festeringWoundTest` est un marqueur, le MJ joue le Test de Blessure Suppurée (V5 p.180).
 - **D-C52** — Miasme de pestilence : Symptôme de Nausée non suivi (aucune maladie dans le moteur) : rappel ; exemptés (dévoués de Nurgle, moines de la peste) reconnus par des **traits** « Dévoué de Nurgle » / « Moine de la peste » posés par le MJ ; « créatures vivantes » = ni Mort-vivant, Démoniaque, Artificiel, Éthéré. Alliés compris (le texte dit « toutes »).
 - **D-C53** — Flot de Corruption : Souffle non opposé lu comme projectile magique de formule `BE+DR` (la surpuissance V5 ne remplace pas la formule) ; formules `BE` ajoutées à `resolveSpellDamage`. Pourriture du sang : rappel, test d'Endurance +0 de la cible non automatisé (le seuil « plus que son BE en Blessures » n'est pas calculé).
+
+## Slaanesh (D8)
+
+- **D-C60** — attribut : modificateurs de résistance portés en marqueur `resistanceModifiers` sur la couche ; aucun test de Peur, Terreur, Animosité, Haine ou Corruption du moteur ne les lit encore, le MJ les applique (même statut que les autres marqueurs de suivi).
+- **D-C61** — Consentement : échec du Test = « perd Mouvement et Action » rappelé dans le journal (aucun état bloquant l'Action n'existe). De la douleur le plaisir : Trait « Indolore » (nom français retenu par défaut, le livre FR V5 n'étant pas consulté) ; « Impuissante » mappé sur « cible sans défense » (rappel, pas d'état). Fantasmagorie : Trait « Distrayant », alliés de la zone seulement (le lanceur compris).
+- **D-C62** — noms français : Consentement (officiel L05 p.257, repris) ; « De la douleur le plaisir » et « Fantasmagorie » proposés par Gemini, retenus (Fantasmagorie plutôt que Phantasmagorie, orthographe usuelle).

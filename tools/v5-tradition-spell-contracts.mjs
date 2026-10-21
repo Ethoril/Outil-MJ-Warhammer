@@ -6,6 +6,7 @@ import {SORCELLERIE} from './tradition-contracts/sorcellerie.mjs';
 import {DEMONOLOGIE} from './tradition-contracts/demonologie.mjs';
 import {NECROMANCIE} from './tradition-contracts/necromancie.mjs';
 import {NURGLE} from './tradition-contracts/nurgle.mjs';
+import {SLAANESH} from './tradition-contracts/slaanesh.mjs';
 
 export const TRADITION_SPELLS=[
  ...MAGIE_NATURELLE_L06,
@@ -13,5 +14,6 @@ export const TRADITION_SPELLS=[
  ...SORCELLERIE,
  ...DEMONOLOGIE,
  ...NECROMANCIE,
- ...NURGLE
+ ...NURGLE,
+ ...SLAANESH
 ];
