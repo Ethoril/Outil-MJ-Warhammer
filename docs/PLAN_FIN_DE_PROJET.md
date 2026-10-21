@@ -71,6 +71,10 @@ Publication 3.21.0 après la phase A.
 
 Parcours guidé de recette (`docs/RECETTE_UTILISATEUR.md` mis à jour), retours du MJ, lots correctifs.
 
+## Phase H — Synchronisation fiche ↔ outil (écriture en retour)
+
+Décision du MJ (21/10) : l’outil réécrira sur la fiche du site des fiches (https://ethoril.github.io/ennemi-interieur-wfrp4/) les valeurs durables qu’il modifie en jeu. À faire **après** les phases B à F, pour disposer de toutes les variables : registre `docs/VARIABLES_PERSISTANTES_PJ.md` tenu à jour par chaque lot. Contenu : champs ajoutés à la fiche (Péchés, Corruption, culte explicite, pénitences, et le reste du registre), import étendu, écriture en retour et ses règles (moment, conflits, annulation).
+
 ## Ordre et jalons
 
 A (3.21.0) → B → C (3.22.0) → D (une version par tradition ou par paire) → E (une version par bestiaire) → F (inventaire, puis sélecteurs, puis lots) → G.
