@@ -116,7 +116,7 @@ try {
   // Fill the full Soleil form, including Sin and the Wrath consequence fields.
   await prayerSelect.selectOption('divine:miracle:soleil-flamboyant');
   const sins=panel.locator('details.workspace-v5-context-details').filter({hasText:'Péchés :'});
-  await sins.locator('summary').click();
+  await sins.locator(':scope > summary').click();
   await sins.locator('[aria-label="Total de Péchés"]').fill('1');
   await sins.locator('[aria-label="Raison de l’ajustement des Péchés"]').fill('Valeur fixée pour l’essai de table');
   await sins.getByRole('button',{name:'Enregistrer les Péchés'}).click();

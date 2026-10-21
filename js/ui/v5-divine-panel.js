@@ -290,7 +290,7 @@ export function createDivinePanel({Store,refresh}){
    field(sin,'Total de Péchés','sinEdit');field(sin,'Raison de l’ajustement des Péchés','sinReason',{type:'text'});
    button(sin,'Enregistrer les Péchés',()=>run(async()=>{const result=await Store.setDivineSin(actor.id,Number(state.sinEdit),{reason:state.sinReason,cult:contract.deity,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Péchés non enregistrés.');state.preview=null;}),state.sinEdit==='','sin');
    if(Store.canManageDivinePenances?.()===true){
-    const events=Store.getDivineSinEvents(),chosen=events.find(row=>row.id===state.sinEventId);
+    const events=Store.getDivineSinEvents?.()||[],chosen=events.find(row=>row.id===state.sinEventId);
     const box=node('div','workspace-divine-sin-events');box.style.minWidth='0';box.append(node('p','workspace-rubric','Événements sourcés de Péché (décision MJ)'));
     select(box,'Événement de Péché',state.sinEventId||'',[['','Choisir un événement'],...events.map(row=>[row.id,row.label+' · '+row.source.book+' p.'+row.source.printedPage+(row.cults?' ('+row.cults.join(', ')+')':'')])],value=>{state.sinEventId=value;change('sinEventFact',state.sinEventFact||'');},'sinEventId');
     if(chosen){box.append(node('p','workspace-muted',chosen.text));if(chosen.effect.kind==='add-mj')field(box,'Péchés à attribuer ('+chosen.effect.min+(chosen.effect.max?' à '+chosen.effect.max:' ou plus')+')','sinEventAmount',{min:chosen.effect.min,max:chosen.effect.max??null});}
@@ -302,7 +302,7 @@ export function createDivinePanel({Store,refresh}){
     sin.append(box);
    }
    const reminders=node('details','workspace-v5-context-details');reminders.append(node('summary','','Commandements, présages et usages (rappels)'));
-   for(const row of Store.getDivineSinReminders())reminders.append(node('p','workspace-muted',row.label+' — '+row.text+' ('+row.source.book+' p.'+row.source.printedPage+')'));
+   for(const row of Store.getDivineSinReminders?.()||[])reminders.append(node('p','workspace-muted',row.label+' — '+row.text+' ('+row.source.book+' p.'+row.source.printedPage+')'));
    sin.append(reminders);
   }
   const active=participants.flatMap(target=>(target.extensions?.v5?.divineEffects||[]).filter(layer=>layer.casterId===actor.id).map(layer=>({...layer,targetName:target.name})));
