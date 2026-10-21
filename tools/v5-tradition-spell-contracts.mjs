@@ -3,9 +3,11 @@ export {fact,receipt,tradition,FM,BFM,INSTANT} from './tradition-contracts/helpe
 import {MAGIE_NATURELLE_L06} from './tradition-contracts/magie-naturelle.mjs';
 import {MAGIE_NATURELLE_AOTE3} from './tradition-contracts/magie-naturelle-aote3.mjs';
 import {SORCELLERIE} from './tradition-contracts/sorcellerie.mjs';
+import {DEMONOLOGIE} from './tradition-contracts/demonologie.mjs';
 
 export const TRADITION_SPELLS=[
  ...MAGIE_NATURELLE_L06,
  ...MAGIE_NATURELLE_AOTE3,
- ...SORCELLERIE
+ ...SORCELLERIE,
+ ...DEMONOLOGIE
 ];
