@@ -86,6 +86,7 @@ export function acquireV5Conditions(participant,acquisitions=[],context={}) {
     const key=keyOf(raw);
     if(key==='surpris' && next.extensions?.v5?.specialStates?.cannotBeSurprised){reminders.push('Ennemi Anticipé : Surpris refusé.');return;}
     if(isV5ConditionImmune(next,key)){reminders.push('Immunité : '+(typeof raw==='string'?raw:raw?.name||key)+' ignoré.');return;}
+    if(key==='brise'&&states.some(state=>state.key==='brise-immunity')){reminders.push('Immunité temporaire : Brisé ignoré.');return;}
     const meditation=activeMagicTalent(next,'mind-over-body');
     if(meditation && (context.painRelated===true || key==='aveugle' && meditation.magicTalentRank>=2))return;
     const amount=typeof raw==='string'?1:raw?.level??1;
@@ -188,7 +189,14 @@ export function recoverV5Condition(participant,condition,options={}) {
   else if(key==='a-terre'&&method==='stand-up')amount=1;
   else if(key==='souille'&&method==='clean')amount=1;
   else if(key==='extenue'&&method==='rest'){
-    if(options.restSatisfied!==true)needs(needsInput,'restSatisfied','Repos adapté à la cause confirmé par le MJ');else amount=options.amount===undefined?1:integer(options.amount,'États retirés');
+    if(options.restSatisfied!==true)needs(needsInput,'restSatisfied','Repos adapté à la cause confirmé par le MJ');
+    else if(states.some(state=>state.key==='harsh-mistress-curse')){
+      // Curse of the Harsh Mistress : Calme (−1 DR) réussi avant tout retrait d'Exténué au repos.
+      if(!options.harshMistressCalmTest)needs(needsInput,'harshMistressCalmTest','Test de Calme (−1 DR) de la Malédiction requis');
+      else if(testValue(options.harshMistressCalmTest).success)amount=options.amount===undefined?1:integer(options.amount,'États retirés');
+      else reminders.push('Malédiction : Calme raté, Exténué reste.');
+    }
+    else amount=options.amount===undefined?1:integer(options.amount,'États retirés');
   }
   else if(key==='hemorragique'&&method==='bandage')amount=1;
   else if(key==='hemorragique'&&method==='wounds-recovered')amount=integer(options.amount,'Blessures effectivement récupérées');
@@ -199,11 +207,17 @@ export function recoverV5Condition(participant,condition,options={}) {
       else amount=integer(options.intelligenceBonus,'Bonus d’Intelligence')+options.test.sl;
     }
   }
-  else if(key==='brise'&&['cool','hiding'].includes(method)){
+  else if(key==='brise'&&['cool','hiding','ride'].includes(method)){
     if(options.engaged!==false)needs(needsInput,'engaged','Confirmer que la cible n’est pas engagée');
     else if(method==='hiding'){
       if(options.fullRoundHidden!==true)needs(needsInput,'fullRoundHidden','Round entier caché hors de vue confirmé');else amount=1;
-    }else if(options.transition?.phase!=='endOfRound'&&options.outOfCombat!==true)needs(needsInput,'recoveryMoment','Récupération par Calme en fin de Round requise');else tested(['cool']);
+    }else if(options.transition?.phase!=='endOfRound'&&options.outOfCombat!==true)needs(needsInput,'recoveryMoment','Récupération par Calme en fin de Round requise');
+    else if(method==='ride'){
+      // Monture Brisée (Q16) : Équitation du cavalier, en selle et lui-même non Brisé.
+      if(options.riderMounted!==true)needs(needsInput,'riderMounted','Cavalier en selle confirmé');
+      else if(!options.rider||levels(normalizeEffects(options.rider.states),'brise')>0)needs(needsInput,'rider','Cavalier non Brisé requis');
+      else tested(['ride']);
+    }else tested(['cool']);
   }
   else if(key==='enflamme')tested(['athletics']);
   else if(key==='enchevetre')tested(['opposed-strength']);
@@ -238,6 +252,52 @@ export function recoverV5Condition(participant,condition,options={}) {
     }
   }
   return createReceipt(participant,next,{removed:removal.removed,acquiredInstances,needsInput,reminders});
+}
+/** Master and Commander (L25 p.63) : +1 DR par rang aux Tests de Commandement à bord ; le fait « à bord » reste une saisie MJ. */
+export function leadershipRallySlModifiers({masterAndCommanderRank=0,onBoardVessel}={}) {
+  const modifiers=[],needsInput=[];
+  if(Number.isSafeInteger(masterAndCommanderRank)&&masterAndCommanderRank>0){
+    if(typeof onBoardVessel!=='boolean')needs(needsInput,'onBoardVessel','Confirmer si le Test de Commandement a lieu à bord');
+    else if(onBoardVessel)modifiers.push({id:'master-and-commander',label:'Master and Commander (+1 DR par rang)',amount:masterAndCommanderRank});
+  }
+  return {modifiers,needsInput};
+}
+/** Commandement (L06 p.169) : Action gratuite d'un meneur non Brisé ; budget 1 + (DR − 1) réparti explicitement entre alliés Brisés. */
+export function previewLeadershipRallyAllies({leader,allies,test,distribution}={}) {
+  const refuse=(error,field)=>({ready:false,error,budget:0,participants:(allies||[]).map(clone),needsInput:field?[{field,label:error}]:[]});
+  if(!leader||!Array.isArray(allies)||!allies.length)return refuse('Meneur et alliés requis.','participants');
+  if(levels(normalizeEffects(leader.states),'brise')>0)return refuse('Le meneur est Brisé : il ne peut pas rallier ses alliés.');
+  if(!test||typeof test.success!=='boolean'||!Number.isSafeInteger(test.sl))return refuse('Résultat du Test de Commandement requis.','test');
+  const budget=test.success?Math.max(1,test.sl):0;
+  const out=allies.map(clone);
+  if(!budget)return {ready:true,budget,participants:out,removed:[],needsInput:[],reminders:['Commandement raté : aucun Brisé retiré.']};
+  if(!distribution||typeof distribution!=='object'||Array.isArray(distribution))return {...refuse('Répartition du budget entre alliés requise.','distribution'),budget};
+  const entries=Object.entries(distribution).filter(([,n])=>n!==0);
+  let total=0;
+  for(const [id,n] of entries){
+    const ally=out.find(p=>p.id===id);
+    if(!ally||!Number.isSafeInteger(n)||n<0)return {...refuse('Répartition invalide : allié inconnu ou quantité incorrecte.','distribution'),budget};
+    if(n>levels(normalizeEffects(ally.states),'brise'))return {...refuse('Répartition invalide : plus que les Brisé de '+id+'.','distribution'),budget};
+    total+=n;
+  }
+  if(total>budget)return {...refuse('Répartition invalide : budget de '+budget+' dépassé.','distribution'),budget};
+  const removed=[];
+  for(const [id,n] of entries){
+    const ally=out.find(p=>p.id===id);
+    const cut=removeInstances(normalizeEffects(ally.states),'brise',n);ally.states=cut.states;removed.push(...cut.removed.map(r=>({...r,participantId:id})));
+  }
+  return {ready:true,budget,participants:out,removed,needsInput:[],reminders:[]};
+}
+/** Delicious Excruciation (L18 p.37) : purge de Brisé, puis immunité pendant BFM Rounds. */
+export function previewDeliciousExcruciation({caster,target,bfm,round}={}) {
+  const refuse=(error,field)=>({ready:false,error,participant:target?clone(target):null,needsInput:field?[{field,label:error}]:[]});
+  if(!caster||!target)return refuse('Lanceur et cible requis.','participants');
+  if(!Number.isSafeInteger(bfm)||bfm<1)return refuse('BFM du lanceur requis pour la durée.','bfm');
+  if(!Number.isSafeInteger(round)||round<0)return refuse('Round courant requis.','round');
+  const next=clone(target),purge=removeInstances(normalizeEffects(next.states),'brise',Number.MAX_SAFE_INTEGER);
+  const immunity=createV5TimedEffect({id:`delicious-excruciation:${caster.id}:${target.id}`,key:'brise-immunity',name:'Immunité à Brisé',kind:'talent-pending',level:1,duration:null},{authorId:caster.id,targetId:target.id,expiry:{phase:'endOfRound',round:round+bfm-1}});
+  next.states=[...purge.states.filter(s=>s.key!=='brise-immunity'),immunity];
+  return {ready:true,participant:next,removed:purge.removed,needsInput:[],reminders:[]};
 }
 function fireArmour(participant,input,needsInput) {
   if(input!==undefined)return integer(input,'PA contre le feu');
