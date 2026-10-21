@@ -24,7 +24,8 @@ test('prayer preview requires an explicit d100 and leaves state untouched', () =
 });
 
 test('a resolved prayer records fumble as Wrath trigger without inventing Wrath outcome', () => {
-  const result = previewDivineExecution(actor, baseContract, [actor], {
+  const sinner={...actor,extensions:{v5:{divine:{sin:1}}}};
+  const result = previewDivineExecution(sinner, baseContract, [sinner], {
     canSpeak: true, roll: 99, sourceFingerprint: fingerprint, facts: { targets: { [actor.id]: { withinRange: true } } }
   });
   assert.equal(result.ready, false);

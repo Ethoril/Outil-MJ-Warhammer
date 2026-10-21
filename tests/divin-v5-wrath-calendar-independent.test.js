@@ -9,6 +9,7 @@ import { previewMagicMeditation } from '../js/core/v5-magic-talents.js';
 import { advanceGameClock, createGameClock } from '../js/core/v5-game-time.js';
 import { migrateSnapshot } from '../js/core/migrations.js';
 import registry from '../js/data/v5-divine-contracts.json' with { type: 'json' };
+import {previewHistoricalWrath,applyHistoricalWrath} from './fixtures/divine-wrath-history.mjs';
 
 // Contrôles indépendants. Sources: Courroux 6–10, L06 p.218;
 // semaine impériale huit jours p.177/289 (contrôle texte + visuel séparé).
@@ -58,15 +59,15 @@ async function fixture({people=[person('priest'),person('ally')], extra={}, pers
   return {store,persistence};
 }
 async function impose(store,{executionId='independent-wrath-1',roll=99,note=true}={}) {
-  const input=prayer({roll,wrathRoll:6,executionId,...(note?{wrathConsequences:'Ancienne confirmation MJ explicite du résultat6–10.'}:{})});
-  const before=stateOf(store), preview=store.previewDivineExecution(BATTLE,input);
+  // Q12 : le résultat bas est restauré comme sanction historique, sans nouveau jet.
+  const before=stateOf(store), preview=previewHistoricalWrath(before,{executionId,roll});
   assert.equal(preview.ready,true,preview.error);
   assert.equal(preview.wrathTableResult?.id,'wrath:6-10');
   assert.deepEqual(stateOf(store),before,'calculer le Courroux ne pose aucune sanction');
-  const result=await store.applyDivineExecution(BATTLE,{preview});
+  const result=await applyHistoricalWrath(store,preview);
   assert.equal(result.ok,true,result.error); assert.equal(result.ready,true,result.error);
   const caps=capsOf(actorOf(store));
-  assert.ok(caps.some(effect=>effect.originExecutionId===executionId),'la vraie résolution6–10 doit poser son plafond autonome');
+  assert.ok(caps.some(effect=>effect.originExecutionId===executionId),'la sanction historique6–10 doit poser son plafond autonome');
   return {preview,result,cap:caps.find(effect=>effect.originExecutionId===executionId)};
 }
 const step=(store,seconds,extra={})=>store.advanceCampaignTime({seconds,reason:'Temps MJ du contrôle Courroux',...extra});
@@ -84,23 +85,24 @@ async function refuseTimeUnchanged(store,seconds=1) {
   return result;
 }
 
-test('Courroux calendaire indépendant —6–10 canonique n’exige plus de texte MJ libre',async()=>{
+test('Courroux calendaire indépendant —6–10 historique sourcé ne requiert aucun texte MJ libre',async()=>{
   const {store}=await fixture();
-  const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:6,executionId:'without-note'}));
+  const preview=previewHistoricalWrath(stateOf(store),{roll:99,executionId:'without-note'});
   assert.equal(preview.ready,true,preview.error);
   assert.equal(preview.wrathTableResult.id,'wrath:6-10');
-  const result=await store.applyDivineExecution(BATTLE,{preview});
+  const result=await applyHistoricalWrath(store,preview);
   assert.equal(result.ok,true); assert.equal(capsOf(actorOf(store)).length,1);
 });
 test('Courroux calendaire indépendant —les autres lignes conservent le traitement MJ',async()=>{
   const {store}=await fixture();
-  for(const wrathRoll of [1,78]) {
+  await store.setDivineSin('priest',1,{reason:'Fixture B01 à Péché positif'});
+  for(const wrathRoll of [6,78]) {
     const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll}));
     assert.equal(preview.ready,false);
     assert.equal(preview.status,'needs-wrath-resolution');
     assert.ok(preview.needsInput.some(need=>need.field==='wrathConsequences'));
   }
-  const lessons=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:11}));
+  const lessons=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:1}));
   assert.equal(lessons.ready,false);
   assert.ok(lessons.needsInput.some(need=>(need.field||need.path||'').includes('wrathDurationRoll')),
     '11–15 exige le dé de durée explicite et ne se résout plus par texte libre');
@@ -147,7 +149,8 @@ test('Courroux calendaire indépendant —échec et déclenchement Courroux rest
   const preview=store.previewDivineExecution(COURAGE,prayer({roll:87}));
   assert.equal(preview.ready,true,preview.error); assert.equal(preview.preview.prayer.success,false);
   assert.equal(preview.preview.prayer.sl,-2); assert.equal(preview.preview.wrath.triggered,false);
-  const fumble=store.previewDivineExecution(COURAGE,prayer({roll:99,wrathRoll:6}));
+  await store.setDivineSin('priest',1,{reason:'Fixture B01 : maladresse avec Péché positif'});
+  const fumble=store.previewDivineExecution(COURAGE,prayer({roll:99,wrathRoll:51}));
   assert.equal(fumble.ready,true,fumble.error); assert.equal(fumble.preview.prayer.sl,-5);
   assert.equal(fumble.preview.wrath.triggered,true); assert.equal(fumble.preview.wrath.reason,'fumble');
 });
@@ -216,14 +219,15 @@ test('Courroux calendaire indépendant —reload simulé, Undo et Redo restauren
 });
 test('Courroux calendaire indépendant —échec sauvegarde pose et expiration sans mutation',async()=>{
   const {store,persistence}=await fixture();
-  const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:6,wrathConsequences:'Ancienne note'}));assert.equal(preview.ready,true,preview.error);
-  let before=stateOf(store);persistence.refuse=true;assert.equal((await store.applyDivineExecution(BATTLE,{preview})).ok,false);
+  const preview=previewHistoricalWrath(stateOf(store));assert.equal(preview.ready,true,preview.error);
+  let before=stateOf(store);persistence.refuse=true;assert.equal((await applyHistoricalWrath(store,preview)).ok,false);
   assert.deepEqual(stateOf(store),before);persistence.refuse=false;
-  await store.applyDivineExecution(BATTLE,{preview});assert.equal(capsOf(actorOf(store)).length,1);
+  await applyHistoricalWrath(store,preview);assert.equal(capsOf(actorOf(store)).length,1);
   before=stateOf(store);persistence.refuse=true;assert.equal((await step(store,WEEK)).ok,false);assert.deepEqual(stateOf(store),before);
 });
 test('Courroux calendaire indépendant —aperçu périmé par temps refusé sans pose',async()=>{
-  const {store}=await fixture();const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:6,wrathConsequences:'Ancienne note'}));
+  const {store}=await fixture();await store.setDivineSin('priest',1,{reason:'Fixture B01 : refus périmé'});
+  const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:51}));
   assert.equal(preview.ready,true,preview.error);await step(store,1);const before=stateOf(store);
   await assert.rejects(()=>store.applyDivineExecution(BATTLE,{preview}),/changé|recalculez|horloge/i);assert.deepEqual(stateOf(store),before);
 });
@@ -295,7 +299,7 @@ test('Courroux calendaire indépendant —dépassement safe integer à la pose r
   const base={schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'priest',order:['priest','ally'],participants:[person('priest'),person('ally')]},extensions:{v5:{turnIndex:1}},log:[],diceLines:[]};
   const advanced=advanceGameClock(createGameClock(base),{id:'clock-v1:0:large-cursor',baseRevision:0,kind:'campaign-time-advance',seconds:Number.MAX_SAFE_INTEGER-WEEK+1,reason:'Curseur borne'});
   base.extensions.v5.gameClock=advanced.clock;const {store}=await fixture({extra:base}),before=stateOf(store);
-  const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:6,wrathConsequences:'Ancienne note'}));
+  const preview=previewHistoricalWrath(stateOf(store));
   assert.equal(preview.ready,false,'addition de la durée hors entier sûr refusée avant confirmation');assert.deepEqual(stateOf(store),before);
 });
 test('Courroux calendaire indépendant —helper commun pur et retour d’expireur existent',async()=>{
@@ -391,7 +395,8 @@ test('Courroux calendaire indépendant —cap déjà échu au curseur de départ
 
 test('Courroux calendaire indépendant —capture clock exacte revalidée même à localRevision inchangée',async()=>{
   const {store}=await fixture();
-  const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:6,wrathConsequences:'Ancienne note'}));
+  await store.setDivineSin('priest',1,{reason:'Fixture B01 : capture exacte de clock'});
+  const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll:51}));
   assert.equal(preview.ready,true,preview.error);
   const candidate=stateOf(store),clock=candidate.extensions.v5.gameClock;
   const advanced=advanceGameClock(clock,{id:'clock-v1:'+clock.revision+':same-local-revision',

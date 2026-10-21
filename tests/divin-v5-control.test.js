@@ -273,7 +273,7 @@ test('Contrôle indépendant — adapter Store choisit la ligne à partir du d10
     return previewStoreDivine(current, shield.id, { actorId: actor.id, targetIds: [actor.id], facts: factsFor(actor), canSpeak: true, roll: prayRoll, wrathRoll,
       wrathConsequences: note, wrathResult: { resultId: 'forged:151-plus' }, expiry: { phase: 'endOfRound', round: 1 } });
   };
-  for (const [prayRoll,wrathRoll,sin,expected] of [[99,100,0,'wrath:96-100'],[99,91,1,'wrath:101-105'],[99,100,5,'wrath:146-150'],[99,91,6,'wrath:151-plus'],[99,78,1,'wrath:88-88'],[99,77,1,'wrath:81-87']]) {
+  for (const [prayRoll,wrathRoll,sin,expected] of [[99,90,1,'wrath:96-100'],[99,91,1,'wrath:101-105'],[99,100,5,'wrath:146-150'],[99,91,6,'wrath:151-plus'],[99,78,1,'wrath:88-88'],[99,77,1,'wrath:81-87']]) {
     const result = run(prayRoll,wrathRoll,sin);
     assert.ok(result.preview?.wrath?.triggered, `Courroux manquant pour ${wrathRoll}+10x${sin}: ${result.error}`);
     assert.equal(result.wrathTableResult?.id, expected);

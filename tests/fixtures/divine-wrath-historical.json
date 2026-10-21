@@ -1,0 +1,565 @@
+{
+  "provenance": {
+    "capturedBefore": "Q12",
+    "baseHead": "29d2221",
+    "purpose": "Sanctions historiques sourcées, pose directe autorisée par le complément MJ du 21/10."
+  },
+  "cases": {
+    "20": {
+      "cap": {
+        "id": "prayer-sl-cap:historical-wrath",
+        "type": "prayer-sl-cap",
+        "cap": 0,
+        "originKind": "wrath",
+        "originExecutionId": "historical-wrath",
+        "wrathResultId": "wrath:6-10",
+        "ruleId": "wrath:6-10:pray-sl-cap",
+        "ruleVersion": 1,
+        "targetId": "priest",
+        "subjectKey": "instance:priest",
+        "source": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 218,
+          "section": "Colère des dieux"
+        },
+        "sourceReceipt": {
+          "ruleId": "wrath:6-10:pray-sl-cap",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 218,
+              "printedPage": 218,
+              "section": "Wrath of the Gods — Think Over Your Deeds (06–10)"
+            },
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 177,
+              "printedPage": 177,
+              "section": "Healing Times and Downtime"
+            },
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 289,
+              "printedPage": 289,
+              "section": "The Imperial Calendar — Imperial week"
+            }
+          ],
+          "rule": {
+            "wrathRange": {
+              "min": 6,
+              "max": 10
+            },
+            "successLevelsMaximum": 0,
+            "application": "after-wrath-resolution"
+          },
+          "duration": {
+            "sourceValue": 1,
+            "sourceUnit": "imperial-week",
+            "days": 8,
+            "conversionPolicyId": "imperial-week-8-days",
+            "secondPolicyId": "campaign-day-86400s",
+            "seconds": 691200
+          },
+          "evidencePath": "docs/divin/sources/DIVIN_L06_CALENDRIER_CONTROLE.md"
+        },
+        "duration": {
+          "value": 1,
+          "sourceValue": 1,
+          "sourceUnit": "imperial-week",
+          "unit": "imperial-week",
+          "days": 8,
+          "seconds": 691200,
+          "conversionPolicyId": "imperial-week-8-days",
+          "secondPolicyId": "campaign-day-86400s"
+        },
+        "clockAnchor": {
+          "campaignSeconds": 0,
+          "clockRevision": 0,
+          "lastEventId": null
+        },
+        "deadline": {
+          "kind": "campaign-time",
+          "atSeconds": 691200
+        },
+        "wrathProof": {
+          "schemaVersion": 1,
+          "originExecutionId": "historical-wrath",
+          "trigger": {
+            "fumble": false,
+            "sinThreshold": true
+          },
+          "prayer": {
+            "initialRoll": 20,
+            "roll": 20,
+            "optionId": "keep",
+            "reversed": false,
+            "success": true,
+            "fumble": false,
+            "sl": 4
+          },
+          "wrath": {
+            "roll": 6,
+            "modifiedRoll": 6,
+            "sinAtTest": 0,
+            "resultId": "wrath:6-10"
+          }
+        }
+      },
+      "receipt": {
+        "executionId": "historical-wrath",
+        "contractId": "divine:blessing:myrmidia:battle",
+        "actorId": "priest",
+        "source": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Bataille",
+          "clauses": []
+        },
+        "sourceReceipt": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Bataille",
+          "clauses": [],
+          "accessSource": {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 220,
+            "section": "Bénédictions par culte",
+            "clauses": []
+          },
+          "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        },
+        "prayer": {
+          "ruleVersion": "v5-test-2026-10-08.1",
+          "roll": 20,
+          "score": 60,
+          "kind": "test",
+          "success": true,
+          "sl": 4,
+          "zeroOutcome": null,
+          "critical": false,
+          "fumble": false,
+          "details": {
+            "baseSl": 4,
+            "modifiers": [],
+            "advantageSl": 0,
+            "totalModifier": 0,
+            "beforeCriticalSl": 4,
+            "automatic": null,
+            "doubled": false
+          },
+          "initialRoll": 20,
+          "optionId": "keep",
+          "reversed": false,
+          "advantage": {
+            "advantage": [],
+            "disadvantage": [],
+            "cancelledPairs": 0,
+            "net": 0,
+            "slModifier": 0,
+            "inversion": "none"
+          }
+        },
+        "prayerSLAdjustment": null,
+        "testContext": {
+          "ready": true,
+          "levels": {},
+          "slModifiers": [],
+          "advantageSources": [],
+          "disadvantageSources": [],
+          "ignoredPenaltySources": [],
+          "restrictions": [],
+          "needsInput": [],
+          "conditionPenaltyMode": null,
+          "conditionPenaltyReason": null,
+          "arbitration": null
+        },
+        "wrath": {
+          "triggered": true,
+          "reason": "sin-threshold",
+          "sinTrigger": true,
+          "sinAtTest": 0,
+          "sinAfter": 0,
+          "unit": 0,
+          "roll": 6,
+          "modifiedRoll": 6,
+          "outcome": {
+            "id": "wrath:6-10",
+            "min": 6,
+            "max": 10,
+            "label": "Pensez à vos actes",
+            "reminder": "Les tests de Prière réussis plafonnent à +0 DR pendant une semaine.",
+            "source": {
+              "document": "Livre de base V5 EN v2.pdf",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "edition": "V5 EN",
+              "sourceStatus": "read-and-page-checked",
+              "printedPage": 218,
+              "section": "Colère des dieux"
+            },
+            "resultId": "wrath:6-10"
+          },
+          "consequences": "Sanction automatique : les Tests de Prière réussis sont plafonnés à +0 DR jusqu’à huit jours de jeu après la résolution."
+        },
+        "wrathResolution": {
+          "status": "resolved-by-source-contract",
+          "trigger": "sin-threshold",
+          "sinBefore": 0,
+          "sinAfter": 0,
+          "roll": 6,
+          "modifiedRoll": 6,
+          "result": {
+            "id": "wrath:6-10",
+            "min": 6,
+            "max": 10,
+            "label": "Pensez à vos actes",
+            "reminder": "Les tests de Prière réussis plafonnent à +0 DR pendant une semaine.",
+            "source": {
+              "document": "Livre de base V5 EN v2.pdf",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "edition": "V5 EN",
+              "sourceStatus": "read-and-page-checked",
+              "printedPage": 218,
+              "section": "Colère des dieux"
+            },
+            "resultId": "wrath:6-10"
+          },
+          "consequences": "Sanction automatique : les Tests de Prière réussis sont plafonnés à +0 DR jusqu’à huit jours de jeu après la résolution."
+        },
+        "appliedEffectIds": [
+          "historical-wrath:ally:divine:blessing:myrmidia:battle:characteristic-modifier"
+        ],
+        "effectReceipts": [],
+        "reminders": [],
+        "status": "ready",
+        "wrathSanction": {
+          "effectId": "prayer-sl-cap:historical-wrath",
+          "ruleId": "wrath:6-10:pray-sl-cap",
+          "subjectKey": "instance:priest",
+          "targetId": "priest",
+          "deadline": {
+            "kind": "campaign-time",
+            "atSeconds": 691200
+          }
+        }
+      },
+      "allyLayers": [
+        {
+          "id": "historical-wrath:ally:divine:blessing:myrmidia:battle:characteristic-modifier",
+          "executionId": "historical-wrath",
+          "prayerId": "divine:blessing:myrmidia:battle",
+          "casterId": "priest",
+          "targetId": "ally",
+          "source": {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 221,
+            "section": "Bénédiction de Bataille",
+            "clauses": []
+          },
+          "sourceReceipt": {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 221,
+            "section": "Bénédiction de Bataille",
+            "clauses": [],
+            "accessSource": {
+              "document": "Livre de base V5 EN v2.pdf",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "edition": "V5 EN",
+              "sourceStatus": "read-and-page-checked",
+              "printedPage": 220,
+              "section": "Bénédictions par culte",
+              "clauses": []
+            },
+            "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+          },
+          "type": "characteristic-modifier",
+          "expiry": {
+            "phase": "endOfTurn",
+            "actorId": "priest",
+            "round": 6,
+            "moment": "afterEffects"
+          },
+          "statModifiers": {
+            "CC": 10
+          },
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ]
+    },
+    "99": {
+      "cap": {
+        "id": "prayer-sl-cap:historical-wrath",
+        "type": "prayer-sl-cap",
+        "cap": 0,
+        "originKind": "wrath",
+        "originExecutionId": "historical-wrath",
+        "wrathResultId": "wrath:6-10",
+        "ruleId": "wrath:6-10:pray-sl-cap",
+        "ruleVersion": 1,
+        "targetId": "priest",
+        "subjectKey": "instance:priest",
+        "source": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 218,
+          "section": "Colère des dieux"
+        },
+        "sourceReceipt": {
+          "ruleId": "wrath:6-10:pray-sl-cap",
+          "sourceRefs": [
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 218,
+              "printedPage": 218,
+              "section": "Wrath of the Gods — Think Over Your Deeds (06–10)"
+            },
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 177,
+              "printedPage": 177,
+              "section": "Healing Times and Downtime"
+            },
+            {
+              "bookId": "L06",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "physicalPage": 289,
+              "printedPage": 289,
+              "section": "The Imperial Calendar — Imperial week"
+            }
+          ],
+          "rule": {
+            "wrathRange": {
+              "min": 6,
+              "max": 10
+            },
+            "successLevelsMaximum": 0,
+            "application": "after-wrath-resolution"
+          },
+          "duration": {
+            "sourceValue": 1,
+            "sourceUnit": "imperial-week",
+            "days": 8,
+            "conversionPolicyId": "imperial-week-8-days",
+            "secondPolicyId": "campaign-day-86400s",
+            "seconds": 691200
+          },
+          "evidencePath": "docs/divin/sources/DIVIN_L06_CALENDRIER_CONTROLE.md"
+        },
+        "duration": {
+          "value": 1,
+          "sourceValue": 1,
+          "sourceUnit": "imperial-week",
+          "unit": "imperial-week",
+          "days": 8,
+          "seconds": 691200,
+          "conversionPolicyId": "imperial-week-8-days",
+          "secondPolicyId": "campaign-day-86400s"
+        },
+        "clockAnchor": {
+          "campaignSeconds": 0,
+          "clockRevision": 0,
+          "lastEventId": null
+        },
+        "deadline": {
+          "kind": "campaign-time",
+          "atSeconds": 691200
+        },
+        "wrathProof": {
+          "schemaVersion": 1,
+          "originExecutionId": "historical-wrath",
+          "trigger": {
+            "fumble": true,
+            "sinThreshold": false
+          },
+          "prayer": {
+            "initialRoll": 99,
+            "roll": 99,
+            "optionId": "keep",
+            "reversed": false,
+            "success": false,
+            "fumble": true,
+            "sl": -5
+          },
+          "wrath": {
+            "roll": 6,
+            "modifiedRoll": 6,
+            "sinAtTest": 0,
+            "resultId": "wrath:6-10"
+          }
+        }
+      },
+      "receipt": {
+        "executionId": "historical-wrath",
+        "contractId": "divine:blessing:myrmidia:battle",
+        "actorId": "priest",
+        "source": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Bataille",
+          "clauses": []
+        },
+        "sourceReceipt": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Bataille",
+          "clauses": [],
+          "accessSource": {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 220,
+            "section": "Bénédictions par culte",
+            "clauses": []
+          },
+          "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+        },
+        "prayer": {
+          "ruleVersion": "v5-test-2026-10-08.1",
+          "roll": 99,
+          "score": 60,
+          "kind": "test",
+          "success": false,
+          "sl": -5,
+          "zeroOutcome": null,
+          "critical": false,
+          "fumble": true,
+          "details": {
+            "baseSl": -3,
+            "modifiers": [],
+            "advantageSl": 0,
+            "totalModifier": 0,
+            "beforeCriticalSl": -3,
+            "automatic": "failure",
+            "doubled": true
+          },
+          "initialRoll": 99,
+          "optionId": "keep",
+          "reversed": false,
+          "advantage": {
+            "advantage": [],
+            "disadvantage": [],
+            "cancelledPairs": 0,
+            "net": 0,
+            "slModifier": 0,
+            "inversion": "none"
+          }
+        },
+        "prayerSLAdjustment": null,
+        "testContext": {
+          "ready": true,
+          "levels": {},
+          "slModifiers": [],
+          "advantageSources": [],
+          "disadvantageSources": [],
+          "ignoredPenaltySources": [],
+          "restrictions": [],
+          "needsInput": [],
+          "conditionPenaltyMode": null,
+          "conditionPenaltyReason": null,
+          "arbitration": null
+        },
+        "wrath": {
+          "triggered": true,
+          "reason": "fumble",
+          "sinTrigger": false,
+          "sinAtTest": 0,
+          "sinAfter": 0,
+          "unit": 9,
+          "roll": 6,
+          "modifiedRoll": 6,
+          "outcome": {
+            "id": "wrath:6-10",
+            "min": 6,
+            "max": 10,
+            "label": "Pensez à vos actes",
+            "reminder": "Les tests de Prière réussis plafonnent à +0 DR pendant une semaine.",
+            "source": {
+              "document": "Livre de base V5 EN v2.pdf",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "edition": "V5 EN",
+              "sourceStatus": "read-and-page-checked",
+              "printedPage": 218,
+              "section": "Colère des dieux"
+            },
+            "resultId": "wrath:6-10"
+          },
+          "consequences": "Sanction automatique : les Tests de Prière réussis sont plafonnés à +0 DR jusqu’à huit jours de jeu après la résolution."
+        },
+        "wrathResolution": {
+          "status": "resolved-by-source-contract",
+          "trigger": "fumble",
+          "sinBefore": 0,
+          "sinAfter": 0,
+          "roll": 6,
+          "modifiedRoll": 6,
+          "result": {
+            "id": "wrath:6-10",
+            "min": 6,
+            "max": 10,
+            "label": "Pensez à vos actes",
+            "reminder": "Les tests de Prière réussis plafonnent à +0 DR pendant une semaine.",
+            "source": {
+              "document": "Livre de base V5 EN v2.pdf",
+              "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+              "edition": "V5 EN",
+              "sourceStatus": "read-and-page-checked",
+              "printedPage": 218,
+              "section": "Colère des dieux"
+            },
+            "resultId": "wrath:6-10"
+          },
+          "consequences": "Sanction automatique : les Tests de Prière réussis sont plafonnés à +0 DR jusqu’à huit jours de jeu après la résolution."
+        },
+        "appliedEffectIds": [],
+        "effectReceipts": [],
+        "reminders": [],
+        "status": "ready",
+        "wrathSanction": {
+          "effectId": "prayer-sl-cap:historical-wrath",
+          "ruleId": "wrath:6-10:pray-sl-cap",
+          "subjectKey": "instance:priest",
+          "targetId": "priest",
+          "deadline": {
+            "kind": "campaign-time",
+            "atSeconds": 691200
+          }
+        }
+      },
+      "allyLayers": []
+    }
+  }
+}
