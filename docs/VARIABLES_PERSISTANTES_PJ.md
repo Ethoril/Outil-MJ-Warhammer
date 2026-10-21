@@ -51,3 +51,10 @@ Les Hémorragique acquis restent des États ordinaires et ne sont pas des variab
 | Avances et score réel de la compétence commune Prière | `skills[].advances/total` ; provenance `divineRejections[].prayLoss` et `lossConfirmedBy` | compétences importées ; avances à confirmer explicitement si absentes | rejet définitif confirmé : avances mises à zéro, total diminué des avances connues | B13 `e6e4b89` |
 
 Les restrictions d’accès et la sanction sociale se déduisent du registre durable, sans nouveau compteur de compétence par culte. La phase H devra synchroniser les acquisitions et avances réellement modifiées avec leur provenance : un réimport de fiche ne doit pas rétablir silencieusement une perte définitive. Les faits d’appartenance d’un interlocuteur sont ceux d’une résolution particulière ; ils ne constituent pas une nouvelle religion permanente du personnage.
+
+| Variable B15 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Jugement dernier (départ, retour par Destin, décision du rejet) | `extensions.v5.divineJudgments[]` : culte, source, preuve de Courroux, statut (`departed`, `returned`, `returned-without-rejection`, `rejected`), point de retour, Destin dépensé, proposition de rejet | absente | Courroux 151+, commandes MJ de retour et de décision | B15 |
+| Points de Destin permanents | `extensions.v5.fate` (miroir `fate`) ; part temporaire dans les couches (`remainingTempFate`) | `destin` (compétence/ressources importées) | débité une seule fois au retour du Jugement dernier (temporaire d’abord) ; sinon dépenses existantes | existant ; B15 |
+
+Le rejet confirmé après un Jugement dernier réutilise `extensions.v5.divineRejections[]` (B13), avec `judgmentId` et une preuve rattachée au 151+. La phase H ne doit jamais rétablir un personnage « parti » ni rembourser le Destin par réimport.

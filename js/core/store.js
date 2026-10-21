@@ -1,4 +1,4 @@
-import {createStoreDivinePenance,completeStoreDivinePenance,getDivinePenanceExamples,previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
+import {returnStoreDivineJudgment,decideStoreDivineJudgmentRejection,createStoreDivinePenance,completeStoreDivinePenance,getDivinePenanceExamples,previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
@@ -2936,6 +2936,14 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clôturer une pénitence.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
       const initial=completeStoreDivinePenance(currentEnvelope(),actorId,id,{...captured,baseRevision:expected});if(initial.status==='duplicate')return {ok:true,status:'duplicate',record:initial.record};let transition;
       const saved=api.executeCommand('divine-penance-complete',draft=>{transition=completeStoreDivinePenance(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async returnDivineJudgment(actorId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut décider le retour après le Jugement dernier.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-judgment-return',draft=>{transition=returnStoreDivineJudgment(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async decideDivineJudgmentRejection(actorId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut confirmer ou refuser le rejet.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-judgment-rejection',draft=>{transition=decideStoreDivineJudgmentRejection(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     previewDivineWrathRecovery(input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId);

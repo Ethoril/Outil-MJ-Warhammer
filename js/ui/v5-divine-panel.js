@@ -38,6 +38,9 @@ export function createDivinePanel({Store,refresh}){
   const recoveryHeal=panel.querySelector('[data-divine-action="recovery-heal"]');if(recoveryHeal)recoveryHeal.disabled=state.busy||!state.wrathRecoveryHeal;
   const saveCorruption=panel.querySelector('[data-divine-action="corruption-fact"]');if(saveCorruption)saveCorruption.disabled=state.busy||state.corruptionEdit===''||!(state.corruptionReason||'').trim();
   panel.querySelectorAll('[data-divine-action="penance-create"]').forEach(button=>button.disabled=state.busy||!(state.penanceText||'').trim()||!(state.penanceReason||'').trim());panel.querySelectorAll('[data-divine-action="penance-complete"]').forEach(button=>button.disabled=state.busy||!(state.penanceCloseReason||'').trim());
+  panel.querySelectorAll('[data-divine-action="judgment-return"]').forEach(button=>button.disabled=state.busy||!(state.judgmentReason||'').trim()||!(state.judgmentPoint||'').trim());
+  panel.querySelectorAll('[data-divine-action="judgment-decline"]').forEach(button=>button.disabled=state.busy||!(state.judgmentReason||'').trim());
+  panel.querySelectorAll('[data-divine-action="judgment-confirm"]').forEach(button=>button.disabled=state.busy||!(state.judgmentReason||'').trim()||state.judgmentConfirmed!=='true'||state.judgmentAdvances===undefined||state.judgmentAdvances==='');
   const saveSin=panel.querySelector('[data-divine-action="sin"]');if(saveSin)saveSin.disabled=state.busy||state.sinEdit==='';
   const grantAccess=panel.querySelector('[data-divine-action="grant-access"]');if(grantAccess)grantAccess.disabled=state.busy||!state.accessScope||!state.accessReason.trim();
   panel.querySelectorAll('[data-divine-action="revoke-access"]').forEach(button=>button.disabled=state.busy||!state.revokeReason.trim());
@@ -177,6 +180,7 @@ export function createDivinePanel({Store,refresh}){
     if(preview.wrath.resultId==='wrath:111-115')confiscationControls(projected,actor,true);
     if(preview.wrath.resultId==='wrath:96-100')field(projected,'Pénitence du nouveau Courroux','wrathRecoveryPenance',{type:'text'});
     if(preview.wrath.resultId==='wrath:11-15')field(projected,'Durée des nouvelles Leçons (d10)','wrathRecoveryDuration',{min:1,max:10});
+    if(preview.wrath.resultId==='wrath:151-plus')projected.append(node('p','workspace-muted','Jugement dernier : le départ sera enregistré ; le retour par Point de Destin se décide ensuite sur la fiche.'));
     if(preview.wrathSummonPreview)summonControls(projected,preview.wrathSummonPreview,participants,true);
     if(preview.wrathAccessPreview)accessControls(projected,preview.wrathAccessPreview,{recovery:true});
     if(preview.wrathAlliesPreview)alliesControls(projected,preview.wrathAlliesPreview,actor,participants,{recovery:true});
@@ -226,6 +230,24 @@ export function createDivinePanel({Store,refresh}){
   for(const record of actor.extensions?.v5?.divineRejections||[])box.append(node('p','workspace-divine-rejection',record.cult+' · '+(record.kind==='permanent'?'Rejet définitif : talents et avances de Prière perdus':record.stage===2?'Excommunication levée après deux pénitences':record.stage===1?'Béni rendu ; une pénitence reste pour Invocation':'Excommunication : deux pénitences requises')+' · Source L06 p.219.'));
   for(const record of actor.extensions?.v5?.divineDailyBleeding||[])box.append(node('p','workspace-divine-daily-bleeding','Hémorragie quotidienne · '+record.cult+' · '+(record.status==='completed'?'terminée par pénitence':record.quantity+' Hémorragique au prochain matin : '+formatCampaignTime(record.nextMorningAt))+' · Source L06 p.219.'));
   for(const record of actor.extensions?.v5?.divineConfiscations||[]){const held=node('div','workspace-divine-confiscation');held.append(node('h4','','Possessions confisquées · '+record.cult));for(const item of record.items||[])held.append(node('p','',item.label+' · '+(item.magical?'magique':'non magique')+' · '+(item.status==='returned'?'rendu':'retenu')));box.append(held);}
+  const JUDGMENT_LABELS={departed:'départ enregistré : le personnage ne revient que par un Point de Destin','returned':'retour par Destin accordé ; rejet « Je vous rejette » proposé','returned-without-rejection':'retour par Destin ; rejet refusé par le MJ',rejected:'retour par Destin ; rejet décidé par le MJ'};
+  for(const record of actor.extensions?.v5?.divineJudgments||[]){
+   const item=node('div','workspace-divine-judgment');item.style.minWidth='0';item.dataset.divineJudgment=record.id;
+   item.append(node('p','workspace-divine-rejection','Jugement dernier · '+record.cult+' · '+(JUDGMENT_LABELS[record.status]||record.status)+(record.returnPoint?' · retour : '+record.returnPoint:'')+' · Source L06 p.219.'));
+   if(mayManage&&record.status==='departed'){
+    field(item,'Motif MJ du retour','judgmentReason',{type:'text'});field(item,'Point de retour choisi par le MJ','judgmentPoint',{type:'text'});
+    button(item,'Retour par un Point de Destin',()=>run(async()=>{const result=await Store.returnDivineJudgment(actor.id,record.id,{reason:state.judgmentReason,returnPoint:state.judgmentPoint,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Retour non enregistré.');state.judgmentReason='';state.judgmentPoint='';state.preview=null;}),!(state.judgmentReason||'').trim()||!(state.judgmentPoint||'').trim(),'judgment-return');
+   }
+   if(mayManage&&record.status==='returned'&&record.rejectionProposal?.status==='proposed'){
+    const known=(actor.skills||[]).find(row=>['Prière','Pray'].includes(row.name));if(state.judgmentAdvances===undefined&&Number.isSafeInteger(known?.advances))state.judgmentAdvances=String(known.advances);
+    item.append(node('p','workspace-muted','Proposition : « Je vous rejette » (perte définitive de Béni, Invocation et des avances de Prière). Rien n’est modifié avant la décision du MJ.'));
+    field(item,'Motif MJ de la décision','judgmentReason',{type:'text'});field(item,'Avances de Prière connues (rejet)','judgmentAdvances');
+    select(item,'Confirmer la perte définitive',state.judgmentConfirmed||'',[['','À préciser'],['true','Oui, décision MJ confirmée'],['false','Non']],value=>{state.judgmentConfirmed=value;change('judgmentReason',state.judgmentReason||'');},'judgmentConfirmed');
+    button(item,'Confirmer le rejet',()=>run(async()=>{const result=await Store.decideDivineJudgmentRejection(actor.id,record.id,{confirm:true,reason:state.judgmentReason,wrathRejectionConfirmed:state.judgmentConfirmed==='true',wrathPrayAdvances:Number(state.judgmentAdvances),baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Décision non enregistrée.');state.judgmentReason='';state.judgmentConfirmed='';state.judgmentAdvances=undefined;state.preview=null;}),!(state.judgmentReason||'').trim()||state.judgmentConfirmed!=='true'||state.judgmentAdvances===undefined||state.judgmentAdvances==='','judgment-confirm');
+    button(item,'Refuser le rejet',()=>run(async()=>{const result=await Store.decideDivineJudgmentRejection(actor.id,record.id,{confirm:false,reason:state.judgmentReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Décision non enregistrée.');state.judgmentReason='';state.preview=null;}),!(state.judgmentReason||'').trim(),'judgment-decline');
+   }
+   box.append(item);
+  }
   content.append(box);
  }
  return {render(actor,participants=[]){
@@ -427,6 +449,7 @@ export function createDivinePanel({Store,refresh}){
     }else if(result.wrathDailyBleedingPreview){dailyBleedingControls(outcome,actor);
     }else if(result.wrathConfiscationPreview){confiscationControls(outcome,actor);
     }else if(result.wrathPenancePreview){field(outcome,'Pénitence imposée par le Courroux','wrathPenanceText',{type:'text'});outcome.append(node('p','workspace-muted','Mission suivie sur la fiche, clôturée par le MJ. Aucun retrait automatique de Péché. Source L06 p.218–219.'));
+    }else if(result.wrathJudgmentPreview){outcome.append(node('p','workspace-muted','Rendez des comptes : le départ sera enregistré sur la fiche. Sans Point de Destin le personnage ne revient jamais ; avec un Point de Destin (solde actuel : '+(result.wrathJudgmentPreview.fate??'inconnu')+'), le MJ décide ensuite du retour, qui impose la proposition « Je vous rejette ». Rien n’est dépensé à l’application. Source L06 p.219.'));
     }else if(result.wrathSummonPreview){summonControls(outcome,result.wrathSummonPreview,participants);
     }else if(result.wrathFortunePreview){outcome.append(node('p','workspace-muted','Le prochain renouvellement normal de Chance donnera un point. Le compteur actuel reste inchangé. Source L06 p.219.'));
     }else if(result.wrathAccessPreview){

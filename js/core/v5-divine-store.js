@@ -7,7 +7,7 @@ import {calculateArmor,spellObjectChoices} from './equipment.js';
 import {refreshEffectLayers,rebaseMagicLayers} from './v5-magic-effects.js';
 import {uid,normalizeAction} from './models.js';
 import {resolveDivineAccess,createDivineAccessGrant,revokeDivineAccessGrant,consumeDivineAccessGrant,emptyDivineAccess,wrathAccessRules,validateDivineAccessSuspensions,readDivineRejections} from './v5-divine-access.js';
-import {v5ResourceIdentity,getV5Fortune,refreshV5Fortune} from './v5-resources.js';
+import {v5ResourceIdentity,getV5Fortune,refreshV5Fortune,getV5Fate,spendV5Temporary} from './v5-resources.js';
 import {advanceGameClock,readCombatPosition} from './v5-game-time.js';
 import {validatePrayerSLCaps,getPrayerSLModifiers,applyPrayerSLCaps,wrathRoundRules,validateWrathRounds,wrathPrayerBan,wrathForcedPrayerGate,wrathTurnPosition,wrathActionSpent} from './v5-divine-prayer-caps.js';
 import {acquireV5Conditions,isV5ConditionImmune,assertDivineWrathConditionsKept,hasDivineWrathLock} from './v5-effects.js';
@@ -554,6 +554,80 @@ function projectWrathSummon(state,plan){
  next.combat.participants=[...parts(next),wrathSummonParticipant(plan,target?.name)];
  return next;
 }
+// B15 : Jugement dernier (151+). Le départ est enregistré à l'application ; le retour exige un Point de Destin débité une seule fois par commande MJ,
+// puis le rejet 146-150 est seulement proposé : aucune mutation avant la confirmation explicite du MJ.
+const judgmentAuthority=new Map();
+const judgmentsOf=row=>Array.isArray(row?.extensions?.v5?.divineJudgments)?row.extensions.v5.divineJudgments:[];
+const JUDGMENT_STATUS=['departed','returned','returned-without-rejection','rejected'];
+function prepareWrathJudgment(state,actor,row,input,wrath,cult){
+ const record={id:'wrath-judgment:'+input.executionId,ruleVersion:1,originExecutionId:input.executionId,resultId:row.id,subjectKey:prayerSubjectKey(state,actor),cult,source:clone(row.source),status:'departed',wrathProof:{roll:wrath.roll,modifiedRoll:wrath.modifiedRoll,sinAtTest:wrath.sinAtTest,resultId:row.id}};
+ const fate=getV5Fate(state,actor);
+ return {ready:true,record,wrathJudgmentPreview:{cult,fate:fate.balance,fateKnown:fate.permanent!==null||fate.temporary>0,source:clone(row.source)}};
+}
+function projectJudgment(state,actor,record){const next=clone(state),key=prayerSubjectKey(state,actor);for(const item of subjectRows(next))if(prayerSubjectKey(next,item.row,item.kind)===key){item.row.extensions??={};item.row.extensions.v5??={};item.row.extensions.v5.divineJudgments=[...judgmentsOf(item.row).filter(row=>row.id!==record.id),clone(record)];}return next;}
+function attestJudgment(state,record){judgmentAuthority.set(record.id+':'+record.status,{revision:state.localRevision,fingerprint:stateFingerprint(state),record:clone(record)});if(judgmentAuthority.size>200)judgmentAuthority.delete(judgmentAuthority.keys().next().value);}
+function validJudgment(state,item,record){
+ const source=registry.wrathTable.find(row=>row.id==='wrath:151-plus'),p=record?.wrathProof;
+ return Boolean(record&&typeof record==='object'&&record.ruleVersion===1&&source&&record.resultId===source.id&&record.id==='wrath-judgment:'+record.originExecutionId&&text(record.originExecutionId)&&text(record.cult)&&validPersistentSubject(state,item.row,item.kind,record.subjectKey)&&stableJSON(record.source)===stableJSON(source.source)&&JUDGMENT_STATUS.includes(record.status)
+  &&p&&p.resultId===source.id&&Number.isSafeInteger(p.sinAtTest)&&p.sinAtTest>=1&&Number.isSafeInteger(p.roll)&&p.roll>=1&&p.roll<=100&&p.modifiedRoll===p.roll+10*p.sinAtTest&&p.modifiedRoll>=source.min
+  &&(record.status==='departed'||text(record.returnPoint)&&record.fateSpent&&record.rejectionProposal&&['proposed','declined','confirmed'].includes(record.rejectionProposal.status)));
+}
+function guardJudgments(before,next){
+ const inspect=state=>{const all=new Map(),groups=new Map();for(const item of subjectRows(state)){const records=judgmentsOf(item.row);if(!Array.isArray(item.row?.extensions?.v5?.divineJudgments||[])||new Set(records.map(row=>row.id)).size!==records.length||records.some(row=>!validJudgment(state,item,row)))throw ruleError('Jugement divin invalide, sujet ou source à vérifier.');const key=prayerSubjectKey(state,item.row,item.kind);if(groups.has(key)&&stableJSON(groups.get(key))!==stableJSON(records))throw ruleError('Jugements divins divergents entre copies.');groups.set(key,records);for(const record of records)all.set(record.id,{record,item});}return all;};
+ const old=inspect(before),current=inspect(next);
+ for(const[id,{record,item}]of old)if(!current.has(id)&&subjectRows(next).some(row=>row.row.id===item.row.id||prayerSubjectKey(next,row.row,row.kind)===record.subjectKey))throw ruleError('Effacement du jugement divin refusé.');
+ for(const[id,{record}]of current){if(stableJSON(old.get(id)?.record)===stableJSON(record))continue;const approved=judgmentAuthority.get(id+':'+record.status);if(approved?.revision===before.localRevision&&approved.fingerprint===stateFingerprint(before)&&stableJSON(approved.record)===stableJSON(record))continue;
+  const encoded=issuedPreviews.get(record.originExecutionId),issued=encoded&&JSON.parse(encoded),authentic=issued?.input?.wrathJudgment||issued?.receipt?.wrathDetails?.judgment;
+  if(old.has(id)||record.status!=='departed'||!issued?.ready||issued.baseRevision!==before.localRevision||issued.baseStateFingerprint!==stateFingerprint(before)||stableJSON(authentic)!==stableJSON(record))throw ruleError('Jugement divin sans aperçu ou décision MJ attestés.');}
+}
+const judgmentRow=()=>registry.wrathTable.find(row=>row.id==='wrath:146-150');
+function debitFate(state,actor,next){
+ const fate=getV5Fate(state,actor);
+ if(fate.temporary>=1){const spent=spendV5Temporary(next,parts(next),actor,'fate',1);if(spent.consumed<1)throw ruleError('Destin temporaire introuvable.');next.combat.participants=spent.participants;return {source:'temporary',before:fate.balance,after:fate.balance-1};}
+ if(fate.permanent===null)throw ruleError('Le Destin du personnage est inconnu : renseignez-le avant le retour.');
+ if(fate.permanent<1)throw ruleError('Sans Point de Destin, le personnage ne revient jamais.');
+ const key=prayerSubjectKey(state,actor);
+ for(const item of subjectRows(next))if(prayerSubjectKey(next,item.row,item.kind)===key){item.row.fate=fate.permanent-1;item.row.extensions??={};item.row.extensions.v5??={};item.row.extensions.v5.fate=fate.permanent-1;if(item.row.extensions.v5.resources?.fate!=null)item.row.extensions.v5.resources.fate=fate.permanent-1;}
+ return {source:'permanent',before:fate.balance,after:fate.balance-1};
+}
+export function returnStoreDivineJudgment(state,actorId,id,input={}){
+ if(input.baseRevision!==undefined&&input.baseRevision!==state.localRevision)throw ruleError('La partie a changé : relisez le jugement divin.');
+ const actor=penanceSubject(state,actorId),old=judgmentsOf(actor).find(row=>row.id===id);if(!actor||!old)throw ruleError('Jugement divin introuvable.');
+ const item=subjectRows(state).find(row=>row.row===actor);if(!validJudgment(state,item,old))throw ruleError('Jugement divin invalide.');
+ if(old.status!=='departed')throw ruleError('Le retour a déjà été décidé pour ce jugement.');
+ if(!text(input.reason))throw ruleError('Motif MJ du retour requis.');
+ if(!text(input.returnPoint)||input.returnPoint.trim().length>200)throw ruleError('Point de retour choisi par le MJ requis (200 caractères au plus).');
+ const next=clone(state),spent=debitFate(state,actor,next),row=judgmentRow();
+ const record={...clone(old),status:'returned',returnedBy:'MJ',returnedRevision:state.localRevision+1,returnedReason:input.reason.trim(),returnPoint:input.returnPoint.trim(),fateSpent:spent,rejectionProposal:{status:'proposed',resultId:row.id,source:clone(row.source)}};
+ const projected=projectJudgment(next,penanceSubject(next,actorId),record);attestJudgment(state,record);
+ projected.log=[{id:record.id+':return',kind:'management',actorId,text:'Jugement dernier : retour par un Point de Destin · '+record.returnPoint+' · rejet « Je vous rejette » proposé',detail:clone(record)},...(projected.log||[])].slice(0,300);
+ return {ok:true,status:'returned',record:clone(record),state:projected};
+}
+export function decideStoreDivineJudgmentRejection(state,actorId,id,input={}){
+ if(input.baseRevision!==undefined&&input.baseRevision!==state.localRevision)throw ruleError('La partie a changé : relisez le jugement divin.');
+ const actor=penanceSubject(state,actorId),old=judgmentsOf(actor).find(row=>row.id===id);if(!actor||!old)throw ruleError('Jugement divin introuvable.');
+ const item=subjectRows(state).find(row=>row.row===actor);if(!validJudgment(state,item,old))throw ruleError('Jugement divin invalide.');
+ if(old.status==='departed')throw ruleError('Le retour par Point de Destin doit précéder la décision du rejet.');
+ if(old.rejectionProposal?.status!=='proposed')throw ruleError('Le rejet est déjà décidé pour ce jugement.');
+ if(typeof input.confirm!=='boolean')throw ruleError('Confirmez ou refusez explicitement le rejet.');
+ if(!text(input.reason))throw ruleError('Motif MJ de la décision requis.');
+ const row=judgmentRow();let next=clone(state),proposal={...clone(old.rejectionProposal),decidedBy:'MJ',decidedReason:input.reason.trim()},status;
+ if(!input.confirm){proposal.status='declined';proposal.declinedReason=input.reason.trim();status='returned-without-rejection';}
+ else{
+  status='rejected';proposal.status='confirmed';const checked=readDivineRejections(actor);if(!checked.ok)throw ruleError('Rejets divins de la fiche à vérifier.');
+  if(checked.records.some(rec=>foldCult(rec.cult)===foldCult(old.cult)&&rec.kind==='permanent'))proposal.outcome='already-permanent';
+  else{
+   const planned=prepareWrathRejection(state,actor,row,{executionId:'judgment-rejection:'+old.id,wrathRejectionConfirmed:input.wrathRejectionConfirmed,wrathPrayAdvances:input.wrathPrayAdvances},{roll:old.wrathProof.roll,modifiedRoll:old.wrathProof.modifiedRoll,sinAtTest:old.wrathProof.sinAtTest,resultId:row.id},old.cult);
+   if(!planned.ready)throw ruleError(planned.error);
+   const rejection={...planned.record,judgmentId:old.id,wrathProof:{...planned.record.wrathProof,resultId:'wrath:151-plus'}};
+   next=projectRejection(next,actor,rejection,{applyLoss:true});rejectionAuthority.set(rejection.id,{revision:state.localRevision,fingerprint:stateFingerprint(state),record:clone(rejection)});proposal.outcome='created';proposal.rejectionId=rejection.id;
+  }
+ }
+ const record={...clone(old),status,rejectionProposal:proposal};attestJudgment(state,record);
+ const projected=projectJudgment(next,penanceSubject(next,actorId),record);
+ projected.log=[{id:record.id+':decision',kind:'management',actorId,text:'Jugement dernier : '+(input.confirm?'rejet confirmé par le MJ':'rejet refusé par le MJ')+' · '+input.reason.trim(),detail:clone(record)},...(projected.log||[])].slice(0,300);
+ return {ok:true,status,record:clone(record),state:projected};
+}
 function prepareWrathFortune(state,actor,row,input,wrath){
  const layer={id:'wrath-fortune:'+input.executionId,type:'wrath-fortune-refresh',ruleVersion:1,originExecutionId:input.executionId,resultId:row.id,subjectKey:prayerSubjectKey(state,actor),source:clone(row.source),limit:1,wrathProof:{roll:wrath.roll,modifiedRoll:wrath.modifiedRoll,sinAtTest:wrath.sinAtTest,resultId:row.id}};
  return {ready:true,layer,wrathFortunePreview:{limit:1,source:clone(row.source)}};
@@ -663,7 +737,7 @@ export function previewStoreDivine(state,contractId,input={}){
  delete captured.wrathStateRuleId;
  delete captured.wrathRoundLayer;
  delete captured.wrathRejection;delete captured.wrathDailyBleeding;delete captured.wrathConfiscation;delete captured.wrathPenance;delete captured.wrathAccessLayer;delete captured.wrathFortuneLayer;
- delete captured.wrathAlliesPlan;delete captured.wrathSummonPlan;
+ delete captured.wrathAlliesPlan;delete captured.wrathSummonPlan;delete captured.wrathJudgment;
  delete captured.wrathSkillLayer;
  delete captured.wrathSkillPreview;
  delete captured.wrathRoundPreview;
@@ -719,6 +793,8 @@ export function previewStoreDivine(state,contractId,input={}){
    const planned=prepareWrathConfiscation(state,ctx.actor,wrathTableResult,captured,{...preview.preview.wrath,resultId:wrathTableResult.id},contract.deity);if(!planned.ready)return {...planned,preview:clone(preview.preview)};captured.wrathConfiscation=planned.record;captured.wrathConsequences='Possessions retirées ; chaque pénitence accomplie pourra rendre un seul objet magique choisi.';captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,resolvedBy:'source-contract',consequences:captured.wrathConsequences,ruleId:wrathTableResult.id+':confiscation'};preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
   }else if(wrathTableResult?.id==='wrath:96-100'){
    const planned=prepareWrathPenance(state,ctx.actor,wrathTableResult,captured,contract.deity);if(!planned.ready)return {...planned,preview:clone(preview.preview),input:{...captured,wrathResult:{resultId:wrathTableResult.id,source:clone(wrathTableResult.source)}}};captured.wrathPenance=planned.record;captured.wrathConsequences='Pénitence enregistrée sur la fiche : '+planned.record.text;captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,resolvedBy:'source-contract',consequences:captured.wrathConsequences,ruleId:wrathTableResult.id+':penance'};preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
+  }else if(wrathTableResult?.id==='wrath:151-plus'){
+   const planned=prepareWrathJudgment(state,ctx.actor,wrathTableResult,captured,{...preview.preview.wrath,resultId:wrathTableResult.id},contract.deity);captured.wrathJudgment=planned.record;captured.wrathConsequences='Jugement dernier : départ enregistré ; retour seulement par un Point de Destin, puis rejet proposé au MJ.';captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,resolvedBy:'source-contract',consequences:captured.wrathConsequences,ruleId:wrathTableResult.id+':judgment'};preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
   }else if(WRATH_SUMMON_RULES[wrathTableResult?.id]){
    const planned=prepareWrathSummon(state,ctx.actor,wrathTableResult,captured,{...preview.preview.wrath,resultId:wrathTableResult.id});if(!planned.ready)return {...planned,preview:clone(preview.preview)};captured.wrathSummonPlan=planned.plan;captured.wrathConsequences=(planned.plan.kind==='demon'?'Un démon inférieur apparaît et attaque la cible désignée : ':'Un Serviteur divin apparaît : ')+planned.plan.profile.name+'.';captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,resolvedBy:'source-contract',consequences:captured.wrathConsequences,ruleId:wrathTableResult.id+':summon'};preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
   }else if(wrathTableResult?.id==='wrath:121-125'){
@@ -793,7 +869,7 @@ export function previewStoreDivine(state,contractId,input={}){
  if(captured.wrathAlliesPlan&&calculated.ready){const projected=projectWrathAllies(calculated.state,captured.wrathAlliesPlan,captured.executionId);if(!projected.ok)return failure('requires-input',projected.error,projected.needsInput);wrathAlliesPreview=projected.preview;}
  const result=calculated.ready?preview:{...preview,...calculated,preview:calculated.preview||preview.preview};
  return rememberPreview({...result,...(wrathStatePreview?{wrathStatePreview}:{}),...(wrathConditionPreview?{wrathConditionPreview}:{}),...(wrathDamagePreview?{wrathDamagePreview}:{}),...(calculated.ready?{projectedEffects:clone(calculated.receipt?.effectReceipts||[])}:{}),contractId,contract:clone(contract),baseRevision:state.localRevision||0,baseStateFingerprint:stateFingerprint(state),baseClockFingerprint:JSON.stringify(clock),input:captured,access:clone(access),
-  executionId:captured.executionId,sourceReceipt:clone(contract.sourceReceipt),wrathTableResult,wrathRejectionPreview:captured.wrathRejection?{cult:captured.wrathRejection.cult,permanent:captured.wrathRejection.kind==='permanent',prayLoss:clone(captured.wrathRejection.prayLoss||null)}:null,wrathDailyBleedingPreview:captured.wrathDailyBleeding?{cult:captured.wrathDailyBleeding.cult,quantity:captured.wrathDailyBleeding.quantity,nextMorningAt:captured.wrathDailyBleeding.nextMorningAt}:null,wrathConfiscationPreview:captured.wrathConfiscation?{count:captured.wrathConfiscation.items.length,cult:captured.wrathConfiscation.cult}:null,wrathPenancePreview:captured.wrathPenance?{cult:captured.wrathPenance.cult,text:captured.wrathPenance.text}:null,wrathFortunePreview:captured.wrathFortuneLayer?{limit:1}:null,wrathSummonPreview:captured.wrathSummonPlan?prepareWrathSummon(state,ctx.actor,wrathTableResult,captured,{...calculated.preview.wrath,resultId:wrathTableResult.id}).wrathSummonPreview:null,wrathAccessPreview:captured.wrathAccessLayer?{resultId:captured.wrathAccessLayer.resultId,cult:captured.wrathAccessLayer.cult,dice:wrathAccessRules[captured.wrathAccessLayer.resultId].dice,value:captured.wrathAccessLayer.duration.value,deadline:clone(captured.wrathAccessLayer.deadline)}:null,wrathAlliesPreview,wrathSkillPreview:clone(captured.wrathSkillPreview||null),wrathRoundPreview:clone(captured.wrathRoundPreview||null),wrathLessonDuration:clone(captured.wrathLessonDuration||null),ruleVersion:preview.ruleVersion});
+  executionId:captured.executionId,sourceReceipt:clone(contract.sourceReceipt),wrathTableResult,wrathRejectionPreview:captured.wrathRejection?{cult:captured.wrathRejection.cult,permanent:captured.wrathRejection.kind==='permanent',prayLoss:clone(captured.wrathRejection.prayLoss||null)}:null,wrathDailyBleedingPreview:captured.wrathDailyBleeding?{cult:captured.wrathDailyBleeding.cult,quantity:captured.wrathDailyBleeding.quantity,nextMorningAt:captured.wrathDailyBleeding.nextMorningAt}:null,wrathConfiscationPreview:captured.wrathConfiscation?{count:captured.wrathConfiscation.items.length,cult:captured.wrathConfiscation.cult}:null,wrathPenancePreview:captured.wrathPenance?{cult:captured.wrathPenance.cult,text:captured.wrathPenance.text}:null,wrathFortunePreview:captured.wrathFortuneLayer?{limit:1}:null,wrathJudgmentPreview:captured.wrathJudgment?prepareWrathJudgment(state,ctx.actor,wrathTableResult,captured,{...calculated.preview.wrath,resultId:wrathTableResult.id}).wrathJudgmentPreview:null,wrathSummonPreview:captured.wrathSummonPlan?prepareWrathSummon(state,ctx.actor,wrathTableResult,captured,{...calculated.preview.wrath,resultId:wrathTableResult.id}).wrathSummonPreview:null,wrathAccessPreview:captured.wrathAccessLayer?{resultId:captured.wrathAccessLayer.resultId,cult:captured.wrathAccessLayer.cult,dice:wrathAccessRules[captured.wrathAccessLayer.resultId].dice,value:captured.wrathAccessLayer.duration.value,deadline:clone(captured.wrathAccessLayer.deadline)}:null,wrathAlliesPreview,wrathSkillPreview:clone(captured.wrathSkillPreview||null),wrathRoundPreview:clone(captured.wrathRoundPreview||null),wrathLessonDuration:clone(captured.wrathLessonDuration||null),ruleVersion:preview.ruleVersion});
 }
 
 export function applyStoreDivine(state,contractId,input={}){
@@ -817,6 +893,7 @@ export function applyStoreDivine(state,contractId,input={}){
  if(captured.input.wrathDailyBleeding){const row=registry.wrathTable.find(row=>row.id==='wrath:131-135'),planned=prepareWrathDailyBleeding(state,ctx.actor,row,captured.input,{...calculated.preview.wrath,resultId:row.id},contract.deity);if(!planned.ready||stableJSON(planned.record)!==stableJSON(captured.input.wrathDailyBleeding))throw ruleError('Matin de récurrence modifié : recalculez.');next=projectDailyBleeding(next,ctx.actor,planned.record);calculated.receipt.wrathDailyBleedingReceipt=clone(planned.record);next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathDailyBleedingReceipt=clone(planned.record);}
  if(captured.input.wrathConfiscation){const row=registry.wrathTable.find(row=>row.id==='wrath:111-115'),planned=prepareWrathConfiscation(state,ctx.actor,row,captured.input,{...calculated.preview.wrath,resultId:row.id},contract.deity);if(!planned.ready||stableJSON(planned.record)!==stableJSON(captured.input.wrathConfiscation))throw ruleError('Inventaire modifié : recalculez.');next=projectConfiscation(next,ctx.actor,planned.record);calculated.receipt.wrathConfiscationReceipt=clone(planned.record);next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathConfiscationReceipt=clone(planned.record);}
  if(captured.input.wrathPenance){const row=registry.wrathTable.find(row=>row.id==='wrath:96-100'),planned=prepareWrathPenance(state,ctx.actor,row,captured.input,contract.deity);if(!planned.ready||stableJSON(planned.record)!==stableJSON(captured.input.wrathPenance))throw ruleError('Pénitence modifiée : recalculez.');next=projectPenance(next,ctx.actor,planned.record);calculated.receipt.wrathPenanceReceipt=clone(planned.record);next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathPenanceReceipt=clone(planned.record);}
+ if(captured.input.wrathJudgment){const row=registry.wrathTable.find(row=>row.id==='wrath:151-plus'),planned=prepareWrathJudgment(state,ctx.actor,row,captured.input,{...calculated.preview.wrath,resultId:row.id},contract.deity);if(stableJSON(planned.record)!==stableJSON(captured.input.wrathJudgment))throw ruleError('Jugement divin modifié : recalculez.');next=projectJudgment(next,ctx.actor,planned.record);calculated.receipt.wrathJudgmentReceipt=clone(planned.record);next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathJudgmentReceipt=clone(planned.record);}
  if(captured.input.wrathSummonPlan){const row=registry.wrathTable.find(row=>row.id===captured.wrathTableResult?.id),planned=row&&WRATH_SUMMON_RULES[row.id]?prepareWrathSummon(state,ctx.actor,row,captured.input,{...calculated.preview.wrath,resultId:row.id}):{ready:false};if(!planned.ready||stableJSON(planned.plan)!==stableJSON(captured.input.wrathSummonPlan))throw ruleError('Apparition du Courroux modifiée : recalculez.');next=projectWrathSummon(next,planned.plan);const receipt={...clone(planned.plan),participantId:planned.plan.id};calculated.receipt.wrathSummonReceipt=receipt;next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathSummonReceipt=clone(receipt);}
  if(captured.input.wrathFortuneLayer){const row=registry.wrathTable.find(row=>row.id==='wrath:121-125'),planned=prepareWrathFortune(state,ctx.actor,row,captured.input,{...calculated.preview.wrath,resultId:row.id});if(stableJSON(planned.layer)!==stableJSON(captured.input.wrathFortuneLayer))throw ruleError('Courroux Chance modifié : recalculez.');next=projectWrathRound(next,ctx.actor,planned.layer);calculated.receipt.wrathFortuneReceipt=clone(planned.layer);next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathFortuneReceipt=clone(planned.layer);}
  if(captured.input.wrathAccessLayer){
@@ -1007,6 +1084,8 @@ function calculateWrathRecovery(state,input){
    next.combat.participants[index]=projected.participant;wrathDetails=clone(projected.receipt||projected.preview);if(damageRule)wrathDamagePreview=projected.preview;
   }else if(['wrath:136-140','wrath:146-150'].includes(row.id)){
    const planned=prepareWrathRejection(state,actor,row,input,wrath,lock.cult);if(!planned.ready)return {...planned,test,wrath};Object.assign(next,projectRejection(next,actor,planned.record,{applyLoss:true}));wrathDetails={rejection:clone(planned.record)};
+  }else if(row.id==='wrath:151-plus'){
+   const planned=prepareWrathJudgment(state,actor,row,input,wrath,lock.cult);Object.assign(next,projectJudgment(next,actor,planned.record));wrathDetails={judgment:clone(planned.record)};
   }else if(WRATH_SUMMON_RULES[row.id]){
    const planned=prepareWrathSummon(state,actor,row,input,wrath);if(!planned.ready)return {...planned,test,wrath};Object.assign(next,projectWrathSummon(next,planned.plan));wrathDetails={summon:{...clone(planned.plan),participantId:planned.plan.id}};wrathSummonPreview=planned.wrathSummonPreview;
   }else if(row.id==='wrath:131-135'){
@@ -1137,7 +1216,7 @@ export function sweepDivineSummons(state){
 
 /** Commande de finalisation : valide les combinaisons et recalcule les couches sans déduire de phases d'une différence d'état. */
 export function finalizeDivineState(before,next){
- next=progressWrathMornings(before,next);guardDailyBleeding(before,next);guardRejections(before,next);
+ next=progressWrathMornings(before,next);guardDailyBleeding(before,next);guardRejections(before,next);guardJudgments(before,next);
  guardWrathCalendar(before,next);guardWrathFortune(before,next);guardPenances(before,next);guardConfiscations(before,next);
  const oldRoundCheck=inspectWrathRounds(before),newRoundCheck=inspectWrathRounds(next);
  if(!oldRoundCheck.ok||!newRoundCheck.ok)throw ruleError('Sanction du Courroux en Rounds invalide ou divergente.');

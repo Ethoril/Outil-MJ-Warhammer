@@ -129,3 +129,14 @@ L06 V5 EN p.218 (88) et p.219 (Serviteurs, 141–145) relues en texte. Le livre 
 | B-C36 | L06 p.218/219 | Durée de présence ? | Aucune : le participant reste jusqu'au retrait par le MJ ; pas de lien `divineSummon`, donc jamais balayé comme une invocation de miracle. | Le livre ne fixe pas de durée. | Durée saisie par le MJ. |
 
 Le dé de distance (2d10, d100) est saisi en total ; la distance en yards est ce total. Le participant entre dans l'ordre d'Initiative par le mécanisme commun (ordre automatique), y compris depuis une récupération B04 (raccord d'une ligne dans `applyDivineWrathRecovery`, store.js, caractérisé par `divin-v5-b14-recovery-characterization.test.js`). Le participant est un état de combat : aucune variable durable nouvelle au registre PJ.
+
+## B15 — session 5 (Claude Pro) : Jugement dernier, Destin et proposition de rejet
+
+L06 V5 EN p.219 relue en texte : « Called to Account », sans Point de Destin le personnage ne revient jamais ; avec, il revient au point choisi par le MJ et subit « Je vous rejette ».
+
+| ID | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| B-C37 | L06 p.219 151+ | Que devient le participant au départ ? | Rien n'est retiré ni modifié : un registre `divineJudgments` consigne le départ ; le MJ gère la scène. | Aucune « mort » ni résurrection n'est inventée ; l'outil n'a pas de statut « absent ». | État « Absent » commun si un jour il existe. |
+| B-C38 | L06 p.219, Q11 | Quand le Point de Destin est-il dépensé ? | À la commande MJ de retour, une seule fois (temporaire d'abord, puis permanent) ; refus sans Destin ou à Destin inconnu ; point de retour et motif obligatoires. | Le tirage n'engage rien : le MJ peut aussi laisser le personnage perdu. | Débit à l'application. |
+| B-C39 | Q11 | Comment confirmer « Je vous rejette » ? | Proposition inerte au retour ; décision MJ explicite (confirmer avec avances de Prière et confirmation de perte, ou refuser avec motif). Si un rejet définitif du même culte existe déjà, aucun doublon (`already-permanent`). | Q11 : le MJ confirme ; réutilisation de la mécanique B13. | Rejet automatique. |
+| B-C40 | B13 | Preuve d'un rejet issu du Jugement ? | `readDivineRejections` accepte une preuve 151+ (`judgmentId`, jet modifié ≥ 151) pour un rejet définitif ; aucun jet 146–150 inventé. | Cohérence avec la règle de lecture sans fabriquer de dé. | — |
