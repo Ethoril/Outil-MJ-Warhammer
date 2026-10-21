@@ -22,7 +22,8 @@ import { normalizeQualities } from './quality-normalization.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
-import { selectV5Test, resolveV5Opposition, reverseV5Roll } from './v5-roll.js';
+import {divineSocialRestriction} from './v5-divine-access.js';
+import { previewV5Test,selectV5Test, resolveV5Opposition, reverseV5Roll } from './v5-roll.js';
 import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
 import { buildCombatTest, hasMomentum, withMomentum, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
@@ -436,8 +437,13 @@ export function previewResolution(input) {
   };
   const actorPrayerNeeds=attachPrayerModifiers(normalized.actor,actorSkillId,normalized.v5);
   const defenderPrayerNeeds=normalized.defense?attachPrayerModifiers(normalized.target,defenderSkillId,normalized.defense.v5):[];
+  const prepareSocial=(subject,action,settings)=>{if(normalized.noTestAction)return {applies:false,needsInput:[]};const rule=divineSocialRestriction(subject,action,settings);if(rule.applies){const modifier=settings.slModifier??action.extensions?.v5?.slModifier??0;if(Number.isInteger(modifier))settings.slModifier=Math.min(-3,modifier);}return rule;};
+  const actorSocial=prepareSocial(normalized.actor,normalized.action,normalized.v5),defenderSocial=normalized.defense?prepareSocial(normalized.target,normalized.defense,normalized.defense.v5):{applies:false,needsInput:[]};
   const actorPlan = buildCombatTest(normalized);
   const defenderPlan = normalized.defense ? buildCombatTest(normalized, 'defender') : null;
+  const capSocial=(plan,rule)=>{plan?.unresolved.push(...rule.needsInput.map(row=>row.label));if(!rule.applies||plan?.kind!=='test'||!plan.test?.options?.length)return;const original=plan.test,result=original.options[0].result,mods=result.details.modifiers.filter(row=>row.id!=='system:wrath-social-ceiling'),total=mods.reduce((n,row)=>n+row.amount,0)+(result.details.advantageSl||0);if(total>-3)mods.push({id:'system:wrath-social-ceiling',label:'Courroux : difficulté sociale au mieux −3 DR',amount:-3-total});plan.test=previewV5Test({score:result.score,roll:original.initialRoll,kind:result.kind,slModifiers:mods,advantageSources:original.advantage.advantage,disadvantageSources:original.advantage.disadvantage});};
+  capSocial(actorPlan,actorSocial);if(defenderPlan)capSocial(defenderPlan,defenderSocial);
+  if(actorSocial.applies||defenderSocial.applies)normalized.divineSocialRestrictions={...(actorSocial.applies?{actor:{ceiling:-3,sources:actorSocial.records.map(row=>({recordId:row.id,source:row.source}))}}:{}),...(defenderSocial.applies?{defender:{ceiling:-3,sources:defenderSocial.records.map(row=>({recordId:row.id,source:row.source}))}}:{})};
   actorPlan.unresolved.push(...actorPrayerNeeds);
   if(defenderPlan)defenderPlan.unresolved.push(...defenderPrayerNeeds);
   const capPrayerOptions=(plan,subject,skillId)=>{

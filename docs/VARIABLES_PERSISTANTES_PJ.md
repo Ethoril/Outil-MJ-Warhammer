@@ -42,3 +42,12 @@ B11 : les possessions et leur retenue sont durables. L’inventaire courant rest
 | Fin de l’Hémorragie quotidienne par pénitence | `extensions.v5.divineDailyBleeding[].status/completedByPenanceId` et `extensions.v5.divinePenances[].stoppedDailyBleedingIds` | absente | clôture MJ de pénitence du même culte, Undo/Redo | B12 |
 
 Les Hémorragique acquis restent des États ordinaires et ne sont pas des variables de retour fiche dans ce registre. Leur cause et le curseur quotidien doivent survivre aux séances : ils sont donc recensés ici. La confirmation d’un saut de matins est transitoire, liée à une seule avance, et ne constitue pas une donnée durable du personnage. B12 renforce aussi l’identité des porteurs des registres B09–B11 ; le registre de phase H doit conserver ces identités et ne jamais copier une sanction entre PJ par nom.
+
+| Variable B13 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Excommunication ou rejet définitif du culte | `extensions.v5.divineRejections[]` : identité, sujet, culte, nature, source et preuve de Courroux | absente | Courroux 136–140/146–150, confirmation MJ pour la perte définitive | B13, caractérisation `26b60d3` |
+| Progression des deux pénitences d’excommunication | `divineRejections[].stage/penanceIds` et `extensions.v5.divinePenances[].divineRejectionProgress` | absente | clôture MJ de deux nouvelles pénitences du même culte, Undo/Redo | B13 |
+| Acquisitions Béni/Invocation du culte perdues définitivement | `talents[]`, avec snapshots `divineRejections[].removedTalents` | talents importés et leur spécialisation | rejet définitif confirmé ; les acquisitions des autres cultes restent présentes | B13 |
+| Avances et score réel de la compétence commune Prière | `skills[].advances/total` ; provenance `divineRejections[].prayLoss` et `lossConfirmedBy` | compétences importées ; avances à confirmer explicitement si absentes | rejet définitif confirmé : avances mises à zéro, total diminué des avances connues | B13 |
+
+Les restrictions d’accès et la sanction sociale se déduisent du registre durable, sans nouveau compteur de compétence par culte. La phase H devra synchroniser les acquisitions et avances réellement modifiées avec leur provenance : un réimport de fiche ne doit pas rétablir silencieusement une perte définitive. Les faits d’appartenance d’un interlocuteur sont ceux d’une résolution particulière ; ils ne constituent pas une nouvelle religion permanente du personnage.
