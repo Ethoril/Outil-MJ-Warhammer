@@ -115,7 +115,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const familiar=(normalized.v5State?.participants || []).find(p=>p.id===settings.context?.magicAssistantId);
   const support=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
   const skillLabel=skill?.nom || action.label || action.note || '';
-  const modifiers = [...support.modifiers,...magicSkillModifiers(actor,skillLabel,settings.context),
+  const modifiers = [...support.modifiers,...magicSkillModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr}),
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.
     ...(target&&!defending?magicAdverseModifiers(target,skillLabel):[]),...(defending&&kind==='ranged'?magicSkillModifiers(actor,'Défense contre Tir'):[]),...(settings.slModifiers || [])];
   const suffused=magicSkillReplacement(actor,skill?.nom || action.label || action.note || '',settings.context);

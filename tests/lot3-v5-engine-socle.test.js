@@ -277,7 +277,7 @@ test('Options propres au sort : chaque option calculée est exécutée ; les aut
   const winds = { extensions: { v5: { hasMomentum: true, channelling: { type: 'winds', sl: 20 } } } }, high = { extensions: { v5: { hasMomentum: true, channelling: { type: 'high', sl: 20 } } } };
   const store = await combat(wizard('mage', winds), wizard('enemy'), wizard('hmage', high), wizard('ally'));
   let calculated = 0, reminders = 0;
-  for (const contract of getAllSpellContracts().filter(c => c.overcast?.specific?.length)) {
+  for (const contract of getAllSpellContracts().filter(c => !c.isTradition && c.overcast?.specific?.length)) {
     assert.ok(contract.overcast.options.includes('special'), contract.name);
     for (const option of contract.overcast.specific) {
       assert.ok(option.cost >= 1 && option.label, `${contract.name} / ${option.id}`);

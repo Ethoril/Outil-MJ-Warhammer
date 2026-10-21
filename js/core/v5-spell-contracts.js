@@ -1990,6 +1990,10 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         healAmount = Math.max(1, Math.floor((Number(actor.caracs?.FM) || 30) / 10));
       } else if (healConf.amountFormula === 'DR') {
         healAmount = Math.max(1, Number(sl) || 1);
+      } else if (typeof healConf.amountFormula === 'string') {
+        // Autre formule déclarée (ex. BDex, BSoc) : valeur du lanceur, jamais deviné.
+        const value = spellFormulaValue(healConf.amountFormula, actor, Number(sl) || 0);
+        healAmount = Number.isFinite(value) ? Math.max(1, value) : 1;
       } else {
         healAmount = 1;
       }

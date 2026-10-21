@@ -117,6 +117,8 @@ const splitSkill=name=>{const match=String(name||'').match(/^(.*?)\s*\((.*)\)\s*
  */
 function testKeyApplies(key,skill,context){
  if(key==='all')return true;
+ // « carac:soc » : tout Test lié à cette caractéristique (Tests de Sociabilité), quelle que soit la compétence.
+ if(/^carac:/i.test(key))return Boolean(context?.carac)&&fold(key.slice(6))===fold(context.carac);
  const wanted=splitSkill(key),test=splitSkill(skill);
  if(wanted.base==='tous les tests')return !wanted.spec||wanted.spec==='secousse';
  if(wanted.base.endsWith(' adverse'))return false;
@@ -124,9 +126,10 @@ function testKeyApplies(key,skill,context){
  if(!wanted.spec)return true;
  return test.spec===wanted.spec||[].concat(context?.skillContext||[]).map(fold).includes(wanted.spec);
 }
+const CARAC_LABELS={cc:'Capacité de Combat',ct:'Capacité de Tir',f:'Force',e:'Endurance',i:'Initiative',ag:'Agilité',dex:'Dextérité',int:'Intelligence',fm:'Force Mentale',soc:'Sociabilité'};
 export function magicSkillModifiers(actor,skill,context={}){
  const result=[];const name=fold(skill);
- for(const [key,amount] of Object.entries(actor?.extensions?.v5?.testModifiers || {}))if(testKeyApplies(key,skill,context))result.push({id:'spell-skill:'+key,label:'Effet magique : '+key,amount});
+ for(const [key,amount] of Object.entries(actor?.extensions?.v5?.testModifiers || {}))if(testKeyApplies(key,skill,context))result.push({id:'spell-skill:'+key,label:'Effet magique : '+(/^carac:/i.test(key)?'Tests de '+(CARAC_LABELS[fold(key.slice(6))]||key.slice(6)):key),amount});
  for(const [index,effect] of (actor?.extensions?.v5?.miscastEffects || []).entries())if(effect.type==='penalty' && [...(effect.targetSkills || []),effect.targetSkillCategory].filter(Boolean).some(s=>name.includes(fold(s)) || name.includes('langue')&&s==='Incantation'))result.push({id:'miscast:'+index,label:effect.name,amount:effect.slModifier});
  return result;
 }

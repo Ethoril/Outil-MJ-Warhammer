@@ -21,8 +21,8 @@ import { projectDivineGear } from './v5-divine-effects-gear.js';
 export const V5_MAGIC_EFFECTS_VERSION = 'v5-magic-effects-2026-10-10.1';
 /** Expressions chiffrées déclarées par un contrat ; aucun dé et aucune interprétation de prose. */
 export function spellFormulaValue(formula,caster,sl=0){
- const stats=caster.caracs || {},values={DR:sl,...Object.fromEntries(['FM','F','E','Int','I','Soc','Ag','CT','CC','M'].map(key=>[key,Number(stats[key])])),BF:Math.floor(Number(stats.F)/10),BFM:Math.floor(Number(stats.FM)/10),BE:Math.floor(Number(stats.E)/10),BIntelligence:Math.floor(Number(stats.Int)/10),BSoc:Math.floor(Number(stats.Soc)/10),BInitiative:Math.floor(Number(stats.I)/10)};
- const expression=String(formula).replace(/\b(?:BIntelligence|BInitiative|BSoc|BFM|BF|BE|DR|FM|F|E|Int|I|Soc|Ag|CT|CC|M)\b/g,key=>String(values[key])).replace(/\s/g,'');
+ const stats=caster.caracs || {},values={DR:sl,...Object.fromEntries(['FM','F','E','Int','I','Soc','Ag','Dex','CT','CC','M'].map(key=>[key,Number(stats[key])])),BF:Math.floor(Number(stats.F)/10),BFM:Math.floor(Number(stats.FM)/10),BE:Math.floor(Number(stats.E)/10),BIntelligence:Math.floor(Number(stats.Int)/10),BSoc:Math.floor(Number(stats.Soc)/10),BDex:Math.floor(Number(stats.Dex)/10),BInitiative:Math.floor(Number(stats.I)/10)};
+ const expression=String(formula).replace(/\b(?:BIntelligence|BInitiative|BSoc|BDex|BFM|BF|BE|DR|FM|F|E|Int|I|Soc|Ag|Dex|CT|CC|M)\b/g,key=>String(values[key])).replace(/\s/g,'');
  if(!/^[+-]?\d+(?:\.\d+)?(?:[+*/-]\d+(?:\.\d+)?)*$/.test(expression))return NaN;
  const tokens=expression.match(/\d+(?:\.\d+)?|[+*/-]/g);let i=0;
  const product=()=>{let value=Number(tokens[i++]);while(tokens[i]==='*'||tokens[i]==='/'){const op=tokens[i++],right=Number(tokens[i++]);value=op==='*'?value*right:value/right;}return value;};

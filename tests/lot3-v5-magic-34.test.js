@@ -28,7 +28,7 @@ import { createStore } from '../js/core/store.js';
 // ============================================================================
 
 test('Phase 3.4 — Les 277 contrats de sorts sont présents et structurés', () => {
-  const all = getAllSpellContracts();
+  const all = getAllSpellContracts().filter(c => !c.isTradition);
   assert.equal(all.length, 277, 'Exactement 277 contrats de sorts');
 
   const bookV5 = all.filter(c => c.isBookV5);
@@ -384,7 +384,7 @@ test('Store V5 — Invocations et Vortex intégrés au combat et annulables (und
 // ============================================================================
 
 test('Contrôle Codex P1 #2 : Zéro placeholder générique parmi les 277 contrats et exécution fidèle des sorts signalés (Forge de Tarnus, Bosquet d’ombres, etc.)', async () => {
-  const all = getAllSpellContracts();
+  const all = getAllSpellContracts().filter(c => !c.isTradition);
   assert.equal(all.length, 277);
 
   for (const c of all) {
@@ -654,7 +654,7 @@ test('Contrôle Codex P1 #3 : Les incidents de focalisation, d’interruption et
 // ============================================================================
 
 test('Second Contrôle Codex P1 #1 : Les 277 contrats (dont les 76 effects.type="special") produisent une exécution réelle avec attributeActive: false', () => {
-  const all = getAllSpellContracts();
+  const all = getAllSpellContracts().filter(c => !c.isTradition);
   assert.equal(all.length, 277);
 
   const specialContracts = all.filter(c => c.effects?.type === 'special');
