@@ -386,7 +386,7 @@ export function summonLayerLabel(layer, participants = []) {
 export function summarizeExecution(receipt, { contract, participants = [] } = {}) {
   if (!receipt) return null;
   const prayer = receipt.prayer;
-  const title = prayer ? `${contract?.name || 'Prière'} · ${prayer.success ? 'prière réussie' : 'prière ratée'} (${prayer.sl} DR)` : contract?.name || 'Prière';
+  const title = receipt.targetRejections?.length ? (contract?.name||'Prière')+' · invocation rejetée ('+prayer.sl+' DR au Test de Prière)' : prayer ? `${contract?.name || 'Prière'} · ${prayer.success ? 'prière réussie' : 'prière ratée'} (${prayer.sl} DR)` : contract?.name || 'Prière';
   const lines = (receipt.effectReceipts || []).map(row => describeEffectResult(row, { contract, participants })).filter(Boolean);
   return { title, lines, reminders: [...(receipt.reminders || [])] };
 }

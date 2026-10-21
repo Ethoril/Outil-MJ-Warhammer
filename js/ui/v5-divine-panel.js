@@ -1,4 +1,5 @@
 /** Brouillon de prière conservé entre rendus ; seul le Store peut confirmer une conséquence. */
+import {CAMP_LABELS} from '../core/encounters.js';
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
 import {divineSinPolicy} from '../core/v5-divine-engine.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
@@ -81,13 +82,26 @@ export function createDivinePanel({Store,refresh}){
   const targetIds=self?[actor.id]:state.targetIds.slice();
   const expiry=buildExpiry({contract,actor,choices:state.choices,round,phase:state.expiryPhase,manualRounds:state.form.expiryRounds});
   return {actorId:actor.id,targetIds,roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
-   wrathSkillIds:clone(state.wrathSkillIds),wrathRoundPolicy:state.wrathRoundPolicy||undefined,wrathActionDecision:state.wrathActionDecision||undefined,wrathRoundAnchor:state.wrathAnchorScene&&state.wrathAnchorRound?{sceneId:state.wrathAnchorScene,round:Number(state.wrathAnchorRound)}:undefined,
+   wrathAllyIds:clone(state.wrathAllyIds),wrathAlliesConfirmed:state.wrathAlliesConfirmed==='true',wrathSkillIds:clone(state.wrathSkillIds),wrathRoundPolicy:state.wrathRoundPolicy||undefined,wrathActionDecision:state.wrathActionDecision||undefined,wrathRoundAnchor:state.wrathAnchorScene&&state.wrathAnchorRound?{sceneId:state.wrathAnchorScene,round:Number(state.wrathAnchorRound)}:undefined,
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),
    wrathDamageRoll:state.wrathDamageRoll?Number(state.wrathDamageRoll):undefined,wrathEnduranceRoll:state.wrathEnduranceRoll?Number(state.wrathEnduranceRoll):undefined,
    wrathTestOptionId:state.wrathTestOptionId||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathConditionPenaltyMode||undefined,conditionPenaltyReason:state.wrathConditionPenaltyReason||''},
    testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
    choices:clone(state.choices),...toEngineInput(state.form,{targetIds,contract,actor}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
+ function alliesControls(container,preview,actor,participants,{recovery=false}={}){
+  const key=recovery?'wrathRecoveryAllyIds':'wrathAllyIds',confirm=recovery?'wrathRecoveryAlliesConfirmed':'wrathAlliesConfirmed',duration=recovery?'wrathRecoveryDuration':'wrathDurationRoll';
+  if(!Array.isArray(state[key]))state[key]=clone(preview.proposedIds);
+  container.append(node('p','workspace-muted','Alliés proposés selon le même camp que '+actor.name+'. Le MJ peut corriger cette liste.'));
+  for(const target of participants.filter(row=>row.zone==='active')){
+   const wrap=node('label','workspace-type workspace-recipient-check'),input=node('input');input.type='checkbox';input.checked=state[key].includes(target.id);input.setAttribute('aria-label','Réprouver '+target.name);input.dataset.focusKey='divine-'+key+'-'+target.id;
+   input.addEventListener('change',()=>{const ids=new Set(state[key]);if(input.checked)ids.add(target.id);else ids.delete(target.id);state[key]=[...ids];state[confirm]='';if(recovery&&state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};changeWrath(key,state[key]);});wrap.append(input,document.createTextNode(target.name+' · '+(CAMP_LABELS[target.camp]||target.camp||'camp à préciser')));container.append(wrap);
+  }
+  select(container,'Confirmer la liste des alliés réprouvés',state[confirm]||'',[['','Confirmation MJ requise'],['true','Liste vérifiée, y compris si vide']],value=>{state[confirm]=value;if(recovery&&state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};changeWrath(confirm,value);},confirm);
+  field(container,'Jet de durée du rejet (d10)',duration,{min:1,max:10});
+  if(preview.value)container.append(node('p','workspace-muted','À Terre : '+(preview.targets.map(row=>row.name).join(', ')||'aucune cible (liste vide confirmée)')+'. Les Bénédictions et Miracles de '+preview.cult+' les visant seront rejetés pendant '+preview.value+' jour(s). Source L06 p.218.'));
+ }
+
  function skillControls(container,preview,actor,{recovery=false}={}){
   const key=recovery?'wrathRecoverySkillIds':'wrathSkillIds',duration=recovery?'wrathRecoveryDuration':'wrathDurationRoll';
   container.append(node('p','workspace-muted',preview.multiple?'Compétences associées au dieu : choix du MJ sur cette fiche (une ou plusieurs).':'Compétence associée au dieu : choix du MJ, exactement une.'));
@@ -110,7 +124,7 @@ export function createDivinePanel({Store,refresh}){
   if(preview.rounds)container.append(node('p','workspace-muted',preview.rounds+' Round(s) ; expiration après les effets du Round '+preview.roundDeadline+'.'));
  }
 
- function recoveryPanel(actor){
+ function recoveryPanel(actor,participants){
   const rows=(actor.states||[]).flatMap(condition=>(condition.divineWrathLocks||[]).map(lock=>({condition,lock})));
   const forced=(actor.extensions?.v5?.divineEffects||[]).some(row=>row.type==='wrath-round-rule'&&row.mode==='forced');
   if(!rows.length&&!state.lastRecovery&&!forced)return null;
@@ -135,7 +149,7 @@ export function createDivinePanel({Store,refresh}){
   select(context,'Arbitrage des États de récupération',state.wrathRecoveryPenaltyMode||'',[['','Si nécessaire : choisir'],['sl','Retenir le plus fort malus en DR'],['disadvantage','Retenir le Désavantage']],value=>changed('wrathRecoveryPenaltyMode',value),'wrathRecoveryPenaltyMode');
   field(context,'Motif de l’arbitrage de récupération','wrathRecoveryPenaltyReason',{type:'text'});box.append(context);
   const input=()=>({actorId:actor.id,...selection,roll:state.wrathRecoveryRoll?Number(state.wrathRecoveryRoll):undefined,canSpeak:state.wrathRecoveryCanSpeak==='true',testOptionId:state.wrathRecoveryOption||undefined,conditionContext:{conditionPenaltyMode:state.wrathRecoveryPenaltyMode||undefined,conditionPenaltyReason:state.wrathRecoveryPenaltyReason||''},brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility},
-   wrathSkillIds:clone(state.wrathRecoverySkillIds),wrathRoundPolicy:state.wrathRecoveryPolicy||undefined,wrathActionDecision:state.wrathRecoveryAction||undefined,wrathRoundAnchor:state.wrathRecoveryScene&&state.wrathRecoveryRound?{sceneId:state.wrathRecoveryScene,round:Number(state.wrathRecoveryRound)}:undefined,
+   wrathAllyIds:clone(state.wrathRecoveryAllyIds),wrathAlliesConfirmed:state.wrathRecoveryAlliesConfirmed==='true',wrathSkillIds:clone(state.wrathRecoverySkillIds),wrathRoundPolicy:state.wrathRecoveryPolicy||undefined,wrathActionDecision:state.wrathRecoveryAction||undefined,wrathRoundAnchor:state.wrathRecoveryScene&&state.wrathRecoveryRound?{sceneId:state.wrathRecoveryScene,round:Number(state.wrathRecoveryRound)}:undefined,
    wrathRoll:state.wrathRecoveryWrathRoll?Number(state.wrathRecoveryWrathRoll):undefined,wrathDurationRoll:state.wrathRecoveryDuration?Number(state.wrathRecoveryDuration):undefined,wrathConsequences:state.wrathRecoveryConsequences||'',wrathDamageRoll:state.wrathRecoveryDamage?Number(state.wrathRecoveryDamage):undefined,wrathEnduranceRoll:state.wrathRecoveryEndurance?Number(state.wrathRecoveryEndurance):undefined,wrathTestOptionId:state.wrathRecoveryDamageOption||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathRecoveryDamageMode||undefined,conditionPenaltyReason:state.wrathRecoveryDamageReason||''}});
   button(box,selection.forcedPrayer?'Calculer la Prière imposée':'Calculer la récupération',()=>{state.recoveryPreview=Store.previewDivineWrathRecovery(input());refresh();},false,'recovery-calculate');
   button(box,selection.forcedPrayer?'Appliquer la Prière imposée':'Appliquer la récupération',()=>run(async()=>{const result=await Store.applyDivineWrathRecovery({preview:state.recoveryPreview});if(result?.ok===false)throw Error(result.error||'Récupération non enregistrée.');state.lastRecovery=`Prière ${selection.forcedPrayer?'imposée':'de récupération'} ${result.test.success?'réussie':'ratée'} · ${result.test.sl} DR · ${result.removedCount} État(s) retiré(s).`;state.recoverySelection=null;state.recoveryPreview=null;state.preview=null;for(const key of ['wrathRecoveryWrathRoll','wrathRecoveryDuration','wrathRecoveryConsequences','wrathRecoveryDamage','wrathRecoveryEndurance','wrathRecoveryDamageOption'])state[key]='';}),!state.recoveryPreview?.ready,'recovery-apply');
@@ -151,6 +165,7 @@ export function createDivinePanel({Store,refresh}){
     field(projected,'Jet du nouveau Courroux (d100)','wrathRecoveryWrathRoll',{min:1,max:100});
     if(preview.wrath.resultId)projected.append(node('p','workspace-muted','Résultat : '+preview.wrath.resultId.replace('wrath:','')));
     if(preview.wrath.resultId==='wrath:11-15')field(projected,'Durée des nouvelles Leçons (d10)','wrathRecoveryDuration',{min:1,max:10});
+    if(preview.wrathAlliesPreview)alliesControls(projected,preview.wrathAlliesPreview,actor,participants,{recovery:true});
     if(preview.wrathSkillPreview)skillControls(projected,preview.wrathSkillPreview,actor,{recovery:true});
     if(preview.wrathRoundPreview)roundControls(projected,preview.wrathRoundPreview,{recovery:true});
     if(preview.wrathDamagePreview){
@@ -203,9 +218,10 @@ export function createDivinePanel({Store,refresh}){
     button(list,'Terminer '+name,()=>run(async()=>{const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }
+  for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-deity-rejection')content.append(node('p','workspace-field-error','Réprouvé par '+layer.cult+' : les Bénédictions et Miracles de ce dieu visant ce personnage échouent jusqu’à '+formatCampaignTime(layer.deadline.atSeconds)+' de temps de campagne. Source L06 p.218.'));
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-skill-penalty')content.append(node('p','workspace-field-error','Courroux : −1 DR à '+layer.skills.map(row=>row.name).join(', ')+' · '+layer.duration.value+(layer.duration.unit==='hours'?' heure(s)':' jour(s)')+' · échéance : '+formatCampaignTime(layer.deadline.atSeconds)+' de temps de campagne · Source L06 p.218.'));
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-round-rule')content.append(node('p','workspace-field-error',(layer.mode==='ban'?'Prière interdite':'Prière comme Action obligatoire')+' · '+layer.resultId.replace('wrath:','')+' · '+layer.rounds+' Round(s), fin après les effets du Round '+layer.roundDeadline+' · scène '+(layer.roundAnchor.sceneId||'combat local')+' · Source L06 p.218.'));
-  const recovery=recoveryPanel(actor);if(recovery)content.append(recovery);
+  const recovery=recoveryPanel(actor,participants);if(recovery)content.append(recovery);
   if(contract.status==='blocked')return panel;
   const access=Store.resolveDivineAccess(actor.id,contract.id);
   const accessBox=node('details','workspace-v5-context-details');accessBox.open=!access.allowed;
@@ -338,6 +354,7 @@ export function createDivinePanel({Store,refresh}){
     const box=node('div','workspace-divine-warnings');box.append(node('p','workspace-rubric','Avertissements'));const list=node('ul');
     for(const text of [...new Set(alerts)])list.append(node('li','',text));box.append(list);outcome.append(box);
    }
+   if(preview?.targetRejections?.length)outcome.append(node('p','workspace-field-error','Invocation rejetée par '+contract.deity+' : cible(s) réprouvée(s) '+preview.targetRejections.map(row=>participants.find(target=>target.id===row.targetId)?.name||row.targetId).join(', ')+'. Le Test de Prière reste résolu, aucun effet d’invocation ne sera appliqué.'));
    if(preview?.reminders?.length){
     const box=node('div','workspace-divine-reminders');box.append(node('p','workspace-rubric','Rappels du MJ'));const list=node('ul');
     for(const reminder of preview.reminders)list.append(node('li','workspace-muted',reminder));box.append(list);outcome.append(box);
@@ -351,6 +368,8 @@ export function createDivinePanel({Store,refresh}){
      outcome.append(node('p','workspace-muted','Leçons divines · malus automatique de −1 DR aux futurs Tests de Prière. Le Round actuel compte comme premier; la sanction prend fin après les effets du dernier Round.'));
      field(outcome,'Jet de durée (d10)','wrathDurationRoll',{min:1,max:10});
      if(result.wrathLessonDuration)outcome.append(node('p','workspace-muted',`Durée : ${result.wrathLessonDuration.roll} + ${result.wrathLessonDuration.sinAtTrigger} Péché(s) = ${result.wrathLessonDuration.rounds} Round(s); fin après les effets du Round ${result.wrathLessonDuration.expiryRound}.`));
+    }else if(result.wrathAlliesPreview){
+     alliesControls(outcome,result.wrathAlliesPreview,actor,participants);
     }else if(result.wrathSkillPreview){
      skillControls(outcome,result.wrathSkillPreview,actor);
     }else if(result.wrathRoundPreview){
