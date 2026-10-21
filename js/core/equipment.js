@@ -89,7 +89,10 @@ export function locationProtection(target,context={}){
  const protection=hasEquipment?armourProtection(target.equipment):null;
  const location=protection?.locations.find(row=>row.id===id);
  let counted=[],ignored=location?.ignored.map(row=>({...row}))??[];
- let baseAp=location?.ap??normalizeArmorLocations(armor)[id];let ap=baseAp;
+ let baseAp=location?.ap??normalizeArmorLocations(armor)[id];
+ // B11 : les PA physiques hors possessions sont un fait MJ, conservé séparément des pièces rendues.
+ const retained=target?.extensions?.v5?.divineConfiscations?.at(-1)?.retainedArmor?.[id];if(protection&&Number.isSafeInteger(retained)&&retained>=0)baseAp+=retained;
+ let ap=baseAp;
  const attackRoll=Number(context.attackRoll),hitRoll=Number(context.hitLocationRoll??context.location?.roll);
  const attackWords=(context.qualities||[]).map(w=>resolveKeyword(typeof w==='string'?w:w.id)?.id??(typeof w==='string'?w:w.id));
  let criticalIgnored=false;
@@ -106,7 +109,7 @@ export function locationProtection(target,context={}){
  if(known.some(key=>(context.ignoredArmourFlaws||[]).includes(key))){include=false;ignored.push({item,reason:'Talent : armure ignorée ('+known.filter(key=>context.ignoredArmourFlaws.includes(key)).join(', ')+')'});}
  if(include)counted.push(item);
  }
- if(location)ap=counted.reduce((sum,item)=>sum+item.ap,0);
+ if(location)ap=counted.reduce((sum,item)=>sum+item.ap,0)+(Number.isSafeInteger(retained)&&retained>=0?retained:0);
  if(location?.ignored.some(row=>row.item.ap===null))manual.push('pa-a-preciser');
  let shieldAp=0,shield=null;
  const shields=protection?.shields||[];

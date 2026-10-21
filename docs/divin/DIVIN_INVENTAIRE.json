@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:d0013bcaf804677ae7a312d1654654b0e45b5b02647cb3a0246bd007f589b8c2",
+  "sourceFingerprint": "sha256:ba2a0ab80b01a3fda3d1ccf1b135c601e88d832bbc6dfa3fd5fe13a45e4aefcb",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -13,11 +13,12 @@
     "talents": 1
   },
   "sourceCounts": {
-    "blessingsSupplement": 12,
-    "blessingsTotal": 72,
+    "blessingsSupplement": 18,
+    "blessingsTotal": 78,
     "blessingsByBook": {
       "L02": 12,
-      "L06": 60
+      "L06": 60,
+      "L25": 6
     },
     "blessingsByCult": {
       "Handrich": 6,
@@ -29,6 +30,7 @@
       "Shallya": 6,
       "Sigmar": 6,
       "Solkan": 6,
+      "Stromfels": 6,
       "Taal": 6,
       "Ulric": 6,
       "Verena": 6
@@ -8052,6 +8054,724 @@
       ],
       "reminders": [
         "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière."
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:stromfels:battle",
+      "type": "blessing",
+      "name": "Bénédiction de Bataille",
+      "deity": "Stromfels",
+      "status": "implemented",
+      "source": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Bataille (Stromfels)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Bataille (Stromfels)",
+        "clauses": [],
+        "accessSource": {
+          "document": "WFRP_Sea_Of_Claws_221021.pdf",
+          "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+          "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 91,
+          "section": "Bénédictions de Stromfels",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Bataille",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_74_72_6f_6d_66_65_6c_73_29",
+        "name": "Béni (Stromfels)",
+        "specialization": "Stromfels"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "CC",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Capacité de Combat.",
+        "access": "Béni (Stromfels)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:battle"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:stromfels:breath",
+      "type": "blessing",
+      "name": "Bénédiction de Souffle",
+      "deity": "Stromfels",
+      "status": "implemented",
+      "source": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Souffle (Stromfels)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Souffle (Stromfels)",
+        "clauses": [],
+        "accessSource": {
+          "document": "WFRP_Sea_Of_Claws_221021.pdf",
+          "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+          "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 91,
+          "section": "Bénédictions de Stromfels",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Souffle",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_74_72_6f_6d_66_65_6c_73_29",
+        "name": "Béni (Stromfels)",
+        "specialization": "Stromfels"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "special-state",
+          "doesNotBreathe": true,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible n’a plus besoin de respirer et ignore les règles d’Étouffement. Le moteur ne lit que l’étouffement des sorts (nuage, ombres) : noyade, fumée et gaz restent à arbitrer par le MJ.",
+        "access": "Béni (Stromfels)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:breath"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:stromfels:courage",
+      "type": "blessing",
+      "name": "Bénédiction de Courage",
+      "deity": "Stromfels",
+      "status": "implemented",
+      "source": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Courage (Stromfels)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Courage (Stromfels)",
+        "clauses": [],
+        "accessSource": {
+          "document": "WFRP_Sea_Of_Claws_221021.pdf",
+          "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+          "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 91,
+          "section": "Bénédictions de Stromfels",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Courage",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_74_72_6f_6d_66_65_6c_73_29",
+        "name": "Béni (Stromfels)",
+        "specialization": "Stromfels"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "FM",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Force Mentale.",
+        "access": "Béni (Stromfels)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:courage"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:stromfels:hardiness",
+      "type": "blessing",
+      "name": "Bénédiction de Vigueur",
+      "deity": "Stromfels",
+      "status": "implemented",
+      "source": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Vigueur (Stromfels)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Vigueur (Stromfels)",
+        "clauses": [],
+        "accessSource": {
+          "document": "WFRP_Sea_Of_Claws_221021.pdf",
+          "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+          "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 91,
+          "section": "Bénédictions de Stromfels",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Vigueur",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_74_72_6f_6d_66_65_6c_73_29",
+        "name": "Béni (Stromfels)",
+        "specialization": "Stromfels"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "characteristic-modifier",
+          "characteristic": "E",
+          "value": 10,
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible gagne +10 en Endurance.",
+        "access": "Béni (Stromfels)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:hardiness"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:stromfels:savagery",
+      "type": "blessing",
+      "name": "Bénédiction de Sauvagerie",
+      "deity": "Stromfels",
+      "status": "implemented",
+      "source": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Sauvagerie (Stromfels)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Sauvagerie (Stromfels)",
+        "clauses": [],
+        "accessSource": {
+          "document": "WFRP_Sea_Of_Claws_221021.pdf",
+          "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+          "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 91,
+          "section": "Bénédictions de Stromfels",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Sauvagerie",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_74_72_6f_6d_66_65_6c_73_29",
+        "name": "Béni (Stromfels)",
+        "specialization": "Stromfels"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "rounds"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            },
+            {
+              "duration": {
+                "add": 6,
+                "unit": "rounds"
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-strike-to-injure",
+              "rank": 1
+            }
+          ],
+          "consumeOn": "critical",
+          "duration": {
+            "value": 6,
+            "unit": "rounds"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "Au prochain Coup Critique infligé par la cible, lancer deux fois et garder le meilleur résultat.",
+        "access": "Béni (Stromfels)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:savagery"
+        }
+      ],
+      "needsInput": []
+    },
+    {
+      "id": "divine:blessing:stromfels:tenacity",
+      "type": "blessing",
+      "name": "Bénédiction de Ténacité",
+      "deity": "Stromfels",
+      "status": "implemented",
+      "source": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Ténacité (Stromfels)",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "document": "WFRP_Sea_Of_Claws_221021.pdf",
+        "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+        "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 91,
+        "section": "Bénédiction de Ténacité (Stromfels)",
+        "clauses": [],
+        "accessSource": {
+          "document": "WFRP_Sea_Of_Claws_221021.pdf",
+          "fileSha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc",
+          "edition": "V4 EN, Sea of Claws (adaptation au socle V5)",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 91,
+          "section": "Bénédictions de Stromfels",
+          "clauses": []
+        },
+        "effectSource": {
+          "document": "Livre de base V5 EN v2.pdf",
+          "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+          "edition": "V5 EN",
+          "sourceStatus": "read-and-page-checked",
+          "printedPage": 221,
+          "section": "Bénédiction de Ténacité",
+          "clauses": []
+        },
+        "catalogueSnapshotSha256": "af32140af75667f9604a49245d8cd3a241f65cb8e8b1d1bd5e8eaa68a58aef0b"
+      },
+      "requiredTalent": {
+        "id": "talent-bless",
+        "catalogueTalentId": "talent-42_e9_6e_69_20_28_53_74_72_6f_6d_66_65_6c_73_29",
+        "name": "Béni (Stromfels)",
+        "specialization": "Stromfels"
+      },
+      "params": {
+        "range": {
+          "kind": "fixed",
+          "value": 6,
+          "unit": "yards"
+        },
+        "targets": {
+          "kind": "count",
+          "value": 1
+        },
+        "duration": {
+          "kind": "instant"
+        }
+      },
+      "extensions": [
+        {
+          "everySuccessLevels": 2,
+          "choices": [
+            {
+              "range": {
+                "add": 6,
+                "unit": "yards"
+              }
+            },
+            {
+              "targets": {
+                "add": 1
+              }
+            }
+          ],
+          "repeatable": true,
+          "instantDurationCannotIncrease": true
+        }
+      ],
+      "effects": [
+        {
+          "type": "remove-condition",
+          "chosen": true,
+          "amount": 1,
+          "excludeKeys": [
+            "souille"
+          ],
+          "duration": {
+            "unit": "instant"
+          }
+        }
+      ],
+      "labels": {
+        "effect": "La cible retire 1 État choisi (sauf Souillé et les États verrouillés).",
+        "access": "Béni (Stromfels)"
+      },
+      "clauses": [
+        {
+          "id": "pray-test",
+          "mode": "engine",
+          "sourceRef": "prayer-success"
+        },
+        {
+          "id": "effect",
+          "mode": "engine",
+          "sourceRef": "blessing:tenacity"
+        }
       ],
       "needsInput": []
     },

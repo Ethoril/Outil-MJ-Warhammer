@@ -1,4 +1,4 @@
-import {previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
+import {createStoreDivinePenance,completeStoreDivinePenance,getDivinePenanceExamples,previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
@@ -66,7 +66,7 @@ import { refreshV5TalentEffects,previewV5FrenzyExit } from './v5-talent-actions.
 import { previewV5TalentConditions } from './v5-talents.js';
 import { normalizeEffects } from './effects.js';
 import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
-import { getV5Fortune, getV5Fate, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
+import { getV5Fortune, getV5Fate, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, refreshV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
 import { acquireV5Conditions, recoverV5Condition, healV5Wounds, assertDivineWrathConditionsKept } from './v5-effects.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
@@ -198,7 +198,7 @@ function registerNewV5Participants(before, next) {
   if (order) next.combat.order = order;
 }
 
-export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
+export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
 
   let reserve = new Map();
@@ -1617,6 +1617,8 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if (draft.localRevision !== expected) throw Object.assign(new Error('La partie a changé. Recalculez le compteur de Fortune.'), { code: 'V5_EFFECT_STALE', userFacing: true });
         const subject = (draft.combat?.participants || []).find(item => item.id === id) || (draft.reserve || []).find(item => item.id === id) || (draft.persistentCharacters || []).find(item => item.id === id);
         if (!subject) throw new TypeError('Personnage introuvable');
+        if(captured.operation && !['correction','refresh'].includes(captured.operation))throw new TypeError('Opération de Chance invalide');
+        if(captured.operation==='refresh')return refreshV5Fortune(draft,subject,amount,{reason:captured.reason,eventId:'fortune-refresh:'+characterId});
         return setV5Fortune(draft, subject, amount, { source: captured.source || 'mj', characterId });
       });
     },
@@ -2924,6 +2926,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }catch(error){return {ok:false,error:error.message||'La révocation n’a pas été enregistrée.',code:error.code||'DIVINE_ACCESS_COMMAND'};}
     },    getDivineContract(identifier) { return getDivineContract(identifier); },
     getAllDivineContracts() { return getAllDivineContracts(); },
+    canManageDivinePenances(){return divineAuthority==='MJ';},
+    getDivinePenanceExamples(){return getDivinePenanceExamples();},
+    async createDivinePenance(actorId,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut créer une pénitence.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-penance-create',draft=>{transition=createStoreDivinePenance(draft,actorId,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async completeDivinePenance(actorId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clôturer une pénitence.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      const initial=completeStoreDivinePenance(currentEnvelope(),actorId,id,{...captured,baseRevision:expected});if(initial.status==='duplicate')return {ok:true,status:'duplicate',record:initial.record};let transition;
+      const saved=api.executeCommand('divine-penance-complete',draft=>{transition=completeStoreDivinePenance(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
     previewDivineWrathRecovery(input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId);
       const block=brokenEscapeActionBlock(envelope,actorId);if(block)return block;

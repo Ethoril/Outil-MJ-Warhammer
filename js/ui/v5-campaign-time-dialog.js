@@ -1,4 +1,5 @@
 /** Explicit elapsed game time, captured against the current saved state. */
+import {getWrathMorningAdvanceSummary,authorizeWrathMorningAdvance} from '../core/v5-divine-store.js';
 import { campaignDurationSeconds } from '../core/v5-game-time.js';
 import { userMessage, userError } from './messages.js';
 
@@ -23,7 +24,7 @@ function timeText(seconds) {
 export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
   if (!Store?.advanceCampaignTime) throw new TypeError('Avance de campagne indisponible.');
   const baseRevision = Store.getLocalRevision();
-  const clock = clockOf(Store);
+  const clock = clockOf(Store),savedState=JSON.parse(Store.getFullJSON());
   return new Promise(resolve => {
     const opener = returnFocus || document.activeElement;
     const dialog = node('dialog', null, 'tool-sheet v5-effect-dialog campaign-time-dialog');
@@ -47,10 +48,11 @@ export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
     const preview = node('p', 'Précisez la durée à avancer.', 'workspace-muted'); preview.setAttribute('aria-live', 'polite');
     const scope = node('p', 'Les durées de sorts, d’incidents, de talents et de Forme bestiale suivent le temps écoulé. Pour les sorts en Rounds, la convention de table est de 10 secondes par Round. Les échéances de Tour des prières attendent un Tour réel.', 'workspace-muted');
     const error = node('p', '', 'v5-effect-error'); error.setAttribute('role', 'alert'); error.hidden = true;
+    const mornings=node('div',null,'campaign-time-mornings'),morningText=node('p','', 'workspace-muted'),morningLabel=node('label','Traiter tous les matins franchis'),morningConfirm=node('input');morningConfirm.type='checkbox';morningConfirm.setAttribute('aria-label','Traiter tous les matins franchis');morningLabel.prepend(morningConfirm);mornings.append(morningText,morningLabel);mornings.hidden=true;
     const controls = node('div', null, 'row');
     const confirm = node('button', 'Avancer le temps'); confirm.type = 'submit';
     const cancel = node('button', 'Annuler', 'ghost'); cancel.type = 'button'; controls.append(confirm, cancel);
-    form.append(heading, current, durationRow, reasonLabel, preview, scope, error, controls);
+    form.append(heading, current, durationRow, reasonLabel, preview, scope, mornings, error, controls);
     dialog.append(form); document.body.append(dialog);
     let busy = false, outcome = null;
     const elapsedSeconds = () => {
@@ -62,10 +64,10 @@ export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
       try {
         const seconds = elapsedSeconds();
         if (!Number.isSafeInteger(clock.campaignSeconds + seconds)) throw new TypeError('Durée trop grande.');
-        preview.textContent = `Après confirmation : ${timeText(clock.campaignSeconds + seconds)} (ajout de ${timeText(seconds)}).`;
+        preview.textContent = `Après confirmation : ${timeText(clock.campaignSeconds + seconds)} (ajout de ${timeText(seconds)}).`;const summary=getWrathMorningAdvanceSummary(savedState,{seconds});mornings.hidden=!summary.subjects.length;morningLabel.hidden=!summary.requiresConfirmation;morningText.textContent=summary.subjects.map(row=>row.name+' : '+row.count+' matin(s), '+row.quantity+' Hémorragique par matin.').join(' ');
       } catch { preview.textContent = 'Précisez une durée positive, exprimable en secondes entières.'; }
     };
-    amount.addEventListener('input', updatePreview); unit.addEventListener('change', updatePreview);
+    amount.addEventListener('input',()=>{morningConfirm.checked=false;updatePreview();});unit.addEventListener('change',()=>{morningConfirm.checked=false;updatePreview();});
     form.addEventListener('submit', async event => {
       event.preventDefault(); if (busy) return;
       try {
@@ -75,7 +77,8 @@ export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
           throw userError('La partie a changé. Fermez cette fenêtre puis rouvrez-la pour vérifier le temps à avancer.');
         }
         busy = true; confirm.disabled = true; cancel.disabled = true; error.hidden = true;
-        const result = await Store.advanceCampaignTime({ seconds, reason: reason.value.trim(), clockBaseRevision: clock.revision }, { baseRevision });
+        const command={seconds,reason:reason.value.trim(),clockBaseRevision:clock.revision},summary=getWrathMorningAdvanceSummary(savedState,{seconds});if(summary.requiresConfirmation){if(!morningConfirm.checked)throw userError('Confirmez explicitement le traitement de tous les matins franchis.');command.eventId='clock-v1:'+clock.revision+':morning:'+crypto.randomUUID();authorizeWrathMorningAdvance(savedState,{...command,confirmedAll:true});}
+        const result = await Store.advanceCampaignTime(command, { baseRevision });
         if (result === false || result?.ok === false) {
           const details = (result?.needsInput || []).map(item => [item.path, item.label || item.reason || item.message || item.field].filter(Boolean).join(' : ')).filter(Boolean);
           const fallback = ['stale', 'conflict'].includes(result?.status)

@@ -18,7 +18,7 @@ const priest = (cult, extra = {}) => fighter('priest', { kind: 'PJ', camp: 'pj',
   skills: [{ id: 'skill-50_72_69_e8_72_65-base', name: 'Prière', status: 'resolved', carac: 'Soc', total: 60 }],
   talents: [{ id: 'talent-bless', status: 'resolved', rank: 1, specialization: cult }, { id: 'talent-invoke', status: 'resolved', rank: 1, specialization: cult }],
   prayers: getAllDivineContracts().filter(row => row.type === 'miracle').map(row => ({ name: row.catalogueName, status: 'resolved' })),
-  extensions: { v5: { divine: { sin: 0 } } }, ...extra });
+  extensions: { v5: { divine: { sin: 0 }, ...(cult==='Solkan'?{corruptionPoints:0}:{}) } }, ...extra });
 const memory = () => { let saved = null; return { async load() { return saved && clone(saved); }, async saveAtomic({ state }) { saved = clone(state); return { ok: true }; } }; };
 async function fixture(cult, others, priestExtra = {}) {
   const store = createStore({ persistence: memory(), storage: null }); await store.ready;

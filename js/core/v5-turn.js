@@ -1,3 +1,4 @@
+import {wrathForcedPrayerGate} from './v5-divine-prayer-caps.js';
 /** Pure V5 turn transition; every die is an explicit input and all actors share one commit. */
 import {expireDivineEffects} from './v5-divine-engine.js';
 import {refreshEffectLayers} from './v5-magic-effects.js';
@@ -28,6 +29,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   const before = structuredClone(state);
   const combat = before.combat || {};
   if (!combat.round) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
+  const prayerGate=wrathForcedPrayerGate(before,combat.currentActorId,{endingTurn:true});if(prayerGate)return {...prayerGate,baseRevision:before.localRevision||0,requests:[]};
   const brokenGate=brokenEscapeTurnGate(before);if(brokenGate)return {...brokenGate,ready:false,baseRevision:before.localRevision||0,requests:[]};
   // Le froid prend effet sur l'ordre automatique au prochain Round, jamais sur les Tours en cours.
   const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,round:combat.round });

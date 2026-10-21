@@ -94,6 +94,19 @@ export function formatV5Balance({ balance, temporary = 0 } = {}) {
 }
 
 /** The balance stays unknown until the permanent counter is initialized: temporary points never stand in for it. */
+export function pendingWrathFortune(subject) { return (Array.isArray(subject?.extensions?.v5?.divineEffects)?subject.extensions.v5.divineEffects:[]).filter(row=>row.type==='wrath-fortune-refresh'); }
+/** Renouvellement explicite : le pool permanent est remplacé, la Chance temporaire reste portée par ses effets. */
+export function refreshV5Fortune(envelope,subject,normalAmount,{reason,eventId}={}) {
+ balance(normalAmount);if(!text(reason)||!text(eventId))throw new TypeError('Motif MJ et identité du renouvellement requis');
+ const known=getV5Fortune(envelope,subject);if(known.permanent===null)throw new TypeError('Initialisez le solde connu avant de renouveler la Chance');
+ if((envelope.extensions?.v5?.fortuneRefreshReceipts||[]).some(row=>row.eventId===eventId))throw new TypeError('Renouvellement déjà enregistré');
+ const markers=pendingWrathFortune(subject),granted=markers.length?1:normalAmount;
+ let next=setV5Fortune(envelope,subject,granted),ids=markers.map(row=>row.id),identity=known.characterId;
+ const clean=rows=>(rows||[]).map(row=>{if(row.id!==subject.id&&v5ResourceIdentity(next,row)!==identity)return row;const result=clone(row);if(Array.isArray(result.extensions?.v5?.divineEffects))result.extensions.v5.divineEffects=result.extensions.v5.divineEffects.filter(effect=>!ids.includes(effect.id));return result;});
+ next.reserve=clean(next.reserve);next.persistentCharacters=clean(next.persistentCharacters);next.combat.participants=clean(next.combat.participants);if(next.activeScene)next.activeScene.participants=clean(next.activeScene.participants);next.suspendedScenes=recordScenes(next.suspendedScenes).map(scene=>({...scene,participants:clean(scene.participants)}));
+ const receipt={eventId,actorId:subject.id,characterId:identity,normalAmount,granted,markerIds:ids,reason:reason.trim()};next.extensions.v5.fortuneRefreshReceipts=[...(next.extensions.v5.fortuneRefreshReceipts||[]),receipt].slice(-300);
+ next.log=[{id:eventId+':log',kind:'management',actorId:subject.id,text:'Chance renouvelée : '+granted+' point(s) permanent(s)'+(markers.length?' · Courroux 121–125 consommé':''),detail:clone(receipt)},...(next.log||[])].slice(0,300);return projectV5ResourceEnvelope(next);
+}
 export function getV5Fortune(envelope, subject) {
   const characterId = v5ResourceIdentity(envelope, subject);
   const entry = registryOf(envelope).find(row => row.characterId === characterId);
@@ -103,7 +116,7 @@ export function getV5Fortune(envelope, subject) {
   const sourceBalance = sourceMatches && Number.isSafeInteger(sourceValue) && sourceValue >= 0 ? sourceValue : null;
   const permanent = entry?.fortune ?? null;
   const temporary = temporaryOf(envelope, subject, characterId, 'fortune');
-  return { characterId, balance: permanent === null ? null : permanent + temporary, permanent, temporary, sourceBalance, initializedFrom: entry?.initializedFrom ?? null };
+  return { characterId, balance: permanent === null ? null : permanent + temporary, permanent, temporary, sourceBalance, initializedFrom: entry?.initializedFrom ?? null, ...(pendingWrathFortune(subject).length?{refreshLimit:1}:{}) };
 }
 /** Destin : le solde permanent est le champ canonique `extensions.v5.fate` ; seule la part temporaire vient des couches. */
 export function getV5Fate(envelope, subject) {

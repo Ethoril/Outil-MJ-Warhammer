@@ -2,7 +2,7 @@
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import DIVINE_REGISTRY from '../data/v5-divine-contracts.json' with { type: 'json' };
-import {resolveDivineAccess,emptyDivineAccess} from './v5-divine-access.js';
+import {resolveDivineAccess,emptyDivineAccess,resolveDivineTalentRestriction} from './v5-divine-access.js';
 import {applyPrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {v5ResourceIdentity} from './v5-resources.js';
 import {resolveV5ConditionTestContext} from './v5-test-context.js';
@@ -10,7 +10,7 @@ import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
 import {effectHandler,effectNeeds,isLayerlessEffect,hasImplicitCasterTarget} from './v5-divine-effect-handlers.js';
 
-export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-21.2';
+export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-21.3';
 const clone = value => structuredClone(value);
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 const freeze = value => {
@@ -338,6 +338,25 @@ function readSkillScore(actor) {
   return Math.max(0, scores[0] + characteristicAdjustment);
 }
 
+
+/** B07 : une cible porte le rejet du culte, indépendamment du prêtre suivant. */
+export function wrathDeityRejections(subject){
+ const layers=(subject?.extensions?.v5?.divineEffects||[]).filter(row=>row.type==='wrath-deity-rejection');
+ if(new Set(layers.map(row=>row.id)).size!==layers.length)return {ok:false,layers:[],needsInput:[need('target.extensions.v5.divineEffects','Occurrence du Courroux dupliquée.')]};
+ const row=DIVINE_REGISTRY.wrathTable.find(row=>row.id==='wrath:41-45');
+ const fiche=subject?.extensions?.ficheId||subject?.ficheSnapshot?.charId;
+ const keys=new Set(['instance:'+subject?.id,'persistent:'+subject?.id,...(fiche?['fiche:'+fiche]:[]),...(subject?.persistentCharacterId?['persistent:'+subject.persistentCharacterId]:[]),...(subject?.extensions?.v5?.resourceCharacterId?['local:'+subject.extensions.v5.resourceCharacterId]:[])]);
+ for(const layer of layers){const d=layer.duration,p=layer.wrathProof;
+  if(layer.resultId!==row.id||layer.ruleVersion!==1||!keys.has(layer.subjectKey)||typeof layer.cult!=='string'||!layer.cult.trim()||typeof layer.originExecutionId!=='string'||!layer.originExecutionId||layer.id!=='wrath-rejection:'+layer.originExecutionId+':'+layer.subjectKey||!sameCanonical(layer.source,row.source)
+   ||!Number.isSafeInteger(d?.roll)||d.roll<1||d.roll>10||!Number.isSafeInteger(d.sinAtTrigger)||d.sinAtTrigger<1||d.value!==d.roll+d.sinAtTrigger||d.unit!=='days'||d.seconds!==d.value*86400
+   ||!Number.isSafeInteger(layer.clockAnchor?.campaignSeconds)||layer.clockAnchor.campaignSeconds<0||!Number.isSafeInteger(layer.clockAnchor.clockRevision)||layer.clockAnchor.clockRevision<0
+   ||layer.deadline?.kind!=='campaign-time'||!Number.isSafeInteger(layer.deadline.atSeconds)||layer.deadline.atSeconds!==layer.clockAnchor.campaignSeconds+d.seconds
+   ||!p||p.resultId!==row.id||p.sinAtTest!==d.sinAtTrigger||!Number.isSafeInteger(p.roll)||p.roll<1||p.roll>100||p.modifiedRoll!==p.roll+10*p.sinAtTest||p.modifiedRoll<41||p.modifiedRoll>45)
+   return {ok:false,layers:[],needsInput:[need('target.extensions.v5.divineEffects','Rejet du culte du Courroux invalide ou non sourcé.')]};
+ }
+ return {ok:true,layers:clone(layers),needsInput:[]};
+}
+
 function readPrayerModifiers(actor) {
   const modifiers = actor?.extensions?.v5?.testModifiers || {};
   if (!objectValue(modifiers)) return null;
@@ -433,6 +452,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const contractProblem = sourceError(contract, input);
   if (contractProblem) return fail(contract?.status === 'blocked' || /V5 EN canonique|incohérent|registre divin canonique|correspond pas au registre/.test(contractProblem) ? 'blocked' : 'needs-input', contractProblem,
     contract?.needsInput || [need('contract.sourceReceipt', 'Reçu de source V5 requis')]);
+  const restriction=resolveDivineTalentRestriction(actor,{cult:contract.deity,talentId:contract.requiredTalent?.id});
+  if(!restriction.allowed)return fail(restriction.status,restriction.reason,restriction.needsInput);
   let accessDecision=null;
   if(input.divineAccessState!==undefined){
     accessDecision=resolveDivineAccess(input.divineAccessState,{actor,subjectKey:input.divineSubjectKey,contract,activeScene:input.divineActiveScene,executionId:input.executionId});
@@ -486,6 +507,12 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const cappedPrayer=applyPrayerSLCaps(actor,prayer);
   if(!cappedPrayer.ok)return fail('needs-input','La sanction calendaire de Prière est invalide.',cappedPrayer.needsInput);
   prayer=cappedPrayer.test;
+  const rejectionTargets=targets?.length?[...targets]:[actor];
+  if((contract.effects||[]).some(effect=>(effect.appliesTo??(effect.casterOnly?'caster':null))==='caster')&&!rejectionTargets.some(row=>row.id===actor.id))rejectionTargets.push(actor);
+  const targetChecks=rejectionTargets.map(target=>({target,check:wrathDeityRejections(target)}));
+  if(targetChecks.some(row=>!row.check.ok))return fail('needs-input','Rejet du culte à vérifier sur les cibles.',targetChecks.flatMap(row=>row.check.needsInput));
+  const targetRejections=targetChecks.flatMap(({target,check})=>check.layers.filter(layer=>fold(layer.cult)===fold(contract.deity)).map(layer=>({targetId:target.id,originExecutionId:layer.originExecutionId,cult:layer.cult,source:clone(layer.source),deadline:clone(layer.deadline)})));
+  const effectiveSuccess=prayer.success&&!targetRejections.length,effectivePrayer={...prayer,success:effectiveSuccess};
   const resultRoll = prayer.roll;
   const unit = resultRoll % 10;
   const sinTrigger = !sinPolicy.exempt && sin > 0 && unit <= sin;
@@ -495,16 +522,17 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   if (contract.status === 'manual') reminders.push('Prière résolue; effet laissé au rappel MJ selon le contrat source.');
   // assisted : les effets structurés sont appliqués, les clauses non automatisées sortent en rappels MJ.
   const appliesEffects = ['implemented', 'assisted'].includes(contract.status);
-  if (contract.status === 'assisted' && prayer.success) reminders.push('Effets structurés appliqués; clauses restantes laissées au rappel MJ.',
+  if (contract.status === 'assisted' && effectiveSuccess) reminders.push('Effets structurés appliqués; clauses restantes laissées au rappel MJ.',
     ...(contract.clauses || []).filter(clause => clause.mode !== 'engine' && clause.text).map(clause => clause.text));
-  const effects = prayer.success && appliesEffects ? (contract.effects || []) : [];
+  if(targetRejections.length)reminders.push('Courroux 41–45 : cette invocation visant une cible réprouvée est rejetée par ce culte ; le Test de Prière et son risque de Courroux restent résolus.');
+  const effects = effectiveSuccess && appliesEffects ? (contract.effects || []) : [];
   const effectTargets = targets?.length ? targets : [actor];
   const unresolvedEffects = effects.flatMap(effect => effectNeeds(effect, { targets: effectTargets, input, actor }));
-  const choiceResult = resolvePrayerChoices(contract, prayer, actor, input, effectTargets);
+  const choiceResult = resolvePrayerChoices(contract, effectivePrayer, actor, input, effectTargets);
   if (choiceResult.error) return { ...fail('needs-input', choiceResult.error, choiceResult.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt) }) };
   const targetProblem = validateTargetRules(contract, targets || [], input, choiceResult.resolvedParams, actor);
   if (targetProblem) return { ...fail('needs-input', targetProblem.error, targetProblem.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt), resolvedParams: clone(choiceResult.resolvedParams) }) };
-  const resolvedEffects = prayer.success && appliesEffects ? choiceResult.resolvedEffects : [];
+  const resolvedEffects = effectiveSuccess && appliesEffects ? choiceResult.resolvedEffects : [];
   let wrathRoll = null;
   let wrathResult = null;
   let wrathConsequences = null;
@@ -527,7 +555,7 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     actorId: actor?.id || null, targetIds: (targets || []).map(target => target?.id).filter(Boolean),
     skill: 'Pray', skillScore, slModifiers, sinAtTest: sin,
     prayer, prayerSLAdjustment:cappedPrayer.status==='applied'?{rawSL:rawPrayerSL,effectiveSL:prayer.sl,caps:clone(cappedPrayer.caps)}:null,
-    unit, success: prayer.success, conditionTestContext:clone(conditionTestContext),
+    unit, success: effectiveSuccess, targetRejections:clone(targetRejections), conditionTestContext:clone(conditionTestContext),
     wrath: { triggered: wrathTriggered, reason: wrathTriggered ? (prayer.fumble ? 'fumble' : 'sin-threshold') : null,
       ...(sinPolicy.exempt ? {exempt:true,exemption:clone(sinPolicy)} : {}),
       sinTrigger, sinAtTest: sin, sinAfter: wrathTriggered && wrathRoll && wrathResult && wrathConsequences ? Math.max(0, sin - 1) : sin,
@@ -552,11 +580,11 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const hasTimedManualPrayer = contract.status === 'manual' && duration && duration.value !== null && duration.unit !== 'instant';
   const manualCalendar = hasTimedManualPrayer && calendarSeconds(duration) !== null;
   // Minutes/heures/jours : échéance calendaire sur l'horloge de jeu, jamais devinée sans elle.
-  if (prayer.success && (timedEffects.some(isCalendarEffect) || manualCalendar) && !hasClockAnchor(input.clockAnchor))
+  if (effectiveSuccess && (timedEffects.some(isCalendarEffect) || manualCalendar) && !hasClockAnchor(input.clockAnchor))
     return { ...fail('needs-input', 'Horloge de jeu requise pour dater cette durée en minutes, heures ou jours.', [need('clockAnchor', 'Horloge de jeu de la partie')]), preview, sourceReceipt: clone(contract.sourceReceipt) };
   // Durées en Rounds (ou non résolues) : échéance de Round explicite, alignée sur chaque durée sourcée.
   const roundDurations = [...timedEffects.filter(effect => !isCalendarEffect(effect)).map(timedDuration), ...(hasTimedManualPrayer && !manualCalendar ? [duration] : [])];
-  if (prayer.success && roundDurations.length && !input.expiry)
+  if (effectiveSuccess && roundDurations.length && !input.expiry)
     return { ...fail('needs-input', 'Échéance explicite requise pour suivre cette prière active.', [need('expiry', 'Fin du Tour auteur ou fin de Round choisie par le MJ')]), preview, sourceReceipt: clone(contract.sourceReceipt) };
   if (prayer.success && roundDurations.length) {
     const expiryError = validateExpiry(input.expiry);
@@ -663,7 +691,7 @@ export function applyDivineExecution(state, contract, input = {}) {
   const receipt = {
     executionId: input.executionId, contractId: contract.id, actorId,
     source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt),
-    prayer: clone(preview.prayer), prayerSLAdjustment:clone(preview.prayerSLAdjustment), testContext:clone(preview.conditionTestContext), wrath: clone(preview.wrath),
+    prayer: clone(preview.prayer),effectiveSuccess:preview.success,targetRejections:clone(preview.targetRejections||[]), prayerSLAdjustment:clone(preview.prayerSLAdjustment), testContext:clone(preview.conditionTestContext), wrath: clone(preview.wrath),
     wrathResolution: preview.wrath.triggered ? { status: input.wrathResult?.resolvedBy==='source-contract'?'resolved-by-source-contract':'resolved-by-mj', trigger: preview.wrath.reason,
       sinBefore: preview.wrath.sinAtTest, sinAfter: preview.wrath.sinAfter,
       roll: preview.wrath.roll, modifiedRoll: preview.wrath.modifiedRoll, result: clone(preview.wrath.outcome),

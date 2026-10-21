@@ -143,6 +143,7 @@ export function validatePrayerSLCaps(actor, { clock = null } = {}) {
 
 /** Apply only the maximum +0 SL to a successful selected Prayer Test. */
 export function applyPrayerSLCaps(actor, test) {
+  const ban=wrathPrayerBan(actor);if(ban)return {ok:false,status:ban.status,test:clone(test),caps:[],needsInput:[{path:"extensions.v5.divineEffects",message:ban.error}]};
   const checked = validatePrayerSLCaps(actor);
   if (!checked.ok) return { ok: false, status: 'requires-input', test: clone(test), caps: [], needsInput: checked.needsInput };
   const copy = clone(test);
@@ -172,3 +173,67 @@ export function getPrayerSLModifiers(actor,{sceneId,round}={}) {
 }
 
 export const prayerSLCapRuleId = ruleId;
+
+// B05 : données de calcul, liées à la table canonique L06 p.218.
+export const wrathRoundRules = Object.freeze({
+ 'wrath:21-25':{mode:'ban',dice:1,perSin:0},
+ 'wrath:31-35':{mode:'ban',dice:1,perSin:1},
+ 'wrath:46-50':{mode:'ban',dice:2,perSin:1},
+ 'wrath:76-80':{mode:'forced',dice:1,perSin:1}
+});
+export function validateWrathRounds(actor){
+ const layers=actor?.extensions?.v5?.divineEffects||[],bad=message=>({ok:false,layers:[],needsInput:[{field:'extensions.v5.divineEffects',message,label:message}]});
+ if(!Array.isArray(layers))return bad('Couches du Courroux invalides.');
+ const active=[];
+ for(const layer of layers){
+  if(layer?.type!=='wrath-round-rule')continue;
+  const rule=wrathRoundRules[layer.resultId],row=registry.wrathTable.find(row=>row.id===layer.resultId),proof=layer.wrathProof;
+  if(!rule||layer.mode==='forced'&&(typeof layer.cult!=='string'||!layer.cult.trim())||!subjectKeys(actor).has(layer.subjectKey)||layer.ruleVersion!==1||layer.mode!==rule.mode||!row||stableJSON(layer.source)!==stableJSON(row.source)
+   ||typeof layer.originExecutionId!=='string'||!layer.originExecutionId||layer.id!=='wrath-round:'+layer.originExecutionId
+   ||!Number.isSafeInteger(layer.durationRoll)||layer.durationRoll<rule.dice||layer.durationRoll>10*rule.dice
+   ||!Number.isSafeInteger(layer.sinAtTrigger)||layer.sinAtTrigger<1||layer.rounds!==layer.durationRoll+rule.perSin*layer.sinAtTrigger
+   ||!['current','next'].includes(layer.roundPolicy)||!Number.isSafeInteger(layer.roundAnchor?.round)||layer.roundAnchor.round<1
+   ||typeof layer.roundAnchor.sceneId!=='string'
+   ||layer.roundDeadline!==layer.roundAnchor.round+layer.rounds-(layer.roundPolicy==='current'?1:0)||!Number.isSafeInteger(layer.roundDeadline)
+   ||!proof||proof.sinAtTest!==layer.sinAtTrigger||proof.resultId!==layer.resultId||!Number.isSafeInteger(proof.roll)||proof.roll<1||proof.roll>100
+   ||proof.modifiedRoll!==proof.roll+10*proof.sinAtTest||proof.modifiedRoll<row.min||proof.modifiedRoll>row.max
+   ||!layer.prayerProof||!Number.isSafeInteger(layer.prayerProof.roll)||layer.prayerProof.roll<1||layer.prayerProof.roll>100
+   ||!(layer.prayerProof.fumble===true||layer.prayerProof.roll%10<=proof.sinAtTest)
+   ||layer.mode==='forced'&&!['count-trigger','next-turn'].includes(layer.actionDecision))return bad('Sanction du Courroux en Rounds invalide ou non sourcée.');
+  if(active.some(row=>row.id===layer.id))return bad('Occurrence du Courroux dupliquée.');
+  if(layer.prayerProof.fumble&&layer.prayerProof.roll!==100&&layer.prayerProof.roll%11!==0)return bad('Preuve de maladresse du Courroux invalide.');
+  active.push(layer);
+ }
+ return {ok:true,layers:clone(active),needsInput:[]};
+}
+export function wrathPrayerBan(actor){
+ const checked=validateWrathRounds(actor);
+ if(!checked.ok)return {ready:false,status:'requires-input',error:checked.needsInput[0].message,needsInput:checked.needsInput};
+ if(checked.layers.some(row=>row.mode==='ban'))return {ready:false,status:'blocked',code:'DIV-WRATH-PRAYER-BANNED',error:'Courroux : tout Test de Prière est interdit jusqu’à expiration attestée des Rounds.',needsInput:[]};
+ return null;
+}
+export function wrathTurnPosition(state){
+ const scene=state.activeScene,encounterId=scene?.encounterId||scene?.id||state.extensions?.v5?.combatId;
+ const serial=scene?.extensions?.v5?.turnIndex??state.extensions?.v5?.turnIndex,actorId=state.combat?.currentActorId;
+ return {encounterId:encounterId||null,turnId:encounterId&&actorId&&Number.isSafeInteger(serial)?(scene?.id||encounterId)+':'+serial+':'+actorId:null,actorId};
+}
+export function wrathActionSpent(state,actorId){
+ const clock=wrathTurnPosition(state),key=JSON.stringify([clock.encounterId,clock.turnId]);
+ return Boolean(clock.turnId&&((state.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId)
+  ||(state.extensions?.v5?.actionLedger?.quotaUsage||[]).some(row=>row.actorId===actorId&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used>0)));
+}
+export function wrathForcedPrayerGate(state,actorId,{prayer=false,endingTurn=false}={}){
+ const actor=state.combat?.participants?.find(row=>row.id===actorId),checked=validateWrathRounds(actor);
+ if(!checked.ok)return {ready:false,status:'requires-input',error:checked.needsInput[0].message,needsInput:checked.needsInput};
+ const forced=checked.layers.filter(row=>row.mode==='forced');if(!forced.length)return null;
+ const position=wrathTurnPosition(state),sceneId=state.activeScene?.status==='active'?state.activeScene.id:'';
+ const block=(code,error)=>({ready:false,status:'requires-input',code,error,needsInput:[{field:'forcedPrayer',label:error}]});
+ if(!position.turnId||position.actorId!==actorId||forced.some(row=>row.roundAnchor.sceneId!==sceneId||state.combat.round<row.roundAnchor.round||state.combat.round>row.roundDeadline))return block('DIV-WRATH-ROUND-ANCHOR','Courroux : Tour et ancre de Rounds concordants requis.');
+ const executionIds=new Set([...(state.extensions?.v5?.divineExecutions||[]),...(state.extensions?.v5?.divineWrathRecoveries||[])].filter(row=>row.actorId===actorId).map(row=>row.executionId));
+ const fulfilled=(state.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===actorId&&row.turnId===position.turnId&&row.encounterId===position.encounterId&&executionIds.has(row.actionId));
+ const deferred=forced.every(row=>row.originTurnId===position.turnId&&row.actionDecision==='next-turn');
+ if(endingTurn)return fulfilled||deferred?null:block('DIV-WRATH-PRAYER-REQUIRED','Courroux : une Prière comme Action est requise avant la fin du Tour.');
+ if(!prayer)return block('DIV-WRATH-PRAYER-REQUIRED','Courroux : seule une Prière peut servir d’Action.');
+ if(wrathActionSpent(state,actorId))return block('DIV-WRATH-ACTION-SPENT','Courroux : l’Action de ce Tour est déjà dépensée, aucune Prière supplémentaire.');
+ return null;
+}

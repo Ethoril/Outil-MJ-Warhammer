@@ -1,3 +1,4 @@
+import {wrathPrayerBan,wrathForcedPrayerGate,validateWrathRounds} from './v5-divine-prayer-caps.js';
 import {withMomentum} from './v5-combat-rules.js';
 import { acquiredV5Talents,currentV5TalentHashes } from './v5-talents.js';
 import { sourceActive } from './v5-talent-actions.js';
@@ -43,6 +44,14 @@ function authorNextTurnEnd(envelope, actorId) {
   return { phase: 'endOfTurn', actorId, round: combat.round + Math.floor((current + distance) / order.length), turn: serial + distance, moment: 'afterEffects' };
 }
 export function buildV5StoreActionInput(envelope, raw = {}) {
+ const sourceActorId=raw.actorId||raw.actor?.id,sourceActor=envelope.combat?.participants?.find(row=>row.id===sourceActorId);
+ const fold=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+ const skillId=raw.action?.extensions?.fiche?.skillId||raw.v5?.context?.skillId,skill=sourceActor?.skills?.find(row=>row.id===skillId);
+ const pray=skillId==='skill-50_72_69_e8_72_65-base'||['priere','pray'].includes(fold(skill?.name||raw.action?.name||raw.action?.nom||raw.action?.skill));
+ if(pray){const ban=wrathPrayerBan(sourceActor);if(ban)throw new TypeError(ban.error);if(validateWrathRounds(sourceActor).layers.some(row=>row.mode==='forced'))throw new TypeError('Courroux : utilisez la Prière divine sourcée ou la récupération.');}
+ const action=raw.v5?.context?.isAction===true||isAttackType(raw.action?.type);
+ if(action){const gate=wrathForcedPrayerGate(envelope,sourceActorId);if(gate)throw new TypeError(gate.error);}
+
   const state = v5StoreActionState(envelope), clock = v5StoreActionClock(envelope);
   const reactionValidation = validateV5ReactionInput(envelope, raw, { clock });
   const supplied = reactionValidation.input;

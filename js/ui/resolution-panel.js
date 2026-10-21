@@ -1,3 +1,4 @@
+import {readDivineRejections} from '../core/v5-divine-access.js';
 import {renderSpellOptions} from './v5-spell-options.js';
 import { isBrokenActor, renderBrokenEscapeVisibilityControl } from './v5-broken-escape-panel.js';
 import {magicTalentRank} from '../core/v5-magic-talents.js';
@@ -1058,6 +1059,7 @@ function renderComparison(entries, handlers, busy) {
  * @param {boolean} options.canApply
  * @param {object} options.handlers select, input, roll, calculate, compare, choose, apply, cancel
  */
+function renderDivineSocialFacts(subject,draft,handlers,{defending=false}={}){const checked=readDivineRejections(subject),cults=[...new Set(checked.records.filter(row=>row.kind==='permanent'||row.stage<2).map(row=>row.cult))];if(!cults.length)return null;const key=defending?'defenseContext':'v5Context',context=draft[key]||{},box=node('div','workspace-divine-social');box.append(node('p','workspace-muted',(defending?'Défenseur':'Auteur')+' : une interaction avec un membre du culte est au mieux Très Difficile (−3 DR), sans amélioration positive au-dessus de ce seuil. Source L06 p.219.'));for(const cult of cults){const text=(defending?'Défenseur · ':'')+'L’interaction concerne un membre de '+cult,label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('À préciser',''),new Option('Oui','true'),new Option('Non','false'));select.value=typeof context.divineCultMembership?.[cult]==='boolean'?String(context.divineCultMembership[cult]):'';select.addEventListener('change',()=>handlers.select({[key]:{...context,divineCultMembership:{...context.divineCultMembership,[cult]:select.value===''?undefined:select.value==='true'}}}));label.append(select);box.append(label);}const text=(defending?'Défenseur · ':'')+'Ce Test est une interaction sociale',label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('Selon la compétence choisie',''),new Option('Oui','true'));select.value=context.socialInteraction===true?'true':'';select.addEventListener('change',()=>handlers.select({[key]:{...context,socialInteraction:select.value==='true'?true:undefined}}));label.append(select);box.append(label);return box;}
 export function renderResolutionPanel({ draft, actor, participants=[], actions, actionKey: selectedKey, type, target, groups, defense, canCalculate, canApply, handlers }) {
   const section = node('section', 'workspace-resolution workspace-card');
   section.setAttribute('aria-labelledby', 'workspace-resolution-title');
@@ -1159,7 +1161,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
         }
       }
       const v5 = node('div', 'workspace-v5-context');
-      v5.appendChild(rubric('Test V5'));
+      v5.appendChild(rubric('Test V5'));if(type!=='attack'){const social=renderDivineSocialFacts(actor,draft,handlers);if(social)v5.append(social);if(type==='opposition'&&target){const defenseSocial=renderDivineSocialFacts(target,draft,handlers,{defending:true});if(defenseSocial)v5.append(defenseSocial);}}
       if((actor?.extensions?.v5?.spellEffects || []).some(e=>e.magicTalentId==='talent-mind-over-body')){const label=node('label','workspace-type','Pénalité de Blessures Critiques (DR négatifs, hors autre modificateur)');const input=document.createElement('input');input.type='number';input.max='0';input.min='-100';input.value=draft.v5Context?.magicCriticalPenalty ?? '';input.setAttribute('aria-label',label.textContent);input.addEventListener('input',()=>handlers.input('v5Context',{...draft.v5Context,magicCriticalPenalty:input.value===''?null:Number(input.value)}));label.append(input);v5.append(label);}
       const attackKind=draft.v5Kind || inferV5Kind({ ...action, type }, equipmentAttackContext(action.extensions?.equipment));
       const attackBase=weaponAttackNature({actor,action:{...action,type},ranged:equipmentAttackContext(action.extensions?.equipment)?.ranged,kind:attackKind});

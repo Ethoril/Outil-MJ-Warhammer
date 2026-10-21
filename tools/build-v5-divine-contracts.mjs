@@ -164,8 +164,13 @@ const supplementBlessingCults = [
  { cult: 'Handrich', printedPage: 47, english: ['Charisma', 'Fortune', 'Hardiness', 'Protection', 'Wisdom', 'Wit'] },
  { cult: 'Solkan', printedPage: 55, english: ['Battle', 'Conscience', 'Courage', 'Hardiness', 'Might', 'Tenacity'] }
 ];
-const supplementBlessings = supplementBlessingCults.flatMap(({ cult, printedPage, english }) => english.map(name => withCultRule(blessingContract(cult, blessingKey(name), { ref: supplementRef(archivesOfTheEmpire3, archivesOfTheEmpire3Edition), printedPage }))));
-if (supplementBlessings.length !== 12 || new Set([...blessings, ...supplementBlessings].map(row => row.id)).size !== 72) throw new Error('Expected 12 distinct supplement blessing associations.');
+const archivesBlessings = supplementBlessingCults.flatMap(({ cult, printedPage, english }) => english.map(name => withCultRule(blessingContract(cult, blessingKey(name), { ref: supplementRef(archivesOfTheEmpire3, archivesOfTheEmpire3Edition), printedPage }))));
+// B08, autorisation MJ : L25 p.91 associe exactement les six Bénédictions de Manann.
+const seaOfClaws=knownBooks.find(book=>book.id==='L25');
+if(seaOfClaws?.sha256!=='60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc')throw new Error('Source L25 de Stromfels absente ou modifiée.');
+const stromfelsBlessings=['Battle','Breath','Courage','Hardiness','Savagery','Tenacity'].map(name=>blessingContract('Stromfels',blessingKey(name),{ref:supplementRef(seaOfClaws,'V4 EN, Sea of Claws (adaptation au socle V5)'),printedPage:91}));
+const supplementBlessings=[...archivesBlessings,...stromfelsBlessings];
+if (supplementBlessings.length !== 18 || new Set([...blessings, ...supplementBlessings].map(row => row.id)).size !== 78) throw new Error('Expected 18 distinct supplement blessing associations.');
 const catalogueMiracleContracts = csvRows.map(entry => {
  const identified = sourceSix.get(entry.nom);
  const supplemental = sourceUpInArmsNine.get(entry.nom);
