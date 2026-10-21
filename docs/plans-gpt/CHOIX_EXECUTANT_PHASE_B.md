@@ -140,3 +140,28 @@ L06 V5 EN p.219 relue en texte : « Called to Account », sans Point de Destin l
 | B-C38 | L06 p.219, Q11 | Quand le Point de Destin est-il dépensé ? | À la commande MJ de retour, une seule fois (temporaire d'abord, puis permanent) ; refus sans Destin ou à Destin inconnu ; point de retour et motif obligatoires. | Le tirage n'engage rien : le MJ peut aussi laisser le personnage perdu. | Débit à l'application. |
 | B-C39 | Q11 | Comment confirmer « Je vous rejette » ? | Proposition inerte au retour ; décision MJ explicite (confirmer avec avances de Prière et confirmation de perte, ou refuser avec motif). Si un rejet définitif du même culte existe déjà, aucun doublon (`already-permanent`). | Q11 : le MJ confirme ; réutilisation de la mécanique B13. | Rejet automatique. |
 | B-C40 | B13 | Preuve d'un rejet issu du Jugement ? | `readDivineRejections` accepte une preuve 151+ (`judgmentId`, jet modifié ≥ 151) pour un rejet définitif ; aucun jet 146–150 inventé. | Cohérence avec la règle de lecture sans fabriquer de dé. | — |
+
+## B16 — session 5 (Claude Pro) : absolution dédiée et pénitence d'Altdorf
+
+L06 V5 EN p.219 (Absolution) et L20 p.219 (pèlerinage de pénitence d'Altdorf, V4 « Moyen +20 » converti en +2 DR) relues en texte.
+
+| ID | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| B-C41 | L06 p.219 | Difficulté de l'absolution ? | Test de Prière +0 (Intermédiaire), le livre ne fixe rien ; nombre N de Péchés et motif décidés par le MJ (1 à Péchés courants). | « Successful Pray Test » sans modificateur. | Difficulté saisie par le MJ. |
+| B-C42 | Q9, Q12 | Absolution à zéro Péché ? | Refusée d'office (rien à retirer, jamais de Courroux à zéro). Cultes exemptés (elfes) refusés. | Q12 prioritaire. | — |
+| B-C43 | L06 p.219 | Ordre retrait / Courroux ? | Le Courroux se déclenche sur les Péchés au moment du Test (règle commune : maladresse ou unité ≤ Péchés) ; le retrait réussi s'applique d'abord, puis la table décrémente d'un Péché sans passer sous zéro. | Lecture la plus simple ; les +10 de table utilisent les Péchés du Test. | Retrait après table. |
+| B-C44 | L20 p.219 | Altdorf : quel culte, quel Courroux ? | Culte de Sigmar seul ; pèlerinage confirmé par le MJ ; +2 DR ; 1 Péché retiré, 2 à +4 DR ou mieux ; échec ordinaire : un Exténué ; seule la maladresse ouvre la table (le texte ne cite pas le déclenchement par unités), et à zéro Péché rien. | Fidélité au texte du supplément. | Courroux général aussi. |
+| B-C45 | L20 p.219 | Exténué « le premier jour de l'aventure suivante » ? | Exténué ordinaire acquis à l'application ; son retrait au bon moment reste au MJ (rappel dans l'aperçu). | Aucune notion d'aventure dans l'outil. | Rappel sans État. |
+
+L'absolution est un Test hors Tour : elle ne consomme aucune Action (`recordV5ActionUsage` non appelé). Elle réutilise le moteur de Test de récupération B04 (même Test partagé, mêmes plafonds, Leçons, interdictions) et les branches de table B01–B15. Reçu : `extensions.v5.divineWrathRecoveries[].absolution`.
+
+## B17 — session 5 (Claude Pro) : événements sourcés de Péché, rappels et Courroux décidé par le MJ
+
+Sources relues par leur résumé d'inventaire et les pages indiquées (L01 p.69, L02 p.18/46/47/51/53, L06 p.205/217/218/220/229, L10 p.20, L13 p.70, L18 p.28/49, L19, L20 p.27, L21 p.7/13, L24 p.90, L25 p.83, L26 p.119) ; textes du catalogue en paraphrases françaises courtes.
+
+| ID | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| B-C46 | L06 p.217/220 et suppléments | Quels événements deviennent des boutons ? | Douze événements à effet chiffré (attribution fixe ou à montant MJ, retrait d'un Péché, remise à zéro) ; commandements, présages, strictures et usages locaux restent des rappels sans mécanique. | Seuls les effets énoncés par le livre sont automatisés. | Plus d'automatisme sur les strictures (non sourcé). |
+| B-C47 | Q10, Q12 | Garde-fous communs ? | Confirmation MJ, fait constaté et culte obligatoires ; culte acquis sur la fiche (règle de `setDivineSin`) ; cultes elfes refusés ; retrait refusé à zéro ; événements propres à un culte (Verena, Handrich, Shallya, Taal, Sigmar/Ulric) refusés pour un autre. Reçu `extensions.v5.divineSinEvents[]` (300 derniers). | Aucune infraction inventée ; audit des décisions. | — |
+| B-C48 | L06 p.218 | « Courroux MJ explicite » hors Prière ? | Variante `gm-wrath` des commandes d'absolution : motif MJ, Péchés strictement positifs, table jouée sans Test de Prière, branches B01–B16 réutilisées. Les lignes 6–10 et 11–15 (qui exigent la preuve d'un vrai Test) sont refusées dans cette variante. | Pas de preuve de Test fabriquée. | Lignes 11–15 jouées par Prière. |
+| B-C49 | — | Qui exécute ? | Seul le MJ (événements, Courroux MJ, absolution à montant MJ) ; l'interface masque le formulaire aux joueurs. | Décision du MJ. | — |

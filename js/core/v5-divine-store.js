@@ -1032,38 +1032,61 @@ export function applyStoreDivine(state,contractId,input={}){
 
 // Une récupération est un vrai Test de Prière, distinct d’une Bénédiction/Miracle.
 // Le moteur commun calcule le Test ; aucun bonus de Bénédiction n’est appliqué.
+// B16 : absolution (L06 p.219) et pénitence d'Altdorf (L20 p.219) : Test de Prière partagé, retrait de Péchés, Courroux si le Test le déclenche.
+const ABSOLUTION_SOURCES={
+ 'gm-wrath':()=>({...clone(registry.wrathTable[0].source),printedPage:218,section:'Colère des dieux (décision du MJ)'}),
+ absolution:()=>({...clone(registry.wrathTable[0].source),printedPage:219,section:'Absolution'}),
+ altdorf:()=>({document:'WFRP_Altdorf_Crown_of_the_Empire.pdf',fileSha256:'3bca350fa5fa62b8711733b9b78a83c47e2de2368c3c5d27b627d7e33c5c281e',edition:'V4 adaptée au socle V5',sourceStatus:'read-and-page-checked',printedPage:219,section:'Pénitence : pèlerinage à Altdorf'})
+};
+function absolutionPlan(state,actor,input){
+ const a=input.absolution||{},bad=(error,field)=>failure('requires-input',error,[{field,label:error}]);
+ if(!['absolution','altdorf','gm-wrath'].includes(a.kind))return bad('Type d’absolution inconnu.','kind');
+ if(!text(a.cult)||!entries().some(row=>row.deity===a.cult))return bad('Culte connu requis.','cult');
+ if(divineSinPolicy({deity:a.cult}).exempt)return failure('blocked','Ce culte est exempté du Péché : aucune absolution possible.');
+ const sin=actor.extensions?.v5?.divine?.sin;if(!Number.isSafeInteger(sin)||sin<0)return bad('Péchés courants requis.','sin');
+ if(sin<1)return failure('blocked','Aucun Péché à retirer : aucune absolution (et jamais de Courroux à zéro Péché).');
+ let count;
+ if(a.kind==='gm-wrath'){if(!text(a.reason))return bad('Motif MJ du Courroux requis.','reason');}
+ else if(a.kind==='altdorf'){if(a.cult!=='Sigmar')return bad('La pénitence d’Altdorf concerne le culte de Sigmar.','cult');if(a.pilgrimageConfirmed!==true)return bad('Le MJ confirme que le pèlerinage a été accompli.','pilgrimageConfirmed');}
+ else{if(!Number.isSafeInteger(a.count)||a.count<1||a.count>sin)return bad('Nombre de Péchés à retirer : entier de 1 aux Péchés courants.','count');if(!text(a.reason))return bad('Motif MJ de l’absolution requis.','reason');count=a.count;}
+ const source=ABSOLUTION_SOURCES[a.kind]();
+ return {ready:true,count,source,lock:{executionId:'absolution:'+input.executionId,cult:a.cult,source},rule:{id:'absolution:'+a.kind,source,recovery:{difficulty:a.kind==='altdorf'?2:0,remove:'none'}}};
+}
 function calculateWrathRecovery(state,input){
  const ctx=context(state,null,{actorId:input.actorId,targetIds:[]});if(!ctx.actor)return ctx;
  const actor=ctx.actor,forcedLayer=input.forcedPrayer===true?validateWrathRounds(actor).layers.find(row=>row.mode==='forced'):null;
- const condition=input.forcedPrayer===true?null:(actor.states||[]).find(row=>row.id===input.stateId);
- const lock=forcedLayer?{executionId:forcedLayer.originExecutionId,cult:forcedLayer.cult,source:clone(forcedLayer.source)}:condition?.divineWrathLocks?.find(row=>row.kind==='pray'&&(!input.originExecutionId||row.executionId===input.originExecutionId));
- const rule=forcedLayer?{id:'wrath:76-80:pray-action',source:clone(forcedLayer.source),recovery:{difficulty:0,remove:'none'}}:wrathStateRule(lock?.resultId);
- if(!forcedLayer&&(!rule||rule.id!==lock.ruleId||rule.recovery?.kind!=='pray'||stableJSON(lock.source)!==stableJSON(rule.source)||!lock.cult))return failure('blocked','Cette occurrence ne porte pas de récupération par Prière sourcée.');
+ const abs=input.absolution?absolutionPlan(state,actor,input):null;if(abs&&!abs.ready)return abs;
+ const gmWrath=abs&&input.absolution.kind==='gm-wrath';
+ const condition=input.forcedPrayer===true||abs?null:(actor.states||[]).find(row=>row.id===input.stateId);
+ const lock=abs?abs.lock:forcedLayer?{executionId:forcedLayer.originExecutionId,cult:forcedLayer.cult,source:clone(forcedLayer.source)}:condition?.divineWrathLocks?.find(row=>row.kind==='pray'&&(!input.originExecutionId||row.executionId===input.originExecutionId));
+ const rule=abs?abs.rule:forcedLayer?{id:'wrath:76-80:pray-action',source:clone(forcedLayer.source),recovery:{difficulty:0,remove:'none'}}:wrathStateRule(lock?.resultId);
+ if(!forcedLayer&&!abs&&(!rule||rule.id!==lock.ruleId||rule.recovery?.kind!=='pray'||stableJSON(lock.source)!==stableJSON(rule.source)||!lock.cult))return failure('blocked','Cette occurrence ne porte pas de récupération par Prière sourcée.');
  if(forcedLayer&&!lock.cult)return failure('requires-input','Culte source de la Prière imposée manquant.');
  if(condition?.divineWrathLocks.filter(row=>row.kind==='pray').length>1&&!input.originExecutionId)return failure('requires-input','Choisissez l’occurrence de Courroux.',[{field:'originExecutionId',label:'Origine à récupérer'}]);
- if(input.canSpeak!==true)return failure('requires-input','La capacité à prononcer la Prière doit être confirmée.',[{field:'canSpeak',label:'Peut prononcer la Prière'}]);
+ if(!gmWrath&&input.canSpeak!==true)return failure('requires-input','La capacité à prononcer la Prière doit être confirmée.',[{field:'canSpeak',label:'Peut prononcer la Prière'}]);
  const caps=inspectPrayerCaps(state,{subjectKey:prayerSubjectKey(state,actor)}),lessons=inspectPrayerLessons(state,{subjectKey:prayerSubjectKey(state,actor)});
  if(!caps.ok||!lessons.ok)return failure('requires-input','Les sanctions de Prière doivent être résolues.',[...caps.needsInput,...lessons.needsInput]);
  const modifiers=getPrayerSLModifiers(actor,{sceneId:state.activeScene?.status==='active'?state.activeScene.id:null,round:state.combat?.round});
  if(!modifiers.ok)return failure('requires-input','Malus de Prière non résolu.',modifiers.needsInput);
  const fold=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const skills=(actor.skills||[]).filter(row=>['pray','priere'].includes(fold(row.name||row.nom)));
- if(!skills.length||skills.some(row=>row.status!=='resolved'||!Number.isSafeInteger(row.total)||row.total<0||!['soc','fellowship'].includes(fold(row.carac||'Soc')))||new Set(skills.map(row=>row.total)).size!==1||!Number.isSafeInteger(actor.caracs?.Soc))return failure('requires-input','Prière résolue et Sociabilité courante requises.',[{field:'actor.skills',label:'Score de Prière résolu'}]);
+ if(!gmWrath&&(!skills.length||skills.some(row=>row.status!=='resolved'||!Number.isSafeInteger(row.total)||row.total<0||!['soc','fellowship'].includes(fold(row.carac||'Soc')))||new Set(skills.map(row=>row.total)).size!==1||!Number.isSafeInteger(actor.caracs?.Soc)))return failure('requires-input','Prière résolue et Sociabilité courante requises.',[{field:'actor.skills',label:'Score de Prière résolu'}]);
  const testContext=resolveV5ConditionTestContext(actor,{characteristic:'Soc',isAction:true,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,conditionPenaltyMode:input.conditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.conditionContext?.conditionPenaltyReason});
  if(!testContext.ready)return failure('requires-input','Précisez le contexte des États.',testContext.needsInput.concat(testContext.restrictions.map(label=>({field:'conditionContext',label}))));
  let test,options;
+ if(gmWrath){test={success:true,fumble:false,sl:0,roll:0,initialRoll:0,reversed:false,optionId:'gm'};options=[];}
  const prayerSheetModifiers=[...new Map([...magicSkillModifiers(actor,'Prière'),...magicSkillModifiers(actor,'Pray')].map(row=>[row.id,row])).values()];
- try{
+ if(!gmWrath)try{
   const preview=previewV5Test({score:effectiveSkillScore(actor,skills[0].total,'Soc'),roll:normalizeV5Roll(input.roll),kind:'test',
    slModifiers:[{id:rule.id+':recovery',label:'Prière de récupération',amount:rule.recovery.difficulty},...testContext.slModifiers,...modifiers.modifiers,...prayerSheetModifiers],advantageSources:testContext.advantageSources,disadvantageSources:testContext.disadvantageSources});
   options=preview.options;
   if(preview.choiceRequired&&!input.testOptionId)return {...failure('requires-input','Choisissez le jet de Prière.',[{field:'testOptionId',label:'Choix du jet de Prière'}]),testOptions:options};
   test=selectV5Test(preview,input.testOptionId||(preview.forcedInversion?'reverse':'keep'));
  }catch(error){return failure('requires-input',error.message,[{field:'roll',label:'Jet d100 explicite'}]);}
- const capped=applyPrayerSLCaps(actor,test);if(!capped.ok)return failure('requires-input','Plafond de Prière non résolu.',capped.needsInput);test=capped.test;
+ if(!gmWrath){const capped=applyPrayerSLCaps(actor,test);if(!capped.ok)return failure('requires-input','Plafond de Prière non résolu.',capped.needsInput);test=capped.test;}
  const sin=actor.extensions?.v5?.divine?.sin,exempt=divineSinPolicy({deity:lock.cult}).exempt;
  if(!exempt&&(!Number.isSafeInteger(sin)||sin<0))return failure('requires-input','Péchés courants requis.',[{field:'sin',label:'Péchés'}]);
- const wrath={triggered:!exempt&&sin>0&&(test.fumble||test.roll%10<=sin),sinAtTest:exempt?0:sin};
+ const wrath={triggered:!exempt&&sin>0&&(gmWrath||test.fumble||input.absolution?.kind!=='altdorf'&&test.roll%10<=sin),sinAtTest:exempt?0:sin};
  const next=clone(state),index=parts(next).findIndex(row=>row.id===actor.id),changed=parts(next)[index];let removedCount=0;
  if(test.success&&condition){
   const target=changed.states.find(row=>row.id===condition.id),remaining=target.divineWrathLocks.filter(row=>row.executionId!==lock.executionId);
@@ -1071,11 +1094,23 @@ function calculateWrathRecovery(state,input){
   if(rule.recovery.remove==='one-plus-sl'&&target.level>amount){target.level-=amount;removedCount=amount;}
   else{target.divineWrathLocks=remaining;if(!remaining.length){removedCount=target.level;changed.states=changed.states.filter(row=>row.id!==target.id);}}
  }
+ let absolutionReceipt=null;
+ if(abs){
+  const requested=gmWrath?0:input.absolution.kind==='altdorf'?(test.sl>=4?2:1):abs.count,removed=test.success?Math.min(requested,sin):0;let fatigued=false;
+  if(!test.success&&input.absolution.kind==='altdorf'&&!test.fumble){
+   const acquired=acquireV5Conditions(parts(next)[index],[{name:'Exténué',level:1,source:{kind:'divine-absolution',executionId:input.executionId,ruleId:abs.rule.id}}],{authorId:actor.id,targetId:actor.id,round:state.combat?.round});
+   if(!acquired.ready)return failure('requires-input','L’acquisition d’Exténué demande une précision.',acquired.needsInput||[]);
+   parts(next)[index]=acquired.participant;fatigued=true;
+  }
+  parts(next)[index].extensions.v5.divine.sin=sin-removed;
+  absolutionReceipt={kind:input.absolution.kind,cult:input.absolution.cult,requested:test.success?requested:0,removed,sinBefore:sin,sinAfterRemoval:sin-removed,fatigued,...(input.absolution.reason?{reason:input.absolution.reason.trim()}:{}),...(input.absolution.kind==='altdorf'?{pilgrimageConfirmed:true}:{})};
+ }
  let wrathDetails=null,wrathDamagePreview=null,wrathSkillPreview=null,wrathAlliesPreview=null,wrathSummonPreview=null,wrathAccessPreview=null;
  if(wrath.triggered){
   if(!Number.isSafeInteger(input.wrathRoll)||input.wrathRoll<1||input.wrathRoll>100)return {...failure('requires-input','Ce Test déclenche un nouveau Courroux : saisissez sa table.',[{field:'wrathRoll',label:'Jet de Courroux d100'}]),test,wrath};
   wrath.roll=input.wrathRoll;wrath.modifiedRoll=input.wrathRoll+10*sin;
   const row=registry.wrathTable.find(row=>wrath.modifiedRoll>=row.min&&(row.max===null||wrath.modifiedRoll<=row.max));wrath.resultId=row.id;
+  if(gmWrath&&['wrath:6-10','wrath:11-15'].includes(row.id))return {...failure('blocked','Cette ligne dépend d’un vrai Test de Prière : à jouer à la main, hors de cette commande.'),test,wrath};
   const stateRule=wrathStateRule(row.id),conditionRule=wrathConditionRule(row.id),damageRule=wrathDamageRule(row.id);
   if(stateRule||conditionRule||damageRule){
    const projected=stateRule?projectWrathStates(changed,stateRule,input.executionId,state.combat?.round,lock.cult)
@@ -1122,13 +1157,16 @@ function calculateWrathRecovery(state,input){
    if(!text(input.wrathConsequences))return {...failure('requires-input','Conséquences MJ requises pour cette ligne encore assistée.',[{field:'wrathConsequences',label:row.label}]),test,wrath};
    wrathDetails={source:clone(row.source),resolvedBy:'MJ',consequences:input.wrathConsequences.trim()};
   }
-  parts(next)[index].extensions.v5.divine.sin=Math.max(0,sin-1);
+  parts(next)[index].extensions.v5.divine.sin=Math.max(0,parts(next)[index].extensions.v5.divine.sin-1);
  }
- const receipt={executionId:input.executionId,actorId:actor.id,stateId:condition?.id||null,forcedPrayer:Boolean(forcedLayer),originExecutionId:lock.executionId,ruleId:rule.id,source:clone(rule.source),test:clone(test),difficulty:rule.recovery.difficulty,removedCount,wrath,wrathDetails};
+ const receipt={...(absolutionReceipt?{absolution:absolutionReceipt}:{}),executionId:input.executionId,actorId:actor.id,stateId:condition?.id||null,forcedPrayer:Boolean(forcedLayer),originExecutionId:lock.executionId,ruleId:rule.id,source:clone(rule.source),test:clone(test),difficulty:rule.recovery.difficulty,removedCount,wrath,wrathDetails};
  next.extensions??={};next.extensions.v5??={};next.extensions.v5.divineWrathRecoveries=[...(next.extensions.v5.divineWrathRecoveries||[]),clone(receipt)].slice(-300);
- next.log=[{id:input.executionId+':log',kind:'effect',actorId:actor.id,text:`${actor.name} · Récupération du Courroux : Prière ${test.success?'réussie':'ratée'}, ${test.sl} DR, ${removedCount} État(s) retiré(s)${wrath.triggered?' · nouveau Courroux '+wrath.resultId:''}`,detail:clone(receipt)},...(next.log||[])].slice(0,300);
+ next.log=[{id:input.executionId+':log',kind:'effect',actorId:actor.id,text:gmWrath?`${actor.name} · Courroux décidé par le MJ : ${input.absolution.reason.trim()}${wrath.triggered?' · Courroux '+wrath.resultId:''}`:abs?`${actor.name} · ${input.absolution.kind==='altdorf'?'Pénitence d’Altdorf':'Absolution'} : Prière ${test.success?'réussie':'ratée'}, ${test.sl} DR, ${absolutionReceipt.removed} Péché(s) retiré(s)${absolutionReceipt.fatigued?' · Exténué':''}${wrath.triggered?' · Courroux '+wrath.resultId:''}`:`${actor.name} · Récupération du Courroux : Prière ${test.success?'réussie':'ratée'}, ${test.sl} DR, ${removedCount} État(s) retiré(s)${wrath.triggered?' · nouveau Courroux '+wrath.resultId:''}`,detail:clone(receipt)},...(next.log||[])].slice(0,300);
  return {ready:true,status:'ready',test:clone(test),testOptions:options,difficulty:rule.recovery.difficulty,removedCount,wrath,wrathDamagePreview,wrathSkillPreview,wrathAlliesPreview,wrathSummonPreview,wrathAccessPreview,source:clone(rule.source),input:clone(input),executionId:input.executionId,receipt,state:next};
 }
+const absolutionInput=input=>{const{kind,cult,count,reason,pilgrimageConfirmed,absolution,...rest}=clone(input);if(absolution)return {...rest,absolution};return {...rest,absolution:{kind,cult,...(count!==undefined?{count}:{}),...(reason!==undefined?{reason}:{}),...(pilgrimageConfirmed!==undefined?{pilgrimageConfirmed}:{})}};};
+export function previewStoreDivineAbsolution(state,input={}){return previewStoreDivineWrathRecovery(state,{...absolutionInput(input),executionId:input.executionId||'absolution:'+uid()});}
+export function applyStoreDivineAbsolution(state,{preview}={}){if(!preview?.input?.absolution)throw ruleError('Aperçu d’absolution requis.');return applyStoreDivineWrathRecovery(state,{preview});}
 export function previewStoreDivineWrathRecovery(state,input={}){
  const captured={...clone(input),executionId:input.executionId||'wrath-recovery:'+uid()};
  const calculated=calculateWrathRecovery(state,captured),{state:discard,...preview}=calculated;
@@ -1142,6 +1180,66 @@ export function applyStoreDivineWrathRecovery(state,{preview}={}){
  return {...result,ok:true};
 }
 
+// B17 : événements sourcés de Péché (paraphrases). Chaque événement exécute la mécanique après confirmation et fait énoncé par le MJ.
+const SRC=(book,printedPage,section)=>({document:{L01:'Archives of the Empire 2.pdf',L02:'Archives of the Empire 3.pdf',L06:'Livre de base V5 EN v2.pdf',L10:'Supplément Vampire - Sylvania The Cursed County v2.pdf',L13:'Up in arms.pdf',L18:'WFRP_Power_Behind_the_Throne_Companion.pdf',L19:'WFRP-Middenheim-City-of-the-White-Wolf_18.01.2021.pdf',L20:'WFRP_Altdorf_Crown_of_the_Empire.pdf',L21:'WFRP_Empire_in_Ruins_Companion.pdf',L24:'Warhammer_Fantasy_Roleplay_Rough_Nights__Hard_Days_PDF.pdf.pdf',L25:'WFRP_Sea_Of_Claws_221021.pdf',L26:'WFRP_Death_on_the_Reik_Companion.pdf'}[book],book,printedPage,section});
+const SIN_EVENTS=[
+ {id:'l06-217-sin-award',label:'Commandement enfreint',text:'Le fidèle enfreint un commandement de son culte : le MJ lui attribue un ou plusieurs Points de Péché, sans plafond.',source:SRC('L06',217,'Péché'),effect:{kind:'add-mj',min:1}},
+ {id:'l06-220-petty-concerns',label:'Appels répétés au divin',text:'Bénédictions ou Miracles répétés dans la même scène, sur la même blessure ou la même cible : le MJ attribue typiquement 1 à 3 Péchés.',source:SRC('L06',220,'Préoccupations mesquines'),effect:{kind:'add-mj',min:1,max:3}},
+ {id:'l06-229-sword-of-justice',label:'Crime sur un adversaire inconscient (Épée de justice)',text:'Un crime commis sur un adversaire rendu inconscient par l’Épée de justice vaut un Point de Péché au prêtre de Verena.',source:SRC('L06',229,'Épée de justice'),effect:{kind:'add',amount:1},cults:['Verena']},
+ {id:'l02-046-handrich-profit-sin',label:'Miracle d’Handrich sans profit',text:'Si le prêtre d’Handrich ne tire aucun profit (selon le MJ) d’un Miracle qu’il a invoqué, il gagne un Point de Péché.',source:SRC('L02',46,'Miracles d’Handrich'),effect:{kind:'add',amount:1},cults:['Handrich']},
+ {id:'l02-047-shake-on-it-break-sin',label:'Marché rompu (Tope là)',text:'Le prêtre d’Handrich qui rompt lui-même les termes du marché pendant la durée de Tope là gagne un Point de Péché.',source:SRC('L02',47,'Tope là'),effect:{kind:'add',amount:1},cults:['Handrich']},
+ {id:'l02-018-temple-event',label:'Faute endossée au temple',text:'Un fidèle enfreint un commandement dans l’enceinte du temple ; le prêtre qui endosse la faute au lieu de le faire châtier gagne un Point de Péché.',source:SRC('L02',18,'Événement d’Entreprise'),effect:{kind:'add',amount:1}},
+ {id:'l01-069-hospice-sin',label:'Manquement grave au Grand Hospice de Shallya',text:'Armes non remises, violence ou désobéissance au personnel du Grand Hospice : le MJ attribue des Péchés de Shallya, voire joue la table de Colère.',source:SRC('L01',69,'Grand Hospice'),effect:{kind:'add-mj',min:1},cults:['Shallya'],wrathHint:true},
+ {id:'l18-028-taal-sin-award',label:'Mort de l’ours du gamin des rues',text:'Si les personnages tuent l’ours utilisé par un gamin des rues, le MJ peut décider que Taal leur doit des Points de Péché.',source:SRC('L18',28,'Down Among the Dead Men'),effect:{kind:'add-mj',min:1},cults:['Taal']},
+ {id:'l21-013-shrine-desecration',label:'Profanation du sanctuaire',text:'Les fanatiques qui profanent le sanctuaire accumulent des Péchés ; leurs prières peuvent ensuite provoquer le Courroux.',source:SRC('L21',13,'Sanctuaire'),effect:{kind:'add-mj',min:1},wrathHint:true},
+ {id:'l10-020-shrine-sin-removal',label:'Prière au sanctuaire délabré',text:'Un fidèle de Taal, Ulric ou Sigmar qui s’arrête prier au sanctuaire routier perd un Point de Péché.',source:SRC('L10',20,'Sanctuaire routier'),effect:{kind:'remove',amount:1},cults:['Taal','Ulric','Sigmar']},
+ {id:'l21-007-shining-rock-sin',label:'Fragment sacré restitué',text:'Restituer le fragment sacré efface les Péchés du dévot de Sigmar ou d’Ulric.',source:SRC('L21',7,'Fragment sacré'),effect:{kind:'clear'},cults:['Sigmar','Ulric']},
+ {id:'l26-119-funeral-sin',label:'Défunt porté au temple',text:'Le MJ retire un Péché aux fidèles éligibles qui aident à porter un défunt au temple.',source:SRC('L26',119,'Funérailles'),effect:{kind:'remove',amount:1}}
+];
+const SIN_REMINDERS=[
+ {id:'l06-217-cult-commandements',label:'Commandements des cultes majeurs',text:'Chaque culte majeur liste cinq commandements ; leur violation fonde l’attribution des Péchés par le MJ (voir « Commandement enfreint »).',source:SRC('L06',205,'Cultes')},
+ {id:'l02-051-khaine-strictures-penances',label:'Khaine : commandements et pénitences',text:'Culte du meurtre rituel : ne pas laisser passer une occasion de tuer ; la pénitence se paie de sa vie ou par un meurtre spectaculaire.',source:SRC('L02',51,'Khaine')},
+ {id:'l02-053-solkan-strictures-penances',label:'Solkan : commandements et pénitences',text:'Pureté intransigeante : détruire le souillé sans négocier ; pénitences d’endurance. Le texte conseille de laisser les Péchés s’accumuler et de jouer les tensions.',source:SRC('L02',53,'Solkan')},
+ {id:'l13-070-myrmidia-strictures',label:'Myrmidia : lecture des commandements',text:'La ruse et l’efficacité froide contre les peuples damnés ne déplaisent pas à la déesse ; imposer une souffrance inutile encourt sa colère.',source:SRC('L13',70,'Myrmidia')},
+ {id:'l18-049-ulric-omens',label:'Ulric : présages',text:'Le MJ peut envoyer des présages, souvent en réponse à une prière, comme rappel amical qu’il vaudrait mieux réduire ses Péchés.',source:SRC('L18',49,'Présages d’Ulric')},
+ {id:'l19-021-ulric-strictures',label:'Ulric : commandements, vœux et usages locaux',text:'Éléments de contexte laissés au MJ pour les fidèles d’Ulric de Middenheim.',source:SRC('L19',21,'Ulric')},
+ {id:'l20-027-cult-strictures',label:'Altdorf : Ranald et Solkan',text:'Pratiques locales de Ranald et commandements sévères de Solkan : contexte soumis au MJ.',source:SRC('L20',27,'Cultes d’Altdorf')},
+ {id:'l24-090-gnome-strictures',label:'Prêtres gnomes',text:'Les prêtres gnomes suivent le système religieux commun et les commandements d’Evawn, Mabyn ou Ringil.',source:SRC('L24',90,'Gnomes')},
+ {id:'l25-083-manann-strictures',label:'Manann : usages régionaux',text:'Les commandements de Manann comprennent des usages régionaux décidés par le MJ.',source:SRC('L25',83,'Manann')},
+ {id:'l06-229-shackles-of-truth',label:'Entraves à la vérité (Verena)',text:'Si l’accusation du prêtre est fausse, il doit lancer immédiatement la table de Colère : le MJ peut la jouer via « Courroux décidé par le MJ ».',source:SRC('L06',229,'Entraves à la vérité')},
+ {id:'l06-218-gm-discretionary',label:'Insulte imprudente envers un dieu',text:'Le MJ peut jouer la table de Colère, ou y piocher un résultat, quand un personnage insulte imprudemment un dieu (« Courroux décidé par le MJ », Péché positif requis).',source:SRC('L06',218,'Colère des dieux')}
+];
+export const getDivineSinEvents=()=>clone(SIN_EVENTS);
+export const getDivineSinReminders=()=>clone(SIN_REMINDERS);
+function planSinEvent(state,input){
+ const bad=(error,field)=>failure('requires-input',error,[{field,label:error}]),event=SIN_EVENTS.find(row=>row.id===input.eventId);
+ if(!event)return bad('Événement de Péché inconnu.','eventId');
+ if(input.confirmed!==true)return bad('Le MJ confirme l’événement avant son exécution.','confirmed');
+ if(!text(input.fact)||input.fact.trim().length>300)return bad('Fait constaté par le MJ requis (300 caractères au plus).','fact');
+ if(!text(input.cult))return bad('Culte concerné requis.','cult');
+ if(event.cults&&!event.cults.some(name=>foldCult(name)===foldCult(input.cult)))return bad('Cet événement ne concerne pas ce culte : '+event.cults.join(', ')+'.','cult');
+ const actor=penanceSubject(state,input.actorId);if(!actor)return failure('blocked','Personnage introuvable.');
+ const policy=resolveSinAdjustmentCult(actor,input.cult);if(!policy.ok)return failure('blocked',policy.error);
+ const before=actor.extensions?.v5?.divine?.sin;if(!Number.isSafeInteger(before)||before<0)return bad('Péchés courants requis : renseignez-les d’abord.','sin');
+ let delta;const e=event.effect;
+ if(e.kind==='add')delta=e.amount;
+ else if(e.kind==='add-mj'){if(!Number.isSafeInteger(input.amount)||input.amount<e.min||e.max&&input.amount>e.max)return bad('Nombre de Péchés à attribuer : entier de '+e.min+(e.max?' à '+e.max:' ou plus')+'.','amount');delta=input.amount;}
+ else if(e.kind==='remove'){if(before<1)return failure('blocked','Aucun Péché à retirer.');delta=-e.amount;}
+ else{if(before<1)return failure('blocked','Aucun Péché à effacer.');delta=-before;}
+ const after=Math.max(0,before+delta);
+ if(!Number.isSafeInteger(after))return failure('blocked','Total de Péchés non représentable.');
+ return {ready:true,event,cult:policy.cult||input.cult,sinBefore:before,sinAfter:after,delta:after-before};
+}
+export function previewStoreDivineSinEvent(state,input={}){const plan=planSinEvent(state,input);if(!plan.ready)return plan;return {ready:true,status:'ready',eventId:plan.event.id,label:plan.event.label,cult:plan.cult,sinBefore:plan.sinBefore,sinAfter:plan.sinAfter,delta:plan.delta,wrathHint:Boolean(plan.event.wrathHint),source:clone(plan.event.source)};}
+export function applyStoreDivineSinEvent(state,input={}){
+ if(input.baseRevision!==undefined&&input.baseRevision!==state.localRevision)throw ruleError('La partie a changé : relisez le total de Péchés.');
+ const plan=planSinEvent(state,input);if(!plan.ready)throw ruleError(plan.error);
+ const next=setStoreDivineSin(state,input.actorId,plan.sinAfter,{reason:plan.event.label+' · '+input.fact.trim(),cult:plan.cult});
+ const record={id:'sin-event:'+uid(),eventId:plan.event.id,cult:plan.cult,fact:input.fact.trim(),sinBefore:plan.sinBefore,sinAfter:plan.sinAfter,source:clone(plan.event.source),decidedBy:'MJ',revision:state.localRevision+1};
+ const actor=penanceSubject(next,input.actorId),key=prayerSubjectKey(next,actor);
+ for(const item of subjectRows(next))if(prayerSubjectKey(next,item.row,item.kind)===key){item.row.extensions??={};item.row.extensions.v5??={};item.row.extensions.v5.divineSinEvents=[...(item.row.extensions.v5.divineSinEvents||[]),clone(record)].slice(-300);}
+ return {ok:true,record,state:next};
+}
 export function setStoreDivineSin(state,actorId,value,{reason,cult}={}){
  if(!Number.isSafeInteger(value)||value<0)throw ruleError('Le total de Péchés doit être un entier positif ou nul.');
  if(typeof reason!=='string'||!reason.trim())throw ruleError('Indiquez la raison de cet ajustement des Péchés.');
