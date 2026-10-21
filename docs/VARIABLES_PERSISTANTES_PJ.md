@@ -69,3 +69,10 @@ Un Exténué d’Altdorf est un État de combat ordinaire, exclu du registre. Le
 | --- | --- | --- | --- | --- |
 | Journal des événements de Péché (reçus d’audit) | `extensions.v5.divineSinEvents[]` : événement, culte, fait, Péchés avant/après, source, décision MJ (300 derniers) | absente ; audit, pas un compteur | commande MJ d’événement sourcé | B17 |
 | Points de Péché (attribution/retrait sourcés) | `extensions.v5.divine.sin` (compteur existant) | absente | événements B17, absolution B16, Courroux | B17 |
+
+| Variable B18 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Reliques d’un dieu (bonus de Prière 1–3 DR, réduction de la table de Courroux 10/20/30) | `extensions.v5.divineRelics[]` : dieu, nom, valeurs, source L21 p.7, motif | absente ; équipement/objets de la fiche non reliés | commande MJ de pose et de retrait | B18 |
+| Suivi quotidien du livre sacré perdu | `extensions.v5.divineDailyWraths[]` : culte, nom, début (secondes de campagne), jours joués, jours écartés, statut | absente | commandes MJ (ouverture, jour joué par le Courroux MJ, jour écarté à zéro Péché, clôture) | B18 |
+| Terres sanctifiées (lieux de la campagne, seuil MJ) | `extensions.v5.sanctifiedGrounds[]` au niveau de la partie (pas du personnage) | absente | commandes MJ ; l’Enflammé acquis est un État de combat exclu du registre | B18 |
+| Faits navals de Manann et Stromfels (audit) | `extensions.v5.divineNavalEvents[]` : navire, dés, humeur calculée, jet modifié (300 derniers) | absente ; l’humeur du navire n’est pas suivie (aucun sous-système naval) | commande MJ ; seul le Péché de la surutilisation (+1) est un compteur durable | B18 |
