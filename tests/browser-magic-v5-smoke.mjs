@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
@@ -654,7 +655,11 @@ try {
     };
   });
   assert.equal(offlineCheck.controller, true, 'Le Service Worker doit rester actif hors ligne');
-  assert.equal(offlineCheck.contractCount, 277, 'Les 277 contrats de sorts V5 doivent être accessibles hors ligne depuis le cache SW');
+  // Décompte lu dans les données (277 sorts du lot 3, plus les traditions ajoutées en phase D).
+  const expectedContracts = JSON.parse(readFileSync(new URL('../js/data/v5-spell-contracts.json', import.meta.url), 'utf8'));
+  const expectedCount = (Array.isArray(expectedContracts) ? expectedContracts : (expectedContracts.contracts || Object.values(expectedContracts).find(Array.isArray))).length;
+  assert.ok(expectedCount >= 277, 'au moins les 277 contrats du lot 3');
+  assert.equal(offlineCheck.contractCount, expectedCount, `Les ${expectedCount} contrats de sorts V5 doivent être accessibles hors ligne depuis le cache SW`);
   await context.setOffline(false);
 
   assert.equal(pageErrors.length, 0, `Aucune erreur JS non gérée ne doit survenir: ${pageErrors.join(' | ')}`);
