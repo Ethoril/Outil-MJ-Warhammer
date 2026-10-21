@@ -681,6 +681,14 @@ export function resolveAuxiliarySummons({ contract, caster, options = {} } = {})
       armor: {head:0,body:0,arms:0,legs:0}, isAuxiliary: true, casterId: caster.id, noMomentum: false,
       extensions: {v5: {summonedBySpellId:contract.id, summonedUntilRound: Number(options.round || 1) + options.domainFacts.minutesToDawn * 6}}
     });
+  } else if (contract.effects?.summon?.generic) {
+    // Créatures sans profil automatique (profils de bestiaire : phase E) : participants génériques sous le contrôle du lanceur.
+    const spec=contract.effects.summon,sl=Math.max(0,Number(options.castingSl) || 0);
+    const total=(spec.baseFormula?spellFormulaValue(spec.baseFormula,caster):1)+Math.max(0,(Number(spec.count) || 1)-1)+(spec.addDr?sl:0);
+    const label=spec.names?.[options.domainFacts?.[spec.nameFact]] || spec.name;
+    for(let i=0;i<total;i++)auxiliaries.push({id:'aux-'+contract.id+'-'+uid()+'-'+(i+1),name:label+' '+(i+1),zone:'active',camp:caster.camp,hp:null,maxHp:null,caracs:{},traits:[...(spec.traits || [])],
+      states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1})),skills:[],actions:[],armor:{head:0,body:0,arms:0,legs:0},isAuxiliary:true,casterId:caster.id,noMomentum:false,
+      extensions:{v5:{summonedBySpellId:contract.id,genericSummon:true}}});
   } else if (contract.effects?.summon?.indestructible) {
     const spec={...contract.effects.summon},sl=options.castingSl || 0;if(spec.wsFormula)spec.ws=spellFormulaValue(spec.wsFormula,caster);
     const count=spec.count;
@@ -1255,6 +1263,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       effectiveTargets = [actor];
     }
   }
+
+  // Invocations génériques : la couche (fin à l’aube, mort du lanceur) est portée par le lanceur, la zone n’est pas suivie.
+  if (effects.summon?.generic) effectiveTargets = [actor];
 
   const targetValidation = validateSpellTargets({...contract,effects}, actor, effectiveTargets, overcastTargetsBonus, options);
   if (!targetValidation.valid) {
@@ -2091,7 +2102,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     let computedTraits = [...(Array.isArray(effects.traits) ? effects.traits : [])];
     for (const entry of specificSteps('trait-rating')) computedTraits = raiseTraitRating(computedTraits, entry.trait, entry.steps * (Number(entry.per) || 1));
     const computedTalents = [...(Array.isArray(effects.talents) ? effects.talents : [])];
-    const computedConditions = [...(Array.isArray(effects.conditions) ? effects.conditions : []), ...(!targetReceipt.conditionsResisted ? effects.failConditions || [] : []), ...(secondaryFailCondition ? [secondaryFailCondition] : []), ...(target.id === actor.id && Array.isArray(effects.selfConditions) ? effects.selfConditions : [])]
+    const computedConditions = [...(Array.isArray(effects.conditions) ? effects.conditions : []), ...(!targetReceipt.conditionsResisted ? effects.failConditions || [] : []), ...(secondaryFailCondition && !(secondaryTestSpec?.failOnlyIfWounded && !(targetReceipt.woundsLost>0)) ? [secondaryFailCondition] : []), ...(target.id === actor.id && Array.isArray(effects.selfConditions) ? effects.selfConditions : [])]
       .filter(name => !noSelfHarm || !NEGATIVE_CONDITIONS.has(fold(name)));
     const computedRemoveConditions = [...(Array.isArray(effects.removeConditions) ? effects.removeConditions : [])];
     const computedSpecialState = { ...(effects.specialState || {}), ...(effects.stateModes?.values[domainFacts[effects.stateModes?.fact]] || {}), ...(specialTag === 'twitch' ? { twitch: true } : {}) };
@@ -3705,7 +3716,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     for (const [index,aux] of preview.auxiliarySummon.auxiliaries.entries()) {
       participants.push({
         ...aux,
-        ...(contract.effects.summonProfile || contract.effects.summon?.indestructible || contract.effects.special==='invisible-eye' ? {extensions:{...aux.extensions,v5:{...aux.extensions?.v5,summonCastExecutionId:opKey,summonOwnerId:preview.targetResults[index]?.targetId || actor.id}}} : {}),
+        ...(contract.effects.summonProfile || contract.effects.summon?.indestructible || contract.effects.summon?.generic || contract.effects.special==='invisible-eye' ? {extensions:{...aux.extensions,v5:{...aux.extensions?.v5,summonCastExecutionId:opKey,summonOwnerId:preview.targetResults[index]?.targetId || actor.id}}} : {}),
         appliedAtRound: currentRound
       });
     }

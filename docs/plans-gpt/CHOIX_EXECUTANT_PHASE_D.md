@@ -31,3 +31,10 @@
 - **D-C31** — « Taille Moyenne ou inférieure » : lue comme Petite ou Moyenne (`allowedSizes`), taille déduite des Traits comme pour Maître des bêtes ; le MJ vérifie. Le Test d'incantation est représenté par un d100 de Force Mentale du lanceur (même convention que les autres oppositions), Endurance Accessible +4 DR via `targetSlModifier` (ajouté), `destroyOnOpposedWin` (ajouté : Blessures à 0, banc, `destroyed`). Les exemptions de ciblage annulent désormais un bannissement/destruction déjà calculé.
 - **D-C32** — Manifestation de Démon Mineur : démon non instancié (profils = phase E), opposition jouée par le MJ ; à la fin de la durée avec ordre inachevé, le démon disparaît (rappel). Alternative : il reste hostile.
 - **D-C33** — Octogramme : barrière en rappel (aucune position suivie) ; cible « ZdE Bonus d'Intelligence mètres » (diamètre maximum).
+
+## Nécromancie (D6)
+
+- **D-C40** — Relever les morts / Réanimation (L06 pp.258-259) : profils des Squelettes (p.339) et Zombies (p.340) = phase E. Participants génériques (sans caractéristiques ni Blessures, Trait Mort-vivant, À Terre, nommés Squelette n / Zombie n) créés par `summon.generic` (nouveau) ; nombre = (1 ou BFM) + DR du Test d'incantation + paliers de +2 DR. Raccordement phase E : remplacer `summon.generic` par le profil du bestiaire. Alternative : refuser le lancement tant que les profils n'existent pas.
+- **D-C41** — la couche d'invocation (fin à l'aube, événement `caster-down`) est portée par le lanceur, la zone n'est pas suivie ; fin sur mort ou Inconscient du lanceur : événement déclaré par le MJ (lecture la plus simple). Terre nue et cadavres présents : rappel, aucun refus. Les morts-vivants retirés avec la couche (comportement standard des invocations).
+- **D-C42** — Crâne hurlant : Test « Psychologie » du livre = Calme +0 DR ; effet « Brisé » seulement si des Blessures sont subies (`failOnlyIfWounded`, ajouté). Obstacles traversés et trajectoire : rappel.
+- **D-C43** — L'appel de Vanhel : le gain (Mouvement ou Action gratuite) n'est pas automatisé ; choix commun saisi en fait, nombre de cibles en rappel.
