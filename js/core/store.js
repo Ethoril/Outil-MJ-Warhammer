@@ -1,4 +1,4 @@
-import {previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
+import {previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
@@ -67,7 +67,7 @@ import { previewV5TalentConditions } from './v5-talents.js';
 import { normalizeEffects } from './effects.js';
 import { buildV5StoreActionInput, annotateV5StoreActionPreview, applyV5StoreAction, v5StoreActionState, v5StoreActionResult, v5StoreActionClock, commitV5StoreTalentUsages } from './v5-store-action.js';
 import { getV5Fortune, getV5Fate, consumeTemporaryFortune as consumeParticipantTempFortune, consumeTemporaryFate as consumeParticipantTempFate, projectV5Resources, projectV5ResourceEnvelope, commitV5Resources, creditFortuneCorruption, setV5Fortune, reconcileV5ResourceBindings } from './v5-resources.js';
-import { acquireV5Conditions, recoverV5Condition, healV5Wounds } from './v5-effects.js';
+import { acquireV5Conditions, recoverV5Condition, healV5Wounds, assertDivineWrathConditionsKept } from './v5-effects.js';
 import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHistory, tagNewEncounterLogs } from './encounter-journal.js';
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
@@ -154,6 +154,7 @@ function clearSessionClairvoyance(participant) {
 }
 // V5 p. 239 : un État lié à un effet d’incident irrévocable ne se retire pas à la main, ni par une modification brute de `states`.
 function assertMiscastConditionsKept(before, after) {
+  after=assertDivineWrathConditionsKept(before,after);
   const kept = new Map((after.states || []).map(state => [state.id, state]));
   if ((before.states || []).some(state => {
     if (!isMiscastConditionLocked(before, state)) return false;
@@ -2908,6 +2909,28 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }catch(error){return {ok:false,error:error.message||'La révocation n’a pas été enregistrée.',code:error.code||'DIVINE_ACCESS_COMMAND'};}
     },    getDivineContract(identifier) { return getDivineContract(identifier); },
     getAllDivineContracts() { return getAllDivineContracts(); },
+    previewDivineWrathRecovery(input={}) {
+      const envelope=currentEnvelope(),actorId=input.actorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId);
+      const block=brokenEscapeActionBlock(envelope,actorId);if(block)return block;
+      if(isBrokenEscapeActor(actor)){
+        const visible=input.brokenEscapeFacts?.visibleToAnyEnemy;
+        if(typeof visible!=='boolean'||isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visible,sequence:envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId]}))return {ready:false,status:'blocked',error:'Brisé : résoudre Flee/Sprint et confirmer la visibilité avant cette Prière.'};
+      }
+      return previewStoreDivineWrathRecovery(envelope,input);
+    },
+    applyDivineWrathRecovery(input={}) {
+      const captured=cloneValue(input);let execution;
+      const saved=api.executeCommand('v5-divine-wrath-recovery',draft=>{
+        const actorId=captured.preview?.input?.actorId,actor=draft.combat?.participants?.find(row=>row.id===actorId),visible=captured.preview?.input?.brokenEscapeFacts?.visibleToAnyEnemy;
+        const block=brokenEscapeActionBlock(draft,actorId);
+        if(block||isBrokenEscapeActor(actor)&&(typeof visible!=='boolean'||isV5BrokenEscapeActionBlocked(actor,{visibleToAnyEnemy:visible,sequence:draft.extensions?.v5?.brokenEscape?.byActorId?.[actorId]})))throw Object.assign(new Error('Brisé : Prière de récupération indisponible pour ce Tour.'),{userFacing:true});
+        execution=applyStoreDivineWrathRecovery(draft,captured);
+        recordV5ActionUsage(execution.state,actorId,execution.executionId);
+        if(isBrokenEscapeActor(execution.state.combat.participants.find(row=>row.id===actorId)))recordV5EscapeVisibility(execution.state,actorId,visible,execution.executionId);
+        return execution.state;
+      });
+      const finish=result=>result?.ok===false?result:{...execution,ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
     previewDivineExecution(identifier,input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId||envelope.combat?.currentActorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId),sequence=envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
       const actionBlock=brokenEscapeActionBlock(envelope,actorId);if(actionBlock)return {...actionBlock,baseRevision:localRevision};

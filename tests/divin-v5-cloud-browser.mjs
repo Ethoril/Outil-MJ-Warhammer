@@ -12,6 +12,7 @@ import {applyOperation} from '../js/core/sync-protocol.js';
 import {normalizeRemoteDocument} from '../js/core/sync-session.js';
 import {APP_VERSION} from '../js/version.js';
 import {runBrokenEscapeCloudScenarios} from './divin-v5-broken-escape-cloud-scenarios.mjs';
+import {runB4WrathCloudScenarios} from './divin-v5-b4-cloud-scenarios.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const local=raw=>{const u=new URL('http://'+raw);assert.ok(['127.0.0.1','localhost','[::1]'].includes(u.hostname)&&u.port&&!u.username&&!u.password&&u.pathname==='/'&&!u.search&&!u.hash);return u.origin;};
 const db=local(process.env.FIREBASE_DATABASE_EMULATOR_HOST||'127.0.0.1:19000'),auth=local(process.env.FIREBASE_AUTH_EMULATOR_HOST||'127.0.0.1:19099');
@@ -549,6 +550,7 @@ try{
  check('Courroux États après résolution et reload : aucun cumul des branches ou sanction ressuscitée');
 
  await runBrokenEscapeCloudScenarios({A,B,settled,pull,envelope,check,boot});
+ await runB4WrathCloudScenarios({A,B,fixture,settled,pull,envelope,check,boot});
 
  const exported=await envelope(B);const shared=await remote();for(const key of ['log','history','localRevision','archives'])assert.equal(Object.hasOwn(shared.state,key),false);assert.deepEqual(errors,[]);mkdirSync(resolve(root,'tmp/divin'),{recursive:true});writeFileSync(resolve(root,'tmp/divin/cloud-divine-receipt.json'),JSON.stringify({appVersion:APP_VERSION,checks,services:'localhost Auth/RTDB',persistence:'native IndexedDB, two isolated contexts',adapter:'production Store/session/protocol, real REST ETag bridge',namespace,errors},null,2));await a.ctx.close();await b.ctx.close();console.log('PASS — recette divin cloud, IndexedDB natif et historique');
 }finally{await browser?.close();if(server)await new Promise(done=>server.close(done));if(token)try{await request('',{method:'DELETE',owner:true});}catch{} }

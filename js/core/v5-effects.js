@@ -11,8 +11,33 @@ const NAMES = {enflamme:'Enflammé',souille:'Souillé',hemorragique:'Hémorragiq
 const ALIASES = {ablaze:'enflamme',besmirched:'souille',bleeding:'hemorragique',blinded:'aveugle',broken:'brise',deafened:'assourdi',entangled:'enchevetre',fatigued:'extenue',poisoned:'empoisonne',prone:'a-terre',stunned:'sonne',surprised:'surpris',unconscious:'inconscient'};
 const PHASES = new Set(['startOfTurn','endOfTurn','endOfRound','attackAttempt']);
 const clone = value => structuredClone(value);
+export const hasDivineWrathLock = state => Array.isArray(state?.divineWrathLocks)&&state.divineWrathLocks.length>0;
+const orderedWrathData=value=>Array.isArray(value)?value.map(orderedWrathData):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,orderedWrathData(value[key])])):value;
+function releaseWrathWoundLocks(states,removed=[]){
+  return states.flatMap(state=>{
+    const ended=(state.divineWrathLocks||[]).filter(lock=>lock.kind==='wounds-regained');if(!ended.length)return [state];
+    const remaining=state.divineWrathLocks.filter(lock=>!ended.includes(lock));
+    if(!remaining.length&&ended.some(lock=>lock.ownedState)){removed.push({id:state.id,key:keyOf(state),level:levelOf(state),reason:'wrath-wound-regained'});return [];}
+    return [{...state,divineWrathLocks:remaining}];
+  });
+}
+/** Garde de l’édition brute ; les commandes de récupération vérifiées changent leurs propres occurrences. */
+export function assertDivineWrathConditionsKept(before,after){
+  const woundsRegained=Number(after.hp)>Number(before.hp);
+  if(woundsRegained)after={...after,states:releaseWrathWoundLocks(after.states||[])};
+  const proposed=new Map((after.states||[]).map(row=>[row.id,row]));
+  for(const state of before.states||[])if(hasDivineWrathLock(state)){
+    const expected=state.divineWrathLocks.filter(lock=>!woundsRegained||lock.kind!=='wounds-regained');if(!expected.length)continue;
+    const next=proposed.get(state.id);
+    if(!next||Number(next.level??1)<Number(state.level??1)||next.name!==state.name||next.key!==state.key
+      ||!expected.every(lock=>(next.divineWrathLocks||[]).some(candidate=>JSON.stringify(orderedWrathData(candidate))===JSON.stringify(orderedWrathData(lock)))))
+      throw Object.assign(new Error('Courroux : cet État exige sa récupération sourcée ; retrait ou modification du verrou refusé.'),{code:'DIVINE_WRATH_LOCKED',userFacing:true});
+  }
+  return after;
+}
 const fold = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[ -]+/g,'-');
 const keyOf = value => { const key=fold(typeof value==='string'?value:value?.key||value?.name); return ALIASES[key]||key; };
+export const isV5ConditionImmune = (participant,condition) => (participant.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===keyOf(condition));
 const levelOf = state => Math.max(1, Number(state.level)||1);
 const levels = (states,key) => states.filter(state=>keyOf(state)===key).reduce((total,state)=>total+levelOf(state),0);
 const integer = (value,label,{minimum=0,maximum=Number.MAX_SAFE_INTEGER}={}) => {
@@ -60,7 +85,7 @@ export function acquireV5Conditions(participant,acquisitions=[],context={}) {
   const add=raw=>{
     const key=keyOf(raw);
     if(key==='surpris' && next.extensions?.v5?.specialStates?.cannotBeSurprised){reminders.push('Ennemi Anticipé : Surpris refusé.');return;}
-    if((next.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===key)){reminders.push('Immunité : '+(typeof raw==='string'?raw:raw?.name||key)+' ignoré.');return;}
+    if(isV5ConditionImmune(next,key)){reminders.push('Immunité : '+(typeof raw==='string'?raw:raw?.name||key)+' ignoré.');return;}
     const meditation=activeMagicTalent(next,'mind-over-body');
     if(meditation && (context.painRelated===true || key==='aveugle' && meditation.magicTalentRank>=2))return;
     const amount=typeof raw==='string'?1:raw?.level??1;
@@ -116,7 +141,7 @@ export function expireV5Effects(participant,transition={}) {
   next.states=normalizeEffects(next.states).filter(state=>{
     const expiry=state.v5Timing?.expiry;
     if(state.v5Timing?.targetId&&state.v5Timing.targetId!==next.id)return true;
-    if(due(expiry,transition)){removed.push({id:state.id,key:keyOf(state),level:levelOf(state)});return false;}
+    if(!hasDivineWrathLock(state)&&due(expiry,transition)){removed.push({id:state.id,key:keyOf(state),level:levelOf(state)});return false;}
     return true;
   });
   return createReceipt(participant,next,{removed});
@@ -124,6 +149,7 @@ export function expireV5Effects(participant,transition={}) {
 // Verrou divin : l'État reste tant que la couche qui l'a posé (prière à verrou) est active.
 const divineLocked = (state,participant) => state.divineLock===true && (participant.extensions?.v5?.divineEffects || []).some(e => e.id === state.divineEffectId);
 const recoveryLocked = (state,participant,options) => {
+  if(hasDivineWrathLock(state))return true;
   if(isMiscastConditionLocked(participant,state))return true;
   if(state.spellEffectId && !state.recoveryDuringSpell && (participant.extensions?.v5?.spellEffects || []).some(e => e.id === state.spellEffectId)) return true;
   if(divineLocked(state,participant))return true;
@@ -143,7 +169,7 @@ export function recoverV5Condition(participant,condition,options={}) {
   const candidates=states.filter(state=>keyOf(state)===key&&(!selected||state.id===selected.id));
   if(!candidates.length)return createReceipt(participant,{...next,states});
   const method=fold(options.method),needsInput=[],reminders=[];
-  const eligible=state=>(!selected||state.id===selected.id)&&!isMiscastConditionLocked(next,state)&&!(state.spellEffectId && !state.recoveryDuringSpell && (next.extensions?.v5?.spellEffects || []).some(e=>e.id===state.spellEffectId))&&!divineLocked(state,next)&&(method==='fortune'||!recoveryLocked(state,next,options));
+  const eligible=state=>(!selected||state.id===selected.id)&&!hasDivineWrathLock(state)&&!isMiscastConditionLocked(next,state)&&!(state.spellEffectId && !state.recoveryDuringSpell && (next.extensions?.v5?.spellEffects || []).some(e=>e.id===state.spellEffectId))&&!divineLocked(state,next)&&(method==='fortune'||!recoveryLocked(state,next,options));
   if(!candidates.some(eligible))return createReceipt(participant,{...next,states},{reminders:['La cause ou les soins requis empêchent encore cette récupération.']});
   let amount=0;
   const tested=(allowed)=>{
@@ -319,7 +345,7 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
   if(ownTurn){
     const blind=removeInstances(next.states,'aveugle',1,state=>state.duration===null&&!state.v5Timing?.expiry&&!recoveryLocked(state,next,inputs));next.states=blind.states;removed.push(...blind.removed);
     next.states=next.states.flatMap(state=>{
-      if(state.v5Timing?.expiry||state.duration===null)return [state];
+      if(hasDivineWrathLock(state)||state.v5Timing?.expiry||state.duration===null)return [state];
       if(state.duration<=1){removed.push({id:state.id,key:keyOf(state),level:levelOf(state)});return [];}
       return [{...state,duration:state.duration-1}];
     });
@@ -347,5 +373,7 @@ export function healV5Wounds(participant,amount) {
   if(hp===0&&levels(states,'empoisonne'))return createReceipt(participant,{...next,states},{reminders:['Empoisonné à 0 Blessure : impossible de récupérer des Blessures avant retrait du poison.']});
   const ceiling=Number.isFinite(Number(next.maxHp))&&next.maxHp!==null?Math.max(hp,Number(next.maxHp)):Number.MAX_SAFE_INTEGER;
   next.hp=Math.min(ceiling,hp+amount);const actual=next.hp-hp,clear=removeInstances(states,'hemorragique',actual);next.states=clear.states;
-  return createReceipt(participant,next,{removed:clear.removed});
+  const removed=[...clear.removed];
+  if(actual>0)next.states=releaseWrathWoundLocks(next.states,removed);
+  return createReceipt(participant,next,{removed});
 }

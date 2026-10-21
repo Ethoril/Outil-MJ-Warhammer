@@ -32,6 +32,8 @@ export function createDivinePanel({Store,refresh}){
  function invalidateEditedForm(input){
   const panel=input.closest('[data-divine-panel]');if(!panel)return;
   const apply=panel.querySelector('[data-divine-action="apply"]');if(apply)apply.disabled=true;
+  const recoveryApply=panel.querySelector('[data-divine-action="recovery-apply"]');if(recoveryApply)recoveryApply.disabled=true;
+  const recoveryHeal=panel.querySelector('[data-divine-action="recovery-heal"]');if(recoveryHeal)recoveryHeal.disabled=state.busy||!state.wrathRecoveryHeal;
   const saveSin=panel.querySelector('[data-divine-action="sin"]');if(saveSin)saveSin.disabled=state.busy||state.sinEdit==='';
   const grantAccess=panel.querySelector('[data-divine-action="grant-access"]');if(grantAccess)grantAccess.disabled=state.busy||!state.accessScope||!state.accessReason.trim();
   panel.querySelectorAll('[data-divine-action="revoke-access"]').forEach(button=>button.disabled=state.busy||!state.revokeReason.trim());
@@ -41,7 +43,7 @@ export function createDivinePanel({Store,refresh}){
  function field(container,label,key,{type='number',min=0,max=null}={}){
   const wrap=node('label','workspace-type',label),input=node('input');input.type=type;if(type==='number'){input.min=min;input.step='1';if(max!==null)input.max=max;}
   input.setAttribute('aria-label',label);input.dataset.focusKey='divine-'+key;input.value=state[key]??'';
-  input.addEventListener('input',()=>{state[key]=input.value;if(!key.startsWith('wrath'))state.testOptionId='';state.preview=key.startsWith('wrath')&&state.preview?{...state.preview,ready:false}:null;state.error='';invalidateEditedForm(input);});
+  input.addEventListener('input',()=>{state[key]=input.value;if(key.startsWith('wrathRecovery')&&state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};if(!key.startsWith('wrath'))state.testOptionId='';state.preview=key.startsWith('wrath')&&state.preview?{...state.preview,ready:false}:null;state.error='';invalidateEditedForm(input);});
   wrap.append(input);container.append(wrap);return input;
  }
  function select(container,label,value,options,handler,key){
@@ -85,6 +87,58 @@ export function createDivinePanel({Store,refresh}){
    testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
    choices:clone(state.choices),...toEngineInput(state.form,{targetIds,contract,actor}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
+ function recoveryPanel(actor){
+  const rows=(actor.states||[]).flatMap(condition=>(condition.divineWrathLocks||[]).map(lock=>({condition,lock})));
+  if(!rows.length&&!state.lastRecovery)return null;
+  const box=node('div','workspace-divine-recovery');box.append(node('p','workspace-rubric','Récupération des États du Courroux'));
+  if(state.lastRecovery)box.append(node('p','workspace-muted',state.lastRecovery));
+  const changed=(key,value)=>{state[key]=value;if(state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};refresh();};
+  for(const {condition,lock} of rows){
+   box.append(node('p','workspace-muted',`${condition.name} ${condition.level||1} · Courroux ${lock.resultId.replace('wrath:','')} · source V5 p. ${lock.source.printedPage}. Retrait générique verrouillé.`));
+   if(lock.kind==='pray')button(box,'Préparer la récupération · '+condition.name+' · '+lock.resultId.replace('wrath:',''),()=>{state.recoverySelection={stateId:condition.id,originExecutionId:lock.executionId};state.recoveryPreview=null;state.wrathRecoveryRoll='';state.wrathRecoveryOption='';refresh();},false,'recovery-select');
+   else if(lock.kind==='wounds-regained'){
+    box.append(node('p','workspace-muted','Inconscient reste jusqu’à la récupération effective d’au moins une Blessure. Les autres causes d’Inconscient restent suivies séparément.'));
+    field(box,'Blessures à récupérer','wrathRecoveryHeal',{min:1});
+    button(box,'Soigner la cause du Courroux',()=>run(async()=>{const receipt=await Store.healWounds(actor.id,Number(state.wrathRecoveryHeal));if(receipt?.ok===false||receipt?.ready===false)throw Error(receipt.error||'Soins non appliqués.');state.lastRecovery=`Soins appliqués : ${receipt.hpDelta} Blessure(s) récupérée(s).`;state.preview=null;state.recoveryPreview=null;}),!state.wrathRecoveryHeal,'recovery-heal');
+   }
+  }
+  const selection=state.recoverySelection;
+  if(!selection||!rows.some(row=>row.condition.id===selection.stateId&&row.lock.executionId===selection.originExecutionId))return box;
+  select(box,'Peut prononcer la Prière de récupération',state.wrathRecoveryCanSpeak||'',[['','À préciser'],['true','Oui'],['false','Non']],value=>changed('wrathRecoveryCanSpeak',value),'wrathRecoveryCanSpeak');
+  field(box,'Jet de récupération du Courroux (d100)','wrathRecoveryRoll',{min:1,max:100});
+  const context=node('details','workspace-v5-context-details');context.append(node('summary','','États du Test de récupération'));
+  select(context,'Arbitrage des États de récupération',state.wrathRecoveryPenaltyMode||'',[['','Si nécessaire : choisir'],['sl','Retenir le plus fort malus en DR'],['disadvantage','Retenir le Désavantage']],value=>changed('wrathRecoveryPenaltyMode',value),'wrathRecoveryPenaltyMode');
+  field(context,'Motif de l’arbitrage de récupération','wrathRecoveryPenaltyReason',{type:'text'});box.append(context);
+  const input=()=>({actorId:actor.id,...selection,roll:state.wrathRecoveryRoll?Number(state.wrathRecoveryRoll):undefined,canSpeak:state.wrathRecoveryCanSpeak==='true',testOptionId:state.wrathRecoveryOption||undefined,conditionContext:{conditionPenaltyMode:state.wrathRecoveryPenaltyMode||undefined,conditionPenaltyReason:state.wrathRecoveryPenaltyReason||''},brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility},
+   wrathRoll:state.wrathRecoveryWrathRoll?Number(state.wrathRecoveryWrathRoll):undefined,wrathDurationRoll:state.wrathRecoveryDuration?Number(state.wrathRecoveryDuration):undefined,wrathConsequences:state.wrathRecoveryConsequences||'',wrathDamageRoll:state.wrathRecoveryDamage?Number(state.wrathRecoveryDamage):undefined,wrathEnduranceRoll:state.wrathRecoveryEndurance?Number(state.wrathRecoveryEndurance):undefined,wrathTestOptionId:state.wrathRecoveryDamageOption||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathRecoveryDamageMode||undefined,conditionPenaltyReason:state.wrathRecoveryDamageReason||''}});
+  button(box,'Calculer la récupération',()=>{state.recoveryPreview=Store.previewDivineWrathRecovery(input());refresh();},false,'recovery-calculate');
+  button(box,'Appliquer la récupération',()=>run(async()=>{const result=await Store.applyDivineWrathRecovery({preview:state.recoveryPreview});if(result?.ok===false)throw Error(result.error||'Récupération non enregistrée.');state.lastRecovery=`Prière de récupération ${result.test.success?'réussie':'ratée'} · ${result.test.sl} DR · ${result.removedCount} État(s) retiré(s).`;state.recoverySelection=null;state.recoveryPreview=null;state.preview=null;for(const key of ['wrathRecoveryWrathRoll','wrathRecoveryDuration','wrathRecoveryConsequences','wrathRecoveryDamage','wrathRecoveryEndurance','wrathRecoveryDamageOption'])state[key]='';}),!state.recoveryPreview?.ready,'recovery-apply');
+  const preview=state.recoveryPreview;
+  if(preview){
+   const projected=node('div','workspace-divine-preview');projected.dataset.wrathRecoveryPreview='';
+   if(preview.test)projected.append(node('p','workspace-muted',`Prière ${preview.test.success?'réussie':'ratée'} · ${preview.test.sl} DR · difficulté ${preview.difficulty>=0?'+':''}${preview.difficulty??''}. À l’application : ${preview.removedCount??0} État(s) retiré(s). Rien n’est encore appliqué.`));
+   if(preview.error)projected.append(node('p','workspace-field-error',preview.error));
+   if(preview.needsInput?.length)projected.append(node('p','workspace-field-error',preview.needsInput.map(row=>row.label||row.message).join(' · ')));
+   if(preview.needsInput?.some(row=>row.field==='testOptionId'))select(projected,'Choix du jet de récupération',state.wrathRecoveryOption||'',[['','Choisir'],...(preview.testOptions||[]).map(option=>[option.id,`${option.id==='reverse'?'Inverser':'Garder'} → ${option.result.roll}`])],value=>changed('wrathRecoveryOption',value),'wrathRecoveryOption');
+   if(preview.wrath?.triggered){
+    projected.append(node('p','workspace-field-error','Nouveau Courroux déclenché par la Prière de récupération. Ses conséquences seront appliquées dans la même commande.'));
+    field(projected,'Jet du nouveau Courroux (d100)','wrathRecoveryWrathRoll',{min:1,max:100});
+    if(preview.wrath.resultId)projected.append(node('p','workspace-muted','Résultat : '+preview.wrath.resultId.replace('wrath:','')));
+    if(preview.wrath.resultId==='wrath:11-15')field(projected,'Durée des nouvelles Leçons (d10)','wrathRecoveryDuration',{min:1,max:10});
+    if(preview.wrathDamagePreview){
+     if(preview.wrathDamagePreview.diceCount)field(projected,`Blessures du nouveau Courroux (${preview.wrathDamagePreview.diceCount}d10)`,'wrathRecoveryDamage',{min:preview.wrathDamagePreview.diceCount,max:10*preview.wrathDamagePreview.diceCount});
+     field(projected,'Résistance du nouveau Courroux (d100)','wrathRecoveryEndurance',{min:1,max:100});
+     if(preview.needsInput?.some(row=>row.field==='wrathTestOptionId'))select(projected,'Choix du jet de Résistance supplémentaire',state.wrathRecoveryDamageOption||'',[['','Choisir'],...(preview.wrathDamagePreview.testOptions||[]).map(option=>[option.id,`${option.id==='reverse'?'Inverser':'Garder'} → ${option.result.roll}`])],value=>changed('wrathRecoveryDamageOption',value),'wrathRecoveryDamageOption');
+     if(preview.needsInput?.some(row=>row.field?.startsWith('wrathConditionContext'))){
+      select(projected,'Arbitrage des États de Résistance supplémentaire',state.wrathRecoveryDamageMode||'',[['','Choisir'],['sl','Retenir le plus fort malus en DR'],['disadvantage','Retenir le Désavantage']],value=>changed('wrathRecoveryDamageMode',value),'wrathRecoveryDamageMode');field(projected,'Motif de Résistance supplémentaire','wrathRecoveryDamageReason',{type:'text'});
+     }
+    }
+    if(preview.needsInput?.some(row=>row.field==='wrathConsequences')||preview.receipt?.wrathDetails?.resolvedBy==='MJ')field(projected,'Conséquences du nouveau Courroux traitées par le MJ','wrathRecoveryConsequences',{type:'text'});
+   }
+   box.append(projected);
+  }
+  return box;
+ }
  return {render(actor,participants=[]){
   if(!actor)return null;if(state.actorId!==actor.id)reset(actor);
   const allContracts=getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type));
@@ -121,6 +175,7 @@ export function createDivinePanel({Store,refresh}){
     button(list,'Terminer '+name,()=>run(async()=>{const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }
+  const recovery=recoveryPanel(actor);if(recovery)content.append(recovery);
   if(contract.status==='blocked')return panel;
   const access=Store.resolveDivineAccess(actor.id,contract.id);
   const accessBox=node('details','workspace-v5-context-details');accessBox.open=!access.allowed;
@@ -277,6 +332,12 @@ export function createDivinePanel({Store,refresh}){
       if(condition.requested.condition==='brise')outcome.append(node('p','workspace-muted','Le panneau Brisé de Jouer exécute Move (Flee) puis Action (Sprint) tant que le personnage reste visible d’au moins un ennemi. Fuite engagée : bloquée jusqu’au raccordement de Momentum, Brisé des ennemis et attaques gratuites. Après confirmation hors de vue de tous les ennemis, Hide reste facultatif et passe par un Test normal de Compétence. Une acquisition après une Action déjà dépensée reste bloquée par DIV-BROKEN-MIDTURN-01 pour décision MJ explicite, sans Action supplémentaire ni report. Source : Livre de base V5 EN, p. 163, 185–186.'));
       if(condition.requested.condition==='hemorragique')outcome.append(node('p','workspace-muted','Hémorragique inflige ses pertes de Blessures à la fin du Round selon l’État commun. Source : Livre de base V5 EN, p. 185.'));
      }
+    }else if(result.wrathStatePreview){
+     const states=result.wrathStatePreview;
+     outcome.append(node('p','workspace-muted',`${result.wrathTableResult.label} · À l’application : ${states.conditions.map(row=>`${row.name} ${row.level||1}${row.locked?' (récupération sourcée)':''}`).join(', ')||'aucun État acquis (immunité)'}. Blessures : ${states.hpBefore} → ${states.hpAfter}. Source : Livre de base V5 EN, p. ${result.wrathTableResult.source.printedPage}.`));
+     if(states.recovery?.kind==='pray')outcome.append(node('p','workspace-muted',`Retrait par Prière ${states.recovery.difficulty>=0?'+':''}${states.recovery.difficulty} DR, depuis le panneau de récupération après application.`));
+     if(states.recovery?.kind==='wounds-regained')outcome.append(node('p','workspace-muted','Inconscient ne sera libéré qu’après récupération effective d’au moins une Blessure.'));
+     for(const reminder of states.reminders)outcome.append(node('p','workspace-muted',reminder));
     }else if(result.wrathDamagePreview){
      const damage=result.wrathDamagePreview;
      outcome.append(node('p','workspace-muted',`${result.wrathTableResult.label} · Blessures directes sur le prêtre, sans réduction d’Endurance ou d’armure. Source : Livre de base V5 EN, p. 218.`));
