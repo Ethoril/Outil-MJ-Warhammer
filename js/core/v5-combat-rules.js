@@ -154,6 +154,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   const charging = !defending && kind === 'melee' && settings.charging === true;
   if (kind === 'melee' && (hasMomentum(actor) || charging || defending&&normalized.combatPrelude?.targetIncomingMomentum)) advantages.push({ id: 'momentum', label: charging ? 'Élan de Charge' : 'Élan' });
   const relevant = new Map(['sonne', 'extenue', 'empoisonne'].map(key => [key, levels.get(key) || 0]));
+  // Revigorer et Clarté d'Esprit : les états Exténué restent comptés mais n'infligent plus leur pénalité.
+  if(actor.extensions?.v5?.specialStates?.ignoreFatiguePenalties)relevant.set('extenue',0);
   for(const effect of talentModifiers.ignoredPenalties)relevant.set(effect.key,Math.max(0,(relevant.get(effect.key)||0)-effect.amount));
   const context = settings.context || {};
   advantages.push(...support.advantages);

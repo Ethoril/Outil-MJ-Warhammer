@@ -958,7 +958,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if(field.optional && (target?options.targetTests?.[target.id]?.[field.key]:domainFacts[field.key])===undefined)continue;
     if(field.requiredWhen && (target?(options.targetTests?.[target.id]?.[field.requiredWhen.key] ?? domainFacts[field.requiredWhen.key]):domainFacts[field.requiredWhen.key])!==field.requiredWhen.value)continue;
     if(field.requiredIfOvercast && !Number(options.overcastSpecific?.[field.requiredIfOvercast]))continue;
-    if(field.optionalFromWeaponSkill && conjuredWeaponSkillScore(actor,domainFacts.weaponKey)!==null)continue;
+    if(field.optionalFromWeaponSkill && conjuredWeaponSkillScore(actor,effects.conjureWeaponKey||domainFacts.weaponKey)!==null)continue;
     const value = target ? options.targetTests?.[target.id]?.[field.key] : domainFacts[field.key];
     const valid = field.type === 'targets' ? Array.isArray(value) && value.every(id=>typeof id==='string') : field.type === 'boolean' ? typeof value === 'boolean' && (field.expected === undefined || value === field.expected)
       : field.type === 'number' ? (field.integer===false?Number.isFinite(value):Number.isInteger(value)) && value >= (field.min ?? 0) && value <= (field.max ?? Infinity)
@@ -2223,12 +2223,14 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     if (effects.killAtZero && Number(target.hp) === 0) { targetReceipt.kill = true; computedSpecialState.dead=true; computedSpecialState.cannotRaiseUndead=true; }
     const computedGrantedActions = [];
     if(effects.conjureWeapon === true){
-      const profile=ARCANE_WEAPON_PROFILES[domainFacts.weaponKey],id='spell-weapon-'+uid();
+      const profile=ARCANE_WEAPON_PROFILES[effects.conjureWeaponKey||domainFacts.weaponKey],id='spell-weapon-'+uid();
       const score=conjuredWeaponSkillScore(actor,profile.id) ?? domainFacts.weaponSkillScore;
       const qualities=[...profile.qualities.map(q=>typeof q==='string'?{id:q}:structuredClone(q)),{id:'magique'}];
       if(profile.id==='garrote')for(const q of qualities)if(q.id==='immobilisante'){q.rating=Number(actor.caracs.F);q.parameter=String(q.rating);}
       computedGrantedActions.push({id,note:profile.name+' aethyrique',type:'attack',attr:'CC',base:score,damage:profile.damage ?? 0,damageFormula:profile.damage===null?'0':'BF'+(profile.damage?'+'+profile.damage:''),qualities,extensions:{v5:{weaponHands:profile.hands,weaponReach:profile.reach,magical:true,materialized:true}}});
       targetReceipt.actions.push({kind:'conjured-weapon',profile:structuredClone(profile),score,summary:profile.name+' aethyrique : '+score+', dégâts '+(profile.damage===null?'aucun':'BF + '+profile.damage)+', '+profile.hands+' main(s), allonge '+profile.reach+'. Lance sans Charge / lance ou épée bâtarde à une main : adapter le profil conformément à p. 301.'});
+      // Variantes déclarées de l'arme conjurée (ex. Dague de l'Art : BF + 8 contre Éthéré ou Corruption) : une action de plus, choisie par le MJ selon la cible.
+      for(const extra of effects.extraConjuredActions || []){const base=computedGrantedActions[computedGrantedActions.length-1];computedGrantedActions.push({...structuredClone(base),id:id+':'+extra.id,note:extra.note,damage:extra.damage,damageFormula:extra.damageFormula});}
       computedSpecialState.conjuredWeapon=id;
     }
     let computedWard = effects.ward ?? effects.wardVsMissiles;

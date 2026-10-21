@@ -54,7 +54,7 @@ export function prepareMagicOptions(actor, kind, options={}, spell = null) {
   const flags=actor.extensions?.v5?.specialStates;
   if(kind==='casting' && actor.extensions?.v5?.suppressedSpellIds?.includes(spell?.id))throw ruleError('Impasse : ce sort précis est temporairement inutilisable.');
   const recastingAura=(actor.extensions?.v5?.spellEffects || []).some(e=>e.specialState?.cannotCastOther && e.spellId===spell?.id);
-  if (['casting','channelling','dispel'].includes(kind) && flags?.cannotSpeak || kind==='casting' && (flags?.cannotCast || flags?.cannotCastOther && !recastingAura || flags?.blockedSkillFamilies?.includes('language')) || kind==='dispel' && flags?.cannotDispel) throw ruleError('Effet actif : parole ou Test magique interdit.');
+  if (['casting','channelling','dispel'].includes(kind) && flags?.cannotSpeak || kind==='channelling' && flags?.cannotChannel || kind==='casting' && (flags?.cannotCast || flags?.cannotCastOther && !recastingAura || flags?.blockedSkillFamilies?.includes('language')) || kind==='dispel' && flags?.cannotDispel) throw ruleError('Effet actif : parole ou Test magique interdit.');
   const next = prepareMiscastOptions(actor, options);
   next.forceMajorMiscast=Boolean(actor.extensions?.v5?.specialStates?.forceMajorMiscast && (options.roll===100 || options.roll%11===0));
   if(actor.extensions?.v5?.specialStates?.forbidMitigation){next.instinctiveDiction=false;next.attunementRank=0;if(options.useCadaiRune && options.cadaiPurpose==='miscast')throw ruleError('La Fortune est Capricieuse interdit l’atténuation des incidents.');}
