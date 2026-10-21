@@ -2678,6 +2678,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       hasTalents ||
       hasConditions ||
       hasRemoveConditions ||
+      Boolean(effects.removeConditionLevels) ||
       hasSpecialState ||
       computedTempFortune > 0 ||
       computedTempFate > 0 ||
@@ -2714,6 +2715,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         talents: hasTalents ? computedTalents : undefined,
         conditions: hasConditions ? computedConditions : undefined,
         removeConditions: hasRemoveConditions ? computedRemoveConditions : undefined,
+        removeConditionLevels: effects.removeConditionLevels,
         removeBrokenCount: computedRemoveBrokenCount > 0 ? computedRemoveBrokenCount : undefined,
         tempFortunePoints: computedTempFortune > 0 ? computedTempFortune : undefined,
         tempFatePoints: computedTempFate > 0 ? computedTempFate : undefined,

@@ -667,6 +667,19 @@ export function applySpellEffects(participant, effectDefinition, options = {}) {
     }).filter(Boolean);
   }
 
+  // Niveaux d'états retirés (ex. Bonne santé : 1 Exténué et 1 Sonné, sans effacer les autres niveaux).
+  if (effectDefinition.removeConditionLevels && typeof effectDefinition.removeConditionLevels === 'object' && Array.isArray(next.states)) {
+    for (const [name, amount] of Object.entries(effectDefinition.removeConditionLevels)) {
+      let left = Math.max(0, Number(amount) || 0);
+      next.states = next.states.map(st => {
+        if (left <= 0 || typeof st !== 'object' || st === null || fold(st.key || st.name || st.label) !== fold(name)) return st;
+        const count = Math.max(1, Number(st.level ?? 1) || 1), removed = Math.min(count, left);
+        left -= removed;
+        return count - removed <= 0 ? null : { ...st, level: count - removed };
+      }).filter(Boolean);
+    }
+  }
+
   // 10. Bonus d'armes, Bouclier magique, Actions supplémentaires, État spécial
   if (effectDefinition.weaponBonus && typeof effectDefinition.weaponBonus === 'object') {
     next.extensions.v5.weaponBonuses = [

@@ -193,7 +193,8 @@ export function previewSpellInteraction(state, { effectId, targetId, kind, roll,
         failed=!test.success;
         if(spec.opposedTest){if(!d100(opponentRoll))return block('Auteur de l’effet magique : d100 adverse de FM requis.');const other=secondary(target,spec.opposedTest.skill,spec.opposedTest.stat,opponentRoll);test={...test,opponentSl:other.sl,won:test.sl>other.sl};failed=!test.won;}
       }
-      if (failed) conditions=spec.conditions || spec.failConditions || [];
+      // `alwaysConditions` : états acquis dans tous les cas à la clause (ex. Horreur hantante : +1 Exténué à l'entrée), avant ceux de l'échec.
+      conditions=[...(spec.alwaysConditions || []),...(failed ? (spec.conditions || spec.failConditions || []) : [])];
       if(!failed && spec.endsOnSuccess)Object.assign(owner,expireSpellEffects(owner,{effectId}).participant);
       if(!failed && spec.damageOnTestSuccess){
         const damageSpec=spec.damageOnTestSuccess,raw=resolveSpellDamage({caster,target,formula:damageSpec.formula,sl:spec.castingSl,ignoreAp:damageSpec.ignoreAp,ignoreBe:damageSpec.ignoreBe,spell:{name:effect.spellName}}),protection=previewMagicProtection(target,raw.finalDamage,{wardRoll,nature:attackNature({magical:true,spell:true,ranged:false})});
