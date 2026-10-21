@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {previewV5Turn} from '../js/core/v5-turn.js';
+import {v5StoreActionClock,buildV5StoreActionInput} from '../js/core/v5-store-action.js';
+const actor={id:'a',name:'A',zone:'active',states:[],hp:10,maxHp:10,caracs:{Ag:40,E:40},extensions:{v5:{}}};
+const state=()=>({localRevision:4,combat:{round:2,currentActorId:'a',order:['a','b'],orderMode:'manual',participants:[structuredClone(actor),{...structuredClone(actor),id:'b'}]},extensions:{v5:{combatId:'enc',turnIndex:3}},log:[]});
+test('B05 caractérisation — horloge de quota liée au Tour canonique',()=>assert.deepEqual(v5StoreActionClock(state()),{encounterId:'enc',round:2,turnId:'enc:3:a'}));
+test('B05 caractérisation — transition pure conserve état et change uniquement le vrai Tour',()=>{const before=state(),copy=structuredClone(before),preview=previewV5Turn(before);assert.equal(preview.ready,true,preview.error);assert.equal(preview.state.combat.currentActorId,'b');assert.equal(preview.state.combat.round,2);assert.deepEqual(before,copy);});
+test('B05 caractérisation — aucune transition depuis un combat non démarré',()=>{const before=state();before.combat.round=0;assert.equal(previewV5Turn(before).status,'idle');});
+test('B05 caractérisation — entrée générique conserve identité, jet et contexte Action',()=>{const before=state(),input=buildV5StoreActionInput(before,{actorId:'a',roll:34,action:{name:'Calme',type:'test'},v5:{context:{isAction:true}}});assert.equal(input.actorId,'a');assert.equal(input.roll,34);assert.equal(input.v5.context.isAction,true);assert.equal(input.v5Clock.turnId,'enc:3:a');});

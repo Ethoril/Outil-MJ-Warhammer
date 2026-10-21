@@ -323,3 +323,9 @@ Les entrées engine/assisted aussi sont affectées à un lot : une preuve ancien
 ## Lecture source et choix
 
 L06 p.218-219 relu visuellement avec Poppler, noms FR selon L05. Divergences 01-05, 66-70, 81-87, 88 et 121-125 résolues par V5 (Q1-5), sans sélecteurs hérités V4. Complément L19-L26 décrit dans COURROUX_INVENTAIRE.md ; livre par livre, lecture ciblée, pas d’attestation d’audit exhaustif. Aucun lecteur indépendant simulé. Les autres choix sont consignés dans CHOIX_EXECUTANT_PHASE_B.md avant leur réalisation ; données/dés/faits absents bloquent.
+
+## Reprise session 4 — gpt/phase-b4
+
+Départ propre 08e4362 de codex/divin-v5 (3.21.5, sessions 1–3 fusionnées), worktree E:/Outil MJ Warhammer/tmp/gpt-phase-b4-worktree. Branche demandée expressément par le MJ. Continuer depuis B05, un commit local par lot, jusqu’à moins de 30 % d’usage restant selon la consigne de cette session ; terminer le lot et le rapport proprement. Aucun push ni publication. Manifeste protégé créé avant code à ce départ ; TEMP/TMP hors checkout sur E:.
+
+B05 : L06 p.218 relue visuellement. Contrairement à 11–15, aucun premier Round implicite n’est imposé : choix explicite du MJ (Round actuel ou suivant), ancre explicite hors combat. Les couches en Rounds attendent uniquement une transition canonique afterEffects et ne portent pas d’échéance générique que retirerait une phase libre. 76–80 exige une Prière comme Action ; la Prière déclencheuse peut compter pour le Tour seulement sur décision MJ explicite, aucune Action supplémentaire. Les Tests génériques de Prière passent par le parcours divin sourcé. Une récupération B04 peut poser les mêmes sanctions. Garde final dans v5-divine-store.js et caractérisation préalable de v5-turn.js/v5-store-action.js ; aucun changement de store.js.
