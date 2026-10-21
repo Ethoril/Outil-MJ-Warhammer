@@ -74,3 +74,8 @@ Ces décisions s’imposent aux lots des phases B à E de `docs/PLAN_FIN_DE_PROJ
 - Ajoutés par le MJ : L19 Middenheim, L20 Altdorf, L21 Empire in Ruins Companion, L22 The Horned Rat Companion, L23 Enemy in Shadows Companion, L24 Rough Nights & Hard Days, L25 Sea of Claws, L26 Death on the Reik Companion (`docs/divin/DIVIN_CORPUS_LIVRES_COMPLEMENT.json`).
 - Ignorés (non acquis) : Ubersreik Adventures I-III, Salzenmund, Starter Set, Gamemaster’s Guide ; tout ce qui est supposé en venir est ignoré.
 - Les inventaires B0, C0, D0a, D0b, E0 ont été faits sans L19-L26 : un complément d’inventaire sur ces livres précède les lots des phases B à E.
+
+## Complément du 21/10 (après le blocage B01)
+
+- Q12 **confirmé en connaissance de cause** : jamais de table de Courroux à 0 Péché (ni jet finissant par 0, ni maladresse). Conséquence acceptée : la table étant lue à d100 + 10 × Péché, **les résultats 01-10 deviennent inaccessibles** en jeu ; ils restent au registre, marqués « inaccessibles (arbitrage Q12) ».
+- **Migration autorisée des fixtures de tests** qui obtenaient un résultat bas par une maladresse à 0 Péché : elles passent par un autre chemin (Péché positif et résultat ≥ 11, ou pose directe d’une sanction sourcée), en conservant toutes leurs assertions mécaniques (expiration, CAS, preuve d’origine, périmètre, Leçons, plafonds). Liste de chaque fixture migrée dans le commit et le rapport.
