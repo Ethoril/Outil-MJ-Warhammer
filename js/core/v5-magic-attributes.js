@@ -7,6 +7,7 @@ import { magicTalentRank } from './v5-magic-talents.js';
 
 import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import { applySpellEffects } from './v5-magic-effects.js';
+import { previewV5Test, selectV5Test } from './v5-roll.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 
 export const V5_MAGIC_ATTRIBUTES_VERSION = 'v5-magic-attributes-2026-10-10.1';
@@ -22,7 +23,11 @@ export const LORE_ATTRIBUTES = Object.freeze({
   light: Object.freeze({ id: 'light', wind: 'Hysh', name: 'Domaine de la Lumière' }),
   metal: Object.freeze({ id: 'metal', wind: 'Chamon', name: 'Domaine du Métal' }),
   shadow: Object.freeze({ id: 'shadow', wind: 'Ulgu', name: 'Domaine des Ombres' }),
-  high: Object.freeze({ id: 'high', wind: 'Qhaysh', name: 'Haute Magie' })
+  high: Object.freeze({ id: 'high', wind: 'Qhaysh', name: 'Haute Magie' }),
+  // Domaines du Chaos (V5 pp. 259-260, phase D) : pas de Vent unique.
+  nurgle: Object.freeze({ id: 'nurgle', wind: null, name: 'Domaine de Nurgle' }),
+  slaanesh: Object.freeze({ id: 'slaanesh', wind: null, name: 'Domaine de Slaanesh' }),
+  tzeentch: Object.freeze({ id: 'tzeentch', wind: null, name: 'Domaine de Tzeentch' })
 });
 
 /**
@@ -30,6 +35,9 @@ export const LORE_ATTRIBUTES = Object.freeze({
  */
 export function normalizeLoreId(rawLore) {
   const s = fold(rawLore);
+  if (/nurgle/.test(s)) return 'nurgle';
+  if (/slaanesh/.test(s)) return 'slaanesh';
+  if (/tzeentch/.test(s)) return 'tzeentch';
   if (/bete|beast|ghur/i.test(s)) return 'beasts';
   if (/mort|death|shyish/i.test(s)) return 'death';
   if (/feu|fire|aqshy/i.test(s)) return 'fire';
@@ -328,6 +336,38 @@ export function previewLoreAttribute({
       break;
     }
 
+    case 'nurgle':
+    case 'slaanesh':
+    case 'tzeentch': {
+      // Domaines du Chaos (V5 pp. 259-260) : effet porté par une couche sur chaque cible du sort ; Nurgle et Slaanesh n'agissent que « tant que le sort est en effet ».
+      const instant = /instantan/i.test(String(spell.duration || options.duration || ''));
+      const missingRolls = [];
+      for (const target of targets) {
+        if (!target) continue;
+        const name = target.name || target.id;
+        if (activeLore === 'nurgle') {
+          targetEffects.set(target.id, instant
+            ? { type: 'lore-attribute-nurgle', lore: 'nurgle', summary: `${name} : sort instantané, aucun suivi ; toute Blessure suppurée éventuelle est décidée par le MJ (V5 p. 180).` }
+            : { type: 'lore-attribute-nurgle', lore: 'nurgle', spellEffect: { specialState: { festeringWoundTest: true } }, summary: `${name} : toute Blessure subie pendant le sort exige le Test de Blessure Suppurée (V5 p. 180, à jouer par le MJ).` });
+        } else if (activeLore === 'slaanesh') {
+          targetEffects.set(target.id, instant
+            ? { type: 'lore-attribute-slaanesh', lore: 'slaanesh', summary: `${name} : sort instantané, aucun suivi.` }
+            : { type: 'lore-attribute-slaanesh', lore: 'slaanesh', spellEffect: { specialState: { resistanceModifiers: { Animosité: -2, Haine: -2, Corruption: -2, Peur: 2, Terreur: 2 } } }, summary: `${name} : −2 DR pour résister à Animosité, Haine et Corruption, +2 DR pour résister à Peur et Terreur.` });
+        } else {
+          const roll = options.attributeRolls?.[target.id]?.corruptionRoll;
+          if (!Number.isInteger(roll) || roll < 1 || roll > 100) { missingRolls.push(target.id); continue; }
+          const skill = (target.skills || []).find(sk => fold(sk?.name) === 'endurance');
+          const score = Number(skill?.total ?? skill?.value ?? target.caracs?.E) || 0;
+          const test = selectV5Test(previewV5Test({ score, roll }), 'keep');
+          targetEffects.set(target.id, test.success
+            ? { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: true, sl: test.sl }, spellEffect: { tempFortunePoints: 1, duration: 'Spéciale' }, summary: `${name} : Test de Corruption réussi (${roll}), +1 Point de Chance jusqu’à la fin de la rencontre.` }
+            : { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: false, sl: test.sl }, corruptionGain: 1, summary: `${name} : Test de Corruption raté (${roll}), +1 Point de Corruption.` });
+        }
+      }
+      if (missingRolls.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, ready: false };
+      break;
+    }
+
     case 'shadow': {
       // Ombres (Ulgu) :
       // Tout sort de protection confère au lanceur +2 DR aux tests de Discrétion pour la durée du sort
@@ -404,6 +444,19 @@ export function applyLoreAttribute(state, preview, options = {}) {
     if (!eff) continue;
 
     let currentTarget = structuredClone(updatedParticipants.get(target.id) || target);
+
+    // Domaines du Chaos : Point de Corruption et couche d'effet portée par la cible.
+    if (eff.corruptionGain) {
+      const v5 = currentTarget.extensions?.v5 || {};
+      currentTarget.extensions = { ...(currentTarget.extensions || {}), v5: { ...v5, corruptionPoints: (Number(v5.corruptionPoints) || 0) + eff.corruptionGain } };
+    }
+    if (eff.spellEffect) {
+      currentTarget = applySpellEffects(currentTarget, {
+        spellId: 'lore-attribute-' + eff.lore, spellName: 'Attribut ' + (LORE_ATTRIBUTES[eff.lore]?.name || eff.lore),
+        cn: options.cn, castExecutionId: options.castExecutionId, casterId: options.caster?.id,
+        duration: eff.spellEffect.duration || options.duration, ...eff.spellEffect
+      }, options).participant;
+    }
 
     // Ajout d'état
     if (eff.addCondition) {

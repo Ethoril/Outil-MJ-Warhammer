@@ -38,3 +38,10 @@
 - **D-C41** — la couche d'invocation (fin à l'aube, événement `caster-down`) est portée par le lanceur, la zone n'est pas suivie ; fin sur mort ou Inconscient du lanceur : événement déclaré par le MJ (lecture la plus simple). Terre nue et cadavres présents : rappel, aucun refus. Les morts-vivants retirés avec la couche (comportement standard des invocations).
 - **D-C42** — Crâne hurlant : Test « Psychologie » du livre = Calme +0 DR ; effet « Brisé » seulement si des Blessures sont subies (`failOnlyIfWounded`, ajouté). Obstacles traversés et trajectoire : rappel.
 - **D-C43** — L'appel de Vanhel : le gain (Mouvement ou Action gratuite) n'est pas automatisé ; choix commun saisi en fait, nombre de cibles en rappel.
+
+## Domaines du Chaos : socle et Nurgle (D7)
+
+- **D-C50** — attributs des trois Domaines du Chaos (L06 p.259-260) ajoutés à `v5-magic-attributes.js` (caractérisation commitée avant). Pas de Vent unique (`wind: null`). L'attribut est posé comme couche `lore-attribute-<domaine>` sur chaque cible non résistée, pour la durée du sort ; **sort instantané : aucune couche** (« tant que le sort est en effet » n'a pas d'objet), simple rappel dans le reçu. Alternative : couche d'un Round.
+- **D-C51** — Nurgle : le moteur ne suit pas les Blessures individuelles ni leur état Suppuré (aucun registre) : la couche `festeringWoundTest` est un marqueur, le MJ joue le Test de Blessure Suppurée (V5 p.180).
+- **D-C52** — Miasme de pestilence : Symptôme de Nausée non suivi (aucune maladie dans le moteur) : rappel ; exemptés (dévoués de Nurgle, moines de la peste) reconnus par des **traits** « Dévoué de Nurgle » / « Moine de la peste » posés par le MJ ; « créatures vivantes » = ni Mort-vivant, Démoniaque, Artificiel, Éthéré. Alliés compris (le texte dit « toutes »).
+- **D-C53** — Flot de Corruption : Souffle non opposé lu comme projectile magique de formule `BE+DR` (la surpuissance V5 ne remplace pas la formule) ; formules `BE` ajoutées à `resolveSpellDamage`. Pourriture du sang : rappel, test d'Endurance +0 de la cible non automatisé (le seuil « plus que son BE en Blessures » n'est pas calculé).

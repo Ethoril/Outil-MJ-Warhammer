@@ -972,6 +972,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       : field.type === 'number' ? (field.integer===false?Number.isFinite(value):Number.isInteger(value)) && value >= (field.min ?? 0) && value <= (field.max ?? Infinity)
       : field.type === 'select' ? field.options.some(([key]) => key === value)
       : field.type === 'object' ? spellObjectChoices(target || targets[0],field).some(item=>item.id===value)
+      : field.type === 'contractSpell' ? typeof value === 'string' && Boolean(getSpellContract(value))
       : typeof value === 'string' && value.trim().length > 0;
     if (!valid) return { ready: false, valid: false, status: 'mj-fact-required', missing: ['domainFacts.' + field.key], error: field.label + ' : saisie MJ requise ou fait incompatible avec le sort.', contract };
     if(field.type==='effect' && !target?.extensions?.v5?.spellEffects?.some(e=>e.id===value))return {ready:false,valid:false,status:'mj-fact-required',error:'Couche active réellement présente requise.',contract};
@@ -1640,7 +1641,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   // Attributs facultatifs (« peut infliger ») : choix par cible, appliqué aux ennemis par défaut ; `attributeActive: false` les coupe tous.
   const attributeTargets=Object.fromEntries(effectiveTargets.map(t=>[t.id,typeof options.attributeTargets?.[t.id]==='boolean' ? options.attributeTargets[t.id] : isHostileTarget(actor,t)]));
   const loreKey=attributeLore==='high' ? chosenLore : attributeLore;
-  const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,options:{attributeTargets}});
+  const allLore=options.attributeActive===false ? null : previewLoreAttribute({caster:actor,targets:effectiveTargets,lore:attributeLore,chosenLore,spell:contract,options:{attributeTargets,attributeRolls:options.targetTests,duration:contract.duration}});
+  if(allLore?.missingRolls?.length)return {ready:false,valid:false,status:'dice-required',error:'Attribut du Domaine de Tzeentch : d100 du Test de Corruption requis ('+allLore.missingRolls.join(', ')+').',contract};
   // Règles de dégâts de l'attribut : Cieux et Métal ignorent les PA métalliques (même attribut coupé, comme avant), Métal les ajoute (V5 p. 252), Ombres ignore les PA non magiques (V5 p. 254).
   const loreDamage = {
     ignoreMetalAp: Boolean(allLore?.damageRules?.ignoreMetalAp) || ['heavens','metal'].includes(loreKey),

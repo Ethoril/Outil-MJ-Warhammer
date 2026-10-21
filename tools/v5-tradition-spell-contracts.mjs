@@ -5,11 +5,13 @@ import {MAGIE_NATURELLE_AOTE3} from './tradition-contracts/magie-naturelle-aote3
 import {SORCELLERIE} from './tradition-contracts/sorcellerie.mjs';
 import {DEMONOLOGIE} from './tradition-contracts/demonologie.mjs';
 import {NECROMANCIE} from './tradition-contracts/necromancie.mjs';
+import {NURGLE} from './tradition-contracts/nurgle.mjs';
 
 export const TRADITION_SPELLS=[
  ...MAGIE_NATURELLE_L06,
  ...MAGIE_NATURELLE_AOTE3,
  ...SORCELLERIE,
  ...DEMONOLOGIE,
- ...NECROMANCIE
+ ...NECROMANCIE,
+ ...NURGLE
 ];
