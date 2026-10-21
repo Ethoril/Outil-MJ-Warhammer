@@ -327,13 +327,23 @@ const wrathConditionContracts=wrathConditionRules.map(rule=>({
   resultId:rule.resultId,conditions:rule.conditions,application:{sinTiming:'before-decrement',order:'apply-then-decrement'},
   evidencePath:'docs/divin/sources/L06-wrath-conditions-readings.mjs'}
 }));
+// L06 p.218 : pertes de Blessures, puis Test de Résistance et acquisition canonique.
+const wrathDamageRules=[
+ ['36-40',0,1,2,false],['51-55',1,0,0,false],['71-75',1,0,-1,false],['81-87',2,0,-2,true]
+].map(([range,diceCount,fixed,enduranceDifficulty,extraStunnedPerNegativeSL])=>({
+ id:`wrath:${range}:damage-endurance`,resultId:`wrath:${range}`,ruleVersion:1,diceCount,fixed,perSin:1,enduranceDifficulty,extraStunnedPerNegativeSL,
+ damageType:'direct-damage',source:pdfRef(218,'Colère des dieux'),
+ sourceReceipt:{ruleId:`wrath:${range}:damage-endurance`,sourceRefs:[pdfRef(218,'Colère des dieux')],
+  reading:'Lecture visuelle par l’exécutant, sans contrôle indépendant revendiqué.',sinTiming:'before-decrement',
+  interpretation:range==='51-55'?'Blessures lues comme perte directe, conformément à la famille B03 du plan ; aucun jet de Localisation inventé.':'BE et PA explicitement ignorés par la ligne source.'}
+}));
 // Livres de supplément réellement cités par un contrat (bénédictions de culte, modules de miracles) : le moteur n'accepte que ceux-là hors livre de base.
 const bySource=(rows,key)=>Object.fromEntries([...rows.reduce((map,row)=>map.set(key(row),(map.get(key(row))||0)+1),new Map())].sort(([a],[b])=>a<b?-1:a>b?1:0));
 const bookOf=row=>knownBooks.find(book=>book.sha256===row.source.fileSha256);
 const supplementBooks=[...new Map([...supplementBlessings,...miracleContracts,...standaloneModuleContracts].filter(row=>row.source.fileSha256!==V5.fileSha256).map(row=>[bookOf(row).id,{bookId:bookOf(row).id,document:row.source.document,fileSha256:row.source.fileSha256}])).values()].sort((a,b)=>a.bookId<b.bookId?-1:1);
 const contracts=[...blessings,...supplementBlessings,...miracleContracts,...standaloneModuleContracts,hatred];
 const catalogueDeltas=[...miracleContracts.filter(row=>sourceSix.has(row.catalogueName)||upInArmsModules.has(row.canonicalName)),...standaloneModuleContracts.filter(row=>row.sourceDelta)].map(row=>({id:row.id,catalogueEntry:row.catalogueEntry??null,v5Summary:row.sourceDelta,status:row.status,source:row.source}));
-const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.4.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN',complementCorpusSha256:complementHash,supplementBooks},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,catalogueDeltas,contracts};
+const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.4.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN',complementCorpusSha256:complementHash,supplementBooks},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,wrathDamageRules,catalogueDeltas,contracts};
 const sourceFingerprint = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
 const result={...payload,sourceFingerprint:`sha256:${sourceFingerprint}`};
 const registryText=JSON.stringify(result,null,2)+'\n';

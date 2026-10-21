@@ -10,6 +10,10 @@ import {advanceGameClock,readCombatPosition} from './v5-game-time.js';
 import {validatePrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {acquireV5Conditions} from './v5-effects.js';
 import {removeFromCombat} from './turn-order.js';
+import {effectHandler} from './v5-divine-effect-handlers.js';
+import {previewV5Test,selectV5Test,normalizeV5Roll} from './v5-roll.js';
+import {resolveV5ConditionTestContext} from './v5-test-context.js';
+import {effectiveSkillScore,baseCharacteristicScore,magicSkillModifiers} from './v5-magic-talents.js';
 
 const clone=value=>structuredClone(value);
 const text=value=>typeof value==='string'&&value.trim()?value.trim():null;
@@ -34,6 +38,52 @@ function storeActor(state,actorId){return parts(state).find(row=>row.id===actorI
 const prayerCaps=participant=>(participant?.extensions?.v5?.divineEffects||[]).filter(row=>row?.type==='prayer-sl-cap');
 const prayerNeeds=(path,message)=>({path,code:'unresolved-divine-prayer-cap',message});
 function wrathConditionRule(resultId){return (registry.wrathConditionRules||[]).find(row=>row.resultId===resultId)||null;}
+const wrathDamageRule=resultId=>(registry.wrathDamageRules||[]).find(row=>row.resultId===resultId)||null;
+function projectWrathDamage(actor,rule,input,executionId,sinAtTest,round){
+ const projection={ruleId:rule.id,resultId:rule.resultId,targetId:actor.id,sinAtTest,diceCount:rule.diceCount,enduranceDifficulty:rule.enduranceDifficulty};
+ const fail=(error,needsInput)=>({ok:false,error,needsInput,preview:projection});
+ const fold=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ const need=(field,label)=>({field,label});
+ const effect={type:rule.damageType,fixed:rule.fixed+rule.perSin*sinAtTest,...(rule.diceCount?{dice:{count:rule.diceCount,sides:10}}:{})};
+ const damageInput={damageRoll:input.wrathDamageRoll},handler=effectHandler(effect.type);
+ const required=handler.needs(effect,{actor,targets:[actor],input:damageInput}).map(row=>({...row,field:row.field==='damageRoll'?'wrathDamageRoll':row.field}));
+ if(input.wrathEnduranceRoll===undefined)required.push(need('wrathEnduranceRoll','Jet de Résistance du Courroux (d100) requis.'));
+ if(required.length)return fail('Les dés du Courroux doivent être saisis avant application.',required);
+ const skills=(actor.skills||[]).filter(row=>['resistance','endurance'].includes(fold(row.name||row.nom)));
+ if(skills.some(row=>row.status!=='resolved'||row.carac&&fold(row.carac)!=='e')||new Set(skills.map(row=>row.total)).size>1)
+  return fail('La compétence Résistance doit être résolue sans ambiguïté sur la fiche.',[need('actor.skills.Endurance','Résistance résolue sur la fiche')]);
+ if(!Number.isSafeInteger(actor.caracs?.E)||actor.caracs.E<0||skills.some(row=>!Number.isSafeInteger(row.total)||row.total<0))
+  return fail('Score de Résistance ou Endurance du personnage invalide.',[need('actor.caracs.E','Endurance courante et score de Résistance valides')]);
+ const skillName=skills[0]?.name||skills[0]?.nom||'Résistance';
+ const score=effectiveSkillScore(actor,skills[0]?.total??baseCharacteristicScore(actor,'E'),'E');
+ const changed=clone(actor),damage=handler.applyInstant(changed,effect,{actor,prayer:{sl:0},input:damageInput,executionId,targetId:actor.id});
+ const context=resolveV5ConditionTestContext(changed,{characteristic:'E',isAction:false,involvesMovement:false,runningOrHiding:false,requiresSight:false,reliesOnSight:false,
+  conditionPenaltyMode:input.wrathConditionContext?.conditionPenaltyMode,conditionPenaltyReason:input.wrathConditionContext?.conditionPenaltyReason});
+ if(!context.ready)return fail('Le contexte des États du Test de Résistance doit être précisé.',context.needsInput.map(row=>need('wrathConditionContext.'+row.field,row.label)).concat(context.restrictions.map(label=>need('wrathConditionContext',label))));
+ let testPreview,test;
+ try{
+  testPreview=previewV5Test({score,roll:normalizeV5Roll(input.wrathEnduranceRoll),kind:'test',
+   slModifiers:[{id:rule.id+':difficulty',label:'Difficulté source du Courroux',amount:rule.enduranceDifficulty},...context.slModifiers,...magicSkillModifiers(changed,skillName)],
+   advantageSources:context.advantageSources,disadvantageSources:context.disadvantageSources});
+  projection.testOptions=clone(testPreview.options);
+  if(testPreview.choiceRequired&&!input.wrathTestOptionId)return fail('Choisissez l’issue du Test de Résistance.',[need('wrathTestOptionId','Issue de Résistance')]);
+  test=selectV5Test(testPreview,input.wrathTestOptionId||(testPreview.forcedInversion?'reverse':'keep'));
+ }catch(error){return fail(error.message,[need('wrathEnduranceRoll','Jet d100 et choix de Résistance valides')]);}
+ const count=test.success?0:1+(rule.extraStunnedPerNegativeSL?Math.max(0,-test.sl):0);
+ const priorIds=new Set((changed.states||[]).map(row=>row.id));
+ const acquisition=acquireV5Conditions(changed,count?[{name:'Sonné',level:count,source:{kind:'divine-wrath',ruleId:rule.id,resultId:rule.resultId,executionId,source:clone(rule.source)}}]:[],{authorId:actor.id,targetId:actor.id,round});
+ if(!acquisition.ready)return fail('L’acquisition des États du Courroux requiert une précision.',acquisition.needsInput||[]);
+ const added=(acquisition.participant.states||[]).filter(row=>!priorIds.has(row.id));
+ added.forEach((row,index)=>{row.id=`divine-wrath-damage:${executionId}:${index}`;row.divineWrathExecutionId=executionId;row.divineWrathRuleId=rule.id;});
+ Object.assign(projection,{wounds:damage.wounds,woundsLost:damage.woundsLost,hpBefore:actor.hp,hpAfter:acquisition.participant.hp,
+  enduranceTest:clone(test),enduranceScore:score,stunnedRequested:count,conditions:added.map(row=>({id:row.id,name:row.name,level:row.level})),
+  reminders:clone(acquisition.reminders||[]),momentumBefore:Boolean(actor.extensions?.v5?.hasMomentum),momentumAfter:Boolean(acquisition.participant.extensions?.v5?.hasMomentum)});
+ const result={...damage,conditions:added.map(row=>row.name)};
+ const effectReceipt=handler.receipt(effect,{actor,targetId:actor.id},result);
+ effectReceipt.log=`${actor.name} · Courroux ${rule.resultId} · ${damage.woundsLost} Blessure(s) : ${actor.hp} → ${acquisition.participant.hp} · Résistance ${test.sl} DR · ${count} Sonné demandé(s)`;
+ return {ok:true,participant:acquisition.participant,preview:projection,receipt:{ruleId:rule.id,resultId:rule.resultId,sourceReceipt:clone(rule.sourceReceipt),
+  proof:{sinAtTest,executionId},damage:clone(result),enduranceTest:clone(test),testContext:clone(context),stunnedRequested:count,conditions:clone(projection.conditions),reminders:clone(acquisition.reminders||[])},effectReceipt};
+}
 function projectWrathConditions(actor,rule,executionId,sinAtTest){
  if(!actor||!rule||!Number.isSafeInteger(sinAtTest)||sinAtTest<0)return {ok:false,needsInput:[prayerNeeds('wrathConditionRules','Règle source, acteur et Péchés au déclenchement requis.')]};
  const requested=rule.conditions.map(row=>({name:row.name,level:row.base+row.perSin*sinAtTest,source:{kind:'divine-wrath',ruleId:rule.id,resultId:rule.resultId,executionId,source:clone(rule.source)}}));
@@ -275,6 +325,7 @@ export function previewStoreDivine(state,contractId,input={}){
  const access=resolveDivineAccess(divineAccessState(state),{actor:ctx.actor,subjectKey,contract,activeScene:state.activeScene});
  if(!access.allowed)return failure('blocked',access.reason);
  const captured={...ctx.input,sourceFingerprint:registry.sourceFingerprint,participants:clone(parts(state)),executionId:input.executionId || 'divine:'+uid(),divineAccessState:clone(divineAccessState(state)),divineSubjectKey:subjectKey,divineActiveScene:clone(state.activeScene||null),divineAccessDecision:clone(access),clockAnchor:clock?{campaignSeconds:clock.campaignSeconds,clockRevision:clock.revision,lastEventId:clock.lastEvent?.id??null}:null,prayerRoundAnchor:clone(roundAnchor)};
+ delete captured.wrathDamageRuleId;
  let preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
  let wrathTableResult=null;
  if(preview.preview?.wrath?.triggered && Number.isSafeInteger(captured.wrathRoll) && captured.wrathRoll>=1 && captured.wrathRoll<=100){
@@ -317,6 +368,14 @@ export function previewStoreDivine(state,contractId,input={}){
    captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,reminder:wrathTableResult.reminder,consequences:captured.wrathConsequences,resolvedBy:'source-contract',ruleId:rule.id,sourceReceipt:clone(rule.sourceReceipt)};
    captured.wrathLessonRuleId=rule.id;
    preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
+  }else if(wrathDamageRule(wrathTableResult?.id)){
+   const rule=wrathDamageRule(wrathTableResult.id);
+   if(hasWrathConditionOrigin(state,captured.executionId))return failure('blocked','Cet identifiant d’exécution est déjà porté par un État de Courroux encore présent; utilisez un nouvel identifiant.',[prayerNeeds('executionId','Identifiant unique pour éviter la collision avec un État déjà acquis.')]);
+   captured.wrathDamageRuleId=rule.id;
+   captured.wrathConsequences='Blessures directes et Résistance seront résolues selon la règle structurée de la table.';
+   captured.wrathResult={resultId:wrathTableResult.id,source:clone(rule.source),label:wrathTableResult.label,reminder:wrathTableResult.reminder,
+    consequences:captured.wrathConsequences,resolvedBy:'source-contract',ruleId:rule.id,sourceReceipt:clone(rule.sourceReceipt)};
+   preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
   }else if(wrathTableResult && typeof captured.wrathConsequences==='string' && captured.wrathConsequences.trim()){
    captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,reminder:wrathTableResult.reminder,
     consequences:captured.wrathConsequences.trim(),resolvedBy:'MJ'};
@@ -325,7 +384,13 @@ export function previewStoreDivine(state,contractId,input={}){
  }
  let calculated=preview.ready?applyDivineExecution(state,contract,captured):preview;
  if(calculated.ready){const conflict=unresolvedCombination(calculated.state);if(conflict)calculated=failure('blocked',conflict);}
- let wrathConditionPreview=null;
+ let wrathConditionPreview=null,wrathDamagePreview=null;
+ if(calculated.ready&&captured.wrathDamageRuleId){
+  const rule=wrathDamageRule(wrathTableResult?.id),postActor=parts(calculated.state).find(row=>row.id===ctx.actor.id);
+  const projection=projectWrathDamage(postActor,rule,captured,captured.executionId,calculated.preview.wrath.sinAtTest,state.combat?.round);
+  wrathDamagePreview=projection.preview;
+  if(!projection.ok)calculated=failure('requires-input',projection.error,projection.needsInput);
+ }
  if(calculated.ready&&captured.wrathConditionRuleId){
   const rule=wrathConditionRule(wrathTableResult?.id),postPrayerActor=parts(calculated.state).find(row=>row.id===ctx.actor.id);
   const projection=projectWrathConditions(postPrayerActor,rule,captured.executionId,calculated.preview.wrath.sinAtTest);
@@ -333,7 +398,7 @@ export function previewStoreDivine(state,contractId,input={}){
   else wrathConditionPreview=projection.preview;
  }
  const result=calculated.ready?preview:{...preview,...calculated,preview:calculated.preview||preview.preview};
- return rememberPreview({...result,...(wrathConditionPreview?{wrathConditionPreview}:{}),...(calculated.ready?{projectedEffects:clone(calculated.receipt?.effectReceipts||[])}:{}),contractId,contract:clone(contract),baseRevision:state.localRevision||0,baseStateFingerprint:stateFingerprint(state),baseClockFingerprint:JSON.stringify(clock),input:captured,access:clone(access),
+ return rememberPreview({...result,...(wrathConditionPreview?{wrathConditionPreview}:{}),...(wrathDamagePreview?{wrathDamagePreview}:{}),...(calculated.ready?{projectedEffects:clone(calculated.receipt?.effectReceipts||[])}:{}),contractId,contract:clone(contract),baseRevision:state.localRevision||0,baseStateFingerprint:stateFingerprint(state),baseClockFingerprint:JSON.stringify(clock),input:captured,access:clone(access),
   executionId:captured.executionId,sourceReceipt:clone(contract.sourceReceipt),wrathTableResult,wrathLessonDuration:clone(captured.wrathLessonDuration||null),ruleVersion:preview.ruleVersion});
 }
 
@@ -354,6 +419,20 @@ export function applyStoreDivine(state,contractId,input={}){
  const calculated=applyDivineExecution(state,contract,engineInput);
  if(!calculated.ready)throw ruleError(calculated.error || 'Prière non appliquée : données requises.');
  let next=calculated.state;
+ if(captured.input.wrathDamageRuleId){
+  const rule=wrathDamageRule(captured.wrathTableResult?.id),wrath=calculated.preview.wrath;
+  if(!rule||rule.id!==captured.input.wrathDamageRuleId)throw ruleError('La règle de dégâts du Courroux a changé.');
+  const index=parts(next).findIndex(row=>row.id===ctx.actor.id);
+  const projection=projectWrathDamage(parts(next)[index],rule,captured.input,captured.executionId,wrath.sinAtTest,state.combat?.round);
+  if(!projection.ok)throw ruleError(projection.error);
+  if(JSON.stringify(projection.preview)!==JSON.stringify(captured.wrathDamagePreview))throw ruleError('La projection du Courroux a changé : recalculez.');
+  next.combat.participants[index]=projection.participant;
+  const receipt={...projection.receipt,proof:{...projection.receipt.proof,roll:wrath.roll,modifiedRoll:wrath.modifiedRoll}};
+  const effects=[...(calculated.receipt.effectReceipts||[]),projection.effectReceipt];
+  calculated.receipt.wrathDamageReceipt=clone(receipt);calculated.receipt.effectReceipts=effects;
+  const stored=(next.extensions?.v5?.divineExecutions||[]).find(row=>row.executionId===captured.executionId);
+  if(stored){stored.wrathDamageReceipt=clone(receipt);stored.effectReceipts=clone(effects);}
+ }
  let wrathConditionReceipt=null;
  if(captured.input.wrathConditionRuleId){
   const resultId=captured.wrathTableResult?.id,rule=wrathConditionRule(resultId),prayer=calculated.preview.wrath;

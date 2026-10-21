@@ -280,7 +280,8 @@ test('Contrôle indépendant — adapter Store choisit la ligne à partir du d10
     assert.equal(result.input.wrathResult.resultId, expected, 'le résultat imposé par le formulaire est ignoré');
   }
   const noNote = run(99,77,1,'');
-  assert.equal(noNote.status, 'needs-wrath-resolution');
+  assert.equal(noNote.status, 'requires-input');
+  assert.ok(noNote.needsInput.some(row=>row.field==='wrathDamageRoll'));
   assert.equal(noNote.ready, false);
   assert.equal(noNote.wrathTableResult.id, 'wrath:81-87');
 });
