@@ -225,6 +225,7 @@ export function createDivinePanel({Store,refresh}){
     button(list,'Terminer '+name,()=>run(async()=>{const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }
+  if((actor.extensions?.v5?.divineEffects||[]).some(row=>row.type==='wrath-fortune-refresh'))content.append(node('p','workspace-muted','Courroux : prochain renouvellement de Chance limité à un point permanent (L06 p.219).'));
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='divine-access-suspension')content.append(node('p','workspace-field-error','Courroux : Béni et Invocation ('+layer.cult+') suspendus jusqu’à '+formatCampaignTime(layer.deadline.atSeconds)+' de temps de campagne ; les acquisitions restent conservées. Source L06 p.219.'));
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-deity-rejection')content.append(node('p','workspace-field-error','Réprouvé par '+layer.cult+' : les Bénédictions et Miracles de ce dieu visant ce personnage échouent jusqu’à '+formatCampaignTime(layer.deadline.atSeconds)+' de temps de campagne. Source L06 p.218.'));
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-skill-penalty')content.append(node('p','workspace-field-error','Courroux : −1 DR à '+layer.skills.map(row=>row.name).join(', ')+' · '+layer.duration.value+(layer.duration.unit==='hours'?' heure(s)':' jour(s)')+' · échéance : '+formatCampaignTime(layer.deadline.atSeconds)+' de temps de campagne · Source L06 p.218.'));
@@ -383,6 +384,7 @@ export function createDivinePanel({Store,refresh}){
      outcome.append(node('p','workspace-muted','Leçons divines · malus automatique de −1 DR aux futurs Tests de Prière. Le Round actuel compte comme premier; la sanction prend fin après les effets du dernier Round.'));
      field(outcome,'Jet de durée (d10)','wrathDurationRoll',{min:1,max:10});
      if(result.wrathLessonDuration)outcome.append(node('p','workspace-muted',`Durée : ${result.wrathLessonDuration.roll} + ${result.wrathLessonDuration.sinAtTrigger} Péché(s) = ${result.wrathLessonDuration.rounds} Round(s); fin après les effets du Round ${result.wrathLessonDuration.expiryRound}.`));
+    }else if(result.wrathFortunePreview){outcome.append(node('p','workspace-muted','Le prochain renouvellement normal de Chance donnera un point. Le compteur actuel reste inchangé. Source L06 p.219.'));
     }else if(result.wrathAccessPreview){
      accessControls(outcome,result.wrathAccessPreview);
     }else if(result.wrathAlliesPreview){
