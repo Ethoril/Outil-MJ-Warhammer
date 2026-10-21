@@ -16,6 +16,8 @@ But : tout finir, y compris ce qui était hors périmètre. Arbitrages du MJ : `
 
 Arrêt sur crédits Mistral épuisés (402 « Out of credits »). Faits : A1, A2 (publiés en 3.20.1), inventaires B0 (`docs/divin/COURROUX_INVENTAIRE.*`, 69 entrées) et D0a (`docs/lot3/LOT4_TRADITIONS_BASE.*`, 7 traditions). À relancer : A3 à A12 (prompts dans `docs/PLAN_GLM_PHASE_A.md`), inventaires C0 (Brisé), D0b (traditions des suppléments), E0 (bestiaires), prompts sauvegardés dans `docs/plans-glm/inv-*.md` ; pour A3-A12, prompt : « Read docs/PLAN_GLM_PHASE_A.md: the Global rules section and ONLY lot A<n>; execute it exactly as written… ».
 
+Mise à jour du 21/10 : **phase A terminée** (A3-A12 par GPT, brief `docs/plans-gpt/`, rapport `docs/plans-gpt/RAPPORT_GPT_PHASE_A.md`), publiée en **3.21.0**. Inventaires faits : B0 (Courroux, 11 questions), C0 (Brisé, 20), D0a (traditions de base, 9), D0b (suppléments et runes, 21), E0 (bestiaires, 30). Prochaine étape : arbitrages du MJ en sélecteurs, puis lots B, C, D, E.
+
 ## Phase A — Arbitrages du chantier divin (12 lots)
 
 | Lot | Contenu | Emplacements | Risque |
