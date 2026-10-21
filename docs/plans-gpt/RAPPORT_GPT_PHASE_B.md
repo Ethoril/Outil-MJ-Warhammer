@@ -1,6 +1,6 @@
 # Rapport GPT — Phase B Courroux (partiel)
 
-**Dernière session : session 3, 21 octobre 2026, B04.** Voir sa livraison et ses preuves en fin de rapport. B00–B03 acquis ; le lot suivant est B05. B05–B18 et la clôture B19 restent ouverts : la phase B n’est pas complète. Les sections des sessions précédentes conservent leur état historique, notamment le blocage Q12 levé en session 2.
+**Dernière session : session 4 en cours, 21 octobre 2026.** B00–B10 acquis ; B11 est le prochain lot. Voir la table actualisée en fin de rapport. Les lots suivants et la clôture B19 restent ouverts : la phase B n’est pas complète. Les sections des sessions précédentes conservent leur état historique, notamment le blocage Q12 levé en session 2.
 
 ## Session 1 — historique, branche gpt/phase-b
 
@@ -239,8 +239,10 @@ Demande du MJ : reprendre à B05 depuis codex/divin-v5 à jour, créer gpt/phase
 | B05 | FAIT — 39e85cc | 19 nouveaux tests fonctionnels, suite 3466/3466 ; navigateur 4 contrôles, cloud total 52 (3 nouveaux). |
 | B06 | FAIT — 97c1839 | 11 nouveaux tests, suite 3477/3477 ; navigateur 3 contrôles, cloud total 55 (3 nouveaux). |
 | B07 | FAIT — cbc552e | 15 nouveaux tests, suite 3492/3492 ; navigateur 3 contrôles, cloud total 58 (3 nouveaux). |
-| B08 | PROCHAIN LOT | Extension ciblée du générateur pour 6 Bénédictions de Stromfels autorisée directement par le MJ. |
-| B09–B18 | À FAIRE | Ordre et périmètres du plan conservés. |
+| B08 | FAIT — ab59a17 | 21 nouveaux tests, suite 3516/3516 ; navigateur 4 contrôles, cloud total 61. Six Bénédictions Stromfels autorisées. |
+| B09 | FAIT — af31809 | 10 nouveaux tests + 3 caractérisations ; suite 3529/3529 ; navigateur 3 contrôles, cloud total 64. |
+| B10 | FAIT — aa62ca0 | 12 nouveaux tests + 3 caractérisations, suite 3544/3544 ; navigateur 4 contrôles, cloud total 67. |
+| B11–B18 | À FAIRE | Ordre et périmètres du plan conservés. |
 | B19 | OUVERT | Certification des 89 entrées distincte d’une recette technique verte. |
 
 B05 : interdictions 21–25/31–35/46–50 et obligation 76–80 réellement appliquées, dés et premier Round explicites ; ancre hors combat sans conversion depuis secondes. Fin uniquement sur reçu de vrai Round afterEffects, suspension/reprise conservant la sanction. 76–80 propose un vrai Test de Prière dédié +0 (aucune Bénédiction substituée), respecte l’Action dépensée et exige une décision MJ pour le Tour déclencheur ; autres Actions et fin prématurée refusées. Récupération B04 et Tests génériques identifiés raccordés. B05 utilise des valeurs optionnelles non null pour survivre à RTDB ; régression rouge et cloud réels ont établi ce besoin. Plafond historique et Leçons restent verts. Choix B-C10/B-C11.
@@ -254,3 +256,14 @@ Source L06 p.218 relue visuellement par l’exécutant, sans lecteur indépendan
 Dernière suite complète : node --test --test-concurrency=4, 3492/3492, zéro échec, 96,194 s, tmp/gpt-phase-b/b7/suite-commit.log. Dernier cloud : 58 contrôles, zéro erreur navigateur, tmp/gpt-phase-b/b7/cloud-receipt.json. La recette de départ a passé 26/26 et 3443 tests ; recette finale à rejouer en fin de cette session. Aucun vert intermédiaire ne clôt B19.
 
 Tests existants modifiés en session 4 : divin-v5-store.test.js, cas 21–25 : titre actualisé et fixture remplacée par un d10 explicite et un choix du premier Round ; assertions de ligne canonique et décrément inchangées. divin-v5-cloud-browser.mjs : imports et appels de scénarios B05–B07, aucune assertion historique modifiée. Aucune autre attente mécanique indépendante modifiée.
+
+
+Complément session 4 : B08 suspend temporairement les accès du culte sans effacer les talents permanents ; Solkan bloque si Péché ou Corruption non nuls/inconnus, avec saisie MJ motivée ; Stromfels refuse Invocation à deux et Béni à cinq Péchés. Les six Bénédictions L25 p.91 reprises de Manann ont été ajoutées au générateur et aux deux sorties internes après autorisation directe. Génération double identique et --check verts. Aucun nouveau Miracle de Stromfels : le seuil Invocation est couvert par le prédicat typé d’accès. L06 p.219, L02 p.55 et L25 p.91 relues en texte et visuellement. Choix B-C16–B-C18. Logs b8/suite-final.log (100,600 s), browser/receipt.json, cloud-receipt.json : 3516 tests, 4 contrôles navigateur, 61 cloud.
+
+B09 : marqueur durable du prochain renouvellement normal de Chance ; une dépense/correction ne le consomme pas. Le renouvellement explicite et motivé donne un point permanent puis consomme les occurrences visant cet événement ; temporaire préservé. Solde inconnu à initialiser, pool normal fourni par le MJ, aucun maximum inventé. Undo/Redo/reload/refus persistance et CAS ; UI ressources centrée et entièrement visible à 390/1440 px. Choix B-C19, L06 p.219 relue visuellement. Caractérisation 42889d6 corrigée par eba4d6d avant tout code : le refus persistance renvoie ok:false, pas une exception. Logs b9/suite.log (99,475 s), browser/receipt.json et cloud-receipt.json : 3529 tests, 3 contrôles navigateur, 64 cloud.
+
+Nouvelles exceptions de tests existants B08 expressément autorisées par le MJ : fixtures Solkan de divin-v5-blessings-cults.test.js, divin-v5-p4b-damage-real.test.js et divin-v5-t5-form-model.test.js avec Corruption = 0 explicite ; assertions mécaniques inchangées. Attentes directement affectées : décompte des Bénédictions 72 → 78, page des nouveaux contrats Stromfels = 91. Le harness cloud reçoit les imports/appels B08/B09/B10, ses anciennes assertions restent intactes. Aucune autre assertion mécanique historique modifiée.
+
+Consigne complémentaire du MJ : registre docs/VARIABLES_PERSISTANTES_PJ.md repris depuis codex/divin-v5 (document absent du main indiqué), puis complété rétroactivement dans 9c0247a. B00–B10 sont examinés : Péchés, Corruption, santé, Fortune permanente, couches calendaires, suspension d’accès, prochain renouvellement et pénitences documentés ; variables de combat exclues selon ce registre. Toute variable durable des prochains lots sera ajoutée. Aucun retour vers la fiche n’est réalisé avant la phase H.
+
+B10 terminé : caractérisation 5d2eea7, création/clôture source sur fiche, rôle du contexte Store, clôture idempotente sans retrait de Péché, 96–100 structuré et récupération B04. Exemples des dix cultes L06 p.205–214 et compléments Ulric L19 p.112, pèlerinage L21 p.6, Stromfels L25 p.89 relus et paraphrasés. Choix B-C20–B-C22. Dernière suite complète : 3544/3544, 97,302 s, b10/suite-commit.log ; navigateur final et cloud (67 contrôles) verts. Registre persistant complété. La recette complète de fin de session reste à rejouer.
