@@ -12,7 +12,12 @@ Branche `pro/phase-d`. Plan : `PLAN_PRO_PHASE_D.md`. Choix d'interprétation : `
 | D4 Sorcellerie (8) | FAIT | a75e55d |
 | D5 Démonologie (4) | FAIT | 138f62f |
 | D6 Nécromancie (4) | FAIT | 66c0810 |
-| D7 à D21 | NON FAITS (à reprendre dans l'ordre) | |
+| D7 Nurgle (3) + attributs des trois Domaines du Chaos (caractérisation f11e9ae avant) | FAIT | 535068c |
+| D8 Slaanesh (3) | FAIT | 2ecd542 |
+| D9 Tzeentch (3) | FAIT | 0538bdc |
+| D10 Familiers : conception (`CONCEPTION_FAMILIERS.md`) | FAIT | voir `git log` |
+| D11 Familiers : code | BLOQUÉ : le familier est un participant dont le profil (3 types) est une donnée de bestiaire de la phase E ; raison détaillée §4 de la conception | |
+| D12 à D21 | NON FAITS (à reprendre dans l'ordre) | |
 
 ## Dernière suite complète
 
