@@ -1,6 +1,6 @@
-# Outil MJ — Warhammer (v3.21.5)
+# Outil MJ — Warhammer (v3.21.6)
 
-Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.21.5 : prières, bénédictions et miracles V5 (livre de base et suppléments), dont Protection, Souffle, Morsure du Loup, Écraser les faibles, Fortune généreuse, N’écoutez point la Sorcière, Malice de Ranald, Attaque Rapide, Fureur d’Ulric, En Bon Ordre et Larmes de Shallya (registre des Blessures Critiques), en plus des talents et de la magie.
+Application web progressive (PWA) d’assistance au Maître de Jeu pour **Warhammer**, avec combat **V5** et fiches importées. Version 3.21.6 : prières, bénédictions et miracles V5 (livre de base et suppléments), dont Protection, Souffle, Morsure du Loup, Écraser les faibles, Fortune généreuse, N’écoutez point la Sorcière, Malice de Ranald, Attaque Rapide, Fureur d’Ulric, En Bon Ordre et Larmes de Shallya (registre des Blessures Critiques), en plus des talents et de la magie.
 
 Le [rapport de recette du lot 2](docs/lot2/LOT2_RECETTE_2_5.md) décrit le périmètre livré, les contrôles et les limites. Les effets narratifs restent des rappels, les valeurs de progression appartiennent aux fiches et la magie/les prières automatisées restent au lot 3.
 
