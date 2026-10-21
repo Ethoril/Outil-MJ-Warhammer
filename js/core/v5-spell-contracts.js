@@ -681,6 +681,14 @@ export function resolveAuxiliarySummons({ contract, caster, options = {} } = {})
       armor: {head:0,body:0,arms:0,legs:0}, isAuxiliary: true, casterId: caster.id, noMomentum: false,
       extensions: {v5: {summonedBySpellId:contract.id, summonedUntilRound: Number(options.round || 1) + options.domainFacts.minutesToDawn * 6}}
     });
+  } else if (contract.effects?.summon?.generic) {
+    // Créatures sans profil automatique (profils de bestiaire : phase E) : participants génériques sous le contrôle du lanceur.
+    const spec=contract.effects.summon,sl=Math.max(0,Number(options.castingSl) || 0);
+    const total=(spec.baseFormula?spellFormulaValue(spec.baseFormula,caster):1)+Math.max(0,(Number(spec.count) || 1)-1)+(spec.addDr?sl:0);
+    const label=spec.names?.[options.domainFacts?.[spec.nameFact]] || spec.name;
+    for(let i=0;i<total;i++)auxiliaries.push({id:'aux-'+contract.id+'-'+uid()+'-'+(i+1),name:label+' '+(i+1),zone:'active',camp:caster.camp,hp:null,maxHp:null,caracs:{},traits:[...(spec.traits || [])],
+      states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1})),skills:[],actions:[],armor:{head:0,body:0,arms:0,legs:0},isAuxiliary:true,casterId:caster.id,noMomentum:false,
+      extensions:{v5:{summonedBySpellId:contract.id,genericSummon:true}}});
   } else if (contract.effects?.summon?.indestructible) {
     const spec={...contract.effects.summon},sl=options.castingSl || 0;if(spec.wsFormula)spec.ws=spellFormulaValue(spec.wsFormula,caster);
     const count=spec.count;
@@ -1256,6 +1264,9 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     }
   }
 
+  // Invocations génériques : la couche (fin à l’aube, mort du lanceur) est portée par le lanceur, la zone n’est pas suivie.
+  if (effects.summon?.generic) effectiveTargets = [actor];
+
   const targetValidation = validateSpellTargets({...contract,effects}, actor, effectiveTargets, overcastTargetsBonus, options);
   if (!targetValidation.valid) {
     return {
@@ -1729,10 +1740,10 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       const spec=effects.opposedTest,die=options.targetTests?.[target.id]?.opponentRoll,casterDie=domainFacts.opposedActorRoll;
       if(!Number.isInteger(die)||die<1||die>100||!Number.isInteger(casterDie)||casterDie<1||casterDie>100)return {ready:false,valid:false,status:'dice-required',error:'Deux d100 explicites du Test opposé requis.',contract};
       const skill=(target.skills || []).find(s=>spellSkillMatches(s,spec.targetSkill));
-      const casterTest=selectV5Test(previewV5Test({score:Number(actor.caracs[spec.casterStat]),roll:casterDie}),'keep'),targetTest=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die}),'keep');
+      const casterTest=selectV5Test(previewV5Test({score:Number(actor.caracs[spec.casterStat]),roll:casterDie}),'keep'),targetTest=selectV5Test(previewV5Test({score:effectiveSkillScore(target,skill?.total ?? skill?.value ?? target.caracs[spec.targetStat],spec.targetStat),roll:die,slModifiers:spec.targetSlModifier?[{id:'opposition',label:'Difficulté de l’opposition',amount:spec.targetSlModifier}]:[]}),'keep');
       targetReceipt.opposedTest={casterTest,targetTest,won:casterTest.sl>targetTest.sl || Boolean(spec.casterWinsTies) && casterTest.sl===targetTest.sl};
-      if(spec.resistOnLoss && !targetReceipt.opposedTest.won){targetReceipt.resisted=true;targetReceipt.actions.push({kind:'resisted',summary:'FM opposée : '+casterTest.sl+' contre '+targetTest.sl+', sort évité.'});targetResults.push(targetReceipt);continue;}targetReceipt.banished=effects.banishOnOpposedWin && targetReceipt.opposedTest.won;
-      targetReceipt.actions.push({kind:'opposed-test',summary:'FM '+casterTest.sl+' contre '+spec.targetSkill+' '+targetTest.sl+' : '+(effects.banishOnOpposedWin?(targetReceipt.banished?'banni sans Blessure':'non banni'):targetReceipt.opposedTest.won?'effet appliqué':'effet résisté')+'.'});
+      if(spec.resistOnLoss && !targetReceipt.opposedTest.won){targetReceipt.resisted=true;targetReceipt.actions.push({kind:'resisted',summary:'FM opposée : '+casterTest.sl+' contre '+targetTest.sl+', sort évité.'});targetResults.push(targetReceipt);continue;}targetReceipt.banished=(effects.banishOnOpposedWin || effects.destroyOnOpposedWin) && targetReceipt.opposedTest.won;targetReceipt.destroyed=Boolean(effects.destroyOnOpposedWin && targetReceipt.banished);
+      targetReceipt.actions.push({kind:'opposed-test',summary:'FM '+casterTest.sl+' contre '+spec.targetSkill+' '+targetTest.sl+' : '+(effects.destroyOnOpposedWin?(targetReceipt.destroyed?'détruit':'non détruit'):effects.banishOnOpposedWin?(targetReceipt.banished?'banni sans Blessure':'non banni'):targetReceipt.opposedTest.won?'effet appliqué':'effet résisté')+'.'});
     }
     if(effects.breath){
       const variant=effects.breath.variants[attributeLore],answers=options.targetTests?.[target.id] || {};
@@ -1769,7 +1780,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     const traits = [...(target.traits || []), ...(target.extensions?.traits || [])].map(fold).join(' ');
     const size = /petite|small/.test(traits) ? 'small' : /enorme|enormous|monstr/.test(traits) ? 'enormous' : /grande|large/.test(traits) ? 'large' : 'average';
     if ((rule.requiredFact && options.targetTests?.[target.id]?.[rule.requiredFact]!==true) || (rule.exceptAnyTrait?.some(t=>hasTargetNatureOrTrait(target,t))) || (rule.requiredAllTraits?.some(group=>!group.some(t=>hasTargetNatureOrTrait(target,t)))) || (rule.exceptLore && hasArcaneMagicLore(target,rule.exceptLore)) || (rule.exceptTrait && hasTargetNatureOrTrait(target,rule.exceptTrait)) || (rule.requiredTrait && !hasTargetNatureOrTrait(target,rule.requiredTrait)) || (rule.requiredAnyTrait && !rule.requiredAnyTrait.some(t=>hasTargetNatureOrTrait(target,t))) || (rule.allowedSizes && !rule.allowedSizes.includes(size)) || (rule.alliesOnly && target.camp!==actor.camp) || (rule.enemiesOnly && !isHostileTarget(actor,target))) {
-      targetReceipt.resisted = true; targetReceipt.actions.push({ kind: 'excluded', summary: 'Cible exemptée ou inadmissible selon les clauses du sort.' }); targetResults.push(targetReceipt); continue;
+      targetReceipt.resisted = true; targetReceipt.banished = false; targetReceipt.destroyed = false; targetReceipt.actions.push({ kind: 'excluded', summary: 'Cible exemptée ou inadmissible selon les clauses du sort.' }); targetResults.push(targetReceipt); continue;
     }
     let secondaryFailCondition = null;
     if((options.magicDefianceTargets || []).includes(target.id)){
@@ -2091,7 +2102,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     let computedTraits = [...(Array.isArray(effects.traits) ? effects.traits : [])];
     for (const entry of specificSteps('trait-rating')) computedTraits = raiseTraitRating(computedTraits, entry.trait, entry.steps * (Number(entry.per) || 1));
     const computedTalents = [...(Array.isArray(effects.talents) ? effects.talents : [])];
-    const computedConditions = [...(Array.isArray(effects.conditions) ? effects.conditions : []), ...(!targetReceipt.conditionsResisted ? effects.failConditions || [] : []), ...(secondaryFailCondition ? [secondaryFailCondition] : []), ...(target.id === actor.id && Array.isArray(effects.selfConditions) ? effects.selfConditions : [])]
+    const computedConditions = [...(Array.isArray(effects.conditions) ? effects.conditions : []), ...(!targetReceipt.conditionsResisted ? effects.failConditions || [] : []), ...(secondaryFailCondition && !(secondaryTestSpec?.failOnlyIfWounded && !(targetReceipt.woundsLost>0)) ? [secondaryFailCondition] : []), ...(target.id === actor.id && Array.isArray(effects.selfConditions) ? effects.selfConditions : [])]
       .filter(name => !noSelfHarm || !NEGATIVE_CONDITIONS.has(fold(name)));
     const computedRemoveConditions = [...(Array.isArray(effects.removeConditions) ? effects.removeConditions : [])];
     const computedSpecialState = { ...(effects.specialState || {}), ...(effects.stateModes?.values[domainFacts[effects.stateModes?.fact]] || {}), ...(specialTag === 'twitch' ? { twitch: true } : {}) };
@@ -3473,7 +3484,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
       target.traits=[...new Set([...(target.traits || []),...tRes.persistentTraits])];
     }
     if(tRes.armourDamage){target=applyArcaneArmorDamage(target,tRes.armourDamage);participants[pIdx]=target;}
-    if(tRes.banished){target.zone='bench';target.extensions.v5.banished=true;}
+    if(tRes.banished){target.zone='bench';target.extensions.v5.banished=true;if(tRes.destroyed){target.hp=0;target.extensions.v5.destroyed=true;}}
     if(tRes.casterHealing){const caster=participants.find(p=>p.id===actor.id);caster.hp=Math.min(Number(caster.maxHp),Number(caster.hp)+tRes.casterHealing);}
     // Drain de Magie : vider la réserve de focalisation et dissiper les effets magiques actifs
     if (tRes.drainMagic) {
@@ -3705,7 +3716,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     for (const [index,aux] of preview.auxiliarySummon.auxiliaries.entries()) {
       participants.push({
         ...aux,
-        ...(contract.effects.summonProfile || contract.effects.summon?.indestructible || contract.effects.special==='invisible-eye' ? {extensions:{...aux.extensions,v5:{...aux.extensions?.v5,summonCastExecutionId:opKey,summonOwnerId:preview.targetResults[index]?.targetId || actor.id}}} : {}),
+        ...(contract.effects.summonProfile || contract.effects.summon?.indestructible || contract.effects.summon?.generic || contract.effects.special==='invisible-eye' ? {extensions:{...aux.extensions,v5:{...aux.extensions?.v5,summonCastExecutionId:opKey,summonOwnerId:preview.targetResults[index]?.targetId || actor.id}}} : {}),
         appliedAtRound: currentRound
       });
     }
