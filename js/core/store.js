@@ -2360,13 +2360,28 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         if(old?.used)throw Object.assign(new Error('Quota de Tour déjà dépensé; recalcul requis.'),{userFacing:true});
         const seqs=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]}),seq=seqs.byActorId?.[actorId]||{};
         if(plan.action==='sprint'&&(!seq.fleeCommitted||seq.turnId!==clock.turnId||seq.visibleToAnyEnemy!==true))throw Object.assign(new Error('Move Flee préalable manquant ou périmé.'),{userFacing:true});
-        if(plan.action==='flee'&&((plan.facts.engagedEnemyIds||[]).length||plan.facts.visibleToAnyEnemy!==true))throw Object.assign(new Error('Faits de fuite modifiés; recalculez.'),{userFacing:true});
+        const engagedIds=plan.facts.engagedEnemyIds||[];
+        const validEngaged=engagedIds.length>0&&plan.facts.engagedEscapeConfirmed===true&&plan.facts.freeAttacksResolved===true&&Boolean(plan.engagedEscapeEffects);
+        if(plan.action==='flee'&&((engagedIds.length&&!validEngaged)||plan.facts.visibleToAnyEnemy!==true))throw Object.assign(new Error('Faits de fuite modifiés; recalculez.'),{userFacing:true});
         if(plan.action==='flee'&&(ledger.quotaUsage.some(row=>row.actorId===actorId&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used)||standardV5ActionSpent(draft,actorId,clock)))throw Object.assign(new Error('DIV-BROKEN-MIDTURN-01 : Action déjà dépensée, décision MJ explicite requise.'),{userFacing:true});
+        if(plan.action==='flee'&&validEngaged){
+          const fx=plan.engagedEscapeEffects;
+          for(const enemyId of fx.engagedEnemyIds||[]){
+            const foe=draft.combat?.participants?.find(row=>row.id===enemyId&&row.zone==='active');
+            if(!foe)continue;
+            foe.extensions??={};foe.extensions.v5??={};
+            foe.extensions.v5.hasMomentum=(fx.momentumRetainedEnemyIds||[]).includes(enemyId);
+          }
+          if(Number(fx.addedBrokenCount)>0){
+            actor.states=[...(actor.states||[]),{id:`${plan.actionId}:broken-engaged`,key:'brise',name:'Brisé',level:fx.addedBrokenCount,source:structuredClone(BROKEN_ESCAPE_SOURCE)}];
+            actor.extensions??={};actor.extensions.v5??={};actor.extensions.v5.hasMomentum=false;
+          }
+        }
         if(old)old.used=1;else ledger.quotaUsage.push({actorId,quotaId,scope:'turn',scopeKey:key,used:1});
         ledger.appliedActions??=[];ledger.appliedActions.push({actionId:plan.actionId,actorId,encounterId:clock.encounterId||null});
         const current=plan.action==='flee'?{...plan.sequenceAfter,fleeCommitted:true,sprintCommitted:false,turnId:clock.turnId,startedAtRevision:draft.localRevision+1}:plan.action==='sprint'?{...plan.sequenceAfter,fleeCommitted:true,sprintCommitted:true,turnId:clock.turnId}:seq;
         seqs.byActorId??={};if(plan.action!=='hide')seqs.byActorId[actorId]=current;
-        receipt={id:plan.actionId,actorId,action:plan.action,turn:structuredClone(clock),facts:{...structuredClone(plan.facts),...(plan.action==='flee'?{engagementConfirmation:{confirmed:true,enemyCount:(plan.facts.engagedEnemyIds||[]).length}}:{})},test:plan.test?structuredClone(plan.test):null,moveDistance:plan.moveDistance,sprintDistance:plan.sprintDistance??null,totalDistance:plan.totalDistance??plan.moveDistance,source:structuredClone(BROKEN_ESCAPE_SOURCE),ruleVersion:BROKEN_ESCAPE_RULE_VERSION};
+        receipt={id:plan.actionId,actorId,action:plan.action,turn:structuredClone(clock),facts:{...structuredClone(plan.facts),...(plan.action==='flee'?{engagementConfirmation:{confirmed:true,enemyCount:(plan.facts.engagedEnemyIds||[]).length}}:{})},...(plan.engagedEscapeEffects?{engagedEscapeEffects:structuredClone(plan.engagedEscapeEffects)}:{}),test:plan.test?structuredClone(plan.test):null,moveDistance:plan.moveDistance,sprintDistance:plan.sprintDistance??null,totalDistance:plan.totalDistance??plan.moveDistance,source:structuredClone(BROKEN_ESCAPE_SOURCE),ruleVersion:BROKEN_ESCAPE_RULE_VERSION};
         seqs.receipts=[...(seqs.receipts||[]),receipt].slice(-300);
         draft.extensions??={};draft.extensions.v5={...root,actionLedger:ledger,brokenEscape:seqs};
         return draft;
