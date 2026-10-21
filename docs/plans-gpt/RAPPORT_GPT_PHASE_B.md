@@ -6,6 +6,8 @@
 
 Worktree : `E:/Outil MJ Warhammer/tmp/gpt-phase-b-worktree`, branche `gpt/phase-b`, départ `30d2b15` de `codex/divin-v5`, départ propre. Main et divin-v5 conservés, aucun stash, push, merge, déploiement ou écriture externe. LF vérifiés. Version applicative, service worker, fichiers d’arbitrage et dépendances inchangés.
 
+Contrôle final : main reste propre à `8a47984`. Le checkout source divin-v5 est propre mais a avancé **pendant la session** à `bf4618f` par des commits Gemini (documentation de vérification/recette et outillage GLM). Ces ajouts concurrents n’ont été ni modifiés ni intégrés ici. Les résultats ci-dessous portent sur la branche GPT issue de `30d2b15`, avec le code livré à `7d2691a` ; refaire les vérifications pertinentes après une future intégration avec la branche source actualisée.
+
 - `ab4beb4` : complément L19–L26, 20 entrées ajoutées aux 69 historiques, soit 89, avec `addedOn: "2026-10-21"`.
 - `c7f659a` : plan des 20 lots, avant code ; 75 entrées affectées et 14 exclusions motivées (variantes V4, narration et faux positifs compris).
 - `104db28` : B00, sorties générées resynchronisées après l’ajout du corpus.
