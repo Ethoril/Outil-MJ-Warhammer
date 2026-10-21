@@ -2,7 +2,7 @@
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import DIVINE_REGISTRY from '../data/v5-divine-contracts.json' with { type: 'json' };
-import {resolveDivineAccess,emptyDivineAccess} from './v5-divine-access.js';
+import {resolveDivineAccess,emptyDivineAccess,resolveDivineTalentRestriction} from './v5-divine-access.js';
 import {applyPrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {v5ResourceIdentity} from './v5-resources.js';
 import {resolveV5ConditionTestContext} from './v5-test-context.js';
@@ -452,6 +452,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const contractProblem = sourceError(contract, input);
   if (contractProblem) return fail(contract?.status === 'blocked' || /V5 EN canonique|incohérent|registre divin canonique|correspond pas au registre/.test(contractProblem) ? 'blocked' : 'needs-input', contractProblem,
     contract?.needsInput || [need('contract.sourceReceipt', 'Reçu de source V5 requis')]);
+  const restriction=resolveDivineTalentRestriction(actor,{cult:contract.deity,talentId:contract.requiredTalent?.id});
+  if(!restriction.allowed)return fail(restriction.status,restriction.reason,restriction.needsInput);
   let accessDecision=null;
   if(input.divineAccessState!==undefined){
     accessDecision=resolveDivineAccess(input.divineAccessState,{actor,subjectKey:input.divineSubjectKey,contract,activeScene:input.divineActiveScene,executionId:input.executionId});

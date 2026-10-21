@@ -16,14 +16,14 @@ const baseBlessings = blessings.filter(row => cults.includes(row.deity));
 // Archives of the Empire 3 : Handrich p.47, Solkan p.55 (les effets restent ceux de la p.221 du livre de base V5).
 const supplementPages = { Handrich: 47, Solkan: 55 };
 const supplementBlessings = blessings.filter(row => row.deity in supplementPages);
-const pageOf = row => supplementPages[row.deity] ?? 221;
+const pageOf = row => row.deity==='Stromfels'?91:supplementPages[row.deity] ?? 221;
 const fold = value => String(value).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const actor = (id, cult, extra = {}) => ({ id, name: id, kind: 'PJ', camp: 'pj', zone: 'active', initiative: 60, hp: 20, maxHp: 30,
   caracs: { CC: 40, CT: 40, F: 30, E: 30, I: 40, Ag: 40, Dex: 40, Int: 50, FM: 50, Soc: 60, M: 4 },
   skills: [{ id: 'skill-pray', name: 'Prière', status: 'resolved', carac: 'Soc', total: 60 }],
   talents: [{ id: 'talent-bless', status: 'resolved', rank: 1, specialization: cult }],
   prayers: [], equipment: [], traits: [], states: [], armor: { head: 0, body: 0, arms: 0, legs: 0 },
-  extensions: { v5: { divine: { sin: 0 } } }, ...extra });
+  extensions: { v5: { divine: { sin: 0 }, ...(cult==='Solkan'?{corruptionPoints:0}:{}) } }, ...extra });
 const person = (s, id) => s.listParticipants().find(row => row.id === id);
 async function fixture(cult, allyExtra = {}) {
   const s = createStore(); await s.ready;
@@ -245,7 +245,7 @@ test('chargeur de modules : un module invalide est refusé avec le fichier, le m
 });
 
 test('Handrich et Solkan : 6 bénédictions chacun, source Archives of the Empire 3 (p.47 et p.55), effets du livre de base', () => {
-  assert.equal(blessings.length, 72);
+  assert.equal(blessings.length, 78);
   assert.equal(supplementBlessings.length, 12);
   const expected = {
     Handrich: ['charisma', 'fortune', 'hardiness', 'protection', 'wisdom', 'wit'],
