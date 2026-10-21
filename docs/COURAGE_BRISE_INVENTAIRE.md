@@ -210,6 +210,45 @@ Statuts : engine = clause calculée ; assisted = calcul limité à un circuit ou
 | C0-L11-018 | L11 p. 15 | Borrowed Courage | absent | js/core/v5-talent-psychology.js:5 |
 | C0-L11-019 | L11 p. 61 | Endless Malice : témoins | absent | js/core/v5-talent-psychology.js:5 |
 | C0-L02-006 | L02 p. 81 | Mort du compagnon lié | absent | js/core/v5-magic-reminder-flags.js:33 |
+| C0-L18-001 | L18 p. 36 | Acquiescence et Aura d’Acquiescence | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L18-002 | L18 p. 37 | Delicious Excruciation | absent | js/core/v5-effects.js:94 |
+| C0-L18-003 | L18 p. 38 | Fleshy Curse | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L18-004 | L18 p. 39 | Gift of Slaanesh : Daemonic Aspect et Siren Song | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L18-005 | L18 p. 40 | Luxurious Torment et Pavane of Slaanesh | absent | js/core/v5-talent-psychology.js:57 |
+| C0-L18-006 | L18 p. 50 | Cœur du loup (Heart of the Wolf) | assisted | js/data/v5-divine-contracts.json:25064 ; js/core/v5-divine-effects-conditions.js:244 |
+| C0-L18-007 | L18 p. 75 | Potion of Resistance | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L18-008 | L18 p. 99 | The Crash : Flying Death Skulls | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L19-001 | L19 p. 71 | Sword of Fear | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L19-002 | L19 p. 115 | The Bloody Hidesman : Howl of the Great Beast | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L19-003 | L19 p. 116 | Gabarit Child of Ulric | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L19-004 | L19 p. 128 | Spotted Green Brain Pox : Homicidal Raging | absent | js/core/v5-talent-psychology.js:57 |
+| C0-L20-001 | L20 p. 78 | The Laurels of Victory | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L21-001 | L21 p. 7 | The Aura of Sanctity : Talents de courage | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L21-002 | L21 p. 19 | Wild Magic : The Winds Recede et Tzeentch’s Caprice | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L21-003 | L21 p. 20 | Marsie Wagnershoff : Induce Frenzy et The Body Thief | absent | js/core/v5-talent-psychology.js:57 |
+| C0-L21-004 | L21 p. 23 | Unstable Foundations et Signs of the Times | absent | js/core/v5-talent-small.js:65 |
+| C0-L21-005 | L21 p. 114 | Ending the Attack et Rallying the Defenders | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L22-001 | L22 p. 40 | Skavenbrew | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L22-002 | L22 p. 42 | Mark of the Horned Rat | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L22-003 | L22 p. 44 | Death Frenzy, Musk of Terror et Skitterleap | absent | js/core/v5-talent-psychology.js:57 |
+| C0-L22-004 | L22 p. 111 | Night’s Dark Terrors et Dead from Above | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L23-001 | L23 p. 22 | Montures : Stubborn, Skittish et orages | absent | js/core/v5-magic-arbitrations.js:24 |
+| C0-L23-002 | L23 p. 66 | Mutations physiques : Peur et Warp Frenzy | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L23-003 | L23 p. 70 | Mutations mentales : Shaky Morale, Blasted Mind et Hurried Masochism | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L23-004 | L23 p. 82 | Mark of Tzeentch, Mindfire et Chaos Fury | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L23-005 | L23 p. 104 | Pandemonium Carnival et secrets des prétirés | absent | js/core/v5-talent-psychology.js:6 |
+| C0-L24-001 | L24 p. 45 | A Night at the Opera et Nastassia’s Wedding | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L25-001 | L25 p. 39 | Throgg’s Maul en bélier | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L25-002 | L25 p. 56 | The Mark of Khorne | absent | js/core/v5-talent-psychology.js:57 |
+| C0-L25-003 | L25 p. 63 | Crew Commander et Master and Commander | absent | js/core/v5-talent-situations.js:28 |
+| C0-L25-004 | L25 p. 83 | Sacred Salt et Repel Sea Beast | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L25-005 | L25 p. 91 | Curse of the Harsh Mistress | absent | js/core/v5-effects.js:176 |
+| C0-L25-006 | L25 p. 140 | Monstres marins : Grim, Lures et Syreen | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L26-001 | L26 p. 13 | Schlafenkraut | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L26-002 | L26 p. 83 | A Pirate Attack : moral des pirates | absent | js/core/v5-talent-psychology.js:5 |
+| C0-L26-003 | L26 p. 88 | Naiad War-Form et Attach and Feed | absent | js/core/v5-talent-psychology.js:25 |
+| C0-L26-004 | L26 p. 92 | Cavity Worms : Craintif permanent | absent | js/core/v5-magic-arbitrations.js:24 |
+| C0-L26-005 | L26 p. 97 | Chaos Spawn, Sign of the Beast et mutation animale | absent | js/core/v5-talent-psychology.js:57 |
 
 ## Couverture consultée
 
@@ -230,6 +269,22 @@ Statuts : engine = clause calculée ; assisted = calcul limité à un circuit ou
 - L15 : passages des pages physiques 79, 83, 84, 95, 125, 128, 130 ; repérage lexical puis passages ciblés, divergences conservées.
 - L16 : passages des pages physiques 11 ; repérage lexical puis passages ciblés, divergences conservées.
 - L17 : passages des pages physiques 24, 58, 62, 65, 101, 110, 111, 113, 122, 124, 125, 130, 134, 135, 136, 142, 146, 147, 148, 149, 150, 170, 172, 176, 186, 187, 217 ; repérage lexical puis passages ciblés, divergences conservées.
+
+## Complément d’inventaire L18–L26 (2026-10-21)
+
+39 entrées ajoutées, marquées `addedOn: "2026-10-21"` dans le JSON : 239 entrées au total (photographie initiale C0 de 200 entrées conservée, plus 1 entrée assistée et 38 entrées absentes issues de L18–L26). Les lots de réalisation et d’exclusion motivée figurent dans `docs/plans-gpt/PLAN_GPT_PHASE_C.md`.
+
+Méthode : balayage lexical livre par livre avec `pdftotext` (Git) sur `L18` (`Power Behind the Throne Companion`, autorisé par Q05) et `L19–L26` (`DIVIN_CORPUS_LIVRES_COMPLEMENT.json`), puis lecture ciblée avec `-layout -f/-l` des pages contenant des règles de Brisé, Peur, Terreur, Calme, Commandement ou Psychologie. Les simples mentions narratives ou profils se bornant à lister un Trait du socle sans règle spécifique ne sont pas dupliqués.
+
+- L18 (*Power Behind the Throne Companion*) : pages physiques 36, 37, 38, 39, 40, 50, 75, 99 consultées ; sorts de Slaanesh (*Acquiescence*, *Delicious Excruciation*, *Fleshy Curse*, *Gift of Slaanesh*, *Luxurious Torment*, *Pavane*), miracle d’Ulric *Cœur du loup* (*Heart of the Wolf*, Q05), *Potion of Resistance* et scène *Flying Death Skulls*.
+- L19 (*Middenheim: City of the White Wolf*) : pages physiques 71, 115, 116, 128 consultées ; *Sword of Fear*, *Howl of the Great Beast* (doublon de L17 p. 176), gabarit *Child of Ulric* et symptôme *Homicidal Raging*.
+- L20 (*Altdorf: Crown of the Empire*) : page physique 78 consultée ; *The Laurels of Victory* (Peur 2 dès le 2e Round).
+- L21 (*Empire in Ruins Companion*) : pages physiques 7, 19, 20, 23, 114, 116 consultées ; *The Aura of Sanctity*, incidents de magie sauvage (*The Winds Recede*, *Tzeentch’s Caprice*), mutations de Marsie Wagnershoff (*Induce Frenzy*, *The Body Thief*), faille de Terreur (4) et moral de bataille de masse.
+- L22 (*The Horned Rat Companion*) : pages physiques 40, 42, 44, 111, 117 consultées ; drogue *Skavenbrew*, sorts skavens (*Mark of the Horned Rat*, *Death Frenzy*, *Musk of Terror*, *Skitterleap*) et scènes de Peur/Calme.
+- L23 (*Enemy in Shadows Companion*) : pages physiques 24, 31, 35, 68–70, 72–73, 84–86, 106–107, 119–127 (imprimées 22, 29, 33, 66–68, 70–71, 82–84, 104–105, 117–125) consultées ; Traits de montures (*Stubborn*, *Skittish*), mutations physiques et mentales du Chaos (*Warp Frenzy*, *Shaky Morale*, *Blasted Mind*, *Hurried Masochism*), *Mark of Tzeentch*, *Mindfire*, *Chaos Fury* et secrets des prétirés.
+- L24 (*Rough Nights & Hard Days*) : pages physiques 46, 61 (imprimées 45, 60) consultées ; scènes d’opéra et de mariage (*Fearsome*, Terreur 3 et ralliement).
+- L25 (*Sea of Claws*) : pages physiques 39, 56, 63, 83, 87, 91, 140, 143, 145, 147 consultées ; *Throgg’s Maul*, *Mark of Khorne*, Talents de Commandement naval (*Crew Commander*, *Master and Commander*), *Sacred Salt*, *Repel Sea Beast*, *Curse of the Harsh Mistress* et capacités des monstres marins (*Grim*, leurres, *Syreen*).
+- L26 (*Death on the Reik Companion*) : pages physiques 13, 83, 88, 90, 92, 97–99 consultées ; *Schlafenkraut*, moral pirate, *Naiad War-Form*, *Attach and Feed*, *Cavity Worms*, *Chaos Spawn*, *Sign of the Beast* et mutations animales.
 
 ## openQuestions
 

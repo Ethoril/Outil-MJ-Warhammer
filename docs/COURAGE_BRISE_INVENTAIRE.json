@@ -3010,5 +3010,630 @@
     "proposedAutomation": "Raccorder cette clause après sélection de la version et des faits MJ.",
     "risk": "moyen",
     "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés."
+  },
+  {
+    "id": "C0-L18-001",
+    "sourceBook": "L18",
+    "printedPage": 36,
+    "label": "Acquiescence et Aura d’Acquiescence",
+    "summaryFr": "Sorts de Slaanesh : la cible affectée doit réussir un Test de Calme (+0) pour pouvoir entreprendre une Action.",
+    "mechanic": "Test de Calme (+0) requis avant toute Action sous Acquiescence ou Aura of Acquiescence.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder ce verrou d’Action sous Test de Calme (+0) aux effets psychologiques assistés.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L18-002",
+    "sourceBook": "L18",
+    "printedPage": 37,
+    "label": "Delicious Excruciation",
+    "summaryFr": "Sort de Slaanesh : retire immédiatement tous les États Brisé d’un allié et l’immunise contre tout nouvel État Brisé pendant BFM Rounds.",
+    "mechanic": "Purge immédiate des États Brisé et immunité temporaire à Brisé pendant BFM Rounds.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-effects.js:94"
+    ],
+    "proposedAutomation": "Raccorder la purge de Brisé et le garde d’immunité temporaire à Brisé pendant BFM Rounds.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L18-003",
+    "sourceBook": "L18",
+    "printedPage": 38,
+    "label": "Fleshy Curse",
+    "summaryFr": "Sort de Slaanesh : résistance initiale et à chaque début de Round par un Test de Calme Difficile (−1 DR V5) contre les mutations.",
+    "mechanic": "Test de Calme (−1 DR en conversion V5 de −20 %) à l’application et au début de chaque Round.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Fournir une aide au Test de Calme (−1 DR) pour résister à l’effet.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L18-004",
+    "sourceBook": "L18",
+    "printedPage": 39,
+    "label": "Gift of Slaanesh : Daemonic Aspect et Siren Song",
+    "summaryFr": "Sort de Slaanesh (1d10) : (2) confère Peur 2 ; (5) force un ennemi en vue à avancer à vitesse maximale vers le lanceur ou recevoir 1 État Brisé.",
+    "mechanic": "Peur (2) temporaire sur résultat 2 ; choix ennemi avancer ou subir 1 Brisé sur résultat 5.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Raccorder la source de Peur (2) et l’application conditionnelle de 1 Brisé sur refus d’avancer.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L18-005",
+    "sourceBook": "L18",
+    "printedPage": 40,
+    "label": "Luxurious Torment et Pavane of Slaanesh",
+    "summaryFr": "Luxurious Torment plonge les cibles de la zone en Frénésie ; Pavane of Slaanesh impose un Test de Calme (+0) sous peine de danser.",
+    "mechanic": "Activation de Frénésie de zone (Luxurious Torment) ; Test de Calme (+0) contre la danse forcée (Pavane).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Raccorder l’entrée en Frénésie et le Test de Calme (+0) aux aides psychologiques.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L18-006",
+    "sourceBook": "L18",
+    "printedPage": 50,
+    "label": "Cœur du loup (Heart of the Wolf)",
+    "summaryFr": "Miracle d’Ulric : retire tous les États Brisé des alliés à portée et les immunise à Peur, Terreur, Intimidation et Effrayant pendant BFM Rounds.",
+    "mechanic": "Purge des États Brisé alliés et immunité aux effets de Peur, Terreur, Intimidation et Effrayant pour BFM Rounds.",
+    "currentStatus": "assisted",
+    "evidence": [
+      "js/data/v5-divine-contracts.json:25064",
+      "js/core/v5-divine-effects-conditions.js:244"
+    ],
+    "proposedAutomation": "Vérifier le raccordement du contrat divin existant avec le socle générique Peur, Terreur et Intimidation.",
+    "risk": "faible",
+    "limit": "Contrat divin présent ; raccordement complet avec l’Intimidation et la Peur générique à consolider en phase C.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L18-007",
+    "sourceBook": "L18",
+    "printedPage": 75,
+    "label": "Potion of Resistance",
+    "summaryFr": "Concoction : inflige 3 États Sonné non récupérables par Endurance mais confère Immunité à la Psychologie et Indolore pendant 2+1d10 heures.",
+    "mechanic": "Concoction hors sous-système de drogues : pose Immunité à la Psychologie sous réserve d’arbitrage des drogues/potions.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Exclure si rattaché aux drogues (Q18) ou assister via le Trait Immunité à la Psychologie.",
+    "risk": "faible",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L18-008",
+    "sourceBook": "L18",
+    "printedPage": 99,
+    "label": "The Crash : Flying Death Skulls",
+    "summaryFr": "Scène d’aventure : les passagers sur le toit du coche sont exposés à Peur (2) face au crâne volant.",
+    "mechanic": "Application standard du Trait Peur (2) dans une scène d’aventure.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Couvert par le circuit générique du Trait Peur (indice 2).",
+    "risk": "faible",
+    "limit": "Instance scénaristique du Trait Peur (2).",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L19-001",
+    "sourceBook": "L19",
+    "printedPage": 71,
+    "label": "Sword of Fear",
+    "summaryFr": "Arme magique : une fois par jour, en criant sa formule, le porteur acquiert le Trait Peur (2) pendant 2d10 Rounds.",
+    "mechanic": "Activation 1/jour conférant Peur (2) pendant 2d10 Rounds.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Raccorder l’activation d’objet conférant Peur (2) pendant 2d10 Rounds.",
+    "risk": "faible",
+    "limit": "Aucun circuit de cet objet repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L19-002",
+    "sourceBook": "L19",
+    "printedPage": 115,
+    "label": "The Bloody Hidesman : Howl of the Great Beast",
+    "summaryFr": "En dépensant 1 Élan (Avantage V4) en attaque gratuite, inflige 3 Assourdi et impose un Test de Calme (−1 DR V5) sinon 3 Brisé dans 45 verges ; la réussite immunise pour la rencontre.",
+    "mechanic": "Doublon du trait de L17 p. 176 : dépense d’Élan, 3 Assourdi, Test de Calme (−1 DR) sinon 3 Brisé, immunité de rencontre sur réussite.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Traiter avec C0-L17-010 en convertissant l’Avantage et le malus −10 % en conventions V5 (Q17).",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L19-003",
+    "sourceBook": "L19",
+    "printedPage": 116,
+    "label": "Gabarit Child of Ulric",
+    "summaryFr": "Gabarit lycanthrope conférant Peur (2) et, en option, Belliqueux, Frénésie et Immunité à la Psychologie.",
+    "mechanic": "Réutilisation des Traits standards Peur (2), Belliqueux, Frénésie et Immunité à la Psychologie.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Couvert par les circuits génériques V5 des Traits Peur, Belliqueux, Frénésie et Immunité à la Psychologie.",
+    "risk": "faible",
+    "limit": "Gabarit de bestiaire réutilisant les Traits de psychologie du socle.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L19-004",
+    "sourceBook": "L19",
+    "printedPage": 128,
+    "label": "Spotted Green Brain Pox : Homicidal Raging",
+    "summaryFr": "Symptôme de maladie : impose Haine (Tous les vivants) et Frénésie ; Test de Calme tous les 5 Rounds pour suspendre la Haine et pouvoir fuir ou avertir.",
+    "mechanic": "Combinaison Haine + Frénésie avec Test de Calme périodique tous les 5 Rounds pour permettre la fuite.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Raccorder ce contrôle périodique de Calme sur 5 Rounds aux aides de psychologie.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L20-001",
+    "sourceBook": "L20",
+    "printedPage": 78,
+    "label": "The Laurels of Victory",
+    "summaryFr": "Relique de Kurt Helborg : confère à son porteur le Trait Peur (2) à partir du deuxième Round de combat.",
+    "mechanic": "Activation automatique de Peur (2) dès que le Round de combat courant est ≥ 2.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Raccorder la condition de Round ≥ 2 pour activer Peur (2) sur le porteur.",
+    "risk": "faible",
+    "limit": "Aucun circuit de cet objet repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L21-001",
+    "sourceBook": "L21",
+    "printedPage": 7,
+    "label": "The Aura of Sanctity : Talents de courage",
+    "summaryFr": "Relique sacrée : peut conférer des Talents de courage ou de psychologie (Sans peur, Effrayant, Cœur vaillant, Haine sacrée, Présence imposante) aux fidèles du même dieu.",
+    "mechanic": "Octroi temporaire de Talents du socle déjà gérés par le moteur de Talents.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Assister l’octroi temporaire des Talents de courage/psychologie du socle.",
+    "risk": "faible",
+    "limit": "Aucun circuit dédié à cette relique dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L21-002",
+    "sourceBook": "L21",
+    "printedPage": 19,
+    "label": "Wild Magic : The Winds Recede et Tzeentch’s Caprice",
+    "summaryFr": "Table d’incidents : Tests de Commandement (+0 ou −1 DR V5) imposés aux démons ou créatures proches sous peine de dissolution ou de Blessures par DR manquant.",
+    "mechanic": "Test de Commandement (+0 ou −1 DR) déclenché par incident de magie sauvage.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder l’aide au Test de Commandement d’incident magique avec calcul des Blessures sur échec.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L21-003",
+    "sourceBook": "L21",
+    "printedPage": 20,
+    "label": "Marsie Wagnershoff : Induce Frenzy et The Body Thief",
+    "summaryFr": "Mutation Induce Frenzy : cible touchée doit réussir Volonté (−2 DR V5) ou entrer en Frénésie jusqu’à tomber à 1 PV ou moins ; apparition démoniaque imposant Peur aux témoins.",
+    "mechanic": "Test de Volonté (−2 DR) sinon Frénésie jusqu’à ≤ 1 PV ; Test de Peur (indice saisi par le MJ selon Q13) pour les témoins.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Raccorder le déclenchement de Frénésie sur échec de Volonté (−2 DR) et la Peur à indice MJ.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L21-004",
+    "sourceBook": "L21",
+    "printedPage": 23,
+    "label": "Unstable Foundations et Signs of the Times",
+    "summaryFr": "Événements : regarder la faille du Chaos impose un Test de Terreur (4) ; des enseignes animées gagnent Immunité à la Psychologie.",
+    "mechanic": "Source environnementale de Terreur (4) et octroi du Trait Immunité à la Psychologie.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-small.js:65"
+    ],
+    "proposedAutomation": "Couvert par le circuit générique de Terreur (indice 4) et d’Immunité à la Psychologie.",
+    "risk": "faible",
+    "limit": "Instances scénaristiques de Terreur (4) et d’Immunité à la Psychologie.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L21-005",
+    "sourceBook": "L21",
+    "printedPage": 114,
+    "label": "Ending the Attack et Rallying the Defenders",
+    "summaryFr": "Bataille de masse : une réussite à +6 DR en Commandement (+0) rallie les troupes et leur confère Haine (Morts-vivants) et Haine sacrée pour la bataille.",
+    "mechanic": "Sous-système de moral de bataille de masse et ralliement de troupes.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Exclure selon l’arbitrage Q18 sur le moral de masse.",
+    "risk": "faible",
+    "limit": "Relève du moral de masse exclu par Q18.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L22-001",
+    "sourceBook": "L22",
+    "printedPage": 40,
+    "label": "Skavenbrew",
+    "summaryFr": "Drogue de combat skaven (2d10 − BE Rounds) : sur 1d100, confère Haine de tous les ennemis (30–59), Frénésie (60–89) ou Frénésie enragée (90–100).",
+    "mechanic": "Sous-système de drogue de combat à table aléatoire.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Exclure selon l’arbitrage Q18 sur les drogues.",
+    "risk": "faible",
+    "limit": "Relève des drogues exclues par Q18.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L22-002",
+    "sourceBook": "L22",
+    "printedPage": 42,
+    "label": "Mark of the Horned Rat",
+    "summaryFr": "Sort mineur skaven : la cible tente un Test de Calme (+0) ou subit une plaie suintante infligeant −1 DR (conversion V5 de −10 %) en Sociabilité pendant 1d10 heures.",
+    "mechanic": "Test de Calme (+0) sinon malus de −1 DR en Sociabilité pendant 1d10 heures.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder la résolution du Test de Calme (+0) et son malus temporaire.",
+    "risk": "faible",
+    "limit": "Aucun circuit de ce sort repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L22-003",
+    "sourceBook": "L22",
+    "printedPage": 44,
+    "label": "Death Frenzy, Musk of Terror et Skitterleap",
+    "summaryFr": "Sorts skavens : Death Frenzy impose Frénésie (cible non consentante résiste par Calme +0 mais subit 1 Blessure) ; Musk of Terror impose Terreur 1 (ou 2 aux Skavens) ; Skitterleap offre un Test de Calme (−1 DR V5) pour dévier.",
+    "mechanic": "Frénésie forcée sauf Calme (+0) avec 1 Blessure ; Terreur (1 ou 2 selon espèce skaven) ; déviation par Calme (−1 DR).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Raccorder Death Frenzy, Musk of Terror (indice 1/2) et le Test de Calme de Skitterleap.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ces sorts repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L22-004",
+    "sourceBook": "L22",
+    "printedPage": 111,
+    "label": "Night’s Dark Terrors et Dead from Above",
+    "summaryFr": "Scènes d’aventure : bruits nocturnes soudains exigeant un Test de Peur (1) ; attaque aérienne demandant un Test de Calme (+0) aux PNJ pour éviter la surprise.",
+    "mechanic": "Application scénaristique d’un Test de Peur (1) et d’un Test de Calme (+0).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Couvert par le circuit générique de Peur (indice 1) et de Test de Calme.",
+    "risk": "faible",
+    "limit": "Instances scénaristiques de Peur (1) et de Test de Calme.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L23-001",
+    "sourceBook": "L23",
+    "printedPage": 22,
+    "label": "Montures : Stubborn, Skittish et orages",
+    "summaryFr": "Trait Stubborn des mules (+2 DR FM V5, Test opposé Équitation ou Conduite / Volonté) ; saut sur monture sans cavalier suivi d’Équitation (+0) si Craintif (Skittish) ; orages effrayant les bêtes Craintives.",
+    "mechanic": "Interactions entre Équitation/Conduite et les Traits de monture Stubborn et Craintif (Skittish).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-magic-arbitrations.js:24"
+    ],
+    "proposedAutomation": "Raccorder l’assistance des Traits de monture Craintif (Skittish) et Stubborn.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L23-002",
+    "sourceBook": "L23",
+    "printedPage": 66,
+    "label": "Mutations physiques : Peur et Warp Frenzy",
+    "summaryFr": "Mutations physiques du Chaos : Blank Face, Headless, Short Legs, Skull Face et Transparent Skin confèrent Peur (2) ; Rotting Flesh confère Peur (1) ; Warp Frenzy confère Frénésie et une mutation temporaire.",
+    "mechanic": "Octroi de Peur (1 ou 2) ou de Frénésie par mutation physique.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Couvert par les circuits génériques de Peur (1/2) et de Frénésie avec rappel de mutation temporaire.",
+    "risk": "faible",
+    "limit": "Aucun circuit dédié à ces mutations dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L23-003",
+    "sourceBook": "L23",
+    "printedPage": 70,
+    "label": "Mutations mentales : Shaky Morale, Blasted Mind et Hurried Masochism",
+    "summaryFr": "Mutations mentales : Shaky Morale inflige 1 Brisé sur tout échec de Test lié à la Volonté (comme C0-L06-049) ; Blasted Mind donne Immunité à la Psychologie pour 1d10 Rounds au lieu de Brisé puis inflige 1d10 Brisé ; Hurried Masochism donne Belliqueux et interdit de fuir volontairement ; autres mutations donnant Haine, Animosité, Craintif ou Peureux.",
+    "mechanic": "Déclencheurs de Brisé sur échec de Volonté, report de Brisé en 1d10 Brisé après 1d10 Rounds, et octroi de Traits de Psychologie V5.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder Shaky Morale (avec C0-L06-049), Blasted Mind et Hurried Masochism aux aides de psychologie et de fuite.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ces mutations repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L23-004",
+    "sourceBook": "L23",
+    "printedPage": 82,
+    "label": "Mark of Tzeentch, Mindfire et Chaos Fury",
+    "summaryFr": "La Marque de Tzeentch impose une Animosité mutuelle envers Nurgle ; le sort Mindfire demande un Test de Calme (+0) contre la Corruption ; la Gargouille (Chaos Fury) porte Peur (2), Craintif et en option Peureux.",
+    "mechanic": "Animosité mutuelle, Test de Calme (+0) contre Corruption sur Mindfire, et Traits Peur (2) / Craintif / Peureux.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Raccorder le Test de Calme de Mindfire et réutiliser les Traits génériques Peur, Craintif, Peureux et Animosité.",
+    "risk": "faible",
+    "limit": "Aucun circuit dédié à Mindfire repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L23-005",
+    "sourceBook": "L23",
+    "printedPage": 104,
+    "label": "Pandemonium Carnival et secrets des prétirés",
+    "summaryFr": "Urzo entre en Frénésie (25 %) si son personnel est attaqué ; les Hommes-bêtes de Khorne ont Peureux (Feu) et Frénésie ; les secrets de prétirés confèrent Peureux (Forêts profondes / Solitude = Peur 0), Haine ou Préjugé.",
+    "mechanic": "Instances de Frénésie, Peureux (équivalent à Peur 0 envers la source) et Haine.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:6"
+    ],
+    "proposedAutomation": "Couvert par le circuit générique du Trait Peureux / Afraid (Peur 0) et de Frénésie.",
+    "risk": "faible",
+    "limit": "Instances scénaristiques de Traits de psychologie.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L24-001",
+    "sourceBook": "L24",
+    "printedPage": 45,
+    "label": "A Night at the Opera et Nastassia’s Wedding",
+    "summaryFr": "Scènes d’aventure : un acteur sous Effrayant provoque un Test de Peur (1) et une panique de foule calmée par Commandement/Orateur ; le graf subit 3 Brisé face à la Terreur (3) d’un spectre et peut être rallié.",
+    "mechanic": "Applications scénaristiques de Peur (1), Terreur (3) et ralliement par Commandement / Orateur.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Couvert par les circuits génériques de Peur, Terreur et ralliement par Commandement.",
+    "risk": "faible",
+    "limit": "Instances scénaristiques des règles du socle.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L25-001",
+    "sourceBook": "L25",
+    "printedPage": 39,
+    "label": "Throgg’s Maul en bélier",
+    "summaryFr": "Utilisé comme bélier contre une porte ou une coque, le maillet de Throgg inflige Peur (2) aux défenseurs.",
+    "mechanic": "Source situationnelle de Peur (2).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Couvert par le circuit générique de Peur (indice 2).",
+    "risk": "faible",
+    "limit": "Source situationnelle de Peur (2).",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L25-002",
+    "sourceBook": "L25",
+    "printedPage": 56,
+    "label": "The Mark of Khorne",
+    "summaryFr": "La Marque de Khorne confère le Talent Frénésie et impose une Animosité mutuelle envers les suivants de Slaanesh.",
+    "mechanic": "Octroi de Frénésie et d’Animosité (Slaanesh).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Couvert par les circuits génériques de Frénésie et d’Animosité.",
+    "risk": "faible",
+    "limit": "Octroi de Talent/Trait du socle.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L25-003",
+    "sourceBook": "L25",
+    "printedPage": 63,
+    "label": "Crew Commander et Master and Commander",
+    "summaryFr": "Talents navals : Crew Commander permet un Test de Commandement (+0) pour prêter sa Capacité de Tir à une arme d’équipage ; Master and Commander donne +1 DR par rang aux Tests de Commandement à bord.",
+    "mechanic": "Bonus de +1 DR par rang aux Tests de Commandement à bord (dont le ralliement) et prêt de CT par Commandement.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-situations.js:28"
+    ],
+    "proposedAutomation": "Raccorder le bonus de Master and Commander aux Tests de Commandement (y compris ralliement à bord).",
+    "risk": "faible",
+    "limit": "Aucun circuit de ces talents navals repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L25-004",
+    "sourceBook": "L25",
+    "printedPage": 83,
+    "label": "Sacred Salt et Repel Sea Beast",
+    "summaryFr": "Le sel sacré de Manann (50 %) lancé sur une créature aquatique d’Int ≤ 15 impose un Test de Calme Difficile (−1 DR V5) sinon 1 État Brisé ; le miracle Repel Sea Beast apaise toute rage et hostilité tant que la bête n’est ni blessée ni soumise à un État.",
+    "mechanic": "Test de Calme (−1 DR) sinon 1 Brisé sur créature aquatique (Int ≤ 15) ; apaisement conditionnel par miracle.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder l’effet du sel sacré de Manann (Test de Calme −1 DR sinon 1 Brisé) et le rappel de Repel Sea Beast.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L25-005",
+    "sourceBook": "L25",
+    "printedPage": 91,
+    "label": "Curse of the Harsh Mistress",
+    "summaryFr": "Miracle de Stromfels : oblige la cible à réussir un Test de Calme Difficile (−1 DR V5) lors d’un repos avant de pouvoir retirer un État Exténué.",
+    "mechanic": "Condition de Test de Calme (−1 DR) préalable au retrait d’Exténué au repos.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-effects.js:176"
+    ],
+    "proposedAutomation": "Raccorder le garde de Test de Calme (−1 DR) au retrait d’Exténué sous ce miracle.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L25-006",
+    "sourceBook": "L25",
+    "printedPage": 140,
+    "label": "Monstres marins : Grim, Lures et Syreen",
+    "summaryFr": "Trait Grim (remonte l’Élan au début du Tour sauf si Enchevêtré, Surpris ou Inconscient) ; leurres du Lurkerfish et de l’Orb Leviathan et chant de la Syreen exigeant des Tests de Calme (+4 DR ou −1 DR V5) sous peine d’Inconscient ou Sonné ; Gargantuan lâchant prise sur échec de Calme (+2 DR V5).",
+    "mechanic": "Tests de Calme défensifs contre leurres et chants marins, convertis en DR V5.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Raccorder les aides de Tests de Calme convertis en V5 pour ces capacités de monstres marins.",
+    "risk": "moyen",
+    "limit": "Aucun circuit de ce déclenchement repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L26-001",
+    "sourceBook": "L26",
+    "printedPage": 13,
+    "label": "Schlafenkraut",
+    "summaryFr": "Plante sédative : un Test de Calme (+0) permet de résister à l’endormissement pendant 1d10 heures (le Test d’Endurance contre Exténué reste requis).",
+    "mechanic": "Hors combat : herbe/drogue sédative à Test de Calme (+0).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Exclure si rattaché aux drogues (Q18) ou fournir un simple rappel de Test de Calme (+0).",
+    "risk": "faible",
+    "limit": "Relève des préparations/drogues exclues par Q18.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L26-002",
+    "sourceBook": "L26",
+    "printedPage": 83,
+    "label": "A Pirate Attack : moral des pirates",
+    "summaryFr": "Règle de moral de groupe : Test de Commandement du chef pirate à chaque perte ou usage de magie, et déroute automatique au-delà de la moitié des abordeurs tués.",
+    "mechanic": "Sous-système scénaristique de moral de groupe.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:5"
+    ],
+    "proposedAutomation": "Exclure selon l’arbitrage Q18 sur le moral de masse.",
+    "risk": "faible",
+    "limit": "Relève du moral de masse exclu par Q18.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L26-003",
+    "sourceBook": "L26",
+    "printedPage": 88,
+    "label": "Naiad War-Form et Attach and Feed",
+    "summaryFr": "La forme de guerre de la Naïade confère Peur (2) en action gratuite et l’aspect Still Water donne Immunité à la Psychologie pour le Round ; la lamproie (Attach and Feed) lâche prise immédiatement devant toute source de Peur.",
+    "mechanic": "Octroi temporaire de Peur (2) et d’Immunité à la Psychologie ; réaction automatique d’une créature face à une source de Peur.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:25"
+    ],
+    "proposedAutomation": "Raccorder via les circuits génériques de Peur (2) et d’Immunité à la Psychologie, avec assistance pour le décrochage sur Peur.",
+    "risk": "faible",
+    "limit": "Aucun circuit dédié à ces capacités repéré dans les lecteurs vérifiés.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L26-004",
+    "sourceBook": "L26",
+    "printedPage": 92,
+    "label": "Cavity Worms : Craintif permanent",
+    "summaryFr": "Parasite : un résultat de 9 sur la table d’infection cérébrale confère de façon permanente le Trait Craintif (Skittish).",
+    "mechanic": "Octroi permanent du Trait Craintif (Skittish).",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-magic-arbitrations.js:24"
+    ],
+    "proposedAutomation": "Couvert par le circuit générique du Trait Craintif (Skittish).",
+    "risk": "faible",
+    "limit": "Octroi du Trait du socle Craintif.",
+    "addedOn": "2026-10-21"
+  },
+  {
+    "id": "C0-L26-005",
+    "sourceBook": "L26",
+    "printedPage": 97,
+    "label": "Chaos Spawn, Sign of the Beast et mutation animale",
+    "summaryFr": "L’Enfant du Chaos possède Peur (2) et Frénésie ; le sort Sign of the Beast provoque Animosité (Khorne/Slaanesh) et Haine (Nurgle) envers le lanceur ; la mutation animale (6) plonge l’animal en Frénésie.",
+    "mechanic": "Réutilisation des Traits Peur (2), Frénésie, Animosité et Haine.",
+    "currentStatus": "absent",
+    "evidence": [
+      "js/core/v5-talent-psychology.js:57"
+    ],
+    "proposedAutomation": "Couvert par les circuits génériques de Peur, Frénésie, Animosité et Haine.",
+    "risk": "faible",
+    "limit": "Instances de Traits de psychologie du socle.",
+    "addedOn": "2026-10-21"
   }
 ]
