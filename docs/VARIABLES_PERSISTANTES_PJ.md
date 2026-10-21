@@ -64,3 +64,8 @@ Le rejet confirmé après un Jugement dernier réutilise `extensions.v5.divineRe
 | Points de Péché retirés par absolution ou pénitence d’Altdorf | `extensions.v5.divine.sin` (compteur existant) ; reçu d’audit `extensions.v5.divineWrathRecoveries[].absolution` (type, culte, retrait, motif) | absente | commandes MJ d’absolution (Test de Prière), Courroux consécutif | B16 |
 
 Un Exténué d’Altdorf est un État de combat ordinaire, exclu du registre. Le reçu d’absolution est une métadonnée d’audit, pas un second compteur.
+
+| Variable B17 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Journal des événements de Péché (reçus d’audit) | `extensions.v5.divineSinEvents[]` : événement, culte, fait, Péchés avant/après, source, décision MJ (300 derniers) | absente ; audit, pas un compteur | commande MJ d’événement sourcé | B17 |
+| Points de Péché (attribution/retrait sourcés) | `extensions.v5.divine.sin` (compteur existant) | absente | événements B17, absolution B16, Courroux | B17 |

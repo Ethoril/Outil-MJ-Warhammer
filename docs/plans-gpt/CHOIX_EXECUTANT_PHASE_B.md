@@ -154,3 +154,14 @@ L06 V5 EN p.219 (Absolution) et L20 p.219 (pèlerinage de pénitence d'Altdorf, 
 | B-C45 | L20 p.219 | Exténué « le premier jour de l'aventure suivante » ? | Exténué ordinaire acquis à l'application ; son retrait au bon moment reste au MJ (rappel dans l'aperçu). | Aucune notion d'aventure dans l'outil. | Rappel sans État. |
 
 L'absolution est un Test hors Tour : elle ne consomme aucune Action (`recordV5ActionUsage` non appelé). Elle réutilise le moteur de Test de récupération B04 (même Test partagé, mêmes plafonds, Leçons, interdictions) et les branches de table B01–B15. Reçu : `extensions.v5.divineWrathRecoveries[].absolution`.
+
+## B17 — session 5 (Claude Pro) : événements sourcés de Péché, rappels et Courroux décidé par le MJ
+
+Sources relues par leur résumé d'inventaire et les pages indiquées (L01 p.69, L02 p.18/46/47/51/53, L06 p.205/217/218/220/229, L10 p.20, L13 p.70, L18 p.28/49, L19, L20 p.27, L21 p.7/13, L24 p.90, L25 p.83, L26 p.119) ; textes du catalogue en paraphrases françaises courtes.
+
+| ID | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| B-C46 | L06 p.217/220 et suppléments | Quels événements deviennent des boutons ? | Douze événements à effet chiffré (attribution fixe ou à montant MJ, retrait d'un Péché, remise à zéro) ; commandements, présages, strictures et usages locaux restent des rappels sans mécanique. | Seuls les effets énoncés par le livre sont automatisés. | Plus d'automatisme sur les strictures (non sourcé). |
+| B-C47 | Q10, Q12 | Garde-fous communs ? | Confirmation MJ, fait constaté et culte obligatoires ; culte acquis sur la fiche (règle de `setDivineSin`) ; cultes elfes refusés ; retrait refusé à zéro ; événements propres à un culte (Verena, Handrich, Shallya, Taal, Sigmar/Ulric) refusés pour un autre. Reçu `extensions.v5.divineSinEvents[]` (300 derniers). | Aucune infraction inventée ; audit des décisions. | — |
+| B-C48 | L06 p.218 | « Courroux MJ explicite » hors Prière ? | Variante `gm-wrath` des commandes d'absolution : motif MJ, Péchés strictement positifs, table jouée sans Test de Prière, branches B01–B16 réutilisées. Les lignes 6–10 et 11–15 (qui exigent la preuve d'un vrai Test) sont refusées dans cette variante. | Pas de preuve de Test fabriquée. | Lignes 11–15 jouées par Prière. |
+| B-C49 | — | Qui exécute ? | Seul le MJ (événements, Courroux MJ, absolution à montant MJ) ; l'interface masque le formulaire aux joueurs. | Décision du MJ. | — |
