@@ -64,6 +64,8 @@ La phase est large (20 lots) : si elle dépasse la session, terminer le lot cour
 
 ### B04 — États et récupération conditionnée
 
+Reprise B04 (session 3) : branche gpt/phase-b2 propre à d9166f2 puis avance rapide autorisée vers codex/divin-v5, 7ab5008, qui contient B01–B03 et la version 3.21.2. Aucun fichier hérité modifié. Le MJ autorise explicitement dans ce chat l’ajout ciblé dans store.js pour empêcher les retraits par updateParticipant({states}), après un commit séparé de caractérisation. Ce fichier est ajouté au périmètre B04 pour ce seul garde et son raccordement ; les services de Tour/résolution restent inchangés. Les verrous sont portés par occurrence, y compris si un État unique existait déjà ; Fortune, texte libre et retraits génériques ne les contournent pas. La récupération par Prière utilise le Test V5 partagé, les modificateurs réels, le plafond de Prière et le risque de nouveau Courroux. Les preuves B04 sont séparées sous tmp/gpt-phase-b/b4 ; le manifeste protégé de session 2 est conservé.
+
 - Objectif : États et récupération conditionnée.
 - Inventaire : `l06-218-wrath-16-20`, `l06-218-wrath-61-65`, `l06-218-wrath-66-70`, `l06-218-wrath-89-95`, `l06-219-wrath-101-105`, `l06-219-wrath-126-130`.
 - Arbitrages : Q2 : trois Aveuglé. États existants 61-65 et 89-95 conservés.

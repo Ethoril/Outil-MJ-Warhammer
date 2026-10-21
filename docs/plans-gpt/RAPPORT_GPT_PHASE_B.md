@@ -1,6 +1,6 @@
 # Rapport GPT — Phase B Courroux (partiel)
 
-**Dernière session : session 2, 21 octobre 2026. B01/Q12 débloqué et livré ; B03 livré. Prochain lot : B04.** B00 et B02 sont acquis depuis la session 1. B04–B18 et la clôture B19 restent ouverts : la phase B n’est pas complète. Les sections de session 1 ci-dessous conservent la preuve historique du blocage, levé par le complément MJ à la session 2.
+**Dernière session : session 3, 21 octobre 2026, B04.** Voir sa livraison et ses preuves en fin de rapport. B00–B03 acquis ; le lot suivant est B05. B05–B18 et la clôture B19 restent ouverts : la phase B n’est pas complète. Les sections des sessions précédentes conservent leur état historique, notamment le blocage Q12 levé en session 2.
 
 ## Session 1 — historique, branche gpt/phase-b
 
@@ -177,3 +177,53 @@ Tests B03 : neuf rouges avant code, puis test de collision supplémentaire rouge
 - Les migrations de fixtures expressément autorisées sont détaillées ci-dessus et dans `e8a2b7c`/`5cf5b4f`/`a75c3d5` ; aucune assertion mécanique indépendante affaiblie pour faire passer Q12.
 
 Reprise : utiliser ce nouveau worktree et relire plan/choix/rapport, vérifier branche, HEAD et état hérité. **Commencer par B04** ; B01 est livré. La recette verte couvre uniquement ses contrôles nommés ; B19 et l’intégration mécanique exhaustive restent ouverts.
+
+## Session 3 — B04 : États et récupération conditionnée
+
+Demande directe du MJ : reprendre B04. Worktree B2 trouvé propre à `d9166f2`. La branche source avait intégré B01–B03 et publié la version 3.21.2 : avance rapide locale de gpt/phase-b2 à `7ab5008`, autorisée par le brief de reprise. Aucune modification des checkouts main/source ni de leurs fichiers. Les changements de version présents à ce départ proviennent de l’intégration de l’orchestrateur, pas de B04. Le même TEMP/TMP hors checkout et le manifeste des quatre catalogues protégés de session 2 sont conservés.
+
+### Périmètre et livraison
+
+Le plan omettait store.js alors que les boutons de retrait manuel utilisent updateParticipant({states}). Le MJ a explicitement autorisé son ajout ciblé dans ce chat, avec caractérisation préalable. **`ca102d4`** : plan ajusté et cinq caractérisations vertes, avant modification des services partagés. Aucun moteur de Tour/résolution ou service worker modifié.
+
+| Lot | État / commit | Livraison ou suite |
+| --- | --- | --- |
+| B00–B03 | ACQUIS | Intégrés au départ `7ab5008`, preuves des sessions précédentes. |
+| B04 | FAIT — `e681603` | Contrats, États et récupération détaillés ci-dessous ; caractérisation préalable `ca102d4`. |
+| B05 | NON COMMENCÉ — prochain lot | Interdictions de Prière et Actions en Rounds. |
+| B06–B18 | NON COMMENCÉS | Périmètre du plan conservé. |
+| B19 | OUVERT | Clôture exhaustive distincte de la recette technique. |
+
+Source : images du tableau L06 EN V5 p.218–219 relues visuellement par l’exécutant. Empreinte du PDF contrôlée : `53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de`. Aucune nouvelle lecture indépendante revendiquée. Les contrats typés proviennent de `docs/divin/sources/L06-wrath-conditions-readings.mjs` et du générateur ; aucune modification manuelle des sorties JSON.
+
+- **16–20** : À Terre acquis par le service canonique, verrouillé jusqu’à réussite d’une Prière +2. Si À Terre existait, son identifiant est conservé et la cause de Courroux y est ajoutée. Plusieurs causes demandent une sélection explicite ; lever une cause laisse l’État si une autre cause de Courroux subsiste.
+- **66–70** : À Terre ordinaire et trois Aveuglé. Seuls les nouveaux Aveuglé sont verrouillés ; les anciennes occurrences restent indépendantes. Prière +0 réussie retire 1 + DR sur l’occurrence choisie, sans toucher aux autres Aveuglé. Pas de retrait spontané de ces trois niveaux en fin de Tour.
+- **101–105** : Blessures à zéro, Inconscient canonique. Tout gain effectif d’au moins une Blessure (commande de soins ou éditeur de PV) libère cette cause ; le KO posé par cette seule cause est retiré, un KO préexistant indépendant reste présent. Soins nuls, soins empêchés par Empoisonné et simple déclaration de fin de cause ne libèrent rien.
+- **126–130** : Blessures à zéro et un Enflammé canonique ; dégâts et récupération ordinaires du feu conservés.
+- **61–65 et 89–95** : règles existantes conservées ; les quinze contrôles indépendants restent verts. Quantités des nouvelles sanctions, décrément et cible unique prêtre vérifiés ; les États ne reçoivent pas l’échéance de la Bénédiction.
+
+Les immunités communes s’appliquent avant les verrous. Momentum suit les acquisitions/pertes de Blessures existantes. Les états et causes portent l’origine et le reçu sourcés ; les identifiants de Courroux encore portés par un état restent refusés après éviction du journal.
+
+### Récupération réelle et protection des clauses
+
+Le panneau dispose d’un parcours spécifique de récupération : capacité à parler, jet d100, choix du jet favorable et arbitrage des États quand nécessaire, projection puis application. Le moteur partagé de Tests V5 calcule le résultat depuis la Prière résolue, la Sociabilité courante, les couches de modificateurs, Leçons et les plafonds historiques. Un résultat saisi « réussite » ou un texte libre ne remplace pas le Test. Le Test est enregistré comme Action selon le mécanisme existant et respecte les gardes Brisé/visibilité/Action dépensée.
+
+À Péché positif, la récupération peut déclencher un nouveau Courroux. La récupération et ses conséquences sont appliquées ensemble une fois toutes les données fournies : branches structurées B01–B04 réutilisées, autres lignes encore assistées selon l’état actuel de la phase. Les dés manquants bloquent la transaction. La preuve de nouvelles Leçons produite ici respecte le validateur commun, sans donner une durée différente à la sanction.
+
+Les retraits génériques, Fortune, échéances et modifications brutes des verrous ne contournent pas une récupération source. Le contrôle intervient dans l’édition ciblée et dans la finalisation des commandes : Recommencer ou une commande générique qui efface un tel État est refusé sans mutation. Une récupération de Prière n’est admise que depuis un aperçu émis, avec état/révision/empreinte concordants ; les clauses restant actives sont conservées. L’ordre des clés JSON, notamment après RTDB, ne change pas le sens de la preuve.
+
+Persistance refusée, aperçu falsifié ou périmé et double clic préservent l’état. Undo/Redo et rechargement restituent niveaux, verrous et reçus ensemble. Les choix de lecture **B-C07 à B-C09** sont consignés dans CHOIX_EXECUTANT_PHASE_B.md pour la relecture MJ groupée.
+
+### Tests et assertions
+
+- Tests nouveaux : cinq caractérisations avant service partagé, puis dix-neuf tests B04, dont les premiers rouges sur les mécanismes manquants. Des régressions rouges ciblées couvrent aussi regain PV par éditeur, préservation des Aveuglé antérieurs et immunités, preuve des nouvelles Leçons, ordre de clés cloud et effacement par Recommencer/commande générique. Logs sous `tmp/gpt-phase-b/b4/`.
+- Acceptation ciblée : `node --test tests/divin-v5-b4-states.test.js tests/divin-v5-b4-characterization.test.js tests/divin-v5-wrath-conditions-independent.test.js`, **39/39**.
+- Le seul test existant dont les attentes changent est `divin-v5-wrath-calendar-independent.test.js`, cas jet6 avec Péché1, soit 16–20 : ready/status/besoin de note MJ sont remplacés par ready/ready et la projection À Terre1 verrouillée. Le cas78 (88) conserve ses trois attentes de traitement MJ ; Leçons conserve le d10 requis. Aucun contrôle indépendant d’expiration, CAS, preuve, périmètre ou plafond n’est affaibli. Le premier passage complet donnait **3357/3358**, ce seul ancien statut étant rouge ; un passage intermédiaire après adaptation a donné **3359/3359**, avant les derniers contrôles de sérialisation et de commandes génériques.
+- Navigateur : `node tests/divin-v5-b4-states-browser.mjs`, **quatre contrôles verts** : acquisition 66–70, retrait manuel refusé et vraie récupération +0, Undo/Redo/reload IndexedDB, soins réels libérant 101–105. Préparation du navigateur corrigée pour confirmer la portée ; preuve rouge contre l’ancienne UI conservée. Une régression rouge vérifie aussi l’activation du bouton de soins à la saisie. Captures 390/1440 px inspectées, sans débordement ; pas de téléphone physique testé. Reçu `tmp/gpt-phase-b/b4/browser/receipt.json`.
+- Cloud : quatre nouveaux scénarios B04 ajoutés, sans changer les assertions des 45 contrôles historiques, à `divin-v5-cloud-browser.mjs` via `divin-v5-b4-cloud-scenarios.mjs`. Deux contextes et IndexedDB natifs, Auth/RTDB localhost et vrai CAS REST : acquisition A vers B, Test de récupération par B après sérialisation, reçu et reload A, Undo/Redo, garde du retrait brut et soins du KO B vers A. Passage ciblé **49 contrôles verts**, zéro erreur navigateur ; log `tmp/gpt-phase-b/b4/cloud.log`. La recette finale les rejoue après le dernier garde de finalisation.
+- Fixtures nouvelles corrigées sans affaiblissement : aperçu comparé à l’état après le geste de récupération générique à effet nul (qui produit un journal/révision) ; jet54 plutôt que55 pour obtenir +1 DR sans critique ; modificateur de Prière porté par une vraie couche, car l’agrégat manuel est recalculé à la sauvegarde.
+- Génération : deux passages comparés identiques, `--check` vert. **Suite complète finale : 3361/3361**, zéro échec, `node --test --test-concurrency=4`, **133,808 s**, log `tmp/gpt-phase-b/b4/suite-final.log`. Le navigateur a été rejoué sur le code final après le dernier garde : quatre contrôles verts, log `tmp/gpt-phase-b/b4/browser-final.log`.
+- **Recette finale verte : 26/26 commandes**, dont **3361/3361 tests Node**, les **49 contrôles cloud** (B04 inclus), les invocations cloud et la construction/lecture hors ligne ; terminée le 21/10/2026 à **12:25:54 UTC**. Commande `node tools/run-divine-recipe.mjs`, log `tmp/gpt-phase-b/b4/recipe-final.log`, copie figée du reçu `tmp/gpt-phase-b/b4/recipe-final-receipt.json`. Le reçu cloud final est figé dans `tmp/gpt-phase-b/b4/cloud-final-receipt.json`, zéro erreur navigateur. Le script navigateur B04 est exécuté séparément ; les quatre scénarios cloud B04 sont inclus dans la commande cloud de la recette. Les **quatre catalogues protégés sont inchangés** selon le manifeste établi avant le code, conservé depuis la session 2.
+- Contrôle des checkouts : main observé propre à `7ab5008`, source codex/divin-v5 observé propre à `fa8b189`. Ce dernier a avancé pendant la session par l’intégration de C01/C02 et la version 3.21.3 ; cette avance n’est pas fusionnée dans gpt/phase-b2. Les validations B04 portent sur le départ `7ab5008` plus `ca102d4`/`e681603`. L’intégration future avec la phase C devra réconcilier les raccordements de Store et rejouer les contrôles pertinents. Aucun checkout source n’a été modifié par B04. Aucun push, fusion de B04 vers main/source, déploiement, changement de version ou publication ; LF et diff --check verts.
+
+Arrêt après le seul lot demandé, B04. **Prochain lot : B05.** Les autres lots et la certification B19 restent ouverts.

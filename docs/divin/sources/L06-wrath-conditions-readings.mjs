@@ -37,3 +37,14 @@ export const wrathConditionReading = Object.freeze({
  }),
  evidencePath: 'task evidence wrath-source/source-observation.md'
 });
+
+// B04 : lecture visuelle unique des pages 218–219 par l’exécutant, session 3.
+// Les anciennes attestations ci-dessus restent limitées à 61–65 et 89–95.
+export const wrathStateRules = [
+ {range:'16-20',page:218,conditions:[{name:'À Terre',level:1}],lockCondition:'a-terre',recovery:{kind:'pray',difficulty:2,remove:'condition'}},
+ {range:'66-70',page:218,conditions:[{name:'À Terre',level:1},{name:'Aveuglé',level:3}],lockCondition:'aveugle',recovery:{kind:'pray',difficulty:0,remove:'one-plus-sl'}},
+ {range:'101-105',page:219,zeroWounds:true,conditions:[{name:'Inconscient',level:1}],lockCondition:'inconscient',recovery:{kind:'wounds-regained',minimum:1}},
+ {range:'126-130',page:219,zeroWounds:true,conditions:[{name:'Enflammé',level:1}]}
+].map(({range,page,...rule})=>({...rule,id:`wrath:${range}:states`,resultId:`wrath:${range}`,ruleVersion:1,
+ source:{...V5,printedPage:page,section:'Table de la Colère des dieux'},
+ sourceReceipt:{reading:'Lecture visuelle unique par l’exécutant ; sans attestation indépendante.',printedPage:page,evidencePath:'docs/divin/sources/L06-wrath-conditions-readings.mjs'}}));

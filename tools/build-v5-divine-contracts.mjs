@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { source as prayerSource } from '../docs/divin/sources/L06-prayers.mjs';
 import { imperialWeek, thinkOverYourDeeds, heedMyLessons } from '../docs/divin/sources/L06-calendar-readings.mjs';
-import { wrathConditionReading, wrathConditionRules } from '../docs/divin/sources/L06-wrath-conditions-readings.mjs';
+import { wrathConditionReading, wrathConditionRules, wrathStateRules } from '../docs/divin/sources/L06-wrath-conditions-readings.mjs';
 import { paramKinds, paramUnits, supplementCults, targetRuleFacts } from '../js/core/v5-divine-grammar.js';
 import { validateEffect } from '../js/core/v5-divine-effect-handlers.js';
 
@@ -343,7 +343,7 @@ const bookOf=row=>knownBooks.find(book=>book.sha256===row.source.fileSha256);
 const supplementBooks=[...new Map([...supplementBlessings,...miracleContracts,...standaloneModuleContracts].filter(row=>row.source.fileSha256!==V5.fileSha256).map(row=>[bookOf(row).id,{bookId:bookOf(row).id,document:row.source.document,fileSha256:row.source.fileSha256}])).values()].sort((a,b)=>a.bookId<b.bookId?-1:1);
 const contracts=[...blessings,...supplementBlessings,...miracleContracts,...standaloneModuleContracts,hatred];
 const catalogueDeltas=[...miracleContracts.filter(row=>sourceSix.has(row.catalogueName)||upInArmsModules.has(row.canonicalName)),...standaloneModuleContracts.filter(row=>row.sourceDelta)].map(row=>({id:row.id,catalogueEntry:row.catalogueEntry??null,v5Summary:row.sourceDelta,status:row.status,source:row.source}));
-const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.4.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN',complementCorpusSha256:complementHash,supplementBooks},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,wrathDamageRules,catalogueDeltas,contracts};
+const payload={schemaVersion:1,generatorVersion:'divine-contracts-0.4.0',catalogueSnapshotVersion:snapshot.contentVersion,sourceManifest:{referenceSnapshotSha256:snapshotHash,miraclesCsvSha256:csvHash,v5EnglishBaseSha256:V5.fileSha256,authoritativeEdition:'V5 EN',complementCorpusSha256:complementHash,supplementBooks},sourceTalentDescriptions:talentDescriptions,sourceTalentRecords:talentRows,commonPrayerRules,wrathTable,prayerSLRules,wrathConditionRules:wrathConditionContracts,wrathDamageRules,wrathStateRules,catalogueDeltas,contracts};
 const sourceFingerprint = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
 const result={...payload,sourceFingerprint:`sha256:${sourceFingerprint}`};
 const registryText=JSON.stringify(result,null,2)+'\n';

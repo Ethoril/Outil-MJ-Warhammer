@@ -93,11 +93,18 @@ test('Courroux calendaire indépendant —6–10 historique sourcé ne requiert 
   const result=await applyHistoricalWrath(store,preview);
   assert.equal(result.ok,true); assert.equal(capsOf(actorOf(store)).length,1);
 });
-test('Courroux calendaire indépendant —les autres lignes conservent le traitement MJ',async()=>{
+test('Courroux calendaire indépendant —16–20 automatisé, les lignes restantes conservent leurs besoins',async()=>{
   const {store}=await fixture();
   await store.setDivineSin('priest',1,{reason:'Fixture B01 à Péché positif'});
   for(const wrathRoll of [6,78]) {
     const preview=store.previewDivineExecution(BATTLE,prayer({roll:99,wrathRoll}));
+    if(wrathRoll===6){
+      assert.equal(preview.ready,true,preview.error);
+      assert.equal(preview.status,'ready');
+      assert.equal(preview.wrathStatePreview.resultId,'wrath:16-20');
+      assert.deepEqual(preview.wrathStatePreview.conditions.map(row=>[row.name,row.level,row.locked]),[['À Terre',1,true]]);
+      continue;
+    }
     assert.equal(preview.ready,false);
     assert.equal(preview.status,'needs-wrath-resolution');
     assert.ok(preview.needsInput.some(need=>need.field==='wrathConsequences'));
