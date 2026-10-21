@@ -40,7 +40,7 @@ try{
  const rules=readFileSync(resolve(root,'firebase.database.rules.json'),'utf8');const loaded=await fetch(db+'/.settings/rules.json?ns='+namespace+'&access_token=owner',{method:'PUT',headers:{'content-type':'application/json'},body:rules});assert.equal(loaded.status,200);
  const signup=await fetch(auth+'/identitytoolkit.googleapis.com/v1/accounts:signUp?key=demo-qa-35',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'qa35-'+Date.now()+'@control.test',password:'password123',returnSecureToken:true})});assert.equal(signup.status,200);({idToken:token,localId:uid}=await signup.json());
  await request('wfrp-sessions-v3/'+uid+'/current',{method:'PUT',body:{revision:0,state:fixture}});
- const mime={'.js':'text/javascript','.json':'application/json','.css':'text/css','.html':'text/html'};
+ const mime={'.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.html':'text/html'};
  server=createServer(async(req,res)=>{try{const u=new URL(req.url,'http://localhost');if(u.pathname==='/qa/cloud'){let value;if(req.method==='POST'){let body='';for await(const part of req)body+=part;value=await transact(JSON.parse(body));}else value=await remote();res.writeHead(200,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify(value));return;}if(u.pathname==='/qa.html'){res.writeHead(200,{'content-type':'text/html'});res.end('<!doctype html><title>Recette cloud V5</title><main>Recette locale 2.5</main>');return;}const path=resolve(root,'.'+decodeURIComponent(u.pathname));assert.ok(path.startsWith(resolve(root)+sep)&&statSync(path).isFile());res.writeHead(200,{'content-type':mime[extname(path)]||'application/octet-stream'});res.end(readFileSync(path));}catch(e){res.writeHead(500);res.end(e.message);}});await new Promise(done=>server.listen(0,'127.0.0.1',done));origin='http://127.0.0.1:'+server.address().port;
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
  const a=await context('A'),b=await context('B');const A=a.page,B=b.page;
@@ -230,7 +230,7 @@ try{
  assert.equal(JSON.parse(campaignWinner.extensions.v5.gameClock.lastEvent.payloadFingerprint).seconds,30);
  check('E5 campagne deux avances hors ligne 30/60 : conflit exportable puis seul reçu et effet gagnants conservés');
 
- // E5 divine calendar: a real sourced Wrath6–10 creates its own absolute deadline.
+ // E5 calendrier : sanction historique sourcée 6–10, pose directe autorisée par Q12.
  // This adds five checks; the twenty preceding assertions are kept verbatim.
  const imperialWeekSeconds=8*86400,wrathPrayerId='divine:blessing:myrmidia:courage';
  const wrathCaps=state=>(state.combat.participants.find(p=>p.id==='hero').extensions?.v5?.divineEffects||[])
@@ -243,19 +243,15 @@ try{
    expiry:{phase:'endOfTurn',round:round+5,actorId:'hero',moment:'afterEffects'}});
   if(!preview.ready)throw Error(preview.error);return preview.preview;
  },wrathPrayerId);
- const imposeWrath=page=>page.evaluate(async prayerId=>{
-  const s=window.qa35.store,round=s.getCombat().round;
-  const preview=s.previewDivineExecution(prayerId,{actorId:'hero',targetIds:['ally'],roll:99,wrathRoll:6,canSpeak:true,
-   choices:{range:0,targets:0,duration:0,effect:0},facts:{targets:{ally:{withinRange:true,ally:true}}},
-   expiry:{phase:'endOfTurn',round:round+5,actorId:'hero',moment:'afterEffects'}});
-  if(!preview.ready)throw Error(preview.error);
-  if(preview.wrathTableResult?.id!=='wrath:6-10')throw Error('La ligne canonique6–10 doit être résolue');
-  const result=await s.applyDivineExecution(prayerId,{preview});
+ const imposeWrath=page=>page.evaluate(async()=>{
+  const {imposeHistoricalWrath}=await import('/tests/fixtures/divine-wrath-history.mjs');
+  const {preview,result}=await imposeHistoricalWrath(window.qa35.store,{actorId:'hero',executionId:'cloud-historical-wrath:'+crypto.randomUUID()});
+  if(preview.wrathTableResult?.id!=='wrath:6-10')throw Error('La sanction historique6–10 doit être sourcée');
   if(result?.ok===false||result?.ready===false)throw Error(result.error);
-  return {originExecutionId:preview.executionId,prayer:result.receipt.prayer};
- },wrathPrayerId);
+  return {originExecutionId:preview.cap.originExecutionId,prayer:result.receipt.prayer};
+ });
  // A public import starts a distinct campaign origin after the twenty historical scenarios.
- // Its first real sanction exercises the null lastEventId that RTDB omits.
+ // La première pose historique vérifie le lastEventId nul que RTDB omet.
  await A.evaluate(async initial=>window.qa35.store.loadFromJSON(initial),fixture);
  await settled(A);await pull(B);await settled(B);await pull(A);
  await A.evaluate(async()=>window.qa35.store.setDivineSin('hero',0,{reason:'Base explicite du contrôle Courroux6–10'}));
@@ -265,7 +261,7 @@ try{
  const wrathOrigin=await imposeWrath(A);assert.equal(wrathOrigin.prayer.success,false);
  await settled(A);await pull(B);
  const wrathAfter=await envelope(A),wrathReceived=await envelope(B),cap=wrathCaps(wrathAfter).find(e=>e.originExecutionId===wrathOrigin.originExecutionId);
- assert.ok(cap,'la vraie résolution de la table pose le plafond');
+ assert.ok(cap,'la pose directe de la sanction historique conserve le plafond');
  assert.equal(cap.deadline.atSeconds,wrathClock.campaignSeconds+imperialWeekSeconds);
  assert.equal(cap.duration.days,8);assert.equal(cap.duration.secondPolicyId,'campaign-day-86400s');
  assert.deepEqual(cap.clockAnchor,{campaignSeconds:wrathClock.campaignSeconds,clockRevision:wrathClock.revision,lastEventId:wrathClock.lastEvent?.id??null});
@@ -273,7 +269,7 @@ try{
  assert.equal((await wrathPreview(B)).prayer.success,true);assert.equal((await wrathPreview(B)).prayer.sl,0);
  assert.equal((await wrathPreview(B)).extensionBudget.available,0);
  assert.equal((wrathReceived.combat.participants.find(p=>p.id==='ally').extensions?.v5?.divineEffects||[]).some(e=>e.type==='prayer-sl-cap'),false);
- check('E5 Courroux6–10 A vers B : pose canonique sans note, ancre8jours et vrai plafond Prière reçus');
+ check('E5 Courroux6–10 A vers B : pose historique sourcée, ancre8jours et vrai plafond Prière reçus');
 
  await A.reload();await boot(A,'A');await settled(A);await pull(B);
  assert.deepEqual(wrathProjection(await envelope(A)),wrathProjection(wrathAfter),'IndexedDB conserve la couche autonome et son ancre');
