@@ -110,7 +110,7 @@
     },
     {
       "id": "prayer-success",
-      "text": "Succès: appliquer la prière; échec: aucun effet; maladresse: Colère des dieux.",
+      "text": "Succès : appliquer la prière ; échec : aucun effet. À Péché positif, une maladresse déclenche la Colère ; à zéro, aucun Courroux (arbitrage Q12). Cultes elfes exemptés (Q10).",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -120,7 +120,12 @@
         "section": "Les Prières",
         "clauses": []
       },
-      "mode": "engine-gated"
+      "mode": "engine-gated",
+      "arbitration": {
+        "decisionId": "COURROUX-Q12-2026-10-21",
+        "document": "docs/ARBITRAGES_MJ_21_10.md",
+        "section": "Complément du 21/10"
+      }
     },
     {
       "id": "prayer-voice",
@@ -194,7 +199,7 @@
     },
     {
       "id": "wrath-trigger",
-      "text": "Chaque test de Prière déclenche la Colère si le chiffre des unités du jet est inférieur ou égal au total de Péché, même avec succès; une maladresse déclenche aussi la Colère.",
+      "text": "À Péché strictement positif, la Colère survient si les unités du jet de Prière ne dépassent pas ce total, même avec succès, ou sur maladresse. À zéro : aucun Courroux, même sur maladresse (arbitrage Q12). Cultes elfes exemptés (Q10).",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -204,7 +209,12 @@
         "section": "Péché et Colère divine",
         "clauses": []
       },
-      "mode": "engine-gated"
+      "mode": "engine-gated",
+      "arbitration": {
+        "decisionId": "COURROUX-Q12-2026-10-21",
+        "document": "docs/ARBITRAGES_MJ_21_10.md",
+        "section": "Complément du 21/10"
+      }
     },
     {
       "id": "wrath-resolution",
@@ -251,6 +261,11 @@
         "sourceStatus": "read-and-page-checked",
         "printedPage": 218,
         "section": "Colère des dieux"
+      },
+      "accessibility": {
+        "accessible": false,
+        "reason": "inaccessibles (arbitrage Q12)",
+        "decisionId": "COURROUX-Q12-2026-10-21"
       }
     },
     {
@@ -266,6 +281,11 @@
         "sourceStatus": "read-and-page-checked",
         "printedPage": 218,
         "section": "Colère des dieux"
+      },
+      "accessibility": {
+        "accessible": false,
+        "reason": "inaccessibles (arbitrage Q12)",
+        "decisionId": "COURROUX-Q12-2026-10-21"
       }
     },
     {
@@ -27085,5 +27105,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:e1606465353039c12ff5c59277d3af3c775cbdee2f606497bbcecbf664ea0772"
+  "sourceFingerprint": "sha256:3e20cf60781715baa6aa12cd8b4a79bafc43daca561cda06011178fda3359a59"
 }

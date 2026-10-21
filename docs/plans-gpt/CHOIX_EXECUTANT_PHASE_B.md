@@ -15,3 +15,9 @@
 - La religion d’un personnage ordinaire sans talent d’accès n’est pas déduite de son espèce. Une demande explicitement liée à un culte elfe est toujours refusée pour l’attribution de Péchés.
 - Les sanctions historiques existantes ne sont pas supprimées ou réécrites : la prière elfique ignore le déclenchement de nouveau Courroux, sans modifier les couches déjà enregistrées par ailleurs.
 - B01 ne sera repris qu’avec adaptation explicite du plan et des fixtures indépendantes, sans affaiblissement des assertions, ou après création d’un autre chemin source-validé vers les résultats bas. La preuve détaillée est conservée sous tmp/gpt-phase-b/BLOQUE-B01.md et résumée dans le rapport commité.
+
+## Actualisation, session 2 du 21 octobre
+
+B-C01 est désormais confirmé par le complément MJ : aucun Courroux à zéro, ni unités zéro ni maladresse. Les lignes 01–10 restent sourcées au registre et marquées inaccessibles. La migration des fixtures est autorisée ; les réserves ci-dessus décrivent la première session, plus le comportement livré après Q12. Les sanctions historiques 06–10 restent lisibles et conservent leurs contrôles de preuve et de durée : cet arbitrage ne supprime pas une ancienne sauvegarde.
+
+Migration supplémentaire révélée par le ciblage Q12 : le contrôle de seconde occurrence des Leçons réattribue explicitement un Péché après le décrément de la première occurrence et utilise un jet de table de 1 (+10). Les assertions de refus de cumul/remplacement, absence de mutation et conservation de la première couche restent identiques.

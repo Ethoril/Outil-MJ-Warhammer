@@ -195,8 +195,9 @@ test('Leçons divines indépendant —seconde occurrence non sourcée bloque san
   const {store}=await fixture();
   const first=await applyLessons(store,{executionId:'lessons-first'});
   assert.equal(actorOf(store).extensions.v5.divine.sin,0,'la première résolution retire le Péché avant le second Courroux');
+  await store.setDivineSin('priest',1,{reason:'Fixture Q12 : nouvelle infraction avant la seconde occurrence'});
   const before=stateOf(store);
-  const second=store.previewDivineExecution(BATTLE,prayerInput({roll:99,wrathRoll:11,wrathDurationRoll:4,executionId:'lessons-second'}));
+  const second=store.previewDivineExecution(BATTLE,prayerInput({roll:99,wrathRoll:1,wrathDurationRoll:4,executionId:'lessons-second'}));
   assert.equal(second.ready,false,'la source ne définit pas si une seconde occurrence s’additionne, remplace ou renouvelle');
   assert.ok(second.status==='blocked'||second.status==='requires-input');
   assert.deepEqual(stateOf(store),before,'arbitrage absent: aucune mutation ni remplacement silencieux');

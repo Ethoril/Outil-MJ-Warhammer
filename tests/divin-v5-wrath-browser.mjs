@@ -52,6 +52,12 @@ try{
  });
  await page.getByRole('tab',{name:'Jouer',exact:true}).click();
  const actorButton=page.locator('[data-workspace-select="priest"]');if(await actorButton.count())await actorButton.click();
+ const zeroPanel=await prepare('divine:blessing:myrmidia:battle',99);
+ assert.equal(await zeroPanel.getByRole('spinbutton',{name:'Jet de Courroux (d100)',exact:true}).count(),0,'Q12 : aucune table sur maladresse à zéro');
+ assert.equal(await zeroPanel.locator('[data-divine-action="apply"]').isEnabled(),true);
+ await zeroPanel.locator('[data-divine-action="apply"]').click();
+ await page.waitForFunction(async()=>{const {Store}=await import('/js/main.js');return JSON.parse(Store.getFullJSON()).extensions.v5.divineExecutions?.some(row=>row.prayer.fumble&&!row.wrath.triggered);});
+ assert.equal((await caps()).length,0);check('Q12 : le vrai formulaire applique la maladresse à zéro sans table ni sanction');
  const historical=await page.evaluate(async()=>{
   const {Store}=await import('/js/main.js');const {previewHistoricalWrath}=await import('/tests/fixtures/divine-wrath-history.mjs');
   const snapshot=()=>{const value=JSON.parse(Store.getFullJSON());delete value.exportedAt;return value;};
