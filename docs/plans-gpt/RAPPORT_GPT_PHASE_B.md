@@ -227,3 +227,30 @@ Persistance refusée, aperçu falsifié ou périmé et double clic préservent l
 - Contrôle des checkouts : main observé propre à `7ab5008`, source codex/divin-v5 observé propre à `fa8b189`. Ce dernier a avancé pendant la session par l’intégration de C01/C02 et la version 3.21.3 ; cette avance n’est pas fusionnée dans gpt/phase-b2. Les validations B04 portent sur le départ `7ab5008` plus `ca102d4`/`e681603`. L’intégration future avec la phase C devra réconcilier les raccordements de Store et rejouer les contrôles pertinents. Aucun checkout source n’a été modifié par B04. Aucun push, fusion de B04 vers main/source, déploiement, changement de version ou publication ; LF et diff --check verts.
 
 Arrêt après le seul lot demandé, B04. **Prochain lot : B05.** Les autres lots et la certification B19 restent ouverts.
+
+## Session 4 — gpt/phase-b4 (en cours)
+
+Demande du MJ : reprendre à B05 depuis codex/divin-v5 à jour, créer gpt/phase-b4, un commit par lot, continuer jusqu’à moins de 30 % d’usage restant puis mettre ce rapport à jour. Départ propre 08e4362 (3.21.5, sessions 1–3 fusionnées), worktree E:/Outil MJ Warhammer/tmp/gpt-phase-b4-worktree. Jonction node_modules vers le source, TEMP/TMP E:/Outil MJ Warhammer/tmp/gpt-phase-b4-runtime hors checkout. Manifeste des quatre catalogues protégés créé avant code à ce départ. Aucun push, fusion, version ou publication.
+
+| Lot | État / commit | Preuves actuelles |
+| --- | --- | --- |
+| B00–B04 | ACQUIS | Intégrés au départ 08e4362 ; rapports des sessions précédentes. |
+| Préparation B05 | FAIT — 5fcc568 | Plan de reprise et 4 caractérisations des Actions/Tours, avant modifications partagées. |
+| B05 | FAIT — 39e85cc | 19 nouveaux tests fonctionnels, suite 3466/3466 ; navigateur 4 contrôles, cloud total 52 (3 nouveaux). |
+| B06 | FAIT — 97c1839 | 11 nouveaux tests, suite 3477/3477 ; navigateur 3 contrôles, cloud total 55 (3 nouveaux). |
+| B07 | FAIT — cbc552e | 15 nouveaux tests, suite 3492/3492 ; navigateur 3 contrôles, cloud total 58 (3 nouveaux). |
+| B08 | PROCHAIN LOT | Extension ciblée du générateur pour 6 Bénédictions de Stromfels autorisée directement par le MJ. |
+| B09–B18 | À FAIRE | Ordre et périmètres du plan conservés. |
+| B19 | OUVERT | Certification des 89 entrées distincte d’une recette technique verte. |
+
+B05 : interdictions 21–25/31–35/46–50 et obligation 76–80 réellement appliquées, dés et premier Round explicites ; ancre hors combat sans conversion depuis secondes. Fin uniquement sur reçu de vrai Round afterEffects, suspension/reprise conservant la sanction. 76–80 propose un vrai Test de Prière dédié +0 (aucune Bénédiction substituée), respecte l’Action dépensée et exige une décision MJ pour le Tour déclencheur ; autres Actions et fin prématurée refusées. Récupération B04 et Tests génériques identifiés raccordés. B05 utilise des valeurs optionnelles non null pour survivre à RTDB ; régression rouge et cloud réels ont établi ce besoin. Plafond historique et Leçons restent verts. Choix B-C10/B-C11.
+
+B06 : choix des compétences résolues de la fiche, plusieurs en heures / exactement une en jours ; inconnus, vides, doublons et non résolus bloquent. −1 DR via modificateurs génériques, vérifié sur Test, opposition, Prière et récupération ; durée d10 + Péchés avant décrément. Horloge commune, échéance exacte, refus des retraits bruts, persistance et Undo/Redo ; occurrences distinctes, pire malus commun sans cumul inventé. Choix B-C12/B-C13.
+
+B07 : autres participants du même camp proposés ; liste corrigeable/confirmée, vide explicite admis. À Terre canonique sur les confirmés (unicité/immunité), rejet du culte porté par leurs fiches pour d10 + Péchés jours. Toutes les invocations de ce dieu les visant échouent, y compris autre prêtre et cible implicite du prêtre ; les autres dieux/cibles ne changent pas. Le vrai Test conserve sa réussite/DR/risque de Courroux ; résultat d’invocation distinct, zéro effet et reçu/journal/UI explicites. La Prière déclencheuse n’est pas annulée rétroactivement. À Terre se relève normalement sans mettre fin au rejet. Choix B-C14/B-C15.
+
+Source L06 p.218 relue visuellement par l’exécutant, sans lecteur indépendant simulé. Sources et générateur existants réutilisés ; aucun contrat dérivé changé par B05–B07. Acceptations, preuves rouges, suites et reçus sous tmp/gpt-phase-b/b5, b6, b7. Captures 390/1440 px inspectées, pas de débordement ; aucun téléphone physique testé. Trois scénarios cloud nouveaux par lot intégrés au harness historique, qui conserve ses assertions.
+
+Dernière suite complète : node --test --test-concurrency=4, 3492/3492, zéro échec, 96,194 s, tmp/gpt-phase-b/b7/suite-commit.log. Dernier cloud : 58 contrôles, zéro erreur navigateur, tmp/gpt-phase-b/b7/cloud-receipt.json. La recette de départ a passé 26/26 et 3443 tests ; recette finale à rejouer en fin de cette session. Aucun vert intermédiaire ne clôt B19.
+
+Tests existants modifiés en session 4 : divin-v5-store.test.js, cas 21–25 : titre actualisé et fixture remplacée par un d10 explicite et un choix du premier Round ; assertions de ligne canonique et décrément inchangées. divin-v5-cloud-browser.mjs : imports et appels de scénarios B05–B07, aucune assertion historique modifiée. Aucune autre attente mécanique indépendante modifiée.
