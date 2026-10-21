@@ -3,7 +3,7 @@ import {getAllDivineContracts} from '../core/v5-divine-store.js';
 import {divineSinPolicy} from '../core/v5-divine-engine.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
-import {emptyDivineForm,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
+import {emptyDivineForm,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
 const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
@@ -81,13 +81,24 @@ export function createDivinePanel({Store,refresh}){
   const targetIds=self?[actor.id]:state.targetIds.slice();
   const expiry=buildExpiry({contract,actor,choices:state.choices,round,phase:state.expiryPhase,manualRounds:state.form.expiryRounds});
   return {actorId:actor.id,targetIds,roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
-   wrathRoundPolicy:state.wrathRoundPolicy||undefined,wrathActionDecision:state.wrathActionDecision||undefined,wrathRoundAnchor:state.wrathAnchorScene&&state.wrathAnchorRound?{sceneId:state.wrathAnchorScene,round:Number(state.wrathAnchorRound)}:undefined,
+   wrathSkillIds:clone(state.wrathSkillIds),wrathRoundPolicy:state.wrathRoundPolicy||undefined,wrathActionDecision:state.wrathActionDecision||undefined,wrathRoundAnchor:state.wrathAnchorScene&&state.wrathAnchorRound?{sceneId:state.wrathAnchorScene,round:Number(state.wrathAnchorRound)}:undefined,
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),
    wrathDamageRoll:state.wrathDamageRoll?Number(state.wrathDamageRoll):undefined,wrathEnduranceRoll:state.wrathEnduranceRoll?Number(state.wrathEnduranceRoll):undefined,
    wrathTestOptionId:state.wrathTestOptionId||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathConditionPenaltyMode||undefined,conditionPenaltyReason:state.wrathConditionPenaltyReason||''},
    testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
    choices:clone(state.choices),...toEngineInput(state.form,{targetIds,contract,actor}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
+ function skillControls(container,preview,actor,{recovery=false}={}){
+  const key=recovery?'wrathRecoverySkillIds':'wrathSkillIds',duration=recovery?'wrathRecoveryDuration':'wrathDurationRoll';
+  container.append(node('p','workspace-muted',preview.multiple?'Compétences associées au dieu : choix du MJ sur cette fiche (une ou plusieurs).':'Compétence associée au dieu : choix du MJ, exactement une.'));
+  for(const skill of actor.skills||[]){
+   const name=skill.name||skill.nom||skill.id,wrap=node('label','workspace-type workspace-recipient-check'),input=node('input');input.type='checkbox';input.checked=(state[key]||[]).includes(skill.id);input.disabled=skill.status!=='resolved'||!skill.id;input.setAttribute('aria-label','Sanctionner '+name);input.dataset.focusKey='divine-'+key+'-'+skill.id;
+   input.addEventListener('change',()=>{const ids=new Set(state[key]||[]);if(input.checked)ids.add(skill.id);else ids.delete(skill.id);state[key]=[...ids];if(recovery&&state.recoveryPreview)state.recoveryPreview={...state.recoveryPreview,ready:false};changeWrath(key,state[key]);});wrap.append(input,document.createTextNode(name+(skill.status!=='resolved'?' · à résoudre':'')));container.append(wrap);
+  }
+  field(container,'Jet de durée du malus (d10)',duration,{min:1,max:10});
+  if(preview.value)container.append(node('p','workspace-muted','−1 DR : '+preview.skills.map(row=>row.name).join(', ')+' · '+preview.value+(preview.unit==='hours'?' heure(s)':' jour(s)')+' à partir de l’application. Source L06 p.218.'));
+ }
+
  function roundControls(container,preview,{recovery=false}={}){
   const duration=recovery?'wrathRecoveryDuration':'wrathDurationRoll',policy=recovery?'wrathRecoveryPolicy':'wrathRoundPolicy',decision=recovery?'wrathRecoveryAction':'wrathActionDecision';
   const scene=recovery?'wrathRecoveryScene':'wrathAnchorScene',round=recovery?'wrathRecoveryRound':'wrathAnchorRound';
@@ -124,7 +135,7 @@ export function createDivinePanel({Store,refresh}){
   select(context,'Arbitrage des États de récupération',state.wrathRecoveryPenaltyMode||'',[['','Si nécessaire : choisir'],['sl','Retenir le plus fort malus en DR'],['disadvantage','Retenir le Désavantage']],value=>changed('wrathRecoveryPenaltyMode',value),'wrathRecoveryPenaltyMode');
   field(context,'Motif de l’arbitrage de récupération','wrathRecoveryPenaltyReason',{type:'text'});box.append(context);
   const input=()=>({actorId:actor.id,...selection,roll:state.wrathRecoveryRoll?Number(state.wrathRecoveryRoll):undefined,canSpeak:state.wrathRecoveryCanSpeak==='true',testOptionId:state.wrathRecoveryOption||undefined,conditionContext:{conditionPenaltyMode:state.wrathRecoveryPenaltyMode||undefined,conditionPenaltyReason:state.wrathRecoveryPenaltyReason||''},brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility},
-   wrathRoundPolicy:state.wrathRecoveryPolicy||undefined,wrathActionDecision:state.wrathRecoveryAction||undefined,wrathRoundAnchor:state.wrathRecoveryScene&&state.wrathRecoveryRound?{sceneId:state.wrathRecoveryScene,round:Number(state.wrathRecoveryRound)}:undefined,
+   wrathSkillIds:clone(state.wrathRecoverySkillIds),wrathRoundPolicy:state.wrathRecoveryPolicy||undefined,wrathActionDecision:state.wrathRecoveryAction||undefined,wrathRoundAnchor:state.wrathRecoveryScene&&state.wrathRecoveryRound?{sceneId:state.wrathRecoveryScene,round:Number(state.wrathRecoveryRound)}:undefined,
    wrathRoll:state.wrathRecoveryWrathRoll?Number(state.wrathRecoveryWrathRoll):undefined,wrathDurationRoll:state.wrathRecoveryDuration?Number(state.wrathRecoveryDuration):undefined,wrathConsequences:state.wrathRecoveryConsequences||'',wrathDamageRoll:state.wrathRecoveryDamage?Number(state.wrathRecoveryDamage):undefined,wrathEnduranceRoll:state.wrathRecoveryEndurance?Number(state.wrathRecoveryEndurance):undefined,wrathTestOptionId:state.wrathRecoveryDamageOption||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathRecoveryDamageMode||undefined,conditionPenaltyReason:state.wrathRecoveryDamageReason||''}});
   button(box,selection.forcedPrayer?'Calculer la Prière imposée':'Calculer la récupération',()=>{state.recoveryPreview=Store.previewDivineWrathRecovery(input());refresh();},false,'recovery-calculate');
   button(box,selection.forcedPrayer?'Appliquer la Prière imposée':'Appliquer la récupération',()=>run(async()=>{const result=await Store.applyDivineWrathRecovery({preview:state.recoveryPreview});if(result?.ok===false)throw Error(result.error||'Récupération non enregistrée.');state.lastRecovery=`Prière ${selection.forcedPrayer?'imposée':'de récupération'} ${result.test.success?'réussie':'ratée'} · ${result.test.sl} DR · ${result.removedCount} État(s) retiré(s).`;state.recoverySelection=null;state.recoveryPreview=null;state.preview=null;for(const key of ['wrathRecoveryWrathRoll','wrathRecoveryDuration','wrathRecoveryConsequences','wrathRecoveryDamage','wrathRecoveryEndurance','wrathRecoveryDamageOption'])state[key]='';}),!state.recoveryPreview?.ready,'recovery-apply');
@@ -140,6 +151,7 @@ export function createDivinePanel({Store,refresh}){
     field(projected,'Jet du nouveau Courroux (d100)','wrathRecoveryWrathRoll',{min:1,max:100});
     if(preview.wrath.resultId)projected.append(node('p','workspace-muted','Résultat : '+preview.wrath.resultId.replace('wrath:','')));
     if(preview.wrath.resultId==='wrath:11-15')field(projected,'Durée des nouvelles Leçons (d10)','wrathRecoveryDuration',{min:1,max:10});
+    if(preview.wrathSkillPreview)skillControls(projected,preview.wrathSkillPreview,actor,{recovery:true});
     if(preview.wrathRoundPreview)roundControls(projected,preview.wrathRoundPreview,{recovery:true});
     if(preview.wrathDamagePreview){
      if(preview.wrathDamagePreview.diceCount)field(projected,`Blessures du nouveau Courroux (${preview.wrathDamagePreview.diceCount}d10)`,'wrathRecoveryDamage',{min:preview.wrathDamagePreview.diceCount,max:10*preview.wrathDamagePreview.diceCount});
@@ -191,6 +203,7 @@ export function createDivinePanel({Store,refresh}){
     button(list,'Terminer '+name,()=>run(async()=>{const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }
+  for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-skill-penalty')content.append(node('p','workspace-field-error','Courroux : −1 DR à '+layer.skills.map(row=>row.name).join(', ')+' · '+layer.duration.value+(layer.duration.unit==='hours'?' heure(s)':' jour(s)')+' · échéance : '+formatCampaignTime(layer.deadline.atSeconds)+' de temps de campagne · Source L06 p.218.'));
   for(const layer of actor.extensions?.v5?.divineEffects||[])if(layer.type==='wrath-round-rule')content.append(node('p','workspace-field-error',(layer.mode==='ban'?'Prière interdite':'Prière comme Action obligatoire')+' · '+layer.resultId.replace('wrath:','')+' · '+layer.rounds+' Round(s), fin après les effets du Round '+layer.roundDeadline+' · scène '+(layer.roundAnchor.sceneId||'combat local')+' · Source L06 p.218.'));
   const recovery=recoveryPanel(actor);if(recovery)content.append(recovery);
   if(contract.status==='blocked')return panel;
@@ -338,6 +351,8 @@ export function createDivinePanel({Store,refresh}){
      outcome.append(node('p','workspace-muted','Leçons divines · malus automatique de −1 DR aux futurs Tests de Prière. Le Round actuel compte comme premier; la sanction prend fin après les effets du dernier Round.'));
      field(outcome,'Jet de durée (d10)','wrathDurationRoll',{min:1,max:10});
      if(result.wrathLessonDuration)outcome.append(node('p','workspace-muted',`Durée : ${result.wrathLessonDuration.roll} + ${result.wrathLessonDuration.sinAtTrigger} Péché(s) = ${result.wrathLessonDuration.rounds} Round(s); fin après les effets du Round ${result.wrathLessonDuration.expiryRound}.`));
+    }else if(result.wrathSkillPreview){
+     skillControls(outcome,result.wrathSkillPreview,actor);
     }else if(result.wrathRoundPreview){
      outcome.append(node('p','workspace-muted',result.wrathRoundPreview.mode==='ban'?'Tout Test de Prière sera interdit jusqu’à expiration attestée. Source : L06 p.218.':'Une Prière comme Action sera obligatoire à chaque Tour, sans Action supplémentaire. Source : L06 p.218.'));
      roundControls(outcome,result.wrathRoundPreview);
