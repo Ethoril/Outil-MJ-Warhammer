@@ -4,6 +4,12 @@
 
 ## Règles d’exécution
 
+### Reprise du 21 octobre — branche gpt/phase-b2
+
+Départ `29d2221` de codex/divin-v5 (inclut la fusion `6956d61`, la livraison précédente et le complément MJ), worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-b2-worktree`. Le brief BRIEF_GPT_PHASE_B_REPRISE.md et le complément du MJ autorisent expressément la migration des fixtures B01, en conservant leurs assertions mécaniques : cette exception remplace la limitation de fichiers/tests B01 ci-dessous. Un commit de migration, vert avec l’ancien comportement si possible, précède Q12. Fixtures concernées : wrath-calendar-independent, wrath-lessons-independent, wrath-browser, control, engine, données historiques et helper sous tests/fixtures, plus toute autre révélée par la suite. TEMP/TMP : `E:/Outil MJ Warhammer/tmp/gpt-phase-b2-runtime`, hors checkout. Aucun nouveau balayage de corpus nécessaire : le complément de 89 entrées est déjà fusionné.
+
+Q12 confirmé : aucune table à zéro, même sur maladresse ; lignes 01–10 conservées et marquées inaccessibles au registre. Les tests de plafonds hérités utilisent une pose directe de sanctions historiques sourcées, sans recréer un jet à zéro. Les autres déclencheurs utilisent Péché positif/résultat au moins 11. B03 traite les lignes de dégâts accessibles ; 01–05 n’est plus accessible en jeu selon cet arbitrage et garde sa source et son exclusion motivée. Le reste des lots et garde-fous reste inchangé.
+
 Lots dans l’ordre ci-dessous ; tests nouveaux rouges pour la bonne raison avant code, acceptation ciblée puis `node --test --test-concurrency=4` par lot ; changements partagés à risque précédés de caractérisation commitée. Commit local de chaque lot, jamais de push, fusion, version, dépendance ni publication. LF vérifiés avant commit. Générateur utilisé pour toute sortie dérivée, deux régénérations comparées. Fichiers d’arbitrage et docs/PLAN_*.md intouchés.
 
 Les fichiers autorisés sont limités aux emplacements indiqués par lot, à ses nouveaux tests et aux deux documents de suivi de phase. Les listes de fichiers partagés ne permettent pas de changer une règle voisine ; caractérisation préalable obligatoire sur store.js, resolution.js, v5-store-action.js, v5-turn.js, turn-order.js. Un besoin hors périmètre produit un reçu BLOQUE du lot. Un lot interrompu conserve seulement ses preuves et revient à son commit propre précédent, jamais les travaux des autres checkouts.

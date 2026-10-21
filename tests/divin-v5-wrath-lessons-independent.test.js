@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {imposeHistoricalWrath} from './fixtures/divine-wrath-history.mjs';
 import assert from 'node:assert/strict';
 import { createStore } from '../js/core/store.js';
 import { createCombatEngine } from '../js/core/combat.js';
@@ -194,8 +195,9 @@ test('Leçons divines indépendant —seconde occurrence non sourcée bloque san
   const {store}=await fixture();
   const first=await applyLessons(store,{executionId:'lessons-first'});
   assert.equal(actorOf(store).extensions.v5.divine.sin,0,'la première résolution retire le Péché avant le second Courroux');
+  await store.setDivineSin('priest',1,{reason:'Fixture Q12 : nouvelle infraction avant la seconde occurrence'});
   const before=stateOf(store);
-  const second=store.previewDivineExecution(BATTLE,prayerInput({roll:99,wrathRoll:11,wrathDurationRoll:4,executionId:'lessons-second'}));
+  const second=store.previewDivineExecution(BATTLE,prayerInput({roll:99,wrathRoll:1,wrathDurationRoll:4,executionId:'lessons-second'}));
   assert.equal(second.ready,false,'la source ne définit pas si une seconde occurrence s’additionne, remplace ou renouvelle');
   assert.ok(second.status==='blocked'||second.status==='requires-input');
   assert.deepEqual(stateOf(store),before,'arbitrage absent: aucune mutation ni remplacement silencieux');
@@ -277,10 +279,9 @@ test('Leçons divines indépendant —le −1 DR fait basculer la frontière de 
 
 test('Leçons divines indépendant —le plafond6–10 et le malus11–15 coexistent sans fusion',async()=>{
   const {store}=await fixture();const first=await applyLessons(store,{executionId:'lesson-before-cap'});
-  const capPreview=store.previewDivineExecution(BATTLE,prayerInput({roll:99,wrathRoll:6,executionId:'cap-alongside-lesson'}));
+  const {preview:capPreview,result:capResult}=await imposeHistoricalWrath(store,{executionId:'cap-alongside-lesson'});
   assert.equal(capPreview.ready,true,capPreview.error);
   assert.equal(capPreview.wrathTableResult?.id,'wrath:6-10');
-  const capResult=await store.applyDivineExecution(BATTLE,{preview:capPreview});
   assert.equal(capResult.ok,true,capResult.error);
   const active=actorOf(store),layers=layersOf(active);
   assert.ok(layers.some(layer=>layer.id===first.effect.id&&layer.ruleId==='wrath:11-15:pray-sl-modifier'));

@@ -28,6 +28,7 @@ export function createDivinePanel({Store,refresh}){
  let state={actorId:null,open:false,cult:'',targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0}};
  function reset(actor){state={actorId:actor.id,open:state.open,cult:'',contractId:getAllDivineContracts().find(row=>row.type==='blessing')?.id,targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0},sinEdit:actor.extensions?.v5?.divine?.sin??'',sinReason:'',roll:'',wrathRoll:'',wrathDurationRoll:'',wrathConsequence:'',expiryPhase:'',canSpeak:null,accessScope:'',accessReason:'',revokeReason:'',conditionPenaltyMode:'',conditionPenaltyReason:'',testOptionId:'',brokenEscapeVisibility:null,preview:null,busy:false,error:''};}
  function change(key,value){state[key]=value;if(key!=='testOptionId')state.testOptionId='';state.preview=null;state.error='';refresh();}
+ function changeWrath(key,value){state[key]=value;state.preview=state.preview?{...state.preview,ready:false}:null;state.error='';refresh();}
  function invalidateEditedForm(input){
   const panel=input.closest('[data-divine-panel]');if(!panel)return;
   const apply=panel.querySelector('[data-divine-action="apply"]');if(apply)apply.disabled=true;
@@ -79,6 +80,8 @@ export function createDivinePanel({Store,refresh}){
   const expiry=buildExpiry({contract,actor,choices:state.choices,round,phase:state.expiryPhase,manualRounds:state.form.expiryRounds});
   return {actorId:actor.id,targetIds,roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
    wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),
+   wrathDamageRoll:state.wrathDamageRoll?Number(state.wrathDamageRoll):undefined,wrathEnduranceRoll:state.wrathEnduranceRoll?Number(state.wrathEnduranceRoll):undefined,
+   wrathTestOptionId:state.wrathTestOptionId||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathConditionPenaltyMode||undefined,conditionPenaltyReason:state.wrathConditionPenaltyReason||''},
    testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
    choices:clone(state.choices),...toEngineInput(state.form,{targetIds,contract,actor}),...(isBrokenActor(actor)&&typeof state.brokenEscapeVisibility==='boolean'?{brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility}}:{}),expiry};
  }
@@ -212,7 +215,7 @@ export function createDivinePanel({Store,refresh}){
   if(descr.calendarDuration)content.append(node('p','workspace-muted','Durée en minutes, heures ou jours : l’échéance est calculée sur l’horloge de jeu au moment de l’aperçu.'));
   const actions=node('div','workspace-resolution-row');content.append(actions);
   button(actions,'Calculer la prière',()=>{state.error='';state.lastReceipt=null;try{state.preview=Store.previewDivineExecution(contract.id,prayerInput(actor,contract));}catch(error){state.error=errorText(error);}refresh();},false,'calculate');
-  button(actions,'Appliquer la prière',()=>run(async()=>{const result=await Store.applyDivineExecution(contract.id,{preview:state.preview});if(result?.ok===false || result?.ready===false)throw Error(result.error||'Prière non appliquée.');state.lastReceipt=summarizeExecution(result.receipt,{contract,participants});state.preview=null;state.roll='';state.wrathRoll='';state.wrathDurationRoll='';Object.assign(state.form,{damageRoll:'',damageRolls:{},removals:{},healCount:''});}),!state.preview?.ready,'apply');
+  button(actions,'Appliquer la prière',()=>run(async()=>{const result=await Store.applyDivineExecution(contract.id,{preview:state.preview});if(result?.ok===false || result?.ready===false)throw Error(result.error||'Prière non appliquée.');state.lastReceipt=summarizeExecution(result.receipt,{contract,participants});state.preview=null;state.roll='';state.wrathRoll='';state.wrathDurationRoll='';state.wrathDamageRoll='';state.wrathEnduranceRoll='';state.wrathTestOptionId='';state.wrathConditionPenaltyMode='';state.wrathConditionPenaltyReason='';Object.assign(state.form,{damageRoll:'',damageRolls:{},removals:{},healCount:''});}),!state.preview?.ready,'apply');
   if(state.lastReceipt){
    const receipt=node('div','workspace-divine-receipt');receipt.setAttribute('role','status');receipt.append(node('p','workspace-rubric','Dernier résultat · '+state.lastReceipt.title));
    if(state.lastReceipt.lines.length){const list=node('ul');for(const line of state.lastReceipt.lines)list.append(node('li','',line));receipt.append(list);}
@@ -273,6 +276,24 @@ export function createDivinePanel({Store,refresh}){
       for(const reminder of projection.reminders||[])outcome.append(node('p','workspace-muted',reminder));
       if(condition.requested.condition==='brise')outcome.append(node('p','workspace-muted','Le panneau Brisé de Jouer exécute Move (Flee) puis Action (Sprint) tant que le personnage reste visible d’au moins un ennemi. Fuite engagée : bloquée jusqu’au raccordement de Momentum, Brisé des ennemis et attaques gratuites. Après confirmation hors de vue de tous les ennemis, Hide reste facultatif et passe par un Test normal de Compétence. Une acquisition après une Action déjà dépensée reste bloquée par DIV-BROKEN-MIDTURN-01 pour décision MJ explicite, sans Action supplémentaire ni report. Source : Livre de base V5 EN, p. 163, 185–186.'));
       if(condition.requested.condition==='hemorragique')outcome.append(node('p','workspace-muted','Hémorragique inflige ses pertes de Blessures à la fin du Round selon l’État commun. Source : Livre de base V5 EN, p. 185.'));
+     }
+    }else if(result.wrathDamagePreview){
+     const damage=result.wrathDamagePreview;
+     outcome.append(node('p','workspace-muted',`${result.wrathTableResult.label} · Blessures directes sur le prêtre, sans réduction d’Endurance ou d’armure. Source : Livre de base V5 EN, p. 218.`));
+     if(damage.diceCount)field(outcome,`Jet de Blessures du Courroux (${damage.diceCount}d10)`,'wrathDamageRoll',{min:damage.diceCount,max:10*damage.diceCount});
+     field(outcome,'Jet de Résistance du Courroux (d100)','wrathEnduranceRoll',{min:1,max:100});
+     outcome.append(node('p','workspace-muted',`Difficulté de Résistance : ${damage.enduranceDifficulty>=0?'+':''}${damage.enduranceDifficulty} DR. Péchés utilisés pour les Blessures : ${damage.sinAtTest}, avant décrément.`));
+     if(result.needsInput?.some(row=>row.field?.startsWith('wrathConditionContext.'))||state.wrathConditionPenaltyMode){
+      select(outcome,'Arbitrage des États pour la Résistance',state.wrathConditionPenaltyMode,[['','Choisir pour ce Test'],['sl','Retenir le plus fort malus en DR'],['disadvantage','Retenir le Désavantage']],value=>changeWrath('wrathConditionPenaltyMode',value),'wrathConditionPenaltyMode');
+      field(outcome,'Motif de l’arbitrage pour la Résistance','wrathConditionPenaltyReason',{type:'text'});
+     }
+     if(result.needsInput?.some(row=>row.field==='wrathTestOptionId'))
+      select(outcome,'Choix du jet de Résistance',state.wrathTestOptionId,[['','Choisir'],...(damage.testOptions||[]).map(option=>[option.id,`${option.id==='reverse'?'Inverser':'Garder'} → ${option.result.roll}`])],value=>changeWrath('wrathTestOptionId',value),'wrathTestOptionId');
+     if(damage.enduranceTest){
+      outcome.append(node('p','workspace-muted',`À l’application : ${damage.woundsLost} Blessure(s) perdue(s), ${damage.hpBefore} → ${damage.hpAfter}. Résistance ${damage.enduranceTest.success?'réussie':'ratée'} · ${damage.enduranceTest.sl} DR.`));
+      outcome.append(node('p','workspace-muted',`${damage.stunnedRequested} Sonné demandé(s). États qui seront acquis : ${damage.conditions.map(row=>`${row.name} ${row.level||1}`).join(', ')||'aucun'}.`));
+      if(damage.momentumBefore&&!damage.momentumAfter)outcome.append(node('p','workspace-muted','Le Momentum sera perdu à l’application.'));
+      for(const reminder of damage.reminders||[])outcome.append(node('p','workspace-muted',reminder));
      }
     }else{
      field(outcome,'Conséquences du Courroux traitées par le MJ','wrathConsequence',{type:'text'});

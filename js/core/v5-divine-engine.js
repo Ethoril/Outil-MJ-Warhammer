@@ -10,7 +10,7 @@ import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
 import {effectHandler,effectNeeds,isLayerlessEffect,hasImplicitCasterTarget} from './v5-divine-effect-handlers.js';
 
-export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-21.1';
+export const V5_DIVINE_ENGINE_VERSION = 'v5-divine-engine-2026-10-21.2';
 const clone = value => structuredClone(value);
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 const freeze = value => {
@@ -488,8 +488,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   prayer=cappedPrayer.test;
   const resultRoll = prayer.roll;
   const unit = resultRoll % 10;
-  const sinTrigger = !sinPolicy.exempt && unit <= sin;
-  const wrathTriggered = !sinPolicy.exempt && (prayer.fumble || sinTrigger);
+  const sinTrigger = !sinPolicy.exempt && sin > 0 && unit <= sin;
+  const wrathTriggered = !sinPolicy.exempt && sin > 0 && (prayer.fumble || sinTrigger);
   // `contract.reminders` : rappels permanents du culte ou de la prière (ex. Solkan : aucun Péché ni Corruption toléré).
   const reminders = [...(contract.reminders || [])];
   if (contract.status === 'manual') reminders.push('Prière résolue; effet laissé au rappel MJ selon le contrat source.');

@@ -110,7 +110,7 @@
     },
     {
       "id": "prayer-success",
-      "text": "Succès: appliquer la prière; échec: aucun effet; maladresse: Colère des dieux.",
+      "text": "Succès : appliquer la prière ; échec : aucun effet. À Péché positif, une maladresse déclenche la Colère ; à zéro, aucun Courroux (arbitrage Q12). Cultes elfes exemptés (Q10).",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -120,7 +120,12 @@
         "section": "Les Prières",
         "clauses": []
       },
-      "mode": "engine-gated"
+      "mode": "engine-gated",
+      "arbitration": {
+        "decisionId": "COURROUX-Q12-2026-10-21",
+        "document": "docs/ARBITRAGES_MJ_21_10.md",
+        "section": "Complément du 21/10"
+      }
     },
     {
       "id": "prayer-voice",
@@ -194,7 +199,7 @@
     },
     {
       "id": "wrath-trigger",
-      "text": "Chaque test de Prière déclenche la Colère si le chiffre des unités du jet est inférieur ou égal au total de Péché, même avec succès; une maladresse déclenche aussi la Colère.",
+      "text": "À Péché strictement positif, la Colère survient si les unités du jet de Prière ne dépassent pas ce total, même avec succès, ou sur maladresse. À zéro : aucun Courroux, même sur maladresse (arbitrage Q12). Cultes elfes exemptés (Q10).",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -204,7 +209,12 @@
         "section": "Péché et Colère divine",
         "clauses": []
       },
-      "mode": "engine-gated"
+      "mode": "engine-gated",
+      "arbitration": {
+        "decisionId": "COURROUX-Q12-2026-10-21",
+        "document": "docs/ARBITRAGES_MJ_21_10.md",
+        "section": "Complément du 21/10"
+      }
     },
     {
       "id": "wrath-resolution",
@@ -251,6 +261,11 @@
         "sourceStatus": "read-and-page-checked",
         "printedPage": 218,
         "section": "Colère des dieux"
+      },
+      "accessibility": {
+        "accessible": false,
+        "reason": "inaccessibles (arbitrage Q12)",
+        "decisionId": "COURROUX-Q12-2026-10-21"
       }
     },
     {
@@ -266,6 +281,11 @@
         "sourceStatus": "read-and-page-checked",
         "printedPage": 218,
         "section": "Colère des dieux"
+      },
+      "accessibility": {
+        "accessible": false,
+        "reason": "inaccessibles (arbitrage Q12)",
+        "decisionId": "COURROUX-Q12-2026-10-21"
       }
     },
     {
@@ -993,6 +1013,156 @@
           "order": "apply-then-decrement"
         },
         "evidencePath": "docs/divin/sources/L06-wrath-conditions-readings.mjs"
+      }
+    }
+  ],
+  "wrathDamageRules": [
+    {
+      "id": "wrath:36-40:damage-endurance",
+      "resultId": "wrath:36-40",
+      "ruleVersion": 1,
+      "diceCount": 0,
+      "fixed": 1,
+      "perSin": 1,
+      "enduranceDifficulty": 2,
+      "extraStunnedPerNegativeSL": false,
+      "damageType": "direct-damage",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 218,
+        "section": "Colère des dieux",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "ruleId": "wrath:36-40:damage-endurance",
+        "sourceRefs": [
+          {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 218,
+            "section": "Colère des dieux",
+            "clauses": []
+          }
+        ],
+        "reading": "Lecture visuelle par l’exécutant, sans contrôle indépendant revendiqué.",
+        "sinTiming": "before-decrement",
+        "interpretation": "BE et PA explicitement ignorés par la ligne source."
+      }
+    },
+    {
+      "id": "wrath:51-55:damage-endurance",
+      "resultId": "wrath:51-55",
+      "ruleVersion": 1,
+      "diceCount": 1,
+      "fixed": 0,
+      "perSin": 1,
+      "enduranceDifficulty": 0,
+      "extraStunnedPerNegativeSL": false,
+      "damageType": "direct-damage",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 218,
+        "section": "Colère des dieux",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "ruleId": "wrath:51-55:damage-endurance",
+        "sourceRefs": [
+          {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 218,
+            "section": "Colère des dieux",
+            "clauses": []
+          }
+        ],
+        "reading": "Lecture visuelle par l’exécutant, sans contrôle indépendant revendiqué.",
+        "sinTiming": "before-decrement",
+        "interpretation": "Blessures lues comme perte directe, conformément à la famille B03 du plan ; aucun jet de Localisation inventé."
+      }
+    },
+    {
+      "id": "wrath:71-75:damage-endurance",
+      "resultId": "wrath:71-75",
+      "ruleVersion": 1,
+      "diceCount": 1,
+      "fixed": 0,
+      "perSin": 1,
+      "enduranceDifficulty": -1,
+      "extraStunnedPerNegativeSL": false,
+      "damageType": "direct-damage",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 218,
+        "section": "Colère des dieux",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "ruleId": "wrath:71-75:damage-endurance",
+        "sourceRefs": [
+          {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 218,
+            "section": "Colère des dieux",
+            "clauses": []
+          }
+        ],
+        "reading": "Lecture visuelle par l’exécutant, sans contrôle indépendant revendiqué.",
+        "sinTiming": "before-decrement",
+        "interpretation": "BE et PA explicitement ignorés par la ligne source."
+      }
+    },
+    {
+      "id": "wrath:81-87:damage-endurance",
+      "resultId": "wrath:81-87",
+      "ruleVersion": 1,
+      "diceCount": 2,
+      "fixed": 0,
+      "perSin": 1,
+      "enduranceDifficulty": -2,
+      "extraStunnedPerNegativeSL": true,
+      "damageType": "direct-damage",
+      "source": {
+        "document": "Livre de base V5 EN v2.pdf",
+        "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+        "edition": "V5 EN",
+        "sourceStatus": "read-and-page-checked",
+        "printedPage": 218,
+        "section": "Colère des dieux",
+        "clauses": []
+      },
+      "sourceReceipt": {
+        "ruleId": "wrath:81-87:damage-endurance",
+        "sourceRefs": [
+          {
+            "document": "Livre de base V5 EN v2.pdf",
+            "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
+            "edition": "V5 EN",
+            "sourceStatus": "read-and-page-checked",
+            "printedPage": 218,
+            "section": "Colère des dieux",
+            "clauses": []
+          }
+        ],
+        "reading": "Lecture visuelle par l’exécutant, sans contrôle indépendant revendiqué.",
+        "sinTiming": "before-decrement",
+        "interpretation": "BE et PA explicitement ignorés par la ligne source."
       }
     }
   ],
@@ -27085,5 +27255,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:e1606465353039c12ff5c59277d3af3c775cbdee2f606497bbcecbf664ea0772"
+  "sourceFingerprint": "sha256:c1b3fd1c218d70cbfb7111da72dd1facc52eba58a7809ff92c54cc07856f1894"
 }
