@@ -80,10 +80,10 @@ test('Soleil : faits requis, États réels, paliers et absence de couche à éch
  await s.applyDivineExecution(SUN,{preview:p});assert.equal(person(s,'ally').states.filter(row=>row.key==='aveugle').reduce((n,row)=>n+row.level,0),2);
 });
 
-test('Courroux : le d100 et le traitement MJ sont requis, ligne canonique puis Péchés décrémentés une fois',async()=>{
+test('Courroux : d100 et durée explicite requis, ligne canonique puis Péchés décrémentés une fois',async()=>{
  const s=await fixture();await s.setDivineSin('priest',2,{reason:'Préparation du scénario'});
  const basic=input({roll:22});const missing=s.previewDivineExecution(BATTLE,basic);assert.equal(missing.ready,false);assert.equal(person(s,'priest').extensions.v5.divine.sin,2);
- const preview=s.previewDivineExecution(BATTLE,{...basic,wrathRoll:3,wrathConsequences:'Interdiction de prier suivie par le MJ, durée tirée et notée hors outil.'});assert.equal(preview.ready,true,preview.error);assert.ok(preview.wrathTableResult);
+ const preview=s.previewDivineExecution(BATTLE,{...basic,wrathRoll:3,wrathDurationRoll:2,wrathRoundPolicy:'current'});assert.equal(preview.ready,true,preview.error);assert.ok(preview.wrathTableResult);
  assert.equal(preview.wrathTableResult.min,21);assert.equal(preview.wrathTableResult.max,25);
  await s.applyDivineExecution(BATTLE,{preview});assert.equal(person(s,'priest').extensions.v5.divine.sin,1);
 });
