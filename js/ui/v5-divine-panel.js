@@ -36,6 +36,7 @@ export function createDivinePanel({Store,refresh}){
   const recoveryApply=panel.querySelector('[data-divine-action="recovery-apply"]');if(recoveryApply)recoveryApply.disabled=true;
   const recoveryHeal=panel.querySelector('[data-divine-action="recovery-heal"]');if(recoveryHeal)recoveryHeal.disabled=state.busy||!state.wrathRecoveryHeal;
   const saveCorruption=panel.querySelector('[data-divine-action="corruption-fact"]');if(saveCorruption)saveCorruption.disabled=state.busy||state.corruptionEdit===''||!(state.corruptionReason||'').trim();
+  panel.querySelectorAll('[data-divine-action="penance-create"]').forEach(button=>button.disabled=state.busy||!(state.penanceText||'').trim()||!(state.penanceReason||'').trim());panel.querySelectorAll('[data-divine-action="penance-complete"]').forEach(button=>button.disabled=state.busy||!(state.penanceCloseReason||'').trim());
   const saveSin=panel.querySelector('[data-divine-action="sin"]');if(saveSin)saveSin.disabled=state.busy||state.sinEdit==='';
   const grantAccess=panel.querySelector('[data-divine-action="grant-access"]');if(grantAccess)grantAccess.disabled=state.busy||!state.accessScope||!state.accessReason.trim();
   panel.querySelectorAll('[data-divine-action="revoke-access"]').forEach(button=>button.disabled=state.busy||!state.revokeReason.trim());
@@ -84,7 +85,7 @@ export function createDivinePanel({Store,refresh}){
   const expiry=buildExpiry({contract,actor,choices:state.choices,round,phase:state.expiryPhase,manualRounds:state.form.expiryRounds});
   return {actorId:actor.id,targetIds,roll:state.roll===''?undefined:Number(state.roll),canSpeak:state.canSpeak,
    wrathAllyIds:clone(state.wrathAllyIds),wrathAlliesConfirmed:state.wrathAlliesConfirmed==='true',wrathSkillIds:clone(state.wrathSkillIds),wrathRoundPolicy:state.wrathRoundPolicy||undefined,wrathActionDecision:state.wrathActionDecision||undefined,wrathRoundAnchor:state.wrathAnchorScene&&state.wrathAnchorRound?{sceneId:state.wrathAnchorScene,round:Number(state.wrathAnchorRound)}:undefined,
-   wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),
+   wrathRoll:state.wrathRoll===''?undefined:Number(state.wrathRoll),wrathDurationRoll:state.wrathDurationRoll===''?undefined:Number(state.wrathDurationRoll),wrathConsequences:state.wrathConsequence.trim(),wrathPenanceText:state.wrathPenanceText||'',
    wrathDamageRoll:state.wrathDamageRoll?Number(state.wrathDamageRoll):undefined,wrathEnduranceRoll:state.wrathEnduranceRoll?Number(state.wrathEnduranceRoll):undefined,
    wrathTestOptionId:state.wrathTestOptionId||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathConditionPenaltyMode||undefined,conditionPenaltyReason:state.wrathConditionPenaltyReason||''},
    testOptionId:state.testOptionId||undefined,conditionContext:{conditionPenaltyMode:state.conditionPenaltyMode||undefined,conditionPenaltyReason:state.conditionPenaltyReason},
@@ -156,7 +157,7 @@ export function createDivinePanel({Store,refresh}){
   field(context,'Motif de l’arbitrage de récupération','wrathRecoveryPenaltyReason',{type:'text'});box.append(context);
   const input=()=>({actorId:actor.id,...selection,roll:state.wrathRecoveryRoll?Number(state.wrathRecoveryRoll):undefined,canSpeak:state.wrathRecoveryCanSpeak==='true',testOptionId:state.wrathRecoveryOption||undefined,conditionContext:{conditionPenaltyMode:state.wrathRecoveryPenaltyMode||undefined,conditionPenaltyReason:state.wrathRecoveryPenaltyReason||''},brokenEscapeFacts:{visibleToAnyEnemy:state.brokenEscapeVisibility},
    wrathAllyIds:clone(state.wrathRecoveryAllyIds),wrathAlliesConfirmed:state.wrathRecoveryAlliesConfirmed==='true',wrathSkillIds:clone(state.wrathRecoverySkillIds),wrathRoundPolicy:state.wrathRecoveryPolicy||undefined,wrathActionDecision:state.wrathRecoveryAction||undefined,wrathRoundAnchor:state.wrathRecoveryScene&&state.wrathRecoveryRound?{sceneId:state.wrathRecoveryScene,round:Number(state.wrathRecoveryRound)}:undefined,
-   wrathRoll:state.wrathRecoveryWrathRoll?Number(state.wrathRecoveryWrathRoll):undefined,wrathDurationRoll:state.wrathRecoveryDuration?Number(state.wrathRecoveryDuration):undefined,wrathConsequences:state.wrathRecoveryConsequences||'',wrathDamageRoll:state.wrathRecoveryDamage?Number(state.wrathRecoveryDamage):undefined,wrathEnduranceRoll:state.wrathRecoveryEndurance?Number(state.wrathRecoveryEndurance):undefined,wrathTestOptionId:state.wrathRecoveryDamageOption||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathRecoveryDamageMode||undefined,conditionPenaltyReason:state.wrathRecoveryDamageReason||''}});
+   wrathRoll:state.wrathRecoveryWrathRoll?Number(state.wrathRecoveryWrathRoll):undefined,wrathDurationRoll:state.wrathRecoveryDuration?Number(state.wrathRecoveryDuration):undefined,wrathConsequences:state.wrathRecoveryConsequences||'',wrathPenanceText:state.wrathRecoveryPenance||'',wrathDamageRoll:state.wrathRecoveryDamage?Number(state.wrathRecoveryDamage):undefined,wrathEnduranceRoll:state.wrathRecoveryEndurance?Number(state.wrathRecoveryEndurance):undefined,wrathTestOptionId:state.wrathRecoveryDamageOption||undefined,wrathConditionContext:{conditionPenaltyMode:state.wrathRecoveryDamageMode||undefined,conditionPenaltyReason:state.wrathRecoveryDamageReason||''}});
   button(box,selection.forcedPrayer?'Calculer la Prière imposée':'Calculer la récupération',()=>{state.recoveryPreview=Store.previewDivineWrathRecovery(input());refresh();},false,'recovery-calculate');
   button(box,selection.forcedPrayer?'Appliquer la Prière imposée':'Appliquer la récupération',()=>run(async()=>{const result=await Store.applyDivineWrathRecovery({preview:state.recoveryPreview});if(result?.ok===false)throw Error(result.error||'Récupération non enregistrée.');state.lastRecovery=`Prière ${selection.forcedPrayer?'imposée':'de récupération'} ${result.test.success?'réussie':'ratée'} · ${result.test.sl} DR · ${result.removedCount} État(s) retiré(s).`;state.recoverySelection=null;state.recoveryPreview=null;state.preview=null;for(const key of ['wrathRecoveryWrathRoll','wrathRecoveryDuration','wrathRecoveryConsequences','wrathRecoveryDamage','wrathRecoveryEndurance','wrathRecoveryDamageOption'])state[key]='';}),!state.recoveryPreview?.ready,'recovery-apply');
   const preview=state.recoveryPreview;
@@ -170,6 +171,7 @@ export function createDivinePanel({Store,refresh}){
     projected.append(node('p','workspace-field-error','Nouveau Courroux déclenché par la Prière de récupération. Ses conséquences seront appliquées dans la même commande.'));
     field(projected,'Jet du nouveau Courroux (d100)','wrathRecoveryWrathRoll',{min:1,max:100});
     if(preview.wrath.resultId)projected.append(node('p','workspace-muted','Résultat : '+preview.wrath.resultId.replace('wrath:','')));
+    if(preview.wrath.resultId==='wrath:96-100')field(projected,'Pénitence du nouveau Courroux','wrathRecoveryPenance',{type:'text'});
     if(preview.wrath.resultId==='wrath:11-15')field(projected,'Durée des nouvelles Leçons (d10)','wrathRecoveryDuration',{min:1,max:10});
     if(preview.wrathAccessPreview)accessControls(projected,preview.wrathAccessPreview,{recovery:true});
     if(preview.wrathAlliesPreview)alliesControls(projected,preview.wrathAlliesPreview,actor,participants,{recovery:true});
@@ -189,6 +191,14 @@ export function createDivinePanel({Store,refresh}){
   }
   return box;
  }
+ function penanceControls(content,actor,cult){
+  const box=node('div','workspace-divine-penances');box.append(node('h3','','Pénitences de la fiche'));const rows=actor.extensions?.v5?.divinePenances||[],mayManage=Store.canManageDivinePenances?.()===true;
+  if(!rows.length)box.append(node('p','workspace-muted','Aucune pénitence enregistrée.'));
+  if(mayManage&&rows.some(row=>row.status==='open'))field(box,'Motif de clôture MJ','penanceCloseReason',{type:'text'});
+  for(const row of rows){const item=node('div','workspace-divine-penance');item.append(node('p','',row.cult+' · '+(row.status==='completed'?'Accomplie':'En cours')+' · '+row.text),node('small','workspace-muted',row.source.document+' p.'+row.source.printedPage));if(row.status==='completed')item.append(node('p','workspace-muted','Clôture MJ : '+row.completedReason));else if(mayManage)button(item,'Accomplir la pénitence : '+row.text,()=>run(async()=>{const result=await Store.completeDivinePenance(actor.id,row.id,{reason:state.penanceCloseReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Clôture non enregistrée.');state.preview=null;}),!(state.penanceCloseReason||'').trim(),'penance-complete');box.append(item);}
+  if(mayManage){const examples=(Store.getDivinePenanceExamples?.()||[]).filter(row=>row.cult===cult);select(box,'Exemple de pénitence',state.penanceExample||'',[['','Mission définie par le MJ'],...examples.map(row=>[row.id,row.text+' (p.'+row.source.printedPage+')'])],value=>{const example=examples.find(row=>row.id===value);state.penanceText=example?.text||'';change('penanceExample',value);},'penanceExample');field(box,'Mission de pénitence','penanceText',{type:'text'});field(box,'Motif de création MJ','penanceReason',{type:'text'});button(box,'Créer la pénitence',()=>run(async()=>{const result=await Store.createDivinePenance(actor.id,{text:state.penanceText,reason:state.penanceReason,cult,exampleId:state.penanceExample||undefined,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Pénitence non enregistrée.');state.penanceText='';state.penanceReason='';state.penanceExample='';state.preview=null;}),!(state.penanceText||'').trim()||!(state.penanceReason||'').trim(),'penance-create');}
+  content.append(box);
+ }
  return {render(actor,participants=[]){
   if(!actor)return null;if(state.actorId!==actor.id)reset(actor);
   const allContracts=getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type));
@@ -203,7 +213,7 @@ export function createDivinePanel({Store,refresh}){
   if(cults.length>1)select(content,'Culte',state.cult,[['','Tous les cultes'],...cults.map(cult=>[cult,cult])],value=>{state.cult=value;state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',(value?allContracts.filter(row=>row.deity===value):allContracts)[0]?.id);},'cult');
   select(content,'Prière divine',contract.id,contracts.map(row=>[row.id,row.name+(row.type==='blessing'&&row.deity?' ('+row.deity+')':'')+(row.aspect?' ['+row.aspect+']':'')+' · '+(labels[row.status]||row.status)]),value=>{state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',value);},'prayer');
   content.append(node('p','workspace-muted',(labels[contract.status]||contract.status)+' · '+(contract.deity||'Culte à préciser')+(contract.aspect?' · Aspect : '+contract.aspect:'')));
-  content.append(node('p','',contract.labels?.effect||''));
+  content.append(node('p','',contract.labels?.effect||''));penanceControls(content,actor,contract.deity);
   if(contract.sourceDelta&&contract.status!=='blocked')content.append(node('p','workspace-muted','La règle V5 est présentée ici ; le texte du catalogue de consultation doit encore être actualisé.'));
   if(contract.status!=='blocked')content.append(node('p','workspace-muted',`Portée : ${paramText(contract.params?.range,actor)} · Cibles : ${paramText(contract.params?.targets,actor)} · Durée : ${paramText(contract.params?.duration,actor)}`));
   const source=contract.source;
@@ -384,6 +394,7 @@ export function createDivinePanel({Store,refresh}){
      outcome.append(node('p','workspace-muted','Leçons divines · malus automatique de −1 DR aux futurs Tests de Prière. Le Round actuel compte comme premier; la sanction prend fin après les effets du dernier Round.'));
      field(outcome,'Jet de durée (d10)','wrathDurationRoll',{min:1,max:10});
      if(result.wrathLessonDuration)outcome.append(node('p','workspace-muted',`Durée : ${result.wrathLessonDuration.roll} + ${result.wrathLessonDuration.sinAtTrigger} Péché(s) = ${result.wrathLessonDuration.rounds} Round(s); fin après les effets du Round ${result.wrathLessonDuration.expiryRound}.`));
+    }else if(result.wrathPenancePreview){field(outcome,'Pénitence imposée par le Courroux','wrathPenanceText',{type:'text'});outcome.append(node('p','workspace-muted','Mission suivie sur la fiche, clôturée par le MJ. Aucun retrait automatique de Péché. Source L06 p.218–219.'));
     }else if(result.wrathFortunePreview){outcome.append(node('p','workspace-muted','Le prochain renouvellement normal de Chance donnera un point. Le compteur actuel reste inchangé. Source L06 p.219.'));
     }else if(result.wrathAccessPreview){
      accessControls(outcome,result.wrathAccessPreview);

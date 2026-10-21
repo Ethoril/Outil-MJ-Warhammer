@@ -411,6 +411,61 @@ function projectWrathAllies(state,plan,executionId){
 }
 
 
+// Registre de pénitences dans l'adaptateur déjà précaché (B-C04).
+const penanceAuthority=new Map();
+const penanceSource=(book,page)=>book==='L06'?{...clone(registry.wrathTable[0].source),printedPage:page,section:'Pénitences'}:{document:{L19:'WFRP-Middenheim-City-of-the-White-Wolf_18.01.2021.pdf',L21:'WFRP_Empire_in_Ruins_Companion.pdf',L25:'WFRP_Sea_Of_Claws_221021.pdf'}[book],fileSha256:{L19:'3038d48bd4314e8e95f25fbf7cd1660b82321950f623ab33478666a944e063fb',L21:'6df76acdd7f0b3fd1cb8af756bef086a6a46432f7a8c1c8cebd1f86e14701edd',L25:'60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc'}[book],edition:'V4 adaptée au socle V5',sourceStatus:'read-and-page-checked',printedPage:page,section:'Pénitences'};
+const penanceExamples=[
+ ['manann-voyage','Manann','L06',205,'Accomplir une traversée maritime périlleuse choisie par le MJ.'],
+ ['morr-sepulture','Morr','L06',206,'Restaurer une sépulture abandonnée au service de Morr.'],
+ ['myrmidia-defense','Myrmidia','L06',207,'Former les villageois et organiser leur défense.'],
+ ['ranald-oppression','Ranald','L06',208,'Humilier un oppresseur des pauvres sans mission automatique.'],
+ ['rhya-grove','Rhya','L06',209,'Replanter un lieu dévasté et protéger les familles.'],
+ ['shallya-soins','Shallya','L06',210,'Soigner les habitants d’un village éprouvé par la maladie.'],
+ ['sigmar-communaute','Sigmar','L06',211,'Rebâtir une communauté pour renforcer son unité.'],
+ ['taal-bosquet','Taal','L06',212,'Entretenir un bosquet sacré et affronter les difficultés de la nature.'],
+ ['ulric-courage','Ulric','L06',213,'Vaincre une menace désignée lors d’une épreuve de courage.'],
+ ['verena-savoir','Verena','L06',214,'Retrouver un ouvrage oublié ou résoudre un différend.'],
+ ['ulric-chapelle','Ulric','L19',112,'Inciter les habitants du Middenpalaz à fréquenter leur chapelle délaissée.'],
+ ['sigmar-rocher','Sigmar','L21',6,'Effectuer un pèlerinage au sanctuaire du Rocher brillant.'],
+ ['ulric-rocher','Ulric','L21',6,'Effectuer un pèlerinage au sanctuaire du Rocher brillant.'],
+ ['stromfels-epreuve','Stromfels','L25',89,'Traverser à la nage des eaux dangereuses lors d’une épreuve confirmée par le MJ.']
+].map(([id,cult,book,page,text])=>({id,cult,text,source:penanceSource(book,page)}));
+export const getDivinePenanceExamples=()=>clone(penanceExamples);
+const penancesOf=actor=>{const rows=actor?.extensions?.v5?.divinePenances??[];if(!Array.isArray(rows))throw ruleError('Registre de pénitences invalide.');return rows;};
+function penanceSubject(state,id){return subjectRows(state).find(item=>item.row.id===id)?.row;}
+function validPenance(record){
+ const source=record?.origin?.kind==='wrath'?registry.wrathTable.find(row=>row.id===record.origin.resultId)?.source:record?.exampleId?penanceExamples.find(row=>row.id===record.exampleId&&row.cult===record.cult)?.source:penanceSource('L06',219);
+ return text(record?.id)&&text(record.subjectKey)&&text(record.cult)&&text(record.text)&&record.text.length<=1000&&record.createdBy==='MJ'&&Number.isSafeInteger(record.createdRevision)&&record.createdRevision>=0&&['open','completed'].includes(record.status)&&source&&stableJSON(source)===stableJSON(record.source)
+  &&(record.origin?.kind==='wrath'?record.origin.resultId==='wrath:96-100'&&text(record.origin.executionId):record.origin?.kind==='gm'&&text(record.origin.reason))
+  &&(record.status==='open'?!Object.hasOwn(record,'completedBy')&&!Object.hasOwn(record,'completedRevision')&&!Object.hasOwn(record,'completedReason'):record.completedBy==='MJ'&&text(record.completedReason)&&Number.isSafeInteger(record.completedBaseRevision)&&record.completedBaseRevision>=0&&record.completedRevision===record.completedBaseRevision+1);
+}
+function projectPenance(state,actor,record){const next=clone(state),key=prayerSubjectKey(state,actor);for(const item of subjectRows(next))if(prayerSubjectKey(next,item.row,item.kind)===key){item.row.extensions??={};item.row.extensions.v5??={};const rows=penancesOf(item.row).filter(row=>row.id!==record.id);item.row.extensions.v5.divinePenances=[...rows,clone(record)];}return next;}
+function attestPenance(state,record){penanceAuthority.set(record.id+':'+record.status,{revision:state.localRevision,fingerprint:stateFingerprint(state),record:clone(record)});if(penanceAuthority.size>200)penanceAuthority.delete(penanceAuthority.keys().next().value);}
+export function createStoreDivinePenance(state,actorId,input={}){
+ if(input.baseRevision!==undefined&&input.baseRevision!==state.localRevision)throw ruleError('La partie a changé : relisez les pénitences.');
+ const actor=penanceSubject(state,actorId);if(!actor)throw ruleError('Fiche de pénitence introuvable.');
+ if(Object.hasOwn(input,'source')||!text(input.text)||input.text.length>1000||!text(input.reason)||!text(input.cult)||!entries().some(row=>row.deity===input.cult))throw ruleError('Texte, culte connu et motif MJ requis ; la source est canonique.');
+ const example=input.exampleId?penanceExamples.find(row=>row.id===input.exampleId&&row.cult===input.cult):null;if(input.exampleId&&!example)throw ruleError('Exemple de pénitence inconnu pour ce culte.');
+ const record={id:'penance:'+uid(),subjectKey:prayerSubjectKey(state,actor),cult:input.cult,text:input.text.trim(),source:example?clone(example.source):penanceSource('L06',219),...(example?{exampleId:example.id}:{}),status:'open',createdBy:'MJ',createdRevision:state.localRevision,origin:{kind:'gm',reason:input.reason.trim()}};
+ const next=projectPenance(state,actor,record);attestPenance(state,record);next.log=[{id:record.id+':create',kind:'management',actorId,text:'Pénitence en cours : '+record.text,detail:clone(record)},...(next.log||[])].slice(0,300);return {ok:true,status:'created',record:clone(record),state:next};
+}
+export function completeStoreDivinePenance(state,actorId,id,input={}){
+ const actor=penanceSubject(state,actorId),old=penancesOf(actor).find(row=>row.id===id);if(!actor||!old)throw ruleError('Pénitence introuvable.');if(!validPenance(old))throw ruleError('Pénitence source invalide.');if(old.status==='completed')return {ok:true,status:'duplicate',record:clone(old),state};
+ if(input.baseRevision!==undefined&&input.baseRevision!==state.localRevision)throw ruleError('La partie a changé : relisez les pénitences.');if(!text(input.reason))throw ruleError('Motif MJ de clôture requis.');
+ const record={...clone(old),status:'completed',completedBy:'MJ',completedBaseRevision:state.localRevision,completedRevision:state.localRevision+1,completedReason:input.reason.trim()},next=projectPenance(state,actor,record);attestPenance(state,record);next.log=[{id:id+':complete',kind:'management',actorId,text:'Pénitence accomplie : '+record.text,detail:clone(record)},...(next.log||[])].slice(0,300);return {ok:true,status:'completed',record:clone(record),state:next};
+}
+function prepareWrathPenance(state,actor,row,input,cult){
+ const preview={cult,source:clone(row.source)};if(!text(input.wrathPenanceText)||input.wrathPenanceText.length>1000)return {...failure('requires-input','Le MJ doit définir la pénitence à suivre.',[{field:'wrathPenanceText',label:'Texte de la pénitence imposée'}]),wrathTableResult:clone(row),wrathPenancePreview:preview};
+ const record={id:'wrath-penance:'+input.executionId,subjectKey:prayerSubjectKey(state,actor),cult,text:input.wrathPenanceText.trim(),source:clone(row.source),status:'open',createdBy:'MJ',createdRevision:state.localRevision,origin:{kind:'wrath',executionId:input.executionId,resultId:row.id}};
+ return {ready:true,record,wrathPenancePreview:{...preview,text:record.text}};
+}
+function guardPenances(before,next){
+ const inspect=state=>{const result=new Map(),groups=new Map();for(const item of subjectRows(state)){const rows=penancesOf(item.row),key=prayerSubjectKey(state,item.row,item.kind);if(new Set(rows.map(row=>row.id)).size!==rows.length||rows.some(row=>!validPenance(row)))throw ruleError('Registre de pénitences invalide ou non sourcé.');if(groups.has(key)&&stableJSON(groups.get(key))!==stableJSON(rows))throw ruleError('Pénitences divergentes entre copies.');groups.set(key,rows);for(const record of rows){if(result.has(record.id)&&stableJSON(result.get(record.id))!==stableJSON(record))throw ruleError('Pénitence divergente.');result.set(record.id,record);}}return result;};
+ const old=inspect(before),current=inspect(next);for(const[id,record]of old){const present=current.get(id);if(!present&&subjectRows(next).some(item=>prayerSubjectKey(next,item.row,item.kind)===record.subjectKey||subjectRows(before).some(prior=>prior.row.id===item.row.id&&penancesOf(prior.row).some(row=>row.id===id))))throw ruleError('Effacement de pénitence refusé.');}
+ for(const[id,record]of current){if(stableJSON(old.get(id))===stableJSON(record))continue;const attested=penanceAuthority.get(id+':'+record.status);if(attested?.revision===before.localRevision&&attested.fingerprint===stateFingerprint(before)&&stableJSON(attested.record)===stableJSON(record))continue;
+ const issued=record.origin.kind==='wrath'&&issuedPreviews.get(record.origin.executionId),preview=issued&&JSON.parse(issued),authentic=preview?.input?.wrathPenance||preview?.receipt?.wrathDetails?.record;if(old.has(id)||!preview?.ready||preview.baseRevision!==before.localRevision||preview.baseStateFingerprint!==stateFingerprint(before)||stableJSON(authentic)!==stableJSON(record))throw ruleError('Mutation de pénitence sans commande MJ attestée.');}
+}
+
 function prepareWrathFortune(state,actor,row,input,wrath){
  const layer={id:'wrath-fortune:'+input.executionId,type:'wrath-fortune-refresh',ruleVersion:1,originExecutionId:input.executionId,resultId:row.id,subjectKey:prayerSubjectKey(state,actor),source:clone(row.source),limit:1,wrathProof:{roll:wrath.roll,modifiedRoll:wrath.modifiedRoll,sinAtTest:wrath.sinAtTest,resultId:row.id}};
  return {ready:true,layer,wrathFortunePreview:{limit:1,source:clone(row.source)}};
@@ -519,7 +574,7 @@ export function previewStoreDivine(state,contractId,input={}){
  delete captured.wrathDamageRuleId;
  delete captured.wrathStateRuleId;
  delete captured.wrathRoundLayer;
- delete captured.wrathAccessLayer;delete captured.wrathFortuneLayer;
+ delete captured.wrathPenance;delete captured.wrathAccessLayer;delete captured.wrathFortuneLayer;
  delete captured.wrathAlliesPlan;
  delete captured.wrathSkillLayer;
  delete captured.wrathSkillPreview;
@@ -568,6 +623,8 @@ export function previewStoreDivine(state,contractId,input={}){
    captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,reminder:wrathTableResult.reminder,consequences:captured.wrathConsequences,resolvedBy:'source-contract',ruleId:rule.id,sourceReceipt:clone(rule.sourceReceipt)};
    captured.wrathLessonRuleId=rule.id;
    preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
+  }else if(wrathTableResult?.id==='wrath:96-100'){
+   const planned=prepareWrathPenance(state,ctx.actor,wrathTableResult,captured,contract.deity);if(!planned.ready)return {...planned,preview:clone(preview.preview),input:{...captured,wrathResult:{resultId:wrathTableResult.id,source:clone(wrathTableResult.source)}}};captured.wrathPenance=planned.record;captured.wrathConsequences='Pénitence enregistrée sur la fiche : '+planned.record.text;captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,resolvedBy:'source-contract',consequences:captured.wrathConsequences,ruleId:wrathTableResult.id+':penance'};preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
   }else if(wrathTableResult?.id==='wrath:121-125'){
    const planned=prepareWrathFortune(state,ctx.actor,wrathTableResult,captured,{...preview.preview.wrath,resultId:wrathTableResult.id});captured.wrathFortuneLayer=planned.layer;captured.wrathConsequences='Le prochain renouvellement normal de Chance donnera un point ; le solde actuel et les points temporaires sont conservés.';captured.wrathResult={resultId:wrathTableResult.id,source:clone(wrathTableResult.source),label:wrathTableResult.label,resolvedBy:'source-contract',consequences:captured.wrathConsequences,ruleId:wrathTableResult.id+':fortune'};preview=previewDivineExecution(ctx.actor,contract,ctx.targets,captured);
   }else if(wrathAccessRules[wrathTableResult?.id]){
@@ -640,7 +697,7 @@ export function previewStoreDivine(state,contractId,input={}){
  if(captured.wrathAlliesPlan&&calculated.ready){const projected=projectWrathAllies(calculated.state,captured.wrathAlliesPlan,captured.executionId);if(!projected.ok)return failure('requires-input',projected.error,projected.needsInput);wrathAlliesPreview=projected.preview;}
  const result=calculated.ready?preview:{...preview,...calculated,preview:calculated.preview||preview.preview};
  return rememberPreview({...result,...(wrathStatePreview?{wrathStatePreview}:{}),...(wrathConditionPreview?{wrathConditionPreview}:{}),...(wrathDamagePreview?{wrathDamagePreview}:{}),...(calculated.ready?{projectedEffects:clone(calculated.receipt?.effectReceipts||[])}:{}),contractId,contract:clone(contract),baseRevision:state.localRevision||0,baseStateFingerprint:stateFingerprint(state),baseClockFingerprint:JSON.stringify(clock),input:captured,access:clone(access),
-  executionId:captured.executionId,sourceReceipt:clone(contract.sourceReceipt),wrathTableResult,wrathFortunePreview:captured.wrathFortuneLayer?{limit:1}:null,wrathAccessPreview:captured.wrathAccessLayer?{resultId:captured.wrathAccessLayer.resultId,cult:captured.wrathAccessLayer.cult,dice:wrathAccessRules[captured.wrathAccessLayer.resultId].dice,value:captured.wrathAccessLayer.duration.value,deadline:clone(captured.wrathAccessLayer.deadline)}:null,wrathAlliesPreview,wrathSkillPreview:clone(captured.wrathSkillPreview||null),wrathRoundPreview:clone(captured.wrathRoundPreview||null),wrathLessonDuration:clone(captured.wrathLessonDuration||null),ruleVersion:preview.ruleVersion});
+  executionId:captured.executionId,sourceReceipt:clone(contract.sourceReceipt),wrathTableResult,wrathPenancePreview:captured.wrathPenance?{cult:captured.wrathPenance.cult,text:captured.wrathPenance.text}:null,wrathFortunePreview:captured.wrathFortuneLayer?{limit:1}:null,wrathAccessPreview:captured.wrathAccessLayer?{resultId:captured.wrathAccessLayer.resultId,cult:captured.wrathAccessLayer.cult,dice:wrathAccessRules[captured.wrathAccessLayer.resultId].dice,value:captured.wrathAccessLayer.duration.value,deadline:clone(captured.wrathAccessLayer.deadline)}:null,wrathAlliesPreview,wrathSkillPreview:clone(captured.wrathSkillPreview||null),wrathRoundPreview:clone(captured.wrathRoundPreview||null),wrathLessonDuration:clone(captured.wrathLessonDuration||null),ruleVersion:preview.ruleVersion});
 }
 
 export function applyStoreDivine(state,contractId,input={}){
@@ -660,6 +717,7 @@ export function applyStoreDivine(state,contractId,input={}){
  const calculated=applyDivineExecution(state,contract,engineInput);
  if(!calculated.ready)throw ruleError(calculated.error || 'Prière non appliquée : données requises.');
  let next=calculated.state;
+ if(captured.input.wrathPenance){const row=registry.wrathTable.find(row=>row.id==='wrath:96-100'),planned=prepareWrathPenance(state,ctx.actor,row,captured.input,contract.deity);if(!planned.ready||stableJSON(planned.record)!==stableJSON(captured.input.wrathPenance))throw ruleError('Pénitence modifiée : recalculez.');next=projectPenance(next,ctx.actor,planned.record);calculated.receipt.wrathPenanceReceipt=clone(planned.record);next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathPenanceReceipt=clone(planned.record);}
  if(captured.input.wrathFortuneLayer){const row=registry.wrathTable.find(row=>row.id==='wrath:121-125'),planned=prepareWrathFortune(state,ctx.actor,row,captured.input,{...calculated.preview.wrath,resultId:row.id});if(stableJSON(planned.layer)!==stableJSON(captured.input.wrathFortuneLayer))throw ruleError('Courroux Chance modifié : recalculez.');next=projectWrathRound(next,ctx.actor,planned.layer);calculated.receipt.wrathFortuneReceipt=clone(planned.layer);next.extensions.v5.divineExecutions.find(row=>row.executionId===captured.executionId).wrathFortuneReceipt=clone(planned.layer);}
  if(captured.input.wrathAccessLayer){
   const row=registry.wrathTable.find(row=>row.id===captured.wrathTableResult?.id),planned=prepareWrathAccess(state,ctx.actor,row,captured.input,{...calculated.preview.wrath,resultId:row.id},contract.deity);
@@ -847,6 +905,8 @@ function calculateWrathRecovery(state,input){
     :conditionRule?projectWrathConditions(changed,conditionRule,input.executionId,sin):projectWrathDamage(changed,damageRule,input,input.executionId,sin,state.combat?.round);
    if(!projected.ok)return {...failure('requires-input',projected.error||'Acquisition à préciser.',projected.needsInput),test,wrath,...(damageRule?{wrathDamagePreview:projected.preview}:{})};
    next.combat.participants[index]=projected.participant;wrathDetails=clone(projected.receipt||projected.preview);if(damageRule)wrathDamagePreview=projected.preview;
+  }else if(row.id==='wrath:96-100'){
+   const planned=prepareWrathPenance(state,actor,row,input,lock.cult);if(!planned.ready)return {...planned,test,wrath};Object.assign(next,projectPenance(next,actor,planned.record));wrathDetails={record:clone(planned.record)};
   }else if(row.id==='wrath:121-125'){
    const planned=prepareWrathFortune(state,actor,row,input,wrath);Object.assign(next,projectWrathRound(next,actor,planned.layer));wrathDetails=clone(planned.layer);
   }else if(wrathAccessRules[row.id]){
@@ -969,7 +1029,7 @@ export function sweepDivineSummons(state){
 
 /** Commande de finalisation : valide les combinaisons et recalcule les couches sans déduire de phases d'une différence d'état. */
 export function finalizeDivineState(before,next){
- guardWrathCalendar(before,next);guardWrathFortune(before,next);
+ guardWrathCalendar(before,next);guardWrathFortune(before,next);guardPenances(before,next);
  const oldRoundCheck=inspectWrathRounds(before),newRoundCheck=inspectWrathRounds(next);
  if(!oldRoundCheck.ok||!newRoundCheck.ok)throw ruleError('Sanction du Courroux en Rounds invalide ou divergente.');
  let roundPhases=[];

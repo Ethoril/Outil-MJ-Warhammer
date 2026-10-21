@@ -8,15 +8,16 @@ But : préparer la phase H du plan de fin de projet (écriture en retour de l’
 | Points de Corruption | `extensions.v5.corruptionPoints` | absente | sorts, Courroux, Larmes de Shallya… | lot 3, phase B, phase D |
 | Culte(s) | déduit des talents Béni / Invocation (spécialisation) | talents (importés) | — | divin |
 | Points de Chance permanents | `extensions.v5.characterResources[].fortune`, clé `characterId` ; projection `extensions.v5.resources.fortune` | `chance` (initialisation explicite depuis le solde connu importé) | dépenses, corrections MJ, renouvellement explicite | existant ; B09 `af31809` |
-| Pénitences en cours et accomplies | `extensions.v5.divinePenances[]` : identité, culte, texte, source, origine, statut et clôture MJ | absente | Courroux 96–100, création et clôture MJ | phase B B10 (en cours) |
+| Pénitences en cours et accomplies | `extensions.v5.divinePenances[]` : identité, culte, texte, source, origine, statut et clôture MJ | absente | Courroux 96–100, création et clôture MJ | phase B B10 |
 | Blessures Critiques (registre) | `extensions.v5.criticalWounds` | absente | combat, soins, Larmes de Shallya, bouton Guérir | phase A (A9, A11) |
 
 ## Complément phase B — reprise gpt/phase-b4
 
-Consigne du MJ appliquée rétroactivement aux lots B00–B09 et au lot B10 en cours. Ce registre prépare la phase H ; il ne réalise pas l’écriture vers les fiches. Les chemins ci-dessous sont ceux du personnage et de ses projections dans combat.participants, activeScene.participants, suspendedScenes[].participants, persistentCharacters ou reserve selon leur présence. L’identité de fiche/personnage reste déterminante ; aucun rapprochement par nom.
+Consigne du MJ appliquée rétroactivement aux lots B00–B09 et au lot B10. Ce registre prépare la phase H ; il ne réalise pas l’écriture vers les fiches. Les chemins ci-dessous sont ceux du personnage et de ses projections dans combat.participants, activeScene.participants, suspendedScenes[].participants, persistentCharacters ou reserve selon leur présence. L’identité de fiche/personnage reste déterminante ; aucun rapprochement par nom.
 
 | Variable | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
 | --- | --- | --- | --- | --- |
+| Blessures courantes du personnage | `hp` et `maxHp` de la projection ; différence signée `maxHp - hp` conservée lors de la synchronisation | maximum calculé depuis les caractéristiques/talents importés ; solde courant non importé par ce flux | dégâts directs de Courroux, soins et commandes de Blessures | B03/B04 ; modèle commun de santé |
 | Plafond durable des Tests de Prière jusqu’au terme des huit jours impériaux | `extensions.v5.divineEffects[]`, type `prayer-sl-cap` : source, ancre et échéance de campagne | absente | Courroux 06–10 historique ; vraie expiration calendaire | socle P4/E5, conservé par B01/B05 |
 | Malus de compétences pour plusieurs heures ou jours | `extensions.v5.divineEffects[]`, type `wrath-skill-penalty` : identifiants de compétences, source, durée et échéance | absente | Courroux 26–30/56–60, choix MJ, horloge de campagne | B06 `97c1839` |
 | Réprobation des prières d’un dieu visant le personnage | `extensions.v5.divineEffects[]`, type `wrath-deity-rejection` : culte, source et échéance | absente | Courroux 41–45, destinataires confirmés MJ, expiration | B07 `cbc552e` |

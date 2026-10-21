@@ -1,4 +1,4 @@
-import {previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
+import {createStoreDivinePenance,completeStoreDivinePenance,getDivinePenanceExamples,previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
@@ -198,7 +198,7 @@ function registerNewV5Participants(before, next) {
   if (order) next.combat.order = order;
 }
 
-export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
+export function createStore({ storage = typeof localStorage !== 'undefined' ? localStorage : null, sync = null, persistence = null, persistenceFactory = null, contextId = 'guest', divineAuthority = 'MJ', appVersion = 'unknown', bus = null, now = () => new Date().toLocaleTimeString(), onSyncStatus = null, onLocalStatus = null, onReady = null } = {}) {
   const CLIENT_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : uid();
 
   let reserve = new Map();
@@ -2926,6 +2926,17 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       }catch(error){return {ok:false,error:error.message||'La révocation n’a pas été enregistrée.',code:error.code||'DIVINE_ACCESS_COMMAND'};}
     },    getDivineContract(identifier) { return getDivineContract(identifier); },
     getAllDivineContracts() { return getAllDivineContracts(); },
+    canManageDivinePenances(){return divineAuthority==='MJ';},
+    getDivinePenanceExamples(){return getDivinePenanceExamples();},
+    async createDivinePenance(actorId,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut créer une pénitence.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-penance-create',draft=>{transition=createStoreDivinePenance(draft,actorId,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async completeDivinePenance(actorId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clôturer une pénitence.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;
+      const initial=completeStoreDivinePenance(currentEnvelope(),actorId,id,{...captured,baseRevision:expected});if(initial.status==='duplicate')return {ok:true,status:'duplicate',record:initial.record};let transition;
+      const saved=api.executeCommand('divine-penance-complete',draft=>{transition=completeStoreDivinePenance(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,status:transition.status,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
     previewDivineWrathRecovery(input={}) {
       const envelope=currentEnvelope(),actorId=input.actorId,actor=envelope.combat?.participants?.find(row=>row.id===actorId);
       const block=brokenEscapeActionBlock(envelope,actorId);if(block)return block;
