@@ -16,6 +16,7 @@ import {runB7WrathCloudScenarios} from './divin-v5-b7-cloud-scenarios.mjs';
 import {runB8WrathCloudScenarios} from './divin-v5-b8-cloud-scenarios.mjs';
 import {runB9WrathCloudScenarios} from './divin-v5-b9-cloud-scenarios.mjs';
 import {runB10WrathCloudScenarios} from './divin-v5-b10-cloud-scenarios.mjs';
+import {runB11WrathCloudScenarios} from './divin-v5-b11-cloud-scenarios.mjs';
 import {runB6WrathCloudScenarios} from './divin-v5-b6-cloud-scenarios.mjs';
 import {runB5WrathCloudScenarios} from './divin-v5-b5-cloud-scenarios.mjs';
 import {runB4WrathCloudScenarios} from './divin-v5-b4-cloud-scenarios.mjs';
@@ -563,6 +564,7 @@ try{
  await runB8WrathCloudScenarios({A,B,fixture,settled,pull,envelope,check});
  await runB9WrathCloudScenarios({A,B,fixture,settled,pull,envelope,check});
  await runB10WrathCloudScenarios({A,B,fixture,settled,pull,envelope,check});
+ await runB11WrathCloudScenarios({A,B,fixture,settled,pull,envelope,check});
 
  const exported=await envelope(B);const shared=await remote();for(const key of ['log','history','localRevision','archives'])assert.equal(Object.hasOwn(shared.state,key),false);assert.deepEqual(errors,[]);mkdirSync(resolve(root,'tmp/divin'),{recursive:true});writeFileSync(resolve(root,'tmp/divin/cloud-divine-receipt.json'),JSON.stringify({appVersion:APP_VERSION,checks,services:'localhost Auth/RTDB',persistence:'native IndexedDB, two isolated contexts',adapter:'production Store/session/protocol, real REST ETag bridge',namespace,errors},null,2));await a.ctx.close();await b.ctx.close();console.log('PASS — recette divin cloud, IndexedDB natif et historique');
 }finally{await browser?.close();if(server)await new Promise(done=>server.close(done));if(token)try{await request('',{method:'DELETE',owner:true});}catch{} }
