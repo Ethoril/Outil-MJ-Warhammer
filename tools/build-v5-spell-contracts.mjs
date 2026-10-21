@@ -1,6 +1,8 @@
 import {ELVEN_SPELL_CONFIG} from './v5-elven-spell-contracts.mjs';
 import {ARCANE_WEAPON_PROFILES} from '../js/core/equipment.js';
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {TRADITION_SPELLS} from './v5-tradition-spell-contracts.mjs';
 import { OVERCAST_SPECIFIC } from './v5-overcast-specific.mjs';
 import {measurePeriodicSpellOutcome} from './spell-coverage-probe.mjs';
 import {getV5Fate,getV5Fortune} from '../js/core/v5-resources.js';
@@ -2480,6 +2482,58 @@ for (const item of audit.items) {
   contracts.push(contract);
 }
 
+// Phase D : sorts des traditions (hors feuille Magie et hors audit). Même construction que les contrats d'audit.
+for (const t of TRADITION_SPELLS) {
+  const params = { cn: t.cn, range: t.range, target: t.target, duration: t.duration };
+  const effConfig = structuredClone(t.effects);
+  if (/^zde|zone|aoe/i.test(params.range)) effConfig.aoe = true;
+  for (const fact of effConfig.facts || []) if (fact.type === 'select') fact.owner = 'caster';
+  for (const [id, rule] of Object.entries(effConfig.optionRules || {})) if (rule.chosenTargets) (effConfig.facts ??= []).push({ key: 'optionTargets_' + id, label: 'Option ' + id + ' : destinataires, un par palier', type: 'targets', requiredIfOvercast: id });
+  for (const [option, rule] of Object.entries(effConfig.optionRules || {})) if (rule.test) (effConfig.facts ??= []).push({ key: 'optionRoll_' + option, label: 'Option ' + option + ' : ' + rule.test.skill + ' (d100, ' + rule.test.modifierSl + ' DR)', type: 'number', min: 1, max: 100, requiredIfOvercast: option });
+  const overcast = buildOvercastOptions({ source: { values: params } }, t.domain, params, effConfig, true);
+  if (t.overcastSpecific && overcast.allowed) {
+    overcast.specific = structuredClone(t.overcastSpecific);
+    if (!overcast.options.includes('special')) overcast.options.push('special');
+  }
+  if (t.overcastForbidden) { overcast.allowed = false; overcast.options = []; overcast.reason = t.overcastForbidden; delete overcast.specific; }
+  const payload = JSON.stringify({ canonicalName: t.canonicalName, page: t.page, cn: t.cn, range: t.range, target: t.target, duration: t.duration });
+  const contract = {
+    id: 'spell-tradition-' + t.slug,
+    row: null,
+    name: t.name,
+    canonicalName: t.canonicalName,
+    page: t.page,
+    domain: t.domain,
+    wind: null,
+    type: t.type,
+    cn: t.cn,
+    range: t.range,
+    target: t.target,
+    duration: t.duration,
+    sourceFingerprint: 'sha256:' + createHash('sha256').update(payload).digest('hex'),
+    treatment: effConfig.type === 'narrative' ? 'narrative' : t.treatment || 'engine',
+    overcast,
+    effects: Object.fromEntries(Object.entries(effConfig).filter(([key]) => key !== 'overcastFortunePer2Sl')),
+    reminders: readableReminder([t.description, ...(t.assisted || [])].filter(Boolean).join(' ')) || null,
+    assistedClauses: (t.assisted || []).map(readableReminder),
+    sharedWith: null,
+    sourceBook: t.book,
+    edition: t.edition,
+    isBookV5: false,
+    isElf: false,
+    isWom: false,
+    isJadeVariant: false,
+    isCatalogue: false,
+    isTradition: true,
+    ficheFollowUp: false,
+    isVortex: Boolean(effConfig.vortex),
+    isAuxiliary: effConfig.type === 'summon'
+  };
+  readableEffectLabels(contract.effects);
+  for (const option of contract.overcast.specific || []) option.label = readableReminder(option.label);
+  contracts.push(contract);
+}
+
 const unmatchedSpecific = Object.keys(OVERCAST_SPECIFIC).filter(name => !usedSpecificOvercast.has(name));
 if (unmatchedSpecific.length) throw new Error(`Options de surpuissance propres sans contrat : ${unmatchedSpecific.join(', ')}`);
 console.log(`Génération terminée : ${contracts.length} contrats au total.`);
@@ -2648,7 +2702,7 @@ for (const c of contracts) {
   const effectType = c.effects?.type || 'narrative';
   const fpShort = (c.sourceFingerprint || '').slice(0, 15) + '...';
 
-  matrixRows.push(`| ${c.row} | ${c.name} | ${c.canonicalName} | ${c.domain}${c.wind ? ` (${c.wind})` : ''} | ${c.cn} | ${c.range} | ${c.target} | ${c.duration} | ${statusLabel} | ${effectType} | \`${fpShort}\` |\n`);
+  matrixRows.push(`| ${c.row ?? 'T'} | ${c.name} | ${c.canonicalName} | ${c.domain}${c.wind ? ` (${c.wind})` : ''} | ${c.cn} | ${c.range} | ${c.target} | ${c.duration} | ${statusLabel} | ${effectType} | \`${fpShort}\` |\n`);
 }
 
 const specificRows = [];

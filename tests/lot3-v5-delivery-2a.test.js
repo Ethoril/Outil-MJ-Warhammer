@@ -56,7 +56,7 @@ test('S-04 — interpréteur : bonus, valeurs pleines, multiplicateurs, unités,
 
 test('S-04 — les 277 contrats : seules les durées réellement narratives ou à choisir restent « donnée MJ »', () => {
   const probe = { caracs: { CC: 50, CT: 50, F: 40, E: 40, I: 50, Ag: 50, Dex: 50, Int: 60, FM: 60, Soc: 50, M: 4 } };
-  const contracts = getAllSpellContracts();
+  const contracts = getAllSpellContracts().filter(c => !c.isTradition);
   assert.equal(contracts.length, 277);
   const unreadable = contracts.filter(c => parseSpellDuration(c.duration, { caster: probe, target: probe }).kind === 'unknown');
   const durations = [...new Set(unreadable.map(c => c.duration))].sort();

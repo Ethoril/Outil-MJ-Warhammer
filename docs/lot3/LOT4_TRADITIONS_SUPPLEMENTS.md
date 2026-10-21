@@ -313,3 +313,157 @@ Preuve de périmètre des runes : `docs/lot3/LOT3_CADRAGE_MAGIE.md:159`. Aucun m
 ## Validation documentaire
 
 Identités uniques, champs requis et références de code contrôlés. Les schémas sont des inventaires, pas des contrats de jeu. Aucun code, test, PDF ou contrat généré n’est modifié. Les nombres de tests de la phase A ne valident aucune règle nouvelle de cet inventaire.
+
+## Complément du 21/10/2026 (L18-L26, ajouté en phase D)
+
+Inventaire des livres ajoutés après les inventaires D0a/D0b, mêmes règles : repérage lexical (CN:, rune, familier) puis lecture des pages. Entrées marquées « addedOn » dans le JSON. Statut courant : tout est absent du catalogue ; « à arbitrer » = hors des arbitrages du 21/10 (aucune implantation sans décision du MJ) ; « variante » = cartouche V4 d'un sort déjà inventorié, le socle V5 prime.
+
+Pages imprimées. Total : 114 sorts, 8 runes (variantes ou usages), 11 règles de système.
+
+| ID | Source | Nom | Tradition / CN | Statut |
+| --- | --- | --- | --- | --- |
+| D0b-L22-C001 | L22 p.42 | Favour of the Horned Rat | Skaven Petty / 0 | absent, à arbitrer |
+| D0b-L22-C002 | L22 p.42 | Ghostly Flame | Skaven Petty / 0 | absent, à arbitrer |
+| D0b-L22-C003 | L22 p.42 | Mark of the Horned Rat | Skaven Petty / 0 | absent, à arbitrer |
+| D0b-L22-C004 | L22 p.43 | Rat Thrall | Skaven Petty / 0 | absent, à arbitrer |
+| D0b-L22-C005 | L22 p.43 | Vector | Skaven Petty / 0 | absent, à arbitrer |
+| D0b-L22-C006 | L22 p.43 | Wrack | Skaven Petty / 0 | absent, à arbitrer |
+| D0b-L22-C007 | L22 p.43 | Curse of the Horned Rat | Skaven Arcane / 19 | absent, à arbitrer |
+| D0b-L22-C008 | L22 p.44 | Death Frenzy | Skaven Arcane / 5 | absent, à arbitrer |
+| D0b-L22-C009 | L22 p.44 | Musk of Terror | Skaven Arcane / 9 | absent, à arbitrer |
+| D0b-L22-C010 | L22 p.44 | Skitterleap | Skaven Arcane / 6 | absent, à arbitrer |
+| D0b-L22-C011 | L22 p.44 | Vermintide | Skaven Arcane / 8 | absent, à arbitrer |
+| D0b-L22-C012 | L22 p.45 | Crack’s Call | Skaven Ruin / 11 | absent, à arbitrer |
+| D0b-L22-C013 | L22 p.45 | Crackling Doom | Skaven Ruin / 5 | absent, à arbitrer |
+| D0b-L22-C014 | L22 p.45 | Flensing Ruin | Skaven Ruin / 6 | absent, à arbitrer |
+| D0b-L22-C015 | L22 p.45 | Howling Warpgale | Skaven Ruin / 7 | absent, à arbitrer |
+| D0b-L22-C016 | L22 p.45 | Scorch | Skaven Ruin / 8 | absent, à arbitrer |
+| D0b-L22-C017 | L22 p.45 | Warp Lightning | Skaven Ruin / 7 | absent, à arbitrer |
+| D0b-L22-C018 | L22 p.46 | Warp Shield | Skaven Ruin / 6 | absent, à arbitrer |
+| D0b-L22-C019 | L22 p.46 | Warp Storm | Skaven Ruin / 12 | absent, à arbitrer |
+| D0b-L22-C020 | L22 p.46 | Pestilent Breath | Skaven Plague / 8 | absent, à arbitrer |
+| D0b-L22-C021 | L22 p.46 | Poisonous Pustule | Skaven Plague / 5 | absent, à arbitrer |
+| D0b-L22-C022 | L22 p.47 | Bless with Filth | Skaven Plague / 6 | absent, à arbitrer |
+| D0b-L22-C023 | L22 p.47 | Cloud of Corruption | Skaven Plague / 7 | absent, à arbitrer |
+| D0b-L22-C024 | L22 p.47 | Mantle of Contagion | Skaven Plague / 4 | absent, à arbitrer |
+| D0b-L22-C025 | L22 p.47 | Putrefy | Skaven Plague / 8 | absent, à arbitrer |
+| D0b-L22-C026 | L22 p.47 | Toxic Rain | Skaven Plague / 10 | absent, à arbitrer |
+| D0b-L22-C027 | L22 p.48 | Veil of Flies | Skaven Plague / 6 | absent, à arbitrer |
+| D0b-L22-C028 | L22 p.48 | Weeping Wound | Skaven Plague / 9 | absent, à arbitrer |
+| D0b-L22-C029 | L22 p.48 | Wither | Skaven Plague / 6 | absent, à arbitrer |
+| D0b-L22-C030 | L22 p.48 | Swiftscamper | Skaven Stealth / 4 | absent, à arbitrer |
+| D0b-L22-C031 | L22 p.48 | Armour of Darkness | Skaven Stealth / 6 | absent, à arbitrer |
+| D0b-L22-C032 | L22 p.49 | Black Whirlwind | Skaven Stealth / 12 | absent, à arbitrer |
+| D0b-L22-C033 | L22 p.49 | Buoyant Passage | Skaven Stealth / 6 | absent, à arbitrer |
+| D0b-L22-C034 | L22 p.49 | Flash-Bang | Skaven Stealth / 6 | absent, à arbitrer |
+| D0b-L22-C035 | L22 p.49 | Pelt of the Assassin | Skaven Stealth / 8 | absent, à arbitrer |
+| D0b-L22-C036 | L22 p.49 | Stickypaws | Skaven Stealth / 8 | absent, à arbitrer |
+| D0b-L22-C037 | L22 p.49 | Traceless Demise | Skaven Stealth / 11 | absent, à arbitrer |
+| D0b-L22-C038 | L22 p.49 | Warp Star Infusion | Skaven Stealth / 8 | absent, à arbitrer |
+| D0b-L19-C001 | L19 p.109 | Bless with Filth (variante d’Under-Middenheim) | Skaven Plague / 6 | variante |
+| D0b-L23-C001 | L23 p.79 | Blast of Corruption | Chaos Arcane / 8 | absent, à arbitrer |
+| D0b-L23-C002 | L23 p.79 | Bolt of Corruption | Chaos Arcane / 8 | absent, à arbitrer |
+| D0b-L23-C003 | L23 p.79 | Daemonic Mien | Chaos Arcane / 8 | absent, à arbitrer |
+| D0b-L23-C004 | L23 p.80 | Foul Messenger | Chaos Arcane / 8 | absent, à arbitrer |
+| D0b-L23-C005 | L23 p.80 | Joyous Aspect | Chaos Arcane / 4 | absent, à arbitrer |
+| D0b-L23-C006 | L23 p.80 | Obsession | Chaos Arcane / 8 | absent, à arbitrer |
+| D0b-L23-C007 | L23 p.80 | Power of Chaos | Chaos Arcane / 4 | absent, à arbitrer |
+| D0b-L23-C008 | L23 p.80 | Rend Aethyr | Chaos Arcane / 16 | absent, à arbitrer |
+| D0b-L23-C009 | L23 p.81 | Slave to Darkness | Chaos Arcane / 8 | absent, à arbitrer |
+| D0b-L23-C010 | L23 p.81 | The Purple Hand | Tzeentch Petty / 3 | absent, à arbitrer |
+| D0b-L23-C011 | L23 p.82 | Curse of Tzeentch | Tzeentch / 9 | absent, à arbitrer |
+| D0b-L23-C012 | L23 p.82 | Blue Fire of Tzeentch | Tzeentch / 6 | absent, à arbitrer |
+| D0b-L23-C013 | L23 p.82 | Bolt of Change | Tzeentch / 9 | absent, à arbitrer |
+| D0b-L23-C014 | L23 p.82 | The Flickering Flames of Fickle Fate | Tzeentch / 4 | absent, à arbitrer |
+| D0b-L23-C015 | L23 p.82 | Master of Fortune | Tzeentch / 8 | absent, à arbitrer |
+| D0b-L23-C016 | L23 p.83 | Mindfire | Tzeentch / 6 | absent, à arbitrer |
+| D0b-L23-C017 | L23 p.83 | Pink Fire of Tzeentch | Tzeentch / 6 | absent, à arbitrer |
+| D0b-L23-C018 | L23 p.83 | Sense the Skein | Tzeentch / 3 | absent, à arbitrer |
+| D0b-L23-C019 | L23 p.83 | Tzeentch’s Firestorm | Tzeentch / 11 | absent, à arbitrer |
+| D0b-L23-C020 | L23 p.83 | Tzeentch’s Golden Aura | Tzeentch / 7 | absent, à arbitrer |
+| D0b-L23-C021 | L23 p.83 | Word of Tzeentch | Tzeentch / 7 | absent, à arbitrer |
+| D0b-L23-C022 | L23 p.83 | Transformation of Tzeentch (variante V4) | Tzeentch / 10 | variante |
+| D0b-L23-C023 | L23 p.81 | Boon of Tzeentch (variante V4) | Tzeentch / 9 | variante |
+| D0b-L26-C001 | L26 p.98 | Beast Tongue | Tzeentch Petty / 0 | absent, à arbitrer |
+| D0b-L26-C002 | L26 p.98 | Eyes of the Beast | Tzeentch Petty / 0 | absent, à arbitrer |
+| D0b-L26-C003 | L26 p.98 | Sign of the Beast | Tzeentch Petty / 0 | absent, à arbitrer |
+| D0b-L26-C004 | L26 p.98 | Bension of Tzeentch | Tzeentch Arcane / 9 | absent, à arbitrer |
+| D0b-L26-C005 | L26 p.98 | Bestial Rage | Tzeentch Arcane / 6 | absent, à arbitrer |
+| D0b-L26-C006 | L26 p.98 | Climb | Tzeentch Arcane / 5 | absent, à arbitrer |
+| D0b-L26-C007 | L26 p.99 | Enrage Beast | Tzeentch Arcane / 6 | absent, à arbitrer |
+| D0b-L26-C008 | L26 p.99 | Gift of the Beast | Tzeentch Arcane / 8 | absent, à arbitrer |
+| D0b-L26-C009 | L26 p.99 | Slave to Chaos | Tzeentch Arcane / 18 | absent, à arbitrer |
+| D0b-L26-C010 | L26 p.99 | Subvert Strength | Tzeentch Arcane / 11 | absent, à arbitrer |
+| D0b-L26-C011 | L26 p.100 | Transformation of the Beast | Tzeentch Arcane / 12 | absent, à arbitrer |
+| D0b-L26-C012 | L26 p.100 | Tremor | Tzeentch Arcane / 8 | absent, à arbitrer |
+| D0b-L18-C001 | L18 p.36 | Befuddle | Slaanesh Petty / 0 | absent, à arbitrer |
+| D0b-L18-C002 | L18 p.36 | Blessing of Slaanesh | Slaanesh Petty / 0 | absent, à arbitrer |
+| D0b-L18-C003 | L18 p.36 | Endure Excess | Slaanesh Petty / 0 | absent, à arbitrer |
+| D0b-L18-C004 | L18 p.36 | Leer | Slaanesh Petty / 0 | absent, à arbitrer |
+| D0b-L18-C005 | L18 p.36 | Lure | Slaanesh Petty / 0 | absent, à arbitrer |
+| D0b-L18-C006 | L18 p.36 | Preen | Slaanesh Petty / 0 | absent, à arbitrer |
+| D0b-L18-C007 | L18 p.36 | Sense Vice | Slaanesh Petty / 0 | absent, à arbitrer |
+| D0b-L18-C008 | L18 p.36 | Acquiescence (variante V4) | Slaanesh / 8 | variante |
+| D0b-L18-C009 | L18 p.36 | Aura of Acquiescence | Slaanesh / 12 | absent, à arbitrer |
+| D0b-L18-C010 | L18 p.37 | Bonds of Slaanesh | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C011 | L18 p.37 | Breath of Inspiration | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C012 | L18 p.37 | Blissful Throes | Slaanesh / 6 | absent, à arbitrer |
+| D0b-L18-C013 | L18 p.37 | Cacophonic Caress | Slaanesh / 6 | absent, à arbitrer |
+| D0b-L18-C014 | L18 p.37 | Careless Whispers | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C015 | L18 p.37 | Chaos Spawn | Slaanesh / 10 | absent, à arbitrer |
+| D0b-L18-C016 | L18 p.37 | Cursed Caress | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C017 | L18 p.37 | Cutting Wit | Slaanesh / 6 | absent, à arbitrer |
+| D0b-L18-C018 | L18 p.37 | Delicious Excruciation | Slaanesh / 6 | absent, à arbitrer |
+| D0b-L18-C019 | L18 p.38 | Fleshy Curse | Slaanesh / 10 | absent, à arbitrer |
+| D0b-L18-C020 | L18 p.39 | Flesh Puppet | Slaanesh / 10 | absent, à arbitrer |
+| D0b-L18-C021 | L18 p.39 | From Pain, Pleasure (variante V4) | Slaanesh / 6 | variante |
+| D0b-L18-C022 | L18 p.39 | Gift of Slaanesh | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C023 | L18 p.39 | Lash of Slaanesh | Slaanesh / 6 | absent, à arbitrer |
+| D0b-L18-C024 | L18 p.40 | Luxurious Torment | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C025 | L18 p.40 | Mask of Desire | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C026 | L18 p.40 | Pavane of Slaanesh | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C027 | L18 p.40 | Phantasmagoria (variante V4) | Slaanesh / 8 | variante |
+| D0b-L18-C028 | L18 p.40 | Succubus’s Caress | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C029 | L18 p.40 | Summon Daemonette | Slaanesh / 12 | absent, à arbitrer |
+| D0b-L18-C030 | L18 p.40 | Summon Daemonette Pack | Slaanesh / 25 | absent, à arbitrer |
+| D0b-L18-C031 | L18 p.40 | Titillating Delusions | Slaanesh / 8 | absent, à arbitrer |
+| D0b-L18-C032 | L18 p.110 | Snitch | Arcane / 2 | absent, à arbitrer |
+| D0b-L21-C001 | L21 p.117 | Spirit Walk | Necromancy / 6 | absent, à arbitrer |
+| D0b-L24-C001 | L24 p.52 | Reveal the Inner Beauty | Nurgle / 6 | absent, à arbitrer |
+| D0b-L25-C001 | L25 p.15 | Living Mire | Life (mer) / 8 | absent, à arbitrer |
+| D0b-L25-C002 | L25 p.15 | Water Water Everywhere | Life (mer) / 6 | absent, à arbitrer |
+| D0b-L25-C003 | L25 p.15 | Whirlpool | Life (mer) / 6 | absent, à arbitrer |
+| D0b-L25-C004 | L25 p.15 | Blessings of Bel Shanaar | Heavens (mer) / 2 | absent, à arbitrer |
+| D0b-L25-C005 | L25 p.15 | Niezlib’s Optimal Firing Solution | Heavens (mer) / 6 | absent, à arbitrer |
+| D0b-L25-C006 | L25 p.15 | Sea of Glass | Heavens (mer) / 10 | absent, à arbitrer |
+
+### Runes et systèmes ajoutés
+
+- D0b-R-083 — Rune of Cleaving (arme de Gromril, Von Haffenhof) (L22 p.82) : +5 dégâts au lieu de +4 pour l’arme citée, ignore les PA sauf armure de gromril.
+- D0b-R-084 — Master Rune of Adamant (bouclier de Gudii) (L22 p.82) : +10 Endurance tant que l’objet est possédé (L15 : inversion du critique reçu).
+- D0b-R-085 — Master Rune of Alaric the Mad (Runefang de Solland) (L20 p.78) : Ne retire ni Bonus d’Endurance ni PA (armure magique et Trait Armure compris) ; Protection s’applique normalement.
+- D0b-R-086 — Rune of Light (éclairage de rue, Altdorf) (L20 p.200) : Mention d’une rune d’éclairage de type lanterne ; même usage que L16 p.44, aucun barème.
+- D0b-R-087 — Rune of Speed (variante Sea of Claws) (L25 p.47) : +10 Initiative en attaquant avec l’arme (une seule rune citée).
+- D0b-R-088 — Rune of Striking (variante Sea of Claws) (L25 p.47) : +10 en CC en attaquant avec l’arme.
+- D0b-R-089 — Rune of Clear Seeing (variante Sea of Claws) (L25 p.47) : Voir à travers brumes ordinaires ; les brumes magiques sont révélées en vert.
+- D0b-R-090 — Rune of Farseeing (variante Sea of Claws) (L25 p.47) : Vision comme une lunette jusqu’à un mile, ligne de vue requise.
+- D0b-SYS-18 — Magie skaven et pierre de malepierre (L22 p.42) : Les skavens lancent grâce à la pierre de malepierre ; jusqu’à trois jetons avant un lancement ou une canalisation, +2 DR chacun, trois jetons doublent le résultat avec règles d’influence corruptrice, trop de jetons est souvent fatal.
+- D0b-SYS-19 — Prolongation « + » de la durée (L22 p.43) : Tout sort dont la durée finit par « + » peut être prolongé d’un Round par Test de Volonté à l’échéance.
+- D0b-SYS-20 — Attributs des Domaines skavens (Ruine, Peste, Furtivité) (L22 p.45) : Chaque sort lancé du Domaine : +1 DR en Initiative/Agilité (Ruine), Trait Distraction (Peste) ou Trait Furtif (Furtivité) quelques Rounds.
+- D0b-SYS-21 — Sélection des sorts des Magies du Chaos (L23 p.79) : Un lanceur de Magie du Chaos choisit parmi les sorts d’Arcane, du Chaos Arcane et de son Domaine ; l’Indivis exclut les Domaines.
+- D0b-SYS-22 — Sorts du Chaos : doubles et mémoire (L23 p.80) : Un double de lancement ou de canalisation avec un sort de Chaos fait perdre un Progrès de compétence, un talent hors carrière, ou 1d10 d’Intelligence ; les ingrédients ne protègent pas.
+- D0b-SYS-23 — Influence maligne de Tzeentch (L23 p.79) : Dans une zone d’influence de Tzeentch, un 9 au jet de lancement ou de canalisation donne un incident mineur et le talent Imprégné de magie ; 99 : incident majeur et Horreur rose.
+- D0b-SYS-24 — Magie sauvage d’Altdorf dans le Chaos (L21 p.19) : Table d100 remplaçant les incidents dans les lieux sous l’œil de Tzeentch ; démons instables dissous, orages de feu rose, possession, renforts de démons.
+- D0b-SYS-25 — Magie en mer (L25 p.14) : Modificateurs de canalisation ou de lancement selon le Domaine (Bêtes, Feu, Cieux, Vie) quand le lanceur est en mer.
+- D0b-SYS-26 — Gromril (L22 p.82) : Armes et armures de gromril : Incassables ; l’armure de gromril annule les Blessures Critiques reçues, sauf à 0 Blessure.
+- D0b-SYS-27 — Traits Lanceur aléatoire et Aspiration de sort (Scribes bleus) (L21 p.18) : Le démon lance un sort au hasard chaque Round ; Volonté opposée contre le sort d’un ennemi (aspiré, miroir, déflagration).
+- D0b-SYS-28 — Talent Corruption volontaire (L26 p.100) : Mutation tirée avec deux dés au choix.
+
+### Questions ajoutées
+
+- **D0b-Q22** : Magie skaven (L22 pp.42-49, 37 sorts, V4) : tradition entière hors des arbitrages du 21/10. À implanter, à réserver aux PNJ, ou à écarter ? Aucune implantation sans réponse.
+- **D0b-Q23** : Domaine de Slaanesh étendu (L18, 31 sorts V4), Chaos arcane et Tzeentch étendu (L23, L26, 35 sorts V4) : ajouts optionnels aux 9 sorts du Chaos de L06 déjà arbitrés ? Aucune implantation sans réponse.
+- **D0b-Q24** : Sorts de navire de Sea of Claws (6) et magie en mer : aucun moteur de navire n’existe ; à écarter ou à mettre en rappel ?
+- **D0b-Q25** : Variantes V4 (Acquiescence, From Pain Pleasure, Phantasmagoria, Transformation et Don de Tzeentch, Bless with Filth) : le socle V5 prime par défaut, l’exécutant conserve les contrats L06.
+
+The Horned Rat Companion (L22) : la magie skaven (37 sorts V4, malepierre) est inventoriée et marquée « à arbitrer », conformément au brief ; elle n'est pas implantée.

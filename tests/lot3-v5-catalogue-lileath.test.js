@@ -10,7 +10,7 @@ import { getReferenceCatalogue } from '../js/core/reference-catalog.js';
 test('D-21 annulée — ni Silence (Arcane) ni Arc coruscant : Silence garde la version d’Ulgu, l’Arc de T’Essla la sienne', () => {
   const spells = getReferenceCatalogue().magic.spells;
   assert.equal(spells.length, 277);
-  assert.equal(getAllSpellContracts().length, 277);
+  assert.equal(getAllSpellContracts().filter(c => !c.isTradition).length, 277);
   for (const name of ['Silence (Arcane)', 'Arc coruscant', 'Coruscating Arc']) {
     assert.equal(spells.some(s => s.nom === name), false, name);
     assert.equal(getSpellContract(name), null, name);

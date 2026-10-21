@@ -19,10 +19,13 @@ export async function encounter(extras = {}) {
   return { store, engine: createCombatEngine(store), persistence };
 }
 export function inputFor(c, patch = {}) {
-  return { actorId: 'mage', targetIds: /^Vous$/i.test(c.target) ? ['mage'] : ['foe'], sl: 12, attributeActive: false, locationRoll: 34, beastKey: 'wolf', enduranceRoll: 98,
+  const {domainFactsExtra,...rest} = patch;
+  const out = { actorId: 'mage', targetIds: /^Vous$/i.test(c.target) ? ['mage'] : ['foe'], sl: 12, attributeActive: false, locationRoll: 34, beastKey: 'wolf', enduranceRoll: 98,
     mjDuration: { amount: 3, unit: 'rounds' }, mjChoice: 'Projet et objet validés par le MJ',
     domainFacts: { directEarth: true, patchEarth: true, familiar: true, objectMetal: true, objectMagical: false, objectWorn: true, objectHeld: false, objectId: 'blade', location: 'HEAD', naturalArmorAp:0, encumbranceMode: 'heavier', minutesToDawn: 1, sunlight: false },
-    targetTests: { foe: { objectId:'blade',roll: 98, enduranceRoll: 98, wardRoll: 1,encumbranceStep:0,unburdenedM:4,unburdenedAg:50 }, mage: { objectId:'blade',roll: 98,encumbranceStep:0,unburdenedM:4,unburdenedAg:50 } }, ...patch };
+    targetTests: { foe: { objectId:'blade',roll: 98, enduranceRoll: 98, wardRoll: 1,encumbranceStep:0,unburdenedM:4,unburdenedAg:50 }, mage: { objectId:'blade',roll: 98,encumbranceStep:0,unburdenedM:4,unburdenedAg:50 } }, ...rest };
+  if (domainFactsExtra) out.domainFacts = { ...out.domainFacts, ...domainFactsExtra };
+  return out;
 }
 export async function cast(store, c, patch = {}) {
   const input = inputFor(c, patch), preview = store.previewSpellExecution(c.id, input);
@@ -88,15 +91,15 @@ export function assertSourceBehaviour(c, preview, store) {
     case 'Shroud of Invisibility': assert.equal(foe.extensions.v5.rangedOpponentPenaltySl,undefined); break;
   }
 }
-export async function verifySpell(c) {
+export async function verifySpell(c, patch = {}) {
   const { store, engine, persistence } = await encounter({ foe: c.canonicalName === 'Beast Master' ? { traits: ['Bestial','Taille (Moyenne)'] } : c.canonicalName === 'Daemonbane' ? {traits:['Démoniaque']} : c.canonicalName === 'Cauterise' ? {skills:[{name:'Endurance',total:20}],caracs:{E:20,FM:40,M:4}} : c.canonicalName === 'Fate’s Fickle Fingers' ? {camp:'pj'} : {} });
   const initial=JSON.parse(store.getFullJSON());
-  const before = store.listParticipants(), preview = await cast(store,c);
+  const before = store.listParticipants(), preview = await cast(store,c,patch);
   assertSourceBehaviour(c,preview,store);
   const applied = store.listParticipants(), reload = createStore({persistence}); await reload.ready;
   assert.deepEqual(reload.listParticipants(),applied,'persistance');
   await store.undo(); assert.deepEqual(store.listParticipants(),before,'Undo atomique');
-  await cast(store,c);
+  await cast(store,c,patch);
   const layer = store.listParticipants().flatMap(p => p.extensions.v5.spellEffects || []).find(s => s.spellId === c.id);
   if (layer?.expiresAtRound > 1) {
     // Le combat réel joue la dernière fin de tour ; le saut de fixture évite des centaines de tours sans événement.
@@ -109,7 +112,7 @@ export async function verifySpell(c) {
   for(const kind of c.overcast.options.filter(k=>k!=='special')){
     await store.loadFromJSON(initial);
     const optionBefore=store.listParticipants();
-    const amount=kind==='targets'?1:kind==='aoe'?3:2, p=await cast(store,c,{sl:50,overcastChoices:{[kind]:amount}});
+    const amount=kind==='targets'?1:kind==='aoe'?3:2, p=await cast(store,c,{...patch,sl:50,overcastChoices:{[kind]:amount}});
     assert.equal(p.overcast.choices[kind],amount,c.name+' : dépense '+kind);
     if(['range','duration','aoe'].includes(kind))assert.equal(p.overcast[kind+'Multiplier'],2);
     if(kind==='targets')assert.equal(p.overcast.targetsBonus,1);
@@ -118,13 +121,13 @@ export async function verifySpell(c) {
   }
   for(const option of c.overcast.specific || []){
     await store.loadFromJSON(initial);
-    const p=await cast(store,c,{sl:50,overcastSpecific:{[option.id]:1}});
+    const p=await cast(store,c,{...patch,sl:50,overcastSpecific:{[option.id]:1}});
     const receipt=p.overcastSpecific.find(e=>e.id===option.id);assert.equal(receipt.spent,option.cost);
     assert.ok(receipt.applied || receipt.reminder,'option calculée ou rappel chiffré explicite');
   }
   for(const spec of c.effects.facts || []){
     await store.loadFromJSON(initial);
-    const input=inputFor(c);if(spec.perTarget)delete input.targetTests.foe[spec.key];else delete input.domainFacts[spec.key];
+    const input=inputFor(c,patch);if(spec.perTarget)delete input.targetTests.foe[spec.key];else delete input.domainFacts[spec.key];
     assert.equal(store.previewSpellExecution(c.id,input).ready,false,c.name+' : fait '+spec.key+' absent');
   }
 }

@@ -3481,6 +3481,2280 @@
         "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
       ],
       "limit": "Aucun contrat de ce nom identifié parmi les 277 ; une analogie ne vaut ni implantation ni adaptation V5."
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 42,
+      "nameEn": "Favour of the Horned Rat",
+      "lore": "Skaven Petty",
+      "cn": 0,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "13 heures",
+      "effectSummaryFr": "Un Point de Fortune supplémentaire pour la durée, une fois par période de 13 heures ; un second usage trop tôt attire le courroux du dieu (conséquence au MJ).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 42,
+      "nameEn": "Ghostly Flame",
+      "lore": "Skaven Petty",
+      "cn": 0,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "1 heure ou instantanée",
+      "effectSummaryFr": "Flamme verte qui éclaire comme une torche ; lancée ensuite comme projectile (Force + Volonté en bonus).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C002"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 42,
+      "nameEn": "Mark of the Horned Rat",
+      "lore": "Skaven Petty",
+      "cn": 0,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "1d10 heures",
+      "effectSummaryFr": "Test de Calme ou plaie visible : −10 aux Tests de Sociabilité.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C003"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 43,
+      "nameEn": "Rat Thrall",
+      "lore": "Skaven Petty",
+      "cn": 0,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "1d10 heures",
+      "effectSummaryFr": "Un rat ordinaire obéit et communique avec le lanceur, même au prix de sa vie.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C004"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 43,
+      "nameEn": "Vector",
+      "lore": "Skaven Petty",
+      "cn": 0,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "24 heures",
+      "effectSummaryFr": "Test d’Endurance ou −20 pour résister aux maladies.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C005"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 43,
+      "nameEn": "Wrack",
+      "lore": "Skaven Petty",
+      "cn": 0,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Test d’Endurance ou un état Sonné.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C006"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 43,
+      "nameEn": "Curse of the Horned Rat",
+      "lore": "Skaven Arcane",
+      "cn": 19,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté heures",
+      "effectSummaryFr": "Test d’Endurance ou transformation en skaven d’une taille adaptée, nominalement aux ordres du lanceur ; un Point de Destin permet d’y résister.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C007"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 44,
+      "nameEn": "Death Frenzy",
+      "lore": "Skaven Arcane",
+      "cn": 5,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Frénésie imposée à un skaven ; cible non consentante : Test de Calme, sinon 1 Blessure en se rongeant.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C008"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 44,
+      "nameEn": "Musk of Terror",
+      "lore": "Skaven Arcane",
+      "cn": 9,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Nuage musqué : exposition à Terreur (1), Terreur (2) pour les skavens ; le lanceur est la source.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C009"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 44,
+      "nameEn": "Skitterleap",
+      "lore": "Skaven Arcane",
+      "cn": 6,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Téléportation du lanceur ou d’un allié touché dans Volonté yards (cible non consentante : test d’opposition au toucher).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C010"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 44,
+      "nameEn": "Vermintide",
+      "lore": "Skaven Arcane",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Spécial",
+      "duration": "2 × Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Nuée de rats dirigée sans Action puis aléatoire, 1d10 Blessures par jambe, ignorant l’armure ; fuit le feu.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C011"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 45,
+      "nameEn": "Crack’s Call",
+      "lore": "Skaven Ruin",
+      "cn": 11,
+      "range": "Vous",
+      "target": "ZdE (Volonté) yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Fissure de 1 yard sur Volonté yards : Esquive ou chute et À terre ; +4 DR élargit.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C012"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 45,
+      "nameEn": "Crackling Doom",
+      "lore": "Skaven Ruin",
+      "cn": 5,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +4 ; Endurance ou Sonné par DR.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C013"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 45,
+      "nameEn": "Flensing Ruin",
+      "lore": "Skaven Ruin",
+      "cn": 6,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +4 ignorant armure et Bonus d’Endurance.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C014"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 45,
+      "nameEn": "Howling Warpgale",
+      "lore": "Skaven Ruin",
+      "cn": 7,
+      "range": "Vous",
+      "target": "ZdE (Volonté) yards",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Ouragan : ennemis sans vol, tirs entrant ou sortant −10 ; alliés épargnés.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C015"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 45,
+      "nameEn": "Scorch",
+      "lore": "Skaven Ruin",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +10, un Enflammé, exposition mineure à la Corruption.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C016"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 45,
+      "nameEn": "Warp Lightning",
+      "lore": "Skaven Ruin",
+      "cn": 7,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +11 ; l’armure métallique touchée s’ajoute aux dégâts ; critique du lanceur : il subit un coup.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C017"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 46,
+      "nameEn": "Warp Shield",
+      "lore": "Skaven Ruin",
+      "cn": 6,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "+5 PA partout ; qui touche le lanceur subit un coup de 5 + Bonus de Volonté.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C018"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 46,
+      "nameEn": "Warp Storm",
+      "lore": "Skaven Ruin",
+      "cn": 12,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Orage de foudre : coup +10 par Round à la tête, ignorant l’armure métallique ; déplaçable par Action.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C019"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 46,
+      "nameEn": "Pestilent Breath",
+      "lore": "Skaven Plague",
+      "cn": 8,
+      "range": "Bonus de Volonté yards",
+      "target": "ligne de 2 yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Endurance Difficile ou coup de Bonus de Volonté sans armure ni Bonus d’Endurance ; +2 DR élargit la ligne.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C020"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 46,
+      "nameEn": "Poisonous Pustule",
+      "lore": "Skaven Plague",
+      "cn": 5,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté heures",
+      "effectSummaryFr": "Pustule vidée (1 Blessure) pour enduire une arme : Blessures supplémentaires de Bonus de Volonté sauf Endurance Difficile.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C021"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 47,
+      "nameEn": "Bless with Filth",
+      "lore": "Skaven Plague",
+      "cn": 6,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté minutes+",
+      "effectSummaryFr": "Arme ou trois munitions : chaque touche infligeante empoisonne.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C022"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 47,
+      "nameEn": "Cloud of Corruption",
+      "lore": "Skaven Plague",
+      "cn": 7,
+      "range": "Vous",
+      "target": "ZdE 5 yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Endurance ou un Empoisonné ; attaques du lanceur Infectées quelques Rounds.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C023"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 47,
+      "nameEn": "Mantle of Contagion",
+      "lore": "Skaven Plague",
+      "cn": 4,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté jours",
+      "effectSummaryFr": "Nourriture ou vêtement infecté de Peste noire, contagieux pour la durée.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C024"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 47,
+      "nameEn": "Putrefy",
+      "lore": "Skaven Plague",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Nourriture de la zone pourrie ; qui en mange est exposé à la Courante Galopante.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C025"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 47,
+      "nameEn": "Toxic Rain",
+      "lore": "Skaven Plague",
+      "cn": 10,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Pluie toxique : Endurance Difficile chaque Round ou 3 Blessures ignorant l’armure ; Inconscient à 6 Blessures.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C026"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 48,
+      "nameEn": "Veil of Flies",
+      "lore": "Skaven Plague",
+      "cn": 6,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Nuée de mouches : −20 aux Tests des autres dedans, −20 aux tirs contre le lanceur.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C027"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 48,
+      "nameEn": "Weeping Wound",
+      "lore": "Skaven Plague",
+      "cn": 9,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Chaque Blessure compte comme infection mineure ; Hémorragie doublée.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C028"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 48,
+      "nameEn": "Wither",
+      "lore": "Skaven Plague",
+      "cn": 6,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Endurance ou perte d’Endurance égale aux DR ; mort à 0 (un Point de Destin limite à 1).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C029"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 48,
+      "nameEn": "Swiftscamper",
+      "lore": "Skaven Stealth",
+      "cn": 4,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté + DR Rounds",
+      "effectSummaryFr": "Mouvement augmenté du Bonus de Volonté (+1 par +2 DR).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C030"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 48,
+      "nameEn": "Armour of Darkness",
+      "lore": "Skaven Stealth",
+      "cn": 6,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "+1 PA partout et +20 de Discrétion en pénombre.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C031"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 49,
+      "nameEn": "Black Whirlwind",
+      "lore": "Skaven Stealth",
+      "cn": 12,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Tourbillon mobile (10 yards par Round) : Endurance ou −20 aux CC, CT, Agilité et à la vue.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C032"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 49,
+      "nameEn": "Buoyant Passage",
+      "lore": "Skaven Stealth",
+      "cn": 6,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "Marche sur les liquides ; aucune trace laissée.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C033"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 49,
+      "nameEn": "Flash-Bang",
+      "lore": "Skaven Stealth",
+      "cn": 6,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Endurance ou Aveuglé et Sonné par niveau d’échec ; lanceurs de Furtivité immunisés.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C034"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 49,
+      "nameEn": "Pelt of the Assassin",
+      "lore": "Skaven Stealth",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté minutes+",
+      "effectSummaryFr": "Immobile : +40 de Discrétion.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C035"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 49,
+      "nameEn": "Stickypaws",
+      "lore": "Skaven Stealth",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "Trait Grimpeur de murs.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C036"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 49,
+      "nameEn": "Traceless Demise",
+      "lore": "Skaven Stealth",
+      "cn": 11,
+      "range": "Bonus de Volonté yards",
+      "target": "Jusqu’à Bonus de Volonté cibles",
+      "duration": "Bonus de Volonté jours",
+      "effectSummaryFr": "Le corps d’une cible qui meurt se dissout en bouillie noire acide.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C037"
+    },
+    {
+      "kind": "spell",
+      "book": "L22",
+      "page": 49,
+      "nameEn": "Warp Star Infusion",
+      "lore": "Skaven Stealth",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Spécial",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Étoiles de jet imprégnées : Endurance Difficile ou Blessures de Bonus de Volonté en plus.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L22-C038"
+    },
+    {
+      "kind": "spell",
+      "book": "L19",
+      "page": 109,
+      "nameEn": "Bless with Filth (variante d’Under-Middenheim)",
+      "lore": "Skaven Plague",
+      "cn": 6,
+      "range": "Bonus de Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Variante : tous dans la zone comptent comme Infectés pour la durée ; cartouche différent de L22 p.47.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Magie skaven : tradition entière hors des arbitrages du 21/10 ; inventoriée, à arbitrer, non implantée.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L19-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 79,
+      "nameEn": "Blast of Corruption",
+      "lore": "Chaos Arcane",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +5 sur toute la zone ; Endurance ou 1 Corruption.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 79,
+      "nameEn": "Bolt of Corruption",
+      "lore": "Chaos Arcane",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +6 ; Endurance ou 1 Corruption.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C002"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 79,
+      "nameEn": "Daemonic Mien",
+      "lore": "Chaos Arcane",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Sociabilité Rounds+",
+      "effectSummaryFr": "Trait de démon tiré sur une table (d10), ajouts par +2 DR ; Blessures à 0 sous le trait démoniaque : âme aspirée.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C003"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 80,
+      "nameEn": "Foul Messenger",
+      "lore": "Chaos Arcane",
+      "cn": 8,
+      "range": "Sociabilité miles",
+      "target": "Spécial",
+      "duration": "instantanée",
+      "effectSummaryFr": "Essaim de démons mineurs porteurs d’un message d’environ 25 mots, invisible sans Seconde vue.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C004"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 80,
+      "nameEn": "Joyous Aspect",
+      "lore": "Chaos Arcane",
+      "cn": 4,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Sociabilité Rounds+",
+      "effectSummaryFr": "Aspect sans défaut ni mutation visible ; Perception Difficile pour déceler que quelque chose cloche.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C005"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 80,
+      "nameEn": "Obsession",
+      "lore": "Chaos Arcane",
+      "cn": 8,
+      "range": "Bonus d’Initiative miles",
+      "target": "Spécial",
+      "duration": "DR jours",
+      "effectSummaryFr": "Objet précieux de la cible : obsession dépendant du Domaine, Endurance périodique de plus en plus dure, Corruption possible.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C006"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 80,
+      "nameEn": "Power of Chaos",
+      "lore": "Chaos Arcane",
+      "cn": 4,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Sociabilité) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Déchirure de l’éther : CN des sorts lancés dans la zone divisé par deux ; Endurance de fin de Round ou Corruption.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C007"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 80,
+      "nameEn": "Rend Aethyr",
+      "lore": "Chaos Arcane",
+      "cn": 16,
+      "range": "Volonté yards",
+      "target": "Spécial",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Portail : un démon mineur traverse chaque Round, non contrôlé ; vivants qui voient la brèche : Endurance ou Corruption.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C008"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 81,
+      "nameEn": "Slave to Darkness",
+      "lore": "Chaos Arcane",
+      "cn": 8,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Spécial",
+      "effectSummaryFr": "Opposition de Volonté (2 + DR d’écart) : l’âme est envoyée dans le Chaos et un démon possède le corps ; échec : incantation Majeure.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C009"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 81,
+      "nameEn": "The Purple Hand",
+      "lore": "Tzeentch Petty",
+      "cn": 3,
+      "range": "Intelligence yards",
+      "target": "1",
+      "duration": "Variable",
+      "effectSummaryFr": "Malédiction mineure : paumes violettes une heure par niveau de réussite ; matière de la cible requise.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C010"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 82,
+      "nameEn": "Curse of Tzeentch",
+      "lore": "Tzeentch",
+      "cn": 9,
+      "range": "Intelligence yards",
+      "target": "1",
+      "duration": "Variable",
+      "effectSummaryFr": "Opposition de Volonté : la cible perd l’accès à un sort tiré au hasard un jour par niveau de réussite.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C011"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 82,
+      "nameEn": "Blue Fire of Tzeentch",
+      "lore": "Tzeentch",
+      "cn": 6,
+      "range": "Intelligence yards",
+      "target": "ZdE",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile de zone +3 et un Enflammé ; sur 9 au d10, deux Horreurs bleues sortent d’une victime tuée ou en feu.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C012"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 82,
+      "nameEn": "Bolt of Change",
+      "lore": "Tzeentch",
+      "cn": 9,
+      "range": "Intelligence yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +7 ; Endurance ou Corruption ; maladresse : mutation et talent Magie du Chaos.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C013"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 82,
+      "nameEn": "The Flickering Flames of Fickle Fate",
+      "lore": "Tzeentch",
+      "cn": 4,
+      "range": "Intelligence yards",
+      "target": "Spécial",
+      "duration": "Bonus de Volonté Rounds+",
+      "effectSummaryFr": "Feu sans effet physique : les témoins peuvent relancer chaque Test, au prix d’un Test d’Endurance contre la Corruption.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C014"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 82,
+      "nameEn": "Master of Fortune",
+      "lore": "Tzeentch",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté jours",
+      "effectSummaryFr": "Un Point de Fortune par niveau de réussite positif ; échec : Corruption par niveau négatif ; pas de relance avant la fin.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C015"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 83,
+      "nameEn": "Mindfire",
+      "lore": "Tzeentch",
+      "cn": 6,
+      "range": "Intelligence yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Calme ou Corruption (cibles supplémentaires par +2 DR) ; mutation mentale et Enflammé éventuels.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C016"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 83,
+      "nameEn": "Pink Fire of Tzeentch",
+      "lore": "Tzeentch",
+      "cn": 6,
+      "range": "Intelligence yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Projectile +6 et un Enflammé ; sur 9 au d10, une Horreur rose sort du corps.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C017"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 83,
+      "nameEn": "Sense the Skein",
+      "lore": "Tzeentch",
+      "cn": 3,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "1 Round",
+      "effectSummaryFr": "Le MJ révèle Motivation, ambition à court et à long terme d’une cible vue.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C018"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 83,
+      "nameEn": "Tzeentch’s Firestorm",
+      "lore": "Tzeentch",
+      "cn": 11,
+      "range": "Intelligence yards",
+      "target": "ZdE (Bonus d’Initiative) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Projectile de zone +9 et un Enflammé ; sur 9, deux Horreurs roses.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C019"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 83,
+      "nameEn": "Tzeentch’s Golden Aura",
+      "lore": "Tzeentch",
+      "cn": 7,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Trait Protection 9+ pour la durée.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C020"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 83,
+      "nameEn": "Word of Tzeentch",
+      "lore": "Tzeentch",
+      "cn": 7,
+      "range": "Bonus de Force yards",
+      "target": "1",
+      "duration": "Bonus d’Intelligence Rounds",
+      "effectSummaryFr": "Intelligence opposée : Sonné (par niveau de perte), Inconscient et Corruption sur maladresse ; Endurance ensuite ou Corruption.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C021"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 83,
+      "nameEn": "Transformation of Tzeentch (variante V4)",
+      "lore": "Tzeentch",
+      "cn": 10,
+      "range": "Bonus d’Initiative yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Variante V4 : À terre et Sans défense ; Endurance opposée au Langue (Magick) en fin de sort ; CN 10 (L06 : CN 12).",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C022"
+    },
+    {
+      "kind": "spell",
+      "book": "L23",
+      "page": 81,
+      "nameEn": "Boon of Tzeentch (variante V4)",
+      "lore": "Tzeentch",
+      "cn": 9,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus d’Initiative jours",
+      "effectSummaryFr": "Variante V4 du sort déjà inventorié (L06 p.260) ; mêmes mécaniques générales.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L23-C023"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 98,
+      "nameEn": "Beast Tongue",
+      "lore": "Tzeentch Petty",
+      "cn": 0,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Volonté minutes",
+      "effectSummaryFr": "Parler et comprendre la langue bestiale.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 98,
+      "nameEn": "Eyes of the Beast",
+      "lore": "Tzeentch Petty",
+      "cn": 0,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Vision nocturne (portée doublée si déjà présente).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C002"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 98,
+      "nameEn": "Sign of the Beast",
+      "lore": "Tzeentch Petty",
+      "cn": 0,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "+20 de Sociabilité avec les hommes-bêtes de Tzeentch ; Animosité/Haine d’autres cultes.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C003"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 98,
+      "nameEn": "Bension of Tzeentch",
+      "lore": "Tzeentch Arcane",
+      "cn": 9,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "+10 temporaire à une caractéristique parmi CC, Endurance, Agilité, Volonté.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C004"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 98,
+      "nameEn": "Bestial Rage",
+      "lore": "Tzeentch Arcane",
+      "cn": 6,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Trait Furie.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C005"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 98,
+      "nameEn": "Climb",
+      "lore": "Tzeentch Arcane",
+      "cn": 5,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "Griffes courtes : talent Escalade, pieds et mains nus.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C006"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 99,
+      "nameEn": "Enrage Beast",
+      "lore": "Tzeentch Arcane",
+      "cn": 6,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Un animal ordinaire peut résister (Volonté) ; table d1d10 de réactions (Brisé, Frénésie, Inconscient, mort…).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C007"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 99,
+      "nameEn": "Gift of the Beast",
+      "lore": "Tzeentch Arcane",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "Mutation temporaire tirée sur une table (d10).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C008"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 99,
+      "nameEn": "Slave to Chaos",
+      "lore": "Tzeentch Arcane",
+      "cn": 18,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Possession : le lanceur dirige la cible (Volonté pour résister) ; mutation à la fin.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C009"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 99,
+      "nameEn": "Subvert Strength",
+      "lore": "Tzeentch Arcane",
+      "cn": 11,
+      "range": "Bonus de Volonté yards",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Le prochain objet inanimé non magique touché devient mou ; armure touchée : PA perdus.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C010"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 100,
+      "nameEn": "Transformation of the Beast",
+      "lore": "Tzeentch Arcane",
+      "cn": 12,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Transformation en gor : meilleures caractéristiques, Armure 1, Furie, Cornes +6, perte de la parole intelligible.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C011"
+    },
+    {
+      "kind": "spell",
+      "book": "L26",
+      "page": 100,
+      "nameEn": "Tremor",
+      "lore": "Tzeentch Arcane",
+      "cn": 8,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Agilité ou À terre pour tous sauf le lanceur.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L26-C012"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Befuddle",
+      "lore": "Slaanesh Petty",
+      "cn": 0,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Volonté ou un Sonné.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Blessing of Slaanesh",
+      "lore": "Slaanesh Petty",
+      "cn": 0,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "+10 en Intelligence ou Sociabilité.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C002"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Endure Excess",
+      "lore": "Slaanesh Petty",
+      "cn": 0,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Spécial",
+      "effectSummaryFr": "Ignore Exténué tant que le lanceur s’adonne à un plaisir ; à l’arrêt, retour des états et 1 Blessure.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C003"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Leer",
+      "lore": "Slaanesh Petty",
+      "cn": 0,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "Spécial",
+      "effectSummaryFr": "Une Visée sans le malus habituel, tant que la cible n’a pas été attaquée ou perdue de vue.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C004"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Lure",
+      "lore": "Slaanesh Petty",
+      "cn": 0,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "Objet rendu extrêmement désirable pour qui apprécie ce genre de chose.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C005"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Preen",
+      "lore": "Slaanesh Petty",
+      "cn": 0,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "instantanée",
+      "effectSummaryFr": "Propreté immédiate avec de légers défauts répugnants.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C006"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Sense Vice",
+      "lore": "Slaanesh Petty",
+      "cn": 0,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Intuition/Calme opposés : apprendre un plaisir de la cible.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C007"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Acquiescence (variante V4)",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Variante V4 d’un sort V5 : Initiative ramenée à 10, mouvement aléatoire, Calme pour agir ; L06 : CN 5, Résistance à chaque début de Round.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C008"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 36,
+      "nameEn": "Aura of Acquiescence",
+      "lore": "Slaanesh",
+      "cn": 12,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Sociabilité) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Version de zone d’Acquiescence.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C009"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Bonds of Slaanesh",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Un Enchevêtré par DR.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C010"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Breath of Inspiration",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "1 yard",
+      "target": "1",
+      "duration": "Jusqu’à Volonté jours",
+      "effectSummaryFr": "Bonus égal à la Volonté sur un Test, au prix d’une honte durable.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C011"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Blissful Throes",
+      "lore": "Slaanesh",
+      "cn": 6,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "instantanée, spécial",
+      "effectSummaryFr": "Projectile +6 ; touche à la tête : Enchevêtré maintenu avec la Volonté.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C012"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Cacophonic Caress",
+      "lore": "Slaanesh",
+      "cn": 6,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "instantanée",
+      "effectSummaryFr": "Un coup +3 par DR sur chaque ennemi, ignorant l’armure.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C013"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Careless Whispers",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "1 mile",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Test étendu opposé de Calme (6 DR) : le vainqueur apprend l’ambition de l’autre ; Corruption possible.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C014"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Chaos Spawn",
+      "lore": "Slaanesh",
+      "cn": 10,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Un tirage sur les tables de Corruption par DR.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C015"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Cursed Caress",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "instantanée",
+      "effectSummaryFr": "Extase fatale : un tirage sur la table des critiques de la tête, sans os brisés.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C016"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Cutting Wit",
+      "lore": "Slaanesh",
+      "cn": 6,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Langue-projectile +3 ignorant l’armure.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C017"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 37,
+      "nameEn": "Delicious Excruciation",
+      "lore": "Slaanesh",
+      "cn": 6,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Allié : retire tous les Brisé et empêche d’en gagner pour la durée.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C018"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 38,
+      "nameEn": "Fleshy Curse",
+      "lore": "Slaanesh",
+      "cn": 10,
+      "range": "Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Excroissances permanentes ; cible impuissante ; table d1d10 d’effets à chaque Round.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C019"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 39,
+      "nameEn": "Flesh Puppet",
+      "lore": "Slaanesh",
+      "cn": 10,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "Volonté minutes",
+      "effectSummaryFr": "Test étendu opposé de Calme (6 DR) : le lanceur contrôle la cible (sans lancer de sorts).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C020"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 39,
+      "nameEn": "From Pain, Pleasure (variante V4)",
+      "lore": "Slaanesh",
+      "cn": 6,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Variante V4 : Indolore ; critique : Calme Accessible ou armes lâchées ; L06 : Résistance (+20).",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C021"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 39,
+      "nameEn": "Gift of Slaanesh",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Don tiré sur une table (griffe, aspect, séduction, aura, chant, musc, rapidité).",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C022"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 39,
+      "nameEn": "Lash of Slaanesh",
+      "lore": "Slaanesh",
+      "cn": 6,
+      "range": "Bonus de Volonté yards",
+      "target": "1",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Coup +5 et Volonté (difficulté croissante) ou Sonné.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C023"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Luxurious Torment",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Frénésie : chaque cible frappe la créature la plus proche.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C024"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Mask of Desire",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté heures",
+      "effectSummaryFr": "Retire tous les états, masque les blessures visibles, +10 en Sociabilité.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C025"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Pavane of Slaanesh",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Sociabilité) yards",
+      "duration": "Volonté Rounds",
+      "effectSummaryFr": "Calme ou danse lascive sans autre action.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C026"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Phantasmagoria (variante V4)",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Volonté) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Variante V4 : Distraction pour le lanceur et ses alliés ; L06 : CN 8, même effet.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C027"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Succubus’s Caress",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Sociabilité yards",
+      "target": "1",
+      "duration": "Bonus de Sociabilité heures",
+      "effectSummaryFr": "Calme horaire : Exténué, puis Aveuglé et Sourd cumulés jusqu’à l’inconscience.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C028"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Summon Daemonette",
+      "lore": "Slaanesh",
+      "cn": 12,
+      "range": "Bonus de Volonté yards",
+      "target": "Spécial",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Une Daemonette, non contrôlée mais persuadable.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C029"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Summon Daemonette Pack",
+      "lore": "Slaanesh",
+      "cn": 25,
+      "range": "Bonus de Volonté yards",
+      "target": "Spécial",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Autant de Daemonettes que le Bonus de Volonté.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C030"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 40,
+      "nameEn": "Titillating Delusions",
+      "lore": "Slaanesh",
+      "cn": 8,
+      "range": "Volonté yards",
+      "target": "Voir description",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Illusion irrésistible : Volonté chaque Round ou déplacement vers elle.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C031"
+    },
+    {
+      "kind": "spell",
+      "book": "L18",
+      "page": 110,
+      "nameEn": "Snitch",
+      "lore": "Arcane",
+      "cn": 2,
+      "range": "Toucher",
+      "target": "1",
+      "duration": "Bonus de Volonté heures",
+      "effectSummaryFr": "Zone d’alerte autour d’un objet : le lanceur sent l’entrée d’une créature Petite ou plus dans un rayon de son Bonus de Volonté yards.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L18-C032"
+    },
+    {
+      "kind": "spell",
+      "book": "L21",
+      "page": 117,
+      "nameEn": "Spirit Walk",
+      "lore": "Necromancy",
+      "cn": 6,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Trait Éthéré pour la durée.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L21-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L24",
+      "page": 52,
+      "nameEn": "Reveal the Inner Beauty",
+      "lore": "Nurgle",
+      "cn": 6,
+      "range": "Toucher",
+      "target": "Spécial",
+      "duration": "instantanée",
+      "effectSummaryFr": "Putréfaction : objet inorganique fragilisé ; Endurance ou vieillissement de 2d10 ans et pertes permanentes de caractéristiques.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L24-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L25",
+      "page": 15,
+      "nameEn": "Living Mire",
+      "lore": "Life (mer)",
+      "cn": 8,
+      "range": "Volonté yards × 10",
+      "target": "Un navire",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "Algues : −2 en Mouvement et −3 DR à la Manœuvre du navire ; équipage libérateur par Test étendu.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L25-C001"
+    },
+    {
+      "kind": "spell",
+      "book": "L25",
+      "page": 15,
+      "nameEn": "Water Water Everywhere",
+      "lore": "Life (mer)",
+      "cn": 6,
+      "range": "Vous",
+      "target": "Un navire",
+      "duration": "instantanée",
+      "effectSummaryFr": "Remplit les tonneaux d’eau douce vides.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L25-C002"
+    },
+    {
+      "kind": "spell",
+      "book": "L25",
+      "page": 15,
+      "nameEn": "Whirlpool",
+      "lore": "Life (mer)",
+      "cn": 6,
+      "range": "Volonté yards × 10",
+      "target": "ZdE (Volonté) yards",
+      "duration": "Bonus de Volonté Rounds",
+      "effectSummaryFr": "Tourbillon (taille par DR, p.114 du livre) ; règles de navire.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L25-C003"
+    },
+    {
+      "kind": "spell",
+      "book": "L25",
+      "page": 15,
+      "nameEn": "Blessings of Bel Shanaar",
+      "lore": "Heavens (mer)",
+      "cn": 2,
+      "range": "Vous",
+      "target": "Vous",
+      "duration": "1 jour",
+      "effectSummaryFr": "+2 DR aux Tests de Navigation durant un trajet vers une destination connue.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L25-C004"
+    },
+    {
+      "kind": "spell",
+      "book": "L25",
+      "page": 15,
+      "nameEn": "Niezlib’s Optimal Firing Solution",
+      "lore": "Heavens (mer)",
+      "cn": 6,
+      "range": "Bonus de Volonté yards",
+      "target": "Un navire",
+      "duration": "1 Round",
+      "effectSummaryFr": "+1 DR pour tirer au canon.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L25-C005"
+    },
+    {
+      "kind": "spell",
+      "book": "L25",
+      "page": 15,
+      "nameEn": "Sea of Glass",
+      "lore": "Heavens (mer)",
+      "cn": 10,
+      "range": "Vous",
+      "target": "ZdE (Bonus de Volonté) miles",
+      "duration": "Bonus de Volonté minutes",
+      "effectSummaryFr": "Calme plat : effet de Pot-au-noir.",
+      "currentStatus": "absent",
+      "decision": "à arbitrer",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Source V4 : le socle V5 (L06) prime, conversion DR/Élan à faire si le MJ arbitre en faveur.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-L25-C006"
     }
   ],
   "runes": [
@@ -4940,6 +7214,126 @@
         "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
       ],
       "limit": "Système de gravure non raccordé ; les bonus analogues du moteur ne constituent pas cette rune."
+    },
+    {
+      "name": "Rune of Cleaving (arme de Gromril, Von Haffenhof)",
+      "book": "L22",
+      "page": 82,
+      "type": "arme variante",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "+5 dégâts au lieu de +4 pour l’arme citée, ignore les PA sauf armure de gromril.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-083"
+    },
+    {
+      "name": "Master Rune of Adamant (bouclier de Gudii)",
+      "book": "L22",
+      "page": 82,
+      "type": "armure maître variante",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "+10 Endurance tant que l’objet est possédé (L15 : inversion du critique reçu).",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-084"
+    },
+    {
+      "name": "Master Rune of Alaric the Mad (Runefang de Solland)",
+      "book": "L20",
+      "page": 78,
+      "type": "arme maître variante",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "Ne retire ni Bonus d’Endurance ni PA (armure magique et Trait Armure compris) ; Protection s’applique normalement.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-085"
+    },
+    {
+      "name": "Rune of Light (éclairage de rue, Altdorf)",
+      "book": "L20",
+      "page": 200,
+      "type": "installation (usage narratif)",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "Mention d’une rune d’éclairage de type lanterne ; même usage que L16 p.44, aucun barème.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-086"
+    },
+    {
+      "name": "Rune of Speed (variante Sea of Claws)",
+      "book": "L25",
+      "page": 47,
+      "type": "arme variante",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "+10 Initiative en attaquant avec l’arme (une seule rune citée).",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-087"
+    },
+    {
+      "name": "Rune of Striking (variante Sea of Claws)",
+      "book": "L25",
+      "page": 47,
+      "type": "arme variante",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "+10 en CC en attaquant avec l’arme.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-088"
+    },
+    {
+      "name": "Rune of Clear Seeing (variante Sea of Claws)",
+      "book": "L25",
+      "page": 47,
+      "type": "talisman variante",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "Voir à travers brumes ordinaires ; les brumes magiques sont révélées en vert.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-089"
+    },
+    {
+      "name": "Rune of Farseeing (variante Sea of Claws)",
+      "book": "L25",
+      "page": 47,
+      "type": "talisman variante",
+      "slRequired": "non précisé",
+      "effectSummaryFr": "Vision comme une lunette jusqu’à un mile, ligne de vue requise.",
+      "currentStatus": "variante",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Variante V4 d’une rune de L15 ou usage narratif ; les barèmes et la conversion Élan/DR relèvent de CONCEPTION_RUNES.md, aucun seuil n’est inventé.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-R-090"
     }
   ],
   "systems": [
@@ -5214,6 +7608,193 @@
         "docs/lot3/LOT3_CADRAGE_MAGIE.md:159"
       ],
       "limit": "Le catalogue ordinaire et les runes Cadai elfiques ne sont pas un moteur de cette procédure."
+    },
+    {
+      "book": "L22",
+      "page": 42,
+      "name": "Magie skaven et pierre de malepierre",
+      "effectSummaryFr": "Les skavens lancent grâce à la pierre de malepierre ; jusqu’à trois jetons avant un lancement ou une canalisation, +2 DR chacun, trois jetons doublent le résultat avec règles d’influence corruptrice, trop de jetons est souvent fatal.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Hors arbitrages ; à arbitrer avec la tradition skaven.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-18"
+    },
+    {
+      "book": "L22",
+      "page": 43,
+      "name": "Prolongation « + » de la durée",
+      "effectSummaryFr": "Tout sort dont la durée finit par « + » peut être prolongé d’un Round par Test de Volonté à l’échéance.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Mécanique V4 reprise en L23 ; à arbitrer avec les sorts qui l’emploient.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-19"
+    },
+    {
+      "book": "L22",
+      "page": 45,
+      "name": "Attributs des Domaines skavens (Ruine, Peste, Furtivité)",
+      "effectSummaryFr": "Chaque sort lancé du Domaine : +1 DR en Initiative/Agilité (Ruine), Trait Distraction (Peste) ou Trait Furtif (Furtivité) quelques Rounds.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Hors arbitrages ; à arbitrer avec la tradition skaven.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-20"
+    },
+    {
+      "book": "L23",
+      "page": 79,
+      "name": "Sélection des sorts des Magies du Chaos",
+      "effectSummaryFr": "Un lanceur de Magie du Chaos choisit parmi les sorts d’Arcane, du Chaos Arcane et de son Domaine ; l’Indivis exclut les Domaines.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Écart V4 ; le socle V5 prime.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-21"
+    },
+    {
+      "book": "L23",
+      "page": 80,
+      "name": "Sorts du Chaos : doubles et mémoire",
+      "effectSummaryFr": "Un double de lancement ou de canalisation avec un sort de Chaos fait perdre un Progrès de compétence, un talent hors carrière, ou 1d10 d’Intelligence ; les ingrédients ne protègent pas.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Option V4 ; nécessite arbitrage et conflit avec le principe sans ingrédient (sans effet ici).",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-22"
+    },
+    {
+      "book": "L23",
+      "page": 79,
+      "name": "Influence maligne de Tzeentch",
+      "effectSummaryFr": "Dans une zone d’influence de Tzeentch, un 9 au jet de lancement ou de canalisation donne un incident mineur et le talent Imprégné de magie ; 99 : incident majeur et Horreur rose.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Option V4 ; à arbitrer.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-23"
+    },
+    {
+      "book": "L21",
+      "page": 19,
+      "name": "Magie sauvage d’Altdorf dans le Chaos",
+      "effectSummaryFr": "Table d100 remplaçant les incidents dans les lieux sous l’œil de Tzeentch ; démons instables dissous, orages de feu rose, possession, renforts de démons.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Table de scénario ; à arbitrer.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-24"
+    },
+    {
+      "book": "L25",
+      "page": 14,
+      "name": "Magie en mer",
+      "effectSummaryFr": "Modificateurs de canalisation ou de lancement selon le Domaine (Bêtes, Feu, Cieux, Vie) quand le lanceur est en mer.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "À arbitrer avec les sorts de navire.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-25"
+    },
+    {
+      "book": "L22",
+      "page": 82,
+      "name": "Gromril",
+      "effectSummaryFr": "Armes et armures de gromril : Incassables ; l’armure de gromril annule les Blessures Critiques reçues, sauf à 0 Blessure.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Interaction avec CONCEPTION_RUNES.md ; équipement hors phase D.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-26"
+    },
+    {
+      "book": "L21",
+      "page": 18,
+      "name": "Traits Lanceur aléatoire et Aspiration de sort (Scribes bleus)",
+      "effectSummaryFr": "Le démon lance un sort au hasard chaque Round ; Volonté opposée contre le sort d’un ennemi (aspiré, miroir, déflagration).",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Traits de bestiaire : renvoi à la phase E.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-27"
+    },
+    {
+      "book": "L26",
+      "page": 100,
+      "name": "Talent Corruption volontaire",
+      "effectSummaryFr": "Mutation tirée avec deux dés au choix.",
+      "mechanics": [
+        "separateSystem",
+        "requirementsMJ"
+      ],
+      "currentStatus": "absent",
+      "evidence": [
+        "docs/lot3/LOT3_CADRAGE_MAGIE.md:18"
+      ],
+      "limit": "Talent : hors phase D.",
+      "addedOn": "2026-10-21",
+      "id": "D0b-SYS-28"
     }
   ],
   "coverage": [
@@ -5446,6 +8027,103 @@
         218
       ],
       "result": "8 arcanes, 18 rituels, 6 marais, 1 sort conjoint manquants ; titres des huit domaines rapprochés des noms français et pages, sans confondre les variantes V5."
+    },
+    {
+      "book": "L18",
+      "pages": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        110
+      ],
+      "result": "Domaine de Slaanesh (V4) : 7 mineurs, 24 arcanes dont 3 variantes de sorts V5 ; Snitch.",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L19",
+      "pages": [
+        109
+      ],
+      "result": "Variante de Bless with Filth ; aucun autre sort.",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L20",
+      "pages": [
+        78,
+        200
+      ],
+      "result": "Rune de Maître d’Alaric dans un profil ; aucun sort (repérage CN négatif).",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L21",
+      "pages": [
+        18,
+        19,
+        117
+      ],
+      "result": "Spirit Walk ; magie sauvage d’Altdorf ; Scribes bleus.",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L22",
+      "pages": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        81,
+        82
+      ],
+      "result": "Magie skaven : 6 mineurs, 4 arcanes, 8 Ruine, 10 Peste, 9 Furtivité ; gromril et variantes de runes.",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L23",
+      "pages": [
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "result": "Sorts arcanes du Chaos (9) et 14 sorts de Tzeentch, dont 2 variantes V4.",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L24",
+      "pages": [
+        52
+      ],
+      "result": "Reveal the Inner Beauty (Nurgle).",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L25",
+      "pages": [
+        14,
+        15,
+        47
+      ],
+      "result": "6 sorts de navire, magie en mer, variantes de runes.",
+      "addedOn": "2026-10-21"
+    },
+    {
+      "book": "L26",
+      "pages": [
+        98,
+        99,
+        100
+      ],
+      "result": "3 mineurs et 9 arcanes de Tzeentch (Couronne rouge) ; talent Corruption volontaire.",
+      "addedOn": "2026-10-21"
     }
   ],
   "openQuestions": [
@@ -5532,6 +8210,26 @@
     {
       "id": "D0b-Q21",
       "question": "La liste d’accès des cultes p.134–140 est mentionnée, mais ne doit pas être généralisée depuis un exemple de prêtre : vérifier le culte choisi au futur chantier."
+    },
+    {
+      "id": "D0b-Q22",
+      "addedOn": "2026-10-21",
+      "question": "Magie skaven (L22 pp.42-49, 37 sorts, V4) : tradition entière hors des arbitrages du 21/10. À implanter, à réserver aux PNJ, ou à écarter ? Aucune implantation sans réponse."
+    },
+    {
+      "id": "D0b-Q23",
+      "addedOn": "2026-10-21",
+      "question": "Domaine de Slaanesh étendu (L18, 31 sorts V4), Chaos arcane et Tzeentch étendu (L23, L26, 35 sorts V4) : ajouts optionnels aux 9 sorts du Chaos de L06 déjà arbitrés ? Aucune implantation sans réponse."
+    },
+    {
+      "id": "D0b-Q24",
+      "addedOn": "2026-10-21",
+      "question": "Sorts de navire de Sea of Claws (6) et magie en mer : aucun moteur de navire n’existe ; à écarter ou à mettre en rappel ?"
+    },
+    {
+      "id": "D0b-Q25",
+      "addedOn": "2026-10-21",
+      "question": "Variantes V4 (Acquiescence, From Pain Pleasure, Phantasmagoria, Transformation et Don de Tzeentch, Bless with Filth) : le socle V5 prime par défaut, l’exécutant conserve les contrats L06."
     }
   ]
 }
