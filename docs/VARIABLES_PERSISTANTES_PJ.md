@@ -8,7 +8,7 @@ But : préparer la phase H du plan de fin de projet (écriture en retour de l’
 | Points de Corruption | `extensions.v5.corruptionPoints` | absente | sorts, Courroux, Larmes de Shallya… | lot 3, phase B, phase D |
 | Culte(s) | déduit des talents Béni / Invocation (spécialisation) | talents (importés) | — | divin |
 | Points de Chance permanents | `extensions.v5.characterResources[].fortune`, clé `characterId` ; projection `extensions.v5.resources.fortune` | `chance` (initialisation explicite depuis le solde connu importé) | dépenses, corrections MJ, renouvellement explicite | existant ; B09 `af31809` |
-| Pénitences en cours et accomplies | `extensions.v5.divinePenances[]` : identité, culte, texte, source, origine, statut et clôture MJ | absente | Courroux 96–100, création et clôture MJ | phase B B10 |
+| Pénitences en cours et accomplies | `extensions.v5.divinePenances[]` : identité, culte, texte, source, origine, statut et clôture MJ | absente | Courroux 96–100, création et clôture MJ | phase B B10 `aa62ca0` |
 | Blessures Critiques (registre) | `extensions.v5.criticalWounds` | absente | combat, soins, Larmes de Shallya, bouton Guérir | phase A (A9, A11) |
 
 ## Complément phase B — reprise gpt/phase-b4
@@ -32,22 +32,22 @@ B11 : les possessions et leur retenue sont durables. L’inventaire courant rest
 
 | Variable B11 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
 | --- | --- | --- | --- | --- |
-| Possessions courantes | `equipment[]` des projections ; Actions liées dérivées | équipement importé et exemplaires locaux | retrait de Courroux et restitution unitaire MJ | B11 |
-| Possessions retenues ou rendues | `extensions.v5.divineConfiscations[]` : snapshots, statut, source, identité de pénitence et empreinte | absente | Courroux 111–115, clôture MJ de pénitence | B11 |
-| PA physiques hors possessions connus | `extensions.v5.divineConfiscations[].retainedArmor` | absente ; fait MJ explicite pour six localisations | pose de la confiscation, réutilisation au retour d’une armure | B11 |
+| Possessions courantes | `equipment[]` des projections ; Actions liées dérivées | équipement importé et exemplaires locaux | retrait de Courroux et restitution unitaire MJ | B11 `ee9ef18` |
+| Possessions retenues ou rendues | `extensions.v5.divineConfiscations[]` : snapshots, statut, source, identité de pénitence et empreinte | absente | Courroux 111–115, clôture MJ de pénitence | B11 `ee9ef18` |
+| PA physiques hors possessions connus | `extensions.v5.divineConfiscations[].retainedArmor` | absente ; fait MJ explicite pour six localisations | pose de la confiscation, réutilisation au retour d’une armure | B11 `ee9ef18` |
 
 | Variable B12 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
 | --- | --- | --- | --- | --- |
-| Cause durable d’Hémorragie quotidienne | `extensions.v5.divineDailyBleeding[]` : source, culte, quantité depuis Péchés avant décrément, premier/prochain matin, nombre de matins traités et reçus | absente | Courroux 131–135, véritables avances de l’horloge avec confirmation des matins sautés | B12 |
-| Fin de l’Hémorragie quotidienne par pénitence | `extensions.v5.divineDailyBleeding[].status/completedByPenanceId` et `extensions.v5.divinePenances[].stoppedDailyBleedingIds` | absente | clôture MJ de pénitence du même culte, Undo/Redo | B12 |
+| Cause durable d’Hémorragie quotidienne | `extensions.v5.divineDailyBleeding[]` : source, culte, quantité depuis Péchés avant décrément, premier/prochain matin, nombre de matins traités et reçus | absente | Courroux 131–135, véritables avances de l’horloge avec confirmation des matins sautés | B12 `ac61364` |
+| Fin de l’Hémorragie quotidienne par pénitence | `extensions.v5.divineDailyBleeding[].status/completedByPenanceId` et `extensions.v5.divinePenances[].stoppedDailyBleedingIds` | absente | clôture MJ de pénitence du même culte, Undo/Redo | B12 `ac61364` |
 
 Les Hémorragique acquis restent des États ordinaires et ne sont pas des variables de retour fiche dans ce registre. Leur cause et le curseur quotidien doivent survivre aux séances : ils sont donc recensés ici. La confirmation d’un saut de matins est transitoire, liée à une seule avance, et ne constitue pas une donnée durable du personnage. B12 renforce aussi l’identité des porteurs des registres B09–B11 ; le registre de phase H doit conserver ces identités et ne jamais copier une sanction entre PJ par nom.
 
 | Variable B13 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
 | --- | --- | --- | --- | --- |
-| Excommunication ou rejet définitif du culte | `extensions.v5.divineRejections[]` : identité, sujet, culte, nature, source et preuve de Courroux | absente | Courroux 136–140/146–150, confirmation MJ pour la perte définitive | B13, caractérisation `26b60d3` |
-| Progression des deux pénitences d’excommunication | `divineRejections[].stage/penanceIds` et `extensions.v5.divinePenances[].divineRejectionProgress` | absente | clôture MJ de deux nouvelles pénitences du même culte, Undo/Redo | B13 |
-| Acquisitions Béni/Invocation du culte perdues définitivement | `talents[]`, avec snapshots `divineRejections[].removedTalents` | talents importés et leur spécialisation | rejet définitif confirmé ; les acquisitions des autres cultes restent présentes | B13 |
-| Avances et score réel de la compétence commune Prière | `skills[].advances/total` ; provenance `divineRejections[].prayLoss` et `lossConfirmedBy` | compétences importées ; avances à confirmer explicitement si absentes | rejet définitif confirmé : avances mises à zéro, total diminué des avances connues | B13 |
+| Excommunication ou rejet définitif du culte | `extensions.v5.divineRejections[]` : identité, sujet, culte, nature, source et preuve de Courroux | absente | Courroux 136–140/146–150, confirmation MJ pour la perte définitive | B13 `e6e4b89`, caractérisation `26b60d3` |
+| Progression des deux pénitences d’excommunication | `divineRejections[].stage/penanceIds` et `extensions.v5.divinePenances[].divineRejectionProgress` | absente | clôture MJ de deux nouvelles pénitences du même culte, Undo/Redo | B13 `e6e4b89` |
+| Acquisitions Béni/Invocation du culte perdues définitivement | `talents[]`, avec snapshots `divineRejections[].removedTalents` | talents importés et leur spécialisation | rejet définitif confirmé ; les acquisitions des autres cultes restent présentes | B13 `e6e4b89` |
+| Avances et score réel de la compétence commune Prière | `skills[].advances/total` ; provenance `divineRejections[].prayLoss` et `lossConfirmedBy` | compétences importées ; avances à confirmer explicitement si absentes | rejet définitif confirmé : avances mises à zéro, total diminué des avances connues | B13 `e6e4b89` |
 
 Les restrictions d’accès et la sanction sociale se déduisent du registre durable, sans nouveau compteur de compétence par culte. La phase H devra synchroniser les acquisitions et avances réellement modifiées avec leur provenance : un réimport de fiche ne doit pas rétablir silencieusement une perte définitive. Les faits d’appartenance d’un interlocuteur sont ceux d’une résolution particulière ; ils ne constituent pas une nouvelle religion permanente du personnage.
