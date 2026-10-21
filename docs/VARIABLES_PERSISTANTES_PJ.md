@@ -58,3 +58,9 @@ Les restrictions d’accès et la sanction sociale se déduisent du registre dur
 | Points de Destin permanents | `extensions.v5.fate` (miroir `fate`) ; part temporaire dans les couches (`remainingTempFate`) | `destin` (compétence/ressources importées) | débité une seule fois au retour du Jugement dernier (temporaire d’abord) ; sinon dépenses existantes | existant ; B15 |
 
 Le rejet confirmé après un Jugement dernier réutilise `extensions.v5.divineRejections[]` (B13), avec `judgmentId` et une preuve rattachée au 151+. La phase H ne doit jamais rétablir un personnage « parti » ni rembourser le Destin par réimport.
+
+| Variable B16 | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Points de Péché retirés par absolution ou pénitence d’Altdorf | `extensions.v5.divine.sin` (compteur existant) ; reçu d’audit `extensions.v5.divineWrathRecoveries[].absolution` (type, culte, retrait, motif) | absente | commandes MJ d’absolution (Test de Prière), Courroux consécutif | B16 |
+
+Un Exténué d’Altdorf est un État de combat ordinaire, exclu du registre. Le reçu d’absolution est une métadonnée d’audit, pas un second compteur.

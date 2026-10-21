@@ -1032,13 +1032,32 @@ export function applyStoreDivine(state,contractId,input={}){
 
 // Une récupération est un vrai Test de Prière, distinct d’une Bénédiction/Miracle.
 // Le moteur commun calcule le Test ; aucun bonus de Bénédiction n’est appliqué.
+// B16 : absolution (L06 p.219) et pénitence d'Altdorf (L20 p.219) : Test de Prière partagé, retrait de Péchés, Courroux si le Test le déclenche.
+const ABSOLUTION_SOURCES={
+ absolution:()=>({...clone(registry.wrathTable[0].source),printedPage:219,section:'Absolution'}),
+ altdorf:()=>({document:'WFRP_Altdorf_Crown_of_the_Empire.pdf',fileSha256:'3bca350fa5fa62b8711733b9b78a83c47e2de2368c3c5d27b627d7e33c5c281e',edition:'V4 adaptée au socle V5',sourceStatus:'read-and-page-checked',printedPage:219,section:'Pénitence : pèlerinage à Altdorf'})
+};
+function absolutionPlan(state,actor,input){
+ const a=input.absolution||{},bad=(error,field)=>failure('requires-input',error,[{field,label:error}]);
+ if(!['absolution','altdorf'].includes(a.kind))return bad('Type d’absolution inconnu.','kind');
+ if(!text(a.cult)||!entries().some(row=>row.deity===a.cult))return bad('Culte connu requis.','cult');
+ if(divineSinPolicy({deity:a.cult}).exempt)return failure('blocked','Ce culte est exempté du Péché : aucune absolution possible.');
+ const sin=actor.extensions?.v5?.divine?.sin;if(!Number.isSafeInteger(sin)||sin<0)return bad('Péchés courants requis.','sin');
+ if(sin<1)return failure('blocked','Aucun Péché à retirer : aucune absolution (et jamais de Courroux à zéro Péché).');
+ let count;
+ if(a.kind==='altdorf'){if(a.cult!=='Sigmar')return bad('La pénitence d’Altdorf concerne le culte de Sigmar.','cult');if(a.pilgrimageConfirmed!==true)return bad('Le MJ confirme que le pèlerinage a été accompli.','pilgrimageConfirmed');}
+ else{if(!Number.isSafeInteger(a.count)||a.count<1||a.count>sin)return bad('Nombre de Péchés à retirer : entier de 1 aux Péchés courants.','count');if(!text(a.reason))return bad('Motif MJ de l’absolution requis.','reason');count=a.count;}
+ const source=ABSOLUTION_SOURCES[a.kind]();
+ return {ready:true,count,source,lock:{executionId:'absolution:'+input.executionId,cult:a.cult,source},rule:{id:'absolution:'+a.kind,source,recovery:{difficulty:a.kind==='altdorf'?2:0,remove:'none'}}};
+}
 function calculateWrathRecovery(state,input){
  const ctx=context(state,null,{actorId:input.actorId,targetIds:[]});if(!ctx.actor)return ctx;
  const actor=ctx.actor,forcedLayer=input.forcedPrayer===true?validateWrathRounds(actor).layers.find(row=>row.mode==='forced'):null;
- const condition=input.forcedPrayer===true?null:(actor.states||[]).find(row=>row.id===input.stateId);
- const lock=forcedLayer?{executionId:forcedLayer.originExecutionId,cult:forcedLayer.cult,source:clone(forcedLayer.source)}:condition?.divineWrathLocks?.find(row=>row.kind==='pray'&&(!input.originExecutionId||row.executionId===input.originExecutionId));
- const rule=forcedLayer?{id:'wrath:76-80:pray-action',source:clone(forcedLayer.source),recovery:{difficulty:0,remove:'none'}}:wrathStateRule(lock?.resultId);
- if(!forcedLayer&&(!rule||rule.id!==lock.ruleId||rule.recovery?.kind!=='pray'||stableJSON(lock.source)!==stableJSON(rule.source)||!lock.cult))return failure('blocked','Cette occurrence ne porte pas de récupération par Prière sourcée.');
+ const abs=input.absolution?absolutionPlan(state,actor,input):null;if(abs&&!abs.ready)return abs;
+ const condition=input.forcedPrayer===true||abs?null:(actor.states||[]).find(row=>row.id===input.stateId);
+ const lock=abs?abs.lock:forcedLayer?{executionId:forcedLayer.originExecutionId,cult:forcedLayer.cult,source:clone(forcedLayer.source)}:condition?.divineWrathLocks?.find(row=>row.kind==='pray'&&(!input.originExecutionId||row.executionId===input.originExecutionId));
+ const rule=abs?abs.rule:forcedLayer?{id:'wrath:76-80:pray-action',source:clone(forcedLayer.source),recovery:{difficulty:0,remove:'none'}}:wrathStateRule(lock?.resultId);
+ if(!forcedLayer&&!abs&&(!rule||rule.id!==lock.ruleId||rule.recovery?.kind!=='pray'||stableJSON(lock.source)!==stableJSON(rule.source)||!lock.cult))return failure('blocked','Cette occurrence ne porte pas de récupération par Prière sourcée.');
  if(forcedLayer&&!lock.cult)return failure('requires-input','Culte source de la Prière imposée manquant.');
  if(condition?.divineWrathLocks.filter(row=>row.kind==='pray').length>1&&!input.originExecutionId)return failure('requires-input','Choisissez l’occurrence de Courroux.',[{field:'originExecutionId',label:'Origine à récupérer'}]);
  if(input.canSpeak!==true)return failure('requires-input','La capacité à prononcer la Prière doit être confirmée.',[{field:'canSpeak',label:'Peut prononcer la Prière'}]);
@@ -1063,13 +1082,24 @@ function calculateWrathRecovery(state,input){
  const capped=applyPrayerSLCaps(actor,test);if(!capped.ok)return failure('requires-input','Plafond de Prière non résolu.',capped.needsInput);test=capped.test;
  const sin=actor.extensions?.v5?.divine?.sin,exempt=divineSinPolicy({deity:lock.cult}).exempt;
  if(!exempt&&(!Number.isSafeInteger(sin)||sin<0))return failure('requires-input','Péchés courants requis.',[{field:'sin',label:'Péchés'}]);
- const wrath={triggered:!exempt&&sin>0&&(test.fumble||test.roll%10<=sin),sinAtTest:exempt?0:sin};
+ const wrath={triggered:!exempt&&sin>0&&(test.fumble||input.absolution?.kind!=='altdorf'&&test.roll%10<=sin),sinAtTest:exempt?0:sin};
  const next=clone(state),index=parts(next).findIndex(row=>row.id===actor.id),changed=parts(next)[index];let removedCount=0;
  if(test.success&&condition){
   const target=changed.states.find(row=>row.id===condition.id),remaining=target.divineWrathLocks.filter(row=>row.executionId!==lock.executionId);
   const amount=rule.recovery.remove==='one-plus-sl'?1+Math.max(0,test.sl):target.level;
   if(rule.recovery.remove==='one-plus-sl'&&target.level>amount){target.level-=amount;removedCount=amount;}
   else{target.divineWrathLocks=remaining;if(!remaining.length){removedCount=target.level;changed.states=changed.states.filter(row=>row.id!==target.id);}}
+ }
+ let absolutionReceipt=null;
+ if(abs){
+  const requested=input.absolution.kind==='altdorf'?(test.sl>=4?2:1):abs.count,removed=test.success?Math.min(requested,sin):0;let fatigued=false;
+  if(!test.success&&input.absolution.kind==='altdorf'&&!test.fumble){
+   const acquired=acquireV5Conditions(parts(next)[index],[{name:'Exténué',level:1,source:{kind:'divine-absolution',executionId:input.executionId,ruleId:abs.rule.id}}],{authorId:actor.id,targetId:actor.id,round:state.combat?.round});
+   if(!acquired.ready)return failure('requires-input','L’acquisition d’Exténué demande une précision.',acquired.needsInput||[]);
+   parts(next)[index]=acquired.participant;fatigued=true;
+  }
+  parts(next)[index].extensions.v5.divine.sin=sin-removed;
+  absolutionReceipt={kind:input.absolution.kind,cult:input.absolution.cult,requested:test.success?requested:0,removed,sinBefore:sin,sinAfterRemoval:sin-removed,fatigued,...(input.absolution.reason?{reason:input.absolution.reason.trim()}:{}),...(input.absolution.kind==='altdorf'?{pilgrimageConfirmed:true}:{})};
  }
  let wrathDetails=null,wrathDamagePreview=null,wrathSkillPreview=null,wrathAlliesPreview=null,wrathSummonPreview=null,wrathAccessPreview=null;
  if(wrath.triggered){
@@ -1122,13 +1152,16 @@ function calculateWrathRecovery(state,input){
    if(!text(input.wrathConsequences))return {...failure('requires-input','Conséquences MJ requises pour cette ligne encore assistée.',[{field:'wrathConsequences',label:row.label}]),test,wrath};
    wrathDetails={source:clone(row.source),resolvedBy:'MJ',consequences:input.wrathConsequences.trim()};
   }
-  parts(next)[index].extensions.v5.divine.sin=Math.max(0,sin-1);
+  parts(next)[index].extensions.v5.divine.sin=Math.max(0,parts(next)[index].extensions.v5.divine.sin-1);
  }
- const receipt={executionId:input.executionId,actorId:actor.id,stateId:condition?.id||null,forcedPrayer:Boolean(forcedLayer),originExecutionId:lock.executionId,ruleId:rule.id,source:clone(rule.source),test:clone(test),difficulty:rule.recovery.difficulty,removedCount,wrath,wrathDetails};
+ const receipt={...(absolutionReceipt?{absolution:absolutionReceipt}:{}),executionId:input.executionId,actorId:actor.id,stateId:condition?.id||null,forcedPrayer:Boolean(forcedLayer),originExecutionId:lock.executionId,ruleId:rule.id,source:clone(rule.source),test:clone(test),difficulty:rule.recovery.difficulty,removedCount,wrath,wrathDetails};
  next.extensions??={};next.extensions.v5??={};next.extensions.v5.divineWrathRecoveries=[...(next.extensions.v5.divineWrathRecoveries||[]),clone(receipt)].slice(-300);
- next.log=[{id:input.executionId+':log',kind:'effect',actorId:actor.id,text:`${actor.name} · Récupération du Courroux : Prière ${test.success?'réussie':'ratée'}, ${test.sl} DR, ${removedCount} État(s) retiré(s)${wrath.triggered?' · nouveau Courroux '+wrath.resultId:''}`,detail:clone(receipt)},...(next.log||[])].slice(0,300);
+ next.log=[{id:input.executionId+':log',kind:'effect',actorId:actor.id,text:abs?`${actor.name} · ${input.absolution.kind==='altdorf'?'Pénitence d’Altdorf':'Absolution'} : Prière ${test.success?'réussie':'ratée'}, ${test.sl} DR, ${absolutionReceipt.removed} Péché(s) retiré(s)${absolutionReceipt.fatigued?' · Exténué':''}${wrath.triggered?' · Courroux '+wrath.resultId:''}`:`${actor.name} · Récupération du Courroux : Prière ${test.success?'réussie':'ratée'}, ${test.sl} DR, ${removedCount} État(s) retiré(s)${wrath.triggered?' · nouveau Courroux '+wrath.resultId:''}`,detail:clone(receipt)},...(next.log||[])].slice(0,300);
  return {ready:true,status:'ready',test:clone(test),testOptions:options,difficulty:rule.recovery.difficulty,removedCount,wrath,wrathDamagePreview,wrathSkillPreview,wrathAlliesPreview,wrathSummonPreview,wrathAccessPreview,source:clone(rule.source),input:clone(input),executionId:input.executionId,receipt,state:next};
 }
+const absolutionInput=input=>{const{kind,cult,count,reason,pilgrimageConfirmed,absolution,...rest}=clone(input);if(absolution)return {...rest,absolution};return {...rest,absolution:{kind,cult,...(count!==undefined?{count}:{}),...(reason!==undefined?{reason}:{}),...(pilgrimageConfirmed!==undefined?{pilgrimageConfirmed}:{})}};};
+export function previewStoreDivineAbsolution(state,input={}){return previewStoreDivineWrathRecovery(state,{...absolutionInput(input),executionId:input.executionId||'absolution:'+uid()});}
+export function applyStoreDivineAbsolution(state,{preview}={}){if(!preview?.input?.absolution)throw ruleError('Aperçu d’absolution requis.');return applyStoreDivineWrathRecovery(state,{preview});}
 export function previewStoreDivineWrathRecovery(state,input={}){
  const captured={...clone(input),executionId:input.executionId||'wrath-recovery:'+uid()};
  const calculated=calculateWrathRecovery(state,captured),{state:discard,...preview}=calculated;
