@@ -99,6 +99,12 @@ export const NAME_FIXES = Object.freeze({
   'E0-P-710': 'Ernst Heidlemann — Human Wizard\'s Apprentice (Silver 3)',
   'E0-P-711': 'Hans Gräber — Level 1 Monk, Level 4 Wizard (Necromancer)',
   'E0-P-715': 'The Gravelord\'s Zombies',
+  // Enemy in Shadows Companion (L23) : titre coupé, guillemets en accent grave du livre, umlauts lus comme des tirets longs (E-D29)
+  'E0-P-759': 'Donkey or Mule',
+  'E0-P-768': 'Aleanora \'Al\' Shortbottom — Halfling Toll Keeper (Brass 5)',
+  'E0-P-777': 'Delberz Trütte — Human Pedlar (Brass 4)',
+  'E0-P-783': 'Albert Pförtner — Human Stevedore (Silver 1)',
+  'E0-P-812': '\'Granny\' Haller — Con Artist (Silver 2)',
   // The Horned Rat Companion (L22) : tirets doublés, apostrophe en majuscule (E-D28)
   'E0-P-740': 'Mila Raast — Yellow Fang Senior Cultist',
   'E0-P-747': 'Gimbrin Flintbeard — Dwarf King\'s Ghost'

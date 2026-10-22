@@ -209,6 +209,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L23",
+   "file": "L23.json",
+   "title": "Enemy in Shadows Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 55,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

@@ -33,6 +33,8 @@ export const KEYWORDS_MANUAL = Object.freeze({
   // Middenheim (L19) : Skaven nommés par le texte, Élémentaire d'Ambre, Liche (Trait imprimé Undead), Middenheimers/Nordlandais humains (E-D25)
   'E0-P-592': ['skaven'], 'E0-P-593': ['skaven'], 'E0-P-594': ['skaven'], 'E0-P-597': ['elementaire'], 'E0-P-612': ['mort-vivant'],
   'E0-P-608': ['humain'], 'E0-P-609': ['humain'], 'E0-P-610': ['humain'], 'E0-P-611': ['humain'],
+  // Enemy in Shadows Companion (L23) : Âne/mule sans terme propre, chevaux de guerre en Cheval, Furie du Chaos Démon (Trait imprimé Daemonic) (E-D29)
+  'E0-P-765': ['cheval'], 'E0-P-766': ['cheval'], 'E0-P-788': ['demon'],
   // The Horned Rat Companion (L22) : Skaven (Traits Infected + Night Vision), Undead, Construct imprimés ; le Rat-loup n'est pas un loup (E-D28)
   'E0-P-716': ['skaven'], 'E0-P-718': ['skaven'], 'E0-P-719': ['skaven'], 'E0-P-722': ['skaven'], 'E0-P-724': ['skaven'], 'E0-P-727': ['skaven'],
   'E0-P-728': ['skaven'], 'E0-P-731': ['skaven'], 'E0-P-733': ['-loup'],
