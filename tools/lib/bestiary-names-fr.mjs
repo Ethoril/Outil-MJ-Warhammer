@@ -92,6 +92,14 @@ export const NAMES_FR = Object.freeze({
   'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)'),
   // Tribes and Tribulations (L12)
   'E0-P-438': proposal('Matthogg — Brute ogre'),
+  // Winds of Magic (L17)
+  'E0-P-515': proposal('Golem (construct)'), 'E0-P-516': proposal('Ashamira Dib — Hiérophante (Argent 3)'), 'E0-P-517': proposal('Balthasar Gelt — Seigneur alchimiste (Or 4)'),
+  'E0-P-518': proposal('Tochter Grunfeld — Seigneur sorcier humain (Or 2)'), 'E0-P-519': proposal('Raphael Julevno — Grand astromancien (Or 1)'), 'E0-P-520': proposal('Immanuel-Ferrand Holswig-Schliestein — Maître espion humain (Or 4)'),
+  'E0-P-521': proposal('Elspeth von Draken — Seigneur sorcier humain (Or 2)'), 'E0-P-522': proposal('Sergov Pfeiffer — Sorcier ardent humain (Argent 3)'), 'E0-P-523': proposal('Gregor Martak — Seigneur chamane humain (Or 2)'),
+  'E0-P-524': proposal('Élémentaire incarné de feu'), 'E0-P-525': proposal('Créatures magiques — Élémentaire incarné de mort'), 'E0-P-526': proposal('Élémentaire incarné de bêtes'),
+  'E0-P-527': proposal('Bête des marais'), 'E0-P-528': proposal('Familier de combat'), 'E0-P-529': proposal('Familier de puissance'), 'E0-P-530': proposal('Familier de sorts'),
+  'E0-P-531': proposal('Egrimm van Horstmann'), 'E0-P-532': proposal('Xirat’P — Celui qui lit'), 'E0-P-533': proposal('P’Tarix — Celui qui écrit'),
+  'E0-P-534': proposal('Disque-bibliothèque de Tzeentch'), 'E0-P-535': proposal('Mòna Mimn — Matriarche fimir'),
   // Lords of Stone and Steel (L16)
   'E0-P-492': proposal('Thorgrim Grudgebearer — Nain — Seigneur de Karak'), 'E0-P-493': proposal('Kazador Thunderhorn — Seigneur de Karak nain'), 'E0-P-494': proposal('Ungrim Ironfist — Seigneur de Karak nain'),
   'E0-P-495': proposal('Zylra Kraggsdottir — Citadine naine'), 'E0-P-496': proposal('Kazgar Rognisson — Gardien de porte nain'), 'E0-P-497': proposal('Helga Vikramsdottir — Artisane naine'),

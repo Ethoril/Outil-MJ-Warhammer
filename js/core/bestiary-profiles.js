@@ -29,7 +29,9 @@ export function validateBestiaryRecord(record, referential = activeReferential()
       if (value === undefined) errors.push(`caractéristique ${key} absente (null attendu pour une case vide)`);
       else if (value !== null && (!isInt(value) || value < 0)) errors.push(`caractéristique ${key} invalide`);
     }
-    if (record.kind === 'profile' && (!isInt(record.wounds) || record.wounds < 1)) errors.push('Blessures invalides');
+    // Un profil dont le livre n'imprime aucune Blessures (case W absente) le déclare par `woundsAbsent` : jamais 0 ni recalculé.
+    const absent = record.woundsAbsent === true && record.wounds === null;
+    if (record.kind === 'profile' && !absent && (!isInt(record.wounds) || record.wounds < 1)) errors.push('Blessures invalides');
   }
   for (const attack of record.attacks || []) {
     if (!isText(attack.name)) errors.push('attaque sans nom');

@@ -143,6 +143,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L17",
+   "file": "L17.json",
+   "title": "Winds of Magic",
+   "edition": "V4",
+   "counts": {
+    "profiles": 21,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

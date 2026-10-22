@@ -62,6 +62,9 @@ export const TEMPLATE_IDS = Object.freeze(new Set([
   'E0-P-449'
 ]));
 
+/** Profils dont le livre n'imprime aucune Blessures (pas de colonne W) : `wounds: null` et `woundsAbsent: true` (E-D23). */
+export const WOUNDS_ABSENT_IDS = Object.freeze(new Set(['E0-P-515']));
+
 /**
  * Noms que l'inventaire E0 a lus de travers (phrase du texte d'ambiance prise pour un titre) : le titre imprimé du bloc est rétabli (E-D18).
  */
@@ -80,5 +83,18 @@ export const BODY_OVERRIDES = Object.freeze({
     'Skills: Charm 48, Climb 40, Consume Alcohol 58, Cool 48, Drive 41, Dodge 41, Entertain (Storytelling) 43, Gamble 51, Gossip 53, Haggle 48, Language (Khazalid) 46, Melee (Basic) 44, Ranged (Blackpowder) 42, Trade (Brewer) 45',
     'Talents: Gregarious, Magic Resistance, Night Vision, Read/Write, Strong-minded, Sturdy',
     'Trappings: Blunderbuss with powder and ammunition for 10 shots, Cloak, Clothing, Dagger, Hammer, Hat, Leather Apron, Pouch'
+  ],
+  // Winds of Magic (L17) p. 133 : Sergov Pfeiffer, parenthèse de « Lore » oubliée par le livre, rétablie (E-D23).
+  'L17:133:0': [
+    'Traits: Weapon (Sword) +7, Weapon (Staff) +7',
+    'Skills: Channelling (Aqshy) 50, Charm 44, Cool 45, Dodge 41, Evaluate 58, Gossip 40, Haggle 39, Intimidate 37, Intuition 42, Language (Battle 63, Magick 68, Wastelander 63), Leadership 39, Lore (Magic 58, Reikland 55, Warfare 52), Melee (Basic 45, Polearm 46), Perception 42',
+    "Talents: Aethyric Attunement, Arcane Magic (Lore of Fire), Detect Artefact, Doomed (Beseech our divine lord, or be o'errun by the horde), Fast Hands, Petty Magic, Read/Write, Savvy, Second Sight, Sixth Sense",
+    'Spells: Lore of Fire: Blast, Comfort, Crown of Flame, Distracting, Fearsome, Firewall',
+    'Petty: Dazzle, Dart, Magic Flame, Shock, Sly Hands',
+    "Trappings: Grimoire, Magical Licence, Staff, Wizard's Robes"
+  ],
+  // Winds of Magic (L17) p. 210 : Egrimm van Horstmann, lettres parasites de l'extraction en colonnes (« Lore r », « Corruption y ») retirées (E-D23).
+  'L17:210:0': [
+    "Traits: Afraid (Snakes), Armour 6 (12), Corruption (Moderate), Distracting, Ward (9+), Weapon (Chaos Runeblade) +10 Skills: Animal Care 87, Athletics 85, Bribery 60, Channelling (Dhar 115, Hysh 95), Charm 55, Consume Alcohol 72, Cool 105, Dodge 80, Endurance 82, Entertain (Acting 65, Singing 65), Evaluate 97, Gossip 60, Intimidate 64, Intuition 98, Language (Classical 97, Dark Tongue 97, Magick 117), Leadership 65, Lore (Altdorf 87, Daemonology 97, Dark Magic 97, Magic 107, Nehekhara 87, Tzeentch 99, Warfare 87), Melee (Basic 82, Polearm 72), Perception 88, Pick Lock 78, Research 97, Ride (Dragon 90, Horse 80), Sleight of Hand 78, Stealth (Rural) 80 Talents: Aethyric Attunement, Animal Affinity, Arcane Lore (Daemonology, Lore of Light), Cat-tongued, Chaos Magic (Tzeentch), Combat Aware, Commanding Presence, Detect Artefact, Doomed (`A skein of fate is woven through your life, winding like a serpent. Understand it or face damnation.'), Fast Hands, Frightening, Impassioned Zeal, Instinctive Diction, Iron Will, Lightning Reflexes, Luck 3, Magical Sense, Menacing, Nimble Fingered, Petty Magic, Read/Write, Savant (Tzeentch), Savvy, Second Sight, Sixth Sense, Strike Mighty Blow, Strong-minded, Tower of Memories, Very Resilient, War Wizard, Wilful Corruption Spells: Petty Magic Spells: Dart, Drain, Eavesdrop, Open Lock, Sounds, Warning Arcane Spells: Bolt, Blast, Corrosive Blood, Distracting, Entangle, Flight, Manifest Lesser Daemon, Octagram, Teleport, Ward Lore of Daemonology Spells: Detect Daemon, Manifest Lesser Daemon, Octagram Lore of Light Spells: Abulla's Snare, Assault of Stone, Banishment, Blinding Light, Driving Intent, Eyes of Volans, Hands of Karkora, Net of Amyntok, Speed of Thought, Time Amok Lore of Tzeentch Spells: Bolt of Change, Boon of Tzeentch, Blue Fire of Tzeentch, Curse of Tzeentch, The Flickering Flames of Fickle Fate, Mindfire, Pink Fire of Tzeentch, Transformation of Tzeentch, Treason of Tzeentch, Tzeentch's Firestorm, Tzeentch's Golden Aura, Sense the Skein, Word of Tzeentch Trappings: Chaos Armour (cannot be removed), Chaos Runeblade (+SB+5, Damaging, Hack, Magical, Penetrating, Unbreakable), The Cloak of Golden Glamour, Grimoire of Dark Magicks, Skull of Katam, Talisman of Tzeentch Mental Corruption: Hollow Heart\r"
   ]
 });
