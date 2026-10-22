@@ -14,7 +14,8 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | K4 spécialisations à cible (Haine, Sans peur, Haine-Trait, Dévotion de la Guerrière, migration) | FAIT | 59fdf09 |
 | K5 effets « contre les X » (natures, contrats, sources de Psychologie) | FAIT | 6969097 |
 | D1 à D24 profils de bestiaire (modèle, import livre par livre) | FAIT : D1 à D24 (L06, L11, L01, L02, L03, L04, L07, L09, L10, L12, L13, L14, L16, L17, L18, L19, L20, L21, L22, L23, L24, L25, L26) ; prochain lot : B1 (L26 : E-D32 ; L25 : E-D31 ; L24 : E-D30 ; lecture élargie `setLenient` déjà active, voir E-D22 ; Blessures absentes : E-D23 ; L18 : E-D24 ; L19 : E-D25 ; L20 : E-D26 ; L21 : E-D27 ; L22 : E-D28 ; L23 : E-D29) | voir `git log` |
-| B1 à B3 bibliothèque et raccordements | À FAIRE | |
+| B1 constructeur profil → participant (`buildParticipantFromBestiary`, choix E-B1) | FAIT | voir `git log` |
+| B2, B3 bibliothèque (UI) et raccordement des sorts d'invocation | À FAIRE | |
 | T1 à T12, F1-F2, S1, R1 | À FAIRE | |
 
 ## Dernière suite complète

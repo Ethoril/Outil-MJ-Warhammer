@@ -3,6 +3,7 @@
  * Les valeurs sont celles du livre, imprimées telles quelles : jamais recalculées (BF, Taille et armure compris).
  */
 import { activeReferential } from './creature-keywords.js';
+import { cloneValue, normalizeAction, uid } from './models.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
@@ -52,4 +53,68 @@ export function filterBestiary(profiles, { keyword = null, text = '', kinds = nu
   return profiles.filter(profile => (!kinds || kinds.includes(profile.kind))
     && (!keyword || matches?.(profile, keyword))
     && (!wanted || [profile.name, profile.nameFr, ...(profile.skills || []).map(skill => skill.name)].some(value => String(value || '').toLowerCase().includes(wanted))));
+}
+
+export const BESTIARY_FREE_ATTACK_KEY = 'freeAttack';
+
+const ARMOUR_ZONES = Object.freeze({ head: /\bhead\b/i, body: /\bbody\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });
+
+/** Armure imprimée par zone : `ap` d'ensemble partout, sinon pièces non facultatives (zone nommée, ou partout). Aucun BE ajouté. */
+function printedArmour(armour, includeOptional) {
+  const zones = { head: 0, body: 0, arms: 0, legs: 0 };
+  if (!armour) return zones;
+  if (isInt(armour.ap)) { for (const key of Object.keys(zones)) zones[key] = armour.ap; return zones; }
+  for (const part of armour.parts || []) {
+    if ((part.optional && !includeOptional) || !isInt(part.ap)) continue;
+    const named = Object.keys(zones).filter(key => ARMOUR_ZONES[key].test(part.locations || ''));
+    for (const key of named.length ? named : Object.keys(zones)) zones[key] = Math.max(zones[key], part.ap);
+  }
+  return zones;
+}
+
+const traitText = trait => {
+  const detail = trait.param ?? trait.rating;
+  return detail === undefined || detail === null || detail === '' ? trait.name : `${trait.name} (${detail})`;
+};
+
+function attackAction(attack) {
+  const ranged = isInt(attack.rangeYards);
+  const v5 = { kind: ranged ? 'ranged' : 'melee', ...(attack.free ? { [BESTIARY_FREE_ATTACK_KEY]: attack.free } : {}) };
+  return normalizeAction({
+    name: attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
+    qualities: cloneValue(attack.qualities || []), ...(ranged ? { rangeYards: attack.rangeYards } : {}),
+    ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
+  });
+}
+
+/**
+ * Participant ordinaire d'un profil de bestiaire (valeurs imprimées, jamais recalculées : ni BF, ni Taille, ni armure ajoutés).
+ * `options.library` : profils chargés (un livre ou plusieurs) ; `index` : rang d'exemplaire (suffixe du nom) ; `nameFr` : nom français ;
+ * `includeOptional` : attaques et pièces d'armure facultatives. Les gabarits ne sont pas des créatures : refus.
+ */
+export function buildParticipantFromBestiary(id, options = {}) {
+  const { library, camp = 'neutre', zone = 'bench', index = null, nameFr = false, includeOptional = false, idFactory = uid } = options;
+  if (!Array.isArray(library)) throw new Error('bibliothèque de profils requise');
+  const record = library.find(profile => profile.id === id);
+  if (!record) throw new Error(`profil de bestiaire inconnu : ${id}`);
+  if (record.kind === 'template') throw new Error('un gabarit n’est pas une créature : l’appliquer à un profil');
+  const errors = validateBestiaryRecord(record);
+  if (errors.length) throw new Error(`profil de bestiaire incohérent (${id}) : ${errors.join(' ; ')}`);
+  const base = nameFr && record.nameFr ? record.nameFr : record.name;
+  const wounds = isInt(record.wounds) ? record.wounds : null;
+  const traits = (record.traits || []).filter(trait => isText(trait?.name));
+  return {
+    id: idFactory(), name: index === null ? base : `${base} ${index}`, kind: 'Créature', camp, zone,
+    initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
+    caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
+    armor: printedArmour(record.armour, includeOptional),
+    actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).map(attackAction),
+    skills: (record.skills || []).map(skill => ({ name: skill.nameFr || skill.name, total: skill.value })),
+    traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: '',
+    extensions: { v5: { bestiary: {
+      id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
+      armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
+      optionalTraits: (record.optionalTraits || []).map(traitText), ...(record.woundsAbsent ? { woundsAbsent: true } : {})
+    } } }
+  };
 }
