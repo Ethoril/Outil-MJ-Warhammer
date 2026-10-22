@@ -176,6 +176,17 @@
     "templates": 1,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L20",
+   "file": "L20.json",
+   "title": "Altdorf: Crown of the Empire",
+   "edition": "V4",
+   "counts": {
+    "profiles": 45,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }
