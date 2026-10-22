@@ -1,12 +1,12 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms. Les 24 suppléments restent à traiter. Aucun achèvement des 26 livres n’est prétendu.
+État : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17 a reçu sa revue des mécaniques F0. Les 23 autres suppléments restent à traiter. Aucun achèvement des 26 livres n’est prétendu.
 
 ## Travail local et sources
 
 Worktree dédié `E:/Outil MJ Warhammer/tmp/gpt-phase-f-worktree`, branche `gpt/phase-f`, créé depuis main à `ad092cdf78a747d08f1b1a0fd8acf27a97d6caf8`. Le brief, absent du main initial, a été lu dans le worktree demandé à `b1ab6c512acb6f919a00ef9d6b85fa1769b33c2b` ; SHA-256 `9c97672e69c7d41825d3d9364945add0101fd411ea2b175a261f0c8c48c6aff9`. La demande explicite « depuis main » prévaut sur l’ancienne base commune.
 
-L06 : Livre de base V5 EN v2.pdf, 379 pages, SHA-256 `53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de`. Folio = page physique. L05 sera utilisé pour les noms français seulement, avec page physique = folio +2. Le manifeste décrit 26 livres et 3 968 pages physiques, contre 17 et 2 694 dans l’initial.
+L06 : Livre de base V5 EN v2.pdf, 379 pages, SHA-256 `53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de`. Folio = page physique. L05 a été utilisé pour les noms français seulement, avec page physique = folio +2. Le manifeste décrit 26 livres et 3 968 pages physiques, contre 17 et 2 694 dans l’initial.
 
 Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitrage, catalogue public ou version. Commits locaux seulement ; aucun push, publication ou fusion. Les contrôles d’intégrité finaux seront renouvelés à la clôture du corpus.
 
@@ -27,16 +27,17 @@ Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitr
 | L06 Magie générale p.230-239 | FAIT, 89 entrées | 8482611 | 4 052/4 052 ; 106,348 s |
 | L06 Équipement p.296-317 | FAIT, 129 entrées | f8879ee | 4 052/4 052 ; 105,924 s |
 | L06 Dernière passe : religion, MJ/voyage, procédures animales | FAIT, 23 entrées | 0513a70 | 4 052/4 052 ; 108,503 s, F06-closure-final-full.log |
-| L05 noms FR | FAIT, noms seuls | commit du présent lot | 4 054/4 054 ; 110,085 s, L05-full.log |
-| L17, L11, L13, L14, L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
+| L05 noms FR | FAIT, noms seuls | 775cbd9 | 4 054/4 054 ; 110,085 s, L05-full.log |
+| L17 magie générale, variantes, divination, alchimie, objets, familiers, environnement | FAIT, 367 entrées dans la portée précisée ci-dessous | commit du présent lot | 4 054/4 054 ; 112,751 s, L17-full.log |
+| L11, L13, L14, L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
 
 Logs complets ignorés sous tmp/audit/ : F00-full.log, F06-tests-full.log, F06-combat-full.log, F06-usages-full.log, F06-health-full.log, F06-downtime-full.log, F06-talents-full.log, F06-creation-full.log, F06-magic-full.log, F06-gear-full.log. Les sept tests initiaux d’outillage et les deux nouveaux comportements ont été développés rouge puis vert.
 
 ## Inventaire courant
 
-**1 141 entrées ; 819 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. Le dernier identifiant est F-L06-1141.
+**1 508 entrées ; 1 162 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. L06 conserve ses 1 141 identifiants ; L17 va de F-L17-0001 à F-L17-0367.
 
-L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 de suppléments seront enregistrées dans v5Proposal ; les nouvelles entrées L19-L26 porteront addedOn:2026-10-21. Aucune proposition n’est implantée.
+L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 des suppléments sont enregistrées dans v5Proposal ; les nouvelles entrées L19-L26 porteront addedOn:2026-10-21. Aucune proposition n’est implantée. Les titres français L17 sont des propositions d’audit, sans prétention de nom officiel.
 
 ## Portée de lecture L06
 
@@ -80,13 +81,13 @@ L’audit de couverture est statique : lecture des contrats, moteurs et lecteurs
 
 TEMP/TMP : `E:/Outil MJ Warhammer/tmp/gpt-phase-f-runtime`, même lecteur mais hors checkout. Les faux échecs initiaux E2 et reçu E0 absent ont été résolus sans modifier les assertions héritées.
 
-Neuf nouveaux tests d’outillage : audit-phase-f.test.js (7), audit-covered-selectors.test.js (1), audit-empty-page.test.js (1). **Aucune assertion de test existant modifiée.** Génération déterministe et --check, résumés limités, identifiants, références locales et correspondance exacte des sélecteurs contrôlés. LF et git diff --check verts avant les commits. Une suite verte ne démontre pas l’exhaustivité de l’audit.
+Onze nouveaux tests d’outillage : audit-phase-f.test.js (7), audit-covered-selectors.test.js (1), audit-empty-page.test.js (1), audit-fr-names.test.js (2). **Aucune assertion de test existant modifiée.** Aucun nouveau test pour les seules données L17. Génération déterministe et --check, résumés limités, identifiants, références locales et correspondance exacte des sélecteurs contrôlés. LF et git diff --check verts avant les commits. Une suite verte ne démontre pas l’exhaustivité de l’audit.
 
 Recette réelle déjà exécutée : **26/26 commandes vertes**, Node et parcours navigateur/cloud locaux compris ; reçu tmp/divin/recipe-receipt.json, log tmp/audit/recipe-F00.log, achevée le 22/10 à 21 h 28 (Paris). Sources protégées inchangées. Une nouvelle recette reste requise à la clôture du corpus.
 
 ## Suite
 
-Continuer les 24 suppléments dans l’ordre prescrit après validation de L05, un commit par livre après suite complète verte. Les sélecteurs F1 ne donnent aucune autorisation d’implantation F2. L’audit des 26 livres reste l’objectif de la reprise, sans arrêt à ce jalon.
+Continuer les 23 autres suppléments à partir de L11 dans l’ordre prescrit, un commit par livre après suite complète verte. Les sélecteurs F1 ne donnent aucune autorisation d’implantation F2. L’audit des 26 livres reste l’objectif de la reprise. La succession précise le point atteint en cas de limite de contexte.
 
 Dernière cohérence des renvois : les neuf renvois hérités des premiers chapitres portent aussi une exclusion motivée de sélecteur ; aucun second choix pour C0/E0. Les statuts et identifiants restent conservés.
 
@@ -97,3 +98,24 @@ Livre de base FR.pdf, 355 pages ; SHA-256 `1ee2a2be032fe0a034b5670ac6ab5625ecc68
 Comparaison structurelle à 0513a70 : tous les champs mécaniques, résumés, statuts, propositions et identifiants des 1 141 entrées sont inchangés. Exemples de divergences volontairement non importées : Ambidextre en deux acquisitions dans L05, effets de Baratiner, dégâts de Frappe blessante, modificateurs des Atouts. Le nom officiel peut rester identique alors que la règle change. Les noms Empêtré, En flammes et Exténué sont rattachés comme noms FR, sans renommer les clés moteur locales.
 
 Deux nouveaux tests, dans tests/audit-fr-names.test.js : rouge sur métadonnées FR non contrôlées et source absente de la synthèse, puis **11/11 contrôles d’audit verts**. Le validateur exige L05, son hash, le décalage exact et des noms/portées non vides ; la synthèse affiche les pages FR sans leur attribuer des règles. Total de nouveaux tests d’audit : onze ; aucun test hérité modifié. **100 entrées** portent aussi des termes français sourcés (certaines ont plusieurs termes). Suite complète : **4 054/4 054**, aucun échec, aucun test ignoré.
+
+## L17 — Winds of Magic
+
+Winds Of Magic.pdf, **224 pages**, folio = page physique ; SHA-256 `28283188fa70d51b8f1efe3e8c3214da7be885d2a444321744ead66d1ea2a150`, vérifié par l’extracteur sur le manifeste. Source V4 de 2022 : aucune règle V5 remplacée. **367 entrées**, dont 353 absent, 12 assiste, un rappel et une hors-granularite ; **343 nouveaux sélecteurs**. Onze purs renvois sont exclus de sélection ; les nouvelles clauses d’un domaine déjà inventorié restent distinguées.
+
+Lecture suivie des règles p.19-53, des cadres propres aux Vents p.55,67,79,91,103,115,127,139 et des marques p.58,70,82,94,106,118,130,142 ; lecture p.150-172 et p.180-208, avec les pages narratives identifiées. P.6-18 : repérage de l’histoire, cadre mécanique de Perception p.17 lu ; page18 rendue et vue, fiction manuscrite. P.54-149 hors cadres cités : repérage des carrières, relations et passages chiffrés, profils/sorts laissés à leurs inventaires. P.173-179 : procédures générales et passages hors profils repérés ; profils et Traits renvoyés à E0. P.209-219 : repérage des scénarios/PNJ, objets autonomes p.211 lus et Traits p.214/217 reliés à E0. P.220-224 : index, licence p.222 et éléments de fin ; durée de licence recensée. P.203 rendue et vue : illustration. Cette portée distingue lecture des règles et repérage ciblé ; aucune seconde lecture indépendante de toutes les pages n’est prétendue.
+
+Tableaux vus sur rendus : p.21,23,24,25 dans la reprise précédente ; p.45,48,51,58,70,82,94,106,118,130,142,153,156,157,160,166,180,185,188,190,191,199 dans celle-ci. Reçus et images sous tmp/audit/L17/ ou tmp/audit/L17-table-*.png, non publiés. Les extractions ne sont pas promues automatiquement en preuves de lecture.
+
+- Le symbole Tour concerne **Subornation**, pas Corruption ; Psychométrie à +6 donne au moins trois informations, dont une pertinente. Les notes provisoires de succession ont été corrigées avant les données.
+- Table de conservation p.156 : irrégularités visibles aussi sur rendu (notamment 45/88, 13/28, 13/24 et séparateurs manquants). Aucune normalisation. Table d’altérations p.157 lue visuellement, jamais par attribution des colonnes désalignées.
+- P.50/51 : boussole deux/trois jours, miroir un/trois jours, loupe un jour/une semaine, télescope une/deux semaines. P.198/199 : jonction saturée +2 à +8 contre +1 à +8 ; la synthèse ajoute des effets de saturation corrompue et de Focalisation. Écarts conservés comme propositions, pas décisions.
+- P.180/182 : écarts avec la conception des familiers conservés selon F-C16. Le choix du type reste distinct de l’ouverture générale décidée par le MJ. Le rituel de création garde la décision FAM-RITUEL : événement unique débitant un Destin ou une Résilience.
+- P.53 : la poudre de Léonard augmente de deux les **dégâts** d’un incident de tir, pas son jet de table. L’alkahest produit **5 + DR En flammes**, pas des dégâts de ce montant. Ces distinctions ont été vérifiées avant la fusion des données.
+- P.150 : la lecture de criticalWoundsSuffered au retour de transformation ne démontre pas son alimentation ; aucune écriture autre que l’initialisation trouvée. Les règles générales V4 restent absentes ou partielles selon la clause, avec les limites V5 dans les notes.
+
+Couverture statique : vortex raccordé à previewSpellExecution et au traitement réel de fin de Tour du lanceur ; Test de Volonté déclaré, positions et cibles réelles saisis par le MJ. Imprégné et Assistant magique : moteurs, lecteurs de résolution et contrôles UI lus. Les autres procédures nouvelles ne sont pas déclarées couvertes par une simple saisie de Test/État. La boussole météoritique possède un rappel dans le sort de Puchta, sans flux général de fabrication ni gestion de direction de l’objet permanent.
+
+Renvois : D0b-SYS-15 pour le système de rituels, D0b-L17-001 à 033 pour les sorts/rituels existants ; C0 pour les marques de Psychologie, la hache et les mailles maudites ; E0-T-246/247/248 pour Lanceur aléatoire, Siphon de sort et Œil maléfique ; E0-P-515 à 535 pour les profils de ce livre. Aucun second inventaire des sorts ou profils. Les listes de prix, décorations et effets seulement narratifs sans règle propre ne sont pas multipliées en sélecteurs. Le patronage nominatif reste hors périmètre PNJ ; ses objets transportables sont relevés séparément.
+
+Validation des identifiants, références, résumés et sélecteurs : verte ; génération puis --check cohérents. Suite complète du lot : **4 054/4 054**, aucun échec, aucun ignoré, 112751,2164 ms, tmp/audit/L17-full.log. Après mise au propre des seules notes, les onze contrôles d’audit ont été rejoués avec succès. Comparaison structurelle à 775cbd9 : **les 1 141 entrées héritées L06 sont strictement identiques**, reçu tmp/audit/L17-integrity-receipt.json. Aucun js/, catalogue de jeu, outil ni test modifié pour ce livre. Recette complète à renouveler à la clôture réelle des 26 livres.
