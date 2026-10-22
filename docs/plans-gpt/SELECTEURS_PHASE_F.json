@@ -19511,5 +19511,1487 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0001",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Lire les cartes marines magiques » ? Lire l’Elthárin et réussir un Test combiné de Savoir (Magie) et Navigation à −1 DR permet d’utiliser une carte magique des Îles mouvantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0002",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Éclats de pierre gardienne » ? Un éclat lié à une pierre gardienne d’Ulthuan permet de percevoir sa position pour naviguer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0003",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Navigation quotidienne des Îles mouvantes » ? Un Test de Navigation par jour détermine le passage à travers les brumes et enchantements des Îles mouvantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0004",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Naviguer sans Seconde vue » ? Sans le Talent Seconde vue, le Test quotidien de Navigation subit −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0005",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Naviguer avec une carte magique » ? Savoir lire et utiliser une carte marine magique donne +2 DR au Test de Navigation des Îles mouvantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0006",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Naviguer avec un éclat gardien » ? Posséder un éclat de pierre gardienne donne +1 DR au Test de Navigation des Îles mouvantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0007",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Brumes : passage accéléré » ? À +4 DR ou mieux, un vent mystérieux réduit les semaines de trajet en jours et les jours en heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0008",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Brumes : passage réussi » ? De +0 réussi à +3 DR, le navire évite les illusions, bancs de sable et hauts-fonds mouvants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0009",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Brumes : immobilisation » ? À −0 raté ou −1 DR, le navire attend 2d10 heures dans une eau immobile ou sur un banc de sable, puis rejoue Navigation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0010",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Brumes : dérive » ? De −2 à −4 DR, le navire sort de l’archipel à 100 + 1d100 miles de sa route.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0011",
+    "phase": "Voyage et navigation",
+    "lot": "L14",
+    "source": "L14 p.6",
+    "question": "Implanter « Brumes : demi-tour » ? À −5 DR ou moins, le navire ressort du côté par lequel il était entré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0012",
+    "phase": "Commerce et société",
+    "lot": "L14",
+    "source": "L14 p.20",
+    "question": "Implanter « Peines selon la gravité du délit » ? Délit modéré : prison ou gemme ; grave : 1 à 5 ans de servitude ; odieux : exécution, jusqu’à 5 ans dans les îles, ou exil en Lustrie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0013",
+    "phase": "Commerce et société",
+    "lot": "L14",
+    "source": "L14 p.20",
+    "question": "Implanter « Marché maritime de Tor Koruali » ? Tor Koruali offre un surplus de pièces navales +1 et une demande de bois +1 ; autres cargaisons : luxe, sel, poisson salé et vin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0014",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.20",
+    "question": "Implanter « Fermeture de la gemme ataractique » ? Installer, retirer ou briser un bracelet à gemme ataractique exige un moyen magique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0015",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.20",
+    "question": "Implanter « Pistage de la gemme ataractique » ? Seconde vue permet de suivre la signature magique de la gemme et de retrouver son porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0016",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.20",
+    "question": "Implanter « Réaction de la gemme à la violence » ? Un acte violent du porteur déclenche le sort dormant de la gemme, souvent Décharge ou Sommeil, d’autres sorts restant possibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0017",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.27",
+    "question": "Implanter « Lame d’or marin » ? La lame magique d’or marin ignore les Points d’Armure de la cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0018",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.39",
+    "question": "Implanter « Lance incandescente » ? La lance magique émet une lumière de même intensité qu’une lanterne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0019",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.45",
+    "question": "Implanter « Lame d’acier vif » ? La lame magique combine Solide 3, Raffiné 3, Rapide et Precise sur son profil d’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0020",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.45",
+    "question": "Implanter « Arc d’Anirain » ? L’arc magique d’Anirain combine son profil propre avec Solide 3, Dévastatrice, Raffiné 3 et Precise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0021",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.58",
+    "question": "Implanter « Voiles elfiques » ? Rééquiper un bateau non elfique de voiles elfiques donne +1 Mouvement ; les navires du guide haut elfe les ont déjà.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0022",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.58",
+    "question": "Implanter « Balancier de navire » ? Installer un balancier augmente de 25 % la capacité de charge du bateau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0023",
+    "phase": "Voyage et environnement",
+    "lot": "L14",
+    "source": "L14 p.61",
+    "question": "Implanter « Calme du bosquet de bois stellaire » ? Dans le bosquet de bois stellaire, les Tests de Calme reçoivent +2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0024",
+    "phase": "Voyage et environnement",
+    "lot": "L14",
+    "source": "L14 p.61",
+    "question": "Implanter « Entrée du Chaos dans le bosquet » ? Une créature du Chaos doit réussir Calme +0 pour entrer dans le bosquet ; un échec lui donne un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0025",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.70",
+    "question": "Implanter « Rite de la mare pourpre : yenlui » ? Invoquer Drakira au moyen d’un couteau ensanglanté immergé dans la mare fait passer le yenlui de l’Elfe à Sombre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0026",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.70",
+    "question": "Implanter « Couteau vengeur de Drakira » ? Contre la personne nommée lors du rite, le couteau perd Inoffensive et reçoit Dévastatrice, Rapide, Empaleuse, Pratique et Precise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0030",
+    "phase": "Maladies et poisons",
+    "lot": "L14",
+    "source": "L14 p.73",
+    "question": "Implanter « Peste invalidante : exposition » ? Pendant deux mois après contamination, boire l’eau d’une rivière ou d’un puits voisin impose un Test d’exposition à la peste invalidante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0031",
+    "phase": "Maladies et poisons",
+    "lot": "L14",
+    "source": "L14 p.73",
+    "question": "Implanter « Peste invalidante : contraction » ? Après consommation d’eau infectée, un échec de Résistance −2 DR transmet la peste invalidante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0032",
+    "phase": "Maladies et poisons",
+    "lot": "L14",
+    "source": "L14 p.73",
+    "question": "Implanter « Peste invalidante : incubation et durée » ? La peste invalidante incube pendant 1d10 heures puis dure 5d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0033",
+    "phase": "Maladies et poisons",
+    "lot": "L14",
+    "source": "L14 p.73",
+    "question": "Implanter « Peste invalidante : symptômes » ? La peste invalidante associe Flux sévère, Malaise, Nausée et Plaie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0034",
+    "phase": "Maladies et poisons",
+    "lot": "L14",
+    "source": "L14 p.73",
+    "question": "Implanter « Peste invalidante : soins difficiles » ? Tout Test destiné à guérir cette peste subit −3 DR, y compris un soin magique ou miraculeux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0035",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Potion de force diabolique » ? La potion donne +60 Force pendant 1d10+3 Rounds ; conçue pour les Elfes, elle est sans effet et sans danger initial pour les autres espèces.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0036",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Altération de la potion diabolique » ? Une potion prise à Shadowblade se gâte après 2d10 jours tirés secrètement ; la boire impose Résistance −2 DR ou un Empoisonné par DR négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0037",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Cœur de malheur » ? À la mort de Shadowblade, le Cœur de malheur explose au Round suivant avec l’effet d’une bombe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0038",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Étoiles déchirantes » ? Ces armes de jet de BF+1 ont une portée BF×4 et le Défaut Inoffensive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0039",
+    "phase": "Maladies et poisons",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Venin noir » ? Une Blessure causée par une arme enduite impose Résistance −1 DR ; échec : Blessure suppurante à incubation immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0040",
+    "phase": "Dons et talents",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Accéder aux dons de Khaine » ? Un PNJ de Khaine peut employer un don en Action gratuite en dépensant une Chance, s’il cherche sincèrement à tuer et respecte le culte et ses sacrifices.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0041",
+    "phase": "Dons et talents",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Danse de la fatalité » ? Le don confère +2 DR aux Tests d’Esquive jusqu’à la fin du Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0042",
+    "phase": "Dons et talents",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Main de Khaine » ? En dépensant son Mouvement, le bénéficiaire oppose Représentation (Danse) au Calme d’un ennemi qui le voit ; une réussite rend l’ennemi Surpris.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0043",
+    "phase": "Dons et talents",
+    "lot": "L14",
+    "source": "L14 p.75",
+    "question": "Implanter « Contact de Khaine » ? Le don confère +2 DR à tous les Tests de Mêlée jusqu’à la fin du Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0044",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.76",
+    "question": "Implanter « Profils de chars et chariots » ? Neuf types de véhicules définissent poids, charge, attelage requis, Endurance, Blessures et formule d’impact.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0045",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.76",
+    "question": "Implanter « Charge des occupants » ? Pour la charge du véhicule, un occupant Little vaut 2 Enc, Small 5, Average 10 et Large 30 ; l’équipement porté ordinaire ne s’ajoute pas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0046",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.76",
+    "question": "Implanter « Charge de traction » ? La masse totale du véhicule, occupants et cargaison, est divisée par dix, puis partagée entre les animaux pour leur Encombrement de traction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0047",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Vitesse et difficulté de conduite » ? Le barème de vitesse donne 0/−1/−2/−3/−4 DR aux manœuvres, de la marche à la course incontrôlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0048",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Chariot de transport en manœuvre » ? Une charrette ou un chariot de transport utilisé comme char de guerre subit −2 DR supplémentaires aux manœuvres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0049",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Frapper un char immobile » ? Une attaque de mêlée visant un char immobile touche automatiquement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0050",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Frapper un char mobile ou une pièce précise » ? Une attaque de mêlée contre un char mobile ou une pièce difficile à toucher se résout comme coup ciblé à −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0051",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Défense du conducteur par Conduite » ? En mêlée contre le conducteur d’un char mobile, celui-ci peut remplacer sa compétence de défense par Conduite d’attelage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0052",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Tirer sur un char » ? Les tirs contre un char généralement Large se font à +2 DR ; balles, flèches et carreaux ne blessent normalement pas sa structure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0053",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Résistance de la structure du char » ? Un véhicule utilise son Endurance, son BE et ses Blessures pour les dégâts comme une cible ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0054",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Critiques spéciaux du véhicule » ? Le véhicule ne subit pas de Blessure Critique ordinaire ; un critique sur un coup ciblé déclenche l’effet de la pièce atteinte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0055",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Contrôle du char après un critique » ? Un critique reçu en mouvement impose au conducteur une manœuvre à −2 DR pour garder le contrôle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0056",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Critique de la plateforme » ? Un critique de plateforme ouvre la structure et inflige la moitié des dégâts de l’attaque à un passager tiré au hasard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0057",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Critique du harnais » ? Un harnais brisé ou détaché impose désormais −4 DR aux Tests de Conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0058",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Critique des roues » ? Une roue cassée immobilise le char jusqu’à réparation ; si le char roulait, appliquer le résultat Accident des manœuvres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0059",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Dégâts d’impact par vitesse réelle » ? L’impact emploie le M de la distance réellement parcourue ce Tour, à raison de 2 yards par M, et la formule d’impact du véhicule.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0060",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.77",
+    "question": "Implanter « Impact inoffensif du char » ? Les impacts d’un char reçoivent par défaut Inoffensive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0061",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Faux de roues : retrait d’Inoffensive » ? Un char équipé de faux de roues perd Inoffensive sur ses impacts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0062",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Faux de roues : Percutante » ? Les impacts d’un char équipé de faux de roues gagnent Percutante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0063",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Faux de roues : piétinement » ? Les faux de roues donnent +2 DR aux manœuvres réussies de piétinement et d’écrasement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0064",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Test de manœuvre du char » ? Un Test de manœuvre est un Test de Conduite d’attelage dont l’issue utilise la table propre aux véhicules.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0065",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Manœuvre réussie » ? À +0 réussi ou mieux, la manœuvre et ses bénéfices s’appliquent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0066",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Manœuvre ratée » ? De −0 raté à −5 DR, le char conserve direction et vitesse du Round précédent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0067",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Accident de manœuvre : occupants » ? À −6 DR ou moins, le char se renverse ; chaque occupant reçoit 2d10 dégâts à une localisation aléatoire et teste Athlétisme −3 DR ou tombe À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0068",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Accident de manœuvre : réparation » ? Après un accident, le char ne sert plus avant réparation par un métier adapté ; sa plateforme détruite ne donne plus de bénéfice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0069",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Un seul conducteur » ? Un seul conducteur dirige normalement le char ; des porteurs intelligents et volontaires peuvent faire exception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0070",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Conserver cap et vitesse » ? Au début du Round, le char conserve le cap et la vitesse du Tour précédent jusqu’à décision du conducteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0071",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Garder le cap » ? Continuer à la même vitesse et dans la même direction n’impose pas de Test et laisse l’Action disponible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0072",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Manœuvre simple » ? Après déplacement au même cap et à la même vitesse, l’Action permet de tourner jusqu’à 90°, s’arrêter ou accélérer, sans Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0073",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Tirer sur les rênes » ? Mouvement et Action arrêtent brutalement le char sans Test de conduite ; les autres occupants testent Athlétisme +0 ou tombent À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0074",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Manœuvre rapide » ? Mouvement et Action : manœuvre +2 DR pour tourner jusqu’à 90° ou modifier la vitesse avant le déplacement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0075",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Manœuvre complexe » ? Mouvement et Action : manœuvre −1 DR pour faire demi-tour ou éviter un obstacle avant de repartir selon le nouveau cap.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0076",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.78",
+    "question": "Implanter « Attaques de manœuvre hors initiative » ? Les attaques offertes aux passagers par une manœuvre se font au Tour du conducteur ; hors de ces manœuvres, l’initiative ordinaire s’applique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0077",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Piétinement : approche » ? Mouvement et Action : Conduite +0 pour foncer vers une cible ; seulement en cas de réussite, garder les DR et ajouter +2 pour les faux éventuelles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0078",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Piétinement : opposition » ? Les DR d’approche s’opposent à l’Esquive de la cible ; une cible incapable de bouger est traitée comme ayant obtenu 00.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0079",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Piétinement : écrasement complet » ? À +6 DR ou mieux, le char frappe et met la cible À Terre ; tous les animaux de traction et passagers peuvent immédiatement l’attaquer en mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0080",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Piétinement : coup de biais » ? De +3 à +5 DR, le char frappe la cible et les passagers peuvent l’attaquer en mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0081",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Piétinement : écart précipité » ? De +0 réussi à +2 DR, la cible évite le char mais perd ses prochains Mouvement et Action ; les passagers peuvent l’attaquer en mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0082",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Piétinement : pas de côté » ? De −0 raté à −2 DR, la cible perd son prochain Mouvement ; après les attaques des passagers, elle peut frapper attelage, structure ou équipage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0083",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Piétinement : embardée » ? À −3 DR ou moins, les occupants reçoivent 2d10 dégâts aléatoires et testent Athlétisme −3 DR ou tombent ; réparation requise, plateforme ruinée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0084",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Frapper et repartir : approche » ? Mouvement et Action : une manœuvre +0 permet de longer l’ennemi pour une attaque en passant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0085",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Frapper et repartir : passagers » ? Après réussite, les passagers n’ayant pas encore utilisé leur Action ce Round peuvent attaquer la cible en mêlée comme en charge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0086",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Frapper et repartir : riposte » ? La cible peut frapper attelage, structure ou équipage si son initiative est au moins celle du conducteur ; sinon, aucune riposte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0087",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Frapper et repartir : dégagement » ? Après la passe, le char poursuit son mouvement en se Désengageant plutôt qu’en Fuyant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0088",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.79",
+    "question": "Implanter « Cotres aériens et marins » ? Ces deux véhicules utilisent le char léger et Conduite : le premier seulement dans les airs, le second seulement sur l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0089",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Mouvement de plateforme » ? Les occupants utilisent le Mouvement des animaux de traction ; le conducteur emploie Conduite pour Sprinter avec ce Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0090",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Attaquer depuis la plateforme » ? Une attaque de mêlée depuis la plateforme gagne +2 DR contre une cible plus petite que la plateforme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0091",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Choisir passager ou attelage » ? L’attaquant choisit cavalier ou monture ; en mêlée, viser le cavalier impose −1 DR si l’attaquant est plus petit que la monture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0094",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Perte d’un animal de traction » ? Un animal mort ou incapable de tirer immobilise le char ; détacher son cadavre ne suffit pas, l’attelage réduit n’étant pas adapté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0095",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Contrôler l’arrêt après perte d’un animal » ? Si un animal meurt en mouvement, Conduite +0 détermine l’arrêt ; avant l’Action du conducteur, la vitesse reste celle du Tour précédent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0096",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Occupants concernés par l’arrêt » ? Pour cet arrêt, les occupants comprennent passagers, animaux de traction et leurs cavaliers ; À Terre retire les bénéfices de plateforme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0097",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Arrêt de l’attelage : maîtrisé » ? À +3 DR ou mieux, le conducteur arrête le char sans dommage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0098",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Arrêt de l’attelage : brutal » ? De +0 réussi à +2 DR, les occupants testent Athlétisme +0 ou tombent À Terre ; retirer et remplacer l’animal avant réutilisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0099",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Arrêt de l’attelage : secousses » ? De −0 raté à −2 DR, les occupants subissent 1d10 dégâts aléatoires et testent Athlétisme −1 DR ou tombent ; l’animal doit être remplacé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0100",
+    "phase": "Véhicules et combat naval",
+    "lot": "L14",
+    "source": "L14 p.80",
+    "question": "Implanter « Arrêt de l’attelage : accident » ? À −3 DR ou moins, les occupants subissent 2d10 dégâts aléatoires et testent Athlétisme −3 DR ou tombent ; char à réparer, plateforme ruinée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0109",
+    "phase": "Intrigues et société",
+    "lot": "L14",
+    "source": "L14 p.86",
+    "question": "Implanter « Persuasion ratée à coût négocié » ? Le MJ peut accorder une persuasion malgré l’échec, notamment marginal, en échange d’un coût, délai, coopération réduite ou concession.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0110",
+    "phase": "Intrigues et société",
+    "lot": "L14",
+    "source": "L14 p.89",
+    "question": "Implanter « Journal de réputation » ? Après intrigue, Ambition ou aventure, noter les impressions des PNJ influents sur le groupe ou un personnage ; souligner les faits publics majeurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0111",
+    "phase": "Intrigues et société",
+    "lot": "L14",
+    "source": "L14 p.90",
+    "question": "Implanter « Réputation comme levier » ? Pour une persuasion, le MJ fixe un modificateur selon la réputation, en privilégiant faits importants, récents et pertinents pour la cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0112",
+    "phase": "Intrigues et société",
+    "lot": "L14",
+    "source": "L14 p.90",
+    "question": "Implanter « Réputation de départ » ? À la création, choisir un fait de groupe équilibré ; un fait positif peut être compensé par un négatif. En campagne d’intrigue, chaque PJ peut aussi en avoir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0113",
+    "phase": "Commerce",
+    "lot": "L14",
+    "source": "L14 p.90",
+    "question": "Implanter « Marchandage opposé des possessions » ? Le marchandage d’équipement est un Test dramatique unique, opposé au Marchandage du vendeur, de valeur 2d10+45 par défaut ; réputation et leviers modifient la difficulté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0114",
+    "phase": "Commerce",
+    "lot": "L14",
+    "source": "L14 p.90",
+    "question": "Implanter « Négocier une cargaison par intrigue » ? Un gros achat ou une vente de cargaison peut devenir une scène d’intrigue, avec leviers, offres concurrentes et marchands rivaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0115",
+    "phase": "Commerce",
+    "lot": "L14",
+    "source": "L14 p.90",
+    "question": "Implanter « Réputation d’une transaction réussie » ? Prendre une cargaison, la transporter et la revendre à profit nourrit la réputation et peut ouvrir contacts et arènes sociales auparavant inaccessibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0116",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Répandre des médisances » ? Choisir une cible et tester Ragot +2 DR ; si des agents défendent sa réputation, jouer plutôt une opposition de Ragot.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0117",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Plausibilité d’une médisance » ? La rumeur réussie devient un levier ; une fausseté plus invraisemblable augmente la difficulté décidée par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0118",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Échec des médisances » ? Un échec avertit la cible ; un échec stupéfiant rend la manœuvre publique et peut nuire à la réputation de son auteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0119",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Limite des médisances » ? Une même cible ne peut subir cette activité qu’une fois entre deux aventures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0120",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Soigner sa réputation » ? Une activité réussie par Charme +2 DR crée une impression favorable plausible ; ni ennemi mortel retourné ni exploit nécessitant une aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0121",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Réputation par une autre compétence » ? Selon l’impression voulue, remplacer Charme par Intimidation, Commandement, Subornation ou la compétence de revenu de la carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0122",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Améliorer la réputation d’autrui » ? Améliorer la réputation d’un PJ ou PNJ demande normalement Ragot +0 ; une cible non coopérative peut rendre le Test plus difficile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0123",
+    "phase": "Entre-aventures",
+    "lot": "L14",
+    "source": "L14 p.91",
+    "question": "Implanter « Reprises et limite de réputation » ? Après échec, une nouvelle activité peut rejouer le Test ; une seule réputation peut être forgée avec succès entre deux aventures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0124",
+    "phase": "Intrigues et société",
+    "lot": "L14",
+    "source": "L14 p.92",
+    "question": "Implanter « Valeurs des interlocuteurs improvisés » ? Une opposition sociale emploie surtout Calme, parfois Ragot ou Marchandage ; pour un spécialiste improvisé, une compétence de persuasion peut valoir 2d10+40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0125",
+    "phase": "Bestiaire — clauses manquantes",
+    "lot": "L14",
+    "source": "L14 p.62",
+    "question": "Implanter « Détecter la magie de Ceyluii » ? Détecter ou identifier un sort lancé par Ceyluii exige toujours un Test très difficile, soit −3 DR proposés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0126",
+    "phase": "Bestiaire — clauses manquantes",
+    "lot": "L14",
+    "source": "L14 p.62",
+    "question": "Implanter « Bois stellaire contre les malédictions » ? Un contact avec le bois stellaire rompt immédiatement les malédictions de Ceyluii.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L14-0127",
+    "phase": "Objets magiques",
+    "lot": "L14",
+    "source": "L14 p.74",
+    "question": "Implanter « Esquif enchanté » ? L’esquif enchanté de Farrion peut être manœuvré par un seul Elfe et donne +4 DR à tout Test de Navigation à voile réalisé avec lui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
