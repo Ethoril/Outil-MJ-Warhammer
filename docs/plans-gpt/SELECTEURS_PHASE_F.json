@@ -1339,19 +1339,6 @@
     "statut": "ouvert"
   },
   {
-    "id": "F-L06-0148",
-    "phase": "Combat",
-    "lot": "L06",
-    "source": "L06 p.168",
-    "question": "Implanter « Employer une monture dressée à la guerre » ? Voir le Trait Dressé pour le dressage Guerre et les pénalités d’une monture non préparée au combat.",
-    "choix": "Implanter, version complète",
-    "alternatives": [
-      "Implanter, version adaptée (préciser)",
-      "Ne pas implanter"
-    ],
-    "statut": "ouvert"
-  },
-  {
     "id": "F-L06-0149",
     "phase": "Combat",
     "lot": "L06",
@@ -1430,37 +1417,11 @@
     "statut": "ouvert"
   },
   {
-    "id": "F-L06-0161",
-    "phase": "Combat",
-    "lot": "L06",
-    "source": "L06 p.169",
-    "question": "Implanter « Rallier des alliés Brisés » ? Voir l’inventaire Brisé pour le ralliement par Commandement et la répartition du budget décidée par le MJ.",
-    "choix": "Implanter, version complète",
-    "alternatives": [
-      "Implanter, version adaptée (préciser)",
-      "Ne pas implanter"
-    ],
-    "statut": "ouvert"
-  },
-  {
     "id": "F-L06-0162",
     "phase": "Combat",
     "lot": "L06",
     "source": "L06 p.169",
     "question": "Implanter « Transférer Élan à un allié » ? En Action gratuite, perdre Élan et réussir Commandement permet de donner Élan à un allié choisi.",
-    "choix": "Implanter, version complète",
-    "alternatives": [
-      "Implanter, version adaptée (préciser)",
-      "Ne pas implanter"
-    ],
-    "statut": "ouvert"
-  },
-  {
-    "id": "F-L06-0163",
-    "phase": "Combat",
-    "lot": "L06",
-    "source": "L06 p.169",
-    "question": "Implanter « Intimider en combat » ? Voir l’inventaire Brisé pour Intimidation opposée à Calme, Peur produite et variantes contre un groupe.",
     "choix": "Implanter, version complète",
     "alternatives": [
       "Implanter, version adaptée (préciser)",
@@ -2189,19 +2150,6 @@
     "lot": "L06",
     "source": "L06 p.144",
     "question": "Implanter « Subir les durées d’ivresse et de gueule de bois » ? L’ivresse dure deux heures après le dernier verre ; ensuite, Exténué dure douze moins BE heures.",
-    "choix": "Implanter, version complète",
-    "alternatives": [
-      "Implanter, version adaptée (préciser)",
-      "Ne pas implanter"
-    ],
-    "statut": "ouvert"
-  },
-  {
-    "id": "F-L06-0221",
-    "phase": "Compétences et usages",
-    "lot": "L06",
-    "source": "L06 p.145",
-    "question": "Implanter « Ivresse : courage et Animosité » ? Voir C0 pour le bonus contre Peur et les altérations d’Animosité de la table d’ivresse.",
     "choix": "Implanter, version complète",
     "alternatives": [
       "Implanter, version adaptée (préciser)",
@@ -3042,19 +2990,6 @@
     "statut": "ouvert"
   },
   {
-    "id": "F-L06-0287",
-    "phase": "Voyage et environnement",
-    "lot": "L06",
-    "source": "L06 p.157",
-    "question": "Implanter « Monter une bête non dressée à la guerre » ? Voir l’inventaire C0 pour le Désavantage aux Tests impliquant une monture non dressée à la guerre.",
-    "choix": "Implanter, version complète",
-    "alternatives": [
-      "Implanter, version adaptée (préciser)",
-      "Ne pas implanter"
-    ],
-    "statut": "ouvert"
-  },
-  {
     "id": "F-L06-0288",
     "phase": "Véhicules et navigation",
     "lot": "L06",
@@ -3112,19 +3047,6 @@
     "lot": "L06",
     "source": "L06 p.158",
     "question": "Implanter « Manœuvrer un navire à voile » ? Un progrès suffit aux tâches ordinaires ; difficulté selon météo, obstacles et équipage ; sous vent modéré, victoire de vitesse contre une barque.",
-    "choix": "Implanter, version complète",
-    "alternatives": [
-      "Implanter, version adaptée (préciser)",
-      "Ne pas implanter"
-    ],
-    "statut": "ouvert"
-  },
-  {
-    "id": "F-L06-0293",
-    "phase": "Voyage et environnement",
-    "lot": "L06",
-    "source": "L06 p.158",
-    "question": "Implanter « Résoudre une poursuite V5 » ? Voir C0 pour l’opposition initiale, les facteurs, les obstacles et les issues de poursuite des pp.158-159.",
     "choix": "Implanter, version complète",
     "alternatives": [
       "Implanter, version adaptée (préciser)",
@@ -7453,7 +7375,7 @@
     "phase": "Talents",
     "lot": "L06",
     "source": "L06 p.125",
-    "question": "Implanter « Grimpeur : parois impossibles » ? Autorise les surfaces normalement impraticables ; leur difficulté ne dépasse pas −3 DR.",
+    "question": "Implanter « Grimpeur : parois impossibles » ? Autorise l’escalade de surfaces normalement impossibles, comme glace, mur lisse ou poteau graissé.",
     "choix": "Implanter, version complète",
     "alternatives": [
       "Implanter, version adaptée (préciser)",
@@ -10483,6 +10405,240 @@
     "lot": "L06",
     "source": "L06 p.317",
     "question": "Implanter « Expérience d’un compagnon » ? Le compagnon reçoit la moitié des PX du joueur associé, arrondie vers le bas ; le joueur les dépense pour lui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1119",
+    "phase": "Progression",
+    "lot": "L06",
+    "source": "L06 p.267",
+    "question": "Implanter « Récompenses de séance » ? Conseil de barème : cinquante PX pour survivre ; dix à vingt-cinq pour un sauvetage, une information, un adversaire important ou un petit objectif ; viser environ cent PX par séance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1120",
+    "phase": "Progression",
+    "lot": "L06",
+    "source": "L06 p.267",
+    "question": "Implanter « Récompenses d’étape » ? Vingt-cinq à cent PX pour l’objectif principal d’une aventure ; cent à deux cents pour une série liée ; bonus individuels laissés au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1121",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.269",
+    "question": "Implanter « Distances quotidiennes » ? En bonnes conditions : quinze miles à pied ou en chariot, trente à cheval, soixante en coche express ; barge quarante en aval et au plus quinze en amont.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1122",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.269",
+    "question": "Implanter « Aléas de voyage » ? Terrain, météo et état des routes réduisent les distances de référence selon le MJ ; ce sont des repères ajustables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1123",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.282",
+    "question": "Implanter « Se défendre en justice » ? Charme ou Savoir Droit opposé ; les preuves, circonstances et Statut modifient la difficulté selon le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1124",
+    "phase": "Temps et calendrier",
+    "lot": "L06",
+    "source": "L06 p.289",
+    "question": "Implanter « Semaine impériale » ? La semaine impériale compte huit jours ; une durée explicitement impériale doit suivre cette unité, sans convertir indistinctement les anciennes semaines de magie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1125",
+    "phase": "Temps et calendrier",
+    "lot": "L06",
+    "source": "L06 p.289",
+    "question": "Implanter « Année impériale » ? Une année impériale compte quatre cents jours, douze mois de trente-deux ou trente-trois jours et six fêtes hors numérotation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1126",
+    "phase": "Temps et calendrier",
+    "lot": "L06",
+    "source": "L06 p.289",
+    "question": "Implanter « Cycle de Mannslieb » ? Mannslieb accomplit son cycle en vingt-cinq jours ; le livre ne donne pas un cycle régulier calculable de Morrslieb.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1127",
+    "phase": "Localisations",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Localisations des quadrupèdes » ? Les bras correspondent aux pattes avant, les jambes aux pattes arrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1128",
+    "phase": "Localisations",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Localisations des oiseaux » ? Les bras correspondent aux ailes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1129",
+    "phase": "Localisations",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Localisations des serpents » ? Sur le jet de localisation, 01–19 touche la tête ; 20–00 le corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1130",
+    "phase": "Localisations",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Localisations des araignées » ? Sur le jet de localisation, 01–09 touche la tête, 10–79 les pattes, 80–00 le corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1131",
+    "phase": "Localisations",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Localisation sur grande créature » ? Contre une cible d’au moins deux degrés de taille supérieurs, touche la partie la plus proche, ou visible pour un tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1132",
+    "phase": "Localisations",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Critique d’un appendice » ? Un appendice sans table dédiée, comme aile, tentacule ou queue, utilise le critique du bras avec description adaptée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1133",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Individualiser les caractéristiques » ? Pour individualiser une caractéristique de créature, retire dix puis ajoute 2d10 ; cette méthode peut aussi servir à une espèce de personnage inhabituelle avec carrière adaptée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1134",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Dégâts des profils » ? Les dégâts imprimés d’une arme de créature comprennent déjà le BF approprié ; ne pas l’ajouter une seconde fois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1135",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Arme naturelle ordinaire » ? Sans indication contraire, les armes naturelles ont une allonge Personnelle, sans Qualités ni Défauts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1136",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.318",
+    "question": "Implanter « Équipement des créatures humanoïdes » ? Les armes et armures des humanoïdes sont modifiables ; on leur suppose les compétences nécessaires pour utiliser ces objets sans pénalité.",
     "choix": "Implanter, version complète",
     "alternatives": [
       "Implanter, version adaptée (préciser)",

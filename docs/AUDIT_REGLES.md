@@ -13,7 +13,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | L03 — Archives of the Empire Volume 1.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L04 — Deft Steps Light Fingers.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L05 — Livre de base FR.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
-| L06 — Livre de base V5 EN v2.pdf | 1118 | 184 | 109 | 228 | 595 | 2 |
+| L06 — Livre de base V5 EN v2.pdf | 1141 | 185 | 109 | 228 | 617 | 2 |
 | L07 — Lustria EN.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L08 — Supplément Elfe - High elf Players Guide v2.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L09 — Supplément Elfe Noir - Temple of Spite v2.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -41,25 +41,29 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Argent et statut | 1 | 0 | 0 | 0 | 1 | 0 |
 | Argent et équipement | 39 | 0 | 0 | 11 | 28 | 0 |
-| Armes et armures | 60 | 14 | 2 | 15 | 29 | 0 |
+| Armes et armures | 62 | 14 | 2 | 15 | 31 | 0 |
 | Artisanat et remèdes | 17 | 0 | 0 | 0 | 17 | 0 |
 | Blessures et soins | 115 | 15 | 1 | 66 | 33 | 0 |
 | Combat | 118 | 18 | 11 | 0 | 89 | 0 |
 | Compatibilité | 3 | 0 | 0 | 0 | 3 | 0 |
-| Compétences | 7 | 0 | 0 | 0 | 7 | 0 |
+| Compétences | 8 | 0 | 0 | 0 | 8 | 0 |
 | Compétences et usages | 73 | 0 | 1 | 1 | 71 | 0 |
 | Corruption et mutations | 53 | 0 | 0 | 13 | 40 | 0 |
-| Création et carrières | 43 | 0 | 0 | 0 | 43 | 0 |
+| Création et carrières | 45 | 0 | 0 | 0 | 45 | 0 |
 | Destin et Chance | 12 | 0 | 3 | 0 | 9 | 0 |
 | Entre-aventures et progression | 87 | 0 | 0 | 0 | 87 | 0 |
+| Localisations | 6 | 0 | 0 | 0 | 6 | 0 |
 | Magie générale | 46 | 14 | 16 | 0 | 15 | 1 |
 | Magie — incidents | 43 | 16 | 4 | 23 | 0 | 0 |
 | Maladies et poisons | 38 | 0 | 0 | 0 | 37 | 1 |
+| Progression | 2 | 0 | 0 | 0 | 2 | 0 |
 | Psychologie | 15 | 0 | 0 | 15 | 0 | 0 |
+| Religion — renvois | 4 | 0 | 0 | 0 | 4 | 0 |
 | Soins et remèdes | 10 | 0 | 0 | 0 | 10 | 0 |
-| Talents | 218 | 79 | 53 | 83 | 3 | 0 |
+| Talents | 219 | 80 | 53 | 83 | 3 | 0 |
+| Temps et calendrier | 3 | 0 | 0 | 0 | 3 | 0 |
 | Tests | 35 | 16 | 2 | 0 | 17 | 0 |
-| Voyage et environnement | 30 | 0 | 0 | 0 | 30 | 0 |
+| Voyage et environnement | 32 | 0 | 0 | 0 | 32 | 0 |
 | Véhicules et navigation | 5 | 0 | 0 | 0 | 5 | 0 |
 | Équipement | 1 | 0 | 0 | 0 | 1 | 0 |
 | Équipement spécialisé | 20 | 0 | 1 | 0 | 19 | 0 |
@@ -159,6 +163,8 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-1086 — Outils de métier** (L06 p.312, absent) : Fabriquer ou réparer exige les outils adaptés ; les grands projets et nouvelles possessions demandent un atelier. Mécanique distincte des listes de prix et d’objets. Recherche des termes EN/FR et des lecteurs dans js/core, js/data et js/ui ; aucune procédure générale identifiée.
 - **F-L06-1087 — Équipages minimaux** (L06 p.313, absent) : Charrette : conducteur et animal ; coche : deux conducteurs et quatre chevaux ; barge : trois membres ; canot : un rameur ; chariot : conducteur et deux chevaux. Mécanique distincte des listes de prix et d’objets. Recherche des termes EN/FR et des lecteurs dans js/core, js/data et js/ui ; aucune procédure générale identifiée.
 - **F-L06-1088 — Transport plus rapide** (L06 p.313, absent) : Un transport rapide coûte généralement le double et gagne un Mouvement ; un lent coûte la moitié et perd un Mouvement. Mécanique distincte des listes de prix et d’objets. Recherche des termes EN/FR et des lecteurs dans js/core, js/data et js/ui ; aucune procédure générale identifiée.
+- **F-L06-1134 — Dégâts des profils** (L06 p.318, absent) : Les dégâts imprimés d’une arme de créature comprennent déjà le BF approprié ; ne pas l’ajouter une seconde fois. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1135 — Arme naturelle ordinaire** (L06 p.318, absent) : Sans indication contraire, les armes naturelles ont une allonge Personnelle, sans Qualités ni Défauts. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
 
 ### Artisanat et remèdes
 
@@ -362,16 +368,16 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0145 — Jouer Équitation comme Action gratuite de mouvement monté** (L06 p.168, absent) : Pour Sprint, saut, charge ou manœuvre comparable à cheval, tester Équitation gratuitement et utiliser le Mouvement de la monture. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
 - **F-L06-0146 — Avantage de cavalerie contre une cible plus petite** (L06 p.168, absent) : Un cavalier avec arme de cavalerie gagne Avantage en mêlée contre une cible plus petite que sa monture. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
 - **F-L06-0147 — Atteindre un cavalier protégé par sa monture** (L06 p.168, absent) : Choisir cavalier ou monture ; attaquer ou toucher le cavalier impose Désavantage si l’on est plus petit que la monture, sauf arme Longue ou plus. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
-- **F-L06-0148 — Employer une monture dressée à la guerre** (L06 p.168, absent) : Voir le Trait Dressé pour le dressage Guerre et les pénalités d’une monture non préparée au combat. Fonction de pénalité présente mais aucun appel dans js/ repéré ; son existence seule ne prouve pas une proposition au MJ. Renvoi conservé au domaine déjà inventorié.
+- **F-L06-0148 — Employer une monture dressée à la guerre** (L06 p.168, absent) : Voir le Trait Dressé pour le dressage Guerre et les pénalités d’une monture non préparée au combat. Fonction de pénalité présente mais aucun appel dans js/ repéré ; son existence seule ne prouve pas une proposition au MJ. Renvoi conservé au domaine déjà inventorié. Déjà porté par l’inventaire référencé : Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1.
 - **F-L06-0149 — Employer la Force de la monture en charge** (L06 p.168, absent) : Lors d’une charge montée, le cavalier peut utiliser le Bonus de Force de sa monture pour les dégâts de l’arme. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
 - **F-L06-0150 — Subir Désavantage à l’Esquive montée** (L06 p.168, absent) : Un cavalier subit Désavantage aux Tests d’Esquive, sauf s’il possède Cavalier émérite. Le contexte typé impose -2 DR, tandis que la source donne Désavantage ; exception et lien monture génériques non certifiés.
 - **F-L06-0151 — Déterminer la déviation d’une arme de jet** (L06 p.168, absent) : Après un Tir (Armes de jet) raté : d10 pour la direction, 2d10 yards plafonnés à la moitié de la distance ; 9 tombe à ses pieds, 10 à ceux de la cible. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
 - **F-L06-0157 — Perdre Élan à la pause ou fin du combat** (L06 p.168, absent) : Une pause des combats ou la fin de la rencontre fait perdre Élan. La suspension de scène remet Élan à zéro. Les événements combatPause/combatEnd existent dans la fonction pure ; couverture de toute pause/fin générique non établie.
 - **F-L06-0159 — Donner des ordres en combat** (L06 p.169, absent) : Commandement donne des ordres aux PNJ ; normalement sans opposition aux subordonnés, sinon opposé à leur Calme si l’ordre pose difficulté. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
 - **F-L06-0160 — Contester l’autorité d’un autre chef** (L06 p.169, absent) : Opposer Commandement à Commandement ; les ordres du vainqueur sont suivis. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
-- **F-L06-0161 — Rallier des alliés Brisés** (L06 p.169, absent) : Voir l’inventaire Brisé pour le ralliement par Commandement et la répartition du budget décidée par le MJ. Calcul du budget et de la répartition présent dans une fonction isolée ; aucun appel depuis js/ hors définition repéré. Renvoi à C0 et décision MJ conservés.
+- **F-L06-0161 — Rallier des alliés Brisés** (L06 p.169, absent) : Voir l’inventaire Brisé pour le ralliement par Commandement et la répartition du budget décidée par le MJ. Calcul du budget et de la répartition présent dans une fonction isolée ; aucun appel depuis js/ hors définition repéré. Renvoi à C0 et décision MJ conservés. Déjà porté par l’inventaire référencé : Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1.
 - **F-L06-0162 — Transférer Élan à un allié** (L06 p.169, absent) : En Action gratuite, perdre Élan et réussir Commandement permet de donner Élan à un allié choisi. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
-- **F-L06-0163 — Intimider en combat** (L06 p.169, absent) : Voir l’inventaire Brisé pour Intimidation opposée à Calme, Peur produite et variantes contre un groupe. Fonctions spécialisées présentes, mais aucun appel runtime de previewCombatIntimidation hors définition repéré. Égalité = échec de l’intimidateur selon décision MJ du 22/10.
+- **F-L06-0163 — Intimider en combat** (L06 p.169, absent) : Voir l’inventaire Brisé pour Intimidation opposée à Calme, Peur produite et variantes contre un groupe. Fonctions spécialisées présentes, mais aucun appel runtime de previewCombatIntimidation hors définition repéré. Égalité = échec de l’intimidateur selon décision MJ du 22/10. Déjà porté par l’inventaire référencé : Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1.
 - **F-L06-0171 — Attribuer Inoffensive aux attaques à mains nues** (L06 p.167, absent) : Sans griffes, crocs ou autre arme naturelle, une attaque à mains nues reçoit Inoffensive. La qualité est exécutée quand l’action la porte ; attribution générale selon arme naturelle non repérée. Son calcul et son attribution sont deux clauses distinctes.
 
 ### Compatibilité
@@ -389,6 +395,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0849 — Savoir lire pour rechercher** (L06 p.113, absent) : Recherche exige le talent Lire/Écrire. Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.
 - **F-L06-0850 — Commander un équipage** (L06 p.113, absent) : Un commandant d’équipage bien entraîné emploie Commandement à la place de Navigation à voile. Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.
 - **F-L06-0851 — Nager sans Test** (L06 p.114, absent) : Posséder Natation dispense des Tests ordinaires en eau calme ; difficultés, course et fuite exigent un jet. Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.
+- **F-L06-1123 — Se défendre en justice** (L06 p.282, absent) : Charme ou Savoir Droit opposé ; les preuves, circonstances et Statut modifient la difficulté selon le MJ. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
 
 ### Compétences et usages
 
@@ -440,7 +447,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0218 — Négocier le prix d’un achat** (L06 p.143, absent) : Marchandage opposé +0 : réussite réduit le prix total de 10 %, ou de 20 % à +6 DR ; un seul Test par vendeur. Aucune procédure dédiée complète repérée dans les moteurs et interfaces ; saisie générique d’un Test ou d’un État seulement.
 - **F-L06-0219 — Résister à l’alcool** (L06 p.144, absent) : Résistance à l’alcool selon la force de la boisson ; échec : Exténué ; continuer ou échouer à -5 DR mène à la table d’ivresse. Aucune procédure dédiée complète repérée dans les moteurs et interfaces ; saisie générique d’un Test ou d’un État seulement.
 - **F-L06-0220 — Subir les durées d’ivresse et de gueule de bois** (L06 p.144, absent) : L’ivresse dure deux heures après le dernier verre ; ensuite, Exténué dure douze moins BE heures. Aucune procédure dédiée complète repérée dans les moteurs et interfaces ; saisie générique d’un Test ou d’un État seulement.
-- **F-L06-0221 — Ivresse : courage et Animosité** (L06 p.145, absent) : Voir C0 pour le bonus contre Peur et les altérations d’Animosité de la table d’ivresse. Renvoi à l’inventaire existant, sans recopier ces effets ; pas de flux d’ivresse repéré.
+- **F-L06-0221 — Ivresse : courage et Animosité** (L06 p.145, absent) : Voir C0 pour le bonus contre Peur et les altérations d’Animosité de la table d’ivresse. Renvoi à l’inventaire existant, sans recopier ces effets ; pas de flux d’ivresse repéré. Déjà porté par l’inventaire référencé : Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1.
 - **F-L06-0222 — Ivresse 5-6 : Mouvement ou Action** (L06 p.145, absent) : Un résultat 5-6 de la table d’ivresse ne permet à chaque Tour qu’un Mouvement ou une Action, pas les deux. Aucune procédure dédiée complète repérée dans les moteurs et interfaces ; saisie générique d’un Test ou d’un État seulement.
 - **F-L06-0223 — Ivresse 9-10 : trou de mémoire et poison** (L06 p.145, absent) : Réveil le lendemain avec gueule de bois et souvenirs incomplets ; réussir Résistance à l’alcool pour éviter Empoisonné. Aucune procédure dédiée complète repérée dans les moteurs et interfaces ; saisie générique d’un Test ou d’un État seulement.
 - **F-L06-0224 — S’adresser à une foule** (L06 p.145, absent) : Divertissement (Comédie) attire la foule, Charme la persuade ; Orateur permet les idées plus complexes et d’autres compétences adaptées. Aucune procédure dédiée complète repérée dans les moteurs et interfaces ; saisie générique d’un Test ou d’un État seulement.
@@ -566,6 +573,8 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0894 — Talents de carrière** (L06 p.44, absent) : Peut acheter les talents de son niveau et des niveaux inférieurs. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
 - **F-L06-0895 — Progression hors carrière** (L06 p.44, absent) : Caractéristiques et compétences de base hors carrière coûtent le double ; compétences avancées et talents requièrent normalement les activités de formation adaptées. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
 - **F-L06-0900 — Augmentations point par point** (L06 p.364, absent) : Option : acheter caractéristiques et compétences par points individuels avec le barème dédié ; revenir aux lots de cinq seulement à un multiple de cinq augmentations. Option ou conversion de règles imprimée ; aucun parcours général de conversion/apprentissage repéré. Le prix individuel reste dans son barème source.
+- **F-L06-1133 — Individualiser les caractéristiques** (L06 p.318, absent) : Pour individualiser une caractéristique de créature, retire dix puis ajoute 2d10 ; cette méthode peut aussi servir à une espèce de personnage inhabituelle avec carrière adaptée. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1136 — Équipement des créatures humanoïdes** (L06 p.318, absent) : Les armes et armures des humanoïdes sont modifiables ; on leur suppose les compétences nécessaires pour utiliser ces objets sans pénalité. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
 
 ### Destin et Chance
 
@@ -669,6 +678,15 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0625 — S’entraîner hors carrière** (L06 p.201, absent) : Coût XP normal et paiement d’un tuteur : autant de sous que d’XP pour compétence de base ou caractéristique ; double pour compétence avancée. Aucun gestionnaire d’entre-aventures, d’achat de progrès ou de ressource financière correspondant repéré dans js/core et js/ui.
 - **F-L06-0626 — Apprendre un Talent hors carrière** (L06 p.201, absent) : Premier rang seulement, tuteur adéquat, coût XP normal et 4d10 pistoles supplémentaires. Aucun gestionnaire d’entre-aventures, d’achat de progrès ou de ressource financière correspondant repéré dans js/core et js/ui.
 
+### Localisations
+
+- **F-L06-1127 — Localisations des quadrupèdes** (L06 p.318, absent) : Les bras correspondent aux pattes avant, les jambes aux pattes arrière. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1128 — Localisations des oiseaux** (L06 p.318, absent) : Les bras correspondent aux ailes. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1129 — Localisations des serpents** (L06 p.318, absent) : Sur le jet de localisation, 01–19 touche la tête ; 20–00 le corps. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1130 — Localisations des araignées** (L06 p.318, absent) : Sur le jet de localisation, 01–09 touche la tête, 10–79 les pattes, 80–00 le corps. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1131 — Localisation sur grande créature** (L06 p.318, absent) : Contre une cible d’au moins deux degrés de taille supérieurs, touche la partie la plus proche, ou visible pour un tir. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1132 — Critique d’un appendice** (L06 p.318, absent) : Un appendice sans table dédiée, comme aile, tentacule ou queue, utilise le critique du bras avec description adaptée. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+
 ### Magie générale
 
 - **F-L06-0908 — Durée volontairement réduite** (L06 p.235, absent) : Peut annoncer au lancement une durée plus courte ; une fois lancé, seule une dissipation interrompt le sort avant son terme. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
@@ -753,6 +771,11 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0441 — Accroître la dose d’un poison** (L06 p.183, absent) : Une dose impose une résistance à cible moyenne ; chaque dose supplémentaire aggrave la difficulté d’un cran. Règle source lue ; aucun suivi général de maladie/symptôme avec déclencheur, durée et traitement dans le moteur.
 - **F-L06-0442 — Adapter la dose de poison à la Taille** (L06 p.183, absent) : Petite : une dose vaut quatre ; Moyenne : normal ; Grande : deux pour une ; Énorme : cinq ; Monstrueuse : vingt. Règle source lue ; aucun suivi général de maladie/symptôme avec déclencheur, durée et traitement dans le moteur.
 
+### Progression
+
+- **F-L06-1119 — Récompenses de séance** (L06 p.267, absent) : Conseil de barème : cinquante PX pour survivre ; dix à vingt-cinq pour un sauvetage, une information, un adversaire important ou un petit objectif ; viser environ cent PX par séance. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1120 — Récompenses d’étape** (L06 p.267, absent) : Vingt-cinq à cent PX pour l’objectif principal d’une aventure ; cent à deux cents pour une série liée ; bonus individuels laissés au MJ. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+
 ### Psychologie
 
 - **F-L06-0472 — Résister à la Psychologie** (L06 p.183, rappel) : Règle déjà inventoriée en C0 ; conserver ses clauses et les arbitrages MJ, sans la recopier. Renvoi au domaine déjà inventorié ; détail de couverture à lire dans l’entrée source C0, sans certification supplémentaire. Déjà porté par l’inventaire référencé : Règle entièrement référencée dans un inventaire antérieur et ses lots déjà arbitré(e)s ; aucune nouvelle décision F1 pour ce seul renvoi.
@@ -770,6 +793,13 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0484 — Brisé : se cacher** (L06 p.185, rappel) : Règle déjà inventoriée en C0 ; conserver ses clauses et les arbitrages MJ, sans la recopier. Renvoi au domaine déjà inventorié ; détail de couverture à lire dans l’entrée source C0, sans certification supplémentaire. Déjà porté par l’inventaire référencé : Règle entièrement référencée dans un inventaire antérieur et ses lots déjà arbitré(e)s ; aucune nouvelle décision F1 pour ce seul renvoi.
 - **F-L06-0485 — Brisé : ralliement personnel** (L06 p.186, rappel) : Règle déjà inventoriée en C0 ; conserver ses clauses et les arbitrages MJ, sans la recopier. Renvoi au domaine déjà inventorié ; détail de couverture à lire dans l’entrée source C0, sans certification supplémentaire. Déjà porté par l’inventaire référencé : Règle entièrement référencée dans un inventaire antérieur et ses lots déjà arbitré(e)s ; aucune nouvelle décision F1 pour ce seul renvoi.
 - **F-L06-0486 — Brisé : Round entier caché** (L06 p.186, rappel) : Règle déjà inventoriée en C0 ; conserver ses clauses et les arbitrages MJ, sans la recopier. Renvoi au domaine déjà inventorié ; détail de couverture à lire dans l’entrée source C0, sans certification supplémentaire. Déjà porté par l’inventaire référencé : Règle entièrement référencée dans un inventaire antérieur et ses lots déjà arbitré(e)s ; aucune nouvelle décision F1 pour ce seul renvoi.
+
+### Religion — renvois
+
+- **F-L06-1137 — Petites prières** (L06 p.203, absent) : Option déjà inventoriée : lieu saint, faits et offrande appropriés, d100 secret dont 01 obtient une réponse ; ajustement et bénéfice décidés par le MJ. Renvoi documentaire seulement. Le statut absent ne prétend pas certifier un sous-système divin entier ; conserver les limites de l’identité source et son chantier. Déjà porté par l’inventaire référencé : Identité et suivi déjà portés par l’audit divin ; ne pas dupliquer sa décision.
+- **F-L06-1138 — Dévotion naine aux ancêtres** (L06 p.215, absent) : Déjà inventorié : représenter la dévotion par une carrière adaptée plutôt que Religieux, Prêtre ou Prêtre-guerrier. Renvoi documentaire seulement. Le statut absent ne prétend pas certifier un sous-système divin entier ; conserver les limites de l’identité source et son chantier. Déjà porté par l’inventaire référencé : Identité et suivi déjà portés par l’audit divin ; ne pas dupliquer sa décision.
+- **F-L06-1139 — Prêtrise elfique** (L06 p.215, absent) : Déjà inventorié : prêtrise sans bénédictions ni miracles, représentée par Sorcier et un domaine approprié. Renvoi documentaire seulement. Le statut absent ne prétend pas certifier un sous-système divin entier ; conserver les limites de l’identité source et son chantier. Déjà porté par l’inventaire référencé : Identité et suivi déjà portés par l’audit divin ; ne pas dupliquer sa décision.
+- **F-L06-1140 — Rites halflings** (L06 p.215, absent) : Déjà inventorié : rôle usuel de l’ancien et des sanctuaires ; ne crée pas une interdiction générale du divin. Renvoi documentaire seulement. Le statut absent ne prétend pas certifier un sous-système divin entier ; conserver les limites de l’identité source et son chantier. Déjà porté par l’inventaire référencé : Identité et suivi déjà portés par l’audit divin ; ne pas dupliquer sa décision.
 
 ### Soins et remèdes
 
@@ -844,7 +874,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0774 — Cavalier émérite : ordre à la monture** (L06 p.125, rappel) : Avec la compétence Chevaucher, commande Action et Mouvement sans Test en situation normale. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
 - **F-L06-0776 — Nomade : survie en terrain sauvage** (L06 p.125, rappel) : Reconnaît les routes simples et les endroits propices au gibier, à l’eau et à l’abri. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
 - **F-L06-0778 — Perspicace : caractéristique** (L06 p.125, rappel) : Ajoute 5 en Intelligence sans compter comme augmentation. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
-- **F-L06-0780 — Grimpeur : parois impossibles** (L06 p.125, absent) : Autorise les surfaces normalement impraticables ; leur difficulté ne dépasse pas −3 DR. Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.
+- **F-L06-0780 — Grimpeur : parois impossibles** (L06 p.125, absent) : Autorise l’escalade de surfaces normalement impossibles, comme glace, mur lisse ou poteau graissé. Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.
 - **F-L06-0783 — Pied marin : mer normale** (L06 p.125, rappel) : Aucun Test de mal de mer dans les conditions habituelles. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
 - **F-L06-0784 — Voyageur aguerri : savoir régional** (L06 p.125, rappel) : Peut progresser dans le Savoir local du lieu de séjour même hors carrière. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
 - **F-L06-0785 — Seconde vue : vents de magie** (L06 p.125, rappel) : Autorise la perception des Vents selon la procédure de perception magique. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
@@ -872,6 +902,12 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0842 — Nanti : gain de carrière** (L06 p.128, rappel) : Ajoute une couronne d’or au revenu de carrière ; trois au deuxième achat. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
 - **F-L06-0843 — Prévoyant : équipement anticipé** (L06 p.128, rappel) : Une fois par séance, fournit un objet crédible d’Encombrement zéro et en paie le prix ; les usages suivants coûtent de la Chance ; aucun achat sans argent. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
 - **F-L06-0844 — Sorcier ! : magie autodidacte** (L06 p.128, rappel) : Un sort d’un domaine coloré ou de Sorcellerie ; Focalisation et Magick correspondants deviennent de base ; sorts suivants à 200 PX puis +100 par sort ; oubli à 100 PX. Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.
+
+### Temps et calendrier
+
+- **F-L06-1124 — Semaine impériale** (L06 p.289, absent) : La semaine impériale compte huit jours ; une durée explicitement impériale doit suivre cette unité, sans convertir indistinctement les anciennes semaines de magie. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1125 — Année impériale** (L06 p.289, absent) : Une année impériale compte quatre cents jours, douze mois de trente-deux ou trente-trois jours et six fêtes hors numérotation. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1126 — Cycle de Mannslieb** (L06 p.289, absent) : Mannslieb accomplit son cycle en vingt-cinq jours ; le livre ne donne pas un cycle régulier calculable de Morrslieb. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
 
 ### Tests
 
@@ -917,14 +953,16 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0284 — Accélérer et manœuvrer sous l’eau** (L06 p.157, absent) : Natation remplace Athlétisme et Esquive sous l’eau ; un Test peut accroître la distance comme le Sprint. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
 - **F-L06-0285 — Secourir une personne qui se noie** (L06 p.157, absent) : Natation -1 si la victime réussit Calme ; sinon, opposer Natation à sa Force. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
 - **F-L06-0286 — Faire une acrobatie sur une monture** (L06 p.157, absent) : Employer le plus faible score entre Équitation et compétence de l’action ; l’échec provoque habituellement une chute d’environ deux yards. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
-- **F-L06-0287 — Monter une bête non dressée à la guerre** (L06 p.157, absent) : Voir l’inventaire C0 pour le Désavantage aux Tests impliquant une monture non dressée à la guerre. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
-- **F-L06-0293 — Résoudre une poursuite V5** (L06 p.158, absent) : Voir C0 pour l’opposition initiale, les facteurs, les obstacles et les issues de poursuite des pp.158-159. Fonctions de calcul spécialisées présentes, mais flux général de poursuite non repéré dans Store/UI. Domaine déjà inventorié, pas de duplication.
+- **F-L06-0287 — Monter une bête non dressée à la guerre** (L06 p.157, absent) : Voir l’inventaire C0 pour le Désavantage aux Tests impliquant une monture non dressée à la guerre. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis. Déjà porté par l’inventaire référencé : Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1.
+- **F-L06-0293 — Résoudre une poursuite V5** (L06 p.158, absent) : Voir C0 pour l’opposition initiale, les facteurs, les obstacles et les issues de poursuite des pp.158-159. Fonctions de calcul spécialisées présentes, mais flux général de poursuite non repéré dans Store/UI. Domaine déjà inventorié, pas de duplication. Déjà porté par l’inventaire référencé : Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1.
 - **F-L06-0294 — Tester la résistance à l’exposition** (L06 p.170, absent) : Résistance toutes les quatre heures en environnement difficile, toutes les deux heures en milieu extrême. Aucun flux complet reliant le déclencheur, le Test, la durée et les conséquences dans le moteur ; édition générique possible seulement.
 - **F-L06-0295 — Résister au froid extrême** (L06 p.170, absent) : Premier échec : Désavantage en CT/Ag/Dex ; deuxième : tous les Tests ; suivants : 1d10 dégâts sans PA ; à zéro, Inconscient puis mort après BE heures sans chaleur. Aucun flux complet reliant le déclencheur, le Test, la durée et les conséquences dans le moteur ; édition générique possible seulement.
 - **F-L06-0296 — Résister à une chaleur extrême** (L06 p.170, absent) : Premier échec : Désavantage Int/FM et Exténué ; deuxième : Désavantage général et Exténué ; suivants : dégâts, coma et délai BE heures. Sans armure : +1 DR. Aucun flux complet reliant le déclencheur, le Test, la durée et les conséquences dans le moteur ; édition générique possible seulement.
 - **F-L06-0297 — Cumuler la faim et la soif** (L06 p.170, absent) : Chaque résistance après la première subit un -1 DR cumulatif ; sans nourriture ni eau, pas de récupération naturelle des Blessures ou d’Exténué. Aucun flux complet reliant le déclencheur, le Test, la durée et les conséquences dans le moteur ; édition générique possible seulement.
 - **F-L06-0298 — Subir le manque d’eau** (L06 p.170, absent) : Résistance quotidienne ; échec initial : Désavantage Int/FM/Soc, puis général et 1d10 dégâts sans PA ; à zéro, M=1 et mort après BE jours sans eau. Aucun flux complet reliant le déclencheur, le Test, la durée et les conséquences dans le moteur ; édition générique possible seulement.
 - **F-L06-0299 — Subir le manque de nourriture** (L06 p.170, absent) : Résistance tous les deux jours ; échec initial : Désavantage F/E, puis général et 1d10 dégâts sans PA ; à zéro, perte permanente de 1d10 E. Aucun flux complet reliant le déclencheur, le Test, la durée et les conséquences dans le moteur ; édition générique possible seulement.
+- **F-L06-1121 — Distances quotidiennes** (L06 p.269, absent) : En bonnes conditions : quinze miles à pied ou en chariot, trente à cheval, soixante en coche express ; barge quarante en aval et au plus quinze en amont. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
+- **F-L06-1122 — Aléas de voyage** (L06 p.269, absent) : Terrain, météo et état des routes réduisent les distances de référence selon le MJ ; ce sont des repères ajustables. Clause autonome hors listes de profils. Aucun flux général appliquant la procédure retrouvé dans js/core ou js/ui ; un profil importé ou une saisie libre n’en tient pas lieu.
 
 ### Véhicules et navigation
 
