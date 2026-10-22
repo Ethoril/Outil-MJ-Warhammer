@@ -12,12 +12,12 @@ Relecture faite par le MJ sur la page « Arbitrages des exécutants » (artifact
 | C0-L25-003 | C | L25 p.63 | Master and Commander n'a pas de Talent au catalogue : comment le représenter ? | **Alternative retenue** : Ajouter un Talent au catalogue. |
 | C0-L06-019 | C | L06 p.169 | Qui gagne l'égalité entre Intimidation et Calme ? | **Alternative retenue** : Égalité = échec de l'intimidateur. |
 | C0-L13-013 | C | L13 | Comment reconnaître un « cavalier accompli » sans identifiant de Talent fiable ? | **Alternative retenue** : Lier au Talent Cavalier émérite. |
-| D-C15 | D D2 | L02 | Borne sinistre : l'échec ou la réussite du test d'Intuition donne-t-il la prise de conscience ? | **Décision du MJ** : je ne retrouve pas exactement à quel sort tu fais référence |
+| D-C15 | D D2 | L02 | Borne sinistre : l'échec ou la réussite du test d'Intuition donne-t-il la prise de conscience ? | **Décision du MJ (reposée le 22/10)** : réussite du Test d’Intuition = prise de conscience (coquille du texte corrigée), rappel seul |
 | D-C22 | D D2 | L06 | Revigorer : retire-t-il un état Exténué ou ignore-t-il la pénalité ? | **Alternative retenue** : Retirer un état (lecture de Gemini). |
 | D-C30 | D D5 | L06 p.258 | Destruction de Démon Mineur : où s'applique le +10 à une caractéristique ? | **Alternative retenue** : Effet sur le lanceur (nouveau mécanisme). |
 | D-C32 | D D5 | L06 | Manifestation de Démon Mineur : que devient le démon à la fin de la durée avec ordre inachevé ? | **Alternative retenue** : Il reste hostile. |
 | D-C40 | D D6 | L06 pp.258-259 | Relever les morts : comment représenter Squelettes et Zombies sans profils (phase E) ? | **Alternative retenue** : Refuser le lancement tant que les profils n'existent pas. |
-| D-C50 | D D7 | L06 pp.259-260 | Attributs des Domaines du Chaos : couche pour un sort instantané ? | **Décision du MJ** : qu'est ce que tu appelles couche ?  |
+| D-C50 | D D7 | L06 pp.259-260 | Attributs des Domaines du Chaos : couche pour un sort instantané ? | **Décision du MJ (reposée le 22/10)** : choix de l’exécutant confirmé, sort instantané = simple rappel |
 | D-C51 | D D7 | L06 | Nurgle : comment gérer les Blessures Suppurées ? | **Décision du MJ** : le moteur de nuit pas, mais permet au MJ de jouer le test de blessure suppurée |
 | D-C122 | D D19 | L17 p.27 | Secours au serviteur magique : quel Bonus d'Endurance pour le soin ? | **Décision du MJ** : On compte le bonus d'endurance du serviteur magique |
 | RUN-Q10 | Runes | D0b-Q10 | Comment adapter au V5 les pourcentages V4 et les huit runes à dés inversés ? | **Alternative retenue** : Adapter les huit runes au moteur d'inversion des dés (lecture à arbitrer avant code). |
@@ -90,7 +90,7 @@ Relecture faite par le MJ sur la page « Arbitrages des exécutants » (artifact
 | D-C12 | D D2 | L06 | Nepenthe et Panacée : comment gérer les maladies et le soin ? | Choix de l’exécutant validé : Aucun suivi de maladies ; maladie guérie choisie par le lanceur en rappel ; Panacée soigne le Bonus de Dextérité du lanceur. |
 | D-C13 | D D2 | L06 | Shepherd's Eye sur une cible protégée ou hors du monde ? | Choix de l’exécutant validé : Le MJ décide (rappel). |
 | D-C14 | D D2 | L02 p.62 | Quels Traits la Dague de l'Art vise-t-elle, et comment gérer les dégâts ? | Choix de l’exécutant validé : Éthéré et Corruption (tout degré) ; deux attaques créées (BF+2 et BF+8) plutôt qu'une substitution automatique ; Focalisation +0 DR saisie par le MJ. |
-| D-C15 | D D2 | L02 | Borne sinistre : l'échec ou la réussite du test d'Intuition donne-t-il la prise de conscience ? | **Décision du MJ** : je ne retrouve pas exactement à quel sort tu fais référence |
+| D-C15 | D D2 | L02 | Borne sinistre : l'échec ou la réussite du test d'Intuition donne-t-il la prise de conscience ? | **Décision du MJ (reposée le 22/10)** : réussite du Test d’Intuition = prise de conscience (coquille du texte corrigée), rappel seul |
 | D-C16 | D D2 | L06 | Philtre d'amour : une aide chiffrée ? | Choix de l’exécutant validé : Aucune (le +2 DR de Gemini n'est pas dans la source) ; durée jusqu'à minuit saisie en minutes. |
 | D-C17 | D D2 | L06 | Sachet de protection : comment lire « +1 SL Calme contre les effets surnaturels » ? | Choix de l’exécutant validé : +1 DR au Calme contre tout effet surnaturel (Peur et Terreur incluses), en reçu ; durée saisie par le MJ. |
 | D-C18 | D D2 | L06 | Pas imperceptible : que couvre « Magical Sight » et la Focalisation ? | Choix de l’exécutant validé : Seconde vue et Sens de la magie ; +2 DR Discrétion contre Démoniaque/Éthéré en reçu ; Focalisation interdite par un nouvel état. |
@@ -106,7 +106,7 @@ Relecture faite par le MJ sur la page « Arbitrages des exécutants » (artifact
 | D-C41 | D D6 | L06 | Fin des invocations de Nécromancie à la mort du lanceur ? | Choix de l’exécutant validé : Couche portée par le lanceur, zone non suivie ; fin sur événement déclaré par le MJ ; terre nue et cadavres en rappel ; morts-vivants retirés avec la couche. |
 | D-C42 | D D6 | L06 | Crâne hurlant : quel test et quand Brisé ? | Choix de l’exécutant validé : Test « Psychologie » = Calme +0 DR ; Brisé seulement si des Blessures sont subies ; trajectoire en rappel. |
 | D-C43 | D D6 | L06 | L'appel de Vanhel : le gain est-il automatisé ? | Choix de l’exécutant validé : Non : choix commun (Mouvement ou Action gratuite) saisi en fait ; nombre de cibles en rappel. |
-| D-C50 | D D7 | L06 pp.259-260 | Attributs des Domaines du Chaos : couche pour un sort instantané ? | **Décision du MJ** : qu'est ce que tu appelles couche ?  |
+| D-C50 | D D7 | L06 pp.259-260 | Attributs des Domaines du Chaos : couche pour un sort instantané ? | **Décision du MJ (reposée le 22/10)** : choix de l’exécutant confirmé, sort instantané = simple rappel |
 | D-C51 | D D7 | L06 | Nurgle : comment gérer les Blessures Suppurées ? | **Décision du MJ** : le moteur de nuit pas, mais permet au MJ de jouer le test de blessure suppurée |
 | D-C52 | D D7 | L06 | Miasme de pestilence : qui est exempté et qui est touché ? | Choix de l’exécutant validé : Exemptés : Traits « Dévoué de Nurgle » / « Moine de la peste » posés par le MJ ; touchés : créatures vivantes (ni Mort-vivant, Démoniaque, Artificiel, Éthéré), alliés compris ; Nausée en rappel. |
 | D-C53 | D D7 | L06 | Flot de Corruption : quel Souffle et quels dégâts ? | Choix de l’exécutant validé : Projectile magique de formule BE+DR, non opposé ; Pourriture du sang et test d'Endurance de la cible en rappel. |

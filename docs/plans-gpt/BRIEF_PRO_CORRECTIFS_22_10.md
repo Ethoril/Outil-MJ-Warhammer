@@ -27,10 +27,10 @@ Lis d'abord `docs/plans-gpt/REGLES_COMMUNES_GPT.md`, puis `docs/ARBITRAGES_MJ_21
 5. D-C51 : Nurgle, Blessures Suppurées : le moteur **n'applique rien seul mais propose au MJ de jouer le Test** de Blessure Suppurée (bouton ou rappel actionnable).
 6. D-C122 : secours au serviteur magique : le soin compte le **Bonus d'Endurance du serviteur**.
 
-## K4 — Questions du MJ à lui reposer (ne rien coder avant sa réponse)
+## K4 — Réponses du MJ aux deux questions (22/10, 16 h 50)
 
-- D-C15 : le MJ ne retrouve pas le sort. Il s'agit de Fellstave (« Borne sinistre », AOTE3 / L02 p.62) : lui montrer le texte source, le choix (échec du Test d'Intuition = prise de conscience, lecture littérale) et l'alternative, puis lui reposer la question en sélecteur.
-- D-C50 : le MJ demande ce qu'est une « couche » : lui expliquer en mots de joueur (un effet suivi sur la fiche de la cible, avec une durée, qui disparaît seul) et reposer la question (un sort instantané d'un Domaine du Chaos laisse-t-il un tel effet suivi ?).
+- D-C15 Fellstave (« Borne sinistre », L02 p.62) : **réussite du Test d'Intuition = la créature comprend que sa panique était magique** (coquille présumée du texte corrigée), en rappel seul. Inverser le choix livré.
+- D-C50 : choix livré **confirmé** (sort instantané d'un Domaine du Chaos : aucun effet suivi, simple rappel dans le compte rendu). Rien à coder.
 
 ## Runes et familiers (conception, avant tout code)
 
