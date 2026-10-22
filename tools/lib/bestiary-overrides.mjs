@@ -99,6 +99,16 @@ export const NAME_FIXES = Object.freeze({
   'E0-P-710': 'Ernst Heidlemann — Human Wizard\'s Apprentice (Silver 3)',
   'E0-P-711': 'Hans Gräber — Level 1 Monk, Level 4 Wizard (Necromancer)',
   'E0-P-715': 'The Gravelord\'s Zombies',
+  // Rough Nights & Hard Days (L24) : en-têtes de scénario ou de page collés au nom, apostrophes en majuscule, accents graves, chiffre romain (E-D30)
+  'E0-P-823': 'Friedrich von Pfeifraucher — Magnate (Gold 5)',
+  'E0-P-825': 'Mho, Larz, and \'Curls\' — Thugs (Brass 3)',
+  'E0-P-832': 'Mercinellin \'Seedling\' Thorncobble XIII — Hustler (Brass 1)',
+  'E0-P-835': 'Eberhardt von Dammenblatz — Noble Lord (Gold 7)',
+  'E0-P-837': 'Kappan\'s Racketeers — Thugs (Brass 3)',
+  'E0-P-844': 'Emmanuelle von Liebwitz — Elector Countess (Gold 15)',
+  'E0-P-847': 'Palace Guards (Gold 2)',
+  'E0-P-859': 'Nurgle Cultists & Sorcerer (Silver 3)',
+  'E0-P-861': 'Hubkind\'s Mob (Brass 4)',
   // Enemy in Shadows Companion (L23) : titre coupé, guillemets en accent grave du livre, umlauts lus comme des tirets longs (E-D29)
   'E0-P-759': 'Donkey or Mule',
   'E0-P-768': 'Aleanora \'Al\' Shortbottom — Halfling Toll Keeper (Brass 5)',

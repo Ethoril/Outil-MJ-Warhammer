@@ -220,6 +220,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L24",
+   "file": "L24.json",
+   "title": "Rough Nights & Hard Days",
+   "edition": "V4",
+   "counts": {
+    "profiles": 81,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }
