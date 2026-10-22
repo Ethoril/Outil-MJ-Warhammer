@@ -12,6 +12,7 @@ import {GRANDE_GUEULE} from './tradition-contracts/grande-gueule.mjs';
 import {WAAAGH_PETITE,WAAAGH_GRANDE} from './tradition-contracts/waaagh.mjs';
 import {LUSTRIA} from './tradition-contracts/lustria.mjs';
 import {ELFIQUE_VAUL,ELFIQUE_MER,ELFIQUE_HOETH} from './tradition-contracts/elfique.mjs';
+import {ARCANES_COLLEGES} from './tradition-contracts/arcanes-colleges.mjs';
 
 export const TRADITION_SPELLS=[
  ...MAGIE_NATURELLE_L06,
@@ -28,5 +29,6 @@ export const TRADITION_SPELLS=[
  ...LUSTRIA,
  ...ELFIQUE_VAUL,
  ...ELFIQUE_MER,
- ...ELFIQUE_HOETH
+ ...ELFIQUE_HOETH,
+ ...ARCANES_COLLEGES
 ];

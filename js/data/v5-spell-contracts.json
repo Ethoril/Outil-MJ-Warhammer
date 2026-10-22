@@ -23687,5 +23687,459 @@
     "ficheFollowUp": false,
     "isVortex": false,
     "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-belligerance-du-marais-de-sang",
+    "row": null,
+    "name": "Belligérance du Marais de sang",
+    "canonicalName": "Belligerence of the Bloodmarsh",
+    "page": 26,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 2,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1 Bête des fens (n’importe laquelle)",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:83e131bbee3dd976d10e90423d1b5100df738113f6afc3a5058937f06f2dd33b",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "traits",
+      "traits": [
+        "Frénésie"
+      ],
+      "targetRule": {
+        "requiredAnyTrait": [
+          "bete des fens",
+          "fenbeast"
+        ]
+      }
+    },
+    "reminders": "Vous emplissez une Bête des fens d’un sens urgent du but et d’un mauvais caractère : si elle ne l’a pas déjà, elle gagne le Trait Frénésie. Cible : une Bête des fens (construit de marais ; profils : phase E), reconnue au Trait « Bête des fens » posé par le MJ. Le Trait reste tant que le MJ ne le retire pas (durée instantanée dans la source).",
+    "assistedClauses": [
+      "Cible : une Bête des fens (construit de marais ; profils : phase E), reconnue au Trait « Bête des fens » posé par le MJ. Le Trait reste tant que le MJ ne le retire pas (durée instantanée dans la source)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-effondrement-d-un-construit",
+    "row": null,
+    "name": "Effondrement d’un construit",
+    "canonicalName": "Collapse Construct",
+    "page": 26,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 6,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1 Construit (n’importe lequel)",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:d9f715a8810eb9e2683f83ab09118d2e554677e8c4b82cdb87047aa94b796e7b",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "targetRule": {
+        "requiredAnyTrait": [
+          "artificiel",
+          "construct"
+        ]
+      },
+      "opposedTest": {
+        "casterStat": "FM",
+        "targetStat": "E",
+        "targetSkill": "Endurance",
+        "resistOnLoss": true,
+        "casterWinsTies": true
+      },
+      "specialState": {
+        "assistedReminder": "Le construit est inerte et sans vie (hors combat) tant que le MJ ne le relève pas."
+      }
+    },
+    "reminders": "Vous défaites les énergies magiques qui tiennent un construit : Test opposé de Force Mentale contre Endurance ; si vous gagnez, le construit devient inerte et sans vie. Opposition : Test d’incantation (Force Mentale) contre Endurance du construit, deux dés explicites, égalité au lanceur. Construit : cible portant le Trait Artificiel ou Construit.",
+    "assistedClauses": [
+      "Opposition : Test d’incantation (Force Mentale) contre Endurance du construit, deux dés explicites, égalité au lanceur. Construit : cible portant le Trait Artificiel ou Construit."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-dechiffrer-la-malediction",
+    "row": null,
+    "name": "Déchiffrer la malédiction",
+    "canonicalName": "Decipher Curse",
+    "page": 26,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 4,
+    "range": "Force Mentale mètres",
+    "target": "Tout objet",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:630a222e5b86aa6bc3c24a72bf566fd1e7a19835b652f5657c9d79a9ea420fd9",
+    "treatment": "narrative",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "narrative"
+    },
+    "reminders": "Vous enquêtez magiquement pour savoir si un objet est maudit : déchiffrer une malédiction en révèle les secrets (nature maudite, bienfaits et méfaits, déclencheur) ; ensuite Test d’Intelligence Intermédiaire (+0 DR), échec : Exposition modérée à la Corruption. La malédiction reste active une fois déchiffrée : le rituel Lever la malédiction (L17 p. 33) est nécessaire pour la lever (rituels : système à part). Test d’Intelligence du lanceur et Exposition modérée (V5 p. 187) joués par le MJ.",
+    "assistedClauses": [
+      "La malédiction reste active une fois déchiffrée : le rituel Lever la malédiction (L17 p. 33) est nécessaire pour la lever (rituels : système à part). Test d’Intelligence du lanceur et Exposition modérée (V5 p. 187) joués par le MJ."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-perturber-la-magie",
+    "row": null,
+    "name": "Perturber la magie",
+    "canonicalName": "Disrupt Magic",
+    "page": 26,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 8,
+    "range": "Force Mentale mètres",
+    "target": "1",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:6edc90f935517a22d447663d03631cd02f74b2a3a986bd77ddb8569c3b32bade",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "opposedTest": {
+        "casterStat": "FM",
+        "targetStat": "FM",
+        "targetSkill": "Force Mentale",
+        "resistOnLoss": true,
+        "casterWinsTies": true
+      },
+      "specialState": {
+        "assistedReminder": "Victoire : le sort de la cible échoue et elle subit un Fiasco mineur (tirage joué par le MJ)."
+      }
+    },
+    "reminders": "Vous connaissez une forme agressive de dissipation qui vise un lanceur en train de canaliser : lancé avant qu’il ait fini son sort, vous pouvez opposer un Test de Force Mentale ; si vous gagnez, son sort échoue et il subit un Fiasco mineur. À lancer avant que l’autre lanceur ait fini son sort ou rituel (moment constaté par le MJ). Opposition : deux dés explicites, égalité au lanceur.",
+    "assistedClauses": [
+      "À lancer avant que l’autre lanceur ait fini son sort ou rituel (moment constaté par le MJ). Opposition : deux dés explicites, égalité au lanceur."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-pourriture-grouillante-de-mouches",
+    "row": null,
+    "name": "Pourriture grouillante de mouches",
+    "canonicalName": "Fly-Infested Rotweed",
+    "page": 26,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 4,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1 Bête des fens (n’importe laquelle)",
+    "duration": "Bonus de Force Mentale minutes",
+    "sourceFingerprint": "sha256:8c2cd7320885b58abd5be905522b4ea692e69d1a4bd71e7a1091d5e34bb786e7",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "traits",
+      "traits": [
+        "Distrayant"
+      ],
+      "targetRule": {
+        "requiredAnyTrait": [
+          "bete des fens",
+          "fenbeast"
+        ]
+      }
+    },
+    "reminders": "Vous faites sortir les mouches et autres insectes de la matière de la Bête des fens et voler autour d’elle : elle gagne le Trait Distrayant. Cible : une Bête des fens (Trait posé par le MJ). Le Trait Distrayant dure Bonus de Force Mentale minutes.",
+    "assistedClauses": [
+      "Cible : une Bête des fens (Trait posé par le MJ). Le Trait Distrayant dure Bonus de Force Mentale minutes."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-limon-de-vie",
+    "row": null,
+    "name": "Limon de vie",
+    "canonicalName": "Lifebloom Silt",
+    "page": 26,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 4,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "1 Bête des fens (n’importe laquelle)",
+    "duration": "Bonus de Force Mentale minutes",
+    "sourceFingerprint": "sha256:e67227dbbe1d4e4b4f0b02b4aba078af91af834dc0eb9a52f061e1f2d40e18f6",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "duration",
+        "targets"
+      ]
+    },
+    "effects": {
+      "type": "special",
+      "targetRule": {
+        "requiredAnyTrait": [
+          "bete des fens",
+          "fenbeast"
+        ]
+      },
+      "specialState": {
+        "assistedReminder": "La Bête des fens régénère le double de Blessures qu’elle récupérerait normalement (son Trait Régénération est à jouer par le MJ)."
+      }
+    },
+    "reminders": "Vous dotez une Bête des fens d’un plus grand pouvoir de régénération : pendant la durée, elle régénère le double de Blessures. Cible : une Bête des fens (Trait posé par le MJ). Le doublement s’applique à la Régénération du profil (phase E).",
+    "assistedClauses": [
+      "Cible : une Bête des fens (Trait posé par le MJ). Le doublement s’applique à la Régénération du profil (phase E)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-silence-arcane",
+    "row": null,
+    "name": "Silence (Arcane)",
+    "canonicalName": "Silence (Arcane)",
+    "page": 27,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 4,
+    "range": "Vous",
+    "target": "ZdE Bonus de Force Mentale mètres",
+    "duration": "Bonus de Force Mentale minutes",
+    "sourceFingerprint": "sha256:29a6c490ba51b51a068d6b953253ce0ea5a48f5af336af3272708a04b7024e4c",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "test-modifiers",
+      "aoe": true,
+      "testModifiers": {
+        "Langue (Magick)": -3
+      }
+    },
+    "reminders": "Vous créez autour de vous une zone où aucun bruit ne passe : on n’y entend rien et on n’entend rien de l’extérieur ; l’incantation y subit −3 DR. Variante d’Arcane du Silence d’Ombres (contrat distinct, jamais confondu avec lui) : −3 DR à l’incantation (Langue (Magick)) dans la zone, pour tous les occupants ; aucun suivi du bruit ni des positions.",
+    "assistedClauses": [
+      "Variante d’Arcane du Silence d’Ombres (contrat distinct, jamais confondu avec lui) : −3 DR à l’incantation (Langue (Magick)) dans la zone, pour tous les occupants ; aucun suivi du bruit ni des positions."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-secours-au-serviteur-magique",
+    "row": null,
+    "name": "Secours au serviteur magique",
+    "canonicalName": "Succour Magical Servant",
+    "page": 27,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane",
+    "cn": 2,
+    "range": "Bonus de Force Mentale mètres",
+    "target": "Un de vos Constructs ou Familiers",
+    "duration": "Instantané",
+    "sourceFingerprint": "sha256:335c6a188af4060056a9e04ebbff7f0ce59796b11db5e1978c1e2f4f049471b7",
+    "treatment": "engine",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "range",
+        "targets",
+        "special"
+      ],
+      "specific": [
+        {
+          "id": "double",
+          "label": "+3 DR : soin doublé",
+          "cost": 3,
+          "repeat": false,
+          "kind": "reminder",
+          "reminder": "La créature récupère le double de son Bonus d’Endurance en Blessures."
+        }
+      ]
+    },
+    "effects": {
+      "type": "healing",
+      "healing": {
+        "amountFormula": "BE"
+      },
+      "targetRule": {
+        "alliesOnly": true
+      }
+    },
+    "reminders": "Vous donnez de la puissance magique à votre Familier ou construit : la créature magique récupère aussitôt un nombre de Blessures égal à son Bonus d’Endurance ; avec +3 DR ou plus, le double. Le soin est calculé sur le Bonus d’Endurance du lanceur (le moteur ne lit pas celui de la cible) ; vérifier par le MJ et corriger sur la fiche du familier ou du construit. Le doublement à +3 DR est le seul effet de l’option de surpuissance. Cible : votre Familier ou construit (désigné par le MJ).",
+    "assistedClauses": [
+      "Le soin est calculé sur le Bonus d’Endurance du lanceur (le moteur ne lit pas celui de la cible) ; vérifier par le MJ et corriger sur la fiche du familier ou du construit. Le doublement à +3 DR est le seul effet de l’option de surpuissance. Cible : votre Familier ou construit (désigné par le MJ)."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L17",
+    "edition": "Supplément V4 (Winds of Magic), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
+  },
+  {
+    "id": "spell-tradition-voile-de-brouillard",
+    "row": null,
+    "name": "Voile de brouillard",
+    "canonicalName": "Shroud of Fog",
+    "page": 81,
+    "domain": "arcane",
+    "wind": null,
+    "type": "Sort d’Arcane (Ombres)",
+    "cn": 8,
+    "range": "Vous",
+    "target": "ZdE Bonus de Force Mentale miles",
+    "duration": "Force Mentale minutes",
+    "sourceFingerprint": "sha256:982d0796ceb44443c3e56adcc5537a4a41b86d937a018d7aad2f597f9a1767f4",
+    "treatment": "narrative",
+    "overcast": {
+      "allowed": true,
+      "options": [
+        "duration",
+        "aoe"
+      ]
+    },
+    "effects": {
+      "type": "narrative"
+    },
+    "reminders": "Vous faites naître un épais brouillard qui couvre la région : la visibilité est réduite à 10 mètres ; le brouillard n’est pas magique et ne peut être dissipé. Sort d’Arcane du Domaine des Ombres, pratiqué par les Tisseurs de tempête et certains Ombromanciens de l’Ordre Gris. Visibilité : jouée par le MJ (aucune météo suivie). Le brouillard est non magique : aucune dissipation possible.",
+    "assistedClauses": [
+      "Sort d’Arcane du Domaine des Ombres, pratiqué par les Tisseurs de tempête et certains Ombromanciens de l’Ordre Gris. Visibilité : jouée par le MJ (aucune météo suivie). Le brouillard est non magique : aucune dissipation possible."
+    ],
+    "sharedWith": null,
+    "sourceBook": "L07",
+    "edition": "Supplément V4 (Lustria), conversion V5",
+    "isBookV5": false,
+    "isElf": false,
+    "isWom": false,
+    "isJadeVariant": false,
+    "isCatalogue": false,
+    "isTradition": true,
+    "ficheFollowUp": false,
+    "isVortex": false,
+    "isAuxiliary": false
   }
 ]

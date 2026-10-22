@@ -21,7 +21,9 @@ Branche `pro/phase-d`. Plan : `PLAN_PRO_PHASE_D.md`. Choix d'interprétation : `
 | D13 Petite Waaagh (12) + D14 Grande Waaagh (12) (L12 ; L07 p.183 écarts consignés) | FAIT (un seul commit pour les deux) | voir `git log` (« magie orque ») |
 | D15 Lustria : 4 sorts de Haute Magie + 4 extensions Slann (`variantOf`) | FAIT | voir `git log` (« Lustria ») |
 | D16 Vaul (9) + D17 mer (10) + D18 Hoeth (10), L08 pp. 102-111 | FAIT (un seul commit pour les trois) | voir `git log` (« magie des prêtres elfes ») |
-| D19 à D21 | NON FAITS (à reprendre dans l'ordre) | |
+| D19 Compléments des Collèges (8 Arcanes L17 + Voile de brouillard L07) | FAIT | voir `git log` (« Compléments des Collèges ») |
+| D20 Runes naines : conception | NON FAIT | |
+| D21 Recette et rapport final | NON FAIT | |
 
 ## Dernière suite complète
 
