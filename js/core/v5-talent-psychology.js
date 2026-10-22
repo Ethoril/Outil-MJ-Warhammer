@@ -189,14 +189,14 @@ export function groupIntimidationDefenceSl({organizedGroup,chiefSl,calmSls=[]}={
  if(organizedGroup===true)return Number.isSafeInteger(chiefSl)?chiefSl:null;
  const list=calmSls.filter(Number.isSafeInteger);return list.length?Math.min(...list):null;
 }
-/** Intimidation opposée à Calme : Peur 1 + (DR net − 1) envers l'intimidateur ; l'égalité revient à l'initiateur (V5). */
+/** Intimidation opposée à Calme : Peur 1 + (DR net − 1) envers l'intimidateur ; l'égalité est un échec de l'intimidateur (L06 p.169, 22/10). */
 export function previewCombatIntimidation({author,target,authorTest,defenceTest,encounterId='default-encounter',theft=false,resolutionId='combat-intimidation'}={}){
  if(!author||!target)return intFail('Intimidateur et cible requis.','participants');
  if(!Number.isSafeInteger(authorTest?.sl)||!Number.isSafeInteger(defenceTest?.sl))return intFail('DR d’Intimidation et de Calme requis.','tests');
  const reminders=[];
  if(theft)reminders.push('Vol : un PJ intimidé subit la Peur ; ses biens ne sont pas remis automatiquement.');
  const out={reminders,forcedHandover:false,netSl:authorTest.sl-defenceTest.sl};
- if(resolveV5Opposition(authorTest,defenceTest).winner!=='initiator')return{...out,ready:true,exempt:false,addedStates:[],needsInput:[],unresolved:[]};
+ if(authorTest.sl<=defenceTest.sl)return{...out,ready:true,exempt:false,addedStates:[],needsInput:[],unresolved:[]};
  if(isPsychologyImmune(target,{kind:'intimidate'}))return{...out,ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],needsInput:[],unresolved:[]};
  const rating=1+Math.max(0,out.netSl-1);
  const fear=previewGenericFearEncounter({author,target,rating,sourceKind:'intimidation',sourceLabel:`Intimidation (${rating})`,knownAlly:false,encounterId,resolutionId});
@@ -232,8 +232,8 @@ export function previewSkittishReaction({subject,trigger,visible=true,training=n
 /** Animosité : supplantée dès qu'une Peur ou une Terreur est active. */
 export function isAnimosityOverridden(subject){return(subject?.states||[]).some(s=>['fear-of-talent','terror-of-talent'].includes(s.key));}
 export function untrainedMountDisadvantage({training}={}){return training==='Guerre'?null:{id:'mount:untrained-war',label:'Monture non dressée à la guerre : Désavantage'};}
-/** Cavalier accompli : taille de la monture si la Peur ou la Terreur ne vient que de la Taille adverse. */
-export function effectiveSizeAgainstFear({riderSize,mountSize,accomplishedRider=false,sizeOnlyCause=false}={}){return accomplishedRider===true&&sizeOnlyCause===true&&Number.isSafeInteger(mountSize)?mountSize:riderSize;}
+/** Cavalier accompli = Talent Cavalier émérite (L13, 22/10) : taille de la monture si la Peur ou la Terreur ne vient que de la Taille adverse. */
+export function effectiveSizeAgainstFear({rider,riderSize,mountSize,sizeOnlyCause=false}={}){return hasV5Talent(rider,'talent-roughrider')&&sizeOnlyCause===true&&Number.isSafeInteger(mountSize)?mountSize:riderSize;}
 /* Sources de Peur, Terreur et Brisé des suppléments ramenées à V5 (C05). Conversions V4→V5 (Q17) : ±10 % = ±1 DR, ±20 % = ±2 DR, +40 % = +4 DR, Avantage = Élan. */
 const F=(rating,x={})=>({k:'fear',rating,...x}),FMJ=(x={})=>({k:'fear',ratingFact:'rating',...x}),FOC=(base,every,x={})=>({k:'fear',ratingBase:base,every,...x});
 const TE=(rating,x={})=>({k:'terror',rating,...x}),TOC=(base,every,x={})=>({k:'terror',ratingBase:base,every,...x}),TMJ=(x={})=>({k:'terror',ratingFact:'rating',...x});

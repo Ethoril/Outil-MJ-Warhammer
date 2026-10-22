@@ -5,7 +5,7 @@ Brief : `docs/plans-gpt/BRIEF_PRO_CORRECTIFS_22_10.md`. Branche `pro/correctifs-
 | Sous-lot | Statut |
 |---|---|
 | K1 — Courroux (phase B), points 1 à 7 | FAIT (commit « K1 », voir `git log`) |
-| K2 — Brisé (phase C), points 1 à 3 | À FAIRE |
+| K2 — Brisé (phase C), points 1 à 3 | FAIT (commit « K2 », voir `git log`) |
 | K3 — Magie (phase D), points 1 à 6 + Fellstave (K4) | À FAIRE |
 | Runes et familiers (conception) | À FAIRE |
 
@@ -33,6 +33,16 @@ Brief : `docs/plans-gpt/BRIEF_PRO_CORRECTIFS_22_10.md`. Branche `pro/correctifs-
 - **B-C11** : « occupe l'Action du Tour » lu comme : la Prière déclencheuse compte si l'Action était libre, sinon l'obligation commence au Tour suivant (ex-choix MJ rendu automatique).
 - **B-C26** : la seconde 0 de campagne est lue comme minuit (l'horloge n'a pas d'heure du jour).
 - **B-C20** : « note libre conservée » lu comme suivi structuré facultatif (voir ci-dessus).
+
+## K2 — ce qui change
+
+1. **C0-L06-019** : `previewCombatIntimidation` exige `authorTest.sl > defenceTest.sl` ; l'égalité est un échec de l'intimidateur (aucun état posé).
+2. **C0-L25-003** : `MASTER_AND_COMMANDER_TALENT` (`talent-master-and-commander`, L25 p.63) ; `leadershipRallySlModifiers({participant, onBoardVessel})` lit le rang du Talent (lignes résolues, ou lignes de fiche reconnues par leur nom) ; `masterAndCommanderRank` en saisie n'est plus lu ; « à bord » reste un fait MJ.
+3. **C0-L13-013** : `effectiveSizeAgainstFear({rider, …})` lit `talent-roughrider` sur le cavalier ; `accomplishedRider` n'est plus lu.
+
+Assertions modifiées : `phase-c-c04-intimidation-traits` (égalité = aucun état ; Cavalier accompli par Talent), `phase-c-c03-rally-mount` (Master and Commander par Talent du participant).
+
+Choix d'interprétation : le catalogue des 206 Talents est un instantané épinglé de la feuille source (décomptes et empreintes testés dans six fichiers) ; y ajouter une entrée aurait cassé ces invariants hors périmètre. Le Talent est donc déclaré comme supplément (constante exportée de `js/core/v5-effects.js`), hors du catalogue de 206. Si le MJ veut l'entrée dans le catalogue lui-même, c'est un lot distinct (instantané, contrats, couverture).
 
 ## Vérifications
 

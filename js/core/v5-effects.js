@@ -1,4 +1,5 @@
 import {activeMagicTalent} from './v5-magic-talents.js';
+import {acquiredV5Talents} from './v5-talents.js';
 /** Pure V5 Conditions and explicit combat clocks, core pp.184–187. No dice draw. */
 import { normalizeEffects, normalizeState } from './effects.js';
 import { withMomentum } from './v5-combat-rules.js';
@@ -254,11 +255,18 @@ export function recoverV5Condition(participant,condition,options={}) {
   return createReceipt(participant,next,{removed:removal.removed,acquiredInstances,needsInput,reminders});
 }
 /** Master and Commander (L25 p.63) : +1 DR par rang aux Tests de Commandement à bord ; le fait « à bord » reste une saisie MJ. */
-export function leadershipRallySlModifiers({masterAndCommanderRank=0,onBoardVessel}={}) {
-  const modifiers=[],needsInput=[];
-  if(Number.isSafeInteger(masterAndCommanderRank)&&masterAndCommanderRank>0){
+export const MASTER_AND_COMMANDER_TALENT=Object.freeze({id:'talent-master-and-commander',nom:'Maître et Commandant',englishName:'Master and Commander',source:'L25 p.63'});
+/** Rang du Talent : lignes résolues du catalogue, ou lignes de fiche reconnues par leur nom (le catalogue de 206 Talents n'inclut pas ce supplément). */
+function masterAndCommanderRank(participant){
+  const resolved=acquiredV5Talents(participant).filter(row=>row.talentId===MASTER_AND_COMMANDER_TALENT.id).map(row=>row.rank);
+  const byName=(participant?.talents||[]).filter(row=>row?.status!=='resolved'&&/master\s+and\s+commander|ma[iî]tre\s+et\s+commandant/i.test(String(row?.nom??row?.name??''))).length;
+  return Math.max(0,...resolved,byName);
+}
+export function leadershipRallySlModifiers({participant,onBoardVessel}={}) {
+  const modifiers=[],needsInput=[],rank=masterAndCommanderRank(participant);
+  if(rank>0){
     if(typeof onBoardVessel!=='boolean')needs(needsInput,'onBoardVessel','Confirmer si le Test de Commandement a lieu à bord');
-    else if(onBoardVessel)modifiers.push({id:'master-and-commander',label:'Master and Commander (+1 DR par rang)',amount:masterAndCommanderRank});
+    else if(onBoardVessel)modifiers.push({id:'master-and-commander',label:'Master and Commander (+1 DR par rang)',amount:rank});
   }
   return {modifiers,needsInput};
 }
