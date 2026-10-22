@@ -32,6 +32,7 @@ const ASSETS_TO_CACHE = [
   './js/core/store.js',
   './js/core/creature-keywords.js',
   './js/data/creature-keywords.js',
+  './js/ui/keyword-picker.js',
   './js/core/v5-divine-engine.js',
   './js/core/v5-divine-grammar.js',
   './js/core/v5-divine-effect-handlers.js',

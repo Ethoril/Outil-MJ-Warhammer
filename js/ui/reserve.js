@@ -7,6 +7,7 @@ import { showToast } from './toast.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { resolveKeyword } from '../core/reference-catalog.js';
 import { contextMessage } from './messages.js';
+import { createKeywordPicker } from './keyword-picker.js';
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   const formTitle = qs('#form-title');
@@ -24,6 +25,20 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     meta.innerHTML = '<label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
     const actions = DOM.reserve.form.querySelector('.actions');
     DOM.reserve.form.insertBefore(meta, actions);
+  }
+
+  // Mots-clés de créature (espèce, nature, allégeance) : sélecteur du référentiel, jamais de texte libre.
+  let keywordPicker = null;
+  function ensureKeywordPicker() {
+    const f = DOM.reserve.form;
+    if (!f || keywordPicker) return;
+    const section = document.createElement('div');
+    section.id = 'form-keywords'; section.style.cssText = 'margin:10px 0;';
+    const title = document.createElement('div'); title.textContent = 'Mots-clés de créature (espèce, nature, allégeance)'; title.className = 'muted';
+    const holder = document.createElement('div');
+    section.append(title, holder);
+    f.insertBefore(section, f.querySelector('.actions'));
+    keywordPicker = createKeywordPicker({ container: holder, store: Store, subject: {} });
   }
 
   function ensureArmorSides() {
@@ -151,6 +166,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
 
   function loadProfileIntoForm(p) {
     ensureProfileFields();
+    ensureKeywordPicker();
+    keywordPicker.setSubject(p);
     ensureArmorSides();
     const f = DOM.reserve.form;
     lockSourceFields(p);
@@ -178,6 +195,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
 
   function resetForm() {
     ensureProfileFields();
+    ensureKeywordPicker();
+    keywordPicker.setSubject({});
     ensureArmorSides();
     lockSourceFields();
     DOM.reserve.form.reset();
@@ -238,6 +257,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const id = fd.get('id');
     const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, armorLocations, diceLines };
     const existing = id ? Store.getProfile(id) : null;
+    const picked = keywordPicker?.getValue() || { keywords: [], keywordExclusions: [] };
+    if (picked.keywords.length || picked.keywordExclusions.length || existing?.keywords || existing?.keywordExclusions) Object.assign(data, picked);
     if (existing?.extensions?.ficheId) {
       for (const key of ['caracs', 'initiative', 'hp', 'maxHp', 'armor', 'armorLocations']) data[key] = cloneValue(existing[key]);
       data.diceLines = data.diceLines.flatMap(action => {

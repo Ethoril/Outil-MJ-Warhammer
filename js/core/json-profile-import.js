@@ -5,6 +5,7 @@ import { normalizeDamageFields } from './damage.js';
 import { getKeywordBySlug, getKeywordList } from './keywords.js';
 import { normalizeEquipment } from './equipment.js';
 import { parseProfileText } from './text-profile-import.js';
+import { BASE_REFERENTIAL, resolveKeyword } from './creature-keywords.js';
 
 const FORMAT_VERSION = 1;
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -22,6 +23,7 @@ const PROFILE_KEYS = {
   caracs: ['caracteristiques', 'caracteristique', 'caracs'], armor: ['armure', 'armor'],
   tags: ['tags', 'motscles'], notes: ['notes'], favorite: ['favori', 'favorite'],
   actions: ['jets', 'actions', 'dicelines'], maxHp: ['maxhp'], armorLocations: ['armorlocations'],
+  keywords: ['keywords', 'motsclescreature', 'creaturekeywords'], keywordExclusions: ['keywordexclusions', 'motsclesexclus'],
   skills: ['skills'], talents: ['talents'], equipment: ['equipment'], spells: ['spells'], prayers: ['prayers'],
   ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['movement'], race: ['race']
 };
@@ -264,7 +266,19 @@ function parseArmor(value, errors) {
   return armor;
 }
 
-function parseProfile(raw, index) {
+/** Mots-clés de créature : alias, casse et pluriel résolus en identifiants du référentiel ; un texte inconnu est signalé, jamais gardé. */
+function parseKeywordList(value, field, errors, referential) {
+  const list = typeof value === 'string' ? value.split(',') : value;
+  if (!Array.isArray(list)) { errors.push({ field, reason: 'liste-attendue', value: shownValue(value) }); return []; }
+  const ids = [];
+  for (const item of list) {
+    const found = typeof item === 'string' ? (referential.terms.has(item.trim()) ? referential.terms.get(item.trim()) : resolveKeyword(item, referential)) : null;
+    if (found) { if (!ids.includes(found.id)) ids.push(found.id); } else if (typeof item !== 'string' || item.trim()) errors.push({ field, reason: 'mot-cle-inconnu', value: shownValue(item) });
+  }
+  return ids;
+}
+
+function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
   const errors = [];
   const unknownQualities = [];
   const { values, unknown } = readRecord(raw, PROFILE_KEYS, PROFILE_IGNORED);
@@ -306,10 +320,11 @@ function parseProfile(raw, index) {
     hp: hp !== null || (values.hp !== undefined && values.hp !== null) ? { status: 'found', value: hp, lines: [] } : { status: 'missing', value: null, lines: [] }
   };
   const profile = { name: name || null, kind, group, hp, initiative, caracs, armor: parseArmor(values.armor, errors), tags, notes, favorite, actions };
-  for (const key of FICHE_DATA_FIELDS) if (values[key] !== undefined) {
+  for (const key of FICHE_DATA_FIELDS) if (values[key] !== undefined && key !== 'keywords' && key !== 'keywordExclusions') {
     if (['skills', 'talents', 'equipment', 'spells', 'prayers'].includes(key) && !Array.isArray(values[key])) errors.push({ field: key, reason: 'liste-attendue', value: shownValue(values[key]) });
     else profile[key] = cloneValue(values[key]);
   }
+  for (const key of ['keywords', 'keywordExclusions']) if (values[key] !== undefined) profile[key] = parseKeywordList(values[key], key, errors, referential);
   if (profile.equipment) { const checked = normalizeEquipment(profile.equipment); if (checked.coverage === 'invalid') errors.push({ field: 'equipment', reason: 'collection-invalide', value: checked.warnings.map(w => w.message).join('; ') }); }
   if (values.maxHp !== undefined) profile.maxHp = parseInteger(values.maxHp, 'maxHp', errors);
   if (isRecord(raw.extensions?.fiche) || typeof raw.extensions?.ficheId === 'string') profile.extensions = cloneValue(raw.extensions);
@@ -320,7 +335,7 @@ function parseProfile(raw, index) {
 }
 
 /** Un profil, une liste de profils, ou { profils: [ … ] } (enveloppe facultative avec format et version). */
-export function parseProfileJson(text) {
+export function parseProfileJson(text, { referential = BASE_REFERENTIAL } = {}) {
   if (typeof text !== 'string') throw new TypeError('Le JSON du profil doit être une chaîne');
   // BOM (U+FEFF) d'un fichier « UTF-8 avec BOM » ou espaces insécables collés autour du JSON : JSON.parse
   // les refuse. Ils deviennent des espaces simples, sans décaler les lignes et colonnes des messages.
@@ -342,7 +357,7 @@ export function parseProfileJson(text) {
   getKeywordList();
   const blocks = list.map((item, index) => {
     if (!isRecord(item)) throw userError(`Profil n°${index + 1} : un objet { … } est attendu.`);
-    return parseProfile(item, index);
+    return parseProfile(item, index, referential);
   });
   return {
     status: blocks.some(item => item.blocking || item.ambiguities.length || item.unknownQualities.length) ? 'needs-review' : 'ready',

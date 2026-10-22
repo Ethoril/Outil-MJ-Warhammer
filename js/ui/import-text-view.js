@@ -15,9 +15,10 @@ const REASON_LABELS = {
   'texte-attendu': 'texte attendu',
   'liste-attendue': 'liste attendue',
   'objet-attendu': 'objet { … } attendu',
-  'booleen-attendu': 'vrai ou faux attendu'
+  'booleen-attendu': 'vrai ou faux attendu',
+  'mot-cle-inconnu': 'mot-clé absent du référentiel (utiliser un terme existant ou le faire ajouter par le MJ)'
 };
-const FIELD_LABELS = { name: 'Nom', kind: 'Type', group: 'Groupe', hp: 'PV', initiative: 'Initiative', notes: 'Notes', tags: 'Mots-clés', base: 'valeur', mod: 'modificateur', valeurs: 'valeur' };
+const FIELD_LABELS = { name: 'Nom', kind: 'Type', group: 'Groupe', hp: 'PV', initiative: 'Initiative', notes: 'Notes', tags: 'Mots-clés', keywords: 'Mots-clés de créature', keywordExclusions: 'Mots-clés retirés', base: 'valeur', mod: 'modificateur', valeurs: 'valeur' };
 const MISSING_LABELS = { name: 'nom manquant', hp: 'PV manquants' };
 const ARMOR_LABELS = [['head', 'tête'], ['body', 'corps'], ['arms', 'bras'], ['legs', 'jambes']];
 // Libellés de l'import texte ; l'option `texts` les remplace (import JSON du formulaire).

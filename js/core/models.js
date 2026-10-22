@@ -129,7 +129,7 @@ export function canonicalizeProfileFields(raw) {
 }
 
 // Fields that must survive every profile/participant projection and import.
-export const FICHE_DATA_FIELDS = Object.freeze(['armorLocations', 'protection', 'skills', 'talents', 'equipment', 'spells', 'prayers', 'ficheSnapshot', 'movement', 'race']);
+export const FICHE_DATA_FIELDS = Object.freeze(['armorLocations', 'protection', 'skills', 'talents', 'equipment', 'spells', 'prayers', 'ficheSnapshot', 'movement', 'race', 'keywords', 'keywordExclusions']);
 export const ARMOR_LOCATION_IDS = Object.freeze(['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg']);
 export function normalizeArmorLocations(armor = {}) {
   const a = isRecord(armor) ? armor : {};
@@ -142,9 +142,15 @@ function cleanEquipmentItem(item) {
   if (Array.isArray(copy.locations)) copy.locations = copy.locations.filter(x => typeof x === 'string' && x);
   return copy;
 }
+/** Identifiants de mots-clés de créature : textes nettoyés et dédoublonnés, jamais filtrés (un terme ajouté par le MJ n'est pas dans la base). */
+export function normalizeKeywordList(list) {
+  if (!Array.isArray(list)) return [];
+  return [...new Set(list.filter(item => typeof item === 'string').map(item => item.trim()).filter(Boolean))];
+}
 export function normalizeFicheFields(raw = {}) {
   const fields = {};
   for (const key of FICHE_DATA_FIELDS) {
+    if (key === 'keywords' || key === 'keywordExclusions') { if (Object.hasOwn(raw, key)) fields[key] = normalizeKeywordList(raw[key]); continue; }
     if (Object.hasOwn(raw, key)) fields[key] = ['spells','talents','skills','prayers','equipment'].includes(key) && Array.isArray(raw[key])
       ? raw[key].filter(isRecord).map(key === 'equipment' ? cleanEquipmentItem : cloneValue)
       : cloneValue(raw[key]);

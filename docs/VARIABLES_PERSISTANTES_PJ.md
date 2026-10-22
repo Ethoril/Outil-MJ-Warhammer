@@ -69,3 +69,11 @@ Un Exténué d’Altdorf est un État de combat ordinaire, exclu du registre. Le
 | --- | --- | --- | --- | --- |
 | Journal des événements de Péché (reçus d’audit) | `extensions.v5.divineSinEvents[]` : événement, culte, fait, Péchés avant/après, source, décision MJ (300 derniers) | absente ; audit, pas un compteur | commande MJ d’événement sourcé | B17 |
 | Points de Péché (attribution/retrait sourcés) | `extensions.v5.divine.sin` (compteur existant) | absente | événements B17, absolution B16, Courroux | B17 |
+
+## Phase E — mots-clés de créature (demande du MJ du 22/10)
+
+| Variable | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Mots-clés posés sur un personnage, une créature ou un PNJ | `keywords[]` (identifiants du référentiel) du profil, du participant et de la fiche PJ ; conservés par réserve → combat → scène | absente ; la race de la fiche (`race`) en fait déduire un (non écrit) | sélecteur du formulaire de profil, import JSON, corrections MJ | phase E K3 |
+| Mots-clés déduits écartés par le MJ | `keywordExclusions[]` des mêmes projections | absente | bouton « Écarter » du sélecteur, « Rétablir » | phase E K3 |
+| Ajouts du MJ au référentiel de mots-clés (donnée de campagne, pas de fiche) | `extensions.v5.keywordReferential.terms[]` : id, noms, parents, alias, `addedByMj` ; jamais de retrait ni de renommage | absente | commande `add-creature-keyword` (annulable) | phase E K2 |
