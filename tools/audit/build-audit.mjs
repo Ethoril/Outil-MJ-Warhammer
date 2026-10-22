@@ -29,6 +29,12 @@ export function validateAudit(rows,root) {
     if(!statuses.includes(row.status))throw Error('Statut inconnu : '+row.id);
     if(!mechanics.includes(row.mechanic))throw Error('Type mécanique inconnu : '+row.id);
     if(row.v5Proposal!==null&&!text(row.v5Proposal))throw Error('Conversion invalide : '+row.id);
+    if(row.terminologyFr!==undefined&&!Array.isArray(row.terminologyFr))throw Error('Terminologie française invalide : '+row.id);
+    const frenchSources=[...(row.nameFrSource?[row.nameFrSource]:[]),...(row.terminologyFr||[])];
+    if(frenchSources.length){
+      const book=JSON.parse(read('docs/divin/DIVIN_CORPUS_LIVRES.json')).books.find(item=>item.id==='L05');
+      for(const source of frenchSources)if(!source||source.book!=='L05'||!Number.isInteger(source.page)||source.page<1||source.physicalPage!==source.page+2||source.physicalPage>book.physicalPages||source.pdfSha256!==book.sha256||!text(source.label)||!text(source.scope))throw Error('Source du nom français invalide : '+row.id);
+    }
     if(row.selectorEligible===false&&(!row.coveredBy||!text(row.selectorExclusionReason)))throw Error('Exclusion de sélecteur sans renvoi et raison : '+row.id);
     if(!Array.isArray(row.toolRef))throw Error('Preuves attendues : tableau');
     if(['automatise','assiste','rappel'].includes(row.status)&&!row.toolRef.length)throw Error('Couverture sans preuve : '+row.id);
@@ -50,13 +56,15 @@ export function buildSelectors(rows) {
 }
 export function buildSummary(rows,books) {
   const counts=list=>statuses.map(status=>list.filter(r=>r.status===status).length).join(' | ');
-  const lines=['# Audit des règles — Phase F0','', '**Audit partiel.** Les nombres décrivent les seules règles effectivement recensées. Un livre sans entrée reste à lire. Les pages citées ne certifient pas la lecture du reste du chapitre ni du livre. Voir `plans-gpt/RAPPORT_GPT_PHASE_F.md`.','', 'L’audit de couverture est statique : une référence moteur ne vaut pas recette à la table. Les domaines déjà inventoriés utilisent `coveredBy` sans recopier leur contenu. Chaque lacune jouable recensée possède un sélecteur ; aucune implantation n’est autorisée.','', '## Par livre','', '| Livre | Entrées | automatise | assiste | rappel | absent | hors-granularite |','| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |'];
+  const lines=['# Audit des règles — Phase F0','', '**Audit partiel.** Les nombres décrivent les seules règles effectivement recensées. Ils ne certifient pas à eux seuls la lecture d’un livre. L05 sert aux noms français seulement et ne crée pas de règle supplémentaire. Voir `plans-gpt/RAPPORT_GPT_PHASE_F.md`.','', 'L’audit de couverture est statique : une référence moteur ne vaut pas recette à la table. Les domaines déjà inventoriés utilisent `coveredBy` sans recopier leur contenu. Chaque lacune jouable recensée possède un sélecteur ; aucune implantation n’est autorisée.','', '## Par livre','', '| Livre | Entrées | automatise | assiste | rappel | absent | hors-granularite |','| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |'];
   for(const book of books){const list=rows.filter(r=>r.book===book.id);lines.push('| '+book.id+' — '+book.file+' | '+list.length+' | '+counts(list)+' |');}
+  const named=rows.filter(row=>row.nameFrSource),termed=rows.filter(row=>row.terminologyFr?.length);
+  if(named.length||termed.length)lines.push('','L05 — noms français seulement : '+named.length+' entrées avec nom sourcé et '+termed.length+' avec termes français rattachés. Les mécaniques restent celles de leur livre source.');
   lines.push('','## Par domaine','','| Domaine | Entrées | automatise | assiste | rappel | absent | hors-granularite |','| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |');
   const domains=[...new Set(rows.map(r=>r.domain))].sort();
   for(const domain of domains){const list=rows.filter(r=>r.domain===domain);lines.push('| '+domain+' | '+list.length+' | '+counts(list)+' |');}
   lines.push('','## Lacunes jouables, par domaine','');
-  for(const domain of domains){const list=rows.filter(r=>r.domain===domain&&['absent','rappel'].includes(r.status));if(!list.length)continue;lines.push('### '+domain,'');for(const row of list)lines.push('- **'+row.id+' — '+row.titleFr+'** ('+row.book+' p.'+row.page+', '+row.status+') : '+row.summary+' '+row.notes+(row.selectorEligible===false?' Déjà porté par l’inventaire référencé : '+row.selectorExclusionReason:''));lines.push('');}
+  for(const domain of domains){const list=rows.filter(r=>r.domain===domain&&['absent','rappel'].includes(r.status));if(!list.length)continue;lines.push('### '+domain,'');for(const row of list){const french=row.nameFrSource?[row.nameFrSource]:(row.terminologyFr||[]);lines.push('- **'+row.id+' — '+row.titleFr+'** ('+row.book+' p.'+row.page+', '+row.status+') : '+row.summary+' '+row.notes+(row.selectorEligible===false?' Déjà porté par l’inventaire référencé : '+row.selectorExclusionReason:'')+(french.length?' Nom/termes FR : '+french.map(source=>source.label+' (L05 p.'+source.page+')').join(', ')+'.':''));}lines.push('');}
   return lines.join('\n').trimEnd()+'\n';
 }
 const root=resolve(import.meta.dirname,'../..');

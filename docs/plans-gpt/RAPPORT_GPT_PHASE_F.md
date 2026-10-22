@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 et les 24 suppléments restent à traiter. Aucun achèvement des 26 livres n’est prétendu.
+État : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms. Les 24 suppléments restent à traiter. Aucun achèvement des 26 livres n’est prétendu.
 
 ## Travail local et sources
 
@@ -26,8 +26,8 @@ Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitr
 | L06 Création/carrières/compatibilité | FAIT, 49 entrées | 4f7ae81 | 4 052/4 052 ; 106,970 s |
 | L06 Magie générale p.230-239 | FAIT, 89 entrées | 8482611 | 4 052/4 052 ; 106,348 s |
 | L06 Équipement p.296-317 | FAIT, 129 entrées | f8879ee | 4 052/4 052 ; 105,924 s |
-| L06 Dernière passe : religion, MJ/voyage, procédures animales | FAIT, 23 entrées | commit du présent lot | 4 052/4 052 ; 108,503 s, F06-closure-final-full.log |
-| L05 noms FR | À faire | — | — |
+| L06 Dernière passe : religion, MJ/voyage, procédures animales | FAIT, 23 entrées | 0513a70 | 4 052/4 052 ; 108,503 s, F06-closure-final-full.log |
+| L05 noms FR | FAIT, noms seuls | commit du présent lot | 4 054/4 054 ; 110,085 s, L05-full.log |
 | L17, L11, L13, L14, L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
 
 Logs complets ignorés sous tmp/audit/ : F00-full.log, F06-tests-full.log, F06-combat-full.log, F06-usages-full.log, F06-health-full.log, F06-downtime-full.log, F06-talents-full.log, F06-creation-full.log, F06-magic-full.log, F06-gear-full.log. Les sept tests initiaux d’outillage et les deux nouveaux comportements ont été développés rouge puis vert.
@@ -36,7 +36,7 @@ Logs complets ignorés sous tmp/audit/ : F00-full.log, F06-tests-full.log, F06-c
 
 **1 141 entrées ; 819 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. Le dernier identifiant est F-L06-1141.
 
-Les noms FR restent des libellés de travail avant L05. Les propositions V4 de suppléments seront enregistrées dans v5Proposal ; les nouvelles entrées L19-L26 porteront addedOn:2026-10-21. Aucune proposition n’est implantée.
+L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 de suppléments seront enregistrées dans v5Proposal ; les nouvelles entrées L19-L26 porteront addedOn:2026-10-21. Aucune proposition n’est implantée.
 
 ## Portée de lecture L06
 
@@ -86,6 +86,14 @@ Recette réelle déjà exécutée : **26/26 commandes vertes**, Node et parcours
 
 ## Suite
 
-Rattacher les noms L05. Continuer les 24 suppléments dans l’ordre prescrit, un commit par livre après suite complète verte. Les sélecteurs F1 ne donnent aucune autorisation d’implantation F2. L’audit des 26 livres reste l’objectif de la reprise, sans arrêt à ce jalon L06.
+Continuer les 24 suppléments dans l’ordre prescrit après validation de L05, un commit par livre après suite complète verte. Les sélecteurs F1 ne donnent aucune autorisation d’implantation F2. L’audit des 26 livres reste l’objectif de la reprise, sans arrêt à ce jalon.
 
 Dernière cohérence des renvois : les neuf renvois hérités des premiers chapitres portent aussi une exclusion motivée de sélecteur ; aucun second choix pour C0/E0. Les statuts et identifiants restent conservés.
+
+## L05 — noms français seulement
+
+Livre de base FR.pdf, 355 pages ; SHA-256 `1ee2a2be032fe0a034b5670ac6ab5625ecc6804d25d7385a3f2614789a7d4f4a`. Folio +2 vérifié sur les pages consultées. Repérage au sommaire physique 4-6 ; recherche ciblée des intitulés de compétences, talents, États et Atouts sous tmp/audit/L05/. Le contrôle exact trouve **166 identités de talents**, et non le comptage provisoire annoncé pendant le travail ; elles rattachent **219 entrées** par nameFrSource. Les autres termes sont conservés dans terminologyFr, avec nom, folio, page physique, hash et restriction aux noms. Aucune entrée de règle L05 ajoutée : cela serait un doublon V4 contraire au brief.
+
+Comparaison structurelle à 0513a70 : tous les champs mécaniques, résumés, statuts, propositions et identifiants des 1 141 entrées sont inchangés. Exemples de divergences volontairement non importées : Ambidextre en deux acquisitions dans L05, effets de Baratiner, dégâts de Frappe blessante, modificateurs des Atouts. Le nom officiel peut rester identique alors que la règle change. Les noms Empêtré, En flammes et Exténué sont rattachés comme noms FR, sans renommer les clés moteur locales.
+
+Deux nouveaux tests, dans tests/audit-fr-names.test.js : rouge sur métadonnées FR non contrôlées et source absente de la synthèse, puis **11/11 contrôles d’audit verts**. Le validateur exige L05, son hash, le décalage exact et des noms/portées non vides ; la synthèse affiche les pages FR sans leur attribuer des règles. Total de nouveaux tests d’audit : onze ; aucun test hérité modifié. **100 entrées** portent aussi des termes français sourcés (certaines ont plusieurs termes). Suite complète : **4 054/4 054**, aucun échec, aucun test ignoré.
