@@ -13,7 +13,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | L03 — Archives of the Empire Volume 1.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L04 — Deft Steps Light Fingers.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L05 — Livre de base FR.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
-| L06 — Livre de base V5 EN v2.pdf | 900 | 140 | 86 | 179 | 494 | 1 |
+| L06 — Livre de base V5 EN v2.pdf | 989 | 170 | 106 | 202 | 509 | 2 |
 | L07 — Lustria EN.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L08 — Supplément Elfe - High elf Players Guide v2.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L09 — Supplément Elfe Noir - Temple of Spite v2.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -50,6 +50,8 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | Création et carrières | 43 | 0 | 0 | 0 | 43 | 0 |
 | Destin et Chance | 12 | 0 | 3 | 0 | 9 | 0 |
 | Entre-aventures et progression | 87 | 0 | 0 | 0 | 87 | 0 |
+| Magie générale | 46 | 14 | 16 | 0 | 15 | 1 |
+| Magie — incidents | 43 | 16 | 4 | 23 | 0 | 0 |
 | Maladies et poisons | 38 | 0 | 0 | 0 | 37 | 1 |
 | Psychologie | 15 | 0 | 0 | 15 | 0 | 0 |
 | Talents | 218 | 79 | 53 | 83 | 3 | 0 |
@@ -573,6 +575,50 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0624 — Étudier une cible** (L06 p.201, absent) : Perception +0, difficulté adaptée ; réussite : un Avantage unique lié à la cible durant l’aventure suivante ; répétable. Aucun gestionnaire d’entre-aventures, d’achat de progrès ou de ressource financière correspondant repéré dans js/core et js/ui.
 - **F-L06-0625 — S’entraîner hors carrière** (L06 p.201, absent) : Coût XP normal et paiement d’un tuteur : autant de sous que d’XP pour compétence de base ou caractéristique ; double pour compétence avancée. Aucun gestionnaire d’entre-aventures, d’achat de progrès ou de ressource financière correspondant repéré dans js/core et js/ui.
 - **F-L06-0626 — Apprendre un Talent hors carrière** (L06 p.201, absent) : Premier rang seulement, tuteur adéquat, coût XP normal et 4d10 pistoles supplémentaires. Aucun gestionnaire d’entre-aventures, d’achat de progrès ou de ressource financière correspondant repéré dans js/core et js/ui.
+
+### Magie générale
+
+- **F-L06-0908 — Durée volontairement réduite** (L06 p.235, absent) : Peut annoncer au lancement une durée plus courte ; une fois lancé, seule une dissipation interrompt le sort avant son terme. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0910 — Sort de contact refusé** (L06 p.235, absent) : Après incantation réussie, toucher une cible réticente requiert Bagarre ou Escamotage opposé à Esquive ou Mêlée ; un projectile utilise le jet de contact pour sa localisation. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0911 — Contact par objet enchanté** (L06 p.235, absent) : L’objet enchanté peut fournir son allonge et sa compétence de mêlée pour toucher ; ce Test ne cause pas de dégâts d’arme supplémentaires. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0913 — Voix gênée** (L06 p.235, absent) : Le lanceur doit parler ou chanter ; une voix gênée augmente la difficulté d’un degré. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0915 — Ligne de vue pour lancer** (L06 p.235, absent) : Sauf exception propre au sort, la cible doit être visible au lanceur. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0922 — Indices des Vents** (L06 p.236, absent) : La Seconde vue est permanente et permet d’exploiter les traces magiques pour Perception, Pistage ou d’autres compétences. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0923 — Seconde vue saturée** (L06 p.236, absent) : Dans un lieu saturé de Vents, Désavantage à Perception des phénomènes ordinaires. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0924 — Vent concentré** (L06 p.236, absent) : Un lieu concentrant le Vent utilisé donne l’Avantage aux Tests de Focalisation correspondants. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0932 — Mémorisation des sorts** (L06 p.237, absent) : La mémorisation dépense les PX prévus par le talent magique correspondant. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0933 — Lancer depuis un grimoire** (L06 p.237, absent) : Un sort non mémorisé doit appartenir à un domaine possédé et requiert les deux mains libres pour lire. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0936 — Puissance de la malepierre** (L06 p.237, absent) : La malepierre double les DR d’incantation et de Focalisation mais constitue une influence maligne. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0937 — Consommation de malepierre** (L06 p.237, absent) : Suit les DR fournis ; vingt DR d’énergie consomment un gramme de malepierre. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0938 — Dépendance skaven** (L06 p.237, absent) : Sans malepierre, les Tests d’incantation et de Focalisation skavens subissent −4 DR ; les prophètes gris ne subissent pas son influence maligne. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0944 — Aide à la dissipation** (L06 p.237, absent) : Des lanceurs du même domaine peuvent s’assister pour dissiper. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+- **F-L06-0946 — Plusieurs domaines des Arcanes** (L06 p.237, absent) : Un Elfe peut connaître BFM domaines ; huit sorts du domaine précédent sont requis avant d’en acheter un autre ; un domaine noir additionnel est permis à tout lanceur. Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.
+
+### Magie — incidents
+
+- **F-L06-0948 — Naissance mutante** (L06 p.238, rappel) : La prochaine créature née dans un rayon d’un mile est mutée. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0949 — Distraction** (L06 p.238, rappel) : En combat, reçoit Surpris ; hors combat, subit une brève incapacité de concentration. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application. Le moteur attribue Surpris sans condition de combat dans applyMiscastToParticipant ; la clause complète est donc conservée en rappel.
+- **F-L06-0951 — Attaches défaites** (L06 p.238, rappel) : Boucles et lacets s’ouvrent ; le MJ détermine les objets et armures qui glissent ou tombent. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0952 — Vêtements entravants** (L06 p.238, rappel) : Reçoit Enchevêtré ; sa source résiste avec une Force de 1d10 × 5. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application. Enchevêtré appliqué ; Force de source calculée dans le reçu mais non transmise à l’État par applyMiscastToParticipant.
+- **F-L06-0954 — Visions impies : résistance** (L06 p.238, rappel) : Calme +0 ; en cas d’échec, reçoit un second Aveuglé. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0955 — Lait tourné** (L06 p.238, rappel) : Le lait devient impropre dans un rayon de 1d100 yards. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0956 — Souffle glacial** (L06 p.238, rappel) : À BFM yards, Endurance +0 ou −1 DR aux Tests de CT, Agilité et Dextérité jusqu’à sortie de zone ; aura durant une minute. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0958 — Boisson infecte** (L06 p.238, rappel) : L’alcool dans un rayon de 1d100 yards devient impropre. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0959 — Horreur** (L06 p.238, rappel) : Psychologie −2 ; échec, un Brisé. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0963 — Murmures corrupteurs** (L06 p.238, rappel) : Calme +2 ; échec, un Point de Corruption. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0968 — Puanteur infernale** (L06 p.239, rappel) : Gagne le Trait Distrayant pendant 1d10 heures. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0970 — Projection : déplacement** (L06 p.239, rappel) : Est projeté de 1d10 yards dans une direction aléatoire. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0972 — Lévitation forcée** (L06 p.239, rappel) : Flotte à 1d10 yards pendant 1d10 minutes ; déplacements extérieurs possibles et retour à sa position ; chute à la fin. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0974 — Choc aethyrique : résistance** (L06 p.239, rappel) : Endurance +2 ; échec, reçoit Sonné. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0975 — Secousse du Chaos** (L06 p.239, rappel) : Les créatures à 1d100 yards testent Athlétisme +2 ou tombent À terre. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0977 — Membre gelé** (L06 p.239, rappel) : Un membre aléatoire devient inutilisable comme amputé pendant 1d10 heures. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0978 — Pas mortifères** (L06 p.239, rappel) : Durant 1d10 heures, les plantes piétinées meurent. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0981 — Nuée hostile** (L06 p.239, rappel) : Une nuée choisie par le MJ engage le lanceur ; survivante, elle se retire après 1d10 Rounds. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0983 — Récoltes flétries** (L06 p.239, rappel) : BFM champs dans BFM miles perdent leurs récoltes dans la nuit. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0985 — Chance bloquée** (L06 p.239, rappel) : Ne récupère plus de Chance avant le repos suivant, sauf s’il attaque ou trahit un autre personnage. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application. Le reçu porte fortuneRegenBlocked ; son stockage durable n’est pas inclus dans les propriétés copiées de restriction par applyMiscastToParticipant.
+- **F-L06-0986 — Voix fantomatiques** (L06 p.239, rappel) : Le lanceur et les personnages à BFM yards font Calme +2 ou gagnent un Point de Corruption. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0987 — Sort oublié** (L06 p.239, rappel) : Le sort tenté devient inaccessible s’il était mémorisé et doit être appris à nouveau. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
+- **F-L06-0988 — Contre-réaction : autres créatures** (L06 p.239, rappel) : Les autres créatures à BFM yards perdent 1d10 Blessures sans BE ni PA et reçoivent À terre, suivant l’arbitrage D-08. Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.
 
 ### Maladies et poisons
 

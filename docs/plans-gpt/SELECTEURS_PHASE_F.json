@@ -8539,5 +8539,499 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0908",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.235",
+    "question": "Implanter « Durée volontairement réduite » ? Peut annoncer au lancement une durée plus courte ; une fois lancé, seule une dissipation interrompt le sort avant son terme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0910",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.235",
+    "question": "Implanter « Sort de contact refusé » ? Après incantation réussie, toucher une cible réticente requiert Bagarre ou Escamotage opposé à Esquive ou Mêlée ; un projectile utilise le jet de contact pour sa localisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0911",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.235",
+    "question": "Implanter « Contact par objet enchanté » ? L’objet enchanté peut fournir son allonge et sa compétence de mêlée pour toucher ; ce Test ne cause pas de dégâts d’arme supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0913",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.235",
+    "question": "Implanter « Voix gênée » ? Le lanceur doit parler ou chanter ; une voix gênée augmente la difficulté d’un degré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0915",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.235",
+    "question": "Implanter « Ligne de vue pour lancer » ? Sauf exception propre au sort, la cible doit être visible au lanceur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0922",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.236",
+    "question": "Implanter « Indices des Vents » ? La Seconde vue est permanente et permet d’exploiter les traces magiques pour Perception, Pistage ou d’autres compétences.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0923",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.236",
+    "question": "Implanter « Seconde vue saturée » ? Dans un lieu saturé de Vents, Désavantage à Perception des phénomènes ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0924",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.236",
+    "question": "Implanter « Vent concentré » ? Un lieu concentrant le Vent utilisé donne l’Avantage aux Tests de Focalisation correspondants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0932",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.237",
+    "question": "Implanter « Mémorisation des sorts » ? La mémorisation dépense les PX prévus par le talent magique correspondant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0933",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.237",
+    "question": "Implanter « Lancer depuis un grimoire » ? Un sort non mémorisé doit appartenir à un domaine possédé et requiert les deux mains libres pour lire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0936",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.237",
+    "question": "Implanter « Puissance de la malepierre » ? La malepierre double les DR d’incantation et de Focalisation mais constitue une influence maligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0937",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.237",
+    "question": "Implanter « Consommation de malepierre » ? Suit les DR fournis ; vingt DR d’énergie consomment un gramme de malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0938",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.237",
+    "question": "Implanter « Dépendance skaven » ? Sans malepierre, les Tests d’incantation et de Focalisation skavens subissent −4 DR ; les prophètes gris ne subissent pas son influence maligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0944",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.237",
+    "question": "Implanter « Aide à la dissipation » ? Des lanceurs du même domaine peuvent s’assister pour dissiper.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0946",
+    "phase": "Magie générale",
+    "lot": "L06",
+    "source": "L06 p.237",
+    "question": "Implanter « Plusieurs domaines des Arcanes » ? Un Elfe peut connaître BFM domaines ; huit sorts du domaine précédent sont requis avant d’en acheter un autre ; un domaine noir additionnel est permis à tout lanceur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0948",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Naissance mutante » ? La prochaine créature née dans un rayon d’un mile est mutée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0949",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Distraction » ? En combat, reçoit Surpris ; hors combat, subit une brève incapacité de concentration.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0951",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Attaches défaites » ? Boucles et lacets s’ouvrent ; le MJ détermine les objets et armures qui glissent ou tombent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0952",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Vêtements entravants » ? Reçoit Enchevêtré ; sa source résiste avec une Force de 1d10 × 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0954",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Visions impies : résistance » ? Calme +0 ; en cas d’échec, reçoit un second Aveuglé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0955",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Lait tourné » ? Le lait devient impropre dans un rayon de 1d100 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0956",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Souffle glacial » ? À BFM yards, Endurance +0 ou −1 DR aux Tests de CT, Agilité et Dextérité jusqu’à sortie de zone ; aura durant une minute.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0958",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Boisson infecte » ? L’alcool dans un rayon de 1d100 yards devient impropre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0959",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Horreur » ? Psychologie −2 ; échec, un Brisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0963",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.238",
+    "question": "Implanter « Murmures corrupteurs » ? Calme +2 ; échec, un Point de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0968",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Puanteur infernale » ? Gagne le Trait Distrayant pendant 1d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0970",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Projection : déplacement » ? Est projeté de 1d10 yards dans une direction aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0972",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Lévitation forcée » ? Flotte à 1d10 yards pendant 1d10 minutes ; déplacements extérieurs possibles et retour à sa position ; chute à la fin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0974",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Choc aethyrique : résistance » ? Endurance +2 ; échec, reçoit Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0975",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Secousse du Chaos » ? Les créatures à 1d100 yards testent Athlétisme +2 ou tombent À terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0977",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Membre gelé » ? Un membre aléatoire devient inutilisable comme amputé pendant 1d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0978",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Pas mortifères » ? Durant 1d10 heures, les plantes piétinées meurent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0981",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Nuée hostile » ? Une nuée choisie par le MJ engage le lanceur ; survivante, elle se retire après 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0983",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Récoltes flétries » ? BFM champs dans BFM miles perdent leurs récoltes dans la nuit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0985",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Chance bloquée » ? Ne récupère plus de Chance avant le repos suivant, sauf s’il attaque ou trahit un autre personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0986",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Voix fantomatiques » ? Le lanceur et les personnages à BFM yards font Calme +2 ou gagnent un Point de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0987",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Sort oublié » ? Le sort tenté devient inaccessible s’il était mémorisé et doit être appris à nouveau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0988",
+    "phase": "Magie — incidents",
+    "lot": "L06",
+    "source": "L06 p.239",
+    "question": "Implanter « Contre-réaction : autres créatures » ? Les autres créatures à BFM yards perdent 1d10 Blessures sans BE ni PA et reçoivent À terre, suivant l’arbitrage D-08.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

@@ -21,7 +21,8 @@ Aucun changement de jeu, d’arbitrage, de catalogue public ou de version. Aucun
 | L06 Santé/États/Corruption p.170-189 | FAIT, 246 entrées | 8d79e38 |
 | L06 Entre-aventures p.190-201 | FAIT, 87 entrées | 54ed92d |
 | L06 Compétences/talents p.109-128 | FAIT, 225 entrées | 073dbf7 |
-| L06 Création, carrières, compatibilité p.6, 23-44, 364 | FAIT, 49 entrées ; 4 052/4 052 tests (106,970 s), F06-creation-full.log | commit du présent lot |
+| L06 Création, carrières, compatibilité p.6, 23-44, 364 | FAIT, 49 entrées ; 4 052/4 052 tests (106,970 s), F06-creation-full.log | 4f7ae81 |
+| L06 Magie générale p.230-239 | FAIT, 89 entrées ; 4 052/4 052 tests (106,348 s), F06-magic-full.log | commit du présent lot |
 | L06 autres chapitres | À faire | — |
 | L05 noms FR | À faire après L06 | — |
 | L17, L11, L13, L14, L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — |
@@ -69,3 +70,5 @@ Recette réelle déjà exécutée : **26/26 commandes vertes**, Node et parcours
 Terminer L06 : religion hors domaines déjà inventoriés, magie générale, procédures MJ/voyage et équipement. Puis L05 et les autres livres dans l’ordre du plan. Dernier identifiant : F-L06-0900. Les sélecteurs F1 n’autorisent aucune implantation en F0.
 
 Complément création/carrières : registre à 900 entrées et 657 sélecteurs. Repérage ciblé p.7-22 (introduction et fiction), p.26-35 (allocations d’espèce) et p.45-108 (profils de carrière, listes et conseils narratifs sans nouvelle mécanique autonome repérée). Lecture des procédures p.23-25, 36-44. Tableau p.38 vérifié visuellement. Appendices p.364-370 lus : tables critiques et États répètent les pages déjà inventoriées ; les seuils du bras sont identiques après comparaison, seuls certains renvois changent. Index p.371-376 et fiches p.377-379 : pas de mécanique nouvelle. P.364 ajoute conversion et progression individuelle ; aucune valeur de coût non vérifiée n’est inventée.
+
+Complément magie : registre à 989 entrées et 695 sélecteurs. Lecture p.230-239, contrôle visuel du tableau de surpuissance p.236 (cellules fusionnées). Incidents décomposés entre effets directement appliqués et Tests conditionnels en rappel. Aucun sort réinventorié. Les ingrédients sont hors-granularité par règle maison. Les restrictions fictives de contact, voix et visibilité ne sont pas déduites des champs génériques. Les commandes Store de Focalisation prennent en charge les aperçus pause/interruption par applyChannelling ; aucune attribution automatique du déclencheur n’est prétendue.

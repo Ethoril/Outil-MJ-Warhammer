@@ -15980,5 +15980,1651 @@
     "v5Proposal": null,
     "notes": "Option ou conversion de règles imprimée ; aucun parcours général de conversion/apprentissage repéré. Le prix individuel reste dans son barème source.",
     "domain": "Création et carrières"
+  },
+  {
+    "id": "F-L06-0901",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Casting Test",
+    "titleFr": "Test d’incantation",
+    "summary": "Teste Langue Magick à +0 ; le Test doit réussir et ses DR atteindre le NI du sort.",
+    "mechanic": "test",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0902",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Critical Casting",
+    "titleFr": "Incantation critique",
+    "summary": "Un double réussi d’un sort non mineur provoque un incident mineur et ouvre le choix d’un effet critique.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0903",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Critical Damage",
+    "titleFr": "Critique : dégâts",
+    "summary": "Le choix critique ajoute une Blessure critique à la localisation touchée ou au corps si aucune n’est déterminée.",
+    "mechanic": "damage",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0904",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Total Power",
+    "titleFr": "Critique : pouvoir total",
+    "summary": "Le sort est lancé ; ajoute les dizaines du jet aux DR disponibles pour la surpuissance.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0905",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Unstoppable Force",
+    "titleFr": "Critique : force irrésistible",
+    "summary": "Le choix critique empêche toute dissipation du sort.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0906",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Petty critical exception",
+    "titleFr": "Critique des sorts mineurs",
+    "summary": "Un critique de sort mineur ne provoque ni incantation critique ni incident mineur.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0907",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Fumbled Casting",
+    "titleFr": "Maladresse d’incantation",
+    "summary": "Un double échoué cause un incident mineur ; la réserve de Focalisation ne transforme pas cette maladresse.",
+    "mechanic": "table",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0908",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Shorter spell duration",
+    "titleFr": "Durée volontairement réduite",
+    "summary": "Peut annoncer au lancement une durée plus courte ; une fois lancé, seule une dissipation interrompt le sort avant son terme.",
+    "mechanic": "duration",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0909",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Magic Missile",
+    "titleFr": "Projectile magique",
+    "summary": "Inverse le jet d’incantation pour la localisation ; ajoute BFM aux dégâts imprimés, puis retire BE et PA.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-spell-contracts.js#magic-missile",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0910",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Touch Spell",
+    "titleFr": "Sort de contact refusé",
+    "summary": "Après incantation réussie, toucher une cible réticente requiert Bagarre ou Escamotage opposé à Esquive ou Mêlée ; un projectile utilise le jet de contact pour sa localisation.",
+    "mechanic": "test",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0911",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Enchanted staff touch",
+    "titleFr": "Contact par objet enchanté",
+    "summary": "L’objet enchanté peut fournir son allonge et sa compétence de mêlée pour toucher ; ce Test ne cause pas de dégâts d’arme supplémentaires.",
+    "mechanic": "test",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0912",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Ingredients",
+    "titleFr": "Ingrédients magiques",
+    "summary": "Le livre propose une atténuation d’incident par ingrédient consommé, propre à chaque sort ; la règle maison n’exige aucun ingrédient et n’applique pas cette atténuation.",
+    "mechanic": "resource",
+    "status": "hors-granularite",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Règle maison : aucun ingrédient magique ni atténuation liée. Aucune réintroduction.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0913",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Impaired voice",
+    "titleFr": "Voix gênée",
+    "summary": "Le lanceur doit parler ou chanter ; une voix gênée augmente la difficulté d’un degré.",
+    "mechanic": "modifier",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0914",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Spell bonus stacking",
+    "titleFr": "Cumul des sorts",
+    "summary": "Pour une même valeur, ne conserve que le meilleur bonus et le pire malus des sorts actifs.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-effects.js#stackable",
+      "js/core/v5-spell-contracts.js#spellEffects"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0915",
+    "book": "L06",
+    "page": 235,
+    "chapter": "VIII — Magie générale",
+    "title": "Spell line of sight",
+    "titleFr": "Ligne de vue pour lancer",
+    "summary": "Sauf exception propre au sort, la cible doit être visible au lanceur.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0916",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Channelling Action",
+    "titleFr": "Action de Focalisation",
+    "summary": "Choisit le Vent puis consacre son Action à un Test de Focalisation +0 ; les DR alimentent une réserve.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-channelling.js#previewChannelling",
+      "js/core/store.js#applyChannelling"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0917",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Reserve consumption",
+    "titleFr": "Consommer la réserve",
+    "summary": "Ajoute la réserve adaptée aux DR d’incantation ; toute tentative d’incantation consomme la réserve.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0918",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Channelling pause",
+    "titleFr": "Pause de Focalisation",
+    "summary": "Chaque Tour sans Focalisation exige Endurance +2 pour garder la réserve ; l’échec la dissipe.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-channelling.js#previewChannelling",
+      "js/core/store.js#applyChannelling"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0919",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Critical Channelling",
+    "titleFr": "Focalisation critique",
+    "summary": "Un double réussi ajoute BFM DR supplémentaires à la réserve.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-channelling.js#previewChannelling",
+      "js/core/store.js#applyChannelling"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0920",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Fumbled Channelling",
+    "titleFr": "Focalisation maladroite",
+    "summary": "Un double échoué retire 1d10 DR puis cause un incident mineur majoré de dix par DR perdu.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-channelling.js#previewChannelling",
+      "js/core/store.js#applyChannelling"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0921",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Channelling interruption",
+    "titleFr": "Focalisation interrompue",
+    "summary": "Blessures ou État pendant la Focalisation : Calme −2 ; échec, perte de 1d10 DR et incident mineur majoré de dix par DR perdu.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-channelling.js#previewChannelling",
+      "js/core/store.js#applyChannelling"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0922",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Second Sight clues",
+    "titleFr": "Indices des Vents",
+    "summary": "La Seconde vue est permanente et permet d’exploiter les traces magiques pour Perception, Pistage ou d’autres compétences.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0923",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Saturated Second Sight",
+    "titleFr": "Seconde vue saturée",
+    "summary": "Dans un lieu saturé de Vents, Désavantage à Perception des phénomènes ordinaires.",
+    "mechanic": "modifier",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0924",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Concentrated Wind",
+    "titleFr": "Vent concentré",
+    "summary": "Un lieu concentrant le Vent utilisé donne l’Avantage aux Tests de Focalisation correspondants.",
+    "mechanic": "modifier",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0925",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Overcast budget",
+    "titleFr": "Budget de surpuissance",
+    "summary": "Dépense les DR au-delà du NI, sans dépasser BI + BFM au total.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0926",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Overcast Damage",
+    "titleFr": "Surpuissance des dégâts",
+    "summary": "Les paliers de 1,2,3,5,8,13,18 DR donnent respectivement +1 à +7 Dégâts ; réservés aux projectiles magiques.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0927",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Overcast targets",
+    "titleFr": "Surpuissance des cibles",
+    "summary": "Les paliers 1/2/3 donnent une cible, 5/8/13 deux, 18 trois ; une portée Vous ne peut viser autrui.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0928",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Overcast Range",
+    "titleFr": "Surpuissance de portée",
+    "summary": "Portée multipliée par deux aux paliers 1/2/3, par trois à 5/8/13, par quatre à 18 ; Vous et Contact ne s’étendent pas.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0929",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Overcast AoE",
+    "titleFr": "Surpuissance de zone",
+    "summary": "Zone doublée aux paliers 3/5/8/13, triplée à 18 ; un sort sans zone n’en reçoit pas.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0930",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Overcast Duration",
+    "titleFr": "Surpuissance de durée",
+    "summary": "Durée doublée aux paliers 2/3/5, triplée à 8/13/18 ; Instantanée et Spéciale ne s’étendent pas.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0931",
+    "book": "L06",
+    "page": 236,
+    "chapter": "VIII — Magie générale",
+    "title": "Petty Overcast",
+    "titleFr": "Surpuissance des sorts mineurs",
+    "summary": "Les sorts mineurs ne peuvent recevoir de surpuissance.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0932",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Spell learning",
+    "titleFr": "Mémorisation des sorts",
+    "summary": "La mémorisation dépense les PX prévus par le talent magique correspondant.",
+    "mechanic": "resource",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0933",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Casting from a grimoire",
+    "titleFr": "Lancer depuis un grimoire",
+    "summary": "Un sort non mémorisé doit appartenir à un domaine possédé et requiert les deux mains libres pour lire.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0934",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Grimoire overcast",
+    "titleFr": "Surpuissance depuis un grimoire",
+    "summary": "Un sort de grimoire non mémorisé ne peut recevoir de surpuissance.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#previewCasting",
+      "js/core/store.js#applyCasting"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0935",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Malignant influence",
+    "titleFr": "Influence maligne",
+    "summary": "Sous influence corruptrice, remplace les incidents mineurs par des majeurs ; le lanceur ne constitue pas sa propre influence.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0936",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Warpstone power",
+    "titleFr": "Puissance de la malepierre",
+    "summary": "La malepierre double les DR d’incantation et de Focalisation mais constitue une influence maligne.",
+    "mechanic": "modifier",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0937",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Warpstone consumption",
+    "titleFr": "Consommation de malepierre",
+    "summary": "Suit les DR fournis ; vingt DR d’énergie consomment un gramme de malepierre.",
+    "mechanic": "resource",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0938",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Skaven warpstone dependency",
+    "titleFr": "Dépendance skaven",
+    "summary": "Sans malepierre, les Tests d’incantation et de Focalisation skavens subissent −4 DR ; les prophètes gris ne subissent pas son influence maligne.",
+    "mechanic": "modifier",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0939",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Armour repels magic",
+    "titleFr": "Armure et magie",
+    "summary": "Applique −1 DR par PA de la localisation la plus protégée aux Tests d’incantation et de Focalisation.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-channelling.js#calculateMagicArmorPenalty",
+      "js/core/v5-magic-casting.js#armorPenalty"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0940",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Armour exceptions",
+    "titleFr": "Exceptions d’armure magique",
+    "summary": "Chamon ignore le métal, Ghur le cuir ; PA de sorts, armure naturelle et Armure du Chaos ne repoussent pas les Vents dans leurs cas prévus.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-channelling.js#calculateMagicArmorPenalty",
+      "js/core/v5-magic-casting.js#armorPenalty"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0941",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Dispel Casting",
+    "titleFr": "Dissipation immédiate",
+    "summary": "Une fois par Round, oppose Magick au Test d’incantation pour un point ou une créature visible à portée de FM yards ; victoire annule le sort.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-dispel.js#previewDispelPersistent",
+      "js/core/store.js#applyDispelPersistent"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0942",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Dispel persistent spell",
+    "titleFr": "Dissipation persistante",
+    "summary": "Consacre une Action à un Test étendu Magick +0, jusqu’au NI de l’effet pour le dissiper.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-dispel.js#previewDispelPersistent",
+      "js/core/store.js#applyDispelPersistent"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0943",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Separate dispellers",
+    "titleFr": "Dissipateurs séparés",
+    "summary": "Les dissipateurs suivent des progressions distinctes contre le même sort.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-dispel.js#previewDispelPersistent",
+      "js/core/store.js#applyDispelPersistent"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0944",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Same Lore assistance",
+    "titleFr": "Aide à la dissipation",
+    "summary": "Des lanceurs du même domaine peuvent s’assister pour dissiper.",
+    "mechanic": "modifier",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0945",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Own spell dispel",
+    "titleFr": "Dissiper son propre sort",
+    "summary": "Ajoute 1 DR au Test de Magick visant son propre sort.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-dispel.js#previewDispelPersistent",
+      "js/core/store.js#applyDispelPersistent"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0946",
+    "book": "L06",
+    "page": 237,
+    "chapter": "VIII — Magie générale",
+    "title": "Multiple Arcane Lores",
+    "titleFr": "Plusieurs domaines des Arcanes",
+    "summary": "Un Elfe peut connaître BFM domaines ; huit sorts du domaine précédent sont requis avant d’en acheter un autre ; un domaine noir additionnel est permis à tout lanceur.",
+    "mechanic": "resource",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Recherche du déclencheur et de ses lecteurs dans js/core et js/ui ; les saisies génériques ne démontrent pas cette clause.",
+    "domain": "Magie générale"
+  },
+  {
+    "id": "F-L06-0947",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Cloyed Tongue",
+    "titleFr": "Langue entravée",
+    "summary": "−1 DR à tous les Tests de Langue pendant 1d10 Rounds.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0948",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Witchsign",
+    "titleFr": "Naissance mutante",
+    "summary": "La prochaine créature née dans un rayon d’un mile est mutée.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0949",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Driven to Distraction",
+    "titleFr": "Distraction",
+    "summary": "En combat, reçoit Surpris ; hors combat, subit une brève incapacité de concentration.",
+    "mechanic": "state",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application. Le moteur attribue Surpris sans condition de combat dans applyMiscastToParticipant ; la clause complète est donc conservée en rappel.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0950",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Intestinal Rebellion",
+    "titleFr": "Souillure",
+    "summary": "Reçoit Souillé.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0951",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Unfasten",
+    "titleFr": "Attaches défaites",
+    "summary": "Boucles et lacets s’ouvrent ; le MJ détermine les objets et armures qui glissent ou tombent.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0952",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Wayward Garb",
+    "titleFr": "Vêtements entravants",
+    "summary": "Reçoit Enchevêtré ; sa source résiste avec une Force de 1d10 × 5.",
+    "mechanic": "state",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application. Enchevêtré appliqué ; Force de source calculée dans le reçu mais non transmise à l’État par applyMiscastToParticipant.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0953",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Unholy Visions",
+    "titleFr": "Visions impies : État",
+    "summary": "Reçoit un État Aveuglé.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0954",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Unholy Visions resistance",
+    "titleFr": "Visions impies : résistance",
+    "summary": "Calme +0 ; en cas d’échec, reçoit un second Aveuglé.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0955",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Soured Milk",
+    "titleFr": "Lait tourné",
+    "summary": "Le lait devient impropre dans un rayon de 1d100 yards.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0956",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Freezing Breath",
+    "titleFr": "Souffle glacial",
+    "summary": "À BFM yards, Endurance +0 ou −1 DR aux Tests de CT, Agilité et Dextérité jusqu’à sortie de zone ; aura durant une minute.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0957",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Rupture",
+    "titleFr": "Saignement",
+    "summary": "Reçoit un État Hémorragique.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0958",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Curse of Temperance",
+    "titleFr": "Boisson infecte",
+    "summary": "L’alcool dans un rayon de 1d100 yards devient impropre.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0959",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "The Horror",
+    "titleFr": "Horreur",
+    "summary": "Psychologie −2 ; échec, un Brisé.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0960",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Darkling Sight",
+    "titleFr": "Vue assombrie",
+    "summary": "Perd Seconde vue et subit −2 DR à Focalisation pendant 1d10 heures.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0961",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Ululating Scream",
+    "titleFr": "Hurlement intérieur",
+    "summary": "Reçoit Assourdi durant 1d10 Rounds.",
+    "mechanic": "duration",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0962",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Regurgitation",
+    "titleFr": "Régurgitation",
+    "summary": "Reçoit Souillé et Sonné, ce dernier durant 1d10 Rounds.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0963",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Fell Whispers",
+    "titleFr": "Murmures corrupteurs",
+    "summary": "Calme +2 ; échec, un Point de Corruption.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0964",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Curse of Corruption",
+    "titleFr": "Malédiction corruptrice",
+    "summary": "Reçoit un Point de Corruption.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0965",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Multiplying Misfortune",
+    "titleFr": "Incidents multiples",
+    "summary": "Résout deux nouveaux incidents mineurs sans modificateurs, en relançant chacun des résultats 91 à 100.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0966",
+    "book": "L06",
+    "page": 238,
+    "chapter": "VIII — Magie générale",
+    "title": "Cascading Chaos",
+    "titleFr": "Incident en cascade",
+    "summary": "Résout un nouveau jet majeur, majoré de l’excédent éventuel au-delà de cent du jet mineur modifié.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0967",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Gibbering",
+    "titleFr": "Langage incompréhensible",
+    "summary": "Ne peut communiquer verbalement ni utiliser Langue durant 1d10 Rounds.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0968",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Hellish Stench",
+    "titleFr": "Puanteur infernale",
+    "summary": "Gagne le Trait Distrayant pendant 1d10 heures.",
+    "mechanic": "duration",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0969",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Ragdoll",
+    "titleFr": "Projection : dégâts",
+    "summary": "Subit 1d10 Dégâts réduits par BE, sans PA, puis reçoit À terre.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0970",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Ragdoll movement",
+    "titleFr": "Projection : déplacement",
+    "summary": "Est projeté de 1d10 yards dans une direction aléatoire.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0971",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Power Drain",
+    "titleFr": "Talent temporairement perdu",
+    "summary": "Le talent employé pour lancer devient inutilisable pendant 1d10 minutes.",
+    "mechanic": "duration",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0972",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Levitation",
+    "titleFr": "Lévitation forcée",
+    "summary": "Flotte à 1d10 yards pendant 1d10 minutes ; déplacements extérieurs possibles et retour à sa position ; chute à la fin.",
+    "mechanic": "duration",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0973",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Aethyric Shock wounds",
+    "titleFr": "Choc aethyrique : blessures",
+    "summary": "Perd 1d10 Blessures sans réduction par BE ou PA.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0974",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Aethyric Shock resistance",
+    "titleFr": "Choc aethyrique : résistance",
+    "summary": "Endurance +2 ; échec, reçoit Sonné.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0975",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Chaos Quake",
+    "titleFr": "Secousse du Chaos",
+    "summary": "Les créatures à 1d100 yards testent Athlétisme +2 ou tombent À terre.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0976",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Hexeyes",
+    "titleFr": "Regard maudit",
+    "summary": "Pendant 1d10 heures, un Aveuglé impossible à retirer et perte de Sens de la magie et Seconde vue.",
+    "mechanic": "duration",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0977",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Limb Frozen",
+    "titleFr": "Membre gelé",
+    "summary": "Un membre aléatoire devient inutilisable comme amputé pendant 1d10 heures.",
+    "mechanic": "duration",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0978",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Death Walker",
+    "titleFr": "Pas mortifères",
+    "summary": "Durant 1d10 heures, les plantes piétinées meurent.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0979",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Aethyric Repulsion",
+    "titleFr": "Répulsion aethyrique",
+    "summary": "−3 DR à l’incantation et Focalisation pendant 2d10 heures.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0980",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Magefire",
+    "titleFr": "Flammes magiques",
+    "summary": "Reçoit un État Enflammé.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0981",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Swarmed",
+    "titleFr": "Nuée hostile",
+    "summary": "Une nuée choisie par le MJ engage le lanceur ; survivante, elle se retire après 1d10 Rounds.",
+    "mechanic": "duration",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0982",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Chaotic Foresight",
+    "titleFr": "Chance corruptrice",
+    "summary": "Gagne une Chance pour la séance ; chaque dépense de Chance donne un Point de Corruption.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0983",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Blight",
+    "titleFr": "Récoltes flétries",
+    "summary": "BFM champs dans BFM miles perdent leurs récoltes dans la nuit.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0984",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Foul Enfeeblement",
+    "titleFr": "Affaiblissement corrupteur",
+    "summary": "Gagne un Point de Corruption, Fatigué et À terre.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0985",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Traitor Heart",
+    "titleFr": "Chance bloquée",
+    "summary": "Ne récupère plus de Chance avant le repos suivant, sauf s’il attaque ou trahit un autre personnage.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application. Le reçu porte fortuneRegenBlocked ; son stockage durable n’est pas inclus dans les propriétés copiées de restriction par applyMiscastToParticipant.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0986",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Ghostly Voices",
+    "titleFr": "Voix fantomatiques",
+    "summary": "Le lanceur et les personnages à BFM yards font Calme +2 ou gagnent un Point de Corruption.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0987",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Slipped from Memory",
+    "titleFr": "Sort oublié",
+    "summary": "Le sort tenté devient inaccessible s’il était mémorisé et doit être appris à nouveau.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0988",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Aethyric Feedback others",
+    "titleFr": "Contre-réaction : autres créatures",
+    "summary": "Les autres créatures à BFM yards perdent 1d10 Blessures sans BE ni PA et reçoivent À terre, suivant l’arbitrage D-08.",
+    "mechanic": "damage",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Résultat affiché par le reçu ; suivi fictif ou Test conditionnel et conséquence laissés au MJ. Ne pas assimiler le texte du reçu à une application.",
+    "domain": "Magie — incidents"
+  },
+  {
+    "id": "F-L06-0989",
+    "book": "L06",
+    "page": 239,
+    "chapter": "VIII — Magie générale",
+    "title": "Aethyric Feedback death",
+    "titleFr": "Contre-réaction : seul",
+    "summary": "Sans autre cible à portée, la tête du lanceur explose et il meurt.",
+    "mechanic": "damage",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-miscasts.js#resolveMiscast",
+      "js/core/store.js#applyMiscast"
+    ],
+    "v5Proposal": null,
+    "notes": "Chemin moteur et commande Store lus. Dés et contexte explicitement saisis ; aucune certification de parcours exhaustif à la table.",
+    "domain": "Magie — incidents"
   }
 ]
