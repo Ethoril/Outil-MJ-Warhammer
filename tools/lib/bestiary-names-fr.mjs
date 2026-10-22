@@ -89,5 +89,7 @@ export const NAMES_FR = Object.freeze({
   'E0-P-139': proposal('Blaireau'), 'E0-P-140': proposal('Corbeau'), 'E0-P-141': proposal('Renard'), 'E0-P-143': proposal('Chouette'), 'E0-P-144': proposal('Hermine'),
   'E0-P-145': proposal('Seigneur Adalbert Knopp-Inzel — Premier humain — Chevalier (et espion)'), 'E0-P-146': proposal('Frère Samhel — Prêtre de Morr humain'),
   'E0-P-148': proposal('Leonard — Écuyer humain'), 'E0-P-149': proposal('Ridrek Blackhelm — Artiste nain (et espion)'),
-  'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)')
+  'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)'),
+  // Tribes and Tribulations (L12)
+  'E0-P-438': proposal('Matthogg — Brute ogre')
 });

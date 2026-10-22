@@ -99,6 +99,17 @@
     "templates": 0,
     "pregenerated": 6
    }
+  },
+  {
+   "book": "L12",
+   "file": "L12.json",
+   "title": "Tribes and Tribulations",
+   "edition": "V4",
+   "counts": {
+    "profiles": 49,
+    "templates": 15,
+    "pregenerated": 0
+   }
   }
  ]
 }

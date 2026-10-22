@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { extractProfiles, corpusBooks } from './lib/bestiary-extract.mjs';
 import { assignInventoryIds } from './lib/bestiary-ids.mjs';
 import { buildRecord } from './lib/bestiary-record.mjs';
-import { TEMPLATE_IDS } from './lib/bestiary-overrides.mjs';
+import { TEMPLATE_IDS, NAME_FIXES } from './lib/bestiary-overrides.mjs';
 import { MANUAL_BLOCKS } from './lib/bestiary-manual.mjs';
 import { KEYWORDS_MANUAL } from './lib/bestiary-keywords-manual.mjs';
 import { parsePregenerated } from './lib/bestiary-pregen.mjs';
@@ -65,6 +65,7 @@ function applyManualKeywords(record) {
   if (all.length) record.keywords = all; else delete record.keywords;
 }
 function applyFrenchName(record) {
+  if (NAME_FIXES[record.id]) record.name = NAME_FIXES[record.id];
   applyManualKeywords(record);
   const found = NAMES_FR[record.id];
   if (found) { record.nameFr = found.nameFr; record.nameFrSource = found.source; }

@@ -11,9 +11,9 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | K1 référentiel de mots-clés (hiérarchie, alias, garde-fou) | FAIT | 8cea7d7 |
 | K2 ajout par le MJ (store : commande annulable, refus des doublons ; interface : boîte d'ajout) | FAIT | caractérisation b8f3f59, store 4176c31, interface 0e8e350 |
 | K3 mots-clés portés (profils, participants, PJ, import JSON, sélecteur) | FAIT | 0e8e350 |
-| K4 spécialisations à cible (Haine, Sans peur, Haine-Trait, Dévotion de la Guerrière, migration) | EN COURS (caractérisation 7ebf59e) | |
-| K5 effets « contre les X » (natures, contrats, sources de Psychologie) | À FAIRE | |
-| D1 à D24 profils de bestiaire (modèle, import livre par livre) | EN COURS : D1 à D10 faits (L06, L11, L01, L02, L03, L04, L07, L09, L10) ; prochain : D11 = L12 Tribes and Tribulations | voir `git log` |
+| K4 spécialisations à cible (Haine, Sans peur, Haine-Trait, Dévotion de la Guerrière, migration) | FAIT | 59fdf09 |
+| K5 effets « contre les X » (natures, contrats, sources de Psychologie) | FAIT | 6969097 |
+| D1 à D24 profils de bestiaire (modèle, import livre par livre) | EN COURS : D1 à D11 faits (L06, L11, L01, L02, L03, L04, L07, L09, L10, L12) ; prochain : D12 = L13 Up in Arms | voir `git log` |
 | B1 à B3 bibliothèque et raccordements | À FAIRE | |
 | T1 à T12, F1-F2, S1, R1 | À FAIRE | |
 

@@ -57,5 +57,14 @@ export const CELL_OVERRIDES = Object.freeze({
  * des gabarits. Le genre de la fiche est corrigé, le genre de l'inventaire est conservé dans `inventoryKind` (voir E-D16).
  */
 export const TEMPLATE_IDS = Object.freeze(new Set([
-  'E0-P-326', 'E0-P-327', 'E0-P-328', 'E0-P-329', 'E0-P-330', 'E0-P-331', 'E0-P-332', 'E0-P-333', 'E0-P-334', 'E0-P-335', 'E0-P-336', 'E0-P-337', 'E0-P-338', 'E0-P-339', 'E0-P-340'
+  'E0-P-326', 'E0-P-327', 'E0-P-328', 'E0-P-329', 'E0-P-330', 'E0-P-331', 'E0-P-332', 'E0-P-333', 'E0-P-334', 'E0-P-335', 'E0-P-336', 'E0-P-337', 'E0-P-338', 'E0-P-339', 'E0-P-340',
+  // Tribes and Tribulations (L12) : la Mégère troll des rivières (p. 89) est une variante en modificateurs, comme le Troll massif (E-D18)
+  'E0-P-449'
 ]));
+
+/**
+ * Noms que l'inventaire E0 a lus de travers (phrase du texte d'ambiance prise pour un titre) : le titre imprimé du bloc est rétabli (E-D18).
+ */
+export const NAME_FIXES = Object.freeze({
+  'E0-P-438': 'Matthogg — Ogre Bruiser'
+});
