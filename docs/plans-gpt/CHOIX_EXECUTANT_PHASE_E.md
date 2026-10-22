@@ -1,0 +1,17 @@
+# Choix de l'exécutant, phase E (Claude Pro)
+
+Format : id, source, question, choix, raison, alternative. Relecture du MJ en sélecteurs groupés.
+
+## Mots-clés de créature (demande du MJ du 22/10)
+
+- **E-K01** — Nom du module. Question : `js/core/keywords.js` existe (mots-clés d'armes). Choix : `js/core/creature-keywords.js` et `js/data/creature-keywords.js`, vocabulaire « mots-clés de créature ». Raison : éviter toute confusion avec les qualités d'armes. Alternative : renommer l'existant (rejeté, code partagé).
+- **E-K02** — Trolls. Source : L12 p.15 (« les Trolls ne sont pas apparentés aux Orques et Gobelins »). Choix : `troll` est un enfant de `monstre`, **pas** de `peaux-vertes` (une Haine des Peaux-vertes ne s'applique donc pas aux trolls). Alternative : Troll enfant de Peaux-vertes (rejeté : contredit le livre).
+- **E-K03** — Squigs. Choix : parents `peaux-vertes` et `bete`. Raison : bêtes des Peaux-vertes, soumises à leur Haine ; le MJ corrige au cas par cas. Alternative : `bete` seul.
+- **E-K04** — Fantômes. Choix : `fantome` a pour parents `mort-vivant` et `etheree` (les fantômes portent le Trait Éthéré). Alternative : un seul parent.
+- **E-K05** — Pluriel et variantes. Choix : un mot de plus de trois lettres finissant par « s » (sauf « ss ») perd son « s » à la comparaison ; casse, accents, tirets, apostrophes ignorés ; les pluriels irréguliers (elves, dwarves, chevaux) sont des alias explicites. Raison : règle simple et prévisible, la même pour le terme saisi et le référentiel (« Chaos » reste comparable à lui-même).
+- **E-K06** — Quasi-doublons. Choix : distance d'édition ≤ 2 pour un libellé d'au moins 7 lettres, ≤ 1 de 4 à 6 lettres, égalité exacte sous 4 lettres ; comparaison avec tous les noms et alias. Raison : « Zombi » est refusé au profit de « Zombie », « Orc » ne bloque rien d'inutile. Alternative : seuils relatifs (rejeté, moins lisibles pour le MJ).
+- **E-K07** — Correspondance. Choix : **à sens unique** (la cible porte le mot-clé visé ou un descendant) ; un effet visant « Orque » ne touche pas un Gobelin, un effet visant « Peaux-vertes » touche les deux. Raison : demande du MJ.
+- **E-K08** — Termes relationnels (Étranger, Sigmarite). Choix : présents dans la base pour que Préjugé et Animosité ne soient jamais en texte libre, mais jamais déduits d'une espèce : seul le MJ les assigne à une créature. Alternative : les exclure (rejeté : « Préjugé (Étrangers) » est très fréquent dans les livres).
+- **E-K09** — Peuples humains. Choix : Norse, Kislévite, Bretonnien, Arabyen sont des enfants de `humain` ; les provinces de l'Empire ne sont pas des mots-clés de base (ajout possible par le MJ). Alternative : tout lister (rejeté : le référentiel se veut compact).
+- **E-K10** — « Vivant ». Choix : terme présent (cible d'effets « contre les vivants ») mais **dérivé** : jamais écrit sur un profil, déduit de l'absence de Mort-vivant, Démon, Artificiel, Éthéré (même règle que `hasLivingMagicNature`). Raison : un seul calcul de la nature vivante.
+- **E-K11** — Précache du service worker. Constat : `tests/sw.test.js` exige que tout fichier `js/**/*.js|json` figure dans `ASSETS_TO_CACHE` de `sw.js`. Choix : j'ajoute **seulement les chemins** des nouveaux fichiers à cette liste ; `CACHE_NAME` (la version) reste intacte et revient à l'orchestrateur à la publication. Raison : sans cela la suite échoue à chaque nouveau module. Alternative : laisser le test rouge (rejeté).
