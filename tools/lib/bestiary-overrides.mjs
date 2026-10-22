@@ -68,3 +68,17 @@ export const TEMPLATE_IDS = Object.freeze(new Set([
 export const NAME_FIXES = Object.freeze({
   'E0-P-438': 'Matthogg — Ogre Bruiser'
 });
+
+/**
+ * Corps de bloc relus sur la page quand la mise en page (interligne double) empêche de suivre les lignes d'un bloc. Clé : « livre:page:rang ».
+ * Le texte est celui du livre, recopié ligne à ligne.
+ */
+export const BODY_OVERRIDES = Object.freeze({
+  // Lords of Stone and Steel (L16) p. 28 : Zylra Kraggsdottir.
+  'L16:28:0': [
+    'Traits: Armour (Leather Apron) 1 (5), Ranged (Blunderbuss) (12) +8 (Blast 4, Dangerous, Reload 2), Weapon (Dwarf Warhammer) +7 (Pummel)',
+    'Skills: Charm 48, Climb 40, Consume Alcohol 58, Cool 48, Drive 41, Dodge 41, Entertain (Storytelling) 43, Gamble 51, Gossip 53, Haggle 48, Language (Khazalid) 46, Melee (Basic) 44, Ranged (Blackpowder) 42, Trade (Brewer) 45',
+    'Talents: Gregarious, Magic Resistance, Night Vision, Read/Write, Strong-minded, Sturdy',
+    'Trappings: Blunderbuss with powder and ammunition for 10 shots, Cloak, Clothing, Dagger, Hammer, Hat, Leather Apron, Pouch'
+  ]
+});

@@ -132,6 +132,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L16",
+   "file": "L16.json",
+   "title": "Lords of Stone and Steel",
+   "edition": "V4",
+   "counts": {
+    "profiles": 23,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

@@ -14,6 +14,10 @@ const DASH = /^[-–—−�]+$/;
 const NEGATIVE = /^[\-−–—�]\d/;
 const SECTION_START = /^(Traits|Attack Traits|Skills|Talents|Trappings|Spells|Mutations|Optional|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special)\b/;
 const BARE_LABEL = /^(Attacks|Armour|Skills|Traits|Optional Traits|Talents|Trappings|Spells)$/;
+/** Lecture élargie (étiquettes décalées, interligne double, « Options: ») : réservée aux livres importés depuis L16, pour ne pas bouger les livres déjà relus. */
+let lenient = false;
+export const setLenient = value => { lenient = Boolean(value); };
+
 export const STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'W']);
 
 export const clean = text => text.replace(/[\t ]+/g, ' ').replace(/\s+([,.;:)])/g, '$1').trim();
@@ -109,7 +113,7 @@ export function pageBlocks(pageText) {
     const neighbour = heads.filter(other => other !== head && other.start > head.start + 20).sort((x, y) => x.start - y.start)[0];
     let right = neighbour ? Math.max(head.end + 1, neighbour.start - 4) : Infinity;
     if (gutter && head.start < gutter - 5) right = Math.min(right, gutter);
-    const left = Math.max(gutter && head.start > gutter ? gutter + 1 : 0, head.start - 3);
+    const left = Math.max(gutter && head.start > gutter ? gutter + 1 : 0, head.start - (lenient ? 6 : 3));
     const windowOf = line => (line || '').slice(left, right === Infinity ? undefined : right);
     const rightLimit = right === Infinity ? 1e9 : right;
     // Titre : texte avant l'en-tête sur la même ligne, sinon lignes juste au-dessus (majuscules, ou intitulé entre parenthèses).
@@ -167,7 +171,12 @@ export function pageBlocks(pageText) {
     const rawBody = [];
     let blank = 0;
     for (let k = rowAt + 1; k < lines.length; k += 1) {
-      const text = clean(stripBleed(windowOf(lines[k])));
+      let text = clean(stripBleed(windowOf(lines[k])));
+      // Une étiquette « Traits: » peut commencer quelques colonnes avant l'en-tête (L16 p. 30, 45) : fenêtre élargie à gauche pour elle seule.
+      if (lenient && !SECTION_START.test(text)) {
+        const wider = clean((lines[k] || '').slice(Math.max(gutter && head.start > gutter ? gutter + 1 : 0, left - 8), right === Infinity ? undefined : right)).replace(/^\S*\s+(?=(?:Attack Traits|Optional Traits|Traits|Skills|Talents|Trappings):)/, '');
+        if (/^(?:Attack Traits|Optional Traits|Traits|Skills|Talents|Trappings):/.test(wider)) text = wider;
+      }
       if (heads.some(other => other !== head && other.line === k && other.start < rightLimit && other.end > left)) break;
       // Bloc au format V5 (étiquettes seules sur leur ligne, lignes souvent doublées) : les blancs ne séparent pas le bloc du texte voisin ;
       // il se termine sur un titre en majuscules, trois blancs d'affilée ou le bloc suivant ; les marques de blanc ('') servent à couper
@@ -176,7 +185,9 @@ export function pageBlocks(pageText) {
       if (!text) { blank += 1; if (blank > (v5Block ? 3 : 2)) break; if (v5Block && body.length && body[body.length - 1] !== '') { body.push(''); rawBody.push(''); } continue; }
       if (v5Block && isTitleText(text) && !SECTION_START.test(text)) break;
       // Format V4 : après un blanc, seule une étiquette de section (ou le contenu d'une étiquette seule sur sa ligne) prolonge le bloc.
-      if (!v5Block && blank && !SECTION_START.test(text) && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
+      // Mise en page à interligne double (L16 p. 28) : un seul blanc, suivi d'une suite en minuscule ou entre parenthèses d'une liste commencée, prolonge le bloc.
+      const spaced = lenient && blank === 1 && /^[a-zà-ÿ(]/.test(text) && body.some(line => /^(?:Attack Traits|Optional Traits|Traits|Skills|Talents|Trappings):/.test(line)) && body.length > 0 && !/[.]$/.test(body[body.length - 1] || '');
+      if (!v5Block && blank && !SECTION_START.test(text) && !spaced && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
       // Titre d'un bloc suivant (dans la même fenêtre) : fin du corps.
       if (isTitleText(text) && lines.slice(k + 1, k + 4).some((_, d) => heads.some(other => other.line === k + 1 + d && other.start >= left - 8 && other.start < rightLimit))) break;
       blank = 0;
@@ -195,8 +206,8 @@ export function pageBlocks(pageText) {
 }
 
 // V4 : « Traits: … Skills: … » (étiquette suivie de deux-points, n'importe où dans le texte). V5 : étiquette seule en début de ligne.
-const V4_LABELS = ['Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents', 'Trappings', 'Spells', 'Mutations', 'Optional', 'Petty Magic', 'Arcane Magic'];
-const V4_LABEL_RE = new RegExp(`(?:^|\\s)(${V4_LABELS.join('|')}):`, 'g');
+const V4_LABELS_BASE = ['Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents', 'Trappings', 'Spells', 'Mutations', 'Optional', 'Petty Magic', 'Arcane Magic'];
+const labelRe = wide => new RegExp(`(?:^|\\s)(${(wide ? [...V4_LABELS_BASE, 'Options'] : V4_LABELS_BASE).join('|')}):`, 'g');
 const V5_LABEL_RE = /^(Attacks|Armour|Skills|Traits|Optional Traits|Talents|Trappings|Spells)(?=\s|$)/;
 
 /** Sections étiquetées du corps, sous forme { étiquette: texte } ; `lead` : texte avant la première étiquette. */
@@ -205,7 +216,10 @@ export function splitSections(bodyLines) {
   const joined = clean(lines.join(' '));
   const sections = {};
   const put = (label, text) => { sections[label] = sections[label] ? `${sections[label]} ${text}` : text; };
-  const startsV5 = lines.some(line => line && V5_LABEL_RE.test(line) && !/:/.test(line.slice(0, 12)));
+  // Un bloc V5 commence par une étiquette seule ; une ligne « Armour of … » du texte voisin, plus bas, ne le rend pas V5 (L16 p. 7).
+  const firstLine = lines.find(line => line) || '';
+  const startsV5 = lenient ? V5_LABEL_RE.test(firstLine) && !/:/.test(firstLine.slice(0, 12)) : lines.some(line => line && V5_LABEL_RE.test(line) && !/:/.test(line.slice(0, 12)));
+  const V4_LABEL_RE = labelRe(lenient);
   if (!startsV5 && [...joined.matchAll(V4_LABEL_RE)].length) {
     const marks = [...joined.matchAll(V4_LABEL_RE)].map(found => ({ label: found[1], start: found.index + found[0].length, at: found.index }));
     marks.forEach((mark, index) => put(mark.label, clean(joined.slice(mark.start, index + 1 < marks.length ? marks[index + 1].at : joined.length))));

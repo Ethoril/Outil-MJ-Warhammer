@@ -909,7 +909,7 @@
    },
    "attacks": [
     {
-     "name": "Pistol) (20",
+     "name": "Pistol",
      "damage": 9,
      "trait": "Ranged",
      "ranged": true
@@ -1179,7 +1179,7 @@
    },
    "attacks": [
     {
-     "name": "Repeater Pistol) (10",
+     "name": "Repeater Pistol",
      "damage": 8,
      "trait": "Ranged",
      "ranged": true

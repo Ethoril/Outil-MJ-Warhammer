@@ -28,6 +28,11 @@ export function readTraitItem(text) {
     if (natural[5]) trait.printed = Number(natural[5]);
     return trait;
   }
+  // « Ranged (Dwarf Crossbow) (80) +10 (Damaging, Impale, Reload 1) » : portée imprimée avant les dégâts, qualités entre parenthèses.
+  const ranged = /^(Ranged|Weapon)\s*\(([^()]*)\)\s*\((\d+)\)\s*([+-]\d+)\s*(?:\([^()]*\))?$/i.exec(item);
+  if (ranged) return { name: ranged[1].replace(/^./, letter => letter.toUpperCase()), param: clean(ranged[2]), rating: ranged[4], printed: Number(ranged[3]) };
+  const worn = /^(Armour|Armor)\s*\(([^()]*)\)\s*(\d+)\s*\((\d+)\)$/i.exec(item);
+  if (worn) return { name: 'Armour', param: clean(worn[2]), rating: worn[3], printed: Number(worn[4]) };
   const grouped = /^(Weapon|Ranged|Armour|Armor)\s*\((.+)\)$/.exec(item);
   const found = RATING.exec(item);
   if (!found) return { name: item, raw: item };

@@ -28,6 +28,8 @@ export const KEYWORDS_MANUAL = Object.freeze({
   'E0-P-370': ['fantome'], 'E0-P-371': ['squelette'], 'E0-P-372': ['dragon', 'zombie'], 'E0-P-373': ['goule'], 'E0-P-374': ['goule'], 'E0-P-375': ['mort-vivant'],
   // Tribes and Tribulations (L12) : Matthogg est un Ogre, Gorfang un Orque ; Gnoblars et Hobgobelins sans mot-clé du référentiel (E-D18)
   'E0-P-438': ['ogre'], 'E0-P-455': ['orque'],
+  // Lords of Stone and Steel (L16) : « Daemon Slayer » est une carrière, pas un Démon ; « Outlaw » aussi ; Hagdar est un dragon, Hesh et Blistrox des Skavens (E-D21)
+  'E0-P-503': ['-demon'], 'E0-P-504': ['-demon'], 'E0-P-505': ['-hors-la-loi'], 'E0-P-508': ['dragon'], 'E0-P-510': ['skaven'], 'E0-P-514': ['skaven'],
   // Sea Wardens of Cothique (L14) : les Cothiqui sont des Hauts elfes ; le Kraken est un monstre marin ; Spites et Phénix sans mot-clé du référentiel (E-D20)
   'E0-P-472': ['haut-elfe'], 'E0-P-475': ['haut-elfe'], 'E0-P-476': ['haut-elfe'], 'E0-P-477': ['haut-elfe'], 'E0-P-479': ['haut-elfe'],
   'E0-P-480': ['haut-elfe'], 'E0-P-481': ['haut-elfe'], 'E0-P-484': ['haut-elfe'], 'E0-P-488': ['monstre-marin'],

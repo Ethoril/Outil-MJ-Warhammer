@@ -1,0 +1,4082 @@
+{
+ "schemaVersion": 1,
+ "book": "L16",
+ "title": "Lords of Stone and Steel",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L16",
+  "sha256": "40fee086fd4e09899ea937358b93bdd5e86da35c0bfe3e3e46ab1f73248aa748"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-492",
+   "book": "L16",
+   "page": 7,
+   "physicalPage": 7,
+   "kind": "profile",
+   "blockKey": "L16:7:0",
+   "name": "Thorgrim Grudgebearer — Dwarf — Karak Lord",
+   "nameFr": "Thorgrim Grudgebearer — Nain — Seigneur de Karak",
+   "stats": {
+    "M": 3,
+    "CC": 82,
+    "CT": 35,
+    "F": 65,
+    "E": 75,
+    "I": 26,
+    "Ag": 30,
+    "Dex": 48,
+    "Int": 65,
+    "FM": 85,
+    "Soc": 45
+   },
+   "wounds": 28,
+   "armour": {
+    "ap": 7,
+    "printedTotal": 18
+   },
+   "attacks": [
+    {
+     "name": "Axe of Grimnir",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 50
+    },
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 63
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 60
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 88
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 115
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 90
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 85
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 85
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 55
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 36
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 70
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 85
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 80
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 95
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 70
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 70
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 85
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 107
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 31
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 55
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 85
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ancestral Grudge"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Bookish",
+     "rank": 3
+    },
+    {
+     "name": "Commanding Presence",
+     "rank": 4
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Long Memory"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Public Speaker",
+     "rank": 4
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Savant (Law)",
+     "rank": 6
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tireless"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 150
+    }
+   ],
+   "trappings": [
+    "Armour of Skaldour",
+    "Axe of Grimnir",
+    "Clothing",
+    "Dragon Crown of Karaz",
+    "Great Book of Grudges",
+    "Jewellery worth 1",
+    "the Ruling Rune",
+    "Intimidate"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-493",
+   "book": "L16",
+   "page": 11,
+   "physicalPage": 11,
+   "kind": "profile",
+   "blockKey": "L16:11:0",
+   "name": "Kazador Thunderhorn — Dwarf Karak Lord",
+   "nameFr": "Kazador Thunderhorn — Seigneur de Karak nain",
+   "stats": {
+    "M": 3,
+    "CC": 75,
+    "CT": 74,
+    "F": 75,
+    "E": 67,
+    "I": 40,
+    "Ag": 30,
+    "Dex": 65,
+    "Int": 55,
+    "FM": 75,
+    "Soc": 27
+   },
+   "wounds": 32,
+   "armour": {
+    "ap": 6,
+    "printedTotal": 12
+   },
+   "attacks": [
+    {
+     "name": "Dwarf Crossbow",
+     "damage": 10,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Hammer of Azul",
+     "damage": 14,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 55
+    },
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 37
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 85
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 100
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 92
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 95
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 92
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 80
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 75
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 42
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 100
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 47
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 70
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 75
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 70
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Orcs and Goblins)",
+     "nameFr": "Savoir (Orcs and Goblins)",
+     "frUnverified": true,
+     "value": 70
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 100
+    },
+    {
+     "name": "Melee (Two- handed)",
+     "nameFr": "Corps à corps (Two- handed)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Play (Horn)",
+     "nameFr": "Musicien (Cor)",
+     "value": 85
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 75
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 94
+    },
+    {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 75
+    },
+    {
+     "name": "Secret Signs (Hunter)",
+     "nameFr": "Signes secrets (Chasseur)",
+     "value": 75
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 85
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 50
+    },
+    {
+     "name": "Trade (Mason)",
+     "nameFr": "Métier (Maçon)",
+     "value": 75
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Ancestral Grudge (Orcs)"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Fast Shot"
+    },
+    {
+     "name": "Hatred (Orcs and Goblins)"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Hunter's Eye"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Long Memory"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/ Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Strider (Rocky)"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tireless"
+    },
+    {
+     "name": "Trapper"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 80
+    }
+   ],
+   "trappings": [
+    "Armour of Kings",
+    "Clothing",
+    "Dagger",
+    "Dwarf Crossbow and 10 Bolts",
+    "Hammer of Azul",
+    "Jewellery worth 1000 GC"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-494",
+   "book": "L16",
+   "page": 13,
+   "physicalPage": 13,
+   "kind": "profile",
+   "blockKey": "L16:13:0",
+   "name": "Ungrim Ironfist — Dwarf Karak Lord",
+   "nameFr": "Ungrim Ironfist — Seigneur de Karak nain",
+   "stats": {
+    "M": 3,
+    "CC": 97,
+    "CT": 35,
+    "F": 85,
+    "E": 90,
+    "I": 46,
+    "Ag": 45,
+    "Dex": 48,
+    "Int": 55,
+    "FM": 100,
+    "Soc": 35
+   },
+   "wounds": 47,
+   "armour": {
+    "ap": 7,
+    "printedTotal": 16
+   },
+   "attacks": [
+    {
+     "name": "Axe of Dargo",
+     "damage": 15,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Dwarf Axe",
+     "damage": 13,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 58
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 110
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 120
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 115
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 75
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 65
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 55
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 75
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 105
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 61
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 75
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 70
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 55
+    },
+    {
+     "name": "Lore (Dragons)",
+     "nameFr": "Savoir (Dragons)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Giants)",
+     "nameFr": "Savoir (Géants)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 75
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Trolls)",
+     "nameFr": "Savoir (Trolls)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 117
+    },
+    {
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 117
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 61
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Ancestral Grudge (Orcs)"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Combat Master"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Fearless (Everything)"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Implacable"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Iron Jaw"
+    },
+    {
+     "name": "Long Memory"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Robust"
+    },
+    {
+     "name": "Slayer"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strong Back Strong-minded"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tireless"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 50
+    }
+   ],
+   "trappings": [
+    "Axe of Dargo",
+    "Clothing",
+    "Dagger",
+    "Dragon Cloak of Fyrskar",
+    "Jewellery worth 1000 GC",
+    "Slayer Crown"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-495",
+   "book": "L16",
+   "page": 28,
+   "physicalPage": 28,
+   "kind": "profile",
+   "blockKey": "L16:28:0",
+   "name": "Zylra Kraggsdottir — Dwarf Townswoman",
+   "nameFr": "Zylra Kraggsdottir — Citadine naine",
+   "stats": {
+    "M": 3,
+    "CC": 41,
+    "CT": 32,
+    "F": 30,
+    "E": 43,
+    "I": 33,
+    "Ag": 31,
+    "Dex": 42,
+    "Int": 41,
+    "FM": 45,
+    "Soc": 38
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5,
+    "detail": "Leather Apron"
+   },
+   "attacks": [
+    {
+     "name": "Blunderbuss",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dwarf Warhammer",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 48
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 48
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 41
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 43
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 51
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 53
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 48
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 44
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 42
+    },
+    {
+     "name": "Trade (Brewer)",
+     "nameFr": "Métier (Brasseur)",
+     "value": 45
+    }
+   ],
+   "talents": [
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Blunderbuss with powder and ammunition for 10 shots",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Hammer",
+    "Hat",
+    "Leather Apron",
+    "Pouch"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-496",
+   "book": "L16",
+   "page": 30,
+   "physicalPage": 30,
+   "kind": "profile",
+   "blockKey": "L16:30:0",
+   "name": "Kazgar Rognisson — Dwarf Gate Keeper",
+   "nameFr": "Kazgar Rognisson — Gardien de porte nain",
+   "stats": {
+    "M": 3,
+    "CC": 65,
+    "CT": 45,
+    "F": 50,
+    "E": 60,
+    "I": 30,
+    "Ag": 25,
+    "Dex": 42,
+    "Int": 30,
+    "FM": 60,
+    "Soc": 25
+   },
+   "wounds": 23,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Runic Greataxe",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 35
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 70
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 65
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 75
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 50
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 40
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 35
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 33
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Two- Handed)",
+     "nameFr": "Corps à corps (Two- Handed)",
+     "frUnverified": true,
+     "value": 88
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 55
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Breastplate",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Gate Key",
+    "Mail Skirt",
+    "Plate Helm",
+    "Pouch",
+    "Runic Greataxe (Rune of Cleaving, Rune of Cutting)"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-497",
+   "book": "L16",
+   "page": 31,
+   "physicalPage": 31,
+   "kind": "profile",
+   "blockKey": "L16:31:0",
+   "name": "Helga Vikramsdottir — Dwarf Artisan",
+   "nameFr": "Helga Vikramsdottir — Artisane naine",
+   "stats": {
+    "M": 3,
+    "CC": 42,
+    "CT": 30,
+    "F": 40,
+    "E": 52,
+    "I": 32,
+    "Ag": 23,
+    "Dex": 57,
+    "Int": 34,
+    "FM": 52,
+    "Soc": 26
+   },
+   "wounds": 19,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Dwarf Pistol",
+     "damage": 10,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Hammer",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Art (Engraving)",
+     "nameFr": "Art (Gravure)",
+     "value": 62
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 54
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 57
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 58
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 31
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 37
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 30
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 36
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 42
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 38
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 42
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 31
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 39
+    },
+    {
+     "name": "Lore (Karak Norn)",
+     "nameFr": "Savoir (Karak Norn)",
+     "frUnverified": true,
+     "value": 38
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 44
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 38
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 55
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 36
+    },
+    {
+     "name": "Trade (Smith)",
+     "nameFr": "Métier (Forgeron)",
+     "value": 66
+    }
+   ],
+   "talents": [
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Craftsman (Smith)"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Nimble Fingered"
+    },
+    {
+     "name": "Read/ Write"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Tinker"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Hammer",
+    "Mail Shirt",
+    "Pistol",
+    "Pouch",
+    "Trade Tools (Smith)"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-498",
+   "book": "L16",
+   "page": 32,
+   "physicalPage": 32,
+   "kind": "profile",
+   "blockKey": "L16:32:0",
+   "name": "King Brokk Ironpick — Dwarf Karak Lord",
+   "nameFr": "Roi Brokk Ironpick — Seigneur de Karak nain",
+   "stats": {
+    "M": 3,
+    "CC": 80,
+    "CT": 34,
+    "F": 58,
+    "E": 68,
+    "I": 25,
+    "Ag": 20,
+    "Dex": 41,
+    "Int": 58,
+    "FM": 80,
+    "Soc": 48
+   },
+   "wounds": 26,
+   "armour": {
+    "ap": 6,
+    "printedTotal": 12
+   },
+   "attacks": [
+    {
+     "name": "The Ironpick",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 56
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 63
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 91
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 100
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 83
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 73
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 78
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 58
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 68
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 35
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 73
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 68
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 78
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 68
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 30
+    },
+    {
+     "name": "Play (Horn)",
+     "nameFr": "Musicien (Cor)",
+     "value": 51
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 54
+    },
+    {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 78
+    },
+    {
+     "name": "Trade (Blacksmith)",
+     "nameFr": "Métier (Forgeron)",
+     "value": 61
+    }
+   ],
+   "talents": [
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Long Memory"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tireless"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 25
+    }
+   ],
+   "trappings": [
+    "gromril shield",
+    "the Ironpick",
+    "jewellery worth 1000 GC",
+    "suit of gromril mail",
+    "the war horn of Karak Norn"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-499",
+   "book": "L16",
+   "page": 33,
+   "physicalPage": 33,
+   "kind": "profile",
+   "blockKey": "L16:33:0",
+   "name": "Queen Thurma — Dwarf Karak Lady",
+   "nameFr": "Reine Thurma — Dame de Karak naine",
+   "stats": {
+    "M": 3,
+    "CC": 67,
+    "CT": 32,
+    "F": 53,
+    "E": 62,
+    "I": 21,
+    "Ag": 20,
+    "Dex": 45,
+    "Int": 50,
+    "FM": 77,
+    "Soc": 49
+   },
+   "wounds": 24,
+   "attacks": [
+    {
+     "name": "Thurma's Warhammer",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 60
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 69
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 102
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 87
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 75
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 54
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 68
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 70
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 79
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 59
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 63
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 31
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 69
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 70
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 55
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 26
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 52
+    },
+    {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 70
+    },
+    {
+     "name": "Trade (Goldsmith)",
+     "nameFr": "Métier (Orfèvre)",
+     "value": 65
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ancestral Grudge (Orcs and Goblins)"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Long Memory"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tireless"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 25
+    }
+   ],
+   "trappings": [
+    "Like King Brokk",
+    "Queen Thurma could have her pick of personal possessions",
+    "a brynduraz necklace (worth 200,000 GC)",
+    "the Crown of Queen Hadora",
+    "other jewels worth 2000 GC",
+    "Thurma's Warhammer"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-500",
+   "book": "L16",
+   "page": 41,
+   "physicalPage": 41,
+   "kind": "profile",
+   "blockKey": "L16:41:0",
+   "name": "Bradni Bronzebeard — Dwarf Artisan — (Armourer)",
+   "nameFr": "Bradni Bronzebeard — Artisan nain (armurier)",
+   "stats": {
+    "M": 4,
+    "CC": 41,
+    "CT": 32,
+    "F": 49,
+    "E": 39,
+    "I": 24,
+    "Ag": 20,
+    "Dex": 59,
+    "Int": 34,
+    "FM": 53,
+    "Soc": 23
+   },
+   "wounds": 15,
+   "attacks": [
+    {
+     "name": "Hammer",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 25
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 58
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 25
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 47
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 44
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 28
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 28
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 44
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 42
+    },
+    {
+     "name": "Lore (Karak Norn)",
+     "nameFr": "Savoir (Karak Norn)",
+     "frUnverified": true,
+     "value": 39
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 44
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 49
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 25
+    },
+    {
+     "name": "Trade (Armourer)",
+     "nameFr": "Métier (Armurier)",
+     "value": 69
+    }
+   ],
+   "talents": [
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Craftsman (Armourer)"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Nimble Fingered"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Guild Licence ( Journeyman)",
+    "Hammer",
+    "Leather Jerkin",
+    "Trade Tools (Armourer)"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-501",
+   "book": "L16",
+   "page": 43,
+   "physicalPage": 43,
+   "kind": "profile",
+   "blockKey": "L16:43:0",
+   "name": "Baragor Guttrisson — Dwarf Forgemaster",
+   "nameFr": "Baragor Guttrisson — Maître-forgeron nain",
+   "stats": {
+    "M": 4,
+    "CC": 46,
+    "CT": 31,
+    "F": 41,
+    "E": 48,
+    "I": 22,
+    "Ag": 20,
+    "Dex": 51,
+    "Int": 38,
+    "FM": 60,
+    "Soc": 22
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Dwarf Greathammer",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Art (Engraving)",
+     "nameFr": "Art (Gravure)",
+     "value": 61
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 43
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 63
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 58
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 27
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 32
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 51
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 32
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 46
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 48
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 32
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 48
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 53
+    },
+    {
+     "name": "Lore (Runes)",
+     "nameFr": "Savoir (Runes)",
+     "value": 48
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 51
+    },
+    {
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 56
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 43
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 27
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 43
+    },
+    {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 43
+    },
+    {
+     "name": "Trade (Smith)",
+     "nameFr": "Métier (Forgeron)",
+     "value": 66
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bludgeoner"
+    },
+    {
+     "name": "Craftsman (Smith)"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Forgefire"
+    },
+    {
+     "name": "Magic Defiance"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Master Tradesman (Smith)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Rune Magic (Armour, Engineering, and Protection Runes)"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Beardling Initiates",
+    "Gold Medallion with Grungni's Personal Rune",
+    "Trade Tools (Smith)"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-502",
+   "book": "L16",
+   "page": 45,
+   "physicalPage": 45,
+   "kind": "profile",
+   "blockKey": "L16:45:0",
+   "name": "Nanna Logansdottir — Dwarf — Hearthmistress",
+   "nameFr": "Nanna Logansdottir — Naine — Maîtresse du foyer",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": 40,
+    "F": 34,
+    "E": 52,
+    "I": 22,
+    "Ag": 23,
+    "Dex": 48,
+    "Int": 36,
+    "FM": 56,
+    "Soc": 32
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 7,
+    "detail": "Mail Coat"
+   },
+   "attacks": [
+    {
+     "name": "Dwarf Crossbow",
+     "damage": 10,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dwarf Axe",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Art (Engraving)",
+     "nameFr": "Art (Gravure)",
+     "value": 58
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 42
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 62
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 69
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 57
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 37
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 42
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 39
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 37
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 51
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 37
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 27
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 37
+    },
+    {
+     "name": "Lore (Anatomy)",
+     "nameFr": "Savoir (Anatomie)",
+     "value": 46
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 39
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 39
+    },
+    {
+     "name": "Lore (Runes)",
+     "nameFr": "Savoir (Runes)",
+     "value": 41
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 27
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 50
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 41
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 53
+    },
+    {
+     "name": "Trade (Cook)",
+     "nameFr": "Métier (Cuisinier)",
+     "value": 53
+    },
+    {
+     "name": "Trade (Embalmer)",
+     "nameFr": "Métier (Embalmer)",
+     "frUnverified": true,
+     "value": 63
+    }
+   ],
+   "talents": [
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Liquid Fortification"
+    },
+    {
+     "name": "Magic Defiance"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Master Rune Magic (Protection Runes)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Perfect Pitch"
+    },
+    {
+     "name": "Pharmacist"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistance (Disease)"
+    },
+    {
+     "name": "Rune Magic (Protection and Talismantic Runes)"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Supportive"
+    },
+    {
+     "name": "Surgery"
+    },
+    {
+     "name": "Well-prepared"
+    }
+   ],
+   "trappings": [
+    "Beardling Initiate",
+    "Cult Medallion",
+    "Trade Tools (Embalmer, Smith). Outside the hold",
+    "add the following: Bandages",
+    "Restorative Brew Once the preparations are completed"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-503",
+   "book": "L16",
+   "page": 51,
+   "physicalPage": 51,
+   "kind": "profile",
+   "blockKey": "L16:51:0",
+   "name": "Katrin Thormsdottir — Dwarf — Daemon Slayer",
+   "nameFr": "Katrin Thormsdottir — Naine — Tueuse de démons",
+   "stats": {
+    "M": 4,
+    "CC": 67,
+    "CT": 31,
+    "F": 56,
+    "E": 56,
+    "I": 30,
+    "Ag": 27,
+    "Dex": 44,
+    "Int": 36,
+    "FM": 74,
+    "Soc": 30
+   },
+   "wounds": 27,
+   "attacks": [
+    {
+     "name": "Dwarf Throwing Axes",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dwarf Greataxe",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 66
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 94
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 61
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 41
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 41
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 56
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 61
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 51
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 41
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 39
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 39
+    },
+    {
+     "name": "Lore (Daemons)",
+     "nameFr": "Savoir (Daemons)",
+     "frUnverified": true,
+     "value": 46
+    },
+    {
+     "name": "Lore (Dragons)",
+     "nameFr": "Savoir (Dragons)",
+     "value": 41
+    },
+    {
+     "name": "Lore (Night Goblins)",
+     "nameFr": "Savoir (Night Goblins)",
+     "frUnverified": true,
+     "value": 46
+    },
+    {
+     "name": "Lore (Skaven)",
+     "nameFr": "Savoir (Skavens)",
+     "value": 41
+    },
+    {
+     "name": "Lore (Trolls)",
+     "nameFr": "Savoir (Trolls)",
+     "frUnverified": true,
+     "value": 51
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 77
+    },
+    {
+     "name": "Melee (Two- handed)",
+     "nameFr": "Corps à corps (Two- handed)",
+     "frUnverified": true,
+     "value": 87
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 56
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Thrown)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 41
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ambidextrous",
+     "rank": 2
+    },
+    {
+     "name": "Combat Master"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Fearless (Everything)"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Implacable"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/ Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Robust"
+    },
+    {
+     "name": "Slayer"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Dwarf Greataxe",
+    "Silver Jewellery and Body Piercings",
+    "Tattoos of Death and Shame",
+    "the Severed Head of a Night Goblin she calls `Alfie'",
+    "Three Dwarf Throwing Axes"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-504",
+   "book": "L16",
+   "page": 79,
+   "physicalPage": 79,
+   "kind": "profile",
+   "blockKey": "L16:79:0",
+   "name": "Gotrek Gurnisson — Dwarf Daemon Slayer",
+   "nameFr": "Gotrek Gurnisson — Tueur de démons nain",
+   "stats": {
+    "M": 3,
+    "CC": 95,
+    "CT": 25,
+    "F": 75,
+    "E": 85,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 65,
+    "Int": 51,
+    "FM": 85,
+    "Soc": 18
+   },
+   "wounds": 55,
+   "attacks": [
+    {
+     "name": "Gotrek's Axe",
+     "damage": 15,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 115
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 115
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 115
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 61
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 71
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 71
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 95
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 71
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 61
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 81
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 71
+    },
+    {
+     "name": "Lore (Dragons)",
+     "nameFr": "Savoir (Dragons)",
+     "value": 61
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 71
+    },
+    {
+     "name": "Lore (Engineering)",
+     "nameFr": "Savoir (Ingénierie)",
+     "value": 71
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 71
+    },
+    {
+     "name": "Lore (Giants)",
+     "nameFr": "Savoir (Géants)",
+     "value": 71
+    },
+    {
+     "name": "Lore (Metallurgy)",
+     "nameFr": "Savoir (Métallurgie)",
+     "value": 71
+    },
+    {
+     "name": "Lore (Trolls)",
+     "nameFr": "Savoir (Trolls)",
+     "frUnverified": true,
+     "value": 71
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 135
+    },
+    {
+     "name": "Melee (Two handed)",
+     "nameFr": "Corps à corps (Two handed)",
+     "frUnverified": true,
+     "value": 115
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 71
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 76
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Engineering)",
+     "nameFr": "Projectiles (Ingénierie)",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Thrown)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 35
+    },
+    {
+     "name": "Secret Signs (Miner)",
+     "nameFr": "Signes secrets (Miner)",
+     "frUnverified": true,
+     "value": 66
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 65
+    },
+    {
+     "name": "Trade (Engineer)",
+     "nameFr": "Métier (Ingénieur)",
+     "value": 85
+    },
+    {
+     "name": "Trade (Mason)",
+     "nameFr": "Métier (Maçon)",
+     "value": 85
+    }
+   ],
+   "talents": [
+    {
+     "name": "Careful Strike",
+     "rank": 2
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Master",
+     "rank": 3
+    },
+    {
+     "name": "Combat Reflexes",
+     "rank": 2
+    },
+    {
+     "name": "Craftsman (Engineer)"
+    },
+    {
+     "name": "Drilled",
+     "rank": 2
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Fearless (Everything)"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Hardy",
+     "rank": 3
+    },
+    {
+     "name": "Implacable",
+     "rank": 2
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Reaction Strike"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless",
+     "rank": 2
+    },
+    {
+     "name": "Resolute",
+     "rank": 2
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Robust"
+    },
+    {
+     "name": "Slayer"
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tinker"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Very Resilient"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-505",
+   "book": "L16",
+   "page": 81,
+   "physicalPage": 81,
+   "kind": "profile",
+   "blockKey": "L16:81:0",
+   "name": "Felix Jaeger — Human Outlaw",
+   "nameFr": "Felix Jaeger — Hors-la-loi humain",
+   "stats": {
+    "M": 4,
+    "CC": 55,
+    "CT": 45,
+    "F": 46,
+    "E": 47,
+    "I": 53,
+    "Ag": 35,
+    "Dex": 34,
+    "Int": 62,
+    "FM": 48,
+    "Soc": 44
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Karaghul",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 67
+    },
+    {
+     "name": "Art (Cartography)",
+     "nameFr": "Art (Cartographie)",
+     "value": 39
+    },
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 54
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 49
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 59
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 63
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 57
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 62
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 64
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 67
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 72
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 52
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 52
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 77
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 56
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 65
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 72
+    },
+    {
+     "name": "Language (Gospodarinyi)",
+     "nameFr": "Langue (Gospodar)",
+     "value": 72
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 72
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 49
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 67
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 77
+    },
+    {
+     "name": "Lore (Kislev)",
+     "nameFr": "Savoir (Kislev)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Skaven)",
+     "nameFr": "Savoir (Skavens)",
+     "value": 72
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 65
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 82
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 68
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 50
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 67
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 40
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 51
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 63
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Dirty Fighter"
+    },
+    {
+     "name": "Disarm",
+     "rank": 2
+    },
+    {
+     "name": "Doomed (Thine end is not thine end)"
+    },
+    {
+     "name": "Etiquette (Scholars)"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Numismatics"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Riposte",
+     "rank": 2
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "trappings": [
+    "Backpack (containing Bedroll, Blanket, and Tinderbox)",
+    "Clothing",
+    "Dagger",
+    "Karaghul",
+    "Mail Shirt",
+    "Pouch",
+    "Red Sudenland Wool Cloak",
+    "Writing Kit (containing copious notes on recent adventures)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-506",
+   "book": "L16",
+   "page": 83,
+   "physicalPage": 83,
+   "kind": "profile",
+   "blockKey": "L16:83:0",
+   "name": "Ogre Gorger",
+   "nameFr": "Goinfre ogre",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": null,
+    "F": 55,
+    "E": 55,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 15,
+    "Int": 15,
+    "FM": 30,
+    "Soc": 5
+   },
+   "wounds": 46,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-507",
+   "book": "L16",
+   "page": 84,
+   "physicalPage": 84,
+   "kind": "profile",
+   "blockKey": "L16:84:0",
+   "name": "Magma Dragon",
+   "nameFr": "Dragon de magma",
+   "stats": {
+    "M": 6,
+    "CC": 65,
+    "CT": 60,
+    "F": 65,
+    "E": 75,
+    "I": 60,
+    "Ag": 25,
+    "Dex": 15,
+    "Int": 45,
+    "FM": 85,
+    "Soc": 15
+   },
+   "wounds": 112,
+   "size": "enormous",
+   "armour": {
+    "ap": 6,
+    "printedTotal": 13
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 9,
+     "trait": "Tail"
+    },
+    {
+     "name": "Obsidian Claws",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Grim",
+     "rating": "3",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Immunity",
+     "param": "Fire, Smoke",
+     "ref": "E0-T-031"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tail",
+     "rating": "+9",
+     "ref": "E0-T-054"
+    }
+   ],
+   "keywords": [
+    "dragon"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-508",
+   "book": "L16",
+   "page": 84,
+   "physicalPage": 84,
+   "kind": "profile",
+   "blockKey": "L16:84:1",
+   "name": "Hagdar, Scourge of the Dark Lands",
+   "nameFr": "Hagdar, Fléau des Terres sombres",
+   "stats": {
+    "M": 5,
+    "CC": 60,
+    "CT": 60,
+    "F": 69,
+    "E": 79,
+    "I": 40,
+    "Ag": 10,
+    "Dex": 5,
+    "Int": 45,
+    "FM": 85,
+    "Soc": 10
+   },
+   "wounds": 224,
+   "size": "monstrous",
+   "armour": {
+    "ap": 8,
+    "printedTotal": 15
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 9,
+     "trait": "Tail"
+    },
+    {
+     "name": "Obsidian Claws",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Daemonic",
+     "rating": "9+",
+     "ref": "E0-T-018"
+    },
+    {
+     "name": "Fly",
+     "rating": "60",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Grim",
+     "rating": "3",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Immunity",
+     "param": "Fire, Smoke",
+     "ref": "E0-T-031"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tail",
+     "rating": "+9",
+     "ref": "E0-T-054"
+    }
+   ],
+   "keywords": [
+    "dragon"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-509",
+   "book": "L16",
+   "page": 86,
+   "physicalPage": 86,
+   "kind": "profile",
+   "blockKey": "L16:86:0",
+   "name": "Rogue Idol of Gork (or Mork)",
+   "nameFr": "Idole renégate de Gork (ou Mork)",
+   "stats": {
+    "M": 6,
+    "CC": 45,
+    "CT": null,
+    "F": 70,
+    "E": 65,
+    "I": 20,
+    "Ag": 10,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 52,
+   "size": "large",
+   "armour": {
+    "ap": 4,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Fists",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "param": "assume an Intelligence of 50 for the purpose of testing for stupidity",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-510",
+   "book": "L16",
+   "page": 90,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L16:90:3",
+   "name": "Hesh the Contaminator — Bringer — of the Word",
+   "nameFr": "Hesh le Contaminateur — Porteur de la Parole",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": 30,
+    "F": 45,
+    "E": 50,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 45,
+    "Soc": 20
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Swords",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Enclosed Fighter"
+    }
+   ],
+   "trappings": [
+    "Mouldy Robes",
+    "Pair of Swords"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-511",
+   "book": "L16",
+   "page": 90,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L16:90:1",
+   "name": "Clan Morbidus Clanrat",
+   "nameFr": "Guerrier des clans du clan Morbidus",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 35,
+    "I": 50,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 25,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 35
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Patchwork steel and leather armour",
+    "Shield",
+    "Sword"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-512",
+   "book": "L16",
+   "page": 90,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L16:90:0",
+   "name": "Plague Monk",
+   "nameFr": "Moine de la peste",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 45,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 25,
+    "Soc": 20
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Swords",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 35
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Enclosed Fighter"
+    }
+   ],
+   "trappings": [
+    "Mouldy Robes",
+    "Pair of Swords y"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-513",
+   "book": "L16",
+   "page": 90,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L16:90:2",
+   "name": "Plague Rat",
+   "nameFr": "Rat de la peste",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": null,
+    "F": 30,
+    "E": 25,
+    "I": 25,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 15,
+    "FM": 15,
+    "Soc": 11
+   },
+   "wounds": 5,
+   "size": "small",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Disease",
+     "param": "Foaming Lungrot",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Fetch, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "rat"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-514",
+   "book": "L16",
+   "page": 93,
+   "physicalPage": 93,
+   "kind": "profile",
+   "blockKey": "L16:93:0",
+   "name": "Warlord Blistrox Blyte",
+   "nameFr": "Seigneur de guerre Blistrox Blyte",
+   "stats": {
+    "M": 5,
+    "CC": 55,
+    "CT": 40,
+    "F": 50,
+    "E": 50,
+    "I": 55,
+    "Ag": 50,
+    "Dex": 30,
+    "Int": 35,
+    "FM": 45,
+    "Soc": 30
+   },
+   "wounds": 19,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Warpforged Halberd",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 70
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 50
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 75
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    }
+   ],
+   "traits": [
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Assortment of rusted steel and mouldy leather armour",
+    "Shield",
+    "Sword",
+    "Warpforged Halberd",
+    "Warpstone Charm"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

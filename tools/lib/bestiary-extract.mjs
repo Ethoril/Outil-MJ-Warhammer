@@ -4,9 +4,9 @@
  */
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { pageBlocks } from './bestiary-blocks.mjs';
+import { pageBlocks, setLenient } from './bestiary-blocks.mjs';
 import { parseBlock } from './bestiary-profile.mjs';
-import { CELL_OVERRIDES } from './bestiary-overrides.mjs';
+import { CELL_OVERRIDES, BODY_OVERRIDES } from './bestiary-overrides.mjs';
 
 const read = path => JSON.parse(readFileSync(path, 'utf8'));
 export const corpusBooks = () => [...read('docs/divin/DIVIN_CORPUS_LIVRES.json').books, ...read('docs/divin/DIVIN_CORPUS_LIVRES_COMPLEMENT.json').books];
@@ -31,10 +31,12 @@ export function extractProfiles(ids, { keepBody = false } = {}) {
   const profiles = [];
   const approximate = [];
   for (const book of corpusBooks().filter(item => ids.includes(item.id))) {
+    setLenient(!['L01', 'L02', 'L03', 'L04', 'L05', 'L06', 'L07', 'L09', 'L10', 'L11', 'L12', 'L13', 'L14'].includes(book.id));
     bookPages(book).forEach((page, pageIndex) => {
       pageBlocks(page).forEach((block, index) => {
         const key = `${book.id}:${pageIndex + 1}:${index}`;
         const override = CELL_OVERRIDES[key];
+        if (BODY_OVERRIDES[key]) { block.bodyLines = BODY_OVERRIDES[key]; block.body = BODY_OVERRIDES[key].join(' '); }
         if (override) block.cells = override.cells.slice();
         else if (block.approximate) approximate.push({ key, title: block.title, tokens: block.tokens });
         const { profile } = parseBlock(block, dict);

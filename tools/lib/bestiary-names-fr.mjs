@@ -92,6 +92,15 @@ export const NAMES_FR = Object.freeze({
   'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)'),
   // Tribes and Tribulations (L12)
   'E0-P-438': proposal('Matthogg — Brute ogre'),
+  // Lords of Stone and Steel (L16)
+  'E0-P-492': proposal('Thorgrim Grudgebearer — Nain — Seigneur de Karak'), 'E0-P-493': proposal('Kazador Thunderhorn — Seigneur de Karak nain'), 'E0-P-494': proposal('Ungrim Ironfist — Seigneur de Karak nain'),
+  'E0-P-495': proposal('Zylra Kraggsdottir — Citadine naine'), 'E0-P-496': proposal('Kazgar Rognisson — Gardien de porte nain'), 'E0-P-497': proposal('Helga Vikramsdottir — Artisane naine'),
+  'E0-P-498': proposal('Roi Brokk Ironpick — Seigneur de Karak nain'), 'E0-P-499': proposal('Reine Thurma — Dame de Karak naine'), 'E0-P-500': proposal('Bradni Bronzebeard — Artisan nain (armurier)'),
+  'E0-P-501': proposal('Baragor Guttrisson — Maître-forgeron nain'), 'E0-P-502': proposal('Nanna Logansdottir — Naine — Maîtresse du foyer'), 'E0-P-503': proposal('Katrin Thormsdottir — Naine — Tueuse de démons'),
+  'E0-P-504': proposal('Gotrek Gurnisson — Tueur de démons nain'), 'E0-P-505': proposal('Felix Jaeger — Hors-la-loi humain'), 'E0-P-506': proposal('Goinfre ogre'),
+  'E0-P-507': proposal('Dragon de magma'), 'E0-P-508': proposal('Hagdar, Fléau des Terres sombres'), 'E0-P-509': proposal('Idole renégate de Gork (ou Mork)'),
+  'E0-P-510': proposal('Hesh le Contaminateur — Porteur de la Parole'), 'E0-P-511': proposal('Guerrier des clans du clan Morbidus'), 'E0-P-512': proposal('Moine de la peste'),
+  'E0-P-513': proposal('Rat de la peste'), 'E0-P-514': proposal('Seigneur de guerre Blistrox Blyte'),
   // Sea Wardens of Cothique (L14)
   'E0-P-472': proposal('Prince Dalloran de Cothique — Seigneur noble cothiqui'), 'E0-P-473': proposal('Rejeton de Mathlann'), 'E0-P-474': proposal('Rejeton de Mathlann — Sentinelle'),
   'E0-P-475': proposal('Princesse Litharys d’Elisia — Amirale cothiquie'), 'E0-P-476': proposal('Prince Dalroth — Noble cothiqui'), 'E0-P-477': proposal('Prince Dannor — Noble cothiqui'),
