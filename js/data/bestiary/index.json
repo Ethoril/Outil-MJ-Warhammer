@@ -198,6 +198,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L22",
+   "file": "L22.json",
+   "title": "The Horned Rat Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 43,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

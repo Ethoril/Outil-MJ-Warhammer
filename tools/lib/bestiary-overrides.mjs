@@ -98,7 +98,10 @@ export const NAME_FIXES = Object.freeze({
   'E0-P-709': 'Etelka Herzen — Human Wizard Lord (Gold 2)',
   'E0-P-710': 'Ernst Heidlemann — Human Wizard\'s Apprentice (Silver 3)',
   'E0-P-711': 'Hans Gräber — Level 1 Monk, Level 4 Wizard (Necromancer)',
-  'E0-P-715': 'The Gravelord\'s Zombies'
+  'E0-P-715': 'The Gravelord\'s Zombies',
+  // The Horned Rat Companion (L22) : tirets doublés, apostrophe en majuscule (E-D28)
+  'E0-P-740': 'Mila Raast — Yellow Fang Senior Cultist',
+  'E0-P-747': 'Gimbrin Flintbeard — Dwarf King\'s Ghost'
 });
 
 /** Armure imprimée en plusieurs parties sans total : le texte imprimé est conservé en détail, sans PA global (E-D25). */
