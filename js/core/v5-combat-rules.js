@@ -103,7 +103,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   const ignoreConditions = actor.extensions?.v5?.specialStates?.ignoreConditionPenalties === true;
   const talentRole=defending?'defender':['attack','attaque'].includes(action.type)?'attacker':'actor';
   const contact=contactWeapon(normalized,actor,action,settings);action=contact.action;
-  const talentModifiers=previewV5TalentTestModifiers(actor,{action,settings,kind,role:talentRole});
+  const talentModifiers=previewV5TalentTestModifiers(actor,{action,settings,kind,role:talentRole,opponent:target});
   const unresolved = [...contact.unresolved], restrictions = [];if(unavailableDisarmedWeapon(actor,action))restrictions.push('Cette arme a été désarmée : la récupérer avant de l’employer.');
   if(!defending && target?.extensions?.v5?.specialStates?.tinySwarmCannotAttack && /nu[eé]e|swarm/i.test((actor.traits || []).join(' '))){
     const size=Number(settings.actorSize ?? normalized.attackContext?.actorSize);
@@ -250,7 +250,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   }
   if(talentModifiers.forceSuccess||!defending&&normalized.noTestAction){test=structuredClone(test);const first=test.options[0];first.result={...first.result,roll:1,success:true,sl:0,critical:false,fumble:false,zeroOutcome:'marginalSuccess',automatic:true,noTest:!defending&&normalized.noTestAction===true,details:{...first.result.details,doubled:false}};test.options=[{...first,id:'keep'}];test.choiceRequired=false;test.forcedInversion=false;}
   if(frenzy&&!defending&&kind==='melee'&&['attack','attaque'].includes(action.type)){const enemies=(normalized.v5State?.participants||[]).filter(p=>p.id!==actor.id&&p.camp!==actor.camp&&Number(p.hp)>0&&p.zone==='active'),nearest=context.nearestEnemyId||(enemies.length===1?enemies[0].id:null);if(!nearest||!enemies.some(p=>p.id===nearest)||normalized.target?.id!==nearest)restrictions.push('Frénésie : désigner et attaquer l’ennemi le plus proche.');}
-  const talentSL = previewV5TalentSLChoices(actor, test, { action, settings, kind, role: talentRole });
+  const talentSL = previewV5TalentSLChoices(actor, test, { action, settings, kind, role: talentRole, opponent: target });
   test = talentSL.test; unresolved.push(...talentSL.unresolved);
   test={...test,options:test.options.map(o=>({...o,result:enforceMagicTestRestrictions(actor,o.result,{magical:false})}))};
   return { test, crewSkill,talentPlans: [talentModifiers.plan, ...talentSL.plans,...psychology.plans,...contact.plans,...(contactTalent?[contactTalent]:[]),...(dualWhirlwind?[dualWhirlwind]:[]),...(warLeader?[{proposals:[{origins:[warLeader.source]}]}]:[])], talentSLChoices: talentSL.choiceDescriptors, kind, penalty: appliedPenalty, penaltyStates: [...relevant].filter(([, value]) => value).map(([key]) => key),

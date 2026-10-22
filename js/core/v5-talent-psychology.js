@@ -4,13 +4,16 @@ import{situationPlan,activeSource}from'./v5-talent-situations.js';
 import{acquireV5Conditions,recoverV5Condition,previewDeliciousExcruciation}from'./v5-effects.js';
 import{withMomentum}from'./v5-combat-rules.js';
 import{resolveV5Opposition}from'./v5-roll.js';
+import{participantKeywords,specializationMatches,traitTargetMatches}from'./creature-keywords.js';
 const calmId=()=>getReferenceCatalogue().skills.find(s=>s.nom==='Calme')?.id;
 export function genericPsychologyOrigin(sourceKind='trait',meta={}){
  const hash=currentV5TalentHashes()['talent-large'];
  return{talentId:'talent-large',source:{effectHash:hash,reference:meta.reference||'Livre de base V5, p. 183-184'},psychologySourceKind:sourceKind,...meta};
 }
 const hasTrait=(subject,pattern)=>[...(subject?.traits||[]),...(subject?.states||[]).map(s=>s?.name||s?.key||'')].some(t=>pattern.test(String(t?.name||t?.label||t||'')));
-export function isPsychologyImmune(subject,{kind='fear',enemyGroup=null,ignoreUndeadImmunity=false,ignorePsychologyImmunity=false}={}){
+/** Cible d'une spécialisation : saisie explicite du MJ (`enemyGroup`) ou mots-clés de l'ennemi (`enemy`, participant). */
+const enemyTarget=(enemyGroup,enemy)=>{const keywords=enemy?participantKeywords(enemy).ids:[];return{enemyGroup:enemyGroup||undefined,enemyKeywords:keywords.length?keywords:undefined};};
+export function isPsychologyImmune(subject,{kind='fear',enemyGroup=null,enemy=null,ignoreUndeadImmunity=false,ignorePsychologyImmunity=false}={}){
  if(!subject||ignorePsychologyImmunity===true)return false;
  if((subject.states||[]).some(s=>s.key==='frenzy'&&activeSource(s)))return true;
  const undead=hasTrait(subject,/mort[- ]vivant|undead/i);
@@ -20,10 +23,12 @@ export function isPsychologyImmune(subject,{kind='fear',enemyGroup=null,ignoreUn
  if(kind==='fear'||kind==='intimidate'){
   if(hasTrait(subject,/marque de slaanesh|mark of slaanesh|sans peur.*tout/i))return true;
   if(hasTrait(subject,/belliqueux|belligerent/i)&&subject.extensions?.v5?.hasMomentum===true)return true;
-  if(enemyGroup){
-   const fearless=acquiredV5Talents(subject).some(t=>t.talentId==='talent-fearless'&&(!t.specialization||t.specialization===enemyGroup||t.specialization==='Tout'));
-   const hatred=acquiredV5Talents(subject).some(t=>t.talentId==='talent-hatred'&&t.specialization===enemyGroup)||(subject.states||[]).some(s=>s.key==='hatred'&&s.specialization===enemyGroup);
-   if(fearless||hatred)return true;
+  const target=enemyTarget(enemyGroup,enemy);
+  if(target.enemyGroup||target.enemyKeywords){
+   const fearless=acquiredV5Talents(subject).some(t=>t.talentId==='talent-fearless'&&(!t.specialization||specializationMatches(t.specialization,target)));
+   const hatred=acquiredV5Talents(subject).some(t=>t.talentId==='talent-hatred'&&specializationMatches(t.specialization,target))||(subject.states||[]).some(s=>s.key==='hatred'&&specializationMatches(s.specialization,target));
+   const hatredTrait=enemy&&traitTargetMatches(subject,['hatred','haine'],enemy);
+   if(fearless||hatred||hatredTrait)return true;
   }
  }
  return false;
@@ -40,19 +45,19 @@ export function previewGenericFearEncounter({author,target,rating,sourceKind='tr
   effectiveRating=0;
  }
  if(!Number.isSafeInteger(effectiveRating)||effectiveRating<0)return{ready:false,needsInput:[{field:'rating',label:'Indice de Peur non chiffré : saisie MJ explicite requise (Q13/Q19).'}],unresolved:['Indice de Peur non chiffré : saisie MJ explicite requise (Q13/Q19).'],addedStates:[]};
- if(isPsychologyImmune(target,{kind:'fear',enemyGroup,ignoreUndeadImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
+ if(isPsychologyImmune(target,{kind:'fear',enemyGroup,enemy:author,ignoreUndeadImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
  const already=(target.states||[]).some(s=>['fear-of-talent','fear-overcome'].includes(s.key)&&s.authorId===author.id&&s.encounterId===encounterId&&activeSource(s));
  if(already)return{ready:true,exempt:true,reason:'already-encountered',addedStates:[],unresolved:[],needsInput:[]};
  const origin=genericPsychologyOrigin(sourceKind,{sourceId,sourceLabel});
  const label=sourceLabel||(sourceKind==='afraid'?`Peureux (${effectiveRating})`:sourceKind==='v5-size'?`Peur de taille V5 (${effectiveRating})`:`Peur (${effectiveRating})`);
- const state={id:`${resolutionId}:fear:${author.id}:${target.id}`,key:'fear-of-talent',name:label,kind:'talent-pending',level:1,source:origin,authorId:author.id,targetId:target.id,rating:effectiveRating,mode:'sl',successes:0,lastAttemptRound:null,restriction:'cannotGainMomentum',encounterId,enemyGroup};
+ const state={id:`${resolutionId}:fear:${author.id}:${target.id}`,key:'fear-of-talent',name:label,kind:'talent-pending',level:1,source:origin,authorId:author.id,targetId:target.id,rating:effectiveRating,mode:'sl',successes:0,lastAttemptRound:null,restriction:'cannotGainMomentum',encounterId,enemyGroup,enemyKeywords:participantKeywords(author).ids};
  return{ready:true,exempt:false,rating:effectiveRating,addedStates:[state],unresolved:[],needsInput:[]};
 }
 export function previewGenericTerrorEncounter({author,target,rating,sourceKind='trait',sourceId=null,sourceLabel=null,knownAlly=false,enemyGroup=null,ignoreUndeadImmunity=false,ignorePsychologyImmunity=false,encounterId='default-encounter',resolutionId='generic-terror'}={}){
  if(!target||!author)return{ready:false,needsInput:[{field:'participants',label:'Auteur et cible de la Terreur requis.'}],unresolved:['Auteur et cible de la Terreur requis.'],addedStates:[]};
  if(knownAlly===true||author.id===target.id||author.camp&&target.camp&&author.camp===target.camp&&knownAlly!==false)return{ready:true,exempt:true,reason:'known-ally',addedStates:[],unresolved:[],needsInput:[]};
  if(!Number.isSafeInteger(rating)||rating<1)return{ready:false,needsInput:[{field:'rating',label:'Indice de Terreur non chiffré : saisie MJ explicite requise (Q13/Q19).'}],unresolved:['Indice de Terreur non chiffré : saisie MJ explicite requise (Q13/Q19).'],addedStates:[]};
- if(isPsychologyImmune(target,{kind:'terror',enemyGroup,ignoreUndeadImmunity,ignorePsychologyImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
+ if(isPsychologyImmune(target,{kind:'terror',enemyGroup,enemy:author,ignoreUndeadImmunity,ignorePsychologyImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
  const already=(target.states||[]).some(s=>['terror-of-talent','terror-resolved'].includes(s.key)&&s.authorId===author.id&&s.encounterId===encounterId&&activeSource(s));
  if(already)return{ready:true,exempt:true,reason:'already-encountered',addedStates:[],unresolved:[],needsInput:[]};
  const terrorImmune=(target.states||[]).some(s=>s.key==='terror-immunity'&&s.encounterId===encounterId&&activeSource(s));
@@ -73,7 +78,7 @@ export function resolveGenericFearTest({actor,fearEffectId,test,round=1,enemyGro
  if(existing.mode==='sl'&&Number.isSafeInteger(existing.lastAttemptRound)&&existing.lastAttemptRound===round)return{ready:false,error:'Peur : une seule tentative de Test étendu par Round.'};
  if(!test||typeof test.success!=='boolean'||!Number.isInteger(test.sl))return{ready:false,error:'Résultat du Test de Calme requis.'};
  const group=enemyGroup??existing.enemyGroup;
- const immune=isPsychologyImmune(actor,{kind:'fear',enemyGroup:group});
+ const immune=isPsychologyImmune(actor,{kind:'fear',enemyGroup:group,enemy:existing.enemyKeywords?.length?{keywords:existing.enemyKeywords}:null});
  const delta=test.success?(existing.mode==='sl'?Math.max(0,test.sl):1):0;
  const nextSuccesses=existing.successes+delta;
  const overcome=immune||test.success&&nextSuccesses>=existing.rating;

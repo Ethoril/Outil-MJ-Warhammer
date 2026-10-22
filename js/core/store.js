@@ -72,7 +72,7 @@ import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHist
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
-import { proposeNewKeyword, referentialFromExtensions } from './creature-keywords.js';
+import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
 
@@ -431,6 +431,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     data = projectV5ResourceEnvelope(sanitizeMagicEnvelope(data));
     stateExtensions = data.extensions && typeof data.extensions === 'object' && !Array.isArray(data.extensions)
       ? JSON.parse(JSON.stringify(data.extensions)) : {};
+    setActiveReferential(referentialFromExtensions(stateExtensions).referential);
     encounters = Array.isArray(data.encounters) ? cloneValue(data.encounters) : [];
     persistentCharacters = Array.isArray(data.persistentCharacters) ? cloneValue(data.persistentCharacters).map(withCanonicalCaracs) : [];
     archives = Array.isArray(data.archives) ? cloneValue(data.archives) : [];
@@ -1010,6 +1011,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     try {
       const extensions = JSON.parse(storage.getItem(KEY.EXTENSIONS) || '{}');
       stateExtensions = extensions && typeof extensions === 'object' && !Array.isArray(extensions) ? extensions : {};
+      setActiveReferential(referentialFromExtensions(stateExtensions).referential);
       const r = JSON.parse(storage.getItem(KEY.RESERVE) || '[]');
       reserve = new Map(r.map(o => [o.id, new Profile(o)]));
       const c = JSON.parse(storage.getItem(KEY.COMBAT) || 'null');

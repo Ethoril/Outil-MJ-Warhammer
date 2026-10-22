@@ -96,9 +96,9 @@ Ce parcours guidé permet au MJ de vérifier pas à pas, à la table dans l’on
 10. **Faire monter les enjeux (Ranald)**
     - **Action** : Lancer *Faire monter les enjeux* sur une cible, puis résoudre son prochain Test dans **Résolution** (essayer un jet tout juste réussi à `+1 DR`, puis après `Annuler` un jet tout juste échoué à `-1 DR`).
     - **Résultat attendu** : En cas de réussite du Test de la cible, ses DR sont portés à au moins `+6 DR` ; en cas d’échec, ses DR sont portés à au plus `-6 DR`. Ce résultat amplifié s’applique à l’opposition et aux dégâts, consomme la couche à usage unique lors de l’application, et peut être annulé par `Annuler`.
-11. **Dévotion de la Guerrière (Myrmidia — liste d’ennemis présents et saisie libre)**
+11. **Dévotion de la Guerrière (Myrmidia — mot-clé du référentiel, plus de saisie libre)**
     - **Action** : En présence d’ennemis actifs dans la rencontre, sélectionner *Dévotion de la Guerrière* dans le panneau des prières.
-    - **Résultat attendu** : Le groupe `Saisies des effets` propose la liste déroulante `Ennemi présent` peuplée avec les noms des ennemis actifs (plus `Autre (saisie libre)`) ainsi que le champ `Ennemi visé (espèce ou individu)`. Choisir un nom de la liste ou saisir un texte libre (jusqu’à 60 caractères) puis appliquer accorde aux destinataires le talent `Sans peur [Ennemi]` spécialisé contre cet ennemi.
+    - **Résultat attendu** : Le groupe `Saisies des effets` propose la liste déroulante `Ennemi visé (mot-clé du référentiel)` : les mots-clés des ennemis actifs en premier (« Humain (présent) »), puis tout le référentiel (espèce, nature, allégeance). Aucun champ de texte libre : un terme absent se fait ajouter par le MJ. Choisir un mot-clé puis appliquer accorde aux destinataires le talent `Sans peur [Ennemi]` spécialisé contre ce mot-clé et ses descendants.
 
 ### 3. Registre des Blessures Critiques, invocations et ordre d’Initiative
 

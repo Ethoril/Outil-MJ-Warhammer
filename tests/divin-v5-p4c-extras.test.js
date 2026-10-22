@@ -55,10 +55,10 @@ test('Dévotion de la Guerrière : assistée, grant-talent Sans peur [Ennemi] do
 test('Dévotion de la Guerrière : ennemi saisi figé à l’aperçu, Sans peur [Ennemi] sur l’allié, retiré à l’échéance, Undo et Redo', async () => {
   const store = await fixture();
   const s0 = world(store);
-  const { preview } = await cast(store, DEVOTION, { ...allyFacts, talent: { specialization: '  Gobelins \n des  collines ' } });
-  assert.equal(preview.preview.effects[0].talents[0].specialization, 'Gobelins des collines');
+  const { preview } = await cast(store, DEVOTION, { ...allyFacts, talent: { specialization: '  Peaux   vertes \n' } });
+  assert.equal(preview.preview.effects[0].talents[0].specialization, 'Peaux-vertes');
   assert.equal(preview.preview.effects[0].specializationFrom, undefined);
-  assert.deepEqual(talentRows(injected(store, 'ally')), [['talent-fearless', 'Gobelins des collines', 1, true]]);
+  assert.deepEqual(talentRows(injected(store, 'ally')), [['talent-fearless', 'Peaux-vertes', 1, true]]);
   assert.deepEqual(injected(store, 'priest'), [], 'le prêtre n’est pas désigné');
   const s1 = world(store);
   assert.equal(await store.undo(), true); assert.deepEqual(world(store), s0); assert.deepEqual(injected(store, 'ally'), []);
@@ -71,12 +71,12 @@ test('Dévotion de la Guerrière : ennemi saisi figé à l’aperçu, Sans peur 
 test('Dévotion de la Guerrière : refusée sans ennemi saisi (absent, vide, non texte, trop long), sans rien écrire', async () => {
   const store = await fixture();
   const before = world(store);
-  for (const talent of [undefined, { specialization: '' }, { specialization: '   ' }, { specialization: 42 }, { specialization: 'x'.repeat(61) }]) {
+  for (const talent of [undefined, { specialization: '' }, { specialization: '   ' }, { specialization: 42 }, { specialization: 'x'.repeat(61) }, { specialization: 'Gobelins des collines' }, { specialization: 'x'.repeat(60) }]) {
     const preview = store.previewDivineExecution(DEVOTION, input({ ...allyFacts, ...(talent ? { talent } : {}) }));
     assert.equal(preview.ready, false, JSON.stringify(talent));
     assert.match(JSON.stringify(preview.needsInput), /talent\.specialization/);
   }
-  assert.equal(store.previewDivineExecution(DEVOTION, input({ ...allyFacts, talent: { specialization: 'x'.repeat(60) } })).ready, true);
+  assert.equal(store.previewDivineExecution(DEVOTION, input({ ...allyFacts, talent: { specialization: 'Orques' } })).ready, true);
   assert.deepEqual(world(store), before);
 });
 
@@ -86,7 +86,7 @@ test('Dévotion de la Guerrière : le formulaire expose le champ « Ennemi visé
   const form = emptyDivineForm();
   const model = buildDivineForm(contract, { actor: priest, targets: [], form, choices: { effect: 0 } });
   const field = model.effectFields.find(row => row.path.join('.') === 'talent.specialization');
-  assert.deepEqual([field.kind, field.label], ['text', 'Ennemi visé (espèce ou individu)']);
+  assert.deepEqual([field.kind, field.label], ['select', 'Ennemi visé (mot-clé du référentiel)']);
   setFieldValue(form, field, 'Orques');
   assert.deepEqual(toEngineInput(form, { targetIds: [], contract, actor: priest }).talent, { specialization: 'Orques' });
 });

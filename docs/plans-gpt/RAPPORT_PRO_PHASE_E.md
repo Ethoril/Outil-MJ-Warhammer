@@ -1,0 +1,31 @@
+# Rapport — phase E (mots-clés, bestiaires, Traits), exécutant : Claude Pro
+
+Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `CHOIX_EXECUTANT_PHASE_E.md`. Rapport **partiel**, tenu à jour à chaque lot (une session peut s'interrompre sur la limite de quota : la reprise se fait au « lot suivant »).
+
+## Lots
+
+| Lot | État | Commit |
+|---|---|---|
+| E1 complément d'inventaire L18-L26 (443 profils, 39 Traits et capacités) et outils d'extraction | FAIT | 7c124f6 |
+| Plan de lots | FAIT | f1cfcc2 |
+| K1 référentiel de mots-clés (hiérarchie, alias, garde-fou) | FAIT | 8cea7d7 |
+| K2 ajout par le MJ (store : commande annulable, refus des doublons ; interface : boîte d'ajout) | FAIT | caractérisation b8f3f59, store 4176c31, interface 0e8e350 |
+| K3 mots-clés portés (profils, participants, PJ, import JSON, sélecteur) | FAIT | 0e8e350 |
+| K4 spécialisations à cible (Haine, Sans peur, Haine-Trait, Dévotion de la Guerrière, migration) | EN COURS (caractérisation 7ebf59e) | |
+| K5 effets « contre les X » (natures, contrats, sources de Psychologie) | À FAIRE | |
+| D1 à D24 profils de bestiaire (modèle, import livre par livre) | À FAIRE | |
+| B1 à B3 bibliothèque et raccordements | À FAIRE | |
+| T1 à T12, F1-F2, S1, R1 | À FAIRE | |
+
+## Dernière suite complète
+
+`node --test --test-concurrency=4` : tout vert sauf `E0 indépendant — la recette refuse un cwd externe avant de créer un reçu` (lit `tmp/divin/recipe-receipt.json`, produit par `node tools/run-divine-recipe.mjs` : échec antérieur à la phase, à relancer au lot R1).
+
+## Assertions de tests existants modifiées
+
+- K4 (Dévotion de la Guerrière : la spécialisation est un mot-clé du référentiel, plus de texte libre) : `tests/divin-v5-a1-sans-peur.test.js` (« Gobelins » devient le nom canonique « Gobelin », 2 assertions) ; `tests/divin-v5-a4-devotion.test.js` (test réécrit : suggestions de mots-clés, aucun champ de texte, texte libre refusé, alias résolu) ; `tests/divin-v5-p4c-extras.test.js` (4 assertions : texte saisi, spécialisation posée, liste des refus, type et libellé du champ) ; `tests/divin-v5-a4-devotion-browser.mjs` (parcours navigateur).
+
+## Points d'attention
+
+- `sw.js` : seuls les chemins des nouveaux fichiers sont ajoutés à `ASSETS_TO_CACHE` (le test `tests/sw.test.js` l'exige) ; `CACHE_NAME` n'est pas touché : la version reste à l'orchestrateur (E-K11).
+- Le parcours navigateur complet (`tests/browser-smoke.mjs`) s'exécute avec `PLAYWRIGHT_EXECUTABLE_PATH` pointant vers Edge ; il passe avec le sélecteur de mots-clés du formulaire de profil.

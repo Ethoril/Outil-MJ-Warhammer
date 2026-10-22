@@ -5,6 +5,7 @@ import additionalRegistry from '../data/v5-additional-talent-contracts.json' wit
 import qualityRegistry from '../data/v5-quality-talent-contracts.json' with { type: 'json' };
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { acquiredV5Talents, evaluateV5Talents, V5_TALENT_CONTRACTS } from './v5-talents.js';
+import { participantKeywords } from './creature-keywords.js';
 
 export const V5_TEST_TALENT_IDS = Object.freeze([...registry.contracts,...qualityRegistry.contracts,...additionalRegistry.contracts].filter(row => row.clauses.some(clause => clause.event === 'test.beforeRoll' || clause.event === 'test.afterRoll')).map(row => row.talentId));
 export const V5_TALENT_TEST_CONTEXT_FIELDS = Object.freeze([...registry.contextDescriptors,...additionalRegistry.contextDescriptors]);
@@ -17,7 +18,9 @@ export function buildV5TalentTestContext(action = {}, settings = {}, extra = {})
   const skillId = action.extensions?.fiche?.skillId ?? context.skillId;
   const skill = getReferenceCatalogue().skills.find(row => row.id === skillId);
   const none = skillId === 'none';
-  return { ...context, ...(context.talentAction==='vice'?{resistingVice:context.viceRetry!==true}:{}), ...(context.talentAction==='relentless'?{pursuit:false,pursuitRole:'none'}:{}), psychologyKind:context.psychologyKind||(context.talentAction==='overcome-terror'?'terror':context.talentAction==='overcome-fear'?'fear':'none'),blackpowderBrokenTest:context.blackpowderBrokenTest===true,avoidingSurprise:context.avoidingSurprise===true,normallyAllowedSurpriseTest:context.normallyAllowedSurpriseTest===true,talentAction:context.talentAction||'none',preRollTalent:context.preRollTalent||'none',calledShot:context.calledShot??false,silentTakedown:context.silentTakedown??false, ...extra, attributeId:action.attr || context.attributeId || 'none', weapon:{hack:(action.qualities||[]).some(row=>row.id==='taille'),crewed:(action.qualities||[]).some(row=>row.id==='equipage'),...(extra.weapon||{})}, outsideCombat: ['attack', 'attaque'].includes(action.type) ? false : context.outsideCombat,
+  // Adversaire connu par ses mots-clés : la Haine et les spécialisations à cible s'appliquent d'office ; une saisie `enemyGroup` du MJ prime.
+  const enemyKeywords = extra.opponent && context.enemyGroup == null ? participantKeywords(extra.opponent).ids : [];
+  return { ...context, ...(enemyKeywords.length ? { enemyKeywords } : {}), ...(context.talentAction==='vice'?{resistingVice:context.viceRetry!==true}:{}), ...(context.talentAction==='relentless'?{pursuit:false,pursuitRole:'none'}:{}), psychologyKind:context.psychologyKind||(context.talentAction==='overcome-terror'?'terror':context.talentAction==='overcome-fear'?'fear':'none'),blackpowderBrokenTest:context.blackpowderBrokenTest===true,avoidingSurprise:context.avoidingSurprise===true,normallyAllowedSurpriseTest:context.normallyAllowedSurpriseTest===true,talentAction:context.talentAction||'none',preRollTalent:context.preRollTalent||'none',calledShot:context.calledShot??false,silentTakedown:context.silentTakedown??false, ...extra, attributeId:action.attr || context.attributeId || 'none', weapon:{hack:(action.qualities||[]).some(row=>row.id==='taille'),crewed:(action.qualities||[]).some(row=>row.id==='equipage'),...(extra.weapon||{})}, outsideCombat: ['attack', 'attaque'].includes(action.type) ? false : context.outsideCombat,
     skillId: none ? 'none' : skill?.id, skillGroupId: none ? 'none' : skill?.groupId,
     specializationId: skill?.specializationId ?? (skill || none ? 'none' : undefined),
     specialization: skill?.specialization ?? (skill ? 'none' : undefined) };
@@ -36,8 +39,8 @@ export function applicableV5TalentTestFields(participant, skillId) {
       return result;
     });
 }
-export function previewV5TalentTestModifiers(participant, { action, settings = {}, kind, role = 'actor' } = {}) {
-  const context = buildV5TalentTestContext(action, settings, { kind });
+export function previewV5TalentTestModifiers(participant, { action, settings = {}, kind, role = 'actor', opponent = null } = {}) {
+  const context = buildV5TalentTestContext(action, settings, { kind, opponent });
   const plan = evaluateV5Talents(participant, { event: 'test.beforeRoll', role, context, includeTalents: V5_TEST_TALENT_IDS });
   const names = labels();
   const source = proposal => ({ id: 'talent:' + proposal.stackGroup, label: proposal.origins.map(row => names.get(row.talentId) || row.talentId).join(', ') });
@@ -47,12 +50,12 @@ export function previewV5TalentTestModifiers(participant, { action, settings = {
     disadvantageSources: plan.proposals.filter(row => row.op === 'grantDisadvantage').map(source) };
 }
 /** Keep/invert options remain independent. No reroll and no automatic maximum. */
-export function previewV5TalentSLChoices(participant, preview, { action, settings = {}, kind, role = 'actor' } = {}) {
+export function previewV5TalentSLChoices(participant, preview, { action, settings = {}, kind, role = 'actor', opponent = null } = {}) {
   const test = structuredClone(preview), plans = [], choiceDescriptors = [], unresolved = [];
   const names = labels();
   const selectedOption = settings.choice || (test.options.length === 1 ? test.options[0].id : null);
   for (const option of test.options) {
-    const context = buildV5TalentTestContext(action, settings, { kind, test: { success: option.result.success, roll: option.result.roll, sl: option.result.sl } });
+    const context = buildV5TalentTestContext(action, settings, { kind, opponent, test: { success: option.result.success, roll: option.result.roll, sl: option.result.sl } });
     const choices = { ...(settings.talentChoices || {}) };
     for (const contract of V5_TALENT_CONTRACTS) for (const clause of contract.clauses) if (clause.event === 'test.afterRoll' && clause.choice) {
       const key = clause.choice.id + ':' + option.id;

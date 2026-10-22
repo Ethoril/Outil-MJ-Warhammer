@@ -4,6 +4,7 @@
  * `projectDivineGear` les reconstruit depuis `divineEffects` (appelée par recomputeLayerValues) : fin d'effet, Undo et synchro
  * nettoient donc seuls ce qu'ils ont posé.
  */
+import { activeReferential, keywordTree, participantKeywords, resolveKeyword } from './creature-keywords.js';
 const clone = value => structuredClone(value);
 const need = (field, label) => ({ field, label });
 const isText = value => typeof value === 'string' && value.trim() !== '';
@@ -17,9 +18,10 @@ const characteristicBonus = (participant, key) => {
   const score = Number(participant?.caracs?.[key]);
   return Number.isFinite(score) ? Math.floor(score / 10) : null;
 };
-const SPECIALIZATION_LABEL = 'Ennemi visé (espèce ou individu)';
-const SPECIALIZATION_MAX = 60;
+const SPECIALIZATION_LABEL = 'Ennemi visé (mot-clé du référentiel)';
 const cleanSpecialization = value => typeof value === 'string' ? value.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim() : '';
+// La spécialisation d'un talent à cible est un mot-clé du référentiel (jamais un texte libre) : on conserve son nom canonique.
+const canonicalSpecialization = value => resolveKeyword(cleanSpecialization(value))?.nameFr || '';
 const liveLayer = (participant, layer) => layer && (participant.extensions?.v5?.divineEffects || []).find(row => row.id === layer.id);
 
 const handlers = {
@@ -94,27 +96,25 @@ const handlers = {
     needs(effect, { input } = {}) {
       if (!Array.isArray(effect.talents) || !effect.talents.length) return [need('contract.effects.talents', 'Talents sourcés requis')];
       if (effect.specializationFrom !== 'input') return [];
-      const text = cleanSpecialization(input?.talent?.specialization);
-      if (!text) return [need('talent.specialization', SPECIALIZATION_LABEL)];
-      return text.length > SPECIALIZATION_MAX ? [need('talent.specialization', `${SPECIALIZATION_LABEL} : ${SPECIALIZATION_MAX} caractères au plus`)] : [];
+      return canonicalSpecialization(input?.talent?.specialization) ? [] : [need('talent.specialization', SPECIALIZATION_LABEL)];
     },
     // Spécialisation saisie au lancement : figée ici (aperçu), l'application ne relit plus la saisie.
     resolve(effect, { input } = {}) {
       if (effect.specializationFrom !== 'input') return effect;
       const missing = handlers['grant-talent'].needs(effect, { input });
       if (missing.length) return { error: missing.map(row => row.label).join(' ; '), needs: missing };
-      const specialization = cleanSpecialization(input.talent.specialization);
+      const specialization = canonicalSpecialization(input.talent.specialization);
       const { specializationFrom, ...resolved } = effect;
       return { ...resolved, talents: effect.talents.map(row => ({ ...row, specialization })) };
     },
     inputFields(effect, { actor, participants = [] } = {}) {
       if (effect.specializationFrom !== 'input') return [];
-      const names = [...new Set(participants.filter(row => row.zone === 'active' && row.camp && actor?.camp && row.camp !== actor.camp).map(row => row.name).filter(isText))];
-      const text = { path: 'talent.specialization', label: SPECIALIZATION_LABEL, kind: 'text', scope: 'effect' };
-      if (!participants.length) return [text];
-      return [
-        { id: 'talent.specializationChoice', path: 'talent.specialization', label: 'Ennemi présent', kind: 'select', scope: 'effect',
-          options: [['', 'Autre (saisie libre)'], ...names.map(name => [name, name])], help: 'Choisir un ennemi présent ou saisir librement une espèce ou un individu.' }, text];
+      const referential = activeReferential();
+      const present = [...new Set(participants.filter(row => row.zone === 'active' && row.camp && actor?.camp && row.camp !== actor.camp).flatMap(row => participantKeywords(row, referential).ids))];
+      return [{ id: 'talent.specializationChoice', path: 'talent.specialization', label: SPECIALIZATION_LABEL, kind: 'select', scope: 'effect',
+        options: [['', 'Choisir un mot-clé'], ...present.map(id => [referential.terms.get(id).nameFr, `${referential.terms.get(id).nameFr} (présent)`]),
+          ...keywordTree(referential).map(item => [item.nameFr, `${'— '.repeat(item.depth)}${item.nameFr}`])],
+        help: 'Choisir un mot-clé du référentiel (espèce, nature, allégeance) ; ceux des ennemis présents sont proposés en premier. Un terme absent se fait ajouter par le MJ.' }];
     },
     // `consumeOn: 'critical'` : la couche prend fin au prochain Coup Critique infligé par son porteur (voir consumeDivineLayers).
     buildLayer: effect => ({ grantedTalents: effect.talents.map(row => ({ id: row.id, rank: row.rank ?? 1, ...(row.name ? { name: row.name } : {}), ...(row.specialization ? { specialization: row.specialization } : {}) })),

@@ -21,12 +21,11 @@ try{
  await page.getByRole('tab',{name:'Jouer',exact:true}).click();
  const panel=page.locator('[data-divine-panel]');await panel.locator('summary').first().click();
  const prayer=panel.getByRole('combobox',{name:'Prière divine',exact:true});
- await page.evaluate(async()=>{const {Store}=await import('/js/main.js');await Store.addParticipant({id:'foe',name:'Brigand',kind:'PNJ',camp:'ennemi',zone:'active',hp:20,maxHp:20});});
+ await page.evaluate(async()=>{const {Store}=await import('/js/main.js');await Store.addParticipant({id:'foe',name:'Brigand',kind:'PNJ',camp:'ennemi',zone:'active',hp:20,maxHp:20,keywords:['humain']});});
  await prayer.selectOption('divine:miracle:devotion-de-la-guerriere');
- const list=panel.getByRole('combobox',{name:'Ennemi présent',exact:true}),text=panel.getByRole('textbox',{name:'Ennemi visé (espèce ou individu)',exact:true});
- assert.deepEqual(await list.locator('option').allTextContents(),['Autre (saisie libre)','Brigand']);
- await list.selectOption('Brigand');assert.equal(await text.inputValue(),'Brigand');
- await list.selectOption('');assert.equal(await text.inputValue(),'');await text.fill('Gobelins');
- assert.equal(await text.inputValue(),'Gobelins');assert.deepEqual(errors,[]);
- console.log('PASS — A4 : sélection d’un ennemi et saisie libre par gestes réels.');
+ const list=panel.getByRole('combobox',{name:'Ennemi visé (mot-clé du référentiel)',exact:true});
+ assert.deepEqual((await list.locator('option').allTextContents()).slice(0,2),['Choisir un mot-clé','Humain (présent)']);
+ assert.equal(await panel.getByRole('textbox',{name:'Ennemi visé (mot-clé du référentiel)',exact:true}).count(),0,'plus de texte libre');
+ await list.selectOption('Peaux-vertes');assert.equal(await list.inputValue(),'Peaux-vertes');assert.deepEqual(errors,[]);
+ console.log('PASS — A4 : choix d’un mot-clé du référentiel par gestes réels, sans texte libre.');
 }finally{await browser?.close();await new Promise(done=>server.close(done));}
