@@ -172,6 +172,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/journal-view.js',
   './js/ui/messages.js',
   './js/ui/reserve.js',
+  './js/ui/bestiary-library.js',
   './js/ui/resolution-panel.js',
   './js/ui/v5-magic-controls.js',
   './js/ui/v5-spell-options.js',

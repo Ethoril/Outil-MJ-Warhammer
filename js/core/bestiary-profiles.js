@@ -55,6 +55,36 @@ export function filterBestiary(profiles, { keyword = null, text = '', kinds = nu
     && (!wanted || [profile.name, profile.nameFr, ...(profile.skills || []).map(skill => skill.name)].some(value => String(value || '').toLowerCase().includes(wanted))));
 }
 
+/**
+ * Chargement paresseux des données : l'index d'abord, un livre seulement à la demande (jamais deux fois). `fetchJson(chemin)` renvoie le
+ * JSON ; un échec n'est pas mémorisé, pour permettre une nouvelle tentative.
+ */
+export function createBestiaryLoader(fetchJson, base = './js/data/bestiary/') {
+  let indexPromise = null;
+  const books = new Map();
+  const once = (store, key, load) => {
+    if (!store.has(key)) store.set(key, load().catch(error => { store.delete(key); throw error; }));
+    return store.get(key);
+  };
+  const loader = {
+    async index() {
+      if (!indexPromise) indexPromise = Promise.resolve().then(() => fetchJson(`${base}index.json`)).catch(error => { indexPromise = null; throw error; });
+      return (await indexPromise).books;
+    },
+    book(book) {
+      return once(books, book, async () => {
+        const entry = (await loader.index()).find(item => item.book === book);
+        if (!entry) throw new Error(`livre de bestiaire inconnu : ${book}`);
+        return (await fetchJson(`${base}${entry.file}`)).profiles;
+      });
+    },
+    /** Profils des livres demandés, concaténés dans l'ordre demandé. */
+    async load(bookIds) { return (await Promise.all(bookIds.map(book => loader.book(book)))).flat(); },
+    loadedBooks() { return [...books.keys()]; }
+  };
+  return loader;
+}
+
 export const BESTIARY_FREE_ATTACK_KEY = 'freeAttack';
 
 const ARMOUR_ZONES = Object.freeze({ head: /\bhead\b/i, body: /\bbody\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });
@@ -116,5 +146,15 @@ export function buildParticipantFromBestiary(id, options = {}) {
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
       optionalTraits: (record.optionalTraits || []).map(traitText), ...(record.woundsAbsent ? { woundsAbsent: true } : {})
     } } }
+  };
+}
+
+/** Champs d'un profil de Réserve (à passer à `new Profile`) copiés d'un profil de bestiaire : mêmes valeurs imprimées que le participant. */
+export function buildReserveProfileFromBestiary(id, options = {}) {
+  const participant = buildParticipantFromBestiary(id, options);
+  return {
+    name: participant.name, kind: 'Créature', initiative: participant.initiative, hp: participant.hp ?? 0, maxHp: participant.maxHp ?? 0,
+    caracs: participant.caracs, armor: participant.armor, diceLines: participant.actions, skills: participant.skills,
+    traits: participant.traits, keywords: participant.keywords, group: options.group ?? '', extensions: participant.extensions
   };
 }

@@ -8,6 +8,7 @@ import { createPersistence } from './core/persistence.js';
 import { createCombatEngine } from './core/combat.js';
 import { d100 } from './core/dice.js';
 import { initReserveUI } from './ui/reserve.js';
+import { createBestiaryLibrary } from './ui/bestiary-library.js';
 import { initImportModalUI } from './ui/import-modal.js';
 import { initCardUI } from './ui/card.js';
 import { initCombatViewUI } from './ui/combat-view.js';
@@ -298,6 +299,8 @@ const reserveUI = initReserveUI(Store, { onSaved: payload => {
   if (!profileSavedHandler || profileSavedHandler.token !== payload?.editorToken) return;
   profileSavedHandler.fn(payload);
 } });
+const bestiaryLibrary = createBestiaryLibrary({ container: qs('#bestiary-library-body'), store: Store, notify: (message, type = 'info') => showToast(message, type) });
+qs('#bestiary-library').addEventListener('toggle', event => { if (event.target.open) bestiaryLibrary.open(); });
 const importModalUI = initImportModalUI(Store);
 const cardUI = initCardUI(Store, Combat);
 const combatViewUI = initCombatViewUI(Store, Combat, cardUI, id => {
