@@ -14,7 +14,7 @@ puis enchaîne les étapes de la section « Suite ».
 
 ## État
 
-- **Production : 3.23.0** (22/10 matin, `main` = `codex/divin-v5`). Phases A, B, C terminées ; D terminée sauf D11 (familiers, code bloqué sur les profils de la phase E) ; **E en cours** ; F, G, H à faire.
+- **Production : 3.24.0** (22/10, 16 h 30, `main` = `codex/divin-v5`). Phases A, B, C terminées ; D terminée sauf D11 (familiers, code bloqué sur les profils de la phase E) ; **E en cours** (publié : mots-clés K1-K5, profils de L06, L11, L01-L04, L07 ; reste à intégrer depuis le commit 5eb0d31 de `pro/phase-e`) ; F, G, H à faire.
 - **Autonomie** (MJ, 20/10) : coder, contrôler, **publier sans feu vert** et enchaîner les phases ; arrêt seulement si les tokens ou un quota manquent. Les décisions de règle ouvertes sont posées au MJ **en sélecteurs** (page artifact à db, voir plus bas, ou questions à choix).
 - Arbitrages faisant foi, dans l’ordre : `docs/ARBITRAGES_MJ_21_10.md`, `docs/DECISIONS_MJ_CHOIX_EXECUTANTS_22_10.md` (120 choix des exécutants B, C, D, runes, familiers, relus par le MJ le 22/10), puis `docs/divin/DIVIN_RESERVE_DECISIONS.md`. Règle maison : aucun ingrédient de magie ; V5 partout ; supplément le plus récent en cas de divergence.
 - Registre des valeurs durables de personnage (phase H) : `docs/VARIABLES_PERSISTANTES_PJ.md`.
