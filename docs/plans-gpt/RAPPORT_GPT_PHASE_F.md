@@ -12,6 +12,7 @@
 | F06-Combat | FAIT | `65be80b` ; L06 p.161-169 ; F-L06-0047 à 0171 ; 125 règles supplémentaires |
 | F06-Usages | FAIT, `f904938` | L06 p.134-159 ; F-L06-0172 à 0293 ; 122 entrées ; suite 4 050/4 050 (`tmp/audit/F06-usages-full.log`, 113,573 s) |
 | F06-Santé/États/Corruption | FAIT, commit du présent lot | L06 p.170-189 ; F-L06-0294 à 0539 ; quatre tables critiques, séquelles, maladies, États, mutations ; suite 4 051/4 051 (`tmp/audit/F06-health-full.log`, 109,816 s) |
+| F06-Entre-aventures | Audité, validation avant commit | L06 p.190-201 ; F-L06-0540 à 0626 ; 87 règles et événements mécaniques ; coûts XP vérifiés visuellement p.191 |
 | Reste de L06 | À FAIRE | Compétences/talents, création/carrières, applications des compétences, blessures/soins, maladies/poisons, États hors inventaires existants, corruption, entre-aventures, magie générale, équipement, environnement et appendices à partir de p.364 |
 | F05, F17, F11, F13, F14, F16, F18-F26, F01-F04, F07-F10, F12, F15 | À FAIRE | Tous les autres livres, dans l'ordre du plan ; aucun déclaré lu |
 
@@ -22,6 +23,8 @@ Reprise explicitement demandée par le MJ jusqu'au bout des 26 livres. Les parag
 L06 p.170-189 lu ; p.189 vérifiée visuellement car l'extraction désalignait les deux tables de mutations. Les lignes de critiques pp.173-176 sont rattachées individuellement aux données existantes après lecture source : application des Blessures/États immédiats séparée des séquelles affichées en rappel. Deux modificateurs de seuil résiduels (-10 aux Tests) de la table V5 sont signalés, avec proposition -1 DR, sans correction de la source ni implantation.
 
 Les renvois purs vers des domaines déjà inventoriés peuvent porter `selectorEligible:false`, avec `selectorExclusionReason` obligatoire : ils restent au registre et dans les comptes, mais ne reposent pas au MJ une décision déjà portée par C0/E0/D0. Un nouveau test d'outillage a d'abord échoué sur cette exclusion, puis huit contrôles d'audit sont devenus verts. Aucun test hérité modifié.
+
+L06 p.190-201 lu. Les événements régionaux et personnels à effet déterminé sont détaillés, les rencontres purement narratives restent hors inventaire. La table XP p.191 a été rendue et vérifiée malgré les substitutions de polices de Poppler. L'extracteur a rencontré une page sans texte dans les appendices : il enregistre désormais `textEmpty:true` et une vérification visuelle requise, sans certifier la lecture ni interrompre les pages suivantes ; nouveau test rouge puis vert (neuf tests d'audit au total).
 
 L06 — `Livre de base V5 EN v2.pdf`, 379 pages physiques. SHA-256 recalculé : `53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de`, identique au manifeste. Sommaire repéré aux pages physiques 1-6. Pages 129-133, 265-266 lues pour le lot Tests ; pages 161-169 lues pour Combat ; folios imprimés égaux aux numéros physiques pour ces pages. Passage « Surprised » p.187 consulté pour lever une divergence, sans audit du reste de cette page. Page 267 repérée lors d'un premier extrait, mais XP et voyage non audités. Ni le sommaire ni le hash ne certifient une lecture exhaustive.
 

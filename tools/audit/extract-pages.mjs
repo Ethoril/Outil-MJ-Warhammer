@@ -27,9 +27,9 @@ export function extractPages({root,book,pages,pdftotext=process.env.PDFTOTEXT||'
     const result=runner(pdftotext,['-layout','-enc','UTF-8','-f',String(physicalPage),'-l',String(physicalPage),book.path,'-'],{encoding:'utf8',windowsHide:true,maxBuffer:4*1024*1024});
     if(result.status!==0||result.error)throw Error('Extraction '+book.id+' p.phys.'+physicalPage+' : '+(result.error?.message||result.stderr||'échec Poppler'));
     const text=result.stdout||'';
-    if(!text.trim())throw Error('Page vide : '+book.id+' p.phys.'+physicalPage+' ; vérification visuelle requise');
+    const textEmpty=!text.trim();
     const stem='p'+String(physicalPage).padStart(4,'0');
-    const receipt={book:book.id,pdfSha256,physicalPage,printedPage:null,textSha256:hash(text),read:false,visualChecked:false,warnings:result.stderr||'',command:['pdftotext','-layout','-enc','UTF-8','-f',physicalPage,'-l',physicalPage,book.path,'-']};
+    const receipt={book:book.id,pdfSha256,physicalPage,printedPage:null,textSha256:hash(text),textEmpty,inspectionRequired:textEmpty?'vérification visuelle requise':null,read:false,visualChecked:false,warnings:result.stderr||'',command:['pdftotext','-layout','-enc','UTF-8','-f',physicalPage,'-l',physicalPage,book.path,'-']};
     writeFileSync(join(output,stem+'.txt'),text,'utf8');
     writeFileSync(join(output,stem+'.json'),JSON.stringify(receipt,null,2)+'\n');
     return receipt;

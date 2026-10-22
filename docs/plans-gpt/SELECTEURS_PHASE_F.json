@@ -5562,5 +5562,1136 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0540",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.190",
+    "question": "Implanter « Résoudre une entre-aventure » ? Récupérer toutes les Blessures, dépenser XP, tirer événements régionaux et personnels, acheter, résoudre activités puis dépenser l’argent non conservé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0541",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.191",
+    "question": "Implanter « Acheter les progrès autorisés par sa carrière » ? La carrière et ses niveaux ouvrent caractéristiques, compétences et talents ; compétences et talents des niveaux inférieurs restent disponibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0542",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.191",
+    "question": "Implanter « Acheter des progrès de caractéristique » ? Chaque progrès ajoute cinq points ; coût croissant avec les progrès déjà achetés, sans plafond fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0543",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.191",
+    "question": "Implanter « Acheter des progrès de compétence » ? Chaque progrès ajoute cinq points ; coût croissant par compétence, sans plafond fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0544",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.191",
+    "question": "Implanter « Barème des coûts d’expérience » ? Quinze paliers de +5 à +75 : coût unitaire de caractéristique de 125 à 11250 XP, de compétence de cinquante à 8500 XP.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0545",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.191",
+    "question": "Implanter « Acheter un Talent et ses rangs » ? Chaque acquisition coûte cent XP ; répétition seulement si le Talent l’autorise ; cocher une case du suivi de carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0546",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.191",
+    "question": "Implanter « Cocher les progrès de carrière » ? Achat de compétence ou caractéristique de carrière coche une case, comme les talents et les possessions éligibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0547",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Tirer un événement régional » ? Le MJ tire un d100 pour toute l’entre-aventure, ou choisit un événement approprié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0548",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Procession religieuse » ? Les fidèles du dieu célébré peuvent jouer un Test avec Avantage durant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0549",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Mercenaires inhabituels » ? Entraînement et Apprentissage inhabituel de compétences ou talents martiaux coûtent 20 % de moins.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0550",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Augures du vent d’ouest » ? +1 DR à Incantation et Canalisation d’Azyr durant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0551",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Professeur itinérant » ? Une compétence avancée choisie par le MJ devient accessible à Entraînement sans Consulter un expert.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0552",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Docteur itinérant » ? Disponibilité des remèdes Rares/Peu communs améliorée d’un cran ; amputations et extractions offertes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0553",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Caravane d’artisans » ? +2 DR aux Tests d’Artisanat de l’entre-aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0554",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Profit sur les eaux » ? Les Riverains gagnent 50 % de plus avec Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0555",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Occasion favorable » ? Citadins et Paysans gagnent 50 % de plus avec Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0556",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Festivités » ? Avantage à Commérage ; revenus des Artistes et Amuseurs doublés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0557",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.192",
+    "question": "Implanter « Remèdes miraculeux ambulants » ? Remèdes Rares/Peu communs un cran plus disponibles ; pour chaque achat, d10 : un ou deux remplace le remède par un poison au choix MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0558",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Levée militaire » ? Guerriers : Revenu augmenté de 50 % et compte aussi comme Entraînement au combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0559",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Troupe itinérante interdite » ? Consulter un expert, Fomenter la dissidence et Dernières nouvelles coûtent chacun une activité supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0560",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Mauvais temps » ? À l’aventure suivante, Tests sociaux -1 DR et nourriture 50 % plus chère.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0561",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Ferveur religieuse » ? Avantage à tous les Tests de Prière de cette entre-aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0562",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Vacance du pouvoir » ? Fomenter la dissidence coûte une activité au lieu de deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0563",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Nouvelle lune » ? Roublards : Revenu augmenté de 50 %.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0564",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Fausse monnaie » ? Dépôts bancaires et revenus diminués de 20 %.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0565",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Collecteur d’impôts » ? Revenus légaux réduits de moitié ; revenus hors-la-loi doublés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0566",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Répression du crime » ? Roublards : aucun Revenu et épargne seulement en dépôt à haut risque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0567",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Beau temps accablant » ? À l’aventure suivante, Tests sociaux -1 DR ; disponibilité des objets non exotiques améliorée d’un cran.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0568",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Mauvaises récoltes » ? Paysans : Revenu interdit ; nourriture au double du prix durant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0569",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Épidémie locale » ? Chaque personnage teste Résistance +4 ou contracte le Flux sanglant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0570",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Émeutes » ? Courtisans : Revenu interdit ; Avantage aux Tests de Fomenter la dissidence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0571",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.193",
+    "question": "Implanter « Sous le soupçon » ? Tous perdent une activité ; Roublards ne peuvent gagner de Revenu avant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0572",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Tirer un événement personnel » ? Chaque joueur tire d100 pour les événements de l’entre-aventure ; certains persistent durant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0573",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Inspiration soudaine » ? Gagner cinquante XP.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0574",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Estime inattendue » ? Récompense adaptée par le MJ, objet ou bourse disponible au début de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0575",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Le problème d’un autre » ? Gagner une activité supplémentaire pour cette entre-aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0576",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Une semaine tranquille » ? Ignorer la première maladresse ou première incantation imparfaite mineure de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0577",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Bonne journée de travail » ? Pour le prochain calcul de Revenu, augmenter le Rang de trois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0578",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Œuvre de collection » ? Vendre immédiatement un objet choisi par le MJ au double de son prix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0579",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Étreinte de Morr » ? Héritage avant activités : Bronze vingt sous, Argent dix pistoles, Or deux couronnes ; dépenser ou épargner avant clôture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0580",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Prévenu vaut mieux armé » ? Maximum de Chance augmenté d’un pendant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0581",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Une affaire » ? Acheter un unique objet à moitié prix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0582",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Colporteur » ? Payer six sous pour Dernières nouvelles sans consommer une activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0583",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Relation utile » ? Commande gratuite, ou Recherche d’un Savoir gratuite avec Avantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0584",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.194",
+    "question": "Implanter « Voyante » ? Une pistole : acquérir Destinée ou tirer un nouveau présage à la place de l’ancien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0585",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Vente aux enchères arcanique » ? Deux couronnes : livre et Recherche d’un Savoir gratuite avec Avantage pour un lecteur choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0586",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Bière renversée » ? Désavantage aux Tests sociaux contre une faction choisie durant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0587",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Obligations pesantes » ? Perdre une activité de l’entre-aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0588",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Bien confisqué » ? Dépenser une activité pour récupérer un objet choisi par le MJ, sinon commencer l’aventure sans lui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0589",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Malchance de Ranald » ? Maximum de Chance diminué d’un durant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0590",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Rumeurs scandaleuses » ? Impossible de dépenser Chance sur les Tests sociaux durant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0591",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Allié accusé » ? Licence juridique et Savoir (Loi) +2 : une activité ; sinon trois activités communes. Allié libéré : faveur majeure gagnée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0592",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Accusation de sorcellerie » ? Une activité et Charme -1 pour se disculper ; échec ou absence de démarche : poursuites narratives persistantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0593",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.195",
+    "question": "Implanter « Dépenser l’argent non conservé » ? Après activités, tout argent non épargné est dépensé ; Revenu et sommes explicitement conservées financent l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0594",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.196",
+    "question": "Implanter « Limiter les activités d’entre-aventure » ? Une activité par semaine sans aventure, au maximum trois par période ; obligations de carrière ou d’espèce peuvent les réduire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0595",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.196",
+    "question": "Implanter « Assumer un haut rang de carrière » ? Au quatrième niveau sans Revenu, tester le métier : échec perd un Rang ; à zéro, retour gratuit au troisième niveau, sans retirer les progrès acquis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0596",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.196",
+    "question": "Implanter « Restaurer son Rang professionnel » ? Chaque Revenu ultérieur rend un Rang jusqu’au maximum de carrière ; reprendre un niveau perdu exige à nouveau son coût XP.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0597",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.196",
+    "question": "Implanter « Réserver une activité à l’équilibre elfique » ? Un elfe consacre une activité au yenlui ; si le système détaillé du guide elfe est utilisé, cette dépense est remplacée par ses règles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0598",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.196",
+    "question": "Implanter « Progresser dans sa carrière » ? Une activité, cent XP et suivi rempli : dix cases pour niveau deux, douze de plus pour trois, quatorze de plus pour quatre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0599",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.196",
+    "question": "Implanter « Dresser un animal entre les aventures » ? Dressage +2 réussi ajoute une compétence du Trait Dressé à l’animal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0600",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.197",
+    "question": "Implanter « Placer son argent en banque » ? Réservé Or/Argent ; taux et risque de un à dix ; retrait coûte une autre activité et un d100 : inférieur ou égal au risque perd le capital, sinon intérêt reçu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0601",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.197",
+    "question": "Implanter « Cacher son butin » ? Accessible à tous ; retrait gratuit avant l’aventure, d100 ≤10 perd la cache, sinon capital retrouvé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0602",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.197",
+    "question": "Implanter « Changer de carrière » ? Accord MJ et une activité ; cent XP dans la même Classe, deux cents dans une autre ; vérifier les carrières accessibles à l’espèce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0603",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.197",
+    "question": "Implanter « S’entraîner au combat » ? Une activité donne une relance de Corps à corps ou Tir durant l’aventure suivante ; activité répétable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0604",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.197",
+    "question": "Implanter « Commander un objet exotique » ? Trouver l’artisan, payer, puis recevoir l’objet après l’aventure suivante ; une activité par objet exotique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0605",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.197",
+    "question": "Implanter « Consulter un expert » ? Commérage +0 localise un expert authentique sur réussite, un prétendu expert sur échec ; coût ou faveur décidés par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0606",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.198",
+    "question": "Implanter « Gagner une relance d’expert » ? Si la consultation apporte un savoir, obtenir une relance unique sur ce sujet avant la fin de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0607",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.198",
+    "question": "Implanter « Fabriquer un objet entre les aventures » ? Métier étendu, outils, atelier et matières coûtant un quart du prix ; un jet par activité, travail inachevé conservé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0608",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.198",
+    "question": "Implanter « Barème d’Artisanat » ? Disponibilité Commune : +2 DR, Peu commune : +0, Rare : -1, Exotique : -3 ; seuil Bronze cinq, Argent dix, Or quinze ou plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0609",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.198",
+    "question": "Implanter « Modifier la fabrication par qualités et défauts » ? Chaque Défaut divise le seuil de DR par deux ; ajouter ensuite cinq DR par Qualité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0610",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.198",
+    "question": "Implanter « Commander un objet personnalisé » ? Avec accord MJ, deux Commandes consécutives ou plus pour des objets inhabituels ; prix, matières et faveurs décidés par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0611",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.198",
+    "question": "Implanter « Fomenter la dissidence » ? Deux activités ; Commérage +2 puis Charme selon cible ; les deux doivent réussir. Agitateur compte aussi comme Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0612",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.198",
+    "question": "Implanter « Exploiter la dissidence préparée » ? À l’aventure suivante, Charme rassemble la foule ; changer ensuite de cible aggrave la difficulté de deux crans.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0613",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.199",
+    "question": "Implanter « Gagner un revenu » ? Tester la compétence de Revenu de carrière à +2 ; montant selon Rang/Statut : Bronze 2d10 sous, Argent 1d10 pistoles, Or une couronne par Rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0614",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.199",
+    "question": "Implanter « Réduire le revenu en cas d’échec » ? Un Test de Revenu raté donne moitié du montant normal arrondi au-dessous ; les événements peuvent encore le modifier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0615",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.199",
+    "question": "Implanter « Commencer sans avoir travaillé » ? Sans activité de Revenu, une seule pièce du Statut au début de l’aventure ; obligations de quatrième niveau à traiter séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0616",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.199",
+    "question": "Implanter « Planifier une invention » ? Une activité et Métier (Ingénieur), difficulté MJ ; chaque DR positif fournit +1 DR à la fabrication ultérieure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0617",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.199",
+    "question": "Implanter « Construire une invention » ? Artisanat -3, compétences de tous composants ; matières au double des prix cumulés et disponibilité du composant le plus rare.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0618",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.199",
+    "question": "Implanter « Faire construire une invention » ? Commande auprès d’un expert, coût six fois le prix cumulé des composants ; capacités finales arbitrées par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0619",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.200",
+    "question": "Implanter « Obtenir les dernières nouvelles » ? Commérage +0 ; DR fixent détails et précision ; échec impressionnant peut fournir une fausse information crue vraie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0620",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.200",
+    "question": "Implanter « Augmenter sa réputation » ? Dépenser le Revenu maximum théorique donne +1 Rang jusqu’à la prochaine entre-aventure, sauf scandale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0621",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.200",
+    "question": "Implanter « Approfondir un Savoir » ? Accès à une source et Recherche +2 ; réussite : un fait utile, plus un par DR ; gros échec : fausse certitude.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0622",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.200",
+    "question": "Implanter « Suivre et acquitter les faveurs » ? Mineure : une activité avec accord MJ ; majeure : deux activités consécutives ou plus ; significative : aventure jouée, pas d’acquittement par activités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0623",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.200",
+    "question": "Implanter « Refuser une faveur jurée » ? Rompre sa parole réduit le Statut d’un échelon, avec conséquences narratives décidées par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0624",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.201",
+    "question": "Implanter « Étudier une cible » ? Perception +0, difficulté adaptée ; réussite : un Avantage unique lié à la cible durant l’aventure suivante ; répétable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0625",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.201",
+    "question": "Implanter « S’entraîner hors carrière » ? Coût XP normal et paiement d’un tuteur : autant de sous que d’XP pour compétence de base ou caractéristique ; double pour compétence avancée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0626",
+    "phase": "Entre-aventures et progression",
+    "lot": "L06",
+    "source": "L06 p.201",
+    "question": "Implanter « Apprendre un Talent hors carrière » ? Premier rang seulement, tuteur adéquat, coût XP normal et 4d10 pistoles supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
