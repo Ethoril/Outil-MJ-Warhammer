@@ -1571,5 +1571,1565 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0172",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Repérer une filature » ? Opposer Perception à la Discrétion adaptée du suspect ; autoriser le jet même si personne ne suit réellement le personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0173",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Observer un lieu avant d’agir » ? Perception +0 révèle un fait utile par DR positif sur le lieu surveillé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0174",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Se déplacer sans être aperçu » ? Opposer la Discrétion du terrain à la meilleure Perception des observateurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0175",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Profiter d’une diversion pour se cacher » ? Une diversion appropriée donne Avantage aux Tests de Discrétion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0176",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Faire les poches » ? Opposer Escamotage à Perception de la victime ; les vols routiniers relèvent du Revenu d’entre-aventures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0177",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Trouver les criminels locaux » ? Commérage -1 DR, avec Avantage si le personnage possède Criminel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0178",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Plaider son innocence » ? Charme contre Calme, ou Savoir (Loi) opposé au tribunal ; pris sur le fait ou preuves compromettantes imposent Désavantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0179",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.134",
+    "question": "Implanter « Repérer rapidement l’objet de plus grande valeur » ? Évaluation -1 DR permet de repérer rapidement le bien le plus précieux d’une pièce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0181",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.135",
+    "question": "Implanter « Appliquer les conséquences d’une neutralisation silencieuse » ? Victoire : BF Blessures et Inconscient ; défaite : cible Sonnée et alarme immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0182",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.135",
+    "question": "Implanter « Résoudre une partie de jeu de hasard » ? Chaque joueur teste Jeu ; celui dont les DR sont les plus hauts gagne la partie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0183",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.135",
+    "question": "Implanter « Tricher au jeu » ? Escamotage contre la meilleure Perception adverse ; réussite : Avantage au prochain Test de Jeu de la partie ; échec : risque d’être découvert.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0184",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.136",
+    "question": "Implanter « Option des résultats de triche exceptionnels » ? L’exemple de triche permet à +3/+4 DR l’Avantage durant la soirée, et à +5 DR de gagner sans Test de Jeu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0185",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.136",
+    "question": "Implanter « Installer un piège » ? Tester Piégeage selon la complexité ; installation de vingt minutes par défaut, avec conséquence particulière sur une maladresse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0186",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.136",
+    "question": "Implanter « Détecter un piège » ? Perception à difficulté déterminée par le résultat d’installation ; examiner une petite zone précise donne Avantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0187",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.136",
+    "question": "Implanter « Déclencher un piège non repéré » ? Traverser sa zone déclenche le piège ; appliquer ses effets et Surpris ; Esquive seulement si le piège l’autorise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0188",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.136",
+    "question": "Implanter « Désarmer un piège découvert » ? Piégeage avec une difficulté d’un cran supérieure à l’installation ; Avantage si l’on a installé ce piège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0189",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.136",
+    "question": "Implanter « Crocheter une serrure » ? Test étendu de Crochetage, une tentative par Round ; difficulté et seuil dépendent de la serrure ; outils improvisés donnent Désavantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0190",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.136",
+    "question": "Implanter « Ouvrir une serrure sans urgence » ? Avec Crochetage et les outils requis, aucune épreuve si le temps ne manque pas et que la découverte est improbable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0191",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.137",
+    "question": "Implanter « Piège : seau d’immondices » ? Piégeage +4 ; maladresse : Souillé à l’installateur ; déclenchement : Souillé à la victime.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0192",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.137",
+    "question": "Implanter « Piège : fosse dissimulée » ? Piégeage +2 ; trois heures de creusement par deux yards ; maladresse et déclenchement font subir une chute correspondant à la profondeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0193",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.137",
+    "question": "Implanter « Piège : piège à mâchoires » ? Piégeage +4 en cinq minutes ; maladresse : six dégâts au bras ; victime : 1d10+5 dégâts à la jambe et un Enchevêtré de Force 55.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0194",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.137",
+    "question": "Implanter « Piège : pierre suspendue » ? Piégeage +0 ; maladresse : quatre dégâts à localisation aléatoire ; victime : 1d10+5 dégâts à la tête et Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0195",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.137",
+    "question": "Implanter « Piège : lame oscillante » ? Piégeage -1 avec arme à lame et une heure ; maladresse : cinq dégâts aléatoires ; victime et voisins à deux yards : 1d10+dégâts de l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0196",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.137",
+    "question": "Implanter « Barème des serrures » ? Loquet : +2 et deux DR ; serrure convenable : +0 et quatre ; barrière à goupilles : -1 et cinq ; serrure naine : -3 et huit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0197",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.137",
+    "question": "Implanter « Barème de détection des pièges » ? Installation à +5 ou plus : Perception -3 ; +3/+4 : -2 ; +1/+2 : -1 ; +0 ou résultat inconnu : +0. Un piège évident est plus facile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0198",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.138",
+    "question": "Implanter « Forcer une porte ou une fenêtre » ? Entrée bruyante : Corps à corps +0 avec outil adapté ou Force -1 ; outils discrets : Discrétion +0 contre Perception ; obstacle solide plus difficile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0199",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.138",
+    "question": "Implanter « Lire ou laisser des signes secrets » ? Signes secrets (Voleur) +0 pour trouver les messages ou en laisser aux initiés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0200",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.138",
+    "question": "Implanter « Détrousser par la menace » ? Opposer Intimidation à Calme ; difficulté selon les circonstances, puis Discrétion ou Athlétisme pour s’échapper à temps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0201",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.139",
+    "question": "Implanter « Reconnaître une monnaie falsifiée » ? Évaluation réussie révèle la monnaie manifestement contrefaite ou rognée dans un paiement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0202",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.139",
+    "question": "Implanter « Fabriquer de la fausse monnaie » ? Art (Gravure) -2 pour une matrice convaincante, puis Métier (Forgeron) pour frapper les pièces ; activité routinière par Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0203",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.139",
+    "question": "Implanter « Monter une escroquerie importante » ? Opposer Charme à Calme de la victime ; difficulté selon la vraisemblance du mensonge ; arnaques ordinaires par Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0204",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.140",
+    "question": "Implanter « Fixer la difficulté d’une demande sociale » ? Compter relation, demande, enjeux, coûts et risques favorables puis défavorables ; total positif : +2/+4, négatif : -1/-2/-3, au choix du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0205",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.140",
+    "question": "Implanter « Déterminer le Statut par la carrière » ? Le niveau de carrière fixe Bronze, Argent ou Or et un Rang à l’intérieur de ce Statut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0206",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.140",
+    "question": "Implanter « Se faire un contact rapidement » ? Charme pour s’attirer les bonnes grâces d’un PNJ utile ; le résultat peut fournir information ou Avantage ultérieur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0207",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.140",
+    "question": "Implanter « Comprendre une assemblée » ? Intuition détermine humeur générale, meneurs et rapports de pouvoir d’un groupe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0208",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.140",
+    "question": "Implanter « Mentir de manière convaincante » ? Opposer Calme, Charme ou Divertissement (Comédie) à Intuition de l’auditeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0209",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.140",
+    "question": "Implanter « Répandre une rumeur » ? Commérage, difficulté selon crédibilité de la rumeur et preuves disponibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0210",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.141",
+    "question": "Implanter « Conserver les signes de son Statut » ? Sans les possessions du niveau actuel, être traité au plus haut niveau de carrière dont on possède les attributs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0211",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.141",
+    "question": "Implanter « Changer de Statut » ? Carrière, progression ou perte de possessions modifient le Statut ; le MJ peut aussi le corriger après un événement significatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0212",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.141",
+    "question": "Implanter « Malus de différence de Statut » ? Charme, Commérage et la plupart des Tests de Sociabilité subissent -1 DR par échelon de Statut séparant les interlocuteurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0213",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.142",
+    "question": "Implanter « Intimider grâce au Statut Or » ? En civilisation et avant la violence, un personnage Or gagne Avantage pour intimider un Statut inférieur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0214",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.142",
+    "question": "Implanter « Commander un Statut inférieur » ? Gagner Avantage à Commandement contre les interlocuteurs de Statut inférieur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0215",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.142",
+    "question": "Implanter « Entretenir une relation utile » ? Réussir Charme pour obtenir rapidement un contact donne Avantage aux futurs Tests de Charme avec ce PNJ ; les faveurs entretiennent l’amitié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0216",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.143",
+    "question": "Implanter « Persuader un interlocuteur » ? Charme non opposé si la demande est raisonnable ; Intuition adverse si mensonge ou demande insolite ; Commandement pour des subordonnés volontaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0217",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.143",
+    "question": "Implanter « Demande illégale ou mortellement risquée » ? Une demande illégale est toujours opposée, à -1 DR au mieux ; risquer sa vie est habituellement à -3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0218",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.143",
+    "question": "Implanter « Négocier le prix d’un achat » ? Marchandage opposé +0 : réussite réduit le prix total de 10 %, ou de 20 % à +6 DR ; un seul Test par vendeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0219",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.144",
+    "question": "Implanter « Résister à l’alcool » ? Résistance à l’alcool selon la force de la boisson ; échec : Exténué ; continuer ou échouer à -5 DR mène à la table d’ivresse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0220",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.144",
+    "question": "Implanter « Subir les durées d’ivresse et de gueule de bois » ? L’ivresse dure deux heures après le dernier verre ; ensuite, Exténué dure douze moins BE heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0221",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.145",
+    "question": "Implanter « Ivresse : courage et Animosité » ? Voir C0 pour le bonus contre Peur et les altérations d’Animosité de la table d’ivresse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0222",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.145",
+    "question": "Implanter « Ivresse 5-6 : Mouvement ou Action » ? Un résultat 5-6 de la table d’ivresse ne permet à chaque Tour qu’un Mouvement ou une Action, pas les deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0223",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.145",
+    "question": "Implanter « Ivresse 9-10 : trou de mémoire et poison » ? Réveil le lendemain avec gueule de bois et souvenirs incomplets ; réussir Résistance à l’alcool pour éviter Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0224",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.145",
+    "question": "Implanter « S’adresser à une foule » ? Divertissement (Comédie) attire la foule, Charme la persuade ; Orateur permet les idées plus complexes et d’autres compétences adaptées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0225",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.145",
+    "question": "Implanter « Détecter un mensonge soupçonné » ? Seulement si le mensonge est soupçonné, opposer Charme à Intuition ; échec du menteur : tromperie connue, vérité non nécessairement révélée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0226",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.145",
+    "question": "Implanter « Se faire passer pour quelqu’un d’autre » ? Divertissement (Comédie) contre Intuition ; réussite valable tant qu’aucune nouvelle raison de soupçonner n’apparaît.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0227",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.145",
+    "question": "Implanter « Aggraver la difficulté d’une fausse identité » ? Statut supérieur usurpé ou attributs manquants : -1 DR ou pire ; imiter un individu connu est plus difficile, certaines identités sont impossibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0228",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.147",
+    "question": "Implanter « Diagnostiquer la mort d’un animal » ? Soins aux animaux +2, ou +0 si une maladie ou un poison discret en est la cause.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0229",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.147",
+    "question": "Implanter « Trouver un interlocuteur corruptible » ? Corruption réussie révèle si l’interlocuteur accepte un pot-de-vin et son prix ; le Statut et Marchandage peuvent modifier le montant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0230",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.147",
+    "question": "Implanter « Reconnaître un faux document ou objet » ? Évaluation à difficulté déterminée par la qualité de la falsification.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0231",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.148",
+    "question": "Implanter « Connaître automatiquement les bases d’un Savoir » ? Au moins un progrès dans le Savoir pertinent donne les connaissances de base sans Test ; les informations obscures demandent un jet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0232",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.148",
+    "question": "Implanter « Exploiter un Savoir spécialisé » ? À difficulté comparable, un Savoir plus précis fournit des informations plus fines ; Métier peut remplacer la théorie pour la pratique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0233",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.148",
+    "question": "Implanter « Parler couramment une langue » ? Langue maternelle maîtrisée sans compétence ; quatre progrès, soit +20, donnent la maîtrise courante d’une langue acquise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0234",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.148",
+    "question": "Implanter « Comprendre une langue apparentée » ? Une langue apparentée à la langue maternelle permet une conversation simple, sans lecture, écriture ni maîtrise des notions complexes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0235",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.149",
+    "question": "Implanter « Groupes de langues mutuellement apparentées » ? Familles apparentées : bretonnien/reikspiel/halfling/wastelander ; classique/estalien/tiléen ; gospodaryi/górelsk/ungol. Les autres langues sont isolées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0236",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.148",
+    "question": "Implanter « Transmettre des ordres en Langage de bataille » ? Une Action et Langue (Bataille) +0 transmettent jusqu’à quarante mots d’ordres ou de conseils aux initiés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0237",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.150",
+    "question": "Implanter « Rechercher une information sans urgence » ? Avec un progrès en Recherche et assez de temps, une source organisée donne les faits simples sans Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0238",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.150",
+    "question": "Implanter « Trouver où chercher une information » ? Recherche +0 indique une source utile ; connaissances obscures ou sources désorganisées exigent une recherche testée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0239",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.150",
+    "question": "Implanter « Recueillir des rumeurs locales » ? Commérage, difficulté selon le lieu et la volonté de parler ; les DR donnent des rumeurs plus pertinentes ou secrètes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0240",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.150",
+    "question": "Implanter « Extraire un renseignement d’une personne » ? Charme ou Intimidation contre Calme ; réussite fournit une information utile, y compris mensonge évident ou omission révélatrice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0241",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.150",
+    "question": "Implanter « Fouiller une pièce ou une scène » ? Perception +0 ; de meilleurs DR révèlent indices mieux cachés ou interprétations utiles ; scène perturbée plus difficile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0242",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.151",
+    "question": "Implanter « Interpréter les indices et les personnes » ? Intuition pour humeur, profession, origine ou liens entre indices ; Savoir ou Métier pertinent peut remplacer et faciliter le Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0243",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.151",
+    "question": "Implanter « Suivre une piste » ? Pistage, sans Test pour traces évidentes ; sur longue distance, Test étendu à intervalle de quelques heures ou d’un jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0244",
+    "phase": "Compétences et usages",
+    "lot": "L06",
+    "source": "L06 p.147",
+    "question": "Implanter « Dissimuler sa piste » ? Opposer Pistage du poursuivant à celui du fuyard seulement si ce dernier a pris le temps de masquer sa piste.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0245",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.152",
+    "question": "Implanter « S’orienter sur une journée de voyage » ? Un Test de Navigation par journée ; météo, chemin, carte et connaissance locale fixent la difficulté. Un échec entraîne des complications.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0246",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.152",
+    "question": "Implanter « Trouver de quoi manger dans la nature » ? Une Survie par jour ; réussite nourrit le personnage et un autre par DR après le premier ; milieu hostile accroît la difficulté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0247",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.152",
+    "question": "Implanter « Employer des outils pour chasser ou pêcher » ? Un matériel adapté peut faciliter la Survie d’un cran ; gibier abondant et piège permettent Piégeage à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0248",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.152",
+    "question": "Implanter « Installer un campement protecteur » ? Survie pour abri et eau ; des DR supplémentaires dissimulent le camp ou compensent le matériel manquant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0249",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.152",
+    "question": "Implanter « Dormir dehors sans préparation » ? Sans préparation ni fournitures, subir un Exténué par journée et risquer l’exposition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0250",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.153",
+    "question": "Implanter « Fabriquer rapidement un objet nécessaire » ? Métier adapté, difficulté selon la complexité et les matériaux ; le MJ vérifie temps et moyens disponibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0251",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.153",
+    "question": "Implanter « Réparer une arme détériorée » ? Métier (Forgeron) étendu +2 ; une heure par jet, cinq DR par point ; outils requis et atelier au-delà d’un point endommagé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0252",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.153",
+    "question": "Implanter « Payer la réparation d’une arme » ? Un artisan demande 10 % du prix initial par point de dégâts ; une arme réduite à improvisée est irréparable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0253",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.153",
+    "question": "Implanter « Réparer une armure détériorée » ? Métier (Forgeron) étendu +2 ; une heure par jet, cinq DR par PA ; outils requis et atelier pour les plates.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0254",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.153",
+    "question": "Implanter « Payer la réparation d’une armure » ? Réparation : 10 % du prix initial par PA ; zone totalement brisée : 30 % pour réparer cette zone.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0255",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.153",
+    "question": "Implanter « Chercher les plantes d’un remède » ? Savoir (Herbes) étendu +2 ; un jet par heure ; seuil saisonnier de vingt DR en hiver, dix au printemps/automne et cinq en été.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0256",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.153",
+    "question": "Implanter « Acheter les ingrédients d’un remède » ? Plantes : cinq sous par DR de recherche requis ; ingrédients alchimiques achetés selon le remède.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0257",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Préparer une dose de remède végétal » ? Métier (Herboriste), difficulté selon le symptôme ; quinze minutes par dose, conservation d’un mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0258",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Préparer un remède alchimique » ? Métier (Apothicaire), difficulté selon le symptôme ; une dose par DR réussi, au moins une ; conservation d’un an.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0259",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Remède contre symptômes légers » ? Malaise, nausée, vérole ou infection : ingrédients alchimiques cinq pistoles, Métier (Apothicaire) et (Herboriste) +2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0260",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Remède contre toux, fièvre ou flux » ? Ingrédients dix pistoles ; Apothicaire +0, Herboriste -1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0261",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Remède contre bubons, convulsions ou gangrène » ? Flétrissement, bubons, convulsions et gangrène : ingrédients une couronne ; Apothicaire -1, Herboriste -2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0262",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Remède particulièrement efficace » ? À +6 DR ou critique, le symptôme est soulagé pendant un nombre de jours égal au BE du patient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0263",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Remède efficace ordinaire » ? De +1 à +5 DR, le symptôme est soulagé vingt-quatre heures ; à +0, même durée avec un effet secondaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0264",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Remède placebo » ? À -0 DR, le remède est inutile ; échouer à Calme +2 permet néanmoins d’ignorer le symptôme pendant 2d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0265",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Échec de préparation d’un remède » ? De -1 à -5 DR, aucun effet ; à -6 ou maladresse, remède inefficace et Test de contamination par le Flux sanglant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0266",
+    "phase": "Artisanat et remèdes",
+    "lot": "L06",
+    "source": "L06 p.154",
+    "question": "Implanter « Fabriquer un poison » ? Métier (Empoisonneur), difficulté de résistance du poison ; une dose végétale ou BDex doses alchimiques ; l’échec gaspille les ingrédients.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0267",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : racine d’aspic » ? Ingestion, Résistance +0 ; échec : ivresse pendant -DR heures et un Sonné par DR négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0268",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : feuilles de lotus noir » ? Inhalation, Résistance -1 ; échec : deux Sonné et un de plus par DR négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0269",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : sève de lotus noir » ? Lame enduite infligeant au moins une Blessure, Résistance -1 ; deux Empoisonné et un de plus par DR négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0270",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : dent de démon » ? Ingestion, Résistance -2 ; échec : Convulsions et Fièvre pendant 2d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0271",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : bile de nain » ? Ingestion, Résistance +0 ; échec : Malaise et Nausée pendant 2d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0272",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : Juck » ? Contact cutané, Résistance +2 ; échec : Vérole quarante minutes, plus dix minutes par DR négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0273",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : mort-aux-rats » ? Ingestion, Résistance -1 ; échec : Souillé et deux Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0274",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : herbe somnifère » ? Ingestion, Résistance -1 ; échec : un Exténué plus un par DR négatif ; si leur nombre dépasse BE, sommeil profond.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0275",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.155",
+    "question": "Implanter « Poison : salive d’araignée » ? Lame enduite infligeant une Blessure, Résistance +0 ; échec : un Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0277",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.156",
+    "question": "Implanter « Se déplacer sans jet en situation ordinaire » ? Déplacement ordinaire sans Test ; un progrès en Équitation ou Conduite suffit pour l’usage habituel de la monture ou du véhicule.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0278",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.156",
+    "question": "Implanter « Grimper une échelle » ? Échelle facile : demi-vitesse sans Test, même avec arme à une main ; Action et Escalade +2 pour ajouter M+DR yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0279",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.156",
+    "question": "Implanter « Escalader une paroi avec des prises » ? Deux mains libres et Action d’Escalade : avancer de M/2 + DR yards ; difficulté selon la surface et possibilité d’exiger Escaladeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0280",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.156",
+    "question": "Implanter « Franchir un obstacle par un saut » ? Athlétisme ou Représentation (Acrobaties) décrit ; échec : chute ; -0 permet d’être rattrapé. Difficulté aggravée si M≤3, facilitée si M≥5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0281",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.157",
+    "question": "Implanter « Estimer la distance d’un saut » ? Avec élan et Athlétisme réussi, atteindre environ M yards ; des DR supplémentaires peuvent augmenter la distance jusqu’à environ deux fois M.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0282",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.157",
+    "question": "Implanter « Réduire une chute en sautant volontairement » ? Athlétisme +0 ; réussite réduit la hauteur d’un yard, plus un par DR après le premier ; hauteur effective nulle : aucun dégât.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0283",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.157",
+    "question": "Implanter « Nager sans couler » ? Un progrès en Natation permet de se maintenir sans jet ; sinon, noyade immédiate en eau profonde. Vitesse moitié de M.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0284",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.157",
+    "question": "Implanter « Accélérer et manœuvrer sous l’eau » ? Natation remplace Athlétisme et Esquive sous l’eau ; un Test peut accroître la distance comme le Sprint.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0285",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.157",
+    "question": "Implanter « Secourir une personne qui se noie » ? Natation -1 si la victime réussit Calme ; sinon, opposer Natation à sa Force.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0286",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.157",
+    "question": "Implanter « Faire une acrobatie sur une monture » ? Employer le plus faible score entre Équitation et compétence de l’action ; l’échec provoque habituellement une chute d’environ deux yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0287",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.157",
+    "question": "Implanter « Monter une bête non dressée à la guerre » ? Voir l’inventaire C0 pour le Désavantage aux Tests impliquant une monture non dressée à la guerre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0288",
+    "phase": "Véhicules et navigation",
+    "lot": "L06",
+    "source": "L06 p.158",
+    "question": "Implanter « Arrêter un véhicule » ? Mouvement généralement égal à celui des bêtes ; après freinage, continuer sur M yards ; collision traitée comme chute de la moitié de la distance du Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0289",
+    "phase": "Véhicules et navigation",
+    "lot": "L06",
+    "source": "L06 p.158",
+    "question": "Implanter « Réparer un véhicule et soigner son attelage » ? Métier pertinent pour le véhicule ; Soins aux animaux pour les bêtes de trait.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0290",
+    "phase": "Véhicules et navigation",
+    "lot": "L06",
+    "source": "L06 p.158",
+    "question": "Implanter « Faire avancer une embarcation à rames » ? M de quatre, réduit jusqu’à moitié en remontant le courant ou en surcharge, augmenté jusqu’à moitié avec le courant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0291",
+    "phase": "Véhicules et navigation",
+    "lot": "L06",
+    "source": "L06 p.158",
+    "question": "Implanter « Accélérer à la rame » ? Ramer +0 augmente M d’un, ou de deux à +5 DR ; le rameur devient Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0292",
+    "phase": "Véhicules et navigation",
+    "lot": "L06",
+    "source": "L06 p.158",
+    "question": "Implanter « Manœuvrer un navire à voile » ? Un progrès suffit aux tâches ordinaires ; difficulté selon météo, obstacles et équipage ; sous vent modéré, victoire de vitesse contre une barque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0293",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.158",
+    "question": "Implanter « Résoudre une poursuite V5 » ? Voir C0 pour l’opposition initiale, les facteurs, les obstacles et les issues de poursuite des pp.158-159.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
