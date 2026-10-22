@@ -280,6 +280,18 @@ export function actorDivineCults(actor) {
   return [...cults.values()];
 }
 /** Le total historique partagé n'est pas effacé par une prière elfique. */
+/** B18 (L21 p.7) : relique d'un dieu, +1 à +3 DR aux Tests de Prière et −10 à −30 au résultat de table de Courroux. */
+export function readDivineRelics(actor,deity){
+  const rows=actor?.extensions?.v5?.divineRelics??[];
+  if(!Array.isArray(rows))return {ok:false,error:'Reliques de la fiche invalides.',relics:[]};
+  const relics=[];
+  for(const row of rows){
+    if(!row||typeof row!=='object'||typeof row.id!=='string'||!row.id||typeof row.deity!=='string'||![1,2,3].includes(row.prayerSL)||![10,20,30].includes(row.wrathReduction))return {ok:false,error:'Relique invalide sur la fiche : valeurs hors de la source.',relics:[]};
+    if(fold(row.deity)===fold(deity))relics.push(row);
+  }
+  if(relics.length>1)return {ok:false,error:'Plusieurs reliques du même dieu : cumul non défini par la source.',relics:[]};
+  return {ok:true,relics};
+}
 export function resolveSinAdjustmentCult(actor,requestedCult) {
   const cults = actorDivineCults(actor);
   const requested = typeof requestedCult === 'string' ? requestedCult.trim() : null;
@@ -483,7 +495,10 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   if (sheetModifiers === null) return fail('needs-input', 'Modificateur de Test de Prière invalide sur la fiche.', [need('actor.extensions.v5.testModifiers', 'DR entiers issus des couches actives')]);
   const prayerModifiers=getPrayerSLModifiers(actor,input.prayerSLContext||{});
   if(!prayerModifiers.ok)return fail('needs-input','Le malus de Prière du Courroux doit être vérifié avant ce Test.',prayerModifiers.needsInput.map(row=>need(row.path,row.message)));
-  const slModifiers=[...sheetModifiers,...conditionTestContext.slModifiers,...prayerModifiers.modifiers];
+  const relicRead=readDivineRelics(actor,contract.deity);
+  if(!relicRead.ok)return fail('needs-input',relicRead.error,[need('actor.extensions.v5.divineRelics','Reliques valides, une par dieu')]);
+  const relic=relicRead.relics[0]||null;
+  const slModifiers=[...sheetModifiers,...conditionTestContext.slModifiers,...prayerModifiers.modifiers,...(relic?[{id:'relic:'+relic.id,label:'Relique : '+relic.label,amount:relic.prayerSL}]:[])];
   const sinPolicy = divineSinPolicy(contract);
   const sin = sinPolicy.exempt ? 0 : readSin(actor);
   if (sin === null) return fail('needs-input', 'Le score de Péché doit être enregistré dans la fiche.', [need('actor.extensions.v5.divine.sin', 'Péché courant')]);
@@ -540,15 +555,20 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     try { wrathRoll = normalizeV5Roll(input.wrathRoll); }
     catch (error) { return fail('invalid', error.message, [need('wrathRoll', 'Résultat du jet de Courroux d100')]); }
   }
+  const relicReduction = relic ? relic.wrathReduction : 0;
+  const effectiveWrathRoll = wrathRoll === null ? null : wrathRoll - relicReduction;
+  let wrathAvoided = false;
   if (wrathTriggered && wrathRoll !== null) {
-    const modifiedRoll = wrathRoll + 10 * sin;
-    wrathResult = (DIVINE_REGISTRY.wrathTable || []).find(row => modifiedRoll >= row.min
+    const modifiedRoll = effectiveWrathRoll + 10 * sin;
+    if (relicReduction && modifiedRoll <= 0) wrathAvoided = true;
+    else if (effectiveWrathRoll < 1) return fail('needs-input', 'Courroux réduit par une relique : le résultat positif ne correspond à aucun jet 1–100 ; le MJ tranche hors de cette commande.', [need('wrathRoll', 'Jet de Courroux (relique : résultat à arbitrer)')]);
+    else wrathResult = (DIVINE_REGISTRY.wrathTable || []).find(row => modifiedRoll >= row.min
       && (row.max === undefined || row.max === null || modifiedRoll <= row.max)) || null;
   }
   if (wrathTriggered && typeof input.wrathConsequences === 'string' && input.wrathConsequences.trim()) {
     wrathConsequences = input.wrathConsequences.trim();
   }
-  if (wrathTriggered && (!wrathRoll || !wrathResult || !wrathConsequences)) reminders.push('Courroux divin déclenché; le résultat du Courroux reste à résoudre selon la table V5.');
+  if (wrathTriggered && !wrathAvoided && (!wrathRoll || !wrathResult || !wrathConsequences)) reminders.push('Courroux divin déclenché; le résultat du Courroux reste à résoudre selon la table V5.');
   const preview = freeze({
     ruleVersion: V5_DIVINE_ENGINE_VERSION,
     contractId: contract.id, contractType: contract.type, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt),
@@ -559,7 +579,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     wrath: { triggered: wrathTriggered, reason: wrathTriggered ? (prayer.fumble ? 'fumble' : 'sin-threshold') : null,
       ...(sinPolicy.exempt ? {exempt:true,exemption:clone(sinPolicy)} : {}),
       sinTrigger, sinAtTest: sin, sinAfter: wrathTriggered && wrathRoll && wrathResult && wrathConsequences ? Math.max(0, sin - 1) : sin,
-      unit, roll: wrathRoll, modifiedRoll: wrathRoll === null ? null : wrathRoll + 10 * sin,
+      ...(relic ? { relic: { id: relic.id, label: relic.label, wrathReduction: relic.wrathReduction, prayerSL: relic.prayerSL }, rawRoll: wrathRoll } : {}), ...(wrathAvoided ? { avoided: true } : {}),
+      unit, roll: effectiveWrathRoll, modifiedRoll: effectiveWrathRoll === null ? null : effectiveWrathRoll + 10 * sin,
       outcome: wrathResult ? { ...clone(wrathResult), resultId: wrathResult.id } : null, consequences: wrathConsequences },
     effects: clone(resolvedEffects), unresolvedEffects, reminders,
     limitations: ['Avantage, Désavantage et dépense de Chance ne sont pas résolus par ce moteur; le d100 fourni est traité tel quel.'],
@@ -568,7 +589,7 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     expiry: input.expiry ? clone(input.expiry) : null
   });
   if (unresolvedEffects.length) return { ...fail('needs-input', 'Un ou plusieurs effets demandent un fait ou un raccordement explicite.', unresolvedEffects), preview, sourceReceipt: clone(contract.sourceReceipt) };
-  if (wrathTriggered && (!wrathRoll || !wrathResult || !wrathConsequences)) {
+  if (wrathTriggered && !wrathAvoided && (!wrathRoll || !wrathResult || !wrathConsequences)) {
     const missing = [];
     if (!wrathRoll) missing.push(need('wrathRoll', 'Jet de Courroux d100'));
     if (wrathRoll && !wrathResult) missing.push(need('wrathRoll', 'Résultat dans la plage de la table de Courroux'));

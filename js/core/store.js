@@ -1,4 +1,4 @@
-import {previewStoreDivineSinEvent,applyStoreDivineSinEvent,getDivineSinEvents,getDivineSinReminders,previewStoreDivineAbsolution,applyStoreDivineAbsolution,returnStoreDivineJudgment,decideStoreDivineJudgmentRejection,createStoreDivinePenance,completeStoreDivinePenance,getDivinePenanceExamples,previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
+import {setStoreSanctifiedGround,removeStoreSanctifiedGround,enterStoreSanctifiedGround,leaveStoreSanctifiedGround,previewStoreDivineNavalEvent,applyStoreDivineNavalEvent,startStoreDivineDailyWrath,waiveStoreDivineDailyWrathDay,closeStoreDivineDailyWrath,getStoreDivineDailyWrathStatus,setStoreDivineRelic,removeStoreDivineRelic,previewStoreDivineSinEvent,applyStoreDivineSinEvent,getDivineSinEvents,getDivineSinReminders,previewStoreDivineAbsolution,applyStoreDivineAbsolution,returnStoreDivineJudgment,decideStoreDivineJudgmentRejection,createStoreDivinePenance,completeStoreDivinePenance,getDivinePenanceExamples,previewStoreDivineWrathRecovery,applyStoreDivineWrathRecovery,previewStoreDivine,applyStoreDivine,setStoreDivineSin,endStoreDivinePrayer,finalizeDivineState,expireDivineAtPhases,expireDivineAtClock,getDivineContract,getAllDivineContracts,getStoreDivineAccessGrants,createStoreDivineAccessGrant,revokeStoreDivineAccessGrant,resolveStoreDivineAccess} from './v5-divine-store.js';
 import {processCombatTurnSpells,shieldAtTurnStart,previewSpellInteraction,removeExpiredSummons,endSpellEffectsOnEvent} from './v5-magic-turn.js';
 import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillScore,baseCharacteristicScore} from './v5-magic-talents.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
@@ -2943,6 +2943,48 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if(['absolution','gm-wrath'].includes(captured.preview?.input?.absolution?.kind)&&divineAuthority!=='MJ')throw new Error('Seul le MJ peut décider cette absolution ou ce Courroux.');
       const saved=api.executeCommand('v5-divine-absolution',draft=>{execution=applyStoreDivineAbsolution(draft,captured);return execution.state;});
       const finish=result=>result?.ok===false?result:{...execution,ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async setSanctifiedGround(input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut poser une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-ground-set',draft=>{transition=setStoreSanctifiedGround(draft,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async removeSanctifiedGround(id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut retirer une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-ground-remove',draft=>{transition=removeStoreSanctifiedGround(draft,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async enterSanctifiedGround(participantId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut résoudre l’entrée sur une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-ground-enter',draft=>{transition=enterStoreSanctifiedGround(draft,participantId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,affected:transition.affected,outcome:transition.outcome};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async leaveSanctifiedGround(participantId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut résoudre la sortie d’une terre sanctifiée.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-ground-leave',draft=>{transition=leaveStoreSanctifiedGround(draft,participantId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async applyDivineNavalEvent(input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut enregistrer un événement naval.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-naval-event',draft=>{transition=applyStoreDivineNavalEvent(draft,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    previewDivineNavalEvent(input={}){return previewStoreDivineNavalEvent(currentEnvelope(),input);},
+    getDivineDailyWrathStatus(actorId,id){return getStoreDivineDailyWrathStatus(currentEnvelope(),actorId,id);},
+    async startDivineDailyWrath(actorId,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut ouvrir ce suivi.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-daily-wrath-start',draft=>{transition=startStoreDivineDailyWrath(draft,actorId,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async waiveDivineDailyWrathDay(actorId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut écarter un jour.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-daily-wrath-waive',draft=>{transition=waiveStoreDivineDailyWrathDay(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async closeDivineDailyWrath(actorId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut clore ce suivi.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-daily-wrath-close',draft=>{transition=closeStoreDivineDailyWrath(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async setDivineRelic(actorId,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut poser une relique.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-relic-set',draft=>{transition=setStoreDivineRelic(draft,actorId,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true,record:transition.record};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    async removeDivineRelic(actorId,id,input={}){
+      if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut retirer une relique.');const captured=cloneValue(input),expected=captured.baseRevision??localRevision;let transition;
+      const saved=api.executeCommand('divine-relic-remove',draft=>{transition=removeStoreDivineRelic(draft,actorId,id,{...captured,baseRevision:expected});return transition.state;});const finish=result=>result?.ok===false?result:{ok:true};return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
     },
     getDivineSinEvents(){return getDivineSinEvents();},
     getDivineSinReminders(){return getDivineSinReminders();},
