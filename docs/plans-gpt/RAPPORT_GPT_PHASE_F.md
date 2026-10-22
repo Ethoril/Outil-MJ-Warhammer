@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17 a reçu sa revue des mécaniques F0. Les 23 autres suppléments restent à traiter. Aucun achèvement des 26 livres n’est prétendu.
+État : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17 et L11 ont reçu leur revue des mécaniques F0. Les 22 autres suppléments restent à traiter, à partir de L13. Aucun achèvement des 26 livres n’est prétendu.
 
 ## Travail local et sources
 
@@ -28,16 +28,17 @@ Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitr
 | L06 Équipement p.296-317 | FAIT, 129 entrées | f8879ee | 4 052/4 052 ; 105,924 s |
 | L06 Dernière passe : religion, MJ/voyage, procédures animales | FAIT, 23 entrées | 0513a70 | 4 052/4 052 ; 108,503 s, F06-closure-final-full.log |
 | L05 noms FR | FAIT, noms seuls | 775cbd9 | 4 054/4 054 ; 110,085 s, L05-full.log |
-| L17 magie générale, variantes, divination, alchimie, objets, familiers, environnement | FAIT, 367 entrées dans la portée précisée ci-dessous | commit du présent lot | 4 054/4 054 ; 112,751 s, L17-full.log |
-| L11, L13, L14, L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
+| L17 magie générale, variantes, divination, alchimie, objets, familiers, environnement | FAIT, 367 entrées dans la portée précisée ci-dessous | a92e503 | 4 054/4 054 ; 112,751 s, L17-full.log |
+| L11 récolte, alchimie, équipement, objets et clauses manquantes E0 | FAIT, 167 entrées dans la portée précisée ci-dessous | commit du présent lot | 4 054/4 054 ; 112,301 s, L11-full.log |
+| L13, L14, L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
 
 Logs complets ignorés sous tmp/audit/ : F00-full.log, F06-tests-full.log, F06-combat-full.log, F06-usages-full.log, F06-health-full.log, F06-downtime-full.log, F06-talents-full.log, F06-creation-full.log, F06-magic-full.log, F06-gear-full.log. Les sept tests initiaux d’outillage et les deux nouveaux comportements ont été développés rouge puis vert.
 
 ## Inventaire courant
 
-**1 508 entrées ; 1 162 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. L06 conserve ses 1 141 identifiants ; L17 va de F-L17-0001 à F-L17-0367.
+**1 675 entrées ; 1 257 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. L06 conserve ses 1 141 identifiants ; L17 va de F-L17-0001 à F-L17-0367 et L11 de F-L11-0001 à F-L11-0167.
 
-L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 des suppléments sont enregistrées dans v5Proposal ; les nouvelles entrées L19-L26 porteront addedOn:2026-10-21. Aucune proposition n’est implantée. Les titres français L17 sont des propositions d’audit, sans prétention de nom officiel.
+L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 des suppléments sont enregistrées dans v5Proposal ; les nouvelles entrées L19-L26 porteront addedOn:2026-10-21. Aucune proposition n’est implantée. Les titres français L17/L11 sont des propositions d’audit, sans prétention de nom officiel.
 
 ## Portée de lecture L06
 
@@ -87,7 +88,7 @@ Recette réelle déjà exécutée : **26/26 commandes vertes**, Node et parcours
 
 ## Suite
 
-Continuer les 23 autres suppléments à partir de L11 dans l’ordre prescrit, un commit par livre après suite complète verte. Les sélecteurs F1 ne donnent aucune autorisation d’implantation F2. L’audit des 26 livres reste l’objectif de la reprise. La succession précise le point atteint en cas de limite de contexte.
+Continuer les 22 autres suppléments à partir de L13 dans l’ordre prescrit, un commit par livre après suite complète verte. Les sélecteurs F1 ne donnent aucune autorisation d’implantation F2. L’audit des 26 livres reste l’objectif de la reprise. La succession précise le point atteint en cas de limite de contexte.
 
 Dernière cohérence des renvois : les neuf renvois hérités des premiers chapitres portent aussi une exclusion motivée de sélecteur ; aucun second choix pour C0/E0. Les statuts et identifiants restent conservés.
 
@@ -119,3 +120,21 @@ Couverture statique : vortex raccordé à previewSpellExecution et au traitement
 Renvois : D0b-SYS-15 pour le système de rituels, D0b-L17-001 à 033 pour les sorts/rituels existants ; C0 pour les marques de Psychologie, la hache et les mailles maudites ; E0-T-246/247/248 pour Lanceur aléatoire, Siphon de sort et Œil maléfique ; E0-P-515 à 535 pour les profils de ce livre. Aucun second inventaire des sorts ou profils. Les listes de prix, décorations et effets seulement narratifs sans règle propre ne sont pas multipliées en sélecteurs. Le patronage nominatif reste hors périmètre PNJ ; ses objets transportables sont relevés séparément.
 
 Validation des identifiants, références, résumés et sélecteurs : verte ; génération puis --check cohérents. Suite complète du lot : **4 054/4 054**, aucun échec, aucun ignoré, 112751,2164 ms, tmp/audit/L17-full.log. Après mise au propre des seules notes, les onze contrôles d’audit ont été rejoués avec succès. Comparaison structurelle à 775cbd9 : **les 1 141 entrées héritées L06 sont strictement identiques**, reçu tmp/audit/L17-integrity-receipt.json. Aucun js/, catalogue de jeu, outil ni test modifié pour ce livre. Recette complète à renouveler à la clôture réelle des 26 livres.
+
+## L11 — The Imperial Zoo
+
+The Imperial Zoo.pdf, **139 pages physiques**, folio = page physique ; SHA-256 `28ca57e24377cffb1a54a2374eb5758ebd74e28c4053b1beaf5704bd9e6743f4`, vérifié par l’extracteur. Source V4 datée du 8 février 2022 dans ses crédits. **167 entrées**, 163 absent, deux rappels et deux hors-granularite ; **70 renvois exclus de sélection**, **95 nouveaux sélecteurs**. Les statuts des purs renvois ne constituent pas une nouvelle qualification runtime exhaustive d’E0.
+
+Portée : sommaires et introductions repérés p.1-9 ; expéditions p.10-95 parcourues par petites plages, encadrés de capacités et nouvelles clauses lus ; profils, valeurs et Traits existants laissés à E0. Règles de récolte p.98-102, préparations p.103-111, équipement p.112-114, artisanat/objets p.115-117 et valeur des bêtes vivantes p.120 lus. P.118-119 et121 : récit et conseils. P.122-133 : repérage ciblé des prétirés, équipement, talents et secrets ; procédure commune des secrets supplémentaires lue, pas nouvelle importation des fiches. P.134-137 : présentation et table des Traits consultées. P.138-139 : annonces. Aucune seconde lecture indépendante du livre ni recette de chacune de ses règles n’est prétendue.
+
+Rendus vus : p.6,8,11,18,22,27,31,33,36,37,44,46,49,51,53,55,58,59,63,64,67,70,71,75,76,77,80,87,89,96,99,100,101,111,114,134-137. Les textes manuscrits entrelacés dans l’extraction ont été consultés sur image, sans leur inventer de chiffres. P.8/96 : cartes ; p.55/71 : illustrations. Preuve de portée : tmp/audit/L11-reading-scope.json. Les reçus d’extraction restent read:false : extraction et hash ne prouvent pas la lecture.
+
+- Récolte : rareté, menace, quantité par Taille, identification, conservation, dégradation et recherche d’acheteur sont séparées. La table p.100 contient des prix qui divergent de la formule générale ; aucune correction inventée. Cockatrice dangereuse dans la table, mortelle dans l’exemple p.102 ; phrase de Corpse Render inachevée aussi sur image. Usages « réputés » de la dernière colonne et rumeurs des expéditions ne deviennent pas des effets garantis.
+- Alchimie : poisons, antidotes et usages médicaux conservés ; liqueur du serpent devin exclue Q18. Les sources de matières ordinaires, volumes Enc et formes de préparation sont rattachés par preparationSource aux clauses concernées, sans rendement inventé. Wyvern’s Kiss : onguent p.105, potion/onguent p.111 ; Bloodblind : potion/cru p.106, potion seule p.111 ; Lurek’s Cure p.105 contre Laurek’s Curse p.111. Les prix seuls et les variantes de libellé ne créent pas des règles supplémentaires. Aucun ingrédient magique requis.
+- Valeurs non inventées : gravité du critique d’ingestion de Flesh Blister, dégâts des filets à crochets, durées absentes de certaines potions, frontière de fraîcheur entre un et deux jours et quantité sous la première ligne de récolte. Forge Shield modifie les caractéristiques Agilité/Initiative de −20, pas les DR. Pierre assoiffée : 1d10 Tours imprimés, sans conversion silencieuse en Rounds. Tregara Sap : cartouche flèches/carreaux, texte opératoire carreaux d’arbalète ; divergence conservée.
+- E0 : E0-T-096 à161 et249 portent 67 capacités précises, avec renvoi individuel exclu de F1 ; le plancher Féroce de début de Tour et ses trois exceptions renvoient à la clause commune d’E0-T-209, sans sa variante de réserve de groupe. Les traits génériques/variantes p.135-137 sont déjà dans E0-T-001 à095 et ne sont pas recopiés ; priorité V5, Petit maison et import sans second ajout de BE maintenus. Profils E0-P-001 à062 et prétirés E0-P-536 à541 laissés à E0. Les bois de Taal/Kurnous, les toiles venimeuses, l’esprit embrumé du chamane et la conduite des squigs sont des clauses manquantes, distinctes des seules étiquettes ou caractéristiques importées.
+- Divin : les deux premiers cartouches de miracles du dieu Araignée p.15 n’ont pas été retrouvés dans les inventaires consultés ; ils sont recensés sans NI de sort inventé. Snare ‘Em Good garde son renvoi E0-T-097. La nuée ne reçoit pas un déclencheur de dégâts récurrents non écrit.
+- Couverture : Wightseer/C0-L11-011 et Wulfshawl/C0-L11-012 sont deux rappels effectivement lisibles dans les notes des objets possédés via renderFicheDetails, appelé dans workspace-view et reserve ; leur Peur n’est pas déclarée automatisée. Les armes Skryre ont des données de catalogue et des textes Malepierre, mais leurs profils diffèrent de L11 et aucun moteur Malepierre n’a été trouvé dans keyword-engines. Elles ne sont pas déclarées entièrement absentes de tout affichage ; l’absence qualifie leur variante mécanique complète et son déclenchement. Conserve V5 ne préserve que des rations pendant BFM jours, pas les restes indéfiniment.
+- Exclusions : Eagle Shank ne fournit pas d’effet propre au-delà du type dague ; prix et disponibilités seuls, rumeurs, scènes/PNJ, secrets narratifs et séquelles psychologiques Q18 ne créent pas de sélecteurs. La procédure commune des secrets supplémentaires donne une entrée, pas six copies. Choix F-C19 àF-C24 consignés ; aucun arbitrage, catalogue public ou code de jeu modifié.
+
+Comparaison structurelle à a92e503 : **les 1 508 entrées héritées L06/L17 sont strictement identiques**, reçu tmp/audit/L11-integrity-receipt.json. Génération puis --check cohérents ; contrôles LF et git diff --check verts. Aucun outil ni test ajouté ou modifié pour ce livre. Suite complète du lot : **4 054/4 054**, zéro échec, annulé ou ignoré, **112300,6537 ms**, tmp/audit/L11-full.log. Aucun js/, arbitrage, dépendance, catalogue de jeu ni version modifié ; les quatre seuls fichiers de tests différents de main sont les tests d’audit nouveaux déjà présents à la reprise. Recette complète à renouveler à la clôture réelle du corpus ; l’ancienne recette ne prouve pas la lecture de L11.

@@ -15104,5 +15104,1240 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0001",
+    "phase": "Bestiaire — clauses manquantes",
+    "lot": "L11",
+    "source": "L11 p.10",
+    "question": "Implanter « Bois de Taal » ? Les bois du grand cerf possèdent les qualités Empaleuse et Perforante. Leur attribution propre n’est pas portée par les attaques du profil importé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0002",
+    "phase": "Bestiaire — clauses manquantes",
+    "lot": "L11",
+    "source": "L11 p.10",
+    "question": "Implanter « Bois de Kurnous » ? Les bois de l’Ombre de la rivière sont Rapides, Empaleurs et Perforants ; ces qualités propres ne sont pas raccordées aux attaques importées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0004",
+    "phase": "Bestiaire — clauses manquantes",
+    "lot": "L11",
+    "source": "L11 p.13",
+    "question": "Implanter « Toiles venimeuses » ? Une cible Empêtrée par les toiles de l’Arachnarok gagne aussi un Empoisonné. L’étiquette Vicious Webs du profil ne contient pas le déclencheur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0005",
+    "phase": "Bestiaire — clauses manquantes",
+    "lot": "L11",
+    "source": "L11 p.15",
+    "question": "Implanter « Esprit embrumé du chamane » ? Hors attaque subie, le chamane teste sa Volonté à +4 ; échec : perd Mouvement et Action du Tour. Attaqué, il peut prêter attention normalement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0006",
+    "phase": "Prières — clauses manquantes",
+    "lot": "L11",
+    "source": "L11 p.15",
+    "question": "Implanter « Baiser de la Fosse noire » ? Le miracle du dieu Araignée frappe à portée de Sociabilité : zone de B Soc yards, dégâts 1d10 + DR sans PA et un Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0007",
+    "phase": "Prières — clauses manquantes",
+    "lot": "L11",
+    "source": "L11 p.15",
+    "question": "Implanter « Nuée grouillante » ? Pendant B Soc Rounds, la nuée autour du chamane inflige une Blessure sans BE ni PA, +1 par +2 DR ; les victimes dans la zone subissent −1 DR à tous les Tests.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0008",
+    "phase": "Bestiaire — clauses manquantes",
+    "lot": "L11",
+    "source": "L11 p.28",
+    "question": "Implanter « Diriger un squig monté » ? Équitation (Squig) à −2 DR : réussite autorise choix de cible et Action ou attaque ; échec : seulement se cramponner ; maladresse : projeté puis dévoré par la monture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0009",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.29",
+    "question": "Implanter « Sortir d’un filet » ? Un filet touchant impose Empêtré. Pour sortir, réussir un Test de Force +0 dont les DR atteignent l’indice ; DR non cumulés. Chaque échec ajoute un Empêtré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0010",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.29",
+    "question": "Implanter « Filets à crochets » ? Lutter contre un filet à crochets inflige des dégâts, même si l’évasion réussit ; l’armure est normalement ignorée. Le montant n’est pas publié ici.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0011",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Servants des armes skavens » ? Mitrailleuse Ratling et lance-feu exigent une équipe ; le Jezzail a besoin d’un second servant pour stabiliser son tir. Sans aide, il perd Précise et son autre qualité de précision V4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0012",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Bouclier de stabilisation » ? Avec le bouclier de stabilisation, les deux servants bénéficient de Bouclier 2 ; courir ou fuir exige de le jeter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0013",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Mitrailleuse Ratling : profil et contamination » ? Arme à +10 dégâts, portée 40 yards : Poudre noire, Explosion 3, Empaleuse, Perforante, Dangereuse, Imprécise ; cible blessée : Corruption mineure à +2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0014",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Lame de malepierre : armure métallique » ? Les décharges de la lame à deux mains ignorent les PA métalliques ; les attaques possèdent Défensive, Tailleuse et Empaleuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0015",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Lame de malepierre : choc » ? Une cible perdant plus d’une Blessure sous un coup de lame en mêlée teste sa Résistance à +2 DR ou gagne un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0016",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Lance-feu skaven » ? Arme à +6 dégâts, portée 8 yards, Enflammée, Explosion 4 et Dangereuse ; une cible blessée subit un Test de Corruption modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0017",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Jezzail à malepierre » ? Version du long fusil du Hochland ajoutant Dangereuse ; une cible blessée subit un Test de Corruption mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0018",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.94",
+    "question": "Implanter « Pistolet à malepierre » ? Le pistolet a Poudre noire, Dévastatrice, Empaleuse, Perforante, Recharge 1 et Dangereuse ; une cible blessée subit un Test de Corruption mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0019",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.99",
+    "question": "Implanter « Prix des matières brutes par rareté » ? Par point d’Encombrement : Commun 80 sous, Inhabituel 10 pistoles, Rare 1 couronne, Exotique 3, Unique au moins 5 ; capacités inhabituelles : prix de base doublé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0020",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.99",
+    "question": "Implanter « Prix selon la dangerosité » ? Multiplier le prix par ½, 1, 2 ou 3 selon menace inoffensive, risquée, dangereuse ou mortelle. Ces indices ne servent pas à équilibrer les rencontres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0021",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.99",
+    "question": "Implanter « Quantité de matière récupérable » ? Quantité selon Taille : inférieure à Moyenne 1 Enc ; Moyenne 2 ; Grande 4 ; Énorme 8 ; Monstrueuse 16. Une portion plus légère compte quand même pour 1 Enc au transport.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0022",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.99",
+    "question": "Implanter « Reconnaître les parties utiles » ? Connaissance (Bêtes ou Médecine), Métier (Empoisonneur) pour venimeux/toxiques, ou Connaissance (Magie) pour bêtes mystiques identifie les parties à garder. Toute réussite suffit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0023",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.99",
+    "question": "Implanter « Perte de récolte par méconnaissance » ? Chaque DR d’échec d’identification réduit d’un rang de Taille la matière utile connue ; exemple imprimé : Énorme à −2 DR donne 2 Enc. Aucun rang sous le minimum n’est défini.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0024",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.100",
+    "question": "Implanter « Barème des restes par créature » ? La table fixe rareté, Taille, danger et prix par Enc de chaque créature. Les usages réputés de sa dernière colonne restent des croyances, sans effet de jeu garanti.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0025",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.101",
+    "question": "Implanter « Conserver les matières fraîches » ? Avant perte de fraîcheur, Survie avec matériel adapté conserve les parties ; échec : contamination inutilisable pour ces usages. Les matières toxiques exigent Survie à −1 DR ou Métier (Empoisonneur).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0026",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.101",
+    "question": "Implanter « Dégradation des matières » ? Sans conservation : fraîches moins d’un jour, faisandées à 2 jours, pourries à 5, sans valeur à 7. Conservées : faisandées à 6, pourries à 9, sans valeur à 12 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0027",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.101",
+    "question": "Implanter « Prix selon la conservation » ? Prix frais ×2, conservé normal, faisandé moitié ; pourri : un huitième pour les seules matières Exotiques, sinon aucune valeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0028",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.101",
+    "question": "Implanter « Conserver magiquement les matières » ? Conserver maintient indéfiniment 1 ou 2 Enc au stade conservé. Une quantité supérieure risque de détruire les propriétés ; aucun jet chiffré n’est fourni.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0029",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.102",
+    "question": "Implanter « Trouver un acheteur » ? Sans contact connu, Commérage à +4 DR en ville, +0 dans un bourg, −3 au village ; le MJ peut constater l’absence d’acheteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0030",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.102",
+    "question": "Implanter « Chercher un acheteur criminel » ? Un Commérage raté en recherchant des acheteurs criminels attire la loi. La vente peut être une activité entre aventures ou une transaction jouée ; aucun tarif de commission n’est fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0031",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.103",
+    "question": "Implanter « Préparer une potion » ? Métier (Alchimiste), ou Métier (Apothicaire) à −2 DR, prépare les potions. Aucun seuil étendu ni rendement général n’est publié ici.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0032",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.103",
+    "question": "Implanter « Conservation des potions » ? En flacon hermétique : ingrédients frais, un an ; conservés, six mois ; faisandés, un mois. Les matières pourries sont généralement inutilisables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0033",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.103",
+    "question": "Implanter « Préparer un onguent » ? Métier (Alchimiste), ou Métier (Herboriste) à −2 DR, prépare les onguents. Les matières fraîches ou conservées tiennent un mois ; faisandées, une semaine ; pourries, impropres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0034",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.103",
+    "question": "Implanter « Enduire une arme » ? Hors précipitation, application sans Test. En une Action sur arme pointue ou tranchante : Corps à corps +0 ; à −5 DR ou pire, blessure personnelle et exposition à l’onguent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0035",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.103",
+    "question": "Implanter « Dose d’onguent » ? Une dose suffit pour une arme ou trois flèches ou carreaux. Le chapitre ne fixe pas de consommation universelle après une touche : suivre chaque préparation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0036",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.103",
+    "question": "Implanter « Préparations crues » ? Les préparations crues demandent des matières fraîches, sans compétence spéciale ; même cuites, elles se gâtent en un ou deux jours. Cuisine ou Empoisonneur peut masquer le goût.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0037",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.104",
+    "question": "Implanter « Préparer et dissimuler les poisons » ? Métier (Empoisonneur) règle application, dosage et goût ; il peut remplacer Alchimiste ou Apothicaire uniquement pour créer un poison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0038",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.104",
+    "question": "Implanter « Vésicule de chair : arme » ? Une arme enduite doit toucher dans l’heure ; si elle inflige au moins une Blessure, ajouter 1d10 Blessures. Passé l’heure, le poison s’évapore.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0039",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.104",
+    "question": "Implanter « Vésicule de chair : ingestion » ? Avaler cette préparation impose Résistance à −2 DR ; échec : critique immédiat au torse. Le texte n’en fixe pas la gravité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0040",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.104",
+    "question": "Implanter « Long sommeil : détection » ? Les tentatives de détection du poison subissent −4 DR. Une dose complète impose Résistance à −2 DR ; réussite : aucun effet, échec : danger au prochain sommeil.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0041",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.104",
+    "question": "Implanter « Long sommeil : décès » ? Après le premier échec, antidote puissant ou magie peut encore sauver avant sommeil. À l’endormissement : nouvelle Résistance à −2 DR ; échec : mort. Aucun succès de soin automatique n’est déduit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0042",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.105",
+    "question": "Implanter « Souffle court : effort » ? Pendant six heures après ingestion, tout petit effort physique donne Exténué ; une activité qui en donne normalement un en impose deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0043",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.105",
+    "question": "Implanter « Souffle court : récupération » ? À chaque fin d’heure, Résistance +0 peut arrêter l’effet. Les Exténués déjà acquis restent jusqu’au repos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0044",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.105",
+    "question": "Implanter « Baiser de wyverne » ? Une arme blessant avec ce poison impose Résistance ; échec : 5 Blessures sans BE ni PA. Le poison exposé à l’air dure 2 + 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0045",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.105",
+    "question": "Implanter « Solvant de bézoard » ? Une goutte du poison exact transforme le solvant en antidote de celui-ci ; même recette d’un autre lot insuffisante. Ajouter un autre poison rend le mélange lui-même légèrement toxique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0046",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.105",
+    "question": "Implanter « Remède de Lurek » ? En une minute, annuler les pénalités de caractéristiques liées à l’alcool et l’ivresse complète. Puis Exténué pendant 10 − BE heures, levé seulement par temps et repos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0047",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.106",
+    "question": "Implanter « Teinture bicéphale » ? Cette préparation de sang d’amphisbaena donne +4 DR pour résister à tout poison. Aucune durée de ce bonus n’est publiée dans le passage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0048",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.106",
+    "question": "Implanter « Insensibilité sanglante » ? Accorde Insensible à la douleur pour une heure ; pénalités des critiques ignorées hors amputations. Les critiques et la mort restent possibles ; à expiration, tous leurs effets reviennent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0049",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Feu de Carroburg : souffle » ? Accorde Souffle +10 (Feu), utilisable une seule fois sans Avantage. L’effet prend fin après ce souffle ; ne pas réimporter le coût V4 du Trait.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0050",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Feu de Carroburg : retour de flamme » ? Après avoir soufflé, Résistance à −2 DR ; échec : un En flammes. Aucun risque n’est testé avant l’usage du souffle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0051",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Esprit clair : sang-froid » ? Accorde À Sang-froid et l’inversion des Tests ratés fondés sur la Volonté. Appliquer le Trait V5 prioritaire ; durée de la potion non indiquée ici.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0052",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Esprit clair : surprise prolongée » ? Si le buveur devient Surpris, ignorer la première occasion où cet État devrait disparaître. Aucun Tour supplémentaire n’est ajouté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0053",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Bouclier de forge : protection » ? Un pot appliqué au porteur et à son équipement donne 4 PA contre tout feu, magique compris, et immunité à En flammes. Dure une heure, ou jusqu’au nettoyage à l’alcool.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0054",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Bouclier de forge : gêne » ? L’onguent glissant diminue Agilité et Initiative de 20 pendant son effet. Ce sont des changements de caractéristiques, pas −2 DR aux Tests.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0055",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Dernier souffle : questions » ? Sur cadavre mort depuis au plus un jour : trois questions, réponse facultative mais sans mensonge ; après quelques minutes le corps retombe au repos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0056",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Dernier souffle : quatrième question » ? Poser une quatrième question fait se relever le cadavre en Chose du Bois mort hostile. Le profil existe dans E0 ; le déclencheur de cette potion reste distinct.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0057",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Feu liquide » ? Le liquide brûle sur toute surface. Employé en arme, suivre la bombe incendiaire ; ses En flammes ne peuvent être éteints pendant trois Rounds, même sous l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0058",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.107",
+    "question": "Implanter « Fureur du preyton » ? La préparation impose immédiatement Frénésie pendant 1d10 Rounds, sans possibilité d’y mettre fin plus tôt. Le Trait générique ne prouve pas cette acquisition ni son verrou.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0059",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.108",
+    "question": "Implanter « Brûlure du rasoir : bombe » ? Les bombes incendiaires préparées avec cette substance produisent une attaque magique. Cela ne transforme pas automatiquement toutes les bombes du personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0060",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.108",
+    "question": "Implanter « Brûlure du rasoir : lame » ? Un onguent enflammé rend l’arme magique et lui fait infliger un En flammes à chaque coup pendant 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0062",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.108",
+    "question": "Implanter « Garde du cerf » ? Pendant une heure, immunité à Empoisonné et aux autres effets des poisons futurs. Ne traite aucun poison consommé avant la potion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0063",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.108",
+    "question": "Implanter « Dépit : sang corrosif » ? Résistance à −1 DR : réussite donne Sang corrosif pour 3 + DR Rounds ; échec donne deux Empoisonnés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0064",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.108",
+    "question": "Implanter « Dépit : retenir les morsures » ? Une créature Bestiale blessée après avoir mordu le buveur n’emploie plus sa morsure contre lui pour cette rencontre hostile ; ses autres attaques restent possibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0065",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.109",
+    "question": "Implanter « Sang des marées » ? Ingestion : trois Empoisonnés initiaux sans résistance, soin de BE Blessures et Régénération. La Régénération disparaît quand tous les Empoisonnés sont retirés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0066",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.109",
+    "question": "Implanter « Acide de troll : dissolution » ? Un flacon peut dissoudre 8 Enc d’équipement. Le texte ne fixe ni délai de dissolution ni répartition entre pièces ; ces faits restent au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0067",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.109",
+    "question": "Implanter « Acide de troll : arme » ? Comme arme improvisée, l’acide inflige une base de +9 dégâts avec Perforante et Dangereuse. Aucun profil offensif supplémentaire n’est inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0068",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.110",
+    "question": "Implanter « Camouflage vivant » ? Couverture intégrale : +4 DR en Discrétion fondée sur la vue. Visage et mains seuls : +1 DR pour un quart de dose. L’odeur n’est pas cachée ; durée non chiffrée ici.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0069",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.110",
+    "question": "Implanter « Poudre veineuse : onguent » ? Appliqué sur une blessure, l’onguent retire tous les Hémorragiques sans Test de Soin. L’outil sait retirer un État, mais n’établit pas ce déclencheur d’objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0070",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.110",
+    "question": "Implanter « Poudre veineuse : potion » ? Pendant une heure après ingestion, retirer un Hémorragique à la fin de chaque Round du bénéficiaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0071",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.110",
+    "question": "Implanter « Poudre veineuse : surdose » ? Une nouvelle potion ou un nouvel onguent sous effet d’une dose impose Résistance +0 ; échec : perte de 1d10 Blessures et un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0072",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.110",
+    "question": "Implanter « Poudre veineuse : sang impropre » ? Une créature Vampirique ne récupère aucune Blessure par morsure sur une victime ayant récemment consommé cette potion. La durée précise de « récemment » n’est pas fixée séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0073",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.111",
+    "question": "Implanter « Fléau des sorcières : protection » ? Pendant une heure, accorde Résistance à la Magie 3. Chaque dose simultanée supplémentaire ajoute un à l’indice et une heure ; le V5 prioritaire ne doit pas être remplacé par cette échelle V4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0074",
+    "phase": "Alchimie et soins",
+    "lot": "L11",
+    "source": "L11 p.111",
+    "question": "Implanter « Fléau des sorcières : surdose » ? Chaque dose après la première impose Résistance +0. Échec : un Empoisonné par Round pendant dix Rounds au buveur et aux contacts sans protection ; à la fin, retirer les États issus de cet effet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0075",
+    "phase": "Artisanat",
+    "lot": "L11",
+    "source": "L11 p.112",
+    "question": "Implanter « Fabriquer l’équipement de monstre » ? La fabrication ordinaire suit l’activité d’Artisanat ; pièces rares à commander à un artisan compétent, avec acquisition des matières animales. Pas de recette générale ou rendement ajouté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0076",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.112",
+    "question": "Implanter « Dague funeste : venin » ? Si la dague inflige au moins une Blessure, elle impose un Empoisonné résisté à −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0077",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.112",
+    "question": "Implanter « Dague funeste : épuisement » ? À chaque utilisation, le MJ lance secrètement 1d10 ; sur 1, le venin est épuisé et la lame se brisera lors de son prochain emploi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0078",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.113",
+    "question": "Implanter « Lame à poignée de bois tombé » ? Une lame faite avec un bois naturellement tombé ne se brise pas lorsqu’elle est employée au combat. Rouille, déformation et bris hors combat restent possibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0079",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.113",
+    "question": "Implanter « Lame à poignée de bois arraché » ? Si le bois a été acquis par violence, tout critique infligé par la lame donne un Hémorragique à la victime et au porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0080",
+    "phase": "Artisanat",
+    "lot": "L11",
+    "source": "L11 p.113",
+    "question": "Implanter « Trempe au sang de dragon » ? À la forge, la trempe accorde Durable sans DR d’artisanat supplémentaires et une lame gardant son tranchant. Le bonus n’est pas ajouté rétroactivement à une arme déjà créée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0081",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.113",
+    "question": "Implanter « Plate de léviathan » ? La plate de léviathan pèse un Enc de moins que la pièce métallique correspondante ; ne pas en déduire de changement de PA ou de Taille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0082",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.114",
+    "question": "Implanter « Empennage de griffon » ? Ces flèches ou carreaux fonctionnent comme des flèches elfiques. Le catalogue de munitions connaît ces dernières ; aucun rattachement de l’empennage ni fabrication propre retrouvé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0083",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.114",
+    "question": "Implanter « Pointes de dragon écharde » ? Une attaque de flèche ou carreau ainsi renforcé infligeant au moins une Blessure donne aussi un Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0084",
+    "phase": "Combat et équipement",
+    "lot": "L11",
+    "source": "L11 p.114",
+    "question": "Implanter « Sève de tregara » ? Un pot enduit jusqu’à six carreaux d’arbalète et leur donne Perforante. À utiliser dans la journée, sinon le durcissement détruit les carreaux. Le cartouche annonce aussi des flèches.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0085",
+    "phase": "Artisanat magique",
+    "lot": "L11",
+    "source": "L11 p.115",
+    "question": "Implanter « Artisanat magique : accès » ? Connaissance (Magie) et Magie des Arcanes sont requises. Travailler depuis les matières brutes ; pas d’enchantement permanent d’une arme ou armure déjà faite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0086",
+    "phase": "Artisanat magique",
+    "lot": "L11",
+    "source": "L11 p.115",
+    "question": "Implanter « Artisanat magique : Tests » ? Activité d’Artisanat, cible habituelle 20 DR ; Connaissance (Magie) à −3 DR et Métier adapté à la rareté. Seul le plus faible résultat alimente le total étendu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0087",
+    "phase": "Artisanat magique",
+    "lot": "L11",
+    "source": "L11 p.115",
+    "question": "Implanter « Artisanat magique : collaboration » ? Un mage et un artisan peuvent chacun assurer leur spécialité ; chacun dépense son activité d’Artisanat pour la collaboration.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0089",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.115",
+    "question": "Implanter « Broyeur d’os » ? Si le marteau tue, tous les vivants à dix yards sauf le porteur testent Résistance +0 ; échec : Assourdi et 1d10 Blessures réduites par BE mais pas PA. Seuil de création imprimé : 18 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0090",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.116",
+    "question": "Implanter « Silence : lame » ? Lame ou dague magique Dévastatrice ; seuil de création imprimé de 15 DR. Les qualités connues ne prouvent pas l’existence de cet objet et de ses contraintes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0091",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.116",
+    "question": "Implanter « Silence : mutisme » ? Le porteur en train de manier Silence ne peut émettre de son vocal ; les bruits de déplacement restent audibles. Une personne blessée par la lame devient aussi muette, sans durée précisée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0092",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.116",
+    "question": "Implanter « Silence : cheveu arraché » ? Si le cheveu de sirène a été pris de force, le porteur ne peut employer le talent Chanceux en tenant ou portant l’arme. Don libre : pas de cette conséquence supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0093",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.116",
+    "question": "Implanter « Gants de l’étrangleur » ? Pour les Tests opposés de Force et jets semblables seulement, le porteur compte une Taille au-dessus. Aucun changement global de Taille, Blessures ou dégâts. Seuil de création : 19 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0094",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.117",
+    "question": "Implanter « La dernière rasade » ? Boire au crâne permet voir, entendre et parler aux esprits encore présents ; ils perçoivent le buveur comme un esprit. Dure une minute, prolongée par nouvelles gorgées. Seuil : 18 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0095",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.117",
+    "question": "Implanter « La pierre assoiffée : protection » ? Verser du sang sur la pierre donne Protection 9+ pour 1d10 Tours. Seuil de création : 19 DR. Le texte ne définit pas quelle transition de campagne compte ces Tours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0096",
+    "phase": "Objets magiques",
+    "lot": "L11",
+    "source": "L11 p.117",
+    "question": "Implanter « La pierre assoiffée : emprise » ? Si le porteur devient Hémorragique, Résistance +0 ; échec : l’État ne peut être retiré avant d’arracher la pierre par Force à +2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0097",
+    "phase": "Récolte et commerce",
+    "lot": "L11",
+    "source": "L11 p.120",
+    "question": "Implanter « Valeur d’une bête vivante » ? Estimer la valeur des matières utilisables conservées puis multiplier par dix pour livraison vivante ; majoration possible pour traversée maritime, montant au MJ. Ce prix n’est pas une prime de rançon.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L11-0098",
+    "phase": "Création de personnage",
+    "lot": "L11",
+    "source": "L11 p.123",
+    "question": "Implanter « Secrets supplémentaires des prétirés » ? Chaque secret optionnel choisi à la création donne 1d10 pistoles supplémentaires ; le secret central est obligatoire et ne donne pas ce supplément. Même procédure sur les six prétirés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
