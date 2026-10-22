@@ -17,7 +17,10 @@ Branche `pro/phase-d`. Plan : `PLAN_PRO_PHASE_D.md`. Choix d'interprétation : `
 | D9 Tzeentch (3) | FAIT | 0538bdc |
 | D10 Familiers : conception (`CONCEPTION_FAMILIERS.md`) | FAIT | voir `git log` |
 | D11 Familiers : code | BLOQUÉ : le familier est un participant dont le profil (3 types) est une donnée de bestiaire de la phase E ; raison détaillée §4 de la conception | |
-| D12 à D21 | NON FAITS (à reprendre dans l'ordre) | |
+| D12 Grande Gueule (11 sorts, L01 + L12) + attribut de l'offrande | FAIT | voir `git log` (« Grande Gueule ») |
+| D13 Petite Waaagh (12) + D14 Grande Waaagh (12) (L12 ; L07 p.183 écarts consignés) | FAIT (un seul commit pour les deux) | voir `git log` (« magie orque ») |
+| D15 Lustria : 4 sorts de Haute Magie + 4 extensions Slann (`variantOf`) | FAIT | voir `git log` (« Lustria ») |
+| D16 à D21 | NON FAITS (à reprendre dans l'ordre) | |
 
 ## Dernière suite complète
 

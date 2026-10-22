@@ -2484,6 +2484,25 @@ for (const item of audit.items) {
 
 // Phase D : sorts des traditions (hors feuille Magie et hors audit). Même construction que les contrats d'audit.
 for (const t of TRADITION_SPELLS) {
+  if (t.variantOf) {
+    // Extension explicite d'un contrat existant (jamais un remplacement) : même effet, options de surpuissance supplémentaires.
+    const base = contracts.find(c => !c.isTradition && c.name === t.variantOf);
+    if (!base) throw new Error(`Variante sans contrat de base : ${t.variantOf}`);
+    const variant = structuredClone(base);
+    const variantPayload = JSON.stringify({ canonicalName: t.canonicalName, page: t.page, cn: base.cn, range: base.range, target: base.target, duration: base.duration });
+    Object.assign(variant, {
+      id: 'spell-tradition-' + t.slug, row: null, name: t.name, canonicalName: t.canonicalName, page: t.page, sourceBook: t.book, edition: t.edition,
+      sourceFingerprint: 'sha256:' + createHash('sha256').update(variantPayload).digest('hex'),
+      reminders: readableReminder([t.description, ...(t.assisted || [])].filter(Boolean).join(' ')) || null,
+      assistedClauses: (t.assisted || []).map(readableReminder),
+      isTradition: true, isElf: false, isBookV5: false, variantOf: t.variantOf
+    });
+    variant.overcast.specific = [...(variant.overcast.specific || []), ...structuredClone(t.addOvercastSpecific || [])];
+    if (variant.overcast.allowed && !variant.overcast.options.includes('special')) variant.overcast.options.push('special');
+    for (const option of variant.overcast.specific) option.label = readableReminder(option.label);
+    contracts.push(variant);
+    continue;
+  }
   const params = { cn: t.cn, range: t.range, target: t.target, duration: t.duration };
   const effConfig = structuredClone(t.effects);
   if (/^zde|zone|aoe/i.test(params.range)) effConfig.aoe = true;

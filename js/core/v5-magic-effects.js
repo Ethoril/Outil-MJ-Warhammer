@@ -1101,7 +1101,7 @@ export function resolveSpellDamage({
     rawDamage = Number(strFormula);
   } else if (spell.damage && Number.isFinite(Number(spell.damage))) {
     rawDamage = Number(spell.damage);
-  } else if (/\bBE\b/.test(strFormula) && Number.isFinite(spellFormulaValue(strFormula, caster || {}, Number(sl) || 0))) {
+  } else if (/\b(?:BE|BIntelligence)\b/.test(strFormula) &&Number.isFinite(spellFormulaValue(strFormula, caster || {}, Number(sl) || 0))) {
     // Formules chiffrées sur le Bonus d'Endurance (ex. Flot de Corruption : BE + DR).
     rawDamage = Math.max(0, spellFormulaValue(strFormula, caster || {}, Number(sl) || 0));
   } else {
