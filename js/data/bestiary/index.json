@@ -13,6 +13,17 @@
    }
   },
   {
+   "book": "L02",
+   "file": "L02.json",
+   "title": "Archives of the Empire 3",
+   "edition": "V4",
+   "counts": {
+    "profiles": 12,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L06",
    "file": "L06.json",
    "title": "Livre de base V5",

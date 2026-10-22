@@ -10,5 +10,7 @@ export const KEYWORDS_MANUAL = Object.freeze({
   'E0-P-059': ['fantome'],
   // Archives of the Empire 2 (L01) : PNJ humains du sanatorium et de Mourn
   'E0-P-128': ['humain'], 'E0-P-129': ['humain'], 'E0-P-130': ['humain'], 'E0-P-131': ['humain'], 'E0-P-132': ['humain'], 'E0-P-133': ['humain'],
-  'E0-P-134': ['humain'], 'E0-P-135': ['humain'], 'E0-P-136': ['humain'], 'E0-P-137': ['humain']
+  'E0-P-134': ['humain'], 'E0-P-135': ['humain'], 'E0-P-136': ['humain'], 'E0-P-137': ['humain'],
+  // Archives of the Empire 3 (L02) : les familiers et petits animaux sont des Bêtes
+  'E0-P-140': ['bete'], 'E0-P-141': ['bete'], 'E0-P-142': ['bete'], 'E0-P-143': ['bete'], 'E0-P-144': ['bete']
 });

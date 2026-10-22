@@ -36,6 +36,7 @@ const ASSETS_TO_CACHE = [
   './js/core/bestiary-profiles.js',
   './js/data/bestiary/index.json',
   './js/data/bestiary/L01.json',
+  './js/data/bestiary/L02.json',
   './js/data/bestiary/L06.json',
   './js/data/bestiary/L11.json',
   './js/core/v5-divine-engine.js',
