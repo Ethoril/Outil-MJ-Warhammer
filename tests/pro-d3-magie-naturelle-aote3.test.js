@@ -43,16 +43,16 @@ test('Dague de l’Art — deux attaques Magiques : BF + 2, et BF + 8 contre Ét
  assert.equal(subject(store,'mage').actions.length,3);
  await store.undo();assert.deepEqual(store.listParticipants(),before,'Undo atomique');
 });
-test('Revigorer — deux Exténué : la pénalité de −2 DR disparaît pendant la durée, le compteur reste, retour à l’échéance',async()=>{
+test('Revigorer — D-C22 : retire un état Exténué sur deux ; la pénalité baisse d’un cran',async()=>{
  const {store,engine}=await encounter({mage:{states:[{id:'f',name:'Exténué',level:2}]}});
  const action={type:'skill',attr:'Ag',label:'Athlétisme',base:50};
  const mod=()=>store.previewResolution({actorId:'mage',action,roll:45,v5:{kind:'test',choice:'keep'}}).test;
  const before=mod();
  await cast(store,getSpellContract('Revigorer'),{targetIds:['mage']});
  const during=mod();
- assert.equal(level(subject(store,'mage'),'Exténué'),2,'compteur conservé');
- assert.ok(during.sl>before.sl,'la pénalité d’Exténué n’est plus appliquée : '+before.sl+' -> '+during.sl);
- assert.equal(during.sl-before.sl,2);
+ assert.equal(level(subject(store,'mage'),'Exténué'),1,'un niveau retiré');
+ assert.notEqual(subject(store,'mage').extensions?.v5?.specialStates?.ignoreFatiguePenalties,true,'plus de pénalité ignorée');
+ assert.equal(during.sl-before.sl,1);
 });
 test('Pas imperceptible — aura masquée, aucun lancer, aucune Focalisation, aucune dissipation, +2 DR Discrétion en reçu',async()=>{
  const {store}=await encounter();const c=getSpellContract('Pas imperceptible');

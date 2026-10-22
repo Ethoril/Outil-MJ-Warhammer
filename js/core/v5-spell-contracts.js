@@ -98,6 +98,7 @@ import { reminderFlagTexts } from './v5-magic-reminder-flags.js';
 import { resolveSpecificOvercast, specificOvercastReminder, raiseTraitRating, SPECIFIC_OVERCAST_KINDS } from './v5-magic-overcast-options.js';
 import { normalizeArcaneOptions, previewArcaneUnforgiving, applyArcaneArmorDamage } from './v5-magic-arcane-unforgiving.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
+import { undeadProfilesAvailable, undeadSummonParticipant } from '../data/v5-transformation-bestiary.js';
 
 export const V5_SPELL_CONTRACTS_VERSION = 'v5-spell-contracts-2026-10-10.3';
 
@@ -687,7 +688,8 @@ export function resolveAuxiliarySummons({ contract, caster, options = {} } = {})
     const spec=contract.effects.summon,sl=Math.max(0,Number(options.castingSl) || 0);
     const total=(spec.baseFormula?spellFormulaValue(spec.baseFormula,caster):1)+Math.max(0,(Number(spec.count) || 1)-1)+(spec.addDr?sl:0);
     const label=spec.names?.[options.domainFacts?.[spec.nameFact]] || spec.name;
-    for(let i=0;i<total;i++)auxiliaries.push({id:'aux-'+contract.id+'-'+uid()+'-'+(i+1),name:label+' '+(i+1),zone:'active',camp:caster.camp,hp:null,maxHp:null,caracs:{},traits:[...(spec.traits || [])],
+    const profileKind=spec.profileKinds?.[options.domainFacts?.[spec.nameFact]] || spec.profileKinds?.default;
+    for(let i=0;i<total;i++)auxiliaries.push(profileKind?{...undeadSummonParticipant(profileKind,{id:'aux-'+contract.id+'-'+uid()+'-'+(i+1),name:label+' '+(i+1),camp:caster.camp,casterId:caster.id,states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1}))}),extensions:{v5:{summonedBySpellId:contract.id,genericSummon:true,undeadProfile:profileKind}}}:{id:'aux-'+contract.id+'-'+uid()+'-'+(i+1),name:label+' '+(i+1),zone:'active',camp:caster.camp,hp:null,maxHp:null,caracs:{},traits:[...(spec.traits || [])],
       states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1})),skills:[],actions:[],armor:{head:0,body:0,arms:0,legs:0},isAuxiliary:true,casterId:caster.id,noMomentum:false,
       extensions:{v5:{summonedBySpellId:contract.id,genericSummon:true}}});
   } else if (contract.effects?.summon?.indestructible) {
@@ -1268,6 +1270,8 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
 
   // Invocations génériques : la couche (fin à l’aube, mort du lanceur) est portée par le lanceur, la zone n’est pas suivie.
   if (effects.summon?.generic) effectiveTargets = [actor];
+  // D-C40 : sans les profils Squelette / Zombie du bestiaire, Relever les morts et Réanimation sont refusés.
+  if (effects.summon?.profileKinds && !undeadProfilesAvailable()) return { ready: false, valid: false, status: 'profile-missing', error: 'Profils Squelette / Zombie du bestiaire indisponibles : ce sort ne peut pas être lancé.', contract };
 
   const targetValidation = validateSpellTargets({...contract,effects}, actor, effectiveTargets, overcastTargetsBonus, options);
   if (!targetValidation.valid) {
@@ -2007,6 +2011,11 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
         healAmount = Math.max(1, Math.floor((Number(actor.caracs?.FM) || 30) / 10));
       } else if (healConf.amountFormula === 'DR') {
         healAmount = Math.max(1, Number(sl) || 1);
+      } else if (healConf.onTarget === true && typeof healConf.amountFormula === 'string') {
+        // D-C122 : formule lue sur la cible (Bonus d’Endurance du serviteur) ; sans caractéristique connue, le MJ doit la saisir.
+        const value = spellFormulaValue(healConf.amountFormula, target, Number(sl) || 0);
+        if (!Number.isFinite(value)) return { ready: false, valid: false, status: 'invalid-target-admissibility', error: `${contract.name} : l’Endurance de ${target.name || target.id} est inconnue ; renseignez-la sur sa fiche pour calculer le soin.`, contract };
+        healAmount = Math.max(1, value);
       } else if (typeof healConf.amountFormula === 'string') {
         // Autre formule déclarée (ex. BDex, BSoc) : valeur du lanceur, jamais deviné.
         const value = spellFormulaValue(healConf.amountFormula, actor, Number(sl) || 0);
@@ -3210,6 +3219,10 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     };
   }
 
+  // D-C30 : bonus de caractéristique accordé au lanceur quand la cible est détruite (nouveau mécanisme, hors cibles).
+  const boostSpec = effects.casterBoostOnDestroy, boostStat = boostSpec && domainFacts[boostSpec.fact];
+  const casterBoostOnDestroy = boostStat && targetResults.some(r => r.destroyed) ? { stat: boostStat, amount: boostSpec.amount, duration: effectDuration(actor) } : undefined;
+
   const summary = `Exécution de ${contract.name} (${contract.canonicalName}) par ${actor.name || actor.id} sur ${effectiveTargets.length} cible(s).`;
 
   return {
@@ -3225,6 +3238,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
     unstoppableForce: effectiveCriticalChoice === 'unstoppable-force',
     casterSelfDamage,
     casterConditions:effects.casterConditions,
+    casterBoost:casterBoostOnDestroy,
     mjChoice: resolvedMjChoice,
     targetValidation,
     operationId,
@@ -3739,6 +3753,24 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     const ids=(participants[index].extensions?.v5?.spellEffects || []).filter(e=>e.specialState?.endsOnIncomingAttack).map(e=>e.id);
     for(const effectId of ids)participants[index]=expireSpellEffects(participants[index],{effectId}).participant;
   }
+  // 8 bis. D-C30 : +10 à une caractéristique du lanceur quand la cible est détruite.
+  if (preview.casterBoost) {
+    const cIdx = participants.findIndex(p => p.id === actor.id);
+    if (cIdx !== -1) {
+      participants[cIdx] = applySpellEffects(participants[cIdx], {
+        id: `spell-effect-${contract.id}-${uid()}-${actor.id}`,
+        spellId: contract.id,
+        spellName: contract.name,
+        casterId: actor.id,
+        domain: contract.domain,
+        cn: contract.cn,
+        castExecutionId: opKey,
+        duration: preview.casterBoost.duration,
+        statModifiers: { [preview.casterBoost.stat]: preview.casterBoost.amount }
+      }, { round: currentRound, caster: actor }).participant;
+    }
+  }
+
   // 9. Appliquer l'épuisement magique éventuel
   if (preview.burnout?.active) {
     const bIdx = participants.findIndex(p => p.id === actor.id);

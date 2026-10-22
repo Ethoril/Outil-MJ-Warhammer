@@ -6,7 +6,7 @@ Brief : `docs/plans-gpt/BRIEF_PRO_CORRECTIFS_22_10.md`. Branche `pro/correctifs-
 |---|---|
 | K1 — Courroux (phase B), points 1 à 7 | FAIT (commit « K1 », voir `git log`) |
 | K2 — Brisé (phase C), points 1 à 3 | FAIT (commit « K2 », voir `git log`) |
-| K3 — Magie (phase D), points 1 à 6 + Fellstave (K4) | À FAIRE |
+| K3 — Magie (phase D), points 1 à 6 + Fellstave (K4) | FAIT (commit « K3 », voir `git log`) |
 | Runes et familiers (conception) | À FAIRE |
 
 ## K1 — ce qui change
@@ -44,8 +44,22 @@ Assertions modifiées : `phase-c-c04-intimidation-traits` (égalité = aucun ét
 
 Choix d'interprétation : le catalogue des 206 Talents est un instantané épinglé de la feuille source (décomptes et empreintes testés dans six fichiers) ; y ajouter une entrée aurait cassé ces invariants hors périmètre. Le Talent est donc déclaré comme supplément (constante exportée de `js/core/v5-effects.js`), hors du catalogue de 206. Si le MJ veut l'entrée dans le catalogue lui-même, c'est un lot distinct (instantané, contrats, couverture).
 
+## K3 — ce qui change
+
+1. **D-C22** : Revigorer retire un niveau d'Exténué (`removeConditionLevels`) ; plus de pénalité ignorée (Clarté d'Esprit garde le drapeau).
+2. **D-C30** : nouveau mécanisme `casterBoostOnDestroy` (contrat) → `casterBoost` dans l'aperçu → couche +10 sur le lanceur pour la durée, seulement si la cible est détruite. Nouveau fait requis `boostedStat` (liste des 10 caractéristiques).
+3. **D-C32** : rappel changé : ordre inachevé = démon présent et hostile.
+4. **D-C40** : les profils Squelette (p.339) et Zombie (p.340) existent dans le bestiaire de la phase E : branchés (`UNDEAD_SUMMON_PROFILES`, dans `js/data/v5-transformation-bestiary.js` pour ne pas toucher `sw.js`), à la place de `summon.generic` ; sort refusé (`profile-missing`) si le profil manque (interrupteur de test `setUndeadProfilesAvailable`). Armures facultatives non comptées.
+5. **D-C51** : `resolution.js` ajoute au résultat d'une résolution le rappel « proposer au MJ de jouer le Test de Blessure Suppurée » quand la cible porte la couche de Nurgle et subit des Blessures (rappel additif, rien d'appliqué).
+6. **D-C122** : `healing.onTarget` lit le Bonus d'Endurance du serviteur ; Endurance inconnue = sort refusé avec message.
+7. **Fellstave (D-C15)** : texte inversé (réussite d'Intuition = compréhension), en rappel.
+
+Assertions modifiées : `pro-d3` (Revigorer : retire un niveau), `pro-d5` (fait `boostedStat` ajouté aux lancers de Destruction ; Manifestation : rappel « reste et devient hostile »), `tests/helpers/lot3-declared-answers.js` (`boostedStat`). Ajouts : D-C30, D-C40 (×2), D-C51, D-C122.
+
+Choix d'interprétation : D-C40 lu comme « brancher dès que les profils existent » puisqu'ils existent ; D-C22 : un seul niveau retiré (comme Bonne santé) ; D-C51 : rappel dans la résolution plutôt qu'un bouton. `resolution.js` (code partagé à risque) reçoit un ajout de rappel isolé, couvert par un test et la suite complète. `docs/lot3/LOT3_MATRICE_CONTRATS_V5.md` non régénéré (le générateur la dégrade ; contrats JSON régénérés).
+
 ## Vérifications
 
-- `node --test --test-concurrency=4` : verte (le test E0 dépend du reçu de la recette).
+- `node --test --test-concurrency=4` : verte (le test E0 dépend du reçu de la recette) ; K3 : 4053/4053.
 - `node tools/run-divine-recipe.mjs` : **RECETTE DIVINE VERTE — 26 commandes** (`tmp/divin/base-manifest.json` recréé depuis les fichiers protégés de HEAD).
 - Aucune variable persistante nouvelle.

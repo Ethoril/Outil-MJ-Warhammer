@@ -830,7 +830,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,
-    reminders: [...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    reminders: [...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved,

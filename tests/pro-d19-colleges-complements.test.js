@@ -68,6 +68,13 @@ test('Secours au serviteur magique — soin du Bonus d’Endurance, doublé à +
  const enemy=await encounter({foe:{hp:5,maxHp:40}});
  assert.equal(enemy.store.previewSpellExecution(c.id,inputFor(c)).targetResults?.[0]?.resisted,true);
 });
+test('Secours au serviteur magique — D-C122 : le soin compte le Bonus d’Endurance du serviteur, pas celui du lanceur',async()=>{
+ const c=getSpellContract('Secours au serviteur magique');
+ const {store}=await encounter({foe:{camp:'pj',hp:5,maxHp:40,caracs:{E:70,CC:50,F:40,I:50,Ag:50,Dex:50,Int:60,FM:60,Soc:50,M:4}}});await cast(store,c);
+ assert.equal(subject(store,'foe').hp,5+7,'BE du serviteur (7), non celui du lanceur (4)');
+ const noE=await encounter({foe:{camp:'pj',hp:5,maxHp:40,caracs:{CC:50}}});
+ const p=noE.store.previewSpellExecution(c.id,inputFor(c));assert.equal(p.ready,false);assert.match(p.error,/Endurance/);
+});
 test('Voile de brouillard — rappel (visibilité 10 mètres, non magique) ; aucun doublon de nom parmi les contrats',()=>{
  const c=getSpellContract('Voile de brouillard');assert.equal(c.treatment,'narrative');assert.match(c.reminders,/10 mètres/);assert.match(c.reminders,/non magique/);
  const names=getAllSpellContracts().map(x=>x.name);assert.equal(new Set(names).size,names.length);
