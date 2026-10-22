@@ -99,6 +99,16 @@ export const NAME_FIXES = Object.freeze({
   'E0-P-710': 'Ernst Heidlemann — Human Wizard\'s Apprentice (Silver 3)',
   'E0-P-711': 'Hans Gräber — Level 1 Monk, Level 4 Wizard (Necromancer)',
   'E0-P-715': 'The Gravelord\'s Zombies',
+  // Death on the Reik Companion (L26) : caractères accentués perdus (graphies de l'index p.122), guillemets des surnoms, « Typical » collé au nom, profil sans titre (E-D32)
+  'E0-P-927': 'Gertrud Schützenberger — Human River Recruit (Silver 1)',
+  'E0-P-930': '\'Wet\' Wilgryn Augenlos — Human Shipsword Master (Gold 1)',
+  'E0-P-935': 'Roland \'The Horse\' Bruckesel — Human Guard (Silver 2)',
+  'E0-P-936': 'Edgar \'The Pike\' Ebrecht — Human Pit Fighter (Brass 4)',
+  'E0-P-940': 'Eusapia Balacañon — Human Master Wizard (Gold 1)',
+  'E0-P-946': 'Altgräfin Emelia Luneburg — Human Magnate (Gold 5)',
+  'E0-P-951': 'Agrin \'The Blood of the Flagellant Is Sigmar\'s Own\' Losburg — Human Zealot (Brass 0)',
+  'E0-P-955': 'Boris Landsmaan — Typical Human Pirate (Boat-Hand)',
+  'E0-P-984': 'Carrion',
   // Sea of Claws (L25) : « ö » lu comme un tiret, en-tête de page collé, titres des équipages perdus (lus sur la page 127), apostrophe en majuscule (E-D31)
   'E0-P-895': 'Ludolf Köhler — Imperial Sea Lord (Gold 3)',
   'E0-P-897': 'Skaldor \'Reaver\' Lotharksson — Dwarf Ship\'s Master (Gold 2)',

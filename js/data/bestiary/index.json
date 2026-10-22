@@ -242,6 +242,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L26",
+   "file": "L26.json",
+   "title": "Death on the Reik Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 62,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }
