@@ -28,6 +28,11 @@ export const NAMES_FR = Object.freeze({
   'E0-P-130': proposal('Marie Duvallier — Sœur (Shallya), ancienne médecin (Bronze 4)'), 'E0-P-131': proposal('Anna-Lise Levertske — Sœur, ancienne apothicaire (Bronze 4)'),
   'E0-P-132': proposal('Sœur type — Sœur (Shallya) (Bronze 4)'), 'E0-P-133': proposal('Hanna Bratsch — Auxiliaire, ancienne sergente (Bronze 3*)'),
   'E0-P-134': proposal('Erzbet Wegener — Patiente (Bronze 0)'), 'E0-P-135': proposal('Adalmann von Hopfberg — Seigneur noble (Or 7)'),
+  // Deft Steps, Light Fingers (L04)
+  'E0-P-163': proposal('Garde noire de Morr (chevalier)'), 'E0-P-164': proposal('Receleur'), 'E0-P-165': proposal('Faussaire'), 'E0-P-169': proposal('Propriétaire de planque (citadin)'),
+  'E0-P-170': proposal('August Sternwachter'), 'E0-P-172': proposal('Gunna von Sperren — Reine des contrebandiers'), 'E0-P-173': proposal('Père Pedragar, prêtre de Taal'),
+  'E0-P-174': proposal('Homme du guet'), 'E0-P-177': proposal('Chef de hors-la-loi'), 'E0-P-178': proposal('Chasseur de primes type'), 'E0-P-180': proposal('Lockhund du Hochland'),
+  'E0-P-181': proposal('Bamse du Nordland'), 'E0-P-182': proposal('Chien des marais de Grootscher'), 'E0-P-183': proposal('Faucon-colombe'), 'E0-P-184': proposal('Faucon rouge d’Arabie'),
   // Archives of the Empire Volume 1 (L03)
   'E0-P-155': proposal('Spoondrift « spoony » Skelfsider — Pilleur de tombes (Bronze 3)'), 'E0-P-156': proposal('Thelonius Hardcastle Monkenbridge — Thorncobble XII — Héritier (Or 1)'),
   'E0-P-157': proposal('Alrik Skagsson — Inquisiteur (Argent 5)'), 'E0-P-159': proposal('Thyk Hurgarsson — Compagnon de guilde (Argent 5)'),

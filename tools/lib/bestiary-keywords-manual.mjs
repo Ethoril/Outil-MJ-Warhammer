@@ -15,5 +15,8 @@ export const KEYWORDS_MANUAL = Object.freeze({
   // Archives of the Empire Volume 1 (L03) : Halflings (M 3, Endurance faible) pp. 23-31 et Nains pp. 56-63 (voir E-D10)
   'E0-P-150': ['halfling'], 'E0-P-151': ['halfling'], 'E0-P-152': ['halfling'], 'E0-P-153': ['halfling'], 'E0-P-154': ['halfling'], 'E0-P-155': ['halfling'], 'E0-P-156': ['halfling'],
   'E0-P-157': ['nain'], 'E0-P-158': ['nain'], 'E0-P-159': ['nain'], 'E0-P-160': ['nain'], 'E0-P-161': ['nain'], 'E0-P-162': ['nain'],
+  // Deft Steps, Light Fingers (L04) : PNJ nommés humains ; le surnom « the Fish » n'est pas un poisson ; chiens et rapaces sont des Bêtes
+  'E0-P-170': ['humain'], 'E0-P-171': ['humain', '-poisson'], 'E0-P-172': ['humain'], 'E0-P-173': ['humain'], 'E0-P-179': ['humain'],
+  'E0-P-181': ['bete'], 'E0-P-182': ['bete'], 'E0-P-183': ['bete'],
   'E0-P-140': ['bete'], 'E0-P-141': ['bete'], 'E0-P-142': ['bete'], 'E0-P-143': ['bete'], 'E0-P-144': ['bete']
 });

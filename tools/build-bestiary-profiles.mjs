@@ -57,8 +57,10 @@ const displayName = name => (/[a-zà-ÿ]/.test(name.replace(/\([^)]*\)/g, '')) ?
 function applyManualKeywords(record) {
   const extra = KEYWORDS_MANUAL[record.id];
   if (!extra) return;
-  const all = [...new Set([...(record.keywords || []), ...extra])];
-  record.keywords = all;
+  // Une entrée « -id » retire un mot-clé lu à tort dans le nom (surnom, par exemple).
+  const removed = new Set(extra.filter(id => id.startsWith('-')).map(id => id.slice(1)));
+  const all = [...new Set([...(record.keywords || []), ...extra.filter(id => !id.startsWith('-'))])].filter(id => !removed.has(id));
+  if (all.length) record.keywords = all; else delete record.keywords;
 }
 function applyFrenchName(record) {
   applyManualKeywords(record);
