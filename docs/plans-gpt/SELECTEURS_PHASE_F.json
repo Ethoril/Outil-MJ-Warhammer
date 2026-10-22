@@ -1,0 +1,327 @@
+[
+  {
+    "id": "F-L06-0001",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.129",
+    "question": "Implanter « Décider quand un Test est nécessaire » ? Une action routinière ou à issue certaine réussit sans jet ; le MJ demande un Test quand l’issue est incertaine ou opposée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0015",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.130",
+    "question": "Implanter « Recommencer après un Test raté » ? Un Test raté ne peut être repris qu’après traitement de ses conséquences ou changement important des circonstances.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0016",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.130",
+    "question": "Implanter « Tests dans l’obscurité » ? L’obscurité impose Désavantage aux Tests de mêlée, de tir et de Perception visuelle ; lumière, talents et Traits peuvent l’atténuer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0018",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.131",
+    "question": "Implanter « Barème des difficultés » ? Le barème fixe les DR à +6, +4, +2, 0, -1, -2 et -3, du plus facile au plus difficile ; sans précision, utiliser zéro.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0019",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.131",
+    "question": "Implanter « Interpréter les degrés de résultat » ? Les issues se répartissent en huit paliers : au moins +5, +3/+4, +1/+2, +0, -0, -1/-2, -3/-4 et au plus -5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0023",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.132",
+    "question": "Implanter « Aide collective et chef du Test » ? Avec accord du MJ, le personnage ayant le meilleur score effectue le Test avec Avantage lorsque d’autres l’aident utilement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0024",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.132",
+    "question": "Implanter « Conditions pour aider un allié » ? L’aide doit être pertinente et assez proche ; pas d’aide habituelle contre maladie, poison, peur ou danger ; une compétence avancée exige un progrès.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0025",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Dépenser une Chance pour obtenir Avantage » ? Avant le jet, dépenser un Point de Chance donne Avantage à ce Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0027",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Payer plusieurs relances successives » ? Après une relance, une autre Chance peut être dépensée pour relancer encore en conservant le dernier résultat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0030",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Dépenser un Destin pour annuler une attaque » ? Après les dés d’attaque mais avant dégâts, opposition et critiques, dépenser un Destin annule les effets de l’attaque contre soi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0031",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Dépenser un Destin pour survivre » ? Au lieu de mourir, dépenser un Destin permet de survivre, mais retire le personnage de la rencontre en cours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0032",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Dépenser un Destin pour réussir sans jet » ? Un Destin permet de choisir le résultat du Test plutôt que lancer les dés et garantit une réussite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0033",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Destin : gagner une opposition d’au moins un DR » ? Lors d’une réussite obtenue par Destin, une opposition est gagnée avec au moins +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0034",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Destin : choisir la localisation du critique » ? En choisissant un critique grâce à un Destin, le joueur peut choisir la localisation au lieu d’un tirage aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0035",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.133",
+    "question": "Implanter « Accorder du Destin pour un acte exceptionnel » ? Le Destin ne se renouvelle pas automatiquement ; le MJ peut accorder un point pour un acte exceptionnel, généralement en fin d’aventure importante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0036",
+    "phase": "Destin et Chance",
+    "lot": "L06",
+    "source": "L06 p.265",
+    "question": "Implanter « Adapter le renouvellement de Chance à la durée de séance » ? Pour les longues séances, renouveler la Chance à un moment approprié environ toutes les quatre heures ; pour les courtes, une séance sur deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0037",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Fixer les paramètres d’un Test étendu » ? Le MJ fixe le total de DR, la fréquence des jets, l’échéance et les conséquences d’un dépassement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0038",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Modifier le Test pendant une tâche étendue » ? Le MJ choisit compétence et difficulté pour chaque tentative ; elles peuvent changer pendant la tâche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0039",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Cumuler les DR d’une tâche étendue » ? Après chaque tentative, ajouter les DR réussis ou retrancher les DR d’échec au total de progression partagé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0040",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Progression minimale d’un résultat marginal » ? Dans un Test étendu, une réussite ajoute au moins +1 DR et un échec retranche au moins un DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0041",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Progression d’un critique ou d’une maladresse » ? Dans un Test étendu, un critique ajoute au moins cinq DR et une maladresse en retranche au moins cinq.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0042",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Terminer une tâche étendue au seuil » ? La tâche est réussie lorsque le total de progression atteint le seuil fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0043",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Échouer à une tâche dont la progression devient négative » ? Une tâche étendue échoue dès que sa progression descend sous zéro ; le MJ en détermine les conséquences.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0044",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Échouer à une tâche par manque de temps ou de tentatives » ? Une tâche étendue échoue lorsque le délai ou le nombre d’essais autorisé est épuisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0045",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.266",
+    "question": "Implanter « Partager une progression de tâche étendue » ? Plusieurs personnages peuvent chacun tester et ajouter leurs DR à un total commun de tâche étendue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  }
+]
