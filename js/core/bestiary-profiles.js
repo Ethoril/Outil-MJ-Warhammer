@@ -85,6 +85,14 @@ export function createBestiaryLoader(fetchJson, base = './js/data/bestiary/') {
   return loader;
 }
 
+let summonLibrary = [];
+/**
+ * Profils disponibles aux sorts d'invocation (résolution synchrone) : l'application y inscrit le livre L06 au démarrage.
+ * Pas de pile ni d'historique : la bibliothèque n'est jamais copiée dans les opérations du Store.
+ */
+export function registerSummonLibrary(profiles) { summonLibrary = Array.isArray(profiles) ? profiles : []; }
+export function summonProfileLibrary() { return summonLibrary; }
+
 export const BESTIARY_FREE_ATTACK_KEY = 'freeAttack';
 
 const ARMOUR_ZONES = Object.freeze({ head: /\bhead\b/i, body: /\bbody\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });

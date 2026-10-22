@@ -45,9 +45,9 @@ test('Destruction de Démon Mineur — l’opposition exige deux dés explicites
  const c=getSpellContract('Destruction de Démon Mineur');const {store}=await encounter({foe:{traits:['Démoniaque'],hp:20}});
  assert.equal(store.previewSpellExecution(c.id,inputFor(c,{domainFactsExtra:{}})).ready,false);
 });
-test('Manifestation de Démon Mineur — participant à créer par le MJ, un ordre puis disparition (rappel)',()=>{
+test('Manifestation de Démon Mineur — profil imprimé créé à l’incantation (E-B3), un ordre puis disparition (rappel)',()=>{
  const c=getSpellContract('Manifestation de Démon Mineur');
- assert.equal(c.effects.assistedSummon,true);assert.match(c.reminders,/un seul ordre/);assert.match(c.reminders,/disparaît quand même/);
+ assert.equal(c.effects.type,'summon');assert.deepEqual(c.effects.summon.profiles,{bloodletter:'E0-P-107',daemonette:'E0-P-108'});assert.match(c.reminders,/un seul ordre/);assert.match(c.reminders,/disparaît quand même/);
  assert.deepEqual(c.effects.facts.find(f=>f.key==='daemonKind').options.map(o=>o[0]),['bloodletter','daemonette']);
 });
 test('Octogramme — barrière démoniaque rappelée, version V5 sans clause d’évasion',async()=>{
