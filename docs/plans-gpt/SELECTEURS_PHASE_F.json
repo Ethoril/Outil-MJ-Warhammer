@@ -20993,5 +20993,2163 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0001",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.52",
+    "question": "Implanter « Étapes d’un voyage souterrain » ? Le MJ découpe le trajet en étapes ; chacune comprend conditions des tunnels, une activité par voyageur et rencontres. Une journée représente environ 8 heures de marche et 13 miles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0002",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.52",
+    "question": "Implanter « Longueurs des itinéraires souterrains » ? Étapes proposées : Azgaraz–Norn 12 ; Norn–Hirn 20 ; Karaz-a-Karak–Barak Varr 25 ; Kadrin–Azul 50 ; traversée de Kislev 95.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0003",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.52",
+    "question": "Implanter « Préparer l’itinéraire souterrain » ? Au départ, un voyageur joue Navigation +0 ; une bonne carte donne +2 DR. Réussite : une étape de moins, minimum une.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0004",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.53",
+    "question": "Implanter « Tirer l’état des tunnels » ? À chaque étape, identifier la région puis jeter 1d10 ; les conditions durent jusqu’à l’étape suivante. Le voyage peut traverser plusieurs régions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0005",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.53",
+    "question": "Implanter « Grande Route souterraine » ? 1–2 patrouillé, 3–4 entretenu, 5–6 désert, 7–8 délabré, 9–10 occupé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0006",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.53",
+    "question": "Implanter « Frontière naine » ? 1 patrouillé, 2–3 entretenu, 4–5 désert, 6–7 délabré, 8–10 occupé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0007",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.53",
+    "question": "Implanter « Terriers redoutés » ? 1 entretenu, 2–4 désert, 5–7 délabré, 8–10 occupé ; aucun résultat patrouillé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0008",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.53",
+    "question": "Implanter « Voyages mixtes » ? Alterner conditions et rencontres souterraines avec météo et rencontres de surface ; les activités restent celles du terrain traversé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0009",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Tunnels patrouillés : campement » ? Une étape patrouillée donne +1 DR aux Tests de campement et autorise Récupérer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0010",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Tunnels patrouillés : choisir la rencontre » ? Pour la rencontre, jeter deux d10 séparés, lire deux résultats et laisser les joueurs en choisir un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0011",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Rencontrer ou éviter les patrouilles » ? Signes secrets (Mineur) ou Pistage améliorent les chances de contact ; Discrétion (Souterrain) permet de passer inaperçu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0012",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Tunnels entretenus : récupération » ? L’étape entretenue autorise l’activité Récupérer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0013",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Tunnels déserts : vigilance inquiète » ? Jusqu’à la sortie de l’étape déserte, Perception fondée sur l’ouïe reçoit +1 DR et Calme subit −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0014",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Traverser les tunnels délabrés » ? Chacun joue Athlétisme +0, un par un ; échec : choisir un Exténué ou +2 à l’indice d’instabilité, avec jet d’instabilité à chaque hausse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0015",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Traverser les tunnels occupés » ? Chacun joue Discrétion (Souterrain) +2 DR. Si tous réussissent, pas de poursuite ; sinon distance initiale 2, +1 par personnage ayant réussi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0016",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.54",
+    "question": "Implanter « Conditions : lumière et intégrité proposées » ? Patrouillé : éclairé/solide ; entretenu : lumière lointaine/solide ; désert : noir/usé ; délabré : lumière lointaine/fragile ; occupé : lumière lointaine/usé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0017",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Budget des activités souterraines » ? Chaque voyageur choisit une activité souterraine par étape, dans l’ordre des joueurs ; pas d’échange ordinaire avec les activités entre aventures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0018",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Fatigue des activités souterraines » ? Un Test d’activité raté donne un Exténué ; la fatigue du voyage ne se retire normalement qu’à son terme ou grâce à un campement réussi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0019",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Trouver de l’eau » ? Survie +0 réussie fournit assez d’eau pour éviter la soif pendant 1+DR jours à des compagnons.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0020",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Veiller : prévenir la surprise » ? Perception +0 réussie protège tout le groupe de Surpris jusqu’à l’étape suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0021",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Veiller : danger à l’affût » ? Une veille réussie donne +2 DR à tous les Tests pour éviter le danger à l’affût de cette étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0022",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Camper : retirer la fatigue » ? Guérison ou Survie +0 réussie retire un Exténué à soi ou un allié, puis autant d’Exténués supplémentaires que de DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0023",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Camper : soigner » ? Un Test de Guérison réussi au campement peut donner les bénéfices ordinaires de Guérison à la place du retrait de fatigue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0024",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Cartographier le trajet » ? À chaque étape, jouer Métier (Cartographe) +0 ou Art (Dessin) −1 DR pour produire la carte complète du trajet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0025",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Réutiliser ou vendre la carte » ? La carte complète donne +2 DR à Savoir ou Navigation pour réduire les étapes du même trajet ou de son inverse ; prix habituel 1 CO, 3 CO ou plus après embellissement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0026",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.55",
+    "question": "Implanter « Récupérer en voyage souterrain » ? En étape patrouillée ou entretenue, sans Exténué, Récupérer soigne chaque jour BE Blessures supplémentaires comme au repos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0027",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « Déclencher une rencontre souterraine » ? À chaque étape, jeter 1d10 ; sur 8+, une rencontre survient, déterminée par la table de 2d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0028",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 2 : mal oublié » ? Chaque voyageur joue Résistance +0 contre une exposition modérée à la Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0029",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 3–4 : obstruction » ? Pour dégager le passage, chacun joue Résistance +0 ; échec : un Exténué. Choisir un détour ajoute une étape à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0030",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 5–6 : danger à l’affût » ? Chacun joue Esquive +0 ou subit 8 dégâts sur une localisation aléatoire ; une veille réussie donne +2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0031",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 7–8 : marche pénible » ? Chacun joue Résistance ou Survie +2 DR ; échec : un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0032",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 9–12 : désorientation » ? Un voyageur joue Navigation ou Signes secrets (Mineur) +0 ; échec : une étape supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0033",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 13–14 : terre empoisonnée » ? Chacun joue Résistance −1 DR ; échec : perdre 1 Blessure plus les DR négatifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0034",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 15–16 : gouffre » ? Escalade +2 DR permet de contourner le gouffre ; échec : perdre une possession précieuse, sans chute automatique du personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0035",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 17–18 : détour facultatif » ? Accepter ajoute une étape ; un voyageur joue Savoir (Géologie) ou Navigation +2 DR pour découvrir une chose de valeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0036",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 19 : vestiges » ? Après découverte de dépouilles, Estimation +2 DR permet d’identifier les objets précieux à piller ; on peut choisir l’inhumation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0037",
+    "phase": "Voyage et environnement",
+    "lot": "L16",
+    "source": "L16 p.56",
+    "question": "Implanter « 20 : raccourci » ? Un voyageur joue Navigation ou Signes secrets (Mineur) +2 DR ; réussite : sauter la prochaine étape.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0038",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.57",
+    "question": "Implanter « Entrer dans un boyau » ? Taille Moyenne : prendre À terre en Action gratuite, verrouillé jusqu’à un espace où se relever ; plus grand : entrée impossible ; plus petit : mouvement normal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0039",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.57",
+    "question": "Implanter « Marcher dans un boyau » ? Skavens, Gobelins, Goules et porteurs de Contorsionniste ou Vadrouilleur (Rocheux) marchent malgré l’À terre imposé par le boyau ; une autre cause d’À terre reste active.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0040",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.57",
+    "question": "Implanter « Se déplacer dans un passage étroit » ? Taille Moyenne : vitesse normale et −1 DR aux Tests de mouvement. Skavens, Gobelins, Goules, plus petits et Vadrouilleur (Rocheux) sont exemptés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0041",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.57",
+    "question": "Implanter « Maladresse dans un passage étroit » ? Pour une créature Moyenne, le MJ peut remplacer la table de maladresse par un choc à la tête : 8 dégâts et un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0042",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.57",
+    "question": "Implanter « Grande créature en passage étroit » ? Grande ou plus : prendre À terre en Action gratuite jusqu’à un espace plus grand ; Trolls, Rats-ogres et Grandes créatures Contorsionnistes ou Vadrouilleurs (Rocheux) marchent malgré cette cause.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0044",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.57",
+    "question": "Implanter « Esquive dans les tunnels exigus » ? Boyaux et passages étroits interdisent Esquive sans Combattant en espace clos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0045",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.57",
+    "question": "Implanter « Combattre dans une grande caverne » ? Pas de restriction spatiale par défaut ; le MJ peut réduire les dimensions pour imposer pénalité, À terre ou refus d’entrée aux tailles immenses.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0046",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Noir complet : absence de vision » ? Sans lumière, même Vision nocturne ne permet pas de voir ; les Tests bénéficiant de la vue subissent −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0047",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Se déplacer vite dans le noir » ? Au-delà de la marche dans un tunnel totalement noir, jouer Athlétisme +0 avec −3 DR de visibilité pour ne pas tomber.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0048",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Lumière lointaine : perception » ? Une faible lumière permet de voir à 20 yards par rang de Vision nocturne ; sans ce Talent, seules les zones éclairées ou le yard autour des champignons sont visibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0049",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Lumière lointaine : attaques dans l’ombre » ? Attaquer dans l’obscurité sous lumière lointaine impose −2 DR en mêlée et −3 DR au tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0050",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Portée de la lumière » ? Chaque source possède une portée d’éclairage ; Vision nocturne l’étend de 20 yards par rang. Une zone éclairée procure ordinairement une lumière lointaine au reste de la salle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0051",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Lueur naturelle » ? 0 yard éclairé ; compte néanmoins comme source pour Vision nocturne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0052",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Champignons lumineux » ? Éclairent à 1 yard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0053",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Bougie » ? Éclaire à 10 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0054",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Candélabre » ? Une douzaine de bougies éclaire à 15 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0055",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Lanterne ou torche » ? Éclaire à 20 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0056",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Lanterne-tempête » ? Éclaire à 20 yards, ou 30 yards dans un arc de 90°.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0057",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Brasero ou foyer » ? Éclaire à 40 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0058",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Feu de joie » ? Éclaire à 50 yards ou davantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0059",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Porteur de lumière : gêne visuelle » ? Porter l’unique lumière donne −1 DR aux Tests visuels, sauf éclairage directionnel ou yeux protégés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0060",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.58",
+    "question": "Implanter « Porteur de lumière : cible visible » ? Les tirs contre le porteur de l’unique lumière reçoivent +2 DR ; quelques lumières permettent des modificateurs partiels choisis par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0061",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Fixer l’intégrité du tunnel » ? Le MJ choisit une intégrité solide, usée ou fragile pour l’arène souterraine ou le tronçon de tunnel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0062",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Jet de risque d’effondrement » ? Lors d’une action dangereuse, jeter sur la ligne correspondante ; tunnel usé : +10 au jet, fragile : +20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0063",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Instabilité : créature Moyenne ou Grande » ? Maladresse d’attaque, course, sprint ou mise À terre : aucun effet jusqu’à 99 ; 100–115 intégrité réduite ; 116+ effondrement mineur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0064",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Instabilité : Poudre noire » ? 01–75 aucun effet ; 76–115 intégrité réduite ; 116+ effondrement mineur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0065",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Instabilité : dégâts de zone » ? Arme, miracle ou sort infligeant des dégâts de zone ou Explosion : 01–50 aucun ; 50–99 intégrité réduite ; 100+ effondrement mineur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0066",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Instabilité : créature Énorme ou Monstrueuse » ? Maladresse d’attaque, course, sprint ou mise À terre : 01–50 aucun ; 50–99 intégrité réduite ; 100–115 mineur ; 116+ écroulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0067",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Instabilité : arme à servants » ? 01–75 intégrité réduite ; 76–115 effondrement mineur ; 116+ écroulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0068",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Instabilité : petite secousse » ? 01–75 intégrité réduite ; 76–99 effondrement mineur ; 100+ écroulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0069",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Instabilité : séisme » ? 01–50 intégrité réduite ; 50–75 effondrement mineur ; 76+ écroulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0070",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Dégrader l’intégrité » ? Solide devient usé, usé devient fragile ; dégrader un tunnel fragile provoque un effondrement mineur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0071",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Effondrement mineur » ? La dernière créature ayant augmenté l’instabilité et celles à 3 yards subissent 1d10 dégâts à la tête ; Esquive −1 DR réussie réduit les dégâts de 1+DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0072",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Écroulement : impact » ? Toutes les créatures du combat subissent 1d10+10 dégâts à la tête et prennent À terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0073",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Écroulement : se dégager » ? Avant asphyxie, chaque créature a un Test de Résistance ou Savoir (Géologie) +2 DR ; atteindre 10 DR cumulés permet de sortir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0074",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Écroulement : Destin immédiat » ? Dépenser un Destin quand les rochers tombent permet de gagner un tunnel intact puis la surface.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0075",
+    "phase": "Combat et terrain",
+    "lot": "L16",
+    "source": "L16 p.59",
+    "question": "Implanter « Écroulement : Destin après échec » ? Après échec du dégagement, dépenser un Destin permet un sauvetage par un PNJ avant la mort ; ses conséquences dépendent du sauveteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0076",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.60",
+    "question": "Implanter « Hospitalité : activités des étrangers » ? Par défaut, un non-Nain hébergé dans une forteresse ne peut entreprendre aucune activité, même de maintien de carrière/statut ; exceptions MJ pour isolement, service ou courtoisie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0077",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.60",
+    "question": "Implanter « Hospitalité : événements des étrangers » ? Les non-Nains tirent encore un événement de forteresse, utile aux compagnons nains, mais n’en subissent ni effets positifs ni négatifs sans décision MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0078",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « Événements des forteresses » ? Dans une forteresse ou un grand avant-poste nain, employer cette table d’événements entre aventures à la place de celle du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0079",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 01–04 : infestation » ? Les Guerriers consacrent une activité à Revenu ; les autres peuvent combattre avec Mêlée ou Tir, statut Argent 1. Aucun autre Revenu possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0080",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 05–07 : ensevelissement » ? Un allié PNJ est enseveli ; une activité et Résistance ou Savoir (Géologie) −2 DR peuvent le sauver. Sans réussite pendant cette période, il meurt.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0081",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 08–10 : bile sur l’équipement » ? Esquive +0 ratée : chaque arme et armure subit un dégât.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0082",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 08–10 : blessures du vomissement » ? Après la rencontre du Troll, Résistance +0 ratée fait perdre une activité de convalescence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0083",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 11–13 : honte familiale » ? Dépenser deux activités pour innocenter ou réhabiliter le parent ; sinon la réputation du clan et du personnage peut souffrir longtemps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0084",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 14–16 : portes closes » ? Les Rôdeurs, Riverains et Gens de mer gagnent la moitié de leurs Revenus pendant cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0086",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 21–23 : mentalité de siège » ? Paysans hors Mineurs : Revenu interdit ; prix des aliments doublés jusqu’à la fin de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0087",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 24–26 : bagarre » ? La première attaque qui touche le personnage dans l’aventure suivante inflige +3 dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0088",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 27–29 : impôt royal » ? Payer par rang de Statut 10 sous de cuivre au Bronze, 5 pistoles à l’Argent ou 1 CO à l’Or ; sinon devoir une faveur proportionnelle à la dette.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0089",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.61",
+    "question": "Implanter « 30–31 : animal malade » ? Soins aux animaux +2 DR réussis : retour en bonne santé au début de la prochaine période ; échec : mort. Sans animal, dent ébréchée sans autre effet chiffré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0090",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 35–38 : appel aux armes » ? Un Guerrier faisant Revenu peut jouer Mêlée ou Tir +0 : réussite, faveur majeure reçue ; échec, faveur due. Son salaire augmente de 50 % dans les deux cas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0091",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 39–41 : honorer une faveur » ? Une faveur peut se solder par des activités ou dans l’aventure suivante ; refus : rang de Statut réduit, montant laissé au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0092",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 42–45 : sombres nouvelles » ? Le maximum de Chance baisse de 1 pour l’aventure suivante, minimum zéro.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0095",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 56–58 : jours sombres » ? Gagner un rang de Vision nocturne pour toute l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0096",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 59–60 : nouveauté technique » ? Soutenir l’invention permet d’inverser les Tests de fabrication ou de commande de cet objet pendant cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0097",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 61–63 : écouter un ancien » ? Perdre une activité, mais bénéficier d’une consultation d’expert réussie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0098",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 64–66 : apprenti » ? Perdre une activité à former l’apprenti ; il doit une faveur mineure et fournit Assistance lorsqu’il le peut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0099",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.62",
+    "question": "Implanter « 67–69 : chasse aux Gobelins » ? Tir (Arbalète) +2 DR : réussite, gagner 1 CO et 1 pistole par DR ; échec, payer 1 CO ou devoir une faveur mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0100",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.63",
+    "question": "Implanter « 70–73 : au travail » ? Revenus augmentés de 20 %, ou 50 % si la compétence de Revenu est Résistance ou Métier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0101",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.63",
+    "question": "Implanter « 74–76 : découverte minière et revenus » ? Les Mineurs doublent leurs gains de Revenu pendant cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0102",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.63",
+    "question": "Implanter « 74–76 : matières premières » ? Le coût des matières pour fabriquer ou réparer est réduit de moitié jusqu’à la fin de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0104",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.63",
+    "question": "Implanter « 84–85 : équipement digne d’un Nain » ? Choisir une possession : dégâts réparés gratuitement ; sinon nouvelle Qualité au choix du MJ, voire une rune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0105",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.63",
+    "question": "Implanter « 86–88 : festin » ? Perdre une activité ; Résistance à l’alcool +0 réussie fournit une information mémorisée, avec détails ou informations supplémentaires selon les DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0106",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.63",
+    "question": "Implanter « 89–91 : nouveaux tunnels » ? Inverser un seul Test d’exploration souterraine pendant l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0107",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.63",
+    "question": "Implanter « 95–97 : mentor » ? Inverser un seul Test de la compétence de Revenu avant la fin de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0110",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Activités naines réservées » ? Les nouvelles activités de cette section sont réservées aux personnages nains.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0111",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Doubler les gains temporaires de Statut » ? Un Nain qui réussit une activité augmentant temporairement son rang de Statut double cette augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0112",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Creuser un tunnel » ? Test étendu de Résistance +2 DR, un jet par participant et activité ; un seul participant peut employer Savoir (Géologie) +2 DR à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0113",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Creusement : espace » ? Boyau : 5 DR ; passage étroit : 10 ; grande caverne : 20 ou plus et engins à vapeur requis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0114",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Creusement : éclairage » ? Seuil ajouté : noir +0 DR, lumière lointaine +5, éclairé +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0115",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Creusement : solidité » ? Seuil ajouté : fragile +0 DR, usé +5, solide +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0116",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Creusement : autres facteurs » ? Excavation courte ou superficielle : seuil divisé par deux ; grande étendue : +5 DR ou plus ; secret absolu : +5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0117",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Modifier un tunnel existant » ? Le creusement peut modifier l’intégrité ; aucune hausse de seuil pour la diminuer, mais espace et secret comptent encore.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0118",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.64",
+    "question": "Implanter « Aide des mineurs PNJ » ? Chaque excavateur PNJ expérimenté ajoute +1 DR au Test étendu au début de l’aventure suivante ; nombre illimité, remplace l’Assistance habituelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0119",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Brasser pour sa consommation » ? Payer 6 sous de cuivre, disposer d’une brasserie et d’outils ; Métier (Brasseur) +2 DR étendu, seuil 5 DR, un jet par activité. Les brassins vendus passent par Revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0120",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Force et particularités du brassin » ? Choisir la difficulté de Résistance à l’alcool, ordinairement +0 ou −2 DR ; au plus trois particularités modifient le seuil de brassage, minimum un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0121",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière inspirante, seuil +2 » ? Après Résistance à l’alcool réussie, inverser les Tests de Calme pendant 1+DR heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0122",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière réparatrice, seuil +4 » ? Après Résistance à l’alcool réussie, récupérer deux fois le BE en Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0123",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière fortifiante, seuil +6 » ? Après réussite, doubler le BE contre la première attaque reçue dans 1+DR heures ; une boisson supplémentaire protège une attaque supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0124",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière revigorante, seuil +2 » ? Pas de pénalité de CC ou Agilité ; ignorer l’effet d’ivresse Why’s Everything Wobbling.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0125",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière stabilisante, seuil +2 » ? Pas de pénalité de CT ou Dextérité ; ignorer l’effet d’ivresse I’ll Take Yer All On.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0126",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière clémente, seuil +4 » ? +2 DR aux Tests déterminant la durée d’ivresse ou de gueule de bois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0127",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière punitive, seuil −4 » ? Doubler les pénalités de caractéristiques sur échec de Résistance à l’alcool, maximum −30 ; diviser le BE par deux pour déterminer l’ivresse avancée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0128",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière indigeste, seuil −4 » ? Échec de Résistance à l’alcool : perdre 4 Blessures sans PA ni BE.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0129",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.65",
+    "question": "Implanter « Bière ruineuse, seuil −4 » ? La fatigue de gueule de bois dure 5−DR jours au lieu d’heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0130",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Préparer du feu de drake » ? Ingrédients communs pour 2 pistoles et laboratoire ou Talent Concocter ; Métier (Alchimiste ou Ingénieur) +0 réussi : 12+DR tirs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0131",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Maladresse de feu de drake » ? Maladresse de préparation : explosion infligeant 1d10+4 dégâts sur une localisation aléatoire, plus réparations de laboratoire à évaluer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0132",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Consulter les archives » ? Avec accès aux archives d’une forteresse, Recherche ou Savoir pertinent +2 DR procure des informations selon les DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0133",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Citer les ancêtres » ? Employer ces informations pour persuader un autre Nain pendant l’aventure suivante donne +2 DR aux Tests sociaux pertinents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0134",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Personnaliser une possession » ? Ajouter une Qualité choisie avec le MJ : outils requis, sans matières ni atelier ; Métier pertinent étendu, seuil 5 DR, un jet par activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0135",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Difficulté de personnalisation » ? Disponibilité courante : +2 DR ; limitée : +0 ; rare : −1 ; exotique : −3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0136",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Réparer une possession » ? La personnalisation peut retirer un point de dégât de la possession par DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0137",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.66",
+    "question": "Implanter « Modification esthétique » ? Une modification esthétique demande un DR ou plus, seuil fixé par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0140",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.67",
+    "question": "Implanter « Prêter le serment de Tueur » ? Après une semaine de rupture et d’abandon des possessions, passer au niveau 1 de Tueur coûte 0 PX, même hors Classe ou carrière incomplète. Un niveau supérieur autorisé par le MJ coûte 100 PX.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0146",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.77",
+    "question": "Implanter « Destin du Tueur » ? Un Tueur peut dépenser du Destin pour survivre selon la procédure ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0147",
+    "phase": "Entre-aventures",
+    "lot": "L16",
+    "source": "L16 p.77",
+    "question": "Implanter « Tueur : exemption de maintien de Statut » ? Le MJ peut exempter les Tueurs de l’obligation d’activité liée au maintien du Statut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0148",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.77",
+    "question": "Implanter « Tatouer les protections de Grimnir » ? Réussir dans l’ordre Savoir (Théologie) −3 DR, Savoir (Runes) −2 DR puis Art (Tatouage) +0 ; durée 10+2d10−BDex heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0149",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.77",
+    "question": "Implanter « Échecs du tatouage de Grimnir » ? Échec d’un Savoir : tatouage valable comme possession de carrière, sans bénéfice ; échec d’Art : dessin incomplet à reprendre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0150",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.77",
+    "question": "Implanter « Protections de Grimnir : résistance » ? Trois réussites ajoutent deux rangs à la Résistance à la Magie déjà possédée et portent son maximum à BE+2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0151",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.13",
+    "question": "Implanter « Rune de parade » ? L’arme permet d’inverser les Tests opposant une attaque de mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0152",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.79",
+    "question": "Implanter « Rune inconnue de la hache de Gotrek » ? Si l’arme inflige des dégâts à une grande cible : +5 Blessures à Grande, +10 à Énorme, +15 à Monstrueuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0153",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.80",
+    "question": "Implanter « Karaghul : initiative » ? Porter Karaghul en combat ajoute +30 à l’Initiative de combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0154",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.80",
+    "question": "Implanter « Karaghul : tuer les Dragons » ? Contre les Dragons, Karaghul ignore le BE et inflige le double de Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0155",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.80",
+    "question": "Implanter « Karaghul : qualités » ? L’épée magique Karaghul est Rapide et Pénétrante ; sa nature magique est visible quand elle est dégainée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0156",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.50",
+    "question": "Implanter « Canon Barbe-de-bronze » ? Commander ce canon pour 1 000 CO ajoute Solide 2 et Raffiné 2 au canon nain, et supprime les pénalités aux portées longue et extrême.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0157",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.93",
+    "question": "Implanter « Hallebarde forgée à la malepierre » ? Arme magique Pénétrante ; toute attaque infligeant une Blessure Critique compte aussi comme influence corruptrice mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0158",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.93",
+    "question": "Implanter « Charme de malepierre : chance » ? Le charme de Blistrox lui confère Chance 3 ; les non-Skavens peuvent aussi y trouver de la chance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0159",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.93",
+    "question": "Implanter « Charme de malepierre : corruption » ? Chaque heure de port par un non-Skaven constitue une influence corruptrice modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0160",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.93",
+    "question": "Implanter « Skalm : soin immédiat » ? Chaque application de Skalm soigne instantanément 1d10+1 Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0161",
+    "phase": "Objets magiques",
+    "lot": "L16",
+    "source": "L16 p.93",
+    "question": "Implanter « Skalm : risque de corruption » ? Chaque usage de Skalm constitue une influence corruptrice modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0162",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.91",
+    "question": "Implanter « Fièvre au ventre noir : conservation » ? Les fioles restent actives 13 mois ; une source d’eau contaminée reste dangereuse six mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0163",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.91",
+    "question": "Implanter « Fièvre au ventre noir : contraction » ? Boire de l’eau contaminée impose Résistance +0 ; échec : maladie contractée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0164",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.91",
+    "question": "Implanter « Fièvre au ventre noir : durée » ? Incubation 1d10 jours ; maladie 2d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0165",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.91",
+    "question": "Implanter « Fièvre au ventre noir : symptômes » ? Symptômes : Flétrissure sévère, Persistante (+0), Fièvre, Malaise et Nausée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0166",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.91",
+    "question": "Implanter « Fièvre au ventre noir : diagnostic et soins » ? Identifier ou traiter la maladie ou ses symptômes subit −3 DR ; les sorts et miracles guérissant les maladies sont exemptés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0167",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.92",
+    "question": "Implanter « Pourriture pulmonaire : contact » ? Contact avec un malade ou toux/éternuement voisin : Résistance +2 DR, un Test par heure d’exposition ; échec : maladie contractée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0168",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.92",
+    "question": "Implanter « Pourriture pulmonaire : durée » ? Incubation 1d10 jours ; maladie 1d10+7 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0169",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.92",
+    "question": "Implanter « Pourriture pulmonaire : symptômes » ? Symptômes : Toux et éternuements, Persistante (+0), Malaise et Plaie ; les Skavens ne subissent pas Plaie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0170",
+    "phase": "Maladies et poisons",
+    "lot": "L16",
+    "source": "L16 p.92",
+    "question": "Implanter « Pourriture pulmonaire : immunité acquise » ? Après avoir contracté la maladie, le personnage ne peut plus la contracter de nouveau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0173",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.83",
+    "question": "Implanter « Mâchoires extensibles du Gorger » ? La morsure peut recevoir Empêtrante quand le Gorger ouvre ses mâchoires pour avaler une grande proie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0174",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.83",
+    "question": "Implanter « Repousse des dents du Gorger » ? Une dent perdue par Blessure Critique ou maladie repousse en 1d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0175",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.90",
+    "question": "Implanter « Lien des rats de la peste » ? Séparés des moines de la peste, ou si ceux-ci meurent, les rats perdent leurs Traits de dressage et reprennent leurs instincts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0176",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.87",
+    "question": "Implanter « Guider l’idole sauvage » ? À chaque Round, le chamane créateur peut jouer Commandement +0 : réussite, l’idole suit sa volonté ; échec, elle agit à son gré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0177",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.87",
+    "question": "Implanter « Mort du créateur de l’idole » ? À la mort du chamane, jeter 1d10 sur la table de réaction de l’idole.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0178",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.87",
+    "question": "Implanter « Idole, 1–2 : destruction » ? L’idole s’effondre en pierres et débris inertes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0179",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.87",
+    "question": "Implanter « Idole, 3–4 : effigie » ? L’idole s’assied et redevient une effigie ; le NI d’un futur rituel pour l’animer est divisé par deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0180",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.87",
+    "question": "Implanter « Idole, 5–6 : saccage temporaire » ? L’idole continue son saccage pendant 1d10 jours, puis redevient une effigie selon le résultat 3–4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0181",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.87",
+    "question": "Implanter « Idole, 7–8 : saccage prolongé » ? L’idole continue son saccage pendant 1d10 mois, puis redevient une effigie selon le résultat 3–4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L16-0182",
+    "phase": "Créatures et capacités",
+    "lot": "L16",
+    "source": "L16 p.87",
+    "question": "Implanter « Idole, 9–10 : possession » ? L’esprit du chamane habite l’idole, lui donne son Intelligence et sa Volonté et la dirige ; aucune de ses autres capacités ne peut être utilisée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13 et L14 ont reçu leur revue des mécaniques F0. Les 20 autres suppléments restent à traiter, à partir de L16. Aucun achèvement des 26 livres n’est prétendu.
+État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14 et L16 ont reçu leur revue des mécaniques F0. Les 19 autres suppléments restent à traiter, à partir de L18. Aucun achèvement des 26 livres n’est prétendu.
 
 ## Travail local et sources
 
@@ -31,14 +31,15 @@ Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitr
 | L17 magie générale, variantes, divination, alchimie, objets, familiers, environnement | FAIT, 367 entrées dans la portée précisée ci-dessous | a92e503 | 4 054/4 054 ; 112,751 s, L17-full.log |
 | L11 récolte, alchimie, équipement, objets et clauses manquantes E0 | FAIT, 167 entrées dans la portée précisée ci-dessous | 9af49f9 | 4 054/4 054 ; 112,301 s, L11-full.log |
 | L13 blessures alternatives, équipement, montures, structures, poursuites, Avantage de groupe et activités | FAIT, 275 entrées dans la portée précisée ci-dessous | 810ff20 | 4 054/4 054 ; 126,461 s, L13-full.log |
-| L14 navigation, objets, maladies, dons, chars et intrigues | FAIT, 127 entrées dans la portée précisée ci-dessous | commit du présent lot | 4 054/4 054 ; 131.069 s, L14-full.log |
-| L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
+| L14 navigation, objets, maladies, dons, chars et intrigues | FAIT, 127 entrées dans la portée précisée ci-dessous | 701a2aa | 4 054/4 054 ; 131.069 s, L14-full.log |
+| L16 exploration, combat souterrain, activités, objets et maladies | FAIT, 209 entrées dans la portée précisée ci-dessous | commit du présent lot | 4 054/4 054 ; 96,714 s, L16-full.log |
+| L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
 
 Logs complets ignorés sous tmp/audit/ : F00-full.log, F06-tests-full.log, F06-combat-full.log, F06-usages-full.log, F06-health-full.log, F06-downtime-full.log, F06-talents-full.log, F06-creation-full.log, F06-magic-full.log, F06-gear-full.log. Les sept tests initiaux d’outillage et les deux nouveaux comportements ont été développés rouge puis vert.
 
 ## Inventaire courant
 
-**2 077 entrées ; 1 615 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. L06 conserve ses 1 141 identifiants ; L17 va de F-L17-0001 à F-L17-0367, L11 de F-L11-0001 à F-L11-0167, L13 de F-L13-0001 à F-L13-0275 et L14 de F-L14-0001 à F-L14-0127.
+**2 286 entrées ; 1 781 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. L06 conserve ses 1 141 identifiants ; L17 va de F-L17-0001 à F-L17-0367, L11 de F-L11-0001 à F-L11-0167, L13 de F-L13-0001 à F-L13-0275 et L14 de F-L14-0001 à F-L14-0127.
 
 L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 des suppléments sont enregistrées dans v5Proposal ; les nouvelles entrées L19-L26 porteront addedOn:2026-10-21. Aucune proposition n’est implantée. Les titres français L17/L11 sont des propositions d’audit, sans prétention de nom officiel.
 
@@ -180,3 +181,17 @@ Rendus vus : **p.6,20,22,27,39,45,58,75-80,83,91**. P.22 sans texte est la carte
 - Exclusions : valeurs des profils E0, tactiques et leviers nominatifs p.29-30, patronages, bonus d’arène de la scène, déguisement propre à Revna, récits, rumeurs, commandements sans effet déterminé et simples prix ne créent pas de nouveaux sélecteurs. Les effets autonomes d’équipement et les clauses de capacité manquantes restent conservés malgré leur proximité avec un PNJ. Choix F-C32 àF-C38 consignés, aucune nouvelle décision MJ imposée.
 
 Intégrité : **les 1 950 entrées héritées sont strictement identiques à 810ff20**, reçu tmp/audit/L14-integrity-receipt.json. Génération puis --check cohérents ; aucun js/, test, outil suivi, arbitrage, catalogue de jeu, version ni dépendance modifié pour L14. Les cinq documents modifiés sont en LF et git diff --check passe. Le fichier fournisseur vendor/firebase/firebase-app.js a déjà des fins de ligne mixtes dans l’index ; égalité à810ff20 vérifiée, il reste inchangé. Suite complète : **4 054/4 054**, zéro échec, annulé ou ignoré, **131068.9229 ms**, tmp/audit/L14-full.log. La recette finale des 26 livres reste due à leur clôture réelle. **Prochaine reprise : L16 ; 20 livres restent à traiter.**
+
+## L16 — Lords of Stone and Steel
+
+Source : WFRP_Lords_of_Stone_and_Steel_250714.pdf, 96 pages physiques, SHA-256 `40fee086fd4e09899ea937358b93bdd5e86da35c0bfe3e3e46ab1f73248aa748`. Crédits p.2 : V4, copyright 2025, mise à jour 14 juillet 2025. Folio = page physique.
+
+- Lecture : crédits/sommaire p.2–3 ; chapitres mécaniques p.52–67 ; clauses de reliques p.7/11/13/32/33/50/77/79/80/93 ; capacités et maladies p.83–84/86–87/90–92 ; rancunes p.74. P.4–6 et 37/44/46 lues ; contexte, récits, carrières, lieux, profils et scénarios des autres pages repérés par sommaire et recherches ciblées, sans seconde relecture intégrale. Index p.94–95 ; présentation et publicité p.1/96. Les reçus d’extraction restent read:false ; portée séparée dans tmp/audit/L16-reading-scope.json.
+- Rendus vus p.53/56/58/59/64/65/66. Table p.59 : les colonnes 01–50 et 50–75 se chevauchent ; à 116+, les dégâts de zone donnent un effondrement mineur, les grandes créatures un écroulement. Pas d’alignement arbitraire depuis le texte extrait. P.65 : neuf effets de brassin et leurs seuils réattribués sur image.
+- Ambiguïtés conservées : p.54 demande +2 à un indice d’instabilité que p.59 ne définit pas ; deux d10 séparés pour le choix de rencontre patrouillée contre une table de somme 2d10 p.56. P.64 inverse former/latter pour sape/renforcement, se renvoie à elle-même et dit you do gain any bonuses au sujet d’une Assistance remplacée. P.55 ne chiffre pas le nombre de compagnons abreuvés. Aucun compteur, négation ou nombre ajouté.
+- Registre : 209 entrées F-L16-0001 à F-L16-0209, 197 absent, une assiste, onze hors-granularite ; 31 renvois exclus, 166 sélecteurs nouveaux. 2 077 entrées héritées conservées. 29 renvois runiques/système, un au souffle E0-T-236, un au rituel D0b-L16-001. Rune de parade, rune inconnue de Gotrek, tatouages de Grimnir et comportements non portés par les profils restent sélectionnables. Ni profils ni effets déjà recensés recopiés.
+- Aide réellement raccordée : pénalité typée confined saisie dans resolution-panel, lue par v5-combat-rules/applyV5TalentPenaltyRules et supprimée par Combattant en espace clos. Cela ne démontre ni l’identification spatiale, ni le refus de choisir Esquive, ni tout le combat souterrain. Les autres procédures sont absentes dans cette portée de recherche statique. Pas de recette UI exhaustive.
+- Q18 : rancunes, serment et bilan de rancunes exclus individuellement ; pas exclusion du voyage, de la médecine ou des activités de statut. Bières ordinaires conservées comme artisanat/alcool, choix F-C41 ; aucun système d’addiction ou d’hallucinations ajouté. Ingrédients du brassage et du feu de drake ordinaires, sans prérequis d’incantation.
+- Conversion : ±10 de Test → ±1 DR ; +30 Initiative de Karaghul reste une caractéristique ; +10/+20 d’instabilité restent des jets de table ; bonus de seuil de brassage distincts des difficultés de consommation. Immunité pulmonaire acquise, exception de soin magique pour la fièvre au ventre noir et absence de bénéfice des tatouages après échec de Savoir conservées. Idole 9–10 : possession par le chamane, Intelligence/Volonté héritées, aucune autre capacité.
+
+Contrôles L16 : génération et --check, intégrité des entrées héritées, limites js/tests/outils et LF ; suite complète 4 054/4 054, zéro échec/annulé/ignoré, 96713.5401 ms, tmp/audit/L16-full.log. Aucun test existant ajouté ou modifié. Recette finale due seulement à la clôture des 26 livres.
