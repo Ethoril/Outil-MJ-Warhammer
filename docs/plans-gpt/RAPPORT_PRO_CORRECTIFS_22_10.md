@@ -7,7 +7,7 @@ Brief : `docs/plans-gpt/BRIEF_PRO_CORRECTIFS_22_10.md`. Branche `pro/correctifs-
 | K1 — Courroux (phase B), points 1 à 7 | FAIT (commit « K1 », voir `git log`) |
 | K2 — Brisé (phase C), points 1 à 3 | FAIT (commit « K2 », voir `git log`) |
 | K3 — Magie (phase D), points 1 à 6 + Fellstave (K4) | FAIT (commit « K3 », voir `git log`) |
-| Runes et familiers (conception) | À FAIRE |
+| Runes et familiers (conception) | FAIT (commit « Runes et familiers », voir `git log`) |
 
 ## K1 — ce qui change
 
@@ -57,6 +57,12 @@ Choix d'interprétation : le catalogue des 206 Talents est un instantané éping
 Assertions modifiées : `pro-d3` (Revigorer : retire un niveau), `pro-d5` (fait `boostedStat` ajouté aux lancers de Destruction ; Manifestation : rappel « reste et devient hostile »), `tests/helpers/lot3-declared-answers.js` (`boostedStat`). Ajouts : D-C30, D-C40 (×2), D-C51, D-C122.
 
 Choix d'interprétation : D-C40 lu comme « brancher dès que les profils existent » puisqu'ils existent ; D-C22 : un seul niveau retiré (comme Bonne santé) ; D-C51 : rappel dans la résolution plutôt qu'un bouton. `resolution.js` (code partagé à risque) reçoit un ajout de rappel isolé, couvert par un test et la suite complète. `docs/lot3/LOT3_MATRICE_CONTRATS_V5.md` non régénéré (le générateur la dégrade ; contrats JSON régénérés).
+
+## Runes et familiers — ce qui change (documents seulement, aucun code)
+
+- `CONCEPTION_RUNES.md` §8 : gravure = résultat saisi ; liste par culte (relevé des pp. 134-140 **non fait**, à faire visuellement avant code) ; lecture proposée des huit runes à dés inversés (Tueur, Tueur de gobelins, Fléau des géants, Équilibre, Royauté, Expulsion du Chaos, Grimnir, Grungni) sur le moteur d'inversion (facultative pour le porteur, obligatoire pour l'adversaire), **à valider par le MJ**.
+- `CONCEPTION_FAMILIERS.md` §7 : création par événement unique (1 Destin ou 1 Résilience), familier de joueur = PNJ allié, noms français proposés à valider ; D11 reste bloqué sur la phase E.
+- Choix d'interprétation : le sens des inversions est déduit des résumés de l'inventaire, pas du livre (aucun PDF lu) ; les noms français de runes sont des traductions provisoires.
 
 ## Vérifications
 

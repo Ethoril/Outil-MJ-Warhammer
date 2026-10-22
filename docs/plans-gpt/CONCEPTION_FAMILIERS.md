@@ -67,3 +67,32 @@ Sources : Winds of Magic (L17) pp. 180-188 (V4), lues pour ce document ; arbitra
 - Combien de familiers par maître (la source ne le dit pas dans les pages lues).
 - Familier joueur (F9) : hors périmètre de l'outil du MJ ?
 - Équivalent V5 de « Créature magique » et du talent Imprégné, noms français officiels (livre FR V5 non consulté).
+
+## 7. Décisions du MJ du 22/10 et propositions (avant tout code)
+
+### 7.1 Décisions
+
+- **Création = un événement unique** « création de familier », qui débite **1 Destin ou 1 Résilience** du maître (au choix du MJ à la saisie) ; chaque point supplémentaire cédé donne 1 point à répartir (F10). Pas de rituel simulé (temps, matériel, jets de L17 p. 31 : reçu de rappel seulement). Annuler/Rétablir complets (le point est rendu), reçu CAS. Le §3.4 est confirmé.
+- **Familier de joueur = PNJ allié.** Pas de fiche de joueur propre : le familier est un participant PNJ du camp des alliés, lié au maître. F9 (maître vivant et dans le groupe) reste un reçu MJ à la mort du maître : aucune mutation automatique. Cela répond à la question « familier joueur » du §6 : il est dans le périmètre, sous forme de PNJ allié.
+- **Code D11 toujours bloqué** : il attend les profils de la phase E (profils types Combat / Puissance / Sort, animaux, Natures pour F15).
+
+### 7.2 Noms français proposés (à valider)
+
+Le livre français V5 n'a pas été consulté : propositions à valider ou corriger par le MJ.
+
+| Terme anglais | Proposition |
+|---|---|
+| Familiar | Familier |
+| Combat / Power / Spell familiar | Familier de Combat / de Puissance / de Sort |
+| Imbued with (Wind) | Imprégné de (Vent) |
+| Magical Assistant | Assistant magique |
+| Magical Creature (Trait) | Créature magique |
+| Improve the Familiar (Endeavour) | Améliorer le familier |
+| Animal familiar / Homunculus | Familier animal / Homoncule |
+| Familiar creation | Création de familier |
+
+### 7.3 Questions restantes
+
+- Nombre de familiers par maître (la source ne le dit pas) : proposition = aucun plafond, comme au §3.1.
+- Rituel (p. 31) : à lire si le MJ veut un jour un rappel plus précis.
+- Validation des noms du 7.2.
