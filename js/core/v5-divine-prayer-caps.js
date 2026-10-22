@@ -81,7 +81,7 @@ function validCap(layer, actor) {
     || !Number.isSafeInteger(proof.wrath?.sinAtTest) || proof.wrath.sinAtTest < 0
     || proof.trigger.fumble!==proof.prayer.fumble
     || proof.trigger.sinThreshold!==(proof.prayer.roll%10<=proof.wrath.sinAtTest)
-    || proof.wrath.modifiedRoll !== proof.wrath.roll + 10 * proof.wrath.sinAtTest
+    || ![0, 10, 20, 30].includes(proof.wrath.roll + 10 * proof.wrath.sinAtTest - proof.wrath.modifiedRoll)
     || proof.wrath.resultId !== 'wrath:6-10' || proof.wrath.modifiedRoll < 6 || proof.wrath.modifiedRoll > 10) return false;
   return true;
 }
@@ -119,7 +119,7 @@ function validLessonsModifier(layer, actor) {
     ||!Number.isSafeInteger(layer.wrathProof.prayer.sl)
     ||!Number.isSafeInteger(layer.wrathProof.wrath?.roll)||layer.wrathProof.wrath.roll<1||layer.wrathProof.wrath.roll>100
     ||layer.wrathProof.wrath.sinAtTest!==layer.duration.sinAtTrigger
-    ||layer.wrathProof.wrath.modifiedRoll!==layer.wrathProof.wrath.roll+10*layer.wrathProof.wrath.sinAtTest
+    ||![0,10,20,30].includes(layer.wrathProof.wrath.roll+10*layer.wrathProof.wrath.sinAtTest-layer.wrathProof.wrath.modifiedRoll)
     ||layer.wrathProof.wrath.resultId!=='wrath:11-15'||layer.wrathProof.wrath.modifiedRoll<11||layer.wrathProof.wrath.modifiedRoll>15
     ||(!layer.wrathProof.prayer.fumble&&layer.wrathProof.prayer.roll%10>layer.wrathProof.wrath.sinAtTest)) return false;
   return true;
@@ -196,7 +196,7 @@ export function validateWrathRounds(actor){
    ||typeof layer.roundAnchor.sceneId!=='string'
    ||layer.roundDeadline!==layer.roundAnchor.round+layer.rounds-(layer.roundPolicy==='current'?1:0)||!Number.isSafeInteger(layer.roundDeadline)
    ||!proof||proof.sinAtTest!==layer.sinAtTrigger||proof.resultId!==layer.resultId||!Number.isSafeInteger(proof.roll)||proof.roll<1||proof.roll>100
-   ||proof.modifiedRoll!==proof.roll+10*proof.sinAtTest||proof.modifiedRoll<row.min||proof.modifiedRoll>row.max
+   ||![0,10,20,30].includes(proof.roll+10*proof.sinAtTest-proof.modifiedRoll)||proof.modifiedRoll<row.min||proof.modifiedRoll>row.max
    ||!layer.prayerProof||!Number.isSafeInteger(layer.prayerProof.roll)||layer.prayerProof.roll<1||layer.prayerProof.roll>100
    ||!(layer.prayerProof.fumble===true||layer.prayerProof.roll%10<=proof.sinAtTest)
    ||layer.mode==='forced'&&!['count-trigger','next-turn'].includes(layer.actionDecision))return bad('Sanction du Courroux en Rounds invalide ou non sourcée.');

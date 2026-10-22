@@ -363,7 +363,7 @@ export function wrathDeityRejections(subject){
    ||!Number.isSafeInteger(d?.roll)||d.roll<1||d.roll>10||!Number.isSafeInteger(d.sinAtTrigger)||d.sinAtTrigger<1||d.value!==d.roll+d.sinAtTrigger||d.unit!=='days'||d.seconds!==d.value*86400
    ||!Number.isSafeInteger(layer.clockAnchor?.campaignSeconds)||layer.clockAnchor.campaignSeconds<0||!Number.isSafeInteger(layer.clockAnchor.clockRevision)||layer.clockAnchor.clockRevision<0
    ||layer.deadline?.kind!=='campaign-time'||!Number.isSafeInteger(layer.deadline.atSeconds)||layer.deadline.atSeconds!==layer.clockAnchor.campaignSeconds+d.seconds
-   ||!p||p.resultId!==row.id||p.sinAtTest!==d.sinAtTrigger||!Number.isSafeInteger(p.roll)||p.roll<1||p.roll>100||p.modifiedRoll!==p.roll+10*p.sinAtTest||p.modifiedRoll<41||p.modifiedRoll>45)
+   ||!p||p.resultId!==row.id||p.sinAtTest!==d.sinAtTrigger||!Number.isSafeInteger(p.roll)||p.roll<1||p.roll>100||![0,10,20,30].includes(p.roll+10*p.sinAtTest-p.modifiedRoll)||p.modifiedRoll<41||p.modifiedRoll>45)
    return {ok:false,layers:[],needsInput:[need('target.extensions.v5.divineEffects','Rejet du culte du Courroux invalide ou non sourcé.')]};
  }
  return {ok:true,layers:clone(layers),needsInput:[]};
@@ -527,7 +527,10 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const targetChecks=rejectionTargets.map(target=>({target,check:wrathDeityRejections(target)}));
   if(targetChecks.some(row=>!row.check.ok))return fail('needs-input','Rejet du culte à vérifier sur les cibles.',targetChecks.flatMap(row=>row.check.needsInput));
   const targetRejections=targetChecks.flatMap(({target,check})=>check.layers.filter(layer=>fold(layer.cult)===fold(contract.deity)).map(layer=>({targetId:target.id,originExecutionId:layer.originExecutionId,cult:layer.cult,source:clone(layer.source),deadline:clone(layer.deadline)})));
-  const effectiveSuccess=prayer.success&&!targetRejections.length,effectivePrayer={...prayer,success:effectiveSuccess};
+  // B-C15 : le rejet ne vaut que pour la cible réprouvée ; la prière s'applique aux autres cibles, et échoue seulement si toutes sont rejetées.
+  const rejectedTargetIds=[...new Set(targetRejections.map(row=>row.targetId))];
+  const allTargetsRejected=rejectionTargets.every(target=>rejectedTargetIds.includes(target.id));
+  const effectiveSuccess=prayer.success&&!allTargetsRejected,effectivePrayer={...prayer,success:effectiveSuccess};
   const resultRoll = prayer.roll;
   const unit = resultRoll % 10;
   const sinTrigger = !sinPolicy.exempt && sin > 0 && unit <= sin;
@@ -539,9 +542,9 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const appliesEffects = ['implemented', 'assisted'].includes(contract.status);
   if (contract.status === 'assisted' && effectiveSuccess) reminders.push('Effets structurés appliqués; clauses restantes laissées au rappel MJ.',
     ...(contract.clauses || []).filter(clause => clause.mode !== 'engine' && clause.text).map(clause => clause.text));
-  if(targetRejections.length)reminders.push('Courroux 41–45 : cette invocation visant une cible réprouvée est rejetée par ce culte ; le Test de Prière et son risque de Courroux restent résolus.');
+  if(targetRejections.length)reminders.push(allTargetsRejected?'Courroux 41–45 : cette invocation visant une cible réprouvée est rejetée par ce culte ; le Test de Prière et son risque de Courroux restent résolus.':'Courroux 41–45 : la prière échoue pour la cible réprouvée seule ; elle s’applique aux autres cibles.');
   const effects = effectiveSuccess && appliesEffects ? (contract.effects || []) : [];
-  const effectTargets = targets?.length ? targets : [actor];
+  const effectTargets = (targets?.length ? targets : [actor]).filter(target => !rejectedTargetIds.includes(target.id));
   const unresolvedEffects = effects.flatMap(effect => effectNeeds(effect, { targets: effectTargets, input, actor }));
   const choiceResult = resolvePrayerChoices(contract, effectivePrayer, actor, input, effectTargets);
   if (choiceResult.error) return { ...fail('needs-input', choiceResult.error, choiceResult.needs), preview: freeze({ prayer, success: prayer.success, contractId: contract.id, source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt) }) };
@@ -556,12 +559,11 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     catch (error) { return fail('invalid', error.message, [need('wrathRoll', 'Résultat du jet de Courroux d100')]); }
   }
   const relicReduction = relic ? relic.wrathReduction : 0;
-  const effectiveWrathRoll = wrathRoll === null ? null : wrathRoll - relicReduction;
+  const wrathTotal = wrathRoll === null ? null : wrathRoll + 10 * sin - relicReduction;
   let wrathAvoided = false;
   if (wrathTriggered && wrathRoll !== null) {
-    const modifiedRoll = effectiveWrathRoll + 10 * sin;
+    const modifiedRoll = wrathTotal;
     if (relicReduction && modifiedRoll <= 0) wrathAvoided = true;
-    else if (effectiveWrathRoll < 1) return fail('needs-input', 'Courroux réduit par une relique : le résultat positif ne correspond à aucun jet 1–100 ; le MJ tranche hors de cette commande.', [need('wrathRoll', 'Jet de Courroux (relique : résultat à arbitrer)')]);
     else wrathResult = (DIVINE_REGISTRY.wrathTable || []).find(row => modifiedRoll >= row.min
       && (row.max === undefined || row.max === null || modifiedRoll <= row.max)) || null;
   }
@@ -575,12 +577,12 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
     actorId: actor?.id || null, targetIds: (targets || []).map(target => target?.id).filter(Boolean),
     skill: 'Pray', skillScore, slModifiers, sinAtTest: sin,
     prayer, prayerSLAdjustment:cappedPrayer.status==='applied'?{rawSL:rawPrayerSL,effectiveSL:prayer.sl,caps:clone(cappedPrayer.caps)}:null,
-    unit, success: effectiveSuccess, targetRejections:clone(targetRejections), conditionTestContext:clone(conditionTestContext),
+    unit, success: effectiveSuccess, targetRejections:clone(targetRejections), rejectedTargetIds:[...rejectedTargetIds], conditionTestContext:clone(conditionTestContext),
     wrath: { triggered: wrathTriggered, reason: wrathTriggered ? (prayer.fumble ? 'fumble' : 'sin-threshold') : null,
       ...(sinPolicy.exempt ? {exempt:true,exemption:clone(sinPolicy)} : {}),
       sinTrigger, sinAtTest: sin, sinAfter: wrathTriggered && wrathRoll && wrathResult && wrathConsequences ? Math.max(0, sin - 1) : sin,
       ...(relic ? { relic: { id: relic.id, label: relic.label, wrathReduction: relic.wrathReduction, prayerSL: relic.prayerSL }, rawRoll: wrathRoll } : {}), ...(wrathAvoided ? { avoided: true } : {}),
-      unit, roll: effectiveWrathRoll, modifiedRoll: effectiveWrathRoll === null ? null : effectiveWrathRoll + 10 * sin,
+      unit, roll: wrathRoll, modifiedRoll: wrathTotal,
       outcome: wrathResult ? { ...clone(wrathResult), resultId: wrathResult.id } : null, consequences: wrathConsequences },
     effects: clone(resolvedEffects), unresolvedEffects, reminders,
     limitations: ['Avantage, Désavantage et dépense de Chance ne sont pas résolus par ce moteur; le d100 fourni est traité tel quel.'],
@@ -640,10 +642,10 @@ export function applyDivineExecution(state, contract, input = {}) {
   if (preview.success && preview.effects.length && !targets.length && preview.resolvedParams.targets?.unit !== 'self' && !hasImplicitCasterTarget(contract))
     return { ...fail('needs-input', 'Choisissez les cibles avant application.', [need('targetIds', 'Cibles explicites du contrat')]), state: clone(state), receipt: null, executionId: input.executionId, preview };
   let next = clone(state);
-  const designated = preview.success && (['implemented', 'assisted'].includes(contract.status) || contract.status === 'manual' && previewResult.status === 'reminder') ? (targets.length ? targets : [actor]) : [];
+  const designated = preview.success && (['implemented', 'assisted'].includes(contract.status) || contract.status === 'manual' && previewResult.status === 'reminder') ? (targets.length ? targets : [actor]).filter(row => !(preview.rejectedTargetIds || []).includes(row.id)) : [];
   // Un effet réservé au prêtre (appliesTo 'caster') l'atteint même s'il n'est pas désigné ; les effets de cibles ne touchent que les désignées.
   const casterScoped = preview.effects.some(effect => (effect.appliesTo ?? (effect.casterOnly === true ? 'caster' : 'targets')) === 'caster');
-  const appliedTargets = designated.length && casterScoped && !designated.some(row => row.id === actor.id) ? [...designated, actor] : designated;
+  const appliedTargets = designated.length && casterScoped && !designated.some(row => row.id === actor.id) && !(preview.rejectedTargetIds || []).includes(actor.id) ? [...designated, actor] : designated;
   const layerEffects = preview.effects.filter(effect => !isLayerlessEffect(effect)
     && !(effect.duration?.unit === 'instant' || effect.durationRounds === 0));
   const effectReceipts = [];
