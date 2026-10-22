@@ -15,7 +15,7 @@ for (const book of process.argv.slice(2)) {
   const data = JSON.parse(readFileSync(`js/data/bestiary/${book}.json`, 'utf8'));
   const meta = corpusBooks().find(item => item.id === book);
   const pages = execFileSync('pdftotext', [meta.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8').split('\f')
-    .map(page => page.replace(/[­−–—�]/g, '-').replace(/\*/g, '').replace(/\s+/g, ' '));
+    .map(page => page.replace(/[­−–—�]/g, '-').replace(/-{2,}/g, '-').replace(/\*/g, '').replace(/\s+/g, ' '));
   let checked = 0;
   const skipped = [];
   for (const record of data.profiles) {

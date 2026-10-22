@@ -21,5 +21,12 @@ export const NAMES_FR = Object.freeze({
   'E0-P-112': proposal('Soldat'), 'E0-P-113': proposal('Tirailleur'), 'E0-P-114': proposal('Élite'), 'E0-P-115': proposal('Meneur'), 'E0-P-116': proposal('Commandant'),
   'E0-P-117': proposal('Lanceur de sorts'), 'E0-P-118': proposal('Seigneur lanceur de sorts'),
   'E0-P-119': proposal('Skrakk — Bestigor (Élite)'), 'E0-P-120': proposal('Ungrakk — Seigneur-bête gor (Commandant)'),
-  'E0-P-121': proposal('Swilegrakk — Chamane-bray (Lanceur de sorts)'), 'E0-P-122': proposal('Guzgog — Tirailleur ungor')
+  'E0-P-121': proposal('Swilegrakk — Chamane-bray (Lanceur de sorts)'), 'E0-P-122': proposal('Guzgog — Tirailleur ungor'),
+  // Archives of the Empire 2 (L01)
+  'E0-P-123': proposal('Isrogdal l’Urgent — Ogre protagoniste, ancien pugiliste (Argent 1)'), 'E0-P-124': proposal('Ugrik le Perdu — Ogre hors-la-loi (Bronze 2)'),
+  'E0-P-128': proposal('Margaret von Aschendorf — Abbesse (Shallya) (Argent 2)'), 'E0-P-129': proposal('Clementine Clausewitz — Sœur (Shallya) (Bronze 4)'),
+  'E0-P-130': proposal('Marie Duvallier — Sœur (Shallya), ancienne médecin (Bronze 4)'), 'E0-P-131': proposal('Anna-Lise Levertske — Sœur, ancienne apothicaire (Bronze 4)'),
+  'E0-P-132': proposal('Sœur type — Sœur (Shallya) (Bronze 4)'), 'E0-P-133': proposal('Hanna Bratsch — Auxiliaire, ancienne sergente (Bronze 3*)'),
+  'E0-P-134': proposal('Erzbet Wegener — Patiente (Bronze 0)'), 'E0-P-135': proposal('Adalmann von Hopfberg — Seigneur noble (Or 7)'),
+  'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)')
 });

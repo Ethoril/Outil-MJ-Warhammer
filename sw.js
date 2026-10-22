@@ -35,6 +35,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/keyword-picker.js',
   './js/core/bestiary-profiles.js',
   './js/data/bestiary/index.json',
+  './js/data/bestiary/L01.json',
   './js/data/bestiary/L06.json',
   './js/data/bestiary/L11.json',
   './js/core/v5-divine-engine.js',

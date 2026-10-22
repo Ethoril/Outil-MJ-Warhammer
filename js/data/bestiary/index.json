@@ -2,6 +2,17 @@
  "schemaVersion": 1,
  "books": [
   {
+   "book": "L01",
+   "file": "L01.json",
+   "title": "Archives of the Empire 2",
+   "edition": "V4",
+   "counts": {
+    "profiles": 15,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L06",
    "file": "L06.json",
    "title": "Livre de base V5",
