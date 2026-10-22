@@ -23151,5 +23151,694 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0001",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.11",
+    "question": "Implanter « Se mêler à une réception noble » ? Une demi-heure à converser parmi les invités permet un Test de Ragot −2 DR ; avec Étiquette (Nobles), la difficulté devient +4 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0002",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.11",
+    "question": "Implanter « Recueillir plusieurs informations » ? Plusieurs personnages réussissant simultanément obtiennent des informations différentes plutôt que la même rumeur répétée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0003",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.11",
+    "question": "Implanter « Réception : degrés de renseignement » ? À +2/+3 DR, entendre deux rumeurs plutôt exactes ; à +0 réussi/+1, une rumeur. À +4/+5 et +6+, accéder à des confidences plus importantes choisies selon la scène.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0004",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.11",
+    "question": "Implanter « Réception : échecs ordinaires » ? À −0 raté/−1, entendre une confidence de la scène ; à −2/−3, rien d’utile ; à −4/−5, possible méprise nominative, sinon rien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0005",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.11",
+    "question": "Implanter « Réception : exclu et discrédité » ? À −6 DR ou pire, exclusion de la fête, aucun renseignement et −2 DR aux futurs Tests sociaux envers ses participants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0006",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.12",
+    "question": "Implanter « Parcourir un labyrinthe de haies » ? Navigation +0 détermine la durée de traversée d’un labyrinthe de jardin selon la table p.13.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0007",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.12",
+    "question": "Implanter « Demander de l’aide dans le labyrinthe » ? Faire appeler du secours impose −1 DR aux Tests sociaux et −3 DR à Commandement pour le reste de la réception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0008",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.12",
+    "question": "Implanter « Écouter dans un labyrinthe » ? Discrétion urbaine ou rurale opposée à Perception −2 DR permet d’écouter une conversation ; échec, les interlocuteurs soupçonnent l’écoute et cessent de parler.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0009",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.13",
+    "question": "Implanter « Labyrinthe : +6 DR ou mieux » ? Traversée en une minute ; +5 V4 aux Tests sociaux pour le reste de la réception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0010",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.13",
+    "question": "Implanter « Labyrinthe : +2 à +5 DR » ? Traversée en sept minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0011",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.13",
+    "question": "Implanter « Labyrinthe : +0 réussi ou +1 DR » ? Traversée en quinze minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0012",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.13",
+    "question": "Implanter « Labyrinthe : −0 raté ou −1 DR » ? Traversée en vingt minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0013",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.13",
+    "question": "Implanter « Labyrinthe : −2 à −5 DR » ? Traversée en trente-cinq minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0014",
+    "phase": "Compétences et société",
+    "lot": "L18",
+    "source": "L18 p.13",
+    "question": "Implanter « Labyrinthe : −6 DR ou pire » ? Traversée en environ une heure ; −5 V4 aux Tests sociaux pour le reste de la réception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0015",
+    "phase": "Talents et corruption",
+    "lot": "L18",
+    "source": "L18 p.34",
+    "question": "Implanter « Accès aux talents de Slaanesh » ? Corruption contrôlée et Sort supplémentaire sont des dons parfois octroyés aux adeptes de Slaanesh, indisponibles aux autres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0016",
+    "phase": "Talents et corruption",
+    "lot": "L18",
+    "source": "L18 p.34",
+    "question": "Implanter « Corruption contrôlée : limite » ? Le Talent Corruption contrôlée est limité à un rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0017",
+    "phase": "Talents et corruption",
+    "lot": "L18",
+    "source": "L18 p.34",
+    "question": "Implanter « Corruption contrôlée : résistance » ? Avec ce Talent, résister à l’acquisition d’une mutation par Résistance devient −1 DR au lieu de +0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0018",
+    "phase": "Talents et corruption",
+    "lot": "L18",
+    "source": "L18 p.34",
+    "question": "Implanter « Corruption contrôlée : choix physique » ? Quand une mutation est acquise, tirer deux résultats et choisir l’un ; proposition limitée aux mutations physiques, les séquelles psychologiques restant exclues par Q18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0019",
+    "phase": "Talents et corruption",
+    "lot": "L18",
+    "source": "L18 p.34",
+    "question": "Implanter « Sort supplémentaire : prérequis » ? Posséder le Domaine de Slaanesh est requis pour acquérir Sort supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0020",
+    "phase": "Talents et corruption",
+    "lot": "L18",
+    "source": "L18 p.34",
+    "question": "Implanter « Sort supplémentaire : sort unique » ? Chaque acquisition donne accès à un sort nommé du Domaine de Slaanesh absent de la liste habituelle ; le maximum dépend de cette spécialisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0021",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.30",
+    "question": "Implanter « Amulette au croissant : fatigue » ? Après le premier jour de port, Calme +2 DR chaque jour ; échec, mauvais rêves ; échec impressionnant ou pire, un Exténué jusqu’à la fin du jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0022",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.30",
+    "question": "Implanter « Amulette au croissant : signature » ? Dans Middenheim, le Ghur masque les détails magiques de cette amulette ; étudiée hors de la ville avec la perception magique, une note de Shyish se révèle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0023",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.60",
+    "question": "Implanter « Amulette de cuivre : immunité » ? L’amulette de cuivre trois fois béni confère Immunité au poison à son porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0024",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.60",
+    "question": "Implanter « Amulette de cuivre : détection » ? Tenue au-dessus d’un plat ou d’une boisson empoisonnée, l’amulette devient vert vif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0025",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.60",
+    "question": "Implanter « Tranche-gorge : lame magique » ? Cette dague magique augmente ses dégâts à +3 et possède Rapide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0026",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.60",
+    "question": "Implanter « Tranche-gorge : défaut Faiblesses » ? La dague ignore les PA de toute armure portant le Défaut Faiblesses.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0027",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.94",
+    "question": "Implanter « Anneau de réanimation : effet » ? L’anneau lance Réanimation avec +6 DR fixes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0028",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.94",
+    "question": "Implanter « Anneau de réanimation : réserve » ? L’anneau de Skretth contient assez de puissance pour deux lancements de Réanimation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0029",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.74",
+    "question": "Implanter « Bandeau magique de Klaglich » ? Le bandeau magique protège la tête avec un PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0030",
+    "phase": "Objets magiques",
+    "lot": "L18",
+    "source": "L18 p.74",
+    "question": "Implanter « Épée magique de Klaglich » ? Cette arme de base magique possède Empaleuse et Dévastatrice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0031",
+    "phase": "Maladies et poisons",
+    "lot": "L18",
+    "source": "L18 p.92",
+    "question": "Implanter « Globe de gaz : diffusion » ? Un globe brisé libère du gaz dans un rayon initial de deux yards ; il s’étend de deux yards par Round pendant la moitié de 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0032",
+    "phase": "Maladies et poisons",
+    "lot": "L18",
+    "source": "L18 p.92",
+    "question": "Implanter « Globe de gaz : inconscience » ? Dans le gaz, un échec de Test de la caractéristique Endurance −2 DR rend inconscient pendant 1d10 minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0033",
+    "phase": "Maladies et poisons",
+    "lot": "L18",
+    "source": "L18 p.92",
+    "question": "Implanter « Globe de gaz : réveil sous blessure » ? La victime peut rejouer le Test si elle subit plus de Blessures que son BE.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0034",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Capturer un crâne volant » ? Les tentatives de lutte pour capturer un crâne subissent −3 DR ; filets et autres moyens restent à juger par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0035",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Crâne actif : regard du contrôleur » ? En contrôle direct, les yeux brillent rouge ; le contrôleur voit par le crâne, sans entendre par lui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0036",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Crâne actif : concentration » ? Toute perturbation brise la concentration du contrôleur : le crâne devient passif et poursuit son dernier ordre, ou retourne au maître au choix du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0037",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Crâne passif : dernier ordre » ? Hors de vue du contrôleur, ou quand celui-ci dirige un autre crâne, le crâne poursuit ses instructions avec les yeux assombris ; ordre achevé, il devient dormant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0038",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Crâne dormant : retour à la source » ? Sans contrôle direct ni ordre, les yeux s’éteignent ; le crâne retourne à sa caverne ou, empêché de bouger, s’oriente vers elle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0039",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Observer l’orientation d’un crâne » ? Déplacer un crâne captif puis réussir Perception +0 révèle son orientation vers sa source.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0040",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Crâne dormant : attraction du Chaos » ? Une source locale de Chaos située à cinq yards remplace l’orientation vers la caverne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0041",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Crâne inerte à zéro Blessure » ? Un crâne tombé à zéro Blessure redevient un crâne ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0042",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Crâne inerte après isolement » ? Plus de 24 heures loin d’une source de Chaos rendent le crâne ordinaire ; caverne, malepierre ou autre source reconnue par le MJ comptent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0043",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.107",
+    "question": "Implanter « Interroger un crâne » ? Un crâne captif ne peut pas être interrogé ; son orientation peut néanmoins servir de guide ou de boussole.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0044",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.108",
+    "question": "Implanter « Suivre un crâne volant » ? Le vol empêche de suivre des traces ordinaires ; les Tests d’autres méthodes de poursuite ou de recherche d’indices sont généralement à −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0045",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.108",
+    "question": "Implanter « Courir à travers la forêt » ? Lors de la poursuite à pleine vitesse entre racines et branches, Athlétisme +0 chaque Round ; échec, À terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0046",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.108",
+    "question": "Implanter « Tirer sur le crâne porteur de torche » ? La torche visible annule le malus de tir dû à l’obscurité contre ce crâne ; sa pénalité de petite cible reste distincte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0047",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.113",
+    "question": "Implanter « Seigneur des tombes : forme spectrale » ? En variante MJ, sa mort le transforme en Fantôme ou Spectre, voire Banshee ; l’incantation peut être conservée et Instable est suspendu tant qu’il poursuit sa vengeance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0048",
+    "phase": "Créatures et capacités",
+    "lot": "L18",
+    "source": "L18 p.113",
+    "question": "Implanter « Seigneur des tombes : possession » ? En variante MJ, l’esprit de ce PNJ peut posséder un corps vivant, même animal, en remportant une opposition de Volonté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0049",
+    "phase": "Création et progression",
+    "lot": "L18",
+    "source": "L18 p.31",
+    "question": "Implanter « Golthog PJ : développement » ? Pour sa version PJ rejoignant la campagne, dépenser 500 PX en compétences et talents de Soldat ; ils remplacent ses Traits de PNJ, sauf Taille (Grande).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0050",
+    "phase": "Création et progression",
+    "lot": "L18",
+    "source": "L18 p.31",
+    "question": "Implanter « Golthog PJ : équipement supplémentaire » ? La version PJ reçoit deux CO à dépenser en équipement, rations et autres nécessités, en plus des possessions déjà indiquées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0051",
+    "phase": "Création et progression",
+    "lot": "L18",
+    "source": "L18 p.31",
+    "question": "Implanter « Coût de nourriture des Ogres » ? Nourrir un Ogre coûte environ trois fois le prix pour une autre espèce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0052",
+    "phase": "Création et progression",
+    "lot": "L18",
+    "source": "L18 p.121",
+    "question": "Implanter « Secrets d’Erina : argent initial » ? Chaque secret choisi pour le prétiré d’Erina ajoute 3d10 pistoles à son argent initial.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L18-0053",
+    "phase": "Création et progression",
+    "lot": "L18",
+    "source": "L18 p.123",
+    "question": "Implanter « Secrets de Golthog : argent initial » ? Chaque secret choisi pour le prétiré de Golthog ajoute 1d10 pistoles à son argent initial.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
