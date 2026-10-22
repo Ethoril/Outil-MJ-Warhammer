@@ -86,3 +86,18 @@ Ces décisions s’imposent aux lots des phases B à E de `docs/PLAN_FIN_DE_PROJ
 - B-C02 homonymes : **choix de GPT confirmé** (Mathlann seul = elfe ; Khaine seul = humain ; « Khaine (elfique) » = elfe).
 - B-C03 Péchés stockés et prière elfe : **choix de GPT confirmé** (ignorés pendant la prière elfe, conservés sur la fiche).
 - B-C04 emplacement du code : choix technique de GPT conservé par l’orchestrateur (fonctions dans `v5-divine-engine.js`).
+
+## Choix des exécutants revus le 22/10 (sélecteurs)
+
+Décisions du MJ qui **modifient** le comportement livré (à implanter par un lot correctif de la phase B ou C) :
+
+- B-C45 Pèlerinage d’Altdorf réussi : Exténué « au premier jour de l’aventure suivante » en **rappel seul** (aucun état posé).
+- B-C15 Prière visant un allié réprouvé : **échec pour lui seul**, la prière agit sur les autres cibles.
+- B-C10 Interdictions de Courroux « pendant N Rounds » (21-25, 31-35, 46-50) : **le Round en cours compte comme le premier**, règle fixe (plus de question au MJ).
+- B-C11 Prière due à chaque Tour (76-80) : **elle occupe l’Action du Tour**, règle fixe.
+- B-C50 Relique « −10 à −30 sur la table de Courroux » : malus appliqué **au total** (d100 + 10 × Péché).
+- B-C26 Hémorragie « au premier matin » : **aube (6 h) proposée par défaut**, modifiable par le MJ.
+
+Confirmé tel que livré : C0-L06-018 Ralliement par Commandement, budget **réparti par le MJ**.
+
+Les autres choix (120) sont soumis au MJ sur la page « Arbitrages des exécutants » (artifact claude.ai A6bYrFDz3hkcpva2si4SHq) ; ses décisions seront reportées ici.
