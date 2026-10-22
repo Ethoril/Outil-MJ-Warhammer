@@ -152,7 +152,7 @@ export function buildParticipantFromBestiary(id, options = {}) {
     extensions: { v5: { bestiary: {
       id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
-      optionalTraits: (record.optionalTraits || []).map(traitText), ...(record.woundsAbsent ? { woundsAbsent: true } : {})
+      optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {})
     } } }
   };
 }
