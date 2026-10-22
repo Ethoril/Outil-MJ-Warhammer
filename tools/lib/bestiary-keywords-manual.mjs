@@ -28,6 +28,9 @@ export const KEYWORDS_MANUAL = Object.freeze({
   'E0-P-370': ['fantome'], 'E0-P-371': ['squelette'], 'E0-P-372': ['dragon', 'zombie'], 'E0-P-373': ['goule'], 'E0-P-374': ['goule'], 'E0-P-375': ['mort-vivant'],
   // Tribes and Tribulations (L12) : Matthogg est un Ogre, Gorfang un Orque ; Gnoblars et Hobgobelins sans mot-clé du référentiel (E-D18)
   'E0-P-438': ['ogre'], 'E0-P-455': ['orque'],
+  // Sea Wardens of Cothique (L14) : les Cothiqui sont des Hauts elfes ; le Kraken est un monstre marin ; Spites et Phénix sans mot-clé du référentiel (E-D20)
+  'E0-P-472': ['haut-elfe'], 'E0-P-475': ['haut-elfe'], 'E0-P-476': ['haut-elfe'], 'E0-P-477': ['haut-elfe'], 'E0-P-479': ['haut-elfe'],
+  'E0-P-480': ['haut-elfe'], 'E0-P-481': ['haut-elfe'], 'E0-P-484': ['haut-elfe'], 'E0-P-488': ['monstre-marin'],
   // Deft Steps, Light Fingers (L04) : PNJ nommés humains ; le surnom « the Fish » n'est pas un poisson ; chiens et rapaces sont des Bêtes
   'E0-P-170': ['humain'], 'E0-P-171': ['humain', '-poisson'], 'E0-P-172': ['humain'], 'E0-P-173': ['humain'], 'E0-P-179': ['humain'],
   'E0-P-181': ['bete'], 'E0-P-182': ['bete'], 'E0-P-183': ['bete'],

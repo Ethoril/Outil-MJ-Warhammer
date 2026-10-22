@@ -67,3 +67,7 @@ Format : id, source, question, choix, raison, alternative. Relecture du MJ en s�
 ## Up in Arms (D12)
 
 - **E-D19** — L13 : 15 fiches (9 profils, 6 gabarits), comme annoncé. Valeurs du Destrier, du Cheval de selle et du Demigryph relues sur le texte (p. 29, 109). Chevaux en Cheval, Demigryph en Bête, Mercenaire aguerri en Mercenaire ; les autres PNJ (Éclaireur, Avocat, Scribe, Porteur, Docteur) sans mot-clé : aucune espèce n'est imprimée dans le bloc. Noms français tous proposés (le générateur automatique donnait des intitulés bancals), à relire.
+
+## Sea Wardens of Cothique (D13)
+
+- **E-D20** — L14 : 20 profils, comme annoncé. Les Cothiqui (noms en « Cothiqui ») reçoivent le mot-clé Haut elfe (Cothique est une colonie asur), le Kraken Monstre marin ; Rejetons de Mathlann, Spites (Pie-grièche), Phénix et PNJ sans espèce imprimée restent sans mot-clé (le référentiel n’a pas ces espèces, à arbitrer par le MJ). Ceyluii a bien 1 Blessure imprimée (taille minuscule). Le Kraken imprime « 8 × Tentacles +9 » : la ligne (multiplicité et dégâts) est écartée par l’extraction, le trait Tentacles n’est pas porté (voir tmp/divin/bestiary-ecarts-L14.json), à traiter avec le modèle d’attaques multiples. Noms français tous proposés, à relire.

@@ -92,6 +92,12 @@ export const NAMES_FR = Object.freeze({
   'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)'),
   // Tribes and Tribulations (L12)
   'E0-P-438': proposal('Matthogg — Brute ogre'),
+  // Sea Wardens of Cothique (L14)
+  'E0-P-472': proposal('Prince Dalloran de Cothique — Seigneur noble cothiqui'), 'E0-P-473': proposal('Rejeton de Mathlann'), 'E0-P-474': proposal('Rejeton de Mathlann — Sentinelle'),
+  'E0-P-475': proposal('Princesse Litharys d’Elisia — Amirale cothiquie'), 'E0-P-476': proposal('Prince Dalroth — Noble cothiqui'), 'E0-P-477': proposal('Prince Dannor — Noble cothiqui'),
+  'E0-P-478': proposal('Roc plume-vive'), 'E0-P-479': proposal('Illorahin Seabrow — Marchand aventurier cothiqui'), 'E0-P-480': proposal('Torrelain Moonrose — Meneur cothiqui'),
+  'E0-P-481': proposal('Haute Receveuse Fialthra Swiftprow — Juge cothiquie'), 'E0-P-483': proposal('Ceyluii — Pie-grièche'), 'E0-P-484': proposal('Cireon Fleetcrest — Faiseur de goûts cothiqui'),
+  'E0-P-487': proposal('Lion blanc'), 'E0-P-490': proposal('Phénix flèche-de-flamme'), 'E0-P-491': proposal('Phénix cœur-de-givre'),
   // Up in Arms (L13)
   'E0-P-457': proposal('Chevaliers de l’Empire — Destrier — Lourd cheval de guerre'), 'E0-P-458': proposal('Cheval de selle'), 'E0-P-459': proposal('Monture demigriffon'),
   'E0-P-460': proposal('Éclaireur local (Argent 1)'), 'E0-P-461': proposal('Mercenaire aguerri (Argent 3)'), 'E0-P-462': proposal('Up in Arms — Avocat (Argent 3)'),

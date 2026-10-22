@@ -121,6 +121,17 @@
     "templates": 6,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L14",
+   "file": "L14.json",
+   "title": "Sea Wardens of Cothique",
+   "edition": "V4",
+   "counts": {
+    "profiles": 20,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

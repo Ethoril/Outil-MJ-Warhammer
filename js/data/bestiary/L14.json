@@ -1,0 +1,1305 @@
+{
+ "schemaVersion": 1,
+ "book": "L14",
+ "title": "Sea Wardens of Cothique",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L14",
+  "sha256": "8864e038e2fc742d6b7805caac6058ecc60147c199c6acfacf757cf6c9139ede"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-472",
+   "book": "L14",
+   "page": 27,
+   "physicalPage": 27,
+   "kind": "profile",
+   "blockKey": "L14:27:0",
+   "name": "Prince Dalloran of Cothique — Cothiqui Noble Lord",
+   "nameFr": "Prince Dalloran de Cothique — Seigneur noble cothiqui",
+   "stats": {
+    "M": 5,
+    "CC": 85,
+    "CT": 45,
+    "F": 44,
+    "E": 30,
+    "I": 88,
+    "Ag": 75,
+    "Dex": 65,
+    "Int": 88,
+    "FM": 83,
+    "Soc": 75
+   },
+   "wounds": 18,
+   "keywords": [
+    "noble",
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-473",
+   "book": "L14",
+   "page": 31,
+   "physicalPage": 31,
+   "kind": "profile",
+   "blockKey": "L14:31:0",
+   "name": "Scion of Mathlann",
+   "nameFr": "Rejeton de Mathlann",
+   "stats": {
+    "M": 5,
+    "CC": 55,
+    "CT": 40,
+    "F": 30,
+    "E": 40,
+    "I": 50,
+    "Ag": 50,
+    "Dex": 50,
+    "Int": 40,
+    "FM": 50,
+    "Soc": 40
+   },
+   "wounds": 16,
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-474",
+   "book": "L14",
+   "page": 31,
+   "physicalPage": 31,
+   "kind": "profile",
+   "blockKey": "L14:31:1",
+   "name": "Scion of Mathlann Sentinel",
+   "nameFr": "Rejeton de Mathlann — Sentinelle",
+   "stats": {
+    "M": 5,
+    "CC": 60,
+    "CT": 45,
+    "F": 30,
+    "E": 45,
+    "I": 65,
+    "Ag": 50,
+    "Dex": 50,
+    "Int": 40,
+    "FM": 55,
+    "Soc": 40
+   },
+   "wounds": 16,
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-475",
+   "book": "L14",
+   "page": 39,
+   "physicalPage": 39,
+   "kind": "profile",
+   "blockKey": "L14:39:0",
+   "name": "Princess Litharys of Elisia — Cothiqui Admiral",
+   "nameFr": "Princesse Litharys d’Elisia — Amirale cothiquie",
+   "stats": {
+    "M": 6,
+    "CC": 82,
+    "CT": 81,
+    "F": 32,
+    "E": 46,
+    "I": 87,
+    "Ag": 77,
+    "Dex": 55,
+    "Int": 85,
+    "FM": 84,
+    "Soc": 60
+   },
+   "wounds": 19,
+   "keywords": [
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-476",
+   "book": "L14",
+   "page": 45,
+   "physicalPage": 45,
+   "kind": "profile",
+   "blockKey": "L14:45:0",
+   "name": "Prince Dalroth — Cothiqui Noble",
+   "nameFr": "Prince Dalroth — Noble cothiqui",
+   "stats": {
+    "M": 5,
+    "CC": 73,
+    "CT": 41,
+    "F": 31,
+    "E": 31,
+    "I": 76,
+    "Ag": 42,
+    "Dex": 55,
+    "Int": 34,
+    "FM": 40,
+    "Soc": 42
+   },
+   "wounds": 13,
+   "keywords": [
+    "noble",
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-477",
+   "book": "L14",
+   "page": 45,
+   "physicalPage": 45,
+   "kind": "profile",
+   "blockKey": "L14:45:1",
+   "name": "Prince Dannor — Cothiqui Noble",
+   "nameFr": "Prince Dannor — Noble cothiqui",
+   "stats": {
+    "M": 5,
+    "CC": 59,
+    "CT": 51,
+    "F": 31,
+    "E": 31,
+    "I": 70,
+    "Ag": 44,
+    "Dex": 54,
+    "Int": 42,
+    "FM": 44,
+    "Soc": 53
+   },
+   "wounds": 13,
+   "keywords": [
+    "noble",
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-478",
+   "book": "L14",
+   "page": 47,
+   "physicalPage": 47,
+   "kind": "profile",
+   "blockKey": "L14:47:0",
+   "name": "Swiftfeather Roc",
+   "nameFr": "Roc plume-vive",
+   "stats": {
+    "M": 3,
+    "CC": 45,
+    "CT": null,
+    "F": 40,
+    "E": 40,
+    "I": 50,
+    "Ag": 55,
+    "Dex": null,
+    "Int": 15,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 32,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 6,
+     "trait": "Bite"
+    },
+    {
+     "name": "Talons",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bite",
+     "rating": "+6",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Magic, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Vision)"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-479",
+   "book": "L14",
+   "page": 49,
+   "physicalPage": 49,
+   "kind": "profile",
+   "blockKey": "L14:49:0",
+   "name": "Illorahin Seabrow — Cothiqui Merchant Adventurer",
+   "nameFr": "Illorahin Seabrow — Marchand aventurier cothiqui",
+   "stats": {
+    "M": 5,
+    "CC": 53,
+    "CT": 41,
+    "F": 38,
+    "E": 35,
+    "I": 62,
+    "Ag": 50,
+    "Dex": 50,
+    "Int": 43,
+    "FM": 45,
+    "Soc": 42
+   },
+   "wounds": 13,
+   "keywords": [
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-480",
+   "book": "L14",
+   "page": 51,
+   "physicalPage": 51,
+   "kind": "profile",
+   "blockKey": "L14:51:0",
+   "name": "Torrelain Moonrose — Cothiqui Ringleader",
+   "nameFr": "Torrelain Moonrose — Meneur cothiqui",
+   "stats": {
+    "M": 5,
+    "CC": 44,
+    "CT": 42,
+    "F": 31,
+    "E": 32,
+    "I": 75,
+    "Ag": 65,
+    "Dex": 62,
+    "Int": 66,
+    "FM": 66,
+    "Soc": 65
+   },
+   "wounds": 15,
+   "keywords": [
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-481",
+   "book": "L14",
+   "page": 55,
+   "physicalPage": 55,
+   "kind": "profile",
+   "blockKey": "L14:55:0",
+   "name": "High Receiver Fialthra Swiftprow — Cothiqui Judge",
+   "nameFr": "Haute Receveuse Fialthra Swiftprow — Juge cothiquie",
+   "stats": {
+    "M": 5,
+    "CC": 66,
+    "CT": 42,
+    "F": 32,
+    "E": 44,
+    "I": 68,
+    "Ag": 63,
+    "Dex": 66,
+    "Int": 83,
+    "FM": 81,
+    "Soc": 67
+   },
+   "wounds": 23,
+   "attacks": [
+    {
+     "name": "Elf Bow",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 86
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 73
+    },
+    {
+     "name": "Art (Calligraphy)",
+     "nameFr": "Art (Calligraphie)",
+     "value": 86
+    },
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 76
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 72
+    },
+    {
+     "name": "Channelling (Aqshy)",
+     "nameFr": "Focalisation (Aqshy)",
+     "frUnverified": true,
+     "value": 101
+    },
+    {
+     "name": "Channelling (Azyr)",
+     "nameFr": "Focalisation (Azyr)",
+     "frUnverified": true,
+     "value": 96
+    },
+    {
+     "name": "Channelling (Chamon)",
+     "nameFr": "Focalisation (Chamon)",
+     "frUnverified": true,
+     "value": 91
+    },
+    {
+     "name": "Channelling (Hysh)",
+     "nameFr": "Focalisation (Hysh)",
+     "frUnverified": true,
+     "value": 91
+    },
+    {
+     "name": "Channelling (Ghur)",
+     "nameFr": "Focalisation (Ghur)",
+     "frUnverified": true,
+     "value": 96
+    },
+    {
+     "name": "Channelling (Ghyran)",
+     "nameFr": "Focalisation (Ghyran)",
+     "frUnverified": true,
+     "value": 106
+    },
+    {
+     "name": "Channelling (Qhaysh)",
+     "nameFr": "Focalisation (Qhaysh)",
+     "frUnverified": true,
+     "value": 86
+    },
+    {
+     "name": "Channelling (Shyish)",
+     "nameFr": "Focalisation (Shyish)",
+     "frUnverified": true,
+     "value": 91
+    },
+    {
+     "name": "Channelling (Ulgu)",
+     "nameFr": "Focalisation (Ulgu)",
+     "frUnverified": true,
+     "value": 96
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 82
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 91
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 68
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 77
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 72
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 88
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 77
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 77
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 88
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 47
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 88
+    },
+    {
+     "name": "Language (Arabyan)",
+     "nameFr": "Langue (Arabyan)",
+     "frUnverified": true,
+     "value": 88
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 88
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 98
+    },
+    {
+     "name": "Language (Estalian)",
+     "nameFr": "Langue (Estalien)",
+     "value": 88
+    },
+    {
+     "name": "Language (Grumbarth)",
+     "nameFr": "Langue (Grumbarth)",
+     "value": 88
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 93
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 103
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 88
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 93
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 88
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 93
+    },
+    {
+     "name": "Lore (Astrology)",
+     "nameFr": "Savoir (Astrologie)",
+     "value": 98
+    },
+    {
+     "name": "Lore (Bretonnia)",
+     "nameFr": "Savoir (Bretonnia)",
+     "frUnverified": true,
+     "value": 88
+    },
+    {
+     "name": "Lore (Cothique)",
+     "nameFr": "Savoir (Cothique)",
+     "frUnverified": true,
+     "value": 103
+    },
+    {
+     "name": "Lore (Estalia)",
+     "nameFr": "Savoir (Estalia)",
+     "frUnverified": true,
+     "value": 88
+    },
+    {
+     "name": "Lore (Geography)",
+     "nameFr": "Savoir (Géographie)",
+     "value": 93
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 93
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 98
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 103
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 103
+    },
+    {
+     "name": "Lore (Marienburg)",
+     "nameFr": "Savoir (Marienburg)",
+     "frUnverified": true,
+     "value": 93
+    },
+    {
+     "name": "Lore (The Empire)",
+     "nameFr": "Savoir (The Empire)",
+     "frUnverified": true,
+     "value": 88
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 103
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 71
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 88
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 93
+    },
+    {
+     "name": "Play (Lyre)",
+     "nameFr": "Musicien (Lyre)",
+     "frUnverified": true,
+     "value": 81
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 77
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 47
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 98
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 78
+    },
+    {
+     "name": "Sail (Hawkship)",
+     "nameFr": "Voile (Hawkship)",
+     "frUnverified": true,
+     "value": 78
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 37
+    }
+   ],
+   "talents": [
+    {
+     "name": "High Magic"
+    }
+   ],
+   "trappings": [
+    "Elaborate Staff",
+    "Imposing Ledger",
+    "Robes of Office"
+   ],
+   "keywords": [
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-482",
+   "book": "L14",
+   "page": 57,
+   "physicalPage": 57,
+   "kind": "profile",
+   "blockKey": "L14:57:0",
+   "name": "Herwig Algnar — Human Master Merchant",
+   "nameFr": "Herwig Algnar — Maître marchand humain",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": 35,
+    "F": 31,
+    "E": 31,
+    "I": 45,
+    "Ag": 42,
+    "Dex": 31,
+    "Int": 58,
+    "FM": 38,
+    "Soc": 59
+   },
+   "wounds": 12,
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-483",
+   "book": "L14",
+   "page": 63,
+   "physicalPage": 63,
+   "kind": "profile",
+   "blockKey": "L14:63:0",
+   "name": "Ceyluii — Shrike",
+   "nameFr": "Ceyluii — Pie-grièche",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 53,
+    "F": 19,
+    "E": 35,
+    "I": 60,
+    "Ag": 88,
+    "Dex": 56,
+    "Int": 45,
+    "FM": 83,
+    "Soc": 51
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Dark Elves",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Fast",
+     "ref": "E0-T-077"
+    },
+    {
+     "name": "Fly",
+     "rating": "8",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Venom",
+     "rating": "2",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-484",
+   "book": "L14",
+   "page": 67,
+   "physicalPage": 67,
+   "kind": "profile",
+   "blockKey": "L14:67:0",
+   "name": "Cireon Fleetcrest — Cothiqui Taste Maker",
+   "nameFr": "Cireon Fleetcrest — Faiseur de goûts cothiqui",
+   "stats": {
+    "M": 5,
+    "CC": 39,
+    "CT": 32,
+    "F": 29,
+    "E": 32,
+    "I": 68,
+    "Ag": 56,
+    "Dex": 62,
+    "Int": 75,
+    "FM": 49,
+    "Soc": 64
+   },
+   "wounds": 12,
+   "keywords": [
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-485",
+   "book": "L14",
+   "page": 69,
+   "physicalPage": 69,
+   "kind": "profile",
+   "blockKey": "L14:69:0",
+   "name": "Revna Tharvig — Norscan Spy",
+   "nameFr": "Revna Tharvig — Norscan espion",
+   "stats": {
+    "M": 4,
+    "CC": 38,
+    "CT": 48,
+    "F": 49,
+    "E": 50,
+    "I": 33,
+    "Ag": 34,
+    "Dex": 39,
+    "Int": 41,
+    "FM": 34,
+    "Soc": 37
+   },
+   "wounds": 17,
+   "keywords": [
+    "norse"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-486",
+   "book": "L14",
+   "page": 74,
+   "physicalPage": 74,
+   "kind": "profile",
+   "blockKey": "L14:74:0",
+   "name": "Shadowblade — Dark Elf Assassin",
+   "nameFr": "Shadowblade — Assassin elfe noir",
+   "stats": {
+    "M": 6,
+    "CC": 95,
+    "CT": 89,
+    "F": 38,
+    "E": 41,
+    "I": 105,
+    "Ag": 90,
+    "Dex": 68,
+    "Int": 65,
+    "FM": 70,
+    "Soc": 53
+   },
+   "wounds": 18,
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-487",
+   "book": "L14",
+   "page": 81,
+   "physicalPage": 81,
+   "kind": "profile",
+   "blockKey": "L14:81:0",
+   "name": "White Lion",
+   "nameFr": "Lion blanc",
+   "stats": {
+    "M": 8,
+    "CC": 55,
+    "CT": null,
+    "F": 52,
+    "E": 48,
+    "I": 38,
+    "Ag": 42,
+    "Dex": null,
+    "Int": 15,
+    "FM": 50,
+    "Soc": null
+   },
+   "wounds": 36,
+   "size": "large",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 9,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 65
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 62
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bite",
+     "rating": "+9",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Guard, Magic, Mount, Shock Cavalry, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "lion"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-488",
+   "book": "L14",
+   "page": 82,
+   "physicalPage": 82,
+   "kind": "profile",
+   "blockKey": "L14:82:0",
+   "name": "Kraken",
+   "nameFr": "Kraken",
+   "stats": {
+    "M": 6,
+    "CC": 45,
+    "CT": null,
+    "F": 80,
+    "E": 75,
+    "I": 35,
+    "Ag": 55,
+    "Dex": 35,
+    "Int": 10,
+    "FM": 65,
+    "Soc": null
+   },
+   "wounds": 224,
+   "size": "monstrous",
+   "attacks": [
+    {
+     "name": "Beak",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Grim",
+     "rating": "3",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
+   "keywords": [
+    "monstre-marin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-489",
+   "book": "L14",
+   "page": 82,
+   "physicalPage": 82,
+   "kind": "profile",
+   "blockKey": "L14:82:1",
+   "name": "Great Eagle",
+   "nameFr": "Aigle géant",
+   "stats": {
+    "M": 3,
+    "CC": 65,
+    "CT": null,
+    "F": 44,
+    "E": 43,
+    "I": 55,
+    "Ag": 52,
+    "Dex": null,
+    "Int": 38,
+    "FM": 43,
+    "Soc": 25
+   },
+   "wounds": 32,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 6,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+6",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Vision)"
+    }
+   ],
+   "keywords": [
+    "oiseau-geant"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-490",
+   "book": "L14",
+   "page": 83,
+   "physicalPage": 83,
+   "kind": "profile",
+   "blockKey": "L14:83:0",
+   "name": "Flamespyre Phoenix",
+   "nameFr": "Phénix flèche-de-flamme",
+   "stats": {
+    "M": 3,
+    "CC": 70,
+    "CT": null,
+    "F": 54,
+    "E": 53,
+    "I": 55,
+    "Ag": 52,
+    "Dex": null,
+    "Int": 40,
+    "FM": 50,
+    "Soc": 25
+   },
+   "wounds": 40,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 7,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Attuned to Magic",
+     "ref": "E0-T-229"
+    },
+    {
+     "name": "Bite",
+     "rating": "+7",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Phoenix Reborn",
+     "ref": "E0-T-232"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Vulnerable to Cold",
+     "ref": "E0-T-230"
+    },
+    {
+     "name": "Wake of Fire",
+     "ref": "E0-T-231"
+    },
+    {
+     "name": "Ward",
+     "rating": "8+",
+     "ref": "E0-T-066"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-491",
+   "book": "L14",
+   "page": 84,
+   "physicalPage": 84,
+   "kind": "profile",
+   "blockKey": "L14:84:0",
+   "name": "Frostheart Phoenix",
+   "nameFr": "Phénix cœur-de-givre",
+   "stats": {
+    "M": 2,
+    "CC": 75,
+    "CT": null,
+    "F": 60,
+    "E": 60,
+    "I": 40,
+    "Ag": 52,
+    "Dex": null,
+    "Int": 40,
+    "FM": 60,
+    "Soc": 25
+   },
+   "wounds": 48,
+   "size": "large",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Attuned to Magic",
+     "ref": "E0-T-229"
+    },
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Freezing Aura",
+     "ref": "E0-T-234"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Ward",
+     "rating": "8+",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Vision)"
+    }
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}
