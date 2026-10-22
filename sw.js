@@ -34,6 +34,7 @@ const ASSETS_TO_CACHE = [
   './js/core/creature-combat.js',
   './js/core/creature-states.js',
   './js/core/creature-movement.js',
+  './js/core/creature-senses.js',
   './js/core/creature-natures.js',
   './js/data/creature-keywords.js',
   './js/ui/keyword-picker.js',

@@ -21,7 +21,8 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | T2 combat naturel (Morsure, Cornes, Queue, Piétinement, Tentacules, Langue, Constricteur, Toile, Étreinte glaciale, Souffle, Vomissement, Hurlement, Regard, armes V4) | FAIT (choix E-T2) | voir `git log` |
 | T3 états et dégâts continus (Venin, Infecté, Parasité, Maladie, Sang corrosif, Vampirique, Nuée, Instable, Increvable, Scission, déclencheurs de mort) | FAIT (choix E-T3) | voir `git log` |
 | T4 déplacement (Vol, Bond, Foulée, Grimpant, Amphibie, Arboricole, Limicole, Fouissage, Respiration aquatique, Créature marine, Aquatique) | FAIT (choix E-T4) | voir `git log` |
-| T5 à T12, F1-F2, S1, R1 | À FAIRE | |
+| T5 sens et discrétion (Infravision, Vision nocturne, Furtif, Pisteur, Perturbant, Caméléon, Sens vibratoires) | FAIT (choix E-T5) | voir `git log` |
+| T6 à T12, F1-F2, S1, R1 | À FAIRE | |
 
 ## Dernière suite complète
 
