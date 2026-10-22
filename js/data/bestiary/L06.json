@@ -5387,6 +5387,9 @@
      "modifier": true
     }
    ],
+   "starred": [
+    "wounds"
+   ],
    "keywords": [
     "soldat"
    ],
@@ -5421,6 +5424,9 @@
      "value": 10,
      "modifier": true
     }
+   ],
+   "starred": [
+    "wounds"
    ],
    "nameFrSource": "proposition"
   },
@@ -5489,6 +5495,9 @@
     {
      "name": "T"
     }
+   ],
+   "starred": [
+    "wounds"
    ],
    "nameFrSource": "proposition"
   },
@@ -5575,6 +5584,9 @@
     {
      "name": "T"
     }
+   ],
+   "starred": [
+    "wounds"
    ],
    "nameFrSource": "proposition"
   },
@@ -5668,6 +5680,9 @@
      "name": "T"
     }
    ],
+   "starred": [
+    "wounds"
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -5746,6 +5761,9 @@
      "Choose up to 3 spells from the Petty Magic list and up to 3 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
     ]
    },
+   "starred": [
+    "wounds"
+   ],
    "keywords": [
     "lanceur-de-sorts"
    ],
@@ -5855,6 +5873,9 @@
      "Choose up to 6 spells from the Petty Magic list and up to 9 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
     ]
    },
+   "starred": [
+    "wounds"
+   ],
    "keywords": [
     "lanceur-de-sorts"
    ],

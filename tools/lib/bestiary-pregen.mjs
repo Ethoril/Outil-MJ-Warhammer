@@ -18,11 +18,17 @@ export function parsePregenerated(raw, layout, talentDictionary) {
   // Cadre « WOUNDS » : SB, TBx2, WPB, parfois Hardy, puis le total (dernier nombre).
   const woundsRow = /WOUNDS((?: \d+)+)/.exec(flat);
   const wounds = woundsRow ? [null, woundsRow[1].trim().split(' ').pop()] : /Wounds (\d+)/.exec(flat);
+  // Compétences : la mise en page décale parfois les noms des chiffres ; une ligne n'est gardée que si elle se recoupe (caractéristique
+  // imprimée = caractéristique actuelle de la fiche, et total = caractéristique + progression).
+  const STAT_OF = { WS: 'CC', BS: 'CT', S: 'F', T: 'E', I: 'I', Ag: 'Ag', Agi: 'Ag', Dex: 'Dex', Int: 'Int', WP: 'FM', Fel: 'Soc' };
   const skills = [];
   for (const line of layout.split('\n')) {
     for (const part of [line.slice(0, 56), line.slice(56)]) {
-      const found = new RegExp(`^\\s*([A-Z][A-Za-z()' ]+?)\\s+${CHAR_LABELS}\\s+\\d+(?:\\s+\\d+)?\\s+(\\d+)\\s*$`).exec(part);
-      if (found) skills.push({ name: found[1].trim(), value: Number(found[2]) });
+      const found = new RegExp(`^\\s*([A-Z][A-Za-z()' ]+?)\\s+(${CHAR_LABELS})\\s+(\\d+)(?:\\s+(\\d+))?\\s+(\\d+)\\s*$`).exec(part);
+      if (!found) continue;
+      const [, name, label, characteristic, advance, total] = found;
+      const expected = Number(characteristic) + (advance ? Number(advance) : 0);
+      if (stats[STAT_OF[label]] === Number(characteristic) && expected === Number(total)) skills.push({ name: name.trim(), value: Number(total) });
     }
   }
   const region = layout.slice(layout.indexOf('Talent Name'), layout.indexOf('ARMOUR') > 0 ? layout.indexOf('ARMOUR') : undefined);

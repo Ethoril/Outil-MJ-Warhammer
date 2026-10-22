@@ -11,6 +11,17 @@
     "templates": 7,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L11",
+   "file": "L11.json",
+   "title": "The Imperial Zoo",
+   "edition": "V4",
+   "counts": {
+    "profiles": 62,
+    "templates": 0,
+    "pregenerated": 6
+   }
   }
  ]
 }

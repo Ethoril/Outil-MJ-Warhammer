@@ -32,8 +32,8 @@ export function cleanTraits(traits = [], { canonical, traitRefs }) {
   const dropped = [];
   for (const trait of traits) {
     const name = canonical(trait.name);
-    if (!name) { if (trait.name && !isNoise(trait.name)) kept.push({ name: trait.name, unrecognized: true }); else dropped.push(trait.name); continue; }
-    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(trait.param ? { param: trait.param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
+    if (!name) { dropped.push(trait.name); continue; }
+    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(trait.param ? { param: trait.param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(trait.count ? { count: trait.count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
   }
   return { kept, dropped };
 }
@@ -59,7 +59,7 @@ export function buildAttacks(extracted, traitList) {
     if (trait.weapons) { for (const weapon of trait.weapons) attacks.push({ name: weapon.name, damage: weapon.damage, trait: 'Weapon' }); continue; }
     const damage = number(trait.rating);
     if (damage === null || Number.isNaN(damage)) continue;
-    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.name === 'Ranged' ? { ranged: true } : {}) });
+    attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.count ? { count: trait.count } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}) });
   }
   return attacks;
 }
@@ -141,7 +141,9 @@ export function buildRecord(extracted, entry, context) {
   if (extracted.trappings?.length) record.trappings = extracted.trappings.filter(item => item.length <= 60);
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;
-  if (extracted.specialRules?.length) record.specialRules = extracted.specialRules;
+  const rules = (extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule));
+  if (rules.length) record.specialRules = rules;
+  if (extracted.starred?.length) record.starred = extracted.starred.map(key => (key === 'W' ? 'wounds' : key));
   const abilities = [...(entry.abilityRefs || [])];
   if (abilities.length) record.abilities = abilities;
   const keywords = assignKeywords(entry.name, traits.kept, referential);

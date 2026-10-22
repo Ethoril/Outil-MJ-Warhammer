@@ -33,3 +33,9 @@ Format : id, source, question, choix, raison, alternative. Relecture du MJ en s�
 - **E-D04** — Attaques V4 « Weapon (X) +n » et Traits d'attaque naturelle : conservés comme attaques à dégâts imprimés (déjà totaux), **sans valeur d'attaque** ; le score employé est fixé au lot B1 (CC du profil, ou la compétence de Corps à corps imprimée quand il n'y en a qu'une). Les attaques naturelles (Bite, Horns, Tail…) restent aussi des Traits.
 - **E-D05** — Texte voisin écarté : les compétences hors liste (noms et valeur chiffrée requis), les Traits dont le nom contient du texte courant sont écartés ; les écarts de chaque livre sont écrits dans `tmp/divin/bestiary-ecarts-<livre>.json` (non commité) et relus avant le commit du lot.
 - **E-D06** — Mots-clés des profils : n-grammes du nom imprimé résolus par alias (le plus long d'abord), plus Bestial (Bête) et la Marque du Chaos ; spécificité maximale ; les natures Mort-vivant, Démoniaque, Artificiel et Éthéré ne sont pas écrites (déduites des Traits à l'exécution).
+
+## The Imperial Zoo (D3)
+
+- **E-D07** — Mots-clés manuels (`tools/lib/bestiary-keywords-manual.mjs`) : quand le nom imprimé ne se résout pas par alias (créatures nommées, hybrides), le mot-clé est fixé à la main par identifiant et ajouté à ceux du nom ; jamais de mot-clé inventé hors référentiel.
+- **E-D08** — Prétirés (E0-P-536 à 541) : caractéristiques *actuelles* de la fiche, Blessures = dernier nombre du cadre WOUNDS. Compétences gardées seulement si la ligne se recoupe (caractéristique + progression = total) : drapeau `skillsPartial`. Nom du formulaire différent du titre : `identity.titleMismatch`, aucune correction.
+- **E-D09** — Noms français sans source L05 : propositions mécaniques par glossaire (`bestiary-names-glossary.mjs`), marquées `nameFrSource: "proposition"`, à relire par le MJ.

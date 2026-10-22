@@ -19,6 +19,15 @@ const RATING = /^(?<name>[^()]*?[A-Za-z!'’.\- ]+?)(?:\s*\((?<param>[^]*)\))?(?
 export function readTraitItem(text) {
   const item = clean(text.replace(/\*+$/, ''));
   if (!item) return null;
+  // Attaque (« Weapon (Fangs) +7 », « 2x Weapon (Claws) +10 », « Bite +9 ») suivie du nom d'une capacité collée dans la liste : on ne garde que l'attaque.
+  const natural = /^(?:(\d+)\s*[x×]\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
+  if (natural && !/[+-]\d/.test(natural[3] || '')) {
+    const trait = { name: natural[2].replace(/^./, letter => letter.toUpperCase()), rating: natural[4].replace(/\s+/g, '') };
+    if (natural[3]) trait.param = clean(natural[3]);
+    if (natural[1]) trait.count = Number(natural[1]);
+    if (natural[5]) trait.printed = Number(natural[5]);
+    return trait;
+  }
   const grouped = /^(Weapon|Ranged|Armour|Armor)\s*\((.+)\)$/.exec(item);
   const found = RATING.exec(item);
   if (!found) return { name: item, raw: item };
@@ -43,7 +52,8 @@ export function readTraitItem(text) {
 /** Compétence : « Melee (Basic 65, Two-Handed 65) », « Entertain (Taunt) 27 », « Dodge +10 », « Cool 48 ». */
 export function readSkills(text) {
   const skills = [];
-  for (const item of splitList(text)) {
+  for (const rawItem of splitList(text)) {
+    const item = rawItem.replace(/\s*\(\+\d+ SL[^)]*\)\s*$/, '').trim();
     const grouped = /^(.+?)\s*\(([^)]*\d[^)]*(?:,[^)]*)+)\)$/.exec(item);
     if (grouped) {
       for (const part of splitList(grouped[2])) {
@@ -154,6 +164,9 @@ export function listTraits(text, mode, dictionary, key) {
 export function parseBlock(block, { traitDictionary = new Set(), talentDictionary = new Set() } = {}) {
   const { sections, lead, mode } = splitSections(block.bodyLines);
   const profile = { title: block.title, stats: readStats(block.cells) };
+  // Valeurs suivies d'un astérisque (note de bas de bloc, valeur conditionnelle) : signalées, la valeur imprimée reste celle du tableau.
+  const starred = CARAC_ORDER.filter((key, index) => /\*/.test(String(block.cells[index] ?? '')));
+  if (starred.length) profile.starred = starred;
   const warnings = [];
   if (sections.Attacks) profile.attacks = readAttacks(sections.Attacks);
   if (sections.Armour) profile.armour = readArmour(sections.Armour);
