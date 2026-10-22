@@ -1,4 +1,4 @@
-# Rapport GPT — Phase F0 (partiel, en cours)
+# Rapport GPT — Phase F0 (partiel, arrêt de volume)
 
 22 octobre 2026. Worktree `E:/Outil MJ Warhammer/tmp/gpt-phase-f-worktree`, branche `gpt/phase-f`, base `main` à `ad092cd` (3.24.0). Aucun fichier de jeu ou test existant modifié. Aucune publication, aucun push ni fusion.
 
@@ -9,8 +9,8 @@
 | Plan | FAIT | `3149286` ; plan avant outillage |
 | F00 | FAIT | `ae76525` ; extraction unitaire et vérification des données, nouveaux tests uniquement |
 | F06-Tests | FAIT | `f4483bb` ; L06 p.129-133, 265-266 ; F-L06-0001 à 0046 |
-| F06-Combat | FAIT | Commit du présent lot ; L06 p.161-169 ; F-L06-0047 à 0171 ; 125 règles supplémentaires |
-| Reste de L06 | À FAIRE | Compétences/talents, création/carrières, applications des compétences, blessures/soins, maladies/poisons, États hors inventaires existants, corruption, entre-aventures, magie générale, équipement et environnement |
+| F06-Combat | FAIT | `65be80b` ; L06 p.161-169 ; F-L06-0047 à 0171 ; 125 règles supplémentaires |
+| Reste de L06 | À FAIRE | Compétences/talents, création/carrières, applications des compétences, blessures/soins, maladies/poisons, États hors inventaires existants, corruption, entre-aventures, magie générale, équipement, environnement et appendices à partir de p.364 |
 | F05, F17, F11, F13, F14, F16, F18-F26, F01-F04, F07-F10, F12, F15 | À FAIRE | Tous les autres livres, dans l'ordre du plan ; aucun déclaré lu |
 
 ## Source lue
@@ -48,6 +48,7 @@ Les noms FR sont provisoires avant L05. Les conversions V4 ne sont pas encore ab
 - F00 : rouge attesté (`tmp/audit/F00-red.log`, import de l'outil inexistant), puis 7/7 tests ciblés ; suite complète 4 050/4 050 après démarrage réel de la recette, reçu E0 désormais existant (`tmp/audit/F00-full.log`).
 - F06-Tests : suite complète 4 050/4 050, zéro échec (`tmp/audit/F06-tests-full.log`, 112,669 s).
 - F06-Combat : suite complète 4 050/4 050, zéro échec (`tmp/audit/F06-combat-full.log`, 106,305 s). Génération de la synthèse et des sélecteurs répétée à empreintes identiques ; `--check` vert.
+- Dernière suite complète avant le commit du rapport : **4 050/4 050**, zéro échec, zéro ignoré (`tmp/audit/final-full.log`, 108,582 s). Contrôles de périmètre, références Git et empreintes des trois livrables de données conservés dans `tmp/audit/final-integrity.json`.
 - Recette complète : **26/26 commandes vertes**, dont la suite Node et les parcours navigateur/cloud locaux. Reçus réels dans `tmp/divin/recipe-receipt.json` et `tmp/audit/recipe-F00.log` ; toutes les sources protégées inchangées. Recette achevée le 22/10 à 21 h 28 (Europe/Paris).
 - Fins de ligne LF ; `git diff --check` vert.
 
@@ -58,3 +59,11 @@ Le brief F0 provient du worktree demandé, à `b1ab6c5` ; son SHA-256 est `9c976
 ## Reprise
 
 L'audit des 26 livres n'est pas terminé. Ne pas prendre les 171 règles recensées pour une couverture du corpus. Terminer chaque gros chapitre restant de L06 et son commit, puis L05 et les livres suivants dans l'ordre du plan. Continuer à renvoyer vers les inventaires déjà existants sans les recopier. Toute fin de session suit la clause « Volume » des règles communes et doit laisser un état partiel explicite.
+
+Arrêt après deux gros chapitres propres et commités, conformément à la règle commune : « si la phase dépasse ce qui tient dans ta session, termine le lot en cours proprement (commit), écris le rapport partiel (lots faits, lots restants) et arrête-toi ». Ce n'est ni une clôture de F0, ni un blocage technique. Le volume restant est le reste de L06 et les 25 autres livres ; le complément L19-L26 reste donc intégralement à faire, y compris les conversions V4 et le marquage `addedOn`.
+
+Reprise conseillée : applications des compétences L06 p.134-160, puis blessures et soins à partir de p.170. Vérifier les chapitres encore manquants de L06 avant L05. Dernier identifiant alloué : `F-L06-0171` ; poursuivre à `F-L06-0172` sans renuméroter. Les appendices annoncés au sommaire (Avantage/Élan, difficulté, Résilience/Détermination, etc.) restent à lire : leur seule présence au sommaire ne vaut aucune qualification de couverture.
+
+Commandes de contrôle : `node tools/audit/build-audit.mjs --check`, puis `node --test --test-concurrency=4` avec TEMP/TMP sur `E:/Outil MJ Warhammer/tmp/gpt-phase-f-runtime`. Les données sources sont directement dans `docs/AUDIT_REGLES.json` ; le générateur produit uniquement la synthèse et les sélecteurs. Il a été relancé deux fois avec sorties identiques.
+
+Intégrité constatée après `65be80b` : `main` toujours à `ad092cdf78a747d08f1b1a0fd8acf27a97d6caf8`, `codex/divin-v5` toujours à `b1ab6c512acb6f919a00ef9d6b85fa1769b33c2b`. Diff de `js/` vide ; aucun test hérité modifié. Seuls un nouveau test d'audit, deux nouveaux outils et les documents/données de F0 sont ajoutés ou changés. Le présent rapport est le seul document de clôture modifié après le commit Combat.
