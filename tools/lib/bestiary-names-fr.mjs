@@ -92,6 +92,15 @@ export const NAMES_FR = Object.freeze({
   'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)'),
   // Tribes and Tribulations (L12)
   'E0-P-438': proposal('Matthogg — Brute ogre'),
+  // Power Behind the Throne Companion (L18) : seuls les noms que la traduction automatique rend mal sont proposés ici
+  'E0-P-544': proposal('Hausmeister Breugal — Gouverneur humain, ancien conseiller (Or 3)'),
+  'E0-P-558': proposal('Henri-Phillippe Rocheteau — Doyen de village humain, ancien marchand (Argent 5)'),
+  'E0-P-560': proposal('Parzival Tristan Aschaffenberg — Noble, ancien soldat (Argent 5*)'),
+  'E0-P-562': proposal('La sentinelle de la milice, ancien villageois (Argent 1)'),
+  'E0-P-563': proposal('Villageois typique — Villageois (Bronze 3)'),
+  'E0-P-564': proposal('Wuder Lechart — Idiot du village (Bronze 0)'),
+  'E0-P-567': proposal('Crânes volants de la mort (version renforcée)'),
+  'E0-P-570': proposal('Champions squelettes sans tête'),
   // Winds of Magic (L17)
   'E0-P-515': proposal('Golem (construct)'), 'E0-P-516': proposal('Ashamira Dib — Hiérophante (Argent 3)'), 'E0-P-517': proposal('Balthasar Gelt — Seigneur alchimiste (Or 4)'),
   'E0-P-518': proposal('Tochter Grunfeld — Seigneur sorcier humain (Or 2)'), 'E0-P-519': proposal('Raphael Julevno — Grand astromancien (Or 1)'), 'E0-P-520': proposal('Immanuel-Ferrand Holswig-Schliestein — Maître espion humain (Or 4)'),

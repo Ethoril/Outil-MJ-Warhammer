@@ -30,6 +30,8 @@ export const KEYWORDS_MANUAL = Object.freeze({
   'E0-P-438': ['ogre'], 'E0-P-455': ['orque'],
   // Lords of Stone and Steel (L16) : « Daemon Slayer » est une carrière, pas un Démon ; « Outlaw » aussi ; Hagdar est un dragon, Hesh et Blistrox des Skavens (E-D21)
   'E0-P-503': ['-demon'], 'E0-P-504': ['-demon'], 'E0-P-505': ['-hors-la-loi'], 'E0-P-508': ['dragon'], 'E0-P-510': ['skaven'], 'E0-P-514': ['skaven'],
+  // Power Behind the Throne Companion (L18) : les Crânes volants portent le Trait imprimé Undead (E-D24)
+  'E0-P-565': ['mort-vivant'], 'E0-P-567': ['mort-vivant'],
   // Winds of Magic (L17) : Xirat'P, P'Tarix et le Disque portent le Trait imprimé Daemonic 8+ (E-D23)
   'E0-P-532': ['demon'], 'E0-P-533': ['demon'], 'E0-P-534': ['demon'],
   // Sea Wardens of Cothique (L14) : les Cothiqui sont des Hauts elfes ; le Kraken est un monstre marin ; Spites et Phénix sans mot-clé du référentiel (E-D20)

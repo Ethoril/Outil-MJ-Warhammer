@@ -154,6 +154,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L18",
+   "file": "L18.json",
+   "title": "Power Behind the Throne Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 30,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }
