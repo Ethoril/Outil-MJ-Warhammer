@@ -20,7 +20,8 @@ Branche `pro/phase-d`. Plan : `PLAN_PRO_PHASE_D.md`. Choix d'interprétation : `
 | D12 Grande Gueule (11 sorts, L01 + L12) + attribut de l'offrande | FAIT | voir `git log` (« Grande Gueule ») |
 | D13 Petite Waaagh (12) + D14 Grande Waaagh (12) (L12 ; L07 p.183 écarts consignés) | FAIT (un seul commit pour les deux) | voir `git log` (« magie orque ») |
 | D15 Lustria : 4 sorts de Haute Magie + 4 extensions Slann (`variantOf`) | FAIT | voir `git log` (« Lustria ») |
-| D16 à D21 | NON FAITS (à reprendre dans l'ordre) | |
+| D16 Vaul (9) + D17 mer (10) + D18 Hoeth (10), L08 pp. 102-111 | FAIT (un seul commit pour les trois) | voir `git log` (« magie des prêtres elfes ») |
+| D19 à D21 | NON FAITS (à reprendre dans l'ordre) | |
 
 ## Dernière suite complète
 
