@@ -3131,5 +3131,2436 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0294",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Tester la résistance à l’exposition » ? Résistance toutes les quatre heures en environnement difficile, toutes les deux heures en milieu extrême.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0295",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Résister au froid extrême » ? Premier échec : Désavantage en CT/Ag/Dex ; deuxième : tous les Tests ; suivants : 1d10 dégâts sans PA ; à zéro, Inconscient puis mort après BE heures sans chaleur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0296",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Résister à une chaleur extrême » ? Premier échec : Désavantage Int/FM et Exténué ; deuxième : Désavantage général et Exténué ; suivants : dégâts, coma et délai BE heures. Sans armure : +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0297",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Cumuler la faim et la soif » ? Chaque résistance après la première subit un -1 DR cumulatif ; sans nourriture ni eau, pas de récupération naturelle des Blessures ou d’Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0298",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Subir le manque d’eau » ? Résistance quotidienne ; échec initial : Désavantage Int/FM/Soc, puis général et 1d10 dégâts sans PA ; à zéro, M=1 et mort après BE jours sans eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0299",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Subir le manque de nourriture » ? Résistance tous les deux jours ; échec initial : Désavantage F/E, puis général et 1d10 dégâts sans PA ; à zéro, perte permanente de 1d10 E.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0300",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Récupérer naturellement des Blessures » ? À la fin de la journée, Résistance +2 : réussite rend BE+DR Blessures ; journée de repos ajoute BE même si le Test échoue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0301",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Soigner les Blessures par Guérison » ? Avec fournitures médicales, Guérison réussie rend BInt+DR Blessures ; un soin par incident ; en combat difficulté au mieux +0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0302",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.170",
+    "question": "Implanter « Maladresse de Guérison » ? Une maladresse de soin inflige 1d10 Blessures sans réduire le patient sous une Blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0303",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.171",
+    "question": "Implanter « Soigner un animal » ? Appliquer les règles de soin en remplaçant Guérison par Soins aux animaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0304",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.171",
+    "question": "Implanter « Surveiller l’infection d’une blessure non traitée » ? Sans bandage ni traitement, Résistance +2 en fin de journée ; échec : Infection jusqu’à Guérison -1 réussie ou remède adapté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0306",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.171",
+    "question": "Implanter « Retenir ses coups pour épargner les critiques » ? Déclarer avant le jet que les critiques sont ignorés ; interdit pour projectiles, magie et armes enflammant ; perdre Dévastatrice, Taille, Empaleuse et Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0307",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.171",
+    "question": "Implanter « Assommer avec une arme adaptée » ? Retenir ses coups, toucher la tête avec Assommante et infliger plus de Sonné que le BE pour provoquer Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0308",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.172",
+    "question": "Implanter « Déclarer une Blessure Critique guérie » ? Un critique ne compte guéri que lorsque ses États et tous ses malus temporaires sont terminés ; les Blessures ordinaires récupèrent normalement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0310",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.172",
+    "question": "Implanter « Opérer une Blessure Critique » ? Un personnage doté de Chirurgie traite un critique qui l’exige par Guérison +0 ; malus maintenus avant traitement adéquat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0311",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.172",
+    "question": "Implanter « Mourir de plusieurs Blessures Critiques » ? Avec plus de critiques que BE et Inconscient causé par une blessure, mort après BE Rounds sauf soin d’un critique ou retrait d’Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0312",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.172",
+    "question": "Implanter « Option de mort subite des figurants » ? À zéro Blessure, le MJ peut déclarer mort ou Inconscient un PNJ secondaire ; ne pas appliquer aux PJ ni aux PNJ avec Chanceux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0313",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Appliquer une perte de caractéristique » ? Réduire d’abord la caractéristique de base ; si elle tombe à zéro, retrancher ensuite les progrès achetés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0314",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Compter les jours de convalescence » ? Les délais sont exprimés en jours ; une entre-aventure vaut environ une semaine impériale de huit jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0315",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Fracture mineure : incapacité locale » ? Membre inutilisable ; tête : alimentation liquide et Langue -3 DR ; corps : Désavantage F/Ag et Mouvement moitié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0316",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Fracture mineure : guérison » ? Guérison en 30+1d10 jours ; Résistance +2 finale, sinon séquelles : bras -1 DR d’Ag, corps/jambe -1 M et -10 Ag, tête Langue -1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0317",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Immobiliser une fracture à temps » ? Guérison +2 dans la semaine dispense du Test final si l’immobilisation reste en place ; refaire le soin sous un jour si elle est retirée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0318",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Fracture majeure » ? Même incapacité qu’une fracture mineure, soins nécessaires, dix jours de plus et Tests +0 ; mauvaise guérison : séquelles doublées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0319",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Déchirure musculaire mineure » ? -1 DR aux Tests impliquant la zone et M moitié si jambe ; guérison en 30-BE jours, réduite une fois par Guérison réussie de un jour par DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0320",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.177",
+    "question": "Implanter « Déchirure musculaire majeure » ? -2 DR aux Tests locaux et M moitié si jambe ; après 30-BE jours, malus -1 ; guérison complète après un second délai identique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0321",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Résister au choc d’une amputation » ? Résistance à difficulté de l’amputation : échec pose À Terre, à -1 ajoute Sonné, à -4 ajoute Inconscient ; Chirurgie requise pour guérir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0322",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Porter des cicatrices impressionnantes » ? Avec accord MJ, cicatrices nombreuses donnent définitivement +1 DR en Intimidation et -1 DR en Charme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0323",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre un bras » ? Comme une main perdue, avec impossibilité d’y fixer un bouclier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0324",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre une ou deux oreilles » ? Une oreille perdue sans malus chiffré ; deux imposent Désavantage à Perception auditive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0325",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre un ou deux yeux » ? Après adaptation, un œil perdu sans malus chiffré ; deux : Désavantage aux Tests visuels et Avantage aux attaques de mêlée adverses.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0326",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre des doigts » ? -1 DR aux Tests utilisant la main par doigt perdu ; quatre doigts ou plus équivalent à une main perdue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0327",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre un pied » ? M moitié arrondie au-dessus, -10 CC/Ag, Désavantage Esquive/Athlétisme ; second pied : M=1 et -5 CC/Ag supplémentaires ; déduire les orteils déjà perdus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0328",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre une main » ? Désavantage aux tâches à deux mains, armes à deux mains interdites ; bouclier fixé au bras possible. Réapprendre l’autre main coûte cent XP par DR de malus supprimé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0329",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre une jambe » ? Comme un pied perdu, avec impossibilité d’utiliser Esquive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0330",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre le nez » ? Cicatrice : +2 DR Intimidation et -2 DR Charme ; Désavantage aux Tests d’odorat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0331",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.178",
+    "question": "Implanter « Perdre des dents » ? Chaque paire de dents perdue retire définitivement un point de Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0332",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.179",
+    "question": "Implanter « Mâcher après une perte massive de dents » ? Au-delà de la moitié des dents, manger des solides prend deux fois plus de temps ; seuils humains seize, elfes dix-huit, nains et halflings vingt.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0333",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.179",
+    "question": "Implanter « Perdre des orteils » ? Chaque orteil perdu retire définitivement un point de CC et d’Agilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0334",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.179",
+    "question": "Implanter « Perdre la langue » ? Échec automatique des Tests de Langue impliquant la parole.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0335",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 1–3 : Blessure spectaculaire » ? 0 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0343",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 36–40 : Mâchoire fracturée » ? 2 Blessure(s) supplémentaire(s). États : 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0344",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 41–45 : Nez cassé » ? 3 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0346",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 51–55 : Mâchoire cassée » ? 3 Blessure(s) supplémentaire(s). États : 2 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0347",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 56–60 : Blessure majeure à l’oreille » ? 3 Blessure(s) supplémentaire(s). États : 4 Assourdi. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0348",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 61–65 : Commotion cérébrale » ? 4 Blessure(s) supplémentaire(s). États : 1 Assourdi. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0349",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 66–75 : Dents brisées » ? 4 Blessure(s) supplémentaire(s). États : 2 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0350",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 76–80 : Oreille mutilée » ? 4 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 3 Assourdi. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0351",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 81–85 : Œil crevé » ? 5 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0352",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 86–94 : Coup défigurant » ? 5 Blessure(s) supplémentaire(s). États : 3 Hémorragique, 2 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0353",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 95–99 : Mâchoire mutilée » ? 5 Blessure(s) supplémentaire(s). États : 4 Hémorragique, 3 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0354",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.173",
+    "question": "Implanter « Tête 100+ : Crâne fracassé » ? Cette gravité de critique provoque la mort immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0355",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 1–10 : Choc au poignet » ? 0 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0356",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 11–20 : Choc au bras » ? 0 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0358",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 26–30 : Main ensanglantée » ? 1 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0359",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 31–45 : Torsion » ? 1 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0360",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 46–50 : Déchirure musculaire » ? 1 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0361",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 51–55 : Clef de bras » ? 2 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0362",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 56–60 : Blessure béante » ? 2 Blessure(s) supplémentaire(s). États : 2 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0363",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 61–65 : Ligament rompu » ? 2 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0364",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 66–80 : Cassure nette » ? 2 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0365",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 81–85 : Coupure profonde » ? 3 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0366",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 86–90 : Coude fracassé » ? 3 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0368",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 96–109 : Épaule luxée » ? 4 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0369",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 110–115 : Doigt sectionné » ? 4 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0370",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 116–120 : Main ouverte » ? 4 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0371",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 121–125 : Biceps déchiqueté » ? 5 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0372",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 126–130 : Main mutilée » ? 5 Blessure(s) supplémentaire(s). États : 2 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0373",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 131–135 : Tendons coupés » ? 5 Blessure(s) supplémentaire(s). États : 3 Hémorragique, 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0374",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.174",
+    "question": "Implanter « Bras 136+ : Démembrement brutal » ? Cette gravité de critique provoque la mort immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0375",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 1–10 : Souffle coupé » ? 0 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0376",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 11–15 : Coup au ventre » ? 1 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0379",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 31–35 : Torsion du dos » ? 1 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0380",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 36–50 : Bleus aux côtes » ? 2 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0381",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 51–55 : Clavicule tordue » ? 2 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0383",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 61–65 : Côtes fracturées » ? 2 Blessure(s) supplémentaire(s). États : 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0384",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 66–70 : Blessure béante » ? 3 Blessure(s) supplémentaire(s). États : 3 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0385",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 71–75 : Entaille douloureuse » ? 3 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0386",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 76–80 : Dos froissé » ? 3 Blessure(s) supplémentaire(s). États : 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0387",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 81–85 : Dégâts artériels » ? 3 Blessure(s) supplémentaire(s). États : 4 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0388",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 86–90 : Blessure au ventre » ? 4 Blessure(s) supplémentaire(s). États : 2 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0389",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 91–95 : Hanche fracturée » ? 4 Blessure(s) supplémentaire(s). États : 1 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0390",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 96–100 : Blessure majeure à la poitrine » ? 4 Blessure(s) supplémentaire(s). États : 4 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0391",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 101–105 : Cage thoracique fracassée » ? 5 Blessure(s) supplémentaire(s). États : 1 Sonné, 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0392",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 106–110 : Moelle épinière lésée » ? 5 Blessure(s) supplémentaire(s). États : 3 Sonné. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0393",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 111–115 : Hémorragie interne » ? 5 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0394",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.175",
+    "question": "Implanter « Corps 116+ : Corps déchiré » ? Cette gravité de critique provoque la mort immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0395",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 1–10 : Orteil contusionné » ? 0 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0396",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 11–20 : Perte d’appui » ? 0 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0397",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 21–25 : Cheville tordue » ? 1 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0399",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 41–45 : Coup à la cuisse » ? 1 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0400",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 46–50 : Cheville foulée » ? 1 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0401",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 51–55 : Genou tordu » ? 2 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0402",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 56–60 : Coupure profonde » ? 2 Blessure(s) supplémentaire(s). États : 2 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0403",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 61–65 : Genou gravement tordu » ? 2 Blessure(s) supplémentaire(s). Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0404",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 66–70 : Orteil entaillé » ? 2 Blessure(s) supplémentaire(s). États : 1 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0405",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 71–75 : Tendon rompu » ? 3 Blessure(s) supplémentaire(s). États : 1 Sonné, 1 À Terre. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0406",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 76–80 : Cuisse déchirée » ? 3 Blessure(s) supplémentaire(s). États : 3 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0407",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 81–85 : Jambe tailladée » ? 3 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 1 Sonné, 1 À Terre. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0408",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 86–95 : Genou luxé » ? 4 Blessure(s) supplémentaire(s). États : 1 À Terre. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0409",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 96–100 : Tibia fracturé » ? 4 Blessure(s) supplémentaire(s). États : 1 Sonné, 1 À Terre. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0410",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 101–105 : Genou brisé » ? 4 Blessure(s) supplémentaire(s). États : 1 Hémorragique, 1 Sonné, 1 À Terre. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0411",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 106–115 : Pied écrasé » ? 4 Blessure(s) supplémentaire(s). États : 2 Hémorragique. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0412",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 116–120 : Pied sectionné » ? 5 Blessure(s) supplémentaire(s). États : 3 Hémorragique, 2 Sonné, 1 À Terre. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0413",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 121–125 : Tendon sectionné » ? 5 Blessure(s) supplémentaire(s). États : 2 Hémorragique, 2 Sonné, 1 À Terre. Séquelles et soins propres à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0414",
+    "phase": "Blessures et soins",
+    "lot": "L06",
+    "source": "L06 p.176",
+    "question": "Implanter « Jambe 126+ : Bassin fracassé » ? Cette gravité de critique provoque la mort immédiate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0415",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.179",
+    "question": "Implanter « Diagnostiquer une maladie » ? Guérison identifie la maladie, difficulté selon rareté et expérience antérieure du soigneur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0416",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.179",
+    "question": "Implanter « Peste noire » ? Résistance +2 par heure d’exposition aux puces ou fluides ; incubation 1d10 h, durée 3d10 jours ; Flétrissement, Bubons, Fièvre. Survivants : Test quotidien avec Avantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0417",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.179",
+    "question": "Implanter « Pourriture du sang » ? Complication d’une maladie ou d’un critique ; effet immédiat pendant 1d10 jours ; Flétrissement, Fièvre et Malaise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0418",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.180",
+    "question": "Implanter « Flux sanglant » ? Ingestion contaminée, Résistance +4 ; incubation 1d10 h, durée 1d10 jours ; Fièvre, Flux, Malaise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0419",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.180",
+    "question": "Implanter « Blessure purulente » ? Après combat contre Infecté, Résistance +2 ; incubation 1d10 jours ou immédiate si complication ; persiste jusqu’au traitement ; Fièvre et Malaise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0420",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.180",
+    "question": "Implanter « Courante galopante » ? Ingestion contaminée, Résistance +4 ; incubation 1d10 h, durée 1d10 jours ; Flux, Malaise et Nausée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0421",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.180",
+    "question": "Implanter « Vérole prurigineuse » ? Contact infecté, Résistance +2 ; incubation 1d10 jours, durée 1d10+7 jours ; Vérole ; immunité permanente après première infection.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0422",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.180",
+    "question": "Implanter « Vérole des fourreurs » ? Contact d’animaux, peaux ou cadavres infectés, Résistance +4 ; incubation 1d10 jours, durée 5d10 jours ; Vérole et Infection.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0423",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.180",
+    "question": "Implanter « Fièvre des rats » ? Blessure de rongeur Infecté : Résistance +2, ingestion : +4 ; incubation 3d10+5 jours, durée 3d10+10 ; Fièvre, Malaise et Vérole.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0424",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Mal de mer » ? Elfes immunisés ; première traversée Résistance +0, gros temps +2 ; Nausée. Récupération +2 par jour pour débutant, par heure par gros temps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0425",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Toux des charançons » ? Foin, farine ou toux contaminés : Résistance +2 environ une fois par heure ; incubation et durée 1d10 jours ; Toux/éternuements et Malaise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0426",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Symptôme : Flétrissement » ? Résistance +2 quotidienne ; premier échec : Inconscient impossible à retirer avant fin du symptôme ; second échec : mort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0427",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Symptôme : Bubons » ? -1 DR aux Tests physiques et Soc si visibles/odorants ; Chirurgie par Guérison les enlève, échec : Blessure purulente ; Résistance -1 quotidienne après drainage pour éviter le retour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0428",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Symptôme : Convulsions » ? -1 DR à tous les Tests physiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0429",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Symptôme : Toux et éternuements » ? 1d10 crises par séance, au choix MJ ; Résistance +2 ou prochaine Action perdue ; les voisins à trois yards testent la contamination.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0430",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Symptôme : Fièvre » ? -2 DR aux Tests d’Agilité, Dextérité et Psychologie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0431",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.181",
+    "question": "Implanter « Symptôme : Flux » ? Une urgence par séance laisse BE Rounds pour se soulager ; sinon, Souillé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0432",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Symptôme : Infection » ? Chaque Infection bloque une Blessure récupérable ; Résistance quotidienne +6, échec : Blessure purulente ; déjà purulent : Test +4, échec : Pourriture du sang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0433",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Symptôme : Gangrène » ? Tirer la zone ; nez/doigt/orteil, ou Blessure purulente au corps ; Résistance +2 chaque jour ; plus de BE échecs : membre perdu. Sociabilité -1 DR tant que gangrené.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0434",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Symptôme : Malaise » ? Sens aiguisés indisponibles ; -2 DR à Langue et Perception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0435",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Symptôme : Nausée » ? Après un Tour physiquement intense, Résistance +2 ; échec : Sonné et éventuellement Souillé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0436",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Symptôme : Vérole » ? Sociabilité -1 DR ; deux crises par séance : Résistance +2 ou Exténué jusqu’à 1d10 Actions de grattage ; après maladie, Test +2 ou cicatrice localisée, tête : -1 Soc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0437",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Soigner quotidiennement un malade » ? Un progrès en Guérison suffit : repos sous soins réduit la durée d’un jour supplémentaire ; Guérison +0 protège le soigneur pour la journée et un autre par DR après le premier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0438",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Employer un remède acheté » ? Résistance selon symptôme et remède ; réussite soulage un jour, échec à -6 DR : Courante galopante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0439",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.182",
+    "question": "Implanter « Barème d’efficacité des remèdes achetés » ? Symptômes légers : alchimie/plantes +2, charlatan -1 ; moyens : +0/-1/-2 ; graves : -1/-2/-3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0440",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.183",
+    "question": "Implanter « Identifier un poison et son antidote » ? Guérison -1 ou Métier (Empoisonneur) +2 identifie le poison et l’antidote nécessaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0441",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.183",
+    "question": "Implanter « Accroître la dose d’un poison » ? Une dose impose une résistance à cible moyenne ; chaque dose supplémentaire aggrave la difficulté d’un cran.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0442",
+    "phase": "Maladies et poisons",
+    "lot": "L06",
+    "source": "L06 p.183",
+    "question": "Implanter « Adapter la dose de poison à la Taille » ? Petite : une dose vaut quatre ; Moyenne : normal ; Grande : deux pour une ; Énorme : cinq ; Monstrueuse : vingt.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0453",
+    "phase": "États",
+    "lot": "L06",
+    "source": "L06 p.186",
+    "question": "Implanter « Assourdi : comprendre la parole » ? Assourdi empêche de comprendre la parole, sauf Lecture sur les lèvres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0457",
+    "phase": "États",
+    "lot": "L06",
+    "source": "L06 p.186",
+    "question": "Implanter « Force des liens inanimés » ? Laine dix, ficelle vingt-cinq, corde quarante-cinq, menottes soixante-cinq, grosse chaîne cent cinq.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0487",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.187",
+    "question": "Implanter « Tester la plus forte exposition de la séance » ? Un seul Test de Corruption en fin de séance, sur la plus forte influence rencontrée ; répétition et multiplicité peuvent aggraver la difficulté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0488",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.187",
+    "question": "Implanter « Choisir Résistance ou Calme contre la Corruption » ? Test +0, Résistance pour atteinte physique ou Calme pour atteinte spirituelle, au choix MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0489",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.187",
+    "question": "Implanter « Distinguer exposition et exposition prolongée » ? Exposition : contact un Tour ou proximité une heure ; prolongée : contact une heure ou proximité six heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0490",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.187",
+    "question": "Implanter « Influence corruptrice mineure » ? Échec : un Point de Corruption ; réussite : zéro.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0491",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.187",
+    "question": "Implanter « Influence corruptrice modérée » ? Échec : deux points ; réussite +0 : un ; réussite à au moins +1 DR : zéro.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0492",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.188",
+    "question": "Implanter « Influence corruptrice majeure » ? Échec : trois points ; +0 : deux ; réussite +1 à +3 : un ; au moins +4 DR : zéro.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0493",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.187",
+    "question": "Implanter « Ne pas corrompre automatiquement toute magie » ? Lancer ou subir un sort ne provoque pas de Corruption sans règle explicite, y compris pour un Domaine du Chaos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0494",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.188",
+    "question": "Implanter « Dépasser le seuil de Corruption » ? Au-delà de BE+BFM Points de Corruption, Résistance +0 immédiate ; réussite reporte la mutation au prochain gain de points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0495",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.188",
+    "question": "Implanter « Réduire la Corruption lors d’une mutation » ? Lors d’un échec déclenchant une mutation, retirer un nombre de Points de Corruption égal au BFM.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0496",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.188",
+    "question": "Implanter « Déterminer mutation physique ou mentale » ? Humain : 01-50 physique ; nain : 01-05 ; halfling : 01-10 ; elfe : toujours mentale. Les autres résultats sont mentaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0497",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.188",
+    "question": "Implanter « Délai de manifestation d’une mutation » ? Le MJ tire secrètement 3d10 jours avant manifestation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0498",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.188",
+    "question": "Implanter « Perdre son personnage dans le Chaos » ? Plus de mutations physiques que BE, ou mentales que BFM : personnage perdu, devenu PNJ du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0499",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Obtenir l’absolution de la Corruption » ? Le MJ détermine les conditions et le montant retiré : pèlerinage, destruction d’artefact, purification ou engagement religieux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0500",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 1-5 : Jambes animales » ? +1 Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0501",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 6-10 : Corpulence » ? +5 Force, +5 Endurance et -1 Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0502",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 11-15 : Doigts distendus » ? +10 Dextérité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0503",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 16-20 : Émaciation » ? +5 Agilité et -10 Force.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0504",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 21-25 : Œil énorme » ? Talent Sens aiguisé (Vue).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0505",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 26-30 : Articulations supplémentaires » ? +5 Agilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0506",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 31-35 : Bouche supplémentaire » ? Déterminer sa position sur la table de localisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0507",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 36-40 : Tentacule charnu » ? Trait Tentacules (1).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0508",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 41-45 : Peau lumineuse » ? Éclairage équivalent à une bougie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0509",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 46-50 : Beauté inhumaine » ? +10 Sociabilité et absence de cicatrices.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0510",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 51-55 : Visage inversé » ? -20 Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0511",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 56-60 : Peau de fer » ? +2 PA à toutes les localisations.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0512",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 61-65 : Langue pendante » ? Le texte conserve -10 aux Tests de Langue parlée ; conversion de seuil résiduelle à examiner.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0513",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 66-70 : Plumes éparses » ? Deux tirages de localisation pour les zones emplumées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0514",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 71-75 : Jambes courtes » ? -1 Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0515",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 76-80 : Excroissances épineuses » ? Un tirage de localisation pour les excroissances.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0516",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 81-85 : Écailles épineuses » ? +1 PA à toutes les localisations.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0517",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 86-90 : Cornes inégales » ? +1 PA à la tête et Trait Cornes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0518",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 91-95 : Pieds palmés » ? Talent Foulée (Marais).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0519",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Physique 96-100 : Museau à moustaches » ? Sens aiguisé (Odorat) et +2 DR aux Tests de Pistage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0520",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 1-5 : Envies horribles » ? -5 Force Mentale et -5 Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0521",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 6-10 : Bête intérieure » ? +10 Force Mentale, -5 Intelligence et -5 Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0522",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 11-15 : Rêves chaotiques » ? Un Exténué durant les deux premières heures de chaque journée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0523",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 16-20 : Peau grouillante » ? -5 Initiative et -5 Dextérité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0524",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 21-25 : Fantasmes erratiques » ? -5 Initiative et -5 Force Mentale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0525",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 26-30 : Inquiétude maladive » ? -10 Force Mentale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0526",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 31-35 : Impulsions haineuses » ? Animosité envers toute autre espèce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0527",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 36-40 : Cœur vide » ? +10 Force Mentale et -10 Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0528",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 41-45 : Pensées jalouses » ? -10 Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0529",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 46-50 : Esprit solitaire » ? Le texte conserve -10 à tous les Tests lorsque seul ; conversion de seuil résiduelle à examiner.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0530",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 51-55 : Blocages mentaux » ? -10 Intelligence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0531",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 56-60 : Hâte profane » ? +10 Agilité et -10 Force Mentale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0533",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 66-70 : Esprit soupçonneux » ? -5 Initiative et -5 Intelligence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0534",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 71-75 : Chasseur de sensations » ? +10 Force Mentale et -10 Initiative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0535",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 76-80 : Visions torturées » ? -10 Initiative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0536",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 81-85 : Folie complète » ? +10 Force Mentale et -20 Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0537",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 86-90 : Malveillance permanente » ? +1 DR aux Tests pour nuire, -1 DR aux autres Tests.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0538",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 91-95 : Rage impie » ? +10 CC et Frénésie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0539",
+    "phase": "Corruption et mutations",
+    "lot": "L06",
+    "source": "L06 p.189",
+    "question": "Implanter « Mentale 96-100 : Nervosité inquiète » ? +5 Agilité et -5 Sociabilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

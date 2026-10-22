@@ -29,6 +29,7 @@ export function validateAudit(rows,root) {
     if(!statuses.includes(row.status))throw Error('Statut inconnu : '+row.id);
     if(!mechanics.includes(row.mechanic))throw Error('Type mécanique inconnu : '+row.id);
     if(row.v5Proposal!==null&&!text(row.v5Proposal))throw Error('Conversion invalide : '+row.id);
+    if(row.selectorEligible===false&&(!row.coveredBy||!text(row.selectorExclusionReason)))throw Error('Exclusion de sélecteur sans renvoi et raison : '+row.id);
     if(!Array.isArray(row.toolRef))throw Error('Preuves attendues : tableau');
     if(['automatise','assiste','rappel'].includes(row.status)&&!row.toolRef.length)throw Error('Couverture sans preuve : '+row.id);
     for(const ref of row.toolRef) {
@@ -45,7 +46,7 @@ export function validateAudit(rows,root) {
   return true;
 }
 export function buildSelectors(rows) {
-  return rows.filter(row=>['absent','rappel'].includes(row.status)).map(row=>({id:row.id,phase:row.domain,lot:row.book,source:row.book+' p.'+row.page,question:'Implanter « '+row.titleFr+' » ? '+row.summary,choix:'Implanter, version complète',alternatives:['Implanter, version adaptée (préciser)','Ne pas implanter'],statut:'ouvert'}));
+  return rows.filter(row=>['absent','rappel'].includes(row.status)&&row.selectorEligible!==false).map(row=>({id:row.id,phase:row.domain,lot:row.book,source:row.book+' p.'+row.page,question:'Implanter « '+row.titleFr+' » ? '+row.summary,choix:'Implanter, version complète',alternatives:['Implanter, version adaptée (préciser)','Ne pas implanter'],statut:'ouvert'}));
 }
 export function buildSummary(rows,books) {
   const counts=list=>statuses.map(status=>list.filter(r=>r.status===status).length).join(' | ');
@@ -55,7 +56,7 @@ export function buildSummary(rows,books) {
   const domains=[...new Set(rows.map(r=>r.domain))].sort();
   for(const domain of domains){const list=rows.filter(r=>r.domain===domain);lines.push('| '+domain+' | '+list.length+' | '+counts(list)+' |');}
   lines.push('','## Lacunes jouables, par domaine','');
-  for(const domain of domains){const list=rows.filter(r=>r.domain===domain&&['absent','rappel'].includes(r.status));if(!list.length)continue;lines.push('### '+domain,'');for(const row of list)lines.push('- **'+row.id+' — '+row.titleFr+'** ('+row.book+' p.'+row.page+', '+row.status+') : '+row.summary+' '+row.notes);lines.push('');}
+  for(const domain of domains){const list=rows.filter(r=>r.domain===domain&&['absent','rappel'].includes(r.status));if(!list.length)continue;lines.push('### '+domain,'');for(const row of list)lines.push('- **'+row.id+' — '+row.titleFr+'** ('+row.book+' p.'+row.page+', '+row.status+') : '+row.summary+' '+row.notes+(row.selectorEligible===false?' Déjà porté par l’inventaire référencé : '+row.selectorExclusionReason:''));lines.push('');}
   return lines.join('\n').trimEnd()+'\n';
 }
 const root=resolve(import.meta.dirname,'../..');
