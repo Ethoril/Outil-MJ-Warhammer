@@ -1,0 +1,133 @@
+<title>Arbitrages des exécutants</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@400;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Registre : une colonne de fiches de décision, filtres collants en tête. */
+:root{
+  --bg:#f3f4f2; --panel:#ffffff; --ink:#1d2326; --muted:#5d686d; --rule:#d6dbd9;
+  --accent:#7a2430; --accent-soft:#f3e3e5; --ok:#2f6b4a; --ok-soft:#e1efe6; --warn:#8a5a12; --warn-soft:#f5ead6;
+  --display:"Spectral",Georgia,serif; --label:"IBM Plex Sans Condensed","Arial Narrow",sans-serif; --mono:"IBM Plex Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15191b; --panel:#1e2427; --ink:#e6eaea; --muted:#9aa5a9; --rule:#333c40;
+  --accent:#e08a96; --accent-soft:#3a2328; --ok:#8fd0a9; --ok-soft:#1f3328; --warn:#e2b56a; --warn-soft:#3a2f1c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15191b; --panel:#1e2427; --ink:#e6eaea; --muted:#9aa5a9; --rule:#333c40;
+  --accent:#e08a96; --accent-soft:#3a2328; --ok:#8fd0a9; --ok-soft:#1f3328; --warn:#e2b56a; --warn-soft:#3a2f1c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:1.9rem;font-weight:600;margin:0;text-wrap:balance}
+.lede{color:var(--muted);margin:6px 0 0;max-width:62ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:16px}
+.progress{font-family:var(--label);font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.progress b{color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--label);font-size:.85rem;letter-spacing:.02em;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:focus-visible,.opt:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.status{font-family:var(--label);font-size:.85rem;color:var(--muted);margin-left:auto}
+.list{display:grid;gap:14px;margin-top:18px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:16px;display:grid;gap:10px;min-width:0}
+.card.done{border-left:4px solid var(--ok)}
+.meta{font-family:var(--mono);font-size:.78rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.meta .id{color:var(--accent)}
+.q{font-size:1.08rem;font-weight:600;margin:0;text-wrap:pretty}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;font:inherit;font-size:.95rem;background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.opt .k{font-family:var(--label);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:3px;min-width:7.5em}
+.opt[aria-pressed="true"]{border-color:var(--ok);background:var(--ok-soft)}
+.opt[aria-pressed="true"] .k{color:var(--ok)}
+.opt.other[aria-pressed="true"]{border-color:var(--warn);background:var(--warn-soft)}
+.opt.other[aria-pressed="true"] .k{color:var(--warn)}
+textarea{width:100%;font:inherit;font-size:.92rem;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:8px;min-height:2.6em;resize:vertical}
+.empty{color:var(--muted);font-style:italic}
+.offline{background:var(--accent-soft);color:var(--ink);border-radius:4px;padding:8px 12px;font-family:var(--label);font-size:.9rem}
+@media (max-width:520px){.opt{grid-template-columns:1fr;gap:2px}.opt .k{min-width:0}}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .2s}}
+</style>
+
+<div class="wrap">
+  <h1>Arbitrages des exécutants</h1>
+  <p class="lede">Choix de règle faits par les exécutants des phases B (Courroux), C (Brisé) et D (magie), plus les questions de conception des runes et des familiers. Pour chacun : valider le choix, prendre une alternative, ou écrire ta propre décision. Chaque clic est enregistré, Claude relit le registre.</p>
+  <p class="offline" id="offline" hidden>Enregistrement indisponible sur cet affichage : ouvre la page connecté à claude.ai pour que tes choix soient gardés.</p>
+  <div class="bar">
+    <div class="chips" id="chips"></div>
+    <span class="progress" id="progress"></span>
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+  <div class="list" id="list"></div>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const CHOICES = JSON.parse(document.getElementById('data').textContent);
+const PHASES = [['tout','Tout'],['ouvert','Non tranchés'],['B','B Courroux'],['C','C Brisé'],['D','D Magie'],['Runes','Runes'],['Familiers','Familiers']];
+let filter = 'ouvert', decisions = {}, db = null;
+const $ = id => document.getElementById(id);
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+const docId = id => id.replace(/[^A-Za-z0-9_-]/g, '_');
+
+function renderChips(){
+  const box = $('chips'); box.replaceChildren();
+  for (const [key, label] of PHASES){
+    const b = el('button','chip',label); b.type='button'; b.id='f-'+key; b.setAttribute('aria-pressed', String(filter===key));
+    b.onclick = () => { filter = key; render(); }; box.append(b);
+  }
+}
+function decisionOf(c){ return decisions[docId(c.id)]; }
+function render(){
+  renderChips();
+  const done = CHOICES.filter(c => decisionOf(c)?.verdict).length;
+  $('progress').innerHTML = '';
+  $('progress').append(el('b',null,String(done)), document.createTextNode(' tranchés sur ' + CHOICES.length));
+  const list = $('list'); list.replaceChildren();
+  const shown = CHOICES.filter(c => filter==='tout' || (filter==='ouvert' ? !decisionOf(c)?.verdict : c.phase===filter));
+  if (!shown.length){ list.append(el('p','empty', filter==='ouvert' ? 'Tout est tranché. Claude peut relire le registre.' : 'Aucun choix dans ce filtre.')); return; }
+  for (const c of shown) list.append(card(c));
+}
+function card(c){
+  const d = decisionOf(c) || {};
+  const n = el('article','card' + (d.verdict ? ' done' : ''));
+  const meta = el('div','meta');
+  meta.append(el('span','id',c.id), el('span',null,'Phase ' + c.phase + (c.lot ? ' · ' + c.lot : '')));
+  if (c.source) meta.append(el('span',null,c.source));
+  n.append(meta, el('p','q',c.question));
+  const opts = el('div','opts');
+  const opt = (verdict, key, text, extra='') => {
+    const b = el('button','opt' + extra); b.type='button'; b.id = 'o-' + docId(c.id) + '-' + verdict;
+    b.setAttribute('aria-pressed', String(d.verdict === verdict));
+    b.append(el('span','k',key), el('span',null,text));
+    b.onclick = () => save(c, { verdict, note: (d.note || '') });
+    opts.append(b);
+  };
+  if (c.choix) opt('valider','Valider',c.choix);
+  (c.alternatives || []).forEach((a, i) => opt('alt' + (i+1), 'Alternative' + ((c.alternatives.length>1)?' '+(i+1):''), a));
+  opt('autre','Autre','Ma décision est dans la note ci-dessous.',' other');
+  n.append(opts);
+  const t = el('textarea'); t.id = 'n-' + docId(c.id); t.placeholder = 'Note ou décision (facultatif)'; t.value = d.note || '';
+  t.addEventListener('change', () => save(c, { verdict: d.verdict || (t.value.trim() ? 'autre' : ''), note: t.value }));
+  n.append(t);
+  return n;
+}
+async function save(c, body){
+  decisions[docId(c.id)] = { ...body, id: c.id };
+  render();
+  if (!db){ $('status').textContent = 'Non enregistré (hors ligne)'; return; }
+  $('status').textContent = 'Enregistrement…';
+  try { await db.collection('decisions').doc(docId(c.id)).set({ id: c.id, phase: c.phase, verdict: body.verdict, note: body.note || '', at: new Date().toISOString() }); $('status').textContent = 'Enregistré'; }
+  catch (e) { $('status').textContent = 'Échec de l’enregistrement : ' + (e?.message || e?.code || 'erreur'); }
+}
+render();
+(async () => {
+  try { db = await window.claude?.use?.('db'); } catch { db = null; }
+  if (!db){ $('offline').hidden = false; return; }
+  db.collection('decisions').onSnapshot(snap => {
+    const next = {};
+    for (const s of snap.docs){ const v = s.data(); if (v) next[s.id] = v; }
+    decisions = next; render();
+  }, err => { $('status').textContent = 'Lecture du registre impossible : ' + (err?.message || err?.code || 'erreur'); });
+})();
+</script>

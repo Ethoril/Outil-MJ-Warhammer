@@ -1,48 +1,57 @@
-# Passation — plan de fin de projet (21 octobre 2026, 23 h 45)
+# Passation — plan de fin de projet (22 octobre 2026, 9 h)
 
-## Message à copier dans la nouvelle fenêtre
+L’orchestration passe au **compte Claude Pro** (Claude Code avec la configuration `~/.claude-perso`) jusqu’à dimanche 25/10 : le compte Team de l’app est presque à court de quota.
+
+## Message à copier dans la nouvelle fenêtre (compte Pro)
 
 ```text
-Reprends le plan de fin de projet de l'Outil MJ Warhammer. Lis d'abord docs/PASSATION_FIN_DE_PROJET.md
-dans le worktree C:/Users/arnot/.codex/worktrees/divin-v5/Outil MJ Warhammer (branche codex/divin-v5),
-puis docs/PLAN_FIN_DE_PROJET.md et docs/ARBITRAGES_MJ_21_10.md. Vérifie l'état des trois chantiers
-Claude Pro en cours, intègre et publie ce qui est fini, et relance ce qui s'est arrêté.
+Reprends le plan de fin de projet de l'Outil MJ Warhammer en orchestrateur. Lis d'abord
+docs/PASSATION_FIN_DE_PROJET.md dans le worktree C:/Users/arnot/.codex/worktrees/divin-v5/Outil MJ Warhammer
+(branche codex/divin-v5), puis docs/PLAN_FIN_DE_PROJET.md, docs/ARBITRAGES_MJ_21_10.md et
+docs/DECISIONS_MJ_CHOIX_EXECUTANTS_22_10.md. Vérifie le chantier E, intègre et publie ce qui est fini,
+puis enchaîne les étapes de la section « Suite ».
 ```
 
 ## État
 
-- **Production : 3.23.0** (22/10 matin, `main` = `codex/divin-v5`). Phases A, B, C terminées ; D terminée sauf D11 (familiers, code bloqué sur la phase E) ; E en cours ; F, G, H à faire. Choix des exécutants en cours de relecture par le MJ sur l’artifact « Arbitrages des exécutants » (claude.ai/artifact/A6bYrFDz3hkcpva2si4SHq, collection `decisions`) ; 7 décisions déjà consignées dans `docs/ARBITRAGES_MJ_21_10.md` (lot correctif B à faire).
-- **Autonomie** (MJ, 20/10) : coder, contrôler, **publier sans feu vert** et enchaîner les phases ; arrêt seulement si les tokens ou un quota manquent. Les décisions de règle ouvertes restent posées au MJ **en sélecteurs**.
-- Arbitrages faisant foi : `docs/ARBITRAGES_MJ_21_10.md` (puis `docs/divin/DIVIN_RESERVE_DECISIONS.md`). Règle maison : aucun ingrédient de magie ; V5 partout ; supplément le plus récent en cas de divergence.
-- Registre des valeurs durables de personnage (pour la phase H, écriture en retour vers les fiches) : `docs/VARIABLES_PERSISTANTES_PJ.md`.
+- **Production : 3.23.0** (22/10 matin, `main` = `codex/divin-v5`). Phases A, B, C terminées ; D terminée sauf D11 (familiers, code bloqué sur les profils de la phase E) ; **E en cours** ; F, G, H à faire.
+- **Autonomie** (MJ, 20/10) : coder, contrôler, **publier sans feu vert** et enchaîner les phases ; arrêt seulement si les tokens ou un quota manquent. Les décisions de règle ouvertes sont posées au MJ **en sélecteurs** (page artifact à db, voir plus bas, ou questions à choix).
+- Arbitrages faisant foi, dans l’ordre : `docs/ARBITRAGES_MJ_21_10.md`, `docs/DECISIONS_MJ_CHOIX_EXECUTANTS_22_10.md` (120 choix des exécutants B, C, D, runes, familiers, relus par le MJ le 22/10), puis `docs/divin/DIVIN_RESERVE_DECISIONS.md`. Règle maison : aucun ingrédient de magie ; V5 partout ; supplément le plus récent en cas de divergence.
+- Registre des valeurs durables de personnage (phase H) : `docs/VARIABLES_PERSISTANTES_PJ.md`.
 
-## Chantiers en cours (compte Claude Pro, Sonnet, mode complet, consoles masquées)
+## Chantier en cours
 
-| Phase | Worktree / branche | Fait et publié | En cours / reste |
-| --- | --- | --- | --- |
-| B Courroux | `E:\Outil MJ Warhammer\tmp\pro-phase-b5-worktree`, `pro/phase-b5` | B00-B17 | B18 (en cours, non commité), clôture B19 |
-| C Brisé | `E:\Outil MJ Warhammer\tmp\pro-phase-c2-worktree`, `pro/phase-c2` | C01-C06, **phase terminée** (3.22.0) | — (choix de l’exécutant à relire : `docs/plans-gpt/CHOIX_EXECUTANT_PHASE_C.md`) |
-| E Bestiaires | `E:\Outil MJ Warhammer\tmp\pro-phase-e-worktree`, `pro/phase-e` (depuis 3.22.0) | — | démarrage le 22/10 à 4 h 05 : plan de lots (complément L19-L26), puis lots ; prompt `%LOCALAPPDATA%\Temp\pro-phase-e\prompt.md` |
-| D Magie | `E:\Outil MJ Warhammer\tmp\pro-phase-d`, `pro/phase-d` | D1-D8 (socle, Magie naturelle + AOTE3, Sorcellerie, Démonologie, Nécromancie, Nurgle, Slaanesh) | Tzeentch D9 (en cours, non commité), puis lots suivants de `docs/plans-gpt/PLAN_PRO_PHASE_D.md` (orques, slann, elfes, Grande Gueule, compléments, conception des runes, familiers) |
+| Phase | Worktree / branche | État |
+| --- | --- | --- |
+| E Bestiaires | `E:\Outil MJ Warhammer\tmp\pro-phase-e-worktree`, `pro/phase-e` (partie de 3.22.0) | 1re session 22/10 4 h 25-4 h 51 (quota) : outils d’extraction des profils commencés, rien de commité. Reprise automatique à 9 h 05. Le prompt de reprise ajoute le lot **mots-clés de participants** (avant l’import massif). Plan, choix et rapport attendus : `docs/plans-gpt/PLAN_PRO_PHASE_E.md`, `CHOIX_EXECUTANT_PHASE_E.md`, `RAPPORT_PRO_PHASE_E.md`. |
 
-- **Veilleur E** `%LOCALAPPDATA%\Temp\pro-watch-e.ps1` (22/10, relance E seul à chaque remise à zéro, tour suivant 9 h 05). Ancien veilleur `pro-watch.ps1` (masqué, journal `pro-watch.log`) : attend la fin des sessions, lit « resets Xam » dans le journal de chaque chantier, relance B, D et E (E sans `-Resume` au premier tour) à l’heure de remise à zéro + 5 min, espacés de 10 min, jusqu’à 4 tours ; journaux `%LOCALAPPDATA%\Temp\pro-phase-<b5|d|e>\run-w<tour>.log`, identifiant de session dans `session-id.txt`. Premier tour : 22/10, 4 h 05.
-- Suite complète dans le checkout C: : la lancer **sans** `TEMP` sur E:, sinon « E2 indépendant — preuve hors checkout » échoue (chemin relatif C:→E: impossible).
-- **Quota Pro** : trois chantiers parallèles le vident en ~20 min (fenêtre de 5 h). À l’arrêt (« You've hit your session limit · resets HH »), relancer après la remise à zéro avec `-Resume <id>` et un prompt court « continue » (`prompt-continue.md` du dossier) ; un lanceur `.ps1` démarré par `Start-Process powershell -WindowStyle Hidden` (sinon une fenêtre de terminal par commande). Voir le skill `deleguer-pro`, section « Mode complet ».
-- Autres exécutants possibles avec les mêmes briefs : GPT (`docs/plans-gpt/`), Gemini (`docs/plans-gemini/`) ; GLM sans crédits Mistral (coût réel ≈ 1/7 du plafond affiché).
+- Fichiers du chantier : `%LOCALAPPDATA%\Temp\pro-phase-e\` (`prompt.md`, `prompt-continue.md`, `session-id.txt`, journaux `run-w<n>.log`, `result.json`).
+- **Veilleur** `%LOCALAPPDATA%\Temp\pro-watch-e.ps1` (masqué, journal `%LOCALAPPDATA%\Temp\pro-watch.log`) : un tour est en cours tant que son journal est vide ; à « You've hit your session limit · resets Xam », relance E avec `-Resume` à l’heure de remise à zéro + 5 min ; jusqu’au tour 8 ; s’arrête dès qu’un journal ne montre pas de limite (chantier fini ou erreur : lire le journal).
+- Lancer un chantier : `run-claude-pro.ps1` du skill `deleguer-pro` (`~/.claude/skills/deleguer-pro/scripts/`), `-Workdir <worktree> -PromptFile <prompt> -OutDir <dossier> -Complet [-Resume <id>]`, depuis un lanceur `.ps1` démarré par `Start-Process powershell -WindowStyle Hidden` avec `TEMP`/`TMP` sur E: (modèles : `pro-watch-e.ps1`, `pro-phase-e\launch-w1.ps1`). Depuis le compte Pro lui-même, on peut aussi exécuter un lot directement dans le worktree.
+- **Quota Pro** : un chantier seul tient ~25 min par fenêtre de 5 h ; plusieurs en parallèle se partagent la même fenêtre. Ne pas lancer deux sessions dans le même worktree.
+
+## Suite (dans l’ordre)
+
+1. **Intégrer E** au fil des lots commités (procédure ci-dessous), publier.
+2. **Lot correctif des décisions du 22/10** : `docs/plans-gpt/BRIEF_PRO_CORRECTIFS_22_10.md` (K1 Courroux, K2 Brisé, K3 magie, K4 deux questions à reposer au MJ, mise à jour des conceptions runes et familiers). Nouveau worktree depuis `main` (`git worktree add -b pro/correctifs-22-10 "E:/Outil MJ Warhammer/tmp/pro-correctifs-worktree" codex/divin-v5`, `core.autocrlf false`, `core.eol lf`, `npm ci`, `mkdir tmp/divin`). Il touche les fichiers divins, de courage et de magie, pas ceux de E : peut tourner en même temps que E.
+3. **Runes** (conception validée par le MJ, puis code) et **familiers D11** (après les profils de E).
+4. **Phase F** (audit des 2694 pages, page de sélecteurs par règle, sans implantation automatique), **G** (recette à la table, `docs/RECETTE_UTILISATEUR.md`), **H** (écriture en retour vers les fiches).
+5. **Rappel à faire au MJ (phase H)** : exploiter le référentiel de mots-clés de la phase E dans le projet des fiches ennemi-interieur-wfrp4 (voir `docs/PLAN_FIN_DE_PROJET.md`, phase H).
+6. Sélecteurs encore ouverts : propositions Gemini (`docs/plans-gemini/PROPOSITIONS_NOMS_TRAITS.md`, `PROPOSITIONS_CONVERSION_AOTE3.md`), magie skaven repérée par D, livres absents du corpus (réponse du MJ attendue).
 
 ## Procédure d’intégration et de publication (à chaque retour)
 
-1. Dans le worktree de l’exécutant : `git log`, `git status` propre, `git ls-files --eol | grep crlf` vide, suite complète avec `TEMP`/`TMP` sur E: (`node --test --test-concurrency=4` ; seul échec toléré dans un worktree neuf : « E0 indépendant — la recette refuse un cwd externe »). Supprimer toute copie de tests dans `tmp/`.
-2. Relire le diff des fichiers partagés à risque (`resolution.js`, `store.js`, `v5-store-action.js`, moteurs de Tour, `v5-effects.js`) et les assertions de tests existantes modifiées.
-3. Dans `codex/divin-v5` : `git fetch <worktree> <branche>` puis `git merge` (conflits fréquents sur `v5-effects.js`, `store.js`, le registre des variables : garder les deux apports), suite complète.
-4. Version : `js/version.js`, `package.json`, `package-lock.json` (2 endroits), `sw.js` (CACHE_NAME), `index.html` (#btn-version), README (titre et ligne 3) ; recette `node tools/run-divine-recipe.mjs` verte (~10 min) ; commit ; `git push origin codex/divin-v5:main` et `git push origin codex/divin-v5` ; vérifier `gh run list` et `js/version.js` en ligne ; `git pull --ff-only` dans `E:/Outil MJ Warhammer` (réinitialiser d’abord les seuls écarts de fins de ligne).
+1. Dans le worktree de l’exécutant : `git log`, `git status` propre, `git ls-files --eol | grep crlf` vide. Supprimer toute copie de tests dans `tmp/`.
+2. Relire le diff des fichiers partagés à risque (`resolution.js`, `store.js`, `v5-store-action.js`, moteurs de Tour, `v5-effects.js`, `v5-spell-contracts.js`, `v5-divine-panel.js`) et **toute assertion de test existante modifiée** (acceptable seulement si elle épingle un décompte ou un statut que le lot change légitimement).
+3. Dans `codex/divin-v5` (`C:/Users/arnot/.codex/worktrees/divin-v5/Outil MJ Warhammer`) : `git fetch "<worktree>" <branche>:refs/remotes/pro/<nom>` puis `git merge` (conflits fréquents sur `v5-effects.js`, `store.js`, `v5-divine-panel.js`, le registre des variables, les tests navigateur : garder les deux apports). Suite complète `node --test --test-concurrency=4` **sans** `TEMP` sur E: (sinon « E2 indépendant — preuve hors checkout » échoue : chemin relatif C:→E: impossible).
+4. **Recette** `node tools/run-divine-recipe.mjs` (~10 min) : obligatoire, elle attrape ce que la suite node ne voit pas (tests navigateur : store factice incomplet, sélecteurs devenus ambigus). En cas d’échec : journal `tmp/divin/final-<étape>.log`.
+5. Version : `js/version.js`, `package.json`, `package-lock.json` (2 endroits), `sw.js` (CACHE_NAME), `index.html` (#btn-version), README (titre et ligne 3) ; commit (fichiers en LF ; Python sous Windows écrit du CRLF sans `newline=''`) ; `git push origin codex/divin-v5:main` et `git push origin codex/divin-v5` ; vérifier `https://ethoril.github.io/Outil-MJ-Warhammer/js/version.js` ; `git pull --ff-only` dans `E:/Outil MJ Warhammer`.
 
-## Reste à faire après B, C, D
+## Sélecteurs pour le MJ
 
-- **Rappel à faire au MJ (phase H)** : exploiter le référentiel de mots-clés (phase E) dans le projet des fiches ennemi-interieur-wfrp4 (voir `docs/PLAN_FIN_DE_PROJET.md`, phase H).
-- **Sélecteurs MJ** : choix d’exécutant à relire (`docs/plans-gpt/CHOIX_EXECUTANT_PHASE_C.md`, `_D.md`, et la suite de `_B.md`), propositions Gemini (`docs/plans-gemini/PROPOSITIONS_NOMS_TRAITS.md`, `PROPOSITIONS_CONVERSION_AOTE3.md`), magie skaven repérée par D (à arbitrer), conception des runes (`docs/plans-gpt/CONCEPTION_RUNES.md`, à valider avant code).
-- **Phase E** (bestiaires) : `docs/plans-gpt/BRIEF_GPT_PHASE_E_BESTIAIRES.md`.
-- **Phase F** (audit des 2694 pages avec sélecteur par règle, sans implantation automatique), **G** (recette à la table, parcours dans `docs/RECETTE_UTILISATEUR.md`), **H** (écriture en retour vers les fiches, après tout le reste).
-- Orchestrateur (3.21.8) : panneau divin, appels `Store.getDivineSinEvents/Reminders` gardés `?.() || []` ; test e3-e4 : sélecteur `:scope > summary` (rappels imbriqués depuis B17). Un conflit léger est possible sur ces lignes à la fusion de B18.
-- Suite complète dans le checkout C: : lancer **sans** `TEMP` sur E:, sinon « E2 indépendant — preuve hors checkout » échoue (chemin relatif C:→E:).
-- Petit ménage : dossier verrouillé `E:\Outil MJ Warhammer\tmp\verif-b12` à supprimer.
+- Modèle : page artifact « Arbitrages des exécutants » (claude.ai/artifact/A6bYrFDz3hkcpva2si4SHq) : liste JSON embarquée (id, phase, lot, source, question, choix, alternatives), une décision par document dans la collection `decisions` (`verdict` valider / altN / autre, `note`). Gabarit : `docs/plans-gpt/GABARIT_PAGE_SELECTEURS.html` (remplacer `__DATA__` par le JSON, `<` échappé en `003c`), capability `{db:{}}` ; une nouvelle page par série de questions.
+- Le MJ répond en mots de joueur : jamais d’identifiant de code ni de jargon interne (« couche », « contrat ») dans les questions.
+
+## Petit ménage
+
+- Dossier verrouillé `E:\Outil MJ Warhammer\tmp\verif-b12` à supprimer. Worktrees finis : `pro-phase-b5-worktree`, `pro-phase-c2-worktree`, `pro-phase-d` (branches fusionnées), anciens `gpt-*`, `gemini-*`.

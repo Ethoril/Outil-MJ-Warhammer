@@ -1,0 +1,1350 @@
+[
+ {
+  "id": "B-C05",
+  "phase": "B",
+  "lot": "B03",
+  "source": "L06 p.218",
+  "question": "La ligne 51-55 du Courroux inflige des Blessures : ignorent-elles l'armure et le Bonus d'Endurance ?",
+  "choix": "Blessures directes, sans mitigation : 36-40 : 1 + Péchés ; 51-55 et 71-75 : d10 + Péchés ; 81-87 : 2d10 + Péchés.",
+  "alternatives": [
+   "Appliquer la mitigation ordinaire des dégâts (armure, Bonus d'Endurance)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C06",
+  "phase": "B",
+  "lot": "B03",
+  "source": "L06 p.218",
+  "question": "Comment résoudre les tests de Résistance et l'état Sonné du Courroux sans créer une règle d'État à part ?",
+  "choix": "Test passif de Résistance (difficulté +2/0/-1/-2 selon la ligne) ; échec = 1 Sonné, plus un par DR négatif sur 81-87. Pas d'Action ni d'Inconscient V4 inventés.",
+  "alternatives": [
+   "Ajouter une Action de Résistance.",
+   "Ignorer le contexte des États.",
+   "Imposer l'Inconscient V4."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C07a",
+  "phase": "B",
+  "lot": "B04",
+  "source": "L06 p.218, 16-20",
+  "question": "Sur 16-20, À Terre est un état unique et peut déjà être présent : comment appliquer la récupération par Prière ?",
+  "choix": "Le Courroux verrouille À Terre, même s'il était déjà présent ; s'il y a plusieurs causes, le MJ choisit explicitement laquelle.",
+  "alternatives": [
+   "Remplacer l'état unique.",
+   "Laisser les retraits génériques contourner la clause."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C07b",
+  "phase": "B",
+  "lot": "B04",
+  "source": "L06 p.218, 66-70",
+  "question": "Sur 66-70, quels Aveuglé sont verrouillés jusqu'à la Prière de récupération ?",
+  "choix": "À Terre reste ordinaire ; seuls les trois nouveaux Aveuglé acquis par ce résultat sont verrouillés. Les anciens Aveuglé gardent leur propre récupération.",
+  "alternatives": [
+   "Verrouiller tous les Aveuglé du personnage."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C08",
+  "phase": "B",
+  "lot": "B04",
+  "source": "L06 p.219, 101-105",
+  "question": "Que signifie « premier PV récupéré » pour lever le KO de 101-105 ?",
+  "choix": "Tout gain effectif de PV (soin ou éditeur de Blessures) libère la cause et retire le KO acquis par cette sanction ; un KO antérieur indépendant reste. Un soin nul ou bloqué ne libère rien.",
+  "alternatives": [
+   "Demander une confirmation du MJ.",
+   "Laisser le KO jusqu'à un second geste manuel."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C09",
+  "phase": "B",
+  "lot": "B04",
+  "source": "L06 p.218",
+  "question": "La Prière de récupération expose-t-elle à un nouveau Courroux ?",
+  "choix": "Oui : c'est un Test de Prière ordinaire (difficulté +2 ou +0), avec les Leçons, le plafond et les gardes habituels ; aucune Bénédiction n'est invoquée à la place.",
+  "alternatives": [
+   "Jet de récupération sans risque.",
+   "Réussite saisie directement.",
+   "Exécuter une Bénédiction supplémentaire."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C12",
+  "phase": "B",
+  "lot": "B06",
+  "source": "L06 p.218, 26-30 et 56-60",
+  "question": "Quelles compétences subissent le malus des lignes 26-30 (heures) et 56-60 (jours) ?",
+  "choix": "Le MJ choisit explicitement les compétences présentes sur la fiche : une ou plusieurs pour les heures, exactement une pour les jours ; rien n'est déduit du culte. Durée = d10 + Péchés.",
+  "alternatives": [
+   "Déduire les compétences du culte."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C13",
+  "phase": "B",
+  "lot": "B06",
+  "source": "L06 p.218",
+  "question": "Comment cumuler plusieurs malus de compétence issus du Courroux ?",
+  "choix": "Règle V5 existante de non-cumul (pire malus) ; les occurrences distinctes sont conservées avec leurs échéances, sans seconde règle de cumul.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C14",
+  "phase": "B",
+  "lot": "B07",
+  "source": "L06 p.218, 41-45",
+  "question": "Qui est visé par l'À Terre et le rejet des alliés réprouvés (41-45) ?",
+  "choix": "Le logiciel propose les autres participants actifs du même camp que le prêtre ; le MJ ajoute ou retire n'importe qui (lui-même compris) et confirme la liste. Le rejet dure d10 + Péchés jours.",
+  "alternatives": [
+   "Cibler automatiquement tous les alliés."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C16",
+  "phase": "B",
+  "lot": "B08",
+  "source": "L06 p.219, L02 p.55, L25 p.91",
+  "question": "Les lignes 106-110 et 116-120 effacent-elles les talents du culte ?",
+  "choix": "Elles suspendent temporairement les deux talents du culte source sans effacer l'acquisition ; fin sur l'horloge commune. Aucun octroi du MJ ne contourne une restriction source.",
+  "alternatives": [
+   "Retirer définitivement les talents."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C17",
+  "phase": "B",
+  "lot": "B08",
+  "source": "L25 p.91, L06",
+  "question": "Comment vérifier la Corruption exigée pour Solkan quand elle est inconnue ?",
+  "choix": "Solkan exige zéro Péché et zéro Corruption ; la Corruption inconnue bloque (pas de zéro implicite), le MJ la saisit avec un motif.",
+  "alternatives": [
+   "Supposer zéro Corruption si inconnue."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C18",
+  "phase": "B",
+  "lot": "B08",
+  "source": "L25 p.91",
+  "question": "Quelles Bénédictions de Stromfels et quelles interdictions de Péché ?",
+  "choix": "Les six Bénédictions de Manann sont reprises ; Invoquer interdit à deux Péchés, Bénir à cinq ; aucun nouveau Miracle de Stromfels inventé.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C19",
+  "phase": "B",
+  "lot": "B09",
+  "source": "L06 p.219, 121-125",
+  "question": "Que se passe-t-il quand plusieurs occurrences visent le prochain renouvellement de Chance ?",
+  "choix": "Un marqueur par occurrence ; le prochain renouvellement normal donne un point et consomme tous les marqueurs. Pas de file de renouvellements futurs ; le MJ fournit le montant normal.",
+  "alternatives": [
+   "Une occurrence par renouvellement successif."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C20",
+  "phase": "B",
+  "lot": "B10",
+  "source": "L06 p.218-219, L19, L21, L25",
+  "question": "Comment suivre une pénitence en cours (ligne 96-100) ?",
+  "choix": "Registre structuré (culte, mission fixée par le MJ, source, origine) ; une note libre ne suffit plus ; la clôture accomplie répétée est sans effet. Aucune mission déduite.",
+  "alternatives": [
+   "Garder la note libre."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C21",
+  "phase": "B",
+  "lot": "B10",
+  "source": "L06",
+  "question": "Qui peut créer ou clôturer une pénitence ?",
+  "choix": "Seul le MJ (contexte local de l'outil) ; un joueur ne peut pas, même en forgeant une requête. Motif obligatoire ; aucun Péché retiré ni objet rendu implicitement.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C23",
+  "phase": "B",
+  "lot": "B11",
+  "source": "L06 p.219, 111-115",
+  "question": "Que confisque la ligne 111-115 ?",
+  "choix": "Tous les objets identifiés dans l'inventaire de la fiche (armes locales comprises, avec leurs Actions) ; le MJ désigne les objets magiques. Un second Courroux avec objets magiques encore retenus demande un arbitrage.",
+  "alternatives": [
+   "Ne confisquer que les objets magiques."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C24",
+  "phase": "B",
+  "lot": "B11",
+  "source": "L06 p.219",
+  "question": "Quelles protections physiques restent sans possessions, et comment les rendre ?",
+  "choix": "Les six PA subsistants sont fournis explicitement par le MJ (jamais zéro implicite) ; à la restitution d'une armure, ils s'ajoutent aux pièces rendues.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C25",
+  "phase": "B",
+  "lot": "B11",
+  "source": "L06 p.219",
+  "question": "Qu'est-ce qu'une pénitence du même culte restitue ?",
+  "choix": "Exactement un objet magique encore retenu, choisi par le MJ, avec son Action ; les objets non magiques ne reviennent pas par cette règle. Un inventaire modifié depuis bloque et demande un arbitrage.",
+  "alternatives": [
+   "Restituer tous les objets."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C27",
+  "phase": "B",
+  "lot": "B12",
+  "source": "L06 p.219, 131-135",
+  "question": "Comment appliquer l'Hémorragique quotidien quand plusieurs matins sont sautés ?",
+  "choix": "Franchissement sur un vrai reçu d'horloge ; plusieurs matins sautés exigent la confirmation explicite du MJ ; au-delà de 500 acquisitions, demander des intervalles plus courts.",
+  "alternatives": [
+   "Appliquer tous les matins sans confirmer."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C28",
+  "phase": "B",
+  "lot": "B12",
+  "source": "L06 p.219",
+  "question": "Qu'est-ce qui met fin à l'hémorragie quotidienne ?",
+  "choix": "Une pénitence accomplie du même culte ; un autre culte, le simple retrait de l'Hémorragique ou une note ne suffisent pas. Les États déjà acquis restent.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C30a",
+  "phase": "B",
+  "lot": "B13",
+  "source": "L06 p.219, 136-140",
+  "question": "Comment lever l'excommunication de 136-140 ?",
+  "choix": "Acquisitions conservées mais inutilisables pour ce culte ; deux pénitences accomplies après la pose rendent Béni puis Invocation et lèvent la sanction sociale ; pas d'empilement de pénitences.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C30b",
+  "phase": "B",
+  "lot": "B13",
+  "source": "L06 p.219",
+  "question": "Un second rejet temporaire du même culte pendant le premier ?",
+  "choix": "Il demande un arbitrage du MJ ; le rejet définitif ne se lève pas par ce parcours.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C31",
+  "phase": "B",
+  "lot": "B13",
+  "source": "L06 p.219, 146-150",
+  "question": "Que retire le rejet définitif (« toutes vos Avances de Prière ») ?",
+  "choix": "Béni et Invocation du culte source et toutes les avances de la compétence Prière commune, après confirmation du MJ ; les autres cultes et compétences sont conservés.",
+  "alternatives": [
+   "Retirer seulement les avances propres au culte (compteur inexistant)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C32",
+  "phase": "B",
+  "lot": "B13",
+  "source": "L06 p.219",
+  "question": "Quelle difficulté sociale envers les membres du culte rejeté ?",
+  "choix": "Au mieux Très difficile (-3 DR) ; les bonus ne remontent pas au-dessus de -3 ; Prière et Tests physiques exclus ; appartenance confirmée par le MJ, jamais déduite du nom.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C33",
+  "phase": "B",
+  "lot": "B14",
+  "source": "L06 p.218-219",
+  "question": "D'où vient le profil du démon ou du serviteur divin ?",
+  "choix": "Saisi et confirmé par le MJ (nom, Blessures, Initiative, caractéristiques, traits facultatifs) ; ni armure, ni compétence, ni Action créées.",
+  "alternatives": [
+   "Liste fermée de profils après le Bestiaire (phase E)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C34",
+  "phase": "B",
+  "lot": "B14",
+  "source": "L06 p.218, 88",
+  "question": "Quelle est la cible du démon inférieur ?",
+  "choix": "Le MJ désigne un participant présent (le prêtre admis) ; le démon est ennemi ; « la plus proche » exige des positions que l'outil n'a pas.",
+  "alternatives": [
+   "Calcul de proximité si des positions existent."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C35",
+  "phase": "B",
+  "lot": "B14",
+  "source": "L06 p.219, 141-145",
+  "question": "Camp et conduite du serviteur divin ?",
+  "choix": "Camp (allié, ennemi, neutre) et conduite choisis par le MJ, sans défaut.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C36",
+  "phase": "B",
+  "lot": "B14",
+  "source": "L06 p.218-219",
+  "question": "Combien de temps le démon ou le serviteur reste-t-il ?",
+  "choix": "Aucune durée : il reste jusqu'au retrait par le MJ.",
+  "alternatives": [
+   "Durée saisie par le MJ."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C37",
+  "phase": "B",
+  "lot": "B15",
+  "source": "L06 p.219, 151+",
+  "question": "Que devient le participant au Jugement dernier ?",
+  "choix": "Rien n'est retiré : un registre consigne le départ ; le MJ gère la scène. Pas d'état Absent.",
+  "alternatives": [
+   "État « Absent » commun si un jour il existe."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C38",
+  "phase": "B",
+  "lot": "B15",
+  "source": "L06 p.219, Q11",
+  "question": "Quand le Point de Destin est-il dépensé après le Jugement ?",
+  "choix": "À la commande de retour du MJ, une seule fois (temporaire d'abord) ; refus sans Destin ; point de retour et motif obligatoires.",
+  "alternatives": [
+   "Débit à l'application du résultat."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C39",
+  "phase": "B",
+  "lot": "B15",
+  "source": "L06 p.219, Q11",
+  "question": "Comment confirmer « Je vous rejette » au retour ?",
+  "choix": "Proposition inerte ; le MJ confirme (avances de Prière perdues) ou refuse avec motif ; pas de doublon si un rejet définitif du culte existe.",
+  "alternatives": [
+   "Rejet automatique."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C40",
+  "phase": "B",
+  "lot": "B15",
+  "source": "L06 p.219",
+  "question": "Quelle preuve d'un rejet issu du Jugement ?",
+  "choix": "Une preuve de jet 151+ suffit pour un rejet définitif ; aucun jet 146-150 n'est inventé.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C41",
+  "phase": "B",
+  "lot": "B16",
+  "source": "L06 p.219",
+  "question": "Quelle difficulté pour l'absolution ?",
+  "choix": "Test de Prière +0 (Intermédiaire) ; le nombre de Péchés retirés et le motif sont décidés par le MJ.",
+  "alternatives": [
+   "Difficulté saisie par le MJ."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C42",
+  "phase": "B",
+  "lot": "B16",
+  "source": "L06 p.219",
+  "question": "L'absolution est-elle possible à zéro Péché ?",
+  "choix": "Refusée d'office (rien à retirer, jamais de Courroux à zéro) ; cultes elfes exemptés refusés.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C43",
+  "phase": "B",
+  "lot": "B16",
+  "source": "L06 p.219",
+  "question": "Dans l'absolution, qui passe en premier : retrait de Péché ou Courroux ?",
+  "choix": "Le Courroux se joue sur les Péchés au moment du Test ; le retrait réussi s'applique d'abord, puis la table décrémente d'un Péché sans passer sous zéro.",
+  "alternatives": [
+   "Retrait après la table."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C44",
+  "phase": "B",
+  "lot": "B16",
+  "source": "L20 p.219",
+  "question": "Comment jouer le pèlerinage de pénitence d'Altdorf ?",
+  "choix": "Culte de Sigmar seul, +2 DR, 1 Péché retiré (2 à +4 DR ou mieux) ; échec : un Exténué ; seule la maladresse ouvre la table du Courroux.",
+  "alternatives": [
+   "Appliquer aussi le déclenchement général du Courroux (unités)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C46",
+  "phase": "B",
+  "lot": "B17",
+  "source": "L06 p.217/220 et suppléments",
+  "question": "Quels événements deviennent des boutons de Péché ?",
+  "choix": "Douze événements à effet chiffré ; commandements, présages, strictures et usages locaux restent des rappels sans mécanique.",
+  "alternatives": [
+   "Automatiser aussi les strictures."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C47",
+  "phase": "B",
+  "lot": "B17",
+  "source": "L06",
+  "question": "Quels garde-fous pour les événements de Péché ?",
+  "choix": "Confirmation du MJ, fait constaté et culte obligatoires ; cultes elfes refusés ; retrait refusé à zéro ; événements propres à un culte refusés pour un autre.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C48",
+  "phase": "B",
+  "lot": "B17",
+  "source": "L06 p.218",
+  "question": "Comment jouer un « Courroux du MJ » hors Prière ?",
+  "choix": "Variante où le MJ donne le motif et un nombre de Péchés positif ; la table se joue sans Test ; les lignes 6-10 et 11-15 (preuve d'un vrai Test) sont refusées.",
+  "alternatives": [
+   "Jouer 11-15 par Prière."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C49",
+  "phase": "B",
+  "lot": "B17",
+  "source": "L06",
+  "question": "Qui peut déclencher ces événements, Courroux MJ et absolutions à montant ?",
+  "choix": "Seul le MJ ; le formulaire est masqué aux joueurs.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C51",
+  "phase": "B",
+  "lot": "B18",
+  "source": "L22 p.39",
+  "question": "Comment suivre le Courroux quotidien du Liber Bubonicus ?",
+  "choix": "Suivi MJ : jours dus = jours écoulés moins jours joués ou écartés ; chaque jour se joue ou s'écarte avec motif à zéro Péché ; culte rattaché obligatoire.",
+  "alternatives": [
+   "Culte libre « Rat cornu »."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C52",
+  "phase": "B",
+  "lot": "B18",
+  "source": "L22 p.71",
+  "question": "Quel seuil et quels effets pour la terre sanctifiée de l'hermite ?",
+  "choix": "Seuil de Péchés fourni par le MJ ; monstres déclarés par le MJ ; effet au choix : franchissement impossible ou Enflammé tant que présent. Soin doublé et +2 DR en rappel.",
+  "alternatives": [
+   "Automatiser soin et bonus."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C53",
+  "phase": "B",
+  "lot": "B18",
+  "source": "L25 p.87/91",
+  "question": "Comment gérer l'humeur des navires (Manann, Stromfels) ?",
+  "choix": "Aucune humeur suivie : le MJ fournit navire, période lunaire, dés et nombre de navires, consignés au reçu.",
+  "alternatives": [
+   "Humeur suivie par navire."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "B-C54",
+  "phase": "B",
+  "lot": "B18",
+  "source": "L06 p.218",
+  "question": "Un Courroux évité décrémente-t-il le Péché ?",
+  "choix": "Non : aucune table n'est résolue, donc aucun décrément.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L25-003",
+  "phase": "C",
+  "lot": "",
+  "source": "L25 p.63",
+  "question": "Master and Commander n'a pas de Talent au catalogue : comment le représenter ?",
+  "choix": "Rang saisi par le MJ et fait « à bord » confirmé ; renvoyé en modificateur de DR à passer au jet.",
+  "alternatives": [
+   "Ajouter un Talent au catalogue."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L25-005",
+  "phase": "C",
+  "lot": "",
+  "source": "L25 p.91",
+  "question": "Comment représenter la malédiction Curse of the Harsh Mistress ?",
+  "choix": "État dédié ; retirer Exténué au repos exige un Test de Calme (-1 DR) réussi.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L18-002",
+  "phase": "C",
+  "lot": "",
+  "source": "L18 p.37",
+  "question": "Combien de Rounds dure l'immunité à Brisé ?",
+  "choix": "BFM Rounds à partir du Round de lancement, jusqu'à la fin du Round r + BFM - 1.",
+  "alternatives": [
+   "Fin du Round r + BFM."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L06-019",
+  "phase": "C",
+  "lot": "",
+  "source": "L06 p.169",
+  "question": "Qui gagne l'égalité entre Intimidation et Calme ?",
+  "choix": "L'initiateur (règle V5 des égalités) : Peur 1.",
+  "alternatives": [
+   "Égalité = échec de l'intimidateur."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L13-013",
+  "phase": "C",
+  "lot": "",
+  "source": "L13",
+  "question": "Comment reconnaître un « cavalier accompli » sans identifiant de Talent fiable ?",
+  "choix": "Fait explicite du MJ ; Cavalier émérite est un autre Talent V5.",
+  "alternatives": [
+   "Lier au Talent Cavalier émérite."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L06-033",
+  "phase": "C",
+  "lot": "",
+  "source": "L06 p.358, Q10",
+  "question": "Que subit une cible immunisée à la Psychologie face au Hurlement spectral ?",
+  "choix": "Elle subit dégâts et Assourdi ; Test de Calme et Brisé sont ignorés.",
+  "alternatives": [
+   "Immunité totale."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L06-037",
+  "phase": "C",
+  "lot": "",
+  "source": "L06",
+  "question": "Comment lire Craintif face à un effet magique « visible » ?",
+  "choix": "L'effet magique doit rester visible ; pour le bruit, exemption du dressage Guerre ou d'une voix isolée. Lecture littérale.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C0-L02-001",
+  "phase": "C",
+  "lot": "",
+  "source": "L02 p.62, Q14",
+  "question": "Comment lire l'Intuition de Fellstave à la récupération ?",
+  "choix": "Texte imprimé vérifié : à la récupération, Intuition (+0) et un échec révèle la panique magique ; réussite non inversée, rappel seul.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "C05",
+  "phase": "C",
+  "lot": "",
+  "source": "L01-L26",
+  "question": "Que faire des clauses de psychologie sans mécanique chiffrée ?",
+  "choix": "Les effets chiffrés sont appliqués ; le reste en rappel, trait accordé sans modifier la fiche, ou saisie du MJ.",
+  "alternatives": [
+   "Un moteur dédié par source."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C03",
+  "phase": "D",
+  "lot": "",
+  "source": "L06",
+  "question": "Les sorts de Domaine de niveau 0 peuvent-ils être surpuissants ?",
+  "choix": "Oui : ce sont des sorts de Domaine, pas des Sorts Mineurs.",
+  "alternatives": [
+   "Interdit, comme le Petit sort."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C10",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06 p.255",
+  "question": "Quand s'achève la Joie de Halãtha « quand utilisé » ?",
+  "choix": "À la première occasion de conception constatée par le MJ ; rappel narratif.",
+  "alternatives": [
+   "Fin à la tentative.",
+   "Fin à la naissance."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C11",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06 p.256, L02 p.63",
+  "question": "Mirkride : version V5 ou V4 ?",
+  "choix": "Version V5 (aucune action sur le monde matériel) ; la variante V4 qui permet de lancer des sorts est écartée.",
+  "alternatives": [
+   "Variante V4 avec lancement de sorts."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C12",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Nepenthe et Panacée : comment gérer les maladies et le soin ?",
+  "choix": "Aucun suivi de maladies ; maladie guérie choisie par le lanceur en rappel ; Panacée soigne le Bonus de Dextérité du lanceur.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C13",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Shepherd's Eye sur une cible protégée ou hors du monde ?",
+  "choix": "Le MJ décide (rappel).",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C14",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L02 p.62",
+  "question": "Quels Traits la Dague de l'Art vise-t-elle, et comment gérer les dégâts ?",
+  "choix": "Éthéré et Corruption (tout degré) ; deux attaques créées (BF+2 et BF+8) plutôt qu'une substitution automatique ; Focalisation +0 DR saisie par le MJ.",
+  "alternatives": [
+   "Liste élargie : Mutation, Marque du Chaos, Démoniaque (proposition Gemini)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C15",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L02",
+  "question": "Borne sinistre : l'échec ou la réussite du test d'Intuition donne-t-il la prise de conscience ?",
+  "choix": "Lecture littérale : l'échec = prise de conscience, en rappel ; type de créature choisi par le lanceur ; durée 1 mois saisie par le MJ.",
+  "alternatives": [
+   "Inverser (réussite = prise de conscience), proposition Gemini."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C16",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Philtre d'amour : une aide chiffrée ?",
+  "choix": "Aucune (le +2 DR de Gemini n'est pas dans la source) ; durée jusqu'à minuit saisie en minutes.",
+  "alternatives": [
+   "Ajouter un +2 DR optionnel."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C17",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Sachet de protection : comment lire « +1 SL Calme contre les effets surnaturels » ?",
+  "choix": "+1 DR au Calme contre tout effet surnaturel (Peur et Terreur incluses), en reçu ; durée saisie par le MJ.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C18",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Pas imperceptible : que couvre « Magical Sight » et la Focalisation ?",
+  "choix": "Seconde vue et Sens de la magie ; +2 DR Discrétion contre Démoniaque/Éthéré en reçu ; Focalisation interdite par un nouvel état.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C19",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "L'Expulsion : quel test et quelle cible ?",
+  "choix": "Test de Volonté fixe +0 DR (non opposé), Blessures directes BFM ; cible non Éthérée/Démoniaque exemptée ; bannissement 1d10 ans en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C20",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Quelle liste pour Protection contre le wyrd ?",
+  "choix": "Sorcellerie, Nécromancie, Démonologie, Chaos (source) ; l'ajout de Gemini « tout sort de Focalisation (Dhar) » est écarté.",
+  "alternatives": [
+   "Ajouter les sorts de Focalisation (Dhar)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C21",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Valide-t-on les noms français de sorts proposés ?",
+  "choix": "Propositions de Gemini retenues (Dague de l'Art, Borne sinistre, Revigorer, Philtre d'amour, Sachet de protection, Pas imperceptible, Marée d'argent, L'Expulsion, Protection contre le wyrd).",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C22",
+  "phase": "D",
+  "lot": "D2",
+  "source": "L06",
+  "question": "Revigorer : retire-t-il un état Exténué ou ignore-t-il la pénalité ?",
+  "choix": "Les états Exténué restent comptés, leur pénalité est ignorée ; l'effet agit aussi sur Clarté d'Esprit.",
+  "alternatives": [
+   "Retirer un état (lecture de Gemini)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C30",
+  "phase": "D",
+  "lot": "D5",
+  "source": "L06 p.258",
+  "question": "Destruction de Démon Mineur : où s'applique le +10 à une caractéristique ?",
+  "choix": "Non appliqué par le moteur (la cible est détruite) : caractéristique choisie en fait, rappel de report sur la fiche du lanceur.",
+  "alternatives": [
+   "Effet sur le lanceur (nouveau mécanisme)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C31",
+  "phase": "D",
+  "lot": "D5",
+  "source": "L06 p.258",
+  "question": "Comment lire « Taille Moyenne ou inférieure » et le Test d'incantation de la Destruction ?",
+  "choix": "Petite ou Moyenne, taille déduite des Traits (le MJ vérifie) ; opposition d'un d100 de Force Mentale contre Endurance +4 DR ; cible détruite si le lanceur gagne.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C32",
+  "phase": "D",
+  "lot": "D5",
+  "source": "L06",
+  "question": "Manifestation de Démon Mineur : que devient le démon à la fin de la durée avec ordre inachevé ?",
+  "choix": "Il disparaît (rappel) ; démon non instancié, opposition jouée par le MJ.",
+  "alternatives": [
+   "Il reste hostile."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C33",
+  "phase": "D",
+  "lot": "D5",
+  "source": "L06",
+  "question": "Octogramme : suivi de la barrière et de la zone ?",
+  "choix": "Barrière en rappel (aucune position suivie) ; cible « ZdE Bonus d'Intelligence mètres » (diamètre maximum).",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C40",
+  "phase": "D",
+  "lot": "D6",
+  "source": "L06 pp.258-259",
+  "question": "Relever les morts : comment représenter Squelettes et Zombies sans profils (phase E) ?",
+  "choix": "Participants génériques (sans caractéristiques ni Blessures, Mort-vivant, À Terre) ; nombre = (1 ou BFM) + DR + paliers de +2 DR ; à remplacer par les profils du bestiaire.",
+  "alternatives": [
+   "Refuser le lancement tant que les profils n'existent pas."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C41",
+  "phase": "D",
+  "lot": "D6",
+  "source": "L06",
+  "question": "Fin des invocations de Nécromancie à la mort du lanceur ?",
+  "choix": "Couche portée par le lanceur, zone non suivie ; fin sur événement déclaré par le MJ ; terre nue et cadavres en rappel ; morts-vivants retirés avec la couche.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C42",
+  "phase": "D",
+  "lot": "D6",
+  "source": "L06",
+  "question": "Crâne hurlant : quel test et quand Brisé ?",
+  "choix": "Test « Psychologie » = Calme +0 DR ; Brisé seulement si des Blessures sont subies ; trajectoire en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C43",
+  "phase": "D",
+  "lot": "D6",
+  "source": "L06",
+  "question": "L'appel de Vanhel : le gain est-il automatisé ?",
+  "choix": "Non : choix commun (Mouvement ou Action gratuite) saisi en fait ; nombre de cibles en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C50",
+  "phase": "D",
+  "lot": "D7",
+  "source": "L06 pp.259-260",
+  "question": "Attributs des Domaines du Chaos : couche pour un sort instantané ?",
+  "choix": "Couche d'attribut sur chaque cible non résistée pour la durée du sort ; sort instantané : aucune couche, simple rappel dans le reçu.",
+  "alternatives": [
+   "Couche d'un Round pour les sorts instantanés."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C51",
+  "phase": "D",
+  "lot": "D7",
+  "source": "L06",
+  "question": "Nurgle : comment gérer les Blessures Suppurées ?",
+  "choix": "Le moteur ne les suit pas : marqueur posé, le MJ joue le Test de Blessure Suppurée (V5 p.180).",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C52",
+  "phase": "D",
+  "lot": "D7",
+  "source": "L06",
+  "question": "Miasme de pestilence : qui est exempté et qui est touché ?",
+  "choix": "Exemptés : Traits « Dévoué de Nurgle » / « Moine de la peste » posés par le MJ ; touchés : créatures vivantes (ni Mort-vivant, Démoniaque, Artificiel, Éthéré), alliés compris ; Nausée en rappel.",
+  "alternatives": [
+   "Exclure les alliés."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C53",
+  "phase": "D",
+  "lot": "D7",
+  "source": "L06",
+  "question": "Flot de Corruption : quel Souffle et quels dégâts ?",
+  "choix": "Projectile magique de formule BE+DR, non opposé ; Pourriture du sang et test d'Endurance de la cible en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C60",
+  "phase": "D",
+  "lot": "D8",
+  "source": "L06",
+  "question": "Slaanesh : les modificateurs de résistance sont-ils appliqués ?",
+  "choix": "Portés en marqueur sur la couche ; aucun test du moteur ne les lit, le MJ les applique.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C61",
+  "phase": "D",
+  "lot": "D8",
+  "source": "L06",
+  "question": "Slaanesh : états bloquants, Traits et noms ?",
+  "choix": "Échec du Consentement : perte de Mouvement et Action en rappel ; De la douleur le plaisir : Trait « Indolore » ; Impuissante = cible sans défense (rappel) ; Fantasmagorie : Trait « Distrayant », alliés de la zone.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C62",
+  "phase": "D",
+  "lot": "D8",
+  "source": "L05 p.257",
+  "question": "Noms français des sorts de Slaanesh ?",
+  "choix": "Consentement (officiel) ; « De la douleur le plaisir » et « Fantasmagorie » proposés par Gemini et retenus.",
+  "alternatives": [
+   "Phantasmagorie."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C70",
+  "phase": "D",
+  "lot": "D9",
+  "source": "L06",
+  "question": "Tzeentch : quel Test de Corruption, quelle durée de la Chance gagnée ?",
+  "choix": "Endurance +0 DR (lecture physique), d100 saisi par cible ; réussite : +1 Chance temporaire sans échéance (le MJ la retire) ; échec : +1 Corruption.",
+  "alternatives": [
+   "Couche d'un Round.",
+   "Test de Calme (corruption spirituelle)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C71",
+  "phase": "D",
+  "lot": "D9",
+  "source": "L06",
+  "question": "Don de Tzeentch : le sort choisi devient-il lançable ?",
+  "choix": "Le sort est un fait validé contre les contrats, non lançable hors sorts mémorisés ; fin sur Incantation Imparfaite en rappel ; aucune interaction avec le verrou elfique.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C72",
+  "phase": "D",
+  "lot": "D9",
+  "source": "L06",
+  "question": "Transformation et Trahison de Tzeentch : quelle part automatisée ?",
+  "choix": "Impuissante = cible sans défense (rappel) ; Point de Corruption sur échec automatisé ; Animosité (Alliés) en Trait ; transfert d'Avantage et attaque de l'allié en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C73",
+  "phase": "D",
+  "lot": "D9",
+  "source": "L05 p.257",
+  "question": "Noms français des sorts de Tzeentch ?",
+  "choix": "Trahison de Tzeentch (officiel) ; Don de Tzeentch et Transformation de Tzeentch (Gemini, retenus).",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C80",
+  "phase": "D",
+  "lot": "D12",
+  "source": "L01 pp.32-33, L12 p.82",
+  "question": "Noms français des sorts de la Grande Gueule ogre ?",
+  "choix": "Brise-os, Gloutonneur, Dévore-cervelle, Saveur de la mort, Tripes de troll, La Gueule, Festin des tombés ; Brasse-bile, Bouillie de sang, Du cœur au ventre, Brise-dents.",
+  "alternatives": [
+   "Garder les noms anglais."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C81",
+  "phase": "D",
+  "lot": "D12",
+  "source": "L01, L12",
+  "question": "Comment convertir les valeurs V4 des sorts ogres ?",
+  "choix": "-20 -> -2 DR, -30 -> -3 DR, +20 -> +2 DR, Easy +40 -> +4 DR ; « Difficult (+20) » (libellé contradictoire) -> Difficile -2 DR ; dégâts inchangés.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C82",
+  "phase": "D",
+  "lot": "D12",
+  "source": "L01 p.32, L12 p.82",
+  "question": "Attribut de la Grande Gueule : comment le résoudre ?",
+  "choix": "1d10 saisi par sort réussi ; 10 ou ≥ NI : le lanceur récupère NI Blessures ; appliqué aussi aux sorts de L12.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C83",
+  "phase": "D",
+  "lot": "D12",
+  "source": "L01",
+  "question": "Gloutonneur et Festin des tombés : refus, zone et résistance ?",
+  "choix": "Refus volontaire du don en fait optionnel ; sans repas copieux la cible gagne Exténué ; zone non chiffrée : cibles désignées par le MJ ; Calme de fin de sort pour les non-Ogres ayant blessé au corps à corps.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C84",
+  "phase": "D",
+  "lot": "D12",
+  "source": "L01",
+  "question": "La Gueule : la fosse persistante est-elle suivie ?",
+  "choix": "Première résolution automatique (Esquive, dégâts, trois Enchevêtré) ; persistance de la fosse en rappel, non suivie.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C85",
+  "phase": "D",
+  "lot": "D12",
+  "source": "L12 p.82",
+  "question": "Sorts de L12 : alliés ogres, soin, dents ?",
+  "choix": "« Ogres amis » = fait saisi par cible ; Bouillie de sang : valeur de soin saisie, 0 = échec ; Brise-dents : perte de dents et Endurance du Boucher en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C90",
+  "phase": "D",
+  "lot": "D13",
+  "source": "L12 pp.98-101, L07 p.183",
+  "question": "Magie orque : quelle source l'emporte entre L12 et L07 ?",
+  "choix": "L12 (dernière édition) : Bash 'Em Lads! et Mork Save Us! incluent les Hobgobelins ; pour 'Eadbutt, cartouche de L07 (une cible, instantané) avec texte de L12.",
+  "alternatives": [
+   "Cartouche de L12 à la lettre (le projectile frapperait le lanceur)."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C91",
+  "phase": "D",
+  "lot": "D13",
+  "source": "L12",
+  "question": "Comment convertir l'Avantage V4 des sorts orques ?",
+  "choix": "En Élan V5 (binaire), un par cible désignée, jamais cumulé ; plafond « autant de cibles que de DR » en rappel.",
+  "alternatives": [
+   "Suivre un compteur d'Avantage."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C92",
+  "phase": "D",
+  "lot": "D13",
+  "source": "L12",
+  "question": "Comment reconnaître Orques, Gobelins et Hobgobelins ?",
+  "choix": "Fait par cible saisi (greenskin, Gobelin des forêts) ; une cible sans le fait est exclue ; aucun trait d'espèce lu.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C93",
+  "phase": "D",
+  "lot": "D14",
+  "source": "L12",
+  "question": "Attributs des Waaagh : la Chance coûte-t-elle des DR ?",
+  "choix": "Petite Waaagh : 1 DR converti en 1 Chance sur demande, couche sans échéance, sans déduire le DR de la surpuissance ; Grande Waaagh : rappel.",
+  "alternatives": [
+   "Déduire le DR dépensé de la surpuissance."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C94",
+  "phase": "D",
+  "lot": "D14",
+  "source": "L12",
+  "question": "Magie orque : durées, profils et cumuls des sorts individuels ?",
+  "choix": "Difficult (-10) -> -1 DR ; Evil Sun à chaque fin de Round, alliés compris ; Fists of Gork : profil d'attaque propre (Bagarre 55, BF+9) ; Brainbursta : un Sonné par DR (plafond 20) ; positions et chute en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C95",
+  "phase": "D",
+  "lot": "D14",
+  "source": "L12",
+  "question": "Les règles de la Waaagh hors sorts sont-elles implantées ?",
+  "choix": "Non : canalisation selon les Orques, isolement -2 DR, table de Fiasco, objets, champignons et Idoles restent non implantés, à arbitrer.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C96",
+  "phase": "D",
+  "lot": "D14",
+  "source": "L12",
+  "question": "Valide-t-on les noms français proposés pour la magie orque ?",
+  "choix": "Proposés (aucun officiel) : Du calme !, Mots malins, Malédiction de la Mauvaise Lune, Gork va arranger ça, Mork te veut !, Le Soleil mauvais, Poings de Gork, WAAAGH ! et autres.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C100",
+  "phase": "D",
+  "lot": "D15",
+  "source": "L07 pp.128-129",
+  "question": "Quels sorts nouveaux de Haute Magie de Lustria, et quelles conversions ?",
+  "choix": "Quatre sorts : Déracinement des montagnes, Ligne de terre, Ruine des cités, Déflagration mentale ; Very Hard -30 -> -3 DR, Hard -20 -> -2 DR, +20 -> +2 DR ; « Slann seulement » en rappel.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C101",
+  "phase": "D",
+  "lot": "D15",
+  "source": "L07",
+  "question": "Comment intégrer les extensions Slann des contrats elfiques ?",
+  "choix": "Contrats distincts « (Slann) » qui clonent l'effet elfique avec leurs options de surpuissance propres ; contrats elfiques inchangés.",
+  "alternatives": [
+   "Injecter les options Slann dans les contrats elfiques."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C102",
+  "phase": "D",
+  "lot": "D15",
+  "source": "L07 pp.128-129",
+  "question": "Déracinement, Ruine, Ligne de terre, Déflagration : quelles précisions de règle ?",
+  "choix": "Athlétisme joué à l'incantation (échec = À Terre) ; Ruine fortifiée exige +6 DR ; Déflagration BInt+6, +6 contre Démoniaque et Mort-vivant ; Méditations des Slann exclues.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C110",
+  "phase": "D",
+  "lot": "D16",
+  "source": "L08 pp.102-111",
+  "question": "Valide-t-on les noms français des sorts elfiques de Vaul, mer et Hoeth ?",
+  "choix": "Noms proposés (aucun officiel), neuf, dix et dix sorts ; domaines Vaul, Mathlann, Hoeth.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C111",
+  "phase": "D",
+  "lot": "D16",
+  "source": "L08",
+  "question": "Yenlui et talents Cadai : vérifie-t-on les conditions ?",
+  "choix": "Yenlui saisi par le MJ ; condition « Yenlui lumineux requis » inscrite en rappel, jamais vérifiée ; talents Cadai non implantés.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C112",
+  "phase": "D",
+  "lot": "D16",
+  "source": "L08",
+  "question": "Sacrifices de Vaul, Hoeth et de la mer : bloquants ou non ?",
+  "choix": "Vaul et Hoeth : rappels non bloquants ; mer : payés à l'incantation (Exténué et Blessures du lanceur appliqués, annulés par Undo). Appel des mers : 2 Exténué + 2 Blessures.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C113",
+  "phase": "D",
+  "lot": "D16",
+  "source": "L08",
+  "question": "Artisanat de Vaul et fabrication magique : suivis ?",
+  "choix": "Rappels uniquement ; sorts V4 de la Forteresse de Hotek joués par le MJ avec les contrats V5.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C114",
+  "phase": "D",
+  "lot": "D17",
+  "source": "L08",
+  "question": "Rage de Vaul, Brumes, Illumination, Sceaux : quelle part automatisée ?",
+  "choix": "Rage : anneau intérieur seulement ; Brumes : Discrétion +2 DR alliés, malus de tir en rappel ; Illumination : +20 Int et FM, retrait des Traits en rappel ; profils de fantômes et merwyrms à créer par le MJ.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C120",
+  "phase": "D",
+  "lot": "D19",
+  "source": "Winds of Magic pp.26-27, L07 p.81",
+  "question": "Sorts d'Arcane : nom de Fenbeast et sens de « Construit » ?",
+  "choix": "Bête des fens (Trait posé par le MJ, profil en phase E) ; Construit = Trait Artificiel ou Construit ; noms français proposés.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C121",
+  "phase": "D",
+  "lot": "D19",
+  "source": "L17 p.27",
+  "question": "Comment nommer et résoudre le Silence du livre L17 ?",
+  "choix": "Nommé « Silence (Arcane) » ; -3 SL -> -3 DR à l'incantation pour tous les occupants de la zone ; bruit non suivi.",
+  "alternatives": [],
+  "statut": "ouvert"
+ },
+ {
+  "id": "D-C122",
+  "phase": "D",
+  "lot": "D19",
+  "source": "L17 p.27",
+  "question": "Secours au serviteur magique : quel Bonus d'Endurance pour le soin ?",
+  "choix": "Celui du lanceur (le moteur ne lit pas celui de la cible), à corriger par le MJ ; +3 DR pour doubler en rappel.",
+  "alternatives": [
+   "Bonus d'Endurance de la cible."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "RUN-Q10",
+  "phase": "Runes",
+  "lot": "",
+  "source": "D0b-Q10",
+  "question": "Comment adapter au V5 les pourcentages V4 et les huit runes à dés inversés ?",
+  "choix": "",
+  "alternatives": [
+   "Adapter les huit runes au moteur d'inversion des dés (lecture à arbitrer avant code).",
+   "Garder les pourcentages V4 en reçu chiffré sans effet automatique."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "RUN-Q11",
+  "phase": "Runes",
+  "lot": "",
+  "source": "D0b-Q11",
+  "question": "Comment traiter les alias de noms et les huit variantes du complément ?",
+  "choix": "Une seule identité par rune, nom V5 retenu, ancien nom en alias ; variantes rattachées sans doublon.",
+  "alternatives": [
+   "Une entrée distincte pour chaque variante ou ancien nom."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "RUN-Q12",
+  "phase": "Runes",
+  "lot": "",
+  "source": "D0b-Q12",
+  "question": "La Rune de Rétribution (arme, protection, funéraire) : une ou trois entrées ?",
+  "choix": "Trois entrées distinctes, jamais fusionnées.",
+  "alternatives": [
+   "Une seule entrée fusionnée."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "RUN-Q13",
+  "phase": "Runes",
+  "lot": "",
+  "source": "D0b-Q13",
+  "question": "Quel seuil de gravure pour les runes de reliques et autres runes sans valeur publiée ?",
+  "choix": "Aucun seuil inventé : seuil nul, état « à arbitrer » affiché, gravure refusée.",
+  "alternatives": [
+   "Seuil fixé par le MJ."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "RUN-SYS13",
+  "phase": "Runes",
+  "lot": "",
+  "source": "SYS-13, pp.134-140",
+  "question": "Quelle liste de runes accessibles pour chaque culte ancestral ?",
+  "choix": "",
+  "alternatives": [
+   "Liste propre à chaque culte (pp.134-140, à relever).",
+   "Liste générique de Forgerune."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "RUN-ARTISANAT",
+  "phase": "Runes",
+  "lot": "",
+  "source": "Conception §4",
+  "question": "Le moteur doit-il gérer l'artisanat de gravure (semaines, ateliers) ou seulement le résultat saisi ?",
+  "choix": "Tests prolongés saisis par le MJ (jets explicites), gravure active unique par objet.",
+  "alternatives": [
+   "Suivre semaines, ateliers et outils.",
+   "Enregistrer seulement le résultat saisi."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "FAM-RITUEL",
+  "phase": "Familiers",
+  "lot": "",
+  "source": "L17 p.31",
+  "question": "Comment gérer le rituel de création d'un familier (temps, matériel, jets, échecs) ?",
+  "choix": "",
+  "alternatives": [
+   "Événement unique de création débitant 1 Destin ou 1 Résilience.",
+   "Via le système de rituels, à part."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "FAM-NOMBRE",
+  "phase": "Familiers",
+  "lot": "",
+  "source": "L17",
+  "question": "Combien de familiers par maître ?",
+  "choix": "Liste sans plafond inventé (la source n'en fixe pas).",
+  "alternatives": [
+   "Aucun plafond.",
+   "Plafond fixé par le MJ."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "FAM-JOUEUR",
+  "phase": "Familiers",
+  "lot": "",
+  "source": "L17 p.184",
+  "question": "Le familier joueur (maître vivant et dans le groupe) relève-t-il de l'outil du MJ ?",
+  "choix": "",
+  "alternatives": [
+   "Hors périmètre de l'outil.",
+   "Géré avec le reçu « le familier suit ou s'efface »."
+  ],
+  "statut": "ouvert"
+ },
+ {
+  "id": "FAM-NOMS",
+  "phase": "Familiers",
+  "lot": "",
+  "source": "L17 p.187",
+  "question": "Quels équivalents V5 et noms français pour Créature magique et Imprégné de (Vent) ?",
+  "choix": "",
+  "alternatives": [
+   "Noms proposés à valider, livre FR V5 non consulté."
+  ],
+  "statut": "ouvert"
+ }
+]
