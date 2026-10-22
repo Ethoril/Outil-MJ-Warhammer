@@ -13,7 +13,8 @@ test('D-21 annulée — ni Silence (Arcane) ni Arc coruscant : Silence garde la 
   assert.equal(getAllSpellContracts().filter(c => !c.isTradition).length, 277);
   for (const name of ['Silence (Arcane)', 'Arc coruscant', 'Coruscating Arc']) {
     assert.equal(spells.some(s => s.nom === name), false, name);
-    assert.equal(getSpellContract(name), null, name);
+    // Phase D (Q15) : « Silence (Arcane) » de Winds of Magic est un contrat de tradition distinct (aucune identité du catalogue public).
+    if (name === 'Silence (Arcane)') { assert.equal(getSpellContract(name).isTradition, true); assert.notEqual(getSpellContract(name).id, getSpellContract('Silence').id); } else assert.equal(getSpellContract(name), null, name);
   }
   assert.equal(spells.find(s => s.nom === 'Silence').type, "Uglu - Gris - Domaine de l'Ombre");
   assert.equal(spells.find(s => s.nom === 'Arc de T’Essla').cn, 7);

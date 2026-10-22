@@ -19554,9 +19554,9 @@
     "isAuxiliary": false
   },
   {
-    "id": "spell-tradition-gout-de-la-mort",
+    "id": "spell-tradition-saveur-de-la-mort",
     "row": null,
-    "name": "Goût de la mort",
+    "name": "Saveur de la mort",
     "canonicalName": "Taste Death",
     "page": 33,
     "domain": "maw",

@@ -60,7 +60,7 @@ test('Phase 3.4 — Les 277 contrats de sorts sont présents et structurés', ()
 // ============================================================================
 
 test('Magie Elfique — Haute Magie (16 sorts) : surpuissance, burnout et sorts clés', () => {
-  const highSpells = getAllSpellContracts().filter(c => c.domain === 'high');
+  const highSpells = getAllSpellContracts().filter(c => c.domain === 'high' && !c.isTradition);
   assert.equal(highSpells.length, 16, 'Exactement 16 sorts de Haute Magie');
 
   const actor = {
@@ -292,7 +292,7 @@ test('Invocations Auxiliaires — Création des participants conformes sans muta
 // ============================================================================
 
 test('Suivi Fiche — Les 31 sorts produisent un reçu structuré sans écrire dans les fiches', () => {
-  const ficheSpells = getAllSpellContracts().filter(c => c.ficheFollowUp);
+  const ficheSpells = getAllSpellContracts().filter(c => c.ficheFollowUp && !c.isTradition);
   assert.equal(ficheSpells.length, 31, 'Exactement 31 sorts signalés suivi fiche');
 
   const actor = { id: 'lanceur-1', name: 'Pratiquant' };

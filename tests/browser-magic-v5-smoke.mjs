@@ -650,11 +650,12 @@ try {
     const contracts = mod.getAllSpellContracts();
     return {
       controller: Boolean(navigator.serviceWorker.controller),
-      contractCount: contracts.length
+      contractCount: contracts.filter(c => !c.isTradition).length, traditionCount: contracts.filter(c => c.isTradition).length
     };
   });
   assert.equal(offlineCheck.controller, true, 'Le Service Worker doit rester actif hors ligne');
   assert.equal(offlineCheck.contractCount, 277, 'Les 277 contrats de sorts V5 doivent être accessibles hors ligne depuis le cache SW');
+  assert.ok(offlineCheck.traditionCount > 0, 'Les contrats de traditions (phase D) doivent aussi être servis hors ligne');
   await context.setOffline(false);
 
   assert.equal(pageErrors.length, 0, `Aucune erreur JS non gérée ne doit survenir: ${pageErrors.join(' | ')}`);

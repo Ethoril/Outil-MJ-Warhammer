@@ -9,7 +9,7 @@ const SOURCE=[
  ['Brise-os','Bonecrusher','L01',32,5,'Force Mentale mètres','1','Instantané'],
  ['Gloutonneur','Bullgorger','L01',32,5,'Bonus de Force Mentale mètres','1','Bonus de Force Mentale Rounds'],
  ['Dévore-cervelle','Braingobbler','L01',32,5,'Vous','Vous','Bonus de Force Mentale Rounds'],
- ['Goût de la mort','Taste Death','L01',33,2,'Vous','Vous','Instantané'],
+ ['Saveur de la mort','Taste Death','L01',33,2,'Vous','Vous','Instantané'],
  ['Tripes de troll','Trollguts','L01',33,6,'Bonus d’Endurance mètres','1','Bonus d’Endurance Rounds'],
  ['La Gueule','The Maw','L01',33,11,'Force Mentale mètres','ZdE Bonus de Force Mentale mètres','Bonus de Force Mentale Rounds'],
  ['Festin des tombés','Feast of the Fallen','L01',33,9,'Vous','Spécial','Bonus de Force Mentale Rounds'],
@@ -39,7 +39,7 @@ test('Attribut de la Grande Gueule — d10 de l’offrande : 10 ou ≥ NI soigne
   await cast(e.store,c,{attributeActive:true,targetTests:{foe:{roll:98,wardRoll:1},mage:{mawRoll:roll}}});
   assert.equal(subject(e.store,'mage').hp,10+gain,'d10 '+roll);
  }
- const low=getSpellContract('Goût de la mort');
+ const low=getSpellContract('Saveur de la mort');
  const t=await encounter({mage:{hp:10}});
  await cast(t.store,low,{attributeActive:true,targetTests:{mage:{mawRoll:2}}});
  assert.equal(subject(t.store,'mage').hp,12,'NI 2, d10 2 : soigne 2');
@@ -62,11 +62,11 @@ test('Gloutonneur — +20 Force, refus par Calme −2 DR, Exténué à la fin sa
  await cast(fail.store,c,{targetTests:{foe:{rejectsGift:true,resistanceRoll:95,roll:95}}});
  assert.ok(subject(fail.store,'foe').extensions.v5.spellEffects.some(e=>e.spellId===c.id),'refus raté');
 });
-test('Dévore-cervelle, Tripes de troll, Goût de la mort — Traits et rappels',async()=>{
+test('Dévore-cervelle, Tripes de troll, Saveur de la mort — Traits et rappels',async()=>{
  assert.deepEqual(getSpellContract('Dévore-cervelle').effects.traits,['Peur (2)']);
  assert.match(getSpellContract('Dévore-cervelle').reminders,/−2 DR/);
  const troll=getSpellContract('Tripes de troll');assert.deepEqual(troll.effects.traits,['Régénération']);assert.match(troll.reminders,/Accessible \(\+2 DR\)/);
- assert.equal(getSpellContract('Goût de la mort').treatment,'narrative');
+ assert.equal(getSpellContract('Saveur de la mort').treatment,'narrative');
 });
 test('La Gueule — Esquive +0 : réussie, dégâts 8 moins DR ; ratée, dégâts 10 et trois Enchevêtré',async()=>{
  const c=getSpellContract('La Gueule');

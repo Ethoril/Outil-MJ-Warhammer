@@ -25,7 +25,7 @@ export const GRANDE_GUEULE=[
   'Vous dévorez une tête entière : votre ventre en tire l’essence des cauchemars, qui se répand en une vague d’horreur nauséabonde : vous gagnez Peur (2).',
   {type:'traits',traits:['Peur (2)']},
   'Si le défunt était proche d’une créature affectée par votre Peur, elle subit −2 DR à ses Tests de Calme pour y résister (rappel : relation jugée par le MJ).'),
- L01('gout-de-la-mort','Goût de la mort','Taste Death',33,2,'Vous','Vous','Instantané',
+ L01('saveur-de-la-mort','Saveur de la mort','Taste Death',33,2,'Vous','Vous','Instantané',
   'En consommant une part de cadavre, vous apprenez quand et comment la créature est morte : arme, poison, magie, mort naturelle, de façon générale.',
   {type:'narrative'},
   'Information générale seulement (jamais le coupable ni les détails de l’arme). Mort « propre » (ni poison ni maladie) : il est convenable de consommer le reste du corps.'),
