@@ -76,6 +76,8 @@ Parcours guidé de recette (`docs/RECETTE_UTILISATEUR.md` mis à jour), retours 
 
 Décision du MJ (21/10) : l’outil réécrira sur la fiche du site des fiches (https://ethoril.github.io/ennemi-interieur-wfrp4/) les valeurs durables qu’il modifie en jeu. À faire **après** les phases B à F, pour disposer de toutes les variables : registre `docs/VARIABLES_PERSISTANTES_PJ.md` tenu à jour par chaque lot. Contenu : champs ajoutés à la fiche (Péchés, Corruption, culte explicite, pénitences, et le reste du registre), import étendu, écriture en retour et ses règles (moment, conflits, annulation).
 
+**Rappel du MJ (22/10) — projet des fiches (ennemi-interieur-wfrp4, hors dépôt de l’outil)** : exploiter le référentiel de mots-clés de la phase E dans les fiches (mots-clés du personnage, spécialisations de Haine, Animosité, Préjugé, Sans peur [Ennemi]… choisies dans la même liste), avec la même source de vérité que l’outil. À rappeler au MJ à l’ouverture de la phase H.
+
 ## Ordre et jalons
 
 A (3.21.0) → B → C (3.22.0) → D (une version par tradition ou par paire) → E (une version par bestiaire) → F (inventaire, puis sélecteurs, puis lots) → G.

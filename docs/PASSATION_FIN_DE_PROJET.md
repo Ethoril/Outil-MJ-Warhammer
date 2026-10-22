@@ -39,6 +39,7 @@ Claude Pro en cours, intègre et publie ce qui est fini, et relance ce qui s'est
 
 ## Reste à faire après B, C, D
 
+- **Rappel à faire au MJ (phase H)** : exploiter le référentiel de mots-clés (phase E) dans le projet des fiches ennemi-interieur-wfrp4 (voir `docs/PLAN_FIN_DE_PROJET.md`, phase H).
 - **Sélecteurs MJ** : choix d’exécutant à relire (`docs/plans-gpt/CHOIX_EXECUTANT_PHASE_C.md`, `_D.md`, et la suite de `_B.md`), propositions Gemini (`docs/plans-gemini/PROPOSITIONS_NOMS_TRAITS.md`, `PROPOSITIONS_CONVERSION_AOTE3.md`), magie skaven repérée par D (à arbitrer), conception des runes (`docs/plans-gpt/CONCEPTION_RUNES.md`, à valider avant code).
 - **Phase E** (bestiaires) : `docs/plans-gpt/BRIEF_GPT_PHASE_E_BESTIAIRES.md`.
 - **Phase F** (audit des 2694 pages avec sélecteur par règle, sans implantation automatique), **G** (recette à la table, parcours dans `docs/RECETTE_UTILISATEUR.md`), **H** (écriture en retour vers les fiches, après tout le reste).
