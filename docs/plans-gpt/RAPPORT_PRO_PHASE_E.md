@@ -18,7 +18,8 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | B2 bibliothèque de profils (UI : filtres livre/genre/mot-clé/nom, fiche lecture seule, ajout au combat ×N, copie en Réserve, chargement paresseux) | FAIT (choix E-B2) | voir `git log` |
 | B3 raccordement des sorts d'invocation (Relever les morts, Réanimation, Manifestation de Démon Mineur ; choix E-B3) | FAIT | voir `git log` |
 | T1 natures (Éthéré, Démoniaque, Protection, Immunité feu/froid/contondant, Artificiel : Endurance pour Volonté ; rappels) | FAIT (choix E-T1) | voir `git log` |
-| T2 à T12, F1-F2, S1, R1 | À FAIRE | |
+| T2 combat naturel (Morsure, Cornes, Queue, Piétinement, Tentacules, Langue, Constricteur, Toile, Étreinte glaciale, Souffle, Vomissement, Hurlement, Regard, armes V4) | FAIT (choix E-T2) | voir `git log` |
+| T3 à T12, F1-F2, S1, R1 | À FAIRE | |
 
 ## Dernière suite complète
 
