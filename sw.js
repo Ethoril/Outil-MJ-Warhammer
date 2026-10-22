@@ -31,6 +31,7 @@ const ASSETS_TO_CACHE = [
 
   './js/core/store.js',
   './js/core/creature-keywords.js',
+  './js/core/creature-natures.js',
   './js/data/creature-keywords.js',
   './js/ui/keyword-picker.js',
   './js/core/bestiary-profiles.js',
