@@ -76,6 +76,9 @@ export function readDescribedNames(text, dictionary) {
 }
 
 /** Attaques V5 : « Hooves and Tusks: (40/+6) Free Attack only when Charging » → { name, value, damage, note }. */
+// Qualités, défauts et clauses qui suivent la valeur d'une attaque (le nom de la suivante vient juste après, sans séparateur).
+const QUALITY_START = /^(?:Accurate|Blackpowder|Blast|Damaging|Defensive|Distract|Entangle|Fast|Hack|Impact|Impale|Penetrating|Pistol|Precise|Pummel|Repeater(?: \d+)?|Shield|Trap Blade|Unbreakable|Wrap|Dangerous|Imprecise|Reload(?: \d+)?|Slow|Tiring|Undamaging|Partial|Ugly|Magical|Unbalanced|Slashing|\d+ yards?|Free Attack only when Charging|Lose Momentum to make this Free Attack)\b,?\s*/i;
+
 export function readAttacks(text) {
   const attacks = [];
   const pattern = /(?:^|\s)([A-Z][^:()]*?)(?:\s*\(([^()]*)\))?\s*:\s*\(\s*(\d+)\s*\/\s*([+-]?\d+)\s*\)/g;
@@ -83,7 +86,11 @@ export function readAttacks(text) {
   marks.forEach((mark, index) => {
     const end = index + 1 < marks.length ? marks[index + 1].index : text.length;
     const tail = clean(text.slice(mark.index + mark[0].length, end));
-    const attack = { name: clean(mark[1]), value: Number(mark[3]), damage: Number(mark[4]) };
+    let name = clean(mark[1]);
+    const peeled = [];
+    for (let found = QUALITY_START.exec(name); found && found[0].length < name.length; found = QUALITY_START.exec(name)) { peeled.push(found[0].replace(/,\s*$/, '').trim()); name = name.slice(found[0].length); }
+    if (peeled.length && attacks.length) { const previous = attacks[attacks.length - 1]; previous.tail = clean(`${previous.tail || ''} ${peeled.join(', ')}`); }
+    const attack = { name: clean(name), value: Number(mark[3]), damage: Number(mark[4]) };
     if (mark[2]) attack.detail = clean(mark[2]);
     if (/^Optional/i.test(attack.name)) { attack.optional = true; attack.name = clean(attack.name.replace(/^Optional\s*/i, '')); }
     if (tail) attack.tail = tail;
@@ -149,6 +156,10 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   if (sections.Attacks) profile.attacks = readAttacks(sections.Attacks);
   if (sections.Armour) profile.armour = readArmour(sections.Armour);
   if (sections.Traits !== undefined) Object.assign(profile, listTraits(sections.Traits, mode, traitDictionary, 'traits'));
+  if (sections.Traits === undefined && mode === 'v5' && traitDictionary.size) {
+    const scanned = readDescribedNames(block.body, traitDictionary).map(readTraitItem).filter(Boolean);
+    if (scanned.length) profile.traits = scanned;
+  }
   if (sections['Attack Traits'] !== undefined) Object.assign(profile, listTraits(sections['Attack Traits'], mode, traitDictionary, 'attackTraits'));
   const optional = sections['Optional Traits'] ?? sections.Optional;
   if (optional !== undefined) profile.optional = splitList(optional).map(readTraitItem).filter(Boolean);

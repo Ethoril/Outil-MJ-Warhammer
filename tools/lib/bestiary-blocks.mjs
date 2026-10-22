@@ -26,6 +26,23 @@ const isTitleText = text => {
 const parenthesised = text => /^\(.*\)$/.test(text);
 const padCells = tokens => [...tokens, ...Array(Math.max(0, 12 - tokens.length)).fill(null)];
 
+/** Gouttière interne d'une fiche (lignes brutes de sa fenêtre) : colonne libre de texte avec du texte de part et d'autre, sinon null. */
+function innerGutter(rawLines) {
+  const filled = rawLines.filter(line => line.trim());
+  if (filled.length < 8) return null;
+  const width = Math.max(...filled.map(line => line.length));
+  let best = null;
+  for (let x = 14; x < width - 14; x += 1) {
+    if (filled.some(line => line[x] && line[x] !== ' ')) continue;
+    const leftCount = filled.filter(line => line.slice(0, x).trim()).length;
+    const rightCount = filled.filter(line => line.slice(x + 1).trim()).length;
+    if (leftCount < 4 || rightCount < 4) continue;
+    const score = Math.min(leftCount, rightCount) * 100 - Math.abs(x - width / 2);
+    if (!best || score > best.score) best = { x, score };
+  }
+  return best ? best.x : null;
+}
+
 /** Colonne de gouttière d'une page à deux colonnes de texte : aucune ligne ne la traverse (hors titres pleine largeur). */
 function findGutter(lines) {
   const filled = lines.filter(line => line.trim());
@@ -86,7 +103,7 @@ export function pageBlocks(pageText) {
     const neighbour = heads.filter(other => other !== head && other.start > head.start + 20).sort((x, y) => x.start - y.start)[0];
     let right = neighbour ? Math.max(head.end + 1, neighbour.start - 4) : Infinity;
     if (gutter && head.start < gutter - 5) right = Math.min(right, gutter);
-    const left = Math.max(0, head.start - 2);
+    const left = Math.max(gutter && head.start > gutter ? gutter + 1 : 0, head.start - 4);
     const windowOf = line => (line || '').slice(left, right === Infinity ? undefined : right);
     const rightLimit = right === Infinity ? 1e9 : right;
     // Titre : texte avant l'en-tête sur la même ligne, sinon lignes juste au-dessus (majuscules, ou intitulé entre parenthèses).
@@ -103,8 +120,16 @@ export function pageBlocks(pageText) {
     // Ligne des valeurs : première ligne sous l'en-tête, dans la fenêtre, faite de seuls nombres et tirets (ou Base/Adv./Total).
     // Les chiffres sont les jetons numériques en tête de ligne (le texte de la colonne voisine peut suivre sur la même ligne).
     const rowPrefix = line => {
-      const slice = (line || '').slice(left, right === Infinity ? undefined : right);
-      const found = /^\s*(?:(?:Total|Base)\s+)?(?:(?:[+\-−–—�]?\d+\*?|[-–—−�]+|\*)(?=\s|$)\s*)+/.exec(slice);
+      // La marge gauche élargie peut ramasser la fin d'un mot voisin : on réessaie avec les marges plus étroites.
+      for (const margin of [0, 2, 4]) {
+        const found = rowPrefixAt(line, left + margin);
+        if (found) return found;
+      }
+      return null;
+    };
+    const rowPrefixAt = (line, from) => {
+      const slice = (line || '').slice(from, right === Infinity ? undefined : right);
+      const found =/^\s*(?:(?:Total|Base)\s+)?(?:(?:[+\-−–—�]?\d+\*?|[-–—−�]+|\*)(?=\s|$)\s*)+/.exec(slice);
       return found && (found[0].match(CELL) || []).length >= 3 ? found[0].replace(/^\s*(Total|Base)\b/, label => ' '.repeat(label.length)) : null;
     };
     let rowAt = -1;
@@ -133,22 +158,32 @@ export function pageBlocks(pageText) {
     }
     // Corps : fenêtre de lignes sous la ligne des valeurs.
     const body = [];
+    const rawBody = [];
     let blank = 0;
     for (let k = rowAt + 1; k < lines.length; k += 1) {
       const text = clean(windowOf(lines[k]));
       if (heads.some(other => other !== head && other.line === k && other.start < rightLimit && other.end > left)) break;
-      if (!text) { blank += 1; if (blank > 2) break; continue; }
-      // Après un blanc, seule une étiquette de section (ou le contenu d'une étiquette seule sur sa ligne) prolonge le bloc.
-      if (blank && !SECTION_START.test(text) && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
+      // Bloc au format V5 (étiquettes seules sur leur ligne, lignes souvent doublées) : les blancs ne séparent pas le bloc du texte voisin ;
+      // il se termine sur un titre en majuscules, trois blancs d'affilée ou le bloc suivant ; les marques de blanc ('') servent à couper
+      // la dernière section à son premier paragraphe.
+      const v5Block = /^(Attacks|Armour|Skills|Traits)(\s|$)/.test(body.find(line => line) || '');
+      if (!text) { blank += 1; if (blank > (v5Block ? 3 : 2)) break; if (v5Block && body.length && body[body.length - 1] !== '') { body.push(''); rawBody.push(''); } continue; }
+      if (v5Block && isTitleText(text) && !SECTION_START.test(text)) break;
+      // Format V4 : après un blanc, seule une étiquette de section (ou le contenu d'une étiquette seule sur sa ligne) prolonge le bloc.
+      if (!v5Block && blank && !SECTION_START.test(text) && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
       // Titre d'un bloc suivant (dans la même fenêtre) : fin du corps.
       if (isTitleText(text) && lines.slice(k + 1, k + 4).some((_, d) => heads.some(other => other.line === k + 1 + d && other.start >= left - 8 && other.start < rightLimit))) break;
       blank = 0;
       body.push(text);
+      rawBody.push(windowOf(lines[k]));
       if (body.length > 45) break;
     }
+    // Fiche à deux colonnes internes (Vampire…) : la colonne de gauche d'abord, puis celle de droite.
+    const inner = innerGutter(rawBody);
+    const ordered = inner === null ? body : [...rawBody.map(line => clean(line.slice(0, inner))), ...rawBody.map(line => clean(line.slice(inner)))].filter((line, index, all) => line || (index > 0 && all[index - 1]));
     // Zone du titre : texte de la fenêtre juste au-dessus de l'en-tête (pour rapprocher un bloc d'un nom connu).
     const zone = clean([...Array(6).keys()].reverse().map(back => (back === 0 ? lines[head.line].slice(Math.max(0, head.start - 60), head.start) : windowOf(lines[head.line - back]))).join(' '));
-    blocks.push({ title: clean(titleParts.join(' ')), zone, cells: aligned.cells, extra: aligned.extra, approximate: Boolean(aligned.approximate), tokens: aligned.tokens || aligned.cells, body: clean(body.join(' ')), bodyLines: body, row: rowAt, header: head.line });
+    blocks.push({ title: clean(titleParts.join(' ')), zone, cells: aligned.cells, extra: aligned.extra, approximate: Boolean(aligned.approximate), tokens: aligned.tokens || aligned.cells, body: clean(ordered.join(' ')), bodyLines: ordered, row: rowAt, header: head.line });
   }
   return blocks;
 }
@@ -164,18 +199,40 @@ export function splitSections(bodyLines) {
   const joined = clean(lines.join(' '));
   const sections = {};
   const put = (label, text) => { sections[label] = sections[label] ? `${sections[label]} ${text}` : text; };
-  if ([...joined.matchAll(V4_LABEL_RE)].length) {
+  const startsV5 = lines.some(line => line && V5_LABEL_RE.test(line) && !/:/.test(line.slice(0, 12)));
+  if (!startsV5 && [...joined.matchAll(V4_LABEL_RE)].length) {
     const marks = [...joined.matchAll(V4_LABEL_RE)].map(found => ({ label: found[1], start: found.index + found[0].length, at: found.index }));
     marks.forEach((mark, index) => put(mark.label, clean(joined.slice(mark.start, index + 1 < marks.length ? marks[index + 1].at : joined.length))));
     return { sections, lead: clean(joined.slice(0, marks[0].at)), mode: 'v4' };
   }
   let current = null;
   const lead = [];
+  const chunks = new Map();
   for (const line of lines) {
     const found = V5_LABEL_RE.exec(line);
-    if (found) { current = found[1]; put(current, clean(line.slice(found[0].length))); } else if (current) put(current, line); else lead.push(line);
+    if (found) { current = found[1]; chunks.set(current, [clean(line.slice(found[0].length))]); } else if (current) chunks.get(current).push(line); else if (line) lead.push(line);
   }
-  for (const label of Object.keys(sections)) sections[label] = clean(sections[label]);
+  const last = [...chunks.keys()].pop();
+  for (const [label, parts] of chunks) {
+    let kept = parts;
+    if (label === last) {
+      // Dernière section : son premier paragraphe seulement (le texte qui suit est un encadré voisin) ; une ligne qui se prolonge
+      // (virgule finale ou suite en minuscule) reste dans le paragraphe.
+      kept = [];
+      let seen = false;
+      for (let i = 0; i < parts.length; i += 1) {
+        const part = parts[i];
+        if (part === '') {
+          const next = parts.slice(i + 1).find(line => line !== '');
+          const previous = kept.filter(Boolean).pop() || '';
+          if (seen && !(/,$/.test(previous) || (next && /^[a-zà-ÿ(]/.test(next)))) break;
+          continue;
+        }
+        kept.push(part); if (part) seen = true;
+      }
+    }
+    sections[label] = clean(kept.filter(Boolean).join(' '));
+  }
   return { sections, lead: clean(lead.join(' ')), mode: 'v5' };
 }
 
