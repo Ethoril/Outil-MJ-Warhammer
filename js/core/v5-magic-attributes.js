@@ -27,7 +27,12 @@ export const LORE_ATTRIBUTES = Object.freeze({
   // Domaines du Chaos (V5 pp. 259-260, phase D) : pas de Vent unique.
   nurgle: Object.freeze({ id: 'nurgle', wind: null, name: 'Domaine de Nurgle' }),
   slaanesh: Object.freeze({ id: 'slaanesh', wind: null, name: 'Domaine de Slaanesh' }),
-  tzeentch: Object.freeze({ id: 'tzeentch', wind: null, name: 'Domaine de Tzeentch' })
+  tzeentch: Object.freeze({ id: 'tzeentch', wind: null, name: 'Domaine de Tzeentch' }),
+  // Magie des Ogres (Grande Gueule, AotE2 p. 32).
+  maw: Object.freeze({ id: 'maw', wind: null, name: 'Domaine de la Grande Gueule' }),
+  // Magie orque (Tribes and Tribulations pp. 98-101).
+  'little-waaagh': Object.freeze({ id: 'little-waaagh', wind: null, name: 'Domaine de la Petite Waaagh' }),
+  'big-waaagh': Object.freeze({ id: 'big-waaagh', wind: null, name: 'Domaine de la Grande Waaagh' })
 });
 
 /**
@@ -35,6 +40,9 @@ export const LORE_ATTRIBUTES = Object.freeze({
  */
 export function normalizeLoreId(rawLore) {
   const s = fold(rawLore);
+  if (/^little-waaagh$|petite.?waaagh|little.?waaagh/.test(s)) return 'little-waaagh';
+  if (/^big-waaagh$|grande.?waaagh|big.?waaagh/.test(s)) return 'big-waaagh';
+  if (/^maw$|great.?maw|grande.?gueule/.test(s)) return 'maw';
   if (/nurgle/.test(s)) return 'nurgle';
   if (/slaanesh/.test(s)) return 'slaanesh';
   if (/tzeentch/.test(s)) return 'tzeentch';
@@ -364,7 +372,31 @@ export function previewLoreAttribute({
             : { type: 'lore-attribute-tzeentch', lore: 'tzeentch', test: { roll, success: false, sl: test.sl }, corruptionGain: 1, summary: `${name} : Test de Corruption raté (${roll}), +1 Point de Corruption.` });
         }
       }
-      if (missingRolls.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, ready: false };
+      if (missingRolls.length) return { lore: activeLore, loreName: LORE_ATTRIBUTES[activeLore].name, casterEffects: null, targetEffects, damageRules, missingRolls, missingLabel: 'd100 du Test de Corruption', ready: false };
+      break;
+    }
+
+    case 'maw': {
+      // Grande Gueule (AotE2 p. 32) : après un sort réussi, d10 de l'offrande ; 10 ou au moins égal au NI : le lanceur récupère NI Blessures.
+      const roll = options.attributeRolls?.[caster?.id]?.mawRoll;
+      const cn = Number(spell.cn) || 0;
+      if (!Number.isInteger(roll) || roll < 1 || roll > 10) return { lore: 'maw', loreName: LORE_ATTRIBUTES.maw.name, casterEffects: null, targetEffects, damageRules, missingRolls: [caster?.id || 'lanceur'], missingLabel: 'd10 de l’offrande (Grande Gueule)', ready: false };
+      const heals = roll === 10 || roll >= cn;
+      casterEffects = { type: 'lore-attribute-maw', lore: 'maw', roll, healWounds: heals ? cn : 0, summary: heals ? `Offrande : d10 ${roll}, le lanceur récupère ${cn} Blessures.` : `Offrande : d10 ${roll}, aucun soin.` };
+      break;
+    }
+
+    case 'little-waaagh': {
+      // Petite Waaagh (L12 p. 98) : avec au moins 1 DR au Test d'incantation, le Chaman peut en acheter un Point de Chance (jusqu'à la fin de la rencontre, au-delà de son maximum).
+      if (options.waaaghFortune === true && Number(castingSl) >= 1) {
+        casterEffects = { type: 'lore-attribute-little-waaagh', lore: 'little-waaagh', gainFortune: 1, summary: 'Petite Waaagh : 1 DR converti en 1 Point de Chance jusqu’à la fin de la rencontre.' };
+      }
+      break;
+    }
+
+    case 'big-waaagh': {
+      // Grande Waaagh (L12 p. 100) : les Orques, Gobelins et Hobgobelins à moins de Bonus de Force Mentale mètres perdent leurs états Brisé ; positions non suivies, appliqué par le MJ.
+      casterEffects = { type: 'lore-attribute-big-waaagh', lore: 'big-waaagh', reminderOnly: true, summary: 'Grande Waaagh : les Orques, Gobelins et Hobgobelins à portée perdent leurs états Brisé (à retirer par le MJ).' };
       break;
     }
 
@@ -424,6 +456,12 @@ export function applyLoreAttribute(state, preview, options = {}) {
     } else if (casterEffects.lore === 'heavens') {
       const res=applySpellEffects(caster,{spellId:options.spellId || 'lore-attribute-heavens',spellName:'Attribut des Cieux',tempFortunePoints:casterEffects.gainFortune,duration:'Spéciale',expiresAtNextTurnOf:caster.id,appliedAtTurnSerial:options.turnSerial ?? 0,cn:options.cn,castExecutionId:options.castExecutionId,casterId:caster.id},{...options,overcastDurationMultiplier:1});
       updatedParticipants.set(caster.id,res.participant);
+    } else if (casterEffects.lore === 'little-waaagh') {
+      const res = applySpellEffects(caster, { spellId: options.spellId || 'lore-attribute-little-waaagh', spellName: 'Attribut de la Petite Waaagh', tempFortunePoints: casterEffects.gainFortune, duration: 'Spéciale', cn: options.cn, castExecutionId: options.castExecutionId, casterId: caster.id }, { ...options, overcastDurationMultiplier: 1 });
+      updatedParticipants.set(caster.id, res.participant);
+    } else if (casterEffects.lore === 'maw') {
+      if (casterEffects.healWounds > 0) caster.hp = Math.min(Number(caster.maxHp ?? Infinity), (Number(caster.hp) || 0) + casterEffects.healWounds);
+      updatedParticipants.set(caster.id, caster);
     } else if (casterEffects.lore === 'shadow') {
       // +2 DR Discrétion
       const res = applySpellEffects(caster, {
