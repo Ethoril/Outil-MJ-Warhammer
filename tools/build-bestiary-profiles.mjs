@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { extractProfiles, corpusBooks } from './lib/bestiary-extract.mjs';
 import { assignInventoryIds } from './lib/bestiary-ids.mjs';
 import { buildRecord } from './lib/bestiary-record.mjs';
-import { TEMPLATE_IDS, NAME_FIXES, WOUNDS_ABSENT_IDS } from './lib/bestiary-overrides.mjs';
+import { TEMPLATE_IDS, NAME_FIXES, WOUNDS_ABSENT_IDS, ARMOUR_DETAIL } from './lib/bestiary-overrides.mjs';
 import { MANUAL_BLOCKS } from './lib/bestiary-manual.mjs';
 import { KEYWORDS_MANUAL } from './lib/bestiary-keywords-manual.mjs';
 import { parsePregenerated } from './lib/bestiary-pregen.mjs';
@@ -94,6 +94,7 @@ for (const book of ids) {
     const record = buildRecord(profile, corrected ? { ...entry, kind: 'template' } : entry, context);
     if (corrected) record.inventoryKind = entry.kind;
     if (WOUNDS_ABSENT_IDS.has(record.id)) record.woundsAbsent = true;
+    if (ARMOUR_DETAIL[record.id]) record.armour = { detail: ARMOUR_DETAIL[record.id] };
     dropped.push({ id: record.id, ...record._dropped });
     delete record._dropped;
     applyFrenchName(record);

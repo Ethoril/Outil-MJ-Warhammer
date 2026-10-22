@@ -59,7 +59,9 @@ export const CELL_OVERRIDES = Object.freeze({
 export const TEMPLATE_IDS = Object.freeze(new Set([
   'E0-P-326', 'E0-P-327', 'E0-P-328', 'E0-P-329', 'E0-P-330', 'E0-P-331', 'E0-P-332', 'E0-P-333', 'E0-P-334', 'E0-P-335', 'E0-P-336', 'E0-P-337', 'E0-P-338', 'E0-P-339', 'E0-P-340',
   // Tribes and Tribulations (L12) : la Mégère troll des rivières (p. 89) est une variante en modificateurs, comme le Troll massif (E-D18)
-  'E0-P-449'
+  'E0-P-449',
+  // Middenheim (L19) : l'Enfant d'Ulric (p. 116) n'a pas de profil propre, il imprime les modificateurs de sa forme hybride (E-D25)
+  'E0-P-598'
 ]));
 
 /** Profils dont le livre n'imprime aucune Blessures (pas de colonne W) : `wounds: null` et `woundsAbsent: true` (E-D23). */
@@ -69,7 +71,14 @@ export const WOUNDS_ABSENT_IDS = Object.freeze(new Set(['E0-P-515']));
  * Noms que l'inventaire E0 a lus de travers (phrase du texte d'ambiance prise pour un titre) : le titre imprimé du bloc est rétabli (E-D18).
  */
 export const NAME_FIXES = Object.freeze({
-  'E0-P-438': 'Matthogg — Ogre Bruiser'
+  'E0-P-438': 'Matthogg — Ogre Bruiser',
+  // Middenheim (L19) : tirets longs lus à la place des umlauts (E-D25)
+  'E0-P-585': 'Emmille Münzstätter — Human Artisan (Silver 1)'
+});
+
+/** Armure imprimée en plusieurs parties sans total : le texte imprimé est conservé en détail, sans PA global (E-D25). */
+export const ARMOUR_DETAIL = Object.freeze({
+  'E0-P-575': 'Helm 2, Plate 3'
 });
 
 /**

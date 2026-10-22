@@ -165,6 +165,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L19",
+   "file": "L19.json",
+   "title": "Middenheim: City of the White Wolf",
+   "edition": "V4",
+   "counts": {
+    "profiles": 40,
+    "templates": 1,
+    "pregenerated": 0
+   }
   }
  ]
 }

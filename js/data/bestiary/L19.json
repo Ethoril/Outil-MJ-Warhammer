@@ -1,0 +1,4365 @@
+{
+ "schemaVersion": 1,
+ "book": "L19",
+ "title": "Middenheim: City of the White Wolf",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L19",
+  "sha256": "3038d48bd4314e8e95f25fbf7cd1660b82321950f623ab33478666a944e063fb"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-572",
+   "book": "L19",
+   "page": 32,
+   "physicalPage": 32,
+   "kind": "profile",
+   "blockKey": "L19:32:0",
+   "name": "Sergeant Wolfgard Hohmann — Human Honour Guard (Silver 3)",
+   "nameFr": "Sergent Wolfgard Hohmann — Garde d’honneur humain (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 54,
+    "CT": 27,
+    "F": 42,
+    "E": 42,
+    "I": 38,
+    "Ag": 40,
+    "Dex": 32,
+    "Int": 36,
+    "FM": 31,
+    "Soc": 38
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 2,
+    "detail": "Breastplate and Helm"
+   },
+   "attacks": [
+    {
+     "name": "Halberd",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 46
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 51
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 48
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 43
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 64
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 59
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 44
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed (The scythe shall reap thy flesh)"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Tenacious"
+    }
+   ],
+   "trappings": [
+    "Halberd",
+    "Polished Breastplate",
+    "Sharp Remarks",
+    "Sword",
+    "Unit of Guards",
+    "Well-Pressed Uniform"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-573",
+   "book": "L19",
+   "page": 32,
+   "physicalPage": 32,
+   "kind": "profile",
+   "blockKey": "L19:32:1",
+   "name": "Sergeant Wereburga Krotpreffer — Human Honour Guard (Silver 3)",
+   "nameFr": "Sergent Wereburga Krotpreffer — Garde d’honneur humain (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 49,
+    "CT": 36,
+    "F": 38,
+    "E": 45,
+    "I": 38,
+    "Ag": 33,
+    "Dex": 35,
+    "Int": 39,
+    "FM": 40,
+    "Soc": 22
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 2,
+    "detail": "Breastplate and Helm"
+   },
+   "attacks": [
+    {
+     "name": "Warhammer",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 44
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 38
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 47
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 42
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Sigmarites",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Outsiders",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed (The written word shall spell thy doom)"
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "Tenacious"
+    }
+   ],
+   "trappings": [
+    "A Grim Outlook",
+    "Discerning Gaze",
+    "Sword",
+    "Unit of Uneasy Guards",
+    "Warhammer"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-574",
+   "book": "L19",
+   "page": 39,
+   "physicalPage": 39,
+   "kind": "profile",
+   "blockKey": "L19:39:0",
+   "name": "Alfric `Half-Nose' Anvilbreaker — Dwarf Fence (Silver 2)",
+   "nameFr": "Alfric `Half-Nose' Anvilbreaker — Receleur nain (Argent 2)",
+   "stats": {
+    "M": 3,
+    "CC": 42,
+    "CT": 32,
+    "F": 42,
+    "E": 44,
+    "I": 38,
+    "Ag": 30,
+    "Dex": 36,
+    "Int": 49,
+    "FM": 41,
+    "Soc": 38
+   },
+   "wounds": 16,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 51
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 64
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 68
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 44
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 58
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 50
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Secret Signs (Thief)",
+     "nameFr": "Signes secrets (Voleur)",
+     "value": 52
+    },
+    {
+     "name": "Trade (Mason)",
+     "nameFr": "Métier (Maçon)",
+     "value": 38
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Elves",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Hatred",
+     "param": "Greenskins",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Strangers",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Dagger",
+    "Sharp Ears",
+    "Writing Kit"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-575",
+   "book": "L19",
+   "page": 52,
+   "physicalPage": 52,
+   "kind": "profile",
+   "blockKey": "L19:52:0",
+   "name": "Captain Moritz Valgeir — Human Knight, Former Sergeant (Silver 5)",
+   "nameFr": "Capitaine Moritz Valgeir — Chevalier humain, ancien sergent (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 46,
+    "F": 48,
+    "E": 45,
+    "I": 48,
+    "Ag": 33,
+    "Dex": 45,
+    "Int": 39,
+    "FM": 40,
+    "Soc": 42
+   },
+   "wounds": 16,
+   "armour": {
+    "detail": "Helm 2, Plate 3"
+   },
+   "attacks": [
+    {
+     "name": "Cavalry Hammer",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Lance",
+     "damage": 10,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 46
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 48
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 45
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 51
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 53
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 49
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 52
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 45
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 47
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 54
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 45
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 56
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 43
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 64
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 61
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 65
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 39
+    }
+   ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Etiquette (Soldiers)"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "Strong Back",
+     "rank": 2
+    }
+   ],
+   "trappings": [
+    "Antique Plate Armour",
+    "Cavalry Hammer",
+    "Commanding Voice",
+    "Lance",
+    "Well-worn Sword"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-576",
+   "book": "L19",
+   "page": 52,
+   "physicalPage": 52,
+   "kind": "profile",
+   "blockKey": "L19:52:1",
+   "name": "Wulfric Tore — Human Merchant (Silver 5)",
+   "nameFr": "Wulfric Tore — Marchand humain (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 27,
+    "F": 22,
+    "E": 24,
+    "I": 38,
+    "Ag": 40,
+    "Dex": 32,
+    "Int": 36,
+    "FM": 31,
+    "Soc": 48
+   },
+   "wounds": 10,
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 33
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 49
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 51
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 42
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 54
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 49
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Doomed (From above comes thy death)"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-577",
+   "book": "L19",
+   "page": 67,
+   "physicalPage": 67,
+   "kind": "profile",
+   "blockKey": "L19:67:0",
+   "name": "Mote Yarrow the Fetchling",
+   "nameFr": "Mote Yarrow le Fetchling",
+   "stats": {
+    "M": 6,
+    "CC": 55,
+    "CT": 56,
+    "F": 13,
+    "E": 20,
+    "I": 65,
+    "Ag": 45,
+    "Dex": 71,
+    "Int": 65,
+    "FM": 62,
+    "Soc": 55
+   },
+   "wounds": 2,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 80
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 87
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 75
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 77
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 43
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 95
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 95
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Mortal Beings",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight, Smell, Hearing)"
+    },
+    {
+     "name": "Arcane Magic (Beasts, Hedgecraft, Life, Witchcraft)"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Little"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strider (Woodlands)"
+    },
+    {
+     "name": "Strong-minded",
+     "rank": 2
+    },
+    {
+     "name": "Witch!",
+     "rank": 2
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-578",
+   "book": "L19",
+   "page": 67,
+   "physicalPage": 67,
+   "kind": "profile",
+   "blockKey": "L19:67:1",
+   "name": "Yanni Weber — Human Master Wizard (Gold 1)",
+   "nameFr": "Yanni Weber — Maître sorcier humain (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 52,
+    "CT": 33,
+    "F": 38,
+    "E": 35,
+    "I": 38,
+    "Ag": 45,
+    "Dex": 35,
+    "Int": 58,
+    "FM": 59,
+    "Soc": 28
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Quarterstaff",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 64
+    },
+    {
+     "name": "Channelling (Ghur)",
+     "nameFr": "Focalisation (Ghur)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 63
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 51
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 62
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 66
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 66
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 58
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 63
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic (Beasts)"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Doomed (Thy last exclamation is love)"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "Grimoire",
+    "Magical License",
+    "Quarterstaff",
+    "Morg the Talking Rat Skull"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-579",
+   "book": "L19",
+   "page": 72,
+   "physicalPage": 72,
+   "kind": "profile",
+   "blockKey": "L19:72:0",
+   "name": "Stefan Hochen — Human Doktor (Silver 5)",
+   "nameFr": "Stefan Hochen — Docteur humain (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 26,
+    "CT": 32,
+    "F": 32,
+    "E": 36,
+    "I": 48,
+    "Ag": 30,
+    "Dex": 52,
+    "Int": 56,
+    "FM": 51,
+    "Soc": 48
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 53
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 55
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 62
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 36
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 52
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 67
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 64
+    },
+    {
+     "name": "Lore (Anatomy)",
+     "nameFr": "Savoir (Anatomie)",
+     "value": 66
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 68
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 63
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 61
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 42
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Surgery"
+    }
+   ],
+   "trappings": [
+    "Controversial Opinions on Mutants",
+    "Healing Draughts",
+    "Inherited Guild Licence",
+    "Trade Tools (Medicine)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-580",
+   "book": "L19",
+   "page": 72,
+   "physicalPage": 72,
+   "kind": "profile",
+   "blockKey": "L19:72:1",
+   "name": "Marta Gerbenshreiber — Human Bailiff (Silver 5)",
+   "nameFr": "Marta Gerbenshreiber — Huissier humain (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 49,
+    "CT": 36,
+    "F": 35,
+    "E": 38,
+    "I": 48,
+    "Ag": 33,
+    "Dex": 35,
+    "Int": 37,
+    "FM": 40,
+    "Soc": 48
+   },
+   "wounds": 13,
+   "armour": {
+    "ap": 1,
+    "detail": "Leather Jack"
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 63
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 55
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 52
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 43
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 47
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 55
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 60
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 56
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 47
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 59
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 61
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Those she Presumes to be Weak",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Embezzle"
+    },
+    {
+     "name": "Numismatics"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Tenacious"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon (Club)",
+    "Leather Jack",
+    "Lofty Ambitions"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-581",
+   "book": "L19",
+   "page": 78,
+   "physicalPage": 78,
+   "kind": "profile",
+   "blockKey": "L19:78:0",
+   "name": "Waldtraud Blass — Human Master Apothecary, Former Apprentice Artisan (Silver 3)",
+   "nameFr": "Waldtraud Blass — Maître apothicaire humain, ancien apprenti artisan (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 23,
+    "CT": 29,
+    "F": 32,
+    "E": 42,
+    "I": 48,
+    "Ag": 34,
+    "Dex": 50,
+    "Int": 48,
+    "FM": 31,
+    "Soc": 33
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 47
+    },
+    {
+     "name": "Lore (Chemistry)",
+     "nameFr": "Savoir (Chimie)",
+     "value": 68
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 63
+    },
+    {
+     "name": "Lore (Science)",
+     "nameFr": "Savoir (Science)",
+     "value": 53
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 55
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 53
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed (Caught within the trap you set)"
+    },
+    {
+     "name": "Concoct"
+    },
+    {
+     "name": "Craftsman (Apothecary)"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Master Tradesman (Apothecary)"
+    },
+    {
+     "name": "Pharmacist"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "trappings": [
+    "Dose of Ranald's Delight",
+    "Healing Draught",
+    "Trade Tools (Apothecary)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-582",
+   "book": "L19",
+   "page": 78,
+   "physicalPage": 78,
+   "kind": "profile",
+   "blockKey": "L19:78:1",
+   "name": "Johen — Human Witch (Brass 2)",
+   "nameFr": "Johen — Sorcière humaine (Bronze 2)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 34,
+    "F": 38,
+    "E": 38,
+    "I": 42,
+    "Ag": 37,
+    "Dex": 35,
+    "Int": 31,
+    "FM": 50,
+    "Soc": 48
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 66
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 58
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 64
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 44
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 54
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 44
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 47
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic (Witchcraft)"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Witch!"
+    }
+   ],
+   "keywords": [
+    "humain",
+    "sorciere"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-583",
+   "book": "L19",
+   "page": 85,
+   "physicalPage": 85,
+   "kind": "profile",
+   "blockKey": "L19:85:0",
+   "name": "Ritta — Human Con Artist (Silver 2)",
+   "nameFr": "Ritta — Escroc humain (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 32,
+    "CT": 33,
+    "F": 32,
+    "E": 34,
+    "I": 46,
+    "Ag": 34,
+    "Dex": 46,
+    "Int": 38,
+    "FM": 41,
+    "Soc": 48
+   },
+   "wounds": 13,
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 57
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 52
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 48
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 61
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 59
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 56
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 52
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Secret Identity"
+    }
+   ],
+   "trappings": [
+    "Disguise Kit",
+    "3d10 Pilfered Shillings",
+    "Tears On Demand"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-584",
+   "book": "L19",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "profile",
+   "blockKey": "L19:89:0",
+   "name": "Wulfrum Viert — Human Steward (Gold 1)",
+   "nameFr": "Wulfrum Viert — Intendant humain (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": 33,
+    "F": 42,
+    "E": 43,
+    "I": 38,
+    "Ag": 30,
+    "Dex": 31,
+    "Int": 46,
+    "FM": 46,
+    "Soc": 49
+   },
+   "wounds": 16,
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 57
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 63
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 54
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 58
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 53
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 57
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 66
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 58
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 52
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 54
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 62
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 40
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 50
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Servants)"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Numismatics"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Supportive"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-585",
+   "book": "L19",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "profile",
+   "blockKey": "L19:89:1",
+   "name": "Emmille Münzstätter — Human Artisan (Silver 1)",
+   "nameFr": "Emmille Münzstätter — Artisan humain (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 29,
+    "CT": 36,
+    "F": 48,
+    "E": 33,
+    "I": 33,
+    "Ag": 32,
+    "Dex": 39,
+    "Int": 32,
+    "FM": 32,
+    "Soc": 27
+   },
+   "wounds": 13,
+   "skills": [
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 40
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 34
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 37
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 38
+    },
+    {
+     "name": "Trade (Coin Stamping)",
+     "nameFr": "Métier (Coin Stamping)",
+     "frUnverified": true,
+     "value": 44
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Sigmarites",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Nimble Fingered"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-586",
+   "book": "L19",
+   "page": 95,
+   "physicalPage": 95,
+   "kind": "profile",
+   "blockKey": "L19:95:0",
+   "name": "Agna Lottrisdottir — Dwarf Envoy (Silver 4)",
+   "nameFr": "Agna Lottrisdottir — Envoyé nain (Argent 4)",
+   "stats": {
+    "M": 3,
+    "CC": 41,
+    "CT": 28,
+    "F": 33,
+    "E": 40,
+    "I": 32,
+    "Ag": 25,
+    "Dex": 31,
+    "Int": 34,
+    "FM": 52,
+    "Soc": 19
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 1,
+    "detail": "Leather Jack"
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 29
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 29
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 25
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 38
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 59
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 46
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Elves",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Hatred",
+     "param": "Greenskins",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Prejudice",
+     "param": "cowardly Dwarfs that aren't eager to wage war in order to re-establish the Everlasting Realm",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Seasoned Traveller"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon (Dagger)",
+    "Leather Jack",
+    "Old Missives"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-587",
+   "book": "L19",
+   "page": 95,
+   "physicalPage": 95,
+   "kind": "profile",
+   "blockKey": "L19:95:1",
+   "name": "Helmut Beckenbauer — Human Gang Boss (Silver 3)",
+   "nameFr": "Helmut Beckenbauer — Chef de bande humain (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 53,
+    "CT": 32,
+    "F": 47,
+    "E": 45,
+    "I": 32,
+    "Ag": 33,
+    "Dex": 31,
+    "Int": 40,
+    "FM": 45,
+    "Soc": 53
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 2,
+    "detail": "Mail Shirt"
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Knuckledusters",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 59
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 56
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 56
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 61
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 67
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 46
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "People who don't appreciate a good game of Middenball",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Doomed (Bloody rest shake thy bones to paste)"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Fearless (Watchmen)"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Robust"
+    },
+    {
+     "name": "Street Fighting"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-588",
+   "book": "L19",
+   "page": 100,
+   "physicalPage": 100,
+   "kind": "profile",
+   "blockKey": "L19:100:0",
+   "name": "Brother Bengt — Human Priest (Silver 1)",
+   "nameFr": "Frère Bengt — Prêtre humain (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 32,
+    "F": 38,
+    "E": 46,
+    "I": 42,
+    "Ag": 40,
+    "Dex": 32,
+    "Int": 50,
+    "FM": 41,
+    "Soc": 48
+   },
+   "wounds": 15,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 53
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 49
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 52
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 57
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 53
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 57
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 57
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 52
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Bad Listeners",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Bless (Ulric)"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Invoke (Ulric)"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-589",
+   "book": "L19",
+   "page": 100,
+   "physicalPage": 100,
+   "kind": "profile",
+   "blockKey": "L19:100:1",
+   "name": "Walpurga Wurklich — Human Agitator (Brass 2)",
+   "nameFr": "Walpurga Wurklich — Agitateur humain (Bronze 2)",
+   "stats": {
+    "M": 4,
+    "CC": 23,
+    "CT": 25,
+    "F": 25,
+    "E": 36,
+    "I": 40,
+    "Ag": 40,
+    "Dex": 37,
+    "Int": 44,
+    "FM": 46,
+    "Soc": 38
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 48
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 43
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 54
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Liars, Dissemblers, Sophists",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Actors, Theatregoers",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Impassioned Zeal"
+    },
+    {
+     "name": "Public Speaker"
+    }
+   ],
+   "trappings": [
+    "Symbol of Verena",
+    "Accusatory Glare",
+    "Sanctimony to Spare"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-590",
+   "book": "L19",
+   "page": 106,
+   "physicalPage": 106,
+   "kind": "profile",
+   "blockKey": "L19:106:0",
+   "name": "Grand Vizier Bhar — Necromancer (Silver 3)",
+   "nameFr": "Grand Vizir Bhar — Nécromancien (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 42,
+    "CT": 37,
+    "F": 32,
+    "E": 55,
+    "I": 45,
+    "Ag": 37,
+    "Dex": 40,
+    "Int": 62,
+    "FM": 54,
+    "Soc": 49
+   },
+   "wounds": 18,
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 55
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 74
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 54
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 64
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 52
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 68
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 52
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 67
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 49
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 56
+    },
+    {
+     "name": "Language (Arabyan)",
+     "nameFr": "Langue (Arabyan)",
+     "frUnverified": true,
+     "value": 99
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 81
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Daemonology)",
+     "nameFr": "Savoir (Démonologie)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 68
+    },
+    {
+     "name": "Lore (Necromancy)",
+     "nameFr": "Savoir (Nécromancie)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Tzeentch)",
+     "nameFr": "Savoir (Tzeentch)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 56
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 88
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 58
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 65
+    },
+    {
+     "name": "Trade (Herbalist)",
+     "nameFr": "Métier (Herboriste)",
+     "value": 52
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Arcane Magic (Daemonology, Necromancy, Tzeentch, Witchery)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Etiquette (Criminals, Cultists)"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Savant (Necromancy)"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strong Minded"
+    },
+    {
+     "name": "Witch!"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-591",
+   "book": "L19",
+   "page": 106,
+   "physicalPage": 106,
+   "kind": "profile",
+   "blockKey": "L19:106:1",
+   "name": "Andrea Bruhn — Human Town Councillor (Silver 5)",
+   "nameFr": "Andrea Bruhn — Conseiller municipal humain (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 32,
+    "E": 29,
+    "I": 43,
+    "Ag": 51,
+    "Dex": 45,
+    "Int": 52,
+    "FM": 38,
+    "Soc": 51
+   },
+   "wounds": 10,
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 58
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 54
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 58
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 71
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 59
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 58
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 69
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 54
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Performers who aren't as good as they think they are",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Doomed (Thou wilt seem pretty in ribbons)"
+    },
+    {
+     "name": "Etiquette (Servants, Guilders, Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Supportive"
+    }
+   ],
+   "trappings": [
+    "Bored Servant",
+    "Coach and Driver",
+    "Eye for Talent",
+    "Heart of Stone"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-592",
+   "book": "L19",
+   "page": 109,
+   "physicalPage": 109,
+   "kind": "profile",
+   "blockKey": "L19:109:0",
+   "name": "Castellan-Warlord Gnawretch Skrray",
+   "nameFr": "Châtelain-chef de guerre Gnawretch Skrray",
+   "stats": {
+    "M": 5,
+    "CC": 54,
+    "CT": 36,
+    "F": 47,
+    "E": 45,
+    "I": 60,
+    "Ag": 45,
+    "Dex": 41,
+    "Int": 45,
+    "FM": 42,
+    "Soc": 45
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 4
+   },
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 6,
+     "trait": "Tail"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 75
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 57
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 57
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 67
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 74
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Tail",
+     "rating": "+6",
+     "ref": "E0-T-054"
+    }
+   ],
+   "trappings": [
+    "Heavy Armour",
+    "Sword."
+   ],
+   "abilities": [
+    "E0-T-262",
+    "E0-T-263"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-593",
+   "book": "L19",
+   "page": 110,
+   "physicalPage": 110,
+   "kind": "profile",
+   "blockKey": "L19:110:0",
+   "name": "Master-Moulder Skree",
+   "nameFr": "Maître-mouleur Skree",
+   "stats": {
+    "M": 5,
+    "CC": 47,
+    "CT": 34,
+    "F": 48,
+    "E": 46,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 45,
+    "Int": 48,
+    "FM": 43,
+    "Soc": 28
+   },
+   "wounds": 16,
+   "armour": {
+    "detail": "Hide 2"
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 7,
+     "trait": "Bite"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 58
+    },
+    {
+     "name": "Animal Training",
+     "nameFr": "Dressage",
+     "value": 58
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 68
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 56
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 58
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 58
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 57
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 62
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 65
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+7",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Smell)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Surgery"
+    },
+    {
+     "name": "Trapper"
+    }
+   ],
+   "trappings": [
+    "Man Catcher (Treat as a spear with Entangle and Undamaging)",
+    "Hand Weapon (Sword)"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-594",
+   "book": "L19",
+   "page": 110,
+   "physicalPage": 110,
+   "kind": "profile",
+   "blockKey": "L19:110:1",
+   "name": "Arch-Prelate Kanker Flett",
+   "nameFr": "Archi-prélat Kanker Flett",
+   "stats": {
+    "M": 1,
+    "CC": 32,
+    "CT": 30,
+    "F": 30,
+    "E": 56,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 47,
+    "FM": 46,
+    "Soc": 32
+   },
+   "wounds": 17,
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 61
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 62
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 57
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 42
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Corruption",
+     "rating": "1",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Petty Magic Petty Magic"
+    }
+   ],
+   "trappings": [
+    "Spell ingredients",
+    "sword",
+    "crutches."
+   ],
+   "spells": {
+    "spells": [
+     "Drain",
+     "Produce Small Animal",
+     "Rot Arcane Magic and Lore Bless with Filth (page 109)",
+     "Creeping Menace",
+     "Curse of 110 Crippling Pain",
+     "Stream of Corruption"
+    ]
+   },
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-595",
+   "book": "L19",
+   "page": 114,
+   "physicalPage": 114,
+   "kind": "profile",
+   "blockKey": "L19:114:0",
+   "name": "Jacopo Schmidt — Human Procurer (Silver 1)",
+   "nameFr": "Jacopo Schmidt — Procureur humain (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 35,
+    "F": 48,
+    "E": 37,
+    "I": 43,
+    "Ag": 48,
+    "Dex": 47,
+    "Int": 40,
+    "FM": 45,
+    "Soc": 57
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 55
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 59
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 52
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 51
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 45
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 44
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 52
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 52
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 53
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 49
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 52
+    }
+   ],
+   "talents": [
+    {
+     "name": "Alley Cat"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-596",
+   "book": "L19",
+   "page": 114,
+   "physicalPage": 114,
+   "kind": "profile",
+   "blockKey": "L19:114:1",
+   "name": "Traudl Bauer — Human Penitent (Brass 0)",
+   "nameFr": "Traudl Bauer — Pénitent humain (Bronze 0)",
+   "stats": {
+    "M": 4,
+    "CC": 55,
+    "CT": 28,
+    "F": 40,
+    "E": 45,
+    "I": 31,
+    "Ag": 24,
+    "Dex": 39,
+    "Int": 24,
+    "FM": 39,
+    "Soc": 27
+   },
+   "wounds": 19,
+   "attacks": [
+    {
+     "name": "Axe",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 44
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 44
+    },
+    {
+     "name": "Ranged (Sling)",
+     "nameFr": "Projectiles (Fronde)",
+     "value": 33
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Sigmarites",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Hatred",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Insufficiently zealous Ulricans",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed (Perseverance, fortitude, thine end rushes still, soon)"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Implacable"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Stone Soup"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-597",
+   "book": "L19",
+   "page": 115,
+   "physicalPage": 115,
+   "kind": "profile",
+   "blockKey": "L19:115:0",
+   "name": "The Bloody Hidesman",
+   "nameFr": "Le Peaussier sanglant",
+   "stats": {
+    "M": 7,
+    "CC": 56,
+    "CT": null,
+    "F": 75,
+    "E": 62,
+    "I": 45,
+    "Ag": 49,
+    "Dex": 15,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 104,
+   "size": "enormous",
+   "armour": {
+    "detail": "Hide 2"
+   },
+   "attacks": [
+    {
+     "name": "Horns",
+     "damage": 10,
+     "trait": "Horns"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Horns",
+     "rating": "+10",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Territorial",
+     "param": "Wellspring of Ghur",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "specialRules": [
+    "Weapon +11 Manifestation of Ghur"
+   ],
+   "abilities": [
+    "E0-T-258",
+    "E0-T-259",
+    "E0-T-260"
+   ],
+   "keywords": [
+    "elementaire"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-598",
+   "book": "L19",
+   "page": 116,
+   "physicalPage": 116,
+   "kind": "template",
+   "blockKey": "L19:116:0",
+   "name": "Child of Ulric",
+   "nameFr": "Enfant de Ulric",
+   "modifiers": {
+    "M": 1,
+    "CC": 10,
+    "F": 10,
+    "E": 10,
+    "I": 10,
+    "Ag": 10,
+    "Dex": -10,
+    "Int": -10,
+    "Soc": -20,
+    "W": 4
+   },
+   "armour": {
+    "detail": "Hide 2"
+   },
+   "traits": [
+    {
+     "name": "Bite",
+     "param": "SB +3",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "abilities": [
+    "E0-T-261"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-599",
+   "book": "L19",
+   "page": 117,
+   "physicalPage": 117,
+   "kind": "profile",
+   "blockKey": "L19:117:0",
+   "name": "Spectre",
+   "nameFr": "Spectre",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": null,
+    "F": null,
+    "E": 40,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 18,
+    "FM": 18,
+    "Soc": null
+   },
+   "wounds": 10,
+   "traits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "specialRules": [
+    "Paralysing Chill"
+   ],
+   "abilities": [
+    "E0-T-257"
+   ],
+   "keywords": [
+    "fantome"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-600",
+   "book": "L19",
+   "page": 117,
+   "physicalPage": 117,
+   "kind": "profile",
+   "blockKey": "L19:117:1",
+   "name": "White Wolf",
+   "nameFr": "Loup blanc",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": null,
+    "F": 45,
+    "E": 45,
+    "I": 35,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 28,
+    "FM": 35,
+    "Soc": 15
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "detail": "Hide 1"
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 6,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+6",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "loup"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-601",
+   "book": "L19",
+   "page": 141,
+   "physicalPage": 141,
+   "kind": "profile",
+   "blockKey": "L19:141:0",
+   "name": "`Magister' Hugo Greendale",
+   "nameFr": "`Magister' Hugo Greendale",
+   "stats": {
+    "M": 3,
+    "CC": 22,
+    "CT": 45,
+    "F": 18,
+    "E": 39,
+    "I": 41,
+    "Ag": 40,
+    "Dex": 42,
+    "Int": 36,
+    "FM": 34,
+    "Soc": 52
+   },
+   "wounds": 9,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 57
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 44
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 49
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 65
+    },
+    {
+     "name": "Language (Mootish)",
+     "nameFr": "Langue (Mootish)",
+     "value": 41
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 49
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 51
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 61
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 51
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 45
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 43
+    },
+    {
+     "name": "Trade (Carpenter)",
+     "nameFr": "Métier (Charpentier)",
+     "value": 44
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-602",
+   "book": "L19",
+   "page": 141,
+   "physicalPage": 141,
+   "kind": "profile",
+   "blockKey": "L19:141:1",
+   "name": "Beate Moser",
+   "nameFr": "Beate Moser",
+   "stats": {
+    "M": 4,
+    "CC": 41,
+    "CT": 44,
+    "F": 42,
+    "E": 41,
+    "I": 35,
+    "Ag": 29,
+    "Dex": 45,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 37
+   },
+   "wounds": 20,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 43
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 47
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 54
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 55
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 56
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 44
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 56
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 44
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 44
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 49
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 49
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 47
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 51
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 58
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 52
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 49
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 57
+    }
+   ],
+   "talents": [
+    {
+     "name": "Alley Cat"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Bless (Ulric)"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Hardy (+4 Wounds already added to profile)"
+    },
+    {
+     "name": "Holy Visions"
+    },
+    {
+     "name": "Impassioned Zeal"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Rover"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-603",
+   "book": "L19",
+   "page": 142,
+   "physicalPage": 142,
+   "kind": "profile",
+   "blockKey": "L19:142:0",
+   "name": "Old Otto",
+   "nameFr": "Vieux Otto",
+   "stats": {
+    "M": 4,
+    "CC": 32,
+    "CT": 37,
+    "F": 42,
+    "E": 38,
+    "I": 35,
+    "Ag": 38,
+    "Dex": 59,
+    "Int": 57,
+    "FM": 54,
+    "Soc": 59
+   },
+   "wounds": 15,
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 65
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 69
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 44
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 68
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 65
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 45
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 62
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 58
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 62
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 46
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 65
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 46
+    },
+    {
+     "name": "Trade (Printing)",
+     "nameFr": "Métier (Imprimerie)",
+     "value": 65
+    }
+   ],
+   "talents": [
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Doomed (Eaten by thine very own offspring)"
+    },
+    {
+     "name": "Nimble Fingered"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Tinker"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-604",
+   "book": "L19",
+   "page": 142,
+   "physicalPage": 142,
+   "kind": "profile",
+   "blockKey": "L19:142:1",
+   "name": "Brigitte Schleigel",
+   "nameFr": "Brigitte Schleigel",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 34,
+    "F": 31,
+    "E": 32,
+    "I": 45,
+    "Ag": 49,
+    "Dex": 35,
+    "Int": 50,
+    "FM": 34,
+    "Soc": 47
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 45
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 57
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 57
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 42
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 57
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 62
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 57
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 55
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 60
+    },
+    {
+     "name": "Trade (Printing)",
+     "nameFr": "Métier (Imprimerie)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "aristocrats, reactionaries, watchmen, wealthy people, weirdroot users",
+     "ref": "E0-T-081"
+    },
+    {
+     "name": "Afraid",
+     "param": "Creditors",
+     "ref": "E0-T-001"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Doomed (Thy end lieth hidden in the gloaming)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-605",
+   "book": "L19",
+   "page": 143,
+   "physicalPage": 143,
+   "kind": "profile",
+   "blockKey": "L19:143:0",
+   "name": "Brute",
+   "nameFr": "Brute",
+   "stats": {
+    "M": 4,
+    "CC": 47,
+    "CT": 32,
+    "F": 42,
+    "E": 42,
+    "I": 35,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 30
+   },
+   "wounds": 15,
+   "armour": {
+    "detail": "Leather 2"
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 67
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-606",
+   "book": "L19",
+   "page": 143,
+   "physicalPage": 143,
+   "kind": "profile",
+   "blockKey": "L19:143:1",
+   "name": "Athlete",
+   "nameFr": "Athlete",
+   "stats": {
+    "M": 5,
+    "CC": 38,
+    "CT": 44,
+    "F": 35,
+    "E": 35,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 45,
+    "Int": 30,
+    "FM": 40,
+    "Soc": 30
+   },
+   "wounds": 12,
+   "armour": {
+    "detail": "Leather 2"
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 48
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-607",
+   "book": "L19",
+   "page": 143,
+   "physicalPage": 143,
+   "kind": "profile",
+   "blockKey": "L19:143:2",
+   "name": "Dwarf",
+   "nameFr": "Nain",
+   "stats": {
+    "M": 3,
+    "CC": 47,
+    "CT": 34,
+    "F": 38,
+    "E": 45,
+    "I": 30,
+    "Ag": 25,
+    "Dex": 35,
+    "Int": 30,
+    "FM": 50,
+    "Soc": 20
+   },
+   "wounds": 16,
+   "armour": {
+    "detail": "Leather 2"
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 35
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 62
+    }
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-608",
+   "book": "L19",
+   "page": 150,
+   "physicalPage": 150,
+   "kind": "profile",
+   "blockKey": "L19:150:0",
+   "name": "Gerdon Salzwed — Middenheimer Fence (Silver 2)",
+   "nameFr": "Gerdon Salzwed — Receleur de Middenheim (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 23,
+    "F": 33,
+    "E": 31,
+    "I": 25,
+    "Ag": 29,
+    "Dex": 22,
+    "Int": 21,
+    "FM": 37,
+    "Soc": 33
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 38
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 38
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 32
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 29
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 31
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 43
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 36
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 39
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Pure Soul"
+    }
+   ],
+   "trappings": [
+    "Clothing",
+    "Dagger",
+    "Hand Weapon (Sword)",
+    "Pouch containing 3 Shillings",
+    "Sling Bag containing 2 Candles",
+    "4 Matches",
+    "Hood",
+    "and Stolen Goods worth 17 Shillings"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-609",
+   "book": "L19",
+   "page": 151,
+   "physicalPage": 151,
+   "kind": "profile",
+   "blockKey": "L19:151:0",
+   "name": "Hasso Schroeter Middenheimer Entertainer (Brass 5)",
+   "nameFr": "Hasso Schroeter — Artiste de Middenheim (Bronze 5)",
+   "stats": {
+    "M": 4,
+    "CC": 24,
+    "CT": 31,
+    "F": 34,
+    "E": 40,
+    "I": 34,
+    "Ag": 28,
+    "Dex": 33,
+    "Int": 25,
+    "FM": 34,
+    "Soc": 35
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 45
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 28
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 38
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 37
+    },
+    {
+     "name": "Play (Lute)",
+     "nameFr": "Musicien (Luth)",
+     "value": 43
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 43
+    }
+   ],
+   "talents": [
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Guilders)"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Pouch containing 27 Brass Pennies",
+    "Lute",
+    "Backpack containing Bowl",
+    "Tinderbox",
+    "Blanket",
+    "Rations (1 day)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-610",
+   "book": "L19",
+   "page": 152,
+   "physicalPage": 152,
+   "kind": "profile",
+   "blockKey": "L19:152:0",
+   "name": "Kat Sperber — Middenlander Pedlar (Brass 4)",
+   "nameFr": "Kat Sperber — Colporteur du Middenland (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 27,
+    "F": 38,
+    "E": 35,
+    "I": 32,
+    "Ag": 31,
+    "Dex": 29,
+    "Int": 30,
+    "FM": 40,
+    "Soc": 26
+   },
+   "wounds": 13,
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 33
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 36
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 31
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 41
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 37
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 38
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 33
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Pouch containing 12 Brass Pennies",
+    "Backpack containing Tinderbox",
+    "Blanket",
+    "Rations (1 day)",
+    "Tent",
+    "Wooden Clothes Pegs worth 5 Brass Pennies"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-611",
+   "book": "L19",
+   "page": 153,
+   "physicalPage": 153,
+   "kind": "profile",
+   "blockKey": "L19:153:0",
+   "name": "Theresia Kleist Nordlander Seawoman (Silver 3)",
+   "nameFr": "Theresia Kleist — Marin du Nordland (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 27,
+    "CT": 34,
+    "F": 28,
+    "E": 36,
+    "I": 29,
+    "Ag": 37,
+    "Dex": 31,
+    "Int": 32,
+    "FM": 33,
+    "Soc": 27
+   },
+   "wounds": 9,
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 38
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 39
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 32
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 37
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 32
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 37
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 33
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 52
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 41
+    }
+   ],
+   "talents": [
+    {
+     "name": "Fisherman"
+    },
+    {
+     "name": "Resistance (Disease)"
+    },
+    {
+     "name": "Strong Legs"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Very Resilient"
+    }
+   ],
+   "trappings": [
+    "Bucket",
+    "Brush",
+    "Mop",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Pouch containing 4 Shillings",
+    "Sling Bag containing a Flask of Spirits"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-612",
+   "book": "L19",
+   "page": 157,
+   "physicalPage": 157,
+   "kind": "profile",
+   "blockKey": "L19:157:0",
+   "name": "Pestilential Liche-Thing",
+   "nameFr": "Liche pestilentielle",
+   "stats": {
+    "M": 5,
+    "CC": 68,
+    "CT": 42,
+    "F": 64,
+    "E": 58,
+    "I": 64,
+    "Ag": 53,
+    "Dex": 67,
+    "Int": 78,
+    "FM": 68,
+    "Soc": 49
+   },
+   "wounds": 22,
+   "skills": [
+    {
+     "name": "Channelling (Shyish)",
+     "nameFr": "Focalisation (Shyish)",
+     "frUnverified": true,
+     "value": 83
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 84
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 88
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 83
+    }
+   ],
+   "traits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Disease",
+     "param": "Spotted Green Brain Pox",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Hatred",
+     "param": "Teutogens",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Death, Necromancy)"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Perfect Pitch"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "spells": {
+    "spells": [
+     "Caress of Laniph",
+     "Purple Pall of Shyish",
+     "Raise Dead",
+     "Reanimate",
+     "Scythe of Shyish",
+     "Steal Life. of Middenheim might look very different. Clues given in Death on the Reik suggest that the cult have a headquarters in Middenheim",
+     "but little notion of how to find it. The Characters must be very proactive to track down and break up the cult in the city. If the Red Crown is destroyed",
+     "Khazrak's campaign will lack critical guidance",
+     "but if the Characters can intercept messages between the cultists and the Beastmen without tipping the Red Crown off",
+     "they could help Middenheim mount a conclusive counter-offensive."
+    ]
+   },
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}
