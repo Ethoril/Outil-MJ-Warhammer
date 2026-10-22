@@ -6693,5 +6693,1214 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0628",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.114",
+    "question": "Implanter « Sens aiguisé : perception exceptionnelle » ? Autorise un Test de Perception pour des détails autrement imperceptibles ; chaque achat choisit un autre sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0631",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.114",
+    "question": "Implanter « Chat de gouttière : itinéraire urbain » ? Dans une ville connue, trouve sans Test le trajet rapide ou discret.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0633",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.114",
+    "question": "Implanter « Affinité avec les animaux : animaux non agressifs » ? Les animaux sauvages ne prennent normalement pas le personnage inoffensif pour une menace tant qu’il reste pacifique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0634",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.115",
+    "question": "Implanter « Magie des Arcanes : accès et apprentissage » ? Un domaine et un sort initial ; coûts par sort de 100 à 500 PX selon le nombre connu ; oubli volontaire à 100 PX avec perte des sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0635",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.115",
+    "question": "Implanter « Magie des Arcanes : compatibilité des domaines » ? Le domaine acquis conditionne les sorts accessibles ; un domaine noir supplémentaire demande l’accord du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0638",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.115",
+    "question": "Implanter « Artiste : progression artistique » ? Autorise les augmentations de la spécialité d’Art hors carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0642",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.115",
+    "question": "Implanter « Insignifiant : présence discrète » ? Habillé pour servir ses supérieurs, passe pour légitime sans contrôle ordinaire tant qu’il n’attire pas l’attention.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0645",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.116",
+    "question": "Implanter « Béni : accès aux bénédictions » ? Accès aux bénédictions du dieu ; incompatibilités magiques et oubli à 100 PX entraînant leur perte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0648",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.116",
+    "question": "Implanter « Effraction : repérage d’accès » ? Identifie comment entrer dans un bâtiment.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0650",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.116",
+    "question": "Implanter « Suborneur : prix du silence » ? Reconnaît sans Test qui accepte une offre et le montant à proposer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0654",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.116",
+    "question": "Implanter « Noctambule : consommation modérée » ? Une consommation modeste ne cause pas d’effet négatif ; le MJ détermine l’excès.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0656",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.116",
+    "question": "Implanter « Souplesse féline : chute involontaire » ? Traite une chute involontaire comme volontaire pour autoriser sa réduction de dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0658",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.116",
+    "question": "Implanter « Magie du Chaos : apprentissage » ? Un sort gratuit ; chaque sort appris donne un Point de Corruption ; coûts croissants par paliers ; un seul domaine du Chaos et aucun oubli volontaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0663",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Présence imposante : autorité de crise » ? Les personnes reconnaissent une autorité raisonnable dans une crise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0664",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Concocter : fabrication gratuite » ? Une activité de fabrication par séance pour remèdes ou poisons sans atelier ; outils et matières restent requis ; bénéfice expirant au prochain repos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0666",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Contorsionniste : passage étroit » ? Peut traverser des ouvertures normalement trop petites.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0667",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Imperturbable : caractéristique » ? Ajoute 5 en Force Mentale sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0670",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Claquer le fouet : animaux dressés » ? Les animaux dressés effectuent Mouvement et Action sans Test de Conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0672",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Maître artisan : progression du métier » ? Autorise la progression du Métier choisi hors carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0673",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Criminel : revenus criminels » ? Double le revenu criminel ; interdit une carrière dont aucun niveau ne propose Criminel ; oubli à 100 PX avec accord du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0676",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.117",
+    "question": "Implanter « Détection d'artefact : détection au contact » ? Détecte un objet magique au toucher ; avec Seconde vue, Intuition détermine pouvoirs, activation et charges.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0681",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.118",
+    "question": "Implanter « Destinée : mort prédite » ? Mourir conformément à sa destinée recharge la Chance des alliés ; le prochain personnage reçoit un Point de Destin supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0685",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.119",
+    "question": "Implanter « Escroquer : revenus détournés » ? Remplace le revenu par Subornation ou Évaluation ; succès double le gain, échec révèle les irrégularités et ne rapporte rien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0687",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.119",
+    "question": "Implanter « Combattant en espace clos : esquive confinée » ? Autorise Esquive même si l’espace ne le permet normalement pas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0688",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.119",
+    "question": "Implanter « Savoir-vivre : intégration sociale » ? Avec une tenue et une conduite adaptées, se fond dans le groupe choisi ; le MJ prévient des comportements déplacés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0690",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.119",
+    "question": "Implanter « Mains agiles : divertir avec les mains » ? Autorise Escamotage pour divertir un public.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0695",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.119",
+    "question": "Implanter « Pansement de fortune : matériel improvisé » ? Peut improviser attelles et bandages avec les matériaux disponibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0696",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.119",
+    "question": "Implanter « Pêcheur : pêche » ? Avec eau et matériel adaptés, nourrit sans Test le personnage et BI personnes supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0701",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.120",
+    "question": "Implanter « Véloce : mouvement permanent » ? Augmente le Mouvement de 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0707",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.120",
+    "question": "Implanter « Dur à cuire : blessures maximales » ? Ajoute une nouvelle fois le BE au total maximal de Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0709",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.120",
+    "question": "Implanter « Haine sacrée : dégâts de miracles » ? Les miracles infligeant des Blessures en causent deux de plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0710",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.120",
+    "question": "Implanter « Visions sacrées : perception du sacré » ? Reconnaît les lieux saints ; perçoit les pouvoirs divins ou du Chaos lancés en vue et le pouvoir divin des objets au toucher.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0711",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.120",
+    "question": "Implanter « Œil du chasseur : chasse » ? Dans une région giboyeuse, avec temps et matériel, nourrit sans Test le personnage et BI personnes supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0718",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.121",
+    "question": "Implanter « Invocation : apprentissage des miracles » ? Un miracle initial ; coûts progressifs par paliers de miracles connus ; incompatibilités et oubli à 100 PX avec perte des miracles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0722",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.121",
+    "question": "Implanter « Saut carpé : se relever immédiatement » ? Après avoir reçu À terre, un Test immédiat d’Athlétisme ou Acrobaties +0 permet de se relever.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0723",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.121",
+    "question": "Implanter « Caïd : carrières criminelles » ? Lève les interdictions de carrière et la suspicion légale attachées à Criminel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0724",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.121",
+    "question": "Implanter « Réflexes foudroyants : caractéristique » ? Ajoute 5 en Agilité sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0726",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.121",
+    "question": "Implanter « Linguistique : progression linguistique » ? Les augmentations de Langue coûtent toujours 50 PX.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0727",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.122",
+    "question": "Implanter « Lire sur les lèvres : lecture labiale » ? Avec la bouche du locuteur visible, un Test d’Intuition +0 permet de comprendre les paroles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0728",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.122",
+    "question": "Implanter « Chanceux : chance maximale » ? Augmente la Chance maximale de un par achat, jusqu’à trois achats.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0730",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.122",
+    "question": "Implanter « Résistance à la Magie : incompatibilité magique » ? Les apprentissages magiques incompatibles restent interdits.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0732",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.122",
+    "question": "Implanter « Magnum opus : chef-d’œuvre » ? Chaque acquisition produit une œuvre valant au moins dix fois sa valeur habituelle ; le MJ détermine les bonus sociaux procurés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0733",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.122",
+    "question": "Implanter « Tireur de précision : caractéristique » ? Ajoute 5 en Capacité de Tir sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0739",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.122",
+    "question": "Implanter « Imitation : accent » ? Après un jour d’exposition, reproduit un accent et repère ceux qui le simulent sans le même talent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0740",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.123",
+    "question": "Implanter « Vision nocturne : vision dans la pénombre » ? Avec un éclairage minimal, voit clairement sur vingt yards et étend de vingt yards la portée des lumières.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0741",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.123",
+    "question": "Implanter « Doigts de fée : caractéristique » ? Ajoute 5 en Dextérité sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0742",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.123",
+    "question": "Implanter « Noblesse : statut » ? Avec une tenue correcte, compte au moins un Échelon au-dessus d’autrui, sauf autre détenteur du talent ; accès à Noble comme carrière de même Classe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0749",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.123",
+    "question": "Implanter « Sens de l'orientation : nord » ? Identifie le nord à l’aide de signes familiers sans Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0751",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.123",
+    "question": "Implanter « Faire la manche : abri urbain » ? Trouve normalement un abri urbain sûr mais inconfortable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0753",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.123",
+    "question": "Implanter « Oreille absolue : apprentissage à l’oreille » ? Une seule écoute suffit pour apprendre un morceau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0754",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.123",
+    "question": "Implanter « Magie mineure : apprentissage » ? Trois sorts initiaux ; les suivants coûtent de 50 à 250 PX selon les paliers de cinq sorts ; oubli à 100 PX avec perte des sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0755",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.124",
+    "question": "Implanter « Pharmacologie : dose supplémentaire » ? Fabriquer un remède alchimique produit une dose supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0759",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.124",
+    "question": "Implanter « Âme pure : seuil de corruption » ? Double le nombre de Points de Corruption tolérés avant un Test contre la mutation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0762",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.124",
+    "question": "Implanter « Lire/Écrire : lecture et écriture » ? Peut lire et écrire toutes les langues parlées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0770",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.124",
+    "question": "Implanter « Guide fluvial : route fluviale sûre » ? Pas de Test en eaux dangereuses si la difficulté reste supérieure à −1 DR ; avec le Savoir local adapté, aucun Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0774",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Cavalier émérite : ordre à la monture » ? Avec la compétence Chevaucher, commande Action et Mouvement sans Test en situation normale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0776",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Nomade : survie en terrain sauvage » ? Reconnaît les routes simples et les endroits propices au gibier, à l’eau et à l’abri.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0778",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Perspicace : caractéristique » ? Ajoute 5 en Intelligence sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0780",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Grimpeur : parois impossibles » ? Autorise les surfaces normalement impraticables ; leur difficulté ne dépasse pas −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0783",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Pied marin : mer normale » ? Aucun Test de mal de mer dans les conditions habituelles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0784",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Voyageur aguerri : savoir régional » ? Peut progresser dans le Savoir local du lieu de séjour même hors carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0785",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Seconde vue : vents de magie » ? Autorise la perception des Vents selon la procédure de perception magique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0786",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Identité secrète : persona » ? Adopte une carrière et son Statut sans Test pour une période décidée ; Banque et Revenus utilisent cette identité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0787",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Identité secrète : revenus sous couverture » ? Revenu à +0 via Interprétation ou compétence de la carrière fictive ; Subornation ou Évaluation si détournement ; échec dévoile l’identité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0788",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Discret : filature compromise » ? Si la cible repère la filature, peut la continuer en étant vu ou l’abandonner sans être découvert.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0789",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Vivacité : caractéristique » ? Ajoute 5 en Initiative sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0791",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.125",
+    "question": "Implanter « Tireur d'élite : précision exceptionnelle » ? Autorise les tirs extraordinaires, avec difficulté fixée par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0794",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.126",
+    "question": "Implanter « Sixième sens : danger caché » ? Juste avant un danger caché, Intuition +0 permet de le détecter à la dernière seconde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0798",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.126",
+    "question": "Implanter « Lecture rapide : lecture accélérée » ? Lit une page d’un coup d’œil et un long ouvrage en une journée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0800",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.126",
+    "question": "Implanter « Pas de côté : sortie par esquive » ? Une Esquive de défense réussie permet de bouger jusqu’à deux yards et de rompre l’engagement sans attaque gratuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0801",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.126",
+    "question": "Implanter « Brouet : ration supplémentaire » ? Un Test de recherche de nourriture du groupe nourrit aussi ce personnage, même si le Test échoue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0811",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.127",
+    "question": "Implanter « Infatigable : charge transportable » ? Ajoute un point d’Encombrement transportable, ou trois au deuxième achat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0815",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.127",
+    "question": "Implanter « Costaud : charge maximale » ? Compte deux fois le BF dans la capacité d’Encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0816",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.127",
+    "question": "Implanter « Affable : caractéristique » ? Ajoute 5 en Sociabilité sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0818",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.127",
+    "question": "Implanter « Doué en calcul : mesure du temps » ? Suit précisément le temps écoulé tant qu’il reste conscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0823",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.127",
+    "question": "Implanter « Chirurgie : critiques opérables » ? Autorise le traitement des critiques exigeant Chirurgie, avec leurs procédures et risques propres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0825",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.127",
+    "question": "Implanter « Bricoleur : réparer sans formation » ? Traite tous les Métiers comme compétences de base pour réparer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0829",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Trappeur : fabrication de pièges » ? Une heure de préparation permet de fabriquer un petit piège à animaux ou une fosse couverte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0831",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Acrobaties équestres : représentation montée » ? Autorise toutes les compétences de Représentation à cheval.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0833",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Rat d'égout : repères souterrains » ? Estime facilement profondeur et distance parcourue sous terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0835",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Très résistant : caractéristique » ? Ajoute 5 en Endurance sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0836",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Très fort : caractéristique » ? Ajoute 5 en Force sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0838",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Guerrier né : caractéristique » ? Ajoute 5 en Capacité de Combat sans compter comme augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0842",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Nanti : gain de carrière » ? Ajoute une couronne d’or au revenu de carrière ; trois au deuxième achat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0843",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Prévoyant : équipement anticipé » ? Une fois par séance, fournit un objet crédible d’Encombrement zéro et en paie le prix ; les usages suivants coûtent de la Chance ; aucun achat sans argent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0844",
+    "phase": "Talents",
+    "lot": "L06",
+    "source": "L06 p.128",
+    "question": "Implanter « Sorcier ! : magie autodidacte » ? Un sort d’un domaine coloré ou de Sorcellerie ; Focalisation et Magick correspondants deviennent de base ; sorts suivants à 200 PX puis +100 par sort ; oubli à 100 PX.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0845",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.109",
+    "question": "Implanter « Valeur de compétence » ? La compétence vaut caractéristique plus cinq par augmentation ; une compétence de base reste utilisable sans augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0846",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.110",
+    "question": "Implanter « Compétence avancée » ? Une compétence avancée ne peut être testée qu’avec au moins une augmentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0847",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.110",
+    "question": "Implanter « Spécialités de compétences » ? Chaque spécialité reçoit ses propres augmentations et constitue une compétence distincte ; les choix de carrière bornent les spécialités accessibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0848",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.112",
+    "question": "Implanter « Maîtrise linguistique » ? Une augmentation permet de se faire comprendre ; quatre rendent fluent et dispensent des Tests ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0849",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.113",
+    "question": "Implanter « Savoir lire pour rechercher » ? Recherche exige le talent Lire/Écrire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0850",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.113",
+    "question": "Implanter « Commander un équipage » ? Un commandant d’équipage bien entraîné emploie Commandement à la place de Navigation à voile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0851",
+    "phase": "Compétences",
+    "lot": "L06",
+    "source": "L06 p.114",
+    "question": "Implanter « Nager sans Test » ? Posséder Natation dispense des Tests ordinaires en eau calme ; difficultés, course et fuite exigent un jet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

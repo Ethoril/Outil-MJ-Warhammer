@@ -10919,5 +10919,4282 @@
     "v5Proposal": null,
     "notes": "Aucun gestionnaire d’entre-aventures, d’achat de progrès ou de ressource financière correspondant repéré dans js/core et js/ui.",
     "domain": "Entre-aventures et progression"
+  },
+  {
+    "id": "F-L06-0627",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Accurate Shot — dégâts à distance",
+    "titleFr": "Tir précis : dégâts à distance",
+    "summary": "Ajoute 1 Dégât aux tirs réussis, ou 2 si le tireur a visé.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0628",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Acute Sense — perception exceptionnelle",
+    "titleFr": "Sens aiguisé : perception exceptionnelle",
+    "summary": "Autorise un Test de Perception pour des détails autrement imperceptibles ; chaque achat choisit un autre sens.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0629",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Aethyric Attunement — choix des incidents",
+    "titleFr": "Harmonisation aethyrique : choix des incidents",
+    "summary": "Deux jets réels et choix sur les incidents mineurs ; le deuxième rang étend ce choix aux majeurs.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-talents.js#attunementRank",
+      "js/core/v5-magic-miscasts.js#attunementRank"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0630",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Alley Cat — furtivité urbaine",
+    "titleFr": "Chat de gouttière : furtivité urbaine",
+    "summary": "Avantage aux Tests de Discrétion urbaine.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0631",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Alley Cat — itinéraire urbain",
+    "titleFr": "Chat de gouttière : itinéraire urbain",
+    "summary": "Dans une ville connue, trouve sans Test le trajet rapide ou discret.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0632",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Ambidextrous — main secondaire",
+    "titleFr": "Ambidextre : main secondaire",
+    "summary": "Supprime la pénalité de −2 DR des Tests effectués uniquement avec la main secondaire.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0633",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Animal Affinity — animaux non agressifs",
+    "titleFr": "Affinité avec les animaux : animaux non agressifs",
+    "summary": "Les animaux sauvages ne prennent normalement pas le personnage inoffensif pour une menace tant qu’il reste pacifique.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0634",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Arcane Magic — accès et apprentissage",
+    "titleFr": "Magie des Arcanes : accès et apprentissage",
+    "summary": "Un domaine et un sort initial ; coûts par sort de 100 à 500 PX selon le nombre connu ; oubli volontaire à 100 PX avec perte des sorts.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0635",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Arcane Magic — compatibilité des domaines",
+    "titleFr": "Magie des Arcanes : compatibilité des domaines",
+    "summary": "Le domaine acquis conditionne les sorts accessibles ; un domaine noir supplémentaire demande l’accord du MJ.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0636",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Argumentative — débat imposé",
+    "titleFr": "Ergoteur : débat imposé",
+    "summary": "Charme opposé à Calme enferme la cible dans le débat ; agir autrement impose −3 DR jusqu’à une urgence ou une attaque.",
+    "mechanic": "state",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0637",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Artistic — art spécialisé",
+    "titleFr": "Artiste : art spécialisé",
+    "summary": "Avantage dans la spécialité artistique acquise ; nouveau choix à chaque acquisition.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0638",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Artistic — progression artistique",
+    "titleFr": "Artiste : progression artistique",
+    "summary": "Autorise les augmentations de la spécialité d’Art hors carrière.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0639",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Attractive — choix de DR",
+    "titleFr": "Attirant : choix de DR",
+    "summary": "Après un Charme réussi, le joueur peut prendre les unités du jet comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0640",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Battle Rage — renvoi au domaine déjà inventorié",
+    "titleFr": "Contrôle de la Frénésie : renvoi au domaine déjà inventorié",
+    "summary": "Entrée en Frénésie sans Test si admissible ; aucune Fatigue à sa sortie.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-041",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0641",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Beat Blade — battement",
+    "titleFr": "Battement : battement",
+    "summary": "Remplace les dégâts du coup réussi par l’interdiction de défendre en mêlée et l’Avantage aux attaques jusqu’à la fin du prochain Tour ; Esquive permise, cible non supérieure en taille.",
+    "mechanic": "state",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0642",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Beneath Notice — présence discrète",
+    "titleFr": "Insignifiant : présence discrète",
+    "summary": "Habillé pour servir ses supérieurs, passe pour légitime sans contrôle ordinaire tant qu’il n’attire pas l’attention.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0643",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Berserk Charge — charge",
+    "titleFr": "Charge berserk : charge",
+    "summary": "Ajoute 2 Dégâts aux attaques effectuées en chargeant.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0644",
+    "book": "L06",
+    "page": 115,
+    "chapter": "IV — Compétences et talents",
+    "title": "Blather — distraction verbale",
+    "titleFr": "Baratiner : distraction verbale",
+    "summary": "Charme opposé à Calme captive durant un Tour ou une minute par DR ; au-delà du BFM adverse, l’effet persiste jusqu’à exposition de la ruse.",
+    "mechanic": "duration",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0645",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Bless — accès aux bénédictions",
+    "titleFr": "Béni : accès aux bénédictions",
+    "summary": "Accès aux bénédictions du dieu ; incompatibilités magiques et oubli à 100 PX entraînant leur perte.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0646",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Bookish — recherche",
+    "titleFr": "Studieux : recherche",
+    "summary": "Avantage aux Tests de Recherche.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0647",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Break and Enter — effraction",
+    "titleFr": "Effraction : effraction",
+    "summary": "Avantage au crochetage et aux Tests pour forcer une entrée.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0648",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Break and Enter — repérage d’accès",
+    "titleFr": "Effraction : repérage d’accès",
+    "summary": "Identifie comment entrer dans un bâtiment.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0649",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Briber — subornation",
+    "titleFr": "Suborneur : subornation",
+    "summary": "Avantage aux Tests de Subornation.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0650",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Briber — prix du silence",
+    "titleFr": "Suborneur : prix du silence",
+    "summary": "Reconnaît sans Test qui accepte une offre et le montant à proposer.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0651",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Cardsharp — double au pari",
+    "titleFr": "Tricheur : double au pari",
+    "summary": "Sur un double de Pari opposé, impose une relance adverse réelle et neutralise son bénéfice d’Escamotage.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0652",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Careful Strike — coup ciblé",
+    "titleFr": "Frappe précise : coup ciblé",
+    "summary": "Réduit le malus de Coup ciblé en mêlée à −1 DR ; l’annule avec Avantage.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0653",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Carouser — résistance",
+    "titleFr": "Noctambule : résistance",
+    "summary": "Avantage pour Résistance à l’alcool et Endurance contre les poisons.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0654",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Carouser — consommation modérée",
+    "titleFr": "Noctambule : consommation modérée",
+    "summary": "Une consommation modeste ne cause pas d’effet négatif ; le MJ détermine l’excès.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0655",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Catfall — réception",
+    "titleFr": "Souplesse féline : réception",
+    "summary": "Avantage à Athlétisme pour amortir une chute.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0656",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Catfall — chute involontaire",
+    "titleFr": "Souplesse féline : chute involontaire",
+    "summary": "Traite une chute involontaire comme volontaire pour autoriser sa réduction de dégâts.",
+    "mechanic": "damage",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0657",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Cat-tongued — mensonge",
+    "titleFr": "Menteur : mensonge",
+    "summary": "Avantage à Charme pour mentir.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0658",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Chaos Magic — apprentissage",
+    "titleFr": "Magie du Chaos : apprentissage",
+    "summary": "Un sort gratuit ; chaque sort appris donne un Point de Corruption ; coûts croissants par paliers ; un seul domaine du Chaos et aucun oubli volontaire.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0659",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Combat Aware — renvoi au domaine déjà inventorié",
+    "titleFr": "Vigilance : renvoi au domaine déjà inventorié",
+    "summary": "Perception +0 pour éviter une Surprise identifiée ; succès automatique si ce Test était déjà normalement autorisé.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-009",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0660",
+    "book": "L06",
+    "page": 116,
+    "chapter": "IV — Compétences et talents",
+    "title": "Combat Master — surnombre",
+    "titleFr": "Maîtrise du combat : surnombre",
+    "summary": "Compte pour deux combattants dans le calcul du surnombre.",
+    "mechanic": "modifier",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-measures.js#previewV5TalentMeasure",
+      "js/ui/v5-talent-measures.js#availableV5TalentMeasures"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0661",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Combat Reflexes — initiative",
+    "titleFr": "Combat instinctif : initiative",
+    "summary": "Le joueur fournit deux jets d’Initiative et choisit celui qu’il conserve.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0662",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Commanding Presence — commandement",
+    "titleFr": "Présence imposante : commandement",
+    "summary": "Avantage aux Tests de Commandement.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0663",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Commanding Presence — autorité de crise",
+    "titleFr": "Présence imposante : autorité de crise",
+    "summary": "Les personnes reconnaissent une autorité raisonnable dans une crise.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0664",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Concoct — fabrication gratuite",
+    "titleFr": "Concocter : fabrication gratuite",
+    "summary": "Une activité de fabrication par séance pour remèdes ou poisons sans atelier ; outils et matières restent requis ; bénéfice expirant au prochain repos.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0665",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Contortionist — évasion",
+    "titleFr": "Contorsionniste : évasion",
+    "summary": "Avantage à Athlétisme pour se libérer.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0666",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Contortionist — passage étroit",
+    "titleFr": "Contorsionniste : passage étroit",
+    "summary": "Peut traverser des ouvertures normalement trop petites.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0667",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Coolheaded — caractéristique",
+    "titleFr": "Imperturbable : caractéristique",
+    "summary": "Ajoute 5 en Force Mentale sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0668",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Crack the Whip — conduite",
+    "titleFr": "Claquer le fouet : conduite",
+    "summary": "Avantage aux Tests de Conduite d’attelage.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0669",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Crack the Whip — poursuite",
+    "titleFr": "Claquer le fouet : poursuite",
+    "summary": "Ajoute 1 au Mouvement des animaux durant une poursuite.",
+    "mechanic": "modifier",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-measures.js#previewV5TalentMeasure",
+      "js/ui/v5-talent-measures.js#availableV5TalentMeasures"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0670",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Crack the Whip — animaux dressés",
+    "titleFr": "Claquer le fouet : animaux dressés",
+    "summary": "Les animaux dressés effectuent Mouvement et Action sans Test de Conduite.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0671",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Craftsman — métier spécialisé",
+    "titleFr": "Maître artisan : métier spécialisé",
+    "summary": "Avantage aux Tests du Métier choisi ; acquisition distincte pour une autre spécialité.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0672",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Craftsman — progression du métier",
+    "titleFr": "Maître artisan : progression du métier",
+    "summary": "Autorise la progression du Métier choisi hors carrière.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0673",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Criminal — revenus criminels",
+    "titleFr": "Criminel : revenus criminels",
+    "summary": "Double le revenu criminel ; interdit une carrière dont aucun niveau ne propose Criminel ; oubli à 100 PX avec accord du MJ.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0674",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Deadeye Shot — tir ciblé",
+    "titleFr": "Tir mortel : tir ciblé",
+    "summary": "Limite le malus du tir ciblé à −1 DR ; l’annule si le tir a été visé.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0675",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Dealmaker — marchandage",
+    "titleFr": "Négociateur : marchandage",
+    "summary": "Avantage aux Tests de Marchandage.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0676",
+    "book": "L06",
+    "page": 117,
+    "chapter": "IV — Compétences et talents",
+    "title": "Detect Artefact — détection au contact",
+    "titleFr": "Détection d'artefact : détection au contact",
+    "summary": "Détecte un objet magique au toucher ; avec Seconde vue, Intuition détermine pouvoirs, activation et charges.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0677",
+    "book": "L06",
+    "page": 118,
+    "chapter": "IV — Compétences et talents",
+    "title": "Dicer — pari",
+    "titleFr": "Maîtrise des dés : pari",
+    "summary": "Avantage aux Tests de Pari.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0678",
+    "book": "L06",
+    "page": 118,
+    "chapter": "IV — Compétences et talents",
+    "title": "Dirty Fighting — coup bas",
+    "titleFr": "Combat déloyal : coup bas",
+    "summary": "Un coup à mains nues au corps ayant infligé des Blessures peut remplacer ses dégâts par le critique Coup bas.",
+    "mechanic": "damage",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0679",
+    "book": "L06",
+    "page": 118,
+    "chapter": "IV — Compétences et talents",
+    "title": "Disarm — désarmement",
+    "titleFr": "Désarmer : désarmement",
+    "summary": "Un succès de mêlée à au moins 4 DR peut remplacer les dégâts par un désarmement à 1d10 pieds ; dépenser l’Élan pour saisir l’arme ; exceptions de taille et armes attachées.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0680",
+    "book": "L06",
+    "page": 118,
+    "chapter": "IV — Compétences et talents",
+    "title": "Distract — distraction en combat",
+    "titleFr": "Distraire : distraction en combat",
+    "summary": "Utilise le Mouvement à deux yards : Athlétisme, Représentation ou Escamotage opposé à Perception ; la cible perd l’Élan et ne gagne plus d’Avantage jusqu’à la fin du Tour suivant.",
+    "mechanic": "state",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0681",
+    "book": "L06",
+    "page": 118,
+    "chapter": "IV — Compétences et talents",
+    "title": "Doomed — mort prédite",
+    "titleFr": "Destinée : mort prédite",
+    "summary": "Mourir conformément à sa destinée recharge la Chance des alliés ; le prochain personnage reçoit un Point de Destin supplémentaire.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0682",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Drilled — renvoi au domaine déjà inventorié",
+    "titleFr": "Coude-à-coude : renvoi au domaine déjà inventorié",
+    "summary": "Un allié engagé avec le même ennemi peut se désengager gratuitement ; dépense d’Élan pour le transmettre à un autre détenteur adjacent.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-075",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0683",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Dual Wielder — attaque secondaire",
+    "titleFr": "Maniement de deux armes : attaque secondaire",
+    "summary": "Dispense du coût d’Élan de l’attaque avec l’autre main.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0684",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Dual Wielder — parade au couteau",
+    "titleFr": "Maniement de deux armes : parade au couteau",
+    "summary": "En maniant deux armes, dagues et couteaux peuvent servir à parer.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0685",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Embezzle — revenus détournés",
+    "titleFr": "Escroquer : revenus détournés",
+    "summary": "Remplace le revenu par Subornation ou Évaluation ; succès double le gain, échec révèle les irrégularités et ne rapporte rien.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0686",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Enclosed Fighter — combat confiné",
+    "titleFr": "Combattant en espace clos : combat confiné",
+    "summary": "Ignore les pénalités de mêlée dues à l’espace réduit.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0687",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Enclosed Fighter — esquive confinée",
+    "titleFr": "Combattant en espace clos : esquive confinée",
+    "summary": "Autorise Esquive même si l’espace ne le permet normalement pas.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0688",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Etiquette — intégration sociale",
+    "titleFr": "Savoir-vivre : intégration sociale",
+    "summary": "Avec une tenue et une conduite adaptées, se fond dans le groupe choisi ; le MJ prévient des comportements déplacés.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0689",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Fast Hands — escamotage et contact",
+    "titleFr": "Mains agiles : escamotage et contact",
+    "summary": "Avantage à Escamotage et aux Tests de Bagarre de simple contact.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0690",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Fast Hands — divertir avec les mains",
+    "titleFr": "Mains agiles : divertir avec les mains",
+    "summary": "Autorise Escamotage pour divertir un public.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0691",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Fast Shot — tir initial",
+    "titleFr": "Tir rapide : tir initial",
+    "summary": "Avant son premier Tour, un Pistol chargé peut tirer hors engagement ; l’Action du Round est consommée et l’Initiative départage plusieurs tireurs.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0692",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Fearless — renvoi au domaine déjà inventorié",
+    "titleFr": "Sans peur : renvoi au domaine déjà inventorié",
+    "summary": "Immunité à la Peur causée par le groupe choisi ; acquisition par groupe, sans généraliser à toute Terreur.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-021",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0693",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Feint — défense forcée",
+    "titleFr": "Feinte : défense forcée",
+    "summary": "Avec Élan contre une cible sans Élan, impose Intuition à la défense.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0694",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Field Dressing — soins",
+    "titleFr": "Pansement de fortune : soins",
+    "summary": "Avantage aux Tests de Guérison.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0695",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Field Dressing — matériel improvisé",
+    "titleFr": "Pansement de fortune : matériel improvisé",
+    "summary": "Peut improviser attelles et bandages avec les matériaux disponibles.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0696",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Fisherman — pêche",
+    "titleFr": "Pêcheur : pêche",
+    "summary": "Avec eau et matériel adaptés, nourrit sans Test le personnage et BI personnes supplémentaires.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0697",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Flagellant — douleur critique",
+    "titleFr": "Flagellant : douleur critique",
+    "summary": "Ignore les malus de douleur dus aux critiques, sauf amputations.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0698",
+    "book": "L06",
+    "page": 119,
+    "chapter": "IV — Compétences et talents",
+    "title": "Flagellant — renvoi au domaine déjà inventorié",
+    "titleFr": "Flagellant : renvoi au domaine déjà inventorié",
+    "summary": "Une Blessure permet une entrée gratuite en Frénésie si le personnage y a accès.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-076",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0699",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Flee! — renvoi au domaine déjà inventorié",
+    "titleFr": "Fuite ! : renvoi au domaine déjà inventorié",
+    "summary": "Mouvement supplémentaire après Désengagement, sans recevoir Brisé à cause de la fuite.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-024",
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0700",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Flee! — renvoi au domaine déjà inventorié",
+    "titleFr": "Fuite ! : renvoi au domaine déjà inventorié",
+    "summary": "Ajoute 1 DR aux Tests comme proie dans une poursuite.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-023",
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0701",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Fleet-footed — mouvement permanent",
+    "titleFr": "Véloce : mouvement permanent",
+    "summary": "Augmente le Mouvement de 1.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0702",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Frenzy — renvoi au domaine déjà inventorié",
+    "titleFr": "Frénésie : renvoi au domaine déjà inventorié",
+    "summary": "Règles de Frénésie : activation, restrictions et sortie dans l’inventaire psychologique.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-008",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0703",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Frightening — renvoi au domaine déjà inventorié",
+    "titleFr": "Effrayant : renvoi au domaine déjà inventorié",
+    "summary": "Peur causée par le talent, avec le degré supérieur si de Grande taille ; décision MJ et mécanique C0 préservées.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-022",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0704",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Furious Assault — attaque supplémentaire",
+    "titleFr": "Assaut féroce : attaque supplémentaire",
+    "summary": "Après un coup de mêlée réussi, une fois par Round, dépenser l’Élan permet une nouvelle attaque.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0705",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Gregarious — commérage",
+    "titleFr": "Sociable : commérage",
+    "summary": "Avantage aux Tests de Ragot.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0706",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Gunner — armes dangereuses",
+    "titleFr": "Artilleur : armes dangereuses",
+    "summary": "Neutralise Dangereuse pour Poudre noire, Ingénierie et Explosifs.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0707",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Hardy — blessures maximales",
+    "titleFr": "Dur à cuire : blessures maximales",
+    "summary": "Ajoute une nouvelle fois le BE au total maximal de Blessures.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0708",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Hatred — renvoi au domaine déjà inventorié",
+    "titleFr": "Haine : renvoi au domaine déjà inventorié",
+    "summary": "Applique la Haine envers le groupe acquis selon C0.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-007",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0709",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Holy Hatred — dégâts de miracles",
+    "titleFr": "Haine sacrée : dégâts de miracles",
+    "summary": "Les miracles infligeant des Blessures en causent deux de plus.",
+    "mechanic": "damage",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0710",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Holy Visions — perception du sacré",
+    "titleFr": "Visions sacrées : perception du sacré",
+    "summary": "Reconnaît les lieux saints ; perçoit les pouvoirs divins ou du Chaos lancés en vue et le pouvoir divin des objets au toucher.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0711",
+    "book": "L06",
+    "page": 120,
+    "chapter": "IV — Compétences et talents",
+    "title": "Hunter's Eye — chasse",
+    "titleFr": "Œil du chasseur : chasse",
+    "summary": "Dans une région giboyeuse, avec temps et matériel, nourrit sans Test le personnage et BI personnes supplémentaires.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0712",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Impassioned Zeal — cause défendue",
+    "titleFr": "Ferveur ardente : cause défendue",
+    "summary": "Avantage à Charme en faveur de sa cause ; Désavantage pour mentir contre celle-ci.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0713",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Implacable — hémorragie",
+    "titleFr": "Endurci : hémorragie",
+    "summary": "Réduit de un chaque nouvelle acquisition d’États Hémorragique.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0714",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "In-fighter — allonge adverse",
+    "titleFr": "Combattant au contact : allonge adverse",
+    "summary": "Annule le bonus adverse d’allonge.",
+    "mechanic": "modifier",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0715",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "In-fighter — combat au contact",
+    "titleFr": "Combattant au contact : combat au contact",
+    "summary": "Action de mêlée opposée : impose le contact ; armes au-delà de Courte deviennent improvisées ; un adversaire dépense l’Élan au début de son Tour pour rompre ce contact.",
+    "mechanic": "state",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0716",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Inspiring — commandement en combat",
+    "titleFr": "Exaltant : commandement en combat",
+    "summary": "Avantage au Commandement pendant un combat.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0717",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Instinctive Diction — incident mineur",
+    "titleFr": "Diction instinctive : incident mineur",
+    "summary": "Retire 20 au résultat d’incident mineur ; un résultat inférieur à 1 annule cet incident ; aucun bénéfice sur les majeurs.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-talents.js#instinctiveDiction",
+      "js/core/v5-magic-miscasts.js#instinctiveDiction"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0718",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Invoke — apprentissage des miracles",
+    "titleFr": "Invocation : apprentissage des miracles",
+    "summary": "Un miracle initial ; coûts progressifs par paliers de miracles connus ; incompatibilités et oubli à 100 PX avec perte des miracles.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0719",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Iron Jaw — premier étourdissement",
+    "titleFr": "Mâchoires d'acier : premier étourdissement",
+    "summary": "La première acquisition de Sonné de la rencontre est réduite de un.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0720",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Iron Will — résister aux influences",
+    "titleFr": "Volonté de fer : résister aux influences",
+    "summary": "Avantage à Calme pour résister aux influences d’autrui, y compris magiques.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0721",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Jump Up — acrobaties",
+    "titleFr": "Saut carpé : acrobaties",
+    "summary": "Avantage à Représentation acrobatique pour se déplacer ou divertir hors combat.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0722",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Jump Up — se relever immédiatement",
+    "titleFr": "Saut carpé : se relever immédiatement",
+    "summary": "Après avoir reçu À terre, un Test immédiat d’Athlétisme ou Acrobaties +0 permet de se relever.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0723",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Kingpin — carrières criminelles",
+    "titleFr": "Caïd : carrières criminelles",
+    "summary": "Lève les interdictions de carrière et la suspicion légale attachées à Criminel.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0724",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Lightning Reflexes — caractéristique",
+    "titleFr": "Réflexes foudroyants : caractéristique",
+    "summary": "Ajoute 5 en Agilité sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0725",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Linguistics — langues",
+    "titleFr": "Linguistique : langues",
+    "summary": "Avantage aux Tests de Langue autres que Magick.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0726",
+    "book": "L06",
+    "page": 121,
+    "chapter": "IV — Compétences et talents",
+    "title": "Linguistics — progression linguistique",
+    "titleFr": "Linguistique : progression linguistique",
+    "summary": "Les augmentations de Langue coûtent toujours 50 PX.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0727",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Lip Reading — lecture labiale",
+    "titleFr": "Lire sur les lèvres : lecture labiale",
+    "summary": "Avec la bouche du locuteur visible, un Test d’Intuition +0 permet de comprendre les paroles.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0728",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Luck — chance maximale",
+    "titleFr": "Chanceux : chance maximale",
+    "summary": "Augmente la Chance maximale de un par achat, jusqu’à trois achats.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0729",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Magic Resistance — résistance aux sorts",
+    "titleFr": "Résistance à la Magie : résistance aux sorts",
+    "summary": "Retire 3 DR au sort qui affecterait le détenteur.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0730",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Magic Resistance — incompatibilité magique",
+    "titleFr": "Résistance à la Magie : incompatibilité magique",
+    "summary": "Les apprentissages magiques incompatibles restent interdits.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0731",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Magical Sense — détecter une incantation",
+    "titleFr": "Perception de la Magie : détecter une incantation",
+    "summary": "Détecte une incantation à portée égale à Perception en yards et sa direction ; Seconde vue accorde l’Avantage aux Tests relatifs aux Vents.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-talents.js#magical-sense",
+      "js/core/v5-magic-talents.js#magical-sense"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0732",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Magnum Opus — chef-d’œuvre",
+    "titleFr": "Magnum opus : chef-d’œuvre",
+    "summary": "Chaque acquisition produit une œuvre valant au moins dix fois sa valeur habituelle ; le MJ détermine les bonus sociaux procurés.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0733",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Marksman — caractéristique",
+    "titleFr": "Tireur de précision : caractéristique",
+    "summary": "Ajoute 5 en Capacité de Tir sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0734",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Master of Disguise — interprétation réussie",
+    "titleFr": "Maître en déguisement : interprétation réussie",
+    "summary": "Sur une Interprétation réussie pour se déguiser, peut choisir les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0735",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Master Orator — plaidoirie",
+    "titleFr": "Grand orateur : plaidoirie",
+    "summary": "Avantage à Savoir juridique pour argumenter une affaire, ou au Savoir pertinent pour débattre.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0736",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Master Tradesman — résultat de métier",
+    "titleFr": "Travailleur qualifié : résultat de métier",
+    "summary": "Après réussite du Métier choisi, peut retenir les unités comme DR ; spécialité acquise séparément.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0737",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Menacing — intimidation",
+    "titleFr": "Menaçant : intimidation",
+    "summary": "Avantage aux Tests d’Intimidation.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0738",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Mimic — imitation",
+    "titleFr": "Imitation : imitation",
+    "summary": "Avantage à Interprétation, Comédie et Représentation de clown.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0739",
+    "book": "L06",
+    "page": 122,
+    "chapter": "IV — Compétences et talents",
+    "title": "Mimic — accent",
+    "titleFr": "Imitation : accent",
+    "summary": "Après un jour d’exposition, reproduit un accent et repère ceux qui le simulent sans le même talent.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0740",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Night Vision — vision dans la pénombre",
+    "titleFr": "Vision nocturne : vision dans la pénombre",
+    "summary": "Avec un éclairage minimal, voit clairement sur vingt yards et étend de vingt yards la portée des lumières.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0741",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Nimble-fingered — caractéristique",
+    "titleFr": "Doigts de fée : caractéristique",
+    "summary": "Ajoute 5 en Dextérité sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0742",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Noble Blood — statut",
+    "titleFr": "Noblesse : statut",
+    "summary": "Avec une tenue correcte, compte au moins un Échelon au-dessus d’autrui, sauf autre détenteur du talent ; accès à Noble comme carrière de même Classe.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0743",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Nose for Trouble — intuition",
+    "titleFr": "Flairer les ennuis : intuition",
+    "summary": "Avantage aux Tests d’Intuition.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0744",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Numismatics — origine monétaire",
+    "titleFr": "Numismate : origine monétaire",
+    "summary": "Avantage à Savoir Héraldique pour reconnaître la provenance d’une pièce, médaille ou bannière.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0745",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Numismatics — évaluation",
+    "titleFr": "Numismate : évaluation",
+    "summary": "Après Évaluation réussie, peut prendre les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0746",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Old Salt — navigation océanique",
+    "titleFr": "Loup de mer : navigation océanique",
+    "summary": "Sur Row ou Sail réussi en mer, peut choisir les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0747",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Old Salt — équipage",
+    "titleFr": "Loup de mer : équipage",
+    "summary": "Compte pour deux membres d’équipage en mer.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-measures.js#previewV5TalentMeasure",
+      "js/ui/v5-talent-measures.js#availableV5TalentMeasures"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0748",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Orientation — navigation",
+    "titleFr": "Sens de l'orientation : navigation",
+    "summary": "Avantage à Navigation.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0749",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Orientation — nord",
+    "titleFr": "Sens de l'orientation : nord",
+    "summary": "Identifie le nord à l’aide de signes familiers sans Test.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0750",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Panhandle — mendicité",
+    "titleFr": "Faire la manche : mendicité",
+    "summary": "Avantage à Charme pour mendier, y compris pendant une activité de revenu.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0751",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Panhandle — abri urbain",
+    "titleFr": "Faire la manche : abri urbain",
+    "summary": "Trouve normalement un abri urbain sûr mais inconfortable.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0752",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Perfect Pitch — musique",
+    "titleFr": "Oreille absolue : musique",
+    "summary": "Avantage au Chant et à Jouer d’un instrument.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0753",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Perfect Pitch — apprentissage à l’oreille",
+    "titleFr": "Oreille absolue : apprentissage à l’oreille",
+    "summary": "Une seule écoute suffit pour apprendre un morceau.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0754",
+    "book": "L06",
+    "page": 123,
+    "chapter": "IV — Compétences et talents",
+    "title": "Petty Magic — apprentissage",
+    "titleFr": "Magie mineure : apprentissage",
+    "summary": "Trois sorts initiaux ; les suivants coûtent de 50 à 250 PX selon les paliers de cinq sorts ; oubli à 100 PX avec perte des sorts.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0755",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Pharmacist — dose supplémentaire",
+    "titleFr": "Pharmacologie : dose supplémentaire",
+    "summary": "Fabriquer un remède alchimique produit une dose supplémentaire.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0756",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Pilot — manœuvres nautiques",
+    "titleFr": "Pilote : manœuvres nautiques",
+    "summary": "Avantage aux Tests de Rame et Navigation à voile.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0757",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Public Speaker — charmer une foule",
+    "titleFr": "Orateur : charmer une foule",
+    "summary": "Avantage à Charme pour influencer un groupe.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0758",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Public Speaker — renvoi au domaine déjà inventorié",
+    "titleFr": "Orateur : renvoi au domaine déjà inventorié",
+    "summary": "Après avoir charmé le groupe, permet de le diriger avec Commandement, notamment pour rallier ses membres.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-026",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0759",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Pure Soul — seuil de corruption",
+    "titleFr": "Âme pure : seuil de corruption",
+    "summary": "Double le nombre de Points de Corruption tolérés avant un Test contre la mutation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0760",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Rapid Reload — rechargement",
+    "titleFr": "Rechargement rapide : rechargement",
+    "summary": "Diminue de un le degré du Défaut Rechargement.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-qualities.js#previewV5ActionQualities",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0761",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Reaction Strike — attaque contre charge",
+    "titleFr": "Frappe réactive : attaque contre charge",
+    "summary": "Sur Initiative +0 réussie quand il est chargé, obtient une attaque gratuite de main principale contre le chargeur ; une seule par Round.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-attacks.js#previewReactionStrike",
+      "js/core/v5-talent-situations.js#previewSituationActivation"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0762",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Read/Write — lecture et écriture",
+    "titleFr": "Lire/Écrire : lecture et écriture",
+    "summary": "Peut lire et écrire toutes les langues parlées.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0763",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Relentless — suivre un désengagement",
+    "titleFr": "Impitoyable : suivre un désengagement",
+    "summary": "Après le Tour de l’adversaire désengagé, un Test +0 d’Athlétisme, Conduite ou Chevaucher accorde un Mouvement de poursuite et le Désengagement libre des autres adversaires.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0764",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Relentless — renvoi au domaine déjà inventorié",
+    "titleFr": "Impitoyable : renvoi au domaine déjà inventorié",
+    "summary": "Ajoute 1 DR aux Tests de poursuite en tant que poursuivant.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-044",
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0765",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Resistant — immunité ponctuelle",
+    "titleFr": "Résistance : immunité ponctuelle",
+    "summary": "Une fois par séance avant le jet, peut réussir automatiquement contre la menace choisie.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0766",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Resistant — résistance spécialisée",
+    "titleFr": "Résistance : résistance spécialisée",
+    "summary": "Avantage aux autres Tests contre la menace choisie ; une acquisition par menace.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0767",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Resolute — renvoi au domaine déjà inventorié",
+    "titleFr": "Déterminé : renvoi au domaine déjà inventorié",
+    "summary": "Après acquisition d’un État, Calme +0 peut préserver l’Élan.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-042",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0768",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Reversal — élan en défense",
+    "titleFr": "Renversement : élan en défense",
+    "summary": "Conserve l’Élan s’il est touché en mêlée malgré un Test personnel réussi.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0769",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Riposte — contre-attaque",
+    "titleFr": "Riposte : contre-attaque",
+    "summary": "Gagner une défense opposée en mêlée inflige des dégâts comme attaquant.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0770",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "River Guide — route fluviale sûre",
+    "titleFr": "Guide fluvial : route fluviale sûre",
+    "summary": "Pas de Test en eaux dangereuses si la difficulté reste supérieure à −1 DR ; avec le Savoir local adapté, aucun Test.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0771",
+    "book": "L06",
+    "page": 124,
+    "chapter": "IV — Compétences et talents",
+    "title": "Robust — guérison supplémentaire",
+    "titleFr": "Robuste : guérison supplémentaire",
+    "summary": "Les Tests réussis pour récupérer des Blessures peuvent en rendre deux de plus.",
+    "mechanic": "damage",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0772",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Roughrider — chevauchée",
+    "titleFr": "Cavalier émérite : chevauchée",
+    "summary": "Avantage aux Tests de Chevaucher.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0773",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Roughrider — poursuite montée",
+    "titleFr": "Cavalier émérite : poursuite montée",
+    "summary": "Ajoute 1 au Mouvement de la monture en poursuite.",
+    "mechanic": "modifier",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-measures.js#previewV5TalentMeasure",
+      "js/ui/v5-talent-measures.js#availableV5TalentMeasures"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0774",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Roughrider — ordre à la monture",
+    "titleFr": "Cavalier émérite : ordre à la monture",
+    "summary": "Avec la compétence Chevaucher, commande Action et Mouvement sans Test en situation normale.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0775",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Rover — discrétion rurale",
+    "titleFr": "Nomade : discrétion rurale",
+    "summary": "Avantage à Discrétion rurale.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0776",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Rover — survie en terrain sauvage",
+    "titleFr": "Nomade : survie en terrain sauvage",
+    "summary": "Reconnaît les routes simples et les endroits propices au gibier, à l’eau et à l’abri.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0777",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Savant — savoir spécialisé",
+    "titleFr": "Savant : savoir spécialisé",
+    "summary": "Avantage au Savoir choisi déjà possédé ; une acquisition par spécialité.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0778",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Savvy — caractéristique",
+    "titleFr": "Perspicace : caractéristique",
+    "summary": "Ajoute 5 en Intelligence sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0779",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Scale Sheer Surface — escalade",
+    "titleFr": "Grimpeur : escalade",
+    "summary": "Avantage aux Tests d’Escalade.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0780",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Scale Sheer Surface — parois impossibles",
+    "titleFr": "Grimpeur : parois impossibles",
+    "summary": "Autorise les surfaces normalement impraticables ; leur difficulté ne dépasse pas −3 DR.",
+    "mechanic": "test",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0781",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Schemer — intrigue",
+    "titleFr": "Intrigant : intrigue",
+    "summary": "Sur Ragot ou Savoir Politique réussi, peut retenir les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0782",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sea Legs — mal de mer",
+    "titleFr": "Pied marin : mal de mer",
+    "summary": "Avantage aux Tests pour éviter le mal de mer.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0783",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sea Legs — mer normale",
+    "titleFr": "Pied marin : mer normale",
+    "summary": "Aucun Test de mal de mer dans les conditions habituelles.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0784",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Seasoned Traveller — savoir régional",
+    "titleFr": "Voyageur aguerri : savoir régional",
+    "summary": "Peut progresser dans le Savoir local du lieu de séjour même hors carrière.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0785",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Second Sight — vents de magie",
+    "titleFr": "Seconde vue : vents de magie",
+    "summary": "Autorise la perception des Vents selon la procédure de perception magique.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0786",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Secret Identity — persona",
+    "titleFr": "Identité secrète : persona",
+    "summary": "Adopte une carrière et son Statut sans Test pour une période décidée ; Banque et Revenus utilisent cette identité.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0787",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Secret Identity — revenus sous couverture",
+    "titleFr": "Identité secrète : revenus sous couverture",
+    "summary": "Revenu à +0 via Interprétation ou compétence de la carrière fictive ; Subornation ou Évaluation si détournement ; échec dévoile l’identité.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0788",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Shadow — filature compromise",
+    "titleFr": "Discret : filature compromise",
+    "summary": "Si la cible repère la filature, peut la continuer en étant vu ou l’abandonner sans être découvert.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0789",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sharp — caractéristique",
+    "titleFr": "Vivacité : caractéristique",
+    "summary": "Ajoute 5 en Initiative sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0790",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sharpshooter — cible à terre ou à couvert",
+    "titleFr": "Tireur d'élite : cible à terre ou à couvert",
+    "summary": "Ignore les malus de tir liés à la cible À terre et à son couvert.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0791",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sharpshooter — précision exceptionnelle",
+    "titleFr": "Tireur d'élite : précision exceptionnelle",
+    "summary": "Autorise les tirs extraordinaires, avec difficulté fixée par le MJ.",
+    "mechanic": "test",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0792",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Shieldsman — protéger un allié",
+    "titleFr": "Porte-bouclier : protéger un allié",
+    "summary": "Une fois par Round, dépenser l’Élan prête les PA du bouclier à un allié adjacent dépourvu de bouclier.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0793",
+    "book": "L06",
+    "page": 125,
+    "chapter": "IV — Compétences et talents",
+    "title": "Shieldsman — repousser",
+    "titleFr": "Porte-bouclier : repousser",
+    "summary": "Après une opposition de mêlée gagnée, dépenser l’Élan et remplacer les dégâts permet de pousser la cible de deux yards et de rompre l’engagement ; quota partagé par Round.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0794",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sixth Sense — danger caché",
+    "titleFr": "Sixième sens : danger caché",
+    "summary": "Juste avant un danger caché, Intuition +0 permet de le détecter à la dernière seconde.",
+    "mechanic": "test",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0795",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Slayer — charge d’un grand ennemi",
+    "titleFr": "Tueur : charge d’un grand ennemi",
+    "summary": "Gagne automatiquement l’Élan quand une créature plus grande le charge.",
+    "mechanic": "resource",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0796",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sniper — longue portée",
+    "titleFr": "Tireur embusqué : longue portée",
+    "summary": "Supprime le malus de longue portée ; limite celui de portée extrême à −1 DR.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0797",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Speedreader — recherche étendue",
+    "titleFr": "Lecture rapide : recherche étendue",
+    "summary": "Double les DR ajoutés par un Test réussi à une Recherche étendue.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0798",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Speedreader — lecture accélérée",
+    "titleFr": "Lecture rapide : lecture accélérée",
+    "summary": "Lit une page d’un coup d’œil et un long ouvrage en une journée.",
+    "mechanic": "duration",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0799",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sprinter — course et saut",
+    "titleFr": "Sprinter : course et saut",
+    "summary": "Avantage à Athlétisme pour courir ou sauter.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0800",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Step Aside — sortie par esquive",
+    "titleFr": "Pas de côté : sortie par esquive",
+    "summary": "Une Esquive de défense réussie permet de bouger jusqu’à deux yards et de rompre l’engagement sans attaque gratuite.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0801",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Stone Soup — ration supplémentaire",
+    "titleFr": "Brouet : ration supplémentaire",
+    "summary": "Un Test de recherche de nourriture du groupe nourrit aussi ce personnage, même si le Test échoue.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0802",
+    "book": "L06",
+    "page": 126,
+    "chapter": "IV — Compétences et talents",
+    "title": "Stout-hearted — renvoi au domaine déjà inventorié",
+    "titleFr": "Cœur vaillant : renvoi au domaine déjà inventorié",
+    "summary": "Réduit de un la première acquisition de Brisé de chaque rencontre.",
+    "mechanic": "procedure",
+    "status": "automatise",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-043",
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0803",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Striding Gait — terrain familier",
+    "titleFr": "Bon marcheur : terrain familier",
+    "summary": "Ignore les pénalités de Mouvement dans le terrain choisi ; acquisition par terrain.",
+    "mechanic": "modifier",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-measures.js#previewV5TalentMeasure",
+      "js/ui/v5-talent-measures.js#availableV5TalentMeasures"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0804",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Striding Gait — poursuite",
+    "titleFr": "Bon marcheur : poursuite",
+    "summary": "Ajoute 2 DR aux Tests de poursuite dans le terrain choisi.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0805",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strike Mighty Blow — dégâts de mêlée",
+    "titleFr": "Coup puissant : dégâts de mêlée",
+    "summary": "Ajoute 1 Dégât en mêlée, ou 2 si l’attaque bénéficiait d’Avantage.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0806",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strike to Injure — gravité des critiques",
+    "titleFr": "Frappe blessante : gravité des critiques",
+    "summary": "Le joueur fournit deux résultats de critique et choisit lequel conserver.",
+    "mechanic": "table",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-combat.js#prepareV5TalentCriticalRolls",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0807",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strike to Injure — neutralisation silencieuse",
+    "titleFr": "Frappe blessante : neutralisation silencieuse",
+    "summary": "Le livre supprime le malus de Coup ciblé pour neutraliser silencieusement ; la décision MJ locale retient plutôt la procédure spéciale de p.135.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Ne modifie pas la décision MJ du catalogue. La variante imprimée n’est pas réintroduite en parallèle.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0808",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strike to Stun — arme improvisée",
+    "titleFr": "Frappe assommante : arme improvisée",
+    "summary": "Attribue Assommante à toute arme improvisée.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-qualities.js#previewV5ActionQualities",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0809",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strike to Stun — neutralisation silencieuse",
+    "titleFr": "Frappe assommante : neutralisation silencieuse",
+    "summary": "Le livre retire le malus ciblé avec une arme Assommante ; la règle locale publiée accorde l’Avantage à la neutralisation spéciale.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Décision MJ locale préservée ; les conséquences particulières de neutralisation sont recensées p.135.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0810",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strong Back — force opposée",
+    "titleFr": "Infatigable : force opposée",
+    "summary": "Ajoute 1 DR à la Force opposée, ou 3 au second rang.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0811",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strong Back — charge transportable",
+    "titleFr": "Infatigable : charge transportable",
+    "summary": "Ajoute un point d’Encombrement transportable, ou trois au deuxième achat.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0812",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strong Legs — sprint et saut réussis",
+    "titleFr": "Bonnes jambes : sprint et saut réussis",
+    "summary": "Sur Athlétisme réussi pour sprinter ou sauter, peut prendre les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0813",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strong-minded — ignorer les malus",
+    "titleFr": "Obstiné : ignorer les malus",
+    "summary": "Une fois par séance, avant le jet, peut ignorer tous les modificateurs négatifs du Test.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0814",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Strong Swimmer — nage",
+    "titleFr": "Nageur endurant : nage",
+    "summary": "Avantage à Natation et +2 DR aux poursuites à la nage.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0815",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sturdy — charge maximale",
+    "titleFr": "Costaud : charge maximale",
+    "summary": "Compte deux fois le BF dans la capacité d’Encombrement.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0816",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Suave — caractéristique",
+    "titleFr": "Affable : caractéristique",
+    "summary": "Ajoute 5 en Sociabilité sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0817",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Super Numerate — évaluation",
+    "titleFr": "Doué en calcul : évaluation",
+    "summary": "Avantage aux Tests d’Évaluation.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0818",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Super Numerate — mesure du temps",
+    "titleFr": "Doué en calcul : mesure du temps",
+    "summary": "Suit précisément le temps écoulé tant qu’il reste conscient.",
+    "mechanic": "duration",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0819",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Supportive — statut supérieur",
+    "titleFr": "Coopératif : statut supérieur",
+    "summary": "Ignore le malus de Charme envers un Statut supérieur et gagne l’Avantage pour s’en attirer les bonnes grâces.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0820",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sure Shot — dégâts de tir",
+    "titleFr": "Tir sûr : dégâts de tir",
+    "summary": "Ajoute 1 Dégât aux attaques à distance.",
+    "mechanic": "damage",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0821",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Sure Shot — armure partielle",
+    "titleFr": "Tir sûr : armure partielle",
+    "summary": "Ignore l’armure Partielle ; ignore aussi ses Points faibles avec une arme Empaleuse.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0822",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Surgery — guérison hors combat",
+    "titleFr": "Chirurgie : guérison hors combat",
+    "summary": "Après Guérison réussie hors combat, peut prendre les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0823",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Surgery — critiques opérables",
+    "titleFr": "Chirurgie : critiques opérables",
+    "summary": "Autorise le traitement des critiques exigeant Chirurgie, avec leurs procédures et risques propres.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0824",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Tenacious — fatigue initiale",
+    "titleFr": "Persévérant : fatigue initiale",
+    "summary": "Réduit de un la première acquisition de Fatigué de la rencontre.",
+    "mechanic": "state",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0825",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Tinker — réparer sans formation",
+    "titleFr": "Bricoleur : réparer sans formation",
+    "summary": "Traite tous les Métiers comme compétences de base pour réparer.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Le contrat calcule Avantage et durée pour un réparateur formé ; aucune ouverture générale des compétences avancées non acquises vérifiée.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0826",
+    "book": "L06",
+    "page": 127,
+    "chapter": "IV — Compétences et talents",
+    "title": "Tinker — réparer avec formation",
+    "titleFr": "Bricoleur : réparer avec formation",
+    "summary": "Avec une augmentation du Métier approprié, accorde l’Avantage et divise la durée de réparation par deux.",
+    "mechanic": "duration",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-measures.js#previewV5TalentMeasure",
+      "js/ui/v5-talent-measures.js#availableV5TalentMeasures"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0827",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Tower of Memories — savoir réussi",
+    "titleFr": "Tour des souvenirs : savoir réussi",
+    "summary": "Après réussite d’un Savoir, peut choisir les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0828",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Trapper — pièges",
+    "titleFr": "Trappeur : pièges",
+    "summary": "Avantage aux Tests de Piégeage.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0829",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Trapper — fabrication de pièges",
+    "titleFr": "Trappeur : fabrication de pièges",
+    "summary": "Une heure de préparation permet de fabriquer un petit piège à animaux ou une fosse couverte.",
+    "mechanic": "duration",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0830",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Trick Rider — esquive montée",
+    "titleFr": "Acrobaties équestres : esquive montée",
+    "summary": "Supprime la pénalité typée d’Esquive montée.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talents.js#evaluateV5Talents",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Le moteur supprime une pénalité typée de −2 DR ; L06 p.168 donne un Désavantage. L’autorisation de Représentation est distincte et la divergence générale reste ouverte.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0831",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Trick Rider — représentation montée",
+    "titleFr": "Acrobaties équestres : représentation montée",
+    "summary": "Autorise toutes les compétences de Représentation à cheval.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0832",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Tunnel Fighter — discrétion souterraine",
+    "titleFr": "Rat d'égout : discrétion souterraine",
+    "summary": "Avantage à Discrétion souterraine.",
+    "mechanic": "modifier",
+    "status": "automatise",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentTestModifiers",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0833",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Tunnel Fighter — repères souterrains",
+    "titleFr": "Rat d'égout : repères souterrains",
+    "summary": "Estime facilement profondeur et distance parcourue sous terre.",
+    "mechanic": "procedure",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0834",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Unshakeable — renvoi au domaine déjà inventorié",
+    "titleFr": "Inébranlable : renvoi au domaine déjà inventorié",
+    "summary": "Dispense du Test contre Brisé lié au tir d’une arme à poudre noire.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-027",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0835",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Very Resilient — caractéristique",
+    "titleFr": "Très résistant : caractéristique",
+    "summary": "Ajoute 5 en Endurance sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0836",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Very Strong — caractéristique",
+    "titleFr": "Très fort : caractéristique",
+    "summary": "Ajoute 5 en Force sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0837",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "War Leader — renvoi au domaine déjà inventorié",
+    "titleFr": "Seigneur de guerre : renvoi au domaine déjà inventorié",
+    "summary": "Les alliés influencés utilisent Commandement du meneur contre la Peur ; fin à la bataille ou invalidation du meneur.",
+    "mechanic": "procedure",
+    "status": "assiste",
+    "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-028",
+    "toolRef": [
+      "js/core/v5-talent-actions.js#previewV5TalentActivation",
+      "js/core/resolution.js#resolvedV5Action"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents",
+    "selectorEligible": false,
+    "selectorExclusionReason": "Clause déjà portée par C0 ; conserver sa décision et son suivi."
+  },
+  {
+    "id": "F-L06-0838",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Warrior Born — caractéristique",
+    "titleFr": "Guerrier né : caractéristique",
+    "summary": "Ajoute 5 en Capacité de Combat sans compter comme augmentation.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0839",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "War Wizard — incantation rapide",
+    "titleFr": "Mage de guerre : incantation rapide",
+    "summary": "Dépenser l’Élan permet un sort de NI au plus 5 en Action libre ; aucun autre Test magique ce Tour, Focalisation comprise.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-magic-casting.js#warWizard",
+      "js/core/v5-magic-talents.js#warWizardTurn"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0840",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Waterman — navigation fluviale",
+    "titleFr": "Marinier : navigation fluviale",
+    "summary": "Sur Rame ou Navigation à voile réussi en rivière ou lac, peut prendre les unités comme DR.",
+    "mechanic": "test",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-tests.js#previewV5TalentSLChoices",
+      "js/core/v5-combat-rules.js#buildCombatTest"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0841",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Waterman — équipage fluvial",
+    "titleFr": "Marinier : équipage fluvial",
+    "summary": "Compte pour deux membres d’équipage sur rivière ou lac.",
+    "mechanic": "resource",
+    "status": "assiste",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-measures.js#previewV5TalentMeasure",
+      "js/ui/v5-talent-measures.js#availableV5TalentMeasures"
+    ],
+    "v5Proposal": null,
+    "notes": "Source V5 lue ; identité et texte publiés vérifiés. Contexte fictif explicite requis ; le contrat actif et ses lecteurs bornent la couverture.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0842",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Wealthy — gain de carrière",
+    "titleFr": "Nanti : gain de carrière",
+    "summary": "Ajoute une couronne d’or au revenu de carrière ; trois au deuxième achat.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0843",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Well-prepared — équipement anticipé",
+    "titleFr": "Prévoyant : équipement anticipé",
+    "summary": "Une fois par séance, fournit un objet crédible d’Encombrement zéro et en paie le prix ; les usages suivants coûtent de la Chance ; aucun achat sans argent.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0844",
+    "book": "L06",
+    "page": 128,
+    "chapter": "IV — Compétences et talents",
+    "title": "Witch! — magie autodidacte",
+    "titleFr": "Sorcier ! : magie autodidacte",
+    "summary": "Un sort d’un domaine coloré ou de Sorcellerie ; Focalisation et Magick correspondants deviennent de base ; sorts suivants à 200 PX puis +100 par sort ; oubli à 100 PX.",
+    "mechanic": "resource",
+    "status": "rappel",
+    "coveredBy": null,
+    "toolRef": [
+      "js/core/v5-talent-coverage.js#v5TalentCoverage",
+      "js/ui/rules-view.js#v5TalentCoverage"
+    ],
+    "v5Proposal": null,
+    "notes": "Description et traitement visibles dans le catalogue. Aucun parcours appliquant cette clause dans ce dépôt ; les valeurs possédées dans une fiche ne prouvent pas leur calcul ici.",
+    "domain": "Talents"
+  },
+  {
+    "id": "F-L06-0845",
+    "book": "L06",
+    "page": 109,
+    "chapter": "IV — Compétences et talents",
+    "title": "Skill values",
+    "titleFr": "Valeur de compétence",
+    "summary": "La compétence vaut caractéristique plus cinq par augmentation ; une compétence de base reste utilisable sans augmentation.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.",
+    "domain": "Compétences"
+  },
+  {
+    "id": "F-L06-0846",
+    "book": "L06",
+    "page": 110,
+    "chapter": "IV — Compétences et talents",
+    "title": "Advanced Skills",
+    "titleFr": "Compétence avancée",
+    "summary": "Une compétence avancée ne peut être testée qu’avec au moins une augmentation.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.",
+    "domain": "Compétences"
+  },
+  {
+    "id": "F-L06-0847",
+    "book": "L06",
+    "page": 110,
+    "chapter": "IV — Compétences et talents",
+    "title": "Grouped Skills",
+    "titleFr": "Spécialités de compétences",
+    "summary": "Chaque spécialité reçoit ses propres augmentations et constitue une compétence distincte ; les choix de carrière bornent les spécialités accessibles.",
+    "mechanic": "resource",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.",
+    "domain": "Compétences"
+  },
+  {
+    "id": "F-L06-0848",
+    "book": "L06",
+    "page": 112,
+    "chapter": "IV — Compétences et talents",
+    "title": "Language fluency",
+    "titleFr": "Maîtrise linguistique",
+    "summary": "Une augmentation permet de se faire comprendre ; quatre rendent fluent et dispensent des Tests ordinaires.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.",
+    "domain": "Compétences"
+  },
+  {
+    "id": "F-L06-0849",
+    "book": "L06",
+    "page": 113,
+    "chapter": "IV — Compétences et talents",
+    "title": "Research literacy",
+    "titleFr": "Savoir lire pour rechercher",
+    "summary": "Recherche exige le talent Lire/Écrire.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.",
+    "domain": "Compétences"
+  },
+  {
+    "id": "F-L06-0850",
+    "book": "L06",
+    "page": 113,
+    "chapter": "IV — Compétences et talents",
+    "title": "Commanding a trained crew",
+    "titleFr": "Commander un équipage",
+    "summary": "Un commandant d’équipage bien entraîné emploie Commandement à la place de Navigation à voile.",
+    "mechanic": "test",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.",
+    "domain": "Compétences"
+  },
+  {
+    "id": "F-L06-0851",
+    "book": "L06",
+    "page": 114,
+    "chapter": "IV — Compétences et talents",
+    "title": "Swimming without a Test",
+    "titleFr": "Nager sans Test",
+    "summary": "Posséder Natation dispense des Tests ordinaires en eau calme ; difficultés, course et fuite exigent un jet.",
+    "mechanic": "procedure",
+    "status": "absent",
+    "coveredBy": null,
+    "toolRef": [],
+    "v5Proposal": null,
+    "notes": "Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.",
+    "domain": "Compétences"
   }
 ]
