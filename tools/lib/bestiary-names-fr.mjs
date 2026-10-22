@@ -91,5 +91,11 @@ export const NAMES_FR = Object.freeze({
   'E0-P-148': proposal('Leonard — Écuyer humain'), 'E0-P-149': proposal('Ridrek Blackhelm — Artiste nain (et espion)'),
   'E0-P-136': proposal('Isabella — Voyante (Bronze 4)'), 'E0-P-137': proposal('Richter Kless — Professeur (Or 1)'),
   // Tribes and Tribulations (L12)
-  'E0-P-438': proposal('Matthogg — Brute ogre')
+  'E0-P-438': proposal('Matthogg — Brute ogre'),
+  // Up in Arms (L13)
+  'E0-P-457': proposal('Chevaliers de l’Empire — Destrier — Lourd cheval de guerre'), 'E0-P-458': proposal('Cheval de selle'), 'E0-P-459': proposal('Monture demigriffon'),
+  'E0-P-460': proposal('Éclaireur local (Argent 1)'), 'E0-P-461': proposal('Mercenaire aguerri (Argent 3)'), 'E0-P-462': proposal('Up in Arms — Avocat (Argent 3)'),
+  'E0-P-463': proposal('Scribe (Argent 2)'), 'E0-P-464': proposal('Porteur (Argent 1)'), 'E0-P-465': proposal('Docteur (Argent 5)'),
+  'E0-P-466': proposal('Vétéran d’aventures'), 'E0-P-467': proposal('Infirme'), 'E0-P-468': proposal('Esprit vif'),
+  'E0-P-469': proposal('Voyou repenti'), 'E0-P-470': proposal('Vieux loup de mer'), 'E0-P-471': proposal('Diamant brut')
 });

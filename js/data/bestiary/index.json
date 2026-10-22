@@ -110,6 +110,17 @@
     "templates": 15,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L13",
+   "file": "L13.json",
+   "title": "Up in Arms",
+   "edition": "V4",
+   "counts": {
+    "profiles": 9,
+    "templates": 6,
+    "pregenerated": 0
+   }
   }
  ]
 }

@@ -63,3 +63,7 @@ Format : id, source, question, choix, raison, alternative. Relecture du MJ en s�
 ## Tribes and Tribulations (D11)
 
 - **E-D18** — L12 : 64 fiches, 49 profils et 15 gabarits (le plan en annonçait 14). La Mégère troll des rivières (E0-P-449, p. 89), classée « profil » par l'inventaire, est imprimée en modificateurs (F+10, E+10, I+5, Int+30, FM+20, aucune Blessures) : fiche « gabarit », genre d'inventaire gardé dans `inventoryKind` (comme E-D16). E0-P-438 : l'inventaire a pris une phrase du texte pour le titre ; titre rétabli « Matthogg — Ogre Bruiser » (`NAME_FIXES`), mot-clé Ogre ; Gorfang en Orque. Gnoblars et Hobgobelins sans mot-clé : le référentiel n'a pas ces espèces (à arbitrer par le MJ). Noms français tous proposés, à relire.
+
+## Up in Arms (D12)
+
+- **E-D19** — L13 : 15 fiches (9 profils, 6 gabarits), comme annoncé. Valeurs du Destrier, du Cheval de selle et du Demigryph relues sur le texte (p. 29, 109). Chevaux en Cheval, Demigryph en Bête, Mercenaire aguerri en Mercenaire ; les autres PNJ (Éclaireur, Avocat, Scribe, Porteur, Docteur) sans mot-clé : aucune espèce n'est imprimée dans le bloc. Noms français tous proposés (le générateur automatique donnait des intitulés bancals), à relire.
