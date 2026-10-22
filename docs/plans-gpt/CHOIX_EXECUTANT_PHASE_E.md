@@ -39,3 +39,9 @@ Format : id, source, question, choix, raison, alternative. Relecture du MJ en s�
 - **E-D07** — Mots-clés manuels (`tools/lib/bestiary-keywords-manual.mjs`) : quand le nom imprimé ne se résout pas par alias (créatures nommées, hybrides), le mot-clé est fixé à la main par identifiant et ajouté à ceux du nom ; jamais de mot-clé inventé hors référentiel.
 - **E-D08** — Prétirés (E0-P-536 à 541) : caractéristiques *actuelles* de la fiche, Blessures = dernier nombre du cadre WOUNDS. Compétences gardées seulement si la ligne se recoupe (caractéristique + progression = total) : drapeau `skillsPartial`. Nom du formulaire différent du titre : `identity.titleMismatch`, aucune correction.
 - **E-D09** — Noms français sans source L05 : propositions mécaniques par glossaire (`bestiary-names-glossary.mjs`), marquées `nameFrSource: "proposition"`, à relire par le MJ.
+
+## Archives of the Empire (D4 à D6)
+
+- **E-D10** — Espèce des PNJ sans mention dans le nom : lue sur le contexte du livre (Mouvement 3 et Endurance : Halflings pp. 23-31 et Nains pp. 56-63 de L03 ; PNJ humains de L01 et L02), fixée à la main dans `bestiary-keywords-manual.mjs`. Relue par le MJ au besoin.
+- **E-D11** — Vérificateur : le texte brut écrit une case vide « -- » ; le contrôle l'assimile au tiret unique (sinon le Rhinox de L01 restait faussement en écart).
+- **E-D12** — Noms français des PNJ des Archives : traduction des seuls intitulés de métier (Nun → Sœur, Squire → Écuyer…), noms propres conservés ; tous marqués « proposition ».

@@ -24,6 +24,17 @@
    }
   },
   {
+   "book": "L03",
+   "file": "L03.json",
+   "title": "Archives of the Empire Volume 1",
+   "edition": "V4",
+   "counts": {
+    "profiles": 13,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L06",
    "file": "L06.json",
    "title": "Livre de base V5",

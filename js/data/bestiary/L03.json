@@ -1,0 +1,1407 @@
+{
+ "schemaVersion": 1,
+ "book": "L03",
+ "title": "Archives of the Empire Volume 1",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L03",
+  "sha256": "d07f2cbd9faf64f3e979ee249c44bfbfa3e8163b47a2fc678e6749700920c5d7"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-150",
+   "book": "L03",
+   "page": 23,
+   "physicalPage": 23,
+   "kind": "profile",
+   "blockKey": "L03:23:0",
+   "name": "Misodoctakleidist ‘doc’ Ashfield — Soldier (Silver 3)",
+   "nameFr": "Misodoctakleidist ‘doc’ Ashfield — Soldat (Argent 3)",
+   "stats": {
+    "M": 3,
+    "CC": 30,
+    "CT": 54,
+    "F": 21,
+    "E": 36,
+    "I": 35,
+    "Ag": 28,
+    "Dex": 44,
+    "Int": 27,
+    "FM": 53,
+    "Soc": 40
+   },
+   "wounds": 11,
+   "keywords": [
+    "soldat",
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-151",
+   "book": "L03",
+   "page": 24,
+   "physicalPage": 24,
+   "kind": "profile",
+   "blockKey": "L03:24:0",
+   "name": "Thomasina ‘tina’ Brambledown — Bargeswain (Silver 3)",
+   "nameFr": "Thomasina ‘tina’ Brambledown — Maître de barge (Argent 3)",
+   "stats": {
+    "M": 3,
+    "CC": 21,
+    "CT": 48,
+    "F": 34,
+    "E": 41,
+    "I": 45,
+    "Ag": 55,
+    "Dex": 51,
+    "Int": 27,
+    "FM": 39,
+    "Soc": 43
+   },
+   "wounds": 11,
+   "attacks": [
+    {
+     "name": "Boat Hook",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 56
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 49
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 51
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 68
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 56
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 56
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 56
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 32
+    },
+    {
+     "name": "Lore (Riverways)",
+     "nameFr": "Savoir (Voies fluviales)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 31
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 32
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 61
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 44
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 77
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 49
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Waterman"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon (Boat Hook)",
+    "Leather Jack",
+    "Pole",
+    "Pouch with 12 silver",
+    "Rope",
+    "Uniform (Auftrager Trading)"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-152",
+   "book": "L03",
+   "page": 27,
+   "physicalPage": 27,
+   "kind": "profile",
+   "blockKey": "L03:27:0",
+   "name": "Luitpoldstrasse ‘louis’ Lostpockets — Master Beggar (Brass 4)",
+   "nameFr": "Luitpoldstrasse ‘louis’ Lostpockets — Maître mendiant (Bronze 4)",
+   "stats": {
+    "M": 3,
+    "CC": 22,
+    "CT": 46,
+    "F": 23,
+    "E": 52,
+    "I": 32,
+    "Ag": 42,
+    "Dex": 46,
+    "Int": 36,
+    "FM": 61,
+    "Soc": 48
+   },
+   "wounds": 26,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 52
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 58
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 62
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 71
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 57
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 62
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 58
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 58
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 42
+    },
+    {
+     "name": "Lore (Altdorf)",
+     "nameFr": "Savoir (Altdorf)",
+     "value": 46
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 47
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 56
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 57
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Hardy",
+     "rank": 2
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Panhandle"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Resistance (Disease)"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Very Resilient"
+    }
+   ],
+   "trappings": [
+    "Poor Quality Blanket",
+    "Bowl",
+    "Crutch",
+    "Cup",
+    "Ugly Dagger (Shiv)",
+    "Hiding Place with 6 Brass Pennies"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-153",
+   "book": "L03",
+   "page": 28,
+   "physicalPage": 28,
+   "kind": "profile",
+   "blockKey": "L03:28:0",
+   "name": "Belliquotious ‘bella’ Lowhaven Iv — Racketeer (Brass 5)",
+   "nameFr": "Belliquotious ‘bella’ Lowhaven Iv — Racketteur (Bronze 5)",
+   "stats": {
+    "M": 3,
+    "CC": 44,
+    "CT": 40,
+    "F": 40,
+    "E": 50,
+    "I": 32,
+    "Ag": 35,
+    "Dex": 46,
+    "Int": 33,
+    "FM": 40,
+    "Soc": 40
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Knuckledusters",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 50
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 53
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 60
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 55
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 48
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 60
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 43
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 53
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 47
+    },
+    {
+     "name": "Lore (Ubersreik)",
+     "nameFr": "Savoir (Ubersreik)",
+     "frUnverified": true,
+     "value": 43
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 59
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 47
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 45
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Criminal",
+     "rank": 2
+    },
+    {
+     "name": "Dirty Fighting",
+     "rank": 2
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Menacing",
+     "rank": 2
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Chip on her shoulder",
+    "Knuckledusters",
+    "Leather Coif",
+    "Leather Jack",
+    "Mail Shirt",
+    "Purse with 16 Silver Shillings"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-154",
+   "book": "L03",
+   "page": 29,
+   "physicalPage": 29,
+   "kind": "profile",
+   "blockKey": "L03:29:0",
+   "name": "Suffonsification ‘suffy’ Rumster Lvi — Apprentice Artisan (Brass 2)",
+   "nameFr": "Suffonsification ‘suffy’ Rumster Lvi — Apprenti artisan (Bronze 2)",
+   "stats": {
+    "M": 3,
+    "CC": 15,
+    "CT": 49,
+    "F": 26,
+    "E": 32,
+    "I": 32,
+    "Ag": 39,
+    "Dex": 49,
+    "Int": 34,
+    "FM": 35,
+    "Soc": 43
+   },
+   "wounds": 9,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 44
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 48
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 37
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 44
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 42
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 39
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 48
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 37
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 42
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 44
+    },
+    {
+     "name": "Trade (Cook)",
+     "nameFr": "Métier (Cuisinier)",
+     "value": 59
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Craftsman (Cook)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Public Speaking"
+    },
+    {
+     "name": "Resistance(Chaos)"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "trappings": [
+    "Aspirations beyond his capacity",
+    "Dagger",
+    "Leather Jerkin",
+    "Pouch with 16 Brass Pennies",
+    "Tray of Pies"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-155",
+   "book": "L03",
+   "page": 30,
+   "physicalPage": 30,
+   "kind": "profile",
+   "blockKey": "L03:30:0",
+   "name": "Spoondrift ‘spoony’ Skelfsider – Grave — Robber (Brass 3)",
+   "nameFr": "Spoondrift « spoony » Skelfsider — Pilleur de tombes (Bronze 3)",
+   "stats": {
+    "M": 3,
+    "CC": 31,
+    "CT": 40,
+    "F": 37,
+    "E": 37,
+    "I": 47,
+    "Ag": 31,
+    "Dex": 38,
+    "Int": 38,
+    "FM": 56,
+    "Soc": 48
+   },
+   "wounds": 11,
+   "attacks": [
+    {
+     "name": "Handweapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 66
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 62
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 58
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 62
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 41
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 62
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 44
+    },
+    {
+     "name": "Trade (Cook)",
+     "nameFr": "Métier (Cuisinier)",
+     "value": 43
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Resistance (Disease)"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Backpack",
+    "Collapsible Step-ladder",
+    "Crowbar",
+    "Handcart",
+    "Hand Weapon",
+    "Hooded Cloak",
+    "Rope",
+    "Spade",
+    "Storm Lantern and Oil",
+    "Tarpaulin"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-156",
+   "book": "L03",
+   "page": 31,
+   "physicalPage": 31,
+   "kind": "profile",
+   "blockKey": "L03:31:0",
+   "name": "Thelonius Hardcastle Monkenbridge — Thorncobble Xii – Scion (Gold 1)",
+   "nameFr": "Thelonius Hardcastle Monkenbridge — Thorncobble XII — Héritier (Or 1)",
+   "stats": {
+    "M": 3,
+    "CC": 20,
+    "CT": 46,
+    "F": 24,
+    "E": 30,
+    "I": 34,
+    "Ag": 27,
+    "Dex": 48,
+    "Int": 29,
+    "FM": 40,
+    "Soc": 48
+   },
+   "wounds": 10,
+   "attacks": [
+    {
+     "name": "Tiny Foil",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 52
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 53
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 38
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 39
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 37
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 29
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 58
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 34
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 25
+    },
+    {
+     "name": "Play (Harpsichord)",
+     "nameFr": "Musicien (Clavecin)",
+     "value": 53
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 51
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Small"
+    }
+   ],
+   "trappings": [
+    "Courtly Garb",
+    "4 Rings worth 3 GC each",
+    "Lolli Skelfsider (Servant)"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-157",
+   "book": "L03",
+   "page": 56,
+   "physicalPage": 56,
+   "kind": "profile",
+   "blockKey": "L03:56:1",
+   "name": "Alrik Skagsson – Inquisitor (Silver 5)",
+   "nameFr": "Alrik Skagsson — Inquisiteur (Argent 5)",
+   "stats": {
+    "M": 3,
+    "CC": 78,
+    "CT": 57,
+    "F": 36,
+    "E": 72,
+    "I": 35,
+    "Ag": 28,
+    "Dex": 47,
+    "Int": 38,
+    "FM": 79,
+    "Soc": 32
+   },
+   "wounds": 24,
+   "armour": {
+    "ap": 2,
+    "detail": "Mail Shirt"
+   },
+   "attacks": [
+    {
+     "name": "Pistol) (20",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Silvered Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 36
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 76
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    }
+   ],
+   "talents": [
+    {
+     "name": "Fearless (Witches)"
+    },
+    {
+     "name": "Magic Resistant"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Strong-Minded"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Pair of Pistols and 12 Shots",
+    "Hat (Henin)",
+    "Mail Shirt",
+    "Quality Clothes",
+    "Hand Weapon (Silvered Sword)",
+    "Subordinate Interrogators"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-158",
+   "book": "L03",
+   "page": 56,
+   "physicalPage": 56,
+   "kind": "profile",
+   "blockKey": "L03:56:0",
+   "name": "Karstin Largsdottir – Agent (Gold 1)",
+   "nameFr": "Karstin Largsdottir – agent (Or 1)",
+   "stats": {
+    "M": 3,
+    "CC": 62,
+    "CT": 31,
+    "F": 43,
+    "E": 65,
+    "I": 56,
+    "Ag": 42,
+    "Dex": 65,
+    "Int": 53,
+    "FM": 71,
+    "Soc": 41
+   },
+   "wounds": 21,
+   "attacks": [
+    {
+     "name": "Axe",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 62
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 52
+    }
+   ],
+   "talents": [
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Lip Reading"
+    },
+    {
+     "name": "Magic Resistant"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Strong-Minded"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Book (Cryptography)",
+    "Hand Weapon (Axe)",
+    "Ring of Spies and Informers",
+    "Loft of Homing Pigeons",
+    "Quill and Ink"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-159",
+   "book": "L03",
+   "page": 57,
+   "physicalPage": 57,
+   "kind": "profile",
+   "blockKey": "L03:57:0",
+   "name": "Thyk Hurgarsson – Fellow (Silver 5)",
+   "nameFr": "Thyk Hurgarsson — Compagnon de guilde (Argent 5)",
+   "stats": {
+    "M": 3,
+    "CC": 42,
+    "CT": 31,
+    "F": 30,
+    "E": 68,
+    "I": 51,
+    "Ag": 20,
+    "Dex": 41,
+    "Int": 72,
+    "FM": 75,
+    "Soc": 47
+   },
+   "wounds": 22,
+   "armour": {
+    "ap": 1,
+    "detail": "Leather Jack"
+   },
+   "attacks": [
+    {
+     "name": "Axe",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 44
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 57
+    },
+    {
+     "name": "Lore (Imperial History)",
+     "nameFr": "Savoir (Imperial History)",
+     "frUnverified": true,
+     "value": 78
+    }
+   ],
+   "talents": [
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Magic Resistant"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Imperial History)"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Strong-Minded"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Books",
+    "Fine Clothing",
+    "Hand Weapon (Axe)",
+    "Leather Jack",
+    "Travelling Clothes"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-160",
+   "book": "L03",
+   "page": 62,
+   "physicalPage": 62,
+   "kind": "profile",
+   "blockKey": "L03:62:0",
+   "name": "Volund Sliverscar — Chartered Engineer (Gold 2)",
+   "nameFr": "Volund Sliverscar — Ingénieur agréé (Or 2)",
+   "stats": {
+    "M": 3,
+    "CC": 44,
+    "CT": 51,
+    "F": 34,
+    "E": 66,
+    "I": 56,
+    "Ag": 22,
+    "Dex": 68,
+    "Int": 69,
+    "FM": 86,
+    "Soc": 25
+   },
+   "wounds": 23,
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Repeater Pistol) (10",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "War Wrench",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 32
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 70
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 68
+    }
+   ],
+   "talents": [
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Magnum Opus"
+    },
+    {
+     "name": "Master Tradesman (Engineer)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Engineer)"
+    },
+    {
+     "name": "Strong-Minded"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Guild Medallion of Office (Karak Guildmaster)",
+    "Library (Engineer)",
+    "Quality Trade Tools (Engineer)",
+    "Large Workshop (Engineer)"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-161",
+   "book": "L03",
+   "page": 63,
+   "physicalPage": 63,
+   "kind": "profile",
+   "blockKey": "L03:63:0",
+   "name": "Gurniksson Hammerback – Miner Foreman",
+   "nameFr": "Gurniksson Hammerback — Contremaître mineur",
+   "stats": {
+    "M": 3,
+    "CC": 64,
+    "CT": 31,
+    "F": 53,
+    "E": 64,
+    "I": 54,
+    "Ag": 20,
+    "Dex": 41,
+    "Int": 39,
+    "FM": 68,
+    "Soc": 40
+   },
+   "wounds": 23,
+   "armour": {
+    "ap": 1
+   },
+   "attacks": [
+    {
+     "name": "Two-Handed Pick",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Careful Strike"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tunnel Rat"
+    }
+   ],
+   "trappings": [
+    "Clan of Miners",
+    "Guild Medallion of Office (Karak Guildmaster)"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-162",
+   "book": "L03",
+   "page": 63,
+   "physicalPage": 63,
+   "kind": "profile",
+   "blockKey": "L03:63:1",
+   "name": "Ragni Thorisson – Officer (Gold 1)",
+   "nameFr": "Ragni Thorisson – officier (Or 1)",
+   "stats": {
+    "M": 3,
+    "CC": 73,
+    "CT": 67,
+    "F": 36,
+    "E": 58,
+    "I": 59,
+    "Ag": 28,
+    "Dex": 47,
+    "Int": 39,
+    "FM": 77,
+    "Soc": 34
+   },
+   "wounds": 20,
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Two-Handed Warhammer",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 48
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 58
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 50
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Badge of Office",
+    "Company of Hammerers",
+    "Symbol of Rank"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

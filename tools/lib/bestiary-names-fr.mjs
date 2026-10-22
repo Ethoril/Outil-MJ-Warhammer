@@ -28,6 +28,10 @@ export const NAMES_FR = Object.freeze({
   'E0-P-130': proposal('Marie Duvallier — Sœur (Shallya), ancienne médecin (Bronze 4)'), 'E0-P-131': proposal('Anna-Lise Levertske — Sœur, ancienne apothicaire (Bronze 4)'),
   'E0-P-132': proposal('Sœur type — Sœur (Shallya) (Bronze 4)'), 'E0-P-133': proposal('Hanna Bratsch — Auxiliaire, ancienne sergente (Bronze 3*)'),
   'E0-P-134': proposal('Erzbet Wegener — Patiente (Bronze 0)'), 'E0-P-135': proposal('Adalmann von Hopfberg — Seigneur noble (Or 7)'),
+  // Archives of the Empire Volume 1 (L03)
+  'E0-P-155': proposal('Spoondrift « spoony » Skelfsider — Pilleur de tombes (Bronze 3)'), 'E0-P-156': proposal('Thelonius Hardcastle Monkenbridge — Thorncobble XII — Héritier (Or 1)'),
+  'E0-P-157': proposal('Alrik Skagsson — Inquisiteur (Argent 5)'), 'E0-P-159': proposal('Thyk Hurgarsson — Compagnon de guilde (Argent 5)'),
+  'E0-P-160': proposal('Volund Sliverscar — Ingénieur agréé (Or 2)'), 'E0-P-161': proposal('Gurniksson Hammerback — Contremaître mineur'),
   // Archives of the Empire 3 (L02)
   'E0-P-139': proposal('Blaireau'), 'E0-P-140': proposal('Corbeau'), 'E0-P-141': proposal('Renard'), 'E0-P-143': proposal('Chouette'), 'E0-P-144': proposal('Hermine'),
   'E0-P-145': proposal('Seigneur Adalbert Knopp-Inzel — Premier humain — Chevalier (et espion)'), 'E0-P-146': proposal('Frère Samhel — Prêtre de Morr humain'),
