@@ -149,6 +149,14 @@ export const NAMES_FR = Object.freeze({
   'E0-P-655': proposal('Chef de guerre Brruxx Chittirr — Chef du clan Mors'),
   'E0-P-656': proposal('Katarina Briesach — Champion du Chaos mutant'),
   'E0-P-620': proposal('Svenrina « la Grise » Hallovadottir — Maître artiste nain (Argent 5)'),
+  // Sea of Claws (L25) : propositions écrites à la main (équipages et capitaines)
+  'E0-P-895': proposal('Ludolf Köhler — Seigneur de la mer impérial (Or 3)'), 'E0-P-896': proposal('Throgg, roi troll'),
+  'E0-P-897': proposal('Skaldor « Reaver » Lotharksson — Maître de navire nain (Or 2)'), 'E0-P-898': proposal('Olg Blöösalt — Capitaine skaeling (Or 2)'),
+  'E0-P-899': proposal('Novice — Argent 1'), 'E0-P-900': proposal('Officier — Argent 5'), 'E0-P-901': proposal('Marin — Argent 3'),
+  'E0-P-902': proposal('Huffer — Argent 1'), 'E0-P-903': proposal('Mercenaire aguerri — Argent 3'), 'E0-P-904': proposal('Doktor — Argent 5'),
+  'E0-P-909': proposal('Élémentaire de mer'), 'E0-P-916': proposal('Léviathan noir'), 'E0-P-917': proposal('Léviathan à orbes'),
+  'E0-P-919': proposal('Jaego Roth — Capitaine corsaire'), 'E0-P-920': proposal('Long Drong — Capitaine tueur, chef des pirates tueurs'),
+  'E0-P-921': proposal('Wulfrik — Champion sarl'), 'E0-P-922': proposal('Vrisk Ironscratch — Archi-seigneur des mers du clan Skurvy'),
   // Enemy in Shadows Companion (L23) : propositions écrites à la main (le générateur renversait les intitulés de métier)
   'E0-P-759': proposal('Âne ou mule'), 'E0-P-761': proposal('Cheval de trait'), 'E0-P-762': proposal('Bœuf'), 'E0-P-763': proposal('Cheval de trait lourd'),
   'E0-P-764': proposal('Cheval de selle'), 'E0-P-765': proposal('Cheval de guerre léger'), 'E0-P-766': proposal('Cheval de guerre lourd'),

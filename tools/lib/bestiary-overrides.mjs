@@ -99,6 +99,16 @@ export const NAME_FIXES = Object.freeze({
   'E0-P-710': 'Ernst Heidlemann — Human Wizard\'s Apprentice (Silver 3)',
   'E0-P-711': 'Hans Gräber — Level 1 Monk, Level 4 Wizard (Necromancer)',
   'E0-P-715': 'The Gravelord\'s Zombies',
+  // Sea of Claws (L25) : « ö » lu comme un tiret, en-tête de page collé, titres des équipages perdus (lus sur la page 127), apostrophe en majuscule (E-D31)
+  'E0-P-895': 'Ludolf Köhler — Imperial Sea Lord (Gold 3)',
+  'E0-P-897': 'Skaldor \'Reaver\' Lotharksson — Dwarf Ship\'s Master (Gold 2)',
+  'E0-P-898': 'Olg Blöösalt — Skaeling Captain (Gold 2)',
+  'E0-P-899': 'Landsman — Silver 1',
+  'E0-P-900': 'Officer — Silver 5',
+  'E0-P-901': 'Sailor — Silver 3',
+  'E0-P-902': 'Huffer — Silver 1',
+  'E0-P-903': 'Seasoned Mercenary — Silver 3',
+  'E0-P-904': 'Doktor — Silver 5',
   // Rough Nights & Hard Days (L24) : en-têtes de scénario ou de page collés au nom, apostrophes en majuscule, accents graves, chiffre romain (E-D30)
   'E0-P-823': 'Friedrich von Pfeifraucher — Magnate (Gold 5)',
   'E0-P-825': 'Mho, Larz, and \'Curls\' — Thugs (Brass 3)',

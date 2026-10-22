@@ -231,6 +231,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L25",
+   "file": "L25.json",
+   "title": "Sea of Claws",
+   "edition": "V4",
+   "counts": {
+    "profiles": 28,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }
