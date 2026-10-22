@@ -46,3 +46,8 @@ Format : id, source, question, choix, raison, alternative. Relecture du MJ en s�
 - **E-D11** — Vérificateur : le texte brut écrit une case vide « -- » ; le contrôle l'assimile au tiret unique (sinon le Rhinox de L01 restait faussement en écart).
 - **E-D12** — Noms français des PNJ des Archives : traduction des seuls intitulés de métier (Nun → Sœur, Squire → Écuyer…), noms propres conservés ; tous marqués « proposition ».
 - **E-D13** — L04 : seuls les PNJ nommés reçoivent « humain » (les archétypes de métier restent sans espèce) ; une entrée « -mot-clé » du fichier de mots-clés manuels retire un mot-clé lu à tort (le surnom « the Fish » d'Albrecht ne donne pas « poisson »). Limite connue : sur le Chien des marais de Grootscher, « Size (Average) Stride » est collé en une ligne et le Trait Taille n'est pas relevé (Taille moyenne, valeur par défaut).
+
+## Lustria (D8)
+
+- **E-D14** — L07 : espèces des PNJ lues sur le texte du livre (Adella et Soren : Norses ; Finrian : Haut Elfe ; Lokhir : Elfe noir ; Tzku'Ta : Slann ; Crotaz'L : Saurus) ; Kroxigor sous « homme-lézard » faute de terme propre ; pas de mot-clé « géant » pour la chauve-souris géante. Noms français : tous proposés à la main (le glossaire mécanique donnait « Sang-froid » pour Cold One, « Cornu One »…), à relire.
+- **E-D15** — Coupures de ligne : « Cold- blooded », « Swamp- strider » sont recollés avant la recherche du Trait. Traits écartés faute d'entrée d'inventaire (relevés dans les écarts, non inventés) : Vampiric Gaze, Corrupting, Breath +12 de la Salamandre, Weapons, Hunger.

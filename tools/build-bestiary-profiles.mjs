@@ -45,7 +45,8 @@ for (const trait of inventory.traits) {
   if (trait.nameFr && !traitFr.has(base)) traitFr.set(base, baseName(trait.nameFr));
 }
 const canonical = name => {
-  const key = String(name).trim().toLowerCase();
+  // Les coupures de ligne laissent « Cold- blooded » : le trait d'union suivi d'un blanc est recollé.
+  const key = String(name).trim().toLowerCase().replace(/-\s+/g, '-');
   const direct = canonicalNames.get(key);
   if (direct) return direct;
   const alias = TRAIT_ALIASES[key];

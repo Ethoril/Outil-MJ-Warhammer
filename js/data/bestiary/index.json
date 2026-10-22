@@ -57,6 +57,17 @@
    }
   },
   {
+   "book": "L07",
+   "file": "L07.json",
+   "title": "Lustria",
+   "edition": "V4",
+   "counts": {
+    "profiles": 68,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L11",
    "file": "L11.json",
    "title": "The Imperial Zoo",
