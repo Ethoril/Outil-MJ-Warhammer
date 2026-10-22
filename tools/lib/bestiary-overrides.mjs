@@ -77,7 +77,28 @@ export const NAME_FIXES = Object.freeze({
   // Altdorf (L20) : titre de section collé au nom, parenthèse doublée, umlaut lu comme un tiret long (E-D26)
   'E0-P-613': 'Thyrus Gormann — Wizard Lord (Gold 2)',
   'E0-P-632': 'Freya Husslhaus — Human Priest (Silver 1)',
-  'E0-P-651': 'Count Jäger'
+  'E0-P-651': 'Count Jäger',
+  // Empire in Ruins Companion (L21) : titres sans nom, virgules orphelines, umlauts lus comme des tirets longs, titre de section collé (E-D27)
+  'E0-P-658': 'Father Gregor Braun — High Priest (Gold 1)',
+  'E0-P-660': 'Wolf-Born Fernand Wagner — High Priest (Gold 1)',
+  'E0-P-665': 'Flamers of Tzeentch',
+  'E0-P-666': 'Agitator — Brass 2',
+  'E0-P-668': 'Animated Furniture, Large',
+  'E0-P-679': 'Colonel Reikhardt Sievers — Officer (Gold 1)',
+  'E0-P-680': 'Father Eduard von Tunz — Human Priest (Silver 2)',
+  'E0-P-681': 'Flag Sergeant Borys Zielin — Human Scout (Silver 1)',
+  'E0-P-682': 'Bengt Livmatz — Human Artisan (Silver 1)',
+  'E0-P-684': 'Renia Grünewald — Human Envoy (Silver 2)',
+  'E0-P-686': 'Sebastian, Esmer, Jozef — Human Sergeants (Silver 1)',
+  'E0-P-688': 'Wolfgang Holswig-Aberauer, the Champion in Shadows',
+  'E0-P-690': 'Mournguls',
+  'E0-P-691': 'Curs\'d Ettins',
+  'E0-P-692': 'Colossal Squigs',
+  'E0-P-693': 'Necrofex Colossus',
+  'E0-P-709': 'Etelka Herzen — Human Wizard Lord (Gold 2)',
+  'E0-P-710': 'Ernst Heidlemann — Human Wizard\'s Apprentice (Silver 3)',
+  'E0-P-711': 'Hans Gräber — Level 1 Monk, Level 4 Wizard (Necromancer)',
+  'E0-P-715': 'The Gravelord\'s Zombies'
 });
 
 /** Armure imprimée en plusieurs parties sans total : le texte imprimé est conservé en détail, sans PA global (E-D25). */

@@ -187,6 +187,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L21",
+   "file": "L21.json",
+   "title": "Empire in Ruins Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 58,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

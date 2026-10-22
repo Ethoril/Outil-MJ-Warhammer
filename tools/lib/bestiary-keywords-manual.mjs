@@ -33,6 +33,11 @@ export const KEYWORDS_MANUAL = Object.freeze({
   // Middenheim (L19) : Skaven nommés par le texte, Élémentaire d'Ambre, Liche (Trait imprimé Undead), Middenheimers/Nordlandais humains (E-D25)
   'E0-P-592': ['skaven'], 'E0-P-593': ['skaven'], 'E0-P-594': ['skaven'], 'E0-P-597': ['elementaire'], 'E0-P-612': ['mort-vivant'],
   'E0-P-608': ['humain'], 'E0-P-609': ['humain'], 'E0-P-610': ['humain'], 'E0-P-611': ['humain'],
+  // Empire in Ruins Companion (L21) : Traits imprimés Daemonic, Undead, Construct ; « Wolf-Born » est un titre, pas un loup (E-D27)
+  'E0-P-665': ['demon'], 'E0-P-689': ['demon'], 'E0-P-660': ['-loup'],
+  'E0-P-693': ['mort-vivant'], 'E0-P-695': ['mort-vivant'], 'E0-P-712': ['mort-vivant'], 'E0-P-713': ['mort-vivant'], 'E0-P-714': ['mort-vivant'], 'E0-P-715': ['mort-vivant'],
+  'E0-P-668': ['artificiel'], 'E0-P-669': ['artificiel'], 'E0-P-670': ['artificiel'], 'E0-P-671': ['artificiel'],
+  'E0-P-672': ['artificiel'], 'E0-P-673': ['artificiel'], 'E0-P-674': ['artificiel'],
   // Power Behind the Throne Companion (L18) : les Crânes volants portent le Trait imprimé Undead (E-D24)
   'E0-P-565': ['mort-vivant'], 'E0-P-567': ['mort-vivant'],
   // Winds of Magic (L17) : Xirat'P, P'Tarix et le Disque portent le Trait imprimé Daemonic 8+ (E-D23)
