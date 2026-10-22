@@ -7902,5 +7902,642 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0852",
+    "phase": "Tests",
+    "lot": "L06",
+    "source": "L06 p.6",
+    "question": "Implanter « Notation des dés » ? Un d10 indique de 1 à 10, zéro valant 10 ; additionner plusieurs dés puis appliquer les constantes. Deux zéros sur d100 valent 100.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0853",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.23",
+    "question": "Implanter « Espèce au hasard » ? Choisir l’espèce ou accepter le premier tirage et gagner un Point de Chance supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0854",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.23",
+    "question": "Implanter « Table d’espèce » ? Le d100 détermine l’espèce : Humain 01–90, Halfling 91–94, Nain 95–98, Haut Elfe 99, Elfe Sylvain 00.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0855",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.23",
+    "question": "Implanter « Talents aléatoires » ? Chaque talent aléatoire est déterminé par la table d100 ; un résultat déjà possédé est relancé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0856",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.27",
+    "question": "Implanter « Compétences initiales humaines » ? Accorde une augmentation dans cinq compétences au choix parmi la liste humaine, et six en Reikspiel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0857",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.27",
+    "question": "Implanter « Talents initiaux humains » ? Le personnage humain reçoit Destinée et quatre talents aléatoires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0858",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.27",
+    "question": "Implanter « Ressources initiales humaines » ? Initialise Destin à 4, Chance à 3 et Mouvement à 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0859",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.29",
+    "question": "Implanter « Compétences initiales naines » ? Accorde une augmentation dans cinq compétences de la liste naine et six dans chacune des langues Khazalid et Reikspiel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0860",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.29",
+    "question": "Implanter « Talents initiaux nains » ? Accorde Résistance à la magie, Vision nocturne, Costaud, puis les choix Lire/Écrire ou Acharné et Déterminé ou Obstiné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0861",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.29",
+    "question": "Implanter « Ressources initiales naines » ? Initialise Destin à 2, Chance à 2 et Mouvement à 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0862",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.31",
+    "question": "Implanter « Compétences initiales halflings » ? Accorde une augmentation dans cinq compétences de la liste halfling et six dans chacune des langues Haffennaff et Reikspiel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0863",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.31",
+    "question": "Implanter « Talents initiaux halflings » ? Accorde Sens aiguisé du goût, Vision nocturne, Résistance au Chaos et deux talents aléatoires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0864",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.31",
+    "question": "Implanter « Ressources initiales halflings » ? Initialise Destin à 2, Chance à 3 et Mouvement à 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0865",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.32",
+    "question": "Implanter « Langues initiales des Hauts Elfes » ? Accorde six augmentations dans chacune des langues Elthárin et Reikspiel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0866",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.33",
+    "question": "Implanter « Compétences initiales des Hauts Elfes » ? Accorde une augmentation dans cinq compétences au choix parmi la liste des Hauts Elfes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0867",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.33",
+    "question": "Implanter « Talents initiaux des Hauts Elfes » ? Accorde Sens aiguisé de la vue, Vision nocturne, Lire/Écrire, puis les choix Sang-froid ou Perspicace et Seconde vue ou Sixième sens.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0868",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.33",
+    "question": "Implanter « Ressources initiales des Hauts Elfes » ? Initialise Destin à 1, Chance à 2 et Mouvement à 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0869",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.35",
+    "question": "Implanter « Compétences initiales des Elfes Sylvains » ? Accorde une augmentation dans cinq compétences de la liste sylvaine et six dans chacune des langues Elthárin et Reikspiel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0870",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.35",
+    "question": "Implanter « Talents initiaux des Elfes Sylvains » ? Accorde Sens aiguisé de la vue, Vision nocturne, Nomade, puis les choix Dur à cuire ou Seconde vue et Lire/Écrire ou Très résistant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0871",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.35",
+    "question": "Implanter « Ressources initiales des Elfes Sylvains » ? Initialise Destin à 1, Chance à 2 et Mouvement à 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0872",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.36",
+    "question": "Implanter « Première carrière » ? Choisit une carrière disponible pour l’espèce ou la tire dans sa colonne ; le personnage commence au premier niveau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0873",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.36",
+    "question": "Implanter « Accepter une carrière aléatoire » ? Accepter le premier résultat donne deux possessions du deuxième niveau ; choisir parmi trois résultats en donne une ; rejeter encore n’en donne aucune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0874",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.36",
+    "question": "Implanter « Progression initiale de carrière » ? Les possessions supplémentaires obtenues au tirage initial cochent une ou deux cases de progression ; c’est la seule progression de carrière cochée à la création.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0875",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.36",
+    "question": "Implanter « Table des carrières aléatoires » ? La table sur deux pages répartit les carrières par espèce et classe ; une carrière sans plage ne peut pas être obtenue par ce tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0876",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.38",
+    "question": "Implanter « Tirage des caractéristiques » ? Lance dix fois 2d10 dans l’ordre et ajoute les modificateurs d’espèce ; garder l’ordre accorde six points libres dans les trois caractéristiques de carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0877",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.38",
+    "question": "Implanter « Répartir les caractéristiques » ? Réordonner les dix jets donne trois points libres dans les caractéristiques initiales de carrière, après ajout des modificateurs d’espèce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0878",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.38",
+    "question": "Implanter « Nouveau tirage ou répartition » ? Un nouveau jeu de dix jets, ou cent points répartis entre 4 et 16 par caractéristique avant modificateurs d’espèce, remplace les résultats sans points libres supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0879",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.38",
+    "question": "Implanter « Modificateurs initiaux d’espèce » ? La table fixe les dix constantes d’espèce à ajouter aux jets de caractéristiques ; elle est distincte des talents et augmentations ultérieurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0880",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.38",
+    "question": "Implanter « Augmentations initiales de carrière » ? Répartit huit augmentations entre les compétences du premier niveau de carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0881",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.39",
+    "question": "Implanter « Plafond initial des compétences » ? À la création, une même compétence ne peut recevoir plus de trois augmentations, soit quinze points.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0882",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.39",
+    "question": "Implanter « Talent de carrière initial » ? Choisit un talent du premier niveau de la carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0883",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.39",
+    "question": "Implanter « Équipement initial » ? Reçoit les possessions du premier niveau, celles de la classe et le lot commun ; conserve les doublons.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0884",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.39",
+    "question": "Implanter « Fortune monétaire initiale » ? Bronze : vingt sous plus 2d10 par rang ; Argent : dix pistoles plus 1d10 par rang ; Or : deux couronnes plus une par rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0885",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.40",
+    "question": "Implanter « Calcul des Blessures maximales » ? Les Blessures maximales valent BF + BFM + deux fois BE ; Dur à cuire ajoute encore BE.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0886",
+    "phase": "Équipement",
+    "lot": "L06",
+    "source": "L06 p.40",
+    "question": "Implanter « Charge maximale » ? La charge transportable sans pénalité vaut BF + BE ; Costaud compte BF deux fois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0887",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.40",
+    "question": "Implanter « Tout laisser au hasard » ? Accepter le premier tirage d’espèce, de carrière et de caractéristiques augmente le Destin de un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0888",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.41",
+    "question": "Implanter « Progrès de l’ambition » ? Un progrès réel et substantiel vers l’ambition personnelle rapporte cinquante PX en fin de séance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0889",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.41",
+    "question": "Implanter « Ambition accomplie » ? Accomplir l’ambition personnelle rapporte deux cent cinquante PX ; choisir une nouvelle ambition ou retirer le personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0890",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.42",
+    "question": "Implanter « Ambition de groupe » ? Le progrès n’accorde pas de PX ; accomplir l’ambition commune donne un Point de Destin supplémentaire à chaque personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0891",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.43",
+    "question": "Implanter « Cases de progression de carrière » ? Une augmentation de compétence ou caractéristique de carrière, un talent de carrière ou une possession du niveau suivant coche une case ; dix cases ouvrent l’activité de promotion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0892",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.43",
+    "question": "Implanter « Caractéristiques de carrière » ? Peut augmenter les caractéristiques ouvertes par son niveau actuel et ceux déjà franchis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0893",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.44",
+    "question": "Implanter « Compétences de carrière » ? Peut augmenter les compétences de son niveau actuel et des niveaux inférieurs ; la compétence signalée sert au revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0894",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.44",
+    "question": "Implanter « Talents de carrière » ? Peut acheter les talents de son niveau et des niveaux inférieurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0895",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.44",
+    "question": "Implanter « Progression hors carrière » ? Caractéristiques et compétences de base hors carrière coûtent le double ; compétences avancées et talents requièrent normalement les activités de formation adaptées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0896",
+    "phase": "Argent et statut",
+    "lot": "L06",
+    "source": "L06 p.44",
+    "question": "Implanter « Statut et possession » ? Au moins une possession du niveau courant permet d’en revendiquer le Statut ; son absence ou une disgrâce abaisse ce Statut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0897",
+    "phase": "Compatibilité",
+    "lot": "L06",
+    "source": "L06 p.364",
+    "question": "Implanter « Conversion de l’Avantage V4 » ? Un gain d’Avantage ancien donne l’Élan, une perte ou dépense le retire, quelle que soit la quantité ancienne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0898",
+    "phase": "Compatibilité",
+    "lot": "L06",
+    "source": "L06 p.364",
+    "question": "Implanter « Conversion des difficultés V4 » ? Les modificateurs anciens par dizaines deviennent des modificateurs de DR : +60/+40/+20/0/−10/−20/−30 deviennent +6/+4/+2/0/−1/−2/−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0899",
+    "phase": "Compatibilité",
+    "lot": "L06",
+    "source": "L06 p.364",
+    "question": "Implanter « Résilience et Détermination anciennes » ? Une référence à Résilience utilise Destin, une référence à Détermination utilise Chance ; perdre définitivement une Résilience réduit d’un la Chance maximale dans les mêmes conditions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0900",
+    "phase": "Création et carrières",
+    "lot": "L06",
+    "source": "L06 p.364",
+    "question": "Implanter « Augmentations point par point » ? Option : acheter caractéristiques et compétences par points individuels avec le barème dédié ; revenir aux lots de cinq seulement à un multiple de cinq augmentations.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

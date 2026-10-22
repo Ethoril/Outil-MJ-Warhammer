@@ -13,7 +13,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | L03 — Archives of the Empire Volume 1.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L04 — Deft Steps Light Fingers.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L05 — Livre de base FR.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
-| L06 — Livre de base V5 EN v2.pdf | 851 | 140 | 86 | 179 | 445 | 1 |
+| L06 — Livre de base V5 EN v2.pdf | 900 | 140 | 86 | 179 | 494 | 1 |
 | L07 — Lustria EN.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L08 — Supplément Elfe - High elf Players Guide v2.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L09 — Supplément Elfe Noir - Temple of Spite v2.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -39,23 +39,31 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 
 | Domaine | Entrées | automatise | assiste | rappel | absent | hors-granularite |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Argent et statut | 1 | 0 | 0 | 0 | 1 | 0 |
 | Artisanat et remèdes | 17 | 0 | 0 | 0 | 17 | 0 |
 | Blessures et soins | 115 | 15 | 1 | 66 | 33 | 0 |
 | Combat | 118 | 18 | 11 | 0 | 89 | 0 |
+| Compatibilité | 3 | 0 | 0 | 0 | 3 | 0 |
 | Compétences | 7 | 0 | 0 | 0 | 7 | 0 |
 | Compétences et usages | 73 | 0 | 1 | 1 | 71 | 0 |
 | Corruption et mutations | 53 | 0 | 0 | 13 | 40 | 0 |
+| Création et carrières | 43 | 0 | 0 | 0 | 43 | 0 |
 | Destin et Chance | 12 | 0 | 3 | 0 | 9 | 0 |
 | Entre-aventures et progression | 87 | 0 | 0 | 0 | 87 | 0 |
 | Maladies et poisons | 38 | 0 | 0 | 0 | 37 | 1 |
 | Psychologie | 15 | 0 | 0 | 15 | 0 | 0 |
 | Talents | 218 | 79 | 53 | 83 | 3 | 0 |
-| Tests | 34 | 16 | 2 | 0 | 16 | 0 |
+| Tests | 35 | 16 | 2 | 0 | 17 | 0 |
 | Voyage et environnement | 30 | 0 | 0 | 0 | 30 | 0 |
 | Véhicules et navigation | 5 | 0 | 0 | 0 | 5 | 0 |
+| Équipement | 1 | 0 | 0 | 0 | 1 | 0 |
 | États | 29 | 12 | 15 | 1 | 1 | 0 |
 
 ## Lacunes jouables, par domaine
+
+### Argent et statut
+
+- **F-L06-0896 — Statut et possession** (L06 p.44, absent) : Au moins une possession du niveau courant permet d’en revendiquer le Statut ; son absence ou une disgrâce abaisse ce Statut. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
 
 ### Artisanat et remèdes
 
@@ -271,6 +279,12 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0163 — Intimider en combat** (L06 p.169, absent) : Voir l’inventaire Brisé pour Intimidation opposée à Calme, Peur produite et variantes contre un groupe. Fonctions spécialisées présentes, mais aucun appel runtime de previewCombatIntimidation hors définition repéré. Égalité = échec de l’intimidateur selon décision MJ du 22/10.
 - **F-L06-0171 — Attribuer Inoffensive aux attaques à mains nues** (L06 p.167, absent) : Sans griffes, crocs ou autre arme naturelle, une attaque à mains nues reçoit Inoffensive. La qualité est exécutée quand l’action la porte ; attribution générale selon arme naturelle non repérée. Son calcul et son attribution sont deux clauses distinctes.
 
+### Compatibilité
+
+- **F-L06-0897 — Conversion de l’Avantage V4** (L06 p.364, absent) : Un gain d’Avantage ancien donne l’Élan, une perte ou dépense le retire, quelle que soit la quantité ancienne. Option ou conversion de règles imprimée ; aucun parcours général de conversion/apprentissage repéré. Le prix individuel reste dans son barème source.
+- **F-L06-0898 — Conversion des difficultés V4** (L06 p.364, absent) : Les modificateurs anciens par dizaines deviennent des modificateurs de DR : +60/+40/+20/0/−10/−20/−30 deviennent +6/+4/+2/0/−1/−2/−3. Option ou conversion de règles imprimée ; aucun parcours général de conversion/apprentissage repéré. Le prix individuel reste dans son barème source.
+- **F-L06-0899 — Résilience et Détermination anciennes** (L06 p.364, absent) : Une référence à Résilience utilise Destin, une référence à Détermination utilise Chance ; perdre définitivement une Résilience réduit d’un la Chance maximale dans les mêmes conditions. Option ou conversion de règles imprimée ; aucun parcours général de conversion/apprentissage repéré. Le prix individuel reste dans son barème source.
+
 ### Compétences
 
 - **F-L06-0845 — Valeur de compétence** (L06 p.109, absent) : La compétence vaut caractéristique plus cinq par augmentation ; une compétence de base reste utilisable sans augmentation. Identités et valeurs importées présentes ; aucune procédure générale appliquant cette condition d’accès ou de progression repérée dans ce dépôt.
@@ -411,6 +425,52 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0537 — Mentale 86-90 : Malveillance permanente** (L06 p.189, absent) : +1 DR aux Tests pour nuire, -1 DR aux autres Tests. Ligne et plage vérifiées visuellement p.189 ; aucune attribution persistante générique de mutation repérée.
 - **F-L06-0538 — Mentale 91-95 : Rage impie** (L06 p.189, absent) : +10 CC et Frénésie. Ligne et plage vérifiées visuellement p.189 ; aucune attribution persistante générique de mutation repérée.
 - **F-L06-0539 — Mentale 96-100 : Nervosité inquiète** (L06 p.189, absent) : +5 Agilité et -5 Sociabilité. Ligne et plage vérifiées visuellement p.189 ; aucune attribution persistante générique de mutation repérée.
+
+### Création et carrières
+
+- **F-L06-0853 — Espèce au hasard** (L06 p.23, absent) : Choisir l’espèce ou accepter le premier tirage et gagner un Point de Chance supplémentaire. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0854 — Table d’espèce** (L06 p.23, absent) : Le d100 détermine l’espèce : Humain 01–90, Halfling 91–94, Nain 95–98, Haut Elfe 99, Elfe Sylvain 00. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0855 — Talents aléatoires** (L06 p.23, absent) : Chaque talent aléatoire est déterminé par la table d100 ; un résultat déjà possédé est relancé. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0856 — Compétences initiales humaines** (L06 p.27, absent) : Accorde une augmentation dans cinq compétences au choix parmi la liste humaine, et six en Reikspiel. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0857 — Talents initiaux humains** (L06 p.27, absent) : Le personnage humain reçoit Destinée et quatre talents aléatoires. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0858 — Ressources initiales humaines** (L06 p.27, absent) : Initialise Destin à 4, Chance à 3 et Mouvement à 4. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0859 — Compétences initiales naines** (L06 p.29, absent) : Accorde une augmentation dans cinq compétences de la liste naine et six dans chacune des langues Khazalid et Reikspiel. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0860 — Talents initiaux nains** (L06 p.29, absent) : Accorde Résistance à la magie, Vision nocturne, Costaud, puis les choix Lire/Écrire ou Acharné et Déterminé ou Obstiné. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0861 — Ressources initiales naines** (L06 p.29, absent) : Initialise Destin à 2, Chance à 2 et Mouvement à 3. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0862 — Compétences initiales halflings** (L06 p.31, absent) : Accorde une augmentation dans cinq compétences de la liste halfling et six dans chacune des langues Haffennaff et Reikspiel. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0863 — Talents initiaux halflings** (L06 p.31, absent) : Accorde Sens aiguisé du goût, Vision nocturne, Résistance au Chaos et deux talents aléatoires. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0864 — Ressources initiales halflings** (L06 p.31, absent) : Initialise Destin à 2, Chance à 3 et Mouvement à 3. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0865 — Langues initiales des Hauts Elfes** (L06 p.32, absent) : Accorde six augmentations dans chacune des langues Elthárin et Reikspiel. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0866 — Compétences initiales des Hauts Elfes** (L06 p.33, absent) : Accorde une augmentation dans cinq compétences au choix parmi la liste des Hauts Elfes. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0867 — Talents initiaux des Hauts Elfes** (L06 p.33, absent) : Accorde Sens aiguisé de la vue, Vision nocturne, Lire/Écrire, puis les choix Sang-froid ou Perspicace et Seconde vue ou Sixième sens. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0868 — Ressources initiales des Hauts Elfes** (L06 p.33, absent) : Initialise Destin à 1, Chance à 2 et Mouvement à 5. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0869 — Compétences initiales des Elfes Sylvains** (L06 p.35, absent) : Accorde une augmentation dans cinq compétences de la liste sylvaine et six dans chacune des langues Elthárin et Reikspiel. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0870 — Talents initiaux des Elfes Sylvains** (L06 p.35, absent) : Accorde Sens aiguisé de la vue, Vision nocturne, Nomade, puis les choix Dur à cuire ou Seconde vue et Lire/Écrire ou Très résistant. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0871 — Ressources initiales des Elfes Sylvains** (L06 p.35, absent) : Initialise Destin à 1, Chance à 2 et Mouvement à 5. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0872 — Première carrière** (L06 p.36, absent) : Choisit une carrière disponible pour l’espèce ou la tire dans sa colonne ; le personnage commence au premier niveau. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0873 — Accepter une carrière aléatoire** (L06 p.36, absent) : Accepter le premier résultat donne deux possessions du deuxième niveau ; choisir parmi trois résultats en donne une ; rejeter encore n’en donne aucune. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0874 — Progression initiale de carrière** (L06 p.36, absent) : Les possessions supplémentaires obtenues au tirage initial cochent une ou deux cases de progression ; c’est la seule progression de carrière cochée à la création. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0875 — Table des carrières aléatoires** (L06 p.36, absent) : La table sur deux pages répartit les carrières par espèce et classe ; une carrière sans plage ne peut pas être obtenue par ce tirage. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0876 — Tirage des caractéristiques** (L06 p.38, absent) : Lance dix fois 2d10 dans l’ordre et ajoute les modificateurs d’espèce ; garder l’ordre accorde six points libres dans les trois caractéristiques de carrière. Tableau p.38 vérifié visuellement. Aucun générateur de personnage ou procédure de progression appliquant cette règle repéré dans js/core, js/data ou js/ui.
+- **F-L06-0877 — Répartir les caractéristiques** (L06 p.38, absent) : Réordonner les dix jets donne trois points libres dans les caractéristiques initiales de carrière, après ajout des modificateurs d’espèce. Tableau p.38 vérifié visuellement. Aucun générateur de personnage ou procédure de progression appliquant cette règle repéré dans js/core, js/data ou js/ui.
+- **F-L06-0878 — Nouveau tirage ou répartition** (L06 p.38, absent) : Un nouveau jeu de dix jets, ou cent points répartis entre 4 et 16 par caractéristique avant modificateurs d’espèce, remplace les résultats sans points libres supplémentaires. Tableau p.38 vérifié visuellement. Aucun générateur de personnage ou procédure de progression appliquant cette règle repéré dans js/core, js/data ou js/ui.
+- **F-L06-0879 — Modificateurs initiaux d’espèce** (L06 p.38, absent) : La table fixe les dix constantes d’espèce à ajouter aux jets de caractéristiques ; elle est distincte des talents et augmentations ultérieurs. Tableau p.38 vérifié visuellement. Aucun générateur de personnage ou procédure de progression appliquant cette règle repéré dans js/core, js/data ou js/ui.
+- **F-L06-0880 — Augmentations initiales de carrière** (L06 p.38, absent) : Répartit huit augmentations entre les compétences du premier niveau de carrière. Tableau p.38 vérifié visuellement. Aucun générateur de personnage ou procédure de progression appliquant cette règle repéré dans js/core, js/data ou js/ui.
+- **F-L06-0881 — Plafond initial des compétences** (L06 p.39, absent) : À la création, une même compétence ne peut recevoir plus de trois augmentations, soit quinze points. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0882 — Talent de carrière initial** (L06 p.39, absent) : Choisit un talent du premier niveau de la carrière. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0883 — Équipement initial** (L06 p.39, absent) : Reçoit les possessions du premier niveau, celles de la classe et le lot commun ; conserve les doublons. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0884 — Fortune monétaire initiale** (L06 p.39, absent) : Bronze : vingt sous plus 2d10 par rang ; Argent : dix pistoles plus 1d10 par rang ; Or : deux couronnes plus une par rang. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0885 — Calcul des Blessures maximales** (L06 p.40, absent) : Les Blessures maximales valent BF + BFM + deux fois BE ; Dur à cuire ajoute encore BE. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0887 — Tout laisser au hasard** (L06 p.40, absent) : Accepter le premier tirage d’espèce, de carrière et de caractéristiques augmente le Destin de un. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0888 — Progrès de l’ambition** (L06 p.41, absent) : Un progrès réel et substantiel vers l’ambition personnelle rapporte cinquante PX en fin de séance. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0889 — Ambition accomplie** (L06 p.41, absent) : Accomplir l’ambition personnelle rapporte deux cent cinquante PX ; choisir une nouvelle ambition ou retirer le personnage. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0890 — Ambition de groupe** (L06 p.42, absent) : Le progrès n’accorde pas de PX ; accomplir l’ambition commune donne un Point de Destin supplémentaire à chaque personnage. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0891 — Cases de progression de carrière** (L06 p.43, absent) : Une augmentation de compétence ou caractéristique de carrière, un talent de carrière ou une possession du niveau suivant coche une case ; dix cases ouvrent l’activité de promotion. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0892 — Caractéristiques de carrière** (L06 p.43, absent) : Peut augmenter les caractéristiques ouvertes par son niveau actuel et ceux déjà franchis. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0893 — Compétences de carrière** (L06 p.44, absent) : Peut augmenter les compétences de son niveau actuel et des niveaux inférieurs ; la compétence signalée sert au revenu. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0894 — Talents de carrière** (L06 p.44, absent) : Peut acheter les talents de son niveau et des niveaux inférieurs. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0895 — Progression hors carrière** (L06 p.44, absent) : Caractéristiques et compétences de base hors carrière coûtent le double ; compétences avancées et talents requièrent normalement les activités de formation adaptées. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
+- **F-L06-0900 — Augmentations point par point** (L06 p.364, absent) : Option : acheter caractéristiques et compétences par points individuels avec le barème dédié ; revenir aux lots de cinq seulement à un multiple de cinq augmentations. Option ou conversion de règles imprimée ; aucun parcours général de conversion/apprentissage repéré. Le prix individuel reste dans son barème source.
 
 ### Destin et Chance
 
@@ -679,6 +739,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0043 — Échouer à une tâche dont la progression devient négative** (L06 p.266, absent) : Une tâche étendue échoue dès que sa progression descend sous zéro ; le MJ en détermine les conséquences. La Dissipation persistante implante ce cas pour ses propres progrès, sans procédure générale de tâche.
 - **F-L06-0044 — Échouer à une tâche par manque de temps ou de tentatives** (L06 p.266, absent) : Une tâche étendue échoue lorsque le délai ou le nombre d’essais autorisé est épuisé. Pas de compteur d’essais et d’échéance pour une tâche étendue générique repéré.
 - **F-L06-0045 — Partager une progression de tâche étendue** (L06 p.266, absent) : Plusieurs personnages peuvent chacun tester et ajouter leurs DR à un total commun de tâche étendue. Ni tâche commune ni rattachement de tentatives de plusieurs acteurs repéré.
+- **F-L06-0852 — Notation des dés** (L06 p.6, absent) : Un d10 indique de 1 à 10, zéro valant 10 ; additionner plusieurs dés puis appliquer les constantes. Deux zéros sur d100 valent 100. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
 
 ### Voyage et environnement
 
@@ -720,6 +781,10 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 - **F-L06-0290 — Faire avancer une embarcation à rames** (L06 p.158, absent) : M de quatre, réduit jusqu’à moitié en remontant le courant ou en surcharge, augmenté jusqu’à moitié avec le courant. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
 - **F-L06-0291 — Accélérer à la rame** (L06 p.158, absent) : Ramer +0 augmente M d’un, ou de deux à +5 DR ; le rameur devient Exténué. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
 - **F-L06-0292 — Manœuvrer un navire à voile** (L06 p.158, absent) : Un progrès suffit aux tâches ordinaires ; difficulté selon météo, obstacles et équipage ; sous vent modéré, victoire de vitesse contre une barque. Flux complet de préparation, calcul, coût, durée et application non repéré dans les moteurs et interfaces ; suivi manuel requis.
+
+### Équipement
+
+- **F-L06-0886 — Charge maximale** (L06 p.40, absent) : La charge transportable sans pénalité vaut BF + BE ; Costaud compte BF deux fois. Les données importées de fiche ne démontrent pas la création, le calcul initial ou la progression dans ce dépôt. Pas de nouvelle implantation en F0.
 
 ### États
 
