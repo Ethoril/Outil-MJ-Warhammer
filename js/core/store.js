@@ -72,6 +72,7 @@ import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHist
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
+import { proposeNewKeyword, referentialFromExtensions } from './creature-keywords.js';
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
 
@@ -2217,6 +2218,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!source) throw new Error('Rencontre introuvable');
       const next = setEncounterEntry(source, profileId, options);
       return api.executeCommand('edit-encounter-entry', draft => ({ ...draft, encounters: (draft.encounters || []).map(item => item.id === id ? next : item) }));
+    },
+    /** Référentiel de mots-clés de créature : base figée + ajouts du MJ de la sauvegarde. */
+    getKeywordReferential() { return referentialFromExtensions(stateExtensions).referential; },
+    /** Ajout d'un mot-clé par le MJ : refusé (avec le terme existant à utiliser) s'il double ou presque un terme connu. Aucun retrait ni renommage. */
+    addCreatureKeyword(input) {
+      const proposal = proposeNewKeyword(input, referentialFromExtensions(stateExtensions).referential);
+      if (!proposal.ok) return { ok: false, reason: proposal.reason, existing: proposal.existing, message: proposal.message };
+      const result = api.executeCommand('add-creature-keyword', draft => {
+        const v5 = draft.extensions?.v5 || {};
+        return { ...draft, extensions: { ...(draft.extensions || {}), v5: { ...v5, keywordReferential: { terms: [...(v5.keywordReferential?.terms || []), proposal.term] } } } };
+      });
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, term: proposal.term })) : { ...result, term: proposal.term };
     },
     listPersistentCharacters() { return cloneValue(persistentCharacters); },
     savePersistentCharacter(input) {
