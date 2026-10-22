@@ -9033,5 +9033,1461 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0990",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.296",
+    "question": "Implanter « Conversions monétaires » ? Une couronne vaut vingt pistoles ou deux cent quarante sous ; une pistole vaut douze sous.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0991",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.296",
+    "question": "Implanter « Train de vie quotidien » ? Dépenser chaque jour environ la moitié du rang de Statut, dans sa monnaie, permet de maintenir les apparences.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0992",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.296",
+    "question": "Implanter « Achats à la création » ? La création permet d’acheter les objets des listes sans restriction de disponibilité ; la restriction commence en jeu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0993",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Détecter une fausse monnaie » ? Évaluation réussie permet de repérer les pièces contrefaites.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0994",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Fabriquer de fausses pièces » ? Art Gravure crée la matrice puis Métier Forgeron frappe les pièces ; la proportion de métal précieux modifie la difficulté de détection.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0995",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Pièces rognées » ? Évaluation détecte le rognage ; un rognage plus important facilite le Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0996",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Disponibilité commune » ? Les biens communs sont normalement en stock sans Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0997",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Disponibilité limitée » ? Un d100 trouve un bien limité sur 30 % en village, 60 % en bourg, 90 % en ville.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0998",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Disponibilité rare » ? Un d100 trouve un bien rare sur 15 % en village, 30 % en bourg, 45 % en ville.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0999",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Disponibilité exotique » ? Un bien exotique demande décision du MJ, commande ou fabrication ; aucun stock ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1000",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Retenter une recherche d’achat » ? Après échec, peut retenter dans une autre localité, ou la semaine suivante dans un bourg ou une ville.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1001",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.297",
+    "question": "Implanter « Recherche commerciale approfondie » ? Le MJ peut ajouter dix ou vingt points de probabilité pour une recherche diligente, une carrière pertinente ou une journée de Ragot.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1002",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Vendre ses possessions » ? Cherche un acheteur par disponibilité ; la valeur de base d’occasion est la moitié du prix neuf avant négociation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1003",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Revente après recherche » ? Consacrer du temps à Ragot peut trouver un acheteur jusqu’à quatre-vingts pour cent du prix neuf, selon le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1004",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Baisser le prix demandé » ? Chaque division par deux du prix demandé améliore la disponibilité de l’acheteur d’un degré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1005",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Troc » ? Prend la probabilité de disponibilité du plus rare des objets, la divise par deux en arrondissant vers le bas puis cherche un partenaire ; négociation possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1006",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Prix des objets de qualité » ? Chaque Qualité double le prix et rend l’objet plus difficile à trouver d’un degré ; plus de Qualités que de Défauts désigne un objet de qualité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1007",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Solide » ? Absorbe son degré en dégâts matériels avant pénalité ; sauvegarde contre casse immédiate de 9+ sur d10, améliorée d’un par acquisition supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1008",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Raffiné » ? Chaque degré accroît la qualité ostentatoire de l’objet et son prestige social, à qualifier par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1009",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Léger » ? Réduit l’Encombrement de un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1010",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Pratique : Test échoué » ? Ajoute 1 DR aux Tests échoués utilisant l’objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1011",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.298",
+    "question": "Implanter « Pratique : armure » ? Diminue d’un degré les pénalités de l’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1012",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Prix des objets défectueux » ? Chaque Défaut divise le prix par deux et améliore la disponibilité d’un degré ; un objet exotique reste exotique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1013",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Reconnaître les défauts » ? Évaluation ou une compétence technique appropriée révèle les Défauts dissimulés d’un objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1014",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Volumineux » ? Ajoute un Encombrement ; vêtements et armures volumineux restent à un Encombrement lorsqu’ils sont portés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1015",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Bâclé : casse » ? Un double sur un Test échoué utilisant l’objet le brise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1016",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Bâclé : armure » ? Un critique à une localisation protégée brise l’armure bâclée correspondante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1017",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Laid » ? Peut imposer −1 DR aux Tests de Sociabilité liés à l’objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1018",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Peu fiable : échec » ? Un Test échoué avec l’objet reçoit −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1019",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Peu fiable : armure » ? Double les pénalités de l’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1020",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Poids des pièces » ? Deux cents pièces représentent un point d’Encombrement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1021",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Objet surdimensionné » ? Ne transporte normalement qu’un objet de quatre Encombrements ou davantage, généralement avec les deux mains.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1022",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Poids d’un passager » ? Un passager de taille humaine occupe environ dix Encombrements dans un véhicule ou sur un animal, avec ajustement MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1023",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Objets portés » ? Un objet porté sur soi réduit son Encombrement de un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1024",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Surcharge et fatigue » ? Être surchargé impose Désavantage aux Tests d’Endurance contre Fatigué ; ses effets s’ajoutent à ceux de l’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1025",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Surcharge jusqu’au double » ? Au-delà de la capacité jusqu’à son double : Mouvement −1, minimum trois ; Agilité −10 ; une Fatigue de voyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1026",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Surcharge jusqu’au triple » ? Au-delà du double jusqu’au triple : Mouvement −2, minimum deux ; Agilité −20, minimum dix ; deux Fatigues de voyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1027",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Charge supérieure au triple » ? Une charge supérieure à trois fois la capacité empêche tout déplacement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1028",
+    "phase": "Argent et équipement",
+    "lot": "L06",
+    "source": "L06 p.299",
+    "question": "Implanter « Déposer la surcharge » ? Mouvement et Agilité changent immédiatement ; déposer les objets lève leurs malus, mais la Fatigue de voyage ne disparaît qu’après un long repos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1029",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.300",
+    "question": "Implanter « Mêlée sans spécialité » ? Sans augmentation de la spécialité de mêlée, utilise CC mais garde les Défauts de l’arme et perd ses Qualités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1030",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.300",
+    "question": "Implanter « Armes de cavalerie à pied » ? À pied, les armes de cavalerie à deux mains relèvent aussi de Deux mains ; les armes à une main deviennent improvisées sauf exception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1031",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.300",
+    "question": "Implanter « Escrime avec Base » ? Corps à corps Base permet les armes d’Escrime mais sans leurs Qualités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1032",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.300",
+    "question": "Implanter « Fléau sans formation » ? Sans formation, ajoute Dangereuse à l’arme de Fléau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1033",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.300",
+    "question": "Implanter « Allonge Très longue » ? Permet d’engager jusqu’à quatre yards au lieu de deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1034",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.300",
+    "question": "Implanter « Allonge Massive » ? Permet d’engager jusqu’à six yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1036",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.302",
+    "question": "Implanter « Tir sans spécialité » ? Interdit le Test de Tir sans spécialité appropriée, sauf les exceptions explicites.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1037",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.302",
+    "question": "Implanter « Ingénierie et poudre noire » ? Tir Ingénierie permet les armes à poudre noire et explosives sans malus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1038",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.302",
+    "question": "Implanter « Arbalète et lancer sans formation » ? Peut utiliser CT pour Arbalète ou Lancer, avec −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1039",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.302",
+    "question": "Implanter « Ingénierie avec Poudre noire » ? Tir Poudre noire permet les armes d’Ingénierie avec −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1040",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.302",
+    "question": "Implanter « Bandes de portée » ? Bout portant quatre yards ; courte moitié de la portée imprimée, longue double, extrême triple.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1041",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.302",
+    "question": "Implanter « Munitions de poudre noire » ? Le tromblon seul utilise grenaille ou projectiles improvisés ; les autres armes à poudre noire et d’Ingénierie utilisent des balles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1042",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Explosion » ? Toutes les cibles dans le diamètre du degré subissent dégâts d’arme sans DR et États ; pas d’opposition ordinaire ; Dévastatrice peut ajouter les unités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1045",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Rapide » ? Ajoute deux à l’Initiative seulement lors des attaques avec cette arme ; perd cet Atout en combat à deux armes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1046",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Taille » ? Un coup réussi retire un PA à une pièce ou au bouclier touché avant le calcul des dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1048",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Empaleuse : projectile fiché » ? Un projectile ayant causé un critique bloque une Blessure récupérable tant qu’il reste fiché ; Guérison +0 retire flèches ou carreaux, Chirurgie les balles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1049",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Infliger un État » ? Un coup réussi inflige l’État indiqué, avec sa Force ou difficulté propre ; une entrave immobilise aussi l’usage de l’arme jusqu’à libération volontaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1050",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Arme magique » ? Peut blesser les créatures immunisées aux attaques ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1051",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Parade : main secondaire » ? En défense avec Parade, ignore le malus de main secondaire de −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1052",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.304",
+    "question": "Implanter « Parade : attaque secondaire » ? À deux armes, si le premier coup touche, la seconde attaque faite avec Parade ne peut être opposée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1054",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.305",
+    "question": "Implanter « Pistolet au contact » ? Peut tirer en mêlée sans modificateur de portée ; la cible peut opposer comme à une attaque de mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1057",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.305",
+    "question": "Implanter « À répétition » ? Contient un nombre de tirs égal au degré ; chaque tir recharge automatiquement jusqu’à épuisement, puis recharge normale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1058",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.305",
+    "question": "Implanter « Piège-lame : désarmer » ? Un critique défensif contre une lame peut être remplacé par le désarmement si la taille le permet ; Désarmement permet de dépenser l’Élan pour saisir la lame.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1059",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.305",
+    "question": "Implanter « Piège-lame : briser » ? Après avoir piégé la lame, Force −3 avec ajout des DR de mêlée permet de la briser, sauf Incassable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1060",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.305",
+    "question": "Implanter « Incassable » ? Empêche normalement casse, corrosion et émoussement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1061",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.305",
+    "question": "Implanter « À enroulement » ? Les défenses de mêlée opposées à cette arme subissent −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1064",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.305",
+    "question": "Implanter « Rechargement » ? Après usage, requiert autant d’Actions que le degré ; un chargeur à répétition encore partiellement rempli réduit la recharge d’une Action.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1070",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.306",
+    "question": "Implanter « Bouclier attaché » ? Porté sur sangle, protège tête, corps et bras secondaire tout en permettant une arme d’hast à deux mains ; une rondache autorise une arme d’Encombrement zéro dans cette main.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1071",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.306",
+    "question": "Implanter « Frapper avec le bouclier » ? Traite le bouclier comme arme improvisée d’allonge Personnelle ; son usage de protection est suspendu jusqu’au prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1074",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.306",
+    "question": "Implanter « Armure à une autre taille » ? Par degré au-dessus de Moyenne, Encombrement +1 et prix doublé ; en dessous, Encombrement −1 et prix divisé par deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1075",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.307",
+    "question": "Implanter « Pénalités d’armure » ? Toute maille retire 1 DR à Discrétion et toute plate un autre ; le heaume impose −2 DR à Perception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1076",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.307",
+    "question": "Implanter « Armure simplifiée » ? Option d’ensembles : légère un PA, moyenne trois, lourde cinq ; applique leurs Encombrements, pénalités et Qualités groupés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1077",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.308",
+    "question": "Implanter « Conteneurs » ? Un contenant remplace l’Encombrement de ses objets admissibles par sa propre valeur, dans la limite de sa capacité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1078",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.308",
+    "question": "Implanter « Sacs transportés » ? Un sac exige une main, un grand sac plein les deux ; sac à dos et bandoulière comptent comme portés sur soi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1079",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.309",
+    "question": "Implanter « Nourriture médiocre » ? Prix réduit de moitié ; dix pour cent de risque d’exposition à la Courante galopante ; nourriture fine au double du prix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1080",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.310",
+    "question": "Implanter « Outil en combat » ? Un outil utilisé pour frapper compte normalement comme arme improvisée ; le MJ peut traiter un outil lourd ou tranchant comme arme de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1081",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.310",
+    "question": "Implanter « Trousse antitoxine » ? Guérison réussie avec la trousse retire tous les États Empoisonné ; traitement d’au moins deux Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1082",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.310",
+    "question": "Implanter « Trousse de déguisement » ? Contient les fournitures pour quatre déguisements.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1083",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.310",
+    "question": "Implanter « Menottes » ? Infligent Enchevêtré de Force 65 ; une seule tentative de libération par heure sans outils adaptés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1084",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.310",
+    "question": "Implanter « Loupe de lecture » ? Ajoute 2 DR au déchiffrage de petits textes ou de textes illisibles et aux recherches de détails fins par Perception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1085",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.310",
+    "question": "Implanter « Contacts de guilde » ? Après échec de disponibilité, une licence adaptée permet Ragot +0 auprès de la guilde ; succès autorise une relance de disponibilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1086",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.312",
+    "question": "Implanter « Outils de métier » ? Fabriquer ou réparer exige les outils adaptés ; les grands projets et nouvelles possessions demandent un atelier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1087",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.313",
+    "question": "Implanter « Équipages minimaux » ? Charrette : conducteur et animal ; coche : deux conducteurs et quatre chevaux ; barge : trois membres ; canot : un rameur ; chariot : conducteur et deux chevaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1088",
+    "phase": "Armes et armures",
+    "lot": "L06",
+    "source": "L06 p.313",
+    "question": "Implanter « Transport plus rapide » ? Un transport rapide coûte généralement le double et gagne un Mouvement ; un lent coûte la moitié et perd un Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1089",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Tonique digestif » ? Ajoute 2 DR aux Tests de guérison des troubles digestifs, notamment Dysenterie et Courante galopante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1090",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Faxtoryll » ? Une dose par Blessure critique retire tous les États Hémorragique sans Test de Guérison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1091",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Cataplasme curatif » ? Un critique traité ne provoque pas d’infection.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1092",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Remède contre un symptôme » ? Une dose soulage le symptôme pendant vingt-quatre heures ; une dose quotidienne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1093",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Belladone » ? Après deux à trois heures, Endurance +0 évite un sommeil de 1d10 + quatre heures ; une dose par personne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1094",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Herbe contre l’étourdissement » ? Retire un Sonné, une dose par rencontre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1095",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Potion de vitalité » ? Boire retire immédiatement tous les États Fatigué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1096",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Faux remèdes » ? Le d100 dépend de la qualité : poison léger jusqu’à 5/15/25, placebo jusqu’à 20/35/50, sinon médecine efficace, pour fine/moyenne/pauvre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1097",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Remède toxique » ? Un faux remède toxique impose le Test d’exposition à la Courante galopante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1098",
+    "phase": "Soins et remèdes",
+    "lot": "L06",
+    "source": "L06 p.314",
+    "question": "Implanter « Placebo » ? Un échec à Calme +2 permet au faux remède de fonctionner par placebo durant 2d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1099",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.315",
+    "question": "Implanter « Prothèse portée » ? Une prothèse a zéro Encombrement lorsqu’elle est portée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1100",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.315",
+    "question": "Implanter « Jambe artificielle » ? Récupère un point de Mouvement perdu ; cinquante PX d’entraînement récupèrent le dernier point, cent PX permettent à nouveau Esquive ; bénéfices liés au port de la prothèse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1101",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.315",
+    "question": "Implanter « Faux nez » ? Ignore la perte de Sociabilité due à l’absence de nez.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1102",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.315",
+    "question": "Implanter « Crochet de main » ? Cent PX par point retirent le malus de −2 DR aux tâches à deux mains ; deux cents le suppriment ; compte comme une dague.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1103",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.315",
+    "question": "Implanter « Dents artificielles » ? Ignore les pénalités liées à la perte des dents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1104",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.315",
+    "question": "Implanter « Bâton enchanté » ? Réduit le NI des sorts du domaine associé de un, minimum zéro ; prolonge le corps pour les sorts de contact mais reste un bâton de combat non magique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1105",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.315",
+    "question": "Implanter « Robes de sorcier » ? Accorde +1, +2 ou +3 DR en Focalisation du Vent associé selon la qualité pratique, normale ou élaborée ; aucun bénéfice sur les autres Vents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1107",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Bandage : consommation » ? Le bandage est consommé par le soin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1108",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Sac de couchage » ? Ajoute 2 DR à Endurance contre le froid pendant le repos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1109",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Bougie » ? Éclaire deux yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1110",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Lampe Feinkopf » ? Éclaire comme une bougie ; exposée au grisou, le fait exploser après 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1111",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Grappin » ? Avec une corde, autorise l’escalade de surfaces normalement impraticables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1112",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Huile de lampe » ? Une dose alimente une torche une heure, une lanterne quatre heures, une lampe Davrich huit heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1113",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Lanterne » ? Éclaire dix yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1114",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Lanterne-tempête » ? Éclaire dix yards ou vingt dans un arc dirigé de quatre-vingt-dix degrés ; peut être occultée et résiste au vent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1115",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.316",
+    "question": "Implanter « Torche » ? Éclaire dix yards et sert d’arme improvisée ; un critique ajoute un Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1116",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.317",
+    "question": "Implanter « Salaire d’un employé » ? Une tâche coûte son Statut dans la monnaie associée ; journée trois fois, semaine vingt-quatre fois ; danger imprévu double le prix sauf Commandement réussi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1117",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.317",
+    "question": "Implanter « Ordres à un employé » ? Les tâches complexes autonomes ou une raison de fuir peuvent exiger Commandement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-1118",
+    "phase": "Équipement spécialisé",
+    "lot": "L06",
+    "source": "L06 p.317",
+    "question": "Implanter « Expérience d’un compagnon » ? Le compagnon reçoit la moitié des PX du joueur associé, arrondie vers le bas ; le joueur les dépense pour lui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

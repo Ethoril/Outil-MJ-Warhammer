@@ -22,7 +22,8 @@ Aucun changement de jeu, d’arbitrage, de catalogue public ou de version. Aucun
 | L06 Entre-aventures p.190-201 | FAIT, 87 entrées | 54ed92d |
 | L06 Compétences/talents p.109-128 | FAIT, 225 entrées | 073dbf7 |
 | L06 Création, carrières, compatibilité p.6, 23-44, 364 | FAIT, 49 entrées ; 4 052/4 052 tests (106,970 s), F06-creation-full.log | 4f7ae81 |
-| L06 Magie générale p.230-239 | FAIT, 89 entrées ; 4 052/4 052 tests (106,348 s), F06-magic-full.log | commit du présent lot |
+| L06 Magie générale p.230-239 | FAIT, 89 entrées ; 4 052/4 052 tests (106,348 s), F06-magic-full.log | 8482611 |
+| L06 Équipement p.296-317 | FAIT, 129 entrées ; 4 052/4 052 tests (105,924 s), F06-gear-full.log | commit du présent lot |
 | L06 autres chapitres | À faire | — |
 | L05 noms FR | À faire après L06 | — |
 | L17, L11, L13, L14, L16, L18-L26, L01-L04, L07-L10, L12, L15 | À faire dans cet ordre | — |
@@ -72,3 +73,5 @@ Terminer L06 : religion hors domaines déjà inventoriés, magie générale, pro
 Complément création/carrières : registre à 900 entrées et 657 sélecteurs. Repérage ciblé p.7-22 (introduction et fiction), p.26-35 (allocations d’espèce) et p.45-108 (profils de carrière, listes et conseils narratifs sans nouvelle mécanique autonome repérée). Lecture des procédures p.23-25, 36-44. Tableau p.38 vérifié visuellement. Appendices p.364-370 lus : tables critiques et États répètent les pages déjà inventoriées ; les seuils du bras sont identiques après comparaison, seuls certains renvois changent. Index p.371-376 et fiches p.377-379 : pas de mécanique nouvelle. P.364 ajoute conversion et progression individuelle ; aucune valeur de coût non vérifiée n’est inventée.
 
 Complément magie : registre à 989 entrées et 695 sélecteurs. Lecture p.230-239, contrôle visuel du tableau de surpuissance p.236 (cellules fusionnées). Incidents décomposés entre effets directement appliqués et Tests conditionnels en rappel. Aucun sort réinventorié. Les ingrédients sont hors-granularité par règle maison. Les restrictions fictives de contact, voix et visibilité ne sont pas déduites des champs génériques. Les commandes Store de Focalisation prennent en charge les aperçus pause/interruption par applyChannelling ; aucune attribution automatique du déclencheur n’est prétendue.
+
+Complément équipement : registre à 1 118 entrées et 807 sélecteurs. Lecture p.296-317 ; seules les mécaniques propres sont recensées, pas une copie des listes marchandes. Qualités comparées aux contrats, à leur version active et aux lecteurs de résolution/protection. Le statut générique des mots-clés ne suffit pas : Assommante possède son lecteur V5 spécialisé, alors que les projectiles fichés d’Empaleuse restent en rappel. Les remèdes, prothèses, objets magiques et capacités de contenants sont séparés des prix. Les malus d’Agilité imprimés p.299 restent des valeurs de caractéristique, aucune conversion en DR n’est inventée.
