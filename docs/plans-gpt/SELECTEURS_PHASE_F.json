@@ -16339,5 +16339,3177 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0001",
+    "phase": "Création et carrières",
+    "lot": "L13",
+    "source": "L13 p.9",
+    "question": "Implanter « Tirage des nouvelles carrières » ? Après une carrière de base éligible, un second d100 propose une spécialisation ; le joueur peut conserver sa première carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0002",
+    "phase": "Création et carrières",
+    "lot": "L13",
+    "source": "L13 p.9",
+    "question": "Implanter « Dix compétences au premier rang » ? Les nouvelles carrières offrent dix compétences au premier rang ; huit seulement doivent progresser pour changer de rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0003",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.30",
+    "question": "Implanter « Nourrir un demi-griffon » ? Le demi-griffon consomme chaque jour l’équivalent d’un porc ; laissé chasser seul, il a 15 % de chances de ne pas revenir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0004",
+    "phase": "Commerce",
+    "lot": "L13",
+    "source": "L13 p.54",
+    "question": "Implanter « Disponibilité des marchandises tiléennes » ? Pour la disponibilité commerciale, agrumes, olives et poisson salé prennent la place du grain ; la pierre prend celle du métal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0005",
+    "phase": "Commerce",
+    "lot": "L13",
+    "source": "L13 p.54",
+    "question": "Implanter « Prix saisonniers tiléens » ? Le barème saisonnier fixe les prix de base des agrumes, olives, poisson salé et pierre pour le commerce du compagnon du Reik.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0006",
+    "phase": "Création et carrières",
+    "lot": "L13",
+    "source": "L13 p.55",
+    "question": "Implanter « Création humaine tiléenne » ? Trois compétences culturelles reçoivent cinq augmentations, trois autres en reçoivent trois ; deux choix de talents et trois talents aléatoires complètent le départ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0007",
+    "phase": "Création et carrières",
+    "lot": "L13",
+    "source": "L13 p.55",
+    "question": "Implanter « Tiléens nés dans l’Empire » ? Les Tiléens nés dans l’Empire utilisent la création impériale, en remplaçant l’option Langue (Wasteland) par Langue (Tiléen).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0008",
+    "phase": "Création et carrières",
+    "lot": "L13",
+    "source": "L13 p.55",
+    "question": "Implanter « Destinée de Luccini » ? Un humain de Luccini peut remplacer un talent de départ par Destinée ; les non-humains conservent leur création du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0009",
+    "phase": "Création et carrières",
+    "lot": "L13",
+    "source": "L13 p.56",
+    "question": "Implanter « Substitutions de carrières tiléennes » ? Flagellant peut devenir nonne ou prêtre d’un des cinq cultes listés ; cavalier, soldat et prêtre-guerrier ont des substitutions propres à la Tilée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0010",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.80",
+    "question": "Implanter « Option de blessures alternative » ? Le système optionnel remplace les règles de blessures et de mort du socle V4 avec nouvelles tables et blessures triviales.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0011",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.80",
+    "question": "Implanter « Hémorragie et infections » ? Hémorragique impose −10 aux Tests contre blessure purulente, infection mineure et pourriture du sang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0012",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.80",
+    "question": "Implanter « Hémorragie à zéro Blessure — fin de Tour » ? À zéro Blessure, un Test de Résistance à +0 en fin de chaque Tour évite Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0013",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.80",
+    "question": "Implanter « Coagulation sur un double » ? Inconscient et hémorragique, risque de décès de 10 % par Hémorragique en fin de Round ; un double au d100 retire un Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0014",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.80",
+    "question": "Implanter « Soigner l’hémorragie — variante » ? Guérison +20 retire un Hémorragique plus un par DR ; la fin de toute hémorragie donne un Exténué. Les soins magiques retirent un Hémorragique par Blessure rendue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0015",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.81",
+    "question": "Implanter « Critique à zéro Blessure » ? Une attaque réduisant la cible à zéro Blessure déclenche un critique ; ajouter dix au jet par Blessure excédentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0016",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.81",
+    "question": "Implanter « Un seul critique par coup » ? Un même coup n’inflige jamais deux critiques ; les Blessures supplémentaires du critique ne déclenchent pas une nouvelle table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0017",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.82",
+    "question": "Implanter « Retenir ses coups » ? Déclarer avant le jet : critique seulement à zéro Blessure ; perdre Tailleuse, Percutante, Empaleuse et Pénétrante. Interdit aux tirs, sorts et armes donnant En flammes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0018",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.82",
+    "question": "Implanter « Mort subite des figurants » ? À zéro Blessure, le MJ peut déclarer un figurant mort ou inconscient ; option exclue pour les PJ et PNJ possédant Chance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0019",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.82",
+    "question": "Implanter « Mort par accumulation de blessures » ? Inconscient à zéro Blessure, mourir en fin de Round si le nombre de blessures critiques non triviales dépasse le Bonus d’Endurance, sauf soin suffisant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0020",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.82",
+    "question": "Implanter « Blessures critiques triviales » ? Les résultats marqués T ne retirent aucune Blessure supplémentaire et ne comptent pas dans le total mortel de blessures critiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0021",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Coup étourdissant » ? 04–06 : 1 Blessure et un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0022",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Œil heurté » ? 07–09 : 1 Blessure et un Aveuglé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0023",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Coup sur l’oreille » ? 10–15 : 1 Blessure et un Assourdi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0024",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Coupure mineure à la tête » ? 16–20 : 1 Blessure et un Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0025",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Mâchoire fracturée » ? 36–40 : 2 Blessures, deux Sonné et fracture mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0026",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Œil gravement blessé » ? 41–45 : 3 Blessures, un Hémorragique et un Aveuglé persistant jusqu’aux soins médicaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0027",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Oreille gravement blessée » ? 46–50 : 3 Blessures ; −20 aux Tests auditifs ; une seconde occurrence supprime définitivement l’audition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0028",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Nez cassé » ? 51–55 : 3 Blessures, deux Hémorragique ; Résistance +0 ou un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0029",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Mâchoire cassée » ? 56–60 : 3 Blessures, trois Sonné, fracture majeure ; Résistance +0 ou Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0030",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Oreille mutilée » ? 61–65 : 4 Blessures, trois Assourdi, deux Hémorragique et perte de l’oreille, amputation moyenne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0031",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Commotion » ? 76–80 : 4 Blessures, un Assourdi, deux Hémorragique, 1d10 Sonné ; un Exténué durant 1d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0032",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Œil détruit » ? 81–85 : 5 Blessures, trois Aveuglé, deux Hémorragique, un Sonné et œil perdu, amputation difficile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0033",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.83",
+    "question": "Implanter « Coup défigurant » ? 86–94 : 5 Blessures, trois Hémorragique, trois Aveuglé, deux Sonné ; œil et nez perdus, amputation ardue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0034",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Entorse du bras » ? 26–40 : 1 Blessure et déchirure musculaire mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0035",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Muscles du bras déchirés » ? 41–45 : 1 Blessure, un Hémorragique et déchirure mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0036",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Main ensanglantée » ? 46–50 : 1 Blessure et un Hémorragique ; tant qu’il persiste, Dextérité +20 avant une action avec l’objet tenu, ou le lâcher.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0037",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Fracture nette du bras » ? 61–75 : 2 Blessures, objet lâché, fracture mineure ; Résistance −10 ou un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0038",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Ligament rompu » ? 76–80 : 2 Blessures, objet lâché et déchirure musculaire majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0039",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Entaille profonde du bras » ? 81–85 : 3 Blessures, deux Hémorragique, un Sonné, déchirure mineure ; Résistance −20 ou Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0040",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Épaule luxée » ? 96–109 : 4 Blessures, bras inutilisable, Sonné jusqu’aux soins ; Guérison étendue +20 à 6 DR remet le bras, puis −10 aux Tests du bras durant 1d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0041",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Main mutilée » ? 126–130 : 5 Blessures, main perdue et deux Hémorragique ; Résistance −20 ou Sonné et À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0042",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.84",
+    "question": "Implanter « Tendons du bras sectionnés » ? 131–135 : 5 Blessures, bras inutilisable, trois Hémorragique et un Sonné ; Résistance −20 ou Inconscient, amputation très ardue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0043",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Souffle coupé » ? 01–10 : Blessure triviale, un Sonné ; Résistance +20 ou À Terre ; Mouvement divisé par deux durant 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0044",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Égratignure du corps » ? 11–20 : 1 Blessure et un Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0045",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Coup au ventre » ? 21–25 : 1 Blessure, un Sonné ; Résistance +40 ou vomir et À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0046",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Coup bas » ? 26–30 : 1 Blessure ; Résistance −20 ou trois Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0047",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Côtes contusionnées » ? 36–40 : 2 Blessures ; −10 aux Tests d’Agilité pendant 1d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0048",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Clavicule tordue » ? 41–45 : 2 Blessures ; bras tiré au hasard, objet lâché et bras inutilisable 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0049",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Plaie déchirée » ? 46–50 : 2 Blessures et deux Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0050",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Côtes fêlées » ? 51–55 : 2 Blessures, un Sonné et fracture mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0051",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Plaie béante du corps » ? 56–60 : 3 Blessures, trois Hémorragique ; jusqu’à chirurgie, toute nouvelle Blessure au corps ajoute un Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0052",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Entaille douloureuse » ? 61–65 : 3 Blessures, deux Hémorragique et un Sonné ; Résistance −20 ou Inconscient ; sans au moins 4 DR, cri de douleur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0053",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Artère du corps touchée » ? 66–70 : 3 Blessures et quatre Hémorragique ; jusqu’à chirurgie, tout dégât au corps ajoute deux Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0054",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Dos froissé » ? 71–75 : 3 Blessures et déchirure musculaire majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0055",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Hanche fracturée » ? 76–80 : 4 Blessures, un Sonné et fracture mineure ; Résistance +0 ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0056",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Plaie thoracique majeure » ? 81–85 : 4 Blessures, quatre Hémorragique ; jusqu’à chirurgie, toute nouvelle Blessure au corps ajoute deux Hémorragique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0057",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Cage thoracique fracassée » ? 91–95 : 5 Blessures, fracture majeure et Sonné persistant jusqu’aux soins médicaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0058",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.85",
+    "question": "Implanter « Clavicule cassée » ? 96–110 : 5 Blessures, fracture majeure et Inconscient persistant jusqu’aux soins médicaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0059",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Orteil heurté » ? 01–10 : Blessure triviale ; Résistance +20 ou −10 aux Tests d’Agilité jusqu’à la fin du prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0060",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Cheville tordue » ? 21–25 : 1 Blessure ; −10 aux Tests d’Agilité pendant 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0061",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Genou tordu » ? 51–55 : 2 Blessures ; −20 aux Tests d’Agilité pendant 1d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0062",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Orteil entaillé » ? 56–60 : 2 Blessures, un Hémorragique ; après la rencontre, Résistance +0 ou perte d’un orteil, amputation moyenne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0063",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Entaille profonde de la jambe » ? 61–65 : 2 Blessures, deux Hémorragique ; Résistance +0 ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0064",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Genou gravement tordu » ? 66–70 : 2 Blessures et déchirure musculaire majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0065",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Jambe tailladée » ? 71–75 : 3 Blessures, À Terre, deux Hémorragique et fracture mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0066",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Tendon rompu » ? 81–85 : 3 Blessures, À Terre, un Sonné, jambe inutilisable et déchirure majeure ; Résistance −20 ou Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0067",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Tibia fêlé » ? 86–90 : 4 Blessures, Sonné, À Terre, déchirure majeure et fracture mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0068",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Genou brisé » ? 91–95 : 4 Blessures, un Hémorragique, À Terre, Sonné et fracture majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0069",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Genou luxé » ? 96–105 : 4 Blessures, À Terre ; Résistance −20 ou Sonné jusqu’aux soins ; Guérison étendue +20 à 6 DR, puis demi-Mouvement et −10 aux Tests de jambe durant 1d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0070",
+    "phase": "Blessures et soins",
+    "lot": "L13",
+    "source": "L13 p.86",
+    "question": "Implanter « Pied écrasé » ? 106–115 : 4 Blessures, deux Hémorragique ; Résistance +20 ou À Terre et perte d’un orteil plus un par DR sous zéro ; sans chirurgie sous 1d10 jours, pied perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0071",
+    "phase": "Équipement",
+    "lot": "L13",
+    "source": "L13 p.88",
+    "question": "Implanter « Installation du théodolite » ? Métier (Cartographe) permet d’utiliser un théodolite ; les modèles élaborés nécessitent au moins un Round d’installation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0072",
+    "phase": "Équipement",
+    "lot": "L13",
+    "source": "L13 p.88",
+    "question": "Implanter « Mèche lente » ? La mèche lente brûle à environ un pied par heure ; elle entretient la source de feu d’une arme à mèche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0073",
+    "phase": "Équipement",
+    "lot": "L13",
+    "source": "L13 p.88",
+    "question": "Implanter « Mèche de détonation » ? La mèche brûle un pouce par seconde ; qualité ordinaire : risque d’échec d’environ 5 % sur dix yards, médiocre : contrôle tous les cinq yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0074",
+    "phase": "Équipement",
+    "lot": "L13",
+    "source": "L13 p.88",
+    "question": "Implanter « Peau de phoque et moufles » ? Le manteau peut aider contre le froid, sans bonus fixé ici ; les moufles empêchent les actions exigeant la dextérité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0075",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.89",
+    "question": "Implanter « Qualités alternatives d’une arme » ? Choisir avant le jet une des qualités alternatives ; sans choix, employer la première. Les qualités permanentes continuent de s’appliquer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0077",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.89",
+    "question": "Implanter « Entaille » ? Un critique ajoute un Hémorragique ; dépenser X Avantages permet un Hémorragique supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0078",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.89",
+    "question": "Implanter « Dispersion à bout portant » ? Une seule cible ; ajouter l’indice de Dispersion aux dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0079",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.89",
+    "question": "Implanter « Dispersion de courte à longue portée » ? Toucher la cible et les X créatures visibles les plus proches ; aucune paire de cibles ne doit être distante de plus de X yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0080",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.89",
+    "question": "Implanter « Dispersion à portée extrême » ? Sélection de cibles identique à la portée courte à longue ; diminuer les dégâts de l’indice de Dispersion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0081",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.89",
+    "question": "Implanter « Croche-pied » ? Après une touche, deux Avantages autorisent Force opposée à Athlétisme ; victoire : À Terre et, pour un cavalier, chute préalable de deux yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0082",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.90",
+    "question": "Implanter « Bouclier en opposition — variante » ? Toute attaque opposée donne les PA de l’indice du bouclier, même si l’arme principale sert à parer ; un indice au moins égal à deux autorise la parade des tirs visibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0083",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.90",
+    "question": "Implanter « Trouver un gourdin » ? En forêt, Survie en extérieur étendue +0 atteignant 7 DR procure un gourdin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0084",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.90",
+    "question": "Implanter « Épée brisée utilisée en dague » ? Une épée brisée sert de dague ; sans poignée adaptée, elle gagne Dangereuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0085",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.91",
+    "question": "Implanter « Couteau à couille — qualités conditionnelles » ? Empaleuse et Précise ne s’appliquent que contre une cible Surprise ou À Terre ; Pénétrante reste permanente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0086",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.92",
+    "question": "Implanter « Pavois porté » ? Porté : Protectrice 3, Défensive, Inoffensive, Lente et Épuisante ; encombrement 4, dégâts BF+2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0087",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.92",
+    "question": "Implanter « Pavois planté » ? Deux Actions pour orienter le pavois ; à un yard derrière, Protectrice 5 contre les tirs de cette direction, et seulement le premier Tour en mêlée venant de face.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0088",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.93",
+    "question": "Implanter « Marteau de cavalerie à pied » ? À pied, le marteau de cavalerie se manie avec Corps à corps (Deux mains).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0089",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.93",
+    "question": "Implanter « Lance sans charge » ? Une lance ou demi-lance est une arme improvisée pendant un Round sans charge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0090",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.93",
+    "question": "Implanter « Sabre à pied » ? Corps à corps (Base) porte Entaille de 1A à 2A ; avec Escrime, le sabre conserve Entaille 1A.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0091",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.93",
+    "question": "Implanter « Épée de sport » ? Une épée courte d’escrime au bout et au tranchant émoussés gagne Inoffensive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0092",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.94",
+    "question": "Implanter « Gantelets intégrés aux plaques » ? Un gantelet à pointes ou verrouillé peut s’acheter dans l’armure de bras : additionner le prix, conserver seulement l’encombrement de l’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0093",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.94",
+    "question": "Implanter « Fabriquer un garrot » ? En lieu urbain approprié, Métier (Chandelier, Ingénieur, Tailleur ou Tanneur) étendu +0 atteignant 5 DR fabrique cet objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0094",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.94",
+    "question": "Implanter « Fabriquer des poings américains » ? En lieu urbain approprié, Métier (Charpentier, Ingénieur, Forgeron, Tailleur ou Tanneur) étendu +0 atteignant 10 DR fabrique cet objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0095",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.95",
+    "question": "Implanter « Fabriquer une matraque souple » ? En lieu urbain approprié, Métier (Charpentier, Ingénieur, Forgeron, Tailleur ou Tanneur) étendu +0 atteignant 15 DR fabrique cet objet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0096",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.94",
+    "question": "Implanter « Retenir une arme par gantelet verrouillé » ? Un premier lâcher forcé est remplacé par −20 aux Tests avec l’objet tant que sa cause persiste, au moins un Tour ; un second lâcher pendant ce temps réussit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0097",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.95",
+    "question": "Implanter « Fléau sans entraînement » ? Sans compétence de Fléau, ajouter Dangereuse et perdre toutes les qualités bénéfiques du fléau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0098",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.95",
+    "question": "Implanter « Parade avec une arme défensive » ? Toute arme défensive à une main peut employer Parade ; cette compétence supprime le malus de main secondaire de −20 pour opposer une attaque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0099",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.95",
+    "question": "Implanter « Cape immobilisante » ? Une cape utilise Force 25 pour déterminer son immobilisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0100",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.96",
+    "question": "Implanter « Main gauche sans Parade » ? Sans compétence de Parade, la main gauche est traitée comme une dague et perd Défensive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0101",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.96",
+    "question": "Implanter « Filet lesté immobilisant » ? Un filet lesté utilise Force 55 pour déterminer son immobilisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0102",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.96",
+    "question": "Implanter « Attrape-homme à ressort » ? Le mécanisme à ressort coûte davantage et donne +20 aux Tests de Force pour immobiliser une cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0103",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.97",
+    "question": "Implanter « Épée bâtarde à une main » ? Avec Corps à corps (Base), l’épée bâtarde peut servir à une main mais gagne Épuisante et Lente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0104",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.97",
+    "question": "Implanter « Trouver un bâton de combat » ? En forêt, Survie en extérieur étendue +0 atteignant 20 DR procure un bâton de combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0105",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.98",
+    "question": "Implanter « Trouver un caillou de fronde » ? Survie en extérieur étendue +40 ou Perception étendue +0, seuil 5 DR, permet de trouver une pierre adaptée à la fronde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0106",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.98",
+    "question": "Implanter « Trouver une flèche improvisée » ? En forêt, Survie en extérieur étendue +0 atteignant 10 DR procure une tige droite utilisable comme flèche improvisée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0107",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.101",
+    "question": "Implanter « Allumer une arme à mèche » ? Avant utilisation, dépenser une Action pour allumer la mèche ; pluie ou vent peuvent l’éteindre. Le tromblon à mèche suit les mêmes contraintes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0108",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.102",
+    "question": "Implanter « Recharger le pistolet Griffonsfoot » ? Un tir décharge simultanément six canons ; recharger exige six projectiles et la poudre correspondante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0109",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.102",
+    "question": "Implanter « Maladresse de la hache-fusil » ? Employée comme hache alors qu’elle est chargée, une maladresse critique décharge l’arme dans le torse de son porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0110",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.102",
+    "question": "Implanter « Maladresse de la hallebarde-fusil » ? Employée comme hallebarde alors qu’elle est chargée, une maladresse critique tire sur quiconque se trouve directement derrière le porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0111",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.103",
+    "question": "Implanter « Poivrière et seconde main » ? Une seconde main libre est nécessaire pour préparer le canon suivant ; sinon la poivrière perd Répétition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0112",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.103",
+    "question": "Implanter « Explosion du mortier à main » ? Une maladresse pendant le rechargement fait exploser le mortier à main.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0113",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.103",
+    "question": "Implanter « Détecter la canne-pistolet » ? La reconnaître demande Perception −20, ou −30 si l’observateur ne connaît pas les armes à poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0114",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.103",
+    "question": "Implanter « Cartouche de papier et recharge » ? Les Tests de rechargement avec une cartouche adaptée reçoivent +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0115",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.103",
+    "question": "Implanter « Poudre d’Aqshy et maladresses » ? Avec cette poudre, tout échec contenant 8 ou 9 sur l’un des deux dés compte comme maladresse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0116",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.104",
+    "question": "Implanter « Bruit des gros projectiles » ? Le tireur et toute personne à deux yards passent Résistance +0 ou gagnent un Assourdi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0117",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.104",
+    "question": "Implanter « Mèche de bombe dans un mortier » ? Allumer avant chargement et choisir le nombre de Tours : un = fin du Tour courant, deux = fin du prochain Tour ; l’explosion survient même sans tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0118",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.104",
+    "question": "Implanter « Grappin du mortier à main » ? Le grappin ne se tire qu’au mortier à main ; une touche contre une créature inflige un Enchevêtré, ou fixe une corde à un point distant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0119",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.105",
+    "question": "Implanter « Entretien quotidien d’une monture » ? Une augmentation de Soin aux animaux suffit ordinairement ; situation difficile : Test quotidien +20 ou +0 ; un soigneur gère six bêtes, douze avec une bonne écurie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0120",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.105",
+    "question": "Implanter « Monture négligée » ? Chaque jour sans soin requis, Endurance +0 de la monture ; échec : conséquence MJ, souvent un Exténué d’abord, puis maladie, équipement dégradé ou fuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0121",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.105",
+    "question": "Implanter « Diriger le Mouvement d’une monture » ? Le cavalier dépense son Mouvement pour diriger celui de la monture ; son Mouvement effectif peut alors être celui de la monture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0122",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.105",
+    "question": "Implanter « Diriger l’Action d’une monture » ? Le cavalier dépense son Action pour diriger l’Action de la monture ; une monture non entraînée peut demander un Test. Cavalier émérite évite ce Test et cette dépense.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0123",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.106",
+    "question": "Implanter « Attaquer depuis une monture » ? Une attaque de mêlée du cavalier contre une cible plus petite que sa monture reçoit +20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0124",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.106",
+    "question": "Implanter « Viser le cavalier » ? Choisir cavalier ou monture ; contre un cavalier sur monture plus grande que soi, −10 en mêlée, sauf monture de taille comparable ou arme d’allonge Longue au moins.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0125",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.106",
+    "question": "Implanter « Force de la monture en charge » ? Lors d’une charge, le cavalier peut utiliser Force et Taille de sa monture pour calculer les dégâts de mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0127",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.106",
+    "question": "Implanter « Arcs de tir montés » ? Arme à deux mains : tir devant ; à une main : devant ou du côté de l’arme. Voltige autorise tout azimut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0128",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.106",
+    "question": "Implanter « Action d’attaque propre à la monture » ? Monture de Guerre sans Craintif : Action propre contre un ennemi engagé ; les autres exigent des ordres. Guerre donne le choix au cavalier, sinon au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0129",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.106",
+    "question": "Implanter « Avantage de la monture » ? Sans Guerre, aucun Avantage ; avec Guerre et une augmentation en Équitation, fusionner les réserves cavalier/monture et diviser par deux toute perte normalement totale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0131",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.106",
+    "question": "Implanter « Identifier le dressage » ? Dressage +0 révèle les entraînements reçus ; une influence ou une drogue peut rendre le diagnostic plus difficile, sans barème imposé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0135",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.107",
+    "question": "Implanter « Frapper plutôt qu’éviter le piétinement » ? Une créature plus petite traversée peut renoncer à l’Esquive et attaquer une fois monture ou cavalier si elle n’a pas encore agi ce Round ; seule la neutralisation arrête la charge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0136",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.107",
+    "question": "Implanter « Localisations des quadrupèdes » ? D100 : tête 01–16, corps 17–56, antérieure gauche 57–67, droite 68–78, postérieure gauche 79–89, droite 90–00.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0137",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.108",
+    "question": "Implanter « Chute d’une monture » ? Chute ordinaire de deux yards : 1d10+6 dégâts, réduits par BE mais pas PA ; ajouter un yard par palier de Taille à partir de Grande.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0138",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.108",
+    "question": "Implanter « La monture remarque son cavalier tombé » ? Le MJ peut autoriser un Test d’Initiative +20 de la monture pour remarquer la chute ; son comportement reste décidé selon la scène.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0139",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.108",
+    "question": "Implanter « Mort, KO et À Terre en selle » ? Mort, Inconscient ou À Terre du cavalier entraînent sa chute sauf équipement adapté ; les mêmes événements sur la monture font tomber le cavalier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0140",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.108",
+    "question": "Implanter « Surpris et Sonné en selle » ? Cavalier Surpris : Équitation +40 ou chute ; Sonné : +0 ou chute. Monture Craintive Surprise : Équitation +40 pour rester en selle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0141",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.108",
+    "question": "Implanter « Cavalier immobilisé et prise » ? Contre un lien tenu ou ancré, Équitation +0 réussie permet de conserver sa selle et d’utiliser la Taille de la monture dans l’opposition de Force.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0142",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.108",
+    "question": "Implanter « Monture craintive immobilisée » ? Si la monture Craintive devient Enchevêtrée mais pas le cavalier, Équitation +0 ou le cavalier est désarçonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0143",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.109",
+    "question": "Implanter « Dompter un demi-griffon » ? Rester monté un jour et une nuit malgré ses tentatives donne Dompté ; seul ce cavalier est accepté. Les adultes entraînés reçoivent les entraînements listés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0144",
+    "phase": "Montures",
+    "lot": "L13",
+    "source": "L13 p.109",
+    "question": "Implanter « Entretien du demi-griffon » ? Prévoir 2 CO de viande fraîche par semaine, une chasse au moins mensuelle et selle/harnachement au double du prix ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0145",
+    "phase": "PNJ — procédures",
+    "lot": "L13",
+    "source": "L13 p.113",
+    "question": "Implanter « Générer un mercenaire » ? Choisir le profil puis tirer une fois gabarit, particularité physique, éthique et personnalité ; le MJ peut retirer certains tirages après vérification des candidats.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0152",
+    "phase": "PNJ — procédures",
+    "lot": "L13",
+    "source": "L13 p.116",
+    "question": "Implanter « Particularités physiques du mercenaire » ? Le tirage physique peut imposer une amputation et ses conséquences du socle ; les autres apparences sans effet restent descriptives.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0153",
+    "phase": "PNJ — procédures",
+    "lot": "L13",
+    "source": "L13 p.116",
+    "question": "Implanter « Mutation latente du mercenaire » ? Le résultat 13 annonce une mutation lente qui devient manifeste après 1d10 mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0154",
+    "phase": "PNJ — procédures",
+    "lot": "L13",
+    "source": "L13 p.116",
+    "question": "Implanter « Salaire des jours sacrés » ? Pour le résultat d’éthique 41–55, travailler les Marktags et Festags exige double salaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0155",
+    "phase": "PNJ — procédures",
+    "lot": "L13",
+    "source": "L13 p.116",
+    "question": "Implanter « Mercenaire surévalué » ? Pour le résultat d’éthique 61–72, le mercenaire demande 10 % de plus que le tarif habituel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0156",
+    "phase": "PNJ — procédures",
+    "lot": "L13",
+    "source": "L13 p.116",
+    "question": "Implanter « Commandement d’un mercenaire peu zélé » ? Pour l’éthique 73–85, Commandement −20 lors des instructions empêche le mercenaire de bâcler son travail.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0159",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.118",
+    "question": "Implanter « Capacité des structures » ? L’encombrement indique le poids à soulever ; la limite indique la charge maximale de la structure. Le MJ valide aussi l’emplacement utile des pièces.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0160",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.118",
+    "question": "Implanter « Couvert de structure » ? Le malus du couvert s’applique par défaut aux tirs visant un occupant qui l’utilise ; Surpris ou exposé volontairement ne bénéficie pas de ce couvert.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0161",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.119",
+    "question": "Implanter « Échelle des structures courantes » ? Le tableau distingue encombrement, capacité, Endurance, Blessures et couvert ; les murs et clôtures marqués sont décrits par tronçons de cinq yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0162",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.120",
+    "question": "Implanter « Frapper une structure » ? Une structure immobile est touchée automatiquement en mêlée ; véhicule mobile ou point précis : coup ciblé −20. Le conducteur peut opposer Conduite à la mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0163",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.120",
+    "question": "Implanter « Endurance des grandes structures » ? Contre une arme ordinaire, compter le BE de la structure à nouveau par catégorie de Taille au-dessus de l’attaquant ; les armes de siège ignorent cette restriction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0164",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Tir manqué et structure » ? Manquer un occupant de 0 à −2 DR peut toucher sa structure ; à −3 ou moins, le tir n’a aucun effet sur celle-ci.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0165",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Déclencher un critique de structure » ? Un double provoque un critique seulement si le coup retire au moins un quart des Blessures restantes ; à zéro, chaque touche provoque un critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0166",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Éclats » ? 01–35 : trivial ; une personne tirée au hasard sur la structure ou à couvert reçoit les dégâts de son BE.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0167",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Secousse » ? 36–50 : 1 Blessure ; occupants : Athlétisme +40 ou Surpris.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0168",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Perforation » ? 51–60 : 1 Blessure ; réduire d’un palier le malus de couvert.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0169",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Ébranlement » ? 61–70 : 2 Blessures ; occupants : Athlétisme +20 ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0170",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Pluie d’éclats » ? 71–80 : 2 Blessures ; toutes les personnes sur la structure ou à couvert reçoivent les dégâts de son BE.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0171",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Effondrement partiel » ? 81–90 : 3 Blessures ; Athlétisme +0 ou chute ; capacité divisée par deux, matériel excédentaire tombe et devient inutilisable avant réparation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0172",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Brèche » ? 91–95 : 3 Blessures ; occupants frappés de débris à dégâts BE ; aucun couvert ne subsiste pour eux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0173",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.121",
+    "question": "Implanter « Effondrement » ? 96+ : structure détruite ; personnes à couvert frappées à dégâts BE ; occupants testent la chute et subissent un coup de Force égale aux Blessures restantes ; matériel à réparer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0174",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.122",
+    "question": "Implanter « Réparer durablement une structure » ? Métier (Charpentier ou Maçon) +20 selon matériau : chaque réussite prend 1d10 heures et rend 1d10 Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0175",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.122",
+    "question": "Implanter « Réparation de fortune en combat » ? Métier adapté étendu −30, seuil 20 DR, rend 1d10 Blessures ; les soins des créatures ne réparent pas les structures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0176",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.122",
+    "question": "Implanter « Compétences des servants » ? Groupe de Tir adapté obligatoire ; Ingénierie peut servir les pièces à poudre. Une baliste peut utiliser CT sans compétence mais perd ses qualités et garde ses défauts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0177",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.122",
+    "question": "Implanter « Munitions propres au siège » ? Les pièces de siège utilisent leurs munitions dédiées : ni balles de fusil pour canon, ni carreaux d’arbalète pour baliste.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0178",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.123",
+    "question": "Implanter « Recharger une pièce à salve » ? Atteindre le seuil de Recharge ne rend qu’un point de Salve ; une batterie vide doit le faire neuf fois pour revenir à Salve 9.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0179",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.123",
+    "question": "Implanter « Recul de l’arquebuse à salve » ? À chaque tir, Résistance +20 ; une Blessure par DR d’échec ; échec stupéfiant : critique à l’épaule via table du bras ; une balle et une charge par tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0180",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.124",
+    "question": "Implanter « Carcasse projetée » ? Explosion 3 inflige dégâts +4 ; dans Explosion 20, Résistance +60 ou blessure purulente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0181",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.124",
+    "question": "Implanter « Munition incendiaire de siège » ? Toute cible affectée reçoit 1 + DR En flammes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0182",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.125",
+    "question": "Implanter « Équipage qualifié » ? Tous les servants comptés doivent posséder la compétence de Tir adaptée ; le groupe choisit qui tire, les servants supplémentaires ne donnent pas de bonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0183",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.125",
+    "question": "Implanter « Équipage insuffisant » ? Il manque un servant : Recharge doublée ; deux : ajouter Imprécise ; trois : ajouter Dangereuse. Les effets se cumulent ; un défaut déjà présent ajoute −10 au Tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0184",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.125",
+    "question": "Implanter « Assistance et incident d’équipage » ? Un servant peut assister les Tests de rechargement ; tout incident d’une pièce avec Équipage affecte tous ses servants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0185",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.126",
+    "question": "Implanter « Tirer une salve » ? Chaque tir consomme un point de Salve ; plusieurs tirs par Tour sont permis avec −10 cumulatif par tir après le premier, remis à zéro au Tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0186",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.126",
+    "question": "Implanter « Incident de salve au bras principal » ? 1–4 au d10 : tous les servants reçoivent les dégâts complets au bras principal ; unités du jet utilisées comme DR ; pièce détruite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0187",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.126",
+    "question": "Implanter « Incident de salve aléatoire » ? 5–7 au d10 : tous les servants reçoivent les dégâts complets à une localisation aléatoire ; unités comme DR ; pièce détruite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0188",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.126",
+    "question": "Implanter « Explosion des salves restantes » ? 8–9 au d10 : pour chaque point de Salve restant, tous les servants reçoivent les dégâts complets à une localisation aléatoire, unités comme DR ; pièce détruite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0189",
+    "phase": "Artillerie et structures",
+    "lot": "L13",
+    "source": "L13 p.126",
+    "question": "Implanter « Salve incontrôlée » ? 10 au d10 : un tir par point de Salve restant part dans une direction aléatoire jusqu’à d100 yards ; personnes sur sa trajectoire : Esquive −30 pour l’éviter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0192",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.127",
+    "question": "Implanter « Proie rattrapée et séparation du groupe » ? À distance zéro, sacrifier le plus lent ou faire arrêter des volontaires ; les poursuivants choisissent qui combat et qui poursuit les autres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0193",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.128",
+    "question": "Implanter « Mouvement en poursuite simple » ? Un Mouvement supérieur donne autant de DR supplémentaires que l’écart de Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0194",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.128",
+    "question": "Implanter « Distances individuelles en poursuite » ? En poursuite complexe, un point vaut dix yards ; séparer les proies distantes de plus de seize yards et les poursuivants selon leur Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0195",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.128",
+    "question": "Implanter « Seuil de fuite selon le terrain » ? Seuils de fuite : 3 en ville ou labyrinthe, 5 en terrain très encombré, 7 en village ou bois clair, 10 en terrain ouvert irrégulier, 13 en étendue dégagée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0196",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.128",
+    "question": "Implanter « Tests de poursuite complexe » ? Dans l’ordre d’Initiative : Athlétisme, Équitation ou Conduite +20 ; à pied, Mouvement 3 : +0, 2 : −20, 1 : −30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0197",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.129",
+    "question": "Implanter « Progression rapide » ? +4 ou plus : distance normale de course divisée par dix, arrondie à l’inférieur et minimum un, puis +1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0198",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.129",
+    "question": "Implanter « Progression ordinaire » ? réussite +0 à +3 : distance normale de course divisée par dix, arrondie à l’inférieur et minimum un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0199",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.129",
+    "question": "Implanter « Progression gênée » ? échec −0 à −2 : même base de course divisée par dix et minimum un, puis −1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0200",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.129",
+    "question": "Implanter « Arrêt en poursuite » ? −3 à −4 : aucune progression ce Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0201",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.129",
+    "question": "Implanter « Accident en poursuite » ? −5 ou moins : chute éventuelle à résoudre puis À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0202",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.129",
+    "question": "Implanter « Dépasser une proie rattrapée » ? À distance zéro, le poursuivant choisit de charger cette proie ou de continuer vers une autre ; recalculer ensuite les distances individuelles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0203",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.129",
+    "question": "Implanter « Entrave en poursuite » ? À Terre, Enchevêtré ou autrement empêché : perdre la prochaine occasion de Test de progression pour se libérer, avec Test si nécessaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0204",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Position d’un obstacle » ? Le MJ fixe distance et visibilité ; l’obstacle devient participant immobile. À distance zéro, s’arrêter ou le franchir ; changer de trajet reste possible si on le perçoit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0205",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Créer un obstacle en fuite » ? Perception selon le terrain pour en trouver un, puis Athlétisme +0 pour le placer sans ralentir ; échec : perte de déplacement ou entrave décidée par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0206",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Tronc » ? visible ; Athlétisme +20 ; échec : participant ou monture À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0207",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Meule de foin » ? visible ; Escalade −20 ; échec : Enchevêtré contre Force 2d10+20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0208",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Flaque sale » ? Perception +20 ; Athlétisme +20 si vue, −20 sinon ; échec : −2 DR aux Tests de Sociabilité jusqu’au nettoyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0209",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Caisses de marchandises » ? visible ; Athlétisme ou Équitation +0 ; échec : participant ou monture À Terre et 2d10 objets cassés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0210",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Portail fermé » ? visible ; Escalade −20 ; échec : bloqué ce Round ; échec impressionnant : chute de deux yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0211",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.130",
+    "question": "Implanter « Nid-de-poule » ? Perception +0 ; Athlétisme +40 si vu, −20 sinon ; échec : critique Cheville tordue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0212",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Sables mouvants » ? Perception +0 ; Athlétisme +40 si vus, −20 sinon ; échec : entrave Force d10+20, +1d10 par Round jusqu’à six ; puis Calme +0 ou risque de noyade.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0213",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Troupeau de chèvres » ? visible ; Athlétisme −20 ; échec : coup de cornes dégâts +6.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0214",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Seau de viscères de poisson » ? visible ; Athlétisme +40 ; échec : À Terre et création d’une flaque de viscères.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0215",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Flaque de viscères » ? visible ; Athlétisme −20 ; échec : À Terre, −2 DR de Sociabilité jusqu’au nettoyage et contrôle d’infection des plaies non soignées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0216",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Plancher pourri » ? Perception −20 ; Athlétisme +20 si vu, −30 sinon ; échec : chute de trois yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0217",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Ouvrier sur une échelle » ? visible ; Athlétisme +40 ; échec : À Terre, ouvrier teste Athlétisme −20 ou chute de 1d10 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0218",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Charrette abandonnée » ? visible ; Escalade +20 ; échec : bloqué ce Round, nouvelle tentative possible au suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0219",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Charrette de choux » ? visible ; Escalade +0 ; échec : glissade, Initiative +20 ou Surpris ; séparer la charrette et les choux en deux obstacles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0220",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Choux éparpillés » ? visible ; Athlétisme −20 ; échec : chute d’un yard et À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0221",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.131",
+    "question": "Implanter « Épuisement pendant une poursuite » ? Résistance périodique ; échec : un Exténué au coureur ou à la bête. Animal Exténué veut marcher ; Emprise sur animaux +0 permet de poursuivre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0222",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.132",
+    "question": "Implanter « Calendrier de Résistance en poursuite » ? Le tableau donne les difficultés progressives selon les Rounds et le mode de déplacement ; cellules vides et écart au texte p.131 doivent rester visibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0223",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.132",
+    "question": "Implanter « Avance après désengagement » ? Simple : Avantages dépensés, Esquive 1, fuite 3 si coup gratuit sinon 1. Complexe : Avantage 1 ou 2 dès trois points ; Esquive 1 ; fuite selon Test avec +2 DR si coup gratuit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0224",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.133",
+    "question": "Implanter « Réserves d’Avantage de groupe » ? Alliés et adversaires ont chacun une réserve commune ; PNJ alliés alimentent les alliés, hostiles et neutres les adversaires ; aucun bonus automatique aux jets.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0225",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.133",
+    "question": "Implanter « Avantage contre Surpris » ? Attaquer un ennemi Surpris donne un Avantage à la réserve.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0226",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.133",
+    "question": "Implanter « Évaluer la situation » ? Une compétence employée pour obtenir un avantage tactique donne deux Avantages en cas de réussite, trois à partir de +6 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0227",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.133",
+    "question": "Implanter « Avantage de victoire » ? Vaincre un PNJ important donne un Avantage ; le MJ peut en accorder deux pour un ennemi majeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0228",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.133",
+    "question": "Implanter « Avantage d’opposition initiée » ? Gagner une opposition initiée pendant le combat donne un Avantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0229",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.133",
+    "question": "Implanter « Blesser sans opposition » ? Blesser sans Test opposé donne un Avantage maximum pour l’action, quel que soit le nombre de victimes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0230",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.134",
+    "question": "Implanter « Brutaliser avec Avantage » ? Coût un, Action spéciale : opposition de Force ; victoire : adversaire À Terre et gagne un Avantage ; défaite : il gagne un Avantage et l’Action finit, sans autre gain d’opposition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0231",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.134",
+    "question": "Implanter « Ruser avec Avantage » ? Coût un, Action spéciale : opposition d’Agilité ; vainqueur gagne un Avantage ; si l’acteur gagne, MJ peut autoriser En flammes, Aveuglé ou Enchevêtré selon moyens et antécédents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0232",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.134",
+    "question": "Implanter « Effort supplémentaire » ? Coût deux Avantages : +10 au Test choisi avant jet ; chaque point de plus ajoute +10 ; ce Test ne génère aucun Avantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0234",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.134",
+    "question": "Implanter « Action supplémentaire par Avantage » ? Coût quatre : une Action supplémentaire sans génération d’Avantage, une fois par Tour seulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0235",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.134",
+    "question": "Implanter « Domination en fin de Round » ? Le camp dominant par nombre ou position reçoit un Avantage pris au camp dominé ; si sa réserve est vide, créer le point. Le MJ évalue la situation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0236",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.135",
+    "question": "Implanter « Avantage initial de groupe » ? Option : au début du combat, cumuler les circonstances de manœuvre, nombre, surprise, terrain et menace, avec seulement le meilleur modificateur de chaque catégorie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0237",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.135",
+    "question": "Implanter « Instable — sélection de groupe » ? En fin de Round, tirer une seule créature Instable au hasard ; si la réserve adverse dépasse la sienne, perdre l’écart en Blessures, puis disparaître à zéro.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0238",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.136",
+    "question": "Implanter « Défense — variante de groupe » ? Choisir une compétence ou caractéristique défensive ; +20 aux Tests de défense concernés jusqu’au début du prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0239",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.136",
+    "question": "Implanter « Sprint — variante V4 » ? Action : Athlétisme +20 ; parcourir Course + DR yards en plus du Mouvement, y compris les DR négatifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0240",
+    "phase": "Combat — variantes V4",
+    "lot": "L13",
+    "source": "L13 p.136",
+    "question": "Implanter « Charge — variante de groupe » ? Après le Mouvement de charge, le premier Test de mêlée initié reçoit +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0241",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.137",
+    "question": "Implanter « Activités hors classe Guerrier » ? Tout personnage peut tenter ces activités ; n’avoir jamais appartenu à la classe Guerrier rend les Tests d’un palier plus difficiles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0242",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.137",
+    "question": "Implanter « Préparer le tir parfait de Fanmaris » ? Activité puis Tir (Arc) −10 ; réussite : un tir parfait pendant l’aventure suivante, après un Round de visée donnant +20 au tir. L’activité peut se répéter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0243",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.137",
+    "question": "Implanter « Tir parfait — localisation » ? +1 DR : choisir la localisation touchée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0244",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.137",
+    "question": "Implanter « Tir parfait — pénétration » ? +2–3 DR : Pénétrante pour cette attaque, ou +2 dégâts si déjà présente.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0245",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.137",
+    "question": "Implanter « Tir parfait — critique » ? +4–5 DR : critique automatique en plus des effets précédents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0246",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.137",
+    "question": "Implanter « Tir parfait — dévastation » ? +6 DR : Dévastatrice, ou Percutante si déjà Dévastatrice ; effets antérieurs cumulés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0247",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.137",
+    "question": "Implanter « Défense de Leitdorf » ? Activité et mêlée −10 réussie : une fois la prochaine aventure, après un Round engagé, attaque opposée −10 ; défense sans talents ni augmentations ; victoire : subir 1d10 dégâts sans PA, défaite : critique adverse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0248",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.138",
+    "question": "Implanter « Méthode Alcatini » ? Deux rangs de Coude-à-coude requis ; Commandement −10 : un personnage par DR gagne un rang pour l’aventure suivante, au plus le rang du formateur ; Exaltant multiplie les bénéficiaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0249",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.138",
+    "question": "Implanter « Récit du comte Punchausen » ? Charme −10 ou Représentation (Conte) +0 : réussite, 2d10 pistoles et une inversion de dés sur un de ces Tests pendant la prochaine aventure, auprès d’un lecteur du récit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0250",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.138",
+    "question": "Implanter « Manœuvre de l’intendant — contact » ? Choisir un objet et ses qualités, arrondir son coût au CO supérieur, plafond 20 CO sauf MJ ; Commérage +0 réussi trouve la mission pour l’obtenir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0251",
+    "phase": "Entre-aventures",
+    "lot": "L13",
+    "source": "L13 p.138",
+    "question": "Implanter « Manœuvre de l’intendant — mission » ? Mêlée ou Tir −10 : objet acquis dans tous les cas ; réussite : critique aléatoire à −20 gravité, échec : bonus de gravité égal au prix en CO. Pas de déviation critique, Destin possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0252",
+    "phase": "Talents",
+    "lot": "L13",
+    "source": "L13 p.140",
+    "question": "Implanter « Battement — variante de groupe » ? Action, mêlée non opposée contre ennemi armé au plus aussi grand : réussite retire un Avantage adverse, deux à +6 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0254",
+    "phase": "Talents",
+    "lot": "L13",
+    "source": "L13 p.140",
+    "question": "Implanter « Distraire — variante de groupe » ? Dépenser le Mouvement ; Athlétisme opposé à Calme : victoire, la cible ne génère plus d’Avantage pour son camp jusqu’à fin du prochain Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0255",
+    "phase": "Talents",
+    "lot": "L13",
+    "source": "L13 p.140",
+    "question": "Implanter « Coude-à-coude — variante de groupe » ? Un personnage avec ce talent compte pour deux combattants lors de la domination en fin de Round ; bonus de Tests de mêlée près d’un allié Coude-à-coude.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0257",
+    "phase": "Talents",
+    "lot": "L13",
+    "source": "L13 p.140",
+    "question": "Implanter « Artilleur — activité d’évaluation » ? Ajouter le rang aux DR du rechargement étendu d’une arme à poudre ; recharger en combat compte comme Évaluation avec un Avantage supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0258",
+    "phase": "Talents",
+    "lot": "L13",
+    "source": "L13 p.140",
+    "question": "Implanter « Recharge rapide — activité d’évaluation » ? Ajouter le rang aux DR du rechargement étendu d’une arme à distance ; recharger en combat compte comme Évaluation avec un Avantage supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0260",
+    "phase": "Talents",
+    "lot": "L13",
+    "source": "L13 p.141",
+    "question": "Implanter « Riposte — variante de groupe » ? Après victoire en mêlée opposée, renoncer aux dégâts et au gain ordinaire pour transférer un Avantage de la réserve adverse vers la sienne, même pendant son Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0262",
+    "phase": "Talents",
+    "lot": "L13",
+    "source": "L13 p.141",
+    "question": "Implanter « Homme de bouclier — variante de groupe » ? En défendant au bouclier, une fois par Tour et pour deux Avantages : infliger les dégâts d’une Action ou repousser de deux yards et ne plus être engagé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0273",
+    "phase": "Armes et qualités",
+    "lot": "L13",
+    "source": "L13 p.104",
+    "question": "Implanter « Ferraille infectée » ? La mitraille de ferraille donne Infecté aux attaques qui l’emploient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0274",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.127",
+    "question": "Implanter « Désengager par Avantage individuel » ? Avoir plus d’Avantage que l’adversaire permet de remettre sa réserve à zéro et de partir sans pénalité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L13-0275",
+    "phase": "Poursuites",
+    "lot": "L13",
+    "source": "L13 p.127",
+    "question": "Implanter « Désengager par Esquive V4 » ? Esquive opposée à mêlée : victoire, un Avantage puis Mouvement libre ; défaite, chaque adversaire gagne un Avantage et le fuyard reste bloqué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
