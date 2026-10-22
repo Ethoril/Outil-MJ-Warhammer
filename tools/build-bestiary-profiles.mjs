@@ -9,6 +9,10 @@ import { extractProfiles, corpusBooks } from './lib/bestiary-extract.mjs';
 import { assignInventoryIds } from './lib/bestiary-ids.mjs';
 import { buildRecord } from './lib/bestiary-record.mjs';
 import { MANUAL_BLOCKS } from './lib/bestiary-manual.mjs';
+import { parsePregenerated } from './lib/bestiary-pregen.mjs';
+import { cleanSkills } from './lib/bestiary-record.mjs';
+import { execFileSync } from 'node:child_process';
+import { NAMES_FR } from './lib/bestiary-names-fr.mjs';
 import { TRAIT_ALIASES } from './lib/bestiary-complement-data.mjs';
 import { validateBestiaryRecord } from '../js/core/bestiary-profiles.js';
 import { BASE_REFERENTIAL } from '../js/core/creature-keywords.js';
@@ -46,6 +50,10 @@ const canonical = name => {
 const titleCase = text => text.toLowerCase().replace(/(^|[\s(\-'’`])([a-zà-ÿ])/g, (_, before, letter) => before + letter.toUpperCase())
   .replace(/\b(Of|The|Von|Van|De|La|Der|Zu|Zum|Und|And|Or|At|In)\b/g, word => word.toLowerCase()).replace(/^./, letter => letter.toUpperCase());
 const displayName = name => (/[a-zà-ÿ]/.test(name.replace(/\([^)]*\)/g, '')) ? name : titleCase(name)).replace(/\s+-\s+/g, ' — ');
+function applyFrenchName(record) {
+  const found = NAMES_FR[record.id];
+  if (found) { record.nameFr = found.nameFr; record.nameFrSource = found.source; }
+}
 const context = { canonical, traitRefs, traitFr, displayName, referential: BASE_REFERENTIAL };
 
 mkdirSync('js/data/bestiary', { recursive: true });
@@ -67,13 +75,33 @@ for (const book of ids) {
     const record = buildRecord(profile, entry, context);
     dropped.push({ id: record.id, ...record._dropped });
     delete record._dropped;
+    applyFrenchName(record);
     records.push(record);
+  }
+  const talentDictionary = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(item => item.englishName).filter(Boolean));
+  for (const entry of missing.filter(item => item.kind === 'pregenerated-character')) {
+    const meta = manifest.find(item => item.id === book);
+    const page = flag => execFileSync('pdftotext', [...flag, '-f', String(entry.physicalPage), '-l', String(entry.physicalPage), meta.path, '-'], { maxBuffer: 1 << 26 }).toString('utf8');
+    const parsed = parsePregenerated(page([]), page(['-layout']), talentDictionary);
+    const skills = cleanSkills(parsed.skills);
+    const record = {
+      id: entry.id, book, page: entry.page, physicalPage: entry.physicalPage, kind: 'pregenerated-character', blockKey: `${book}:${entry.physicalPage}:sheet`,
+      name: entry.name, nameFr: null, stats: parsed.stats, wounds: parsed.wounds, identity: { ...parsed.identity, formName: parsed.identity.name },
+      ...(skills.kept.length ? { skills: skills.kept } : {}), ...(parsed.talents.length ? { talents: parsed.talents } : {})
+    };
+    // Intitulés incohérents de la fiche (nom du formulaire différent du titre) : signalés, jamais corrigés.
+    const title = entry.name.trim().toLowerCase();
+    if (record.identity.formName && record.identity.formName.trim().toLowerCase() !== title) record.identity.titleMismatch = true;
+    for (const warning of parsed.warnings) console.error(`${entry.id} : ${warning}`);
+    records.push(record);
+    missing.splice(missing.indexOf(entry), 1);
   }
   for (const entry of missing) {
     const manual = MANUAL_BLOCKS[entry.id];
     if (!manual) { console.error(`SANS BLOC : ${entry.id} ${entry.name} (${book} p. ${entry.page})`); continue; }
     const record = buildRecord(manual, entry, context);
     delete record._dropped;
+    applyFrenchName(record);
     records.push(record);
   }
   for (const block of extra) console.error(`BLOC SANS ENTRÉE : ${block.key} ${block.title}`);

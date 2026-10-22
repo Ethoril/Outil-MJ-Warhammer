@@ -1,0 +1,16 @@
+{
+ "schemaVersion": 1,
+ "books": [
+  {
+   "book": "L06",
+   "file": "L06.json",
+   "title": "Livre de base V5",
+   "edition": "V5",
+   "counts": {
+    "profiles": 53,
+    "templates": 7,
+    "pregenerated": 0
+   }
+  }
+ ]
+}

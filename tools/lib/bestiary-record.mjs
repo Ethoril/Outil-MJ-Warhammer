@@ -9,7 +9,7 @@ const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']
 const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Ranged']);
 const SIZES = new Set(['tiny', 'little', 'small', 'average', 'large', 'enormous', 'monstrous']);
 
-const isNoise = text => text.length > 40 || /\b(?:the|and|with|who|that|which|his|her|their|they|will|when|from)\b/i.test(text) || /\d/.test(text.replace(/\(.*\)/, ''));
+const isNoise = text => text.length > 40 || /(?:^|\s)[a-z.']/.test(text.replace(/\(.*\)/, '')) || /\b(?:the|and|with|who|that|which|his|her|their|they|will|when|from)\b/i.test(text) || /\d/.test(text.replace(/\(.*\)/, ''));
 
 /** Compétences : seules celles dont le groupe est connu et la valeur chiffrée sont gardées ; le reste est du texte voisin (liste `dropped`). */
 export function cleanSkills(skills = []) {

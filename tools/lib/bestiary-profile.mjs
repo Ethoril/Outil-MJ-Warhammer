@@ -27,6 +27,8 @@ export function readTraitItem(text) {
   if (param) trait.param = clean(param);
   if (rating !== undefined) trait.rating = rating;
   if (printed !== undefined) trait.printed = Number(printed);
+  // « Fly (80) », « Vol (80) » : une précision purement numérique est la valeur du Trait.
+  if (trait.param && /^\d+\+?$/.test(trait.param) && trait.rating === undefined) { trait.rating = trait.param; delete trait.param; }
   // « Weapon (Warhammer +9, Sword +7) » : plusieurs armes dans les parenthèses.
   if (grouped && /\+\d/.test(grouped[2]) && rating === undefined) {
     trait.weapons = splitList(grouped[2]).map(part => {

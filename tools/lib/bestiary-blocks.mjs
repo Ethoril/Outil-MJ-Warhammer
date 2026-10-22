@@ -26,6 +26,12 @@ const isTitleText = text => {
 const parenthesised = text => /^\(.*\)$/.test(text);
 const padCells = tokens => [...tokens, ...Array(Math.max(0, 12 - tokens.length)).fill(null)];
 
+/** Fin d'un mot ou d'une phrase de la colonne voisine, collée au bord gauche de la fenêtre (« rotect  Melee (Basic) 45 ») : retirée. */
+function stripBleed(raw) {
+  const found = /^\s*(?:[a-zà-ÿ’',.;:()\-]+\s+){0,3}[a-zà-ÿ’',.;:()\-]+\s{2,}(?=[A-Z0-9])/.exec(raw);
+  return found ? raw.slice(found[0].length) : raw;
+}
+
 /** Gouttière interne d'une fiche (lignes brutes de sa fenêtre) : colonne libre de texte avec du texte de part et d'autre, sinon null. */
 function innerGutter(rawLines) {
   const filled = rawLines.filter(line => line.trim());
@@ -103,7 +109,7 @@ export function pageBlocks(pageText) {
     const neighbour = heads.filter(other => other !== head && other.start > head.start + 20).sort((x, y) => x.start - y.start)[0];
     let right = neighbour ? Math.max(head.end + 1, neighbour.start - 4) : Infinity;
     if (gutter && head.start < gutter - 5) right = Math.min(right, gutter);
-    const left = Math.max(gutter && head.start > gutter ? gutter + 1 : 0, head.start - 4);
+    const left = Math.max(gutter && head.start > gutter ? gutter + 1 : 0, head.start - 3);
     const windowOf = line => (line || '').slice(left, right === Infinity ? undefined : right);
     const rightLimit = right === Infinity ? 1e9 : right;
     // Titre : texte avant l'en-tête sur la même ligne, sinon lignes juste au-dessus (majuscules, ou intitulé entre parenthèses).
@@ -121,7 +127,7 @@ export function pageBlocks(pageText) {
     // Les chiffres sont les jetons numériques en tête de ligne (le texte de la colonne voisine peut suivre sur la même ligne).
     const rowPrefix = line => {
       // La marge gauche élargie peut ramasser la fin d'un mot voisin : on réessaie avec les marges plus étroites.
-      for (const margin of [0, 2, 4]) {
+      for (const margin of [0, 2, 4, 6, 8]) {
         const found = rowPrefixAt(line, left + margin);
         if (found) return found;
       }
@@ -161,7 +167,7 @@ export function pageBlocks(pageText) {
     const rawBody = [];
     let blank = 0;
     for (let k = rowAt + 1; k < lines.length; k += 1) {
-      const text = clean(windowOf(lines[k]));
+      const text = clean(stripBleed(windowOf(lines[k])));
       if (heads.some(other => other !== head && other.line === k && other.start < rightLimit && other.end > left)) break;
       // Bloc au format V5 (étiquettes seules sur leur ligne, lignes souvent doublées) : les blancs ne séparent pas le bloc du texte voisin ;
       // il se termine sur un titre en majuscules, trois blancs d'affilée ou le bloc suivant ; les marques de blanc ('') servent à couper
