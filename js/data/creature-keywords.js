@@ -98,6 +98,8 @@ export const BASE_KEYWORDS = Object.freeze([
   term('cheval', 'Cheval', 'Horse', ['bete'], ['horses', 'destrier', 'chevaux']),
   term('sanglier', 'Sanglier', 'Boar', ['bete'], ['boars', 'porc sauvage']),
   term('ours', 'Ours', 'Bear', ['bete'], ['bears']),
+  term('lion', 'Lion', 'Lion', ['bete'], ['lions', 'lion de guerre']),
+  term('chevre', 'Chèvre', 'Goat', ['bete'], ['goats', 'bouc']),
   term('oiseau-geant', 'Oiseau géant', 'Giant Bird', ['bete'], ['aigle géant', 'giant eagle', 'rapace']),
   term('poisson', 'Poisson', 'Fish', ['bete'], ['fishes', 'créature aquatique']),
   term('grande-bete', 'Grande bête', 'Large Beast', ['bete'], ['grandes bêtes', 'large beasts']),
