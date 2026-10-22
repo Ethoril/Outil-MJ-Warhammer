@@ -65,6 +65,17 @@ export const NAMES_FR = Object.freeze({
   'E0-P-358': proposal('Selthira Heartrender — Sorcière-elfe de basse naissance (citadine)'), 'E0-P-359': proposal('Haidrath — Mégère de basse naissance (des terres sauvages)'),
   'E0-P-360': proposal('Hulreth — Disciple de Khaine de haute naissance (prêtre guerrier)'), 'E0-P-361': proposal('Duriath Helbane — Maître de flotte'),
   'E0-P-362': proposal('Kheitalla — Mégère de la mort'), 'E0-P-363': proposal('Kernethar Grimwitch — Sorcier fugitif'),
+  // Sylvania, The Cursed County (L10)
+  'E0-P-364': proposal('Comte Alberich V Haupt-Anderssen — Électeur impérial, magnat noble'), 'E0-P-365': proposal('Fargal Kraggzin — Capitaine rôdeur nain'),
+  'E0-P-366': proposal('Werther von Hornau — Chancelier humain'), 'E0-P-367': proposal('Giancarlo Cacciatore — Maître chasseur humain'),
+  'E0-P-368': proposal('Elsbeth Blattner — Sorcière humaine'), 'E0-P-369': proposal('Drakenhund sylvanien'), 'E0-P-370': proposal('Frederick van Hal'),
+  'E0-P-371': proposal('Sorcière squelette'), 'E0-P-372': proposal('Graug le Terrible'), 'E0-P-373': proposal('Ghast des cryptes'), 'E0-P-374': proposal('Horreur des cryptes'),
+  'E0-P-375': proposal('Homme rapiécé'), 'E0-P-376': proposal('Arlo Dunne — Paysan humain'), 'E0-P-377': proposal('Jimmi Greenleaf — Artisan halfling'),
+  'E0-P-378': proposal('Niels Vorberren — Patrouilleur routier humain'), 'E0-P-379': proposal('Sihastrul — Mystique humain'), 'E0-P-380': proposal('Gretchen Beirne — Sorcière de haie humaine'),
+  'E0-P-381': proposal('Trevna Fane — Serviteur humain'), 'E0-P-382': proposal('Comte Petr von Stolpe — Noble'), 'E0-P-383': proposal('Gabriella von Bundebad — Grande vampire'),
+  'E0-P-384': proposal('Matthias Primvik — Percepteur humain'), 'E0-P-385': proposal('Père Tantlus Radu — Prêtre humain'), 'E0-P-386': proposal('Ranolf Quickfingers — Rôdeur humain'),
+  'E0-P-387': proposal('Otto et Hendrik Vogel — Clercs humains'), 'E0-P-388': proposal('Erich Frohlich — Villageois humain'), 'E0-P-389': proposal('Seiren Walburg — Prêtre humain'),
+  'E0-P-390': proposal('Emil Hartwig — Contremaître humain'), 'E0-P-391': proposal('Andrei van Hal — Sentinelle humaine'), 'E0-P-392': proposal('Grimes — Chef de bande humain'),
   // Deft Steps, Light Fingers (L04)
   'E0-P-163': proposal('Garde noire de Morr (chevalier)'), 'E0-P-164': proposal('Receleur'), 'E0-P-165': proposal('Faussaire'), 'E0-P-169': proposal('Propriétaire de planque (citadin)'),
   'E0-P-170': proposal('August Sternwachter'), 'E0-P-172': proposal('Gunna von Sperren — Reine des contrebandiers'), 'E0-P-173': proposal('Père Pedragar, prêtre de Taal'),

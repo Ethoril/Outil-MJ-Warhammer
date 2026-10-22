@@ -42,6 +42,7 @@ const ASSETS_TO_CACHE = [
   './js/data/bestiary/L06.json',
   './js/data/bestiary/L07.json',
   './js/data/bestiary/L09.json',
+  './js/data/bestiary/L10.json',
   './js/data/bestiary/L11.json',
   './js/core/v5-divine-engine.js',
   './js/core/v5-divine-grammar.js',

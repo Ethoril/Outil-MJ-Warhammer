@@ -79,6 +79,17 @@
    }
   },
   {
+   "book": "L10",
+   "file": "L10.json",
+   "title": "Sylvania, The Cursed County",
+   "edition": "V4",
+   "counts": {
+    "profiles": 29,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L11",
    "file": "L11.json",
    "title": "The Imperial Zoo",

@@ -24,6 +24,8 @@ export const KEYWORDS_MANUAL = Object.freeze({
   'E0-P-325': ['elfe-noir'], 'E0-P-329': ['elfe-noir'], 'E0-P-330': ['elfe-noir'], 'E0-P-331': ['elfe-noir'], 'E0-P-332': ['elfe-noir'], 'E0-P-333': ['elfe-noir'],
   'E0-P-335': ['elfe-noir'], 'E0-P-336': ['-sorciere', '-elfe', 'elfe-noir'], 'E0-P-337': ['elfe-noir'], 'E0-P-338': ['elfe-noir'],
   'E0-P-354': ['elfe-noir'], 'E0-P-358': ['-sorciere'], 'E0-P-361': ['elfe-noir'], 'E0-P-362': ['elfe-noir'], 'E0-P-363': ['elfe-noir'],
+  // Sylvania (L10) : morts-vivants et goules du comté maudit ; Graug est un dragon zombie squelettique (E-D17)
+  'E0-P-370': ['fantome'], 'E0-P-371': ['squelette'], 'E0-P-372': ['dragon', 'zombie'], 'E0-P-373': ['goule'], 'E0-P-374': ['goule'], 'E0-P-375': ['mort-vivant'],
   // Deft Steps, Light Fingers (L04) : PNJ nommés humains ; le surnom « the Fish » n'est pas un poisson ; chiens et rapaces sont des Bêtes
   'E0-P-170': ['humain'], 'E0-P-171': ['humain', '-poisson'], 'E0-P-172': ['humain'], 'E0-P-173': ['humain'], 'E0-P-179': ['humain'],
   'E0-P-181': ['bete'], 'E0-P-182': ['bete'], 'E0-P-183': ['bete'],
