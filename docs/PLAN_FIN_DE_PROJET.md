@@ -60,6 +60,7 @@ Publication 3.21.0 après la phase A.
 - E0 inventaire : Traits de créature (livre de base + suppléments) → couverture moteur actuelle ; profils de créatures et PNJ par livre (livre de base, Imperial Zoo, Sylvania, Lustria, Temple of Spite, Sea Wardens…).
 - E1… : automatiser les Traits (en commençant par les plus fréquents), puis importer les profils en données (format des profils existants, importables dans un combat).
 - Sélecteurs MJ pour les Traits ambigus.
+- Mots-clés de participants (demande du MJ, 22/10, voir `docs/ARBITRAGES_MJ_21_10.md`) : référentiel hiérarchisé figé mais évolutif (ajout MJ contrôlé contre doublons et fautes), porté par les profils et les PJ ; Haine, Animosité, Préjugé, Sans peur [Ennemi] et effets « contre les X » appliqués automatiquement.
 
 ## Phase F — Audit exhaustif des 2694 pages, sans implantation automatique
 

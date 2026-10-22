@@ -101,3 +101,10 @@ Décisions du MJ qui **modifient** le comportement livré (à implanter par un l
 Confirmé tel que livré : C0-L06-018 Ralliement par Commandement, budget **réparti par le MJ**.
 
 Les autres choix (120) sont soumis au MJ sur la page « Arbitrages des exécutants » (artifact claude.ai A6bYrFDz3hkcpva2si4SHq) ; ses décisions seront reportées ici.
+
+## Mots-clés de participants (demande du MJ, 22/10)
+
+- Chaque PNJ, créature et PJ porte des **mots-clés** tirés d’un **référentiel unique** (espèce, peuple, nature, allégeance : Peaux-vertes, Orque, Gobelin, Skaven, Mort-vivant, Démon, Chaos, Nurgle, Elfe, Nain…), **hiérarchisé** (Orque et Gobelin sont des Peaux-vertes ; Démon de Nurgle est Démon, Chaos et Nurgle).
+- Le référentiel est **figé mais évolutif** : liste de base livrée dans le dépôt ; ajout seulement par un formulaire MJ qui refuse les doublons et les quasi-doublons (casse, accents, pluriel, distance d’édition, alias) et propose le terme existant ; les alias (« peau verte », « greenskin ») pointent vers une seule entrée.
+- Les spécialisations à cible (Haine, Animosité, Préjugé, Sans peur [Ennemi], Tueur de…, effets « contre les X » des sorts, prières, runes et Traits) se choisissent **dans le même référentiel**, jamais en texte libre ; l’effet s’applique automatiquement quand la cible porte le mot-clé (ou un descendant), le MJ peut corriger.
+- Place : phase E (profils importés avec leurs mots-clés) ; la migration des spécialisations existantes en texte libre est consignée cas par cas.
