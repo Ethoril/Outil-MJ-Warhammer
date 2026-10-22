@@ -1,4 +1,5 @@
 /** Declarative, pure talent clauses. No text parsing, random draws or session mutations. */
+import { ENEMY_FROM_KEYWORDS, contextMatchesSpecialization } from './creature-keywords.js';
 export const TALENT_CONTRACT_SCHEMA_VERSION = 1;
 export const EXCLUDED_BASE_CHARACTERISTIC_TALENTS = Object.freeze([
   'talent-suave', 'talent-nimble-fingered', 'talent-warrior-born', 'talent-coolheaded',
@@ -77,14 +78,15 @@ function conditions(clause, context, acquisition) {
   const missing = new Set(); let rejected = false;
   if (clause.requireSpecialization && !acquisition.specialization) missing.add('talent.specialization');
   for (const predicate of clause.when) {
-    const actual = read(context, predicate.field);
+    let actual = read(context, predicate.field);
+    if (actual == null && predicate.field === 'enemyGroup' && Array.isArray(context?.enemyKeywords) && context.enemyKeywords.length) actual = ENEMY_FROM_KEYWORDS;
     if (actual == null) { missing.add(predicate.field); continue; }
     if (!scalar(actual)) throw new TypeError(`Contexte invalide : ${predicate.field}`);
     if (predicate.op === 'matchesSpecialization' && !acquisition.specialization) { missing.add('talent.specialization'); continue; }
     const matches = predicate.op === 'eq' ? actual === predicate.value
       : predicate.op === 'in' ? predicate.value.includes(actual)
       : predicate.op === 'gte' ? typeof actual === 'number' && actual >= predicate.value
-      : actual === acquisition.specialization;
+      : contextMatchesSpecialization(acquisition.specialization, actual, context);
     if (!matches) rejected = true;
   }
   if (typeof clause.effect.amount === 'object' && acquisition.rank == null) missing.add('talent.rank');

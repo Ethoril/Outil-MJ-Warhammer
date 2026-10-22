@@ -1,0 +1,82 @@
+{
+ "schemaVersion": 1,
+ "books": [
+  {
+   "book": "L01",
+   "file": "L01.json",
+   "title": "Archives of the Empire 2",
+   "edition": "V4",
+   "counts": {
+    "profiles": 15,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L02",
+   "file": "L02.json",
+   "title": "Archives of the Empire 3",
+   "edition": "V4",
+   "counts": {
+    "profiles": 12,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L03",
+   "file": "L03.json",
+   "title": "Archives of the Empire Volume 1",
+   "edition": "V4",
+   "counts": {
+    "profiles": 13,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L04",
+   "file": "L04.json",
+   "title": "Deft Steps, Light Fingers",
+   "edition": "V4",
+   "counts": {
+    "profiles": 22,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L06",
+   "file": "L06.json",
+   "title": "Livre de base V5",
+   "edition": "V5",
+   "counts": {
+    "profiles": 53,
+    "templates": 7,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L07",
+   "file": "L07.json",
+   "title": "Lustria",
+   "edition": "V4",
+   "counts": {
+    "profiles": 68,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L11",
+   "file": "L11.json",
+   "title": "The Imperial Zoo",
+   "edition": "V4",
+   "counts": {
+    "profiles": 62,
+    "templates": 0,
+    "pregenerated": 6
+   }
+  }
+ ]
+}

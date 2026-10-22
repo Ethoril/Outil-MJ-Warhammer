@@ -51,7 +51,7 @@ test('Dévotion de la Guerrière : grant-talent talent-fearless étiqueté « Sa
     facts: { targets: { ally: { ally: true, withinRange: true } } }, talent: { specialization: 'Gobelins' } });
   assert.equal(preview.ready, true, `${preview.error} ${JSON.stringify(preview.needsInput)}`);
   assert.deepEqual(preview.preview.effects[0].talents.map(row => [row.id, row.name, row.specialization]),
-    [['talent-fearless', 'Sans peur', 'Gobelins']]);
+    [['talent-fearless', 'Sans peur', 'Gobelin']]);
   const result = await store.applyDivineExecution(DEVOTION, { preview });
   assert.equal(result.ready, true, result.error);
   const ally = store.listParticipants().find(row => row.id === 'ally');
@@ -59,5 +59,5 @@ test('Dévotion de la Guerrière : grant-talent talent-fearless étiqueté « Sa
   assert.equal(granted.length, 1);
   assert.equal(granted[0].id, 'talent-fearless');
   assert.equal(granted[0].name, 'Sans peur', 'le Talent injecté porte le nom du catalogue');
-  assert.equal(granted[0].specialization, 'Gobelins');
+  assert.equal(granted[0].specialization, 'Gobelin');
 });

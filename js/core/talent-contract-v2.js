@@ -2,6 +2,7 @@
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from './talent-contracts.js';
 import { previewV5ActionCosts } from './v5-action-costs.js';
 import { createV5TimedEffect } from './v5-effects.js';
+import { ENEMY_FROM_KEYWORDS, contextMatchesSpecialization } from './creature-keywords.js';
 export const TALENT_CONTRACT_V2_SCHEMA_VERSION = 2;
 const EVENTS = new Set(['test.beforeRoll','test.afterRoll','damage.beforeProtection','condition.beforeAcquire','momentum.beforeLoss','action.before','action.afterAttack','critical.beforeTable','protection.before','talent.activate','combat.beforeTests','situation.calculate','healing.afterTest']);
 const ROLES = new Set(['actor','attacker','defender']);
@@ -92,13 +93,15 @@ export function evaluateTalentContractsV2({ contracts, acquisitions, sourceHashe
       if (clause.event !== event || clause.role !== role) continue;
       const origin = {talentId:contract.talentId,clauseId:clause.id,specialization:acquisition.specialization??null,ruleVersion:contract.ruleVersion,source:clone(contract.source)}, missing = new Set(); let rejected = false;
       for (const predicate of clause.when) {
-        const actual = read(context,predicate.field), other = predicate.op === 'lteField' ? read(context,predicate.otherField) : undefined;
+        let actual = read(context,predicate.field);
+        if (actual == null && predicate.field === 'enemyGroup' && Array.isArray(context?.enemyKeywords) && context.enemyKeywords.length) actual = ENEMY_FROM_KEYWORDS;
+        const other = predicate.op === 'lteField' ? read(context,predicate.otherField) : undefined;
         if (actual == null) {missing.add(predicate.field); continue;}
         if (!scalar(actual)) throw new TypeError('Valeur de contexte v2 invalide');
         if (predicate.op === 'lteField' && other == null) {missing.add(predicate.otherField); continue;}
         if (predicate.op === 'matchesSpecialization' && !acquisition.specialization) {missing.add('talent.specialization'); continue;}
         if (predicate.op === 'lteField' && (!Number.isFinite(actual) || !Number.isFinite(other))) throw new TypeError('Tailles comparables numériques requises');
-        const matches = predicate.op === 'eq' ? actual === predicate.value : predicate.op === 'in' ? predicate.value.includes(actual) : predicate.op === 'gte' ? typeof actual === 'number' && actual >= predicate.value : predicate.op === 'lteField' ? actual <= other : actual === acquisition.specialization;
+        const matches = predicate.op === 'eq' ? actual === predicate.value : predicate.op === 'in' ? predicate.value.includes(actual) : predicate.op === 'gte' ? typeof actual === 'number' && actual >= predicate.value : predicate.op === 'lteField' ? actual <= other : contextMatchesSpecialization(acquisition.specialization, actual, context);
         if (!matches) rejected = true;
       }
       if (rejected) {trace.push({...origin,status:'notApplicable'}); continue;}

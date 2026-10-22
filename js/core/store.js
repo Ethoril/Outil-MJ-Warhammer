@@ -72,6 +72,7 @@ import { encounterJournalScope, purgeEncounterJournal, purgeEncounterJournalHist
 import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
+import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
 
@@ -430,6 +431,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     data = projectV5ResourceEnvelope(sanitizeMagicEnvelope(data));
     stateExtensions = data.extensions && typeof data.extensions === 'object' && !Array.isArray(data.extensions)
       ? JSON.parse(JSON.stringify(data.extensions)) : {};
+    setActiveReferential(referentialFromExtensions(stateExtensions).referential);
     encounters = Array.isArray(data.encounters) ? cloneValue(data.encounters) : [];
     persistentCharacters = Array.isArray(data.persistentCharacters) ? cloneValue(data.persistentCharacters).map(withCanonicalCaracs) : [];
     archives = Array.isArray(data.archives) ? cloneValue(data.archives) : [];
@@ -1009,6 +1011,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     try {
       const extensions = JSON.parse(storage.getItem(KEY.EXTENSIONS) || '{}');
       stateExtensions = extensions && typeof extensions === 'object' && !Array.isArray(extensions) ? extensions : {};
+      setActiveReferential(referentialFromExtensions(stateExtensions).referential);
       const r = JSON.parse(storage.getItem(KEY.RESERVE) || '[]');
       reserve = new Map(r.map(o => [o.id, new Profile(o)]));
       const c = JSON.parse(storage.getItem(KEY.COMBAT) || 'null');
@@ -2217,6 +2220,18 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!source) throw new Error('Rencontre introuvable');
       const next = setEncounterEntry(source, profileId, options);
       return api.executeCommand('edit-encounter-entry', draft => ({ ...draft, encounters: (draft.encounters || []).map(item => item.id === id ? next : item) }));
+    },
+    /** Référentiel de mots-clés de créature : base figée + ajouts du MJ de la sauvegarde. */
+    getKeywordReferential() { return referentialFromExtensions(stateExtensions).referential; },
+    /** Ajout d'un mot-clé par le MJ : refusé (avec le terme existant à utiliser) s'il double ou presque un terme connu. Aucun retrait ni renommage. */
+    addCreatureKeyword(input) {
+      const proposal = proposeNewKeyword(input, referentialFromExtensions(stateExtensions).referential);
+      if (!proposal.ok) return { ok: false, reason: proposal.reason, existing: proposal.existing, message: proposal.message };
+      const result = api.executeCommand('add-creature-keyword', draft => {
+        const v5 = draft.extensions?.v5 || {};
+        return { ...draft, extensions: { ...(draft.extensions || {}), v5: { ...v5, keywordReferential: { terms: [...(v5.keywordReferential?.terms || []), proposal.term] } } } };
+      });
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, term: proposal.term })) : { ...result, term: proposal.term };
     },
     listPersistentCharacters() { return cloneValue(persistentCharacters); },
     savePersistentCharacter(input) {

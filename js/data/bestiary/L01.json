@@ -1,0 +1,1385 @@
+{
+ "schemaVersion": 1,
+ "book": "L01",
+ "title": "Archives of the Empire 2",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L01",
+  "sha256": "925cf38a31ffa3561c63df3a9a1c2e2c18034ff0ed1e1d90571965a068434c5e"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-123",
+   "book": "L01",
+   "page": 14,
+   "physicalPage": 14,
+   "kind": "profile",
+   "blockKey": "L01:14:1",
+   "name": "Isrogdal the Urgent — Ogre Protagonist, Former Pugilist (Silver 1)",
+   "nameFr": "Isrogdal l’Urgent — Ogre protagoniste, ancien pugiliste (Argent 1)",
+   "stats": {
+    "M": 6,
+    "CC": 41,
+    "CT": 32,
+    "F": 58,
+    "E": 52,
+    "I": 11,
+    "Ag": 32,
+    "Dex": 25,
+    "Int": 22,
+    "FM": 33,
+    "Soc": 26
+   },
+   "wounds": 36,
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Club",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Knuckledusters",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 28
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 37
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 57
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 62
+    },
+    {
+     "name": "Entertain (Taunt)",
+     "nameFr": "Divertissement (Raillerie)",
+     "value": 27
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 32
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 27
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 27
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 72
+    },
+    {
+     "name": "Lore (Ogres)",
+     "nameFr": "Savoir (Ogres)",
+     "frUnverified": true,
+     "value": 25
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 51
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 54
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dirty Fighting",
+     "rank": 2
+    },
+    {
+     "name": "Large"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistance (Poison (Ingested))"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Vice (Food)"
+    }
+   ],
+   "trappings": [
+    "Gut Plate",
+    "Mail Coat and Chausses",
+    "Mail Coif",
+    "Hand Weapon (Club)",
+    "Knuckledusters",
+    "2d10 Silver Shillings"
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-124",
+   "book": "L01",
+   "page": 14,
+   "physicalPage": 14,
+   "kind": "profile",
+   "blockKey": "L01:14:0",
+   "name": "Ugrik the Lost — Ogre Outlaw (Brass 2)",
+   "nameFr": "Ugrik le Perdu — Ogre hors-la-loi (Bronze 2)",
+   "stats": {
+    "M": 6,
+    "CC": 48,
+    "CT": 30,
+    "F": 53,
+    "E": 50,
+    "I": 22,
+    "Ag": 33,
+    "Dex": 25,
+    "Int": 25,
+    "FM": 33,
+    "Soc": 22
+   },
+   "wounds": 36,
+   "keywords": [
+    "ogre",
+    "hors-la-loi"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-125",
+   "book": "L01",
+   "page": 26,
+   "physicalPage": 26,
+   "kind": "profile",
+   "blockKey": "L01:26:0",
+   "name": "Nazzaalta Talltale — Ogre Stevedore",
+   "nameFr": "Nazzaalta Talltale — Docker ogre",
+   "stats": {
+    "M": 6,
+    "CC": 36,
+    "CT": 17,
+    "F": 49,
+    "E": 43,
+    "I": 16,
+    "Ag": 28,
+    "Dex": 26,
+    "Int": 25,
+    "FM": 29,
+    "Soc": 19
+   },
+   "wounds": 28,
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-126",
+   "book": "L01",
+   "page": 26,
+   "physicalPage": 26,
+   "kind": "profile",
+   "blockKey": "L01:26:1",
+   "name": "Artur Hammerfoot — Ogre Artisan",
+   "nameFr": "Artur Hammerfoot — Artisan ogre",
+   "stats": {
+    "M": 6,
+    "CC": 29,
+    "CT": 19,
+    "F": 58,
+    "E": 51,
+    "I": 3,
+    "Ag": 21,
+    "Dex": 26,
+    "Int": 25,
+    "FM": 36,
+    "Soc": 19
+   },
+   "wounds": 36,
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-127",
+   "book": "L01",
+   "page": 34,
+   "physicalPage": 34,
+   "kind": "profile",
+   "blockKey": "L01:34:0",
+   "name": "Rhinox",
+   "nameFr": "Rhinox",
+   "stats": {
+    "M": 6,
+    "CC": 55,
+    "CT": null,
+    "F": 60,
+    "E": 55,
+    "I": 25,
+    "Ag": 20,
+    "Dex": null,
+    "Int": 10,
+    "FM": 40,
+    "Soc": 20
+   },
+   "wounds": 50,
+   "size": "large",
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Horns",
+     "damage": 10,
+     "trait": "Horns"
+    },
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Horns",
+     "rating": "+10",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Mount, War",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-128",
+   "book": "L01",
+   "page": 74,
+   "physicalPage": 74,
+   "kind": "profile",
+   "blockKey": "L01:74:0",
+   "name": "Margaret von Aschendorf — Abbess (Shallya) (Silver 2)",
+   "nameFr": "Margaret von Aschendorf — Abbesse (Shallya) (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 32,
+    "F": 31,
+    "E": 35,
+    "I": 37,
+    "Ag": 32,
+    "Dex": 43,
+    "Int": 48,
+    "FM": 42,
+    "Soc": 47
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 39
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 38
+    },
+    {
+     "name": "Entertain (Storyteller)",
+     "nameFr": "Divertissement (Storyteller)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 43
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 37
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 41
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 41
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 35
+    },
+    {
+     "name": "Trade (Herbalist)",
+     "nameFr": "Métier (Herboriste)",
+     "value": 41
+    }
+   ],
+   "talents": [
+    {
+     "name": "Etiquette (Shallyans)"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Holy Visions"
+    },
+    {
+     "name": "Invoke (Shallya)"
+    },
+    {
+     "name": "Panhandle"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistance (Disease)"
+    },
+    {
+     "name": "Robust"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Stout-hearted"
+    }
+   ],
+   "trappings": [
+    "Robes",
+    "Silver Dove Cloak-Pin"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-129",
+   "book": "L01",
+   "page": 75,
+   "physicalPage": 75,
+   "kind": "profile",
+   "blockKey": "L01:75:2",
+   "name": "Clementine Clausewitz — Nun (Shallya) (Brass 4)",
+   "nameFr": "Clementine Clausewitz — Sœur (Shallya) (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 21,
+    "CT": 24,
+    "F": 27,
+    "E": 32,
+    "I": 34,
+    "Ag": 32,
+    "Dex": 38,
+    "Int": 37,
+    "FM": 35,
+    "Soc": 39
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 43
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 32
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 43
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 40
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 43
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 39
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 37
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 42
+    },
+    {
+     "name": "Trade (Herbalist)",
+     "nameFr": "Métier (Herboriste)",
+     "value": 39
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bless (Shallya)"
+    },
+    {
+     "name": "Etiquette (Shallyans)"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Invoke (Shallya)"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Panhandle"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "trappings": [
+    "Robes",
+    "Silver Dove Cloak-Pin"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-130",
+   "book": "L01",
+   "page": 75,
+   "physicalPage": 75,
+   "kind": "profile",
+   "blockKey": "L01:75:0",
+   "name": "Marie Duvallier — Nun (Shallya), Former Physician (Brass 4)",
+   "nameFr": "Marie Duvallier — Sœur (Shallya), ancienne médecin (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 34,
+    "F": 32,
+    "E": 36,
+    "I": 32,
+    "Ag": 34,
+    "Dex": 46,
+    "Int": 49,
+    "FM": 48,
+    "Soc": 43
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 41
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 46
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 31
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 42
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 41
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 52
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 38
+    },
+    {
+     "name": "Lore (Anatomy)",
+     "nameFr": "Savoir (Anatomie)",
+     "value": 37
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 43
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 34
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 48
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 35
+    },
+    {
+     "name": "Trade (Herbalist)",
+     "nameFr": "Métier (Herboriste)",
+     "value": 32
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Etiquette (Shallyans)"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Invoke (Shallya)"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Panhandle"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Surgery"
+    }
+   ],
+   "trappings": [
+    "Robes",
+    "Silver Dove Cloak-Pin",
+    "Surgical Tools"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-131",
+   "book": "L01",
+   "page": 75,
+   "physicalPage": 75,
+   "kind": "profile",
+   "blockKey": "L01:75:1",
+   "name": "Anna-Lise Levertske — Nun, Former Apothecary (Brass 4)",
+   "nameFr": "Anna-Lise Levertske — Sœur, ancienne apothicaire (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 34,
+    "F": 31,
+    "E": 42,
+    "I": 31,
+    "Ag": 29,
+    "Dex": 46,
+    "Int": 48,
+    "FM": 36,
+    "Soc": 43
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 40
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 38
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 43
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 40
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 48
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 42
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 39
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 36
+    },
+    {
+     "name": "Lore (Chemistry)",
+     "nameFr": "Savoir (Chimie)",
+     "value": 43
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 44
+    },
+    {
+     "name": "Lore (Plants)",
+     "nameFr": "Savoir (Plants)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Lore (Science)",
+     "nameFr": "Savoir (Science)",
+     "value": 42
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 42
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 41
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 46
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 42
+    },
+    {
+     "name": "Trade (Brewer)",
+     "nameFr": "Métier (Brasseur)",
+     "value": 38
+    },
+    {
+     "name": "Trade (Herbalist)",
+     "nameFr": "Métier (Herboriste)",
+     "value": 38
+    }
+   ],
+   "talents": [
+    {
+     "name": "Concoct"
+    },
+    {
+     "name": "Craftsman (Apothecary)"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Etiquette (Scholar)"
+    },
+    {
+     "name": "Etiquette (Shallyans)"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Pharmacist"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Stone Soup"
+    }
+   ],
+   "trappings": [
+    "Pharmaceutical Equipment",
+    "Robes",
+    "Silver Dove Cloak-Pin"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-132",
+   "book": "L01",
+   "page": 76,
+   "physicalPage": 76,
+   "kind": "profile",
+   "blockKey": "L01:76:0",
+   "name": "Typical Sister — Nun (Shallya) (Brass 4)",
+   "nameFr": "Sœur type — Sœur (Shallya) (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 25,
+    "F": 30,
+    "E": 30,
+    "I": 30,
+    "Ag": 30,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 35
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 35
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 40
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 40
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 35
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 30
+    },
+    {
+     "name": "Trade (Herbalist)",
+     "nameFr": "Métier (Herboriste)",
+     "value": 35
+    }
+   ],
+   "talents": [
+    {
+     "name": "Etiquette (Shallyans)"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Stone Soup"
+    },
+    {
+     "name": "Panhandle"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "trappings": [
+    "Robes",
+    "Silver Dove Cloak-Pin"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-133",
+   "book": "L01",
+   "page": 76,
+   "physicalPage": 76,
+   "kind": "profile",
+   "blockKey": "L01:76:1",
+   "name": "Hanna Bratsch — Attendant, Former Sergeant (Brass 3*)",
+   "nameFr": "Hanna Bratsch — Auxiliaire, ancienne sergente (Bronze 3*)",
+   "stats": {
+    "M": 4,
+    "CC": 48,
+    "CT": 34,
+    "F": 47,
+    "E": 49,
+    "I": 41,
+    "Ag": 43,
+    "Dex": 33,
+    "Int": 37,
+    "FM": 48,
+    "Soc": 33
+   },
+   "wounds": 12,
+   "armour": {
+    "ap": 1,
+    "detail": "Leather Jack and Leggings"
+   },
+   "attacks": [
+    {
+     "name": "Club",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 42
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 35
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 34
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 52
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 44
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 42
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 36
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 47
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 33
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 32
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 33
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 37
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 38
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 31
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 42
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Etiquette (Soldiers)"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Leather Jack and Leggings",
+    "Hand Weapon (Club)",
+    "Silver Dove Cloak-Pin"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-134",
+   "book": "L01",
+   "page": 77,
+   "physicalPage": 77,
+   "kind": "profile",
+   "blockKey": "L01:77:0",
+   "name": "Erzbet Wegener — Patient (Brass 0)",
+   "nameFr": "Erzbet Wegener — Patiente (Bronze 0)",
+   "stats": {
+    "M": 4,
+    "CC": 10,
+    "CT": 10,
+    "F": 43,
+    "E": 46,
+    "I": 10,
+    "Ag": 10,
+    "Dex": 10,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 11,
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-135",
+   "book": "L01",
+   "page": 78,
+   "physicalPage": 78,
+   "kind": "profile",
+   "blockKey": "L01:78:0",
+   "name": "Adalmann von Hopfberg — Noble Lord (Gold 7)",
+   "nameFr": "Adalmann von Hopfberg — Seigneur noble (Or 7)",
+   "stats": {
+    "M": 4,
+    "CC": 49,
+    "CT": 32,
+    "F": 28,
+    "E": 32,
+    "I": 39,
+    "Ag": 43,
+    "Dex": 52,
+    "Int": 55,
+    "FM": 54,
+    "Soc": 62
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 65
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 44
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 52
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 35
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 52
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 55
+    },
+    {
+     "name": "Language (Estalian)",
+     "nameFr": "Langue (Estalien)",
+     "value": 37
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 42
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 57
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 43
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 47
+    }
+   ],
+   "talents": [
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Etiquette (Noble)"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Public Speaking"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Tenacious"
+    }
+   ],
+   "trappings": [
+    "Good Quality Clothing",
+    "Collection of Books on Naval History",
+    "Unfinished Manuscript of his Memoirs."
+   ],
+   "keywords": [
+    "noble",
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-136",
+   "book": "L01",
+   "page": 79,
+   "physicalPage": 79,
+   "kind": "profile",
+   "blockKey": "L01:79:0",
+   "name": "Isabella — Seer (Brass 4)",
+   "nameFr": "Isabella — Voyante (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 29,
+    "F": 26,
+    "E": 32,
+    "I": 47,
+    "Ag": 36,
+    "Dex": 47,
+    "Int": 44,
+    "FM": 46,
+    "Soc": 49
+   },
+   "wounds": 12,
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-137",
+   "book": "L01",
+   "page": 80,
+   "physicalPage": 80,
+   "kind": "profile",
+   "blockKey": "L01:80:0",
+   "name": "Richter Kless — Professor (Gold 1)",
+   "nameFr": "Richter Kless — Professeur (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 29,
+    "CT": 31,
+    "F": 32,
+    "E": 47,
+    "I": 43,
+    "Ag": 31,
+    "Dex": 45,
+    "Int": 65,
+    "FM": 37,
+    "Soc": 42
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 41
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 47
+    },
+    {
+     "name": "Language (Dark Tongue of Chaos)",
+     "nameFr": "Langue (Dark Tongue of Chaos)",
+     "frUnverified": true,
+     "value": 42
+    },
+    {
+     "name": "Language (Gospodarinyi)",
+     "nameFr": "Langue (Gospodar)",
+     "value": 35
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 45
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

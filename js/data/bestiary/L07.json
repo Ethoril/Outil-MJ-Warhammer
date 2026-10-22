@@ -1,0 +1,7669 @@
+{
+ "schemaVersion": 1,
+ "book": "L07",
+ "title": "Lustria",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L07",
+  "sha256": "975555bd937144d8e99236be2b38aa8b96bf06ac4072523c30c187e6504a0554"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-243",
+   "book": "L07",
+   "page": 42,
+   "physicalPage": 42,
+   "kind": "profile",
+   "blockKey": "L07:42:0",
+   "name": "Adella of the Thousand Mouths",
+   "nameFr": "Adella aux Mille Bouches",
+   "stats": {
+    "M": 4,
+    "CC": 62,
+    "CT": 33,
+    "F": 45,
+    "E": 41,
+    "I": 58,
+    "Ag": 38,
+    "Dex": 55,
+    "Int": 68,
+    "FM": 55,
+    "Soc": 64
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Spear",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 48
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 84
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 84
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 61
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 48
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 88
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 84
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 78
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 71
+    },
+    {
+     "name": "Language (Estalian)",
+     "nameFr": "Langue (Estalien)",
+     "value": 78
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 83
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 78
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 71
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 84
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 88
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 83
+    },
+    {
+     "name": "Lore (Skeggi)",
+     "nameFr": "Savoir (Skeggi)",
+     "frUnverified": true,
+     "value": 88
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 82
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 87
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 78
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 55
+    },
+    {
+     "name": "Sail (Longship)",
+     "nameFr": "Voile (Drakkar)",
+     "value": 43
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 50
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 78
+    }
+   ],
+   "traits": [
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Warleader"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Assorted Armour",
+    "Spear"
+   ],
+   "keywords": [
+    "norse"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-244",
+   "book": "L07",
+   "page": 44,
+   "physicalPage": 44,
+   "kind": "profile",
+   "blockKey": "L07:44:0",
+   "name": "Soren Hoarder — Vitki",
+   "nameFr": "Soren Hoarder — Vitki",
+   "stats": {
+    "M": 4,
+    "CC": 48,
+    "CT": 29,
+    "F": 31,
+    "E": 45,
+    "I": 55,
+    "Ag": 52,
+    "Dex": 40,
+    "Int": 65,
+    "FM": 65,
+    "Soc": 45
+   },
+   "wounds": 17,
+   "attacks": [
+    {
+     "name": "Quarterstaff",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 85
+    },
+    {
+     "name": "Channelling (Dhar)",
+     "nameFr": "Focalisation (Dhar)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 67
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 51
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 58
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 68
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 85
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 36
+    },
+    {
+     "name": "Sail (Longship)",
+     "nameFr": "Voile (Drakkar)",
+     "value": 60
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 72
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 34
+    }
+   ],
+   "traits": [
+    {
+     "name": "Spellcaster",
+     "param": "Petty, Tzeentch, Witchcraft",
+     "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Tzeentch, Witchcraft)"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 3
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "War Wizard"
+    }
+   ],
+   "spells": {
+    "Petty Magic": [
+     "Bearings",
+     "Dazzle",
+     "Dart",
+     "Drain",
+     "Murmured Whisper"
+    ],
+    "Sly Hands Arcane Magic": [
+     "Arrow Shield",
+     "Bolt",
+     "Bridge",
+     "Drop",
+     "Entangle"
+    ]
+   },
+   "keywords": [
+    "norse"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-245",
+   "book": "L07",
+   "page": 57,
+   "physicalPage": 57,
+   "kind": "profile",
+   "blockKey": "L07:57:0",
+   "name": "Serpents of Sotek",
+   "nameFr": "Serpents de Sotek",
+   "stats": {
+    "M": 3,
+    "CC": 45,
+    "CT": null,
+    "F": 30,
+    "E": 35,
+    "I": 70,
+    "Ag": 65,
+    "Dex": null,
+    "Int": 20,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 45,
+   "size": "small",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Venom",
+     "param": "Hard",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "serpent"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-246",
+   "book": "L07",
+   "page": 58,
+   "physicalPage": 58,
+   "kind": "profile",
+   "blockKey": "L07:58:0",
+   "name": "Malformed Saurus Spawn",
+   "nameFr": "Rejeton saurus difforme",
+   "stats": {
+    "M": 3,
+    "CC": 53,
+    "CT": null,
+    "F": 58,
+    "E": 55,
+    "I": 25,
+    "Ag": 35,
+    "Dex": 25,
+    "Int": 11,
+    "FM": 20,
+    "Soc": null
+   },
+   "wounds": 17,
+   "armour": {
+    "detail": "Scales) 3 (8"
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Disease",
+     "param": "Yellow Skull Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    }
+   ],
+   "keywords": [
+    "saurus",
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-247",
+   "book": "L07",
+   "page": 61,
+   "physicalPage": 61,
+   "kind": "profile",
+   "blockKey": "L07:61:0",
+   "name": "Uthl’Kritchnaak — Exalted Herald of Nurgle",
+   "nameFr": "Uthl’Kritchnaak — Héraut exalté de Nurgle",
+   "stats": {
+    "M": 6,
+    "CC": 75,
+    "CT": 55,
+    "F": 55,
+    "E": 77,
+    "I": 30,
+    "Ag": 59,
+    "Dex": 42,
+    "Int": 91,
+    "FM": 83,
+    "Soc": 8
+   },
+   "wounds": 62,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Horns",
+     "damage": 7,
+     "trait": "Horns"
+    },
+    {
+     "name": "Sword",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Corruption",
+     "param": "Major",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Corrosive Blood",
+     "ref": "E0-T-015"
+    },
+    {
+     "name": "Daemonic",
+     "rating": "8",
+     "ref": "E0-T-018"
+    },
+    {
+     "name": "Disease",
+     "param": "Bloody Flux",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Fear",
+     "rating": "3",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Horns",
+     "rating": "+7",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Nurgle",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Vomit",
+     "ref": "E0-T-065"
+    }
+   ],
+   "trappings": [
+    "Horn of Desecration",
+    "Plaguesword"
+   ],
+   "keywords": [
+    "nurgle",
+    "demon-de-nurgle"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-248",
+   "book": "L07",
+   "page": 62,
+   "physicalPage": 62,
+   "kind": "profile",
+   "blockKey": "L07:62:0",
+   "name": "Lord Skrolk — Skaven Plaguelord",
+   "nameFr": "Seigneur Skrolk — Seigneur de la peste skaven",
+   "stats": {
+    "M": 5,
+    "CC": 58,
+    "CT": 23,
+    "F": 54,
+    "E": 75,
+    "I": 70,
+    "Ag": 55,
+    "Dex": 50,
+    "Int": 85,
+    "FM": 75,
+    "Soc": 20
+   },
+   "wounds": 33,
+   "attacks": [
+    {
+     "name": "Quarterstaff",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 70
+    },
+    {
+     "name": "Channelling (Dhar)",
+     "nameFr": "Focalisation (Dhar)",
+     "frUnverified": true,
+     "value": 95
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 95
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 105
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 105
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 40
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 40
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 90
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 95
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 95
+    },
+    {
+     "name": "Language (Dark Tongue)",
+     "nameFr": "Langue (Sombre / Dark Tongue)",
+     "value": 105
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 105
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 100
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 105
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 95
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 63
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 90
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 105
+    },
+    {
+     "name": "Trade (Poisoner)",
+     "nameFr": "Métier (Empoisonneur)",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Corruption",
+     "param": "Moderate",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Petty, Nurgle, Plague",
+     "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Nurgle, Plague)"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Luck",
+     "rank": 7
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "War Wizard"
+    }
+   ],
+   "spells": {
+    "spells": [
+     "Lord Skrolk is an accomplished wizard whose power is further bolstered by his loathsome god. He can be considered to have access to any spells from the following lists: � Petty Magic � The Lore of Nurgle"
+    ]
+   },
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-249",
+   "book": "L07",
+   "page": 67,
+   "physicalPage": 67,
+   "kind": "profile",
+   "blockKey": "L07:67:0",
+   "name": "Black Jens — Ghoul Chancellor",
+   "nameFr": "Black Jens — Chancelier goule",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 50,
+    "F": 30,
+    "E": 40,
+    "I": 40,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 45,
+    "FM": 60,
+    "Soc": 45
+   },
+   "wounds": 17,
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 5,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 55
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 55
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+5",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Etiquette (Undead)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Cleaver",
+    "Five-Zombie Honour Guard",
+    "Tattered Robes and Chain of Office"
+   ],
+   "keywords": [
+    "goule"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-250",
+   "book": "L07",
+   "page": 73,
+   "physicalPage": 73,
+   "kind": "profile",
+   "blockKey": "L07:73:0",
+   "name": "Luthor Harkon — Vampire Arch-Grand — Commodore and Self-Declared Emperor",
+   "nameFr": "Luthor Harkon — Vampire archi-grand — Commodore et empereur autoproclamé",
+   "stats": {
+    "M": 6,
+    "CC": 84,
+    "CT": 55,
+    "F": 60,
+    "E": 63,
+    "I": 55,
+    "Ag": 72,
+    "Dex": 46,
+    "Int": 77,
+    "FM": 75,
+    "Soc": 60
+   },
+   "wounds": 25,
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Pistol) (20",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Rapier",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 75
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 80
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 85
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 82
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 83
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 87
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 70
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 82
+    },
+    {
+     "name": "Language (Cathayan)",
+     "nameFr": "Langue (Cathayen)",
+     "value": 87
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 87
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 87
+    },
+    {
+     "name": "Language (Nehekharan)",
+     "nameFr": "Langue (Nehekharan)",
+     "frUnverified": true,
+     "value": 87
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 87
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 82
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 85
+    },
+    {
+     "name": "Lore (Daemonology)",
+     "nameFr": "Savoir (Démonologie)",
+     "value": 87
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 87
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 82
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 97
+    },
+    {
+     "name": "Lore (Old Ones)",
+     "nameFr": "Savoir (Old Ones)",
+     "frUnverified": true,
+     "value": 82
+    },
+    {
+     "name": "Lore (Undead)",
+     "nameFr": "Savoir (Morts-vivants)",
+     "value": 92
+    },
+    {
+     "name": "Lore (Vampire Coast)",
+     "nameFr": "Savoir (Vampire Coast)",
+     "frUnverified": true,
+     "value": 97
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 97
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 94
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 89
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 89
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 104
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 87
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 87
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 75
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 75
+    },
+    {
+     "name": "Sail (Carrack)",
+     "nameFr": "Voile (Carrack)",
+     "frUnverified": true,
+     "value": 82
+    },
+    {
+     "name": "Sail (Cog)",
+     "nameFr": "Voile (Cogue)",
+     "value": 82
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 61
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 87
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 75
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Vampiric",
+     "ref": "E0-T-063"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Reaction Strike",
+     "rank": 2
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Regeneration"
+    },
+    {
+     "name": "Riposte",
+     "rank": 2
+    },
+    {
+     "name": "Sea Legs"
+    }
+   ],
+   "trappings": [
+    "Dashing but Threadbare Commodore's Uniform",
+    "Doll named `Anna'",
+    "Pistol with Ammunition for 12 Shots",
+    "Suit of Plate Armour"
+   ],
+   "keywords": [
+    "vampire"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-251",
+   "book": "L07",
+   "page": 75,
+   "physicalPage": 75,
+   "kind": "profile",
+   "blockKey": "L07:75:0",
+   "name": "The Brine Wife — Syreen and Witch",
+   "nameFr": "L’Épouse de la saumure — Sirène et sorcière",
+   "stats": {
+    "M": 6,
+    "CC": 56,
+    "CT": null,
+    "F": 30,
+    "E": 67,
+    "I": 40,
+    "Ag": 55,
+    "Dex": 31,
+    "Int": 58,
+    "FM": 58,
+    "Soc": 18
+   },
+   "wounds": 20,
+   "attacks": [
+    {
+     "name": "Ghostly Blade",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling (Dhar)",
+     "nameFr": "Focalisation (Dhar)",
+     "frUnverified": true,
+     "value": 88
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 78
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 87
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 38
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 50
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 78
+    },
+    {
+     "name": "Lore (Necromancy)",
+     "nameFr": "Savoir (Nécromancie)",
+     "value": 78
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 78
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 71
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 78
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 51
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Petty, Necromancy, Witchcraft",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Necromancy, Witchery)"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 3
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "keywords": [
+    "sorciere"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-252",
+   "book": "L07",
+   "page": 87,
+   "physicalPage": 87,
+   "kind": "profile",
+   "blockKey": "L07:87:0",
+   "name": "Lord Finrian",
+   "nameFr": "Seigneur Finrian",
+   "stats": {
+    "M": 5,
+    "CC": 69,
+    "CT": 57,
+    "F": 45,
+    "E": 42,
+    "I": 79,
+    "Ag": 62,
+    "Dex": 39,
+    "Int": 46,
+    "FM": 57,
+    "Soc": 45
+   },
+   "wounds": 17,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Dragon Blade",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 51
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 67
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 50
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 65
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 62
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 47
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 55
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 67
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 57
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 56
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 50
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 99
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 51
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 47
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 47
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 51
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 61
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 89
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 74
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 79
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 74
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 74
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 82
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 56
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 94
+    },
+    {
+     "name": "Play (Horn)",
+     "nameFr": "Musicien (Cor)",
+     "value": 44
+    },
+    {
+     "name": "Play (Fife)",
+     "nameFr": "Musicien (Fifre)",
+     "value": 44
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 67
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 67
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 50
+    },
+    {
+     "name": "Sail (Dragonship)",
+     "nameFr": "Voile (Dragonship)",
+     "frUnverified": true,
+     "value": 70
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "Dark Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Dwarfs",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Etiquette (Soldiers)"
+    },
+    {
+     "name": "Inspiring",
+     "rank": 2
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strong Swimmer",
+     "rank": 2
+    },
+    {
+     "name": "War Leader",
+     "rank": 3
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Dragonship Exelceron",
+    "Elven Steed with Ithilmar Barding",
+    "Full Plate Armour",
+    "Horn",
+    "Maps and Sea Charts",
+    "Shield",
+    "Villa on Culchan Plains"
+   ],
+   "keywords": [
+    "haut-elfe"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-253",
+   "book": "L07",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "profile",
+   "blockKey": "L07:89:0",
+   "name": "Swiftfeather Roc",
+   "nameFr": "Roc plume-vive",
+   "stats": {
+    "M": 2,
+    "CC": 45,
+    "CT": null,
+    "F": 40,
+    "E": 40,
+    "I": 50,
+    "Ag": 55,
+    "Dex": null,
+    "Int": 25,
+    "FM": 45,
+    "Soc": null
+   },
+   "wounds": 32,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 6,
+     "trait": "Bite"
+    },
+    {
+     "name": "Talons",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bite",
+     "rating": "+6",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fly",
+     "rating": "160",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    }
+   ],
+   "keywords": [
+    "bete",
+    "oiseau-geant"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-254",
+   "book": "L07",
+   "page": 90,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L07:90:0",
+   "name": "Lokhir Fellheart",
+   "nameFr": "Lokhir Fellheart",
+   "stats": {
+    "M": 5,
+    "CC": 75,
+    "CT": 75,
+    "F": 35,
+    "E": 45,
+    "I": 64,
+    "Ag": 45,
+    "Dex": 45,
+    "Int": 64,
+    "FM": 70,
+    "Soc": 45
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 5,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 70
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 65
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 55
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 85
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 70
+    },
+    {
+     "name": "Language (Elth�rin)",
+     "nameFr": "Langue (Elth�rin)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 70
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 75
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 70
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Oceans)",
+     "nameFr": "Savoir (Oceans)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 95
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 85
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 85
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 95
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 55
+    },
+    {
+     "name": "Sail (Black Ark)",
+     "nameFr": "Voile (Black Ark)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Terror",
+     "rating": "2",
+     "ref": "E0-T-057"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Etiquette (Crew)"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck",
+     "rank": 2
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Public Speaking"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Stout-hearted"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Helm of the Kraken",
+    "Plate Armour",
+    "The Red Blades",
+    "Sea Dragon Cloak"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-255",
+   "book": "L07",
+   "page": 113,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L07:113:0",
+   "name": "Tzku’Ta",
+   "nameFr": "Tzku’Ta",
+   "stats": {
+    "M": 6,
+    "CC": 24,
+    "CT": 40,
+    "F": 32,
+    "E": 26,
+    "I": 56,
+    "Ag": 60,
+    "Dex": 45,
+    "Int": 67,
+    "FM": 63,
+    "Soc": 58
+   },
+   "wounds": 10,
+   "size": "small",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Staff",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling (Azyr)",
+     "nameFr": "Focalisation (Azyr)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 68
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 72
+    },
+    {
+     "name": "Entertain (Fortune Telling)",
+     "nameFr": "Divertissement (Voyance)",
+     "value": 78
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 67
+    },
+    {
+     "name": "Language (Elth�rin)",
+     "nameFr": "Langue (Elth�rin)",
+     "frUnverified": true,
+     "value": 38
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 74
+    },
+    {
+     "name": "Lore (Astrology)",
+     "nameFr": "Savoir (Astrologie)",
+     "value": 77
+    },
+    {
+     "name": "Lore (Astronomy)",
+     "nameFr": "Savoir (Astronomie)",
+     "value": 77
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 70
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 73
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 88
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 33
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 69
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Leader",
+     "ref": "E0-T-080"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Petty, Heavens",
+     "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Heavens)"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Impassioned Zeal"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Read/Write (Saurian)"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "Papyrus copies of the Plaques of Tlaxtlan",
+    "Silver necklace and bands of office",
+    "Staff",
+    "Wax slate and stylus"
+   ],
+   "spells": {
+    "Petty: Bearings, Dazzle, Dart, Warning Arcane: Aethyric Armour, Flight": [
+     "Lore of Heavens"
+    ]
+   },
+   "keywords": [
+    "slann"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-256",
+   "book": "L07",
+   "page": 123,
+   "physicalPage": 123,
+   "kind": "profile",
+   "blockKey": "L07:123:0",
+   "name": "Slann of the Fifth Generation",
+   "nameFr": "Slann de la cinquième génération",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 35,
+    "F": 35,
+    "E": 55,
+    "I": 20,
+    "Ag": 15,
+    "Dex": 30,
+    "Int": 85,
+    "FM": 85,
+    "Soc": 30
+   },
+   "wounds": 42,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 105
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 105
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 105
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 95
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 135
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 105
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 105
+    },
+    {
+     "name": "Lore (Science)",
+     "nameFr": "Savoir (Science)",
+     "value": 115
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 105
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 100
+    }
+   ],
+   "traits": [
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "ref": "E0-T-048"
+    }
+   ],
+   "abilities": [
+    "E0-T-211",
+    "E0-T-212",
+    "E0-T-215",
+    "E0-T-218",
+    "E0-T-217"
+   ],
+   "keywords": [
+    "slann"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-257",
+   "book": "L07",
+   "page": 123,
+   "physicalPage": 123,
+   "kind": "profile",
+   "blockKey": "L07:123:1",
+   "name": "Slann of the Fourth Generation",
+   "nameFr": "Slann de la quatrième génération",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 35,
+    "F": 35,
+    "E": 60,
+    "I": 15,
+    "Ag": 15,
+    "Dex": 30,
+    "Int": 95,
+    "FM": 95,
+    "Soc": 35
+   },
+   "wounds": 48,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 115
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 120
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 120
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 110
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 155
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 115
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 120
+    },
+    {
+     "name": "Lore (Science)",
+     "nameFr": "Savoir (Science)",
+     "value": 130
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 115
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 115
+    }
+   ],
+   "traits": [
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement",
+     "rank": 2
+    },
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "High Magic"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 3
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Magic)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "War Wizard"
+    }
+   ],
+   "abilities": [
+    "E0-T-211",
+    "E0-T-212",
+    "E0-T-215",
+    "E0-T-218",
+    "E0-T-217",
+    "E0-T-214"
+   ],
+   "keywords": [
+    "slann"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-258",
+   "book": "L07",
+   "page": 124,
+   "physicalPage": 124,
+   "kind": "profile",
+   "blockKey": "L07:124:2",
+   "name": "Slann of the Second Generation",
+   "nameFr": "Slann de la deuxième génération",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 35,
+    "F": 35,
+    "E": 65,
+    "I": 15,
+    "Ag": 10,
+    "Dex": 30,
+    "Int": 105,
+    "FM": 105,
+    "Soc": 35
+   },
+   "wounds": 50,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 135
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 140
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 140
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 130
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 180
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 130
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 140
+    },
+    {
+     "name": "Lore (Science)",
+     "nameFr": "Savoir (Science)",
+     "value": 150
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 140
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 135
+    }
+   ],
+   "traits": [
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement",
+     "rank": 3
+    },
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Bookish",
+     "rank": 2
+    },
+    {
+     "name": "Detect Artefact",
+     "rank": 2
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "High Magic"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 4
+    },
+    {
+     "name": "Luck",
+     "rank": 5
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Chaos, History, Magic)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense",
+     "rank": 2
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "War Wizard"
+    }
+   ],
+   "abilities": [
+    "E0-T-211",
+    "E0-T-212",
+    "E0-T-215",
+    "E0-T-218",
+    "E0-T-217",
+    "E0-T-214",
+    "E0-T-213"
+   ],
+   "keywords": [
+    "slann"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-259",
+   "book": "L07",
+   "page": 124,
+   "physicalPage": 124,
+   "kind": "profile",
+   "blockKey": "L07:124:1",
+   "name": "Slann of the First Generation",
+   "nameFr": "Slann de la première génération",
+   "stats": {
+    "M": null,
+    "CC": 25,
+    "CT": null,
+    "F": 35,
+    "E": 65,
+    "I": 15,
+    "Ag": null,
+    "Dex": null,
+    "Int": 110,
+    "FM": 110,
+    "Soc": 35
+   },
+   "wounds": 58,
+   "size": "large",
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 140
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 145
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 145
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 135
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 185
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 135
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 145
+    },
+    {
+     "name": "Lore (Science)",
+     "nameFr": "Savoir (Science)",
+     "value": 155
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 145
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 140
+    }
+   ],
+   "traits": [
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Flammable",
+     "ref": "E0-T-208"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "ref": "E0-T-048"
+    }
+   ],
+   "abilities": [
+    "E0-T-211",
+    "E0-T-212",
+    "E0-T-215",
+    "E0-T-218",
+    "E0-T-217",
+    "E0-T-214",
+    "E0-T-213",
+    "E0-T-216"
+   ],
+   "keywords": [
+    "slann"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-260",
+   "book": "L07",
+   "page": 124,
+   "physicalPage": 124,
+   "kind": "profile",
+   "blockKey": "L07:124:0",
+   "name": "Slann of the Third Generation",
+   "nameFr": "Slann de la troisième génération",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 35,
+    "F": 35,
+    "E": 65,
+    "I": 15,
+    "Ag": 10,
+    "Dex": 30,
+    "Int": 100,
+    "FM": 100,
+    "Soc": 35
+   },
+   "wounds": 50,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 125
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 130
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 45
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 130
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 120
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 170
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 120
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 130
+    },
+    {
+     "name": "Lore (Science)",
+     "nameFr": "Savoir (Science)",
+     "value": 140
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 130
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 125
+    }
+   ],
+   "traits": [
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "ref": "E0-T-048"
+    }
+   ],
+   "abilities": [
+    "E0-T-211",
+    "E0-T-212",
+    "E0-T-215",
+    "E0-T-218",
+    "E0-T-217",
+    "E0-T-214"
+   ],
+   "keywords": [
+    "slann"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-261",
+   "book": "L07",
+   "page": 136,
+   "physicalPage": 136,
+   "kind": "profile",
+   "blockKey": "L07:136:0",
+   "name": "Skink",
+   "nameFr": "Skink",
+   "stats": {
+    "M": 6,
+    "CC": 20,
+    "CT": 35,
+    "F": 30,
+    "E": 25,
+    "I": 40,
+    "Ag": 40,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 25,
+    "Soc": 25
+   },
+   "wounds": 6,
+   "size": "small",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 30
+    },
+    {
+     "name": "Ranged (Throwing)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    }
+   ],
+   "keywords": [
+    "skink"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-262",
+   "book": "L07",
+   "page": 141,
+   "physicalPage": 141,
+   "kind": "profile",
+   "blockKey": "L07:141:0",
+   "name": "Anomoq — Skink Priest of Sotek",
+   "nameFr": "Anomoq — Prêtre skink de Sotek",
+   "stats": {
+    "M": 6,
+    "CC": 45,
+    "CT": 35,
+    "F": 39,
+    "E": 30,
+    "I": 55,
+    "Ag": 58,
+    "Dex": 35,
+    "Int": 50,
+    "FM": 69,
+    "Soc": 48
+   },
+   "wounds": 12,
+   "size": "small",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 5,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 56
+    },
+    {
+     "name": "Channelling (Ghur)",
+     "nameFr": "Focalisation (Ghur)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 43
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 65
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Lore (Old Ones)",
+     "nameFr": "Savoir (Old Ones)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Lore (Sotek)",
+     "nameFr": "Savoir (Sotek)",
+     "frUnverified": true,
+     "value": 78
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 70
+    },
+    {
+     "name": "Language (Saurian)",
+     "nameFr": "Langue (Saurian)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 60
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 56
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 64
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 64
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bite",
+     "rating": "+5",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Hatred",
+     "param": "Skaven",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Beasts",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Care"
+    },
+    {
+     "name": "Arcane Magic (Beasts)"
+    },
+    {
+     "name": "Hatred (Skaven)"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "War Wizard"
+    }
+   ],
+   "spells": {
+    "Arcane Magic": [
+     "Blast",
+     "Drop",
+     "Entangle",
+     "Fearsome",
+     "Ward"
+    ]
+   },
+   "keywords": [
+    "skink"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-263",
+   "book": "L07",
+   "page": 142,
+   "physicalPage": 142,
+   "kind": "profile",
+   "blockKey": "L07:142:0",
+   "name": "Chameleon Skink",
+   "nameFr": "Skink caméléon",
+   "stats": {
+    "M": 6,
+    "CC": 20,
+    "CT": 45,
+    "F": 30,
+    "E": 25,
+    "I": 40,
+    "Ag": 45,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 25,
+    "Soc": 20
+   },
+   "wounds": 6,
+   "keywords": [
+    "skink"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-264",
+   "book": "L07",
+   "page": 143,
+   "physicalPage": 143,
+   "kind": "profile",
+   "blockKey": "L07:143:0",
+   "name": "Saurus",
+   "nameFr": "Saurus",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 5,
+    "F": 45,
+    "E": 45,
+    "I": 15,
+    "Ag": 20,
+    "Dex": 18,
+    "Int": 25,
+    "FM": 65,
+    "Soc": 20
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 4,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 7,
+     "trait": "Tail"
+    },
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+4",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Tail",
+     "rating": "+7",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    }
+   ],
+   "keywords": [
+    "saurus"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-265",
+   "book": "L07",
+   "page": 145,
+   "physicalPage": 145,
+   "kind": "profile",
+   "blockKey": "L07:145:0",
+   "name": "Saurus Temple Guard",
+   "nameFr": "Garde du temple saurus",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 5,
+    "F": 45,
+    "E": 45,
+    "I": 25,
+    "Ag": 20,
+    "Dex": 18,
+    "Int": 25,
+    "FM": 65,
+    "Soc": 20
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 4,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 7,
+     "trait": "Tail"
+    },
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 65
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+4",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Tail",
+     "rating": "+7",
+     "ref": "E0-T-054"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combate Aware"
+    },
+    {
+     "name": "Combat Master"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Shieldsman"
+    }
+   ],
+   "keywords": [
+    "saurus"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-266",
+   "book": "L07",
+   "page": 147,
+   "physicalPage": 147,
+   "kind": "profile",
+   "blockKey": "L07:147:0",
+   "name": "Crotaz’L, Scar Veteran",
+   "nameFr": "Crotaz’L, vétéran balafré",
+   "stats": {
+    "M": 4,
+    "CC": 65,
+    "CT": 5,
+    "F": 60,
+    "E": 57,
+    "I": 36,
+    "Ag": 38,
+    "Dex": 25,
+    "Int": 43,
+    "FM": 81,
+    "Soc": 25
+   },
+   "wounds": 24,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 6,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 7,
+     "trait": "Tail"
+    },
+    {
+     "name": "Weapon",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 89
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 43
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 77
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 69
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 49
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 63
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bite",
+     "rating": "+6",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Tail",
+     "rating": "+7",
+     "ref": "E0-T-054"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ambidextrous",
+     "rank": 2
+    },
+    {
+     "name": "Berserk Charge"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Master"
+    },
+    {
+     "name": "Disarm"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Fearless (Undead)"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Implacable"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "trappings": [
+    "Beaten Gold Armour",
+    "Starmetal Helm",
+    "Skavenpelt Cloak",
+    "Twin Obsinite Spiked Mauls (Penetrating, Pummel)"
+   ],
+   "keywords": [
+    "saurus"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-267",
+   "book": "L07",
+   "page": 148,
+   "physicalPage": 148,
+   "kind": "profile",
+   "blockKey": "L07:148:0",
+   "name": "Kroxigor",
+   "nameFr": "Kroxigor",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 5,
+    "F": 45,
+    "E": 45,
+    "I": 15,
+    "Ag": 20,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 30,
+    "Soc": 15
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 4,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 5,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 7,
+     "trait": "Tail"
+    },
+    {
+     "name": "Weapon",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Melee (Two Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bite",
+     "rating": "+5",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Tail",
+     "rating": "+7",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    }
+   ],
+   "keywords": [
+    "homme-lezard"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-268",
+   "book": "L07",
+   "page": 153,
+   "physicalPage": 153,
+   "kind": "profile",
+   "blockKey": "L07:153:0",
+   "name": "Coatl",
+   "nameFr": "Coatl",
+   "stats": {
+    "M": 2,
+    "CC": 51,
+    "CT": null,
+    "F": 35,
+    "E": 55,
+    "I": 35,
+    "Ag": 20,
+    "Dex": null,
+    "Int": 75,
+    "FM": 85,
+    "Soc": 20
+   },
+   "wounds": 42,
+   "size": "large",
+   "armour": {
+    "ap": 4,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Fly",
+     "rating": "90",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Heavens, Life, Light",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Telepathy",
+     "ref": "E0-T-206"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Terror",
+     "rating": "1",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Ward",
+     "rating": "8+",
+     "ref": "E0-T-066"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Horns",
+     "rating": "+6",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Aqshy, Chamon, Ghur, Shyish or Ulgu",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "serpent",
+    "monstre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-269",
+   "book": "L07",
+   "page": 155,
+   "physicalPage": 155,
+   "kind": "profile",
+   "blockKey": "L07:155:0",
+   "name": "Tlat’L the Enigma, Coatl Protector",
+   "nameFr": "Tlat’L l’Énigme, protecteur coatl",
+   "stats": {
+    "M": 2,
+    "CC": 52,
+    "CT": null,
+    "F": 35,
+    "E": 55,
+    "I": 56,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 86,
+    "FM": 95,
+    "Soc": 23
+   },
+   "wounds": 44,
+   "size": "large",
+   "armour": {
+    "ap": 5,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling (Azyr, Ghyran, Hysh, Shyish)",
+     "nameFr": "Focalisation (Azyr, Ghyran, Hysh, Shyish)",
+     "frUnverified": true,
+     "value": 100
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 99
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 56
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 73
+    },
+    {
+     "name": "Lore (Lustria)",
+     "nameFr": "Savoir (Lustria)",
+     "frUnverified": true,
+     "value": 95
+    },
+    {
+     "name": "Lore (Old Ones)",
+     "nameFr": "Savoir (Old Ones)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 73
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 67
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Fly",
+     "rating": "90",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Death, Heavens, Life, Light",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Telepathy",
+     "ref": "E0-T-206"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Terror",
+     "rating": "1",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Ward",
+     "rating": "8+",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "trappings": [
+    "Golden Mask"
+   ],
+   "spells": {
+    "Lore of Death": [
+     "Amaranth",
+     "Ashes and Dust",
+     "Crystal Maze",
+     "Speed of Lykos"
+    ],
+    "Lore of Heavens": [
+     "Cerulean Shield",
+     "Enemy Foreseen",
+     "Storm of Shemtek",
+     "T'Essla's Arc"
+    ],
+    "Lore of Life": [
+     "Forest of Thorns",
+     "Geyser",
+     "Lifebloom",
+     "Regenerate",
+     "Vital Growth"
+    ],
+    "Lore of Light": [
+     "Banishment",
+     "Blinding Light",
+     "Net of Amyntok"
+    ]
+   },
+   "keywords": [
+    "serpent",
+    "monstre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-270",
+   "book": "L07",
+   "page": 167,
+   "physicalPage": 167,
+   "kind": "profile",
+   "blockKey": "L07:167:1",
+   "name": "Blood Hungry Spore Cloud",
+   "nameFr": "Nuage de spores assoiffé de sang",
+   "stats": {
+    "M": null,
+    "CC": null,
+    "CT": null,
+    "F": null,
+    "E": 45,
+    "I": null,
+    "Ag": null,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "traits": [
+    {
+     "name": "Disease",
+     "param": "Fungal Takeover",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stationary Attacker",
+     "ref": "E0-T-173"
+    }
+   ],
+   "specialRules": [
+    "Blood Hungry Spore Cloud"
+   ],
+   "abilities": [
+    "E0-T-175"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-271",
+   "book": "L07",
+   "page": 167,
+   "physicalPage": 167,
+   "kind": "profile",
+   "blockKey": "L07:167:2",
+   "name": "Impaling Spikethorn",
+   "nameFr": "Épine-à-empaler",
+   "stats": {
+    "M": null,
+    "CC": 33,
+    "CT": null,
+    "F": 40,
+    "E": 30,
+    "I": 60,
+    "Ag": null,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 10,
+   "size": "average",
+   "attacks": [
+    {
+     "name": "Spines",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Flammable",
+     "ref": "E0-T-208"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stationary Attacker",
+     "ref": "E0-T-173"
+    }
+   ],
+   "abilities": [
+    "E0-T-177"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-272",
+   "book": "L07",
+   "page": 167,
+   "physicalPage": 167,
+   "kind": "profile",
+   "blockKey": "L07:167:3",
+   "name": "Vypervine",
+   "nameFr": "Vipérine",
+   "stats": {
+    "M": null,
+    "CC": 33,
+    "CT": null,
+    "F": 32,
+    "E": 31,
+    "I": 60,
+    "Ag": null,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 9,
+   "specialRules": [
+    "Weapon (Spines) +4 ptional"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-273",
+   "book": "L07",
+   "page": 167,
+   "physicalPage": 167,
+   "kind": "profile",
+   "blockKey": "L07:167:0",
+   "name": "Grasping Creeper Vine",
+   "nameFr": "Liane rampante agrippeuse",
+   "stats": {
+    "M": null,
+    "CC": 33,
+    "CT": null,
+    "F": 31,
+    "E": 33,
+    "I": 60,
+    "Ag": null,
+    "Dex": null,
+    "Int": null,
+    "FM": 20,
+    "Soc": null
+   },
+   "wounds": 22,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Vines",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Flammable",
+     "ref": "E0-T-208"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stationary Attacker",
+     "ref": "E0-T-173"
+    }
+   ],
+   "abilities": [
+    "E0-T-176"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-274",
+   "book": "L07",
+   "page": 168,
+   "physicalPage": 168,
+   "kind": "profile",
+   "blockKey": "L07:168:2",
+   "name": "Itxi Grub",
+   "nameFr": "Larve itxi",
+   "stats": {
+    "M": 1,
+    "CC": 31,
+    "CT": null,
+    "F": 5,
+    "E": 22,
+    "I": 10,
+    "Ag": 12,
+    "Dex": null,
+    "Int": 3,
+    "FM": 10,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Mandibles) +2 Magical Snack"
+   ],
+   "abilities": [
+    "E0-T-178"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-275",
+   "book": "L07",
+   "page": 168,
+   "physicalPage": 168,
+   "kind": "profile",
+   "blockKey": "L07:168:1",
+   "name": "Fireleech",
+   "nameFr": "Sangsue de feu",
+   "stats": {
+    "M": 1,
+    "CC": 32,
+    "CT": null,
+    "F": 23,
+    "E": 21,
+    "I": 30,
+    "Ag": 22,
+    "Dex": null,
+    "Int": 3,
+    "FM": 14,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "attacks": [
+    {
+     "name": "Raspy Teeth",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    }
+   ],
+   "abilities": [
+    "E0-T-180"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-276",
+   "book": "L07",
+   "page": 168,
+   "physicalPage": 168,
+   "kind": "profile",
+   "blockKey": "L07:168:0",
+   "name": "Brainfluke",
+   "nameFr": "Cervelle-douve",
+   "stats": {
+    "M": 1,
+    "CC": 25,
+    "CT": null,
+    "F": 20,
+    "E": 32,
+    "I": 10,
+    "Ag": 12,
+    "Dex": null,
+    "Int": 5,
+    "FM": 10,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "attacks": [
+    {
+     "name": "Teeth",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Aquatic",
+     "ref": "E0-T-210"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    }
+   ],
+   "abilities": [
+    "E0-T-179"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-277",
+   "book": "L07",
+   "page": 169,
+   "physicalPage": 169,
+   "kind": "profile",
+   "blockKey": "L07:169:3",
+   "name": "Pallid Blindwyrm",
+   "nameFr": "Ver aveugle pâle",
+   "stats": {
+    "M": null,
+    "CC": 33,
+    "CT": null,
+    "F": 42,
+    "E": 25,
+    "I": 60,
+    "Ag": 12,
+    "Dex": null,
+    "Int": 3,
+    "FM": 10,
+    "Soc": null
+   },
+   "wounds": 5,
+   "size": "small",
+   "attacks": [
+    {
+     "name": "Jaws",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Infected",
+     "param": "Blindwyrm Fits",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stationary Attacker",
+     "ref": "E0-T-173"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-278",
+   "book": "L07",
+   "page": 169,
+   "physicalPage": 169,
+   "kind": "profile",
+   "blockKey": "L07:169:4",
+   "name": "Carrion Ant",
+   "nameFr": "Fourmi charognarde",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": null,
+    "F": 33,
+    "E": 33,
+    "I": 32,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 8,
+    "FM": 14,
+    "Soc": null
+   },
+   "wounds": 7,
+   "size": "small",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 4,
+     "trait": "Bite"
+    },
+    {
+     "name": "Fangs",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    },
+    {
+     "name": "Bite",
+     "rating": "+4",
+     "ref": "E0-T-006"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-279",
+   "book": "L07",
+   "page": 169,
+   "physicalPage": 169,
+   "kind": "profile",
+   "blockKey": "L07:169:2",
+   "name": "Bloodwasp",
+   "nameFr": "Guêpe de sang",
+   "stats": {
+    "M": 3,
+    "CC": 31,
+    "CT": null,
+    "F": 31,
+    "E": 24,
+    "I": 33,
+    "Ag": 32,
+    "Dex": null,
+    "Int": 12,
+    "FM": 18,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "attacks": [
+    {
+     "name": "Sting",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Fly",
+     "rating": "40",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Venom",
+     "param": "Hard",
+     "ref": "E0-T-064"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    }
+   ],
+   "abilities": [
+    "E0-T-181"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-280",
+   "book": "L07",
+   "page": 169,
+   "physicalPage": 169,
+   "kind": "profile",
+   "blockKey": "L07:169:0",
+   "name": "Huntipede",
+   "nameFr": "Chassipède",
+   "stats": {
+    "M": 3,
+    "CC": 30,
+    "CT": null,
+    "F": 26,
+    "E": 26,
+    "I": 32,
+    "Ag": 34,
+    "Dex": null,
+    "Int": 6,
+    "FM": 12,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 3,
+     "trait": "Bite"
+    },
+    {
+     "name": "Stinging Tail",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Venom",
+     "param": "Average",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Bite",
+     "rating": "+3",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-281",
+   "book": "L07",
+   "page": 169,
+   "physicalPage": 169,
+   "kind": "profile",
+   "blockKey": "L07:169:1",
+   "name": "Bloodmaggot",
+   "nameFr": "Asticot de sang",
+   "stats": {
+    "M": 1,
+    "CC": 23,
+    "CT": null,
+    "F": 32,
+    "E": 24,
+    "I": 32,
+    "Ag": 18,
+    "Dex": null,
+    "Int": 3,
+    "FM": 10,
+    "Soc": null
+   },
+   "wounds": 1,
+   "attacks": [
+    {
+     "name": "Proboscis",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-282",
+   "book": "L07",
+   "page": 170,
+   "physicalPage": 170,
+   "kind": "profile",
+   "blockKey": "L07:170:1",
+   "name": "Lustrian Treefrog",
+   "nameFr": "Rainette lustrienne",
+   "stats": {
+    "M": 3,
+    "CC": 18,
+    "CT": null,
+    "F": 18,
+    "E": 18,
+    "I": 30,
+    "Ag": 33,
+    "Dex": null,
+    "Int": 10,
+    "FM": 16,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 2,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bounce",
+     "ref": "E0-T-008"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Venom",
+     "param": "Very Hard",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-283",
+   "book": "L07",
+   "page": 170,
+   "physicalPage": 170,
+   "kind": "profile",
+   "blockKey": "L07:170:0",
+   "name": "Blot Toad",
+   "nameFr": "Crapaud tache-d’encre",
+   "stats": {
+    "M": 3,
+    "CC": 33,
+    "CT": null,
+    "F": 34,
+    "E": 32,
+    "I": 31,
+    "Ag": 33,
+    "Dex": null,
+    "Int": 12,
+    "FM": 32,
+    "Soc": null
+   },
+   "wounds": 9,
+   "size": "small",
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bounce",
+     "ref": "E0-T-008"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Teeth) +4 Odour Attack"
+   ],
+   "abilities": [
+    "E0-T-182"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-284",
+   "book": "L07",
+   "page": 171,
+   "physicalPage": 171,
+   "kind": "profile",
+   "blockKey": "L07:171:1",
+   "name": "Piranha Lizard",
+   "nameFr": "Lézard piranha",
+   "stats": {
+    "M": 4,
+    "CC": 38,
+    "CT": null,
+    "F": 36,
+    "E": 33,
+    "I": 33,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 16,
+    "FM": 26,
+    "Soc": null
+   },
+   "wounds": 11,
+   "size": "average",
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 4,
+     "trait": "Tail"
+    },
+    {
+     "name": "Teeth",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Tail",
+     "rating": "+4",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-285",
+   "book": "L07",
+   "page": 171,
+   "physicalPage": 171,
+   "kind": "profile",
+   "blockKey": "L07:171:2",
+   "name": "Scalemane Reptilion",
+   "nameFr": "Reptilion à crinière d’écailles",
+   "stats": {
+    "M": 5,
+    "CC": 37,
+    "CT": null,
+    "F": 36,
+    "E": 38,
+    "I": 35,
+    "Ag": 32,
+    "Dex": null,
+    "Int": 16,
+    "FM": 30,
+    "Soc": null
+   },
+   "wounds": 24,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 4,
+     "trait": "Tail"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Venom",
+     "param": "Hard",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Tail",
+     "rating": "+4",
+     "ref": "E0-T-054"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Teeth) +6 Venomous Bite"
+   ],
+   "abilities": [
+    "E0-T-183"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-286",
+   "book": "L07",
+   "page": 171,
+   "physicalPage": 171,
+   "kind": "profile",
+   "blockKey": "L07:171:0",
+   "name": "Hyenadon",
+   "nameFr": "Hyénadon",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": null,
+    "F": 33,
+    "E": 32,
+    "I": 31,
+    "Ag": 32,
+    "Dex": null,
+    "Int": 14,
+    "FM": 30,
+    "Soc": null
+   },
+   "wounds": 12,
+   "size": "average",
+   "armour": {
+    "ap": 3,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 4,
+     "trait": "Tail"
+    },
+    {
+     "name": "Teeth",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Tail",
+     "rating": "+4",
+     "ref": "E0-T-054"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-287",
+   "book": "L07",
+   "page": 171,
+   "physicalPage": 171,
+   "kind": "profile",
+   "blockKey": "L07:171:3",
+   "name": "Tiguana",
+   "nameFr": "Tiguana",
+   "stats": {
+    "M": 5,
+    "CC": 26,
+    "CT": 40,
+    "F": 24,
+    "E": 22,
+    "I": 28,
+    "Ag": 33,
+    "Dex": null,
+    "Int": 10,
+    "FM": 24,
+    "Soc": null
+   },
+   "wounds": 6,
+   "size": "small",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    },
+    {
+     "name": "Creature Weapons",
+     "rating": "+3",
+     "printed": 5,
+     "ref": "E0-T-288"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Guard",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-288",
+   "book": "L07",
+   "page": 172,
+   "physicalPage": 172,
+   "kind": "profile",
+   "blockKey": "L07:172:0",
+   "name": "Blue-Ringed Asp",
+   "nameFr": "Aspic à anneaux bleus",
+   "stats": {
+    "M": 3,
+    "CC": 40,
+    "CT": null,
+    "F": 32,
+    "E": 25,
+    "I": 25,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 10,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 6,
+   "size": "small",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
+   "abilities": [
+    "E0-T-184"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-289",
+   "book": "L07",
+   "page": 172,
+   "physicalPage": 172,
+   "kind": "profile",
+   "blockKey": "L07:172:2",
+   "name": "Borer Snake",
+   "nameFr": "Serpent foreur",
+   "stats": {
+    "M": 5,
+    "CC": 33,
+    "CT": null,
+    "F": 28,
+    "E": 22,
+    "I": 22,
+    "Ag": 31,
+    "Dex": null,
+    "Int": 10,
+    "FM": 20,
+    "Soc": null
+   },
+   "wounds": 2,
+   "size": "little",
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Bite) +4 Boring Attack"
+   ],
+   "abilities": [
+    "E0-T-185"
+   ],
+   "keywords": [
+    "serpent"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-290",
+   "book": "L07",
+   "page": 172,
+   "physicalPage": 172,
+   "kind": "profile",
+   "blockKey": "L07:172:1",
+   "name": "Amaxon Swamp Python",
+   "nameFr": "Python des marais d’Amaxon",
+   "stats": {
+    "M": 3,
+    "CC": 45,
+    "CT": null,
+    "F": 65,
+    "E": 58,
+    "I": 33,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 24,
+    "FM": 52,
+    "Soc": null
+   },
+   "wounds": 84,
+   "size": "enormous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Average, Large, or Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-291",
+   "book": "L07",
+   "page": 173,
+   "physicalPage": 173,
+   "kind": "profile",
+   "blockKey": "L07:173:1",
+   "name": "Giant Bat",
+   "nameFr": "Chauve-souris géante",
+   "stats": {
+    "M": 1,
+    "CC": 33,
+    "CT": null,
+    "F": 36,
+    "E": 32,
+    "I": 30,
+    "Ag": 34,
+    "Dex": null,
+    "Int": 14,
+    "FM": 24,
+    "Soc": null
+   },
+   "wounds": 8,
+   "size": "small",
+   "attacks": [
+    {
+     "name": "Teeth",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-292",
+   "book": "L07",
+   "page": 173,
+   "physicalPage": 173,
+   "kind": "profile",
+   "blockKey": "L07:173:0",
+   "name": "Blood Bat",
+   "nameFr": "Chauve-souris de sang",
+   "stats": {
+    "M": 3,
+    "CC": 33,
+    "CT": null,
+    "F": 22,
+    "E": 22,
+    "I": 32,
+    "Ag": 34,
+    "Dex": null,
+    "Int": 14,
+    "FM": 24,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "attacks": [
+    {
+     "name": "Fangs",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Disease",
+     "param": "Cataleptic Ague",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-293",
+   "book": "L07",
+   "page": 173,
+   "physicalPage": 173,
+   "kind": "profile",
+   "blockKey": "L07:173:2",
+   "name": "Culchan",
+   "nameFr": "Culchan",
+   "stats": {
+    "M": 8,
+    "CC": 45,
+    "CT": null,
+    "F": 55,
+    "E": 45,
+    "I": 45,
+    "Ag": 52,
+    "Dex": null,
+    "Int": 14,
+    "FM": 38,
+    "Soc": 10
+   },
+   "wounds": 32,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 9,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Bite",
+     "rating": "+9",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Guard, Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-294",
+   "book": "L07",
+   "page": 173,
+   "physicalPage": 173,
+   "kind": "profile",
+   "blockKey": "L07:173:3",
+   "name": "Jaguar",
+   "nameFr": "Jaguar",
+   "stats": {
+    "M": 8,
+    "CC": 55,
+    "CT": null,
+    "F": 43,
+    "E": 35,
+    "I": 50,
+    "Ag": 60,
+    "Dex": null,
+    "Int": 15,
+    "FM": 30,
+    "Soc": 5
+   },
+   "wounds": 26,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 6,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Bite",
+     "rating": "+6",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Guard",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-295",
+   "book": "L07",
+   "page": 174,
+   "physicalPage": 174,
+   "kind": "profile",
+   "blockKey": "L07:174:0",
+   "name": "Cold One",
+   "nameFr": "Sang-froid (monture saurienne)",
+   "stats": {
+    "M": 7,
+    "CC": 42,
+    "CT": null,
+    "F": 42,
+    "E": 45,
+    "I": 25,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "abilities": [
+    "E0-T-186"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-296",
+   "book": "L07",
+   "page": 175,
+   "physicalPage": 175,
+   "kind": "profile",
+   "blockKey": "L07:175:0",
+   "name": "Horned One",
+   "nameFr": "Unicorne saurien",
+   "stats": {
+    "M": 8,
+    "CC": 42,
+    "CT": null,
+    "F": 42,
+    "E": 45,
+    "I": 25,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Horns",
+     "damage": 9,
+     "trait": "Horns"
+    },
+    {
+     "name": "Claws",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Horns",
+     "rating": "+9",
+     "ref": "E0-T-028"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-297",
+   "book": "L07",
+   "page": 175,
+   "physicalPage": 175,
+   "kind": "profile",
+   "blockKey": "L07:175:2",
+   "name": "Razordon",
+   "nameFr": "Razordon",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": 45,
+    "F": 41,
+    "E": 43,
+    "I": 22,
+    "Ag": 24,
+    "Dex": null,
+    "Int": 14,
+    "FM": 32,
+    "Soc": null
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 5,
+     "trait": "Bite"
+    },
+    {
+     "name": "Ranged",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Bite",
+     "rating": "+5",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Trained",
+     "param": "War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "abilities": [
+    "E0-T-187"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-298",
+   "book": "L07",
+   "page": 175,
+   "physicalPage": 175,
+   "kind": "profile",
+   "blockKey": "L07:175:1",
+   "name": "Salamander",
+   "nameFr": "Salamandre",
+   "stats": {
+    "M": 6,
+    "CC": 43,
+    "CT": 48,
+    "F": 44,
+    "E": 46,
+    "I": 28,
+    "Ag": 26,
+    "Dex": null,
+    "Int": 14,
+    "FM": 32,
+    "Soc": null
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 6,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Bite",
+     "rating": "+6",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Trained",
+     "param": "War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-299",
+   "book": "L07",
+   "page": 176,
+   "physicalPage": 176,
+   "kind": "profile",
+   "blockKey": "L07:176:1",
+   "name": "Ripperdactyl",
+   "nameFr": "Ripperdactyle",
+   "stats": {
+    "M": 2,
+    "CC": 45,
+    "CT": null,
+    "F": 38,
+    "E": 36,
+    "I": 33,
+    "Ag": 44,
+    "Dex": null,
+    "Int": 12,
+    "FM": 36,
+    "Soc": null
+   },
+   "wounds": 24,
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 3,
+     "trait": "Tail"
+    },
+    {
+     "name": "Teeth",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Tail",
+     "rating": "+3",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "specialRules": [
+    "Acute Sense (Vision"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-300",
+   "book": "L07",
+   "page": 176,
+   "physicalPage": 176,
+   "kind": "profile",
+   "blockKey": "L07:176:0",
+   "name": "Terradon",
+   "nameFr": "Terradon",
+   "stats": {
+    "M": 2,
+    "CC": 45,
+    "CT": null,
+    "F": 42,
+    "E": 38,
+    "I": 36,
+    "Ag": 42,
+    "Dex": null,
+    "Int": 12,
+    "FM": 38,
+    "Soc": null
+   },
+   "wounds": 26,
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 5,
+     "trait": "Bite"
+    },
+    {
+     "name": "Teeth",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+5",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Creature Weapons",
+     "rating": "+6",
+     "ref": "E0-T-288"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "specialRules": [
+    "Acute Sense (Vision"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-301",
+   "book": "L07",
+   "page": 177,
+   "physicalPage": 177,
+   "kind": "profile",
+   "blockKey": "L07:177:0",
+   "name": "Stegadon",
+   "nameFr": "Stégadon",
+   "stats": {
+    "M": 6,
+    "CC": 35,
+    "CT": null,
+    "F": 56,
+    "E": 65,
+    "I": 21,
+    "Ag": 15,
+    "Dex": null,
+    "Int": 18,
+    "FM": 35,
+    "Soc": 10
+   },
+   "wounds": 80,
+   "size": "enormous",
+   "armour": {
+    "ap": 6,
+    "printedTotal": 12
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 9,
+     "trait": "Bite"
+    },
+    {
+     "name": "Horns",
+     "damage": 9,
+     "trait": "Horns"
+    },
+    {
+     "name": "Tail",
+     "damage": 11,
+     "trait": "Tail"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Bite",
+     "rating": "+9",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Horns",
+     "rating": "+9",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Tail",
+     "rating": "+11",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "ref": "E0-T-060"
+    }
+   ],
+   "abilities": [
+    "E0-T-188"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-302",
+   "book": "L07",
+   "page": 178,
+   "physicalPage": 178,
+   "kind": "profile",
+   "blockKey": "L07:178:0",
+   "name": "Arcanadon",
+   "nameFr": "Arcanadon",
+   "stats": {
+    "M": 6,
+    "CC": 25,
+    "CT": null,
+    "F": 55,
+    "E": 65,
+    "I": 15,
+    "Ag": 15,
+    "Dex": null,
+    "Int": 15,
+    "FM": 55,
+    "Soc": 10
+   },
+   "wounds": 88,
+   "size": "enormous",
+   "armour": {
+    "ap": 4,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 5,
+     "trait": "Bite"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Bite",
+     "rating": "+5",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-303",
+   "book": "L07",
+   "page": 178,
+   "physicalPage": 178,
+   "kind": "profile",
+   "blockKey": "L07:178:1",
+   "name": "Bastiladon",
+   "nameFr": "Bastiladon",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": null,
+    "F": 45,
+    "E": 55,
+    "I": 14,
+    "Ag": 14,
+    "Dex": null,
+    "Int": 10,
+    "FM": 62,
+    "Soc": null
+   },
+   "wounds": 80,
+   "size": "enormous",
+   "armour": {
+    "ap": 8,
+    "printedTotal": 13
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 9,
+     "trait": "Tail"
+    },
+    {
+     "name": "Shoulder Spikes",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+9",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-304",
+   "book": "L07",
+   "page": 179,
+   "physicalPage": 179,
+   "kind": "profile",
+   "blockKey": "L07:179:0",
+   "name": "Pliodon",
+   "nameFr": "Pliodon",
+   "stats": {
+    "M": 5,
+    "CC": 48,
+    "CT": null,
+    "F": 58,
+    "E": 68,
+    "I": 15,
+    "Ag": 17,
+    "Dex": null,
+    "Int": 22,
+    "FM": 58,
+    "Soc": null
+   },
+   "wounds": 88,
+   "size": "enormous",
+   "armour": {
+    "ap": 4,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 7,
+     "trait": "Tail"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+7",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Claws) +7 Ramming Attack"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-305",
+   "book": "L07",
+   "page": 180,
+   "physicalPage": 180,
+   "kind": "profile",
+   "blockKey": "L07:180:0",
+   "name": "Carnosaur",
+   "nameFr": "Carnosaure",
+   "stats": {
+    "M": 7,
+    "CC": 65,
+    "CT": null,
+    "F": 75,
+    "E": 55,
+    "I": 20,
+    "Ag": 20,
+    "Dex": null,
+    "Int": 25,
+    "FM": 55,
+    "Soc": null
+   },
+   "wounds": 88,
+   "size": "enormous",
+   "armour": {
+    "ap": 4,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 13,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 11,
+     "trait": "Tail"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Bite",
+     "rating": "+13",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+11",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Guard, Mount, War",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Claws) +11 Blood Frenzy"
+   ],
+   "abilities": [
+    "E0-T-191"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-306",
+   "book": "L07",
+   "page": 180,
+   "physicalPage": 180,
+   "kind": "profile",
+   "blockKey": "L07:180:1",
+   "name": "Troglodon",
+   "nameFr": "Troglodon",
+   "stats": {
+    "M": 7,
+    "CC": 62,
+    "CT": 15,
+    "F": 72,
+    "E": 54,
+    "I": 24,
+    "Ag": 25,
+    "Dex": null,
+    "Int": 22,
+    "FM": 56,
+    "Soc": null
+   },
+   "wounds": 88,
+   "abilities": [
+    "E0-T-192"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-307",
+   "book": "L07",
+   "page": 181,
+   "physicalPage": 181,
+   "kind": "profile",
+   "blockKey": "L07:181:0",
+   "name": "Dread Saurian",
+   "nameFr": "Saurien terrifiant",
+   "stats": {
+    "M": 7,
+    "CC": 45,
+    "CT": null,
+    "F": 85,
+    "E": 75,
+    "I": 35,
+    "Ag": 25,
+    "Dex": null,
+    "Int": 15,
+    "FM": 30,
+    "Soc": null
+   },
+   "wounds": 200,
+   "size": "monstrous",
+   "armour": {
+    "ap": 5,
+    "printedTotal": 12
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 14,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 12,
+     "trait": "Tail"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Grim",
+     "rating": "3",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Bite",
+     "rating": "+14",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+12",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "specialRules": [
+    "Weapon (Claws) +12 Fearsome Roar"
+   ],
+   "keywords": [
+    "bete",
+    "monstre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-308",
+   "book": "L07",
+   "page": 182,
+   "physicalPage": 182,
+   "kind": "profile",
+   "blockKey": "L07:182:0",
+   "name": "Savage Orc",
+   "nameFr": "Orque sauvage",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 25,
+    "FM": 35,
+    "Soc": 20
+   },
+   "wounds": 14,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Stone Axe",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Ranged",
+     "rating": "+6",
+     "printed": 50,
+     "ref": "E0-T-082"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-309",
+   "book": "L07",
+   "page": 182,
+   "physicalPage": 182,
+   "kind": "profile",
+   "blockKey": "L07:182:2",
+   "name": "Savage Orc Shaman",
+   "nameFr": "Chamane orque sauvage",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 50,
+    "I": 35,
+    "Ag": 25,
+    "Dex": 30,
+    "Int": 40,
+    "FM": 50,
+    "Soc": 20
+   },
+   "wounds": 18,
+   "attacks": [
+    {
+     "name": "Stone Axe",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling (Petty, WAAAGH!)",
+     "nameFr": "Focalisation (Petty, WAAAGH!)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 50
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Ranged",
+     "rating": "+6",
+     "printed": 50,
+     "ref": "E0-T-082"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic (WAAAGH!)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-310",
+   "book": "L07",
+   "page": 182,
+   "physicalPage": 182,
+   "kind": "profile",
+   "blockKey": "L07:182:1",
+   "name": "Savage Orc Chief",
+   "nameFr": "Chef orque sauvage",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 40,
+    "F": 50,
+    "E": 60,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 20,
+    "Int": 35,
+    "FM": 60,
+    "Soc": 30
+   },
+   "wounds": 23,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Stone Axe",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Ranged",
+     "rating": "+8",
+     "printed": 50,
+     "ref": "E0-T-082"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Feint"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

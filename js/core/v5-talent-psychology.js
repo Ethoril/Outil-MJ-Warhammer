@@ -4,13 +4,16 @@ import{situationPlan,activeSource}from'./v5-talent-situations.js';
 import{acquireV5Conditions,recoverV5Condition,previewDeliciousExcruciation}from'./v5-effects.js';
 import{withMomentum}from'./v5-combat-rules.js';
 import{resolveV5Opposition}from'./v5-roll.js';
+import{activeReferential,keywordMatches,participantKeywords,specializationMatches,traitTargetMatches}from'./creature-keywords.js';
 const calmId=()=>getReferenceCatalogue().skills.find(s=>s.nom==='Calme')?.id;
 export function genericPsychologyOrigin(sourceKind='trait',meta={}){
  const hash=currentV5TalentHashes()['talent-large'];
  return{talentId:'talent-large',source:{effectHash:hash,reference:meta.reference||'Livre de base V5, p. 183-184'},psychologySourceKind:sourceKind,...meta};
 }
 const hasTrait=(subject,pattern)=>[...(subject?.traits||[]),...(subject?.states||[]).map(s=>s?.name||s?.key||'')].some(t=>pattern.test(String(t?.name||t?.label||t||'')));
-export function isPsychologyImmune(subject,{kind='fear',enemyGroup=null,ignoreUndeadImmunity=false,ignorePsychologyImmunity=false}={}){
+/** Cible d'une spécialisation : saisie explicite du MJ (`enemyGroup`) ou mots-clés de l'ennemi (`enemy`, participant). */
+const enemyTarget=(enemyGroup,enemy)=>{const keywords=enemy?participantKeywords(enemy).ids:[];return{enemyGroup:enemyGroup||undefined,enemyKeywords:keywords.length?keywords:undefined};};
+export function isPsychologyImmune(subject,{kind='fear',enemyGroup=null,enemy=null,ignoreUndeadImmunity=false,ignorePsychologyImmunity=false}={}){
  if(!subject||ignorePsychologyImmunity===true)return false;
  if((subject.states||[]).some(s=>s.key==='frenzy'&&activeSource(s)))return true;
  const undead=hasTrait(subject,/mort[- ]vivant|undead/i);
@@ -20,10 +23,12 @@ export function isPsychologyImmune(subject,{kind='fear',enemyGroup=null,ignoreUn
  if(kind==='fear'||kind==='intimidate'){
   if(hasTrait(subject,/marque de slaanesh|mark of slaanesh|sans peur.*tout/i))return true;
   if(hasTrait(subject,/belliqueux|belligerent/i)&&subject.extensions?.v5?.hasMomentum===true)return true;
-  if(enemyGroup){
-   const fearless=acquiredV5Talents(subject).some(t=>t.talentId==='talent-fearless'&&(!t.specialization||t.specialization===enemyGroup||t.specialization==='Tout'));
-   const hatred=acquiredV5Talents(subject).some(t=>t.talentId==='talent-hatred'&&t.specialization===enemyGroup)||(subject.states||[]).some(s=>s.key==='hatred'&&s.specialization===enemyGroup);
-   if(fearless||hatred)return true;
+  const target=enemyTarget(enemyGroup,enemy);
+  if(target.enemyGroup||target.enemyKeywords){
+   const fearless=acquiredV5Talents(subject).some(t=>t.talentId==='talent-fearless'&&(!t.specialization||specializationMatches(t.specialization,target)));
+   const hatred=acquiredV5Talents(subject).some(t=>t.talentId==='talent-hatred'&&specializationMatches(t.specialization,target))||(subject.states||[]).some(s=>s.key==='hatred'&&specializationMatches(s.specialization,target));
+   const hatredTrait=enemy&&traitTargetMatches(subject,['hatred','haine'],enemy);
+   if(fearless||hatred||hatredTrait)return true;
   }
  }
  return false;
@@ -40,19 +45,19 @@ export function previewGenericFearEncounter({author,target,rating,sourceKind='tr
   effectiveRating=0;
  }
  if(!Number.isSafeInteger(effectiveRating)||effectiveRating<0)return{ready:false,needsInput:[{field:'rating',label:'Indice de Peur non chiffré : saisie MJ explicite requise (Q13/Q19).'}],unresolved:['Indice de Peur non chiffré : saisie MJ explicite requise (Q13/Q19).'],addedStates:[]};
- if(isPsychologyImmune(target,{kind:'fear',enemyGroup,ignoreUndeadImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
+ if(isPsychologyImmune(target,{kind:'fear',enemyGroup,enemy:author,ignoreUndeadImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
  const already=(target.states||[]).some(s=>['fear-of-talent','fear-overcome'].includes(s.key)&&s.authorId===author.id&&s.encounterId===encounterId&&activeSource(s));
  if(already)return{ready:true,exempt:true,reason:'already-encountered',addedStates:[],unresolved:[],needsInput:[]};
  const origin=genericPsychologyOrigin(sourceKind,{sourceId,sourceLabel});
  const label=sourceLabel||(sourceKind==='afraid'?`Peureux (${effectiveRating})`:sourceKind==='v5-size'?`Peur de taille V5 (${effectiveRating})`:`Peur (${effectiveRating})`);
- const state={id:`${resolutionId}:fear:${author.id}:${target.id}`,key:'fear-of-talent',name:label,kind:'talent-pending',level:1,source:origin,authorId:author.id,targetId:target.id,rating:effectiveRating,mode:'sl',successes:0,lastAttemptRound:null,restriction:'cannotGainMomentum',encounterId,enemyGroup};
+ const state={id:`${resolutionId}:fear:${author.id}:${target.id}`,key:'fear-of-talent',name:label,kind:'talent-pending',level:1,source:origin,authorId:author.id,targetId:target.id,rating:effectiveRating,mode:'sl',successes:0,lastAttemptRound:null,restriction:'cannotGainMomentum',encounterId,enemyGroup,enemyKeywords:participantKeywords(author).ids};
  return{ready:true,exempt:false,rating:effectiveRating,addedStates:[state],unresolved:[],needsInput:[]};
 }
 export function previewGenericTerrorEncounter({author,target,rating,sourceKind='trait',sourceId=null,sourceLabel=null,knownAlly=false,enemyGroup=null,ignoreUndeadImmunity=false,ignorePsychologyImmunity=false,encounterId='default-encounter',resolutionId='generic-terror'}={}){
  if(!target||!author)return{ready:false,needsInput:[{field:'participants',label:'Auteur et cible de la Terreur requis.'}],unresolved:['Auteur et cible de la Terreur requis.'],addedStates:[]};
  if(knownAlly===true||author.id===target.id||author.camp&&target.camp&&author.camp===target.camp&&knownAlly!==false)return{ready:true,exempt:true,reason:'known-ally',addedStates:[],unresolved:[],needsInput:[]};
  if(!Number.isSafeInteger(rating)||rating<1)return{ready:false,needsInput:[{field:'rating',label:'Indice de Terreur non chiffré : saisie MJ explicite requise (Q13/Q19).'}],unresolved:['Indice de Terreur non chiffré : saisie MJ explicite requise (Q13/Q19).'],addedStates:[]};
- if(isPsychologyImmune(target,{kind:'terror',enemyGroup,ignoreUndeadImmunity,ignorePsychologyImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
+ if(isPsychologyImmune(target,{kind:'terror',enemyGroup,enemy:author,ignoreUndeadImmunity,ignorePsychologyImmunity}))return{ready:true,exempt:true,reason:'psychology-immunity',addedStates:[],unresolved:[],needsInput:[]};
  const already=(target.states||[]).some(s=>['terror-of-talent','terror-resolved'].includes(s.key)&&s.authorId===author.id&&s.encounterId===encounterId&&activeSource(s));
  if(already)return{ready:true,exempt:true,reason:'already-encountered',addedStates:[],unresolved:[],needsInput:[]};
  const terrorImmune=(target.states||[]).some(s=>s.key==='terror-immunity'&&s.encounterId===encounterId&&activeSource(s));
@@ -73,7 +78,7 @@ export function resolveGenericFearTest({actor,fearEffectId,test,round=1,enemyGro
  if(existing.mode==='sl'&&Number.isSafeInteger(existing.lastAttemptRound)&&existing.lastAttemptRound===round)return{ready:false,error:'Peur : une seule tentative de Test étendu par Round.'};
  if(!test||typeof test.success!=='boolean'||!Number.isInteger(test.sl))return{ready:false,error:'Résultat du Test de Calme requis.'};
  const group=enemyGroup??existing.enemyGroup;
- const immune=isPsychologyImmune(actor,{kind:'fear',enemyGroup:group});
+ const immune=isPsychologyImmune(actor,{kind:'fear',enemyGroup:group,enemy:existing.enemyKeywords?.length?{keywords:existing.enemyKeywords}:null});
  const delta=test.success?(existing.mode==='sl'?Math.max(0,test.sl):1):0;
  const nextSuccesses=existing.successes+delta;
  const overcome=immune||test.success&&nextSuccesses>=existing.rating;
@@ -239,7 +244,7 @@ export const PSYCHOLOGY_SOURCES=Object.freeze([
  {ids:['C0-L06-049'],name:'Corruption : moral vacillant',steps:[R('Un échec contre une Peur donne Brisé ; d’autres mutations mentales peuvent imposer Animosité ou Frénésie (MJ).')]},
  {ids:['C0-L06-052'],name:'Fureur de Myrmidia',steps:[G('Frénésie','durée du miracle')]},
  {ids:['C0-L06-053'],name:'Apaisement de Shallya',steps:[G('Psychologie suspendue','durée du miracle'),R('Puis sommeil ; un dormeur réticent résiste par Calme.')]},
- {ids:['C0-L06-054'],name:'Flambeau de vertu',steps:[P(),G('Sans peur (tout)','tant que le prêtre est vu'),FMJ({scope:'enemies',label:'Peur des orques et gobelins'})]},
+ {ids:['C0-L06-054'],name:'Flambeau de vertu',steps:[P(),G('Sans peur (tout)','tant que le prêtre est vu'),FMJ({scope:'enemies',label:'Peur des orques et gobelins',keyword:'peaux-vertes'})]},
  {ids:['C0-L06-056'],name:'Fureur d’Ulric',steps:[R('Test de Frénésie gratuit aux Tours alliés ; dégâts explosifs sur la première touche de mêlée à la place de l’attaque gratuite.')]},
  {ids:['C0-L06-057'],name:'Incident mineur : visions',steps:[B(-2,1)]},
  {ids:['C0-L06-060'],name:'Effrayant : sort',steps:[FOC(1,3)]},
@@ -267,12 +272,12 @@ export const PSYCHOLOGY_SOURCES=Object.freeze([
  {ids:['C0-L04-002'],name:'Rally Round',steps:[R('Bonus de Calme et d’Endurance aux alliés de statut Bronze, selon l’effectif ; aucun effet sur Argent/Or.')]},
  {ids:['C0-L04-003'],name:'Pax of Taal',steps:[R('Animaux Bestiaux non corrompus apaisés ; ne retire pas Brisé automatiquement.')]},
  {ids:['C0-L07-001','C0-L08-007'],name:'Apothéose',steps:[F(1,{duration:'1 Round'}),R('Variante Slann : l’indice augmente par 2 DR supplémentaires.')]},
- {ids:['C0-L07-002'],name:'Nœud géomantique terrifiant',steps:[TE(3,{scope:'chaos-category'})]},
+ {ids:['C0-L07-002'],name:'Nœud géomantique terrifiant',steps:[TE(3,{scope:'chaos-category',keyword:'chaos'})]},
  {ids:['C0-L07-003'],name:'Bénédictions de ponte',steps:[R('Sans peur contre des groupes précis ou Haine des skavens selon le tableau (à confirmer).')]},
  {ids:['C0-L07-004'],name:'Stationary Attacker',steps:[G('Immunité à la Psychologie'),R('Aucun déplacement ni Fuite.')]},
  {ids:['C0-L07-005','C0-L11-007'],name:'Carnosaur : Blood Frenzy',steps:[G('Frénésie','jusqu’à la mort des ennemis détectés',{trigger:'première Blessure infligée'})]},
  {ids:['C0-L07-006'],name:'Dread Saurian : Fearsome Roar',variants:{huge:[B(-1,0,{onFailFear:true})],other:[B(-2,0,{onFailFlee:true})]}},
- {ids:['C0-L07-007','C0-L12-005'],name:'Attribut Waaagh!',steps:[P({scope:'greenskins-in-range'})]},
+ {ids:['C0-L07-007','C0-L12-005'],name:'Attribut Waaagh!',steps:[P({scope:'greenskins-in-range',keyword:'peaux-vertes'})]},
  {ids:['C0-L07-008'],name:'Malédiction magique d’exploration',steps:[R('Calme raté : fuite des visions ; la récupération est suivie d’Exténué.')]},
  {ids:['C0-L07-009'],name:'Nuage de spores',steps:[R('Échec d’Endurance : dégâts directs et Frénésie automatique aux combats de l’aventure.')]},
  {ids:['C0-L08-002'],name:'Obsession elfique',steps:[R('Une fois par séance, avec accord du MJ : choisir l’issue d’un Test de Psychologie contraire à l’obsession.')]},
@@ -291,7 +296,7 @@ export const PSYCHOLOGY_SOURCES=Object.freeze([
  {ids:['C0-L11-008'],name:'Shard Dragon : Rabid Frenzy',steps:[G('Frénésie','irrépressible',{trigger:'première Blessure reçue'}),R('Deux Tests de mêlée gratuits par Round.')]},
  {ids:['C0-L11-009'],name:'Breath of Nightmares',steps:[TE(2,{testKey:'endurance',ignorePsychologyImmunity:true})]},
  {ids:['C0-L11-011'],name:'Bouclier de poudre de revenant',steps:[R('Les morts-vivants sont perçus vivants : leur Peur disparaît sauf si cette forme la causait déjà.')]},
- {ids:['C0-L11-012'],name:'Wulfshowl',steps:[F(2,{scope:'wolves-lions-goats-chimeras'})]},
+ {ids:['C0-L11-012'],name:'Wulfshowl',steps:[F(2,{scope:'wolves-lions-goats-chimeras',keywords:['loup','lion','chevre','chimere']})]},
  {ids:['C0-L11-014'],name:'Fury',variants:{hatred:[R('Dépenser 1 Élan : Haine des adversaires proches.')],frenzy:[R('Dépenser 3 Élan : Frénésie, puis perte de tout l’Élan.')]}},
  {ids:['C0-L11-018'],name:'Borrowed Courage',steps:[R('Le gobelin monté sur une araignée géante ne subit pas Effrayé envers les elfes.')]},
  {ids:['C0-L11-019'],name:'Endless Malice : témoins',steps:[F(2,{scope:'witnesses'})]},
@@ -299,7 +304,7 @@ export const PSYCHOLOGY_SOURCES=Object.freeze([
  {ids:['C0-L12-002'],name:'Incident de gastromancie 61–65',steps:[G('Frénésie','le boucher')]},
  {ids:['C0-L12-003'],name:'Hungry Troll',steps:[G('Frénésie','jusqu’à un repas de taille moyenne ou plus')]},
  {ids:['C0-L12-004'],name:'Incident chamanique 51–55',steps:[R('Dégâts au chamane ; orques/gobelins proches : Endurance ou Blessure directe et Frénésie.')]},
- {ids:['C0-L12-006'],name:'WAAAGH!',steps:[P({scope:'greenskins-in-zone'}),R('Bonus de Calme, d’Endurance et d’Élan pendant la durée.')]},
+ {ids:['C0-L12-006'],name:'WAAAGH!',steps:[P({scope:'greenskins-in-zone',keyword:'peaux-vertes'}),R('Bonus de Calme, d’Endurance et d’Élan pendant la durée.')]},
  {ids:['C0-L13-003'],name:'Tenez bon',steps:[G('Aucun nouveau Brisé allié','durée',{lock:'brise'})]},
  {ids:['C0-L13-004'],name:'Dévotion de la Vierge guerrière',steps:[G('Sans peur d’un ennemi choisi (Peur seulement)')]},
  {ids:['C0-L15-003'],name:'Pierre des serments',steps:[M('Tests contre les déplacements forcés, dont ceux qui empêchent Brisé',2,'forced-movement')]},
@@ -342,7 +347,7 @@ export const PSYCHOLOGY_SOURCES=Object.freeze([
  {ids:['C0-L21-002'],name:'Wild Magic : Winds Recede et Tzeentch’s Caprice',steps:[R('Test de Commandement (+0 ou −1 DR) selon l’incident de magie sauvage.')]},
  {ids:['C0-L21-003'],name:'Marsie Wagnershoff',variants:{frenzy:[R('Volonté (−2 DR) sinon Frénésie jusqu’à 1 PV ou moins.')],witness:[FMJ({scope:'witnesses'})]}},
  {ids:['C0-L22-002'],name:'Mark of the Horned Rat',steps:[B(0,0,{onFailSocPenalty:{amount:-1,duration:'1d10 heures'}})]},
- {ids:['C0-L22-003'],name:'Death Frenzy, Musk of Terror et Skitterleap',variants:{frenzy:[B(0,0,{onFailFrenzy:true})],musk1:[TE(1,{scope:'skaven'})],musk2:[TE(2,{scope:'skaven'})],skitterleap:[B(-1,0)]}},
+ {ids:['C0-L22-003'],name:'Death Frenzy, Musk of Terror et Skitterleap',variants:{frenzy:[B(0,0,{onFailFrenzy:true})],musk1:[TE(1,{scope:'skaven',keyword:'skaven'})],musk2:[TE(2,{scope:'skaven',keyword:'skaven'})],skitterleap:[B(-1,0)]}},
  {ids:['C0-L23-002'],name:'Mutations physiques : Peur et Warp Frenzy',variants:{fear1:[F(1)],fear2:[F(2)],frenzy:[G('Frénésie')]}},
  {ids:['C0-L23-003'],name:'Mutations mentales',steps:[R('Shaky Morale : Brisé sur échec de Volonté ; Blasted Mind : 1d10 Brisé après 1d10 Rounds ; Hurried Masochism : Traits de Psychologie V5.')]},
  {ids:['C0-L23-004'],name:'Mark of Tzeentch, Mindfire et Chaos Fury',steps:[R('Animosité mutuelle ; Calme (+0) contre la Corruption (Mindfire) ; Traits Peur (2), Craintif, Peureux.')]},
@@ -361,6 +366,19 @@ export function previewPsychologySource(sourceId,{author,targets=[],overcast=0,v
  let steps=entry.steps;
  if(entry.variants){steps=entry.variants[variant];if(!steps){stop('variant','Variante requise : '+Object.keys(entry.variants).join(', '));return out;}}
  const swap=(p,next)=>{const i=out.participants.findIndex(x=>x.id===p.id);out.participants[i]=next;};
+ // Étape visant un mot-clé : la cible porteuse du terme ou d'un descendant est touchée ; sans mot-clé connu, comportement d'avant avec rappel ;
+ // correction du MJ par facts.keywordTargets[idCible] (true : forcer, false : retirer).
+ const pool=s=>{
+  const wanted=s.keywords||(s.keyword?[s.keyword]:null);if(!wanted)return[...out.participants];
+  const label=wanted.map(id=>activeReferential().terms.get(id)?.nameFr||id).join(', ');
+  return out.participants.filter(p=>{
+   const forced=facts.keywordTargets?.[p.id];if(typeof forced==='boolean')return forced;
+   const ids=participantKeywords(p).ids;
+   if(!ids.length){out.reminders.push(`${p.id} : mots-clés inconnus, effet appliqué comme avant — vérifier que la cible est bien « ${label} » (facts.keywordTargets pour corriger).`);return true;}
+   if(wanted.some(id=>keywordMatches(ids,id)))return true;
+   out.reminders.push(`${p.id} : n’est pas « ${label} » — aucun effet (facts.keywordTargets pour forcer).`);return false;
+  });
+ };
  for(const s of steps){
   if(s.k==='reminder'){out.reminders.push(s.text);continue;}
   if(s.k==='modifier'){out.modifiers.push({id:`${sourceId}:${out.modifiers.length}`,label:s.label,amount:s.amount,scope:s.scope});continue;}
@@ -376,7 +394,7 @@ export function previewPsychologySource(sourceId,{author,targets=[],overcast=0,v
    if(!Number.isSafeInteger(rating)||rating<1){stop(s.ratingFact||'rating','Indice non chiffré : saisie MJ explicite requise (Q13/Q19).');continue;}
    if(s.fromRound&&!(Number.isSafeInteger(round)&&round>=s.fromRound)){out.reminders.push(`${entry.name} : actif dès le Round ${s.fromRound}.`);continue;}
    if(!author||!out.participants.length){stop('participants','Auteur et cibles requis.');continue;}
-   for(const p of [...out.participants]){
+   for(const p of pool(s)){
     const preview=(s.k==='fear'?previewGenericFearEncounter:previewGenericTerrorEncounter)({author,target:p,rating,sourceKind:'spell',sourceId,sourceLabel:`${entry.name} (${rating})`,encounterId,resolutionId:`${sourceId}:${s.k}`,ignorePsychologyImmunity:s.ignorePsychologyImmunity});
     if(!preview.ready){for(const n of preview.needsInput)stop(n.field,n.label);continue;}
     if(preview.addedStates.length){swap(p,{...p,states:[...(p.states||[]),...preview.addedStates]});out.addedStates.push(...preview.addedStates);}
@@ -384,7 +402,7 @@ export function previewPsychologySource(sourceId,{author,targets=[],overcast=0,v
    continue;
   }
   if(s.k==='purge'){
-   for(const p of [...out.participants]){
+   for(const p of pool(s)){
     if(s.immunity){if(!Number.isSafeInteger(bfm)||bfm<1||!Number.isSafeInteger(round)){stop('bfm','BFM et Round courant requis pour l’immunité.');break;}swap(p,previewDeliciousExcruciation({caster:author||p,target:p,bfm,round}).participant);continue;}
     const amount=s.amount??brokenLevels(p);
     if(amount>0)swap(p,recoverV5Condition(p,'brise',{method:'divine-removal',amount}).participant);
@@ -394,13 +412,13 @@ export function previewPsychologySource(sourceId,{author,targets=[],overcast=0,v
   }
   if(s.k==='condition'){
    if(s.remove||!(s.level>0))continue;
-   for(const p of [...out.participants])swap(p,acquireV5Conditions(p,[{name:s.name,level:s.level,source:{kind:'psychology-source',sourceId}}],{round}).participant);
+   for(const p of pool(s))swap(p,acquireV5Conditions(p,[{name:s.name,level:s.level,source:{kind:'psychology-source',sourceId}}],{round}).participant);
    continue;
   }
   if(s.k==='calmBroken'){
    const key=s.testKey||'calm';
    if(s.modifier!==0)out.modifiers.push({id:`${sourceId}:test:${key}`,label:`Test de ${key==='calm'?'Calme':key} de ${entry.name}`,amount:s.modifier,scope:'test'});
-   for(const p of [...out.participants]){
+   for(const p of pool(s)){
     const t=tests[key]?.[p.id];
     if(typeof t?.success!=='boolean'||!Number.isSafeInteger(t.sl)){stop('tests.'+key,'Test ('+key+') requis pour '+p.id+'.');continue;}
     if(t.success){if(s.encounterImmunity)out.reminders.push(`${p.id} : protégé pour la rencontre.`);continue;}

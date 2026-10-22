@@ -76,3 +76,11 @@ Un Exténué d’Altdorf est un État de combat ordinaire, exclu du registre. Le
 | Suivi quotidien du livre sacré perdu | `extensions.v5.divineDailyWraths[]` : culte, nom, début (secondes de campagne), jours joués, jours écartés, statut | absente | commandes MJ (ouverture, jour joué par le Courroux MJ, jour écarté à zéro Péché, clôture) | B18 |
 | Terres sanctifiées (lieux de la campagne, seuil MJ) | `extensions.v5.sanctifiedGrounds[]` au niveau de la partie (pas du personnage) | absente | commandes MJ ; l’Enflammé acquis est un État de combat exclu du registre | B18 |
 | Faits navals de Manann et Stromfels (audit) | `extensions.v5.divineNavalEvents[]` : navire, dés, humeur calculée, jet modifié (300 derniers) | absente ; l’humeur du navire n’est pas suivie (aucun sous-système naval) | commande MJ ; seul le Péché de la surutilisation (+1) est un compteur durable | B18 |
+
+## Phase E — mots-clés de créature (demande du MJ du 22/10)
+
+| Variable | Emplacement dans l’outil | Source sur la fiche aujourd’hui | Modifiée par | Lot / commit |
+| --- | --- | --- | --- | --- |
+| Mots-clés posés sur un personnage, une créature ou un PNJ | `keywords[]` (identifiants du référentiel) du profil, du participant et de la fiche PJ ; conservés par réserve → combat → scène | absente ; la race de la fiche (`race`) en fait déduire un (non écrit) | sélecteur du formulaire de profil, import JSON, corrections MJ | phase E K3 |
+| Mots-clés déduits écartés par le MJ | `keywordExclusions[]` des mêmes projections | absente | bouton « Écarter » du sélecteur, « Rétablir » | phase E K3 |
+| Ajouts du MJ au référentiel de mots-clés (donnée de campagne, pas de fiche) | `extensions.v5.keywordReferential.terms[]` : id, noms, parents, alias, `addedByMj` ; jamais de retrait ni de renommage | absente | commande `add-creature-keyword` (annulable) | phase E K2 |

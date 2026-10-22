@@ -948,3 +948,499 @@ Les PNJ seulement nommés sans bloc de profil, les carrières et les créatures 
 ## Validation et limites
 
 Champs, références de code, identités et décomptes vérifiés. Aucun bloc complet de caractéristiques recopié ; aucun changement de code, de catalogue ou de test. La recette verte de phase A valide ses contrôles nommés, pas les Traits absents ni l’exhaustivité du corpus.
+
+## Complément du 21/10/2026 (livres L18 à L26)
+
+AJOUT : 443 références de profils et 39 Traits ou capacités, tous marqués `addedOn: "2026-10-21"`. L18 (Power Behind the Throne Companion) était déjà autorisé (arbitrage Q05), sans avoir été inventorié ici ; L19 à L26 ont été ajoutés au corpus le 21/10. Les noms de profils sont déduits du titre imprimé (provisoires, relus à l’import) ; les noms de Traits V4 sont rapprochés des Traits V5 par une table d’alias (`tools/lib/bestiary-complement-data.mjs`), sans changer leur règle.
+
+### Traits et capacités ajoutés
+
+| ID | Source | Nom / nom français | Genre | Résumé |
+| --- | --- | --- | --- | --- |
+| E0-T-250 | L21 p.21 | Breath (Warpfire) / Souffle (Feu du Warp, traduction de travail) | variant | Souffle ordinaire ; qui rate l’esquive fait un Test d’Endurance Intermédiaire (+0 DR) et, réussi ou non, subit une exposition modérée à la Corruption. |
+| E0-T-251 | L18 p.85 | Formless Horror / Horreur informe (traduction de travail) | profile-ability | Propre au Changelin : une fois par Round, copie exacte d’une créature typique ou d’un individu étudié BI heures ; il gagne ses Traits et peut utiliser ses caractéristiques à la place des siennes (compétences de l’individu, pas ses souvenirs). Même texte en L21 p.56. |
+| E0-T-252 | L21 p.21 | Font of Flame / — | profile-ability | Flamer de Tzeentch sans assez d’Élan pour son Souffle : un d10, de 8 à 10 il peut tout de même souffler. Termes V4 convertis en V5 au lot de l’implantation (±10 → ±1 DR, Avantage → Élan). |
+| E0-T-253 | L21 p.63 | Messy Demise / — | profile-ability | À la mort d’un Squig colossal, tout engagé à trois yards fait un Test d’Esquive Intermédiaire (+0 DR) sinon 2d10 Blessures réduites par Endurance et armure, minimum une. |
+| E0-T-254 | L21 p.62 | Hammer Hand / — | profile-ability | Le bras massif de l’Ettin maudit ajoute +30 au jet de gravité de toutes ses Blessures Critiques (table V4 en pourcentage : lecture V5 à fixer au lot). |
+| E0-T-255 | L21 p.64 | Suffused with Death / — | profile-ability | Dans les 80 yards du colosse, les sorts de la Mort et de la Nécromancie gagnent +1 DR ; ceux de Ghyran, Hysh et Azyr subissent −10 (−1 DR en V5). |
+| E0-T-256 | L21 p.64 | Garden of Corpses / — | profile-ability | Le colosse vaincu libère 3d10 zombies qui attaquent tout être vivant proche. |
+| E0-T-257 | L19 p.117 | Paralysing Chill / Froid paralysant (traduction de travail) | profile-ability | Le Spectre ne fait aucun dégât ; un coup au but inflige un état Sonné par DR de marge. |
+| E0-T-258 | L19 p.115 | Manifestation of Ghur / — | profile-ability | Les sorts du Domaine des Bêtes ne nuisent pas à l’Élémentaire incarné ; les effets qui blessent davantage Démons et Morts-vivants le touchent comme eux, sauf ceux de ce Domaine. |
+| E0-T-259 | L19 p.115 | Eternal Guardian / — | profile-ability | L’Élémentaire gardien tué se reconstitue en d10 jours, sauf précautions adaptées (dressage, drainage magique, corruption de la source). |
+| E0-T-260 | L19 p.115 | Howl of the Great Beast / — | profile-ability | À son Tour, pour un Élan, hurlement en attaque gratuite : vivants à Initiative yards, trois Assourdi et Test de Calme Difficile sinon trois Brisé ; qui réussit une fois n’y est plus soumis durant la rencontre. Termes V4 convertis en V5 au lot de l’implantation (±10 → ±1 DR, Avantage → Élan). |
+| E0-T-261 | L19 p.116 | Shapeshift / Changement de forme (Enfant d’Ulric) | profile-ability | L’Enfant d’Ulric passe d’une forme à l’autre en dépensant deux actions. |
+| E0-T-262 | L19 p.109 | Stinging Tail / — | profile-ability | Gnawretch : attaque de queue gratuite pour un Élan ; qui subit des dégâts devient Empoisonné. |
+| E0-T-263 | L19 p.109 | Prosthetic Hand / — | profile-ability | Gnawretch porte toujours un couteau à la main gauche et ne peut employer d’arme à deux mains. |
+| E0-T-264 | L18 p.117 | Flaming / — | profile-ability | Une morsure de crâne volant qui inflige au moins une Blessure inflige aussi un état Enflammé. |
+| E0-T-265 | L18 p.119 | Headless / Sans tête (traduction de travail) | profile-ability | Un coup à la tête devient un coup au corps si l’attaque réussit avec 2 DR ou plus, sinon un échec. |
+| E0-T-266 | L22 p.14 | Warp-Cursed Blades / — | profile-ability | Les épées des gardes de Skrittar comptent comme armes de poing et possèdent en plus les qualités Dévastatrice et Empaleuse. |
+| E0-T-267 | L25 p.56 | Mark of Khorne / Marque de Khorne | trait-or-variant | Marque physique : talent Frénésie, Étiquette (Fidèles de Khorne), Animosité réciproque envers les adorateurs de Slaanesh tant que la marque se voit ; jamais Langue (Magick) ni Focalisation sauf pour dissiper ; talents martiaux achetables comme avancements. Variante de E0-T-035, à ne pas fusionner. |
+| E0-T-268 | L23 p.82 | Mark of Tzeentch / Marque de Tzeentch | trait-or-variant | Marque physique : 1d10/3 Mutations (arrondi au supérieur) alternées mentales et physiques (colonne Tzeentch), Étiquette (Fidèles de Tzeentch), Animosité réciproque envers les adorateurs de Nurgle tant que la marque se voit ; talents de magie achetables comme avancements. Variante de E0-T-035. |
+| E0-T-269 | L23 p.84 | Split / Scission (traduction de travail) | trait | Sur Blessure Critique ou à zéro Blessure, la créature se scinde en deux Horreurs bleues intactes. |
+| E0-T-270 | L23 p.84 | Tzeentch’s Fire / Feu de Tzeentch (traduction de travail) | trait | Les Horreurs du même type proches mettent leur pouvoir en commun : l’une lance un sort de Tzeentch par Round (Feu rose ou bleu), +1 DR par autre Horreur, jusqu’à +9 DR. |
+| E0-T-271 | L23 p.87 | Shapeshifter (Creature) / Métamorphe (créature) | trait | Passe à volonté à la forme de la créature désignée (un Round entier, sans Mouvement ni Action) ; à la pleine lune, Test de Volonté Facile (+20) au crépuscule sinon transformation ; garde Int, FM et Soc, le reste devient le profil de la créature. |
+| E0-T-272 | L25 p.140 | Marine Creature / Créature marine (traduction de travail) | trait | Mouvement plein dans l’eau ; hors de l’eau M tombe à 1 et tous ses Tests subissent −2 DR ; doit être régulièrement arrosée sous peine d’asphyxie. |
+| E0-T-273 | L25 p.140 | Grim (Rating) — Sea of Claws / Féroce — Sea of Claws | variant | Début de Tour sans l’indice en Élan : la réserve monte à l’indice, sauf Enchevêtré, Surpris ou Inconscient ; avec les règles de groupe de Up in Arms, la créature fournit l’indice à la réserve adverse. Même texte que E0-T-209 (Lustria). |
+| E0-T-274 | L26 p.90 | Analgesic Saliva / Salive analgésique (traduction de travail) | trait | La morsure ne fait pas mal : la créature s’attache sans réveiller une victime endormie ; l’effet cesse 10 − BE Rounds après qu’elle se détache. |
+| E0-T-275 | L26 p.90 | Anticoagulant Saliva / Salive anticoagulante (traduction de travail) | trait | La victime d’une morsure gagne un état Hémorragique. |
+| E0-T-276 | L26 p.90 | Aquatic — Death on the Reik / Aquatique — Death on the Reik | variant | Respire sous l’eau et se déplace à pleine vitesse dans l’eau, mais ne peut pas se déplacer sur terre. Précise la mention sans règle de L07 (E0-T-210). |
+| E0-T-277 | L26 p.90 | Attach and Feed / S’attacher et se nourrir (traduction de travail) | trait | Une morsure réussie attache la créature : perte automatique d’une Blessure par Round ; à zéro la victime devient Inconsciente. Elle ne lâche qu’une fois repue (son BE en Blessures) ; on l’arrache par Force opposée en infligeant une Blessure ; ce qu’elle craint la fait lâcher. |
+| E0-T-278 | L26 p.90 | Creeping / Rampant (traduction de travail) | trait | Implacable mais lente : la créature ne peut jamais Courir. |
+| E0-T-279 | L26 p.90 | Engulf — Death on the Reik / Engloutir — Death on the Reik | variant | Toute attaque réussie d’une créature assez grande engloutit la victime (même sans dégâts) : un Enchevêtré de la Force de la créature, un de plus à chaque début de Round et une Blessure automatique ; trop petite, elle immobilise seulement la localisation touchée. Variante de E0-T-119. |
+| E0-T-280 | L26 p.90 | Hallucinogen / Hallucinogène | trait | Musc hallucinogène : à deux yards (plus sous le vent), Test de Volonté Facile (+20) sinon un Sonné par niveau d’échec. |
+| E0-T-281 | L26 p.90 | Capricious / Capricieux (traduction de travail) | trait | Humeur changeante : tout Test de Sociabilité mené avec elle se modifie selon un d10 (1 : −2 DR ; 2-3 : −1 ; 4-7 : aucun ; 8-9 : +1 ; 10 : +2). |
+| E0-T-282 | L26 p.88 | Naiad War-Form / Forme de guerre (Naïade) | profile-ability | Passage gratuit en forme d’eau vive : Peur 2 et Armure 2 ; chaque Round, un aspect différent au choix (Crue : +1 DR Force/Endurance et dégâts à +10 ; Méandre : +2 DR sur CC ; Rapides : Mouvement 10 et +1 DR à l’Esquive ; Eau calme : Immunité Psychologique). |
+| E0-T-283 | L25 p.149 | Lord of the Deeps / — | profile-ability | Triton : Charme animal et Affinité avec les animaux ne valent que pour les créatures marines, mais sans les empêchements habituels (belliqueuse, territoriale, dressée, blessée) ; seules les créatures dominées par magie ne lui obéissent pas. |
+| E0-T-284 | L25 p.149 | Favoured of Manann / — | profile-ability | Triton : lien avec Manann laissé au MJ ; il répond mal à un navire dont l’Humeur de Manann est négative et peut honorer un navire à 50 ou plus. |
+| E0-T-285 | L25 p.149 | Miracles as Spells / Miracles lancés comme des sorts | profile-ability | Triton lance comme des sorts de NI 1 des miracles de Manann (Becalm, Fair Winds, Sea Curse, Rip Tides) et de Stromfels (Raging Seas) et peut les surpuissanter comme des sorts. |
+| E0-T-286 | L24 p.66 | Unstable Reformation / — | profile-ability | Si Inta-Dapesht « meurt » à cause d’Instable, il se reforme après 8 heures avec toutes ses Blessures. |
+| E0-T-287 | L22 p.14 | Shield (Rating) / Bouclier (valeur) | trait-V4 | Trait V4 de profil (« Shield 2* ») : bouclier de la valeur indiquée ; lu comme l’option Bouclier de L06 p.319 (+n PA et +1 DR en opposition par Esquive ou Mêlée) ; l’astérisque n’a pas de note imprimée dans les passages lus. |
+| E0-T-288 | L22 p.73 | Creature Weapons (Claws, Beak, Slam, Tongue) / Armes naturelles V4 (Griffes, Bec, Coup, Langue) | trait-V4 | Attaques naturelles V4 écrites « Claws +6 », « Beak +8 », « Slam +n », « Tongue Attack +3 » : dégâts imprimés, déjà complets, à traiter comme les autres armes de créature. |
+
+### Profils ajoutés
+
+| ID | Source | Nom | Traits reconnus | Capacités |
+| --- | --- | --- | --- | --- |
+| E0-P-542 | L18 p.31 | Golthog — Ogre Soldier (Silver 3) | Armour, Night Vision, Prejudice, Size, Weapon | — |
+| E0-P-543 | L18 p.53 | Sascha Rothbert — Human Procurer (Silver 1) | Weapon | — |
+| E0-P-544 | L18 p.56 | Hausmeister Breugal — Human Governor, Former Advisor (Gold 3) | Prejudice, Weapon | — |
+| E0-P-545 | L18 p.60 | Nastassia — Human Spymaster (Gold 4) | Armour, Weapon | — |
+| E0-P-546 | L18 p.63 | Alfric `Half-Nose' Anvilbreaker — Dwarf Fence (Silver 2) | Animosity, Hatred, Prejudice, Weapon | — |
+| E0-P-547 | L18 p.66 | Thognar — Dwarf Aide (Silver 2) | — | — |
+| E0-P-548 | L18 p.68 | Edel Mueller — Human High Priestess (Gold 1) | — | — |
+| E0-P-549 | L18 p.71 | Isolde Begegnen — Human High Priestess (Gold 1) | — | — |
+| E0-P-550 | L18 p.74 | Brunhilde Klaglich — Human Spymaster (Gold 4) | Armour, Weapon | — |
+| E0-P-551 | L18 p.85 | Changeling of Tzeentch | Corruption, Daemonic, Dark Vision, Distracting, Fear, Formless Horror, Spellcaster, Unstable, Weapon | E0-T-251 |
+| E0-P-552 | L18 p.96 | Peter Tavelli — Yellow Fang Cultist (Brass 4) | Prejudice, Ranged, Weapon | — |
+| E0-P-553 | L18 p.96 | Tigrati `Head' Parvisch — Cultist (Brass 2) | Infestation, Weapon | — |
+| E0-P-554 | L18 p.97 | Yellow Fang Cultists | Armour, Weapon | — |
+| E0-P-555 | L18 p.97 | Skaven Grey Seer | Corruption, Night Vision, Spellcaster, Weapon | — |
+| E0-P-556 | L18 p.97 | Yellow Fang Cultists | Armour, Weapon | — |
+| E0-P-557 | L18 p.97 | Skaven Grey Seer | Corruption, Night Vision, Spellcaster, Weapon | — |
+| E0-P-558 | L18 p.114 | Henri-Phillippe Rocheteau — Human Village Elder, Former Merchant (Silver 5) | — | — |
+| E0-P-559 | L18 p.114 | Villager (Brass 4) | — | — |
+| E0-P-560 | L18 p.115 | Parzival Tristan Aschaffenberg Noble, Former Soldier (Silver 5*) | — | — |
+| E0-P-561 | L18 p.115 | Isolde Gudhoffen — Villager (Brass 3) | — | — |
+| E0-P-562 | L18 p.116 | The Militia Sentry, Former Villager (Silver 1) | — | — |
+| E0-P-563 | L18 p.116 | Typical Villager — Villager (Brass 3) | Prejudice | — |
+| E0-P-564 | L18 p.116 | Wuder Lechart — Village Fool (Brass 0) | Corruption, Immunity, Tough | — |
+| E0-P-565 | L18 p.117 | Flying Death Skulls | Bite, Construct, Fear, Fly, Infected, Night Vision, Size, Undead, Weapon | — |
+| E0-P-566 | L18 p.117 | Zombie | Armour, Construct, Dark Vision, Fear, Painless, Territorial, Undead, Unstable | — |
+| E0-P-567 | L18 p.117 | Flying Death-Ier Skulls | Bite, Construct, Fear, Fly, Night Vision, Size, Undead | E0-T-264 |
+| E0-P-568 | L18 p.117 | Zombie Champion | Armour, Construct, Dark Vision, Fear, Hardy, Painless, Shield, Territorial, Undead, Weapon | — |
+| E0-P-569 | L18 p.118 | Wizard | Clever, Prejudice, Stealthy, Weapon | — |
+| E0-P-570 | L18 p.119 | Headless Skeleton Champions | Armour, Construct, Dark Vision, Fear, Painless, Undead, Unstable, Weapon | E0-T-265 |
+| E0-P-571 | L18 p.119 | Headless Skeletons | Armour, Construct, Dark Vision, Fear, Painless, Undead, Unstable | E0-T-265 |
+| E0-P-572 | L19 p.32 | Sergeant Wolfgard Hohmann — Human Honour Guard (Silver 3) | Armour, Weapon | — |
+| E0-P-573 | L19 p.32 | Sergeant Wereburga Krotpreffer — Human Honour Guard (Silver 3) | Animosity, Armour, Prejudice, Weapon | — |
+| E0-P-574 | L19 p.39 | Alfric `Half-Nose' Anvilbreaker — Dwarf Fence (Silver 2) | Animosity, Hatred, Prejudice, Weapon | — |
+| E0-P-575 | L19 p.52 | Captain Moritz Valgeir — Human Knight, Former Sergeant (Silver 5) | Armour, Weapon | — |
+| E0-P-576 | L19 p.52 | Wulfric Tore — Human Merchant (Silver 5) | — | — |
+| E0-P-577 | L19 p.67 | Mote Yarrow the Fetchling | Ethereal, Prejudice | — |
+| E0-P-578 | L19 p.67 | Yanni Weber — Human Master Wizard (Gold 1) | Weapon | — |
+| E0-P-579 | L19 p.72 | Stefan Hochen — Human Doktor (Silver 5) | — | — |
+| E0-P-580 | L19 p.72 | Marta Gerbenshreiber — Human Bailiff (Silver 5) | Armour, Prejudice, Weapon | — |
+| E0-P-581 | L19 p.78 | Waldtraud Blass — Human Master Apothecary, Former Apprentice Artisan (Silver 3) | — | — |
+| E0-P-582 | L19 p.78 | Johen — Human Witch (Brass 2) | — | — |
+| E0-P-583 | L19 p.85 | Ritta — Human Con Artist (Silver 2) | — | — |
+| E0-P-584 | L19 p.89 | Wulfrum Viert — Human Steward (Gold 1) | — | — |
+| E0-P-585 | L19 p.89 | Emmille M—nzst—tter — Human Artisan (Silver 1) | Prejudice | — |
+| E0-P-586 | L19 p.95 | Agna Lottrisdottir — Dwarf Envoy (Silver 4) | Animosity, Armour, Hatred, Prejudice, Weapon | — |
+| E0-P-587 | L19 p.95 | Helmut Beckenbauer — Human Gang Boss (Silver 3) | Armour, Prejudice, Weapon | — |
+| E0-P-588 | L19 p.100 | Brother Bengt — Human Priest (Silver 1) | Prejudice | — |
+| E0-P-589 | L19 p.100 | Walpurga Wurklich — Human Agitator (Brass 2) | Animosity, Prejudice | — |
+| E0-P-590 | L19 p.106 | Grand Vizier Bhar - Necromancer (Silver 3) | — | — |
+| E0-P-591 | L19 p.106 | Andrea Bruhn — Human Town Councillor (Silver 5) | Prejudice | — |
+| E0-P-592 | L19 p.109 | Castellan-Warlord Gnawretch Skrray | Armour, Infected, Mutation, Tail | E0-T-262, E0-T-263 |
+| E0-P-593 | L19 p.110 | Master-Moulder Skree | Armour, Bite, Die Hard, Infected, Regeneration | — |
+| E0-P-594 | L19 p.110 | Arch-Prelate Kanker Flett | Corruption, Disease, Infected | — |
+| E0-P-595 | L19 p.114 | Jacopo Schmidt — Human Procurer (Silver 1) | — | — |
+| E0-P-596 | L19 p.114 | Traudl Bauer — Human Penitent (Brass 0) | Animosity, Hatred, Prejudice, Weapon | — |
+| E0-P-597 | L19 p.115 | The Bloody Hidesman | Armour, Construct, Horns, Size, Stride, Territorial, Terror, Unstable | E0-T-258, E0-T-259, E0-T-260 |
+| E0-P-598 | L19 p.116 | Child of Ulric | Armour, Bite, Fear, Night Vision, Tracker | E0-T-261 |
+| E0-P-599 | L19 p.117 | Spectre | Dark Vision, Ethereal, Fear, Undead, Unstable | E0-T-257 |
+| E0-P-600 | L19 p.117 | White Wolf | Armour, Bite, Night Vision, Size, Stride, Tracker | — |
+| E0-P-601 | L19 p.141 | `Magister' Hugo Greendale | — | — |
+| E0-P-602 | L19 p.141 | Beate Moser | — | — |
+| E0-P-603 | L19 p.142 | Old Otto | — | — |
+| E0-P-604 | L19 p.142 | Brigitte Schleigel | Afraid, Prejudice | — |
+| E0-P-605 | L19 p.143 | Brute | Armour | — |
+| E0-P-606 | L19 p.143 | Athlete | Armour | — |
+| E0-P-607 | L19 p.143 | Dwarf | Armour | — |
+| E0-P-608 | L19 p.150 | Gerdon Salzwed — Middenheimer Fence (Silver 2) | — | — |
+| E0-P-609 | L19 p.151 | Hasso Schroeter Middenheimer Entertainer (Brass 5) | — | — |
+| E0-P-610 | L19 p.152 | Kat Sperber — Middenlander Pedlar (Brass 4) | — | — |
+| E0-P-611 | L19 p.153 | Theresia Kleist Nordlander Seawoman (Silver 3) | — | — |
+| E0-P-612 | L19 p.157 | Pestilential Liche-Thing | Corruption, Die Hard, Ethereal, Hatred, Infected, Regeneration, Terror | — |
+| E0-P-613 | L20 p.21 | Altdorf — Governance of Altdorf Thyrus Gormann — Wizard Lord (Gold 2) | Animosity, Weapon | — |
+| E0-P-614 | L20 p.32 | Andreas Brohne — Human Gang Boss (Silver 3) | Weapon | — |
+| E0-P-615 | L20 p.32 | Breem — Human Racketeer (Brass 5) | Armour, Weapon | — |
+| E0-P-616 | L20 p.36 | Willi Pick — Dock Master (Silver 5) | Armour, Weapon | — |
+| E0-P-617 | L20 p.37 | Balthus — Human Pamphleteer (Brass 1) | Armour, Weapon | — |
+| E0-P-618 | L20 p.59 | Seymour Taungar — Human Troubadour (Silver 3) | — | — |
+| E0-P-619 | L20 p.60 | Rosanna Ophuls Master Investigator (Silver 3) | — | — |
+| E0-P-620 | L20 p.62 | Svenrina `the Grey' Hallovadottir — Dwarf Master Artist (Silver 5) | Armour, Weapon | — |
+| E0-P-621 | L20 p.65 | Gravin Luciana von Eckstein — Human Magnate (Gold 5) | — | — |
+| E0-P-622 | L20 p.67 | Deanne L'Isanore — Human Entertainer (Brass 5) | — | — |
+| E0-P-623 | L20 p.67 | Preternaturally Fine Burglar | — | — |
+| E0-P-624 | L20 p.71 | Baron Ewald von Laue — Human Noble (Gold 3) | Weapon | — |
+| E0-P-625 | L20 p.72 | Helena Bastiat-Hatzburg, Mistress of Revels — Human Advisor (Silver 4) | — | — |
+| E0-P-626 | L20 p.78 | Kurt Helborg Knight of the Inner Circle (Gold 4) | Armour, Fear, Weapon | — |
+| E0-P-627 | L20 p.82 | Reik Rivermarshal Sigfreda Marham von Sieblich — Human Shipsword Master (Gold 1) | Armour, Shield, Weapon | — |
+| E0-P-628 | L20 p.86 | Lord Tyrkel von Hargenfels, Imperial First Fleet Lieutenant — Human Boatswain (Silver 5) | Armour, Weapon | — |
+| E0-P-629 | L20 p.90 | Reinholdt Waffenkammer — Human Officer (Gold 1) | Armour, Weapon | — |
+| E0-P-630 | L20 p.90 | Lothar von Liebnitz — Human Sergeant (Silver 5) | Armour, Ranged, Weapon | — |
+| E0-P-631 | L20 p.94 | Harald Kleindeinst Watch Captain (Gold 1) | Armour, Ranged, Weapon | — |
+| E0-P-632 | L20 p.101 | Freya Husslhaus — Human Priest (Silver 1)) | — | — |
+| E0-P-633 | L20 p.102 | Zavant Konniger — Detective (Silver 5) | Armour, Weapon | — |
+| E0-P-634 | L20 p.104 | The Stirland Abomination | Belligerent, Bestial, Die Hard, Fury, Horns, Size, Weapon | — |
+| E0-P-635 | L20 p.105 | The Drakwald Gibberbeast | Armour, Corruption, Night Vision, Size, Spellcaster, Weapon | — |
+| E0-P-636 | L20 p.109 | Gretchen Schwanz — Human Rat Catcher (Silver 1) | Armour, Ranged, Weapon | — |
+| E0-P-637 | L20 p.109 | Thomas Fabhber — Human Merchant (Silver 5) | — | — |
+| E0-P-638 | L20 p.126 | Maren Mauer — Human Pedlar (Brass 4) | — | — |
+| E0-P-639 | L20 p.127 | Genarro Gastoli — Human Soldier (Silver 3) | Armour, Ranged, Weapon | — |
+| E0-P-640 | L20 p.132 | The Reikerbahn Pike | Amphibious, Armour, Belligerent, Big, Bite, Cold-blooded, Dark Vision, Frenzy, Hatred, Hungry, Size, Tail, Territorial | — |
+| E0-P-641 | L20 p.132 | Hattie Adler | Armour, Belligerent, Bounce, Distracting, Fast, Hungry, Infected, Night Vision, Stealthy | — |
+| E0-P-642 | L20 p.136 | Gustav Zasle — Human Cat Burglar (Silver 3) | Armour | — |
+| E0-P-643 | L20 p.137 | Honoria Kohle — Human Crime Lord (Silver 5) | Armour, Ranged, Weapon | — |
+| E0-P-644 | L20 p.149 | Lunn Yorrisson — Engineer (Silver 2) | Armour, Ranged, Weapon | — |
+| E0-P-645 | L20 p.149 | Kazran Dernsson Master Gunsmith (Silver 3) | Armour, Ranged | — |
+| E0-P-646 | L20 p.158 | Zofia Miska — Human Master Wizard (Gold 1) | — | — |
+| E0-P-647 | L20 p.162 | Frederich `Old' Weirde — Professor (Gold 1) | — | — |
+| E0-P-648 | L20 p.163 | Chancellor Eberhardt von Festschrift Professor (Gold 1) | — | — |
+| E0-P-649 | L20 p.166 | Melinda Greyweave — Elf Witch (Brass 2) | — | — |
+| E0-P-650 | L20 p.167 | Orth Vii Chylis Lightbringer — Elf Master Wizard (Gold 1) | — | — |
+| E0-P-651 | L20 p.173 | Count J—ger | Blessed, Dark Vision, Magic Resistance, Miracles, Stealthy, Ward | — |
+| E0-P-652 | L20 p.195 | Concern Peony Hayfoot — Spy (Silver 3) | — | — |
+| E0-P-653 | L20 p.197 | Burgomeister Chard — Demagogue (Brass 5) | — | — |
+| E0-P-654 | L20 p.204 | Warlock Bombardier Skrreth Ffley Clan Skryre Warlock | Armour, Infected, Night Vision, Ranged, Skittish, Weapon | — |
+| E0-P-655 | L20 p.204 | Warchief Brruxx Chittirr Clan Mors Chieftain | Armour, Infected, Night Vision, Skittish, Weapon | — |
+| E0-P-656 | L20 p.216 | Katarina Briesach Mutant Chaos Champion | Armour, Champion, Corruption, Distracting, Mutation, Ranged, Weapon | — |
+| E0-P-657 | L20 p.218 | Human Cultist | — | — |
+| E0-P-658 | L21 p.10 | Father Gregor Braun High Priest (Gold 1) | Blessed, Miracles, Weapon | — |
+| E0-P-659 | L21 p.10 | Silvie Unterfaut - Sigmarite Priest (Silver 1) | Prejudice, Weapon | — |
+| E0-P-660 | L21 p.11 | Wolf-Born Fernand Wagner High Priest (Gold 1) | Blessed, Miracles, Weapon | — |
+| E0-P-661 | L21 p.11 | Manfred Ulricson - Ulrican Priest (Silver 1) | Prejudice, Weapon | — |
+| E0-P-662 | L21 p.12 | Brother Martin and Brother Rolf — Human Monks (Nuns) (Brass 4) | Prejudice, Weapon | — |
+| E0-P-663 | L21 p.14 | The White Wolf of Shining Rock | Armour, Bite, Blessed, Die Hard, Night Vision, Size, Stealthy, Stride, Tracker, Weapon | — |
+| E0-P-664 | L21 p.20 | Child of Chaos | Corruption | — |
+| E0-P-665 | L21 p.21 | Profil sans titre (L21 p. 21) | Armour, Breath, Corruption, Daemonic, Distracting, Fear, Night Vision, Unstable | E0-T-250, E0-T-252 |
+| E0-P-666 | L21 p.22 | Brass | Armour, Weapon | — |
+| E0-P-667 | L21 p.22 | Murderous Altdorfer | — | — |
+| E0-P-668 | L21 p.24 | Large | Armour, Construct, Immune to Psychology, Painless, Size, Weapon | — |
+| E0-P-669 | L21 p.24 | Animated Coach | Armour, Construct, Immune to Psychology, Painless, Size, Weapon | — |
+| E0-P-670 | L21 p.24 | Animated Furniture, Medium | Armour, Construct, Immune to Psychology, Painless, Stride, Weapon | — |
+| E0-P-671 | L21 p.24 | Animated Furniture, Small | Armour, Construct, Immune to Psychology, Painless, Stride, Weapon | — |
+| E0-P-672 | L21 p.25 | Cow Carcass | Construct, Corruption, Die Hard, Immune to Psychology, Immunity, Infected, Magical, Regeneration, Stride, Unstable | — |
+| E0-P-673 | L21 p.25 | Pig Carcass | Construct, Corruption, Die Hard, Immune to Psychology, Immunity, Infected, Magical, Regeneration, Size, Stride, Unstable | — |
+| E0-P-674 | L21 p.25 | Sheep Carcass | Construct, Corruption, Die Hard, Immune to Psychology, Immunity, Infected, Magical, Regeneration, Size, Stride, Unstable | — |
+| E0-P-675 | L21 p.32 | Olgog Gristlefang | Belligerent, Hungry, Immune to Psychology, Night Vision, Size, Weapon | — |
+| E0-P-676 | L21 p.32 | The Green Racket | Afraid, Animosity, Infected, Night Vision, Weapon | — |
+| E0-P-677 | L21 p.32 | The Doom Divers | Animosity, Night Vision, Weapon | — |
+| E0-P-678 | L21 p.33 | Gitface | Animosity, Night Vision, Ranged, Size, Stealthy, Weapon | — |
+| E0-P-679 | L21 p.39 | Colonel Reikhardt Sievers Officer (Gold 1) | Armour, Ranged, Weapon | — |
+| E0-P-680 | L21 p.40 | Father Eduard von Tunz, — Human Priest (Silver 2) | Armour, Weapon | — |
+| E0-P-681 | L21 p.40 | Flag Sergeant Borys Zielin, — Human Scout (Silver 1) | Armour, Ranged, Weapon | — |
+| E0-P-682 | L21 p.41 | Bengt Livmatz, — Human Artisan (Silver 1) | Armour, Ranged | — |
+| E0-P-683 | L21 p.41 | Scout Sergeant Alicja Bohun, Leader of the Vanguard | Armour, Ranged | — |
+| E0-P-684 | L21 p.41 | Renia Gr—newald, — Human Envoy (Silver 2) | — | — |
+| E0-P-685 | L21 p.42 | Soldier | Armour, Ranged, Weapon | — |
+| E0-P-686 | L21 p.42 | Sebastian, Esmer, Jozef, — Human Sergeants (Silver 1) | Armour, Ranged, Weapon | — |
+| E0-P-687 | L21 p.42 | Vanguard Soldier | Armour, Ranged, Striding Gait | — |
+| E0-P-688 | L21 p.53 | Wolfgang Holswig-Aberauer the Champion in Shadows | Armour, Distracting, Fear, Regeneration, Tail, Weapon | — |
+| E0-P-689 | L21 p.56 | Changeling of Tzeentch | Corruption, Daemonic, Dark Vision, Distracting, Fear, Formless Horror, Spellcaster, Unstable, Weapon | — |
+| E0-P-690 | L21 p.61 | Profil sans titre (L21 p. 61) | Armour, Bite, Champion, Chill Grasp, Dark Vision, Immune to Psychology, Immunity, Magical, Size, Stealthy, Terror, Vampiric, Ward, Weapon | — |
+| E0-P-691 | L21 p.62 | Profil sans titre (L21 p. 62) | Armour, Dark Vision, Distracting, Hatred, Regeneration, Spellcaster, Terror, Weapon | E0-T-254 |
+| E0-P-692 | L21 p.63 | Profil sans titre (L21 p. 63) | Bestial, Bounce, Night Vision, Size | E0-T-253 |
+| E0-P-693 | L21 p.64 | Profil sans titre (L21 p. 64) | Construct, Dark Vision, Distracting, Magical, Size, Spellcaster, Terror, Undead | E0-T-255, E0-T-256 |
+| E0-P-694 | L21 p.65 | Gregor Smiesdorf - Deserter (Brass 0) | Armour, Ranged, Weapon | — |
+| E0-P-695 | L21 p.68 | Sadikur of Numas | Armour, Champion, Dark Vision, Fear, Undead, Weapon | — |
+| E0-P-696 | L21 p.71 | Mentag the Undefeated — Pit Champion (Silver 5) | Armour, Belligerent, Champion, Night Vision, Prejudice, Ranged, Size, Weapon | — |
+| E0-P-697 | L21 p.71 | Savage the Dog — Good Dog (Brass 0) | Night Vision, Size, Skittish, Trained, Weapon | — |
+| E0-P-698 | L21 p.72 | Toddy Shufflefoot — Charlatan (Brass 5) | Night Vision, Ranged, Size, Weapon | — |
+| E0-P-699 | L21 p.73 | Erwin von Oberholtzer — Noble (Gold 3) | Weapon | — |
+| E0-P-700 | L21 p.78 | Gerta Faernmaus — Duellist (Silver 5) | Armour, Weapon | — |
+| E0-P-701 | L21 p.79 | Guards | Armour, Weapon | — |
+| E0-P-702 | L21 p.79 | Guard Sergent | Armour, Weapon | — |
+| E0-P-703 | L21 p.79 | Ruprecht Etzburger — Seneschal (Gold 1) | Weapon | — |
+| E0-P-704 | L21 p.84 | Chaos Beastman | Armour, Belligerent, Fury, Horns, Hungry, Night Vision, Size, Weapon | — |
+| E0-P-705 | L21 p.84 | Zurn the Bloody Crown — Chaos Warrior | Armour, Bite, Champion, Clever, Mutation, Tough | — |
+| E0-P-706 | L21 p.84 | Ulfhednar the Destroyer — Chaos Warrior | Armour, Champion, Clever, Fast, Mutation, Tough, Weapon | — |
+| E0-P-707 | L21 p.84 | Gors of the Red Crown | Arboreal, Armour, Fury, Horns, Night Vision, Weapon | — |
+| E0-P-708 | L21 p.84 | Ungors of the Red Crown | Arboreal, Armour, Night Vision, Ranged, Weapon | — |
+| E0-P-709 | L21 p.85 | The Siege of Diesdorf Etelka Herzen — Human Wizard Lord (Gold 2) | Corruption, Spellcaster, Weapon | — |
+| E0-P-710 | L21 p.85 | Ernst Heidlemann — Human Wizard'S Apprentice (Silver 3) | Weapon | — |
+| E0-P-711 | L21 p.117 | Hans Gr—ber Level 1 Monk, Level 4 Wizard (Necromancer) | Clever, Prejudice, Stealthy | — |
+| E0-P-712 | L21 p.118 | Winged Nightmare | Armour, Bestial, Bite, Fear, Fly, Size, Trained, Undead | — |
+| E0-P-713 | L21 p.118 | Flying Death Skulls | Bite, Construct, Fear, Fly, Infected, Night Vision, Size, Undead, Unstable | — |
+| E0-P-714 | L21 p.118 | Hexwraiths | Champion, Chill Grasp, Dark Vision, Ethereal, Magical, Terror, Undead, Unstable, Weapon | — |
+| E0-P-715 | L21 p.118 | The Gravelord'S Zombies | Construct, Dark Vision, Fear, Painless, Undead, Unstable, Weapon | — |
+| E0-P-716 | L22 p.14 | Grey Seer Skrittar, Herald of the Council of Thirteen | Infected, Night Vision, Weapon | — |
+| E0-P-717 | L22 p.14 | The Rat | Bestial, Brute, Infected, Night Vision, Size, Skittish, Stride, Weapon | — |
+| E0-P-718 | L22 p.14 | Palanquin Guards | Armour, Champion, Infected, Night Vision, Weapon | E0-T-266 |
+| E0-P-719 | L22 p.17 | Gristl Twitchslice | Armour, Infected, Night Vision, Shield, Weapon | — |
+| E0-P-720 | L22 p.18 | Treecherik Clanrat | Armour, Infected, Night Vision, Shield, Weapon | — |
+| E0-P-721 | L22 p.18 | Clan Eshin Infiltrator | Armour, Infected, Night Vision, Ranged, Stealthy, Weapon | — |
+| E0-P-722 | L22 p.20 | Scrak Fangsnapper | Armour, Infected, Night Vision, Weapon | — |
+| E0-P-723 | L22 p.20 | Clan Mors Clanrat | Armour, Infected, Night Vision, Weapon | — |
+| E0-P-724 | L22 p.22 | Klik Rustclaw — Deathvermin Commander | Armour, Night Vision, Shield, Weapon | — |
+| E0-P-725 | L22 p.22 | Deathvermin Stormvermin | Armour, Night Vision, Shield, Weapon | — |
+| E0-P-726 | L22 p.25 | Diseased Clanrat | Armour, Disease, Infected, Night Vision, Weapon | — |
+| E0-P-727 | L22 p.25 | Blightskab — Plague Priest | Disease, Infected, Night Vision, Weapon | — |
+| E0-P-728 | L22 p.28 | Master Moulder Wrakrennch | Armour, Infected, Night Vision, Weapon | — |
+| E0-P-729 | L22 p.28 | The Hellbeast of Seep-Gore | Armour, Corrosive Blood, Die Hard, Fear, Infected, Night Vision, Size, Stupid, Trained, Weapon | — |
+| E0-P-730 | L22 p.28 | Packmaster | Armour, Infected, Night Vision, Weapon | — |
+| E0-P-731 | L22 p.31 | Turntail Poisoned Wind Globadiers | Armour, Night Vision, Ranged, Weapon | — |
+| E0-P-732 | L22 p.31 | Turntail Clanrat | Armour, Night Vision, Ranged, Weapon | — |
+| E0-P-733 | L22 p.50 | Wolf Rat | Bestial, Bite, Disease, Frenzy, Hungry, Infected, Night Vision, Skittish, Stride, Territorial, Tracker, Trained | — |
+| E0-P-734 | L22 p.50 | Great Pox Rat | Armour, Bite, Size, Trained, Weapon | — |
+| E0-P-735 | L22 p.50 | Plague Rat | Bestial, Big, Bite, Brute, Corruption, Die Hard, Disease, Frenzy, Hungry, Infected, Infestation, Night Vision, Size, Skittish, Stealthy, Stride | — |
+| E0-P-736 | L22 p.51 | Brood Horror | Bite, Corrosive Blood, Disease, Hungry, Infected, Regeneration, Size, Tail, Trained, Weapon | — |
+| E0-P-737 | L22 p.52 | Rat Ogre Bonebreaker | Armour, Fear, Night Vision, Painless, Size, Stupid, Trained, Weapon | — |
+| E0-P-738 | L22 p.54 | Dricht Skuttlespite Clan Eshin Gutter Runner | Armour, Night Vision, Ranged, Stealthy, Tail, Weapon | — |
+| E0-P-739 | L22 p.62 | Yellow Fang Junior Cultist | Armour, Ranged, Weapon | — |
+| E0-P-740 | L22 p.63 | Mila Raast-- Yellow Fang Senior Cultist | Weapon | — |
+| E0-P-741 | L22 p.71 | Ingrid Sasslewort | Hardy, Weapon | — |
+| E0-P-742 | L22 p.73 | Great Eagle | Clever, Fearless, Size, Territorial | — |
+| E0-P-743 | L22 p.73 | Mountain Cat | Arboreal, Bestial, Bite, Night Vision, Size, Skittish, Stealthy, Stride, Territorial, Tracker | — |
+| E0-P-744 | L22 p.73 | Cliff Spider | Armour, Bestial, Bite, Night Vision, Size, Skittish, Stride, Venom, Wallcrawler | — |
+| E0-P-745 | L22 p.77 | Blightking | Armour, Belligerent, Champion, Corruption, Disease, Shield, Weapon | — |
+| E0-P-746 | L22 p.78 | Behram Gundarson — Slayer (Brass 5) | Animosity, Hatred, Night Vision, Prejudice, Tough, Weapon | — |
+| E0-P-747 | L22 p.79 | Gimbrin Flintbeard — Dwarf King'S Ghost | Dark Vision, Ethereal, Fear, Hatred, Prejudice, Territorial, Undead, Unstable, Weapon | — |
+| E0-P-748 | L22 p.93 | Alphonse Hercules de Gasgoigne — Detective, Former Thief (Silver 3) | Armour, Size, Weapon | — |
+| E0-P-749 | L22 p.94 | Claudia Carbonetti — Gang Boss (Silver 3) | Armour, Ranged, Weapon | — |
+| E0-P-750 | L22 p.94 | Former Interrogator | Armour, Ranged, Weapon | — |
+| E0-P-751 | L22 p.95 | Giuseppe the Dog — Tilean Manhound | Armour, Bestial, Bite, Frenzy, Night Vision, Stride | — |
+| E0-P-752 | L22 p.95 | Thugs | Armour, Weapon | — |
+| E0-P-753 | L22 p.103 | Martina Kurtz — Mine Foreman (Silver 5) | Armour, Weapon | — |
+| E0-P-754 | L22 p.103 | Wilhelm Koch — Prospector (Brass 2) | Armour, Weapon | — |
+| E0-P-755 | L22 p.119 | Wizard | Clever, Prejudice, Stealthy | — |
+| E0-P-756 | L22 p.120 | Abyssal Terror | Armour, Bite, Fear, Fly, Size, Trained, Undead, Weapon | — |
+| E0-P-757 | L22 p.120 | Carrion | Fear, Fly, Night Vision, Size, Trained, Undead | — |
+| E0-P-758 | L22 p.120 | Flying Death Skulls | Bite, Construct, Fear, Fly, Infected, Night Vision, Size, Undead, Unstable | — |
+| E0-P-759 | L23 p.22 | Or Mule | Skittish, Stride, Trained, Weapon | — |
+| E0-P-760 | L23 p.22 | Dog | Skittish, Stride, Trained, Weapon | — |
+| E0-P-761 | L23 p.23 | Draught Horse | Size, Skittish, Stride, Trained, Weapon | — |
+| E0-P-762 | L23 p.23 | Ox | Bestial, Size, Skittish, Stride, Trained, Weapon | — |
+| E0-P-763 | L23 p.23 | Heavy Draught Horse | Brute, Size, Skittish, Stride, Trained, Weapon | — |
+| E0-P-764 | L23 p.23 | Riding Horse | Size, Skittish, Stride, Trained, Weapon | — |
+| E0-P-765 | L23 p.24 | Light Warhorse | Champion, Clever, Elite, Hardy, Rear, Size, Skittish, Stride, Tough, Trained, Weapon | — |
+| E0-P-766 | L23 p.24 | Heavy Warhorse | Champion, Clever, Elite, Hardy, Rear, Size, Skittish, Stride, Tough, Trained, Weapon | — |
+| E0-P-767 | L23 p.40 | Johann Hindersson — Human Toll Keeper (Brass 5) | Armour, Ranged, Weapon | — |
+| E0-P-768 | L23 p.41 | Aleanora `Al' Shortbottom — Halfling Toll Keeper (Brass 5) | Armour | — |
+| E0-P-769 | L23 p.42 | Charlotte-Samantha Maiers — Human Road Sergeant (Silver 4) | Armour, Ranged, Weapon | — |
+| E0-P-770 | L23 p.42 | Heinrich Steele — Human Road Captain (Gold 1) | Armour, Ranged, Weapon | — |
+| E0-P-771 | L23 p.44 | Anke Dorflinger — Human Bounty Hunter (Silver 3) | Armour, Ranged, Weapon | — |
+| E0-P-772 | L23 p.46 | Pandora Lostpocket — Halfling Entertainer (Brass 5) | Ranged, Weapon | — |
+| E0-P-773 | L23 p.47 | Wolmar Rotte — Human Charlatan (Brass 5) | Corruption, Mutation, Weapon | — |
+| E0-P-774 | L23 p.48 | Maria Braund — Human Outlaw (Brass 2) | Armour, Ranged, Weapon | — |
+| E0-P-775 | L23 p.50 | Eberhart von Durbheim — Human Noble (Gold 3) | Weapon | — |
+| E0-P-776 | L23 p.51 | Rembrandt Haube — Human Outlaw (Brass 2) | Armour, Ranged, Weapon | — |
+| E0-P-777 | L23 p.52 | Delberz Tr—tte — Human Pedlar (Brass 4) | Prejudice, Weapon | — |
+| E0-P-778 | L23 p.53 | Wilhelm Kind — Human Brigand (Brass 1) | Armour, Weapon | — |
+| E0-P-779 | L23 p.54 | Brokur Zindrisson — Dwarf Artisan (Silver 1) | Armour, Weapon | — |
+| E0-P-780 | L23 p.55 | Pompai Ricolma — Human Bawd (Brass 3) | Weapon | — |
+| E0-P-781 | L23 p.56 | Sonny Rags — Human Beggar (Brass 2) | Weapon | — |
+| E0-P-782 | L23 p.57 | Heinrich Marken — Human Charlatan (Brass 5) | Prejudice, Weapon | — |
+| E0-P-783 | L23 p.58 | Albert Pf—rtner — Human Stevedore (Silver 1) | Armour, Hatred, Weapon | — |
+| E0-P-784 | L23 p.59 | Alette Zimmermann — Human Thief (Brass 3) | Animosity, Weapon | — |
+| E0-P-785 | L23 p.60 | Keiti Ouala — Human Merchant (Silver 5) | Weapon | — |
+| E0-P-786 | L23 p.62 | Konrad Brecht — Human Racketeer (Brass 5) | Armour, Hungry, Weapon | — |
+| E0-P-787 | L23 p.63 | Reynald Verstand — Human Attendant (Silver 5) | Afraid, Animosity, Weapon | — |
+| E0-P-788 | L23 p.84 | Chaos Fury | Afraid, Bite, Brute, Clever, Corruption, Daemonic, Fast, Fear, Fly, Horns, Mutation, Size, Skittish, Unstable, Weapon | — |
+| E0-P-789 | L23 p.85 | Pink Horror | Corruption, Daemonic, Distracting, Fear, Mutation, Size, Spellcaster, Split, Unstable, Weapon | E0-T-269, E0-T-270 |
+| E0-P-790 | L23 p.85 | Blue Horror | Corruption, Daemonic, Distracting, Fear, Mutation, Spellcaster, Unstable, Weapon | E0-T-270 |
+| E0-P-791 | L23 p.86 | Emmaretta — Hunter (Brass 4) | Night Vision, Prejudice, Ranged, Shapeshifter, Weapon | E0-T-271 |
+| E0-P-792 | L23 p.87 | Great Cats | — | — |
+| E0-P-793 | L23 p.88 | Johann the Ghost | — | — |
+| E0-P-794 | L23 p.92 | Kasper Lauengram — Human Brigand (Brass 1) | Prejudice, Ranged, Weapon | — |
+| E0-P-795 | L23 p.93 | Wolfgang Kellerman — Human Outlaw Chief (Brass 4) | Armour, Prejudice, Ranged, Weapon | — |
+| E0-P-796 | L23 p.93 | Bruno — Human Brigand (Silver 2) | Armour, Prejudice, Weapon | — |
+| E0-P-797 | L23 p.95 | Amadeus von Drakensberg — Human Magnate (Gold 5) | Weapon | — |
+| E0-P-798 | L23 p.96 | Bodyguards Aplenty — Human Sentries (Silver 1) | Armour, Weapon | — |
+| E0-P-799 | L23 p.98 | Sleeves — Halfling Menial (Silver 1) | Size, Weapon | — |
+| E0-P-800 | L23 p.99 | Black Arrows — Outlaws (Brass 2) | Armour, Ranged, Weapon | — |
+| E0-P-801 | L23 p.99 | Carnivorous Snapper | Armour, Bite, Cold-blooded, Hardy, Hungry, Tail, Weapon | — |
+| E0-P-802 | L23 p.100 | Annalisa Kessler — Outlaw Chief (Brass 4) | Armour, Prejudice, Ranged, Weapon | — |
+| E0-P-803 | L23 p.104 | Urzo | Armour, Frenzy, Horns, Size, Weapon | — |
+| E0-P-804 | L23 p.105 | Khornate Beastmen | Afraid, Armour, Bite, Frenzy, Fury, Horns, Night Vision, Weapon | — |
+| E0-P-805 | L23 p.105 | Rassark - Uncommonly Rat-Like — Beastman | Infected | — |
+| E0-P-806 | L23 p.105 | The Twins | Bite, Frenzy, Fury, Hardy, Night Vision, Size, Weapon | — |
+| E0-P-807 | L23 p.106 | The Farmyard Beasts | — | — |
+| E0-P-808 | L23 p.106 | The Imperial Beast | Bite, Fury, Night Vision, Size, Weapon | — |
+| E0-P-809 | L23 p.109 | Wolfgang Hollseher — Wizard (Gold 2) | Weapon | — |
+| E0-P-810 | L23 p.110 | Magnus Bugman — Loremaster (Gold 2) | Animosity, Hatred, Magic Resistance, Night Vision, Weapon | — |
+| E0-P-811 | L23 p.110 | Benbow — Coachman (Silver 2) | Armour, Ranged, Weapon | — |
+| E0-P-812 | L23 p.111 | Granny' Haller — Con Artist (Silver 2) | Weapon | — |
+| E0-P-813 | L23 p.112 | Big Anders, Little Anders, Bertoldo, Ivan, Magda, and Mikhail — Coachmen (Silver 1) | Ranged, Weapon | — |
+| E0-P-814 | L24 p.17 | Maria-Ulrike von Liebwitz — Noble Lord (Gold 7) | Prejudice, Weapon | — |
+| E0-P-815 | L24 p.17 | Bruno Franke — Judicial Champion (Gold 3) | Armour, Weapon | — |
+| E0-P-816 | L24 p.17 | Gustaf Rechtshandler — Barrister (Gold 1) | Prejudice, Weapon | — |
+| E0-P-817 | L24 p.18 | Bodyguards and Men-at-Arms (Silver 3) | Armour, Prejudice, Tough, Weapon | — |
+| E0-P-818 | L24 p.18 | Dominique Herveaux — Assassin (Gold 1) | Weapon | — |
+| E0-P-819 | L24 p.18 | Handmaids and Servants (Silver 3) | Weapon | — |
+| E0-P-820 | L24 p.18 | Gunni, Bart, and Hans-Frederick — Smugglers (Brass 3) | Weapon | — |
+| E0-P-821 | L24 p.19 | Ursula Kopfgeld — Master Bounty Hunter (Silver 5) | Armour, Prejudice, Ranged, Weapon | — |
+| E0-P-822 | L24 p.19 | Josef Aufwiegler — Rabble Rouser (Brass 3) | — | — |
+| E0-P-823 | L24 p.20 | Warhammer Fantasy Rolepl Ay Friedrich von Pfeifraucher — Magnate (Gold 5) | Weapon | — |
+| E0-P-824 | L24 p.20 | Hanna Lastkahn — Townswoman (Silver 2) | Weapon | — |
+| E0-P-825 | L24 p.20 | Mho, Larz, and `Curls' — Thugs (Brass 3) | Armour, Prejudice, Weapon | — |
+| E0-P-826 | L24 p.20 | Thomas Prahmhandler — Master Merchant (Gold 1) | Armour, Prejudice, Ranged, Weapon | — |
+| E0-P-827 | L24 p.21 | Allrella, Elphoise, and Helga — Slaanesh Cultists (Silver 1) | — | — |
+| E0-P-828 | L24 p.21 | Coachmen (Silver 2) | Prejudice, Ranged, Weapon | — |
+| E0-P-829 | L24 p.21 | Glimbrin Oddsocks — Master Thief (Brass 5) | Hatred, Prejudice, Weapon | — |
+| E0-P-830 | L24 p.21 | Boatmen (Silver 2) | Armour, Prejudice, Weapon | — |
+| E0-P-831 | L24 p.22 | Hans Orf — Townsman (Silver 2) | Prejudice, Weapon | — |
+| E0-P-832 | L24 p.22 | Mercinellin `Seedling' Thorncobble Xiii — Hustler (Brass 1) | Weapon | — |
+| E0-P-833 | L24 p.22 | Servants, Cleaners, and Similar — Menials (Brass 3) | Weapon | — |
+| E0-P-834 | L24 p.22 | Ol' Bess — Artisan (Silver 1) | Prejudice, Weapon | — |
+| E0-P-835 | L24 p.33 | A Day at the Trials Eberhardt von Dammenblatz — Noble Lord (Gold 7) | Prejudice, Weapon | — |
+| E0-P-836 | L24 p.33 | Imperial Viper | Armour, Bestial, Cold-blooded, Size, Venom, Weapon | — |
+| E0-P-837 | L24 p.33 | Kappan'S Racketeers — Thugs (Brass 3) | Armour, Tough, Weapon | — |
+| E0-P-838 | L24 p.34 | Restless Ghost | Dark Vision, Ethereal, Fear, Fury, Hatred, Undead, Unstable, Weapon | — |
+| E0-P-839 | L24 p.34 | Matthias Hubkind — Witch Hunter (Silver 3) | Armour, Hatred, Prejudice, Ranged, Weapon | — |
+| E0-P-840 | L24 p.35 | Watchmen — Khorne Cultists (Silver 1) | Armour, Elite, Frenzy, Fury, Hardy, Weapon | — |
+| E0-P-841 | L24 p.35 | Magistrates — Judges (Gold 2) | Prejudice, Weapon | — |
+| E0-P-842 | L24 p.35 | Petra Steinmetz — High Priestess (Gold 1) | Blessed, Miracles, Weapon | — |
+| E0-P-843 | L24 p.35 | Bloodletters | Armour, Champion, Corruption, Daemonic, Fear, Frenzy, Horns, Painless, Unstable, Weapon | — |
+| E0-P-844 | L24 p.48 | Warhammer Fantasy Rolepl Ay Emmanuelle von Liebwitz — Elector Countess (Gold 15) | — | — |
+| E0-P-845 | L24 p.48 | Brecht Kavenner — Slaanesh Cultist and Barrister (Gold 3) | Clever, Corruption, Cunning, Hardy, Hatred, Leader, Magic Resistance, Mutation | — |
+| E0-P-846 | L24 p.48 | Noble Servants (Gold 2) | Cunning, Weapon | — |
+| E0-P-847 | L24 p.49 | A Night at the Opera Palace Guards (Gold 2) | Armour, Elite, Hardy, Tough, Weapon | — |
+| E0-P-848 | L24 p.49 | Performers (Silver 1) | Weapon | — |
+| E0-P-849 | L24 p.49 | Stagehands (Silver 1) | Weapon | — |
+| E0-P-850 | L24 p.49 | Servants (Silver 1) | Weapon | — |
+| E0-P-851 | L24 p.49 | Musicians (Silver 1) | Weapon | — |
+| E0-P-852 | L24 p.49 | Brocks and Reiner — Spies (Silver 3) | Ranged, Weapon | — |
+| E0-P-853 | L24 p.50 | Erwin Pakker — Professor (Gold 1) | Prejudice, Weapon | — |
+| E0-P-854 | L24 p.50 | Edvard Lowenhertz — Wyrd (Brass 3) | Armour, Clever, Corruption, Cunning, Fast, Fury, Hatred, Spellcaster, Weapon | — |
+| E0-P-855 | L24 p.50 | Cannon and Mortar Students — Student Engineers (Brass 4) | Ranged, Weapon | — |
+| E0-P-856 | L24 p.50 | Edwina Lowenhertz — Witch (Brass 2) | Clever, Cunning, Fast, Hatred, Spellcaster, Weapon | — |
+| E0-P-857 | L24 p.51 | Assassins (Silver 1) | Armour, Cunning, Fast, Hardy, Hatred, Prejudice, Weapon | — |
+| E0-P-858 | L24 p.51 | Detlef Sierck — Genius (Gold 3) | — | — |
+| E0-P-859 | L24 p.52 | Nurgle Cultists S Sorcerer (Silver 3) | Corruption, Hardy, Infected, Weapon | — |
+| E0-P-860 | L24 p.52 | Martyn Ruchen — Chaos Cult Leader and Chaos Sorcerer (Silver 3) | Corruption, Cunning, Disease, Hardy, Hatred, Infected, Magic Resistance, Mutation | — |
+| E0-P-861 | L24 p.53 | Hubkind'S Mob (Brass 4) | Armour, Fury, Hardy, Prejudice, Weapon | — |
+| E0-P-862 | L24 p.53 | Watch Sergeant (Silver 1) | — | — |
+| E0-P-863 | L24 p.53 | Operagoer (Silver 3) | Weapon | — |
+| E0-P-864 | L24 p.53 | Nulner Watchmen (Silver 1) | Armour, Hardy, Prejudice, Weapon | — |
+| E0-P-865 | L24 p.53 | Young Noble (Gold 1) | Prejudice, Weapon | — |
+| E0-P-866 | L24 p.64 | Wilhelm von Saponatheim — Noble Lord (Gold 7) | Prejudice, Weapon | — |
+| E0-P-867 | L24 p.65 | Inta-Dapesht | Chill Grasp, Dark Vision, Ethereal, Frenzy, Hardy, Magical, Painless, Terror, Unstable | E0-T-286 |
+| E0-P-868 | L24 p.65 | Nastassia von Saponatheim — Scion (Gold 1) | Weapon | — |
+| E0-P-869 | L24 p.65 | Joachim Bitterfeld — Artisan (Silver 1) | Weapon | — |
+| E0-P-870 | L24 p.66 | Cultists of the Jade Sceptre (Gold 2) | Corruption, Spellcaster | — |
+| E0-P-871 | L24 p.66 | Manfred von Saponatheim — Prisoner (Brass 0) | Afraid, Animosity, Brute, Frenzy, Hardy, Hatred, Immune to Psychology, Stupid | — |
+| E0-P-872 | L24 p.67 | Taggees — Spies (Gold 2) | Bounce, Champion, Cunning, Distracting, Elite, Fast, Tough, Weapon | — |
+| E0-P-873 | L24 p.67 | Clothilde Telland — Noble (Gold 4) | Weapon | — |
+| E0-P-874 | L24 p.67 | Josef von Angendorf — Cat Burglar (Gold 2) | Clever, Cunning, Elite, Fast, Leader, Weapon | — |
+| E0-P-875 | L24 p.80 | Erich von Holzenauer — Noble (Gold 2) | Prejudice, Weapon | — |
+| E0-P-876 | L24 p.80 | Siegfried von Saponatheim — Noble (Gold 2) | Prejudice, Weapon | — |
+| E0-P-877 | L24 p.81 | Rickard Aschaffenberg — Magnate (Gold 3) | Hardy, Weapon | — |
+| E0-P-878 | L24 p.81 | Heinrich von Bruner — Magnate (Gold 3) | Corruption, Prejudice, Weapon | — |
+| E0-P-879 | L24 p.81 | Maximilian Aschaffenburg — Scion (Gold 1) | Animosity, Weapon | — |
+| E0-P-880 | L24 p.81 | Galina Hohengolfrid — Noble (Gold 2) | Weapon | — |
+| E0-P-881 | L24 p.82 | Jean-Luc de Cadent — Agent (Gold 1) | Armour, Prejudice, Weapon | — |
+| E0-P-882 | L24 p.82 | Heinrich von Falkenhayn — Noble (Gold 2) | Weapon | — |
+| E0-P-883 | L24 p.82 | Florian Pfeifraucher — Noble (Gold 2) | Weapon | — |
+| E0-P-884 | L24 p.83 | Otto Krupp — Guildmaster (Gold 1) | Armour, Weapon | — |
+| E0-P-885 | L24 p.83 | Borgan Foambeard — Guildmaster (Gold 1) | Animosity, Armour, Weapon | — |
+| E0-P-886 | L24 p.83 | Ernst Maler — Burgomeister (Gold 1) | Weapon | — |
+| E0-P-887 | L24 p.84 | Lorith Silverleaf — Envoy (Silver 4) | Prejudice, Weapon | — |
+| E0-P-888 | L24 p.84 | Gunther Emming — High Priest (Gold 1) | Prejudice, Weapon | — |
+| E0-P-889 | L24 p.84 | Heinrich Gutenberg — High Priest (Gold 1) | Prejudice, Weapon | — |
+| E0-P-890 | L24 p.84 | Celestine Hoch — Priestess (Silver 1) | Prejudice, Weapon | — |
+| E0-P-891 | L24 p.85 | Erwin Blucher — Officer (Gold 1) | Weapon | — |
+| E0-P-892 | L24 p.85 | Jendrik von Dabernick — Officer (Gold 1) | Armour, Weapon | — |
+| E0-P-893 | L24 p.85 | Andrea Pfeffer — Watch Captain (Gold 1) | Hardy, Weapon | — |
+| E0-P-894 | L24 p.85 | Skaven Gutter Runner | Armour, Bite, Champion, Disease, Infected, Night Vision, Ranged, Stealthy, Tail, Tracker, Weapon | — |
+| E0-P-895 | L25 p.22 | Ludolf K—hler Imperial Sea Lord (Gold 3) | Armour, Ranged, Weapon | — |
+| E0-P-896 | L25 p.39 | Throgg Troll King | Armour, Bite, Brute, Clever, Die Hard, Regeneration, Size, Terror, Vomit, Weapon | — |
+| E0-P-897 | L25 p.47 | Kraka Ravnsvake Vi Skaldor `Reaver' Lotharksson — Dwarf Runes Ship'S Master (Gold 2) | Armour, Ranged, Weapon | — |
+| E0-P-898 | L25 p.55 | The Skaeling Coast Vii Olg Bl——salt Skaeling Captain (Gold 2) | Armour, Mark of Khorne, Mutation, Weapon | E0-T-267 |
+| E0-P-899 | L25 p.127 | Landsman — Silver | Weapon | — |
+| E0-P-900 | L25 p.127 | Officer — Silver | Weapon | — |
+| E0-P-901 | L25 p.127 | Sailor — Silver | Armour, Weapon | — |
+| E0-P-902 | L25 p.127 | Silver | Armour, Weapon | — |
+| E0-P-903 | L25 p.127 | Seasoned Mercenary — Silver | Armour, Ranged, Weapon | — |
+| E0-P-904 | L25 p.127 | Silver | Weapon | — |
+| E0-P-905 | L25 p.140 | Lurkerfish | Amphibious, Bestial, Dark Vision, Distracting, Grim, Hungry, Size, Swarm, Weapon | — |
+| E0-P-906 | L25 p.141 | Gymmcrabs | Amphibious, Armour, Bestial, Dark Vision, Size, Swarm, Weapon | — |
+| E0-P-907 | L25 p.141 | Daggerfish | Bestial, Bounce, Hungry, Marine Creature, Ranged, Size, Swarm, Weapon | E0-T-272 |
+| E0-P-908 | L25 p.141 | Latch Eel | Bestial, Bite, Cold-blooded, Dark Vision, Hungry, Marine Creature, Size, Swarm, Weapon | E0-T-272 |
+| E0-P-909 | L25 p.142 | Sea Elemental | Construct, Grim, Marine Creature, Night Vision, Rear, Size, Spellcaster, Terror, Unstable, Ward, Weapon | E0-T-272 |
+| E0-P-910 | L25 p.143 | Gargantuan | Armour, Cold-blooded, Constrictor, Dark Vision, Grim, Hungry, Marine Creature, Rear, Regeneration, Size, Weapon | E0-T-272 |
+| E0-P-911 | L25 p.144 | Kharibdyss | Amphibious, Armour, Belligerent, Bestial, Bite, Constrictor, Dark Vision, Distracting, Grim, Hungry, Regeneration, Size, Stealthy, Tail, Territorial, Venom, Weapon | — |
+| E0-P-912 | L25 p.145 | Syreen | Amphibious, Dark Vision, Ethereal, Fury, Terror, Undead, Unstable, Weapon | — |
+| E0-P-913 | L25 p.145 | Merwyrm | Amphibious, Armour, Bite, Dark Vision, Grim, Hungry, Immune to Psychology, Infected, Marine Creature, Painless, Regeneration, Size, Tail, Weapon | E0-T-272 |
+| E0-P-914 | L25 p.146 | Bone Hydra | Armour, Bite, Breath, Construct, Corruption, Dark Vision, Fear, Grim, Marine Creature, Painless, Size, Undead, Unstable, Weapon | E0-T-272 |
+| E0-P-915 | L25 p.146 | Leech Wyrm | Armour, Bestial, Bite, Cold-blooded, Construct, Corruption, Dark Vision, Grim, Marine Creature, Painless, Size, Tail, Vomit, Weapon | E0-T-272 |
+| E0-P-916 | L25 p.147 | Black Leviathan | Armour, Bestial, Dark Vision, Grim, Hungry, Marine Creature, Size, Tail, Weapon | E0-T-272 |
+| E0-P-917 | L25 p.147 | Orb Leviathan | Armour, Bestial, Dark Vision, Distracting, Grim, Hungry, Marine Creature, Size, Weapon | E0-T-272 |
+| E0-P-918 | L25 p.149 | Triton | Animosity, Armour, Blessed, Champion, Grim, Hardy, Magical, Marine Creature, Rear, Size, Tail | E0-T-272, E0-T-283, E0-T-284, E0-T-285 |
+| E0-P-919 | L25 p.151 | Jaego Roth Privateer Captain | Armour, Hatred, Ranged | — |
+| E0-P-920 | L25 p.152 | Long Drong Slayer Captain of the Slayer Pirates | Ranged, Weapon | — |
+| E0-P-921 | L25 p.155 | Wulfrik Sarl Champion | Armour, Champion, Corruption, Weapon | — |
+| E0-P-922 | L25 p.156 | Vrisk Ironscratch Arch-Sealord of Clan Skurvy | Armour, Infected, Night Vision, Ranged, Weapon | — |
+| E0-P-923 | L26 p.18 | Count Otto Boormann — Human Noble, Former Diplomat (Gold 3) | Prejudice, Weapon | — |
+| E0-P-924 | L26 p.20 | Bernhardt Dampfer — Human Bargeswain (Silver 3) | Armour, Ranged, Weapon | — |
+| E0-P-925 | L26 p.21 | Reiner and Karl Dampfer and Hans Vollrat — Human Boat-Hands (Silver 1) | Armour, Ranged, Weapon | — |
+| E0-P-926 | L26 p.21 | Vampire Noble | Bite, Champion, Night Vision, Undead, Vampiric, Wallcrawler | — |
+| E0-P-927 | L26 p.35 | Gertrud Sch—tzenberger — Human River Recruit (Silver 1) | Armour, Weapon | — |
+| E0-P-928 | L26 p.36 | August Hauser — Human Riverwarden (Silver 2) | Armour, Ranged, Weapon | — |
+| E0-P-929 | L26 p.36 | Adalia Eisen — Human Shipsword (Silver 4) | Ranged, Weapon | — |
+| E0-P-930 | L26 p.37 | Wet' Wilgryn Augenlos — Human Shipsword Master (Gold 1) | Armour, Ranged, Weapon | — |
+| E0-P-931 | L26 p.38 | Grugor Lustig — Human Charlatan (Brass 3) | Weapon | — |
+| E0-P-932 | L26 p.40 | Hans and Hannes — Human Grave Robbers (Brass 2) | Armour, Weapon | — |
+| E0-P-933 | L26 p.41 | Klaus Jager — Human Hunter (Brass 2) | Ranged, Weapon | — |
+| E0-P-934 | L26 p.42 | Baron Sigismund von der Bahr — Human Noble (Gold 3) | Weapon | — |
+| E0-P-935 | L26 p.43 | Roland `the Horse' Bruckesel — Human Guard (Silver 2) | Armour, Weapon | — |
+| E0-P-936 | L26 p.44 | Edgar `the Pike' Ebrecht — Human Pit Fighter (Brass 4) | Weapon | — |
+| E0-P-937 | L26 p.45 | Hilma Bootschlecht — Human Stevedore (Brass 3) | Weapon | — |
+| E0-P-938 | L26 p.46 | Sigfrida Junker — Adventurous Human Noble, Aspiring Duellist (Gold 1) | Ranged, Weapon | — |
+| E0-P-939 | L26 p.47 | Avaloi Winesong — High Elf Artisan (Silver 1) | Prejudice, Weapon | — |
+| E0-P-940 | L26 p.48 | Eusapia Balaca—on — Human Master Wizard (Gold 1) | Animosity, Weapon | — |
+| E0-P-941 | L26 p.49 | Johanna Schnee — Human Physician (Silver 3) | Afraid, Weapon | — |
+| E0-P-942 | L26 p.51 | Elias Answell — Human Trader and Bargeswain (Silver 2) | Armour, Weapon | — |
+| E0-P-943 | L26 p.51 | Mia Answell — Human Boat-Hand (Silver 1) | Weapon | — |
+| E0-P-944 | L26 p.52 | Sofia Fischer — Human Greenfish (Brass 2) | — | — |
+| E0-P-945 | L26 p.53 | Uwe Wasserhund — Human Scion (Gold 1) | Weapon | — |
+| E0-P-946 | L26 p.54 | Altgr—fin Emelia Luneburg — Human Magnate (Gold 5) | Ranged | — |
+| E0-P-947 | L26 p.55 | Simone L'Escalier — Human Busker (Brass 3) | — | — |
+| E0-P-948 | L26 p.56 | Sigrund Dopplewasser — Human Swindler (Brass 3) | — | — |
+| E0-P-949 | L26 p.57 | Sven Stoutbeard — Dwarf Dwarven Engineer (Silver 2) | Ranged | — |
+| E0-P-950 | L26 p.58 | Bella Hornwhistler — Halfling Student (Silver 1) | Weapon | — |
+| E0-P-951 | L26 p.59 | Agrin `the Blood of the Flagellant Is Sigmar'S Own' Losburg — Human Zealot (Brass 0) | Weapon | — |
+| E0-P-952 | L26 p.60 | Krazold Ironhand — Dwarf Riverguide (Brass 4) | Weapon | — |
+| E0-P-953 | L26 p.80 | Typical Human Wrecker | Prejudice, Weapon | — |
+| E0-P-954 | L26 p.81 | Dederick Ritter — Human Wrecker Captain | Armour, Prejudice, Ranged, Weapon | — |
+| E0-P-955 | L26 p.82 | Boris Landsmaan Typical — Human Pirate (Boat-Hand) | Prejudice, Weapon | — |
+| E0-P-956 | L26 p.83 | Reginhard Vieth — Human Pirate Captain (Shipsword Master, Gold 1) | Mutation, Ranged, Weapon | — |
+| E0-P-957 | L26 p.84 | Sophie van Haagen — Human Merchant (Silver 5) | Weapon | — |
+| E0-P-958 | L26 p.85 | Amoebae | Amphibious, Bestial, Corrosive Blood, Creeping, Dark Vision, Die Hard, Engulf, Hungry, Immune to Psychology, Painless, Regeneration, Size, Swamp-strider, Wallcrawler | E0-T-278 |
+| E0-P-959 | L26 p.86 | Reik Eels | Aquatic, Bestial, Bite, Cold-blooded, Constrictor, Hungry, Night Vision, Size, Swamp-strider, Weapon | — |
+| E0-P-960 | L26 p.86 | Giant Leeches | Afraid, Analgesic Saliva, Anticoagulant Saliva, Aquatic, Attach and Feed, Bestial, Bite, Creeping, Die Hard, Distracting, Hallucinogen, Hungry, Immune to Psychology, Size, Stealthy, Weapon | E0-T-274, E0-T-275, E0-T-277, E0-T-278, E0-T-280 |
+| E0-P-961 | L26 p.88 | Naiads | Amphibious, Capricious, Chill Grasp, Cunning, Magical, Naiad War-Form, Night Vision, Weapon | E0-T-281, E0-T-282 |
+| E0-P-962 | L26 p.88 | Stirpikes | Animosity, Aquatic, Belligerent, Bestial, Bite, Cold-blooded, Frenzy, Hardy, Hatred, Hungry, Immune to Psychology, Night Vision, Size, Stride, Tough | — |
+| E0-P-963 | L26 p.89 | River Trolls | Amphibious, Armour, Belligerent, Bestial, Big, Bite, Brute, Die Hard, Distracting, Frenzy, Hardy, Hungry, Infected, Infestation, Magic Resistance, Mutation, Night Vision, Painless, Regeneration, Size, Stupid, Swamp-strider, Territorial, Tough, Vomit, Weapon | — |
+| E0-P-964 | L26 p.104 | Captain Regina Willendorf — Human Barge Master, Former Huffer and Attendant (Gold 1) | Armour, Prejudice, Ranged, Weapon | — |
+| E0-P-965 | L26 p.105 | Second Pilot Reiner Petersen — Human Pilot, Former Boatman (Silver 3) | Prejudice, Weapon | — |
+| E0-P-966 | L26 p.105 | First Pilot Ella Greendale — Halfling Master Pilot, Former Boatman (Silver 5) | Night Vision, Size, Weapon | — |
+| E0-P-967 | L26 p.106 | Human Boatman (Silver 2) | Prejudice, Weapon | — |
+| E0-P-968 | L26 p.106 | Bosun Hans Sauber — Human Bargeswain, Former Sergeant (Silver 3) | Armour, Prejudice, Ranged, Weapon | — |
+| E0-P-969 | L26 p.106 | Human Boat-Hand (Silver 1) | Prejudice, Weapon | — |
+| E0-P-970 | L26 p.107 | Human Apprentice Artisan, Former Servant (Brass 2) | Night Vision, Weapon | — |
+| E0-P-971 | L26 p.107 | Human Servant (Silver 3) | Prejudice, Weapon | — |
+| E0-P-972 | L26 p.107 | Chief Cook Maximillian `Max' Berryhill — Halfling Master Artisan (Silver 3) | Night Vision, Size, Weapon | — |
+| E0-P-973 | L26 p.108 | Purser Eberhardt Kleingeld — Human Attendant, Former Boat-Hand (Silver 5) | Prejudice, Weapon | — |
+| E0-P-974 | L26 p.108 | Self Made, Obnoxious Trader — Human Merchant (Silver 5) | Prejudice, Weapon | — |
+| E0-P-975 | L26 p.109 | Quick-Witted Dealmaker — Human Merchant (Silver 5) | Prejudice, Weapon | — |
+| E0-P-976 | L26 p.109 | Elderly Duchess — Human Magnate (Gold 5) | Prejudice, Weapon | — |
+| E0-P-977 | L26 p.109 | Experienced Broker — Human Master Merchant (Gold 1) | — | — |
+| E0-P-978 | L26 p.110 | Young Blood — Human Scion (Gold 1) | Weapon | — |
+| E0-P-979 | L26 p.110 | Dwarf Gambler (Silver 2) | Weapon | — |
+| E0-P-980 | L26 p.111 | Armchair General — Human Counsellor, Former Officer (Gold 1) | — | — |
+| E0-P-981 | L26 p.111 | Frontier Commander — Human Cavalry Sergeant (Gold 1) | Armour, Prejudice, Weapon | — |
+| E0-P-982 | L26 p.116 | Father Marcus — Human Professor, Former Abbot (Gold 1) | Prejudice, Weapon | — |
+| E0-P-983 | L26 p.116 | Brother Martin and Brother Rolf — Human Monks (Nuns) (Brass 4) | Prejudice, Weapon | — |
+| E0-P-984 | L26 p.118 | Profil sans titre (L26 p. 118) | Fast, Fear, Fly, Hungry, Immune to Psychology, Night Vision, Painless, Size, Territorial, Unstable, Weapon | — |

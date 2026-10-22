@@ -1,0 +1,6339 @@
+{
+ "schemaVersion": 1,
+ "book": "L06",
+ "title": "Livre de base V5",
+ "edition": "V5",
+ "source": {
+  "corpusId": "L06",
+  "sha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-063",
+   "book": "L06",
+   "page": 319,
+   "physicalPage": 319,
+   "kind": "profile",
+   "blockKey": "L06:319:0",
+   "name": "Human",
+   "nameFr": "Humain",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 30,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 30
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 35,
+     "damage": 7
+    },
+    {
+     "name": "Bow and Arrows",
+     "value": 35,
+     "damage": 7,
+     "optional": true,
+     "rangeYards": 50,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L05 p.311"
+  },
+  {
+   "id": "E0-P-064",
+   "book": "L06",
+   "page": 319,
+   "physicalPage": 319,
+   "kind": "profile",
+   "blockKey": "L06:319:1",
+   "name": "Halfling",
+   "nameFr": "Halfling",
+   "stats": {
+    "M": 3,
+    "CC": 20,
+    "CT": 40,
+    "F": 20,
+    "E": 20,
+    "I": 50,
+    "Ag": 30,
+    "Dex": 40,
+    "Int": 30,
+    "FM": 40,
+    "Soc": 40
+   },
+   "wounds": 10,
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 20,
+     "damage": 6
+    },
+    {
+     "name": "Sling and Bullets",
+     "value": 40,
+     "damage": 6,
+     "optional": true,
+     "rangeYards": 60,
+     "qualities": [
+      "Pummel"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "L05 p.311"
+  },
+  {
+   "id": "E0-P-065",
+   "book": "L06",
+   "page": 320,
+   "physicalPage": 320,
+   "kind": "profile",
+   "blockKey": "L06:320:1",
+   "name": "Dwarf",
+   "nameFr": "Nain",
+   "stats": {
+    "M": 3,
+    "CC": 40,
+    "CT": 30,
+    "F": 30,
+    "E": 40,
+    "I": 20,
+    "Ag": 20,
+    "Dex": 40,
+    "Int": 30,
+    "FM": 50,
+    "Soc": 20
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 7
+    },
+    {
+     "name": "Crossbow and Bolts",
+     "value": 30,
+     "damage": 9,
+     "optional": true,
+     "rangeYards": 50,
+     "qualities": [
+      "Impale",
+      "Reload 1"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 35
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Magic Resistance",
+     "ref": "E0-T-037"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "L05 p.311"
+  },
+  {
+   "id": "E0-P-066",
+   "book": "L06",
+   "page": 320,
+   "physicalPage": 320,
+   "kind": "profile",
+   "blockKey": "L06:320:0",
+   "name": "High Elf or Wood Elf",
+   "nameFr": "Elfe (haut et sylvain)",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 40,
+    "F": 30,
+    "E": 30,
+    "I": 50,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 30
+   },
+   "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 40,
+     "damage": 7
+    },
+    {
+     "name": "Longbow and Elf Arrows",
+     "value": 45,
+     "damage": 7,
+     "optional": true,
+     "rangeYards": 70,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "haut-elfe",
+    "elfe-sylvain"
+   ],
+   "nameFrSource": "L05 p.311"
+  },
+  {
+   "id": "E0-P-067",
+   "book": "L06",
+   "page": 321,
+   "physicalPage": 321,
+   "kind": "profile",
+   "blockKey": "L06:321:0",
+   "name": "Human Watchman",
+   "nameFr": "Milicien humain",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 30,
+    "F": 40,
+    "E": 30,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 30
+   },
+   "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Leather Jack",
+      "ap": 1,
+      "locations": "Arms and Body"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 55,
+     "damage": 6
+    },
+    {
+     "name": "Hand Weapon",
+     "value": 55,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 40
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 35
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Supportive"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Clothing",
+    "Copper Badge",
+    "Dagger",
+    "Hand Weapon",
+    "Lamp Oil",
+    "Lantern and Pole",
+    "Leather Jack",
+    "Hat",
+    "Pouch containing 1d10 Silver Shillings",
+    "Sling Bag containing"
+   ],
+   "keywords": [
+    "humain",
+    "milicien"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-068",
+   "book": "L06",
+   "page": 321,
+   "physicalPage": 321,
+   "kind": "profile",
+   "blockKey": "L06:321:1",
+   "name": "Human Merchant",
+   "nameFr": "Marchand humain",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 30,
+    "Ag": 40,
+    "Dex": 30,
+    "Int": 40,
+    "FM": 35,
+    "Soc": 45
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 35,
+     "damage": 5
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 45
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 50
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 40
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 45
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    }
+   ],
+   "talents": [
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Abacus",
+    "Canvas Tarpaulin",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Hat",
+    "Mule and Cart containing Wares",
+    "Pouch containing"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-069",
+   "book": "L06",
+   "page": 322,
+   "physicalPage": 322,
+   "kind": "profile",
+   "blockKey": "L06:322:1",
+   "name": "Human Thug",
+   "nameFr": "Voyou humain",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 30,
+    "F": 45,
+    "E": 40,
+    "I": 35,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 30
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Leather Jack",
+      "ap": 1,
+      "locations": "Arms and Body"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 50,
+     "damage": 6
+    },
+    {
+     "name": "Hand Weapon",
+     "value": 50,
+     "damage": 8
+    },
+    {
+     "name": "Knuckledusters",
+     "value": 45,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 35
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 35
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 35
+    }
+   ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Cardsharp"
+    },
+    {
+     "name": "Iron Jaw"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Clothing",
+    "Dagger",
+    "Hand Weapon",
+    "Hood",
+    "Knuckledusters",
+    "2 Leather Jack",
+    "Pouch containing 3d10 Brass Pennies",
+    "Sling Bag containing 2 Candles and 5 Matches"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-070",
+   "book": "L06",
+   "page": 322,
+   "physicalPage": 322,
+   "kind": "profile",
+   "blockKey": "L06:322:0",
+   "name": "Halfling Thief",
+   "nameFr": "Halfling voleur",
+   "stats": {
+    "M": 3,
+    "CC": 20,
+    "CT": 40,
+    "F": 30,
+    "E": 20,
+    "I": 55,
+    "Ag": 40,
+    "Dex": 50,
+    "Int": 30,
+    "FM": 40,
+    "Soc": 40
+   },
+   "wounds": 10,
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Leather Jerkin",
+      "ap": 1,
+      "locations": "Body"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 25,
+     "damage": 5
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 35
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 25
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 65
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 55
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 55
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Night Vision"
+    }
+   ],
+   "trappings": [
+    "Clothing",
+    "Crowbar",
+    "Dagger",
+    "Hood",
+    "Leather Jerkin",
+    "Pouch containing 3d10 Brass Pennies",
+    "Sack",
+    "Sling Bag containing 2 Candles and 1d10 Matches"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-071",
+   "book": "L06",
+   "page": 323,
+   "physicalPage": 323,
+   "kind": "profile",
+   "blockKey": "L06:323:0",
+   "name": "Gnome",
+   "nameFr": "Gnome",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 30,
+    "F": 30,
+    "E": 20,
+    "I": 30,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 30,
+    "FM": 40,
+    "Soc": 25
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Leather Jerkin",
+      "ap": 1,
+      "optional": true,
+      "locations": "Body"
+     },
+     {
+      "name": "Helmet",
+      "ap": 2,
+      "optional": true,
+      "locations": "Head"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "gnome"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-072",
+   "book": "L06",
+   "page": 324,
+   "physicalPage": 324,
+   "kind": "profile",
+   "blockKey": "L06:324:0",
+   "name": "Ogre",
+   "nameFr": "Ogre",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 20,
+    "F": 45,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 30,
+    "Soc": 20
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Gut Plate",
+      "ap": 2,
+      "optional": true,
+      "locations": "Body"
+     },
+     {
+      "name": "Helmet",
+      "ap": 2,
+      "optional": true,
+      "locations": "Head"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 40,
+     "damage": 12
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Melee",
+     "nameFr": "Corps à corps",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "L05 p.312"
+  },
+  {
+   "id": "E0-P-073",
+   "book": "L06",
+   "page": 325,
+   "physicalPage": 325,
+   "kind": "profile",
+   "blockKey": "L06:325:0",
+   "name": "Boar",
+   "nameFr": "Sanglier",
+   "stats": {
+    "M": 7,
+    "CC": 35,
+    "CT": null,
+    "F": 35,
+    "E": 40,
+    "I": 35,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": null
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Hide",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hooves and Tusks",
+     "value": 40,
+     "damage": 6
+    },
+    {
+     "name": "Horns",
+     "value": 40,
+     "damage": 7,
+     "detail": "Tusks",
+     "free": "charge"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "sanglier"
+   ],
+   "nameFrSource": "L05 p.316"
+  },
+  {
+   "id": "E0-P-074",
+   "book": "L06",
+   "page": 325,
+   "physicalPage": 325,
+   "kind": "profile",
+   "blockKey": "L06:325:1",
+   "name": "Dog",
+   "nameFr": "Chien",
+   "stats": {
+    "M": 6,
+    "CC": 25,
+    "CT": null,
+    "F": 20,
+    "E": 20,
+    "I": 35,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 10,
+    "Soc": 15
+   },
+   "wounds": 4,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 25,
+     "damage": 5
+    },
+    {
+     "name": "Bite",
+     "value": 25,
+     "damage": 5,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Entertain, Fetch, Guard, Magic, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "chien"
+   ],
+   "nameFrSource": "L05 p.315"
+  },
+  {
+   "id": "E0-P-075",
+   "book": "L06",
+   "page": 326,
+   "physicalPage": 326,
+   "kind": "profile",
+   "blockKey": "L06:326:0",
+   "name": "Giant Rat",
+   "nameFr": "Rat géant",
+   "stats": {
+    "M": 6,
+    "CC": 20,
+    "CT": null,
+    "F": 20,
+    "E": 20,
+    "I": 35,
+    "Ag": 35,
+    "Dex": 10,
+    "Int": 15,
+    "FM": 15,
+    "Soc": null
+   },
+   "wounds": 4,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 30,
+     "damage": 4
+    },
+    {
+     "name": "Bite",
+     "value": 30,
+     "damage": 5,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 30
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Disease",
+     "param": "Black Plague, Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Trained",
+     "param": "War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "rat"
+   ],
+   "nameFrSource": "L05 p.316"
+  },
+  {
+   "id": "E0-P-076",
+   "book": "L06",
+   "page": 326,
+   "physicalPage": 326,
+   "kind": "profile",
+   "blockKey": "L06:326:1",
+   "name": "Giant Spider",
+   "nameFr": "Araignée géante",
+   "stats": {
+    "M": 6,
+    "CC": 35,
+    "CT": null,
+    "F": 15,
+    "E": 25,
+    "I": 10,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 5,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 4,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Chitinous Hide",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Fangs",
+     "value": 40,
+     "damage": 3
+    },
+    {
+     "name": "Bite",
+     "value": 40,
+     "damage": 4,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    },
+    {
+     "name": "Web",
+     "rating": "40",
+     "ref": "E0-T-068"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Small to Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Venom",
+     "param": "Average",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "araignee"
+   ],
+   "nameFrSource": "L05 p.314"
+  },
+  {
+   "id": "E0-P-077",
+   "book": "L06",
+   "page": 327,
+   "physicalPage": 327,
+   "kind": "profile",
+   "blockKey": "L06:327:1",
+   "name": "Horse",
+   "nameFr": "Cheval",
+   "stats": {
+    "M": 8,
+    "CC": 25,
+    "CT": null,
+    "F": 45,
+    "E": 35,
+    "I": 15,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 22,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hooves",
+     "value": 25,
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Entertain, Magic, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L05 p.314"
+  },
+  {
+   "id": "E0-P-078",
+   "book": "L06",
+   "page": 327,
+   "physicalPage": 327,
+   "kind": "profile",
+   "blockKey": "L06:327:0",
+   "name": "Wolf",
+   "nameFr": "Loup",
+   "stats": {
+    "M": 9,
+    "CC": 25,
+    "CT": null,
+    "F": 35,
+    "E": 30,
+    "I": 35,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 15,
+    "Soc": null
+   },
+   "wounds": 10,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 35,
+     "damage": 6
+    },
+    {
+     "name": "Bite",
+     "value": 35,
+     "damage": 6,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Fetch, Guard, Magic, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "loup"
+   ],
+   "nameFrSource": "L05 p.315"
+  },
+  {
+   "id": "E0-P-079",
+   "book": "L06",
+   "page": 328,
+   "physicalPage": 328,
+   "kind": "profile",
+   "blockKey": "L06:328:0",
+   "name": "Bog Octopus",
+   "nameFr": "Pieuvre des tourbières",
+   "stats": {
+    "M": 3,
+    "CC": 35,
+    "CT": null,
+    "F": 80,
+    "E": 75,
+    "I": 15,
+    "Ag": 55,
+    "Dex": null,
+    "Int": 5,
+    "FM": 65,
+    "Soc": null
+   },
+   "wounds": 56,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 7
+   },
+   "attacks": [
+    {
+     "name": "Tentacles",
+     "value": 40,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 65
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 65
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 90
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Wetlands",
+     "ref": "E0-T-051"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Enormous or Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "L05 p.323"
+  },
+  {
+   "id": "E0-P-080",
+   "book": "L06",
+   "page": 329,
+   "physicalPage": 329,
+   "kind": "profile",
+   "blockKey": "L06:329:1",
+   "name": "Cave Squig",
+   "nameFr": "Squig des cavernes",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": null,
+    "F": 50,
+    "E": 30,
+    "I": 10,
+    "Ag": 50,
+    "Dex": null,
+    "Int": 5,
+    "FM": 15,
+    "Soc": null
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Teeth",
+     "value": 40,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bounce",
+     "ref": "E0-T-008"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Horns",
+     "rating": "+8",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Size",
+     "param": "Small to Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Guard, Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "squig"
+   ],
+   "nameFrSource": "L05 p.323"
+  },
+  {
+   "id": "E0-P-081",
+   "book": "L06",
+   "page": 329,
+   "physicalPage": 329,
+   "kind": "profile",
+   "blockKey": "L06:329:0",
+   "name": "Demigryph",
+   "nameFr": "Demigriffon",
+   "stats": {
+    "M": 7,
+    "CC": 45,
+    "CT": null,
+    "F": 55,
+    "E": 40,
+    "I": 30,
+    "Ag": 45,
+    "Dex": null,
+    "Int": 15,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Hide",
+      "ap": 1
+     },
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 50,
+     "damage": 14
+    },
+    {
+     "name": "Bite",
+     "value": 50,
+     "damage": 8,
+     "free": "momentum",
+     "qualities": [
+      "Penetrating"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Guard, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "L05 p.318"
+  },
+  {
+   "id": "E0-P-082",
+   "book": "L06",
+   "page": 330,
+   "physicalPage": 330,
+   "kind": "profile",
+   "blockKey": "L06:330:0",
+   "name": "Dragon",
+   "nameFr": "Dragon",
+   "stats": {
+    "M": 6,
+    "CC": 65,
+    "CT": 60,
+    "F": 65,
+    "E": 65,
+    "I": 60,
+    "Ag": 25,
+    "Dex": 15,
+    "Int": 45,
+    "FM": 85,
+    "Soc": 25
+   },
+   "wounds": 104,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 6,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 3
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 70,
+     "damage": 16
+    },
+    {
+     "name": "Bite",
+     "value": 70,
+     "damage": 9,
+     "free": "momentum",
+     "qualities": [
+      "Penetrating"
+     ]
+    },
+    {
+     "name": "Tail",
+     "value": 70,
+     "damage": 8,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Immunity",
+     "param": "Any",
+     "ref": "E0-T-031"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Various",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Wetlands, Woodland",
+     "ref": "E0-T-051"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "dragon"
+   ],
+   "nameFrSource": "L05 p.319"
+  },
+  {
+   "id": "E0-P-083",
+   "book": "L06",
+   "page": 331,
+   "physicalPage": 331,
+   "kind": "profile",
+   "blockKey": "L06:331:0",
+   "name": "Fenbeast",
+   "nameFr": "Bête des marais",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": null,
+    "F": 50,
+    "E": 55,
+    "I": 10,
+    "Ag": 15,
+    "Dex": 10,
+    "Int": 10,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 40,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Fists",
+     "value": 40,
+     "damage": 14,
+     "qualities": [
+      "Magical c"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 65
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "nameFrSource": "L05 p.318"
+  },
+  {
+   "id": "E0-P-084",
+   "book": "L06",
+   "page": 332,
+   "physicalPage": 332,
+   "kind": "profile",
+   "blockKey": "L06:332:0",
+   "name": "Giant",
+   "nameFr": "Géant",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 30,
+    "F": 65,
+    "E": 55,
+    "I": 30,
+    "Ag": 20,
+    "Dex": 15,
+    "Int": 15,
+    "FM": 25,
+    "Soc": 15
+   },
+   "wounds": 72,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Scavenged Armour",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 35,
+     "damage": 16
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    }
+   ],
+   "keywords": [
+    "geant"
+   ],
+   "nameFrSource": "L05 p.320"
+  },
+  {
+   "id": "E0-P-085",
+   "book": "L06",
+   "page": 332,
+   "physicalPage": 332,
+   "kind": "profile",
+   "blockKey": "L06:332:1",
+   "name": "Griffon",
+   "nameFr": "Griffon",
+   "stats": {
+    "M": 6,
+    "CC": 50,
+    "CT": null,
+    "F": 50,
+    "E": 50,
+    "I": 45,
+    "Ag": 60,
+    "Dex": null,
+    "Int": 20,
+    "FM": 50,
+    "Soc": 15
+   },
+   "wounds": 80,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Hide",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Talons",
+     "value": 60,
+     "damage": 14,
+     "qualities": [
+      "Fast"
+     ]
+    },
+    {
+     "name": "Bite",
+     "value": 60,
+     "damage": 8,
+     "free": "momentum",
+     "qualities": [
+      "Penetrating"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Magic, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "griffon"
+   ],
+   "nameFrSource": "L05 p.320"
+  },
+  {
+   "id": "E0-P-086",
+   "book": "L06",
+   "page": 333,
+   "physicalPage": 333,
+   "kind": "profile",
+   "blockKey": "L06:333:0",
+   "name": "Manticore",
+   "nameFr": "Manticore",
+   "stats": {
+    "M": 6,
+    "CC": 55,
+    "CT": null,
+    "F": 55,
+    "E": 55,
+    "I": 50,
+    "Ag": 65,
+    "Dex": null,
+    "Int": 10,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 72,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Hide",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 60,
+     "damage": 14
+    },
+    {
+     "name": "Bite",
+     "value": 60,
+     "damage": 8,
+     "free": "momentum"
+    },
+    {
+     "name": "Tail",
+     "value": 60,
+     "damage": 7,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Hatred",
+     "param": "Predators",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic, Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "manticore",
+    "bete"
+   ],
+   "nameFrSource": "L05 p.322"
+  },
+  {
+   "id": "E0-P-087",
+   "book": "L06",
+   "page": 334,
+   "physicalPage": 334,
+   "kind": "profile",
+   "blockKey": "L06:334:0",
+   "name": "Pegasus",
+   "nameFr": "Pégase",
+   "stats": {
+    "M": 8,
+    "CC": 35,
+    "CT": null,
+    "F": 45,
+    "E": 40,
+    "I": 30,
+    "Ag": 45,
+    "Dex": null,
+    "Int": 20,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 28,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hooves",
+     "value": 40,
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "pegase"
+   ],
+   "nameFrSource": "L05 p.323"
+  },
+  {
+   "id": "E0-P-088",
+   "book": "L06",
+   "page": 335,
+   "physicalPage": 335,
+   "kind": "profile",
+   "blockKey": "L06:335:0",
+   "name": "Troll",
+   "nameFr": "Troll",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 15,
+    "F": 55,
+    "E": 45,
+    "I": 10,
+    "Ag": 15,
+    "Dex": 15,
+    "Int": 10,
+    "FM": 20,
+    "Soc": 5
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 2
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 14
+    },
+    {
+     "name": "Bite",
+     "value": 40,
+     "damage": 8,
+     "free": "momentum"
+    },
+    {
+     "name": "Vomit",
+     "value": 55,
+     "damage": 8,
+     "rangeYards": 2
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Magic Resistance",
+     "rating": "2",
+     "ref": "E0-T-037"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Mountains, Underground, Wetlands",
+     "ref": "E0-T-051"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "L05 p.324"
+  },
+  {
+   "id": "E0-P-089",
+   "book": "L06",
+   "page": 336,
+   "physicalPage": 336,
+   "kind": "profile",
+   "blockKey": "L06:336:0",
+   "name": "Goblin",
+   "nameFr": "Gobelin",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 20,
+    "Ag": 30,
+    "Dex": 25,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 15
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Helmet",
+      "ap": 2,
+      "optional": true,
+      "locations": "Head"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Shortbow and Arrows",
+     "value": 35,
+     "damage": 6,
+     "optional": true,
+     "rangeYards": 40,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 30
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 25
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 35
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "L05 p.326"
+  },
+  {
+   "id": "E0-P-090",
+   "book": "L06",
+   "page": 337,
+   "physicalPage": 337,
+   "kind": "profile",
+   "blockKey": "L06:337:0",
+   "name": "Orc",
+   "nameFr": "Orc",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 18,
+    "FM": 35,
+    "Soc": 15
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     },
+     {
+      "name": "Helmet",
+      "ap": 2,
+      "optional": true,
+      "locations": "Head"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 40,
+     "damage": 7
+    },
+    {
+     "name": "Bow and Arrows",
+     "value": 35,
+     "damage": 7,
+     "optional": true,
+     "rangeYards": 50,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "L05 p.325"
+  },
+  {
+   "id": "E0-P-091",
+   "book": "L06",
+   "page": 338,
+   "physicalPage": 338,
+   "kind": "profile",
+   "blockKey": "L06:338:1",
+   "name": "Crypt Ghoul",
+   "nameFr": "Goule de crypte",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": null,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 25,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 5
+   },
+   "wounds": 13,
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Filthy Claws",
+     "value": 35,
+     "damage": 6
+    },
+    {
+     "name": "Bite",
+     "value": 35,
+     "damage": 6,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 40
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "goule"
+   ],
+   "nameFrSource": "L05 p.328"
+  },
+  {
+   "id": "E0-P-092",
+   "book": "L06",
+   "page": 338,
+   "physicalPage": 338,
+   "kind": "profile",
+   "blockKey": "L06:338:0",
+   "name": "Snotling",
+   "nameFr": "Snotling",
+   "stats": {
+    "M": 4,
+    "CC": 20,
+    "CT": 20,
+    "F": 20,
+    "E": 20,
+    "I": 20,
+    "Ag": 30,
+    "Dex": 20,
+    "Int": 10,
+    "FM": 20,
+    "Soc": 15
+   },
+   "wounds": 4,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "attacks": [
+    {
+     "name": "Knife",
+     "value": 20,
+     "damage": 3,
+     "qualities": [
+      "Undamaging"
+     ]
+    },
+    {
+     "name": "Rocks",
+     "value": 20,
+     "damage": 2,
+     "optional": true,
+     "rangeYards": 6,
+     "qualities": [
+      "Undamaging"
+     ]
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Fetch, Guard",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "snotling",
+    "bete"
+   ],
+   "nameFrSource": "L05 p.326"
+  },
+  {
+   "id": "E0-P-093",
+   "book": "L06",
+   "page": 339,
+   "physicalPage": 339,
+   "kind": "profile",
+   "blockKey": "L06:339:0",
+   "name": "Skeleton",
+   "nameFr": "Squelette",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 25,
+    "F": 30,
+    "E": 30,
+    "I": 20,
+    "Ag": 20,
+    "Dex": 25,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 30,
+     "damage": 7,
+     "qualities": [
+      "Magical"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "squelette"
+   ],
+   "nameFrSource": "L05 p.329"
+  },
+  {
+   "id": "E0-P-094",
+   "book": "L06",
+   "page": 340,
+   "physicalPage": 340,
+   "kind": "profile",
+   "blockKey": "L06:340:0",
+   "name": "Zombie",
+   "nameFr": "Zombie",
+   "stats": {
+    "M": 4,
+    "CC": 15,
+    "CT": null,
+    "F": 30,
+    "E": 30,
+    "I": 5,
+    "Ag": 10,
+    "Dex": 10,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 25,
+     "damage": 7,
+     "qualities": [
+      "Magical"
+     ]
+    },
+    {
+     "name": "Bite",
+     "value": 30,
+     "damage": 6,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 25
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Disease",
+     "param": "Various",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "zombie"
+   ],
+   "nameFrSource": "L05 p.330"
+  },
+  {
+   "id": "E0-P-095",
+   "book": "L06",
+   "page": 341,
+   "physicalPage": 341,
+   "kind": "profile",
+   "blockKey": "L06:341:0",
+   "name": "Dire Wolf",
+   "nameFr": "Loup funeste",
+   "stats": {
+    "M": 9,
+    "CC": 35,
+    "CT": null,
+    "F": 35,
+    "E": 30,
+    "I": 35,
+    "Ag": 25,
+    "Dex": null,
+    "Int": null,
+    "FM": 10,
+    "Soc": null
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Hide",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 40,
+     "damage": 7
+    },
+    {
+     "name": "Bite",
+     "value": 40,
+     "damage": 6,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 10
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "loup"
+   ],
+   "nameFrSource": "L05 p.328"
+  },
+  {
+   "id": "E0-P-096",
+   "book": "L06",
+   "page": 341,
+   "physicalPage": 341,
+   "kind": "profile",
+   "blockKey": "L06:341:1",
+   "name": "Ghost",
+   "nameFr": "Fantôme",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": null,
+    "F": 30,
+    "E": 30,
+    "I": 10,
+    "Ag": 30,
+    "Dex": 20,
+    "Int": 15,
+    "FM": 15,
+    "Soc": null
+   },
+   "wounds": 10,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Ghostly Grasp",
+     "value": 40,
+     "damage": 5,
+     "qualities": [
+      "Magical"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fly",
+     "rating": "20",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hatred",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "fantome"
+   ],
+   "nameFrSource": "L05 p.328"
+  },
+  {
+   "id": "E0-P-097",
+   "book": "L06",
+   "page": 342,
+   "physicalPage": 342,
+   "kind": "profile",
+   "blockKey": "L06:342:0",
+   "name": "Cairn Wraith",
+   "nameFr": "Spectre de cairn",
+   "stats": {
+    "M": 6,
+    "CC": 35,
+    "CT": null,
+    "F": 35,
+    "E": 30,
+    "I": 25,
+    "Ag": 30,
+    "Dex": 25,
+    "Int": 25,
+    "FM": 25,
+    "Soc": 15
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Scythe",
+     "value": 45,
+     "damage": 7,
+     "qualities": [
+      "Defensive",
+      "Hack",
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 40
+    },
+    {
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Fly",
+     "rating": "20",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "fantome"
+   ],
+   "nameFrSource": "L05 p.329"
+  },
+  {
+   "id": "E0-P-098",
+   "book": "L06",
+   "page": 342,
+   "physicalPage": 342,
+   "kind": "profile",
+   "blockKey": "L06:342:1",
+   "name": "Tomb Banshee",
+   "nameFr": "Banshee",
+   "stats": {
+    "M": 6,
+    "CC": 35,
+    "CT": null,
+    "F": 30,
+    "E": 30,
+    "I": 35,
+    "Ag": 30,
+    "Dex": 25,
+    "Int": 25,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 7,
+     "rangeYards": 30
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Fly",
+     "rating": "20",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "fantome"
+   ],
+   "nameFrSource": "L05 p.327"
+  },
+  {
+   "id": "E0-P-099",
+   "book": "L06",
+   "page": 343,
+   "physicalPage": 343,
+   "kind": "profile",
+   "blockKey": "L06:343:0",
+   "name": "Vampire",
+   "nameFr": "Vampire",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": 40,
+    "F": 50,
+    "E": 40,
+    "I": 40,
+    "Ag": 50,
+    "Dex": 40,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 25
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     },
+     {
+      "name": "Heavy Armour",
+      "ap": 5,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 55,
+     "damage": 9
+    },
+    {
+     "name": "Bite",
+     "value": 60,
+     "damage": 8,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 35
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Vampiric",
+     "ref": "E0-T-063"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fly",
+     "rating": "40",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Petrifying Gaze",
+     "ref": "E0-T-043"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Death or Necromancy",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "keywords": [
+    "vampire"
+   ],
+   "nameFrSource": "L05 p.330"
+  },
+  {
+   "id": "E0-P-100",
+   "book": "L06",
+   "page": 344,
+   "physicalPage": 344,
+   "kind": "profile",
+   "blockKey": "L06:344:0",
+   "name": "Varghulf",
+   "nameFr": "Varghulf",
+   "stats": {
+    "M": 8,
+    "CC": 55,
+    "CT": null,
+    "F": 55,
+    "E": 55,
+    "I": 20,
+    "Ag": 50,
+    "Dex": null,
+    "Int": 10,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 32,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Hide",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 65,
+     "damage": 14
+    },
+    {
+     "name": "Bite",
+     "value": 65,
+     "damage": 8,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 65
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 30
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 60
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 20
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hatred",
+     "param": "Living",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Vampiric",
+     "ref": "E0-T-063"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "L05 p.327"
+  },
+  {
+   "id": "E0-P-101",
+   "book": "L06",
+   "page": 345,
+   "physicalPage": 345,
+   "kind": "profile",
+   "blockKey": "L06:345:0",
+   "name": "Gor",
+   "nameFr": "Gor",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 30,
+    "Soc": 10
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 7
+    },
+    {
+     "name": "Horns",
+     "value": 35,
+     "damage": 7,
+     "free": "charge"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Disease",
+     "param": "Packer's Pox",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Mark of Chaos",
+     "ref": "E0-T-035"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    }
+   ],
+   "keywords": [
+    "gor"
+   ],
+   "nameFrSource": "L05 p.332"
+  },
+  {
+   "id": "E0-P-102",
+   "book": "L06",
+   "page": 345,
+   "physicalPage": 345,
+   "kind": "profile",
+   "blockKey": "L06:345:1",
+   "name": "Ungor",
+   "nameFr": "Ungor",
+   "stats": {
+    "M": 5,
+    "CC": 30,
+    "CT": 30,
+    "F": 30,
+    "E": 35,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 20,
+    "FM": 25,
+    "Soc": 10
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 35,
+     "damage": 7
+    },
+    {
+     "name": "Shortbow and Arrows",
+     "value": 40,
+     "damage": 6,
+     "optional": true,
+     "rangeYards": 40,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Disease",
+     "param": "Packer's Pox",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    }
+   ],
+   "keywords": [
+    "ungor"
+   ],
+   "nameFrSource": "L05 p.332"
+  },
+  {
+   "id": "E0-P-103",
+   "book": "L06",
+   "page": 346,
+   "physicalPage": 346,
+   "kind": "profile",
+   "blockKey": "L06:346:0",
+   "name": "Minotaur",
+   "nameFr": "Minotaure",
+   "stats": {
+    "M": 6,
+    "CC": 45,
+    "CT": 25,
+    "F": 45,
+    "E": 45,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 10,
+    "Int": 15,
+    "FM": 35,
+    "Soc": 10
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 55,
+     "damage": 12
+    },
+    {
+     "name": "Horns",
+     "value": 45,
+     "damage": 8,
+     "free": "charge"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Disease",
+     "param": "Packer's Pox",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Infestation",
+     "ref": "E0-T-033"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    }
+   ],
+   "keywords": [
+    "minotaure"
+   ],
+   "nameFrSource": "L05 p.332"
+  },
+  {
+   "id": "E0-P-104",
+   "book": "L06",
+   "page": 347,
+   "physicalPage": 347,
+   "kind": "profile",
+   "blockKey": "L06:347:0",
+   "name": "Cultist",
+   "nameFr": "Cultiste",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 30,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 30
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 35,
+     "damage": 7
+    },
+    {
+     "name": "Bow and Arrows",
+     "value": 35,
+     "damage": 7,
+     "optional": true,
+     "rangeYards": 50,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    },
+    {
+     "name": "Secret Signs (Cult)",
+     "nameFr": "Signes secrets (Cult)",
+     "frUnverified": true,
+     "value": 40
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Mark of Chaos",
+     "ref": "E0-T-035"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    }
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "L05 p.333"
+  },
+  {
+   "id": "E0-P-105",
+   "book": "L06",
+   "page": 347,
+   "physicalPage": 347,
+   "kind": "profile",
+   "blockKey": "L06:347:1",
+   "name": "Mutant",
+   "nameFr": "Mutant",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 30,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 30
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 35,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    }
+   ],
+   "keywords": [
+    "mutant"
+   ],
+   "nameFrSource": "L05 p.333"
+  },
+  {
+   "id": "E0-P-106",
+   "book": "L06",
+   "page": 348,
+   "physicalPage": 348,
+   "kind": "profile",
+   "blockKey": "L06:348:0",
+   "name": "Chaos Warrior",
+   "nameFr": "Guerrier du Chaos",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 30,
+    "F": 45,
+    "E": 45,
+    "I": 45,
+    "Ag": 40,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 55,
+    "Soc": 30
+   },
+   "wounds": 17,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Heavy Armour",
+      "ap": 5
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 60,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Disease",
+     "param": "Various",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Mark of Chaos",
+     "ref": "E0-T-035"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    }
+   ],
+   "keywords": [
+    "guerrier-du-chaos"
+   ],
+   "nameFrSource": "L05 p.334"
+  },
+  {
+   "id": "E0-P-107",
+   "book": "L06",
+   "page": 349,
+   "physicalPage": 349,
+   "kind": "profile",
+   "blockKey": "L06:349:0",
+   "name": "Bloodletter of Khorne",
+   "nameFr": "Sanguinaire de Khorne",
+   "stats": {
+    "M": 5,
+    "CC": 55,
+    "CT": 55,
+    "F": 45,
+    "E": 35,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 70,
+    "Soc": 15
+   },
+   "wounds": 17,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 2
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hellblade",
+     "value": 65,
+     "damage": 9,
+     "qualities": [
+      "Damaging",
+      "Magical"
+     ]
+    },
+    {
+     "name": "Horns",
+     "value": 55,
+     "damage": 8,
+     "free": "charge",
+     "qualities": [
+      "Magical"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Moderate",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Daemonic",
+     "rating": "8+",
+     "ref": "E0-T-018"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hatred",
+     "param": "Daemons of Slaanesh",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Mark of Chaos",
+     "param": "Khorne",
+     "ref": "E0-T-035"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "keywords": [
+    "demon-de-khorne"
+   ],
+   "nameFrSource": "L05 p.335"
+  },
+  {
+   "id": "E0-P-108",
+   "book": "L06",
+   "page": 350,
+   "physicalPage": 350,
+   "kind": "profile",
+   "blockKey": "L06:350:0",
+   "name": "Daemonette of Slaanesh",
+   "nameFr": "Démonette de Slaanesh",
+   "stats": {
+    "M": 5,
+    "CC": 50,
+    "CT": 45,
+    "F": 35,
+    "E": 35,
+    "I": 55,
+    "Ag": 60,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 70,
+    "Soc": 45
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 55,
+     "damage": 9,
+     "qualities": [
+      "Fast",
+      "Penetrating",
+      "Magical"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 55
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Moderate",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Daemonic",
+     "rating": "8+",
+     "ref": "E0-T-018"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Hatred",
+     "param": "Daemons of Khorne",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Mark of Chaos",
+     "param": "Slaanesh",
+     "ref": "E0-T-035"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "keywords": [
+    "demon-de-slaanesh"
+   ],
+   "nameFrSource": "L05 p.335"
+  },
+  {
+   "id": "E0-P-109",
+   "book": "L06",
+   "page": 351,
+   "physicalPage": 351,
+   "kind": "profile",
+   "blockKey": "L06:351:0",
+   "name": "Clanrat",
+   "nameFr": "Guerrier des clans",
+   "stats": {
+    "M": 5,
+    "CC": 30,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 15
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 35,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 50
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Underground",
+     "ref": "E0-T-051"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "L05 p.337"
+  },
+  {
+   "id": "E0-P-110",
+   "book": "L06",
+   "page": 352,
+   "physicalPage": 352,
+   "kind": "profile",
+   "blockKey": "L06:352:1",
+   "name": "Stormvermin",
+   "nameFr": "Vermine de choc",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": 30,
+    "F": 45,
+    "E": 45,
+    "I": 55,
+    "Ag": 45,
+    "Dex": 30,
+    "Int": 20,
+    "FM": 35,
+    "Soc": 15
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Heavy Armour",
+      "ap": 5
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Halberd",
+     "value": 60,
+     "damage": 8,
+     "qualities": [
+      "Defensive",
+      "Hack",
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 50
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 25
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 60
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 65
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Underground",
+     "ref": "E0-T-051"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "L05 p.337"
+  },
+  {
+   "id": "E0-P-111",
+   "book": "L06",
+   "page": 352,
+   "physicalPage": 352,
+   "kind": "profile",
+   "blockKey": "L06:352:0",
+   "name": "Rat Ogre",
+   "nameFr": "Rat-ogre",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": 10,
+    "F": 55,
+    "E": 45,
+    "I": 35,
+    "Ag": 45,
+    "Dex": 25,
+    "Int": 10,
+    "FM": 25,
+    "Soc": 10
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Hide",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Claws",
+     "value": 50,
+     "damage": 14
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 60
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 60
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Disease",
+     "param": "Ratte Fever",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Mutation",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Tail",
+     "ref": "E0-T-054"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Guard, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "rat-ogre",
+    "bete"
+   ],
+   "nameFrSource": "L05 p.337"
+  },
+  {
+   "id": "E0-P-112",
+   "book": "L06",
+   "page": 353,
+   "physicalPage": 353,
+   "kind": "template",
+   "blockKey": "L06:353:0",
+   "name": "Soldier",
+   "nameFr": "Soldat",
+   "modifiers": {
+    "CC": 10,
+    "F": 10,
+    "E": 10,
+    "FM": 10
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "starred": [
+    "wounds"
+   ],
+   "keywords": [
+    "soldat"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-113",
+   "book": "L06",
+   "page": 353,
+   "physicalPage": 353,
+   "kind": "template",
+   "blockKey": "L06:353:2",
+   "name": "Skirmisher",
+   "nameFr": "Tirailleur",
+   "modifiers": {
+    "CT": 10,
+    "I": 10,
+    "Ag": 10,
+    "FM": 10
+   },
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Bow, Sling, or Throwing)",
+     "nameFr": "Projectiles (Bow, Sling, or Throwing)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "starred": [
+    "wounds"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-114",
+   "book": "L06",
+   "page": 353,
+   "physicalPage": 353,
+   "kind": "template",
+   "blockKey": "L06:353:4",
+   "name": "Elite",
+   "nameFr": "Élite",
+   "modifiers": {
+    "CC": 15,
+    "F": 15,
+    "E": 15,
+    "I": 15,
+    "FM": 15
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any Two)",
+     "nameFr": "Corps à corps (Any Two)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 15,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "T"
+    }
+   ],
+   "starred": [
+    "wounds"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-115",
+   "book": "L06",
+   "page": 353,
+   "physicalPage": 353,
+   "kind": "template",
+   "blockKey": "L06:353:1",
+   "name": "Leader",
+   "nameFr": "Meneur",
+   "modifiers": {
+    "CC": 15,
+    "CT": 15,
+    "F": 15,
+    "E": 15,
+    "I": 15,
+    "Ag": 15,
+    "FM": 15,
+    "Soc": 5
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any Two)",
+     "nameFr": "Corps à corps (Any Two)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 15,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "T"
+    }
+   ],
+   "starred": [
+    "wounds"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-116",
+   "book": "L06",
+   "page": 353,
+   "physicalPage": 353,
+   "kind": "template",
+   "blockKey": "L06:353:3",
+   "name": "Commander",
+   "nameFr": "Commandant",
+   "modifiers": {
+    "CC": 20,
+    "CT": 20,
+    "F": 20,
+    "E": 10,
+    "I": 20,
+    "Ag": 10,
+    "FM": 20,
+    "Soc": 15
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 30,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any Two)",
+     "nameFr": "Corps à corps (Any Two)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "T"
+    }
+   ],
+   "starred": [
+    "wounds"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-117",
+   "book": "L06",
+   "page": 354,
+   "physicalPage": 354,
+   "kind": "template",
+   "blockKey": "L06:354:0",
+   "name": "Spellcaster",
+   "nameFr": "Lanceur de sorts",
+   "modifiers": {
+    "I": 10,
+    "Int": 10,
+    "FM": 10
+   },
+   "skills": [
+    {
+     "name": "Channelling (Any)",
+     "nameFr": "Focalisation (Any)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic (Any) or Chaos Magic (Any)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "spells": {
+    "spells": [
+     "Choose up to 3 spells from the Petty Magic list and up to 3 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
+    ]
+   },
+   "starred": [
+    "wounds"
+   ],
+   "keywords": [
+    "lanceur-de-sorts"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-118",
+   "book": "L06",
+   "page": 354,
+   "physicalPage": 354,
+   "kind": "template",
+   "blockKey": "L06:354:2",
+   "name": "Spellcaster Lord",
+   "nameFr": "Seigneur lanceur de sorts",
+   "modifiers": {
+    "CC": 10,
+    "I": 20,
+    "Ag": 15,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 10
+   },
+   "skills": [
+    {
+     "name": "Channelling (Any)",
+     "nameFr": "Focalisation (Any)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Any) or Chaos Magic (Any)"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 2
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "spells": {
+    "spells": [
+     "Choose up to 6 spells from the Petty Magic list and up to 9 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
+    ]
+   },
+   "starred": [
+    "wounds"
+   ],
+   "keywords": [
+    "lanceur-de-sorts"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-119",
+   "book": "L06",
+   "page": 354,
+   "physicalPage": 354,
+   "kind": "profile",
+   "blockKey": "L06:354:1",
+   "name": "Skrakk — Bestigor (Elite)",
+   "nameFr": "Skrakk — Bestigor (Élite)",
+   "stats": {
+    "M": 5,
+    "CC": 50,
+    "CT": 30,
+    "F": 50,
+    "E": 55,
+    "I": 45,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 45,
+    "Soc": 10
+   },
+   "wounds": 19,
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Greataxe",
+     "value": 65,
+     "damage": 11,
+     "qualities": [
+      "Damaging",
+      "Hack",
+      "Unbalanced"
+     ]
+    },
+    {
+     "name": "Horns",
+     "value": 35,
+     "damage": 9,
+     "free": "charge"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 15
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Greataxe",
+    "Light Armour"
+   ],
+   "keywords": [
+    "bestigor"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-120",
+   "book": "L06",
+   "page": 355,
+   "physicalPage": 355,
+   "kind": "profile",
+   "blockKey": "L06:355:0",
+   "name": "Ungrakk — Gor Beastlord (Commander)",
+   "nameFr": "Ungrakk — Seigneur-bête gor (Commandant)",
+   "stats": {
+    "M": 5,
+    "CC": 55,
+    "CT": 50,
+    "F": 55,
+    "E": 50,
+    "I": 50,
+    "Ag": 45,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 50,
+    "Soc": 25
+   },
+   "wounds": 20,
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 75,
+     "damage": 9
+    },
+    {
+     "name": "Horns",
+     "value": 55,
+     "damage": 9,
+     "free": "charge"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 50
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 75
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Axe",
+    "Medium Armour"
+   ],
+   "keywords": [
+    "gor"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-121",
+   "book": "L06",
+   "page": 355,
+   "physicalPage": 355,
+   "kind": "profile",
+   "blockKey": "L06:355:1",
+   "name": "Swilegrakk — Bray Shaman (Spellcaster)",
+   "nameFr": "Swilegrakk — Chamane-bray (Lanceur de sorts)",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 40,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 30,
+    "FM": 40,
+    "Soc": 10
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 7
+    },
+    {
+     "name": "Horns",
+     "value": 35,
+     "damage": 7,
+     "free": "charge"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling (Ghur)",
+     "nameFr": "Focalisation (Ghur)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic (Beasts)"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "Axe",
+    "Light Armour",
+    "Staff"
+   ],
+   "spells": {
+    "Petty Magic": [
+     "Animal Friend",
+     "Dart",
+     "Sounds"
+    ],
+    "Lore of Beasts": [
+     "Arrow Shield",
+     "Beast Form",
+     "Blast"
+    ]
+   },
+   "keywords": [
+    "homme-bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-122",
+   "book": "L06",
+   "page": 356,
+   "physicalPage": 356,
+   "kind": "profile",
+   "blockKey": "L06:356:0",
+   "name": "Guzgog — Ungor Skirmisher",
+   "nameFr": "Guzgog — Tirailleur ungor",
+   "stats": {
+    "M": 5,
+    "CC": 30,
+    "CT": 40,
+    "F": 30,
+    "E": 35,
+    "I": 40,
+    "Ag": 45,
+    "Dex": 30,
+    "Int": 20,
+    "FM": 35,
+    "Soc": 10
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 30,
+     "damage": 7
+    },
+    {
+     "name": "Shortbow and Arrows",
+     "value": 50,
+     "damage": 6,
+     "rangeYards": 40,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 55
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 50
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "trappings": [
+    "Axe",
+    "Shortbow and 10 Arrows"
+   ],
+   "keywords": [
+    "ungor"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

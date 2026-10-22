@@ -9,6 +9,7 @@ import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import { applySpellEffects } from './v5-magic-effects.js';
 import { previewV5Test, selectV5Test } from './v5-roll.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
+import { keywordMatches, participantKeywords, resolveKeyword } from './creature-keywords.js';
 
 export const V5_MAGIC_ATTRIBUTES_VERSION = 'v5-magic-attributes-2026-10-10.1';
 
@@ -114,24 +115,27 @@ const DAEMON_NATURE = /^(?:demons?|daemons?|demoniaques?|daemonic|sanguinaire)(?
 const CONSTRUCT_NATURE = /^(?:artificiels?|artificielles?|creatures? artificielles?|constructs?|automates?|automata)(?:\s*\([^)]*\)|\s+\d+\+?)?$/;
 const ETHEREAL_NATURE = /^(?:etheres?|etherees?|ethereal(?: creatures?)?)(?:\s*\([^)]*\)|\s+\d+\+?)?$/;
 
+/** Le participant porte ce mot-clé de nature ou un descendant (Squelette est un Mort-vivant) : jamais le nom ni un rôle. */
+const carriesKeyword = (participant, id) => keywordMatches(participantKeywords(participant).ids, id);
+
 /** Mort-vivant explicite : une haine ou un rôle « Chasseur de morts-vivants » ne suffit pas. */
 export function isTargetUndead(participant) {
-  return participant?.isUndead === true || natureLabels(participant).some(label => UNDEAD_NATURE.test(label));
+  return participant?.isUndead === true || natureLabels(participant).some(label => UNDEAD_NATURE.test(label)) || carriesKeyword(participant, 'mort-vivant');
 }
 
 /** Démon explicite, y compris les désignations françaises et anglaises déjà admises. */
 export function isTargetDaemon(participant) {
-  return participant?.isDaemon === true || natureLabels(participant).some(label => DAEMON_NATURE.test(label));
+  return participant?.isDaemon === true || natureLabels(participant).some(label => DAEMON_NATURE.test(label)) || carriesKeyword(participant, 'demon');
 }
 
 /** Artificiel / Construct explicite. */
 export function isTargetConstruct(participant) {
-  return participant?.isConstruct === true || natureLabels(participant).some(label => CONSTRUCT_NATURE.test(label));
+  return participant?.isConstruct === true || natureLabels(participant).some(label => CONSTRUCT_NATURE.test(label)) || carriesKeyword(participant, 'artificiel');
 }
 
 /** Éthéré explicite. */
 export function isTargetEthereal(participant) {
-  return participant?.isEthereal === true || natureLabels(participant).some(label => ETHEREAL_NATURE.test(label));
+  return participant?.isEthereal === true || natureLabels(participant).some(label => ETHEREAL_NATURE.test(label)) || carriesKeyword(participant, 'etheree');
 }
 
 /** Vérifie un trait ou une nature exacte sans faux positif sur une sous-chaîne (ex: « Chasseur de démons »). */
@@ -142,6 +146,9 @@ export function hasTargetNatureOrTrait(participant, traitKey) {
   if (key === 'mort-vivant' || key === 'mort vivant' || key === 'undead') return isTargetUndead(participant);
   if (key === 'construct' || key === 'artificiel' || key === 'artificielle' || key === 'automate') return isTargetConstruct(participant);
   if (key === 'ethere' || key === 'etheree' || key === 'ethereal') return isTargetEthereal(participant);
+  // Un mot-clé du référentiel (nom, alias, ancêtre) : « contre les Peaux-vertes » vise un Orque.
+  const keyword = resolveKeyword(traitKey);
+  if (keyword && carriesKeyword(participant, keyword.id)) return true;
   const pattern = new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}s?(?:\\s*\\([^)]*\\)|\\s+\\d+\\+?)?$`);
   return natureLabels(participant).some(label => pattern.test(label));
 }

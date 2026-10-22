@@ -27,6 +27,8 @@ Les clés ignorent la casse, les accents, les espaces, les tirets et les soulign
 | `tags` | `motscles` | liste de textes, ou texte « a, b » | `[]` | Tags |
 | `notes` | | texte (une liste de textes est jointe par des sauts de ligne) | `""` | Notes |
 | `favori` | `favorite` | booléen | `false` | Profil favori |
+| `keywords` | `motsclescreature`, `creaturekeywords` | liste de mots-clés du référentiel (espèce, nature, allégeance), par nom ou alias : « Peau verte », « Orc » et « Peaux-vertes » désignent le même terme ; stockés comme identifiants ; un terme inconnu est signalé « à vérifier » et jamais conservé | absent | Mots-clés de créature (sélecteur) |
+| `keywordExclusions` | `motsclesexclus` | mots-clés déduits (race, Trait de nature) que le MJ écarte | absent | bouton « Écarter » |
 | `jets` | `actions`, `diceLines` | liste de jets | `[]` | Jets pré-configurés |
 
 ## Jet

@@ -1,0 +1,1266 @@
+{
+ "schemaVersion": 1,
+ "book": "L02",
+ "title": "Archives of the Empire 3",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L02",
+  "sha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-138",
+   "book": "L02",
+   "page": 30,
+   "physicalPage": 30,
+   "kind": "profile",
+   "blockKey": "L02:30:0",
+   "name": "Grafina Griselda — Human Magnate",
+   "nameFr": "Grafina Griselda — Magnat humain",
+   "stats": {
+    "M": 4,
+    "CC": 41,
+    "CT": 28,
+    "F": 28,
+    "E": 26,
+    "I": 53,
+    "Ag": 30,
+    "Dex": 51,
+    "Int": 60,
+    "FM": 55,
+    "Soc": 57
+   },
+   "wounds": 11,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 63
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 77
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 82
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 41
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 65
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 80
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 82
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 62
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 43
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 73
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 63
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 70
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 77
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 63
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 46
+    },
+    {
+     "name": "Play (Lute)",
+     "nameFr": "Musicien (Luth)",
+     "value": 56
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 45
+    }
+   ],
+   "talents": [
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Courtly Garb",
+    "Dagger",
+    "Hand Mirror",
+    "Jewellery worth 200 GC",
+    "Townhouses in Altdorf and Auerswald",
+    "Riding Horse with Saddle and Harness"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-139",
+   "book": "L02",
+   "page": 76,
+   "physicalPage": 76,
+   "kind": "profile",
+   "blockKey": "L02:76:0",
+   "name": "Badger",
+   "nameFr": "Blaireau",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": null,
+    "F": 15,
+    "E": 25,
+    "I": 35,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 15,
+    "Soc": 15
+   },
+   "wounds": 5,
+   "size": "little",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 3
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 25
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 30
+    },
+    {
+     "name": "Entertain (Any)",
+     "nameFr": "Divertissement (Any)",
+     "frUnverified": true,
+     "value": 20
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Language (Wilds)",
+     "nameFr": "Langue (Wilds)",
+     "frUnverified": true,
+     "value": 20
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 35
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 33
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animal Telepathy",
+     "ref": "E0-T-169"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Companion Trait",
+     "param": "Resilience",
+     "ref": "E0-T-162"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Messenger",
+     "ref": "E0-T-170"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Smell)"
+    },
+    {
+     "name": "Animal Assistant"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-140",
+   "book": "L02",
+   "page": 77,
+   "physicalPage": 77,
+   "kind": "profile",
+   "blockKey": "L02:77:2",
+   "name": "Crow",
+   "nameFr": "Corbeau",
+   "stats": {
+    "M": 2,
+    "CC": 30,
+    "CT": null,
+    "F": 10,
+    "E": 10,
+    "I": 35,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 20,
+    "FM": 25,
+    "Soc": 15
+   },
+   "wounds": 3,
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-141",
+   "book": "L02",
+   "page": 77,
+   "physicalPage": 77,
+   "kind": "profile",
+   "blockKey": "L02:77:1",
+   "name": "Fox",
+   "nameFr": "Renard",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": null,
+    "F": 15,
+    "E": 20,
+    "I": 40,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 20
+   },
+   "wounds": 4,
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-142",
+   "book": "L02",
+   "page": 77,
+   "physicalPage": 77,
+   "kind": "profile",
+   "blockKey": "L02:77:0",
+   "name": "Cat",
+   "nameFr": "Chat",
+   "stats": {
+    "M": 5,
+    "CC": 35,
+    "CT": null,
+    "F": 15,
+    "E": 15,
+    "I": 40,
+    "Ag": 45,
+    "Dex": null,
+    "Int": 15,
+    "FM": 20,
+    "Soc": 20
+   },
+   "wounds": 3,
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-143",
+   "book": "L02",
+   "page": 77,
+   "physicalPage": 77,
+   "kind": "profile",
+   "blockKey": "L02:77:3",
+   "name": "Owl",
+   "nameFr": "Chouette",
+   "stats": {
+    "M": 2,
+    "CC": 35,
+    "CT": null,
+    "F": 10,
+    "E": 15,
+    "I": 35,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 25,
+    "Soc": 15
+   },
+   "wounds": 3,
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-144",
+   "book": "L02",
+   "page": 78,
+   "physicalPage": 78,
+   "kind": "profile",
+   "blockKey": "L02:78:0",
+   "name": "Stoat",
+   "nameFr": "Hermine",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": null,
+    "F": 10,
+    "E": 10,
+    "I": 45,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 15,
+    "FM": 15,
+    "Soc": 15
+   },
+   "wounds": 2,
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-145",
+   "book": "L02",
+   "page": 90,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L02:90:0",
+   "name": "Lord Adalbert Knopp-Inzel — Human First — Knight (and Spy)",
+   "nameFr": "Seigneur Adalbert Knopp-Inzel — Premier humain — Chevalier (et espion)",
+   "stats": {
+    "M": 3,
+    "CC": 60,
+    "CT": 33,
+    "F": 40,
+    "E": 25,
+    "I": 45,
+    "Ag": 39,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 45,
+    "Soc": 45
+   },
+   "wounds": 10,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Lance",
+     "damage": 10,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 45
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 49
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 50
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 55
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 55
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 40
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 55
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 50
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 40
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 50
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 55
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 55
+    },
+    {
+     "name": "Lore (Battle)",
+     "nameFr": "Savoir (Battle)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 50
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 54
+    },
+    {
+     "name": "Secret Signs (Untersuchung)",
+     "nameFr": "Signes secrets (Untersuchung)",
+     "frUnverified": true,
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 49
+    },
+    {
+     "name": "Trade (Farrier)",
+     "nameFr": "Métier (Maréchal-ferrant)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Easily Confused",
+     "ref": "E0-T-194"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Rough Rider"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Charcoal Stick",
+    "Destrier with Barding",
+    "Hooded Cloak",
+    "Lance",
+    "Plate Armour",
+    "Pouch containing 12 Gold Crowns and 10 Shillings",
+    "Reinforced Soft Kit and Great Helm",
+    "Saddle and Tack",
+    "Sword * Adalbert is still getting used to his prosthetic leg",
+    "and may not Dodge until he does so."
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-146",
+   "book": "L02",
+   "page": 92,
+   "physicalPage": 92,
+   "kind": "profile",
+   "blockKey": "L02:92:0",
+   "name": "Brother Samhel — Human Priest of Morr",
+   "nameFr": "Frère Samhel — Prêtre de Morr humain",
+   "stats": {
+    "M": 4,
+    "CC": 27,
+    "CT": 29,
+    "F": 32,
+    "E": 43,
+    "I": 28,
+    "Ag": 35,
+    "Dex": 25,
+    "Int": 42,
+    "FM": 38,
+    "Soc": 52
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Mace",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 67
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 48
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 53
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 57
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 62
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 52
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 38
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 57
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 37
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 38
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 67
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 57
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bless (Morr)"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Invoke (Morr)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-147",
+   "book": "L02",
+   "page": 93,
+   "physicalPage": 93,
+   "kind": "profile",
+   "blockKey": "L02:93:0",
+   "name": "Ella Terenz — Human Con Artist",
+   "nameFr": "Ella Terenz — Escroc humain",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 29,
+    "F": 27,
+    "E": 29,
+    "I": 53,
+    "Ag": 42,
+    "Dex": 54,
+    "Int": 42,
+    "FM": 47,
+    "Soc": 59
+   },
+   "wounds": 10,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 79
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 74
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 44
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 79
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 74
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 62
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 67
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 79
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 74
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 63
+    },
+    {
+     "name": "Language (Thieves' Tongue)",
+     "nameFr": "Langue (Thieves' Tongue)",
+     "frUnverified": true,
+     "value": 57
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 68
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 69
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Cardsharp"
+    },
+    {
+     "name": "Diceman"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Criminals, Nobles)"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Secret Identity"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Backpack",
+    "Dagger",
+    "Deck of Cards",
+    "Dice",
+    "Expensive Town Clothes",
+    "Hood",
+    "Poor Town Clothes",
+    "Purse with 22 Shillings"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-148",
+   "book": "L02",
+   "page": 94,
+   "physicalPage": 94,
+   "kind": "profile",
+   "blockKey": "L02:94:1",
+   "name": "Leonard — Human Squire",
+   "nameFr": "Leonard — Écuyer humain",
+   "stats": {
+    "M": 4,
+    "CC": 36,
+    "CT": 31,
+    "F": 42,
+    "E": 32,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 31,
+    "Int": 35,
+    "FM": 30,
+    "Soc": 32
+   },
+   "wounds": 13,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 55
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 50
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 55
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 51
+    },
+    {
+     "name": "Play (Bugle)",
+     "nameFr": "Musicien (Bugle)",
+     "frUnverified": true,
+     "value": 36
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 65
+    },
+    {
+     "name": "Trade (Farrier)",
+     "nameFr": "Métier (Maréchal-ferrant)",
+     "value": 51
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Roughrider"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Bugle",
+    "Cloak",
+    "Clothing",
+    "Mail Shirt",
+    "Purse with 18 Shillings",
+    "Riding Horse with Saddle and Tack",
+    "Shield",
+    "Sword",
+    "Trade Tools (Farrier)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-149",
+   "book": "L02",
+   "page": 94,
+   "physicalPage": 94,
+   "kind": "profile",
+   "blockKey": "L02:94:0",
+   "name": "Ridrek Blackhelm — Dwarf Entertainer — (and Spy)",
+   "nameFr": "Ridrek Blackhelm — Artiste nain (et espion)",
+   "stats": {
+    "M": 3,
+    "CC": 42,
+    "CT": 27,
+    "F": 30,
+    "E": 43,
+    "I": 22,
+    "Ag": 33,
+    "Dex": 56,
+    "Int": 32,
+    "FM": 57,
+    "Soc": 20
+   },
+   "wounds": 16,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 43
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 30
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 30
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 67
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 33
+    },
+    {
+     "name": "Entertain (Comedy)",
+     "nameFr": "Divertissement (Comédie)",
+     "value": 23
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 42
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 30
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 42
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 52
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 42
+    },
+    {
+     "name": "Perform (Juggling)",
+     "nameFr": "Représentation (Juggling)",
+     "frUnverified": true,
+     "value": 38
+    },
+    {
+     "name": "Play (Tin Whistle)",
+     "nameFr": "Musicien (Tin Whistle)",
+     "frUnverified": true,
+     "value": 66
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 48
+    }
+   ],
+   "talents": [
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Mimic"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Public Speaking"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Backpack",
+    "Blanket",
+    "Brightly Coloured Clothing",
+    "Dagger",
+    "Hooded Cloak",
+    "Juggling Balls",
+    "Pouch",
+    "Tin Whistle",
+    "Tinderbox"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}
