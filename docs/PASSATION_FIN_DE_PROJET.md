@@ -37,7 +37,7 @@ puis enchaîne les étapes de la section « Suite ».
 3. **Runes** (conception validée par le MJ, puis code) et **familiers D11** (après les profils de E).
 4. **Phase F** (audit des 2694 pages, page de sélecteurs par règle, sans implantation automatique), **G** (recette à la table, `docs/RECETTE_UTILISATEUR.md`), **H** (écriture en retour vers les fiches).
 5. **Rappel à faire au MJ (phase H)** : exploiter le référentiel de mots-clés de la phase E dans le projet des fiches ennemi-interieur-wfrp4 (voir `docs/PLAN_FIN_DE_PROJET.md`, phase H).
-6. Sélecteurs encore ouverts : propositions Gemini (`docs/plans-gemini/PROPOSITIONS_NOMS_TRAITS.md`, `PROPOSITIONS_CONVERSION_AOTE3.md`), magie skaven repérée par D, livres absents du corpus (réponse du MJ attendue).
+6. Validations du MJ du 22/10 soir (`docs/ARBITRAGES_MJ_21_10.md`) : runes validées (code possible), magie skaven ajoutée au plan, passe de cohérence outil ↔ feuille avant G. Pages de sélecteurs à faire : choix de l’exécutant E (à la fin de E), propositions Gemini (dédiée).
 
 ## Procédure d’intégration et de publication (à chaque retour)
 

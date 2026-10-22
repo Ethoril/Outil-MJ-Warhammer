@@ -53,7 +53,7 @@ Ces décisions s’imposent aux lots des phases B à E de `docs/PLAN_FIN_DE_PROJ
 - Divergences entre suppléments (ex. sorts orques Lustria / Tribes and Tribulations) : **le livre le plus récent fait foi**.
 - Runes naines : **converties en V5** (±10 → ±1 DR, Avantage → Élan), conversions consignées ; seuils non publiés jamais inventés.
 - Vérifications de l’exécutant sans arbitrage : identités de runes renommées (Q11), Retribution en trois variantes séparées (Q12), collision Silence arcane / Silence (Q15), tableaux désalignés (Q07), difficulté de Bullgorger (Q05), faits spatiaux en saisie MJ (Q16), variantes slann en extensions (Q17), accès des cultes vérifié par culte (Q21).
-- Livres absents du corpus : liste fournie au MJ le 21/10, en attente de sa réponse.
+- Livres absents du corpus : réglé (voir « Corpus (21/10) »).
 
 ## Bestiaires (E0, `docs/BESTIAIRE_INVENTAIRE.md`)
 
@@ -108,3 +108,15 @@ Les autres choix (120) sont soumis au MJ sur la page « Arbitrages des exécutan
 - Le référentiel est **figé mais évolutif** : liste de base livrée dans le dépôt ; ajout seulement par un formulaire MJ qui refuse les doublons et les quasi-doublons (casse, accents, pluriel, distance d’édition, alias) et propose le terme existant ; les alias (« peau verte », « greenskin ») pointent vers une seule entrée.
 - Les spécialisations à cible (Haine, Animosité, Préjugé, Sans peur [Ennemi], Tueur de…, effets « contre les X » des sorts, prières, runes et Traits) se choisissent **dans le même référentiel**, jamais en texte libre ; l’effet s’applique automatiquement quand la cible porte le mot-clé (ou un descendant), le MJ peut corriger.
 - Place : phase E (profils importés avec leurs mots-clés) ; la migration des spécialisations existantes en texte libre est consignée cas par cas.
+
+## Validations du MJ du 22/10 (soir)
+
+- **Runes à dés inversés** (`docs/plans-gpt/CONCEPTION_RUNES.md` §8.2, branche `pro/correctifs-22-10`) : lecture proposée **validée** : inversion facultative au profit du porteur (Maître du Tueur, Tueur de gobelins, Fléau des géants, Expulsion du Chaos), obligatoire pour l’adversaire (Équilibre, Royauté, Grimnir, Grungni) ; inversion obligatoire et facultative sur le même Test = annulation ; pas de cumul de plusieurs runes ; bonus d’Avantage virtuel de R-052 en reçu MJ. Le code des runes peut commencer (relevé des listes par culte pp.134-140 d’abord).
+- **Master and Commander** : Talent ajouté à part dans l’outil (catalogue figé sur la feuille source) **accepté** ; le MJ ajoutera le Talent à sa feuille.
+- **B-C11** : lecture de l’exécutant **validée** (Action libre : la prière la prend ; Action déjà consommée : l’obligation commence au Tour suivant).
+- **Noms français des familiers** : propositions **conservées** (Familier de Combat / de Puissance / de Sort, Imprégné de (Vent), Assistant magique, Créature magique, Améliorer le familier).
+- **Choix de l’exécutant de la phase E** : une page de sélecteurs **à la fin de la phase E**.
+- **Propositions de Gemini** (`docs/plans-gemini/PROPOSITIONS_NOMS_TRAITS.md`, `PROPOSITIONS_CONVERSION_AOTE3.md`) : une page de sélecteurs dédiée.
+- **Magie skaven** (repérée en phase D) : **ajoutée au plan** (lot de tradition à faire, sur le modèle des autres traditions de la phase D).
+- **Corpus** : réglé (section « Corpus (21/10) » ci-dessus), plus rien en attente.
+- **Passe de cohérence finale** : vérifier en fin de projet que tout ce qui est implanté dans l’outil (Talents, Traits, sorts, prières, mots-clés) concorde avec la feuille source du MJ, et lister les écarts (ex. Master and Commander).

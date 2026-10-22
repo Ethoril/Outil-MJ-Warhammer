@@ -53,6 +53,7 @@ Publication 3.21.0 après la phase A.
 - D0 inventaire par tradition (pages, sorts, règles propres : incantation, Fléau/Corruption, ingrédients, familiers) : Haie (base + AOTE3 p.60-65), Sorcellerie, Démonologie, Nécromancie, Chaos (Nurgle, Slaanesh, Tzeentch), Vampires (Sylvania), Elfes noirs (Temple of Spite), Grande Gueule (AOTE2), Runes naines (Dwarf Players Guide, Lords of Stone and Steel), compléments des Collèges (Winds of Magic et autres). Rapport `docs/lot3/LOT4_INVENTAIRE_TRADITIONS.{json,md}`.
 - Sélecteurs MJ (règles propres à chaque tradition, noms français).
 - Lots par tradition, dans le circuit du lot 3 : catalogue des sorts, contrats V5 (`js/data/v5-spell-contracts.json`), effets génériques nouveaux si besoin, tests de contrat, intégration aux fiches.
+- Magie skaven (ajout du MJ, 22/10) : lot de tradition sur le modèle des autres (inventaire des sources, contrats, tests).
 - Runes naines à part : conception d’un moteur de runes (gravure, runes d’arme/armure/talisman, Runes de Maître), soumise au MJ avant code.
 
 ## Phase E — Bestiaires et Traits de créature
@@ -67,6 +68,10 @@ Publication 3.21.0 après la phase A.
 - F0 : extraction règle par règle, livre par livre (`pdftotext`), comparaison avec la couverture de l’outil → registre `docs/AUDIT_REGLES.json` (règle, source, statut actuel).
 - F1 : page de sélection pour le MJ (artifact ou écran de l’outil) : pour chaque règle non couverte, « implanter / ne pas implanter » et « règle complète / adaptée (texte de l’adaptation) », pour préserver les règles maison. Décisions enregistrées dans le dépôt.
 - F2… : lots uniquement pour les règles retenues, avec la version choisie (complète ou adaptée).
+
+## Passe de cohérence outil ↔ feuille source (avant G)
+
+Vérifier que tout ce qui est implanté (Talents, Traits, sorts, prières, mots-clés) concorde avec la feuille source du MJ ; lister les écarts à reporter dans la feuille (ex. Master and Commander, ajouté à part en 22/10).
 
 ## Phase G — Recette à la table
 
