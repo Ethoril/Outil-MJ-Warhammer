@@ -1,0 +1,5572 @@
+{
+ "schemaVersion": 1,
+ "book": "L09",
+ "title": "Temple of Spite",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L09",
+  "sha256": "ac6c63298be499fbd869b33af9a2e95ce8250c368932e0953a37d117ae1fe3e9"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-311",
+   "book": "L09",
+   "page": 44,
+   "physicalPage": 44,
+   "kind": "profile",
+   "blockKey": "L09:44:1",
+   "name": "Dark Elf",
+   "nameFr": "Elfe noir",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 40,
+    "F": 30,
+    "E": 30,
+    "I": 50,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 30
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Crossbow and Bolts",
+     "value": 40,
+     "damage": 8,
+     "rangeYards": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-312",
+   "book": "L09",
+   "page": 44,
+   "physicalPage": 44,
+   "kind": "profile",
+   "blockKey": "L09:44:3",
+   "name": "Dark Elf Highborn",
+   "nameFr": "Elfe noir de haute naissance",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": 40,
+    "F": 30,
+    "E": 30,
+    "I": 50,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 45
+   },
+   "wounds": 13,
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-313",
+   "book": "L09",
+   "page": 44,
+   "physicalPage": 44,
+   "kind": "profile",
+   "blockKey": "L09:44:0",
+   "name": "Dark Elf City Lowborn",
+   "nameFr": "Elfe noir de basse naissance (citadin)",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 40,
+    "F": 30,
+    "E": 30,
+    "I": 50,
+    "Ag": 40,
+    "Dex": 45,
+    "Int": 45,
+    "FM": 40,
+    "Soc": 30
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 40,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-314",
+   "book": "L09",
+   "page": 44,
+   "physicalPage": 44,
+   "kind": "profile",
+   "blockKey": "L09:44:2",
+   "name": "Dark Elf Wilderness Lowborn",
+   "nameFr": "Elfe noir de basse naissance (des terres sauvages)",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 45,
+    "F": 30,
+    "E": 30,
+    "I": 50,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 45,
+    "FM": 40,
+    "Soc": 30
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Crossbow and Bolts",
+     "value": 45,
+     "damage": 8,
+     "rangeYards": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-315",
+   "book": "L09",
+   "page": 45,
+   "physicalPage": 45,
+   "kind": "profile",
+   "blockKey": "L09:45:1",
+   "name": "Dark Steed",
+   "nameFr": "Destrier noir",
+   "stats": {
+    "M": 9,
+    "CC": 25,
+    "CT": null,
+    "F": 45,
+    "E": 35,
+    "I": 15,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 22,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1
+     }
+    ]
+   },
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-316",
+   "book": "L09",
+   "page": 45,
+   "physicalPage": 45,
+   "kind": "profile",
+   "blockKey": "L09:45:0",
+   "name": "Dark Pegasus",
+   "nameFr": "Pégase noir",
+   "stats": {
+    "M": 8,
+    "CC": 45,
+    "CT": null,
+    "F": 45,
+    "E": 40,
+    "I": 25,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 15,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 28,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Magic, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "pegase"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-317",
+   "book": "L09",
+   "page": 46,
+   "physicalPage": 46,
+   "kind": "profile",
+   "blockKey": "L09:46:0",
+   "name": "Naggarothi Cold One",
+   "nameFr": "Sang-froid naggarothi",
+   "stats": {
+    "M": 7,
+    "CC": 45,
+    "CT": null,
+    "F": 45,
+    "E": 45,
+    "I": 25,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 2
+     },
+     {
+      "name": "Light Armour",
+      "ap": 1
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Stupid",
+     "param": "Replaces Bestial if Trained",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-318",
+   "book": "L09",
+   "page": 46,
+   "physicalPage": 46,
+   "kind": "profile",
+   "blockKey": "L09:46:1",
+   "name": "Kharibdyss",
+   "nameFr": "Kharibdyss",
+   "stats": {
+    "M": 6,
+    "CC": 55,
+    "CT": null,
+    "F": 65,
+    "E": 55,
+    "I": 40,
+    "Ag": 15,
+    "Dex": null,
+    "Int": 5,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 68,
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 2
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 75
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 15
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    }
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-319",
+   "book": "L09",
+   "page": 47,
+   "physicalPage": 47,
+   "kind": "profile",
+   "blockKey": "L09:47:0",
+   "name": "War Hydra",
+   "nameFr": "Hydre de guerre",
+   "stats": {
+    "M": 6,
+    "CC": 45,
+    "CT": null,
+    "F": 55,
+    "E": 55,
+    "I": 15,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 15,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 68,
+   "keywords": [
+    "hydre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-320",
+   "book": "L09",
+   "page": 48,
+   "physicalPage": 48,
+   "kind": "profile",
+   "blockKey": "L09:48:0",
+   "name": "Harpy",
+   "nameFr": "Harpie",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": null,
+    "F": 35,
+    "E": 30,
+    "I": 56,
+    "Ag": 52,
+    "Dex": 35,
+    "Int": 20,
+    "FM": 25,
+    "Soc": 10
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    }
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-321",
+   "book": "L09",
+   "page": 49,
+   "physicalPage": 49,
+   "kind": "profile",
+   "blockKey": "L09:49:0",
+   "name": "Juvenile Helldrake",
+   "nameFr": "Dragon de l’Enfer juvénile",
+   "stats": {
+    "M": 7,
+    "CC": 50,
+    "CT": null,
+    "F": 55,
+    "E": 55,
+    "I": 60,
+    "Ag": 40,
+    "Dex": 10,
+    "Int": 35,
+    "FM": 40,
+    "Soc": 10
+   },
+   "wounds": 76,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 2
+     }
+    ]
+   },
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-322",
+   "book": "L09",
+   "page": 49,
+   "physicalPage": 49,
+   "kind": "profile",
+   "blockKey": "L09:49:1",
+   "name": "Helldrake",
+   "nameFr": "Dragon de l’Enfer",
+   "stats": {
+    "M": 7,
+    "CC": 55,
+    "CT": null,
+    "F": 65,
+    "E": 65,
+    "I": 60,
+    "Ag": 35,
+    "Dex": 10,
+    "Int": 45,
+    "FM": 45,
+    "Soc": 10
+   },
+   "wounds": 176,
+   "size": "monstrous",
+   "armour": {
+    "toughnessBonus": 6,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 3
+     }
+    ]
+   },
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-323",
+   "book": "L09",
+   "page": 50,
+   "physicalPage": 50,
+   "kind": "profile",
+   "blockKey": "L09:50:0",
+   "name": "Sea Dragon",
+   "nameFr": "Dragon des mers",
+   "stats": {
+    "M": 0,
+    "CC": 70,
+    "CT": 60,
+    "F": 70,
+    "E": 80,
+    "I": 60,
+    "Ag": 25,
+    "Dex": 10,
+    "Int": 55,
+    "FM": 60,
+    "Soc": 25
+   },
+   "wounds": 232,
+   "keywords": [
+    "dragon"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-324",
+   "book": "L09",
+   "page": 51,
+   "physicalPage": 51,
+   "kind": "profile",
+   "blockKey": "L09:51:0",
+   "name": "Druchii Anointed",
+   "nameFr": "Oint druchii",
+   "stats": {
+    "M": 5,
+    "CC": 85,
+    "CT": 75,
+    "F": 55,
+    "E": 45,
+    "I": 90,
+    "Ag": 90,
+    "Dex": 90,
+    "Int": 55,
+    "FM": 65,
+    "Soc": 65
+   },
+   "wounds": 19,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     },
+     {
+      "name": "Heavy Armour",
+      "ap": 5
+     }
+    ]
+   },
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Followers of Khaine and Khorne",
+     "ref": "E0-T-003"
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-325",
+   "book": "L09",
+   "page": 52,
+   "physicalPage": 52,
+   "kind": "profile",
+   "blockKey": "L09:52:0",
+   "name": "Doomfire Warlock",
+   "nameFr": "Sorcier du feu maudit",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 40,
+    "F": 40,
+    "E": 30,
+    "I": 50,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 10
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Followers of Slaanesh",
+     "ref": "E0-T-001"
+    }
+   ],
+   "spells": {
+    "spells": [
+     "from Colour Magic Lores",
+     "the Lore of Witchcraft",
+     "or the Lore of Dark Magic (page 64)."
+    ]
+   },
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-326",
+   "book": "L09",
+   "page": 53,
+   "physicalPage": 53,
+   "kind": "template",
+   "blockKey": "L09:53:1",
+   "name": "Druchii Warrior",
+   "nameFr": "Guerrier druchii",
+   "modifiers": {
+    "CC": 10,
+    "CT": 10,
+    "F": 5,
+    "I": 5,
+    "Ag": 10,
+    "FM": 10
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "trappings": [
+    "Black cloak",
+    "Dagger",
+    "Medium Armour",
+    "Repeater Crossbow with 21 Bolts (if crossbowman) or Shield",
+    "Sword or Spear"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-327",
+   "book": "L09",
+   "page": 53,
+   "physicalPage": 53,
+   "kind": "template",
+   "blockKey": "L09:53:3",
+   "name": "Druchii Elite Warrior",
+   "nameFr": "Guerrier d’élite druchii",
+   "modifiers": {
+    "CC": 15,
+    "CT": 10,
+    "F": 15,
+    "I": 20,
+    "Ag": 10,
+    "FM": 15
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any Two)",
+     "nameFr": "Corps à corps (Any Two)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ride (Cold One)",
+     "nameFr": "Chevaucher (Cold One)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "trappings": [
+    "Fine Black Cloak",
+    "Dagger",
+    "Heavy Armour",
+    "Halberd or Lance or Two-handed Weapon",
+    "Sword"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-328",
+   "book": "L09",
+   "page": 53,
+   "physicalPage": 53,
+   "kind": "template",
+   "blockKey": "L09:53:0",
+   "name": "Druchii Officer",
+   "nameFr": "Officier druchii",
+   "modifiers": {
+    "CC": 25,
+    "CT": 20,
+    "F": 10,
+    "I": 20,
+    "Ag": 10,
+    "FM": 15,
+    "Soc": 20
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any Two)",
+     "nameFr": "Corps à corps (Any Two)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Fine Black Cloak",
+    "Dagger",
+    "Medium Armour",
+    "Repeater Crossbow with 21 Bolts (if crossbowman) or Shield",
+    "Sword"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-329",
+   "book": "L09",
+   "page": 53,
+   "physicalPage": 53,
+   "kind": "template",
+   "blockKey": "L09:53:2",
+   "name": "Reaver Captain",
+   "nameFr": "Capitaine pillard",
+   "modifiers": {
+    "CC": 20,
+    "CT": 20,
+    "F": 10,
+    "I": 20,
+    "Ag": 20,
+    "FM": 15,
+    "Soc": 20
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Language (Any One)",
+     "nameFr": "Langue (Any One)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any Two)",
+     "nameFr": "Corps à corps (Any Two)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Any One)",
+     "nameFr": "Projectiles (Any One)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Swimmer"
+    }
+   ],
+   "trappings": [
+    "Medium Armour",
+    "Sea Dragon Cloak",
+    "Two Swords"
+   ],
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-330",
+   "book": "L09",
+   "page": 54,
+   "physicalPage": 54,
+   "kind": "template",
+   "blockKey": "L09:54:0",
+   "name": "Corsair",
+   "nameFr": "Corsaire",
+   "modifiers": {
+    "CC": 10,
+    "CT": 5,
+    "F": 5,
+    "I": 10,
+    "Ag": 10,
+    "FM": 10
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 5,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Old Salt"
+    }
+   ],
+   "trappings": [
+    "Medium Armour",
+    "Sea Dragon Cloak",
+    "Two Swords"
+   ],
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-331",
+   "book": "L09",
+   "page": 54,
+   "physicalPage": 54,
+   "kind": "template",
+   "blockKey": "L09:54:2",
+   "name": "Scout",
+   "nameFr": "Éclaireur",
+   "modifiers": {
+    "CT": 15,
+    "I": 10,
+    "Ag": 15,
+    "FM": 10
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any Two)",
+     "nameFr": "Corps à corps (Any Two)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "trappings": [
+    "Dark Cloak",
+    "Repeater Crossbow and 21 Bolts",
+    "Light"
+   ],
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-332",
+   "book": "L09",
+   "page": 54,
+   "physicalPage": 54,
+   "kind": "template",
+   "blockKey": "L09:54:1",
+   "name": "Bloodshade",
+   "nameFr": "Ombre-sang",
+   "modifiers": {
+    "CC": 10,
+    "CT": 20,
+    "F": 10,
+    "I": 15,
+    "Ag": 20,
+    "FM": 15,
+    "Soc": 10
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any)",
+     "nameFr": "Corps à corps (Any)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Repeater crossbow)",
+     "nameFr": "Projectiles (Repeater crossbow)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Secret Signs (Autarii)",
+     "nameFr": "Signes secrets (Autarii)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Implacable"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Scale Sheer Surface"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Striding Gait (any)"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Dagger",
+    "Repeater Crossbow and 21 and Bolts",
+    "Light Armour",
+    "Sword"
+   ],
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-333",
+   "book": "L09",
+   "page": 54,
+   "physicalPage": 54,
+   "kind": "template",
+   "blockKey": "L09:54:3",
+   "name": "Assassin",
+   "nameFr": "Assassin",
+   "modifiers": {
+    "CC": 30,
+    "CT": 20,
+    "F": 10,
+    "I": 20,
+    "Ag": 20,
+    "Dex": 10,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 10
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Chemistry, Herbs)",
+     "nameFr": "Savoir (Chemistry, Herbs)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any One)",
+     "nameFr": "Corps à corps (Any One)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Any One)",
+     "nameFr": "Projectiles (Any One)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Trade (Poisoner)",
+     "nameFr": "Métier (Empoisonneur)",
+     "value": 15,
+     "modifier": true
+    }
+   ],
+   "talents": [],
+   "trappings": [
+    "Dagger",
+    "Disguise",
+    "Repeater Handbow",
+    "Sword",
+    "Vial of"
+   ],
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-334",
+   "book": "L09",
+   "page": 55,
+   "physicalPage": 55,
+   "kind": "template",
+   "blockKey": "L09:55:1",
+   "name": "Druchii Sorceress",
+   "nameFr": "Sorcière druchii",
+   "modifiers": {
+    "I": 10,
+    "Int": 15,
+    "FM": 15,
+    "Soc": 10
+   },
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 15,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Any)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Soul Pact (Hekarti)"
+    }
+   ],
+   "trappings": [
+    "Diadem",
+    "Hand Weapon",
+    "Robes"
+   ],
+   "spells": {
+    "spells": [
+     "Choose up to 5 Spells from the Petty Magic list and up to 7 taken from any combination of Spells from Colour Magic Lores",
+     "the Lore of Witchcraft",
+     "or the Lore of Dark Magic (page 64)"
+    ]
+   },
+   "keywords": [
+    "elfe-noir"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-335",
+   "book": "L09",
+   "page": 55,
+   "physicalPage": 55,
+   "kind": "template",
+   "blockKey": "L09:55:0",
+   "name": "Supreme Sorceress",
+   "nameFr": "Sorcière suprême",
+   "modifiers": {
+    "CC": 5,
+    "I": 20,
+    "Ag": 10,
+    "Dex": 10,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 20
+   },
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 30,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 30,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 30,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Any)"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Soul Pact (Hekarti, Any other)"
+    }
+   ],
+   "trappings": [
+    "Black Staff of Office",
+    "Diadem",
+    "Hand Weapon",
+    "Robes"
+   ],
+   "spells": {
+    "spells": [
+     "Choose up to 5 Spells from the Petty Magic list and up to 12 taken from any combination of Spells from Colour Magic Lores",
+     "the Lore of Witchcraft",
+     "or the Lore of Dark Magic (page 64)."
+    ]
+   },
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-336",
+   "book": "L09",
+   "page": 55,
+   "physicalPage": 55,
+   "kind": "template",
+   "blockKey": "L09:55:2",
+   "name": "Witch Elf",
+   "nameFr": "Sorcière-elfe de Khaine",
+   "modifiers": {
+    "CC": 10,
+    "F": 10,
+    "I": 10,
+    "Ag": 10,
+    "FM": 10
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any)",
+     "nameFr": "Corps à corps (Any)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Khaine)",
+     "nameFr": "Savoir (Khaine)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Battle Rage"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Etiquette (Cult of Khaine)"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "trappings": [
+    "Blood-stained Robes",
+    "Sacred Dagger",
+    "Two Swords",
+    "Vial of Black Lotus Blade Venom",
+    "Vial of Zha'Kheril (see page 59)"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-337",
+   "book": "L09",
+   "page": 56,
+   "physicalPage": 56,
+   "kind": "template",
+   "blockKey": "L09:56:0",
+   "name": "Hag",
+   "nameFr": "Mégère",
+   "modifiers": {
+    "CC": 20,
+    "F": 10,
+    "I": 20,
+    "Ag": 20,
+    "Int": 10,
+    "FM": 20,
+    "Soc": 10
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Khaine, Poisons)",
+     "nameFr": "Savoir (Khaine, Poisons)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Any)",
+     "nameFr": "Corps à corps (Any)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "talents": [],
+   "trappings": [
+    "Blood-stained Robes",
+    "Sacred Dagger",
+    "Two Swords",
+    "Vial of Black Lotus Blade Venom",
+    "Vial of Zha'Kheril (see page 59)"
+   ],
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-338",
+   "book": "L09",
+   "page": 56,
+   "physicalPage": 56,
+   "kind": "template",
+   "blockKey": "L09:56:2",
+   "name": "Beastmaster",
+   "nameFr": "Maître des bêtes",
+   "modifiers": {
+    "CC": 5,
+    "CT": 10,
+    "I": 5,
+    "Ag": 5,
+    "Int": 5,
+    "FM": 5
+   },
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Animal Training",
+     "nameFr": "Dressage",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "trappings": [
+    "Light Armour",
+    "Net",
+    "Spear or Sword",
+    "Whip"
+   ],
+   "inventoryKind": "profile",
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-339",
+   "book": "L09",
+   "page": 56,
+   "physicalPage": 56,
+   "kind": "template",
+   "blockKey": "L09:56:1",
+   "name": "Druchii Entourage",
+   "nameFr": "Suite druchii",
+   "modifiers": {
+    "CC": 10,
+    "CT": 5,
+    "I": 10,
+    "Ag": 5,
+    "Dex": 5,
+    "Int": 10,
+    "Soc": 15
+   },
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Entertain (Wit)",
+     "nameFr": "Divertissement (Wit)",
+     "frUnverified": true,
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Hand Weapon)",
+     "nameFr": "Corps à corps (Hand Weapon)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Etiquette (Druchii Nobles)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Supportive"
+    }
+   ],
+   "trappings": [
+    "Dagger",
+    "Fine Clothes",
+    "Medium Armour",
+    "Sword"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-340",
+   "book": "L09",
+   "page": 56,
+   "physicalPage": 56,
+   "kind": "template",
+   "blockKey": "L09:56:3",
+   "name": "Druchii Servant",
+   "nameFr": "Serviteur druchii",
+   "modifiers": {
+    "CC": 5,
+    "F": 5,
+    "E": 5,
+    "I": 15,
+    "Ag": 10,
+    "Dex": 5,
+    "Int": 5,
+    "Soc": 15
+   },
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Hearing)"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Etiquette (Druchii Nobles)"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Supportive"
+    },
+    {
+     "name": "Well-prepared"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Dagger",
+    "Livery"
+   ],
+   "keywords": [
+    "elfe-noir",
+    "serviteur"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-341",
+   "book": "L09",
+   "page": 72,
+   "physicalPage": 72,
+   "kind": "profile",
+   "blockKey": "L09:72:0",
+   "name": "Captain Valerion Tremendros — Dark Elf Highborn Officer",
+   "nameFr": "Capitaine Valerion Tremendros — Officier de haute naissance",
+   "stats": {
+    "M": 5,
+    "CC": 70,
+    "CT": 60,
+    "F": 40,
+    "E": 30,
+    "I": 70,
+    "Ag": 50,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 55,
+    "Soc": 65
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 70,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 60
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 85
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 80
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 70
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-342",
+   "book": "L09",
+   "page": 73,
+   "physicalPage": 73,
+   "kind": "profile",
+   "blockKey": "L09:73:0",
+   "name": "Damina Hroska — Dark Elf City Lowborn Assassin",
+   "nameFr": "Damina Hroska — Assassine de basse naissance (citadine)",
+   "stats": {
+    "M": 5,
+    "CC": 70,
+    "CT": 60,
+    "F": 40,
+    "E": 30,
+    "I": 70,
+    "Ag": 60,
+    "Dex": 55,
+    "Int": 65,
+    "FM": 60,
+    "Soc": 50
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Damage inflict 1 Bleeding Condition Repeater Handbow and Bolts",
+     "value": 65,
+     "damage": 7,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 75
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 60
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 65
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 55
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 80
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 55
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 85
+    },
+    {
+     "name": "Lore (Chemistry)",
+     "nameFr": "Savoir (Chimie)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Herbs)",
+     "nameFr": "Savoir (Herbes)",
+     "value": 85
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 85
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 90
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 65
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 65
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 80
+    },
+    {
+     "name": "Trade (Poisoner)",
+     "nameFr": "Métier (Empoisonneur)",
+     "value": 85
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Fine Clothes",
+    "Grand Cathayan Fan",
+    "Disguise",
+    "Light Armour",
+    "Repeater Handbow with 21 Bolts",
+    "Vial of Poison (Manbane)"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-343",
+   "book": "L09",
+   "page": 74,
+   "physicalPage": 74,
+   "kind": "profile",
+   "blockKey": "L09:74:0",
+   "name": "Hermizor of House Arguental — Dark Elf Highborn Entourage",
+   "nameFr": "Hermizor de la maison Arguental — Suite de haute naissance",
+   "stats": {
+    "M": 5,
+    "CC": 55,
+    "CT": 45,
+    "F": 30,
+    "E": 30,
+    "I": 60,
+    "Ag": 45,
+    "Dex": 45,
+    "Int": 50,
+    "FM": 40,
+    "Soc": 60
+   },
+   "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 70
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 70
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Entertain (Wit)",
+     "nameFr": "Divertissement (Wit)",
+     "frUnverified": true,
+     "value": 70
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 55
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 80
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 55
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-344",
+   "book": "L09",
+   "page": 80,
+   "physicalPage": 80,
+   "kind": "profile",
+   "blockKey": "L09:80:0",
+   "name": "Jareth Brackblood — Dark Elf Reaver Captain",
+   "nameFr": "Jareth Brackblood — Capitaine pillard",
+   "stats": {
+    "M": 5,
+    "CC": 60,
+    "CT": 60,
+    "F": 40,
+    "E": 30,
+    "I": 70,
+    "Ag": 60,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 55,
+    "Soc": 60
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     },
+     {
+      "name": "Sea Dragon Cloak",
+      "ap": 2,
+      "locations": "Body with the Partial Flaw"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 75,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 75
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 85
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 60
+    },
+    {
+     "name": "Language (Cathayan)",
+     "nameFr": "Langue (Cathayen)",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 75
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 50
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 85
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 75
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 50
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 75
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 50
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-345",
+   "book": "L09",
+   "page": 81,
+   "physicalPage": 81,
+   "kind": "profile",
+   "blockKey": "L09:81:0",
+   "name": "Demeth Soulbane — Dark Elf Corsair",
+   "nameFr": "Demeth Soulbane — Corsaire",
+   "stats": {
+    "M": 5,
+    "CC": 50,
+    "CT": 65,
+    "F": 35,
+    "E": 30,
+    "I": 60,
+    "Ag": 50,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     },
+     {
+      "name": "Sea Dragon Cloak",
+      "ap": 2,
+      "locations": "Body with the Partial Flaw"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 75,
+     "damage": 7,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 55
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 75
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 40
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 55
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 40
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-346",
+   "book": "L09",
+   "page": 82,
+   "physicalPage": 82,
+   "kind": "profile",
+   "blockKey": "L09:82:0",
+   "name": "Zarugh Kelvain — Dark Elf Ship’S Crew",
+   "nameFr": "Zarugh Kelvain — Équipage de navire",
+   "stats": {
+    "M": 5,
+    "CC": 50,
+    "CT": 45,
+    "F": 35,
+    "E": 30,
+    "I": 60,
+    "Ag": 50,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 55
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 55
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 40
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 55
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Bucket",
+    "Dagger",
+    "Light Armour",
+    "Rope"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-347",
+   "book": "L09",
+   "page": 86,
+   "physicalPage": 86,
+   "kind": "profile",
+   "blockKey": "L09:86:0",
+   "name": "Dockside Thug",
+   "nameFr": "Voyou des quais",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 35,
+    "F": 40,
+    "E": 30,
+    "I": 35,
+    "Ag": 30,
+    "Dex": 35,
+    "Int": 30,
+    "FM": 35,
+    "Soc": 30
+   },
+   "wounds": 13,
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-348",
+   "book": "L09",
+   "page": 87,
+   "physicalPage": 87,
+   "kind": "profile",
+   "blockKey": "L09:87:0",
+   "name": "Harzeth Duskmantle — Dark Elf Spymaster",
+   "nameFr": "Harzeth Duskmantle — Maître espion",
+   "stats": {
+    "M": 5,
+    "CC": 60,
+    "CT": 45,
+    "F": 35,
+    "E": 30,
+    "I": 75,
+    "Ag": 60,
+    "Dex": 40,
+    "Int": 85,
+    "FM": 75,
+    "Soc": 70
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 55,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 85
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 90
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 95
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 90
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 90
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 80
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 95
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 90
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 90
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 95
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 100
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 85
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 90
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 95
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 55
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 95
+    },
+    {
+     "name": "Secret Signs (Druchii Spy)",
+     "nameFr": "Signes secrets (Druchii Spy)",
+     "frUnverified": true,
+     "value": 95
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 55
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 70
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 80
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Dagger",
+    "Repeater Handbow with 21 Bolts",
+    "Sea Elf Robes"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-349",
+   "book": "L09",
+   "page": 88,
+   "physicalPage": 88,
+   "kind": "profile",
+   "blockKey": "L09:88:0",
+   "name": "Selin Ebonspite — Dark Elf Agent",
+   "nameFr": "Selin Ebonspite — Agent",
+   "stats": {
+    "M": 5,
+    "CC": 55,
+    "CT": 45,
+    "F": 35,
+    "E": 35,
+    "I": 80,
+    "Ag": 60,
+    "Dex": 40,
+    "Int": 70,
+    "FM": 55,
+    "Soc": 45
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Longbow and Elf Arrows",
+     "value": 65,
+     "damage": 7,
+     "rangeYards": 70
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 80
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 70
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 55
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 55
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 70
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 55
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 95
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 80
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Athel Loren)",
+     "nameFr": "Savoir (Athel Loren)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Bretonnia)",
+     "nameFr": "Savoir (Bretonnia)",
+     "frUnverified": true,
+     "value": 80
+    },
+    {
+     "name": "Lore (Naggaroth)",
+     "nameFr": "Savoir (Naggaroth)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 95
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 95
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 95
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 65
+    },
+    {
+     "name": "Secret Signs (Asrai)",
+     "nameFr": "Signes secrets (Asrai)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Secret Signs (Druchii Spy)",
+     "nameFr": "Signes secrets (Druchii Spy)",
+     "frUnverified": true,
+     "value": 80
+    },
+    {
+     "name": "Secret Signs (Ranger)",
+     "nameFr": "Signes secrets (Ranger)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 75
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 55
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 45
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 85
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Backpack",
+    "Hooded Cloak",
+    "Longbow and 10 Arrows",
+    "Light Armour",
+    "Travel Clothes",
+    "Sword"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-350",
+   "book": "L09",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "profile",
+   "blockKey": "L09:89:0",
+   "name": "Daleathra Bladeborn — Dark Elf Agent",
+   "nameFr": "Daleathra Bladeborn — Agente",
+   "stats": {
+    "M": 5,
+    "CC": 85,
+    "CT": 60,
+    "F": 40,
+    "E": 30,
+    "I": 85,
+    "Ag": 65,
+    "Dex": 45,
+    "Int": 60,
+    "FM": 85,
+    "Soc": 75
+   },
+   "wounds": 18,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 70,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 65
+    },
+    {
+     "name": "Animal Training (Pigeon)",
+     "nameFr": "Dressage (Pigeon)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 80
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 95
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 95
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 50
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 40
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 90
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 65
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 90
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 85
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 95
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 70
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 85
+    },
+    {
+     "name": "Lore (Altdorf)",
+     "nameFr": "Savoir (Altdorf)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Khaine)",
+     "nameFr": "Savoir (Khaine)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Lore (Naggaroth)",
+     "nameFr": "Savoir (Naggaroth)",
+     "frUnverified": true,
+     "value": 80
+    },
+    {
+     "name": "Lore (Ulthuan)",
+     "nameFr": "Savoir (Ulthuan)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 100
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 95
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 70
+    },
+    {
+     "name": "Secret Signs (Druchii Spy)",
+     "nameFr": "Signes secrets (Druchii Spy)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 55
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 80
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Fine and Fashionable Attire",
+    "Repeater Handbow with 21 Bolts",
+    "Sacred Dagger",
+    "Small Import Business",
+    "Sword",
+    "Vial of Black Lotus Blade Venom"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-351",
+   "book": "L09",
+   "page": 95,
+   "physicalPage": 95,
+   "kind": "profile",
+   "blockKey": "L09:95:0",
+   "name": "Gref — Dark Elf Wilderness Lowborn Bloodshade",
+   "nameFr": "Gref — Ombre-sang de basse naissance (des terres sauvages)",
+   "stats": {
+    "M": 5,
+    "CC": 50,
+    "CT": 65,
+    "F": 40,
+    "E": 30,
+    "I": 65,
+    "Ag": 60,
+    "Dex": 40,
+    "Int": 45,
+    "FM": 55,
+    "Soc": 40
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Crossbow and Bolts",
+     "value": 80,
+     "damage": 8,
+     "rangeYards": 45
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 40
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 70
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 55
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 55
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 80
+    },
+    {
+     "name": "Secret Signs (Autarii)",
+     "nameFr": "Signes secrets (Autarii)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 65
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Rocky, Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "trappings": [
+    "Light Armour",
+    "Obsidian Dagger",
+    "Repeater Crossbow and 21 Bolts",
+    "Sword"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-352",
+   "book": "L09",
+   "page": 96,
+   "physicalPage": 96,
+   "kind": "profile",
+   "blockKey": "L09:96:0",
+   "name": "Kalimel Nightpiercer — Dark Elf Scout",
+   "nameFr": "Kalimel Nightpiercer — Éclaireur",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 55,
+    "F": 30,
+    "E": 30,
+    "I": 60,
+    "Ag": 55,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Crossbow and Bolts",
+     "value": 60,
+     "damage": 8,
+     "rangeYards": 45
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 60
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 50
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 60
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 50
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 60
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 60
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 80
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 60
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 75
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 65
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 55
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-353",
+   "book": "L09",
+   "page": 97,
+   "physicalPage": 97,
+   "kind": "profile",
+   "blockKey": "L09:97:0",
+   "name": "Samuril Meurlith — Dark Elf Supreme Sorceress",
+   "nameFr": "Samuril Meurlith — Sorcière suprême",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": 40,
+    "F": 30,
+    "E": 30,
+    "I": 70,
+    "Ag": 50,
+    "Dex": 50,
+    "Int": 70,
+    "FM": 70,
+    "Soc": 50
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 40
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 90
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 100
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 70
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 100
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 100
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 90
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 60
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-354",
+   "book": "L09",
+   "page": 103,
+   "physicalPage": 103,
+   "kind": "profile",
+   "blockKey": "L09:103:0",
+   "name": "Scorath Scaleflayer — High Beastmaster",
+   "nameFr": "Scorath Scaleflayer — Haut maître des bêtes",
+   "stats": {
+    "M": 5,
+    "CC": 60,
+    "CT": 70,
+    "F": 37,
+    "E": 35,
+    "I": 72,
+    "Ag": 60,
+    "Dex": 58,
+    "Int": 67,
+    "FM": 66,
+    "Soc": 48
+   },
+   "wounds": 17,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     },
+     {
+      "name": "Sea Dragon Cloak",
+      "ap": 2,
+      "locations": "Body with the Partial Flaw"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Whip",
+     "value": 75,
+     "damage": 5
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 72
+    },
+    {
+     "name": "Animal Training",
+     "nameFr": "Dressage",
+     "value": 84
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 70
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 52
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 82
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 68
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 56
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 77
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 54
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 73
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 67
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 83
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 68
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 82
+    },
+    {
+     "name": "Ranged (Whip)",
+     "nameFr": "Projectiles (Whip)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Ride (Cold One)",
+     "nameFr": "Chevaucher (Cold One)",
+     "frUnverified": true,
+     "value": 76
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 81
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 66
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 64
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 44
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fearless",
+     "param": "Beasts",
+     "ref": "E0-T-227"
+    },
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Medium Armour",
+    "Scourgerunner Chariot",
+    "Sea Dragon Cloak",
+    "Sword",
+    "Whip"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-355",
+   "book": "L09",
+   "page": 104,
+   "physicalPage": 104,
+   "kind": "profile",
+   "blockKey": "L09:104:0",
+   "name": "Kelrathi — Dark Elf Beastmaster",
+   "nameFr": "Kelrathi — Maître des bêtes",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": 50,
+    "F": 35,
+    "E": 30,
+    "I": 66,
+    "Ag": 52,
+    "Dex": 65,
+    "Int": 70,
+    "FM": 66,
+    "Soc": 30
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 3
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 78
+    },
+    {
+     "name": "Animal Training",
+     "nameFr": "Dressage",
+     "value": 72
+    },
+    {
+     "name": "Channelling (Ghur)",
+     "nameFr": "Focalisation (Ghur)",
+     "frUnverified": true,
+     "value": 68
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 70
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 72
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 78
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 70
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 82
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 96
+    },
+    {
+     "name": "Lore (Chemistry)",
+     "nameFr": "Savoir (Chimie)",
+     "value": 76
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 77
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 52
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 67
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 72
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 70
+    },
+    {
+     "name": "Trade (Poisoner)",
+     "nameFr": "Métier (Empoisonneur)",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
+   "spells": {
+    "Petty Magic": [
+     "Animal Friend",
+     "Marsh Lights",
+     "Murmured Whisper",
+     "Produce Small Animal",
+     "Warning"
+    ]
+   },
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-356",
+   "book": "L09",
+   "page": 110,
+   "physicalPage": 110,
+   "kind": "profile",
+   "blockKey": "L09:110:0",
+   "name": "Nyandra Filvanir — Dark Elf City Lowborn Reaver Captain",
+   "nameFr": "Nyandra Filvanir — Capitaine pillard de basse naissance (citadine)",
+   "stats": {
+    "M": 5,
+    "CC": 60,
+    "CT": 60,
+    "F": 40,
+    "E": 30,
+    "I": 70,
+    "Ag": 60,
+    "Dex": 45,
+    "Int": 45,
+    "FM": 55,
+    "Soc": 60
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     },
+     {
+      "name": "Sea Dragon Cloak",
+      "ap": 2,
+      "locations": "Body with the Partial Flaw"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 75,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 75
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 85
+    },
+    {
+     "name": "Language (Norscan)",
+     "nameFr": "Langue (Norscan)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 75
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 50
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 85
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 75
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 50
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 75
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-357",
+   "book": "L09",
+   "page": 111,
+   "physicalPage": 111,
+   "kind": "profile",
+   "blockKey": "L09:111:0",
+   "name": "Anuidethar Veilthorn — Dark Elf Factor (Merchant)",
+   "nameFr": "Anuidethar Veilthorn — Facteur (marchand)",
+   "stats": {
+    "M": 5,
+    "CC": 41,
+    "CT": 40,
+    "F": 30,
+    "E": 30,
+    "I": 75,
+    "Ag": 48,
+    "Dex": 45,
+    "Int": 86,
+    "FM": 53,
+    "Soc": 73
+   },
+   "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Mail Shirt",
+      "ap": 2,
+      "locations": "Arms and Body"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 55,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 77
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 88
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 67
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 90
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 83
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 98
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 85
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 88
+    },
+    {
+     "name": "Language (Cathayan)",
+     "nameFr": "Langue (Cathayen)",
+     "value": 92
+    },
+    {
+     "name": "Language (Norscan)",
+     "nameFr": "Langue (Norscan)",
+     "frUnverified": true,
+     "value": 96
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 100
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 100
+    },
+    {
+     "name": "Lore (Seafaring)",
+     "nameFr": "Savoir (Seafaring)",
+     "frUnverified": true,
+     "value": 89
+    },
+    {
+     "name": "Lore (Trade)",
+     "nameFr": "Savoir (Trade)",
+     "frUnverified": true,
+     "value": 96
+    },
+    {
+     "name": "Melee (Sword)",
+     "nameFr": "Corps à corps (Sword)",
+     "frUnverified": true,
+     "value": 49
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 82
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 55
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 38
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-358",
+   "book": "L09",
+   "page": 116,
+   "physicalPage": 116,
+   "kind": "profile",
+   "blockKey": "L09:116:0",
+   "name": "Selthira Heartrender — Dark Elf Lowborn (City) Witch Elf",
+   "nameFr": "Selthira Heartrender — Sorcière-elfe de basse naissance (citadine)",
+   "stats": {
+    "M": 5,
+    "CC": 50,
+    "CT": 40,
+    "F": 40,
+    "E": 30,
+    "I": 60,
+    "Ag": 50,
+    "Dex": 45,
+    "Int": 45,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Khaine)",
+     "nameFr": "Savoir (Khaine)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Blood-stained Robes",
+    "Four Sacred Daggers",
+    "Two"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-359",
+   "book": "L09",
+   "page": 117,
+   "physicalPage": 117,
+   "kind": "profile",
+   "blockKey": "L09:117:0",
+   "name": "Haidrath — Dark Elf Lowborn (Wilderness) Hag",
+   "nameFr": "Haidrath — Mégère de basse naissance (des terres sauvages)",
+   "stats": {
+    "M": 5,
+    "CC": 60,
+    "CT": 45,
+    "F": 40,
+    "E": 30,
+    "I": 70,
+    "Ag": 60,
+    "Dex": 40,
+    "Int": 55,
+    "FM": 60,
+    "Soc": 40
+   },
+   "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 80
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 50
+    },
+    {
+     "name": "Lore (Khaine)",
+     "nameFr": "Savoir (Khaine)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Lore (Poisons)",
+     "nameFr": "Savoir (Poison)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 80
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 75
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 60
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-360",
+   "book": "L09",
+   "page": 118,
+   "physicalPage": 118,
+   "kind": "profile",
+   "blockKey": "L09:118:0",
+   "name": "Hulreth — Dark Elf Highborn — Disciple of Khaine (Warrior Priest)",
+   "nameFr": "Hulreth — Disciple de Khaine de haute naissance (prêtre guerrier)",
+   "stats": {
+    "M": 5,
+    "CC": 76,
+    "CT": 40,
+    "F": 40,
+    "E": 30,
+    "I": 85,
+    "Ag": 65,
+    "Dex": 40,
+    "Int": 84,
+    "FM": 65,
+    "Soc": 80
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 85
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 95
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 85
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 35
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 85
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 90
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 95
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 94
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 86
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 95
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 85
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 80
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Brass Mask",
+    "Ceremonial Armour (Medium Armour)",
+    "Chalice of Blood",
+    "Disciple's Robes",
+    "Sacred Swords"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-361",
+   "book": "L09",
+   "page": 122,
+   "physicalPage": 122,
+   "kind": "profile",
+   "blockKey": "L09:122:0",
+   "name": "Duriath Helbane — the Fleetmaster",
+   "nameFr": "Duriath Helbane — Maître de flotte",
+   "stats": {
+    "M": 5,
+    "CC": 75,
+    "CT": 75,
+    "F": 50,
+    "E": 35,
+    "I": 80,
+    "Ag": 70,
+    "Dex": 60,
+    "Int": 65,
+    "FM": 70,
+    "Soc": 75
+   },
+   "wounds": 18,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "AP gon Cloak",
+      "ap": 2,
+      "locations": "Body with the Partial Flaw"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Handbow and Bolts",
+     "value": 90,
+     "damage": 6,
+     "rangeYards": 10,
+     "qualities": [
+      "Pistol"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 85
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 85
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 65
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 80
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 80
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 90
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 75
+    },
+    {
+     "name": "Language (Grand Cathayan)",
+     "nameFr": "Langue (Grand Cathayan)",
+     "frUnverified": true,
+     "value": 70
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 85
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 95
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Naggaroth)",
+     "nameFr": "Savoir (Naggaroth)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Lore (Oceans)",
+     "nameFr": "Savoir (Oceans)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 85
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 85
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 85
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 90
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 85
+    },
+    {
+     "name": "Ride (Manticore)",
+     "nameFr": "Chevaucher (Manticore)",
+     "value": 75
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 65
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 85
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 65
+    }
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-362",
+   "book": "L09",
+   "page": 124,
+   "physicalPage": 124,
+   "kind": "profile",
+   "blockKey": "L09:124:0",
+   "name": "Death Hag Kheitalla",
+   "nameFr": "Kheitalla — Mégère de la mort",
+   "stats": {
+    "M": 5,
+    "CC": 75,
+    "CT": 74,
+    "F": 47,
+    "E": 38,
+    "I": 80,
+    "Ag": 71,
+    "Dex": 38,
+    "Int": 56,
+    "FM": 65,
+    "Soc": 65
+   },
+   "wounds": 17,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 85
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 55
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 85
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 80
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 90
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 75
+    },
+    {
+     "name": "Language (Grand Cathayan)",
+     "nameFr": "Langue (Grand Cathayan)",
+     "frUnverified": true,
+     "value": 70
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 85
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 105
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Naggaroth)",
+     "nameFr": "Savoir (Naggaroth)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Lore (Oceans)",
+     "nameFr": "Savoir (Oceans)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 85
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 85
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 89
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 85
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 75
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 75
+    },
+    {
+     "name": "Ride (Manticore)",
+     "nameFr": "Chevaucher (Manticore)",
+     "value": 75
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 65
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 85
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 65
+    },
+    {
+     "name": "Trade (Apothecary)",
+     "nameFr": "Métier (Apothicaire)",
+     "value": 71
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Brass Crown of Office",
+    "Blood-stained Robes",
+    "Two Swords",
+    "Ceremonial Dagger",
+    "Main Gauche",
+    "Vials of Witchbrew (5) and Black Lotus (5)"
+   ],
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-363",
+   "book": "L09",
+   "page": 126,
+   "physicalPage": 126,
+   "kind": "profile",
+   "blockKey": "L09:126:0",
+   "name": "Kernethar Grimwitch — Fugitive Sorcerer",
+   "nameFr": "Kernethar Grimwitch — Sorcier fugitif",
+   "stats": {
+    "M": 5,
+    "CC": 54,
+    "CT": 34,
+    "F": 31,
+    "E": 36,
+    "I": 68,
+    "Ag": 55,
+    "Dex": 50,
+    "Int": 70,
+    "FM": 70,
+    "Soc": 41
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Channelling (Dhar)",
+     "nameFr": "Focalisation (Dhar)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Channelling (Ghur)",
+     "nameFr": "Focalisation (Ghur)",
+     "frUnverified": true,
+     "value": 95
+    },
+    {
+     "name": "Channelling (Shyish)",
+     "nameFr": "Focalisation (Shyish)",
+     "frUnverified": true,
+     "value": 90
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Entertain (Acting)",
+     "nameFr": "Divertissement (Acteur)",
+     "value": 46
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 46
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 88
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 90
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 95
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 80
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 51
+    },
+    {
+     "name": "Lore (Chemistry)",
+     "nameFr": "Savoir (Chimie)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 62
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 83
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 65
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Dagger",
+    "Diary",
+    "Forged Testimonials for `Malforic Silverblade",
+    "Fencing Master'",
+    "Fine Leather Travelling Clothes and Cloak",
+    "Purse with 15 GC",
+    "Rapier"
+   ],
+   "spells": {
+    "Petty: Bearings, Careful Step, Drain, Light, Murmured Whisper, Rot, Twitch": [
+     "Lore of Death"
+    ],
+    "Aethyric Armour, Blast, Soul Vortex, Steal Life, Purple Pall of Shyish, Terrifying": [
+     "Lore of Beasts"
+    ],
+    "Amber Talons, Beast Form, Bridge, Entangle, Flock of Doom,": [
+     "Mundane Aura Lore of Dark Magic"
+    ]
+   },
+   "keywords": [
+    "elfe-noir"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

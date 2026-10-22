@@ -51,3 +51,11 @@ export const CELL_OVERRIDES = Object.freeze({
   // The Horned Rat Companion (L22) : le rat à deux têtes (BS, Dex et Fel absents).
   'L22:14:1': row('M=5 WS=35 BS=- S=40 T=35 I=25 Ag=25 Dex=- Int=17 WP=15 Fel=- W=11')
 });
+
+/**
+ * Entrées que l'inventaire E0 classe « profile » alors que le livre imprime des modificateurs (cases vides, aucune Blessures) : ce sont
+ * des gabarits. Le genre de la fiche est corrigé, le genre de l'inventaire est conservé dans `inventoryKind` (voir E-D16).
+ */
+export const TEMPLATE_IDS = Object.freeze(new Set([
+  'E0-P-326', 'E0-P-327', 'E0-P-328', 'E0-P-329', 'E0-P-330', 'E0-P-331', 'E0-P-332', 'E0-P-333', 'E0-P-334', 'E0-P-335', 'E0-P-336', 'E0-P-337', 'E0-P-338', 'E0-P-339', 'E0-P-340'
+]));

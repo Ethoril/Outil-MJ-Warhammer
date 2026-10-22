@@ -51,3 +51,7 @@ Format : id, source, question, choix, raison, alternative. Relecture du MJ en s�
 
 - **E-D14** — L07 : espèces des PNJ lues sur le texte du livre (Adella et Soren : Norses ; Finrian : Haut Elfe ; Lokhir : Elfe noir ; Tzku'Ta : Slann ; Crotaz'L : Saurus) ; Kroxigor sous « homme-lézard » faute de terme propre ; pas de mot-clé « géant » pour la chauve-souris géante. Noms français : tous proposés à la main (le glossaire mécanique donnait « Sang-froid » pour Cold One, « Cornu One »…), à relire.
 - **E-D15** — Coupures de ligne : « Cold- blooded », « Swamp- strider » sont recollés avant la recherche du Trait. Traits écartés faute d'entrée d'inventaire (relevés dans les écarts, non inventés) : Vampiric Gaze, Corrupting, Breath +12 de la Salamandre, Weapons, Hunger.
+
+## Temple of Spite (D9)
+
+- **E-D16** — L09 : 15 entrées (E0-P-326 à 340, archétypes de carrière p. 53-56) classées « profil » par l'inventaire E0 mais imprimées en modificateurs (cases vides, pas de Blessures) : fiche de genre « gabarit », genre d'inventaire gardé dans `inventoryKind` ; le test de cohérence compare à `inventoryKind` et compte les genres des fiches. Espèce « elfe-noir » posée à la main sur les archétypes, les Druchii nommés sans mention (Scaleflayer, Helbane, Kheitalla, Grimwitch) ; Sorcière-elfe de Khaine : ni « sorcière » ni « elfe » seul. Montures : le sang-froid naggarothi n'est pas un Elfe noir ; Dragons de l'Enfer en Monstres. Le Voyou des quais (E0-P-347) reste sans espèce (non précisée). Noms français tous proposés, à relire.

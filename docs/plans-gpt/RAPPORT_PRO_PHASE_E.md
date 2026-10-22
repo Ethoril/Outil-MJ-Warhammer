@@ -13,7 +13,7 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | K3 mots-clés portés (profils, participants, PJ, import JSON, sélecteur) | FAIT | 0e8e350 |
 | K4 spécialisations à cible (Haine, Sans peur, Haine-Trait, Dévotion de la Guerrière, migration) | EN COURS (caractérisation 7ebf59e) | |
 | K5 effets « contre les X » (natures, contrats, sources de Psychologie) | À FAIRE | |
-| D1 à D24 profils de bestiaire (modèle, import livre par livre) | À FAIRE | |
+| D1 à D24 profils de bestiaire (modèle, import livre par livre) | EN COURS : L01, L02, L03, L04, L06, L07, L11 faits ; D9 = L09 (Temple of Spite, 38 profils + 15 gabarits) fait | voir `git log` |
 | B1 à B3 bibliothèque et raccordements | À FAIRE | |
 | T1 à T12, F1-F2, S1, R1 | À FAIRE | |
 

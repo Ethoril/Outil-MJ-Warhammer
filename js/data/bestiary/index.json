@@ -68,6 +68,17 @@
    }
   },
   {
+   "book": "L09",
+   "file": "L09.json",
+   "title": "Temple of Spite",
+   "edition": "V4",
+   "counts": {
+    "profiles": 38,
+    "templates": 15,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L11",
    "file": "L11.json",
    "title": "The Imperial Zoo",

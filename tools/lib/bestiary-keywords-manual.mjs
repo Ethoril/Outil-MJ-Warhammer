@@ -19,6 +19,11 @@ export const KEYWORDS_MANUAL = Object.freeze({
   'E0-P-243': ['norse'], 'E0-P-244': ['norse'], 'E0-P-247': ['demon-de-nurgle'], 'E0-P-252': ['haut-elfe'], 'E0-P-253': ['oiseau-geant'], 'E0-P-254': ['elfe-noir'],
   'E0-P-255': ['slann'], 'E0-P-266': ['saurus'], 'E0-P-267': ['homme-lezard'], 'E0-P-268': ['serpent', 'monstre'], 'E0-P-269': ['serpent', 'monstre'],
   'E0-P-291': ['-geant'], 'E0-P-299': ['bete'], 'E0-P-300': ['bete'], 'E0-P-306': ['bete'], 'E0-P-307': ['monstre'],
+  // Temple of Spite (L09) : Elfes noirs (druchii) ; montures et monstres ; le sang-froid naggarothi n'est qu'une monture (E-D16)
+  'E0-P-315': ['cheval'], 'E0-P-317': ['-elfe-noir'], 'E0-P-318': ['monstre'], 'E0-P-320': ['monstre'], 'E0-P-321': ['-bete', 'monstre'], 'E0-P-322': ['-bete', 'monstre'],
+  'E0-P-325': ['elfe-noir'], 'E0-P-329': ['elfe-noir'], 'E0-P-330': ['elfe-noir'], 'E0-P-331': ['elfe-noir'], 'E0-P-332': ['elfe-noir'], 'E0-P-333': ['elfe-noir'],
+  'E0-P-335': ['elfe-noir'], 'E0-P-336': ['-sorciere', '-elfe', 'elfe-noir'], 'E0-P-337': ['elfe-noir'], 'E0-P-338': ['elfe-noir'],
+  'E0-P-354': ['elfe-noir'], 'E0-P-358': ['-sorciere'], 'E0-P-361': ['elfe-noir'], 'E0-P-362': ['elfe-noir'], 'E0-P-363': ['elfe-noir'],
   // Deft Steps, Light Fingers (L04) : PNJ nommés humains ; le surnom « the Fish » n'est pas un poisson ; chiens et rapaces sont des Bêtes
   'E0-P-170': ['humain'], 'E0-P-171': ['humain', '-poisson'], 'E0-P-172': ['humain'], 'E0-P-173': ['humain'], 'E0-P-179': ['humain'],
   'E0-P-181': ['bete'], 'E0-P-182': ['bete'], 'E0-P-183': ['bete'],
