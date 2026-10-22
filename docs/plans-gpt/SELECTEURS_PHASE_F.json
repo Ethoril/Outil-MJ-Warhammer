@@ -323,5 +323,1253 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0047",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.161",
+    "question": "Implanter « Calculer l’initiative du combat » ? Au début du combat, tirer un d10 et ajouter le Bonus d’Initiative ; le MJ peut grouper les jets de PNJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0049",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.161",
+    "question": "Implanter « Départager les égalités d’initiative » ? En cas d’égalité d’initiative de combat, comparer l’Initiative ; si elle est encore égale, un Test opposé laisse le gagnant choisir l’ordre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0051",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.162",
+    "question": "Implanter « Limiter un Tour à un Mouvement et une Action » ? Un Tour donne normalement un Mouvement et une Action, dans l’ordre choisi ; on peut renoncer à l’un ou aux deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0052",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.161",
+    "question": "Implanter « Déterminer la surprise d’une embuscade » ? Opposer normalement la plus faible Discrétion des assaillants à la meilleure Perception adverse quand une détection est possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0053",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.161",
+    "question": "Implanter « Appliquer Surpris après une embuscade réussie » ? Si l’embuscade gagne son opposition, chaque adversaire reçoit Surpris ; sinon, le combat commence normalement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0054",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.162",
+    "question": "Implanter « Arbitrer les Actions gratuites » ? Avertir, dégainer ou boire une potion peut être gratuit ; le MJ en borne le nombre raisonnable, un Test étant normalement une Action.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0055",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.162",
+    "question": "Implanter « Déplacement difficile utilisant aussi l’Action » ? Un déplacement qui exige un Test, comme une escalade ou un saut, utilise aussi l’Action du Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0056",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.162",
+    "question": "Implanter « Se mettre sur la défensive » ? Consacrer l’Action à une compétence défensive donne +2 DR aux défenses utilisant cette compétence jusqu’au début du prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0057",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Calculer marche et course » ? En un Mouvement, la marche couvre deux fois M en yards et la course quatre fois M ; choisir explicitement le mode.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0058",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Déclarer deux adversaires engagés » ? Une attaque de mêlée effectuée ou subie rend les deux adversaires engagés l’un avec l’autre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0059",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Mettre fin à l’engagement après un Round sans attaque » ? Après un Round entier sans attaque entre les deux adversaires, leur engagement prend fin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0060",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Sprinter avec l’Action » ? Dépenser l’Action pour Athlétisme +2 DR ; ajouter Course + DR yards au Mouvement du Tour, même si les DR sont négatifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0062",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Se désengager en dépensant Élan » ? Perdre Élan permet de quitter les adversaires sans pénalité et de se déplacer normalement, y compris charger une autre cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0063",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Se désengager sans Élan » ? Dépenser l’Action pour Esquive ou Représentation (Acrobaties), opposée au meilleur Corps à corps des adversaires engagés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0064",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Se désengager en infériorité numérique » ? Un Désengagement sans Élan subit Désavantage quand les adversaires sont au moins deux fois plus nombreux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0065",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Interdire le Désengagement d’une cible encerclée » ? Sans Élan, une cible encerclée ne peut pas se désengager ; la Fuite reste possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0066",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.163",
+    "question": "Implanter « Conséquence d’un Désengagement raté » ? Un échec de Désengagement conserve l’engagement et donne Élan aux adversaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0069",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.164",
+    "question": "Implanter « Vérifier portée et ligne de vue » ? Un tir exige portée et ligne de vue ; une attaque de mêlée exige une arme prête et une cible à son allonge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0077",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.164",
+    "question": "Implanter « Réduire les dégâts d’une arme endommagée » ? Chaque point de détérioration subi par l’arme réduit ses dégâts d’un point.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0078",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.164",
+    "question": "Implanter « Transformer une arme détériorée en arme improvisée » ? À bonus de dégâts nul, l’arme devient improvisée ; une nouvelle détérioration la rend inutilisable en mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0079",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.164",
+    "question": "Implanter « Détériorer les PA d’une armure » ? Chaque détérioration retire un PA à la zone concernée ; à zéro, cette partie de l’armure est inutilisable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0081",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Lâcher puis récupérer son arme après une maladresse » ? Par défaut, une maladresse fait lâcher l’arme et impose de dépenser l’Action suivante pour la récupérer ; le MJ peut préférer la table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0082",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Maladresse 1-2 : Blessure directe » ? Retirer une Blessure en ignorant Endurance et armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0083",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Maladresse 3-4 : arme abîmée et Tour retardé » ? L’arme subit un point de détérioration ; au prochain Round, le personnage agit en dernier malgré initiative, talents et règles spéciales.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0084",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Maladresse 5-6 : prochaine Action pénalisée » ? Au prochain Round, l’Action du personnage subit -1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0085",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Maladresse 7 : prochain Mouvement perdu » ? Le personnage perd son prochain Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0086",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Maladresse 8 : prochaine Action perdue » ? Le personnage perd sa prochaine Action.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0087",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Maladresse 9 : cheville blessée » ? Tirer une jambe au hasard ; -1 DR aux usages de cette jambe pendant 1d10 Rounds, compté comme Blessure Critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0088",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Maladresse 10 : toucher un allié ou être Sonné » ? Toucher un allié aléatoire à portée avec des DR égaux aux unités du jet ; sinon, le personnage reçoit Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0090",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Déclencher un incident de poudre » ? Avec Poudre noire, Ingénierie ou Explosif, 99 ou 100 impose la table d’incident plutôt que la table ordinaire de maladresse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0091",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Incident 1-8 : arme ou explosif inopérant » ? L’arme ne tire pas ; une arme à feu doit être rechargée, un explosif reste inerte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0092",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Incident 9-10 : explosion de l’arme » ? L’arme explose et inflige ses dégâts complets au bras principal avec zéro DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0094",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.165",
+    "question": "Implanter « Limiter les tirs d’un combattant engagé » ? Un combattant engagé ne peut tirer qu’avec une arme possédant Pistolet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0096",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Employer la spécialisation du groupe d’arme » ? Une attaque emploie la spécialisation de Corps à corps ou de Tir correspondant au groupe de l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0097",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Employer une arme de mêlée sans entraînement » ? Sans progrès dans le groupe, tester la CC ; perdre les bénéfices des Qualités de l’arme et conserver ses Défauts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0098",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Refuser une arme de tir sans entraînement » ? Sans progrès dans le groupe de tir, l’arme ne peut normalement pas être utilisée, sauf les exceptions publiées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0099",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Utiliser Tir (Ingénierie) pour poudre et explosifs » ? Tir (Ingénierie) peut servir pour les armes à poudre noire et explosives.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0100",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Utiliser Tir (Poudre noire) pour une arme d’ingénierie » ? Tir (Poudre noire) peut servir pour une arme d’ingénierie avec difficulté au moins -2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0101",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Utiliser CT pour arbalètes et armes de jet » ? Sans progrès adéquats, CT reste utilisable pour arbalètes et armes de jet, avec difficulté au moins -1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0102",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Manier à pied une arme de cavalerie à deux mains » ? À pied, une arme de cavalerie à deux mains peut être utilisée avec Corps à corps (Deux mains) sans pénalité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0103",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Manier à pied une arme de cavalerie à une main » ? À pied, une arme de cavalerie à une main compte comme arme improvisée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0104",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Utiliser une arme d’escrime avec Corps à corps de base » ? Corps à corps (Base) peut servir pour une arme d’escrime, en perdant ses Qualités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0105",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Rendre dangereuse une arme de fléau non maîtrisée » ? Sans progrès en Corps à corps (Fléau), l’arme reçoit le Défaut Dangereuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0107",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Engager à distance avec une très longue arme » ? Une arme Très longue permet d’engager jusqu’à quatre yards ; une arme à allonge Massive jusqu’à six yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0108",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Appliquer les modificateurs de situation aux attaques » ? Les modificateurs de combat de ces tableaux s’appliquent aux attaques, sans donner automatiquement la pénalité inverse au défenseur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0109",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Tir : taille de la cible » ? Une cible plus grande donne +1 DR, ou +2 si Monstrueuse ; une cible plus petite impose -1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0110",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Tir : distance de la cible » ? La courte portée donne +1 DR, le bout portant +2 ; la longue portée impose -1 et l’extrême -2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0111",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Tir : cible surprise » ? Une cible surprise donne +1 DR au tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0112",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Tir : cible à couvert » ? Un couvert donne -1 DR au tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0113",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Tir : cible à terre » ? Une cible à terre donne -1 DR au tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0114",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Tir : éclairage et météo » ? Brouillard ou faible lumière : -1 DR ; pluie et vent : -2 ; météo extrême ou obscurité totale : -3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0115",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Tir après déplacement » ? Se déplacer avant de tirer impose -1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0116",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée : cible en infériorité numérique » ? Une cible en infériorité numérique donne +1 DR ; une cible encerclée donne +2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0117",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée : attaquant en hauteur » ? Une position haute de l’attaquant donne +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0118",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée : cible enchevêtrée » ? Une cible Enchevêtrée donne +1 DR à l’attaquant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0119",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée en terrain difficile » ? Boue, eau ou terrain difficile imposent -1 DR à l’attaquant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0120",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée dans un espace exigu » ? Dans un espace exigu, une allonge moyenne impose -1 DR ; une allonge supérieure impose -2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0121",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée : attaquant à terre » ? Le tableau de mêlée impose -1 DR à l’attaquant À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0122",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée : défenseur en hauteur » ? Une position haute du défenseur impose -1 DR à l’attaquant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0123",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.166",
+    "question": "Implanter « Mêlée : bonus du tableau contre Surpris » ? Le tableau de mêlée p.166 donne +1 DR à l’attaquant contre une cible surprise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0125",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Viser avant de tirer » ? Une Action de visée donne +1 DR au prochain tir contre cette cible ; bouger, se défendre ou agir autrement avant le tir annule le bonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0127",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Choisir son jet contre une cible sans défense » ? En mêlée ou au tir à bout portant contre une cible sans défense, choisir le jet ; la touche est automatique et un critique permet de choisir la localisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0128",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Option létale contre une cible sans défense » ? Si le MJ retient une partie plus létale, une attaque admissible contre une cible sans défense peut la tuer directement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0129",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Se rendre sans défense en refusant une opposition » ? Une cible capable de s’opposer à l’attaque mais qui choisit de ne pas le faire compte comme sans défense.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0130",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Déterminer l’infériorité numérique » ? Un camp domine numériquement avec au moins deux engagés pour un ; ne compter que les combattants engagés entre eux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0131",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Déterminer l’encerclement » ? Une cible est encerclée si aucune sortie n’est possible ; il faut souvent trois assaillants, parfois deux en lieu étroit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0132",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Tirer dans un groupe » ? Contre au moins six personnes, gagner Avantage, mais le MJ tire au hasard la victime parmi les cibles possibles, alliés compris.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0133",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Tirer dans une mêlée » ? Une cible engagée impose Désavantage ; si l’inversion transforme la touche en échec, toucher un combattant de la mêlée choisi au hasard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0134",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Porter deux armes à une main » ? On peut manier simultanément deux armes prévues pour une main.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0136",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Déclarer et commencer une empoignade » ? Avant le jet de Corps à corps (Bagarre), annoncer l’empoignade ; gagner l’opposition remplace les dégâts par une prise et un Enchevêtré adverse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0137",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Poursuivre une empoignade à son Tour » ? Commencer son Tour en empoignade impose un Test de Force opposé pour l’Action.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0138",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Blesser en empoignade » ? Gagner le Test de Force permet d’infliger BF + DR dégâts ; localiser avec ce jet et ignorer les PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0139",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Immobiliser davantage en empoignade » ? Gagner l’opposition de Force permet d’ajouter un Enchevêtré, plus un par DR après le premier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0140",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Se dégager en empoignade » ? Gagner l’opposition de Force permet de retirer un de ses Enchevêtré, plus un par DR après le premier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0144",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Employer le Mouvement de la monture » ? Le cavalier utilise le Mouvement de sa monture pour se déplacer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0145",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Jouer Équitation comme Action gratuite de mouvement monté » ? Pour Sprint, saut, charge ou manœuvre comparable à cheval, tester Équitation gratuitement et utiliser le Mouvement de la monture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0146",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Avantage de cavalerie contre une cible plus petite » ? Un cavalier avec arme de cavalerie gagne Avantage en mêlée contre une cible plus petite que sa monture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0147",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Atteindre un cavalier protégé par sa monture » ? Choisir cavalier ou monture ; attaquer ou toucher le cavalier impose Désavantage si l’on est plus petit que la monture, sauf arme Longue ou plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0148",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Employer une monture dressée à la guerre » ? Voir le Trait Dressé pour le dressage Guerre et les pénalités d’une monture non préparée au combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0149",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Employer la Force de la monture en charge » ? Lors d’une charge montée, le cavalier peut utiliser le Bonus de Force de sa monture pour les dégâts de l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0150",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Subir Désavantage à l’Esquive montée » ? Un cavalier subit Désavantage aux Tests d’Esquive, sauf s’il possède Cavalier émérite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0151",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Déterminer la déviation d’une arme de jet » ? Après un Tir (Armes de jet) raté : d10 pour la direction, 2d10 yards plafonnés à la moitié de la distance ; 9 tombe à ses pieds, 10 à ceux de la cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0157",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.168",
+    "question": "Implanter « Perdre Élan à la pause ou fin du combat » ? Une pause des combats ou la fin de la rencontre fait perdre Élan.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0159",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Donner des ordres en combat » ? Commandement donne des ordres aux PNJ ; normalement sans opposition aux subordonnés, sinon opposé à leur Calme si l’ordre pose difficulté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0160",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Contester l’autorité d’un autre chef » ? Opposer Commandement à Commandement ; les ordres du vainqueur sont suivis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0161",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Rallier des alliés Brisés » ? Voir l’inventaire Brisé pour le ralliement par Commandement et la répartition du budget décidée par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0162",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Transférer Élan à un allié » ? En Action gratuite, perdre Élan et réussir Commandement permet de donner Élan à un allié choisi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0163",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Intimider en combat » ? Voir l’inventaire Brisé pour Intimidation opposée à Calme, Peur produite et variantes contre un groupe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0164",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Subir les dégâts d’une chute » ? Une chute inflige trois dégâts par yard ; retrancher le Bonus d’Endurance et ignorer les PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0165",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Tester Résistance après une chute blessante » ? Si les Blessures perdues dépassent le Bonus d’Endurance, tester Résistance +0 ; un échec pose À Terre et un critique à la jambe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0166",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Ajouter un critique sur une chute désastreuse » ? Un échec d’au plus -5 DR au Test de Résistance après chute inflige un critique supplémentaire à localisation aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0167",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Retenir son souffle avant une privation d’air » ? Avec préparation, retenir son souffle pendant BE × 10 secondes sans Test ; une privation d’air imprévue commence immédiatement l’asphyxie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0168",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Perdre des Blessures par asphyxie » ? Chaque Round d’asphyxie retire une Blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0169",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Devenir Inconscient à zéro Blessure par asphyxie » ? L’asphyxie qui réduit les Blessures à zéro inflige immédiatement Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0170",
+    "phase": "Voyage et environnement",
+    "lot": "L06",
+    "source": "L06 p.169",
+    "question": "Implanter « Mourir après BE Rounds à zéro par asphyxie » ? Après avoir atteint zéro Blessure par asphyxie, mourir au bout d’un nombre de Rounds égal au Bonus d’Endurance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L06-0171",
+    "phase": "Combat",
+    "lot": "L06",
+    "source": "L06 p.167",
+    "question": "Implanter « Attribuer Inoffensive aux attaques à mains nues » ? Sans griffes, crocs ou autre arme naturelle, une attaque à mains nues reçoit Inoffensive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
