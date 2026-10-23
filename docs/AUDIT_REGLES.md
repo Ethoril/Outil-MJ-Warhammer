@@ -1,6 +1,6 @@
 # Audit des règles — Phase F0
 
-**Audit partiel.** Les nombres décrivent les seules règles effectivement recensées. Ils ne certifient pas à eux seuls la lecture d’un livre. L05 sert aux noms français seulement et ne crée pas de règle supplémentaire. Voir `plans-gpt/RAPPORT_GPT_PHASE_F.md`.
+**Registre documentaire F0.** Les nombres décrivent les seules règles effectivement recensées. Ils ne certifient pas à eux seuls la lecture d’un livre. L05 sert aux noms français seulement et ne crée pas de règle supplémentaire. Voir `plans-gpt/RAPPORT_GPT_PHASE_F.md`.
 
 L’audit de couverture est statique : une référence moteur ne vaut pas recette à la table. Les domaines déjà inventoriés utilisent `coveredBy` sans recopier leur contenu. Chaque lacune jouable recensée possède un sélecteur ; aucune implantation n’est autorisée.
 

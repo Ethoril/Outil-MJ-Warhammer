@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03, L04, L07, L08 et L09 ont reçu les revues décrites ci-dessous. 26 livres sur vingt-six sont traités dans les portées documentaires précisées ci-dessous (L05 : noms seuls). La revue du périmètre documentaire F0 est terminée ; les contrôles de clôture et les limites sont consignés en fin de rapport.
+État au 23 octobre 2026 : **revue documentaire F0 des 26 livres terminée**, dans les portées et limites de lecture décrites ci-dessous ; L05 sert aux noms français seulement. Le registre contient **7 019 entrées et 5 337 sélecteurs ouverts**. La clôture, les preuves et les suites autorisées sont précisées en fin de rapport.
 
 ## Travail local et sources
 
@@ -8,7 +8,7 @@ Worktree dédié `E:/Outil MJ Warhammer/tmp/gpt-phase-f-worktree`, branche `gpt/
 
 L06 : Livre de base V5 EN v2.pdf, 379 pages, SHA-256 `53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de`. Folio = page physique. L05 a été utilisé pour les noms français seulement, avec page physique = folio +2. Le manifeste décrit 26 livres et 3 968 pages physiques, contre 17 et 2 694 dans l’initial.
 
-Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitrage, catalogue public ou version. Commits locaux seulement ; aucun push, publication ou fusion. Les contrôles d’intégrité finaux seront renouvelés à la clôture du corpus.
+Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitrage, catalogue public ou version. Commits locaux seulement ; aucun push, publication ou fusion. Les contrôles de clôture sont consignés en fin de rapport.
 
 ## Lots et reçus
 
@@ -42,16 +42,24 @@ Aucun fichier js/ ni test hérité modifié ; aucun changement de règle, arbitr
 | L24 Gnomes, jeux et clauses autonomes | FAIT, 86 entrées dans la portée ci-dessous | 7eb717c | contrôles L24 ci-dessous |
 | L25 navigation, construction, avaries, voyages et clauses marines | FAIT, 468 entrées dans la portée ci-dessous | 73bced3 | contrôles L25 ci-dessous |
 | L26 herbes, navigation, commerce, maladies et clauses autonomes | FAIT, 288 entrées dans la portée ci-dessous | 7590ed8 | contrôles L26 ci-dessous |
-| L01 Ogres, signes, artefacts, Hospice et batailles | FAIT, 425 entrées dans la portée ci-dessous | commit du présent lot | 4 054/4 054 ; 97,410 s, L01-full.log |
-| L02-L04, L07-L10, L12, L15 | À faire dans cet ordre | — | — |
+| L01 Ogres, signes, artefacts, Hospice et batailles | FAIT, 425 entrées dans la portée ci-dessous | 91e9fc5 | 4 054/4 054 ; 97,410 s, L01-full.log |
+| L02 — Archives of the Empire 3.pdf | FAIT, 333 entrées dans la portée ci-dessous | 44f90cc | 4 054/4 054 ; reçu du livre ci-dessous |
+| L03 — Archives of the Empire Volume 1.pdf | FAIT, 61 entrées dans la portée ci-dessous | c33aeaa | 4 054/4 054 ; reçu du livre ci-dessous |
+| L04 — Deft Steps Light Fingers.pdf | FAIT, 495 entrées dans la portée ci-dessous | 37c2c1c | 4 054/4 054 ; reçu du livre ci-dessous |
+| L07 — Lustria EN.pdf | FAIT, 403 entrées dans la portée ci-dessous | 0d06c6e | 4 054/4 054 ; reçu du livre ci-dessous |
+| L08 — Supplément Elfe - High elf Players Guide v2.pdf | FAIT, 352 entrées dans la portée ci-dessous | 4157cac | 4 054/4 054 ; reçu du livre ci-dessous |
+| L09 — Supplément Elfe Noir - Temple of Spite v2.pdf | FAIT, 310 entrées dans la portée ci-dessous | b5f32c9 | 4 054/4 054 ; reçu du livre ci-dessous |
+| L10 — Supplément Vampire - Sylvania The Cursed County v2.pdf | FAIT, 90 entrées dans la portée ci-dessous | 57b0bfc | 4 054/4 054 ; reçu du livre ci-dessous |
+| L12 — Tribes and Tribulations EN.pdf | FAIT, 217 entrées dans la portée ci-dessous | d41a00b | 4 054/4 054 ; reçu du livre ci-dessous |
+| L15 — WFRP_Dwarf_Players_Guide_Book_250714.pdf | FAIT, 320 entrées dans la portée ci-dessous | 42578d7 | 4 054/4 054 ; reçu du livre ci-dessous |
 
 Logs complets ignorés sous tmp/audit/ : F00-full.log, F06-tests-full.log, F06-combat-full.log, F06-usages-full.log, F06-health-full.log, F06-downtime-full.log, F06-talents-full.log, F06-creation-full.log, F06-magic-full.log, F06-gear-full.log. Les sept tests initiaux d’outillage et les deux nouveaux comportements ont été développés rouge puis vert.
 
 ## Inventaire courant
 
-**4 013 entrées ; 3 216 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. L06 conserve ses 1 141 identifiants ; L17 va de F-L17-0001 à F-L17-0367, L11 de F-L11-0001 à F-L11-0167, L13 de F-L13-0001 à F-L13-0275, L14 de F-L14-0001 à F-L14-0127, L16 de F-L16-0001 à F-L16-0209, L18 de F-L18-0001 à F-L18-0100, L19 de F-L19-0001 à F-L19-0155 L20 de F-L20-0001 à F-L20-0062, L21 de F-L21-0001 à F-L21-0075, L22 de F-L22-0001 à F-L22-0212 et L23 de F-L23-0001 à F-L23-0281.
+**7 019 entrées ; 5 337 sélecteurs ouverts.** Répartition exacte par statut, domaine et livre générée dans `docs/AUDIT_REGLES.md` depuis `docs/AUDIT_REGLES.json`. Chaque lacune jouable du registre possède son sélecteur. Les purs renvois déjà inventoriés portent coveredBy, selectorEligible:false et une raison ; une clause réellement nouvelle reste sélectionnable. L06 conserve ses 1 141 identifiants ; L17 va de F-L17-0001 à F-L17-0367, L11 de F-L11-0001 à F-L11-0167, L13 de F-L13-0001 à F-L13-0275, L14 de F-L14-0001 à F-L14-0127, L16 de F-L16-0001 à F-L16-0209, L18 de F-L18-0001 à F-L18-0100, L19 de F-L19-0001 à F-L19-0155 L20 de F-L20-0001 à F-L20-0062, L21 de F-L21-0001 à F-L21-0075, L22 de F-L22-0001 à F-L22-0212 et L23 de F-L23-0001 à F-L23-0281.
 
-L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 des suppléments sont enregistrées dans v5Proposal ; L19/L20 portent addedOn:2026-10-21, comme le porteront les prochaines entrées L21-L26. Aucune proposition n’est implantée. Les titres français L17/L11 sont des propositions d’audit, sans prétention de nom officiel.
+L05 rattache les intitulés et termes effectivement retrouvés ; le complément explicatif de chaque titre F0 reste une formulation d’audit. Les propositions V4 des suppléments sont enregistrées dans v5Proposal ; les entrées L19-L26 portent addedOn:2026-10-21. Aucune proposition n’est implantée. Les titres français L17/L11 sont des propositions d’audit, sans prétention de nom officiel.
 
 ## Portée de lecture L06
 
@@ -97,11 +105,11 @@ TEMP/TMP : `E:/Outil MJ Warhammer/tmp/gpt-phase-f-runtime`, même lecteur mais h
 
 Onze nouveaux tests d’outillage : audit-phase-f.test.js (7), audit-covered-selectors.test.js (1), audit-empty-page.test.js (1), audit-fr-names.test.js (2). **Aucune assertion de test existant modifiée.** Aucun nouveau test pour les seules données L17. Génération déterministe et --check, résumés limités, identifiants, références locales et correspondance exacte des sélecteurs contrôlés. LF et git diff --check verts avant les commits. Une suite verte ne démontre pas l’exhaustivité de l’audit.
 
-Recette réelle déjà exécutée : **26/26 commandes vertes**, Node et parcours navigateur/cloud locaux compris ; reçu tmp/divin/recipe-receipt.json, log tmp/audit/recipe-F00.log, achevée le 22/10 à 21 h 28 (Paris). Sources protégées inchangées. Une nouvelle recette reste requise à la clôture du corpus.
+Recette réelle déjà exécutée : **26/26 commandes vertes**, Node et parcours navigateur/cloud locaux compris ; reçu tmp/audit/recipe-before-close/recipe-receipt.json, log tmp/audit/recipe-F00.log, achevée le 22/10 à 21 h 28 (Paris). Sources protégées inchangées. Il s’agit de la recette initiale ; son reçu et ses logs sont conservés sous tmp/audit/recipe-before-close/. La recette finale est décrite dans la section de clôture.
 
-## Suite
+## Suite après F0
 
-Continuer les 21 autres suppléments à partir de L14 dans l’ordre prescrit, un commit par livre après suite complète verte. Les sélecteurs F1 ne donnent aucune autorisation d’implantation F2. L’audit des 26 livres reste l’objectif de la reprise. La succession précise le point atteint en cas de limite de contexte.
+Aucun livre F0 ne reste à traiter dans le périmètre défini. Les sections suivantes conservent l’historique des lots : leurs anciennes mentions « restent » décrivent le moment du lot. Les 5 337 sélecteurs sont ouverts pour les décisions F1 ; ils ne donnent aucune autorisation d’implantation F2.
 
 Dernière cohérence des renvois : les neuf renvois hérités des premiers chapitres portent aussi une exclusion motivée de sélecteur ; aucun second choix pour C0/E0. Les statuts et identifiants restent conservés.
 
@@ -522,8 +530,24 @@ Contrôles : deux générations identiques et --check ; suite complète 4054/405
 
 Source : 144 pages physiques, SHA-256 `f9ffbe960aae459ff53d1ecc832298908f1f22cd7a223aab863d4ca14bea7e50`. V4 explicite, copyright2025, mise à jour14juillet2025, crédits2 vus. Folio=physique.
 
-Repérage144pages et42pages vues en image : création, carrières, Talents, rancunesQ18, gromril, équipement, artillerie, véhicules, artefacts, runes et accès des cultes. IdentitéV4 juillet2025 confirmée. Les tables39/49/50/91/92/93/97/101/103/106/110/114 sont lues visuellement, les colonnes ne sont pas attribuées depuis le texte désaligné. Anomalies conservées :13 partagé/25 absent en39 ; équipage3 générique contre profils2 ; PierrierExplosion2/Dispersion3 ; Mortier−20/−30 ; CanonTempête50% contre120/75 ; Barge600/800 ; Nautilusprofondeur30/30 ; Tube100/Recharge8 distinct de Torpille1000/Recharge5. Les valeurs de caractéristique, prix, dégâts, recharge et score de table conservent leurs unités. Les statuts positifs de Talents reposent sur UI, prévisualisation et résolution réellement lus ; rappels conservateurs pour clauses complètes non démontrées et couverture partielle documentée. Aucun parcours UI propre aux nouvelles entrées n’est revendiqué. Runes et capacités déjà inventoriées reçoivent des liens exacts ; le résultat de gravure reste saisi selon RUN-ARTISANAT. Rancunes explicitement exclues, pas médecine/alcool génériques. Aucun changement de code de jeu, d’inventaire hérité ou d’arbitrage.
+Repérage des 144 pages et 42 pages vues en image : création, carrières, talents, rancunes Q18, gromril, équipement, artillerie, véhicules, artefacts, runes et accès aux cultes. Édition V4 du 14 juillet 2025 confirmée sur les crédits. Les tables 39/49/50/91/92/93/97/101/103/106/110/114 ont été lues en image, sans attribuer les colonnes depuis une extraction désalignée. Les divergences restent explicites : 13 partagé et 25 absent p.39 ; équipage générique de 3 contre profils de 2 ; Pierrier Explosion 2/Dispersion 3 ; Mortier −20/−30 ; Canon Tempête à 50 % contre 120/75 ; Barge de capacité 600/800 ; profondeur du Nautilus 30/30 ; Tube de portée 100 et Recharge 8 distinct de la Torpille de portée 1000 et Recharge 5. Les caractéristiques, prix, dégâts, recharges et scores de table gardent leurs unités. Les statuts positifs des talents reposent sur les lecteurs UI, prévisualisations et résolutions effectivement lus ; les limites et couvertures partielles restent documentées. Aucun parcours UI propre aux nouvelles entrées n’est revendiqué. Les runes et capacités déjà inventoriées portent des liens exacts ; le résultat de gravure reste une donnée MJ selon RUN-ARTISANAT. Les rancunes sont exclues par Q18, sans exclusion générale de la médecine ou de l’alcool. Aucun code de jeu, inventaire hérité ou arbitrage modifié.
 
 Registre : 320 entrées, 203 sélecteurs nouveaux, 93 purs renvois exclus ; statuts {"absent":291,"hors-granularite":7,"assiste":17,"rappel":5}. Les 6699 entrées héritées sont identiques ; total 7019 entrées / 5337 sélecteurs. Lecture : tmp/audit/L15-finish-reading.json ; les reçus bruts restent read:false. Audit statique, aucune recette à la table revendiquée.
 
 Contrôles : deux générations identiques et --check ; suite complète 4054/4054, zéro échec, annulé ou ignoré, 96694.7124 ms, tmp/audit/L15-finish-full.log. Intégrité, LF et diff--check vérifiés avant commit ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local relevé dans la succession. Restent : aucun livre F0.
+
+## Clôture F0 — 26 livres
+
+La revue documentaire F0 est clôturée dans le périmètre du brief : 26 livres traités, dont L05 pour les noms français seulement ; 3 968 pages physiques dans les manifestes. Les portées de lecture par livre ci-dessus font foi. Cela ne certifie ni une lecture littéraire intégrale, ni une seconde revue indépendante du corpus.
+
+Registre final : **7 019 entrées**, dont 195 automatise, 179 assiste, 272 rappel, 6 271 absent et 102 hors-granularite. Les purs renvois portent une exclusion motivée et un coveredBy exact. Les **5 337 sélecteurs F1 restent ouverts** ; leur présence n’autorise aucune implantation F2. Aucun livre F0 ne reste à traiter.
+
+Dernière séquence : L10, L12 et L15 ajoutent 627 entrées et 377 sélecteurs. Les 6 392 entrées héritées de b5f32c9 sont identiques. Commits locaux : L10 57b0bfcfcf02eb61b6a6085069c46d3f8c945dec ; L12 d41a00bec1ab060c20dabec471c25da058474037 ; L15 42578d727b06b8d1bdec8ee66f1a49f604671f6e. Chacun contient les cinq documents autorisés et sa suite complète 4 054/4 054, sans échec, annulation ni test ignoré. Les 352 pages de ces trois PDF ont été extraites ; les repérages et lectures ciblées sont distingués des 80 pages contrôlées en image (14/24/42). Les reçus bruts read:false restent intacts.
+
+Recette générale exécutée depuis le worktree : **26/26 commandes réussies**, dont **4 054/4 054 tests**, les parcours navigateur locaux, les deux parcours cloud sur émulateurs, la construction et le contrôle hors ligne. Début 2026-10-23T21:50:40.201Z, fin 2026-10-23T21:55:24.225Z. Reçu : tmp/divin/recipe-receipt.json ; log principal : tmp/audit/F0-finish-recipe.log ; logs détaillés : tmp/divin/final-*.log. Les quatre sources protégées sont identiques au manifeste de base ad092cd. La recette initiale du 22 octobre est préservée sous tmp/audit/recipe-before-close/.
+
+La recette exerce les comportements existants désignés par ses commandes ; elle ne rejoue pas les 7 019 entrées documentaires et ne démontre pas leur implantation ou l’exhaustivité de lecture. Les statuts de couverture restent issus de l’audit statique et limités à leurs preuves. Les divergences de sources, propositions V4→V5, absences et couvertures partielles restent visibles dans les notes et choix ; aucune règle n’est ajustée pour obtenir un résultat vert.
+
+Contrôles de clôture : deux générations identiques puis --check, correspondance registre/sélecteurs, références valides, résumés courts, intégrité des 6 392 entrées héritées, cinq documents par commit de livre, LF et diff--check. Reçus tmp/audit/F0-finish-counts.json, F0-finish-generation.json et F0-finish-integrity.json. Le générateur de synthèse emploie désormais le titre neutre « Registre documentaire F0 » ; la clôture reste une conclusion du présent rapport, pas une déduction du nombre d’entrées.
+
+Aucun js/, test hérité, vendor, catalogue, version ou arbitrage modifié par cette séquence ; les seuls tests ajoutés depuis la base de phase sont les quatre fichiers audit-*.test.js de l’outillage initial. Le fichier non suivi REPRISE_GEMINI_PHASE_F.md est préservé à l’identique et la succession est actualisée. Aucun push, fusion ou publication. La suite éventuelle est une décision MJ sur les sélecteurs F1, puis un chantier F2 explicitement autorisé.
