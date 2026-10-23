@@ -12,6 +12,14 @@ docs/DECISIONS_MJ_CHOIX_EXECUTANTS_22_10.md. Vérifie le chantier E, intègre et
 puis enchaîne les étapes de la section « Suite ».
 ```
 
+## Point du 23/10, 8 h 15 (compte Team)
+
+- Phase E (24 lots) et lot correctif du 22/10 **fusionnés dans `codex/divin-v5`** (`9c12613`), recette verte, **non publiés** : la contre-vérification indépendante (deux vérificateurs Sonnet) a trouvé des profils incomplets (talents, compétences, équipement perdus à l'extraction ; 12 profils L14 vides ; armure fausse sur 29 profils), des écarts de règle (Langue, Souffle, Nuée, Bestial, Dressé, D-C32 seulement en texte) et beaucoup de code annoncé « branché » sans appelant (Traits T2-T12, Slann, moitié des familiers).
+- **Lot qualité** en cours : `docs/plans-gpt/PLAN_PRO_QUALITE_E.md` (Q0-Q10, R), worktree `E:/Outil MJ Warhammer/tmp/pro-qualite-e-worktree`, branche `pro/qualite-e`, veilleur `%LOCALAPPDATA%\Temp\pro-watch-qualite.ps1` **lancé via WMI** (`Invoke-CimMethod Win32_Process Create`) : un veilleur lancé depuis l'app meurt quand l'app redémarre (incident du 23/10, 0 h 22).
+- **Règle du MJ (23/10)** : contre-vérification indépendante (code + règles/PDF) avant toute publication, et après chaque correction.
+- Ensuite : contre-vérifier le lot qualité, intégrer, recette, publier 3.25.0 ; puis chantier « brancher les Traits non appelés + familiers selon les décisions du 22/10 ».
+- Dérive connue : `tools/check-lot3-generation.mjs` régénère une matrice qui classe 4 sorts de zone en « Rappel » dès la base 3.24.0 (la matrice committée est la référence des tests) ; à traiter à part.
+
 ## État
 
 - **Production : 3.24.0** (22/10, 16 h 30, `main` = `codex/divin-v5`). Phases A, B, C terminées ; D terminée sauf D11 (familiers, code bloqué sur les profils de la phase E) ; **E en cours** (publié : mots-clés K1-K5, profils de L06, L11, L01-L04, L07 ; reste à intégrer depuis le commit 5eb0d31 de `pro/phase-e`) ; F, G, H à faire.
