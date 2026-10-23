@@ -1471,8 +1471,15 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
     removeParticipant(id) {
       if (!canMutate()) return false;
       const participant = combat.participants.get(id); if (!participant) return;
-      if (persistence) return api.executeCommand('remove-participant', draft => {
-        const participants = (draft.combat?.participants || []).filter(item => item.id !== id).map(item => item.extensions?.v5?.familiarOf?.masterId === id ? withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; }) : item);
+      // Un participant lié par un familier passe par une commande annulable même sans persistance : l'historique des liens (commandes) ne se mêle pas à l'instantané hérité.
+      const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf);
+      if (persistence || linked) return api.executeCommand('remove-participant', draft => {
+        const stripLinks = item => {
+          if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+          if (familiarLinksOf(item).some(row => row.familiarId === id)) return withV5(item, v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(row => row.familiarId !== id) }));
+          return item;
+        };
+        const participants = (draft.combat?.participants || []).filter(item => item.id !== id).map(stripLinks);
         const transition = participant.zone === 'active' ? removeFromCombat({ participants: draft.combat?.participants || [], order: draft.combat?.order || [], currentActorId: draft.combat?.currentActorId, participantId: id }) : null;
         return {
           ...draft,

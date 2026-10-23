@@ -43,7 +43,8 @@ export function validateFamiliarLink(master, familiar, link) {
   if (!FAMILIAR_SYSTEMS.includes(link?.system)) return refuse('unknown-system', 'Système de familier inconnu : homoncule ou animal.');
   const owner = familiarOfOf(familiar);
   if (owner && owner.masterId) return refuse('already-linked', owner.masterId === master.id ? 'Ce familier est déjà lié à ce maître.' : 'Ce familier est déjà lié à un autre maître.');
-  if (familiarOfOf(master)) return refuse('master-is-familiar', 'Un familier ne peut pas avoir de familier.');  if (link.system === 'homunculus') {
+  if (familiarOfOf(master)) return refuse('master-is-familiar', 'Un familier ne peut pas avoir de familier.');
+  if (link.system === 'homunculus') {
     if (!HOMUNCULUS_KINDS.includes(link.kind)) return refuse('unknown-kind', 'Type d’homoncule inconnu : Combat, Puissance ou Sorts.');
     if (!FAMILIAR_WINDS.includes(link.wind)) return refuse('unknown-wind', 'Vent de magie hors liste.');
   } else {
