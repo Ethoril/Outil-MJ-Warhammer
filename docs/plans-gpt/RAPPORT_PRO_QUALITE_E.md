@@ -32,6 +32,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q21 | FAIT (`QE-Q21-1`) | (voir `git log`, « Q21 ») |
 | Q22 | FAIT (`QE-Q22-1`) | (voir `git log`, « Q22 ») |
 | Q23 | FAIT (`QE-Q23-1`) | (voir `git log`, « Q23 ») |
+| Q24 | FAIT sans modification de code (`QE-Q24-1`) | (voir `git log`, « Q24 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -290,3 +291,9 @@ Branché / non appelé (grep dans `js/`) :
 - `js/core/v5-talent-tests.js` : `previewV5TalentTestModifiers` ajoute les DR de `leadershipRallySlModifiers` (+1 par niveau, à bord) aux `slModifiers` des Tests de Commandement et pose une question `unresolved` si « à bord » est inconnu ; `applicableV5TalentTestFields` propose le champ Oui/Non `onBoardVessel` au porteur du talent, pour Commandement seulement. Choix : `QE-Q23-1`. Texte du contrat inchangé (déjà cohérent). Pas de variable persistante nouvelle.
 - Test : `tests/pro-q23-maitre-a-bord-moteur.test.js` (4 tests par `buildCombatTest` : 2 niveaux à bord → DR 1 → 3 ; hors navire / inconnu / sans talent / autre compétence ; champ d interface). Suite complète lancée une fois : 4407 réussis, 0 échec.
 - **Branché (appelant + chemin d interface)** : `leadershipRallySlModifiers` ← `js/core/v5-talent-tests.js` ← `v5-combat-rules.js` (`buildCombatTest`) et `resolution.js` ; chemin : panneau de Résolution → compétence Commandement → champ « à bord » (`resolution-panel.js`, `applicableV5TalentTestFields`). Rendu non vérifié dans un navigateur. **Code testé, non appelé** : `previewLeadershipRallyAllies` (budget de ralliement des Brisés), hors périmètre de Q23.
+
+## Q24 — copie de `talent-source.js` (FAIT, sans modification de code)
+
+- Constat : le fichier source du projet des fiches (`js/catalogue/talent-source.js`) contient **déjà** la suppression du « = » en tête de description ; relecture ligne à ligne contre `js/data/shared/catalogue/talent-source.js` : 165 lignes, aucune différence. La copie est donc identique à la source, ce que le lot exigeait. L'annuler la rendrait différente (`QE-Q24-1`).
+- Assertion de `lot3-v5-cloture` (`startsWith('+')`) et empreinte du contrat de Coup puissant laissées : cohérentes avec la source. `tests/lot3-v5-cloture.test.js` : 9 réussis, 0 échec. Aucune suite complète relancée (aucun fichier de code ni de test modifié).
+- Aucune fonction de jeu, aucune valeur durable de personnage.
