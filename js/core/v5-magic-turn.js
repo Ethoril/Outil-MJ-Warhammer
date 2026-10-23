@@ -1,6 +1,7 @@
 /** Effets magiques au changement de Tour : fonction pure partagée par Store et la commande end-turn-v5. */
 import { advanceMagicConsequences } from './v5-magic-time.js';
 import { expireSpellEffects, endBeastForm, resolveSpellDamage,spellFormulaValue,applySpellEffects,unsuppressedSpellEffects,rebaseMagicLayers } from './v5-magic-effects.js';
+import { normalizeCamp } from './encounters.js';
 import { reverseV5Roll } from './v5-roll.js';
 import { attackNature, previewMagicProtection, wardDiceCount,natureTagLabel } from './v5-magic-combat.js';
 import { acquireV5Conditions } from './v5-effects.js';
@@ -27,17 +28,35 @@ export function endSpellEffectsOnEvent(participants,actorId,event){
  */
 export function removeExpiredSummons(envelope,{deferCurrent=true}={}) {
   const combat=envelope.combat;if(!combat?.participants)return envelope;
-  const participants=combat.participants.filter(p=>{
+  let turned=false;
+  const alive=(p,data)=>{
+    const owner=combat.participants.find(x=>x.id===data.summonOwnerId);
+    return owner?.extensions?.v5?.spellEffects?.some(e=>e.castExecutionId===data.summonCastExecutionId && e.spellId===data.summonedBySpellId);
+  };
+  // D-C32 : un démon manifesté n'est pas retiré à la fin de la durée ; il passe dans le camp opposé à celui du lanceur.
+  const candidates=combat.participants.map(p=>{
+    const data=p.extensions?.v5;
+    if(!data?.summonCastExecutionId || !data.hostileOnExpiry || alive(p,data))return p;
+    turned=true;
+    const {summonCastExecutionId,summonOwnerId,hostileOnExpiry,...rest}=data;
+    const owner=combat.participants.find(x=>x.id===summonOwnerId);
+    const casterCamp=data.summonCasterCamp || owner?.camp;
+    const reminder='Ordre accompli : retirez le démon (hostile au lanceur, il reste en jeu tant que le MJ ne le retire pas).';
+    return {...p,camp:oppositeCamp(casterCamp),notes:p.notes?`${p.notes} ${reminder}`:reminder,extensions:{...p.extensions,v5:{...rest,hostileAfterExpiry:true}}};
+  });
+  const participants=candidates.filter(p=>{
     const data=p.extensions?.v5;
     if(!data?.summonCastExecutionId)return true;
     if(deferCurrent && p.id===combat.currentActorId && (combat.order || [])[0]!==p.id)return true;
-    const owner=combat.participants.find(x=>x.id===data.summonOwnerId);
-    return owner?.extensions?.v5?.spellEffects?.some(e=>e.castExecutionId===data.summonCastExecutionId && e.spellId===data.summonedBySpellId);
+    return alive(p,data);
   });
-  if(participants.length===combat.participants.length)return envelope;
+  if(participants.length===combat.participants.length)return turned?{...envelope,combat:{...combat,participants}}:envelope;
   const ids=new Set(participants.map(p=>p.id)),order=(combat.order || []).filter(id=>ids.has(id));
   return {...envelope,combat:{...combat,participants,order,currentActorId:ids.has(combat.currentActorId)?combat.currentActorId:order[0] || null}};
 }
+
+/** Camp hostile à `camp` : un lanceur ennemi a le démon pour allié des PJ, tous les autres l'ont pour ennemi. */
+export function oppositeCamp(camp){return normalizeCamp(camp)==='ennemi'?'allie':'ennemi';}
 
 /** Traversée, déplacement, détection ou bruit déclaré : résolution sans relancer le sort ni consommer une réserve. */
 export function previewSpellInteraction(state, { effectId, targetId, kind, roll, wardRoll, locationRoll, controlValue,lineOfSight,opponentRoll,damageRoll,targetIds,targetsDeclared,targetTests={},declaredFailures,missileDeclared,missConfirmed,originalRoll,actionId,distance,actionConfirmed,strengthBonus,meleeWoundConfirmed,deathConfirmed } = {}) {

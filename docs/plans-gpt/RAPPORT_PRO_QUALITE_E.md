@@ -11,7 +11,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q4 | FAIT | (voir `git log`, « Q4 ») |
 | Q5 | FAIT | (voir `git log`, « Q5 ») |
 | Q6 | FAIT | (voir `git log`, « Q6 ») |
-| Q7 à Q10, R | à faire | — |
+| Q7 | FAIT | (voir `git log`, « Q7 ») |
+| Q8 à Q10, R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -107,3 +108,11 @@ Les compétences manquantes restantes ne viennent plus de `readSkills` : ce sont
 - Test : `tests/pro-q6-armure.test.js` (7 tests) : E0-P-628 PA 1 au corps seul ; E0-P-556 « Mail Coat 2 » corps et bras ; E0-P-575 casque et plastron ; rappel pour E0-P-593, 616, 704.
 - Branché : `buildParticipantFromBestiary` a des appelants dans `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js` et `js/core/v5-spell-contracts.js` ; l'armure par zones et le rappel passent par l'outil. L'affichage du champ `notes` du participant dans l'interface n'a pas été vérifié.
 - Suite complète : 4284 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
+
+## Q7 — démon de Manifestation, D-C32 dans le moteur (FAIT)
+
+- `js/core/v5-magic-turn.js` : `removeExpiredSummons` ne retire plus un démon dont le contrat porte `hostileOnExpiry` ; à l'expiration de la couche du lanceur, il passe dans le camp opposé à celui du lanceur (`oppositeCamp` : ennemi → allié des PJ, tout autre camp → ennemi), perd son lien d'invocation et reçoit dans `notes` le rappel « Ordre accompli : retirez le démon ». Le retrait passe par la commande du Store (instantané complet) : Annuler rétablit le camp et le lien. `js/core/v5-spell-contracts.js` : le démon qui l'emporte (« attaque ») prend aussi le camp opposé au lanceur (avant : toujours `ennemi`) ; les champs `hostileOnExpiry` et `summonCasterCamp` sont posés à l'incantation.
+- Contrat : `hostileOnExpiry: true` et texte « camp opposé à celui du lanceur » dans `tools/tradition-contracts/demonologie.mjs` et `js/data/v5-spell-contracts.json` (modifiés à l'identique, sans régénérer la chaîne lot3).
+- Test : `tests/pro-q7-demon-expiration.test.js` (4 tests de comportement : expiration → démon présent, hostile ; Annuler ; lanceur ennemi → allié ; camp du démon qui l'emporte).
+- Branché dans l'outil : `removeExpiredSummons` est appelé par `js/core/store.js` (chaque commande) ; `oppositeCamp` par `v5-spell-contracts.js`. L'affichage du champ `notes` d'un participant en combat n'a pas été vérifié (le rappel est dans les données du participant).
+- Suite complète : 4288 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
