@@ -33,6 +33,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q22 | FAIT (`QE-Q22-1`) | (voir `git log`, « Q22 ») |
 | Q23 | FAIT (`QE-Q23-1`) | (voir `git log`, « Q23 ») |
 | Q24 | FAIT sans modification de code (`QE-Q24-1`) | (voir `git log`, « Q24 ») |
+| Q25 | FAIT (`QE-Q25-1`) | (voir `git log`, « Q25 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -297,3 +298,12 @@ Branché / non appelé (grep dans `js/`) :
 - Constat : le fichier source du projet des fiches (`js/catalogue/talent-source.js`) contient **déjà** la suppression du « = » en tête de description ; relecture ligne à ligne contre `js/data/shared/catalogue/talent-source.js` : 165 lignes, aucune différence. La copie est donc identique à la source, ce que le lot exigeait. L'annuler la rendrait différente (`QE-Q24-1`).
 - Assertion de `lot3-v5-cloture` (`startsWith('+')`) et empreinte du contrat de Coup puissant laissées : cohérentes avec la source. `tests/lot3-v5-cloture.test.js` : 9 réussis, 0 échec. Aucune suite complète relancée (aucun fichier de code ni de test modifié).
 - Aucune fonction de jeu, aucune valeur durable de personnage.
+
+## Q25 — contrôle : borne à gauche, profils très incomplets, profils empilés (FAIT)
+
+- `tools/lib/bestiary-completeness.mjs` : `findValueRow` (le premier chiffre ne peut pas être la fin d'un nombre plus long, ni le dernier le début d'un plus long ; si deux profils d'une page impriment la même ligne, on prend celle qui suit le nom), `veryIncomplete` (JSON sans compétence, talent, Trait ni équipement alors que le bloc imprime une rubrique, deux-points ou non), `stackedBlock` (colonnes imbriquées : plusieurs en-têtes de suite, le profil de rang n reçoit le n-ième groupe de rubriques). `tools/verify-bestiary-stats.mjs` : nouvelle catégorie `veryIncomplete`, avertissements de compétences triés, bloc contrôlé même sur un écart de valeurs.
+- **Sea Dragon L09 E0-P-323 signalé** : « ÉCART … 0 70 60 … 232 » (M imprimé = 10 ; correction au lot Q26). **Les 4 profils L09 sont signalés** `veryIncomplete` : E0-P-315, 319, 323, 347. Le faux positif E0-P-124 (talents/compétences du profil voisin E0-P-123 de la même page) disparaît par `stackedBlock`.
+- E0-P-822 : le faux positif de texte voisin disparaît aussi, mais il révèle un **vrai manque** (compétences, talents, attaques, équipement du profil absents du JSON) ; à traiter en Q27 (consigné `QE-Q25-1`).
+- Totaux du contrôle après Q25 (23 livres) : talents 48, compétences 55, attaques 33, Traits 68, équipement 150, sorts 14, bruit d'équipement 69, très incomplets 4. Avant : talents 41, compétences 85, équipement 154 (ces écarts viennent de profils empilés relus à la bonne rubrique, pas de données modifiées). 10 avertissements de compétences (inchangés). Aucune donnée de livre modifiée.
+- Test : `tests/pro-q25-controle.test.js` (4 tests). Suite complète lancée une fois : 4411 réussis, 0 échec.
+- Outil de contrôle seulement : pas de « branché » à déclarer.

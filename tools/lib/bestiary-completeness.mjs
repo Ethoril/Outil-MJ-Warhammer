@@ -219,3 +219,66 @@ export function extendedGaps(record, block) {
     trappingNoise: trappingNoise(record)
   };
 }
+
+// ---- Q25 : recherche de la ligne de valeurs avec borne à gauche, profils très incomplets ----
+
+/** Position de la ligne de valeurs dans le texte de la page, ou -1. Le premier chiffre ne doit pas être la fin d'un nombre plus long (« 10 70 60… » ne vaut pas « 0 70 60… »). */
+export function findValueRow(text, tokens, name = '') {
+  const exact = new RegExp(`(?<![0-9])${tokens.map(token => token.replace(/\*/g, '\\*')).join(' ')}(?![0-9])`, 'g');
+  const hits = [...text.matchAll(exact)].map(hit => hit.index);
+  // Deux profils d'une même page peuvent imprimer la même ligne de valeurs : on prend celle qui suit le nom du profil.
+  if (hits.length > 1) {
+    const word = name.toLowerCase().replace(/[^a-z ]/g, ' ').split(' ').find(part => part.length > 2);
+    const near = word && hits.find(index => text.slice(Math.max(0, index - 250), index).toLowerCase().includes(word));
+    return near ?? hits[0];
+  }
+  if (hits.length) return hits[0];
+  // Une case vide perdue à l'extraction brute s'écrit parfois comme un blanc : on tolère l'absence d'un tiret.
+  const loose = new RegExp(`(?:^|[^0-9])${tokens.filter(token => token !== '-').map(token => token.replace('*', '')).join('(?: -)* (?:- )*')}\\*?(?:[^0-9]|$)`);
+  return loose.exec(text)?.index ?? -1;
+}
+
+const SECTION_WORD = /\b(?:Skills|Talents|Traits|Trappings)\s+[A-Z]/;
+
+/**
+ * Profil très incomplet : le JSON n'a ni compétence, ni talent, ni Trait, ni équipement alors que le bloc imprimé annonce une de ces rubriques,
+ * y compris sans deux-points (mise en page « Traits Marine Creature: » de L09, que `segment` ne voit pas).
+ */
+export function veryIncomplete(record, block) {
+  const empty = ['skills', 'talents', 'traits', 'trappings'].every(field => !(record[field] || []).length);
+  if (!empty) return [];
+  const hit = SECTION_WORD.exec(block.slice(0, 1500));
+  return hit ? [hit[0]] : [];
+}
+
+/**
+ * Profils empilés (colonnes imbriquées) : plusieurs en-têtes de caractéristiques se suivent sans rubrique entre eux, puis les rubriques des profils
+ * arrivent l'une après l'autre dans l'ordre des profils (L01 p.14, L24 p.20). Le profil de rang n reçoit le n-ième groupe de rubriques.
+ * Retourne null hors pile, ou si le nombre de groupes ne correspond pas au nombre de profils (on garde alors le découpage simple).
+ */
+export function stackedBlock(pageText, index) {
+  const headers = [...pageText.matchAll(new RegExp(HEADER.source, 'g'))].map(hit => ({ start: hit.index, end: hit.index + hit[0].length }));
+  let own = headers.findLastIndex(header => header.end <= index);
+  if (own < 0) return null;
+  const linked = i => i >= 0 && i + 1 < headers.length && !LABEL.test(pageText.slice(headers[i].end, headers[i + 1].start));
+  let first = own;
+  while (linked(first - 1)) first -= 1;
+  let last = own;
+  while (linked(last)) last += 1;
+  const size = last - first + 1;
+  if (size < 2) return null;
+  const tail = pageText.slice(headers[last].end);
+  const from = tail.search(LABEL);
+  if (from < 0) return null;
+  const groups = [];
+  let seen = new Set();
+  let start = from;
+  for (const hit of tail.slice(from).matchAll(new RegExp(LABEL.source, 'g'))) {
+    const label = hit[0].replace(/\s*:$/, '');
+    if (seen.has(label)) { groups.push(tail.slice(start, from + hit.index)); start = from + hit.index; seen = new Set(); }
+    seen.add(label);
+  }
+  groups.push(tail.slice(start));
+  if (groups.length !== size) return null;
+  return groups[own - first];
+}
