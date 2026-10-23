@@ -62554,5 +62554,1929 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0001",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.21",
+    "question": "Implanter « Tour de la Lune — nuit pleine » ? Dormir dans la tour lorsque Mannslieb est pleine donne 2 Chance gardables jusqu’à la pleine lune suivante et Destinée funeste si absent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0002",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Brumes — pénétrer » ? Calme +2 DR et Perception −1 DR ; Seconde vue donne +3 DR. En cas d’échec, sommer les DR négatifs et les soustraire à tous les Tests de Voile dans les brumes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0003",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Brumes — échec de Voile » ? Chaque échec : 50% ressortir des brumes, 50% collision violente avec indice 52 contre roche de l’Arche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0004",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Amarrage — progression » ? Deux Tests de Voile réussis permettent d’atteindre sûrement le flanc de l’Arche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0005",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Amarrage — détection » ? Taille18 ou moins : gardes ne remarquent qu’avec Perception −3 DR ; bateaux plus grands normalement repérés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0006",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Amarrage — riposte » ? Dans cinq Rounds, tirs des corsaires ; trois balistes peuvent viser le bateau, cinq si sa Taille atteint60.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0007",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Abordage — escalade » ? Escalade −2 DR pour franchir roche et murs sculptés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0008",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Abordage — vol » ? Sentinelles font Perception −2 DR pour repérer l’arrivée aérienne et appeler les balistes Sky Reaper.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0009",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.30",
+    "question": "Implanter « Rencontres — cadence » ? Choisir une rencontre adaptée ou tirer toutes les dix minutes de jeu en lieu public ; tirer réaction si intrus sans cachette ni justification.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0010",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Réactions — présence Asur » ? Ajouter2 au d10 de réaction si un Haut Elfe est dans le groupe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0011",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Rencontre — personnalité notable » ? Au résultat important, cinq guerriers d’escorte ; d10 : 1–2 Sorcière, 3–6 Noble, 7–9 Capitaine, 10 membre de la Convocation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0012",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Rencontre — Khainites » ? Trois fidèles avec50% de chance qu’une Furie soit parmi eux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0013",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Personne — A/B/C/D 01–35/01–20/01–30/01–50 » ? Plages d100 par zone A/B/C/D ; Aucune réaction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0014",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Deux serviteurs — A/B/C/D 36–45/21–31/31–41/51–58 » ? Plages d100 par zone A/B/C/D ; d10 : 1–4 indifférent, 5–6 curieux, 7+ diligent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0015",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Quatre captifs et un geôlier — A/B/C/D 46–50/32–35/42–47/59–71 » ? Plages d100 par zone A/B/C/D ; 1–5 indifférent, 6–7 curieux, 8 moqueur, 9+ confrontation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0016",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Cinq captifs seuls — A/B/C/D —/—/48/72–74 » ? Plages d100 par zone A/B/C/D ; 1–5 indifférent, 6+ curieux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0017",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Deux marins — A/B/C/D 51–60/36–45/49–54/75–76 » ? Plages d100 par zone A/B/C/D ; 1–3 indifférent, 4–5 curieux, 6 moqueur, 7 confrontation, 8 diligent, 9+ cruel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0018",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Six guerriers — A/B/C/D 61–69/46–56/55–60/77–79 » ? Plages d100 par zone A/B/C/D ; 1–2 curieux, 3 moqueur, 4–5 confrontation, 6–7 diligent, 8 cruel, 9+ meurtrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0019",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Maître des bêtes et deux aides — A/B/C/D 70–72/57–59/61–64/80–90 » ? Plages d100 par zone A/B/C/D ; 1–2 indifférent, 3–4 curieux, 5 moqueur, 6–7 confrontation, 8+ cruel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0020",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Six fêtards — A/B/C/D 73–78/60–67/65–69/91–93 » ? Plages d100 par zone A/B/C/D ; 1–3 curieux, 4–5 moqueur, 6 confrontation, 7–8 cruel, 9+ meurtrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0021",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Quatre corsaires — A/B/C/D 79–86/68–80/70–74/94–96 » ? Plages d100 par zone A/B/C/D ; 1–2 moqueur, 3–4 confrontation, 5–6 diligent, 7–8 cruel, 9+ meurtrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0022",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Trois Khainites — A/B/C/D 87–89/81–84/75–94/97–98 » ? Plages d100 par zone A/B/C/D ; 1–2 moqueur, 3–5 confrontation, 6+ meurtrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0023",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.31",
+    "question": "Implanter « Personnalité notable — A/B/C/D 90–00/85–00/95–00/99–00 » ? Plages d100 par zone A/B/C/D ; 1–2 indifférent, 3–4 moqueur, 5–6 confrontation, 7–8 cruel, 9+ meurtrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0024",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.32",
+    "question": "Implanter « Réaction — indifférent » ? Poursuit ses occupations ; aucune intervention contre le groupe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0025",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.32",
+    "question": "Implanter « Réaction — curieux » ? Cherche à savoir qui ils sont et quel bénéfice en tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0026",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.32",
+    "question": "Implanter « Réaction — moqueur » ? S’amuse à insulter le groupe devant autrui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0027",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.32",
+    "question": "Implanter « Réaction — confrontation » ? Exige identité et justification de présence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0028",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.32",
+    "question": "Implanter « Réaction — diligent » ? Tente capture et prévient corsaires/guerriers ; si très inférieur en nombre, donne l’alarme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0029",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.32",
+    "question": "Implanter « Réaction — cruel » ? Engage le combat pour blesser et divertir, puis emmener les victimes aux cellules.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0030",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.32",
+    "question": "Implanter « Réaction — meurtrier » ? Charge armes sorties avec intention de tuer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0031",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événements — cadence » ? Tirer une fois toutes les dix minutes passées sur les ponts ; réactions présument absence d’alarme et présence plausible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0032",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement01–05 — révolte » ? Distraction des geôliers : Discrétion+2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0033",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement06–10 — Dhar » ? Calme+2 DR ou1 Corruption en traversant la poche de magie noire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0034",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement11–15 — parfum » ? Calme+0 DR ou Tests d’Intelligence−1 DR pendant une heure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0035",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement16–20 — dépouille » ? Cadavre porte Cape de dragon des mers ; effet de la cape renvoyé à sa clause58.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0036",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement21–25 — voie inondée » ? Résistance ou Natation+2 DR pour franchir l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0037",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement36–40 — guano » ? Esquive+0 DR ou Souillé jusqu’au nettoyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0038",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement41–45 — refuser » ? Charme+0 DR pour décliner l’invitation à torturer sans offenser.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0039",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement51–55 — rênes » ? Emprise sur les animaux−2 DR pour éviter une ruade du coursier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0040",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement56–60 — spectacle » ? Discrétion−1 DR pour ne pas être enrôlé dans le spectacle des adolescents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0041",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.33",
+    "question": "Implanter « Événement71–75 — vague » ? Athlétisme−2 DR ou À terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0043",
+    "phase": "Exploration",
+    "lot": "L09",
+    "source": "L09 p.34",
+    "question": "Implanter « Calendrier druchii » ? Quatre saisons de100 jours ; cérémonies de Mathlann à chaque pleine lune de Mannslieb.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0072",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.54",
+    "question": "Implanter « Assassin — Dons conditionnels » ? Seuls assassins élevés par Khainites reçoivent Dons de Khaine ; choisir1–3 dons, les autres n’y ont pas accès via ce gabarit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0077",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.55",
+    "question": "Implanter « Sorcière — répertoire du gabarit » ? Jusqu’à cinq sorts mineurs et sept choisis parmi magie colorée, Sorcellerie et Magie noire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0078",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.55",
+    "question": "Implanter « Sorcière suprême — répertoire » ? Jusqu’à cinq sorts mineurs et douze choisis parmi magie colorée, Sorcellerie et Magie noire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0086",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.57",
+    "question": "Implanter « Marché de l’Arche » ? Toutes les armes du chapitre achetables sur place seulement si l’acheteur paraît Elfe noir ; 1 lune d’argent vaut8 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0087",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.57",
+    "question": "Implanter « Draich — équivalence » ? Lame de bourreau à deux mains : traiter comme Grande hache ou Espadon selon son type.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0088",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.57",
+    "question": "Implanter « Lame-épine » ? 42 CO, Enc1, Base, courte, BF+3 ; Belle facture2, Empaleuse, Précise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0089",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.57",
+    "question": "Implanter « Voleuse d’âme » ? 80 CO, Enc2, Deux mains, longue, BF+5 ; Dévastatrice, Belle facture2, Empaleuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0090",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.57",
+    "question": "Implanter « Lames de brassard » ? 62 CO, Enc2, Bagarre, personnelle, BF+2 ; Rapide, Belle facture2, Entaille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0091",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.57",
+    "question": "Implanter « Filet druchii » ? 5 CO, Enc1, Parade, court, BF ; Enchevêtrante, Belle facture1, Défensive, Enveloppante, Lente, Inoffensive ; une main, à distinguer du filet lesté de L11.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0092",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Arbalète à répétition » ? 12 CO, Enc2, portée48, dégâts+8 ; Recharge9, Répétition3, Belle facture1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0093",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Arbalète de poing à répétition » ? 14 CO, Enc1, portée10, dégâts+6 ; Pistolet, Recharge9, Répétition3, Belle facture1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0094",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Baliste Faucheuse » ? 120 CO, Enc15, portée120 ; dégâts+9 en Volée6 ou+12 en tir unique ; Précise, Servants2, Recharge12.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0095",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Faucheuse du ciel » ? 160 CO, Enc15, portée90 sans perte verticale ; dégâts+8 en Volée6 ou+10 en tir unique ; Précise, Servants2, Recharge12.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0096",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Harpon Ravager » ? 96 CO, Enc5, portée36, dégâts+10 ; Précise, Carreau barbelé, Empaleuse, Recharge3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0097",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Entaille — critique » ? Dégâts critiques avec l’arme : ajouter un Hémorragique aux effets du critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0098",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Entaille — Élan » ? Peut perdre l’Élan pour infliger un Hémorragique additionnel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0099",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Carreau barbelé — impact » ? Si Dégâts, Esquive+0 DR ou À terre ; cible tirée1d10 yards vers le char durant le Round de celui-ci.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0100",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Carreau barbelé — traînage » ? Appliquer les dégâts de traînage selon Ennemi dans l’Ombre Compagnon p26.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0101",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Carreau barbelé — extraction » ? Test−2 DR pour retirer le harpon, causant une Blessure supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0102",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Casque druchii — visage » ? Visière, mentonnière ou aventail ferme l’ouverture et supprime Partielle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0103",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Cape de dragon — protection » ? 2 PA au Corps, Partielle, Enc2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0104",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Cape de dragon — entretien » ? Vrasha nécessaire ; chaque semaine sans traitement perd1 PA définitivement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0105",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.58",
+    "question": "Implanter « Barvalk — restaurateur » ? Liqueur retire Exténué et réduit l’exposition au froid d’un Test de Résistance raté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0106",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Hushalta — guérison » ? Chaque dose : sommeil1d10 heures ; récupère BE Blessures immédiatement puis chaque heure ; Résistance+2 DR contre Infection mineure/Plaie infectée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0107",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Hushalta — contrecoup » ? Par dose, Initiative et Intelligence−20 pendant deux heures au réveil ; nouvelle dose dans les dix heures suivant réveil double ces pertes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0108",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Manbane » ? Après au moins une Blessure, Résistance−1 DR ou2 Hémorragique et3 Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0109",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Sildru » ? Après au moins une Blessure par arme enduite, Résistance−2 DR ou Inconscient et2 Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0110",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Valikh — déclencheur » ? Après au moins une Blessure, sang bouillant ; chaque fin de Round ultérieur inflige1d10 dégâts sans PA, minimum une Blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0111",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Valikh — fin » ? Résistance−1 DR au début d’un Round met fin au poison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0112",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Vrasha — monture » ? Masque odeur du cavalier pour qu’un Sang-froid l’accepte ; ne prouve ni dressage ni contrôle automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0113",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Vrasha — insensibilité » ? Une application retire odorat, goût et toucher et donne Insensible à la douleur pour1d10 heures ; après dix utilisations, c’est permanent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0114",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Vrasha — plaie » ? Sur plaie ouverte, retire tous les Hémorragiques, rend2 Blessures et donne2 Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0115",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.59",
+    "question": "Implanter « Flotte — batteries » ? Ravenship douze balistes, deux batteries par bord ; Storm Barque dix-huit, trois batteries par bord ; Wrackhold une à l’avant et une à l’arrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0119",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Tidescourge — débarquement » ? Faible tirant d’eau permet plage et rivière ; aucune arme montée au-delà de celles de l’équipage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0120",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Bête captive — compétence » ? Vaisseau tiré ou porté par créature : Dressage remplace Voile ou Rame pour les Tests de manœuvre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0121",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Bête captive — décès » ? Si créature meurt, navire immobilisé ; Forteresse de mort portée par Dragon des mers coule avec son corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0122",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Doomreaver — armement » ? Aucune arme montée ; compte sur attaques du Helldrake qui tire le navire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0123",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Forteresse de mort — batteries » ? Howdah sur Dragon des mers avec trois balistes, une par bord et une arrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0124",
+    "phase": "Équipement",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Harbinger — transport » ? Vaisseau fermé tiré par jeune Helldrake, principalement transport personnel et débarquement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0125",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Char Scourgerunner — données » ? Enc15, charge26, Exotique, traction2A, E50, B18, FrappeM.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0126",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Char de Sang-froid — données » ? Enc20, charge30, Rare, traction2A, E60, B20, FrappeM+1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0127",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Ravenship — données » ? Équipage65, Voile10(18), Rame4(30), Manœuvre+1 DR, Taille50, E75, B180, charge350, Blindé et Foc volant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0128",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Storm Barque — données » ? Équipage80, Voile11(35), sans rames, Manœuvre—, Taille60, E75, B210, charge450, Blindé et Foc volant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0129",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Wrackhold — données » ? Équipage35, Voile8(20), Rame4(20), Manœuvre—, Taille40, E65, B150, charge450.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0130",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Tidescourge — données » ? Équipage3, Voile4(2), Rame3(2), Manœuvre+1 DR, Taille15, E35, B25, charge120.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0131",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Doomreaver — données » ? Équipage10, Natation6(2), Manœuvre+2 DR, Taille30, E60, B100, charge300, Bête captive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0132",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Forteresse de mort — données » ? Équipage20, Natation6(2), Manœuvre—, Taille50, E60, B200, charge600, Blindé et Bête captive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0133",
+    "phase": "Transport",
+    "lot": "L09",
+    "source": "L09 p.60",
+    "question": "Implanter « Harbinger — données » ? Équipage2, Natation4(1), Manœuvre+2 DR, Taille15, E30, B40, charge80, Bête captive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0134",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.61",
+    "question": "Implanter « Sorcellerie — accès masculin » ? Elfes des deux sexes peuvent lancer en Magie noire ; persécution des hommes est sociale, pas incapacité technique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0135",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Dhar — gravité des incidents » ? Lancement de Magie noire ou Focalisation Dhar : tous incidents traités majeurs, sauf Diction instinctive ; ingrédients ne réduisent pas leur gravité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0136",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Dhar — unité8 » ? Un8 aux unités de Lancement noir ou Focalisation Dhar donne incident majeur et1 Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0137",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Dhar — Yenlui » ? Lancer un sort noir pousse l’Elfe vers Yenlui Sombre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0138",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication — déclencheurs » ? Dissipation d’un sort noir, rituel interrompu ou Lancement dépassant le NI de+4 DR : tirer complication.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0139",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Pacte de l’âme — accès » ? Elfes seulement, maximum4 ; chaque acquisition conclut un pacte supplémentaire, avec sacrifices réclamés par l’entité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0140",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication01–11 — décoloration » ? Dans BFM yards, chair grisâtre plusieurs jours, objets gris permanents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0141",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication25–36 — gravité » ? Dans BFM yards, Tests liés au mouvement physique−1 DR pendant8 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0142",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication37–48 — cohésion » ? Calme+0 DR ou équipement subit1 dommage et un Défaut : d10, 1–3 Laid, 4–7 Mauvais, 8–10 Peu fiable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0143",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication49–61 — ichor » ? Vivants dans2×BFM yards : Perception et Langue−2 DR pendant2d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0144",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication62–74 — Vent dominant » ? Pendant1d10 Rounds, seuls sorts du Vent dominant peuvent être lancés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0145",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication75–87 — diablotins » ? Pendant8 Rounds, tous Tests dans BFM yards−2 DR, sauf créatures Mort-vivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0146",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Complication88–00 — malepierre » ? Zone de BFM yards : Lancement/Focalisation de Magie noire+2 DR ; chaque Round dans zone expose à Corruption majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0148",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.63",
+    "question": "Implanter « Pacte — entité et renouvellement » ? Réservé aux Elfes ; chaque achat conclut un pacte, entité réclamant sacrifices croissants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0177",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Dons de Khaine — accès » ? Un don choisi par acquisition du Talent ; après dégâts causés avec compétence de mêlée, CC+0 DR en Action gratuite pour un don connu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0178",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Dons de Khaine — coup mortel » ? Le Test d’activation gagne+2 DR si le coup a tué ; atteindre les DR requis par le don.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0179",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Dons de Khaine — Haut Elfe » ? Un Haut Elfe utilisant un don passe immédiatement en Yenlui Sombre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0180",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Danse funeste » ? Requiert2 DR, donne+2 DR aux Tests d’Esquive jusqu’au prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0181",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Dague de Khaine » ? Requiert2 DR, arme Dévastatrice, Magique et Précise jusqu’à fin du prochain Tour de son porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0182",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Tourment éternel » ? Requiert4 DR et coup mortel : empêche résurrection nécromantique/contact magique de l’âme ; rend1 Chance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0183",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Main de Khaine » ? Requiert2 DR, opposition Représentation Danse/Calme ; victoire rend cible Surprise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0184",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Lame cachée » ? Requiert3 DR, attaque gratuite additionnelle à la dague avec Mêlée Base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0185",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Dard final » ? Requiert3 DR, l’arme impose un Empoisonné à chaque dégât causé pendant six Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0186",
+    "phase": "Magie",
+    "lot": "L09",
+    "source": "L09 p.68",
+    "question": "Implanter « Toucher de Khaine » ? Requiert3 DR,+3 DR à tous Tests de Mêlée jusqu’à fin du prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0188",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.72",
+    "question": "Implanter « Valerion — initiative » ? Réflexes de combat fixe Initiative de combat90.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0189",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.72",
+    "question": "Implanter « Bouclier — repoussement local » ? Avec bouclier, une fois par Round, perdre Élan après opposition de mêlée gagnée pour pousser2 yards et ne plus être Engagé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0196",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.73",
+    "question": "Implanter « Éventail de Damina » ? L’éventail cathayen inflige un Hémorragique dès qu’il cause des dégâts ; attaque donnée85/+6.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0206",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.80",
+    "question": "Implanter « Jareth — initiative » ? Réflexes de combat fixe Initiative de combat80.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0207",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.80",
+    "question": "Implanter « Jareth — Réception » ? Peut inverser Athlétisme raté lié à chute ou équilibre ; au plus+1 DR après inversion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0208",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.80",
+    "question": "Implanter « Jareth — Inspirant » ? Commandement peut influencer cinq fois le nombre normal de fidèles pendant bataille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0209",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.80",
+    "question": "Implanter « Jareth — Menaçant » ? Peut inverser Intimidation ratée ; au plus+1 DR après inversion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0210",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.80",
+    "question": "Implanter « Jareth — Pilote » ? Peut inverser Voile/Rame raté ; au plus+1 DR après inversion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0211",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.80",
+    "question": "Implanter « Jareth — Nageur » ? Peut inverser Natation ratée ; au plus+1 DR après inversion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0217",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.81",
+    "question": "Implanter « Demeth — initiative » ? Réflexes de combat fixe Initiative de combat70.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0218",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.81",
+    "question": "Implanter « Demeth — Tir précis » ? Ignore malus de Difficulté aux tirs dus à la Taille de la cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0219",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.81",
+    "question": "Implanter « Demeth — Tireur d’élite » ? Aucun malus à longue portée et moitié des malus à portée extrême.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0225",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.82",
+    "question": "Implanter « Zarugh — initiative » ? Réflexes de combat fixe Initiative de combat70.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0229",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.85",
+    "question": "Implanter « Espion — Haine retirée » ? En créant un espion noir infiltré chez ses cousins, retirer Haine Hauts Elfes pour éviter de compromettre la couverture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0234",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.94",
+    "question": "Implanter « Rune de contrainte » ? Chaque PJ marqué : trahison fait écraser son cœur à pleine lune suivante, dans deux semaines ; Grimwitch peut retirer la rune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0236",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.96",
+    "question": "Implanter « Kalimel — Recharge locale » ? Son arbalète a portée45 et Recharge6, contre portée48/Recharge9 de table58.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0254",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.101",
+    "question": "Implanter « Rylveth — déguisement » ? Opposition Perception avec les PJ ; victoire des Druchii donne+1 DR pour mentir après préparation des déguisements.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0255",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.101",
+    "question": "Implanter « Rylveth — récompense » ? Offre15 CO pour hippogriffe jeune et30 CO supplémentaires pour mère.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0256",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.101",
+    "question": "Implanter « Hydre expérimentale — composition » ? Hydre furtive avec Sang corrosif, ni Régénération ni Souffle de feu ; absence d’immunité à son propre sang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0257",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.101",
+    "question": "Implanter « Hydre expérimentale — contrecoup » ? Chaque fois qu’elle est blessée, l’hydre subit une Blessure supplémentaire de son sang corrosif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0258",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.102",
+    "question": "Implanter « Dragon couveur — réveil » ? Dormira encore dix ans sans dérangement ; une Blessure ou dégât à ses œufs le réveille ; œufs volés le conduisent à attaquer le village.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0259",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.102",
+    "question": "Implanter « Parchemin de Triton — restriction » ? Aucun Elfe noir ne peut contraindre Triton à paraître ; quelqu’un d’une autre espèce doit lire le parchemin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0263",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.109",
+    "question": "Implanter « Marchand intimidé — lecture » ? Perception+0 DR détecte tremblement nerveux du marchand ; Marchandage opposé peut être aidé, compétence marchande65.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0264",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.109",
+    "question": "Implanter « Nightwake — appareillage » ? Après signal, 1d10+3 Rounds pour lever ancre et déployer voiles ; équipage à terre à au moins quinze minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0265",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.109",
+    "question": "Implanter « Nightwake — vente pressée » ? 200 Enc de marbre de Tiranoc, prix de base6 ; Filvanir fait Marchandage−2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0266",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.109",
+    "question": "Implanter « Nightwake — représailles » ? Si vend à−10% du prix de base ou moins, navire complet poursuit acheteurs sauf s’ils le surclassent largement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0267",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.109",
+    "question": "Implanter « Nightwake — renforts » ? Navires50 yards au large ; trois balistes peuvent viser plage, barques de renfort arrivent en quatre Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0268",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.110",
+    "question": "Implanter « Filvanir — initiative » ? Réflexes de combat fixe Initiative de combat90.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0288",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.114",
+    "question": "Implanter « Esteban — saignement » ? Captif commence la poursuite avec un Hémorragique ; arrêter ou ralentir saignement nécessaire pour l’aider.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0289",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.115",
+    "question": "Implanter « Chaudron — huit victimes » ? Si les huit sacrifices meurent, les fidèles entrent en Frénésie et attaquent amis comme ennemis ; empêcher la dernière mort peut interrompre le résultat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0290",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.116",
+    "question": "Implanter « Selthira — initiative » ? Réflexes de combat fixe Initiative de combat80.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0297",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.117",
+    "question": "Implanter « Haidrath — initiative » ? Réflexes de combat fixe Initiative de combat90.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0305",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.118",
+    "question": "Implanter « Hulreth — don nommé » ? Sa liste mentionne Knife of Khaine, alors que la liste68 propose Dagger of Khaine ; identité à confirmer, pas nouveau don inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L09-0307",
+    "phase": "Combat et exploration",
+    "lot": "L09",
+    "source": "L09 p.120",
+    "question": "Implanter « Elfe noir — création culturelle » ? Douze compétences et six groupes de Talents propres, incluant Haine Hauts Elfes, Savoir ou Intrigant, Seconde vue ou Sixième sens, Lire/Écrire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
