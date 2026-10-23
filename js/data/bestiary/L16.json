@@ -258,9 +258,7 @@
     "Clothing",
     "Dragon Crown of Karaz",
     "Great Book of Grudges",
-    "Jewellery worth 1",
-    "the Ruling Rune",
-    "Intimidate"
+    "Jewellery worth 1,750 GC"
    ],
    "keywords": [
     "nain"
@@ -1367,6 +1365,11 @@
      "value": 36
     },
     {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 40
+    },
+    {
      "name": "Trade (Smith)",
      "nameFr": "Métier (Forgeron)",
      "value": 66
@@ -1545,6 +1548,16 @@
      "value": 78
     },
     {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Two-handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 100
+    },
+    {
      "name": "Perception",
      "nameFr": "Perception",
      "value": 30
@@ -1571,6 +1584,10 @@
     }
    ],
    "talents": [
+    {
+     "name": "Ancestral Grudge (Orcs and Goblins, Skaven)",
+     "rank": 2
+    },
     {
      "name": "Carouser"
     },
@@ -2429,9 +2446,9 @@
    "trappings": [
     "Beardling Initiate",
     "Cult Medallion",
-    "Trade Tools (Embalmer, Smith). Outside the hold",
+    "Trade Tools (Embalmer, Smith)",
     "Bandages",
-    "Restorative Brew Once the preparations are completed"
+    "Restorative Brew"
    ],
    "keywords": [
     "nain"
@@ -2986,6 +3003,11 @@
     {
      "name": "Warrior Born"
     }
+   ],
+   "trappings": [
+    "Clothing",
+    "Jewelry worth 200 GC",
+    "Gotrek's Axe"
    ],
    "keywords": [
     "nain"
@@ -3679,6 +3701,12 @@
      "ref": "E0-T-006"
     },
     {
+     "name": "Breath",
+     "rating": "+17",
+     "param": "Brimstone Fire",
+     "ref": "E0-T-009"
+    },
+    {
      "name": "Daemonic",
      "rating": "9+",
      "ref": "E0-T-018"
@@ -4044,7 +4072,7 @@
    ],
    "trappings": [
     "Mouldy Robes",
-    "Pair of Swords y"
+    "Pair of Swords"
    ],
    "keywords": [
     "skaven"

@@ -44,5 +44,22 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-307': { traits: 'L07 p.181 : Hunger est absent de l\'inventaire des Traits (hors L18-L26) ; sa règle n\'est pas recopiée.' },
   'E0-P-368': { spells: 'L10 p.15 : « Rot A city woman » est le dernier sort (Rot) collé à la prose de la colonne voisine ; les six sorts imprimés sont présents.' },
   'E0-P-006': { skills: 'L11 p.15 : le texte « all within the area of effect… Snare \'Em Good » est la description des miracles de la colonne voisine ; Pray 60 est la seule compétence imprimée et elle est présente.' },
-  'E0-P-022': { traits: 'L11 p.37 : Mental Corruption est présent avec son paramètre complet « Totally Unhinged + 2 additional » ; le contrôle le lisait coupé au « + ».' }
+  'E0-P-022': { traits: 'L11 p.37 : Mental Corruption est présent avec son paramètre complet « Totally Unhinged + 2 additional » ; le contrôle le lisait coupé au « + ».' },
+  'E0-P-398': { attacks: 'L12 p.10 : « Weapon (Choppa) +8 » est le Trait du profil Orc voisin (même page, colonne de gauche) ; le Basic Savage Orc a Weapon (Stone Axe) +7, présent.' },
+  'E0-P-407': { trappings: 'L12 p.16 : « harassing enemies with missiles, and keeping lookout. SKIRMISHER » est la prose du gabarit Skirmisher voisin ; l\'équipement du Night Goblin Chief est complet.' },
+  'E0-P-413': { traits: 'L12 p.19 : le Trait Web 40 est présent ; « HOPPING SQUIG » est le titre du profil voisin collé à la fin de la ligne.' },
+  'E0-P-439': { trappingNoise: 'L12 p.79 : Rulg imprime ses ingrédients de sorts en minuscules (« three lumps of bedrock… », « two potions of spleen and gall… », « six disembodied limbs… ») : ce sont des objets du livre.' },
+  'E0-P-453': { trappings: 'L12 p.105 : « BLOATED CAVE SQUIG » est le titre du profil voisin (Gobbla) collé au dernier objet.' },
+  'E0-P-459': { traits: 'L13 p.109 : Trained (Broken, Mount, Shock Cavalry, War) est présent depuis la lecture de « Combat Traits: Bite +9, Weapon (Talons) +9 » ; le contrôle garde « Combat » collé à la parenthèse.' },
+  'E0-P-461': { trappingNoise: 'L13 p.113 : « either a Halberd or a Crossbow and 10 Bolts » est un objet imprimé tel quel.' },
+  'E0-P-495': { skills: 'L16 p.28 : prose de la colonne voisine intercalée dans la ligne de Compétences ; Language (Khazalid) 46 et Ranged (Blackpowder) 42 sont présents.' },
+  'E0-P-498': {
+    skills: 'L16 p.32 : « Lore (History 78, Metallurgy 68, Politics 73. Warfare 78) » : coquille du livre (point pour virgule) ; les quatre Lore sont présents.',
+    trappingNoise: 'L16 p.32 : la liste de cérémonie imprime ses objets en minuscules (« gromril shield », « the Ironpick »…), ce sont des objets du livre.'
+  },
+  'E0-P-499': {
+    trappings: 'L16 p.33 : « Like King Brokk » ouvre la phrase d\'introduction de la liste (« …her ceremonial outfit consists of: ») ; les objets sont présents.',
+    trappingNoise: 'L16 p.33 : la liste de cérémonie imprime ses objets en minuscules (« a brynduraz necklace (worth 200,000 GC) »…), ce sont des objets du livre.'
+  },
+  'E0-P-503': { trappingNoise: 'L16 p.51 : « the Severed Head of a Night Goblin she calls `Alfie\' » est un objet imprimé tel quel (minuscule initiale, apostrophe de citation du livre).' }
 });

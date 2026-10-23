@@ -147,6 +147,12 @@ export const ARMOUR_DETAIL = Object.freeze({
   'E0-P-575': 'Helm 2, Plate 3'
 });
 
+/** Équipement dont un objet est suivi d'un mot ou d'une phrase de la colonne voisine : l'objet est coupé après le nom donné (L16 p. 45 : « Restorative Brew Once the preparations… », p. 90 : « Pair of Swords y »). */
+export const TRAPPING_TRIMS = Object.freeze({
+  'E0-P-502': ['Restorative Brew'],
+  'E0-P-512': ['Pair of Swords']
+});
+
 /** Équipement dont le nom imprimé contient des virgules (Helena Bastiat-Hatzburg, Altdorf L20 p. 72) : recollé après le découpage à virgules. */
 export const TRAPPING_JOINS = Object.freeze({
   'E0-P-625': ['Notebook of Plans, Schemes, and Dirty Secrets'],
@@ -157,7 +163,9 @@ export const TRAPPING_JOINS = Object.freeze({
   'E0-P-363': ['Forged Testimonials for \'Malforic Silverblade, Fencing Master\'', 'Traveller\'s Chest with Fine Clothes and Hidden Compartment for Diary'],
   // Power Behind the Throne Companion (L18) p. 97 : Skaven Grey Seer, « As above, plus enough Warpstone… » : l'objet ajouté est un seul nom.
   'E0-P-557': ['enough Warpstone to double the SL of three Casting/Channelling Tests (WFRP 244)'],
-  'E0-P-472': ['Vaults containing vast wealth of coin, rare minerals, and magical items']
+  'E0-P-472': ['Vaults containing vast wealth of coin, rare minerals, and magical items'],
+  // Tribes and Tribulations (L12) p. 107 : Gorfang, « Ramshackle armour incorporating plate, mail, and scale » est un seul objet.
+  'E0-P-455': ['Ramshackle armour incorporating plate, mail, and scale']
 });
 
 /**
@@ -444,5 +452,24 @@ export const BODY_OVERRIDES = Object.freeze({
   'L11:15:1': [
     'Traits: Animosity (Greenskins), Arboreal, Blessed (Spider-god), Fear 1, Immunity (Poison), Miracles (Spider-god), Night Vision, Painless, Venom, Weapon (Spider-god Staff) +8, Not All There: toxin-induced haze',
     'Skills: Pray 60'
+  ],
+  // Hirelings (L13) p. 114 : Porter, « Gamble 36 » et « Gossip 46 » étaient perdus (colonne du Scribe voisin, qui a aussi Gamble et Gossip, intercalée).
+  'L13:114:2': [
+    'Traits: Armour 1, Weapon (Sword) +8',
+    'Skills: Athletics 41, Bribery 41, Charm 41, Climb 51, Consume Alcohol 56, Cool 34, Dodge 41, Endurance 56, Entertain (Storytelling) 36, Evaluate 34, Gamble 36, Gossip 46, Haggle 39, Intimidate 46, Melee (Basic) 56, Perception 46, Stealth 36, Swim 51',
+    'Talents: Doomed, Strong Back, Sturdy, Suave, Tenacious, Very Resilient, Very Strong',
+    'Trappings: Sword, Leather Gloves, Guild License, Leather Jerkin, Pipe and Tobacco, Porter\'s Cap. Cloak, Clothing, Dagger, Pouch, Sling Bag containing a Flask of Spirits'
+  ],
+  // Dwarfs (L16) p. 31 : Helga Vikramsdottir, deux mots de la prose voisine (« is a ») s'intercalent dans « Secret Signs (Guilder)40 ».
+  'L16:31:0': [
+    'Traits: Armour 2 (7), Ranged (Dwarf Pistol) (20) +10 (Impale, Penetrating, Pistol, Reload 1), Weapon (Hammer) +8 (Pummel)',
+    'Skills: Art (Engraving) 62, Consume Alcohol 54, Cool 57, Endurance 58, Entertain (Storytelling) 31, Evaluate 37, Gossip 30, Haggle 36, Intimidate 42, Intuition 38, Language (Guilder) 42, Leadership 31, Lore (Geology 39, Karak Norn 38, Metallurgy 44), Melee (Basic) 45, Perception 38, Ranged (Blackpowder) 55, Research 36, Secret Signs (Guilder) 40, Trade (Smith) 66',
+    'Talents: Artistic, Craftsman (Smith), Etiquette (Guilder), Magic Resistance, Night Vision, Nimble Fingered, Read/Write, Strong Back, Tinker, Very Strong',
+    'Trappings: Cloak, Clothing, Dagger, Hammer, Mail Shirt, Pistol, Pouch, Trade Tools (Smith)'
+  ],
+  // Tribes and Tribulations (L12) p. 108 : Sog'Kog, « Trappings » (« Collection of the heads of his favourite victims, Two-Handed Stone Axe ») était perdu, le numéro de page collé au dernier objet.
+  'L12:108:0': [
+    'Traits: Armour 2 (7), Bite +8, Corrosive Blood, Corruption (Minor), Die Hard, Horns +8, Infected, Regenerate, Size (Enormous), Stupid, 2 Tentacles +6, Vomit, Weapon (Two-Handed Stone Axe) +12',
+    'Trappings: Collection of the heads of his favourite victims, Two-Handed Stone Axe'
   ]
 });

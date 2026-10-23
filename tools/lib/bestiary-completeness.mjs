@@ -209,10 +209,12 @@ export function extendedGaps(record, block) {
   const haveAttacks = recordAttackKeys(record);
   const haveTraits = recordTraitKeys(record);
   const attackNames = new Set((record.attacks || []).map(attack => letters(attack.name)));
+  const haveTraitRatings = new Set((record.traits || []).filter(trait => trait?.rating).map(trait => `${letters(trait.name)}|${String(trait.rating).replace(/\D/g, '')}`));
   const trappings = (record.trappings || []).map(letters);
   const haveSpells = recordSpellKeys(record);
   return {
-    attacks: printedAttacks(block).filter(attack => !haveAttacks.has(attack.key)).map(attack => attack.label),
+    // Q27c : un Souffle « Breath +10 (Poison) » est gardé comme Trait (rating +10), pas comme action : il compte comme présent.
+    attacks: printedAttacks(block).filter(attack => !haveAttacks.has(attack.key) && !haveTraitRatings.has(attack.key.split('|').slice(0, 2).join('|'))).map(attack => attack.label),
     traits: printedTraits(block).filter(trait => !haveTraits.has(trait.key) && !attackNames.has(trait.key)).map(trait => trait.label),
     trappings: printedTrappings(block).filter(item => !trappings.some(have => have.includes(item.key) || (have.length >= 4 && item.key.includes(have)))).map(item => item.label),
     spells: printedSpells(block).filter(spell => !haveSpells.has(spell.key)).map(spell => spell.label),

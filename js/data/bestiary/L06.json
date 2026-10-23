@@ -5395,6 +5395,13 @@
      "nameFr": "Esquive",
      "value": 10,
      "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
     }
    ],
    "starred": [
@@ -5430,6 +5437,13 @@
     {
      "name": "Ranged (Bow, Sling, or Throwing)",
      "nameFr": "Projectiles (Bow, Sling, or Throwing)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Rural or Underground)",
+     "nameFr": "Discrétion (Rural or Underground)",
      "frUnverified": true,
      "value": 10,
      "modifier": true

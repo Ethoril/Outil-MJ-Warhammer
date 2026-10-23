@@ -333,3 +333,12 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, 23 livres** : talents 13, compétences 28, attaques 20, Traits 46, équipement 134, sorts 13, bruit d'équipement 62 (reste de Q27c à Q27e : L12 8 profils, L13 3, L16 11, L17 10, L18 13, L19 7, L20 20, L21 19, L22 12, L23 15, L25 5, L26 16).
 - Test : `tests/pro-q27b-completude.test.js` (7 tests) ; `pro-q27a-faux-positifs` lit désormais les 23 livres. Suite complète lancée une fois : 4433 réussis, 0 échec.
 - Outil de contrôle et données de livre : rien à déclarer « branché ». Aucune valeur durable de personnage.
+
+## Q27c — complétude de L12, L13, L16 (FAIT ; Q27 non terminé)
+
+- Mesure avant : 22 profils signalés (L12 8, L13 3, L16 11 ; talents 1, compétences 8, attaques 5, Traits 2, équipement 9, bruit d'équipement 18). Tous relus sur leurs pages. **Après : 0 manque non justifié sur L01-L16** ; 11 profils justifiés un par un (`QE-Q27c-4`).
+- **Vrais manques corrigés** : Sog'Kog (2 Tentacles +6, équipement), Hagdar (Souffle +17 Brimstone Fire), Demigryph Mount (Trained, Bite +9 : l'intitulé « Combat Traits: » coupait la liste), Brokk (Melee (Basic) 90, Melee (Two-handed) 100, talent Ancestral Grudge 2), Helga (Secret Signs (Guilder) 40), Porter (Gamble 36, Gossip 46), Gotrek (équipement après « Amputations »), Thorgrim (« Jewellery worth 1,750 GC » coupé au séparateur de milliers, descriptions d'objets collées), Nanna (« Trade Tools (Embalmer, Smith). Outside the hold »), Plague Monk, Gorfang. Détail : `QE-Q27c-1` à `-3`.
+- **Livres régénérés** (23) : seuls L06, L12, L13, L16 changent, uniquement par des lignes gagnées ou nettoyées. Aucune valeur imprimée changée, aucune entrée perdue hors parasites. Question au MJ : seconde zone d'armure du Demigryph (`QE-Q27c-2`).
+- **Contrôle, 23 livres** : talents 12, compétences 20, attaques 15, Traits 44, équipement 125, sorts 13, bruit d'équipement 44 (avant : 13, 28, 20, 46, 134, 13, 62). Reste à traiter : L17 10 profils, L18 13, L19 7, L20 20, L21 19, L22 12, L23 15, L25 5, L26 16 (Q27d, Q27e…).
+- Test : `tests/pro-q27c-completude.test.js` (8 tests). Suite complète lancée une fois : 4441 réussis, 0 échec.
+- Outil de contrôle et données de livre : rien à déclarer « branché » (le Souffle et les tentacules de Sog'Kog passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.

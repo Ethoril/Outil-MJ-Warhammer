@@ -26,13 +26,18 @@ export function readTraitItem(text) {
 export function readTrappings(rawText) {
   // L14 : « Whilst Dalroth could equip himself … he can be expected to have the following items to hand: Blade… » ; la phrase d'introduction n'est pas un objet.
   // « …his preferred attire consists of: Crown… » (L16 p. 32) et « …, add the following: Bandages » (L16 p. 45) : même chose en cours de liste.
-  const text = rawText.replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with|consists of):\s*/, '').replace(/(^|,\s*)(?:add )?the following:\s*/g, '$1');
+  // « Trade Tools (Embalmer, Smith). Outside the hold, add the following: Bandages, Restorative Brew » (L16 p. 45) : variante de la liste, pas une phrase.
+  const text = rawText.replace(/\.\s+Outside the hold(?=,\s*add the following:)/, '').replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with|consists of):\s*/, '').replace(/(^|,\s*)(?:add )?the following:\s*/g, '$1');
   // « Sword * Adalbert is still… » (L02 p. 90) : l'astérisque peut être suivi d'une espace.
   const cut = /\s\*\s?(?=[A-Za-z])/.exec(text);
   // Titre en majuscules d'un profil voisin collé à la liste (« Zweihander, Dagger POWER FAMILIAR but familiars… », L17 p. 182) : la liste s'arrête avant.
   const neighbour = /\s[A-Z][A-Z'’-]{2,}(?:\s[A-Z][A-Z'’-]{2,})+\b/.exec(cut ? text.slice(0, cut.index) : text);
   const end = neighbour ? neighbour.index : (cut ? cut.index : text.length);
-  let items = splitList(text.slice(0, end));
+  // Descriptions d'objets collées à la liste (« …, Jewellery worth 1,750 GC Armour of Skaldour Master Rune of… », L16 p. 7) : un objet de la liste répété ensuite en intitulé coupe la liste.
+  let listText = text.slice(0, end);
+  const repeats = splitList(listText).filter(item => item.length >= 8).map(item => listText.indexOf(` ${item} `, listText.indexOf(item) + item.length)).filter(at => at > 0);
+  if (repeats.length) listText = listText.slice(0, Math.min(...repeats));
+  let items = splitList(listText);
   // Description d'un objet de la liste, collée à elle (« …, Throat Slitter, … Amulet of Thrice-Blessed Copper: A verdigris amulet… », L18 p. 60) :
   // l'élément qui contient « Nom : » répète un objet déjà listé ; il est coupé avant ce nom, la description n'est pas de l'équipement.
   const described = items.findIndex(item => /:\s/.test(item.replace(/\([^)]*\)/g, '')));
@@ -49,10 +54,11 @@ function readTraitItemPlain(text) {
   const item = clean(text.replace(/\*+$/, ''));
   if (!item) return null;
   // « Breath +12 (Fire) » (Salamander, L07 p. 175) : le Souffle V4 porte ses dégâts imprimés, le type est la précision.
-  const breath = /^Breath\s*([+-]\d+)\s*\(([^()]*)\)$/i.exec(item);
+  // Quelques lettres de la colonne voisine peuvent s'intercaler (« Breath +17 nd (Brimstone Fire) », Hagdar L16 p. 84) : écartées.
+  const breath = /^Breath\s*([+-]\d+)(?:\s+[a-z]{1,3})?\s*\(([^()]*)\)$/.exec(item) || /^Breath\s*([+-]\d+)\s*\(([^()]*)\)$/i.exec(item);
   if (breath) return { name: 'Breath', param: clean(breath[2]), rating: breath[1] };
   // Attaque (« Weapon (Fangs) +7 », « 2x Weapon (Claws) +10 », « Bite +9 ») suivie du nom d'une capacité collée dans la liste : on ne garde que l'attaque.
-  const natural = /^(?:(\d+)\s*[x×\uFFFD]\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
+  const natural = /^(?:(\d+)\s*[x×\uFFFD]?\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
   if (natural && !/[+-]\d/.test(natural[3] || '')) {
     const trait = { name: natural[2].replace(/^./, letter => letter.toUpperCase()), rating: natural[4].replace(/\s+/g, '') };
     if (natural[3]) trait.param = clean(natural[3]).replace(/([a-z])- (?=[A-Z])/g, '$1-');
@@ -94,7 +100,8 @@ function readTraitItemPlain(text) {
 export function readSkills(text) {
   const skills = [];
   // Césures de mise en page (« Two- handed », « Pole- arm ») recollées ; « Pole-arm » et « Pole Arm » sont la spécialisation Polearm.
-  const joined = text.replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm');
+  // Fragment de la colonne voisine entre un nom et sa parenthèse (« Melee rd, (Basic 90, Two-handed 100) », Brokk Ironpick L16 p. 32) : écarté.
+  const joined = text.replace(/([\wà-ÿ])- (?=[a-zà-ÿ])/g, '$1-').replace(/\bPole[- ]arm\b/gi, 'Polearm').replace(/(\p{L}) [a-z]{1,3},(?= \()/gu, '$1');
   // Note à astérisque collée à la dernière compétence (« Swim 35 *All Tests connected with… », L01 p. 78) : la liste s'arrête avant.
   for (const rawItem of splitList(joined.replace(/\s\*\s?[A-Z][\s\S]*$/, '')).map(entry => entry.replace(/\s*\*+$/, ''))) {
     // « Language (Magick 74, Reikspiel) 48 » (L18 p. 97) : la dernière spécialisation a sa valeur après la parenthèse.
@@ -123,7 +130,10 @@ export function readTalents(text) {
     // Un astérisque final (« Strike Mighty Blow 2* », Krag-Breaker L11 p. 25) marque une valeur conditionnelle : le talent et son rang restent.
     const base = clean(item.replace(/[.*]+$/, '').replace(/\s*\((?:[^()]*\s){7,}[^()]*\)\s*$/, group => (/^\s*\((?:[A-Z][\w'’-]*(?: (?:of )?[A-Z][\w'’-]*){0,2})(?:, (?:[A-Z][\w'’-]*(?: (?:of )?[A-Z][\w'’-]*){0,2}))+\)\s*$/.test(group) ? group : '')).replace(/:.*$/, ''));
     const ranked = /^(.*?)\s+(\d+)$/.exec(base);
-    return ranked ? { name: clean(ranked[1]), rank: Number(ranked[2]) } : { name: base };
+    // « Ancestral Grudge 2 (Orcs and Goblins, Skaven) » (Brokk Ironpick, L16 p. 32) : le rang précède la parenthèse de spécialisation.
+    const rankedBefore = ranked ? null : /^(.*?)\s+(\d+)\s*(\([^()]*\))$/.exec(base);
+    if (rankedBefore) return { name: clean(`${rankedBefore[1]} ${rankedBefore[3]}`), rank: Number(rankedBefore[2]) };
+    return ranked ?{ name: clean(ranked[1]), rank: Number(ranked[2]) } : { name: base };
   });
 }
 

@@ -5866,9 +5866,7 @@
     }
    ],
    "trappings": [
-    "Ramshackle armour incorporating plate",
-    "mail",
-    "and scale",
+    "Ramshackle armour incorporating plate, mail, and scale",
     "The Red Fang",
     "Shield"
    ],
@@ -5915,6 +5913,12 @@
      "name": "Horns",
      "damage": 8,
      "trait": "Horns"
+    },
+    {
+     "name": "Tentacles",
+     "damage": 6,
+     "trait": "Tentacles",
+     "count": 2
     },
     {
      "name": "Two-Handed Stone Axe",
@@ -5964,9 +5968,19 @@
      "ref": "E0-T-052"
     },
     {
+     "name": "Tentacles",
+     "rating": "+6",
+     "count": 2,
+     "ref": "E0-T-055"
+    },
+    {
      "name": "Vomit",
      "ref": "E0-T-065"
     }
+   ],
+   "trappings": [
+    "Collection of the heads of his favourite victims",
+    "Two-Handed Stone Axe"
    ],
    "keywords": [
     "chaos",

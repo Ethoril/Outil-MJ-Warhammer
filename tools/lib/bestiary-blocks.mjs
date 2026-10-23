@@ -231,7 +231,9 @@ export function pageBlocks(pageText) {
       const skillsTail = blank === 1 && /^\d+,\s/.test(text) && /^Skills:/.test(lastLabel || '');
       // Règle spéciale d'un Trait (« A Fool's End � Soporific Breath… », L11 p. 30) : son paragraphe, après un blanc, précède encore les Compétences du bloc.
       const ruleStart = blank === 1 && /^[A-Z][A-Za-z' !,&-]{2,40}\s[�–—]\s/.test(text) && body.some(line => /^(?:Attack Traits|Traits):/.test(line)) && !body.some(line => /^(?:Skills|Talents|Trappings):/.test(line));
-      if (!v5Block && blank && !SECTION_START.test(text) && !spaced && !skillsTail && !ruleStart && !starNote &&!wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
+      // « Amputations: In 2496 IC, Gotrek lost… » (L16 p. 79) : paragraphe de règle entre les Talents et « Fate Points » / « Trappings », après un blanc.
+      const amputations = blank === 1 && /^Amputations:/.test(text) && body.some(line => /^Talents:/.test(line));
+      if (!v5Block && blank && !SECTION_START.test(text) && !amputations && !spaced && !skillsTail && !ruleStart && !starNote &&!wealthOpening && !trappingsList && !(BARE_LABEL.test(body[body.length - 1] || '') && blank <= 2)) break;
       // Titre d'un bloc suivant (dans la même fenêtre) : fin du corps.
       if (isTitleText(text) && lines.slice(k + 1, k + 4).some((_, d) => heads.some(other => other.line === k + 1 + d && other.start >= left - 8 && other.start < rightLimit))) break;
       blank = 0;
@@ -250,7 +252,7 @@ export function pageBlocks(pageText) {
 }
 
 // V4 : « Traits: … Skills: … » (étiquette suivie de deux-points, n'importe où dans le texte). V5 : étiquette seule en début de ligne.
-const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents?', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Miracles', 'Armour by Location', 'Special Rules'];
+const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents?', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Amputations', 'Miracles', 'Armour by Location', 'Special Rules'];
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');
@@ -260,7 +262,8 @@ const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits and Tale
 export function splitSections(bodyLines) {
   const lines = Array.isArray(bodyLines) ? bodyLines : [bodyLines];
   // Intitulé « SPELLS » centré (sans deux-points) : même rôle que « Spells: ».
-  const joined = clean(lines.join(' ')).replace(/(^|\s)SPELLS(?=\s)/g, '$1Spells:');
+  // « …, Trained (Broken, Mount) Combat Traits: Bite +9, Weapon (Talons) +9 » (Demigryph Mount, L13 p. 109) : l'intitulé « Combat Traits: » prolonge la liste des Traits.
+  const joined = clean(lines.join(' ')).replace(/(^|\s)SPELLS(?=\s)/g, '$1Spells:').replace(/\s+Combat Traits:\s*/g, ', ');
   const sections = {};
   const put = (label, text) => { sections[label] = sections[label] ? `${sections[label]} ${text}` : text; };
   // Un bloc V5 commence par une étiquette seule ; une ligne « Armour of … » du texte voisin, plus bas, ne le rend pas V5 (L16 p. 7).
@@ -318,10 +321,12 @@ export function splitList(text) {
   const items = [];
   let depth = 0;
   let current = '';
-  for (const char of text) {
+  for (const [index, char] of [...text].entries()) {
     if (char === '(' || char === '[') depth += 1;
     if (char === ')' || char === ']') depth = Math.max(0, depth - 1);
-    if (char === ',' && depth === 0) { items.push(current); current = ''; } else current += char;
+    // Séparateur de milliers (« Jewellery worth 1,750 GC », L16 p. 7) : pas une coupure.
+    const thousands = char === ',' && /\d$/.test(current) && /^,\d{3}(?!\d)/.test(text.slice(index, index + 5));
+    if (char === ',' && depth === 0 && !thousands) { items.push(current); current = ''; } else current += char;
   }
   items.push(current);
   return items.map(item => clean(item)).filter(Boolean);
