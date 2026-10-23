@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03, L04, L07, L08 et L09 ont reçu les revues décrites ci-dessous. 23 livres sur vingt-six sont traités dans ces portées documentaires ; les 3 autres restent à traiter, à partir de L10. Aucun achèvement des 26 livres n’est prétendu.
+État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03, L04, L07, L08 et L09 ont reçu les revues décrites ci-dessous. 24 livres sur vingt-six sont traités dans les portées documentaires précisées ci-dessous (L05 : noms seuls). Restent L12, L15.
 
 ## Travail local et sources
 
@@ -497,3 +497,13 @@ Choix F-C162–169 ; recherches statiques L09-runtime-search-three.txt,L09-all-j
 Registre : 310 entrées, 148 nouveaux sélecteurs ; 159 purs renvois exclus ; statuts {"absent":293,"rappel":14,"hors-granularite":3}. Les 6082 entrées héritées sont identiques ; total 6392 entrées / 4960 sélecteurs. Portée de lecture : tmp/audit/L09-reading-scope-three.json ; reçus bruts read:false conservés. Aucun achèvement global ni recette UI revendiqués.
 
 Contrôles : deux générations identiques puis --check ; suite complète 4 054/4 054, zéro échec/annulé/ignoré, 97179.0375 ms, tmp/audit/L09-full-three.log. Intégrité, LF et diff--check verts ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local à relever dans la succession ; 3 livres restent à partir de L10.
+
+## L10 — Supplément Vampire - Sylvania The Cursed County v2.pdf
+
+Source : 96 pages physiques, SHA-256 `445ca4421ec9323e34bc7e60a0f73c68df02f732da365d5f269341054c41dfa5`. V5 explicite, crédits p.II, copyright 2026, mise à jour 8 septembre 2026. Folio arabe = physique, liminaires II/III aux pages physiques 2/3.
+
+Repérage des 96 pages puis lecture ciblée des clauses transportables : voyages et quatre tables de terrain, navigation, soins et objets, Vanhaldenschlosse, corruption et annexes de profils. Quatorze pages vues en image. Tables 23/32/40 désalignées résolues sur les pages ; collision 12+DR, malus en encombrement et perte d’Élan non quantifiée gardés sans correction. Graveroot distinct de la superstition de l’huile et de la bougie ; Stand Draught et envies cannibales durables exclus par Q18. Le sanctuaire B17 est assisté par un flux lu (culte, confirmation, reçu, écritures), sans nouvelle recette UI. Recherches par noms anglais et lieux dans js/core, js/data, js/ui ; aucun flux dédié établi pour les autres clauses. Aucun domaine des Vampires fabriqué.
+
+Registre : 90 entrées, 58 sélecteurs nouveaux, 30 purs renvois exclus ; statuts {"absent":87,"assiste":1,"hors-granularite":2}. Les 6392 entrées héritées sont identiques ; total 6482 entrées / 5018 sélecteurs. Lecture : tmp/audit/L10-finish-reading.json ; les reçus bruts restent read:false. Audit statique, aucune recette à la table revendiquée.
+
+Contrôles : deux générations identiques et --check ; suite complète 4054/4054, zéro échec, annulé ou ignoré, 101115.6707 ms, tmp/audit/L10-finish-full.log. Intégrité, LF et diff--check vérifiés avant commit ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local relevé dans la succession. Restent : L12, L15.

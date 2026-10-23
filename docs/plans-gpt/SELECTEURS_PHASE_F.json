@@ -64478,5 +64478,759 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0002",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.10",
+    "question": "Implanter « Reconnaître un site sylvanien » ? Savoir Sylvanie +4 DR, Stirland +2 DR ou Empire −1 DR permet de rappeler l’histoire du lieu ; le MJ peut aussi donner l’information.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0007",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.20",
+    "question": "Implanter « Fréquence des événements routiers » ? Tirer un d10 par jour à pied ; deux tirages par jour à cheval ou en diligence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0008",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.20",
+    "question": "Implanter « Terre de malepierre » ? Prélever la malepierre ou séjourner trop longtemps exige Endurance +0 DR ; échec : 1 Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0009",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.20",
+    "question": "Implanter « Reconnaître les funérailles fluviales » ? Savoir Sylvanie identifie le rite destiné à empêcher le mort de revenir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0011",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.21",
+    "question": "Implanter « Bateau strigany — manœuvrabilité » ? Le bateau strigany donne +2 DR aux manœuvres et possède Smoothing ; valeurs navales propres au tableau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0012",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Événements fluviaux sylvaniens » ? Un d10 par jour sur dix résultats ; marais 1, encrassement 2, collision 3, échouage 4, cargaison 5, monstres 6, barges 7, observateur 8, entrave 9, profondeurs 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0013",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Encrassement de coque » ? −1 DR aux Tests de conduite et −1 Mouvement jusqu’au nettoyage dans un mouillage approprié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0014",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Collision fluviale » ? Manœuvre −1 DR, Ramer ou Voile modifié par Man ; échec : 12+DR dégâts et 20 % de risque d’échouage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0015",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Échouage sylvanien » ? La coque subit 12 dégâts réduits par E et armure ; dégagement par Force pénalisée de l’encombrement du bateau et du fret, aide sans plafond de personnes ou bêtes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0016",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Cargaison échouée » ? Récupérer 1d10 encombrement de marchandise commune, revendable à 1 CO par encombrement dans un établissement assez grand.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0017",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Filet de cadavres » ? Couper les herbes prend plusieurs minutes ; fouiller rapporte 4d10 CO ; sur 1 au d10, 1d10 zombies embarquent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0018",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Mains des profondeurs — acquisition » ? Force +0 DR ; échec : entraîné à l’eau, Empêtré égal aux DR de l’échec et début de noyade.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0019",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.23",
+    "question": "Implanter « Mains des profondeurs — libération » ? Libération par lutte contre Force 45 ; les alliés doivent plonger pour aider.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0020",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.25",
+    "question": "Implanter « Événements de forêt et vallée » ? Deux d10 par jour à travers la campagne ; dix rencontres, dont hospitalité strigany, victime contagieuse et brouillard séparateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0021",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.25",
+    "question": "Implanter « Hospitalité strigany profanée » ? Nuire délibérément aux hôtes après avoir accepté leur protection donne 1 Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0022",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.25",
+    "question": "Implanter « Morsure du prisonnier » ? Après morsure, Endurance +0 DR ; échec : Blessure suppurante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0023",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.25",
+    "question": "Implanter « Séparation dans le brouillard » ? Le brouillard réduit la visibilité à quelques pas ; sans précaution immédiate, les voyageurs se séparent en suivant des formes trompeuses.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0024",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.27",
+    "question": "Implanter « Événements de marais et tourbières » ? Deux d10 par jour ; dix résultats, les effets propres de l’armure, des fleurs, des esprits et des créatures restent séparés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0025",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.27",
+    "question": "Implanter « Armure rouillée du marais » ? Le plastron et les brassards récupérés possèdent Partielle en raison de la corrosion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0026",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.27",
+    "question": "Implanter « Fleurs acides » ? Cueillir une fleur jaune à taches rouges inflige 1 Blessure aux doigts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0027",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.27",
+    "question": "Implanter « Larcin des esprits » ? Opposition Vigilance/Escamotage contre Escamotage 50 ; échec : un petit objet d’inventaire disparaît.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0028",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.27",
+    "question": "Implanter « Créatures sylvaniennes au sol » ? Esquive +0 DR pour éviter les créatures ; échec : 1 Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0029",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.27",
+    "question": "Implanter « Regard sous les eaux » ? Calme +0 DR ou exposition à une influence corruptrice mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0030",
+    "phase": "Voyage et environnement",
+    "lot": "L10",
+    "source": "L10 p.27",
+    "question": "Implanter « Statue d’orientation » ? Navigation +0 DR réussie révèle la direction d’une localité voisine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0031",
+    "phase": "Équipement",
+    "lot": "L10",
+    "source": "L10 p.32",
+    "question": "Implanter « Cataplasme de mousse des fens » ? Fonctionne comme un cataplasme de soins ; prix local 10 shillings, encombrement nul.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0032",
+    "phase": "Équipement",
+    "lot": "L10",
+    "source": "L10 p.32",
+    "question": "Implanter « Graveroot — guérison » ? Une dose guérit les infections causées par les morts-vivants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0033",
+    "phase": "Équipement",
+    "lot": "L10",
+    "source": "L10 p.32",
+    "question": "Implanter « Graveroot — toxicité » ? Tirer un d10 à chaque dose ; sur 1, acquérir Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0034",
+    "phase": "Équipement",
+    "lot": "L10",
+    "source": "L10 p.32",
+    "question": "Implanter « Épée de Drakenhof » ? Épée à 1 CO, encombrement 1, qualités Fine et Pratique, défaut esthétique de lame.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0036",
+    "phase": "Équipement",
+    "lot": "L10",
+    "source": "L10 p.32",
+    "question": "Implanter « Waldenloaf — maladie » ? Sustente un jour ; après plus de trois jours consécutifs, 20 % de risque de Courante galopante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0037",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.35",
+    "question": "Implanter « Portrait articulé » ? Perception −2 DR découvre les charnières ; Crochetage −1 DR ouvre le mécanisme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0038",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.35",
+    "question": "Implanter « Identifier Belrado » ? Histoire ou Évaluation +0 DR rappelle l’identité du peintre ; son fantôme peint à chaque pleine lune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0039",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.36",
+    "question": "Implanter « Suivre le corbeau du Rookery » ? Perception −2 DR permet de repérer la silhouette qui ouvre la fenêtre au corbeau messager.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0041",
+    "phase": "Équipement",
+    "lot": "L10",
+    "source": "L10 p.40",
+    "question": "Implanter « Arbalète lourde Catechist » ? Portée 60, dégâts +9, Recharge 2 et Pénétrante ; 10 CO, encombrement 3, exotique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0042",
+    "phase": "Équipement",
+    "lot": "L10",
+    "source": "L10 p.40",
+    "question": "Implanter « Pieu Catechist » ? Munition à 2 shillings, encombrement 0, portée quart de l’arme, dégâts non chiffrés ; Empaleuse et Dévastatrice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0043",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.47",
+    "question": "Implanter « Vents funestes » ? Focalisation et Langue Magick pour utiliser les Vents : +1 DR sur les terres du château ; aucun bonus à Ghyran, +2 DR pour la Nécromancie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0044",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.48",
+    "question": "Implanter « Navigation dans le château » ? Avec la carte d’Andrei : Navigation −2 DR ; réussite vers la pièce voulue, échec sur table d100 des onze salles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0045",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.48",
+    "question": "Implanter « Salles cachées » ? Savoir Magie ou Nécromancie −3 DR révèle les vides ; Navigation −2 DR atteint ensuite au hasard l’une des quatre salles cachées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0046",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.48",
+    "question": "Implanter « Labyrinthe — dissipation et discernement » ? −3 DR aux Tests de dissipation ou d’identification de magie ; réduire ce malus de 1 DR par rang de Sens aiguisés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0047",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.48",
+    "question": "Implanter « Labyrinthe — Dhar » ? Toutes les Focalisations Dhar dans le château bénéficient de l’Avantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0048",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.48",
+    "question": "Implanter « Ouïe des esprits » ? Double vue permet d’entendre la banshee et le chœur spectral dans la grande salle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0049",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.49",
+    "question": "Implanter « Orrery — savoir astronomique » ? +2 DR aux Savoirs Astronomie et Astrologie ; +4 DR si le sujet est Morrslieb.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0050",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.49",
+    "question": "Implanter « Orrery — corruption » ? Utiliser l’astrolabe impose le contact proche avec la malepierre et expose à la Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0051",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.49",
+    "question": "Implanter « Deuil illusoire » ? Savoir Histoire −2 DR rappelle la famille de van Hal ; toucher les corps ou leurs ornements les dissout en brume.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0052",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.50",
+    "question": "Implanter « Van Hal — perception des vivants » ? Van Hal sent instinctivement tout être vivant dans Vanhaldenschlosse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0053",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.50",
+    "question": "Implanter « Chambre de séance — liens » ? Les cercles contiennent des esprits, y compris un puissant démon ; le réseau entretient indéfiniment les morts-vivants du château.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0054",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.50",
+    "question": "Implanter « Miroir — libération » ? Effacer salpêtre et myrrhe des cercles libère le démon lié ; détruire le château peut aussi briser sa prison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0055",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.50",
+    "question": "Implanter « Vizir — nexus » ? Détruire le vizir déstabilise le flux magique du château.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0056",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.50",
+    "question": "Implanter « Interroger les rois morts » ? Savoir Histoire −2 DR ou Sylvanie −1 DR donne des informations à échanger contre les secrets du château.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0058",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.51",
+    "question": "Implanter « Élémentaire corrompu — liaison » ? Couper entièrement le lien entre menhir et puits inflige les dégâts du Sablier de Shyish brisé, sans son bénéfice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0059",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.51",
+    "question": "Implanter « Démolition du réseau » ? Les explosifs de Bela doivent être placés aux points essentiels du flux magique, de la tour au puits ; sape ordinaire insuffisante mais inutile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0062",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.55",
+    "question": "Implanter « Le Dormeur — malédiction » ? Réveiller le prophète ivre fait automatiquement échouer un Test choisi par le MJ le lendemain.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0063",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.57",
+    "question": "Implanter « Disparitions du Butcher’s Rest » ? Commérage réussi révèle les disparitions après visite à la taverne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0064",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.63",
+    "question": "Implanter « Fort Oberstyre — histoire » ? Savoir Histoire −2 DR rappelle les assauts et la provenance des horreurs du fort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0065",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.68",
+    "question": "Implanter « Cannibalisme — corruption » ? Manger sciemment de la chair humaine expose à une influence corruptrice modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0069",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.69",
+    "question": "Implanter « Pistes des collines hantées » ? Survie en extérieur +0 DR identifie les os et cordes comme des pistes olfactives destinées à contenir les goules.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0078",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.86",
+    "question": "Implanter « Gabriella — morsure gratuite » ? Perdre l’Élan permet l’attaque gratuite de morsure du profil.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0081",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.88",
+    "question": "Implanter « Bylorak — accès aux bénédictions » ? Radu accède à Souffle, Vigueur, Protection, Récupération, Ténacité et Sagesse via Bénir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L10-0082",
+    "phase": "Magie générale",
+    "lot": "L10",
+    "source": "L10 p.88",
+    "question": "Implanter « Radu — cécité permanente » ? Le prêtre est toujours considéré Aveuglé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

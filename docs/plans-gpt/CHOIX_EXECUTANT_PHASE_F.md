@@ -265,3 +265,15 @@ La référence à un symbole existant est une preuve de localisation, pas une pr
 | F-C167 | L09 p68/73/101/115/118 | Capacités annexes ? | Dons en rappel consultable ; éventail,hydre expérimentale,Chaudron et Knife/Dagger traités à part des profils E0. | Hémorragique sur dégâts et contrecoup hydre ne sont pas de simples listes de Traits ; identité de don Hulreth ouverte. | Un profil prouve toutes ses annexes, écarté. |
 | F-C168 | L09 p72/80/81/96/110/116–117 | Variantes de talents ? | Reprises identiques renvoyées exactement L06 ; inversions de Jareth,Inspirant×5,Tir précis par Taille,moitié de portée extrême et initiatives fixes gardés séparés. | Deux formulations parfois dans le même livre ; aucune correction silencieuse ni arrondi inventé. | Déduire toutes les variantes depuis Talent homonyme du socle, écarté. |
 | F-C169 | L09 p94/101/102/109/120 | Scènes et création ? | Rune lunaire,bonus de déguisement,prix,réveil dragon,restriction Triton,commerce et liste culturelle propres recensés ; intrigues narratives hors mécanique. | Temps de campagne attesté ; aucun scénario converti en moteur de quête ni récompense narrative chiffrée de force. | Exclure tout scénario ou certifier une recette UI, écarté. |
+
+## L10 — choix F-C170 à F-C176
+
+| Id | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| F-C170 | L10 II/23/48 | Édition et tableaux ? | V5 datée du 8 septembre 2026 ; folio=physique ; colonnes de 23/32/40 lues en image. | Nom Vampire trompeur, extraction désalignée. | Présumer V4, écarté. |
+| F-C171 | L10 23/48/86 | Convertir les unités ? | DR déjà V5, Avantage V5 gardé, encombrement et perte d’Élan sans coefficient inventé. | Les anomalies imprimées restent ouvertes. | Transformer toute pénalité en dixièmes, écarté. |
+| F-C172 | L10 32/68 ; Q18 | Remèdes et corruption ? | Graveroot et maladie alimentaire conservés ; Stand Draught et séquelle mentale exclus. | Q18 ciblé, pas exclusion générale de soins ou corruption. | Exclure tout le chapitre, écarté. |
+| F-C173 | L10 20 ; B17 | Sanctuaire couvert ? | Assisté par le flux de Péché effectivement lu ; renvoi exact gardé. | Fait, culte, confirmation, reçu et écriture existent. | Reprendre le statut absent historique, écarté. |
+| F-C174 | L10 49–51 | Profils et annexes ? | Sens des vivants, prison, nexus et lien du Sablier propres recensés. | Profil E0 seul insuffisant. | Tout déduire des Traits, écarté. |
+| F-C175 | L10 32/40 | Normaliser objets ? | Prix, caractéristiques, recharge, dégâts tiret et quart de portée conservés. | Image confirme les cellules, pas d’effet fiable pour bougie ou huile superstitieuse. | Inventer détection des morts-vivants, écarté. |
+| F-C176 | L10 88 ; D0b-Q02 | Magie des Vampires ? | Aucune liste créée ; accès Bylorak distinct, effets des bénédictions hérités. | Sommaire et clauses ne fournissent pas de domaine de Vampires. | Créer des sorts depuis PNJ, écarté. |

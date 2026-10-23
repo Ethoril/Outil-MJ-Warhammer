@@ -17,7 +17,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | L07 — Lustria EN.pdf | 403 | 1 | 0 | 2 | 399 | 1 |
 | L08 — Supplément Elfe - High elf Players Guide v2.pdf | 352 | 5 | 24 | 9 | 304 | 10 |
 | L09 — Supplément Elfe Noir - Temple of Spite v2.pdf | 310 | 0 | 0 | 14 | 293 | 3 |
-| L10 — Supplément Vampire - Sylvania The Cursed County v2.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
+| L10 — Supplément Vampire - Sylvania The Cursed County v2.pdf | 90 | 0 | 1 | 0 | 87 | 2 |
 | L11 — The Imperial Zoo.pdf | 167 | 0 | 0 | 2 | 163 | 2 |
 | L12 — Tribes and Tribulations EN.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L13 — Up in arms.pdf | 275 | 1 | 3 | 7 | 262 | 2 |
@@ -52,7 +52,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Artisanat et remèdes | 17 | 0 | 0 | 0 | 17 | 0 |
 | Artisanat magique | 4 | 0 | 0 | 0 | 3 | 1 |
 | Bataille de masse | 44 | 0 | 0 | 0 | 36 | 8 |
-| Bestiaire | 198 | 0 | 0 | 0 | 198 | 0 |
+| Bestiaire | 227 | 0 | 0 | 0 | 227 | 0 |
 | Bestiaire — clauses manquantes | 8 | 0 | 0 | 0 | 8 | 0 |
 | Bestiaire — renvois | 75 | 0 | 0 | 0 | 75 | 0 |
 | Blessures et soins | 177 | 15 | 1 | 66 | 95 | 0 |
@@ -100,7 +100,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Magie : sorts existants | 32 | 0 | 0 | 0 | 32 | 0 |
 | Magie et environnement | 52 | 0 | 0 | 2 | 50 | 0 |
 | Magie et traditions | 1 | 0 | 0 | 0 | 1 | 0 |
-| Magie générale | 117 | 14 | 18 | 0 | 84 | 1 |
+| Magie générale | 145 | 14 | 18 | 0 | 111 | 2 |
 | Magie générale et objets | 227 | 0 | 0 | 0 | 222 | 5 |
 | Magie — incidents | 43 | 16 | 4 | 23 | 0 | 0 |
 | Maladies | 28 | 0 | 0 | 0 | 28 | 0 |
@@ -114,7 +114,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Prières — clauses manquantes | 2 | 0 | 0 | 0 | 2 | 0 |
 | Progression | 2 | 0 | 0 | 0 | 2 | 0 |
 | Psychologie | 48 | 0 | 0 | 15 | 33 | 0 |
-| Religion | 47 | 0 | 0 | 0 | 47 | 0 |
+| Religion | 48 | 0 | 1 | 0 | 47 | 0 |
 | Religion et environnement | 8 | 0 | 0 | 0 | 8 | 0 |
 | Religion et magie | 31 | 2 | 9 | 4 | 16 | 0 |
 | Religion et objets | 13 | 0 | 0 | 0 | 13 | 0 |
@@ -132,7 +132,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Transformations | 5 | 0 | 0 | 0 | 5 | 0 |
 | Transport | 9 | 0 | 0 | 0 | 9 | 0 |
 | Vents de magie | 79 | 0 | 0 | 0 | 79 | 0 |
-| Voyage et environnement | 410 | 0 | 0 | 0 | 409 | 1 |
+| Voyage et environnement | 434 | 0 | 0 | 0 | 433 | 1 |
 | Voyage et navigation | 11 | 0 | 0 | 0 | 11 | 0 |
 | Véhicules et combat naval | 59 | 0 | 1 | 0 | 58 | 0 |
 | Véhicules et navigation | 5 | 0 | 0 | 0 | 5 | 0 |
@@ -158,7 +158,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | objets | 28 | 0 | 0 | 0 | 28 | 0 |
 | talents | 19 | 0 | 1 | 0 | 18 | 0 |
 | voyage | 46 | 0 | 0 | 0 | 46 | 0 |
-| Équipement | 109 | 4 | 0 | 5 | 100 | 0 |
+| Équipement | 117 | 4 | 0 | 5 | 107 | 1 |
 | Équipement et artisanat | 113 | 0 | 0 | 0 | 112 | 1 |
 | Équipement et navigation | 27 | 0 | 0 | 0 | 27 | 0 |
 | Équipement spécialisé | 20 | 0 | 1 | 0 | 19 | 0 |
@@ -734,6 +734,35 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L09-0308 — DURIATH HELBANE — THE FLEETMASTER** (L09 p.122, absent) : Profil/gabarit renvoyé à son inventaire E0 ; ne certifie ni données de fiche complètes ni capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
 - **F-L09-0309 — DEATH HAG KHEITALLA** (L09 p.124, absent) : Profil/gabarit renvoyé à son inventaire E0 ; ne certifie ni données de fiche complètes ni capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
 - **F-L09-0310 — KERNETHAR GRIMWITCH — FUGITIVE SORCERER** (L09 p.126, absent) : Profil/gabarit renvoyé à son inventaire E0 ; ne certifie ni données de fiche complètes ni capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0001 — COUNT ALBERICH V HAUPT-ANDERSSEN — IMPERIAL ELECTOR, NOBLE MAGNATE** (L10 p.9, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0003 — FARGAL KRAGGZIN — DWARF RANGER CAPTAIN** (L10 p.12, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0004 — WERTHER VON HORNAU — HUMAN CHANCELLOR** (L10 p.13, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0005 — GIANCARLO CACCIATORE — HUMAN MASTER HUNTER** (L10 p.14, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0006 — ELSBETH BLATTNER — HUMAN WIZARD** (L10 p.15, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0040 — SYLVANIAN DRAKENHUND** (L10 p.38, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0057 — FREDERICK VAN HAL** (L10 p.50, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0060 — SKELETAL WITCH** (L10 p.51, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0061 — GRAUG THE TERRIBLE** (L10 p.51, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0067 — CRYPT GHAST** (L10 p.68, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0068 — CRYPT HORROR** (L10 p.68, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0070 — PATCHWORK MAN** (L10 p.74, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0071 — ARLO DUNNE — HUMAN PEASANT** (L10 p.79, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0072 — JIMMI GREENLEAF — HALFLING ARTISAN** (L10 p.80, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0073 — NIELS VORBERREN — HUMAN ROADWARDEN** (L10 p.81, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0074 — SIHASTRUL — HUMAN MYSTIC** (L10 p.82, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0075 — GRETCHEN BEIRNE — HUMAN HEDGE WITCH** (L10 p.83, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0076 — TREVNA FANE — HUMAN SERVANT** (L10 p.84, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0077 — COUNT PETR VON STOLPE — NOBLE** (L10 p.85, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0079 — GABRIELLA VON BUNDEBAD — VAMPIRE GRANDEE** (L10 p.86, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0080 — MATTHIAS PRIMVIK — HUMAN TAX COLLECTOR** (L10 p.87, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0083 — FATHER TANTLUS RADU — HUMAN PRIEST** (L10 p.88, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0084 — RANOLF QUICKFINGERS — HUMAN PROWLER** (L10 p.89, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0085 — OTTO AND HENDRIK VOGEL — HUMAN CLERK** (L10 p.90, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0086 — ERICH FROHLICH — HUMAN VILLAGER** (L10 p.91, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0087 — SEIREN WALBURG — HUMAN PRIEST** (L10 p.92, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0088 — EMIL HARTWIG — HUMAN FOREMAN** (L10 p.93, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0089 — ANDREI VAN HAL — HUMAN SENTRY** (L10 p.94, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L10-0090 — GRIMES — HUMAN GANG BOSS** (L10 p.95, absent) : Profil renvoyé à E0 ; ce lien ne certifie ni les données complètes ni les capacités annexes. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
 
 ### Bestiaire — clauses manquantes
 
@@ -3330,6 +3359,33 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L02-0324 — Ulgu — toucher** (L02 p.88, absent) : 1 DR : ajouter jusqu’à BFM DR aux Tests de Discrétion de ce Round, après jet avant annonce du résultat. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L02-0325 — Ulgu — autre cible** (L02 p.88, absent) : 2 DR : l’ennemi hostile choisit une autre cible viable à son prochain Tour s’il en existe une. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L02-0326 — Ulgu — ombre passagère** (L02 p.88, absent) : 3 DR : se libérer, empêcher les saisies, ignorer terrain difficile et se glisser à travers barreaux ou espaces étroits ; durée non précisée ici. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0037 — Portrait articulé** (L10 p.35, absent) : Perception −2 DR découvre les charnières ; Crochetage −1 DR ouvre le mécanisme. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0038 — Identifier Belrado** (L10 p.35, absent) : Histoire ou Évaluation +0 DR rappelle l’identité du peintre ; son fantôme peint à chaque pleine lune. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0039 — Suivre le corbeau du Rookery** (L10 p.36, absent) : Perception −2 DR permet de repérer la silhouette qui ouvre la fenêtre au corbeau messager. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0043 — Vents funestes** (L10 p.47, absent) : Focalisation et Langue Magick pour utiliser les Vents : +1 DR sur les terres du château ; aucun bonus à Ghyran, +2 DR pour la Nécromancie. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0044 — Navigation dans le château** (L10 p.48, absent) : Avec la carte d’Andrei : Navigation −2 DR ; réussite vers la pièce voulue, échec sur table d100 des onze salles. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0045 — Salles cachées** (L10 p.48, absent) : Savoir Magie ou Nécromancie −3 DR révèle les vides ; Navigation −2 DR atteint ensuite au hasard l’une des quatre salles cachées. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0046 — Labyrinthe — dissipation et discernement** (L10 p.48, absent) : −3 DR aux Tests de dissipation ou d’identification de magie ; réduire ce malus de 1 DR par rang de Sens aiguisés. Aucun plancher ajouté au texte ; Acuité non spécialisée dans la clause source.
+- **F-L10-0047 — Labyrinthe — Dhar** (L10 p.48, absent) : Toutes les Focalisations Dhar dans le château bénéficient de l’Avantage. Avantage V5 conservé : aucune conversion automatique en Élan.
+- **F-L10-0048 — Ouïe des esprits** (L10 p.48, absent) : Double vue permet d’entendre la banshee et le chœur spectral dans la grande salle. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0049 — Orrery — savoir astronomique** (L10 p.49, absent) : +2 DR aux Savoirs Astronomie et Astrologie ; +4 DR si le sujet est Morrslieb. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0050 — Orrery — corruption** (L10 p.49, absent) : Utiliser l’astrolabe impose le contact proche avec la malepierre et expose à la Corruption. Degré non chiffré ; ne pas fabriquer une difficulté.
+- **F-L10-0051 — Deuil illusoire** (L10 p.49, absent) : Savoir Histoire −2 DR rappelle la famille de van Hal ; toucher les corps ou leurs ornements les dissout en brume. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0052 — Van Hal — perception des vivants** (L10 p.50, absent) : Van Hal sent instinctivement tout être vivant dans Vanhaldenschlosse. Capacité de prose distincte du profil E0-P-370.
+- **F-L10-0053 — Chambre de séance — liens** (L10 p.50, absent) : Les cercles contiennent des esprits, y compris un puissant démon ; le réseau entretient indéfiniment les morts-vivants du château. Ne crée ni nouveau sort de Vampire ni recette de rituel inventée.
+- **F-L10-0054 — Miroir — libération** (L10 p.50, absent) : Effacer salpêtre et myrrhe des cercles libère le démon lié ; détruire le château peut aussi briser sa prison. Condition d’un dispositif local, aucun ingrédient de magie générale réintroduit.
+- **F-L10-0055 — Vizir — nexus** (L10 p.50, absent) : Détruire le vizir déstabilise le flux magique du château. Effet déterminé localement mais intensité non chiffrée ; aucune table inventée.
+- **F-L10-0056 — Interroger les rois morts** (L10 p.50, absent) : Savoir Histoire −2 DR ou Sylvanie −1 DR donne des informations à échanger contre les secrets du château. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0058 — Élémentaire corrompu — liaison** (L10 p.51, absent) : Couper entièrement le lien entre menhir et puits inflige les dégâts du Sablier de Shyish brisé, sans son bénéfice. Exception propre à cette créature ; le profil de l’élémentaire de L17 ne la prouve pas.
+- **F-L10-0059 — Démolition du réseau** (L10 p.51, absent) : Les explosifs de Bela doivent être placés aux points essentiels du flux magique, de la tour au puits ; sape ordinaire insuffisante mais inutile. Pas de quantité ou Test de démolition inventé.
+- **F-L10-0062 — Le Dormeur — malédiction** (L10 p.55, absent) : Réveiller le prophète ivre fait automatiquement échouer un Test choisi par le MJ le lendemain. Échéance de campagne, jamais temps de l’ordinateur.
+- **F-L10-0063 — Disparitions du Butcher’s Rest** (L10 p.57, absent) : Commérage réussi révèle les disparitions après visite à la taverne. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0064 — Fort Oberstyre — histoire** (L10 p.63, absent) : Savoir Histoire −2 DR rappelle les assauts et la provenance des horreurs du fort. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0065 — Cannibalisme — corruption** (L10 p.68, absent) : Manger sciemment de la chair humaine expose à une influence corruptrice modérée. Exposition physique conservée ; séquelle mentale recensée séparément selon Q18.
+- **F-L10-0069 — Pistes des collines hantées** (L10 p.69, absent) : Survie en extérieur +0 DR identifie les os et cordes comme des pistes olfactives destinées à contenir les goules. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0078 — Gabriella — morsure gratuite** (L10 p.86, absent) : Perdre l’Élan permet l’attaque gratuite de morsure du profil. Perte imprimée sans montant ; ne pas inventer 1 Élan ni déduire cette clause du seul Trait Bite.
+- **F-L10-0081 — Bylorak — accès aux bénédictions** (L10 p.88, absent) : Radu accède à Souffle, Vigueur, Protection, Récupération, Ténacité et Sagesse via Bénir. Accès du culte propre, distinct des six effets déjà inventoriés et du seul profil E0.
+- **F-L10-0082 — Radu — cécité permanente** (L10 p.88, absent) : Le prêtre est toujours considéré Aveuglé. Une pose générique d’État ne prouve pas le verrou permanent de ce personnage.
 
 ### Magie générale et objets
 
@@ -5210,6 +5266,30 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L07-0326 — Fleuve7–8 — débris** (L07 p.206, absent) : Manœuvre+0 ou deux touches de10 dégâts bateau. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L07-0327 — Fleuve9–10 — vent debout** (L07 p.206, absent) : Voile impossible ; Rame+0 chacun ou1 Exténué. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L07-0328 — Bateaux — aides propres** (L07 p.206, absent) : Canot+2 DR Rame,skiff+1 DR Voile/Rame,knarr−1 DR Voile/Rame ; drakkar M6 à30 rameurs au lieu de4 ; patrouilleur1 PA. Valeurs et équipages contrôlés visuellement, aucun profil de bateau complet copié.
+- **F-L10-0002 — Reconnaître un site sylvanien** (L10 p.10, absent) : Savoir Sylvanie +4 DR, Stirland +2 DR ou Empire −1 DR permet de rappeler l’histoire du lieu ; le MJ peut aussi donner l’information. Pas de conversion V4 : crédits V5 p.II.
+- **F-L10-0007 — Fréquence des événements routiers** (L10 p.20, absent) : Tirer un d10 par jour à pied ; deux tirages par jour à cheval ou en diligence. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0008 — Terre de malepierre** (L10 p.20, absent) : Prélever la malepierre ou séjourner trop longtemps exige Endurance +0 DR ; échec : 1 Corruption. Seuil de séjour non chiffré, aucune durée inventée.
+- **F-L10-0009 — Reconnaître les funérailles fluviales** (L10 p.20, absent) : Savoir Sylvanie identifie le rite destiné à empêcher le mort de revenir. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0011 — Bateau strigany — manœuvrabilité** (L10 p.21, absent) : Le bateau strigany donne +2 DR aux manœuvres et possède Smoothing ; valeurs navales propres au tableau. Taille, E, Blessures et cargaison sont des unités navales, pas des DR.
+- **F-L10-0012 — Événements fluviaux sylvaniens** (L10 p.23, absent) : Un d10 par jour sur dix résultats ; marais 1, encrassement 2, collision 3, échouage 4, cargaison 5, monstres 6, barges 7, observateur 8, entrave 9, profondeurs 10. Colonnes réattribuées sur image, pas selon l’extraction désalignée.
+- **F-L10-0013 — Encrassement de coque** (L10 p.23, absent) : −1 DR aux Tests de conduite et −1 Mouvement jusqu’au nettoyage dans un mouillage approprié. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0014 — Collision fluviale** (L10 p.23, absent) : Manœuvre −1 DR, Ramer ou Voile modifié par Man ; échec : 12+DR dégâts et 20 % de risque d’échouage. Signe des DR de l’échec non précisé davantage : conserver la formule publiée.
+- **F-L10-0015 — Échouage sylvanien** (L10 p.23, absent) : La coque subit 12 dégâts réduits par E et armure ; dégagement par Force pénalisée de l’encombrement du bateau et du fret, aide sans plafond de personnes ou bêtes. Le malus en encombrement est imprimé en V5 ; ne pas inventer coefficient de conversion.
+- **F-L10-0016 — Cargaison échouée** (L10 p.23, absent) : Récupérer 1d10 encombrement de marchandise commune, revendable à 1 CO par encombrement dans un établissement assez grand. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0017 — Filet de cadavres** (L10 p.23, absent) : Couper les herbes prend plusieurs minutes ; fouiller rapporte 4d10 CO ; sur 1 au d10, 1d10 zombies embarquent. Pas de profil de zombie recopié, ni durée exacte inventée.
+- **F-L10-0018 — Mains des profondeurs — acquisition** (L10 p.23, absent) : Force +0 DR ; échec : entraîné à l’eau, Empêtré égal aux DR de l’échec et début de noyade. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0019 — Mains des profondeurs — libération** (L10 p.23, absent) : Libération par lutte contre Force 45 ; les alliés doivent plonger pour aider. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0020 — Événements de forêt et vallée** (L10 p.25, absent) : Deux d10 par jour à travers la campagne ; dix rencontres, dont hospitalité strigany, victime contagieuse et brouillard séparateur. Les rencontres purement narratives ne sont pas dix nouvelles règles autonomes.
+- **F-L10-0021 — Hospitalité strigany profanée** (L10 p.25, absent) : Nuire délibérément aux hôtes après avoir accepté leur protection donne 1 Corruption. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0022 — Morsure du prisonnier** (L10 p.25, absent) : Après morsure, Endurance +0 DR ; échec : Blessure suppurante. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0023 — Séparation dans le brouillard** (L10 p.25, absent) : Le brouillard réduit la visibilité à quelques pas ; sans précaution immédiate, les voyageurs se séparent en suivant des formes trompeuses. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0024 — Événements de marais et tourbières** (L10 p.27, absent) : Deux d10 par jour ; dix résultats, les effets propres de l’armure, des fleurs, des esprits et des créatures restent séparés. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0025 — Armure rouillée du marais** (L10 p.27, absent) : Le plastron et les brassards récupérés possèdent Partielle en raison de la corrosion. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0026 — Fleurs acides** (L10 p.27, absent) : Cueillir une fleur jaune à taches rouges inflige 1 Blessure aux doigts. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0027 — Larcin des esprits** (L10 p.27, absent) : Opposition Vigilance/Escamotage contre Escamotage 50 ; échec : un petit objet d’inventaire disparaît. Conserver les graphies source Awareness/Slight of Hand comme variante, pas de statistique adverse inventée.
+- **F-L10-0028 — Créatures sylvaniennes au sol** (L10 p.27, absent) : Esquive +0 DR pour éviter les créatures ; échec : 1 Corruption. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0029 — Regard sous les eaux** (L10 p.27, absent) : Calme +0 DR ou exposition à une influence corruptrice mineure. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0030 — Statue d’orientation** (L10 p.27, absent) : Navigation +0 DR réussie révèle la direction d’une localité voisine. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 
 ### Voyage et navigation
 
@@ -6296,6 +6376,13 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L09-0122 — Doomreaver — armement** (L09 p.60, absent) : Aucune arme montée ; compte sur attaques du Helldrake qui tire le navire. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L09-0123 — Forteresse de mort — batteries** (L09 p.60, absent) : Howdah sur Dragon des mers avec trois balistes, une par bord et une arrière. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L09-0124 — Harbinger — transport** (L09 p.60, absent) : Vaisseau fermé tiré par jeune Helldrake, principalement transport personnel et débarquement. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0031 — Cataplasme de mousse des fens** (L10 p.32, absent) : Fonctionne comme un cataplasme de soins ; prix local 10 shillings, encombrement nul. Équivalence d’objet donnée explicitement, pas preuve d’une sélection dédiée dans l’outil.
+- **F-L10-0032 — Graveroot — guérison** (L10 p.32, absent) : Une dose guérit les infections causées par les morts-vivants. Variante de remède propre à L10 ; ne pas assimiler un homonyme à toute la clause.
+- **F-L10-0033 — Graveroot — toxicité** (L10 p.32, absent) : Tirer un d10 à chaque dose ; sur 1, acquérir Empoisonné. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0034 — Épée de Drakenhof** (L10 p.32, absent) : Épée à 1 CO, encombrement 1, qualités Fine et Pratique, défaut esthétique de lame. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L10-0036 — Waldenloaf — maladie** (L10 p.32, absent) : Sustente un jour ; après plus de trois jours consécutifs, 20 % de risque de Courante galopante. Fréquence exacte du risque ensuite non explicitée ; ne pas inventer un jet quotidien.
+- **F-L10-0041 — Arbalète lourde Catechist** (L10 p.40, absent) : Portée 60, dégâts +9, Recharge 2 et Pénétrante ; 10 CO, encombrement 3, exotique. Table lue en image : pas l’arbalète ordinaire du profil nain p12.
+- **F-L10-0042 — Pieu Catechist** (L10 p.40, absent) : Munition à 2 shillings, encombrement 0, portée quart de l’arme, dégâts non chiffrés ; Empaleuse et Dévastatrice. Ne pas remplacer le tiret de dégâts par un nombre inventé.
 
 ### Équipement et artisanat
 
