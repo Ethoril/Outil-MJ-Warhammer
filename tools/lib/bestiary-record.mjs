@@ -2,6 +2,7 @@
  * Fiche de jeu d'un profil de bestiaire : les valeurs imprimées telles quelles (aucun recalcul de BF, de Taille ni d'armure), les noms
  * reconnus de compétences, de Traits et de talents, les mots-clés. Aucune clause de règle n'est recopiée (voir l'inventaire).
  */
+import { readFileSync } from 'node:fs';
 import { SKILL_GROUPS, SKILL_GROUP_ALIASES, skillNameFr } from './bestiary-glossary.mjs';
 import { BASE_REFERENTIAL, keywordAncestors, normalizeKeywordText, resolveKeyword } from '../../js/core/creature-keywords.js';
 
@@ -9,7 +10,11 @@ const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']
 const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Ranged']);
 const SIZES = new Set(['tiny', 'little', 'small', 'average', 'large', 'enormous', 'monstrous']);
 
-const isNoise = text => text.length > 40 || /(?:^|\s)[a-z.']/.test(text.replace(/\(.*\)/, '')) || /\b(?:the|and|with|who|that|which|his|her|their|they|will|when|from)\b/i.test(text) || /\d/.test(text.replace(/\(.*\)/, ''));
+const CATALOGUE_TALENTS = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(entry => String(entry.englishName || '').toLowerCase()).filter(Boolean));
+/** Un nom présent au catalogue des talents n'est jamais du bruit (« Iron Will », « Strike to Stun »…). */
+export const isCatalogueTalent = text => CATALOGUE_TALENTS.has(text.replace(/\(.*\)/, '').replace(/\s+/g, ' ').trim().toLowerCase());
+
+const isNoise = text => !isCatalogueTalent(text) && (text.length > 40 || /(?:^|\s)[a-z.']/.test(text.replace(/\(.*\)/, '')) || /\b(?:the|and|with|who|that|which|his|her|their|they|will|when|from)\b/i.test(text) || /\d/.test(text.replace(/\(.*\)/, '')));
 
 /** Compétences : seules celles dont le groupe est connu et la valeur chiffrée sont gardées ; le reste est du texte voisin (liste `dropped`). */
 export function cleanSkills(skills = []) {

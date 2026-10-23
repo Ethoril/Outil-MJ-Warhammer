@@ -530,6 +530,9 @@
      "name": "Lip Reading"
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
      "name": "Mimic"
     },
     {
@@ -546,6 +549,9 @@
     },
     {
      "name": "Suave"
+    },
+    {
+     "name": "Tower of Memories"
     }
    ],
    "trappings": [
@@ -1346,6 +1352,9 @@
      "name": "Lip Reading"
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
      "name": "Mimic"
     },
     {
@@ -1363,6 +1372,9 @@
     },
     {
      "name": "Suave"
+    },
+    {
+     "name": "Tower of Memories"
     }
    ],
    "trappings": [
@@ -1554,6 +1566,9 @@
     },
     {
      "name": "Disarm"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "trappings": [
@@ -1625,7 +1640,11 @@
      "ref": "E0-T-033"
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "trappings": [
     "Club",
     "Ring of Keys"
@@ -1715,7 +1734,11 @@
      "value": 37
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "trappings": [
     "Club",
     "Dagger",
@@ -1897,6 +1920,9 @@
    "talents": [
     {
      "name": "Hardy"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Strike Mighty Blow"
@@ -2858,7 +2884,13 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Petty Magic"

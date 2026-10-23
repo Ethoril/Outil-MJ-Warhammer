@@ -679,6 +679,9 @@
      "rank": 3
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
     },
     {
@@ -1936,6 +1939,9 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
     },
     {
@@ -2413,6 +2419,9 @@
      "name": "Sturdy"
     },
     {
+     "name": "Suffuse With (Wind) (see page 186)"
+    },
+    {
      "name": "Very Strong"
     },
     {
@@ -2632,6 +2641,9 @@
     },
     {
      "name": "Small"
+    },
+    {
+     "name": "Suffuse With (Wind) (see page 186)"
     }
    ],
    "spells": {
@@ -2929,6 +2941,9 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Lightning Reflexes"
     },
     {
@@ -2967,6 +2982,9 @@
     },
     {
      "name": "Strong-minded"
+    },
+    {
+     "name": "Tower of Memories"
     },
     {
      "name": "Very Resilient"

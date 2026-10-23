@@ -2386,6 +2386,9 @@
     },
     {
      "name": "Doomed (No Master but the River)"
+    },
+    {
+     "name": "Nose for Trouble"
     }
    ],
    "trappings": [
@@ -3356,6 +3359,9 @@
     }
    ],
    "talents": [
+    {
+     "name": "Break and Enter"
+    },
     {
      "name": "Criminal"
     },

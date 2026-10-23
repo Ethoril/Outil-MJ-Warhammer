@@ -1639,7 +1639,11 @@
      "modifier": true
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Gifts of Khaine"
+    }
+   ],
    "trappings": [
     "Dagger",
     "Disguise",
@@ -2083,7 +2087,11 @@
      "modifier": true
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Gifts of Khaine"
+    }
+   ],
    "trappings": [
     "Blood-stained Robes",
     "Sacred Dagger",
@@ -2179,6 +2187,9 @@
    "talents": [
     {
      "name": "Animal Affinity"
+    },
+    {
+     "name": "Crack the Whip"
     },
     {
      "name": "Read/Write"
@@ -2394,6 +2405,9 @@
     },
     {
      "name": "Etiquette (Druchii Nobles)"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Schemer"

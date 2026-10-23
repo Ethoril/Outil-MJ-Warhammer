@@ -2828,6 +2828,9 @@
      "name": "Combat Aware"
     },
     {
+     "name": "War leader"
+    },
+    {
      "name": "Etiquette (Soldiers)"
     }
    ],
@@ -3230,6 +3233,9 @@
      "rank": 4
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Linguistics"
     },
     {
@@ -3238,6 +3244,9 @@
     },
     {
      "name": "Magical Sense"
+    },
+    {
+     "name": "Master of Disguise"
     },
     {
      "name": "Master Orator"
@@ -3283,7 +3292,13 @@
      "rank": 2
     },
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Tenacious"
+    },
+    {
+     "name": "Tower of Memories"
     },
     {
      "name": "Tzeentch's Blessing"
@@ -5420,7 +5435,13 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Petty Magic"

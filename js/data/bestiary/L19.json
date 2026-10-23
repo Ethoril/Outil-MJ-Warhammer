@@ -95,6 +95,9 @@
      "name": "Strike Mighty Blow"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Tenacious"
     }
    ],
@@ -213,6 +216,9 @@
     },
     {
      "name": "Shieldsman"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Tenacious"
@@ -989,6 +995,9 @@
      "name": "Read/Write"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Surgery"
     }
    ],
@@ -1102,6 +1111,9 @@
     }
    ],
    "talents": [
+    {
+     "name": "Break and Enter"
+    },
     {
      "name": "Criminal"
     },
@@ -1543,6 +1555,9 @@
      "name": "Sharp"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Supportive"
     }
    ],
@@ -1858,6 +1873,9 @@
      "name": "Fearless (Watchmen)"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Menacing"
     },
     {
@@ -1868,6 +1886,9 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "keywords": [
@@ -2244,6 +2265,10 @@
     },
     {
      "name": "Strong Minded"
+    },
+    {
+     "name": "Tower of Memories",
+     "rank": 4
     },
     {
      "name": "Witch!"
@@ -2806,6 +2831,9 @@
     },
     {
      "name": "Blather"
+    },
+    {
+     "name": "Break and Enter"
     },
     {
      "name": "Criminal"

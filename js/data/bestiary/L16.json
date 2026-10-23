@@ -513,6 +513,9 @@
      "name": "Inspiring"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Long Memory"
     },
     {
@@ -816,6 +819,9 @@
     },
     {
      "name": "Iron Jaw"
+    },
+    {
+     "name": "Iron Will"
     },
     {
      "name": "Long Memory"
@@ -3268,6 +3274,12 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strike to Injure"
     }
    ],
    "trappings": [

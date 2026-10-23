@@ -607,6 +607,9 @@
      "name": "Step Aside"
     },
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow",
      "rank": 2
     },
@@ -3269,6 +3272,9 @@
      "name": "Alley Cat"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Etiquette (Criminals, Nobles)"
     },
     {
@@ -3287,7 +3293,13 @@
      "name": "Sixth Sense"
     },
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Tenacious"
+    },
+    {
+     "name": "Tower of Memories"
     }
    ],
    "trappings": [
@@ -4054,7 +4066,13 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Petty Magic"

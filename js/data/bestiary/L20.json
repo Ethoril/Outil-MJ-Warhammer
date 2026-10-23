@@ -212,6 +212,9 @@
      "rank": 2
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Magical Sense",
      "rank": 2
     },
@@ -1779,6 +1782,9 @@
      "name": "Alley Cat"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Catfall"
     },
     {
@@ -2358,6 +2364,10 @@
     {
      "name": "Inspiring",
      "rank": 3
+    },
+    {
+     "name": "Iron Will",
+     "rank": 2
     },
     {
      "name": "Luck",
@@ -2995,6 +3005,9 @@
      "rank": 3
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Marksman"
     },
     {
@@ -3434,6 +3447,9 @@
      "name": "Fearless (Criminals)"
     },
     {
+     "name": "Nose for Trouble"
+    },
+    {
      "name": "Read/ Write"
     },
     {
@@ -3448,6 +3464,9 @@
     },
     {
      "name": "Sprinter"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Strong Swimmer"
@@ -3870,6 +3889,10 @@
      "name": "Super Numerate"
     },
     {
+     "name": "Tower of Memories",
+     "rank": 2
+    },
+    {
      "name": "Warrior Born"
     }
    ],
@@ -4174,6 +4197,9 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "trappings": [
@@ -5002,6 +5028,9 @@
      "name": "Artistic"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Catfall"
     },
     {
@@ -5227,6 +5256,9 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Kingpin"
     },
     {
@@ -5240,6 +5272,9 @@
     },
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Suave"
@@ -5932,6 +5967,10 @@
     },
     {
      "name": "Super Numerate"
+    },
+    {
+     "name": "Tower of Memories",
+     "rank": 4
     }
    ],
    "trappings": [
@@ -6137,6 +6176,10 @@
     {
      "name": "Super Numerate",
      "rank": 2
+    },
+    {
+     "name": "Tower of Memories",
+     "rank": 3
     },
     {
      "name": "Wealthy",
@@ -6738,6 +6781,9 @@
      "name": "Blather"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Briber"
     },
     {
@@ -6779,6 +6825,12 @@
     {
      "name": "Luck",
      "rank": 5
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Numismatics"

@@ -426,6 +426,9 @@
      "rank": 3
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Menacing"
     },
     {
@@ -1406,6 +1409,9 @@
      "name": "Instinctive Diction"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Old Salt"
     },
     {
@@ -1605,6 +1611,9 @@
     {
      "name": "Instinctive Diction",
      "rank": 3
+    },
+    {
+     "name": "Iron Will"
     },
     {
      "name": "Luck"
@@ -2174,6 +2183,9 @@
      "name": "Inspiring"
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Luck",
      "rank": 2
     },
@@ -2708,6 +2720,9 @@
      "name": "Super Numerate"
     },
     {
+     "name": "Tower of Memories"
+    },
+    {
      "name": "War Wizard"
     }
    ],
@@ -2895,6 +2910,9 @@
     },
     {
      "name": "Super Numerate"
+    },
+    {
+     "name": "Tower of Memories"
     },
     {
      "name": "War Wizard"

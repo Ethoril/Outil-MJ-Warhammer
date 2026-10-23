@@ -169,6 +169,9 @@
      "rank": 4
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Luck",
      "rank": 3
     },
@@ -480,7 +483,11 @@
      "ref": "E0-T-086"
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -1804,6 +1811,9 @@
      "rank": 2
     },
     {
+     "name": "Iron Will"
+    },
+    {
      "name": "Marksman"
     },
     {
@@ -2735,6 +2745,9 @@
     {
      "name": "Inspiring",
      "rank": 4
+    },
+    {
+     "name": "Iron Will"
     },
     {
      "name": "Lip Reading"
@@ -3782,12 +3795,19 @@
      "name": "Magnum Opus"
     },
     {
+     "name": "Master of Disguise",
+     "rank": 6
+    },
+    {
      "name": "Master Orator",
      "rank": 6
     },
     {
      "name": "Mimic",
      "rank": 3
+    },
+    {
+     "name": "Nose for Trouble"
     },
     {
      "name": "Public Speaker",
@@ -4428,6 +4448,9 @@
     },
     {
      "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Iron Will"
     },
     {
      "name": "Luck"
@@ -5483,6 +5506,9 @@
      "name": "Lip Reading"
     },
     {
+     "name": "Master of Disguise"
+    },
+    {
      "name": "Noble Blood"
     },
     {
@@ -6485,6 +6511,9 @@
     },
     {
      "name": "Robust"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "nameFrSource": "proposition"

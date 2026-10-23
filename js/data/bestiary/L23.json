@@ -850,6 +850,9 @@
      "name": "Noble Blood"
     },
     {
+     "name": "Nose for Trouble"
+    },
+    {
      "name": "Roughrider"
     },
     {
@@ -1015,6 +1018,9 @@
      "name": "Coolheaded"
     },
     {
+     "name": "Crack the Whip"
+    },
+    {
      "name": "Fearless (Outlaws)"
     },
     {
@@ -1022,6 +1028,9 @@
     },
     {
      "name": "Marksman"
+    },
+    {
+     "name": "Nose for Trouble"
     }
    ],
    "trappings": [
@@ -1155,6 +1164,9 @@
    "talents": [
     {
      "name": "Relentless"
+    },
+    {
+     "name": "Strike to Stun"
     },
     {
      "name": "Suave"
@@ -2762,6 +2774,9 @@
      "name": "Alley Cat"
     },
     {
+     "name": "Break and Enter"
+    },
+    {
      "name": "Criminal"
     },
     {
@@ -4074,6 +4089,9 @@
    "talents": [
     {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
     }
    ],
    "trappings": [
@@ -4498,7 +4516,11 @@
      "value": 35
     }
    ],
-   "talents": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    }
+   ],
    "trappings": [
     "Axe",
     "Black Mask",
@@ -5631,6 +5653,9 @@
     }
    ],
    "talents": [
+    {
+     "name": "Crack the Whip"
+    },
     {
      "name": "Etiquette (Soldiers)"
     },
