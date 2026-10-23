@@ -1472,7 +1472,7 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       if (!canMutate()) return false;
       const participant = combat.participants.get(id); if (!participant) return;
       if (persistence) return api.executeCommand('remove-participant', draft => {
-        const participants = (draft.combat?.participants || []).filter(item => item.id !== id);
+        const participants = (draft.combat?.participants || []).filter(item => item.id !== id).map(item => item.extensions?.v5?.familiarOf?.masterId === id ? withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; }) : item);
         const transition = participant.zone === 'active' ? removeFromCombat({ participants: draft.combat?.participants || [], order: draft.combat?.order || [], currentActorId: draft.combat?.currentActorId, participantId: id }) : null;
         return {
           ...draft,
@@ -1485,6 +1485,11 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
       recordSnapshot('remove-participant');
       const turnTransition = participant.zone === 'active' ? removeFromCombat({ participants: Array.from(combat.participants.values()), order: combat.order, currentActorId: combat.currentActorId, participantId: id }) : null;
       combat.participants.delete(id);
+      combat.participants.forEach((item, key) => {
+        if (item.extensions?.v5?.familiarOf?.masterId !== id) return;
+        const freed = withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+        combat.participants.set(key, freed); markDirty(`combat/participants/${key}`, freed);
+      });
       combat.order = turnTransition ? turnTransition.order : combat.order.filter(x => x !== id);
       if (turnTransition) combat.currentActorId = turnTransition.currentActorId;
       else if (combat.currentActorId === id) combat.currentActorId = null;

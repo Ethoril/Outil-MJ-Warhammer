@@ -13,7 +13,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q6 | FAIT | (voir `git log`, « Q6 ») |
 | Q7 | FAIT | (voir `git log`, « Q7 ») |
 | Q8 | FAIT | (voir `git log`, « Q8 ») |
-| Q9, Q10, R | à faire | — |
+| Q9 | FAIT | (voir `git log`, « Q9 ») |
+| Q10, R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -135,3 +136,10 @@ Branché / non appelé (grep dans `js/`) :
 - **Branché** : `attacksAreMagical` → `weaponAttackNature` (`js/core/v5-magic-combat.js`), appelé par `js/core/resolution.js:603` (une attaque d'Artificiel, Démoniaque ou Magique est magique pour les Protections de la cible, sauf déclaration contraire du MJ). `planNaturalAttack` (Langue, Souffle) est appelé par `js/core/v5-store-action.js:69`.
 - **Code testé, non appelé** : `planSwarm`, `planPsychology` (Bestial, Effrayé), `planCreatureMagic` (Dressé) n'ont aucun appelant dans `js/` hors de leurs modules (chantier suivant du plan).
 - Suite complète : 4295 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
+
+## Q9 — liens maître-familier (FAIT)
+
+- `js/core/familiars.js` (`validateFamiliarLink`) : nouveau refus `familiar-is-master` (le participant visé a déjà un familier) ; `master-is-familiar` existait déjà. `js/core/store.js` (`removeParticipant`, avec et sans persistance) : retirer le maître efface `familiarOf` de ses familiers dans la même commande ; Annuler remet maître, lien et familier.
+- Test : `tests/pro-q9-liens-familiers.test.js` (4 tests). Choix : `QE-Q9-1`.
+- Branché : `validateFamiliarLink` est appelé par `linkFamiliar` (js/core/store.js) ; la libération est dans `removeParticipant` (store.js). Aucun appelant de `linkFamiliar` dans l’interface (hors du store) : code testé, non appelé depuis l’UI (chantier suivant du plan).
+- Suite complète : seul échec, étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
