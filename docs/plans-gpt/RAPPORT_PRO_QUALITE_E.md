@@ -8,7 +8,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q1 | FAIT | (voir `git log`, « Q1 ») |
 | Q2 | FAIT | (voir `git log`, « Q2 ») |
 | Q3 | FAIT | (voir `git log`, « Q3 ») |
-| Q4 à Q10, R | à faire | — |
+| Q4 | FAIT | (voir `git log`, « Q4 ») |
+| Q5 à Q10, R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -78,3 +79,11 @@ Les compétences manquantes restantes ne viennent plus de `readSkills` : ce sont
 - Test : `tests/pro-q3-equipement.test.js` (4 profils et fonctions).
 - `trappings`, `notes` et `conditional` sont des données de livre sans appelant dans `js/` : code testé, non appelé.
 - Suite complète : 4266 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
+
+## Q4 — Traits et attaques (FAIT)
+
+- `tools/lib/bestiary-complement-data.mjs` : alias « Immune » → Immunity (les 3 Élémentaires incarnés de L17 gardent leur Immunité avec sa précision). `tools/lib/bestiary-record.mjs` : `Creature Weapons` produit des attaques ; l'arme V4 d'origine (Claws, Beak, Slam, Claw…) devient la précision du Trait et le multiplicateur (« 2 Claws ») est conservé ; une précision « see below » / « see above » est retirée.
+- Livres régénérés (23) : 9 fichiers modifiés (L07, L11, L17, L20, L21, L22, L23, L24, L26) ; seules des entrées sont ajoutées (attaques, précisions), 2 précisions « see … » retirées ; caractéristiques et Blessures intactes. Carrion (E0-P-757) : Bec +9 et 2 Griffes +7 en actions ; Hattie Adler (E0-P-641), carcasses L21 : une attaque.
+- Test : `tests/pro-q4-traits-attaques.test.js`.
+- Branché : `buildParticipantFromBestiary` (js/core/bestiary-profiles.js) transforme déjà `attacks` en actions ; les données sont donc utilisées. L'Immunité reste un Trait affiché, sans lecture générique par le moteur (code testé, non appelé).
+- Suite complète : un seul échec, étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).

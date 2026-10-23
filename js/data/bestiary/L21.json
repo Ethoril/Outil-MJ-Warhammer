@@ -951,6 +951,13 @@
     "Soc": null
    },
    "wounds": 12,
+   "attacks": [
+    {
+     "name": "Slam",
+     "damage": 6,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -973,6 +980,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Slam",
      "ref": "E0-T-288"
     },
     {
@@ -1031,6 +1039,13 @@
    },
    "wounds": 12,
    "size": "small",
+   "attacks": [
+    {
+     "name": "Slam",
+     "damage": 5,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -1058,6 +1073,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+5",
+     "param": "Slam",
      "ref": "E0-T-288"
     },
     {
@@ -1116,6 +1132,13 @@
    },
    "wounds": 8,
    "size": "small",
+   "attacks": [
+    {
+     "name": "Slam",
+     "damage": 4,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -1143,6 +1166,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+4",
+     "param": "Slam",
      "ref": "E0-T-288"
     },
     {
@@ -5510,6 +5534,12 @@
      "name": "Bite",
      "damage": 10,
      "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 8,
+     "trait": "Creature Weapons",
+     "count": 2
     }
    ],
    "traits": [
@@ -5525,6 +5555,8 @@
     {
      "name": "Creature Weapons",
      "rating": "+8",
+     "param": "Claws",
+     "count": 2,
      "ref": "E0-T-288"
     },
     {

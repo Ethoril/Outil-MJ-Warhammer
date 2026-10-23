@@ -3935,7 +3935,6 @@
     },
     {
      "name": "Creeping",
-     "param": "see below",
      "ref": "E0-T-278"
     },
     {
@@ -3949,7 +3948,6 @@
     },
     {
      "name": "Engulf",
-     "param": "see below",
      "ref": "E0-T-119"
     },
     {
@@ -4035,7 +4033,6 @@
    "traits": [
     {
      "name": "Aquatic",
-     "param": "see below",
      "ref": "E0-T-210"
     },
     {
@@ -4242,12 +4239,10 @@
     },
     {
      "name": "Capricious",
-     "param": "see below",
      "ref": "E0-T-281"
     },
     {
      "name": "Naiad War-Form",
-     "param": "see below",
      "ref": "E0-T-282"
     },
     {

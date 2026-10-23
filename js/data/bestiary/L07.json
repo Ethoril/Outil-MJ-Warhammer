@@ -5482,6 +5482,11 @@
    "size": "small",
    "attacks": [
     {
+     "name": "Tongue Attack",
+     "damage": 3,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Bite",
      "damage": 3,
      "trait": "Weapon"
@@ -5524,6 +5529,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+3",
+     "param": "Tongue Attack",
      "printed": 5,
      "ref": "E0-T-288"
     }
@@ -6607,6 +6613,11 @@
      "trait": "Bite"
     },
     {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Teeth",
      "damage": 5,
      "trait": "Weapon"
@@ -6621,6 +6632,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Claws",
      "ref": "E0-T-288"
     }
    ],

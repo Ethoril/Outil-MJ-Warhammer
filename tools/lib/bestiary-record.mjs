@@ -8,7 +8,7 @@ import { BASE_REFERENTIAL, keywordAncestors, normalizeKeywordText, resolveKeywor
 import { TRAPPING_JOINS } from './bestiary-overrides.mjs';
 
 const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
-const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Ranged']);
+const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Ranged', 'Creature Weapons']);
 const SIZES = new Set(['tiny', 'little', 'small', 'average', 'large', 'enormous', 'monstrous']);
 
 const CATALOGUE_TALENTS = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(entry => String(entry.englishName || '').toLowerCase()).filter(Boolean));
@@ -39,7 +39,14 @@ export function cleanTraits(traits = [], { canonical, traitRefs }) {
   for (const trait of traits) {
     const name = canonical(trait.name);
     if (!name) { dropped.push(trait.name); continue; }
-    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(trait.param ? { param: trait.param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(trait.count ? { count: trait.count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(trait.conditional ? { conditional: true } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
+    // « Claws +6 », « 2 Claws +4 », « Slam +6 » (V4) sont des Creature Weapons : l'arme nommée devient la précision, le multiplicateur est gardé.
+    const weapon = name === 'Creature Weapons' && !trait.param ? /^(?:(\d+)\s*[x×]?\s*)?([A-Za-z][A-Za-z ]*)$/.exec(String(trait.name).trim()) : null;
+    const named = weapon && weapon[2].toLowerCase() !== 'creature weapons' ? weapon : null;
+    // Une précision « see below » renvoie à un texte voisin : ce n'est pas une valeur.
+    const seeElsewhere = /^see\s/i.test(trait.param || '');
+    const param = named ? named[2].replace(/^./, letter => letter.toUpperCase()) : (trait.param && !seeElsewhere ? trait.param : null);
+    const count = trait.count || (named?.[1] ? Number(named[1]) : 0);
+    kept.push({ name, ...(trait.rating !== undefined ? { rating: trait.rating } : {}), ...(param ? { param } : {}), ...(trait.printed !== undefined ? { printed: trait.printed } : {}), ...(count ? { count } : {}), ...(trait.weapons ? { weapons: trait.weapons } : {}), ...(trait.conditional ? { conditional: true } : {}), ...(traitRefs.get(name) ? { ref: traitRefs.get(name) } : {}) });
   }
   return { kept, dropped };
 }

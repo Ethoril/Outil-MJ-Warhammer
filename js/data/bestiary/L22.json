@@ -2570,6 +2570,12 @@
      "name": "Bite",
      "damage": 5,
      "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Creature Weapons",
+     "count": 2
     }
    ],
    "traits": [
@@ -2585,6 +2591,8 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Claws",
+     "count": 2,
      "ref": "E0-T-288"
     },
     {
@@ -4208,15 +4216,31 @@
    },
    "wounds": 21,
    "size": "large",
+   "attacks": [
+    {
+     "name": "Beak",
+     "damage": 9,
+     "trait": "Creature Weapons"
+    },
+    {
+     "name": "Claws",
+     "damage": 7,
+     "trait": "Creature Weapons",
+     "count": 2
+    }
+   ],
    "traits": [
     {
      "name": "Creature Weapons",
      "rating": "+9",
+     "param": "Beak",
      "ref": "E0-T-288"
     },
     {
      "name": "Creature Weapons",
      "rating": "+7",
+     "param": "Claws",
+     "count": 2,
      "ref": "E0-T-288"
     },
     {

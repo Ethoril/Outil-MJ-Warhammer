@@ -2035,6 +2035,11 @@
      "ref": "E0-T-026"
     },
     {
+     "name": "Immunity",
+     "param": "All Fire",
+     "ref": "E0-T-031"
+    },
+    {
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
@@ -2130,6 +2135,11 @@
      "ref": "E0-T-026"
     },
     {
+     "name": "Immunity",
+     "param": "Shyish",
+     "ref": "E0-T-031"
+    },
+    {
      "name": "Size",
      "param": "Enormous",
      "ref": "E0-T-045"
@@ -2213,6 +2223,11 @@
      "name": "Horns",
      "rating": "+10",
      "ref": "E0-T-028"
+    },
+    {
+     "name": "Immunity",
+     "param": "Ghur",
+     "ref": "E0-T-031"
     },
     {
      "name": "Size",

@@ -4828,6 +4828,13 @@
    "armour": {
     "ap": 1
    },
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 6,
+     "trait": "Creature Weapons"
+    }
+   ],
    "traits": [
     {
      "name": "Belligerent",
@@ -4840,6 +4847,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Claws",
      "ref": "E0-T-288"
     },
     {

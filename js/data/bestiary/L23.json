@@ -3428,6 +3428,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+6",
+     "param": "Tongue Attack",
      "ref": "E0-T-288"
     }
    ],
@@ -3520,6 +3521,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+3",
+     "param": "Tongue Attack",
      "ref": "E0-T-288"
     }
    ],
@@ -4792,7 +4794,6 @@
    "traits": [
     {
      "name": "Frenzy",
-     "param": "see above",
      "ref": "E0-T-024"
     },
     {
@@ -4841,6 +4842,11 @@
      "trait": "Bite"
     },
     {
+     "name": "Claw",
+     "damage": 5,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Horns",
      "damage": 6,
      "trait": "Horns"
@@ -4865,6 +4871,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+5",
+     "param": "Claw",
      "ref": "E0-T-288"
     },
     {
@@ -4977,6 +4984,11 @@
      "trait": "Bite"
     },
     {
+     "name": "Claw",
+     "damage": 3,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Weapon",
      "damage": 4,
      "trait": "Weapon"
@@ -4991,6 +5003,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+3",
+     "param": "Claw",
      "ref": "E0-T-288"
     },
     {
@@ -5076,6 +5089,11 @@
      "trait": "Bite"
     },
     {
+     "name": "Claw",
+     "damage": 4,
+     "trait": "Creature Weapons"
+    },
+    {
      "name": "Weapon",
      "damage": 5,
      "trait": "Weapon"
@@ -5090,6 +5108,7 @@
     {
      "name": "Creature Weapons",
      "rating": "+4",
+     "param": "Claw",
      "ref": "E0-T-288"
     },
     {
