@@ -46720,5 +46720,3242 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0001",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.6",
+    "question": "Implanter « Acquérir une entreprise » ? Acquisition à la création après fortune initiale, par une Activité ou en aventure ; une seule entreprise gérable par personnage ; copropriété possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0002",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.7",
+    "question": "Implanter « Financer la création » ? Payer le coût initial ; les créanciers exigent au moins 10 % d’apport collectif ; seules les sources disposant de leurs équipements produisent des revenus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0003",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.7",
+    "question": "Implanter « Compétence et statut de revenus » ? Chaque source permet sa compétence et son statut pour Gagner sa vie ou Revenu ; autre compétence et pertes de statut à l’appréciation MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0004",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.8",
+    "question": "Implanter « Dette et remboursement » ? La dette égale la part financée ; une Activité rembourse tout ou partie ; aucune limite de temps mais toute dette empêche une expansion ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0005",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.8",
+    "question": "Implanter « Intérêts d’entreprise » ? Payer les intérêts après événements et Activités, avant perte d’argent ; sans Activité ni réduction de dette ; plus d’intérêts une fois la dette soldée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0006",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.8",
+    "question": "Implanter « Premier impayé » ? Entretien : si le créancier accepte l’excuse, prochain versement triplé ; alternative, Faveur mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0007",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.8",
+    "question": "Implanter « Deuxième impayé » ? Avertissement et mesures coercitives au choix MJ ; alternative, Faveur majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0008",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.8",
+    "question": "Implanter « Troisième impayé ou refus définitif » ? Entreprise saisie ou détruite et représailles MJ ; alternative, Faveur importante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0009",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Expansion ordinaire » ? Une Activité du responsable, un palier à la fois parmi trois ; payer le coût, apport minimal 10 %, nouvelle dette et intérêts du modèle ; aucune dette préalable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0010",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement unique d’entreprise » ? Avant les Activités, un investisseur peut remplacer son événement personnel par celui de l’entreprise ; un seul événement par entreprise et période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0011",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 01–02 — faillite imminente » ? Perdre les avantages de la dernière expansion, dette et intérêts conservés ; remboursement intégral restaure les avantages. Sans expansion, fermeture et dettes maintenues ; sauvetage MJ possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0012",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 03–05 — récession » ? Ni Gagner sa vie ni Revenu par l’entreprise jusqu’à la fin de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0013",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 06–08 — vol » ? Perdre l’équipement portable le plus précieux ; récupération possible en aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0014",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 09–10 — inflation » ? Doubler les intérêts jusqu’au remboursement intégral de la dette.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0015",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 11–13 — dégradation » ? Un équipement gagne un défaut, un animal perd un dressage ou un employé gagne un état ; précision et durée MJ, destruction possible si déjà dégradé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0016",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 14–16 — concurrent » ? Au moins une Activité Revenu de l’entreprise exigée pendant cette période ; elle ne rapporte que la moitié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0017",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 17–20 — diversification forcée » ? La source de revenus choisie par le MJ est indisponible pendant ces Activités ; autres sources conservées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0018",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.9",
+    "question": "Implanter « Événement 21–23 — contrôle » ? Une Activité d’assistance au contrôle ou une amende de 10 % du plus élevé des coûts de création et dernière expansion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0019",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 24–26 — remise » ? Accepter la remise peut réduire les statuts de revenus ; refuser provoque une campagne de dénigrement, conséquences MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0020",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 27–30 — vacances » ? Le personnage ne peut choisir Revenu pendant la période suivante ; autres copropriétaires autorisés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0021",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 31–33 — prudence » ? Aucun créancier pour financer l’expansion durant les prochaines Activités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0022",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 34–36 — routine » ? Choisir une Activité Revenu avant la prochaine aventure si possible ; pas d’autre effet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0023",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 37–39 — départ » ? Un employé existant part ; remplaçant disponible au début de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0024",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 40–41 — créancier remplacé » ? Le créancier cède la dette à un autre ; dette maintenue, identité et relations décidées par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0025",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 42–44 — rénovation » ? Aucun Revenu aux prochaines Activités ; locaux ensuite améliorés, éventuels bonus de compétence MJ non chiffrés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0026",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 45–48 — visite » ? Dette remboursable avant l’aventure suivante sans consommer d’Activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0027",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 49–51 — embauche » ? Gagner un employé inexpérimenté, nécessitant formation et supervision MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0028",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 52–54 — démembrement » ? Avec expansion : céder les équipements et avantages du dernier palier pour solder toute dette ; nouvelle expansion ultérieure permise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0029",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événements 55–57 et 58–60 » ? Remplacer chaque plage par l’événement propre au modèle d’entreprise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0030",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 61–63 — activité normale » ? Aucun effet spécial.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0031",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.10",
+    "question": "Implanter « Événement 64–66 — copropriétaire » ? Accepter un copropriétaire solde la moitié de la dette mais impose ses orientations MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0032",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 67–69 — amélioration » ? Un équipement gagne une qualité, un animal un dressage ou un employé une compétence ; retrait d’un défaut ou état possible, détail MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0033",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 70–72 — fusion » ? Expansion immédiate sans Activité, même avec dette ; coût normal, nouveau financement ajouté à la dette et intérêts du nouveau palier jusqu’au remboursement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0034",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 73–75 — urgence » ? Une source choisie gagne un échelon de statut jusqu’au début de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0035",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 76–78 — bénéfice » ? Aucun effet supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0036",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 79–81 — expansion temporaire » ? Avantages du prochain palier jusqu’à la fin de l’aventure suivante, sans coût ni changement d’intérêts ; aucun palier supérieur inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0037",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 82–85 — autonomie » ? Une Activité Revenu immédiate de l’entreprise, hors maximum d’Activités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0038",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 86–88 — innovation » ? Nouvelle source avec équipement et effets MJ ; statut généralement égal au deuxième plus haut, compétence différente des sources existantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0039",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 89–91 — profits réinvestis » ? Une source choisie gagne durablement un échelon de statut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0040",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 92–94 — nouvel équipement » ? Dupliquer un équipement ou en choisir un de valeur au plus égale au plus élevé des coûts de création et dernière expansion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0041",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 95–97 — générosité » ? Pas d’intérêts à payer pendant cette période.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0042",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.11",
+    "question": "Implanter « Événement 98–100 — rachat » ? Accord des copropriétaires : perdre l’entreprise et ses avantages, solder la dette et partager deux fois le plus élevé des coûts de création et dernière expansion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0043",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.12",
+    "question": "Implanter « Messagerie — véhicules partagés » ? Un seul personnage peut tirer un revenu d’un moyen de transport par semaine, sauf véhicules multiples.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0044",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.12",
+    "question": "Implanter « Messagerie — territoire connu » ? Après Revenu, +20 aux Tests de voyage/navigation du territoire durant l’aventure suivante ; +40 si ville ou quelques villages.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0045",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.12",
+    "question": "Implanter « Messagerie — création et revenus » ? 20 pistoles, apport 2 ; intérêts 1 pistole. Revenus : Résistance Bronze4 ; Équitation Argent1 ; Conduite/Ramer Argent2 ; Voile Argent3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0046",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.12",
+    "question": "Implanter « Messagerie — expansion 1 » ? 10 CO/apport1/intérêts10 pistoles, transports et coursiers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0047",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.12",
+    "question": "Implanter « Messagerie — expansion 2 » ? 10 CO/apport1/intérêts10 pistoles, une source Argent5 et dépôt.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0048",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.12",
+    "question": "Implanter « Messagerie — expansion 3 » ? 30 CO/apport3/intérêts1 CO 10 pistoles, boutique Marchandage Argent1 et véhicule.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0049",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.12",
+    "question": "Implanter « Messagerie — territoire agrandi » ? Troisième expansion : province majeure au plus ; après Revenu, voyage +20, +40 si une province, +60 si ville/villages ; conserve la condition de l’Activité antérieure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0050",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.13",
+    "question": "Implanter « Messagerie — colis intercepté » ? Compensation égale au triple des intérêts actuels, en plus du paiement ordinaire ; récupération en aventure possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0051",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.13",
+    "question": "Implanter « Messagerie — campagne militaire » ? Revenus +50 % jusqu’au début de l’aventure suivante ; poursuivants pendant celle-ci.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0052",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.13",
+    "question": "Implanter « Atelier — spécialisation » ? Choisir Art ou Métier : +20 aux Tests de cette spécialité dans l’atelier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0053",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.13",
+    "question": "Implanter « Atelier — matériaux récupérés » ? La spécialité de Métier choisie ne paie pas les matériaux de l’Activité Fabrication ; exception, Invention.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0054",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.13",
+    "question": "Implanter « Atelier — création et revenus » ? 30 pistoles, apport 3 ; intérêts 1 pistole 6 sous. Revenus : Métier Bronze5 ; Art ou Métier Argent2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0055",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.13",
+    "question": "Implanter « Atelier — expansion 1 » ? 10 pistoles/apport1/intérêts inchangés, un apprenti par investisseur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0056",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.14",
+    "question": "Implanter « Atelier — apprentis formés » ? À la deuxième expansion, assistance de Métier +20 au lieu de +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0057",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.14",
+    "question": "Implanter « Atelier — pénurie » ? Pas de Revenu aux prochaines Activités ; trouver une nouvelle ressource pendant l’aventure suivante double les revenus de la période qui suit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0058",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.14",
+    "question": "Implanter « Atelier — commande urgente » ? Toutes les Activités avant la prochaine aventure doivent être Revenu pour obtenir l’équivalent d’un Revenu gratuit ; sinon aucun effet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0059",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.14",
+    "question": "Implanter « Atelier — expansion 2 » ? 10 CO/apport1/intérêts10 pistoles, atelier agrandi et choix revenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0060",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.14",
+    "question": "Implanter « Atelier — expansion 3 » ? 20 CO/apport2/intérêts1 CO, deuxième choix et guilde Commandement Or1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0061",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.14",
+    "question": "Implanter « Atelier — choix de la deuxième expansion » ? Choisir location Marchandage Argent1, nouveau Métier et spécialisation étendue, vente courante Argent2 ou commandes uniques Argent4 ; troisième expansion offre un second choix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0062",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — financement intégral » ? La création peut être entièrement empruntée, sans apport personnel ; intérêts spécifiques plus élevés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0063",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — Criminalité gratuite » ? Après investissement d’au moins 1 pistole, Criminel gratuit, une seule fois par personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0064",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — coffre » ? À la deuxième expansion, option coffre : découverte de la cache bancaire seulement sur 1 au d100.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0065",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — chef du crime » ? Troisième expansion : possibilité immédiate d’obtenir gratuitement Caïd ; formulation « purchase … for free » conservée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0066",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — création et revenus » ? 10 pistoles, apport nul ; intérêts 2 pistoles. Revenus : Discrétion Bronze4 ; Intimidation/Charme/CC Bronze5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0067",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — expansion 1 » ? 1 CO/apport2 pistoles/intérêts4 pistoles, recrues assistantes, territoire doublé, source Argent2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0068",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — expansion 2 » ? 10 CO/apport1/intérêts10 pistoles, territoire doublé, source Argent4 et un aménagement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0069",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.15",
+    "question": "Implanter « Bande — expansion 3 » ? 40 CO/apport4/intérêts2 CO, deuxième aménagement et tribut Intimidation Or1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0070",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.16",
+    "question": "Implanter « Bande — guerre de territoire » ? Remplacer Contrôle, Vacances, Fusion et Rachat par un conflit rival ; résolution par l’événement alternatif 1 ou aventure MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0071",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.16",
+    "question": "Implanter « Bande — défendre le territoire » ? Recul : aucun Revenu à cette période. Combattre : commencer la prochaine aventure Exténué et +20 pour interagir avec les criminels locaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0072",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.16",
+    "question": "Implanter « Bande — gros coup » ? Revenu +50 % avant la prochaine aventure, mais une seule Activité Revenu cette période et aucune à la période suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0073",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — prière locale » ? Choisir le dieu à la consécration : Prière de base et +20 pour le solliciter dans le temple.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0074",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — visions » ? Tout investisseur utilise Visions divines dans l’enceinte du temple.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0075",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — bénédiction ouverte » ? Deuxième expansion : une bénédiction du culte choisie utilisable par tous dans le temple, sauf bénéficiaires de bénédictions ou miracles d’un autre dieu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0076",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — miracle ouvert » ? Troisième expansion : un miracle du culte choisi utilisable par tous dans le temple, même restriction d’autre culte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0077",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — création et revenus » ? 10 pistoles, apport 1 ; intérêts 6 sous. Revenus : Charme Bronze3 ; Savoir(Théologie), Langue ou Savoir Argent1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0078",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — expansion 1 » ? 20 pistoles/apport2/intérêts1 pistole, dons Argent1 et relique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0079",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — expansion 2 » ? 10 CO/apport1/intérêts10 pistoles, dons Argent3 et un aménagement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0080",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.17",
+    "question": "Implanter « Temple — expansion 3 » ? 40 CO/apport4/intérêts2 CO, dons Or2 et défenseurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0081",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple — gratitude du fidèle » ? Endosser le péché du fidèle donne +20 aux Tests sociaux contre lui durant la prochaine aventure ; le Péché est renvoyé à l’inventaire Courroux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0082",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple — ferveur récompensée » ? Pour l’aventure suivante : Prière de base et Béni du temple ; déjà Béni de ce culte, accès à un miracle ; Béni d’un autre culte, aucun bénéfice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0083",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple — talents selon dieu » ? À l’intérieur seulement : talent du dieu investi ; rang supplémentaire si déjà connu et applicable. Liste détaillée par dieu conservée séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0084",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Manann — talent local » ? Investir dans le temple de Manann donne Maître et commandant sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0085",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Morr — talent local » ? Investir dans le temple de Morr donne Sans peur (Morts-vivants) sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0086",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Myrmidia — talent local » ? Investir dans le temple de Myrmidia donne Chef de guerre sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0087",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Ranald — talent local » ? Investir dans le temple de Ranald donne Tricheur sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0088",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Rhya — talent local » ? Investir dans le temple de Rhya donne Affinité animale, animaux domestiques sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0089",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Shallya — talent local » ? Investir dans le temple de Shallya donne Chirurgie sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0090",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Sigmar — talent local » ? Investir dans le temple de Sigmar donne Volonté de fer sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0091",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Taal — talent local » ? Investir dans le temple de Taal donne Affinité animale, animaux sauvages sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0092",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Ulric — talent local » ? Investir dans le temple de Ulric donne Assaut féroce sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0093",
+    "phase": "Talents",
+    "lot": "L02",
+    "source": "L02 p.18",
+    "question": "Implanter « Temple de Verena — talent local » ? Investir dans le temple de Verena donne Tour de mémoire sur place ; rang supplémentaire si déjà acquis et applicable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0095",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — autorité » ? Investir au moins 1 couronne donne +20 en Commandement contre les citoyens loyaux de l’Empire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0096",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — accès aux talents » ? Au moins 1 couronne investie : Guerrier né ajouté à la carrière si ordre séculier, Visions divines si templier ; pas d’achat gratuit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0097",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — chevalier en croisade » ? Un chevalier PNJ quitte la commanderie ; aucun effet si l’ordre n’en possède pas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0098",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — tournoi » ? Jusqu’à la fin de l’aventure suivante, nouvelle source CC(Cavalerie), Or 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0099",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — création et revenus » ? 5 CO, apport 10 pistoles ; intérêts 5 pistoles. Revenus : Évaluation Argent5 ; Charme/CC Argent4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0100",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — expansion 1 » ? 10 CO/apport1/intérêts10 pistoles, trois chevaliers, cotisations Commandement Argent5 et destriers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0101",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — expansion 2 » ? 30 CO/apport3/intérêts1 CO 10 pistoles, six chevaliers assistants, source Or2 et aménagement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0102",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.19",
+    "question": "Implanter « Ordre — expansion 3 » ? 40 CO/apport4/intérêts2 CO, douze chevaliers, objet magique, source Or4 et fortifications.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0103",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.20",
+    "question": "Implanter « Ordre — talents alternatifs » ? Soleil flamboyant : Chef de guerre ; Griffon : Affinité animale chevaux/demigriffons ; Loups blancs : Assaut féroce ; obligations propres à chaque ordre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0104",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — alcool de carrière » ? Un habitué peut ajouter Résistance à l’alcool aux compétences de sa carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0105",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — début ivre » ? Commencer l’aventure ivre : d10 d’ivresse et +1 Chance même au-delà du maximum ; retour au maximum normal à la séance suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0106",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — fournisseur coûteux » ? Trouver un fournisseur avant fin de l’aventure suivante ou diminuer le statut nourriture/boisson ; ampleur non chiffrée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0107",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — festival » ? Revenus +50 % jusqu’au début de l’aventure suivante ; sans Activité Revenu, un concurrent profite du marché.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0108",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — création et revenus » ? 10 pistoles, apport 1 ; intérêts 6 sous. Revenus : Métier(Cuisinier)/Résistance/Ragot Bronze4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0109",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — expansion 1 » ? 5 CO/apport10 pistoles/intérêts5 pistoles, employés, source Argent1 optionnelle, écurie et cheval.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0110",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — expansion 2 » ? 10 CO/apport1/intérêts10 pistoles, source Argent3, défenses et tromblon.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0111",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.21",
+    "question": "Implanter « Taverne — expansion 3 » ? 20 CO/apport2/intérêts1 CO, réceptions Marchandage Argent4, informateurs et diligence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0112",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.23",
+    "question": "Implanter « Échoppe — marchandage » ? Après Revenu de marchandises générales, +20 en Marchandage jusqu’à fin de l’aventure suivante ; option MJ, réussite contre une Faveur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0113",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.23",
+    "question": "Implanter « Échoppe — disponibilité » ? Après Revenu de biens spécialisés, +20 aux Tests de Disponibilité jusqu’à fin de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0114",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.23",
+    "question": "Implanter « Échoppe — création et revenus » ? 10 pistoles, apport 1 ; intérêts 6 sous. Revenus : Marchandage Bronze5 pour marchandises générales ou spécialisées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0115",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.23",
+    "question": "Implanter « Échoppe — expansion 1 » ? 5 CO/apport10 pistoles/intérêts5 pistoles, source Argent1 et logement ou location Marchandage Argent1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0116",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.23",
+    "question": "Implanter « Échoppe — expansion 2 » ? 10 CO/apport1/intérêts10 pistoles, aménagement et source Argent3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0117",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.23",
+    "question": "Implanter « Échoppe — expansion 3 » ? 20 CO/apport2/intérêts1 CO, place de marché Marchandage Argent5, autre aménagement et gardes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0118",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.24",
+    "question": "Implanter « Échoppe — marché fermé » ? Aucun Revenu avant la prochaine aventure ; revenus +50 % pendant les Activités qui suivent cette aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0119",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.24",
+    "question": "Implanter « Échoppe — faveur remboursée » ? Abaisser d’un rang une Faveur due ; mineure soldée intégralement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0120",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.25",
+    "question": "Implanter « Domaine — statut accentué » ? Investir au moins 6 sous double bonus et malus de statut sur les Tests de compétence.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0121",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.25",
+    "question": "Implanter « Domaine — charité » ? Donner l’équivalent des intérêts actuels permet d’ignorer les malus de statut jusqu’à fin de l’aventure suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0122",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.25",
+    "question": "Implanter « Domaine — maître absent » ? Jusqu’au début de l’aventure suivante, une source du palier supérieur accessible ; aucun effet au dernier palier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0123",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.25",
+    "question": "Implanter « Domaine — création et revenus » ? 10 pistoles, apport 1 ; intérêts 6 sous. Revenus : Résistance Bronze4 domestique ou Bronze3 agricole.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0124",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.25",
+    "question": "Implanter « Domaine — expansion 1 » ? 5 CO/apport10 pistoles/intérêts5 pistoles, Perception Argent2, assistance et cheval.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0125",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.25",
+    "question": "Implanter « Domaine — expansion 2 » ? 30 CO/apport3/intérêts1 CO 10 pistoles, trois équipements, impôts Commandement Or3, soldats dus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0126",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.25",
+    "question": "Implanter « Domaine — expansion 3 » ? 50 CO/apport5/intérêts2 CO 10 pistoles, deux équipements de plus et impôts Or5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0127",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.26",
+    "question": "Implanter « Domaine — droit d’établissement » ? Dans les provinces établies, Sang noble ou octroi par des puissants nécessaire ; possibilité territoriale laissée au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0128",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.27",
+    "question": "Implanter « Troupe — compétences » ? Après investissement de 6 sous : Interprétation et Musique de base, ou une spécialité Divertissement/Interprétation/Musique ajoutée à la carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0129",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.27",
+    "question": "Implanter « Troupe — nouveau programme » ? Une Activité crée un programme ; les trois prochains Revenus l’utilisant rapportent +50 %.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0130",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.27",
+    "question": "Implanter « Troupe — vedettes intermittentes » ? Au troisième palier d’expansion, source Or 2 de spectacle de célébrités utilisable seulement une période d’Activités sur deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0131",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.27",
+    "question": "Implanter « Troupe — création et revenus » ? 10 pistoles, apport 1 ; intérêts 6 sous. Revenus : Spectacle public Bronze4, privé Argent1 ; Marchandage Bronze5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0132",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.27",
+    "question": "Implanter « Troupe — expansion 1 » ? 5 CO/apport10 pistoles/intérêts5 pistoles, cinq assistants, source Argent3 et scène mobile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0133",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.27",
+    "question": "Implanter « Troupe — expansion 2 » ? 20 CO/apport2/intérêts1 CO, salle à louer Marchandage Argent3, accessoires et doublures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0134",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.27",
+    "question": "Implanter « Troupe — expansion 3 » ? 30 CO/apport3/intérêts1 CO 10 pistoles, un aménagement et vedettes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0135",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.28",
+    "question": "Implanter « Troupe — spectacles interdits » ? Gagner sa vie ou Revenu reste possible clandestinement ; conséquences de l’interdiction au MJ, aucun malus numérique inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0136",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.28",
+    "question": "Implanter « Troupe — mécène » ? Après chaque événement futur, d10 : 8–10 double les revenus jusqu’à fin de l’aventure suivante contre une demande ; 1–2 met fin au mécénat ; sinon il persiste.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0137",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — alphabétisation » ? Premier Revenu : Lire/Écrire gratuit, ou Lecture rapide si déjà alphabétisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0138",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — recherche » ? Investissement de 1 pistole : +20 aux Tests d’Activité Rechercher un savoir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0139",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — prestige intermittent » ? Au troisième palier d’expansion, Art(Écriture) Or 2 accessible une période d’Activités sur deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0140",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — publicité controversée » ? Retirer l’annonce divise par deux ses revenus ; la garder divise par deux toutes les autres sources jusqu’à la prochaine aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0141",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — réimpression » ? Consacrer une Activité avant l’aventure suivante double les revenus pendant la période qui suit cette aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0142",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — création et revenus » ? 20 pistoles, apport 2 ; intérêts 1 pistole. Revenus : Métier(Imprimeur) Bronze4/5 ; annonces Marchandage Bronze4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0143",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — expansion 1 » ? 5 CO/apport10 pistoles/intérêts5 pistoles, trois assistants, une source Argent2 et les autres Argent1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0144",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — expansion 2 » ? 10 CO/apport1/intérêts10 pistoles, enquêtes Perception/Recherche Argent4 et chariot.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0145",
+    "phase": "Entre-aventures",
+    "lot": "L02",
+    "source": "L02 p.29",
+    "question": "Implanter « Édition — expansion 3 » ? 10 CO/apport1/intérêts10 pistoles, écrivains et prestige, une source Argent5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0147",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.34",
+    "question": "Implanter « Armure récupérée — décision » ? Le MJ décide l’ajustement si espèce ou gabarit l’impose ; sinon d10 par catégorie et personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0148",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.34",
+    "question": "Implanter « Ajustement — cuir et tenue » ? d10 : 1–6 convient, 7–8 mal ajusté, 9–10 impossible à porter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0149",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.34",
+    "question": "Implanter « Ajustement — brigandine et maille » ? d10 : 1–4 convient, 5–8 mal ajusté, 9–10 impossible à porter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0150",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.34",
+    "question": "Implanter « Ajustement — plates » ? d10 : 1–2 convient, 3–6 mal ajusté, 7–10 impossible à porter.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0151",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.34",
+    "question": "Implanter « Armure mal ajustée » ? Encombrement intégral même portée ; refaçon comme une armure à zéro PA à toutes ses localisations.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0152",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.34",
+    "question": "Implanter « Dégradation locale » ? Une dégradation retire 1 PA à la localisation ; à zéro elle ne protège plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0153",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.34",
+    "question": "Implanter « Armure et discrétion » ? Porter de la maille ou des plates impose −10 à la Discrétion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0154",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Dévier un critique » ? Sur localisation protégée, sacrifier 1 PA pour ignorer la Blessure Critique ; dégâts ordinaires conservés avec PA réduit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0155",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Déviation sous zéro Blessure » ? Un critique dû au passage sous zéro n’est évité que si la déviation empêche ce passage ; formulation source conservée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0156",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparation — métier requis » ? Cuir/brigandine : Tailleur et outils ; maille : Forgeron et outils ; plates : Forgeron, outils et forge ou atelier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0157",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparer en aventure » ? Test étendu de Métier +0 une fois par heure ; restaurer 1 PA à une localisation selon seuil de matériau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0158",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparation — cuir » ? 5 DR cumulés restaurent 1 PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0159",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparation — brigandine » ? 7 DR cumulés restaurent 1 PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0160",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparation — maille ou tenue renforcée » ? 10 DR cumulés restaurent 1 PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0161",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparation — plates » ? 15 DR cumulés restaurent 1 PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0162",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparation en Activité » ? Avec outils et atelier pour plates, un Métier +20 restaure 1 PA par DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0163",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.35",
+    "question": "Implanter « Réparation par artisan » ? 10 % du prix de base par PA perdu ; section totalement brisée, 30 % du prix et attente non chiffrée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0165",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.36",
+    "question": "Implanter « Surcouche » ? Brigandine et plastron peuvent couvrir cuir ou maille ; le plastron ainsi porté ne peut être combiné avec une tenue rembourrée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0166",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.36",
+    "question": "Implanter « Renforcée » ? La tenue renforcée portée sous plates supprime Points faibles de ces plates.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0167",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.36",
+    "question": "Implanter « Visière — manœuvre » ? Une Action pour ouvrir ou fermer ; ouverte, perdre capacités propres au casque et gagner Partielle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0168",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.36",
+    "question": "Implanter « Visière — perception ouverte » ? Visière ouverte : Perception −10 %, malgré le champ de vision élargi annoncé ; pas de correction implicite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0170",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.36",
+    "question": "Implanter « Partielle — critique » ? Un coup critique ignore les PA de l’armure Partielle, indépendamment de la parité ; clause V4 distincte de la couverture actuelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0171",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.36",
+    "question": "Implanter « Tenue exigée » ? Les pièces portant ce défaut exigent une tenue rembourrée dessous.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0173",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.36",
+    "question": "Implanter « Superposition des armures » ? Pas de superposition ordinaire ; tenue sous les autres armures, cuir incompatible sous maille/plates complètes, brigandine ou plastron seulement comme surcouche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0174",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.37",
+    "question": "Implanter « Tenue rembourrée renforcée » ? 1 PA Partielle et Renforcée aux bras, corps et jambes ; tenue ordinaire sans PA. Variante de protection à distinguer du catalogue courant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0175",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.37",
+    "question": "Implanter « Coiffe de maille — perception » ? Coiffe de maille : Perception −10 et Partielle ; exception distincte du malus de Discrétion commun.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0176",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.37",
+    "question": "Implanter « Casque ouvert — perception » ? Casque ouvert : 3 PA Partielle à la tête et Perception −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0177",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.37",
+    "question": "Implanter « Casques fermés — perception » ? Grand heaume, bassinet, armet et salade : 3 PA à la tête et Perception −20 ; capacités propres et visière traitées séparément.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0178",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.38",
+    "question": "Implanter « Bassinet — tir frontal » ? Contre projectile venant de face, protection du casque 4 PA au lieu de 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0179",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.38",
+    "question": "Implanter « Armet — dommage 1–5 » ? Lorsqu’il devrait perdre 1 PA, d10 : 1–5, perte ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0180",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.38",
+    "question": "Implanter « Armet — dommage 6–9 » ? d10 : 6–9, le casque ne subit pas la dégradation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0181",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.38",
+    "question": "Implanter « Armet — dommage 10 » ? Pas de perte de PA mais mécanisme bloqué ; casque impossible à retirer sans le briser ou Métier(Forgeron) −20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0182",
+    "phase": "Équipement",
+    "lot": "L02",
+    "source": "L02 p.38",
+    "question": "Implanter « Salade — critique crânien » ? Réduit de 1 les Blessures du critique à la tête ; ne réduit pas la gravité ni tous les dégâts ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0183",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.41",
+    "question": "Implanter « Choix de carrière de prêtre » ? Au tirage Prêtre, possibilité de choisir les variantes Handrich, Solkan ou Rhya ; familier réservé à l’animal doué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0184",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.46",
+    "question": "Implanter « Prêtre d’Handrich » ? Quatre niveaux de carrière, statuts Bronze5/Argent4/Or2/Or4 ; listes et schéma propres, accès aux compétences et talents par niveau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0201",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.54",
+    "question": "Implanter « Prêtre de Solkan » ? Quatre niveaux Bronze2/Argent1/Argent3/Argent5, progression et listes propres ; Béni puis Invocation de Solkan aux niveaux respectifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0215",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.58",
+    "question": "Implanter « Ancienne Foi — carrières » ? Nonne, Prêtre et Prêtre guerrier possibles pour l’Ancienne Foi ; ses bénédictions spécifiques sont renvoyées à leur inventaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0217",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.62",
+    "question": "Implanter « Sorcière de la Haie — soigneur animalier » ? Option : remplacer Herbes par Soin aux animaux, Herboriste par Dressage, Charmes par Emprise sur les animaux, Artisan par Dur à cuire et Maître artisan par Robuste.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0218",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.62",
+    "question": "Implanter « Haie — langues initiales » ? Ajouter Signes secrets(Haie) et Langue(Belthani) au premier rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0234",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.72",
+    "question": "Implanter « Prêtresse de Rhya » ? Quatre niveaux Bronze2/Argent1/Argent3/Argent5 avec schéma et listes propres ; la carrière accepte aussi des prêtres masculins, malgré sa présentation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0235",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.73",
+    "question": "Implanter « Rhya — carrières martiales exclues » ? Pas de Prêtre guerrier ni de Répurgateur de Rhya ; ne pas transformer les usages de culte en bonus numériques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0242",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.75",
+    "question": "Implanter « Familiers animaux — type » ? Les animaux sont uniquement familiers de Puissance ; pas les talents d’homoncule, ni sacrifice initial de Destin/Résilience.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0243",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.76",
+    "question": "Implanter « Familiers animaux — portée » ? Aide et traits du compagnon uniquement à quatre yards au plus du maître ; capacités et besoins d’un animal vivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0249",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.78",
+    "question": "Implanter « Créer un familier animal » ? Après lien, fiche suivant génération adaptée : pas de CT ni Dextérité, listes réduites, traits ; décisions PX par joueur, personnalité avec MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0250",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.78",
+    "question": "Implanter « Familier Très petit — Blessures » ? Les familiers Très petits ajoutent BFM à leurs Blessures, exception raciale imprimée ; formule BE+BFM de la table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0251",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.78",
+    "question": "Implanter « Familiers — partage de PX » ? Le maître peut céder une portion des PX gagnés ; récompense directe MJ généralement 25–50 % de celle d’un personnage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0253",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.79",
+    "question": "Implanter « Familiers — variantes de taille » ? Blaireau/renard Petits : 2×BE+BFM ; minuscules rats/chauves-souris/crapauds : 1 Blessure ; jeunes d’une taille inférieure jusqu’à maturité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0254",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.79",
+    "question": "Implanter « Familiers — avances initiales » ? Choisir deux compétences à 5 avances et deux à 3 ; deux talents parmi trois, tous les traits de départ de l’espèce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0255",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.79",
+    "question": "Implanter « Animaux — compétences physiques » ? Survie utilise Initiative plutôt qu’Intelligence ; Escalade et Natation utilisent Agilité plutôt que Force.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0256",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.79",
+    "question": "Implanter « Trouver un animal doué » ? Seconde vue ou Sens magique ; chaque nuit Perception −20, espèce aléatoire, 75 % adulte et 25 % jeune.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0257",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.79",
+    "question": "Implanter « Trouver une tanière » ? Survie +0 ou Pistage +20, espèce choisie ; 50 % d’un jeune doué ; défenseurs Territoriaux et Emprise sur animaux −30 à la tanière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0258",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.79",
+    "question": "Implanter « Appeler un animal doué » ? Harmonisation aethyrique requise : chaque nuit Focalisation −10 ; espèce choisie MJ, moitié jeune/adulte et approche à un yard, apprivoisement toujours requis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0259",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.80",
+    "question": "Implanter « Acheter un animal doué » ? Disponibilité Exotique, Activité Commande ; prix avant marchandage 200 CO jeune, 100 CO adulte, espèce choisie et déjà apprivoisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0260",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.80",
+    "question": "Implanter « Apprivoiser ou se lier d’amitié » ? Activité Dressage ou Emprise animale ; Affinité animale réussit l’amitié automatiquement ; adulte sauvage difficulté −10 ; Dressé(Docile) neutralise Bestial.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0261",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.80",
+    "question": "Implanter « Accord spirituel préalable » ? Après Dressage, une semaine à proximité 2–4 yards hors sommeil ; sans jet ; donne Dressé(Magie) qui neutralise Craintif et autorise le rituel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0262",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.80",
+    "question": "Implanter « Envoyer le familier au loin » ? Au-delà de quatre yards, Emprise animale +20 ; perdre aide et traits de compagnon tant que distant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0263",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.80",
+    "question": "Implanter « Instructions complexes du familier » ? Au-delà de quatre yards, instructions complexes peuvent exiger Intelligence ; environnement hostile, opposition de Calme gagnée permet au familier de refuser.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0264",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.80",
+    "question": "Implanter « Langage et progression du familier » ? Rang1 : ordres simples ; télépathie achetable au rang2, langue du maître au rang3 ; communication non requise pour les bonus de lien.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0266",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.81",
+    "question": "Implanter « Langues animales » ? Basse-cour/Sauvages réservés aux animaux doués et exceptions publiées ; généralement un dialecte, corbeaux peuvent apprendre les deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0267",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.81",
+    "question": "Implanter « Corruption du lien animal » ? Exposition corruptrice du maître ou du familier impose aussi un Test à l’autre ; s’ils partagent la source, un seul jet chacun.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0268",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.81",
+    "question": "Implanter « Talents et traits animaux — achat » ? Talents/traits du chapitre réservés aux familiers animaux ; un nouveau trait coûte 100 PX.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0269",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.81",
+    "question": "Implanter « Assistant animal » ? Une aide à Focalisation/Langue(Magick), Survie et Perception magique ; +10 normal même sans compétence, rang maximal1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0270",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.81",
+    "question": "Implanter « Comportement du compagnon — contrôle » ? Calme +20 supprime les comportements pendant une rencontre ; effets de Corruption empirent avec chaque mutation du maître.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0279",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.82",
+    "question": "Implanter « Carrière du familier de Puissance » ? Quatre niveaux sans statut, talents/traits par rang ; option aussi pour homoncules de Puissance. Int/FM/Soc puis Ag, I et CC.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0285",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.83",
+    "question": "Implanter « Origine — rive sud » ? Humain d’Altdorf : remplacer compétences/talents d’origine par la liste rive sud, choix alternatifs imprimés conservés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0286",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.83",
+    "question": "Implanter « Origine — est humain » ? Humain d’Altdorf : liste Eastender, langue de bataille ou voleurs, talents alternatifs et talent aléatoire selon choix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0287",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.83",
+    "question": "Implanter « Origine — nain d’Altdorf » ? Liste propre de compétences et talents alternatifs d’Altdorf ; pas de modification des caractéristiques raciales.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0288",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.84",
+    "question": "Implanter « Origine — quartier des Collèges » ? Humain Hexxerbezrik : liste propre, Seconde vue ou Sixième sens et un talent aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0289",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.84",
+    "question": "Implanter « Origine — docks » ? Humain Docklands : liste propre, Criminel ou Étiquette(Marchands), Négociateur ou Menaçant, un talent aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0290",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.85",
+    "question": "Implanter « Focalisation alternative — option » ? Procédure optionnelle ; choisir le Vent possédé sans annoncer le sort ; Action et Test simple Focalisation +0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0291",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.85",
+    "question": "Implanter « Focalisation alternative — gain » ? Réussite : stocker BFM DR du Vent ; ajouter à un futur Test d’incantation réussi de ce Vent ; pas de plafond normal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0292",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.85",
+    "question": "Implanter « Focalisation alternative — déperdition » ? On peut agir normalement ; tout Tour sans Action de Focalisation perd 1 DR de réserve.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0293",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Focalisation alternative — critique » ? Gagner BFM plus les DR du Test en réserve ; ne donne pas immédiatement le NI requis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0294",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Focalisation alternative — maladresse » ? Toute réserve perdue ; incident mineur si réserve ≤BFM, majeur si réserve >BFM.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0295",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Focalisation alternative — dégâts » ? Tout dégât avec réserve : Résistance +0 ; échec, perdre un DR par Blessure perdue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0296",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Focalisation alternative — minute » ? Au-delà d’une minute hors espace rituel préparé, incident chaque Round : mineur jusqu’à BFM de réserve, majeur au-delà.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0297",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Focalisation alternative — inconscience et mort » ? Traiter la perte de conscience ou la mort avec réserve comme une maladresse et résoudre l’incident correspondant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0298",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Focalisation alternative — incantation » ? Déclarer le sort puis Test normal ; si réussi, ajouter la réserve du Vent correspondant pour atteindre NI ou surpuissance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0299",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Focalisation alternative — plafond optionnel » ? MJ peut plafonner la réserve à 3×BFM si les personnages stockent avant le combat ; option, pas plafond général.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0300",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Cantique — accès et rythme » ? Avec talent de Domaine, dépenser la réserve ; au plus un cantique par Round, généralement sans Action sauf mention explicite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0301",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Cantique — éviter la perte » ? Dépenser au moins 1 DR de réserve en cantique évite la perte habituelle du Round sans Focalisation ; texte emploie Round ici et Tour p85.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0302",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.86",
+    "question": "Implanter « Cantique — apprentissage » ? Un gratuit au premier sort de Domaine, deuxième au troisième sort, troisième au sixième ; choix dans ce Domaine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0303",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Ghur — Serres » ? Dépenser jusqu’à BFM DR : +1 dégât par DR à toute attaque à mains nues jusqu’au prochain Tour ; choix après jet avant résultat annoncé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0304",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Ghur — peau épaisse » ? 3 DR : +1 PA à toute armure de cuir portée jusqu’au prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0305",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Shyish — yeux de mort » ? 1 DR : vision relative des Blessures restantes d’une créature visible, réponse du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0306",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Shyish — murmures du destin » ? 2 DR : connaître la Destinée d’une créature blessée d’au moins1 durant les BFM dernières minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0307",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Shyish — visage mortuaire » ? 3 DR : pour ce Round, pas de respiration, ignorer Exténué/maladie/Empoisonné ; morts-vivants ignorent le mage sauf attaque ou intelligence dévoilant la ruse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0308",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Aqshy — embraser » ? 1 DR : augmenter d’un cran un feu non magique visible à FM yards ; éclairage accru, Enflammé proche au choix MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0309",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Aqshy — incendier » ? Après touche de mêlée, 2 DR infligent un Enflammé à l’adversaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0310",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Azyr — vision du traumatisme » ? 1 DR donne +1 DR à un Test d’Esquive ou de CC pour éviter/parer une attaque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0311",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Azyr — lame crépitante » ? Dépenser jusqu’à BFM DR : +1 dégât par DR pour une attaque de mêlée avec arme métallique ; choix après jet avant résultat annoncé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0312",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.87",
+    "question": "Implanter « Azyr — vision de fortune » ? 3 DR : un allié qui entend gagne +2 DR sur un Test de son prochain Tour ; impossible sur soi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0315",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Chamon — renforcement » ? 1 DR : +1 PA à toute armure métallique portée jusqu’au prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0316",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Chamon — cœur de fer » ? À réception d’une Blessure Critique, 2 DR : attaquant jette deux fois sur table correspondante et garde le résultat le moins nuisible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0317",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Chamon — lame de vif-argent » ? 3 DR : arme métallique de mêlée compte comme sort de Chamon ce Round ; ignore PA métalliques et ajoute ces PA aux dégâts de la localisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0318",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Ghyran — étancher » ? 1 DR retire tous les Exténué et Hémorragique du lanceur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0319",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Ghyran — revigorer » ? Action, toucher autrui et 2 DR : jusqu’au prochain Tour, +1 DR aux Tests de F/E et réussite automatique de résistance aux maladies/poisons.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0320",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Ghyran — régénérer » ? Au début de son Tour, 3 DR donnent Régénération jusqu’au début du Round suivant ; pas jusqu’au prochain Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0321",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Hysh — yeux lumineux » ? 1 DR : Vision nocturne totale jusqu’au prochain Tour et immunité Aveuglé ; Aveuglé déjà acquis ignorés puis reviennent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0322",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Hysh — lumière purificatrice » ? 2 DR : arme de mêlée tenue ou munition lumineuse jusqu’au prochain Tour ; cible touchée Résistance +0 ou Aveuglé, Démoniaque subit +3 dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0323",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Hysh — perfection de soi » ? 3 DR : ignorer maladies, poisons, critiques et mutations jusqu’au prochain Tour, membres temporairement recréés ; pas de guérison définitive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0324",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Ulgu — toucher » ? 1 DR : ajouter jusqu’à BFM DR aux Tests de Discrétion de ce Round, après jet avant annonce du résultat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0325",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Ulgu — autre cible » ? 2 DR : l’ennemi hostile choisit une autre cible viable à son prochain Tour s’il en existe une.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0326",
+    "phase": "Magie générale",
+    "lot": "L02",
+    "source": "L02 p.88",
+    "question": "Implanter « Ulgu — ombre passagère » ? 3 DR : se libérer, empêcher les saisies, ignorer terrain difficile et se glisser à travers barreaux ou espaces étroits ; durée non précisée ici.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L02-0327",
+    "phase": "Création et carrières",
+    "lot": "L02",
+    "source": "L02 p.90",
+    "question": "Implanter « Adalbert — prothèse et Esquive » ? Adalbert ne peut pas esquiver tant qu’il ne s’est pas habitué à sa jambe artificielle ; aucun délai chiffré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
