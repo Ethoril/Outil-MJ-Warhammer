@@ -3342,6 +3342,51 @@
      "name": "Willful Corruption"
     }
    ],
+   "trappings": [
+    "Chaos Armour",
+    "Amulet of Jade (grants the wearer the Regenerate Creature Trait)"
+   ],
+   "spells": {
+    "Petty": [
+     "Dart",
+     "Drain",
+     "Eavesdrop",
+     "Open Lock",
+     "Sounds",
+     "Warning"
+    ],
+    "Arcane": [
+     "Bolt",
+     "Blast",
+     "Corrosive Blood",
+     "Distracting",
+     "Entangle",
+     "Flight",
+     "Manifest Lesser Daemon",
+     "Octagram",
+     "Teleport",
+     "Ward"
+    ],
+    "Lore of Shadows": [
+     "Illusion"
+    ],
+    "Lore of Tzeentch": [
+     "Bolt of Change",
+     "Boon of Tzeentch",
+     "Blue Fire of Tzeentch",
+     "Curse of Tzeentch",
+     "The Flickering Flames of Fickle Fate",
+     "Mindfire",
+     "Pink Fire of Tzeentch",
+     "The Purple Hand",
+     "Transformation of Tzeentch",
+     "Treason of Tzeentch",
+     "Tzeentch's Firestorm",
+     "Tzeentch's Golden Aura",
+     "Sense the Skein",
+     "Word of Tzeentch"
+    ]
+   },
    "nameFrSource": "proposition"
   },
   {
@@ -5191,6 +5236,35 @@
     "Wand of Onyx",
     "7 GCs"
    ],
+   "spells": {
+    "Petty": [
+     "Dazzle",
+     "Drain",
+     "Eavesdrop",
+     "Light",
+     "Open Lock",
+     "Rot",
+     "Sounds",
+     "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
+     "Blast",
+     "Chain Attack",
+     "Dark Vision",
+     "Entangle",
+     "Flight",
+     "Mundane Aura",
+     "Teleport"
+    ],
+    "Lore of Tzeentch": [
+     "Gift of the Beast",
+     "Subvert Strength",
+     "Transformation of the Beast",
+     "Treason of Tzeentch",
+     "Tremor"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -5328,6 +5402,25 @@
     "Travelling Case (including personal effects and 8 vials of a bright red liquid, a preparation to alleviate Toughness Loss)",
     "Sword"
    ],
+   "spells": {
+    "Petty": [
+     "Dart",
+     "Drain",
+     "Magic Flame",
+     "Purify Water",
+     "Shock",
+     "Warning"
+    ],
+    "Arcane": [
+     "Blast",
+     "Chain Attack",
+     "Dark Vision",
+     "Mundane Aura"
+    ],
+    "Lore of Tzeentch": [
+     "Treason of Tzeentchr"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -5501,9 +5594,8 @@
     "Purse with 5 GCs 17/6"
    ],
    "spells": {
-    "spells": [
-     "All Lore of Death and Lore of Necromancy spells",
-     "at GM's discretion"
+    "notes": [
+     "All Lore of Death and Lore of Necromancy spells, at GM's discretion"
     ]
    },
    "nameFrSource": "proposition"

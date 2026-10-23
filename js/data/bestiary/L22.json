@@ -176,6 +176,26 @@
     "Warpstone Charm",
     "10 Doses of Warpstone Snuff"
    ],
+   "spells": {
+    "Petty": [
+     "Favour of the Horned Rat",
+     "Ghostly Flame",
+     "Mark of the Horned Rat",
+     "Rat Thrall",
+     "Vector",
+     "Wrack"
+    ],
+    "Arcane": [
+     "Crackling Doom",
+     "Cracks Call",
+     "Flensing Ruin",
+     "Howling Warpgale",
+     "Scorch",
+     "Warp Lightning",
+     "Warp Shield",
+     "Warp Storm"
+    ]
+   },
    "keywords": [
     "skaven"
    ],
@@ -326,8 +346,7 @@
     }
    ],
    "trappings": [
-    "Heavy Armour",
-    "but they also possess the Damaging and Impale Qualities."
+    "Heavy Armour"
    ],
    "abilities": [
     "E0-T-266"
@@ -4172,9 +4191,8 @@
     "Purse with 5 GCs 17/6"
    ],
    "spells": {
-    "spells": [
-     "All Lore of Death and Lore of Necromancy spells",
-     "at GM's discretion"
+    "notes": [
+     "All Lore of Death and Lore of Necromancy spells, at GM's discretion"
     ]
    },
    "nameFrSource": "proposition"

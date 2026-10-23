@@ -218,8 +218,8 @@
     "Purse containing coins to the value of 4GCs"
    ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Dazzle",
      "Conserve",
      "Light",
@@ -478,8 +478,8 @@
     }
    ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Dazzle",
      "Dart",
      "Drain",
@@ -489,6 +489,34 @@
      "Shock",
      "Twitch",
      "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Blast",
+     "Bolt",
+     "Breath",
+     "Bridge",
+     "Chain Attack",
+     "Corrosive Blood",
+     "Fearsome",
+     "Flight",
+     "Teleport",
+     "Ward"
+    ],
+    "Lore of Metal": [
+     "Crucible of Chamon",
+     "Curse of Rust",
+     "Enchant Weapon",
+     "Feather of Lead",
+     "Forge of Chamon",
+     "Gehenna's Golden Globe",
+     "Glittering Robe",
+     "Goldsteel Shielding",
+     "Meteoric Ironclad",
+     "Prismatic Refraction of Habermas",
+     "Replication of Levorg",
+     "Transmutation of Chamon"
     ]
    },
    "nameFrSource": "proposition"
@@ -720,9 +748,18 @@
      "name": "War Wizard"
     }
    ],
+   "trappings": [
+    "Grimoire",
+    "Enchanted Staff",
+    "Standard Robes",
+    "Golden Sickle",
+    "Magical Licence",
+    "College Library",
+    "Workshop at College"
+   ],
    "spells": {
-    "spells": [
-     "Petty: Animal Friend",
+    "Petty": [
+     "Animal Friend",
      "Bearings",
      "Conserve",
      "Dart",
@@ -732,6 +769,26 @@
      "Spring",
      "Twitch",
      "Warning"
+    ],
+    "Arcane": [
+     "Arrow Shield",
+     "Blast",
+     "Bridge",
+     "Dark Vision",
+     "Entangle",
+     "Flight",
+     "Push",
+     "Ward"
+    ],
+    "Lore of Life": [
+     "Almanac",
+     "Barkskin",
+     "Dwellers Below",
+     "Forest of Thorns",
+     "Leaf Fall",
+     "Lifebloom",
+     "Regenerate",
+     "Verdant Apotheosis"
     ]
    },
    "keywords": [
@@ -956,9 +1013,16 @@
      "name": "Well-prepared"
     }
    ],
+   "trappings": [
+    "Standard Robe",
+    "Sword",
+    "Staff topped with Telescope",
+    "Library of Prophetic Texts",
+    "Collection of Lustrian Gold Plaques"
+   ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Conserve",
      "Dart",
      "Drain",
@@ -969,6 +1033,34 @@
      "Sounds",
      "Twitch",
      "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Blast",
+     "Bolt",
+     "Chain Attack",
+     "Dome",
+     "Flight",
+     "Magic Shield",
+     "Move Object",
+     "Push"
+    ],
+    "Lore of Heavens": [
+     "Azure Blades",
+     "Cerulean Shield",
+     "Comet of Casandora",
+     "Curse of Fate",
+     "Divination",
+     "Fate's Fickle Fingers",
+     "Fate Illuminated",
+     "Lens on the Sky",
+     "Mistral From the Stratosphere",
+     "Project Spirit",
+     "Starcrossed",
+     "Storm of Shemtek",
+     "T'Essla's Arc",
+     "Thorsen's Thunderstorm"
     ]
    },
    "nameFrSource": "proposition"
@@ -1293,13 +1385,16 @@
     "Purse containing 14 GCs"
    ],
    "spells": {
-    "spells": [
-     "Petty Magic Dart",
+    "Petty": [
+     "Dart",
      "Eavesdrop",
      "Magic Flame",
      "Open Lock",
      "Sounds",
-     "Twitch Arcane Choking Shadows",
+     "Twitch"
+    ],
+    "Arcane": [
+     "Choking Shadows",
      "Entangle",
      "Illusion",
      "Mystifying Miasma",
@@ -1565,16 +1660,19 @@
     "Pale Scythe"
    ],
    "spells": {
-    "spells": [
-     "Petty: Dart",
+    "Petty": [
+     "Dart",
      "Drain",
      "Shock",
-     "Warning Arcane: Aethyric Arms",
+     "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Arms",
      "Bridge",
      "Flight",
      "Teleport"
     ],
-    "Lore of Death": [
+    "notes": [
      "Elspeth has memorised all spells from the Lore of Death"
     ]
    },
@@ -1761,7 +1859,10 @@
      "Crown of Flame",
      "Distracting",
      "Fearsome",
-     "Firewall Petty: Dazzle",
+     "Firewall"
+    ],
+    "Petty": [
+     "Dazzle",
      "Dart",
      "Magic Flame",
      "Shock",
@@ -2001,8 +2102,8 @@
     "Standard Robes"
    ],
    "spells": {
-    "spells": [
-     "Petty: Animal Friend",
+    "Petty": [
+     "Animal Friend",
      "Bearings",
      "Produce Small Animal",
      "Spring",
@@ -2112,7 +2213,7 @@
    "spells": {
     "spells": [
      "Aethyric Armour",
-     "Ygethmor's Flaming Blizzard (see page 137)"
+     "Ygethmor's Flaming Blizzard"
     ]
    },
    "keywords": [
@@ -2717,15 +2818,8 @@
     }
    ],
    "spells": {
-    "spells": [
-     "A Spell Familiar knows up to four spells",
-     "depending on their master's Wizard Career Level. The wizard teaches these spells to their familiar",
-     "so the wizard must already know them. A familiar can learn a new spell each time the wizard gains a Career Level. foot in diameter",
-     "it can take a humanoid shape",
-     "but it is too bright to see any features. Power: A self-lighting candle or small lamp. Its master often carries it",
-     "but it can rapidly levitate and float around if necessary. Its flame flickers when it talks. Spell: A large moth",
-     "bright and white as a full moon. It sheds sparkling scales as it flutters. Drawn to light",
-     "but not foolish enough to get burnt. Familiars of Chamon"
+    "notes": [
+     "A Spell Familiar knows up to four spells, depending on their master's Wizard Career Level. The wizard teaches these spells to their familiar, so the wizard must already know them."
     ]
    },
    "nameFrSource": "proposition"
@@ -3074,13 +3168,16 @@
     "Skull of Katam"
    ],
    "spells": {
-    "spells": [
-     "Petty Magic Dart",
+    "Petty": [
+     "Dart",
      "Drain",
      "Eavesdrop",
      "Open Lock",
      "Sounds",
-     "Warning Arcane Bolt",
+     "Warning"
+    ],
+    "Arcane": [
+     "Bolt",
      "Blast",
      "Corrosive Blood",
      "Distracting",
@@ -3091,12 +3188,12 @@
      "Teleport",
      "Ward"
     ],
-    "Lore of Daemonology Spells": [
+    "Lore of Daemonology": [
      "Detect Daemon",
      "Manifest Lesser Daemon",
      "Octagram"
     ],
-    "Lore of Light Spells": [
+    "Lore of Light": [
      "Abulla's Snare",
      "Assault of Stone",
      "Banishment",
@@ -3108,7 +3205,7 @@
      "Speed of Thought",
      "Time Amok"
     ],
-    "Lore of Tzeentch Spells": [
+    "Lore of Tzeentch": [
      "Bolt of Change",
      "Boon of Tzeentch",
      "Blue Fire of Tzeentch",
@@ -3536,18 +3633,21 @@
     "Mouldy Robes"
    ],
    "spells": {
-    "spells": [
-     "Petty Magic Bearings",
+    "Petty": [
+     "Bearings",
      "Careful Step",
      "Gust",
      "Marsh Lights",
      "Spring",
-     "Sounds Arcane Breath",
+     "Sounds"
+    ],
+    "Arcane": [
+     "Breath",
      "Entangle",
      "Fearsome",
-     "Ward M�na's"
+     "Ward"
     ],
-    "Marsh Magic": [
+    "M�na's Marsh Magic": [
      "A Bite of Midges",
      "Despondent Slough",
      "Inculcate Mizzle",

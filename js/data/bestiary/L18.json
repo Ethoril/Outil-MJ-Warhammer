@@ -2027,9 +2027,8 @@
     "As above"
    ],
    "spells": {
-    "spells": [
-     "As above",
-     "plus Chain Attack and Terrifying"
+    "notes": [
+     "As above, plus Chain Attack and Terrifying"
     ]
    },
    "keywords": [
@@ -2959,9 +2958,8 @@
     "purse with 5 GCs 17/6."
    ],
    "spells": {
-    "spells": [
-     "All Lore of Death and Lore of Necromancy spells",
-     "at GM's discretion."
+    "notes": [
+     "All Lore of Death and Lore of Necromancy spells, at GM's discretion."
     ]
    },
    "nameFrSource": "proposition"

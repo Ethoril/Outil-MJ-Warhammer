@@ -2,7 +2,7 @@
  * Bibliothèque de profils de bestiaire : liste filtrable (livre, nom, mot-clé avec descendants), fiche en lecture seule,
  * ajout au combat (un ou plusieurs exemplaires) et copie dans la Réserve. Les données se chargent à la demande, livre par livre.
  */
-import { BESTIARY_STAT_KEYS, buildParticipantFromBestiary, buildReserveProfileFromBestiary, createBestiaryLoader, filterBestiary } from '../core/bestiary-profiles.js';
+import { BESTIARY_STAT_KEYS, bestiarySpellLines, buildParticipantFromBestiary, buildReserveProfileFromBestiary, createBestiaryLoader, filterBestiary } from '../core/bestiary-profiles.js';
 import { keywordMatches, keywordTree } from '../core/creature-keywords.js';
 import { CAMP_LABELS } from '../core/encounters.js';
 import { Participant, Profile } from '../core/models.js';
@@ -30,6 +30,7 @@ export function renderBestiarySheet(record, referential) {
     line('Compétences', (record.skills || []).map(skill => `${skill.nameFr || skill.name} ${skill.value}`).join(', '));
     line('Traits', (record.traits || []).map(trait => `${trait.name}${trait.param ?? trait.rating ? ` (${trait.param ?? trait.rating})` : ''}`).join(', '));
     line('Traits facultatifs', (record.optionalTraits || []).map(trait => trait.name).join(', '));
+    line('Sorts', bestiarySpellLines(record.spells).join(' ; '));
   }
   line('Mots-clés', (record.keywords || []).map(id => referential.terms.get(id)?.nameFr || id).join(', '));
   return sheet;

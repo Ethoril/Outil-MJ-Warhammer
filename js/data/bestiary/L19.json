@@ -2734,7 +2734,7 @@
      "name": "Instinctive Diction"
     },
     {
-     "name": "Petty Magic Petty Magic"
+     "name": "Petty Magic"
     }
    ],
    "trappings": [
@@ -2743,12 +2743,15 @@
     "crutches."
    ],
    "spells": {
-    "spells": [
+    "Petty": [
      "Drain",
      "Produce Small Animal",
-     "Rot Arcane Magic and Lore Bless with Filth (page 109)",
+     "Rot"
+    ],
+    "Arcane and Lore": [
+     "Bless with Filth",
      "Creeping Menace",
-     "Curse of 110 Crippling Pain",
+     "Curse of Crippling Pain",
      "Stream of Corruption"
     ]
    },
@@ -4497,11 +4500,7 @@
      "Raise Dead",
      "Reanimate",
      "Scythe of Shyish",
-     "Steal Life. of Middenheim might look very different. Clues given in Death on the Reik suggest that the cult have a headquarters in Middenheim",
-     "but little notion of how to find it. The Characters must be very proactive to track down and break up the cult in the city. If the Red Crown is destroyed",
-     "Khazrak's campaign will lack critical guidance",
-     "but if the Characters can intercept messages between the cultists and the Beastmen without tipping the Red Crown off",
-     "they could help Middenheim mount a conclusive counter-offensive."
+     "Steal Life"
     ]
    },
    "keywords": [

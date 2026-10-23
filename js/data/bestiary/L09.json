@@ -1100,13 +1100,6 @@
      "ref": "E0-T-001"
     }
    ],
-   "spells": {
-    "spells": [
-     "from Colour Magic Lores",
-     "the Lore of Witchcraft",
-     "or the Lore of Dark Magic (page 64)."
-    ]
-   },
    "keywords": [
     "elfe-noir"
    ],
@@ -2183,10 +2176,8 @@
     "Robes"
    ],
    "spells": {
-    "spells": [
-     "Choose up to 5 Spells from the Petty Magic list and up to 7 taken from any combination of Spells from Colour Magic Lores",
-     "the Lore of Witchcraft",
-     "or the Lore of Dark Magic (page 64)"
+    "notes": [
+     "Choose up to 5 Spells from the Petty Magic list and up to 7 taken from any combination of Spells from Colour Magic Lores, the Lore of Witchcraft, or the Lore of Dark Magic (page 64)"
     ]
    },
    "keywords": [
@@ -2317,10 +2308,8 @@
     "Robes"
    ],
    "spells": {
-    "spells": [
-     "Choose up to 5 Spells from the Petty Magic list and up to 12 taken from any combination of Spells from Colour Magic Lores",
-     "the Lore of Witchcraft",
-     "or the Lore of Dark Magic (page 64)."
+    "notes": [
+     "Choose up to 5 Spells from the Petty Magic list and up to 12 taken from any combination of Spells from Colour Magic Lores, the Lore of Witchcraft, or the Lore of Dark Magic (page 64)."
     ]
    },
    "inventoryKind": "profile",
@@ -4963,14 +4952,15 @@
     "Robes"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Careful Step",
      "Drain",
      "Eavesdrop",
      "Light",
-     "Purify Water"
+     "Purify Water",
+     "Warning"
     ],
-    "Warning Lore of Dark Magic": [
+    "Lore of Dark Magic": [
      "Arnzipal's Black Horror",
      "Bladewind",
      "Chillwind",
@@ -5431,7 +5421,7 @@
     "Surgeon's Tools (Needles, Poultices, Scalpels, Thread)"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Animal Friend",
      "Marsh Lights",
      "Murmured Whisper",
@@ -7051,8 +7041,8 @@
     "Rapier"
    ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Careful Step",
      "Drain",
      "Light",
@@ -7073,9 +7063,10 @@
      "Beast Form",
      "Bridge",
      "Entangle",
-     "Flock of Doom"
+     "Flock of Doom",
+     "Mundane Aura"
     ],
-    "Mundane Aura Lore of Dark Magic": [
+    "Lore of Dark Magic": [
      "Doombolt",
      "Shroud of Despair"
     ]

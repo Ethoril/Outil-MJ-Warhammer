@@ -2174,6 +2174,26 @@
     "Wizard's Robes",
     "1 Gold Crown."
    ],
+   "spells": {
+    "Petty": [
+     "Bearings",
+     "Careful Step",
+     "Dart",
+     "Warning"
+    ],
+    "Arcane": [
+     "Bolt",
+     "Dark Vision",
+     "Terrifying",
+     "Ward"
+    ],
+    "Lore of Beasts": [
+     "Beast Master",
+     "Beast Tongue",
+     "Flock of Doom",
+     "The Amber Spear"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -3779,10 +3799,7 @@
    ],
    "trappings": [
     "Hand Weapon (Sword)",
-    "Pistol with 10 shots",
-    "this headwear serves a purpose beyond boastful pride",
-    "Veith is able to breath underwater",
-    "and swim with unnatural skill."
+    "Pistol with 10 shots"
    ],
    "keywords": [
     "humain"

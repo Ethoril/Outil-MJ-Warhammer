@@ -1089,8 +1089,7 @@
    "trappings": [
     "Choice of appropriate Polearm or Two- Handed Weapon",
     "Hand Weapon",
-    "Mail or Leather and Mail or Plate Armour",
-    "they can also take the Ranged (Bow) +10 Skill"
+    "Mail or Leather and Mail or Plate Armour"
    ],
    "nameFrSource": "proposition"
   },
@@ -1194,8 +1193,7 @@
    "trappings": [
     "Choice of appropriate Polearm or Two- Handed Weapon",
     "Hand Weapon",
-    "Mail or Leather and Mail or Plate Armour",
-    "they can also take the Ranged (Bow) +15 Skill."
+    "Mail or Leather and Mail or Plate Armour"
    ],
    "nameFrSource": "proposition"
   },
@@ -1289,7 +1287,7 @@
     "Staff"
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 3 spells from the Petty Magic list and up to 3 from a suitable magical lore."
     ]
    },
@@ -1420,7 +1418,7 @@
     "Staff"
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 6 spells from the Petty Magic list and up to 9 from a suitable magical lore."
     ]
    },
@@ -2127,14 +2125,18 @@
     "Staff"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Dart",
-     "Rot"
+     "Rot",
+     "Shock"
     ],
-    "Shock Arcane Magic": [
+    "Arcane": [
      "Bridge",
      "Corrosive Blood",
-     "Entangle Little Waaagh!: Gift of the Spider God",
+     "Entangle"
+    ],
+    "Little Waaagh!": [
+     "Gift of the Spider God",
      "Itchy"
     ]
    },
@@ -3507,12 +3509,15 @@
     "Warpaint"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Animal Friend",
      "Dazzle",
      "Drain",
      "Open Lock",
-     "Twitch Lore of the Big Waaagh!:`Ard as Nails",
+     "Twitch"
+    ],
+    "Lore of the Big Waaagh!": [
+     "`Ard as Nails",
      "Bash `Em Lads!",
      "`Eadbutt",
      "Gaze of Mork",
@@ -4630,7 +4635,7 @@
     "spells": [
      "Bilebrew",
      "Bloodgruel",
-     "Toothcracker."
+     "Toothcracker"
     ]
    },
    "keywords": [
@@ -5359,12 +5364,18 @@
     }
    ],
    "spells": {
-    "spells": [
+    "Petty": [
      "Bearings",
      "Careful Step",
      "Drain",
-     "Marsh Lights Arcane Terrifying",
-     "Ward Lore of Death Caress of Laniph",
+     "Marsh Lights"
+    ],
+    "Arcane": [
+     "Terrifying",
+     "Ward"
+    ],
+    "Lore of Death": [
+     "Caress of Laniph",
      "Soul Vortex",
      "Steal Life"
     ]

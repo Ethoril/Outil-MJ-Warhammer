@@ -5765,7 +5765,7 @@
     }
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 3 spells from the Petty Magic list and up to 3 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
     ]
    },
@@ -5877,7 +5877,7 @@
     }
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Choose up to 6 spells from the Petty Magic list and up to 9 from a suitable magical Lore. * Wounds need to be increased due to changes to WP."
     ]
    },
@@ -6248,7 +6248,7 @@
     "Staff"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Animal Friend",
      "Dart",
      "Sounds"

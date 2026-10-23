@@ -105,6 +105,7 @@ export function completenessGaps(record, block, catalogueNames) {
 // ---- Q11 : contrôle étendu (attaques, Traits, équipement, sorts) ----
 
 const SPELL_LABEL = /\b(?:(?:Petty|Arcane|Chaos|Daemonic|Witchcraft)(?: Spells| Magic)?|Spells|Lore of [A-Z][A-Za-z' ]+?)\s*:/g;
+const SPELL_STOP = /\s(?:Trappings\b|(?:Beasts|Death|Fire|Heavens|Life|Light|Metal|Shadows|Hedgecraft|Necromancy|Daemonology|Witchcraft|Tzeentch|High Magic|Magic of [A-Z][a-z]+|Lore of the Big Waaagh!|\S+ Marsh Magic|Little Waaagh!):)/;
 const TRAIT_ALIAS_KEYS = new Map(Object.entries(TRAIT_ALIASES).map(([from, to]) => [letters(from), letters(to.replace(/\(.*\)/, ''))]));
 const traitKey = name => { const key = letters(name); return TRAIT_ALIAS_KEYS.get(key) || key; };
 const ATTACK = /^(?:(\d+)\s*[×xX-]?\s*)?([A-Za-z][A-Za-z' -]*?)\s*(?:\(([^)]*)\))?\s*\+(\d+)\b/;
@@ -177,8 +178,10 @@ export function printedSpells(block) {
     const rest = block.slice(start.index + start[0].length);
     const end = LABEL.exec(rest);
     const next = [...rest.matchAll(SPELL_LABEL)][0];
-    const stop = Math.min(end ? end.index : rest.length, next ? next.index : rest.length);
-    const items = splitTopLevel(rest.slice(0, stop)).map(item => item.replace(/\*/g, '').trim());
+    // V5 : « Trappings » sans deux-points ; Domaines nus (« Light: », « Witchcraft: »), « High Magic: », « Marsh Magic: » ouvrent aussi une autre liste.
+    const other = SPELL_STOP.exec(rest);
+    const stop = Math.min(end ? end.index : rest.length, next ? next.index : rest.length, other ? other.index : rest.length);
+    const items = splitTopLevel(rest.slice(0, stop)).map(item => item.replace(/\*/g, '').replace(/\s+\d{1,3}$/, '').trim()).filter(item => !/^(?:Petty Magic|As above)$|\b(?:knows|memorised)\b/.test(item));
     const cut = items.findIndex(item => !item || item.length > 45);
     for (const item of cut >= 0 ? items.slice(0, cut) : items) found.push({ label: item, key: letters(item) });
   }
@@ -190,7 +193,12 @@ export function recordSpellKeys(record) {
   const walk = value => {
     if (typeof value === 'string') names.push(value);
     else if (Array.isArray(value)) value.forEach(walk);
-    else if (value && typeof value === 'object') { if (value.name) names.push(value.name); if (value.spells) walk(value.spells); }
+    else if (value && typeof value === 'object') {
+      if (value.name) names.push(value.name);
+      // Q14 : { « Petty »: [...], « Lore of X »: [...], spells: [...], notes: [prose] } ; la prose n'est pas une liste de sorts.
+      if (value.spells) walk(value.spells);
+      for (const [key, list] of Object.entries(value)) if (key !== 'spells' && key !== 'notes' && key !== 'name') walk(list);
+    }
   };
   walk(record.spells);
   return new Set(names.map(letters));

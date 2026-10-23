@@ -1087,6 +1087,16 @@
     "Sword"
    ],
    "spells": {
+    "Petty": [
+     "Bearings",
+     "Bless Arrow",
+     "Dazzle",
+     "Gust",
+     "Identify Disease",
+     "Protection from Rain",
+     "Purify Water",
+     "Reveal Magic"
+    ],
     "Lore of Heavens": [
      "Blessings of Bel Shanaar",
      "Divination",
@@ -1100,16 +1110,6 @@
      "The First Portent of Amul",
      "The Second Portent of Amul",
      "The Third Portent of Amul"
-    ],
-    "Petty Spells": [
-     "Bearings",
-     "Bless Arrow",
-     "Dazzle",
-     "Gust",
-     "Identify Disease",
-     "Protection from Rain",
-     "Purify Water",
-     "Reveal Magic"
     ]
    },
    "keywords": [
@@ -2539,6 +2539,16 @@
     "Robes of Office"
    ],
    "spells": {
+    "Petty": [
+     "Bless Arrow",
+     "Calm",
+     "Green Finger",
+     "Identify Disease",
+     "Protection from Rain",
+     "Purify Water",
+     "Remove Dirt",
+     "Reveal Magic"
+    ],
     "Lore of Beasts": [
      "Amber Talons",
      "Beast Master",
@@ -2615,16 +2625,6 @@
      "Enlightenment",
      "Psychic Sending",
      "The Primary Words"
-    ],
-    "Petty Spells": [
-     "Bless Arrow",
-     "Calm",
-     "Green Finger",
-     "Identify Disease",
-     "Protection from Rain",
-     "Purify Water",
-     "Remove Dirt",
-     "Reveal Magic"
     ]
    },
    "keywords": [
@@ -3122,7 +3122,7 @@
     "Twig Spear"
    ],
    "spells": {
-    "Lore of Life Spells": [
+    "Lore of Life": [
      "Barkskin",
      "Dwellers Below",
      "Earthblood",
@@ -3132,7 +3132,7 @@
      "Nature's Whisper",
      "Vital Growth"
     ],
-    "Witchcraft Spells": [
+    "Lore of Witchcraft": [
      "Creeping Menace (Giant Rats, Seagulls)",
      "Curse of Ill Fortune",
      "Curse of Crippling Pain",

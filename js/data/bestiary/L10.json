@@ -38,7 +38,11 @@
     {
      "name": "Rapier",
      "value": 46,
-     "damage": 6
+     "damage": 6,
+     "qualities": [
+      "Fast",
+      "Impale"
+     ]
     },
     {
      "name": "Dagger",
@@ -50,8 +54,10 @@
      "value": 46,
      "damage": 6,
      "qualities": [
-      "with the Magical",
-      "Unbreakable"
+      "Magical",
+      "Unbreakable",
+      "Fine",
+      "with the Magical"
      ]
     }
    ],
@@ -212,7 +218,11 @@
      "name": "Crossbow",
      "value": 60,
      "damage": 9,
-     "rangeYards": 50
+     "rangeYards": 50,
+     "qualities": [
+      "Impale",
+      "Reload 3"
+     ]
     }
    ],
    "skills": [
@@ -757,12 +767,13 @@
     "Practical Robes"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Drain",
      "Marsh Lights",
-     "Open Lock"
+     "Open Lock",
+     "Rot"
     ],
-    "Rot Lore of Death Magic": [
+    "Lore of Death": [
      "Dying Words",
      "Sanctify"
     ]
@@ -1554,7 +1565,10 @@
      "name": "Bow",
      "value": 50,
      "damage": 7,
-     "rangeYards": 50
+     "rangeYards": 50,
+     "qualities": [
+      "Impale"
+     ]
     },
     {
      "name": "Hand Weapon",
@@ -1898,7 +1912,7 @@
     "Trade Tools (Herbalist)"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Animal Friend",
      "Marsh Lights",
      "Warning"
@@ -2083,8 +2097,11 @@
      "value": 43,
      "damage": 6,
      "qualities": [
-      "with the Fast",
+      "Fast",
       "Impale",
+      "Precise",
+      "Undamaging",
+      "with the Fast",
       "and Precise Qualities"
      ]
     }
@@ -2235,8 +2252,11 @@
      "value": 75,
      "damage": 9,
      "qualities": [
-      "with the Fast",
+      "Fast",
       "Impale",
+      "Precise",
+      "Undamaging",
+      "with the Fast",
       "and Precise Qualities"
      ]
     }

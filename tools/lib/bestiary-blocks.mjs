@@ -12,7 +12,7 @@ const HEADER = /\bM\s+WS\s+BS\s+S\s+T\s+I\s+Agi?\s+Dex\s+Int\s+W[Pp]\s+Fel(?:\s+
 const CELL = /(?:[+\-−–—�]?\d+\*?|[-–—−�]+|\*)/g;
 const DASH = /^[-–—−�]+$/;
 const NEGATIVE = /^[\-−–—�]\d/;
-const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits and Talents|Traits|Attack Traits|Skills|Talents|Trappings|Possessions|Spells|(?:Lore of [A-Z][a-z]+|Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells(?=:)|Mutations|Optional|Options|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles)\b/;
+const SECTION_START = /^(Lore of [A-Z][a-z]+(?=:)|Magic of [A-Z][a-z]+(?=:)|High Magic(?=:)|Yenlui State|Obsession|Traits and Talents|Traits|Attack Traits|Skills|Talents|Trappings|Possessions|Spells|SPELLS|Petty(?=:)|(?:Beasts|Death|Fire|Heavens|Life|Light|Metal|Shadows|Hedgecraft|Necromancy|Daemonology|Witchcraft|Tzeentch|Nurgle|Slaanesh|Khorne)(?=:)|Arcane(?: and Lore)?(?=:)|(?:Arcane|Petty Magic) Spells(?=:)|(?:Lore of [A-Z][a-z]+|Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells(?=:)|Mutations|Optional|Options|Armour|Attacks|Petty Magic|Arcane Magic|Weapons?|Special|Fate Points?|Miracles)\b/;
 const BARE_LABEL = /^(Attacks|Armour|Skills|Traits and Talents|Traits|Optional Traits|Talents|Trappings|Spells)$/;
 /** Lecture élargie (étiquettes décalées, interligne double, « Options: ») : réservée aux livres importés depuis L16, pour ne pas bouger les livres déjà relus. */
 let lenient = false;
@@ -250,7 +250,7 @@ export function pageBlocks(pageText) {
 }
 
 // V4 : « Traits: … Skills: … » (étiquette suivie de deux-points, n'importe où dans le texte). V5 : étiquette seule en début de ligne.
-const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents', 'Trappings', 'Possessions', 'Spells', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Miracles', 'Armour by Location', 'Special Rules'];
+const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Miracles', 'Armour by Location', 'Special Rules'];
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');
@@ -259,7 +259,8 @@ const V5_LABEL_RE = /^(Attacks|Armour(?!\s+by\s+Location)|Skills|Traits and Tale
 /** Sections étiquetées du corps, sous forme { étiquette: texte } ; `lead` : texte avant la première étiquette. */
 export function splitSections(bodyLines) {
   const lines = Array.isArray(bodyLines) ? bodyLines : [bodyLines];
-  const joined = clean(lines.join(' '));
+  // Intitulé « SPELLS » centré (sans deux-points) : même rôle que « Spells: ».
+  const joined = clean(lines.join(' ')).replace(/(^|\s)SPELLS(?=\s)/g, '$1Spells:');
   const sections = {};
   const put = (label, text) => { sections[label] = sections[label] ? `${sections[label]} ${text}` : text; };
   // Un bloc V5 commence par une étiquette seule ; une ligne « Armour of … » du texte voisin, plus bas, ne le rend pas V5 (L16 p. 7).

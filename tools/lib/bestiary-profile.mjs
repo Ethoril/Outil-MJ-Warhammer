@@ -25,7 +25,8 @@ export function readTraitItem(text) {
 /** Équipement : la liste, et les notes à astérisque (« *These fade away… ») qui la suivent dans le bloc. */
 export function readTrappings(rawText) {
   // L14 : « Whilst Dalroth could equip himself … he can be expected to have the following items to hand: Blade… » ; la phrase d'introduction n'est pas un objet.
-  const text = rawText.replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with):\s*/, '');
+  // « …his preferred attire consists of: Crown… » (L16 p. 32) et « …, add the following: Bandages » (L16 p. 45) : même chose en cours de liste.
+  const text = rawText.replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with|consists of):\s*/, '').replace(/(^|,\s*)(?:add )?the following:\s*/g, '$1');
   const cut = /\s\*(?=[A-Za-z])/.exec(text);
   // Titre en majuscules d'un profil voisin collé à la liste (« Zweihander, Dagger POWER FAMILIAR but familiars… », L17 p. 182) : la liste s'arrête avant.
   const neighbour = /\s[A-Z][A-Z'’-]{2,}(?:\s[A-Z][A-Z'’-]{2,})+\b/.exec(cut ? text.slice(0, cut.index) : text);
@@ -128,7 +129,7 @@ export function readDescribedNames(text, dictionary) {
 
 /** Attaques V5 : « Hooves and Tusks: (40/+6) Free Attack only when Charging » → { name, value, damage, note }. */
 // Qualités, défauts et clauses qui suivent la valeur d'une attaque (le nom de la suivante vient juste après, sans séparateur).
-const QUALITY_START = /^(?:Accurate|Blackpowder|Blast|Damaging|Defensive|Distract|Entangle|Fast|Hack|Impact|Impale|Penetrating|Pistol|Precise|Pummel|Repeater(?: \d+)?|Shield|Trap Blade|Unbreakable|Wrap|Dangerous|Imprecise|Reload(?: \d+)?|Slow|Tiring|Undamaging|Partial|Ugly|Magical|Unbalanced|Slashing|\d+ yards?|Free Attack only when Charging|Lose Momentum to make this Free Attack)\b,?\s*/i;
+const QUALITY_START = /^(?:Accurate|Blackpowder|Blast|Damaging|Defensive|Distract|Entangle|Fast|Hack|Impact|Impale|Penetrating|Pistol|Precise|Pummel|Repeater \d+|Repeater(?!\s+[A-Z])|Shield|Trap Blade|Unbreakable|Wrap|Dangerous|Imprecise|Reload(?: \d+)?|Slow|Tiring|Undamaging|Partial|Ugly|Magical|Unbalanced|Slashing|\d+ yards?|Free Attack only when Charging|Lose Momentum to make this Free Attack)\b,?\s*/i;
 
 export function readAttacks(text) {
   const attacks = [];
@@ -140,12 +141,11 @@ export function readAttacks(text) {
     const tail = clean(text.slice(mark.index + mark[0].length, end));
     let name = clean(mark[1]);
     // Sans deux-points, le nom suit la fin de la phrase de l'attaque précédente (« … Impale Quality Hand Weapon ») : coupé après « Quality ».
-    // Un nom suivi d'un deux-points est un vrai nom d'attaque (« Repeater Handbow and Bolts: (90/+6) », L09 p. 122) : jamais découpé.
-    const labelled = /:\s*\(/.test(mark[0]);
-    const afterQuality = labelled ? null : /^.*\b(?:Qualit(?:y|ies)|Flaws?)\s+(?=[A-Z])/.exec(name);
+    // « Repeater Handbow and Bolts: (90/+6) » (L09 p. 122) est un nom d'attaque : « Repeater » n'est une qualité que seul ou suivi d'un nombre.
+    const afterQuality = /^.*\b(?:Qualit(?:y|ies)|Flaws?)\s+(?=[A-Z])/.exec(name);
     if (afterQuality && attacks.length) { const previous = attacks[attacks.length - 1]; previous.tail = clean(`${previous.tail || ''} ${afterQuality[0]}`); name = name.slice(afterQuality[0].length); }
     const peeled = [];
-    for (let found = labelled ? null : QUALITY_START.exec(name); found && found[0].length < name.length; found = QUALITY_START.exec(name)) { peeled.push(found[0].replace(/,\s*$/, '').trim()); name = name.slice(found[0].length); }
+    for (let found = QUALITY_START.exec(name); found && found[0].length < name.length; found = QUALITY_START.exec(name)) { peeled.push(found[0].replace(/,\s*$/, '').trim()); name = name.slice(found[0].length); }
     if (peeled.length && attacks.length) { const previous = attacks[attacks.length - 1]; previous.tail = clean(`${previous.tail || ''} ${peeled.join(', ')}`); }
     const attack = { name: clean(name), value: Number(mark[3]), damage: Number(mark[4]) };
     if (mark[2]) attack.detail = clean(mark[2]);
@@ -168,27 +168,58 @@ export function readArmour(text) {
   return result;
 }
 
-const LORE_LABEL = /^(?:Lore of [A-Z][a-z]+|Magic of [A-Z][a-z]+|High Magic)$/;
+// Intitulés de listes de sorts : « Petty », « Petty Magic Spells », « Arcane and Lore », « Lore of Light », « Light » (Domaine seul), « Lore of Death Magic »… (sans deux-points).
+const BARE_LORES = 'Beasts|Death|Fire|Heavens|Life|Light|Metal|Shadows|Hedgecraft|Necromancy|Daemonology|Witchcraft|Tzeentch|Nurgle|Slaanesh|Khorne|Dark Magic';
+const SPELL_LABELS = String.raw`Petty(?: Magic(?: Spells)?| Spells)?|Arcane(?: Magic)?(?: and Lore)?(?: Spells)?|Lore of the Big Waaagh!|Lore of [A-Z][^:,]*?|Magic of [A-Z][a-z]+|High Magic|Chaos Magic|(?:${BARE_LORES})(?: Spells)?|[^\s:,]+ Marsh Magic|Little Waaagh!`;
+const SPELL_LABEL_ONLY = new RegExp(`^(?:${SPELL_LABELS})$`);
+const SPELL_PIECE = new RegExp(`(?:^|\\s)(${SPELL_LABELS}):`);
+// Prose à la place d'une liste (« Choose up to 3 spells… », « All Lore of Death spells, at GM's discretion », « As above, plus… »).
+const SPELL_PROSE = /\b(?:spells?|knows|Choose|memorised|discretion)\b|^As above/;
 
-/** Sorts : « Petty Magic: A, B Arcane Magic: C » ou liste simple. */
+/** Intitulé canonique : « Petty Magic Spells » → « Petty », « Lore of Death Magic » → « Lore of Death », « Light » → « Lore of Light ». */
+export function canonicalSpellLabel(label) {
+  const text = clean(label);
+  if (/^Petty\b/.test(text)) return 'Petty';
+  if (/^Arcane\b.*\bLore\b/.test(text)) return 'Arcane and Lore';
+  if (/^Arcane\b/.test(text)) return 'Arcane';
+  const bare = new RegExp(`^(${BARE_LORES})(?: Spells)?$`).exec(text);
+  if (bare) return bare[1] === 'Dark Magic' ? 'Lore of Dark Magic' : `Lore of ${bare[1]}`;
+  return text.replace(/ Spells$/, '').replace(/^(Lore of (?!Dark Magic$)[A-Z][a-z]+) Magic$/, '$1');
+}
+
+/** Noms de sorts d'une liste imprimée : numéros de page, renvois « (see page 137) », césures et point final retirés. */
+export function spellNames(text) {
+  const sentence = String(text).search(/\.\s/);
+  const list = (sentence >= 0 ? text.slice(0, sentence) : text).replace(/\.\s*$/, '');
+  return splitList(list.replace(/\(?(?:see )?page \d+\)?/gi, ' ').replace(/(?<=[a-z])-\s+(?=[A-Z])/g, '-').replace(/\s\d{1,3}(?=\s|,|$)/g, ' ').replace(/\*/g, ''))
+    .map(item => clean(item)).filter(Boolean);
+}
+
+/**
+ * Sorts : { « Petty »: [...], « Arcane »: [...], « Lore of X »: [...], spells: [liste sans intitulé], notes: [prose] }.
+ * Les intitulés viennent de sections propres (V4) ou du texte d'une section (« Petty Magic: A, B Lore of Death: C », V5 ou liste collée à la précédente).
+ */
 export function readSpells(sections) {
   const spells = {};
-  // L14 : une liste par Lore (« Lore of Shadows: … », « High Magic: … ») forme sa propre section.
-  const lores = Object.keys(sections).filter(label => LORE_LABEL.test(label));
-  // Listes intitulées « Petty Spells », « Lore of Life Spells », « Witchcraft Spells » (L14, L17) : une section chacune, intitulé gardé.
-  const named = Object.keys(sections).filter(label => label !== 'Spells' && /\sSpells$/.test(label));
-  const raw = [sections.Spells, sections['Petty Magic'] && `Petty Magic: ${sections['Petty Magic']}`, sections['Arcane Magic'] && `Arcane Magic: ${sections['Arcane Magic']}`].filter(Boolean).join(' ');
-  if (raw) {
-    const pieces = raw.split(/(?:^|\s)((?:Petty Magic|Arcane Magic|Lore of [A-Za-z ]+|Chaos Magic|Witchcraft|Daemonology|Necromancy|Hedgecraft|[A-Z][A-Za-z' ]+ Magic|[A-Z][A-Za-z' ]*(?:Lore|Spells))):/);
-    // Texte avant le premier intitulé (« Spells: Petty: A, B Lore of Light: C ») : liste simple, gardée sous « spells ».
-    const lead = clean(pieces[0]);
-    if (pieces.length < 3) spells.spells = splitList(raw);
-    else {
-      if (lead) spells.spells = splitList(lead);
-      for (let i = 1; i + 1 < pieces.length; i += 2) spells[clean(pieces[i])] = splitList(pieces[i + 1]);
-    }
+  const addList = (label, text) => {
+    const value = clean(text);
+    // Une phrase du texte voisin qui commence par « Spells » (« Spells from Colour Magic Lores… », L09 p. 52) n'est pas une liste.
+    if (!value || /^[a-z]/.test(value)) return;
+    if (SPELL_PROSE.test(value)) { (spells.notes ||= []).push(value.split(/(?<=\.)\s+(?=[A-Z])/).slice(0, 2).join(' ').replace(/\s+\d{1,3}$/, '')); return; }
+    const names = spellNames(value);
+    if (!names.length) return;
+    const key = label === null ? 'spells' : canonicalSpellLabel(label);
+    spells[key] = [...(spells[key] || []), ...names.filter(name => !(spells[key] || []).includes(name))];
+  };
+  const addText = (label, text) => {
+    const pieces = String(text).split(SPELL_PIECE);
+    addList(label, pieces[0]);
+    for (let i = 1; i + 1 < pieces.length; i += 2) addList(pieces[i], pieces[i + 1]);
+  };
+  for (const [label, text] of Object.entries(sections)) {
+    if (label === 'Spells') addText(null, text);
+    else if (SPELL_LABEL_ONLY.test(label)) addText(label, text);
   }
-  for (const label of [...lores, ...named]) spells[label] = splitList(sections[label]);
   return spells;
 }
 
@@ -258,7 +289,8 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   }
   if (sections['Attack Traits'] !== undefined) Object.assign(profile, listTraits(sections['Attack Traits'], mode, traitDictionary, 'attackTraits'));
   const optional = sections['Optional Traits'] ?? sections.Optional ?? sections.Options;
-  if (optional !== undefined) profile.optional = splitList(optional).map(readTraitItem).filter(Boolean);
+  // « … Trained (Broken, Drive) Note: The small but vicious dog… » (L06 p. 325) : la note qui suit la liste n'en fait pas partie.
+  if (optional !== undefined) profile.optional = splitList(optional.replace(/\s+Note:.*$/, '')).map(readTraitItem).filter(Boolean);
   if (sections.Skills) profile.skills = readSkills(sections.Skills);
   // Liste décrite (V5) : le premier deux-points précède la première virgule. Liste simple avec une clause (« Criminal, …, Doomed: "…", … », L04 p. 64) : lue comme liste.
   const describedTalents = sections.Talents && /:/.test(sections.Talents) && talentDictionary.size && !(sections.Talents.indexOf(',') >= 0 && sections.Talents.indexOf(',') < sections.Talents.indexOf(':'));

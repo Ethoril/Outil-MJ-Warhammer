@@ -147,6 +147,12 @@ function printedArmour(armour, includeOptional) {
   return { zones, reminder: unresolved.length ? `Armure imprimée « ${unresolved.join(', ')} » : zones ou PA non déterminés, à régler à la main (PA laissés à 0).` : '' };
 }
 
+/** Sorts d'un profil, une ligne par liste (« Petty : A, B », « Lore of Life : C ») ; la prose (« notes ») est gardée telle quelle. */
+export function bestiarySpellLines(spells) {
+  return Object.entries(spells || {}).filter(([, list]) => Array.isArray(list) && list.length)
+    .map(([label, list]) => (label === 'notes' ? list.join(' ') : `${label === 'spells' ? 'Sorts' : label} : ${list.join(', ')}`));
+}
+
 const traitText = trait => {
   const detail = trait.param ?? trait.rating;
   return detail === undefined || detail === null || detail === '' ? trait.name : `${trait.name} (${detail})`;
@@ -190,7 +196,9 @@ export function buildParticipantFromBestiary(id, options = {}) {
     extensions: { v5: { bestiary: {
       id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
-      optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {})
+      optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {}),
+      // Sorts imprimés, par liste (« Petty », « Lore of X »…) : consultation seulement, ils ne sont pas dans `participant.spells` (qui ouvre la Focalisation et le choix de sort).
+      ...(record.spells ? { spells: cloneValue(record.spells) } : {})
     } } }
   };
 }

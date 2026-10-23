@@ -122,7 +122,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const btnFav = document.createElement('button'); btnFav.textContent = p.favorite ? '★' : '☆'; btnFav.title = 'Profil favori'; btnFav.classList.add('ghost'); btnFav.addEventListener('click', () => settle(Store.updateProfile(p.id, { favorite: !p.favorite }), 'Favori'));
     const btnDel = document.createElement('button'); btnDel.textContent = 'Suppr'; btnDel.classList.add('danger', 'ghost'); btnDel.addEventListener('click', () => settle(Promise.resolve(Store.removeProfile(p.id)).then(result => settle(Store.log(`Réserve: supprimé ${p.name}`), 'Journal').then(() => result)), 'Suppression'));
     right.append(btnEdit, btnDup, btnFav, btnDel); div.append(left, right);
-    if (p.extensions?.ficheId || p.ficheSnapshot || p.equipment?.length || p.talents?.length) { const details = renderFicheDetails(p); details.style.width = '100%'; div.append(details); }
+    if (p.extensions?.ficheId || p.ficheSnapshot || p.equipment?.length || p.talents?.length || p.extensions?.v5?.bestiary?.spells) { const details = renderFicheDetails(p); details.style.width = '100%'; div.append(details); }
     return div;
   }
 

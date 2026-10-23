@@ -1,4 +1,5 @@
 import { resolveKeyword, resolveTalent, getReferenceCatalogue } from '../core/reference-catalog.js';
+import { bestiarySpellLines } from '../core/bestiary-profiles.js';
 import { acquiredV5TalentCoverage, V5_TALENT_TREATMENT_LABELS } from '../core/v5-talent-coverage.js';
 const element = (tag,text) => { const node=document.createElement(tag); if(text!=null)node.textContent=String(text); return node; };
 const names={head:'Tête',body:'Corps',rightArm:'Bras droit',leftArm:'Bras gauche',rightLeg:'Jambe droite',leftLeg:'Jambe gauche'};
@@ -19,6 +20,7 @@ export function renderFicheDetails(subject={}) {
  if((subject.talents||[]).length)root.append(treatment);
  const catalog=getReferenceCatalogue();
  section('Sorts — consultation',subject.spells||[],row=>[row.nom||row.name,row.desc||row.description||catalog.magic?.spells?.find(item=>item.nom===(row.nom||row.name))?.desc]);
+ section('Sorts du profil (bestiaire)',bestiarySpellLines(subject.extensions?.v5?.bestiary?.spells).map(line=>({line})),row=>{const [label,...rest]=row.line.split(' : ');return [label,rest.join(' : ')||row.line];});
  section('Prières — consultation',subject.prayers||[],row=>[row.nom||row.name,row.effet||row.description||catalog.magic?.miracles?.find(item=>item.nom===(row.nom||row.name))?.effet]);
  return root;
 }

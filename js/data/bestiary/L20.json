@@ -261,6 +261,35 @@
      "rank": 3
     }
    ],
+   "spells": {
+    "Arcane and Lore": [
+     "Aethyric Armour",
+     "Aqshy's Aegis",
+     "Blast",
+     "Bolt",
+     "Breath",
+     "Cauterise",
+     "Chain Attack",
+     "Crown of Flame",
+     "Dome",
+     "Drop",
+     "Fearsome",
+     "Flaming Hearts",
+     "Firewall",
+     "Great Fires of U'Zhul",
+     "Flaming Sword of Rhuin",
+     "Purge",
+     "Terrifying",
+     "Ward"
+    ],
+    "Petty": [
+     "Dart",
+     "Dazzle",
+     "Light",
+     "Magic Flame",
+     "Shock"
+    ]
+   },
    "nameFrSource": "proposition"
   },
   {
@@ -5315,6 +5344,18 @@
     "Leather Jack",
     "Network of Informants"
    ],
+   "spells": {
+    "Petty": [
+     "Animal Friend",
+     "Eavesdrop",
+     "Produce Small Animal"
+    ],
+    "Lore of Witchcraft": [
+     "Blight",
+     "Creeping Menace",
+     "Curse of Ill-Fortune"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -5796,6 +5837,28 @@
     "Grimoire",
     "4 GC 22/-"
    ],
+   "spells": {
+    "Lore of Light": [
+     "Aethyric Armour",
+     "Aethyric Arms",
+     "Banishment",
+     "Blast",
+     "Blinding Light",
+     "Bolt",
+     "Clarity of Thought",
+     "Net of Amyntok",
+     "Pha's Protection",
+     "Speed of Thought"
+    ],
+    "Petty": [
+     "Dart",
+     "Dazzle",
+     "Light",
+     "Magic Flame",
+     "Purify Water",
+     "Shock"
+    ]
+   },
    "keywords": [
     "humain"
    ],
@@ -6379,6 +6442,20 @@
    "trappings": [
     "Tattered Clothing"
    ],
+   "spells": {
+    "Petty": [
+     "Dazzle",
+     "Drain",
+     "Murmured Whisper",
+     "Eavesdrop"
+    ],
+    "Lore of Witchcraft": [
+     "Curse of Crippling Pain",
+     "Curse of Ill-Fortune",
+     "Haunting Horror",
+     "Evil Eye"
+    ]
+   },
    "keywords": [
     "elfe",
     "sorciere"
@@ -6549,11 +6626,8 @@
     "14/-"
    ],
    "spells": {
-    "spells": [
-     "Chylis knows every Petty Magic and Arcane Spell",
-     "plus all those from the Lores of Fire",
-     "Heavens",
-     "and Life."
+    "notes": [
+     "Chylis knows every Petty Magic and Arcane Spell, plus all those from the Lores of Fire, Heavens, and Life."
     ]
    },
    "keywords": [
@@ -7713,22 +7787,25 @@
     }
    ],
    "spells": {
-    "spells": [
-     "Petty: Dart",
+    "Petty": [
+     "Dart",
      "Dazzle",
      "Light",
      "Magic Flame",
      "Spring",
-     "Shock Light: Blinding Light",
+     "Shock"
+    ],
+    "Lore of Light": [
+     "Blinding Light",
      "Clarity of Thought"
     ],
-    "Witchcraft": [
+    "Lore of Witchcraft": [
      "Aethyric Armour",
      "Blast",
      "Blight",
      "Bolt",
      "Curse of Crippling Pain",
-     "Curse of Ill- Fortune",
+     "Curse of Ill-Fortune",
      "Teleport",
      "Terrifying",
      "Ward"

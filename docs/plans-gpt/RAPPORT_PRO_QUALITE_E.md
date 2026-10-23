@@ -21,6 +21,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q12b | FAIT (L07-L12 ; Q12c à faire) | (voir `git log`, « Q12b »)  |
 | Q12c | FAIT en partie (L13-L26 : causes d'outil réparées, manques restants non justifiés un par un, `QE-Q12c-4`) | (voir `git log`, « Q12c ») |
 | Q13 | FAIT (cas nommés L04, L09, L11, L14, L17, L18 ; écarts justifiés `QE-Q13-1`) | (voir `git log`, « Q13 ») |
+| Q14 | FAIT (sorts lus, fiche et participant ; manques restants justifiés `QE-Q14-4`) | (voir `git log`, « Q14 ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -207,3 +208,13 @@ Branché / non appelé (grep dans `js/`) :
 - **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125 et E0-P-126 diffèrent (`QE-Q12a-1`) ; 0 profil retiré. Contrôle des valeurs : toutes les lignes retrouvées sur L04, L09, L11, L14, L17, L18.
 - Test : `tests/pro-q13-cas-nommes.test.js` (9 tests) ; suite complète lancée une fois, sans échec.
 - **Branché / non appelé** : outil et données de livre seulement, aucune fonction de jeu ajoutée ; `attacks` gagnées → actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; `spells`, `trappings`, `talents` : code testé, non appelé.
+
+## Q14 — sorts des profils (FAIT)
+
+- **Outil** (`tools/lib/bestiary-blocks.mjs`, `bestiary-profile.mjs`) : `readSpells` rend un objet { liste : [noms] } aux intitulés canoniques (`Petty`, `Arcane`, `Arcane and Lore`, `Lore of X`, `High Magic`…), `spells` pour une liste sans intitulé et `notes` pour la prose ; numéros de page, renvois « (see page 137) » et césures retirés ; une liste collée à la précédente (« … Ward Lore of Metal: … », « Light: », « Witchcraft: ») est séparée. Le corps d'un profil ne s'arrête plus avant « SPELLS » (intitulé centré, Eusapia L26 p. 48), « Petty: », « Arcane: » ou un Domaine seul (Brine Wife L07 p. 75). Choix : `QE-Q14-1` à `QE-Q14-5`.
+- **Livres régénérés** (23, 15 fichiers modifiés) : 46 profils ont des sorts (662 noms), dont 10 qui n'en avaient aucun ; comparaison profil par profil avec `HEAD` : seules des entrées de sorts s'ajoutent, des fragments de prose disparaissent de l'équipement. Caractéristiques et Blessures : identiques à `9c12613` sauf E0-P-125 et E0-P-126 (déjà signalés, `QE-Q12a-1`).
+- **Régressions de Q13 corrigées au passage** (livres alors non régénérés : L06, L10, L16) : attaques de L06 (Dragon, Manticore, Troll…) et L10 (qualités des Foils), équipement de Brokk / Thurma / Nanna (L16), Traits facultatifs du Dog (L06). `QE-Q14-3`.
+- **Contrôle Q11** : sorts manquants 516 → 14 (8 profils, tous des artefacts de lecture du texte brut, `QE-Q14-4`). Le contrôle lit désormais le champ par liste et arrête la liste imprimée à « Trappings » et aux Domaines suivants.
+- **Fiche de la bibliothèque et participant** : ligne « Sorts » de `renderBestiarySheet` ; `buildParticipantFromBestiary` copie les sorts dans `extensions.v5.bestiary.spells` (la copie dans la Réserve les garde) ; section « Sorts du profil (bestiaire) » de `renderFicheDetails`. Aucune valeur durable de personnage (`VARIABLES_PERSISTANTES_PJ.md` inchangé : créatures, pas de PJ).
+- **Branché / non appelé (grep dans `js/`)** : **branché** — `bestiarySpellLines` (js/core/bestiary-profiles.js) est appelé par `js/ui/bestiary-library.js` (`renderBestiarySheet`, fiche ouverte par le bouton « Fiche » de la bibliothèque) et `js/ui/fiche-details.js` (`renderFicheDetails`, appelé par `js/ui/workspace-view.js` pour la fiche d'un participant et par `js/ui/reserve.js` pour un profil de Réserve) ; `extensions.v5.bestiary.spells` est posé par `buildParticipantFromBestiary` (appelants : `bestiary-library.js`, `bestiary-templates.js`, `v5-spell-contracts.js`). **Non appelé par le moteur de magie** : les sorts du bestiaire sont en consultation seulement, volontairement hors de `participant.spells` (`QE-Q14-2`).
+- Tests : `tests/pro-q14-sorts.test.js` (13 tests, dont rendu de la fiche et de la fiche du participant avec un faux DOM) ; `tests/pro-q5-sea-wardens.test.js` et `tests/pro-q13-cas-nommes.test.js` mis à jour pour la forme canonique.

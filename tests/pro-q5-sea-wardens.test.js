@@ -49,10 +49,11 @@ test('Q5 : la phrase d\'introduction de l\'équipement n\'est pas un objet', () 
   assert.deepEqual(readTrappings('Sword, Shield').items, ['Sword', 'Shield']);
 });
 
-test('Q5 : un texte avant le premier intitulé de sorts reste une liste simple', () => {
+test('Q5 / Q14 : « Petty: » ouvre la liste des sorts mineurs (plus un sort « Petty: Bearings »)', () => {
   const spells = readSpells({ Spells: 'Petty: Bearings, Dazzle Lore of Light: Pierce the Veil' });
-  assert.deepEqual(spells.spells, ['Petty: Bearings', 'Dazzle']);
+  assert.deepEqual(spells.Petty, ['Bearings', 'Dazzle']);
   assert.deepEqual(spells['Lore of Light'], ['Pierce the Veil']);
+  assert.equal(spells.spells, undefined);
 });
 
 test('Q5 : un bloc dont la richesse suit un blanc garde son corps', () => {

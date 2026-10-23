@@ -444,14 +444,15 @@
     "Sack Full of Gifts (contains ingredients for Soren's spells and assorted treasures worth a total of 40 GC)"
    ],
    "spells": {
-    "Petty Magic": [
+    "Petty": [
      "Bearings",
      "Dazzle",
      "Dart",
      "Drain",
-     "Murmured Whisper"
+     "Murmured Whisper",
+     "Sly Hands"
     ],
-    "Sly Hands Arcane Magic": [
+    "Arcane": [
      "Arrow Shield",
      "Bolt",
      "Bridge",
@@ -951,7 +952,7 @@
     }
    ],
    "spells": {
-    "spells": [
+    "notes": [
      "Lord Skrolk is an accomplished wizard whose power is further bolstered by his loathsome god. He can be considered to have access to any spells from the following lists: � Petty Magic � The Lore of Nurgle"
     ]
    },
@@ -1648,6 +1649,43 @@
      "name": "Sixth Sense"
     }
    ],
+   "trappings": [
+    "Cauldron",
+    "Cave Lair on a rocky island off Cape Ruin",
+    "Dozens of Mirrors including a Mirror of Scrying (allows access to the Psychometry Skill to the Character wielding it, and a minor source of Corruption)",
+    "Horde of Treasure from wrecked ships",
+    "Undead Servants"
+   ],
+   "spells": {
+    "Petty": [
+     "Dart",
+     "Dazzle",
+     "Drain",
+     "Gust",
+     "Marsh Lights",
+     "Murmured Whisper"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
+     "Breath (rotted fish and seaweed)",
+     "Dome",
+     "Drop",
+     "Entangle",
+     "Move Object",
+     "Push"
+    ],
+    "Lore of Witchcraft": [
+     "Blight",
+     "Curse of Crippling Pain",
+     "Curse of Ill-Fortune",
+     "The Evil Eye"
+    ],
+    "Lore of Necromancy": [
+     "Raise Dead",
+     "Reanimate",
+     "Vanhel's Call"
+    ]
+   },
    "keywords": [
     "sorciere"
    ],
@@ -2439,11 +2477,14 @@
     "Wax slate and stylus"
    ],
    "spells": {
-    "spells": [
-     "Petty: Bearings",
+    "Petty": [
+     "Bearings",
      "Dazzle",
      "Dart",
-     "Warning Arcane: Aethyric Armour",
+     "Warning"
+    ],
+    "Arcane": [
+     "Aethyric Armour",
      "Flight"
     ],
     "Lore of Heavens": [
@@ -3679,7 +3720,7 @@
     "Staff"
    ],
    "spells": {
-    "Arcane Magic": [
+    "Arcane": [
      "Blast",
      "Drop",
      "Entangle",

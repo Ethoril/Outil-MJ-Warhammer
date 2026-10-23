@@ -25,7 +25,7 @@ test('Q13 L14 : Litharys a son équipement et ses sorts, Fialthra n\'a plus de t
   assert.ok(litharys.spells['Lore of Heavens'].includes('Divination'));
   const fialthra = byId(sea, 'E0-P-481');
   assert.ok(!names(fialthra.talents).some(name => /Dirt|Reveal Magic/.test(name)));
-  assert.ok(fialthra.spells['Petty Spells'].includes('Reveal Magic'));
+  assert.ok(fialthra.spells.Petty.includes('Reveal Magic'));
   assert.ok(names(fialthra.talents).some(name => name.startsWith('Arcane Magic (Beasts')));
   const ceyluii = byId(sea, 'E0-P-483');
   assert.deepEqual(ceyluii.trappings, ['Twig Spear']);
