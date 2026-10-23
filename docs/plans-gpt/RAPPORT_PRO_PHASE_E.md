@@ -28,7 +28,8 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | T9 Plusieurs têtes (registre par tête, effet global, attaques gratuites par tête valide, Perception +2 DR) | FAIT (choix E-T9) | voir `git log` |
 | T10 Taille (barème p. 360, poids au surnombre, écart avec un adversaire, Blessures sur demande) | FAIT (choix E-T10) | voir `git log` |
 | T11 modificateurs de gabarit (application à un profil importé, modificateurs signés, W, Traits, compétences ; choix E-T11) | FAIT | voir `git log` |
-| T12, F1-F2, S1, R1 | À FAIRE | |
+| T12 capacités propres du Zoo et de Lustria (138 entrées : 46 raccordées aux lots T1 à T7, 92 rappels motivés par entrée ; choix E-T12) | FAIT | voir `git log` |
+| F1-F2, S1, R1 | À FAIRE | |
 
 ## Dernière suite complète
 
