@@ -1459,6 +1459,14 @@
      "rank": 3
     }
    ],
+   "trappings": [
+    "Decks of Cards (marked and unmarked)",
+    "Dice (loaded and unloaded)",
+    "Forged Documents",
+    "2 Sets of Clothing with Secret Pockets and Pouches",
+    "1 Set of Quality Clothing",
+    "10d10 brass pennies"
+   ],
    "keywords": [
     "humain"
    ],
@@ -2679,6 +2687,37 @@
      "ref": "E0-T-027"
     }
    ],
+   "talents": [
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dirty Fighting",
+     "rank": 2
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Leather Gloves",
+    "Gang Colours",
+    "Guild License",
+    "Leather Jerkin",
+    "Pipe and Tobacco",
+    "Porter Cap",
+    "Tools",
+    "1d10 silver shillings"
+   ],
    "keywords": [
     "humain"
    ],
@@ -3415,6 +3454,10 @@
      "ref": "E0-T-269"
     },
     {
+     "name": "Tzeentch’s Fire",
+     "ref": "E0-T-270"
+    },
+    {
      "name": "Unstable",
      "ref": "E0-T-062"
     }
@@ -3511,6 +3554,10 @@
      "name": "Fear",
      "rating": "1",
      "ref": "E0-T-022"
+    },
+    {
+     "name": "Tzeentch’s Fire",
+     "ref": "E0-T-270"
     },
     {
      "name": "Unstable",
@@ -4783,6 +4830,13 @@
      "name": "Rapid Reload"
     }
    ],
+   "trappings": [
+    "Black Hood",
+    "Bow and 20 Black Arrows",
+    "Leather Jerkin",
+    "Sword",
+    "8d10 brass pennies"
+   ],
    "keywords": [
     "hors-la-loi"
    ],
@@ -4842,6 +4896,9 @@
      "param": "Large",
      "ref": "E0-T-045"
     }
+   ],
+   "specialRules": [
+    "Animalistic Legs"
    ],
    "nameFrSource": "proposition"
   },
@@ -5928,6 +5985,14 @@
     {
      "name": "Well-prepared"
     }
+   ],
+   "trappings": [
+    "Assorted Powders",
+    "Potions and Charms, all fake (at the GM's discretion, some may have interesting but unplanned effects)",
+    "Necklace of Chicken Bones",
+    "Ragged Clothes",
+    "Trade Tools (Cook)",
+    "2d10 silver shillings"
    ],
    "nameFrSource": "proposition"
   },

@@ -40,6 +40,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q27e | FAIT (L20 ; Q27 non terminé : L21-L23, L25, L26) | (voir `git log`, « Q27e ») |
 | Q27f | FAIT (L21 ; Q27 non terminé : L22, L23, L25, L26) | (voir `git log`, « Q27f ») |
 | Q27g | FAIT (L22 ; Q27 non terminé : L23, L25, L26) | (voir `git log`, « Q27g ») |
+| Q27h | FAIT (L23 ; Q27 non terminé : L25, L26) | (voir `git log`, « Q27h ») |
 
 ## Q0 — contrôle de complétude
 
@@ -385,3 +386,12 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, 23 livres** : talents 6, compétences 3, attaques 2, Traits 7, équipement 58, sorts 0, bruit d'équipement 3 (avant : 7, 4, 2, 13, 62, 0, 5) ; reste : L23 15 profils, L25 5, L26 10 (Q27h…).
 - Test : `tests/pro-q27g-completude.test.js` (4 tests).
 - Outil de contrôle et données de livre : rien à déclarer « branché » (les équipements et Traits gagnés passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
+
+## Q27h — complétude de L23 (FAIT ; Q27 non terminé)
+
+- Mesure avant : 15 profils signalés dans L23 (talents 6, attaques 2, Traits 6, équipement 32). Tous relus sur leurs pages. **Après : 0 manque non justifié sur L01-L24** ; 9 profils justifiés un par un (`QE-Q27h-1`). Reste : L25 5 profils (compétences 3, équipement 2, bruit 1), L26 10 (Trait 1, équipement 24, bruit 2).
+- **Vrais manques corrigés** : Talents et Trappings d'Albert Pförtner, Trappings de Wolmar Rotte, d'Annalisa Kessler et de « Granny » Haller (imprimés sous de la prose de colonne, `BODY_OVERRIDES`), « Tzeentch's Fire » du Pink et du Blue Horror (apostrophe droite imprimée contre apostrophe courbe de l'inventaire : `canonical` les rapproche), « Animalistic Legs » d'Urzo (absent de l'inventaire, gardé dans `specialRules`, question au MJ `QE-Q27h-3`). `joinTrappings` ne coupe plus aux virgules entre parenthèses. Détail : `QE-Q27h-2`.
+- **Livres régénérés** (23, `build-bestiary-profiles.mjs`) : seul L23 change, uniquement par des lignes gagnées (65 lignes ajoutées, aucune retirée). 12 caractéristiques et Blessures inchangées (contrôle : 55/55 lignes retrouvées ; les autres livres sont identiques à `HEAD`).
+- **Contrôle, 23 livres** : talents 0, compétences 3, attaques 0, Traits 1, équipement 26, sorts 0, bruit d'équipement 3 (avant : 6, 3, 2, 7, 58, 0, 3) ; les 10 avertissements de compétence restants sont des coquilles de noms du livre (« Athlethics »…) ou du texte à colonnes, pas des manques.
+- Test : `tests/pro-q27h-completude.test.js` (5 tests).
+- Outil de contrôle et données de livre : rien à déclarer « branché » (équipements, talents et Traits gagnés passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js` ; `specialRules` : code testé, non appelé). Aucune valeur durable de personnage.

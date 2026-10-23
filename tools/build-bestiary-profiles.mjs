@@ -39,16 +39,18 @@ const baseName = name => name.replace(/\s*\(.*\)\s*$/, '').replace(/\s+—.*$/, 
 const canonicalNames = new Map();
 const traitRefs = new Map();
 const traitFr = new Map();
+// L'inventaire écrit « Tzeentch’s Fire » (apostrophe courbe), les livres l'impriment avec l'apostrophe droite (Pink Horror, L23 p. 87).
+const straightQuote = text => text.replace(/[’‘`]/g, '\'');
 for (const trait of inventory.traits) {
   const base = baseName(trait.name);
-  if (!canonicalNames.has(base.toLowerCase())) canonicalNames.set(base.toLowerCase(), base);
+  if (!canonicalNames.has(straightQuote(base).toLowerCase())) canonicalNames.set(straightQuote(base).toLowerCase(), base);
   const better = !traitRefs.has(base) || (trait.kind === 'trait' && !String(traitRefs.get(base)).startsWith('E0-T-0') );
   if (better || trait.kind === 'trait') { if (!traitRefs.has(base) || trait.kind === 'trait') traitRefs.set(base, trait.id); }
   if (trait.nameFr && !traitFr.has(base)) traitFr.set(base, baseName(trait.nameFr));
 }
 const canonical = name => {
   // Les coupures de ligne laissent « Cold- blooded » : le trait d'union suivi d'un blanc est recollé.
-  const key = String(name).trim().toLowerCase().replace(/-\s+/g, '-');
+  const key = straightQuote(String(name).trim().toLowerCase().replace(/-\s+/g, '-'));
   const direct = canonicalNames.get(key);
   if (direct) return direct;
   const alias = TRAIT_ALIASES[key];

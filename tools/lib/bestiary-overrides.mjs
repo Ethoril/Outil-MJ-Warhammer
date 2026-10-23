@@ -172,6 +172,8 @@ export const TRAPPING_JOINS = Object.freeze({
   'E0-P-455': ['Ramshackle armour incorporating plate, mail, and scale'],
   // Altdorf (L21) p. 78 : Gerta Faernmaus, objet décrit sur trois lignes, sa parenthèse finale n'est pas celle d'un nom.
   'E0-P-706': ['Chaos Armour (cannot be removed) decorated with the skin of a dire wolf'],
+  // Enemy in Shadows Companion (L23) p. 111 : « Granny » Haller, « Potions and Charms, all fake (…) » est un seul objet.
+  'E0-P-812': ['Potions and Charms, all fake (at the GM\'s discretion, some may have interesting but unplanned effects)'],
   'E0-P-700': ['Book of Pressed Flowers taken from every battlefield she has ever fought on (worth 5 GC to someone interested in botany)']
 });
 
@@ -179,6 +181,9 @@ export const TRAPPING_JOINS = Object.freeze({
  * Corps de bloc relus sur la page quand la mise en page (interligne double) empêche de suivre les lignes d'un bloc. Clé : « livre:page:rang ».
  * Le texte est celui du livre, recopié ligne à ligne.
  */
+// Noms de Traits imprimés que l'inventaire ne connaît pas : gardés dans `specialRules` plutôt que perdus (Urzo, L23 p. 104 : Animalistic Legs).
+export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs']));
+
 export const BODY_OVERRIDES = Object.freeze({
   // Temple of Spite (L09) p. 122 : Duriath Helbane, la prose de la colonne voisine mange le début de plusieurs lignes (« dium Armour », « gon Cloak », « Old ation », « er's Crown ») : relu sur la page.
   'L09:122:0': [
@@ -446,6 +451,38 @@ export const BODY_OVERRIDES = Object.freeze({
     'Skills: Cool 32, Endurance 55, Haggle 42, Intuition 44, Lore (Middle Mountains) 42, Melee (Basic 36, Two-Handed 36), Outdoor Survival 42, Perception 44',
     'Talents: Doomed (Lose thyself slowly, piece by piece)',
     'Trappings: Roughspun Robes over Leather Jack, Dagger, Pick'
+  ],
+  // Enemy in Shadows Companion (L23) p. 49 : Wolmar Rotte, les Trappings suivent la prose de la colonne voisine (« Rotten to the Core ») et étaient perdus.
+  'L23:49:0': [
+    'Traits: Corruption (Minor), Mutation (Thrill Hunter), Weapon (Fists) +3',
+    'Skills: Bribery 54, Consume Alcohol 35, Charm 59, Cool 58, Entertain (Acting) 59, Entertain (Storytelling) 54, Evaluate 50, Gamble 50, Gossip 54, Haggle 54, Intuition 46, Perception 46, Sleight of Hand 54',
+    'Talents: Blather, Cardsharp, Criminal, Diceman, Fast Hands, Luck 3',
+    'Trappings: Decks of Cards (marked and unmarked), Dice (loaded and unloaded), Forged Documents, 2 Sets of Clothing with Secret Pockets and Pouches, 1 Set of Quality Clothing, 10d10 brass pennies'
+  ],
+  // Enemy in Shadows Companion (L23) p. 60 : Albert Pförtner, Talents et Trappings imprimés plus bas dans la colonne, après la prose « Labourers ».
+  'L23:60:0': [
+    'Traits: Armour (Leather Jerkin) 1, Hatred (Rival Gangers), Weapon (Boat Hook) +9',
+    'Skills: Athletics 28, Bribery 46, Climb 60, Consume Alcohol 58, Dodge 32, Endurance 58, Gossip 46, Intimidate 60, Perception 51, Melee (Basic) 58, Stealth (Urban) 28',
+    'Talents: Criminal, Dirty Fighting 2, Strong Back, Sturdy, Tenacious, Very Strong',
+    'Trappings: Leather Gloves, Gang Colours, Guild License, Leather Jerkin, Pipe and Tobacco, Porter Cap, Tools, 1d10 silver shillings'
+  ],
+  // Enemy in Shadows Companion (L23) p. 102 : Annalisa Kessler, la ligne Trappings est séparée des Talents par le titre « REWARDS ».
+  'L23:102:0': [
+    'Traits: Armour (Leather Jerkin) 1, Prejudice (The Rich), Ranged (Bow) (60) +7, Weapon (Sword) +8',
+    'Skills: Athletics 49, Consume Alcohol 51, Cool 47, Dodge 44, Endurance 51, Gamble 39, Heal 44, Intimidate 50, Intuition 57, Leadership 48, Lore (Local) 44, Melee (Basic) 64, Perception 57, Outdoor Survival 44, Ranged (Bow) 73, Stealth (Rural) 49',
+    'Talents: Combat Aware, Marksman, Rapid Reload',
+    'Trappings: Black Hood, Bow and 20 Black Arrows, Leather Jerkin, Sword, 8d10 brass pennies'
+  ],
+  // Enemy in Shadows Companion (L23) p. 104 : Urzo, Animalistic Legs ouvre la liste des Traits (gardé dans specialRules, TRAITS_KEPT_AS_RULES).
+  'L23:106:0': [
+    'Traits: Animalistic Legs, Armour 3, Frenzy, Horns +9, Size (Large), Weapon (Claws) +4'
+  ],
+  // Enemy in Shadows Companion (L23) p. 111 : « Granny » Haller, Trappings séparés de la liste des Talents par la prose de la colonne.
+  'L23:113:0': [
+    'Traits: Weapon (Fists) +2',
+    'Skills: Animal Care 42, Bribery 63, Charm 73, Charm Animal 52, Cool 57, Consume Alcohol 52, Dodge 49, Endurance 47, Entertain (Acting) 73, Entertain (Fortune Telling) 68, Entertain (Storytelling) 68, Gamble 37, Gossip 73, Haggle 73, Intuition 64, Lore (Astrology) 42, Outdoor Survival 37, Perception 64, Sleight of Hand 55, Stealth (Rural) 49',
+    'Talents: Blather, Cat-tongued, Rover, Seasoned Traveller, Suave, Well-prepared',
+    'Trappings: Assorted Powders, Potions and Charms, all fake (at the GM\'s discretion, some may have interesting but unplanned effects), Necklace of Chicken Bones, Ragged Clothes, Trade Tools (Cook), 2d10 silver shillings'
   ],
   // Ennemi Intérieur, Une nuit agitée (L24) p. 19 : Josef Aufwiegler, la ligne imprimée « Talents: Weapon (Fist) +3 » est une arme (coquille du livre, comme « Weapons (Spear) +8 »).
   'L24:20:1': [

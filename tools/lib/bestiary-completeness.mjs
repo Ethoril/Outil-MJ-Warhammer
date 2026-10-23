@@ -155,7 +155,7 @@ export function printedTraits(block) {
 
 export function recordTraitKeys(record) {
   const keys = new Set();
-  for (const trait of [...(record.traits || []), ...(record.optionalTraits || []), ...(record.abilities || [])]) {
+  for (const trait of [...(record.traits || []), ...(record.optionalTraits || []), ...(record.abilities || []), ...(record.specialRules || [])]) {
     const name = typeof trait === 'string' ? trait : trait?.name;
     if (name) keys.add(traitKey(name));
     // « Large » seul (Trait V4) est gardé comme Size (Large).

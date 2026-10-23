@@ -113,5 +113,15 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-749': { trappings: 'L22 p.94 : « FORMER INTERROGATOR » est le titre du profil voisin (Paolo Gentile) ; les quatre objets de Claudia Carbonetti sont présents.' },
   'E0-P-751': { traits: 'L22 p.95 : « Britta » et « Ilona » sont le texte du profil voisin (Knud, Britta, Ilona, and Mikhail) ; les cinq Traits de Giuseppe sont présents.' },
   'E0-P-757': { traits: 'L22 p.120 : « Undead FLYING DEATH SKULLS » est le dernier Trait de Carrion suivi du titre du profil voisin ; Undead est présent.' },
+  // Q27h : L23 (Enemy in Shadows Companion) relu sur ses pages.
+  'E0-P-760': { attacks: 'L23 p.24 : « which increases their WP score by +20 » est la prose de la colonne voisine (trait Stubborn des ânes et mules) ; le Chien a Weapon +5.' },
+  'E0-P-769': { trappings: 'L23 p.44 : « Road Captain Though never a particularly clever man… » est le titre et la prose du profil voisin (Heinrich Steele) ; les treize objets de la Sergent routier sont présents.' },
+  'E0-P-775': { trappings: 'L23 p.52 : « although people cooperate with bandits more out of fear than love » est la prose de la colonne voisine (Outlaws) ; les sept objets d\'Eberhart sont présents.' },
+  'E0-P-777': { trappings: 'L23 p.54 : « bad timing », « or gravely misplaced faith in the Empire\'s justice system » sont la prose de la colonne voisine (Cell Mates) ; les neuf objets de Delberz sont présents.' },
+  'E0-P-782': { trappings: 'L23 p.59 : « with a comical stooped posture, bushy brows, clever hands, and a knowing gaze » est la prose de la colonne voisine (Heinrich « The Grouch » Marken) ; les cinq objets sont présents.' },
+  'E0-P-784': { trappings: 'L23 p.61 : « if not all » vient de « Most, if not all, lawbreakers… », prose de la colonne voisine ; les six objets d\'Alette sont présents.' },
+  'E0-P-807': { attacks: 'L23 p.108 : « Claw +4 » est le Trait du profil voisin (Imperial Beast) ; les Farmyard Beasts ont Bite +3 et Weapon +5.', traits: 'L23 p.108 : « Size (Small) » est le Trait du profil voisin (Imperial Beast) ; les cinq Traits des Farmyard Beasts sont présents.' },
+  'E0-P-808': { traits: 'L23 p.108 : « Hatred (Keepers) » et « Venom (Challenging) » sont les Traits du profil voisin (Farmyard Beasts) ; les cinq Traits de l\'Imperial Beast sont présents.' },
+  'E0-P-812': { trappingNoise: 'L23 p.111 : « Potions and Charms, all fake (at the GM\'s discretion, some may have interesting but unplanned effects) » est un seul objet imprimé (recollé par TRAPPING_JOINS) ; le contrôle lit sa longue parenthèse comme une phrase.' },
   'E0-P-607': { attacks: 'L19 p.143 : « and go on to score a goal if their total is +25 » est la règle de jeu rapide du match (texte de la colonne voisine) ; le Nain n\'a aucune attaque imprimée.' }
 });

@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { SKILL_GROUPS, SKILL_GROUP_ALIASES, skillNameFr } from './bestiary-glossary.mjs';
 import { BASE_REFERENTIAL, keywordAncestors, normalizeKeywordText, resolveKeyword } from '../../js/core/creature-keywords.js';
-import { TRAPPING_JOINS, TRAPPING_TRIMS } from './bestiary-overrides.mjs';
+import { TRAITS_KEPT_AS_RULES, TRAPPING_JOINS, TRAPPING_TRIMS } from './bestiary-overrides.mjs';
 
 const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
 const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Tentacles', 'Ranged', 'Creature Weapons']);
@@ -180,7 +180,8 @@ export function isTrappingName(item) {
 export function joinTrappings(items, names = []) {
   let list = [...items];
   for (const name of names) {
-    const parts = name.split(',').map(part => part.trim());
+    // Les virgules entre parenthèses ne séparent pas deux objets (« all fake (at the GM's discretion, some may… ») ».
+    const parts = name.split(/,(?![^()]*\))/).map(part => part.trim());
     const at = list.findIndex((_, start) => parts.every((part, offset) => list[start + offset] === part));
     if (at >= 0) list.splice(at, parts.length, name);
   }
@@ -235,7 +236,7 @@ export function buildRecord(extracted, entry, context) {
   if (extracted.notes?.length) record.notes = extracted.notes;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;
-  const rules = (extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule));
+  const rules = [...(extracted.specialRules || []).filter(rule => rule.split(/\s+/).length <= 5 && /^[A-Z]/.test(rule) && !/[.;]/.test(rule)), ...traits.dropped.filter(name => TRAITS_KEPT_AS_RULES.has(name))];
   if (rules.length) record.specialRules = rules;
   if (extracted.starred?.length) record.starred = extracted.starred.map(key => (key === 'W' ? 'wounds' : key));
   const abilities = [...(entry.abilityRefs || [])];
