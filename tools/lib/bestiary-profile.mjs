@@ -29,7 +29,8 @@ export function readTrappings(rawText) {
   // « Trade Tools (Embalmer, Smith). Outside the hold, add the following: Bandages, Restorative Brew » (L16 p. 45) : variante de la liste, pas une phrase.
   // « The Disc is piled high with all manner of grimoires… » (L17 p. 213) : l'équipement est une phrase de description, gardée en note.
   if (/^The [A-Za-z ]+ (?:is|are) [^,]*\.\s/.test(rawText)) return { items: [], notes: [clean(rawText)] };
-  const text = rawText.replace(/\.\s+Outside the hold(?=,\s*add the following:)/, '').replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with|consists of):\s*/, '').replace(/(^|,\s*)(?:add )?the following:\s*/g, '$1');
+  // L'Encombrement « 15/2 » ferme la liste V4 ; le paragraphe de l'encadré voisin qui le suit (Maren Mauer, L20 p. 126) n'est pas de l'équipement.
+  const text = rawText.replace(/((?:^|,\s)\d+\/(?:\d+|-))\s+[A-Z][a-z]+ [a-z].*$/, '$1').replace(/\.\s+Outside the hold(?=,\s*add the following:)/, '').replace(/^[A-Z][^:]{20,}\b(?:to hand|following items|equipped with|consists of):\s*/, '').replace(/(^|,\s*)(?:add )?the following:\s*/g, '$1');
   // « Sword * Adalbert is still… » (L02 p. 90) : l'astérisque peut être suivi d'une espace.
   const cut = /\s\*\s?(?=[A-Za-z])/.exec(text);
   // Titre en majuscules d'un profil voisin collé à la liste (« Zweihander, Dagger POWER FAMILIAR but familiars… », L17 p. 182) : la liste s'arrête avant.
@@ -70,6 +71,9 @@ function readTraitItemPlain(text) {
     if (natural[5]) trait.printed = Number(natural[5]);
     return trait;
   }
+  // « Dagger +5 » (Freya Husslhaus, L20 p. 101), « Unarmed +7 » (Willi Pick p. 36), « Melee (Crowbar) +9 » (Gustav Zasle p. 136) : arme V4 imprimée sans le mot « Weapon ».
+  const bare = /^(Unarmed|Dagger|Sword|Club|Axe|Hammer|Spear|Staff|Mace|Knife|Fists|Rapier)\s*([+-]\d+)$/i.exec(item) || /^Melee\s*\(([^()]*)\)\s*([+-]\d+)$/i.exec(item);
+  if (bare) return { name: 'Weapon', param: clean(bare[1]).replace(/^./, letter => letter.toUpperCase()), rating: bare[2] };
   // « Ranged (Dwarf Crossbow) (80) +10 (Damaging, Impale, Reload 1) » : portée imprimée avant les dégâts, qualités entre parenthèses.
   const ranged = /^(Ranged|Weapon)\s*\(([^()]*)\)\s*\((\d+)\)\s*([+-]\d+)\s*(?:\([^()]*\))?$/i.exec(item);
   // « Blowpipe +1 (20) » (Chameleon Skink, L07 p. 142) : arme à distance imprimée sans « Ranged ( ) » ; portée imprimée entre parenthèses.

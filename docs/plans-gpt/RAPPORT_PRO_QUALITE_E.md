@@ -354,3 +354,12 @@ Branché / non appelé (grep dans `js/`) :
 - **Contrôle, 23 livres** : talents 10, compétences 19, attaques 10, Traits 21, équipement 113, sorts 5, bruit d'équipement 17 (avant : 12, 20, 15, 44, 125, 13, 44) ; L17-L19 à 0. Reste : L20 18 profils, L21 17, L22 9, L23 15, L25 5, L26 10 (Q27e, Q27f).
 - Test : `tests/pro-q27d-completude.test.js` (8 tests). Suite complète lancée une fois : 4449 réussis, 0 échec.
 - Outil de contrôle et données de livre : rien à déclarer « branché » (les notes et la Taille du Library Disc passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.
+
+## Q27e — complétude de L20 (FAIT ; Q27 non terminé)
+
+- Mesure avant : 18 profils signalés dans L20 (compétences 1, attaques 3, Traits 1, équipement 30, sorts 5, bruit d'équipement 7). Tous relus sur leurs pages. **Après : 0 manque non justifié sur L01-L20** ; 7 profils justifiés un par un (`QE-Q27e-1`).
+- **Vrais manques corrigés dans l'outil** : armes V4 sans « Weapon » (Freya Dagger +5, Willi Pick Unarmed +7, Gustav Zasle Crowbar +9, et Sword +7 de trois profils L21 p.41 : Bengt, Alicja, Renia), Research 90 et Trappings du Chancellor (« Skills: » imprimé pour « Trappings: »), Bow +6 de Thomas Fabhber, Maps of the City (Burglar), texte de l'encadré collé aux objets de Maren Mauer (retiré, Encombrement 15/2 gardé), « sort of thing » collé à Hayfoot. Détail : `QE-Q27e-2`.
+- **Livres régénérés** (23) : seuls L07, L17, L20, L21 changent, par des lignes gagnées ou nettoyées (L07 et L17 : un objet long récupéré). Valeurs imprimées (12 caractéristiques, Blessures) inchangées (comparaison avec `HEAD`).
+- **Contrôle, 23 livres** : talents 10, compétences 18, attaques 4, Traits 17, équipement 83, sorts 0, bruit d'équipement 10 (avant : 10, 19, 10, 21, 113, 5, 17) ; L01-L20 et L24 à 0. Reste : L21 15 profils, L22 9, L23 15, L25 5, L26 10 (Q27f).
+- Test : `tests/pro-q27e-completude.test.js` (7 tests). Suite complète lancée une fois : 4456 réussis, 0 échec.
+- Outil de contrôle et données de livre : rien à déclarer « branché » (les attaques gagnées passent par `buildParticipantFromBestiary`, appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`). Aucune valeur durable de personnage.

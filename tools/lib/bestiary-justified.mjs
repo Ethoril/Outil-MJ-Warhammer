@@ -82,5 +82,19 @@ export const JUSTIFIED = Object.freeze({
   'E0-P-568': { trappingNoise: 'L18 p.117 : « Possessions: Mail coat, helmet, axe » : les objets du mort-vivant sont imprimés en minuscules.' },
   'E0-P-569': { trappingNoise: 'L18 p.118 : « Possessions: dagger, spell ingredients, bedroll, necromantic tomes, purse with 5 GCs 17/6 » : tous les objets sont imprimés en minuscules.' },
   'E0-P-594': { trappingNoise: 'L19 p.110 : « Trappings: Spell ingredients, sword, crutches. » : « sword » et « crutches » sont imprimés en minuscules.' },
+  // Q27e : L20 (Altdorf) relu sur ses pages.
+  'E0-P-623': { trappingNoise: 'L20 p.67 : « a dozen Calling Cards showing the silhouette of a cat. » est le dernier objet imprimé de la liste (minuscule initiale du livre).' },
+  'E0-P-631': { trappingNoise: 'L20 p.94 : « the Magnin Throwing Knife » est un objet imprimé tel quel (minuscule initiale du livre).' },
+  'E0-P-637': {
+    trappings: 'L20 p.109 : le livre imprime « Trappings: Ranged (Bow) +6 » à la place de la ligne Traits, puis une seconde ligne « Trappings: Fine Clothing… » ; l\'arc est l\'attaque Bow +6 du profil, les objets sont présents.',
+    trappingNoise: 'L20 p.109 : « Cathayan Amulet (a recent gift, …) » est un objet imprimé, la parenthèse décrit l\'amulette.'
+  },
+  'E0-P-649': {
+    trappings: 'L20 p.166 : « Trappings: Tattered Clothing, » est suivi de l\'encadré SPELLS du profil ; Tattered Clothing est présent, les sorts sont dans le champ spells.',
+    spells: 'L20 p.166 : « Evil Eye Melinda Greyweave » : le titre du texte voisin est collé au dernier sort ; Evil Eye est présent.'
+  },
+  'E0-P-650': { spells: 'L20 p.167 : « Spells: Chylis knows every Petty Magic and Arcane Spell, plus all those from the Lores of Fire, Heavens, and Life. » est une phrase, gardée telle quelle dans les notes de sorts.' },
+  'E0-P-652': { trappings: 'L20 p.195 : « Markus Spiel » est le nom du conseiller du texte voisin (encadré de scénario), pas un objet ; Coarst Clothing (coquille du livre) et Herbs Worth 12/5 sont présents.' },
+  'E0-P-657': { spells: 'L20 p.218 : « Ward 0 As part of their pact with Tzeentch » : Ward est présent, la suite est le texte de la colonne voisine.' },
   'E0-P-607': { attacks: 'L19 p.143 : « and go on to score a goal if their total is +25 » est la règle de jeu rapide du match (texte de la colonne voisine) ; le Nain n\'a aucune attaque imprimée.' }
 });

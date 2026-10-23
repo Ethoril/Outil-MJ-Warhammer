@@ -150,7 +150,9 @@ export const ARMOUR_DETAIL = Object.freeze({
 /** Équipement dont un objet est suivi d'un mot ou d'une phrase de la colonne voisine : l'objet est coupé après le nom donné (L16 p. 45 : « Restorative Brew Once the preparations… », p. 90 : « Pair of Swords y »). */
 export const TRAPPING_TRIMS = Object.freeze({
   'E0-P-502': ['Restorative Brew'],
-  'E0-P-512': ['Pair of Swords']
+  'E0-P-512': ['Pair of Swords'],
+  // Altdorf (L20) p. 195 : Concern Peony Hayfoot, « Herbs Worth 12/5 » est suivi d'un mot de la colonne voisine (« …all that sort of thing »).
+  'E0-P-652': ['Herbs Worth 12/5']
 });
 
 /** Équipement dont le nom imprimé contient des virgules (Helena Bastiat-Hatzburg, Altdorf L20 p. 72) : recollé après le découpage à virgules. */

@@ -168,7 +168,9 @@ export function isTrappingName(item) {
   if (item.length <= 60) return true;
   // Un contenant et son contenu (« Pouch containing Writing Kit and 10 sheets of Parchment and 200 GC », L02 p. 30) est un seul objet.
   if (item.length <= 120 && /^[A-Z][A-Za-z' -]{2,30} containing [A-Z0-9a-z]/.test(item) && !/[.:;]\s|\s--\s/.test(item)) return true;
-  if (!item.endsWith(')') || /^(?:as|or|and|but|which|that|when|if)\s/i.test(item)) return false;
+  // « Maps of the City showing secret passages and poorly guarded homes » (L20 p. 67) : un objet décrit sans verbe conjugué ni ponctuation de phrase est un seul objet.
+  if (item.length <= 90 && /^[A-Z]/.test(item) && !/[.:;]\s|\s--\s/.test(item) && !item.includes('(') && !/\b(?:is|are|was|were|has|have|will|can|wishes|remains)\b/.test(item)) return true;
+  if (!item.endsWith(')') ||/^(?:as|or|and|but|which|that|when|if)\s/i.test(item)) return false;
   const open = item.indexOf('(');
   return open > 0 && item.slice(0, open).trim().length <= 60 && !/[.:;]\s|\s--\s/.test(item.slice(0, open)) && item.lastIndexOf('(') >= open && [...item].reduce((depth, char) => (char === '(' ? depth + 1 : char === ')' ? depth - 1 : depth), 0) === 0;
 }

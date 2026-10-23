@@ -615,6 +615,11 @@
    },
    "attacks": [
     {
+     "name": "Unarmed",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
      "name": "Weapon",
      "damage": 10,
      "trait": "Weapon"
@@ -1854,6 +1859,7 @@
    "trappings": [
     "Very Fine Lockpicks",
     "Keys to dozens of houses",
+    "Maps of the City showing secret passages and poorly guarded homes",
     "Valuables such as jewellery and coin worth 10 Gold Crowns",
     "a dozen Calling Cards showing the silhouette of a cat."
    ],
@@ -3547,6 +3553,13 @@
     "Soc": 51
    },
    "wounds": 17,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Art (Writing)",
@@ -4271,6 +4284,14 @@
     "Soc": 10
    },
    "wounds": 17,
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
    "skills": [
     {
      "name": "Animal Care",
@@ -4386,7 +4407,7 @@
     }
    ],
    "trappings": [
-    "Ranged (Bow) +6 Fine Clothing",
+    "Fine Clothing",
     "Cathayan Amulet (a recent gift, the amulet is suffused with Aqshy and has been affecting Thomas's mood)",
     "12 GC"
    ],
@@ -4559,10 +4580,7 @@
     "Lockpicks",
     "Various Charms and Amulets",
     "Knuckledusters",
-    "strange",
-    "sing haunting threnodies",
-    "and sacrifice an animal",
-    "letting its blood spill across the ground. Surely"
+    "15/2"
    ],
    "keywords": [
     "humain"
@@ -4948,6 +4966,13 @@
     "ap": 1,
     "detail": "Body, Arms"
    },
+   "attacks": [
+    {
+     "name": "Crowbar",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Athletics",
@@ -5348,7 +5373,8 @@
     "Dagger",
     "Treats for the Little Ones",
     "Leather Jack",
-    "Network of Informants"
+    "Network of Informants",
+    "Cloak with many hidden pockets stuffed with straw and droppings"
    ],
    "spells": {
     "Petty": [
@@ -6203,6 +6229,11 @@
      "name": "Play (Lute)",
      "nameFr": "Musicien (Luth)",
      "value": 69
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 90
     }
    ],
    "talents": [
@@ -6267,6 +6298,10 @@
      "name": "Wealthy",
      "rank": 2
     }
+   ],
+   "trappings": [
+    "Symbol of Verena",
+    "Somber Academic Robes"
    ],
    "nameFrSource": "proposition"
   },
@@ -7083,7 +7118,7 @@
    ],
    "trappings": [
     "Coarst Clothing",
-    "Herbs Worth 12/5 sort of thing"
+    "Herbs Worth 12/5"
    ],
    "nameFrSource": "proposition"
   },

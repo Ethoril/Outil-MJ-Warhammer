@@ -279,7 +279,11 @@ export function splitSections(bodyLines) {
     marks.forEach((mark, index) => {
       const text = clean(joined.slice(mark.start, index + 1 < marks.length ? marks[index + 1].at : joined.length));
       // « Talent: Trick Riding » (singulier, Forest Goblin L11 p. 15) : même rubrique que « Talents: ».
-      put(mark.label === 'Talent' ? 'Talents' : mark.label, mark.label === 'Traits' ? text.replace(/\s\*[A-Za-z].*$/, '') : text);
+      // « Skills: Symbol of Verena, Somber Academic Robes » après les Talents (Chancellor von Festschrift, L20 p. 163) : coquille du livre, c'est la ligne Trappings.
+      // « Trappings: Ranged (Bow) +6 » avant les Skills, puis un second « Trappings: » (Thomas Fabhber, L20 p. 109) : la première ligne est la ligne Traits.
+      const weaponOnly = mark.label === 'Trappings' && !sections.Skills && !sections.Traits && /^(?:Weapon|Ranged)\b[^,]*[+-]\d+$/.test(text) && marks.slice(index + 1).some(next => next.label === 'Trappings');
+      const label = mark.label === 'Talent' ? 'Talents' : (mark.label === 'Skills' && sections.Talents && !sections.Trappings && !/\b\d{2}\b/.test(text) ? 'Trappings' : (weaponOnly ? 'Traits' : mark.label));
+      put(label, label === 'Traits' ? text.replace(/\s\*[A-Za-z].*$/, '') : text);
     });
     return { sections, lead: clean(joined.slice(0, marks[0].at)), mode: 'v4' };
   }

@@ -143,7 +143,7 @@ export function printedTraits(block) {
     const words = raw.replace(/\s+Attack$/, '').match(/\([^()]*\)|\S+/g) || [];
     const stop = words.findIndex((word, index) => index > 0 && /^[a-z]/.test(word) && !/^(?:of|and|to|in|from|or)$/.test(word));
     const item = (stop > 0 ? words.slice(0, stop) : words).join(' ');
-    if (/\+\d/.test(item) || /^Creature Weapons/i.test(item) || /^Armour\b/i.test(item) || /^(?:Weapon|Ranged)\b/.test(item)) continue;
+    if (/\+\d/.test(item) || /^Creature Weapons/i.test(item) || /^Armour(?:ed)?\b/i.test(item) || /^(?:Weapon|Ranged)\b/.test(item)) continue;
     const name = item.replace(/\(.*?\)/g, ' ').replace(/\*/g, '').replace(/[\d+]+/g, ' ').replace(/\s+/g, ' ').trim();
     if (name.length < 3 || name.length > 40) continue;
     found.push({ label: item, key: traitKey(name) });
@@ -166,8 +166,11 @@ export function recordTraitKeys(record) {
 export function printedTrappings(block) {
   const text = segment(block, 'Trappings');
   if (text === null) return [];
-  const items = splitTopLevel(text).map(item => item.replace(/\*/g, '').trim()).filter(Boolean);
-  const cut = items.findIndex(item => item.length > 70 || /\b(?:is|are|was|has|have|can|will)\b/.test(item));
+  let items = splitTopLevel(text).map(item => item.replace(/\*/g, '').trim()).filter(Boolean);
+  // Q27e : l'Encombrement « 15/2 » ferme la liste V4 ; ce qui le suit (titre en majuscules, prose, liste de sorts du voisin) n'est pas de l'équipement.
+  const closing = items.findIndex(item => /\b\d+\/(?:\d+|-)\s+[A-Z]/.test(item));
+  if (closing >= 0) items = [...items.slice(0, closing), items[closing].replace(/^(.*?\b\d+\/(?:\d+|-))\s.*$/, '$1')];
+  const cut =items.findIndex(item => item.length > 70 || /\b(?:is|are|was|has|have|can|will)\b/.test(item));
   return (cut >= 0 ? items.slice(0, cut) : items).map(item => ({ label: item, key: letters(item) })).filter(item => item.key.length >= 3);
 }
 
