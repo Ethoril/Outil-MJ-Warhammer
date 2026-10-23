@@ -12,7 +12,7 @@ test('Q15 : les glyphes U+FFFD sont rétablis d’après le glyphe réel du PDF 
   assert.equal(repairGlyphs('Map of Drakenh�henzug'), 'Map of Drakenhöhenzug');
   assert.equal(repairGlyphs('(counts as Zweih�nder)'), '(counts as Zweihänder)');
   assert.equal(repairGlyphs('Ph�\'s Protection'), 'Phâ\'s Protection');
-  assert.equal(repairGlyphs('M�na\'s Marsh Magic, M�NA MIMN'), 'Mána\'s Marsh Magic, MÁNA MIMN');
+  assert.equal(repairGlyphs('M�na\'s Marsh Magic, M�NA MIMN'), 'Mòna\'s Marsh Magic, MÒNA MIMN');
   assert.equal(repairGlyphs('Stolen Amulet of B�gen'), 'Stolen Amulet of Bögen');
   assert.equal(repairGlyphs('coins to a value of 22 GCs, 11/�'), 'coins to a value of 22 GCs, 11/–');
   assert.equal(repairGlyphs('(Chaos � Tzeentch)'), '(Chaos – Tzeentch)');
@@ -33,7 +33,7 @@ test('Q15 : noms corrigés dans les profils', () => {
   assert.ok(names('L10').includes('Language (Elthárin)'));
   assert.ok(names('L12').includes('Zweihänder'));
   assert.ok(names('L17').includes('Phâ\'s Protection'));
-  assert.ok(names('L17').includes('Mána\'s Marsh Magic'));
+  assert.ok(names('L17').includes('Mòna\'s Marsh Magic'));
   assert.ok(names('L26').includes('Stolen Amulet of Bögen'));
 });
 

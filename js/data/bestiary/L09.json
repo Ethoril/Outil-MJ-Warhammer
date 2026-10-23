@@ -319,12 +319,19 @@
     "Soc": 10
    },
    "wounds": 22,
+   "size": "large",
    "armour": {
     "toughnessBonus": 3,
     "parts": [
      {
       "name": "Light Armour",
-      "ap": 1
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
      }
     ]
    },
@@ -338,7 +345,34 @@
      ]
     }
    ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, Drive, Magic, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
    "keywords": [
+    "bete",
     "cheval"
    ],
    "nameFrSource": "proposition"
@@ -666,24 +700,101 @@
     "Soc": null
    },
    "wounds": 68,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 2
+     }
+    ]
+   },
    "attacks": [
     {
-     "name": "Clar Karond to the Helbane family. None may Talons",
+     "name": "Talons",
      "value": 45,
-     "damage": 14,
-     "qualities": [
-      "tend it save"
-     ]
+     "damage": 14
     },
     {
-     "name": "Scorath Scaleflayer, with grave threats should any harm befall it. The high beastmaster's rivals would be eager to Bite",
+     "name": "Bite",
      "value": 45,
      "damage": 8,
      "free": "momentum"
     }
    ],
+   "skills": [
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 25
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Many Heads",
+     "rating": "5",
+     "ref": "E0-T-034"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Mountains, Wetlands",
+     "ref": "E0-T-051"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, War",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
    "keywords": [
-    "hydre"
+    "hydre",
+    "bete"
    ],
    "nameFrSource": "proposition"
   },
@@ -937,7 +1048,7 @@
    "name": "Sea Dragon",
    "nameFr": "Dragon des mers",
    "stats": {
-    "M": 0,
+    "M": 10,
     "CC": 70,
     "CT": 60,
     "F": 70,
@@ -950,12 +1061,55 @@
     "Soc": 25
    },
    "wounds": 232,
+   "size": "monstrous",
+   "armour": {
+    "toughnessBonus": 8,
+    "parts": [
+     {
+      "name": "Scales",
+      "ap": 3
+     }
+    ]
+   },
    "attacks": [
     {
-     "name": "ail",
+     "name": "Claws",
+     "value": 70,
+     "damage": 25
+    },
+    {
+     "name": "Bite",
+     "value": 70,
+     "damage": 10,
+     "free": "momentum"
+    },
+    {
+     "name": "Tail",
      "value": 70,
      "damage": 9,
      "free": "momentum"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Mount",
+     "ref": "E0-T-060"
     }
    ],
    "keywords": [
@@ -1000,6 +1154,12 @@
      {
       "name": "Heavy Armour",
       "ap": 5
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -2895,6 +3055,12 @@
      {
       "name": "Medium Armour",
       "ap": 3
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -3007,6 +3173,12 @@
      {
       "name": "Medium Armour",
       "ap": 3
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -3014,13 +3186,10 @@
     {
      "name": "Razor-tipped Grand Cathayan Fan",
      "value": 85,
-     "damage": 6,
-     "qualities": [
-      "hits that do"
-     ]
+     "damage": 6
     },
     {
-     "name": "Damage inflict 1 Bleeding Condition Repeater Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 65,
      "damage": 7,
      "rangeYards": 10,
@@ -3172,6 +3341,9 @@
     },
     {
      "name": "Sixth Sense"
+    },
+    {
+     "name": "Strike to Injure"
     }
    ],
    "trappings": [
@@ -3217,6 +3389,12 @@
      {
       "name": "Medium Armour",
       "ap": 3
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "condition": "when Opposing an attack with Dodge or Melee"
      }
     ]
    },
@@ -3735,11 +3913,42 @@
     "Soc": 30
    },
    "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1
+     }
+    ]
+   },
    "attacks": [
     {
      "name": "Boat Hook",
      "value": 40,
      "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 40
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 45
     }
    ],
    "nameFrSource": "proposition"
@@ -5273,10 +5482,7 @@
     {
      "name": "Scalpel",
      "value": 52,
-     "damage": 5,
-     "qualities": [
-      "e"
-     ]
+     "damage": 5
     },
     {
      "name": "Bite",
@@ -6158,7 +6364,7 @@
      "name": "Fearless (High Elves)"
     },
     {
-     "name": "Gifts of Khaine"
+     "name": "Gifts of Khaine (Eternal Torment, Hand of Khaine, Hidden Blade, Knife of Khaine)"
     },
     {
      "name": "Holy Visions"
@@ -7016,7 +7222,7 @@
      "name": "Aethyric Attunement"
     },
     {
-     "name": "Arcane Magic"
+     "name": "Arcane Magic (Dark Magic, Lore of Beasts, Lore of Death)"
     },
     {
      "name": "Attractive"
@@ -7047,16 +7253,19 @@
     },
     {
      "name": "Sixth Sense"
+    },
+    {
+     "name": "Soul Pact (Unaligned Daemon)"
     }
    ],
    "trappings": [
     "Dagger",
     "Diary",
-    "Forged Testimonials for `Malforic Silverblade",
-    "Fencing Master'",
+    "Forged Testimonials for 'Malforic Silverblade, Fencing Master'",
     "Fine Leather Travelling Clothes and Cloak",
     "Purse with 15 GC",
-    "Rapier"
+    "Rapier",
+    "Traveller's Chest with Fine Clothes and Hidden Compartment for Diary"
    ],
    "spells": {
     "Petty": [

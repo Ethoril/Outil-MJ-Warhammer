@@ -492,7 +492,8 @@
     "Leather Jack",
     "Hat",
     "Pouch containing 1d10 Silver Shillings",
-    "Sling Bag containing"
+    "Sling Bag containing Lunch",
+    "Uniform"
    ],
    "keywords": [
     "humain",
@@ -607,7 +608,8 @@
     "Dagger",
     "Hat",
     "Mule and Cart containing Wares",
-    "Pouch containing"
+    "Pouch containing 3d10 Shillings",
+    "Sling Bag containing Lunch"
    ],
    "keywords": [
     "humain"

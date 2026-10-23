@@ -34,6 +34,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q23 | FAIT (`QE-Q23-1`) | (voir `git log`, « Q23 ») |
 | Q24 | FAIT sans modification de code (`QE-Q24-1`) | (voir `git log`, « Q24 ») |
 | Q25 | FAIT (`QE-Q25-1`) | (voir `git log`, « Q25 ») |
+| Q26 | FAIT (`QE-Q26-1` à `QE-Q26-8`) | (voir `git log`, « Q26 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -307,3 +308,12 @@ Branché / non appelé (grep dans `js/`) :
 - Totaux du contrôle après Q25 (23 livres) : talents 48, compétences 55, attaques 33, Traits 68, équipement 150, sorts 14, bruit d'équipement 69, très incomplets 4. Avant : talents 41, compétences 85, équipement 154 (ces écarts viennent de profils empilés relus à la bonne rubrique, pas de données modifiées). 10 avertissements de compétences (inchangés). Aucune donnée de livre modifiée.
 - Test : `tests/pro-q25-controle.test.js` (4 tests). Suite complète lancée une fois : 4411 réussis, 0 échec.
 - Outil de contrôle seulement : pas de « branché » à déclarer.
+
+## Q26 — cas nommés (FAIT)
+
+- **Cas traités, vérifiés contre leur page** : L09 Dark Steed (p. 45), War Hydra (47), Sea Dragon (50, M = 10), Damina (73), Dockside Thug (86), Kernethar (126) ; L11 Forest Goblin (Trick Riding), Krag-Breaker (Strike Mighty Blow 2) ; L07 Chameleon Skink (Blowpipe), Troglodon (Claws, Venom, Toxic Bile), Lord Skrolk (équipement) ; L10 Crypt Ghast ; L24 Allrella (Dagger) ; L23 Al Shortbottom (Crossbow, Dagger) ; L22 Dricht (Engineering 71) ; L21 Flamers (Weapon +8) ; L04 Gunna (« Aqshy-Infused ») ; L18 Grey Seer (« As above » résolu) ; L06 Watchman et Merchant (équipement complet) ; glyphe « Mòna » (accent grave, page 216 rendue en image). Gunna avait déjà ses 17 talents (Q13).
+- **Causes d'outil** (`tools/lib/`) : titre de règle collé à une attaque (`listTraits`), astérisque et point finals d'un talent, parenthèse de spécialisations avec « of », étiquette « Talent: », `Blowpipe +1 (20)`, césure dans un nom d'arme, PA conditionnels (« when … ») facultatifs, attaque imprimée deux fois, qualités en minuscules écartées. Profils relus à la main : `BODY_OVERRIDES` (13 blocs), `TRAPPING_JOINS` (Kernethar, Grey Seer). Détail : `QE-Q26-1` à `QE-Q26-8`.
+- **Livres régénérés** (23). Comparaison avec `HEAD` : aucune valeur imprimée changée hors Sea Dragon ; entrées perdues = parasites, renommages et doublons seulement. Comparaison avec `9c12613` : valeurs changées = E0-P-125, E0-P-126 (`QE-Q12a-1`) et E0-P-323 (justifié, `QE-Q26-1`).
+- **Contrôle Q25, 23 livres** : 0 écart de valeurs ; très incomplets 4 → 0 ; talents 48 → 44, compétences 55 → 54, attaques 33 → 25, Traits 68 → 67, équipement 150 → 149, sorts 14, bruit d'équipement 70. L09 : 0 manque. Le reste est à Q27.
+- Test : `tests/pro-q26-cas-nommes.test.js` (12 tests) ; `pro-q15-normalisation-noms` (Mòna) et `pro-d9-l09` (Dark Steed : nature « bete » issue du Trait Bestial désormais lu) mis à jour. Suite complète lancée une fois : 4423 tests, 1 échec (cette assertion), corrigé et relancé en vert.
+- **Branché / non appelé** : données de livre et outil ; les attaques, armures et Traits gagnés passent par `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`, `js/core/v5-spell-contracts.js`) ; `condition` des PA et `optionalTraits` : aucun appelant du moteur (code testé, non appelé). Aucune valeur durable de personnage.

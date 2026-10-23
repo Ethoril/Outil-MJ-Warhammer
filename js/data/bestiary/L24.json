@@ -1146,6 +1146,13 @@
     "Soc": 43
    },
    "wounds": 17,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Prejudice",

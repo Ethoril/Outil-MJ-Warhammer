@@ -51,14 +51,18 @@ function readTraitItemPlain(text) {
   const natural = /^(?:(\d+)\s*[x×\uFFFD]\s*)?(Weapon|Ranged|Bite|Horns|Tail Attack|Tail|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b\s*(?:d\s*)?(?:\(([^()]*)\))?\s*([+-]\s?\d+)(?:\s*\((\d+)\))?/i.exec(item);
   if (natural && !/[+-]\d/.test(natural[3] || '')) {
     const trait = { name: natural[2].replace(/^./, letter => letter.toUpperCase()), rating: natural[4].replace(/\s+/g, '') };
-    if (natural[3]) trait.param = clean(natural[3]);
+    if (natural[3]) trait.param = clean(natural[3]).replace(/([a-z])- (?=[A-Z])/g, '$1-');
     if (natural[1]) trait.count = Number(natural[1]);
     if (natural[5]) trait.printed = Number(natural[5]);
     return trait;
   }
   // « Ranged (Dwarf Crossbow) (80) +10 (Damaging, Impale, Reload 1) » : portée imprimée avant les dégâts, qualités entre parenthèses.
   const ranged = /^(Ranged|Weapon)\s*\(([^()]*)\)\s*\((\d+)\)\s*([+-]\d+)\s*(?:\([^()]*\))?$/i.exec(item);
-  if (ranged) return { name: ranged[1].replace(/^./, letter => letter.toUpperCase()), param: clean(ranged[2]), rating: ranged[4], printed: Number(ranged[3]) };
+  // « Blowpipe +1 (20) » (Chameleon Skink, L07 p. 142) : arme à distance imprimée sans « Ranged ( ) » ; portée imprimée entre parenthèses.
+  const pipe = /^(Blowpipe)\s*([+-]\d+)\s*\((\d+)\)$/i.exec(item);
+  if (pipe) return { name: 'Ranged', param: 'Blowpipe', rating: pipe[2], printed: Number(pipe[3]) };
+  // Césure de mise en page dans un nom d'arme (« Aqshy- Infused Powder », Gunna von Sperren L04 p. 65).
+  if (ranged) return { name: ranged[1].replace(/^./, letter => letter.toUpperCase()), param: clean(ranged[2]).replace(/([a-z])- (?=[A-Z])/g, '$1-'), rating: ranged[4], printed: Number(ranged[3]) };
   const worn = /^(Armour|Armor)\s*\(([^()]*)\)\s*(\d+)\s*\((\d+)\)$/i.exec(item);
   if (worn) return { name: 'Armour', param: clean(worn[2]), rating: worn[3], printed: Number(worn[4]) };
   const grouped = /^(Weapon|Ranged|Armour|Armor)\s*\((.+)\)$/.exec(item);
@@ -111,7 +115,8 @@ export function readSkills(text) {
 export function readTalents(text) {
   return splitList(text).map(item => {
     // Une longue parenthèse est une clause de règle, sauf liste de spécialisations (« Arcane Magic (Beasts, Death, Fire, Heavens, Light, Life, Metal, Shadow) »).
-    const base = clean(item.replace(/\s*\((?:[^()]*\s){7,}[^()]*\)\s*$/, group => (/^\s*\((?:[A-Z][\w'’-]*(?: [A-Z][\w'’-]*){0,2})(?:, (?:[A-Z][\w'’-]*(?: [A-Z][\w'’-]*){0,2}))+\)\s*$/.test(group) ? group : '')).replace(/:.*$/, ''));
+    // Un astérisque final (« Strike Mighty Blow 2* », Krag-Breaker L11 p. 25) marque une valeur conditionnelle : le talent et son rang restent.
+    const base = clean(item.replace(/[.*]+$/, '').replace(/\s*\((?:[^()]*\s){7,}[^()]*\)\s*$/, group => (/^\s*\((?:[A-Z][\w'’-]*(?: (?:of )?[A-Z][\w'’-]*){0,2})(?:, (?:[A-Z][\w'’-]*(?: (?:of )?[A-Z][\w'’-]*){0,2}))+\)\s*$/.test(group) ? group : '')).replace(/:.*$/, ''));
     const ranked = /^(.*?)\s+(\d+)$/.exec(base);
     return ranked ? { name: clean(ranked[1]), rank: Number(ranked[2]) } : { name: base };
   });
@@ -129,7 +134,7 @@ export function readDescribedNames(text, dictionary) {
 
 /** Attaques V5 : « Hooves and Tusks: (40/+6) Free Attack only when Charging » → { name, value, damage, note }. */
 // Qualités, défauts et clauses qui suivent la valeur d'une attaque (le nom de la suivante vient juste après, sans séparateur).
-const QUALITY_START = /^(?:Accurate|Blackpowder|Blast|Damaging|Defensive|Distract|Entangle|Fast|Hack|Impact|Impale|Penetrating|Pistol|Precise|Pummel|Repeater \d+|Repeater(?!\s+[A-Z])|Shield|Trap Blade|Unbreakable|Wrap|Dangerous|Imprecise|Reload(?: \d+)?|Slow|Tiring|Undamaging|Partial|Ugly|Magical|Unbalanced|Slashing|\d+ yards?|Free Attack only when Charging|Lose Momentum to make this Free Attack)\b,?\s*/i;
+const QUALITY_START = /^(?:Accurate|Blackpowder|Blast|Damaging|Defensive|Distract|Entangle|Fast|Hack|Impact|Impale|Penetrating|Pistol|Precise|Pummel|Repeater \d+|Repeater(?!\s+[A-Z])|Shield|Trap Blade|Unbreakable|Wrap|Dangerous|Imprecise|Reload(?: \d+)?|Slow|Tiring|Undamaging|Partial|Ugly|Magical|Unbalanced|Slashing|\d+ yards?|Damage inflict \d+ [A-Z][a-z]+ Conditions?|Free Attack only when Charging|Lose Momentum to make this Free Attack)\b,?\s*/i;
 
 export function readAttacks(text) {
   const attacks = [];
@@ -161,9 +166,10 @@ export function readArmour(text) {
   const result = { parts: [] };
   const tb = /Toughness Bonus:\s*(\d+)/.exec(text);
   if (tb) result.toughnessBonus = Number(tb[1]);
-  for (const part of text.matchAll(/(Optional\s+)?([A-Z][A-Za-z' -]*?):\s*\+(\d+)\s*AP(?:\s+to\s+([A-Za-z ,and]+?))?(?=\s+(?:Optional|[A-Z][A-Za-z' -]*:)|$)/g)) {
+  // « Shield: +2 AP when Opposing an attack with Dodge or Melee » (Damina Hroska, L09 p. 73) : PA conditionnels, jamais ajoutés d'office (partie facultative avec sa condition).
+  for (const part of text.matchAll(/(Optional\s+)?([A-Z][A-Za-z' -]*?):\s*\+(\d+)\s*AP(?:\s+to\s+([A-Za-z ,and]+?))?(?:\s+(when\s+[A-Za-z ,]+?))?(?=\s+(?:Optional|[A-Z][A-Za-z' -]*:)|$)/g)) {
     if (/^Toughness Bonus/.test(part[2])) continue;
-    result.parts.push({ name: clean(part[2]), ap: Number(part[3]), optional: Boolean(part[1]), ...(part[4] ? { locations: clean(part[4]) } : {}) });
+    result.parts.push({ name: clean(part[2]), ap: Number(part[3]), optional: Boolean(part[1]) || Boolean(part[5]), ...(part[4] ? { locations: clean(part[4]) } : {}), ...(part[5] ? { condition: clean(part[5]) } : {}) });
   }
   return result;
 }
@@ -239,6 +245,9 @@ export function listTraits(text, mode, dictionary, key) {
     const colon = item.replace(/\([^)]*\)/g, group => ' '.repeat(group.length)).indexOf(':');
     if (colon >= 0) {
       const head = clean(item.slice(0, colon));
+      // « Weapon (Claws) +11 Toxic Bile: … », « Weapon +8 Font of Flame: … » : l'attaque imprimée est un Trait, le titre qui la suit est la règle spéciale.
+      const attackHead = /^((?:Weapon|Ranged|Bite|Horns|Tail(?: Attack)?|Claws?|Tentacles?|Beak|Slam|Tongue Attack)\b.*?[+-]\s?\d+(?:\s*\(\d+\))?)\s+([A-Z][A-Za-z'’-]*(?:\s+(?:(?:of|the|and|in|to)\s+)?[A-Z][A-Za-z'’-]*){0,3})$/.exec(head);
+      if (attackHead) { const attack = readTraitItem(attackHead[1]); if (attack) out[key].push(attack); rules.push(attackHead[2]); break; }
       const known = [...dictionary].filter(name => head === name || head.startsWith(`${name} `)).sort((a, b) => b.length - a.length)[0];
       if (known && head !== known) { out[key].push(readTraitItem(known)); rules.push(clean(head.slice(known.length))); } else rules.push(head);
       break;
@@ -276,7 +285,7 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
     const mixed = sections['Traits and Talents'];
     const cut = /:/.test(mixed) ? mixed.lastIndexOf('. ') : -1;
     const items = cut >= 0 && !/:/.test(mixed.slice(cut + 2)) ? [...splitList(mixed.slice(0, cut + 1)), ...splitList(mixed.slice(cut + 2))] : splitList(mixed);
-    const baseName = item => clean(item.replace(/\s*\(.*\)\s*$/, '').replace(/\s+\d+$/, ''));
+    const baseName = item => clean(item.replace(/\.$/, '').replace(/\s*\(.*\)\s*$/, '').replace(/\s+\d+$/, ''));
     const flat = name => name.toLowerCase().replace(/[-\s]+/g, ' ');
     const talentNames = new Set([...talentDictionary].map(flat));
     const isTalent = item => talentNames.has(flat(baseName(item)));

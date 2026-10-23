@@ -638,6 +638,19 @@
     "ap": 1,
     "detail": "Leather Jack"
    },
+   "attacks": [
+    {
+     "name": "Crossbow",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "skills": [
     {
      "name": "Bribery",
@@ -5910,7 +5923,7 @@
      "name": "Seasoned Traveller"
     },
     {
-     "name": "Suave*"
+     "name": "Suave"
     },
     {
      "name": "Well-prepared"

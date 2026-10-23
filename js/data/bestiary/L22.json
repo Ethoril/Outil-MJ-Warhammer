@@ -2183,6 +2183,12 @@
      "value": 66
     },
     {
+     "name": "Engineering",
+     "nameFr": "Engineering",
+     "frUnverified": true,
+     "value": 71
+    },
+    {
      "name": "Stealth",
      "nameFr": "Discrétion",
      "value": 65

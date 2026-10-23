@@ -554,6 +554,13 @@
    "armour": {
     "ap": 1
    },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Breath",
@@ -589,7 +596,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +8 Font of Flame"
+    "Font of Flame"
    ],
    "abilities": [
     "E0-T-250",
@@ -3673,6 +3680,13 @@
    },
    "wounds": 76,
    "size": "enormous",
+   "attacks": [
+    {
+     "name": "Slobbering Mouth",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Bestial",
@@ -3691,6 +3705,9 @@
      "param": "Enormous",
      "ref": "E0-T-045"
     }
+   ],
+   "specialRules": [
+    "Messy Demise"
    ],
    "abilities": [
     "E0-T-253"

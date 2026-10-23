@@ -28,6 +28,8 @@ export const CELL_OVERRIDES = Object.freeze({
   'L09:56:1': row('WS=+10 BS=+5 I=+10 Ag=+5 Dex=+5 Int=+10 Fel=+15'),
   'L09:56:2': row('WS=+5 BS=+10 I=+5 Ag=+5 Int=+5 WP=+5'),
   'L09:56:3': row('WS=+5 S=+5 T=+5 I=+15 Ag=+10 Dex=+5 Int=+5 Fel=+15'),
+  // Temple of Spite (L09) p. 50 : Sea Dragon, M = 10 (le « 1 » était perdu par l'extraction).
+  'L09:50:0': row('M=10 WS=70 BS=60 S=70 T=80 I=60 Ag=25 Dex=10 Int=55 WP=60 Fel=25 W=232'),
   // Sylvania (L10) : trois PNJ dont la ligne de valeurs est mal alignée par l'extraction.
   'L10:81:0': row('M=4 WS=37 BS=42 S=29 T=36 I=34 Ag=25 Dex=26 Int=25 WP=36 Fel=35 W=11'),
   'L10:91:0': row('M=4 WS=31 BS=24 S=38 T=37 I=32 Ag=37 Dex=26 Int=38 WP=31 Fel=32 W=12'),
@@ -151,6 +153,10 @@ export const TRAPPING_JOINS = Object.freeze({
   // Sea Wardens of Cothique (L14) p. 27 : Prince Dalloran, la dernière puce de la liste est une seule phrase à virgules.
   // Power Behind the Throne Companion (L18) p. 60 : Nastassia, « 3 GCs in assorted denominations, but can can lay her hands on 100 GCs within an hour » est un seul objet.
   'E0-P-545': ['3 GCs in assorted denominations, but can can lay her hands on 100 GCs within an hour'],
+  // Temple of Spite (L09) p. 126 : Kernethar Grimwitch, le nom d'un faux certificat contient une virgule entre ses apostrophes.
+  'E0-P-363': ['Forged Testimonials for \'Malforic Silverblade, Fencing Master\'', 'Traveller\'s Chest with Fine Clothes and Hidden Compartment for Diary'],
+  // Power Behind the Throne Companion (L18) p. 97 : Skaven Grey Seer, « As above, plus enough Warpstone… » : l'objet ajouté est un seul nom.
+  'E0-P-557': ['enough Warpstone to double the SL of three Casting/Channelling Tests (WFRP 244)'],
   'E0-P-472': ['Vaults containing vast wealth of coin, rare minerals, and magical items']
 });
 
@@ -176,6 +182,171 @@ export const BODY_OVERRIDES = Object.freeze({
     'Briber, Carouser, Catfall, Combat Reflexes, Commanding Presence, Coolheaded, Dealmaker, Dual Wielder, Etiquette (Corsairs, Nobles), Furious Assault, In-fighter, Inspiring, Iron Will, Luck, Menacing, Noble Blood, Old Salt, Orientation, Pilot, Public Speaking, Read/Write, Schemer, Seasoned Traveller, Stout-hearted, Strong Swimmer, Suave, War Leader',
     'Trappings',
     'Fleetmaster\'s Crown, Medium Armour, Repeater Handbow with 21 Bolts, Sea Dragon Cloak, Two Swords'
+  ],
+  // Temple of Spite (L09) p. 45 : Dark Steed, la colonne de droite (Dark Pegasus, armures des gabarits) s'intercale entre les rubriques ; « Option: » = armure facultative.
+  'L09:45:1': [
+    'Attacks',
+    'Hooves (25/+12) with the Pummel Quality',
+    'Armour',
+    'Toughness Bonus: 3',
+    'Optional Light Armour: +1 AP',
+    'Optional Medium Armour: +3 AP',
+    'Traits',
+    'Bestial: Animal behaviour is simple and predictable, see the WFRP Core Rulebook.',
+    'Night Vision: See clearly for 20 yards and extend the illumination distance of light sources by 20 yards.',
+    'Size (Large): See the WFRP Core Rulebook for implications of size.',
+    'Skittish: Receive +3 Broken Conditions if affected by loud noise or magic.',
+    'Optional Traits',
+    'Trained (Broken, Drive, Magic, Mount, War)'
+  ],
+  // Temple of Spite (L09) p. 47 : War Hydra, la prose de la colonne voisine (Gnarlmane, Clar Karond) était lue comme des attaques.
+  'L09:47:0': [
+    'Attacks',
+    'Talons (45/+14)',
+    'Bite (45/+8) Lose Momentum to make this free attack',
+    'Armour',
+    'Toughness Bonus: 5',
+    'Scales: +2 AP',
+    'Skills',
+    'Stealth (Rural) 45, Track 25',
+    'Traits',
+    'Bestial: Animal behaviour is simple and predictable, see the WFRP Core Rulebook.',
+    'Constrictor: Successful hits give the target an Entangled Condition.',
+    'Many Heads 5: The creature has 5 heads, see page 47 for details.',
+    'Night Vision: See clearly for 20 yards and extend the illumination distance of light sources by 20 yards.',
+    'Regenerate: Regain 1d10 Wounds at start of each Round.',
+    'Size (Enormous): See the WFRP Core Rulebook for implications of size.',
+    'Striding Gait (Mountains, Wetlands): Suffer no penalties for moving through mountains or wetland.',
+    'Tracker: Add +3 SL to all Track Tests.',
+    'Optional Traits',
+    'Belligerent, Territorial, Trained (Broken, War), Venom (Difficult)'
+  ],
+  // Temple of Spite (L09) p. 50 : Sea Dragon, le « 10 » de la Capacité de mouvement était lu « 0 » (voir CELL_OVERRIDES) et la prose voisine mangeait les attaques.
+  'L09:50:0': [
+    'Attacks',
+    'Claws (70/+25)',
+    'Bite (70/+10) Lose Momentum to make this free attack',
+    'Tail (70/+9) Lose Momentum to make this free attack, smaller opponents take a Prone Condition if wounded',
+    'Armour',
+    'Toughness Bonus: 8',
+    'Scales: +3 AP',
+    'Traits',
+    'Marine Creature: The creature\'s profile assumes they are in an aquatic environment and they move their full M in water.',
+    'Night Vision: See clearly for 20 yards and extend the illumination distance of light sources by 20 yards.',
+    'Size (Monstrous): See the WFRP Core Rulebook for implications of size.',
+    'Optional Traits',
+    'Trained (Mount)'
+  ],
+  // Temple of Spite (L09) p. 73 : Damina Hroska, la clause de l'éventail (« hits that do Damage inflict… ») collait au nom de l'attaque suivante, le Bouclier manquait,
+  // et « Strike to Injure. » (dernier talent, suivi d'un point) était perdu.
+  'L09:73:0': [
+    'Attacks',
+    'Razor-tipped Grand Cathayan Fan (85/+6) hits that do Damage inflict 1 Bleeding Condition',
+    'Repeater Handbow and Bolts: (65/+7) range of 10 yards with the Impale, Pistol, and Repeater 3 Qualities, and the Reload 9 Flaw',
+    'Armour',
+    'Toughness Bonus: 3',
+    'Medium Armour: +3 AP',
+    'Shield: +2 AP when Opposing an attack with Dodge or Melee',
+    'Skills',
+    'Athletics 75, Bribery 60, Charm 65, Climb 55, Dodge 80, Entertain (Acting) 55, Haggle 65, Intuition 85, Lore (Chemistry 85, Herbs 85), Melee (Basic) 85, Ranged (Crossbow) 65, Perception 90, Pick Lock 65, Sleight of Hand 65, Stealth 80, Trade (Poisoner) 85',
+    'Traits and Talents',
+    'Accurate Shot, Careful Strike, Combat Reflexes, Disarm, Dual Wielder, Enclosed Fighter, Gifts of Khaine (Touch of Khaine), Hatred (High Elves), Master of Disguise, Mimic, Night Vision, Read/Write, Shadow, Sixth Sense, Strike to Injure.',
+    'Trappings',
+    'Cloak, Fine Clothes, Grand Cathayan Fan, Disguise, Light Armour, Repeater Handbow with 21 Bolts, Vial of Poison (Manbane)'
+  ],
+  // Temple of Spite (L09) p. 86 : Dockside Thug, l'Armure et les Compétences (sous la ligne d'attaque, colonnes imbriquées) manquaient.
+  'L09:86:0': [
+    'Attacks',
+    'Boat Hook (40/+8)',
+    'Armour',
+    'Toughness Bonus: 3',
+    'Light Armour: +1 AP',
+    'Skills',
+    'Climb 45, Dodge 35, Melee (Basic) 40, Swim 45'
+  ],
+  // Temple of Spite (L09) p. 126 : Kernethar Grimwitch, « Arcane Magic (Dark Magic, Lore of Beasts, Lore of Death) » (parenthèse sur deux lignes) et « Soul Pact (Unaligned Daemon) » étaient perdus,
+  // l'équipement s'arrêtait à l'apostrophe de « Fencing Master' ».
+  'L09:126:0': [
+    'Attacks',
+    'Dagger (62/+5) with the Fast Quality',
+    'Rapier (70/+7) with the Fast and Impale Qualities',
+    'Armour',
+    'Toughness Bonus: 3',
+    'Skills',
+    'Channelling (Dhar 90, Ghur 95, Shyish 90), Cool 90, Dodge 75, Entertain (Acting) 46, Intimidate 46, Intuition 88, Language (Bretonnian 90, Elthárin, Magick 95, Reikspiel 80), Leadership 51, Lore (Chemistry 85, Magic 95, Medicine 90), Melee (Basic 62, Fencing 70), Perception 83, Ride (Horse) 60, Stealth (Urban) 65',
+    'Traits and Talents',
+    'Aethyric Attunement, Arcane Magic (Dark Magic, Lore of Beasts, Lore of Death), Attractive, Hatred (High Elves), Instinctive Diction, Master of Disguise, Mimic, Night Vision, Petty Magic, Read/Write, Second Sight, Sixth Sense, Soul Pact (Unaligned Daemon).',
+    'Spells',
+    'Petty: Bearings, Careful Step, Drain, Light, Murmured Whisper, Rot, Twitch',
+    'Lore of Death: Aethyric Armour, Blast, Soul Vortex, Steal Life, Purple Pall of Shyish, Terrifying',
+    'Lore of Beasts: Amber Talons, Beast Form, Bridge, Entangle, Flock of Doom, Mundane Aura',
+    'Lore of Dark Magic: Doombolt, Shroud of Despair',
+    'Trappings',
+    'Dagger, Diary, Forged Testimonials for \'Malforic Silverblade, Fencing Master\', Fine Leather Travelling Clothes and Cloak, Purse with 15 GC, Rapier, Traveller\'s Chest with Fine Clothes and Hidden Compartment for Diary'
+  ],
+  // Livre de base V5 (L06) p. 321 : Human Watchman et Human Merchant, la fin de l'équipement (« Lunch, Uniform », « 3d10 Shillings ») se perdait à la coupe de ligne (interligne double).
+  'L06:321:0': [
+    'Attacks',
+    'Dagger: (55/+6)',
+    'Hand Weapon: (55/+8)',
+    'Armour',
+    'Toughness Bonus: 3',
+    'Leather Jack: +1 AP to Arms and Body',
+    'Skills',
+    'Athletics 40, Cool 40, Dodge 40, Gossip 40, Haggle 35, Intimidate 45, Melee (Basic) 55, Perception 50, Ranged (Bow) 35',
+    'Talents',
+    'Acute Sense (Sight): May take Perception Tests to detect normally imperceptible details with the associated sense',
+    'Nose for Trouble: Advantage on Intuition Tests, and can usually tell where to gamble, fight, or get stinking drunk',
+    'Supportive: Advantage and no penalty on Tests to Charm those of higher Status',
+    'Warrior Born: +5 WS already added to profile',
+    'Trappings',
+    'Cloak, Clothing, Copper Badge, Dagger, Hand Weapon, Lamp Oil, Lantern and Pole, Leather Jack, Hat, Pouch containing 1d10 Silver Shillings, Sling Bag containing Lunch, Uniform'
+  ],
+  'L06:321:1': [
+    'Attacks',
+    'Dagger: (35/+5)',
+    'Armour',
+    'Toughness Bonus: 3',
+    'Skills',
+    'Animal Care 45, Charm 50, Charm Animal 40, Drive 45, Evaluate 50, Gossip 55, Haggle 55, Intuition 35, Melee (Basic) 35, Navigation 45',
+    'Talents',
+    'Gregarious: Advantage on Gossip Tests and can usually tell where in a settlement gossip is likely to be exchanged',
+    'Strong Back: Adds +1 SL to Opposed Strength Tests, and can carry an additional Encumbrance point',
+    'Super Numerate: Advantage on Evaluate Tests, and can keep track of the passage of time accurately while conscious',
+    'Suave: +5 Fel already added to profile',
+    'Trappings',
+    'Abacus, Canvas Tarpaulin, Cloak, Clothing, Dagger, Hat, Mule and Cart containing Wares, Pouch containing 3d10 Shillings, Sling Bag containing Lunch'
+  ],
+  // Lustria (L07) p. 62 : Lord Skrolk, l'équipement (« Filthy Robes, Liber Bubonicus, Rod of Corruption ») suit la prose de la rubrique Spells et était perdu ; « Luck 7 » garde son rang.
+  'L07:62:0': [
+    'Traits: Corruption (Moderate), Dark Vision, Die Hard, Disease (Ratte Fever), Frenzy, Infected, Painless, Spellcaster (Petty, Nurgle, Plague), Weapon (Quarterstaff) +9',
+    'Skills: Art (Writing) 70, Channelling (Dhar) 95, Cool 95, Dodge 65, Endurance 105, Gamble 105, Gossip 40, Haggle 40, Intimidate 60, Intuition 90, Language (Battle 95, Classical 95, Dark Tongue 105, Magick 105, Reikspiel 100, Tilean 105), Lore (Chaos 95, Magic 95, Medicine 95, Warfare 95), Melee (Polearm) 63, Perception 90, Research 105, Trade (Poisoner) 70',
+    'Talents: Aethyric Attunement, Arcane Magic (Nurgle, Plague), Detect Artefact, Flee!, Frightening, Hardy, Luck 7, Petty Magic, Read/Write, Savvy, Sixth Sense, War Wizard',
+    'Trappings: Filthy Robes, Liber Bubonicus, Rod of Corruption'
+  ],
+  // Power Behind the Throne Companion (L18) p. 97 : Skaven Grey Seer (version du Rituel), « As above, plus … » résolu d'après le profil voisin (Skretth, même page).
+  'L18:97:3': [
+    'Traits: Corruption (Erratic Fantasist), Night Vision, Spellcaster (Horned Rat), Weapon +7',
+    'Skills: Channelling 71, Melee (Polearm) 53, Language (Magick 74, Reikspiel) 48',
+    'Talents: Aethyric Attunement 2, Hardy 2, Instrinctive Diction 2, War Wizard',
+    'Trappings: Grey Robes, Quarterstaff, 4 Doses of Mandrake Snuff, Grimoire, Magic Ring (see box on page 94), enough Warpstone to double the SL of three Casting/Channelling Tests (WFRP 244)',
+    'Spells: Aethyric Armour, Bolt, Silence, Chain Attack, Terrifying'
+  ],
+  // Sylvania (L10) p. 68 : Crypt Ghast, « Infected » et « Night Vision » (la ligne est coupée par le gabarit voisin du Crypt Horror) manquaient ; Traits facultatifs.
+  'L10:68:0': [
+    'Traits: Bite +7, Fearless, Frenzy, Hungry, Infected, Night Vision, Venom (Hard), Weapon (Claws) +8',
+    'Optional Traits: Champion, Painless'
+  ],
+  // Rough Nights & Hard Days (L24) p. 22 : Allrella, Elphoise et Helga, « (Dagger) +5 » imprime l'arme sans le mot « Weapon » (coquille du livre, comme « Weapons (Spear) +8 »).
+  'L24:22:0': [
+    'Traits: Prejudice (Warriors), Weapon (Dagger) +5'
+  ],
+  // Enemy in Shadows Companion (L23) p. 43 : Aleanora « Al » Shortbottom, « Ranged (Crossbow) 60 +9 » (portée avant les dégâts) et « Dagger +5 » (sans « Weapon ») n'étaient pas lus comme attaques.
+  'L23:43:0': [
+    'Traits: Armour (Leather Jack) 1, Ranged (Crossbow) +9 (60), Weapon (Dagger) +5',
+    'Skills: Bribery 49, Consume Alcohol 43, Dodge 43, Gamble 35, Gossip 49, Haggle 52, Melee (Basic) 27, Perception 41, Ranged (Crossbow) 59, Sleight of Hand 51',
+    'Talents: Acute Sense (Taste), Embezzle, Marksman, Night Vision, Seasoned Traveller, Small, Resistance (Chaos)',
+    'Trappings: Cloak, Clothing, Crossbow with 10 Bolts, Dagger, Leather Jack, 44 brass pennies (with 16 silver shillings and 3 gold crowns secreted away)'
   ],
   // Sea Wardens of Cothique (L14) p. 55 : Fialthra Swiftprow, la liste « Petty Spells » (colonne de droite) commence sur la ligne de l'en-tête :
   // l'extraction en perdait le début et collait « Dirt, Reveal Magic » à la fin des Talents (talent parasite « War Wizard Dirt »).

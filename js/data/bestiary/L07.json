@@ -951,11 +951,11 @@
      "name": "War Wizard"
     }
    ],
-   "spells": {
-    "notes": [
-     "Lord Skrolk is an accomplished wizard whose power is further bolstered by his loathsome god. He can be considered to have access to any spells from the following lists: • Petty Magic • The Lore of Nurgle"
-    ]
-   },
+   "trappings": [
+    "Filthy Robes",
+    "Liber Bubonicus",
+    "Rod of Corruption"
+   ],
    "keywords": [
     "skaven"
    ],
@@ -3767,6 +3767,14 @@
     "ap": 2,
     "printedTotal": 4
    },
+   "attacks": [
+    {
+     "name": "Blowpipe",
+     "damage": 1,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
    "skills": [
     {
      "name": "Dodge",
@@ -4919,6 +4927,13 @@
    },
    "wounds": 1,
    "size": "tiny",
+   "attacks": [
+    {
+     "name": "Mandibles",
+     "damage": 2,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Bestial",
@@ -4943,7 +4958,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Mandibles) +2 Magical Snack"
+    "Magical Snack"
    ],
    "abilities": [
     "E0-T-178"
@@ -5557,6 +5572,13 @@
    },
    "wounds": 9,
    "size": "small",
+   "attacks": [
+    {
+     "name": "Teeth",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Amphibious",
@@ -5593,7 +5615,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Teeth) +4 Odour Attack"
+    "Odour Attack"
    ],
    "abilities": [
     "E0-T-182"
@@ -5723,6 +5745,11 @@
      "name": "Tail",
      "damage": 4,
      "trait": "Tail"
+    },
+    {
+     "name": "Teeth",
+     "damage": 6,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -5763,7 +5790,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Teeth) +6 Venomous Bite"
+    "Venomous Bite"
    ],
    "abilities": [
     "E0-T-183"
@@ -6035,6 +6062,13 @@
    },
    "wounds": 2,
    "size": "little",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Arboreal",
@@ -6063,7 +6097,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Bite) +4 Boring Attack"
+    "Boring Attack"
    ],
    "abilities": [
     "E0-T-185"
@@ -6761,6 +6795,11 @@
      "damage": 8,
      "trait": "Ranged",
      "ranged": true
+    },
+    {
+     "name": "Spines",
+     "damage": 6,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -6814,6 +6853,9 @@
      "param": "War",
      "ref": "E0-T-060"
     }
+   ],
+   "specialRules": [
+    "Shooting Spine Attack"
    ],
    "abilities": [
     "E0-T-187"
@@ -7149,6 +7191,11 @@
      "name": "Tail",
      "damage": 11,
      "trait": "Tail"
+    },
+    {
+     "name": "Trampling Feet",
+     "damage": 10,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -7216,6 +7263,9 @@
      "name": "Trained",
      "ref": "E0-T-060"
     }
+   ],
+   "specialRules": [
+    "Unstoppable Charge"
    ],
    "abilities": [
     "E0-T-188"
@@ -7464,6 +7514,11 @@
      "name": "Tail",
      "damage": 7,
      "trait": "Tail"
+    },
+    {
+     "name": "Claws",
+     "damage": 7,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -7528,7 +7583,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Claws) +7 Ramming Attack"
+    "Ramming Attack"
    ],
    "keywords": [
     "bete"
@@ -7573,6 +7628,11 @@
      "name": "Tail",
      "damage": 11,
      "trait": "Tail"
+    },
+    {
+     "name": "Claws",
+     "damage": 11,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -7646,7 +7706,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Claws) +11 Blood Frenzy"
+    "Blood Frenzy"
    ],
    "abilities": [
     "E0-T-191"
@@ -7689,6 +7749,11 @@
      "name": "Bite",
      "damage": 11,
      "trait": "Bite"
+    },
+    {
+     "name": "Claws",
+     "damage": 11,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -7724,6 +7789,11 @@
      "ref": "E0-T-059"
     },
     {
+     "name": "Venom",
+     "param": "Hard",
+     "ref": "E0-T-064"
+    },
+    {
      "name": "Bite",
      "rating": "+11",
      "ref": "E0-T-006"
@@ -7750,7 +7820,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Claws) +11 Toxic Bile"
+    "Toxic Bile"
    ],
    "abilities": [
     "E0-T-192"
@@ -7798,6 +7868,11 @@
      "name": "Tail",
      "damage": 12,
      "trait": "Tail"
+    },
+    {
+     "name": "Claws",
+     "damage": 12,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -7863,7 +7938,7 @@
     }
    ],
    "specialRules": [
-    "Weapon (Claws) +12 Fearsome Roar"
+    "Fearsome Roar"
    ],
    "keywords": [
     "bete",

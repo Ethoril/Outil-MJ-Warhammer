@@ -2027,7 +2027,7 @@
    "wounds": 11,
    "attacks": [
     {
-     "name": "Skull- Stick",
+     "name": "Skull-Stick",
      "damage": 7,
      "trait": "Weapon"
     }
@@ -4406,7 +4406,7 @@
    },
    "attacks": [
     {
-     "name": "Two- Handed Warhammer",
+     "name": "Two-Handed Warhammer",
      "damage": 12,
      "trait": "Weapon"
     }

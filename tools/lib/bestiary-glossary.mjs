@@ -48,6 +48,7 @@ export function skillNameFr(name) {
 }
 
 /** Compétences imprimées par un livre (Lords of Stone and Steel) dont le nom français n'est pas établi : gardées en anglais, signalées non vérifiées. */
-const UNTRANSLATED_GROUPS = ['Runesmithing'];
+// « Engineering 71 » (Dricht Skuttlespite, L22 p. 54) : imprimée telle quelle, sans équivalent de la liste des Compétences ; gardée, nom français non vérifié.
+const UNTRANSLATED_GROUPS = ['Runesmithing', 'Engineering'];
 
 export const SKILL_GROUPS = Object.freeze(new Set([...Object.keys(SKILL_GROUP_FR), ...Object.keys(SKILL_GROUP_ALIASES), ...UNTRANSLATED_GROUPS]));

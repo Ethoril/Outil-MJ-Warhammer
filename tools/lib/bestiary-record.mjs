@@ -92,7 +92,7 @@ export function buildAttacks(extracted, traitList) {
     if (range) entry.rangeYards = Number(range[1]);
     if (/free attack only when charging/i.test(tail)) entry.free = 'charge';
     else if (/lose momentum to make this free attack/i.test(tail)) entry.free = 'momentum';
-    const flags = tail.replace(/free attack only when charging|lose momentum to make this free attack/ig, '').replace(/\d+\s*yards?/i, '').split(',').map(part => part.trim()).filter(part => part && part.split(/\s+/).length <= 3 && !/[.:;]/.test(part));
+    const flags = tail.replace(/free attack only when charging|lose momentum to make this free attack/ig, '').replace(/\d+\s*yards?/i, '').split(',').map(part => part.trim()).filter(part => part && /^[A-Z]/.test(part) && part.split(/\s+/).length <= 3 && !/[.:;]/.test(part));
     // « with the Impale, Pistol, and Repeater 3 Qualities, and the Reload 9 Flaw » (L09 p. 122) : qualités et défauts nommés, un par un.
     const listed = /\bwith the (.+?) Qualit(?:y|ies)\b(?:,? and the (.+?) Flaws?\b)?/i.exec(tail);
     const named = listed ? [listed[1], listed[2]].filter(Boolean).flatMap(part => part.split(/,\s*(?:and\s+)?|\s+and\s+/)).map(part => part.trim()).filter(Boolean) : [];
@@ -107,7 +107,10 @@ export function buildAttacks(extracted, traitList) {
     if (damage === null || Number.isNaN(damage)) continue;
     attacks.push({ name: trait.param || trait.name, damage, trait: trait.name, ...(trait.count ? { count: trait.count } : {}), ...(trait.name === 'Ranged' ? { ranged: true } : {}) });
   }
-  return attacks;
+  // Le livre imprime parfois la même attaque deux fois (« Horns (Tusks) +10 » et « Weapon (Tusks) +10 », Krag-Breaker « Horns +13 » et « Weapon (Curling Horns) +13 ») :
+  // une arme de même dégâts dont le nom est celui d'une attaque naturelle (ou finit par lui) n'est pas une seconde attaque.
+  const twin = (weapon, other) => other !== weapon && other.trait !== 'Weapon' && other.damage === weapon.damage && (weapon.name.toLowerCase() === other.name.toLowerCase() || weapon.name.toLowerCase().endsWith(` ${other.name.toLowerCase()}`));
+  return attacks.filter(attack => attack.trait !== 'Weapon' || !attacks.some(other => twin(attack, other)));
 }
 
 /** Armure : PA imprimés (jamais additionnés à l'Endurance) ; V5 : parties et Bonus d'Endurance imprimé, V4 : Trait « Armour n (total) ». */
@@ -115,7 +118,7 @@ export function buildArmour(extracted, traitList) {
   const armour = {};
   if (extracted.armour) {
     if (extracted.armour.toughnessBonus !== undefined) armour.toughnessBonus = extracted.armour.toughnessBonus;
-    if (extracted.armour.parts?.length) armour.parts = extracted.armour.parts.map(part => ({ name: part.name, ap: part.ap, ...(part.optional ? { optional: true } : {}), ...(part.locations ? { locations: part.locations } : {}) }));
+    if (extracted.armour.parts?.length) armour.parts = extracted.armour.parts.map(part => ({ name: part.name, ap: part.ap, ...(part.optional ? { optional: true } : {}), ...(part.locations ? { locations: part.locations } : {}), ...(part.condition ? { condition: part.condition } : {}) }));
   }
   const trait = traitList.find(item => item.name === 'Armour');
   if (trait) {

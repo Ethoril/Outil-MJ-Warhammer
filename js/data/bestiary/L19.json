@@ -3018,6 +3018,11 @@
      "name": "Horns",
      "damage": 10,
      "trait": "Horns"
+    },
+    {
+     "name": "Weapon",
+     "damage": 11,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -3055,7 +3060,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +11 Manifestation of Ghur"
+    "Manifestation of Ghur"
    ],
    "abilities": [
     "E0-T-258",

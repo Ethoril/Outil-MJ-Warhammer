@@ -93,6 +93,9 @@
      "ref": "E0-T-044"
     }
    ],
+   "specialRules": [
+    "Taal's Own Blades"
+   ],
    "keywords": [
     "bete"
    ],
@@ -193,6 +196,9 @@
     {
      "name": "Animal Affinity"
     }
+   ],
+   "specialRules": [
+    "Kurnous' Own Blades"
    ],
    "keywords": [
     "bete"
@@ -453,6 +459,11 @@
      "ref": "E0-T-064"
     }
    ],
+   "talents": [
+    {
+     "name": "Trick Riding"
+    }
+   ],
    "specialRules": [
     "Borrowed Courage"
    ],
@@ -484,6 +495,13 @@
     "Soc": 30
    },
    "wounds": 14,
+   "attacks": [
+    {
+     "name": "Spider-god Staff",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Animosity",
@@ -526,6 +544,9 @@
      "name": "Venom",
      "ref": "E0-T-064"
     }
+   ],
+   "specialRules": [
+    "Not All There"
    ],
    "abilities": [
     "E0-T-097"
@@ -669,6 +690,11 @@
      "ref": "E0-T-059"
     }
    ],
+   "talents": [
+    {
+     "name": "Reactive Strike (2)"
+    }
+   ],
    "abilities": [
     "E0-T-100"
    ],
@@ -710,11 +736,6 @@
      "name": "Tusks",
      "damage": 10,
      "trait": "Horns"
-    },
-    {
-     "name": "Tusks",
-     "damage": 10,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -817,11 +838,6 @@
      "name": "Tusks",
      "damage": 11,
      "trait": "Horns"
-    },
-    {
-     "name": "Tusks",
-     "damage": 11,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -861,6 +877,11 @@
      "rating": "+11",
      "param": "Tusks",
      "ref": "E0-T-028"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Master (3)"
     }
    ],
    "abilities": [
@@ -995,11 +1016,6 @@
      "name": "Cavernous Maw",
      "damage": 10,
      "trait": "Bite"
-    },
-    {
-     "name": "Cavernous Maw",
-     "damage": 10,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -1094,11 +1110,6 @@
      "name": "Horns",
      "damage": 10,
      "trait": "Horns"
-    },
-    {
-     "name": "Curling Horns",
-     "damage": 10,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -1180,11 +1191,6 @@
      "name": "Horns",
      "damage": 13,
      "trait": "Horns"
-    },
-    {
-     "name": "Curling Horns",
-     "damage": 13,
-     "trait": "Weapon"
     }
    ],
    "skills": [
@@ -1232,6 +1238,10 @@
     {
      "name": "Berserk Charge",
      "rank": 3
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
     }
    ],
    "abilities": [
@@ -1952,11 +1962,6 @@
      "name": "Tail",
      "damage": 9,
      "trait": "Tail"
-    },
-    {
-     "name": "Lethal Tail",
-     "damage": 9,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -3449,6 +3454,12 @@
      "ref": "E0-T-013"
     }
    ],
+   "talents": [
+    {
+     "name": "Berserk Charge",
+     "rank": 3
+    }
+   ],
    "abilities": [
     "E0-T-130"
    ],
@@ -3486,11 +3497,6 @@
      "name": "Horns",
      "damage": 8,
      "trait": "Horns"
-    },
-    {
-     "name": "Serrated Horns",
-     "damage": 8,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -4541,6 +4547,10 @@
     }
    ],
    "talents": [
+    {
+     "name": "Accurate Shot",
+     "rank": 2
+    },
     {
      "name": "Hardy"
     }
@@ -5795,11 +5805,6 @@
      "name": "Tail",
      "damage": 13,
      "trait": "Tail"
-    },
-    {
-     "name": "Fanged Maw",
-     "damage": 11,
-     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -5950,6 +5955,11 @@
      "name": "Ward",
      "rating": "8+",
      "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Enclosed Fighter"
     }
    ],
    "abilities": [

@@ -2024,11 +2024,20 @@
     }
    ],
    "trappings": [
-    "As above"
+    "Grey Robes",
+    "Quarterstaff",
+    "4 Doses of Mandrake Snuff",
+    "Grimoire",
+    "Magic Ring (see box on page 94)",
+    "enough Warpstone to double the SL of three Casting/Channelling Tests (WFRP 244)"
    ],
    "spells": {
-    "notes": [
-     "As above, plus Chain Attack and Terrifying"
+    "spells": [
+     "Aethyric Armour",
+     "Bolt",
+     "Silence",
+     "Chain Attack",
+     "Terrifying"
     ]
    },
    "keywords": [
@@ -2664,6 +2673,11 @@
      "name": "Bite",
      "damage": 5,
      "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
     }
    ],
    "traits": [
@@ -2702,7 +2716,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +6 Flaming Dangerous"
+    "Flaming Dangerous"
    ],
    "starred": [
     "M"
@@ -2995,6 +3009,12 @@
      "name": "Weapon",
      "damage": 8,
      "trait": "Weapon"
+    },
+    {
+     "name": "Bow",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
     }
    ],
    "traits": [
@@ -3025,7 +3045,7 @@
     }
    ],
    "specialRules": [
-    "Ranged (Bow) +6 Headless"
+    "Headless"
    ],
    "abilities": [
     "E0-T-265"
@@ -3061,6 +3081,13 @@
    "armour": {
     "ap": 2
    },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Construct",
@@ -3089,7 +3116,7 @@
     }
    ],
    "specialRules": [
-    "Weapon +7 Headless"
+    "Headless"
    ],
    "abilities": [
     "E0-T-265"

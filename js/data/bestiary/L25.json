@@ -2320,11 +2320,6 @@
      "name": "Tail",
      "damage": 13,
      "trait": "Tail"
-    },
-    {
-     "name": "Fanged Maw",
-     "damage": 11,
-     "trait": "Weapon"
     }
    ],
    "traits": [

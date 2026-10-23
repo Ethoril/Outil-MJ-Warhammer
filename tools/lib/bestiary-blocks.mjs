@@ -250,7 +250,7 @@ export function pageBlocks(pageText) {
 }
 
 // V4 : « Traits: … Skills: … » (étiquette suivie de deux-points, n'importe où dans le texte). V5 : étiquette seule en début de ligne.
-const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Miracles', 'Armour by Location', 'Special Rules'];
+const V4_LABELS_BASE = ['Yenlui State', 'Obsession', 'Attack Traits', 'Optional Traits', 'Traits', 'Skills', 'Talents?', 'Trappings', 'Possessions', 'Spells', 'Petty', 'Arcane(?: Magic)? and Lore(?: Spells)?', 'Arcane', '(?:Arcane|Petty Magic) Spells', '[^\\s:]+ Marsh Magic', 'Little Waaagh!', 'Lore of the Big Waaagh!', 'Lore of [A-Z][a-z]+ Spells', '(?:Petty|Witchcraft|Daemonology|Necromancy|Hedgecraft|Chaos) Spells','Mutations', 'Optional', 'Petty Magic', 'Arcane Magic', 'Fate Points?', 'Miracles', 'Armour by Location', 'Special Rules'];
 const LORE_PATTERNS = ['Lore of [A-Z][a-z]+', 'Magic of [A-Z][a-z]+', 'High Magic'];
 // « Traits*: » (L01 p. 79) : Traits conditionnels, la note à astérisque suit ; l'astérisque est retiré de l'étiquette.
 const labelRe = wide => new RegExp(`(?:^|\\s)(${[...(wide ? [...V4_LABELS_BASE, 'Options'] : [...V4_LABELS_BASE, ...LORE_PATTERNS])].join('|')})\\*?:`, 'g');
@@ -273,7 +273,8 @@ export function splitSections(bodyLines) {
     const marks = [...joined.matchAll(V4_LABEL_RE)].map(found => ({ label: found[1], start: found.index + found[0].length, at: found.index }));
     marks.forEach((mark, index) => {
       const text = clean(joined.slice(mark.start, index + 1 < marks.length ? marks[index + 1].at : joined.length));
-      put(mark.label, mark.label === 'Traits' ? text.replace(/\s\*[A-Za-z].*$/, '') : text);
+      // « Talent: Trick Riding » (singulier, Forest Goblin L11 p. 15) : même rubrique que « Talents: ».
+      put(mark.label === 'Talent' ? 'Talents' : mark.label, mark.label === 'Traits' ? text.replace(/\s\*[A-Za-z].*$/, '') : text);
     });
     return { sections, lead: clean(joined.slice(0, marks[0].at)), mode: 'v4' };
   }

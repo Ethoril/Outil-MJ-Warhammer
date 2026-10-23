@@ -3513,8 +3513,8 @@
    ],
    "skills": [
     {
-     "name": "Channelling (Mána's Marsh Magic)",
-     "nameFr": "Focalisation (Mána's Marsh Magic)",
+     "name": "Channelling (Mòna's Marsh Magic)",
+     "nameFr": "Focalisation (Mòna's Marsh Magic)",
      "frUnverified": true,
      "value": 90
     },
@@ -3602,7 +3602,7 @@
      "name": "Aethyric Attunement"
     },
     {
-     "name": "Arcane Magic (Mána's Marsh Magic)"
+     "name": "Arcane Magic (Mòna's Marsh Magic)"
     },
     {
      "name": "Instinctive Diction",
@@ -3647,7 +3647,7 @@
      "Fearsome",
      "Ward"
     ],
-    "Mána's Marsh Magic": [
+    "Mòna's Marsh Magic": [
      "A Bite of Midges",
      "Despondent Slough",
      "Inculcate Mizzle",
