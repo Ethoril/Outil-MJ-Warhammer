@@ -41806,5 +41806,4919 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0001",
+    "phase": "Argent et équipement",
+    "lot": "L01",
+    "source": "L01 p.8",
+    "question": "Implanter « Entretien du mercenaire ogre » ? Un mercenaire expérimenté réclame 1 CO/jour, plus repas dont au moins un tiers de vache et un tonnelet de bière ; texte estimant aussi le total à environ 1 CO/jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0002",
+    "phase": "Argent et équipement",
+    "lot": "L01",
+    "source": "L01 p.8",
+    "question": "Implanter « Manœuvre » ? Tarif ogre : 2 pistoles la tâche, 6/jour, 2 CO/semaine ; ajouter 10 pistoles/jour de nourriture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0003",
+    "phase": "Argent et équipement",
+    "lot": "L01",
+    "source": "L01 p.8",
+    "question": "Implanter « Mercenaire » ? Tarif ogre : 6 pistoles la tâche, 1 CO/jour, 6 CO/semaine ; ajouter 10 pistoles/jour de nourriture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0004",
+    "phase": "Argent et équipement",
+    "lot": "L01",
+    "source": "L01 p.8",
+    "question": "Implanter « Garde du corps » ? Tarif ogre : 8 pistoles la tâche, 1 CO 6 pistoles/jour, 8 CO/semaine ; ajouter 10 pistoles/jour de nourriture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0005",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Espèce aléatoire avec Ogre » ? Option : choisir Ogre ou lancer d100 ; accepter le premier résultat rapporte 20 PX. Table : Humain 01–89, Halfelin 90–93, Nain 94–97, Ogre 98, Haut Elfe 99, Elfe sylvain 00.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0006",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Carrières ogres aléatoires » ? Tirer la carrière dans la table spécifique ; une autre carrière exige accord MJ. Le résultat 05 manque dans la table imprimée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0007",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Boucher » ? 01 au d100 : Boucher, classe Lettrés. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0008",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Artisan » ? 02 au d100 : Artisan, classe Citadins. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0009",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Mendiant » ? 03–04 au d100 : Mendiant, classe Citadins. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0010",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Ratier » ? 06 au d100 : Ratier, classe Citadins. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0011",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Garde » ? 07–12 au d100 : Garde, classe Citadins. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0012",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Serviteur » ? 13 au d100 : Serviteur, classe Courtisans. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0013",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Bailli » ? 14 au d100 : Bailli, classe Ruraux. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0014",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Chasseur » ? 15–21 au d100 : Chasseur, classe Ruraux. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0015",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Mineur » ? 22–23 au d100 : Mineur, classe Ruraux. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0016",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Éleveur de Rhinox » ? 24–26 au d100 : Éleveur de Rhinox, classe Ruraux. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0017",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Chasseur de primes » ? 27–29 au d100 : Chasseur de primes, classe Itinérants. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0018",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Amuseur » ? 30–32 au d100 : Amuseur, classe Itinérants. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0019",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Colporteur » ? 33–39 au d100 : Colporteur, classe Itinérants. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0020",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Marin » ? 40 au d100 : Marin, classe Riverains. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0021",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Débardeur » ? 41–43 au d100 : Débardeur, classe Riverains. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0022",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Pilleur de tombes » ? 44–47 au d100 : Pilleur de tombes, classe Roublards. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0023",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Hors-la-loi » ? 48–56 au d100 : Hors-la-loi, classe Roublards. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0024",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Racketteur » ? 57–61 au d100 : Racketteur, classe Roublards. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0025",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Garde du corps » ? 62–68 au d100 : Garde du corps, classe Guerriers. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0026",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Gladiateur » ? 69–79 au d100 : Gladiateur, classe Guerriers. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0027",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Spadassin » ? 80–84 au d100 : Spadassin, classe Guerriers. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0028",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Mangeur d’hommes » ? 85–91 au d100 : Mangeur d’hommes, classe Guerriers. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0029",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.18",
+    "question": "Implanter « Accès ogre : Soldat » ? 92–00 au d100 : Soldat, classe Guerriers. Accès de création, sans recopier les règles de la carrière de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0030",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : CC » ? Caractéristique de départ CC : 2d10+20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0031",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : CT » ? Caractéristique de départ CT : 2d10+10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0032",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Force » ? Caractéristique de départ Force : 2d10+35.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0033",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Endurance » ? Caractéristique de départ Endurance : 2d10+35.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0034",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Initiative » ? Caractéristique de départ Initiative : 2d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0035",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Agilité » ? Caractéristique de départ Agilité : 2d10+15.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0036",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Dextérité » ? Caractéristique de départ Dextérité : 2d10+10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0037",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Intelligence » ? Caractéristique de départ Intelligence : 2d10+10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0038",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Force Mentale » ? Caractéristique de départ Force Mentale : 2d10+20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0039",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Création ogre : Sociabilité » ? Caractéristique de départ Sociabilité : 2d10+10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0040",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Blessures initiales ogres » ? Blessures = 2 × (BF + 2 × BE + BFM).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0041",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Destin et Résilience ogres » ? Départ : Destin 0, Résilience 3 et 1 point supplémentaire à répartir selon la procédure de création.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0043",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Compétences d’espèce ogres » ? Choisir trois des douze compétences pour +5 Augmentations et trois pour +3 ; inclut Grumbarth, Savoir (Ogres), les deux Mêlées et le pistage. Reikspiel parlé couramment.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0044",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.20",
+    "question": "Implanter « Talents d’espèce ogres » ? Six Talents : Combat déloyal, Grande taille, Vision nocturne, Résistance (poisons ingérés), Très résistant ou Très fort, Vice (Nourriture).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0050",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.21",
+    "question": "Implanter « Âge initial ogre » ? Âge initial aléatoire : 5d10+15 ans.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0051",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.21",
+    "question": "Implanter « Taille physique initiale ogre » ? Taille aléatoire 7 pieds 7 pouces +1d10 selon le libellé imprimé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0052",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.21",
+    "question": "Implanter « Restrictions d’apprentissage ogres » ? Écriture, art complexe et Savoirs avancés exigent accord MJ ; remplacer les compétences ou Talents concernés dans les carrières en concertation. Reste applicable à l’avancement p.25.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0053",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.23",
+    "question": "Implanter « Grands Noms ogres » ? Après gain/dépense de Destin ou exploit majeur, un autre Ogre peut accorder un Grand Nom. Typiquement +20 à Intimidation ou Charme parmi les Ogres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0054",
+    "phase": "Combat",
+    "lot": "L01",
+    "source": "L01 p.28",
+    "question": "Implanter « Taille V4 : dégâts contre Moyen » ? Contre Moyen, l’arme de l’Ogre gagne Dévastatrice : choisir unités ou DR pour les dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0055",
+    "phase": "Combat",
+    "lot": "L01",
+    "source": "L01 p.28",
+    "question": "Implanter « Taille V4 : dégâts contre Petit » ? Contre Petit, l’arme gagne aussi Impact ; doubler les dégâts après les modificateurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0056",
+    "phase": "Combat",
+    "lot": "L01",
+    "source": "L01 p.28",
+    "question": "Implanter « Coup meurtrier de Taille V4 » ? Après une touche contre plus petit, entrer dans son espace et attaquer un autre adversaire, jusqu’à BCC répétitions ; aucune cible répétée, mort non requise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0057",
+    "phase": "Combat",
+    "lot": "L01",
+    "source": "L01 p.28",
+    "question": "Implanter « Défense contre Ogre V4 » ? Défense en Mêlée : −2 DR pour Moyen, −4 pour Petit ; les autres compétences dont Esquive sont exemptes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0058",
+    "phase": "Combat",
+    "lot": "L01",
+    "source": "L01 p.28",
+    "question": "Implanter « Bonus V4 pour toucher un Ogre » ? Moyens et Petits gagnent +10 pour toucher un Ogre en Mêlée ou à distance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0062",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.28",
+    "question": "Implanter « Gabarit de l’équipement ogre » ? Les armes ogres listées ont déjà leur Encombrement correct ; ne pas le doubler. Les objets usuels agrandis restent soumis au doublement p.31.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0063",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Massue ogre » ? Base, 1 CO, Enc 2, commun, allonge moyenne, BF+4 ; personnalisation p.30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0064",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Poing de fer » ? Base, 4 CO, Enc 2, rareté Scarce, courte, BF+3 ; Bouclier 1 et Défensive.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0065",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Grande massue ogre » ? Deux mains, 5 CO, Enc 6, commun, longue, BF+6 ; Dévastatrice et personnalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0066",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Grand javelot » ? Lancer, 6 pistoles, Enc 2, Scarce ; portée BF×3, BF+4, Empaleuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0067",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Canon crache-plomb » ? Poudre, deux mains, 14 CO, Enc 8, exotique ; portée 50, +10 dégâts, Dangereuse et Recharge 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0068",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Pistolet ogre » ? Poudre, 9 CO, Enc 3, exotique ; portée 20, +8 dégâts, Pistolet et Recharge 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0069",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Lance-harpon » ? Enchevêtrement, 8 CO, Enc 5, exotique ; portée 20, +10 dégâts, Enchevêtrante et Recharge 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0070",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Piège à chaîne » ? Enchevêtrement, 1 CO, Enc 2, Scarce ; portée BF×2, +7 dégâts, Enchevêtrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0071",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Mitraille de crache-plomb » ? 12 charges pour 4 pistoles, Enc 0, Scarce ; demi-portée de l’arme, Explosion 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0072",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Boulet de crache-plomb » ? 1 CO dont 2 pistoles de poudre ; Enc 0, Scarce ; portée de l’arme, dégâts +4, Pénétrante, Empaleuse, Impact. Boulet récupérable ; nouveau tir au coût de poudre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0073",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Harpons » ? Six pour 5 pistoles, Enc 0, exotiques ; portée de l’arme, Empaleuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0074",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.29",
+    "question": "Implanter « Plaque ventrale ogre » ? Plaque, 20 CO, Enc 4, rare ; corps 3 PA, Impénétrable, aucun malus listé. Protection anatomique insuffisante pour d’autres espèces même réduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0075",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.30",
+    "question": "Implanter « Plaques sur massue » ? Personnaliser une massue ogre avec des plaques lui donne Assommante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0076",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.30",
+    "question": "Implanter « Pointes sur massue » ? Personnaliser une massue ogre avec des pointes lui donne Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0077",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.30",
+    "question": "Implanter « Lames sur massue » ? Personnaliser une massue ogre avec des lames lui donne Taille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0078",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.30",
+    "question": "Implanter « Poing de fer fixé » ? Impossible de désarmer un Poing de fer ; sa main peut tenir une arme ou effectuer des gestes simples.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0079",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.30",
+    "question": "Implanter « Pistolet employé en massue » ? Le pistolet ogre emploie les munitions ordinaires et peut servir d’arme de base ; il ne casse alors que sur une Maladresse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0080",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.30",
+    "question": "Implanter « Compétences du lance-harpon » ? Employer Tir (Arbalète) ou Tir (Enchevêtrement) sans malus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0081",
+    "phase": "Armes et armures",
+    "lot": "L01",
+    "source": "L01 p.30",
+    "question": "Implanter « Lance-harpon sans corde » ? Sans corde, portée 60 et perte d’Enchevêtrante ; aucune rétraction mécanique automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0082",
+    "phase": "Argent et équipement",
+    "lot": "L01",
+    "source": "L01 p.31",
+    "question": "Implanter « Équipement et charge ogres » ? Objets usuels à taille ogre : prix et Encombrement doublés ; capacité de charge = 2×(BF+BE).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0083",
+    "phase": "Argent et équipement",
+    "lot": "L01",
+    "source": "L01 p.31",
+    "question": "Implanter « Besoins alimentaires ogres » ? Manger et boire au moins deux fois les besoins journaliers humains.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0084",
+    "phase": "Maladies et poisons",
+    "lot": "L01",
+    "source": "L01 p.31",
+    "question": "Implanter « Dose de poison pour Ogre » ? Un poison ne produit aucun effet sans deux doses usuelles administrées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0086",
+    "phase": "Argent et équipement",
+    "lot": "L01",
+    "source": "L01 p.31",
+    "question": "Implanter « Objets trop petits » ? −20 aux Tests utilisant des objets inadaptés à la taille ogre ; certaines utilisations restent impossibles, telle une détente trop petite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0088",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.31",
+    "question": "Implanter « Carrière de Crache-feu » ? Adapter la carrière de Sorcier et choisir Magie des Arcanes (Aqshy) pour jouer un Crache-feu ; autres modifications évoquées sans les chiffrer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0089",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.31",
+    "question": "Implanter « Accès ogre aux sorts d’Arcane » ? Un Ogre peut apprendre les sorts d’Arcane comme les autres sorciers ; clause distincte de la liste restrictive de Domaines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0099",
+    "phase": "Montures",
+    "lot": "L01",
+    "source": "L01 p.34",
+    "question": "Implanter « Substitution Équitation (Rhinox) » ? Lorsqu’un Ogre pourrait apprendre Équitation (Cheval), prendre Équitation (Rhinox). Les chevaux ne conviennent pas comme montures aux Ogres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0100",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.35",
+    "question": "Implanter « Mangeur d’hommes » ? Guerriers, Ogres ; quatre rangs Bronze 3/Argent 1/3/5. Départ CC/F/E, puis CT, FM, Soc ; compétences, Talents et dotations propres à chaque rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0101",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.36",
+    "question": "Implanter « Éleveur de Rhinox » ? Ruraux, Ogres ; quatre rangs Argent 1/3/5 puis Or 1. Départ CT/F/E, puis Soc, CC, Ag ; listes de rang et accès à la monture dédiés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0102",
+    "phase": "Création et carrières",
+    "lot": "L01",
+    "source": "L01 p.37",
+    "question": "Implanter « Boucher ogre » ? Lettrés, Ogres ; rangs Bronze 3, Argent 1/2/4. Départ CC/E/FM, puis F, Soc, I ; Talents et Langue magique dès le départ, gastromancie au second rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0103",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Option des signes à la création » ? Après détermination des caractéristiques, tirer d100 ; garder le résultat vaut 25 PX, choisir son signe ne rapporte rien. Appliquer les effets aux valeurs de départ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0104",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Wymund l’Anachorète » ? 01–05 au d100 : Soc+2, I+2, Int−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0105",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Grande Croix » ? 06–10 au d100 : F+2, FM+2, I−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0106",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Ligne du Dessinateur » ? 11–15 au d100 : CT+2, Ag+2, CC−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0107",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Gnuthus le Bœuf » ? 16–20 au d100 : E+2, FM+2, Int−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0108",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Dragomas le Dragon » ? 21–25 au d100 : FM+2, Soc+2, Dex−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0109",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Crépuscule » ? 26–30 au d100 : Int+2, I+2, FM−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0110",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Baudrier de Grungni » ? 31–35 au d100 : CC+2, FM+2, Soc−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0111",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Mammit le Sage » ? 36–40 au d100 : I+2, Int+2, Soc−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0112",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Mummit le Fou » ? 41–45 au d100 : un rang de Chanceux, FM−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0113",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Deux Bœufs » ? 46–50 au d100 : un rang d’Artisan, Int−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0114",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Danseuse » ? 51–55 au d100 : un rang de Zèle, I−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0115",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Tambour » ? 56–60 au d100 : un rang de Fêtard, FM−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0116",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Flûtiste » ? 61–65 au d100 : Soc+2, Dex+2, CC−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0117",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Vobist le Pâle » ? 66–70 au d100 : un rang de Sixième sens, I−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0118",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Chariot brisé » ? 71–75 au d100 : un rang de Résistance (Maladies), FM−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0119",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Chèvre graissée » ? 76–80 au d100 : un rang d’Affinité animale, E−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0120",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Chaudron de Rhya » ? 81–85 au d100 : un rang de Volonté de fer, Ag−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0121",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Cackelfax le Coq » ? 86–90 au d100 : un rang de Négociateur, Soc−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0122",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Scie à os » ? 91–95 au d100 : Int+2, Soc+2, CC−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0123",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Étoile du Sorcier : sous-table » ? 96–00 au d100 : tirer d10 pour le don magique, au lieu d’un effet fixe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0124",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Étoile du Sorcier : Sixième sens » ? 1–3 au d10 : Sixième sens, sans malus de Force indiqué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0125",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Étoile du Sorcier : Seconde vue » ? 4–6 au d10 : Seconde vue et Force−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0126",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Étoile du Sorcier : Magie mineure » ? 7–9 au d10 : Magie mineure et Force−3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0127",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.39",
+    "question": "Implanter « Étoile du Sorcier : Sorcier ! » ? 10 au d10 : Sorcier ! et Force−5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0128",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.43",
+    "question": "Implanter « Mummit : divergence de malus » ? La description donne FM−4 au lieu de FM−3 dans la table p.39.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0129",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.43",
+    "question": "Implanter « Deux Bœufs : choix du Métier » ? Le Métier associé au Talent Artisan peut être choisi après la carrière de départ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0130",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.43",
+    "question": "Implanter « Danseuse : choix du zèle » ? Le sujet du Talent Zèle peut être découvert en jeu, sans être choisi à la création.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0131",
+    "phase": "Signes astraux",
+    "lot": "L01",
+    "source": "L01 p.47",
+    "question": "Implanter « Étoile du Sorcier : variante descriptive » ? La description donne Magie mineure et F−3 fixes, contre le tirage au d10 de la table p.39.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0132",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Arme » ? 01–43 au d100 : coût de l’arme ×50 par pouvoir, 2 mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0133",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Flèches » ? 44–45 au d100 : coût des flèches ×30, 2 semaines pour six.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0134",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Armure » ? 46–51 au d100 : coût de l’armure ×50 par pouvoir, 4 mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0135",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Bouclier » ? 52–55 au d100 : coût du bouclier ×50 par pouvoir, 4 mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0136",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Parchemin » ? 56–60 au d100 : NI du sort ×10, 1 semaine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0137",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Baguette » ? 61–65 au d100 : NI du sort ×50, 3 semaines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0138",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Bâton » ? 66–70 au d100 : prix non chiffré, 4 semaines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0139",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Anneau » ? 71–89 au d100 : NI du sort ×200, 4 semaines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0140",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Talisman » ? 90–97 au d100 : prix non chiffré, 8 semaines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0141",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.51",
+    "question": "Implanter « Génération d’artefact : Curiosité » ? 98–00 au d100 : prix et délai non chiffrés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0142",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Étudier un artefact magique » ? Détection d’artefact permet Intuition au toucher ; sinon un sorcier étudie typiquement une semaine par tentative en lieu équipé puis Savoir (Magie), Average (+0) imprimé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0143",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : ≥+6 » ? ≥+6 : identifier entièrement avec toutes les particularités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0144",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : +4 à +5 » ? +4 à +5 : identifier et savoir que les particularités existent ; le MJ peut taire le détail d’une.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0145",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : +2 à +3 » ? +2 à +3 : identifier, particularités visibles seulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0146",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : +0 réussi à +1 » ? +0 réussi à +1 : identifier avec une particularité cachée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0147",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : 0 raté à −1 » ? 0 raté à −1 : échec reconnu, sans fausse identification ; particularités visibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0148",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : −2 à −3 » ? −2 à −3 : confondre avec un objet proche, particularités visibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0149",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : −4 à −5 » ? −4 à −5 : confondre et imaginer une fausse particularité supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0150",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.52",
+    "question": "Implanter « Identification : ≤−6 » ? ≤−6 : confondre et imaginer au moins deux fausses particularités.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0151",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.53",
+    "question": "Implanter « Commander un artefact » ? Hors aventure, réussir Consulter un expert puis Commander avant la création ; délai au moins double de l’objet ordinaire. Artisans reconnus : Solide et Fin, coût augmenté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0152",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabriquer un artefact » ? Activité d’Artisanat, Test étendu de 20 DR : Savoir (Magie) −30 et Métier à difficulté selon rareté ; additionner seulement le plus faible résultat des deux à chaque tentative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0153",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Coopération de fabrication » ? Sorcier et artisan peuvent collaborer chacun dans sa spécialité ; chacun dépense une activité d’Artisanat. Partir de matières premières : aucun enchantement permanent d’une arme ou armure déjà achevée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0155",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Résultat final de fabrication » ? À la fin, Savoir (Magie) +0 et Métier +0 ; additionner les DR pour la table du résultat final, distincte du cumul du plus faible des deux pendant la fabrication.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0156",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : ≥+6 » ? ≥+6 : donner Incassable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0157",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : +4 à +5 » ? +4 à +5 : donner une Qualité d’objet au choix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0158",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : +2 à +3 » ? +2 à +3 : objet réussi sans complication.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0159",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : 0 réussi à +1 » ? 0 réussi à +1 : objet sans défaut, mais temps de fabrication +50 %.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0160",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : 0 à −11 imprimé » ? 0 à −11 imprimé : une particularité/malédiction ; relancer avec +40 si aucun effet ou runes naines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0161",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : −2 à −3 » ? −2 à −3 : deux tirages de particularités à +40, relancer aucun effet/runes naines ; ajouter un défaut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0162",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : −4 à −5 » ? −4 à −5 : objet inutilisable, toute fabrication à reprendre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0163",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.54",
+    "question": "Implanter « Fabrication achevée : ≤−6 » ? ≤−6 : explosion magique, touche équivalente à une bombe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0164",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.55",
+    "question": "Implanter « Créature ciblée par un enchantement » ? Tirer d100 pour déterminer la famille concernée ; Bestial définit les Bêtes, Béni ou Invocation les vrais fidèles. Résultats 90–92 absents ; Bêtes 94–95 chevauche Fidèles 94 et Araignées géantes 95.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0165",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.55",
+    "question": "Implanter « Lame cherche-gorge » ? Rapière qui ignore les PA d’armures ayant Points faibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0166",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.55",
+    "question": "Implanter « Maille silencieuse » ? Supprime le −10 de Discrétion de la maille ; le porteur de la coiffe ne parle qu’en chuchotant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0167",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.55",
+    "question": "Implanter « Massue brise-tibias » ? Arme de base : +20 au jet de gravité des Critiques aux jambes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0168",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Tirer particularités et malédictions » ? À la génération, tirage secret du MJ ; pas de particularité pour les parchemins, et généralement pas pour les bâtons sauf exceptions p.65.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0169",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Aucune particularité » ? 01–20 : aucun effet particulier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0170",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Lueur et dévotion » ? 21–35 : lueur bleu-vert à l’usage ; rites divins, pouvoirs après 32 jours consécutifs de commandements ; Shallya ne crée pas d’armes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0171",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Runes et bourdonnement » ? 36–40 : Solide et Fin, mais bourdonnement constant pénalisant Discrétion d’un degré de difficulté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0172",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Mot d’activation » ? 41–45 : ne fonctionne qu’après prononciation du mot choisi par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0173",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Vents ténus » ? 46–50 : Focalisation +60 à chaque usage ; échec ou compétence absente : Incantation imparfaite mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0174",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Magie éphémère » ? 51–63 : tous les pouvoirs disparaissent après 1d100 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0175",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Artefact affamant » ? 64–69 : manger deux fois ses besoins normaux ou subir un Exténué permanent tant que l’objet est porté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0176",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Artefact hideux » ? 70–75 : acquiert le défaut Laid.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0177",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Poussière de malepierre » ? 76–78 : source mineure de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0178",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Puissance céleste » ? 79–80 : actif seulement sous l’astre, jamais dedans/sous terre ; d10 : Soleil 1–6, Mannslieb 7–9, Morrslieb 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0179",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Artefact solitaire » ? 81–84 : Tests impliquant l’objet : −1 DR avec autrui présent, +1 DR seul.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0180",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Sangsue vitale » ? 85–89 : à chaque usage, Résistance +0 ou 1 Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0181",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.56",
+    "question": "Implanter « Particularité : Fabrication peu fiable » ? 90–93 : acquiert Peu fiable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0182",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Particularité : Balise magique » ? 94–97 : toujours visible comme un brasier à Seconde vue, même rangé ; porteur incapable de se cacher de ces observateurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0183",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Particularité : Artefact vampire » ? 98–99 : à chaque aube, payer 1 Blessure de sang ou pouvoirs éteints ; après extinction, 3 Blessures pour réactiver.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0184",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Particularité : Farfadet captif » ? 100 : chaque jour Crochetage −20, Dex 58 ; succès : contrôle temporaire, puis trois sorts de Vie avec FM 47 dans les 24 h, sans libération physique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0185",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Particularité : Vents faiblement liés » ? 101–111 : à chaque usage Focalisation +20 ; échec ou compétence absente : Incantation imparfaite mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0186",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Particularité : Vents tourbillonnants » ? 112–129 : incantation à moins de 10 yards du porteur soumise aux Vents tourbillonnants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0187",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Particularité : Vents mal liés » ? 130–137 : à chaque usage Focalisation +0 ; échec ou compétence absente : Incantation imparfaite mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0188",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Particularité : Fragment de malepierre » ? 138–140 : source modérée de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0189",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.57",
+    "question": "Implanter « Type d’arme magique » ? Déterminer l’arme par d100 : armes de base 01–50, puis dague, rapière, hallebarde, lance, bâtarde, grande hache, marteau, espadon, hache de jet, arc et arbalète 99–00.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0190",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Armes magiques : portée et non-cumul » ? Toute arme magique touche les êtres immunisés au non-magique ; les Qualités identiques ne se cumulent pas. Porteur inclut arme au fourreau, manieur exige arme principale active.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0191",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Touchée par les Vents » ? 01–20 : attaque magique sans autre capacité ; arme à distance transmet à ses munitions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0192",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Nimbée d’ombre » ? 21–24 : ignore les armures non magiques ; effet transmis aux munitions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0193",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Enflammée » ? 25–28 : dégainée, flamme sans nuire au manieur ni à ses objets ; touche sur cible inflammable : 1 Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0194",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Argent bondissant : mêlée » ? 32–35 : arme de mêlée Rapide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0195",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Argent bondissant : tir » ? 32–35 : arme à distance : Initiative du manieur +10 en combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0196",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Sculptée de rage » ? 36–39 : dégainer pour combattre soumet le manieur à Frénésie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0197",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Revigorée : fatigue » ? 40–43 : le manieur ignore les États Exténué en combattant avec l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0198",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Revigorée : lame incassable » ? 40–43 : la lame possède Incassable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0199",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Liée au destin » ? 44–47 : au début de chaque Round de combat, le manieur reçoit 1 Avantage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0200",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Rigueur : mêlée » ? 48–51 : donne les bénéfices de Coup puissant, Coup précis et Coup assommant au manieur de mêlée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0201",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Rigueur : tir » ? 48–51 : donne les bénéfices de Tir rapide, Tireur d’élite et Sniper au manieur à distance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0202",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Sorcellerie inébranlable » ? 52–54 : arme Précise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0203",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.58",
+    "question": "Implanter « Déroutante » ? 55–57 : toute personne blessée par l’arme gagne Surpris.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0206",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Mâchoires du loup » ? 61–63 : Dévastatrice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0207",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Adresse et ruse » ? 64–66 : CC ou CT du manieur +20 selon arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0208",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Sel et saumure » ? 67–69 : Action gratuite au premier Round de tout combat ; arme Rapide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0209",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Blessures affreuses » ? 70–72 : Dévastatrice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0210",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Dents et griffes » ? 73–75 : une créature Bestiale doit réussir FM −10 avant d’attaquer le manieur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0211",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Bannissement profond » ? 76–78 : compter trois Avantages supplémentaires seulement pour les effets d’Instable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0212",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Masse indue » ? 79–81 : Assommante et Taille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0213",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Mort languissante » ? 82–84 : toutes les Blessures infligées sont des Plaies infectées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0214",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Tranchant absolu » ? 85–87 : Taille, Empaleuse et Pénétrante ; concerne aussi la munition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0215",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Fléau » ? 88–90 : double les Blessures contre la famille tirée sur la table des créatures p.55.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0216",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Tranchage incessant » ? 91–92 : si la touche cause des dégâts, ajouter deux Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0217",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Or bondissant » ? 93–94 : Rapide, Pénétrante et Précise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0218",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Lésion atroce » ? 95–96 : inverser à choix les chiffres du jet de Blessure Critique et garder le pire effet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0219",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Forme mercurielle » ? 97–98 : à chaque Round, choisir parmi Rapide, Taille, Empaleuse, Pénétrante, Précise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0220",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Lame de givre » ? 99 : si dégâts, doubler les Blessures puis ajouter quatre Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0221",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Munition de givre » ? 99 : pour une arme à distance, obtenir 1d10 munitions enchantées ; ignorer ce résultat si Arme légendaire est déjà tirée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0222",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.59",
+    "question": "Implanter « Arme légendaire » ? 00 : deux tirages supplémentaires ; plafond cinq capacités, doublons non cumulatifs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0223",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Identifier l’histoire d’une arme » ? Le MJ tire l’histoire ; Savoir (Histoire) −20 ou recherche pour la découvrir. Psychologies réservées aux observateurs qui reconnaissent l’arme et ne font pas confiance au porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0224",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Sans histoire » ? 01–17 : aucun effet historique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0225",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Usée » ? 18–29 : choisir Laid, Mal fait ou Peu fiable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0226",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Forge experte » ? 30–37 : choisir Fin, Solide, Léger ou Pratique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0227",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Arme de tyran » ? 38–44 : Défiance des défenseurs du peuple reconnaissant l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0228",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Sacrilège » ? 45–51 : Animosité des Sigmarites ou Ulricains concernés qui reconnaissent l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0229",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Ensorcelée » ? 52–56 : d10 : 1 source mineure de Corruption ; 2–5 particularité à +40 ; 6–10 Animosité des témoins qui la reconnaissent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0230",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Éprouvée au combat » ? 57–73 : statut considéré un échelon supérieur, au maximum Or, pour Intimidation, Commandement et Charme auprès de ceux qui respectent son histoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0231",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.60",
+    "question": "Implanter « Histoire : Histoire foisonnante » ? 97–00 : tirer deux autres histoires, sans plafond ni règle de récursion imprimée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0233",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.61",
+    "question": "Implanter « Récupérer une flèche magique » ? Flèche qui touche détruite ; si elle manque, récupération 90 % en bonnes conditions, 50 % ou moins en terrain rocheux/marécageux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0234",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.61",
+    "question": "Implanter « Flèche magique » ? 01–54 : attaque magique et +1 dégât.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0235",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.61",
+    "question": "Implanter « Flèche de puissance » ? 55–74 : si dégâts, ajouter 1d10 dégâts ignorant armure et Endurance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0236",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.61",
+    "question": "Implanter « Flèche de vol sûr » ? 75–91 : CT +30 lors du tir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0237",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.61",
+    "question": "Implanter « Grêle funeste » ? 92–00 : devient 1d10 flèches, chacune avec jet pour toucher/dégâts ; même cible ou secondaires à 5 pieds de la première et visibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0238",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.61",
+    "question": "Implanter « Enchantement temporaire » ? Circonstances décidées par MJ ; tirer sur la table pertinente et diviser le résultat par deux ; durée 1d100 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0239",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.62",
+    "question": "Implanter « Type et taille de l’armure magique » ? Tirer d100 pour la pièce d’armure, puis deux d10 indépendants pour espèce et taille. Table de stature : 1 très petit, 2–3 petit, 4–7 moyen, 8–9 grand, 10 très grand.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0240",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.62",
+    "question": "Implanter « Ajuster une armure magique » ? Plaque exige proportions adaptées ; armure trop grande éventuellement portable avec +1 Enc par pièce. Forgeron compétent peut l’ajuster sans détruire l’enchantement, à décision MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0243",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.62",
+    "question": "Implanter « Armure d’Ithilmar » ? Réduire l’Encombrement de chaque pièce de 2, minimum 0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0244",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.62",
+    "question": "Implanter « Armure magique : résistance aux dommages » ? Ignorer le premier dommage quotidien à chaque pièce d’armure, notamment Taille ou Déviation de Critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0245",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.62",
+    "question": "Implanter « Armure magique : attaques et zones » ? Protège contre attaques ignorant les armures ordinaires. Effet seulement à la localisation protégée ; certains exigent armure complète.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0246",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.62",
+    "question": "Implanter « Cuir et métaux spéciaux » ? Cuir jamais Gromril ou Ithilmar : relancer ces résultats. Armure naine/elfique peut être respectivement de ces métaux au choix MJ au lieu du tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0247",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure magique » ? 01–32 : aucun pouvoir supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0248",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Tirage Gromril » ? 33–38 : appliquer le Gromril p.62 ; inscription d’appartenance naine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0249",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Tirage Ithilmar » ? 39–42 : appliquer l’Ithilmar p.62 ; inscription du propriétaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0250",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure offerte » ? 43–44 : Gromril ou Ithilmar adapté à l’espèce du destinataire, pas seulement Nain/Elfe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0251",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure apaisante » ? 45–51 : l’assaillant tire deux Critiques et applique le plus faible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0252",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure sans faille » ? 52–58 : armure complète : maille Impénétrable, plaque perd Points faibles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0253",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Écaille de dragon : dégâts » ? 59–65 : réduire de 2 les dégâts de chaleur/feu frappant une localisation protégée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0254",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Écaille de dragon : Enflammé » ? 59–65 : ignorer Enflammé infligé par une attaque frappant une localisation protégée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0255",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure d’argent scintillant » ? 66–76 : armure complète en forte lumière : adversaires de mêlée, Agilité +20 en début de Round ou 1 Aveuglé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0256",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure du trompeur » ? 77–88 : touche en zone protégée : d10, 10 l’annule.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0257",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure de résistance » ? 89–96 : armure complète : E+5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0258",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure de fortune » ? 97–99 : touche en zone protégée : d10, 9–10 l’annulent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0259",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.63",
+    "question": "Implanter « Armure légendaire » ? 00 : deux tirages de plus, cinq pouvoirs maximum, doublons non cumulatifs ; jamais Gromril et Ithilmar ensemble.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0260",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Type du bouclier magique » ? D100 : 01–64 bouclier, 65–89 grand bouclier, 90–00 rondache ; protège contre attaques ignorant les armures ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0261",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Bouclier magique » ? 01–45 : aucun pouvoir supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0262",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Bouclier d’Ithilmar » ? 46–56 : Enc−1, minimum 0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0263",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Bouclier de Gromril » ? 57–68 : qualité Bouclier +1 ; grand modèle Bouclier 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0264",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Bouclier de Ptolos » ? 69–75 : Bouclier +2 contre projectiles ; grand modèle 3 en mêlée, 5 contre tirs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0265",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Bouclier antisort » ? 76–88 : tentative de dissipation des projectiles magiques visant le porteur, Langue (Magick) 30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0266",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Bouclier enchanté » ? 89–00 : Défensive renforcée : +3 DR aux oppositions de Mêlée contre les attaques reçues.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0267",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Génération d’un parchemin » ? Deux d100 indépendants : Domaine puis NI maximum ; choisir un sort au plus près sans dépasser ce NI, ou le NI le plus faible si aucun n’est accessible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0268",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Mineure » ? 01–03 : Domaine Mineure au premier tirage ; NI maximum 0 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0269",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Arcane » ? 04–25 : Domaine Arcane au premier tirage ; NI maximum 1 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0270",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Bêtes » ? 26–33 : Domaine Bêtes au premier tirage ; NI maximum 2 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0271",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Mort » ? 34–41 : Domaine Mort au premier tirage ; NI maximum 3 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0272",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Feu » ? 42–49 : Domaine Feu au premier tirage ; NI maximum 4 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0273",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Cieux » ? 50–57 : Domaine Cieux au premier tirage ; NI maximum 5 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0274",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Métal » ? 58–65 : Domaine Métal au premier tirage ; NI maximum 5 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0275",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Vie » ? 66–73 : Domaine Vie au premier tirage ; NI maximum 6 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0276",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Lumière » ? 74–81 : Domaine Lumière au premier tirage ; NI maximum 7 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0277",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Ombres » ? 82–89 : Domaine Ombres au premier tirage ; NI maximum 8 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0278",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Magie naturelle » ? 90 : Domaine Magie naturelle au premier tirage ; NI maximum 0 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0279",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Sorcellerie » ? 91–93 : Domaine Sorcellerie au premier tirage ; NI maximum 9 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0280",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Démonologie » ? 94–96 : Domaine Démonologie au premier tirage ; NI maximum 10 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0281",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Nécromancie » ? 97–99 : Domaine Nécromancie au premier tirage ; NI maximum 11 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0282",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.64",
+    "question": "Implanter « Parchemin : Chaos au choix » ? 00 : Domaine Chaos au choix au premier tirage ; NI maximum 12 si ce résultat est le second tirage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0283",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Lancer depuis un parchemin » ? Une Action : brandir/lire, Langue (Magick) +0, ou langue phonétique −20 pour non-sorcier. Réussite lance et détruit le parchemin ; échec sans effet, réessai aux Rounds suivants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0284",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Incantations imparfaites du parchemin » ? Des Incantations imparfaites restent possibles ; le sort est toujours considéré lancé avec ingrédients selon la source.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0285",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Corruption des parchemins noirs » ? Usage de Sorcellerie cité comme exposition mineure, puis Sorcellerie citée aussi parmi les Domaines à exposition modérée avec Démonologie, Nécromancie et Chaos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0286",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Bâton de sorcier » ? NI−1, minimum 0, pour le Domaine accordé au bâton ; aussi Arcane si formé au Collège. Magie naturelle/Sorcellerie peuvent avoir leur propre bâton.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0287",
+    "phase": "Magie générale et objets",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Générer un bâton » ? Tirer le Domaine via la table des parchemins, relancer Mineure/Arcane. Particularités seulement pour Naturelle, Sorcellerie, Nécromancie, Démonologie, Chaos : +40 ; relancer les runes naines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0288",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Utilisation des baguettes » ? Un sorcier doit tenir sa baguette en main principale pendant l’Incantation ou la Focalisation pour en bénéficier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0289",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Baguette de jade » ? 01–32 : double la portée des sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0290",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Baguette de jais » ? 33–52 : double la durée des sorts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0291",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Baguette de mise à terre » ? 53–74 : ignorer une Incantation imparfaite mineure à l’Incantation/Focalisation, puis recharge 24 h.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0292",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Baguette des Vents » ? 75–95 : ignorer les malus de Vents tourbillonnants pendant 1d10 Rounds, puis recharge 24 h.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0293",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.65",
+    "question": "Implanter « Baguette interdite » ? 96–00 : après échec d’Incantation, choisir de perdre jusqu’à 3 Blessures pour +1 DR chacune, puis inutilisable 24 h.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0294",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Anneau à sort » ? 01–37 : sort généré comme parchemin, sans Test de Langue ni destruction ; recharge 24 h.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0295",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Anneau de frappe » ? 38–64 : chacun des trois pouvoirs, un seul à la fois pour un Tour par 24 h : Coup puissant, Coup précis, Coup assommant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0296",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Anneau rubis de ruine » ? 65–81 : Grand Feu d’U’Zhul, trois usages par 24 h, selon principe d’anneau à sort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0297",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Anneau protecteur » ? 82–00 : famille tirée p.55 ; diviser par deux les Blessures reçues de ces créatures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0298",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Magnétite d’obsidienne » ? 01–30 : tenter de dissiper tout sort ciblant le porteur, Langue (Magick) 30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0299",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Pierre d’aube » ? 31–45 : attachée à une pièce d’armure : se brise pour annuler les dommages à cette pièce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0300",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Amulette d’opale » ? 46–58 : retirer 1d10 Blessures de la première attaque reçue, une fois par 24 h.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0301",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Graine de renaissance » ? 59–65 : donne Régénération au porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0302",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Cuivre trois fois béni : dégâts » ? 66–73 : réduire les dégâts de toutes les attaques contre le porteur de 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0303",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Cuivre trois fois béni : résistance au poison » ? 66–73 : +30 aux Tests de Résistance pour retirer Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0304",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Cuivre trois fois béni : détection du poison » ? 66–73 : l’amulette devient verte en présence de poison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0305",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.66",
+    "question": "Implanter « Charme du voyageur » ? 83–00 : ignorer le premier Exténué reçu chaque jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0307",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Pot autonettoyant » ? 01–15 : usage régulier : +10 aux Tests de Résistance contre contamination par maladie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0308",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Arme illusoire » ? 16–22 : apparence d’arme réelle, aucun dégât.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0309",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Luth autoaccordé » ? 23–27 : +10 aux Tests de Musique (Luth).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0310",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Sable à lancer » ? 28–33 : quatre usages par sachet ; tir comme fléchette, aucun dégât ; tête touchée : 1 Aveuglé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0311",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Écrit du cinquième Domaine » ? 34–42 : montrer et expliquer la nature de l’écrit ; Perception −30 ou le lecteur croit la prétention du porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0312",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Silex de Dazh » ? 43–48 : contact avec une matière inflammable : allumage automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0313",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Pierre hurlante » ? 49–50 : crie si une créature vivante de taille Petite ou plus est visible ; Perception 75 contre approche discrète ; s’arrête sans cible visible ou yeux couverts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0314",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Bottes sans trace » ? 51–64 : −20 à tous les Tests de Pistage contre le porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0315",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Miroirs clairvoyants » ? 65–69 : voit le miroir jumeau tant qu’ils sont séparés d’au plus 500 miles ; miroir trouvé : 70 % que le jumeau soit possédé par autrui.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0316",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Coupe belliqueuse : eau » ? 70–75 : un buveur par jour ; eau : ignore le premier Hémorragique acquis ce jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0317",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Coupe belliqueuse : alcool » ? 70–75 : un buveur par jour ; alcool fort : ignore la première Blessure Critique subie ce jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0318",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Coupe belliqueuse : sang » ? 70–75 : un buveur par jour ; sang frais d’un ennemi tombé : 100 PX et 1 Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0319",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Cape elfique » ? 76–89 : en milieu rural, −20 aux Tests visuels de Perception et de CT contre le porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0320",
+    "phase": "Objets magiques",
+    "lot": "L01",
+    "source": "L01 p.67",
+    "question": "Implanter « Couronne de commandement » ? 90–00 : +20 aux Tests de Commandement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0322",
+    "phase": "PNJ — procédures",
+    "lot": "L01",
+    "source": "L01 p.69",
+    "question": "Implanter « Admission au Grand Hospice » ? Deux médecins doivent certifier l’admission ; pour les indigents, signatures de Margaret et Marie. Sortie après guérison démontrée, mort ou instruction familiale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0323",
+    "phase": "PNJ — procédures",
+    "lot": "L01",
+    "source": "L01 p.70",
+    "question": "Implanter « Accueil au Grand Hospice selon statut » ? Argent/Or : chambres d’hôtes et repas avec l’abbesse ; dons demandés si son statut domine. Bronze : réfectoire, auberge pour dormir sauf motif, puis couchette libre ou écurie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0324",
+    "phase": "PNJ — procédures",
+    "lot": "L01",
+    "source": "L01 p.71",
+    "question": "Implanter « Hospice : Portes ordinaires » ? Crochetage simple pour la plupart des serrures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0325",
+    "phase": "PNJ — procédures",
+    "lot": "L01",
+    "source": "L01 p.71",
+    "question": "Implanter « Hospice : Chambre forte » ? porte de fer de 2 pouces : Crochetage −20 exigeant 5 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0326",
+    "phase": "PNJ — procédures",
+    "lot": "L01",
+    "source": "L01 p.71",
+    "question": "Implanter « Hospice : Coffres de fer » ? trois coffres de 5 Enc chacun : Crochetage −10 exigeant +3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0330",
+    "phase": "PNJ — procédures",
+    "lot": "L01",
+    "source": "L01 p.79",
+    "question": "Implanter « Isabella : accès de rage » ? Quand on nie ses visions ou lui manque du respect impérial, ses quatre Traits conditionnels s’activent : Peur 1, Frénésie, Fureur et Immunité à la Psychologie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0331",
+    "phase": "PNJ — procédures",
+    "lot": "L01",
+    "source": "L01 p.80",
+    "question": "Implanter « Reconnaître Kless » ? Savoir (Chaos), Hard (−30) imprimé : réussite reconnaît l’auteur du Liber Chaotica.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0332",
+    "phase": "Corruption et mutations",
+    "lot": "L01",
+    "source": "L01 p.81",
+    "question": "Implanter « Étudier le Liber Chaotica » ? Activité de recherche de Savoir ; Intelligence −20 à cause du manuscrit. La source ajoute un tirage de Corruption mentale par DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0334",
+    "phase": "Corruption et mutations",
+    "lot": "L01",
+    "source": "L01 p.81",
+    "question": "Implanter « Comprendre les propos de Kless » ? Au plus une crise par jour : Intelligence −30 ou Savoir (Chaos) +0. Succès : DR Augmentations gratuites, minimum 1, en Savoir (Chaos), et 1 Corruption ; échec sans effet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0335",
+    "phase": "Corruption et mutations",
+    "lot": "L01",
+    "source": "L01 p.81",
+    "question": "Implanter « Approfondir les propos de Kless » ? Après compréhension réussie, possibilité immédiate d’une activité de recherche utilisant Savoir (Chaos) sur les sujets du Liber.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0336",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.82",
+    "question": "Implanter « Puissance des armées » ? Chaque camp a une Puissance collective liée aux effectifs et à la compétence ; elle sert à attaquer l’autre et est recalculée après chaque Round de bataille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0337",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Rapports initiaux de Puissance » ? Guide de rapports allié/ennemi : insignifiant 30/70, désavantagé 40/60, égal 50/50, avantagé 60/40, écrasant 70/30 ; valeurs de Puissance 0–100.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0338",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Calculer la Puissance initiale » ? Option : base 30 par armée puis facteurs de table ; retirer 10 aux deux jusqu’à valeurs 0–100. Écart >100 : résultat déjà décidé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0339",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Mal équipée » ? -10 points de Puissance si Armure 1 ou moins, armes improvisées ou +4 au plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0340",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Bien équipée » ? +10 points de Puissance si Armure 5, poudre ou arme +10 et plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0341",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Lanceurs de sorts » ? +10 points de Puissance si sorciers, prêtres ou vampires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0342",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Vétérans » ? +10 points de Puissance si Mêlée ou Tir à 45 et plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0343",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Élite » ? +20 points de Puissance si Mêlée ou Tir à 60 et plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0344",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Petites unités » ? -10 points de Puissance si halfelins ou snotlings.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0345",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Grandes unités » ? +10 points de Puissance si ogres ou trolls.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0346",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Unités énormes » ? +20 points de Puissance si griffons ou vouivres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0347",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Puissance : Unités monstrueuses » ? +30 points de Puissance si dragons ou géants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0348",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.83",
+    "question": "Implanter « Coût d’entretien d’armée » ? Coût journalier égal à la somme des statuts des troupes ; 100 chevaliers Argent 5 coûtent 500 pistoles/jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0350",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.84",
+    "question": "Implanter « Activités préparant une bataille » ? Temps disponible fixé par MJ, au plus trois activités. Échec non retentable sans changer d’approche ; scènes ou aventures peuvent remplacer les Tests.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0351",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.84",
+    "question": "Implanter « Reconnaissance militaire » ? Test combiné Équitation et Perception +0 : succès révèle forces, distance et Puissance ennemies, +10 au Plan ; échec aucun bonus, ≤−6 risque poursuite/capture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0352",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.84",
+    "question": "Implanter « Rassembler des troupes » ? Tests et difficulté selon méthode ; succès Puissance +5, succès à +6 : +10 ; échec à −6 : Puissance −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0353",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.84",
+    "question": "Implanter « Infiltration militaire » ? Après Reconnaissance réussie, Discrétion+Perception ou Comédie+Perception combinées, difficulté MJ ; succès Plan +20, échec fuir ou capture ; autre espèce rend la tâche plus difficile sans chiffre fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0354",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.84",
+    "question": "Implanter « Saboter l’armée ennemie » ? Après Reconnaissance, Discrétion ou Comédie selon action, éventuellement pendant Infiltration ; succès Puissance adverse −5, à +6 : −10 ; échec fuir ou combattre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0356",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.85",
+    "question": "Implanter « Préparer le plan de bataille » ? Savoir (Guerre), difficulté selon forces/terrain/plan ; assistance avec au moins une Augmentation. Succès +10 aux Tests de Puissance de la bataille ; à +6 : +20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0357",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.85",
+    "question": "Implanter « Autres préparatifs de bataille » ? Le MJ choisit compétence, difficulté, récompense au succès et risque à −6 ; bonus aux Tests/activités ou modification de Puissance. Pas de gain standard inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0358",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.85",
+    "question": "Implanter « Séquence des Rounds de bataille » ? Décrire terrain et scènes ; tous les PJ participent à au moins une scène ; résoudre simultanément les Tests de Puissance puis récupération ; répéter selon durée fixée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0359",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.85",
+    "question": "Implanter « Attaques simultanées de Puissance » ? Chaque armée fait un Test dramatique individuel avec sa Puissance actuelle ; les deux résolutions sont simultanées et retirent 10+DR à l’adversaire, minimum 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0360",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.85",
+    "question": "Implanter « Récupération entre Rounds de bataille » ? Chaque PJ peut tester Résistance +0 pour soigner DR+BE Blessures ; Guérison +0 peut apporter des soins supplémentaires, potions et autres objets utilisables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0362",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.86",
+    "question": "Implanter « Plafond de récupération de Puissance » ? Les scènes ne peuvent jamais porter la Puissance au-delà de sa valeur initiale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0363",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.86",
+    "question": "Implanter « Scène de charge » ? Au plus deux Rounds de combat ; camp qui charge : 1 Avantage, ordre d’Initiative. Chaque ennemi touché retire 1 Puissance ; neutralisé ou tué : 2 de plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0364",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.86",
+    "question": "Implanter « Scène de tir de barrage » ? Au plus deux Rounds, portée normale jusqu’à contact ou abri, ennemis au Sprint ; −1 Puissance par ennemi touché, −2 de plus par neutralisation. Tir sur foule jamais deux fois la même cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0367",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.86",
+    "question": "Implanter « Protéger une cible de bataille » ? Protéger trois Rounds ; succès Puissance adverse −5 ou alliée +5. Assistance réussie par compétence à la cible réduit d’un Round la durée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0370",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.86",
+    "question": "Implanter « Compte à rebours » ? Trois Rounds pour empêcher une attaque dévastatrice ; échec retire 10 Puissance et ouvre une scène de Soutien, pouvant servir aux soins matériels.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0371",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.87",
+    "question": "Implanter « Percée » ? Trois Rounds pour conquérir une position ou accomplir l’objectif : Puissance +10. Échec : retraite au choix ou scène de Charge avec renforts ennemis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0373",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.87",
+    "question": "Implanter « Tir dégagé » ? Charge ou tir à 12 yards : touche −5 Puissance ennemie, neutralisation du général −5 de plus. Réattaquer impose au Round de bataille suivant Charge ennemie seule à trois contre un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0374",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Abattre la grande bête » ? Trois Rounds pour vaincre la créature : −10 Puissance ennemie ; réduire ses Blessures initiales de moitié à cause des autres combattants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0375",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Grimper une créature monstrueuse » ? Secouer les grimpeurs emploie son Action avec opposition Bagarre/Escalade ; la proposition « if successful » permet une attaque comme sur cible sans défense sans préciser clairement le bénéficiaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0376",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Survol : approche et frappe » ? Monture volante : Équitation +0 ; attaque/autre Action à 15−DR yards ; à +6 accès mêlée/bout portant. Touche −5 Puissance, général neutralisé −15 de plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0377",
+    "phase": "Bataille de masse",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Survol : atterrissage raté » ? À −6 en Équitation, chute de 5 yards et, au Round de bataille suivant, scène de Charge où seul l’ennemi charge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0380",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Équipe des machines de guerre » ? Équipe qualifiée incomplète : −20 ; moins de la moitié de l’équipe : usage impossible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0381",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Compétences des machines de guerre » ? Les machines utilisent Tir (Machine de guerre), sauf le bélier employant Force.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0382",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Qualités communes des machines de guerre » ? Toutes les machines listées ont Dévastatrice et Impact, en plus des Qualités de leur ligne de table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0383",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Baliste » ? 75 CO, équipe 4, rare, portée 150, dégâts +14 ; Empaleuse, Pénétrante, Recharge 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0384",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Bélier » ? 10 CO, équipe 6, Scarce, allonge moyenne, BF+10 ; Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0385",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Batterie Tonnerre de Feu » ? 200 CO, équipe 4, exotique, portée 200, +12 ; Dangereuse, Recharge 5, Explosion 15, Imprécise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0386",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Canon Feu d’Enfer » ? 300 CO, équipe 4, exotique, portée 100, +14 ; Poudre, Dangereuse, Recharge 5, Répétition 3, Explosion 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0387",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Canon » ? 120 CO, équipe 4, exotique, portée 120, +20 ; Poudre, Dangereuse, Recharge 3, Explosion 3, Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0388",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Canon à flammes nain » ? 200 CO, équipe 4, exotique, portée 60 ; dégâts spéciaux, Dangereuse, Recharge 3, Imprécise, Explosion 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0389",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Mangonneau » ? 60 CO, équipe 6, rare, portée 60, +10 ; Explosion 5, Recharge 4, Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0390",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Onagre » ? 80 CO, équipe 6, rare, portée 100, +12 ; Explosion 5, Recharge sans indice, Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0391",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Trébuchet » ? 40 CO, équipe 8, Scarce, portée 150, +14 ; Explosion 5, Recharge 5, Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0392",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Machine de guerre : Mortier » ? 100 CO, équipe 6, exotique, portée 200, +20 ; Poudre, Explosion 5, Dangereuse, Imprécise, Recharge 2, Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0393",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Cibles du bélier » ? Dégâts de bélier seulement contre portes et portails ; sinon arme improvisée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0394",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.88",
+    "question": "Implanter « Portée minimale d’artillerie » ? Machines de siège à distance interdites à bout portant ; trébuchets et mortiers impossibles en deçà de leur courte portée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0395",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Canon à flammes : effet spécial » ? Chaque cible affectée reçoit 2+DR Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0396",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Structure : Porte » ? Porte : 2 PA, 8 Blessures, Résistante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0397",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Structure : Porte renforcée » ? Porte renforcée : 5 PA, 15 Blessures, Résistante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0398",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Structure : Portail » ? Portail : 10 PA, 30 Blessures, Imperméable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0399",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Structure : Mur de bois » ? Mur de bois : 6 PA, 15 Blessures, Résistante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0400",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Structure : Mur de pierre » ? Mur de pierre : 12 PA, 40 Blessures, Imperméable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0401",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Qualité Siège » ? Doubler les dégâts aux structures physiques, murs, tours et portails.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0402",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Structure résistante » ? Ne peut être endommagée par une arme à distance sans Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0403",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Structure imperméable » ? Ne peut être endommagée par aucune arme sans Siège.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0404",
+    "phase": "Artillerie et structures",
+    "lot": "L01",
+    "source": "L01 p.89",
+    "question": "Implanter « Puissance des machines de guerre » ? Avant réduction d’échelle : chaque machine +5 Puissance ; attaquant en siège avec Siège +10 à la place. Équipe incomplète : contribution divisée par deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0405",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Facteur de champ de bataille » ? Choisir ou tirer 1d10 pour un facteur s’appliquant à la bataille ou à un Round de bataille ; durée et type de Round des clauses conservés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0406",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Tempête : mêlée » ? 1 : combattants de mêlée plus petits que Grand : −10 aux Tests de combat, Mouvement réduit de moitié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0407",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Tempête : tir et vol » ? 1 : tireurs et montures volantes −20 aux Tests de combat ; Discrétion +20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0408",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Tempête : magie des Cieux » ? 1 : sorciers des Cieux +10 aux Tests d’Incantation et de Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0409",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Pièges de bataille » ? 2 : à chaque déplacement Perception +0 ou activation ; Esquive +0 pour éviter, sinon 8 dégâts et états selon piège, par exemple Enchevêtré ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0410",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Découverte des pièges » ? 2 : après activation, témoins proches Perception −20 pour ne plus les subir ; capture du plan ennemi neutralise tous les pièges.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0411",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Bombardement de siège » ? 3 : fin de chaque Round, Esquive +40 ou Blessure Critique ; vaincre les servants met fin à l’effet et permet de reprendre les machines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0412",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Champ de bataille corrupteur » ? 4 : fin de chaque Round de bataille, Résistance +0 ou +1 Corruption pour chaque PJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0413",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Mutation d’un allié » ? 4 : MJ teste Résistance +40 avec Volonté moyenne des troupes, typiquement 35 ; échec un allié mute et attaque tous les camps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0414",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Nuage toxique » ? 5 : obscurcit comme brouillard ; fin de chaque Round de combat dedans : Résistance +0 ou 1 Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0415",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Nuage toxique enflammé » ? 5 : si enflammé, toute personne dedans reçoit 3 Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0416",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Végétation dense » ? 6 : Mouvement divisé par deux ; Maladresse ajoute Enchevêtré. Une scène et Test de Mêlée réussi avec lame retirent la végétation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0417",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Rivière : combat » ? 7 : source dit plus petits que Grande ou plus, libellé contradictoire ; −20 aux Tests de combat des catégories concernées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0418",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Rivière : courant » ? 7 : finir son Tour dans l’eau impose Force +0 ou être emporté ; contrôler un pont peut forcer seulement l’ennemi à traverser.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0419",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Incendie du champ de bataille » ? 8 : déplacement impose Athlétisme +0 ou 1 Enflammé ; neutraliser la source éteint le feu après 1 Round de bataille.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L01-0420",
+    "phase": "Voyage et environnement",
+    "lot": "L01",
+    "source": "L01 p.90",
+    "question": "Implanter « Résurrection des pertes » ? 9 : chaque Puissance perdue par l’armée en donne une à l’ennemi ; vaincre le nécromancien annule l’effet et retire tous les points ainsi gagnés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
