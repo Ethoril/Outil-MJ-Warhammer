@@ -27,6 +27,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q17 | FAIT (`QE-Q17-1` à `QE-Q17-4`) | (voir `git log`, « Q17 ») |
 | Q18 | FAIT (`QE-Q18-1` à `QE-Q18-5`) | (voir `git log`, « Q18 ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
+| R2 | FAIT (avec réserve : `QE-R2-1`) | (voir `git log`, « R2 ») |
 
 ## Q0 — contrôle de complétude
 
@@ -254,3 +255,10 @@ Branché / non appelé (grep dans `js/`) :
 - `js/core/store.js` (`removeParticipant`) : retirer un familier retire sa ligne de `familiarLinks` chez le maître (le garde-fou `familiar-is-master` ne bloque plus le maître) ; un participant lié passe toujours par la commande annulable `remove-participant`, avec ou sans persistance, si bien qu'Annuler restaure aussi les liens sans persistance. `js/core/familiars.js` : deux instructions collées sur une ligne séparées. Choix : `QE-Q19-1`.
 - Test : `tests/pro-q19-familiers-nettoyage.test.js` (6 tests, avec et sans persistance : nettoyage du maître, Annuler après retrait du maître, Annuler après retrait du familier). Suite complète lancée une fois : 4389 réussis, 0 échec.
 - **Branché (appelant + chemin d'interface)** : `Store.removeParticipant` est déjà appelé par l'interface existante (retrait d'un participant du combat) ; je n'ai pas lancé l'interface dans un navigateur. Aucune valeur durable de personnage (`VARIABLES_PERSISTANTES_PJ.md` inchangé).
+
+## R2 — clôture de la deuxième passe (FAIT, avec réserve)
+
+- **Contrôle Q11, 23 livres** : 0 écart de valeurs, toutes les lignes retrouvées ; 10 avertissements de compétence (texte brut de la page). Manques restants : talents 41, compétences 85, attaques 33, Traits 68, équipement 154 (dont 69 bruits de colonne voisine), sorts 14. Détail par livre : sortie de `node tools/verify-bestiary-stats.mjs` et `tmp/divin/bestiary-completude-<livre>.json`. **Réserve : justifiés par groupes de causes seulement, pas profil par profil** (`QE-R2-1`).
+- **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125 et E0-P-126 diffèrent (`QE-Q12a-1`, en attente du MJ) ; 0 profil ajouté ou retiré.
+- **Recette** : `node tools/run-divine-recipe.mjs` : « RECETTE DIVINE VERTE — 26 commandes » (suite complète `node` incluse, sans échec). Manifeste de base régénéré (`QE-R2-2`).
+- **Branché (appelant + chemin d'interface) / non appelé** : Q10b : talent au catalogue (`resolveTalent`), `leadershipRallySlModifiers` code testé, non appelé. Q14 : sorts branchés (`bestiarySpellLines` ← `bestiary-library.js`, `fiche-details.js`), hors moteur de magie. Q15 : outil et données. Q16 : branché (`buildParticipantFromBestiary` ← bibliothèque, « Ajouter au combat ») ; `multiAttack` et `freeAttack` informatifs, non lus. Q17 : branché (`deriveReminders` ← `Store.getReminders` ← `main.js`), rendu non vérifié dans un navigateur. Q18 : branché (panneau de Résolution → `naturalAttack` → `naturalPlanOf`) ; `planCreatureMagic` code testé, non appelé. Q19 : branché (`Store.removeParticipant`).
