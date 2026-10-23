@@ -32,11 +32,11 @@ Branche `pro/phase-e`. Plan : `PLAN_PRO_PHASE_E.md`. Choix d'interprétation : `
 | F1 conception des familiers (`CONCEPTION_FAMILIERS.md` : deux systèmes, conversion V5, modèle de liens, services, 12 cas de test ; choix E-F1) | FAIT | voir `git log` |
 | F2 liens maître-familier (`familiars.js`, commandes du store annulables, assistance et talents de compagnon, Embrasé d'Aqshy, États/soins refusés, mort d'un animal ; choix E-F2 : pas d'interface de saisie du lien) | FAIT | voir `git log` |
 | S1 Slann (`slann.js` : Palanquin, Slann au sol, Maître des incidents, Puissance totale, Téléportation de secours, Contemplation ; 3 rappels motivés ; choix E-S1) | FAIT | voir `git log` |
-| R1 | À FAIRE | |
+| R1 clôture : `node tools/run-divine-recipe.mjs` verte (26 commandes, dont la suite complète `node`) ; `tmp/divin/base-manifest.json` régénéré depuis les empreintes de `main` (les 4 sources protégées sont identiques à `main`) | FAIT | voir `git log` |
 
 ## Dernière suite complète
 
-`node --test --test-concurrency=4` : tout vert sauf `E0 indépendant — la recette refuse un cwd externe avant de créer un reçu` (lit `tmp/divin/recipe-receipt.json`, produit par `node tools/run-divine-recipe.mjs` : échec antérieur à la phase, à relancer au lot R1).
+`node --test --test-concurrency=4` : tout vert, y compris l'ancien échec « E0 indépendant » (reçu `tmp/divin/recipe-receipt.json` produit par la recette R1, passée verte).
 
 ## Assertions de tests existants modifiées
 
