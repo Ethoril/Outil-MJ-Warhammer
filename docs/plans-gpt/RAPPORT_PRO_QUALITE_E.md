@@ -23,6 +23,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q13 | FAIT (cas nommés L04, L09, L11, L14, L17, L18 ; écarts justifiés `QE-Q13-1`) | (voir `git log`, « Q13 ») |
 | Q14 | FAIT (sorts lus, fiche et participant ; manques restants justifiés `QE-Q14-4`) | (voir `git log`, « Q14 ») |
 | Q15 | FAIT (zéro U+FFFD dans les 23 livres ; noms de talents rattachés, `QE-Q15-1` à `QE-Q15-4`) | (voir `git log`, « Q15 ») |
+| Q16 | FAIT (`QE-Q16-1`, `QE-Q16-2`) | (voir `git log`, « Q16 ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -227,3 +228,9 @@ Branché / non appelé (grep dans `js/`) :
 - **Livres** : 23 régénérés par `tools/build-bestiary-profiles.mjs` ; 21 fichiers modifiés, seuls des noms changent (comparaison avec `HEAD` : les « pertes » sont toutes des renommages ou des parasites retirés). Valeurs imprimées : comparaison avec `9c12613`, seuls E0-P-125 et E0-P-126 diffèrent (`QE-Q12a-1`). Contrôle Q11 : 0 écart de valeurs, avertissements de compétence « Elthárin » / « Mána » (6) disparus ; manques globaux L01-L26 après Q15 : talents 41, compétences 85, attaques 33, Traits 68, sorts 14 (non mesurés avant ce lot dans le même format ; Q15 ne vise pas ces manques).
 - **Test** : `tests/pro-q15-normalisation-noms.test.js` (5 tests). Assertion mise à jour : `pro-q12b` (Nimble Fingered → Nimble-fingered, `QE-Q15-4`). Suite complète lancée une fois : 4364 réussis, 1 échec (cette assertion), corrigé et relancé en vert.
 - **Branché / non appelé** : outil et données de livre seulement. Les noms normalisés sont lus par `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; les `talents` du profil eux-mêmes restent consultables sans appelant du moteur (code testé, non appelé).
+
+## Q16 — attaques multiples (FAIT)
+
+- `js/core/bestiary-profiles.js` (`attackActions`) : une attaque à `count` ≥ 2 donne autant d’actions (« Claws 1 », « Claws 2 » ; Kraken : 8 Tentacles), chacune marquée `multiAttack` et attaque gratuite `all` par défaut ; `validateBestiaryRecord` refuse un multiplicateur invalide ; la fiche de la bibliothèque affiche « 2 × Claws ». Source : L06 p. 362 (Bog Octopus). Choix : `QE-Q16-1`.
+- Test : `tests/pro-q16-attaques-multiples.test.js` (4 tests, sur le **participant** et la copie de Réserve). Assertion mise à jour : `pro-b1-participant` (`QE-Q16-2`). Suite complète lancée une fois : 4368 réussis, 1 échec (cette assertion), corrigé et relancé en vert.
+- **Branché** : `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`, `js/core/v5-spell-contracts.js`) produit les actions ; chemin d’interface : bibliothèque du bestiaire → « Ajouter au combat ». `multiAttack` et `freeAttack` ne sont lus par aucun module de `js/` (code testé, non appelé pour ces deux marques : informatives).

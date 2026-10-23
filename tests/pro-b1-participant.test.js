@@ -127,7 +127,7 @@ test('B1 tous les profils de tous les livres (hors gabarits) se construisent', a
     const profiles = JSON.parse(readFileSync(new URL(`../js/data/bestiary/${file}`, import.meta.url), 'utf8')).profiles;
     for (const profile of profiles.filter(item => item.kind !== 'template')) {
       const participant = buildParticipantFromBestiary(profile.id, { library: profiles, includeOptional: true });
-      assert.equal(participant.actions.length, (profile.attacks || []).length, profile.id);
+      assert.equal(participant.actions.length, (profile.attacks || []).reduce((sum, attack) => sum + (attack.count > 1 ? attack.count : 1), 0), profile.id); // Q16 : « 2 Claws » = 2 actions
       assert.equal(participant.maxHp, profile.woundsAbsent ? null : profile.wounds, profile.id);
       built += 1;
     }

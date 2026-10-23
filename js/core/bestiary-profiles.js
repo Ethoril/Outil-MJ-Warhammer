@@ -39,6 +39,7 @@ export function validateBestiaryRecord(record, referential = activeReferential()
     if (!isText(attack.name)) errors.push('attaque sans nom');
     if (!isInt(attack.damage)) errors.push(`dégâts de ${attack.name} : entier imprimé attendu`);
     if (attack.value !== undefined && !isInt(attack.value)) errors.push(`valeur de ${attack.name} invalide`);
+    if (attack.count !== undefined && (!isInt(attack.count) || attack.count < 1)) errors.push(`multiplicateur de ${attack.name} invalide`);
   }
   for (const skill of record.skills || []) if (!isText(skill.name) || !isInt(skill.value)) errors.push(`compétence invalide : ${skill?.name}`);
   for (const trait of [...(record.traits || []), ...(record.optionalTraits || [])]) if (!isText(trait?.name)) errors.push('Trait sans nom');
@@ -158,13 +159,21 @@ const traitText = trait => {
   return detail === undefined || detail === null || detail === '' ? trait.name : `${trait.name} (${detail})`;
 };
 
-function attackAction(attack) {
+/**
+ * Une attaque imprimée « 2 Claws », « 8 × Tentacles » (`count`) devient autant d'actions (« Claws 1 », « Claws 2 »…), chacune marquée
+ * `multiAttack` ; livre de base V5 (L06) p. 362 : « 8 Tentacles : la créature peut faire 8 attaques gratuites ».
+ */
+function attackActions(attack) {
   const ranged = isInt(attack.rangeYards);
-  const v5 = { kind: ranged ? 'ranged' : 'melee', ...(attack.free ? { [BESTIARY_FREE_ATTACK_KEY]: attack.free } : {}) };
-  return normalizeAction({
-    name: attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
-    qualities: cloneValue(attack.qualities || []), ...(ranged ? { rangeYards: attack.rangeYards } : {}),
-    ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
+  const of = isInt(attack.count) && attack.count > 1 ? attack.count : 1;
+  return Array.from({ length: of }, (_, position) => {
+    const free = attack.free || (of > 1 ? 'all' : null);
+    const v5 = { kind: ranged ? 'ranged' : 'melee', ...(free ? { [BESTIARY_FREE_ATTACK_KEY]: free } : {}), ...(of > 1 ? { multiAttack: { group: attack.name, index: position + 1, of } } : {}) };
+    return normalizeAction({
+      name: of > 1 ? `${attack.name} ${position + 1}` : attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
+      qualities: cloneValue(attack.qualities || []), ...(ranged ? { rangeYards: attack.rangeYards } : {}),
+      ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
+    });
   });
 }
 
@@ -190,7 +199,7 @@ export function buildParticipantFromBestiary(id, options = {}) {
     initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
     caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
     armor,
-    actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).map(attackAction),
+    actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attackActions),
     skills: (record.skills || []).map(skill => ({ name: skill.nameFr || skill.name, total: skill.value })),
     traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
     extensions: { v5: { bestiary: {
