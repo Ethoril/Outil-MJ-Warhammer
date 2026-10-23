@@ -26986,5 +26986,2059 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0001",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.12",
+    "question": "Implanter « Palanquin : combat monté » ? Être porté en palanquin donne les bonus ordinaires de combat monté ; la source cite +2 DR de mêlée contre une cible plus petite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0002",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.14",
+    "question": "Implanter « Talisman de malepierre » ? Un Skaven porteur du talisman peut relancer un Test toutes les treize heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0005",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Arme de malepierre : port quotidien » ? Porter hors boîte doublée de plomb une arme skaven contenant, utilisant ou tirant de la malepierre expose chaque jour à la Corruption mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0006",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Qualité ZZAP » ? ZZAP réduit les PA d’un point et ignore tous ceux d’armure métallique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0007",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Qualité Malepierre » ? En plus des dégâts, une attaque infligeant une Blessure Critique provoque une exposition mineure à la Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0008",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Aiguillon à bêtes : protection ignorée » ? L’aiguillon se manie à deux mains comme une hallebarde mais ignore toute armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0009",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Pavois skaven » ? Encombrement quatre ; au lieu d’un bouclier ordinaire, il impose −2 DR aux attaques à distance contre l’équipe protégée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0010",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Encensoir à peste : exposition à 2 yards » ? Les créatures vivantes proches de l’encensoir allumé subissent une exposition majeure à la Corruption à 2 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0011",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Encensoir à peste : exposition à 4 yards » ? Les créatures vivantes proches de l’encensoir allumé subissent une exposition modérée à la Corruption à 4 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0012",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Encensoir à peste : exposition à 8 yards » ? Les créatures vivantes proches de l’encensoir allumé subissent une exposition mineure à la Corruption à 8 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0013",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.32",
+    "question": "Implanter « Griffes de rat : escalade » ? Porter les griffes de rat donne +1 DR à tous les Tests d’Escalade.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0014",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.33",
+    "question": "Implanter « Lames modifiées : propriétés conservées » ? Les variantes skavens gardent les données, qualités et défauts de l’arme de base en plus des nouvelles propriétés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0015",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.33",
+    "question": "Implanter « Lame de Corruption : venin » ? La cible blessée par cette arme de poing fait Endurance −1 DR ; échec, trois dégâts supplémentaires et un Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0016",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.33",
+    "question": "Implanter « Lame de Corruption : porteur non skaven » ? À chaque usage en combat par un non-Skaven, Endurance −1 DR ; échec, perte permanente de d10 Endurance ; à zéro, dissolution mortelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0017",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.33",
+    "question": "Implanter « Lame de Nurglitch : plaie infectée » ? Une cible blessée doit réussir Résistance −1 DR pour éviter une Blessure suppurée, variante renforcée d’Infecté.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0018",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.33",
+    "question": "Implanter « Lame de malepierre : forme et bonus » ? Hallebarde sur hampe ou arme de poing implantée, la lame gagne un dégât et ZZAP.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0019",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.33",
+    "question": "Implanter « Arme forgée en malepierre » ? L’arme gagne Pénétrante ; si elle l’a déjà, elle ignore les deux premiers PA métalliques et tous les PA non métalliques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0020",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.33",
+    "question": "Implanter « Arme suintante » ? Si elle inflige au moins une Blessure, la cible gagne deux Empoisonné par DR du Test d’attaque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0021",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Dague de poing : profil » ? Arme de base, encombrement zéro, allonge Très courte, BF + un, Défensive et Rapide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0022",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Griffes de rat : profil » ? Arme de base, encombrement zéro, allonge Très courte, BF + deux, Défensive et Rapide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0023",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Arme de queue : profil » ? Arme de base, encombrement zéro, allonge Courte, BF + un, Distrayante et Imprécise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0024",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Encensoir à peste : profil » ? Fléau, encombrement trois, allonge Longue, BF + quatre, Distrayante, Percutante, Imprécise, Fatigante et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0025",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Aiguillon à bêtes : profil » ? Arme d’hast, encombrement trois, allonge Longue, BF + quatre, ZZAP.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0026",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Attrape-choses : profil » ? Arme d’hast à deux mains, encombrement trois, allonge Longue, BF + deux, Entravante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0027",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Combat caudal : manipulation » ? Talent de rang maximal un ; permet les tâches nécessitant normalement une main avec sa queue, et s’applique aux Tests de mêlée d’arme caudale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0028",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Combat caudal : attaque » ? Une fois sur son Tour, faire une attaque supplémentaire avec une arme de queue adaptée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0029",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Globe mortel : variante » ? Comme le globe à vent empoisonné, nuage deux fois plus grand ; Endurance −2 DR ou d10 Blessures réduites par le BE, sans armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0030",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Fusée funeste : incident » ? Sur maladresse du tir, tirer le d100 sur la table propre à la fusée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0031",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Fusée 01–33 : raté d’explosion » ? La fusée touche mais n’explose pas : dégâts ramenés à +6 et Explosion retirée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0032",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Fusée 34–89 : déviation » ? La fusée frappe à 2d10 yards de la cible prévue ; d10, un à cinq vers la gauche, six à dix vers la droite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0033",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.34",
+    "question": "Implanter « Fusée 90–100 : explosion prématurée » ? Toutes les créatures à cinq yards de l’utilisateur reçoivent 2d10 + cinq dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0034",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.35",
+    "question": "Implanter « Bombe infernale : retardateur » ? La bombe inflige +12 dégâts avec Explosion cinq ; elle peut éclater jusqu’à dix Rounds après lancer ou dépôt.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0035",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.35",
+    "question": "Implanter « Globe empoisonné : tir raté » ? Sur tir manqué, d10 : un tombe aux pieds sans casser ; deux à neuf, d10 yards trop court ; dix, se brise aux pieds du lanceur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0036",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.35",
+    "question": "Implanter « Globe empoisonné : nuage » ? Le gaz occupe trois yards de diamètre et de hauteur pendant d10 − un Rounds ; sur un, il se dissipe immédiatement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0037",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.35",
+    "question": "Implanter « Globe empoisonné : exposition » ? Dans le nuage, Endurance +0, talents anti-poison applicables ; échec, touche à +4 dégâts ignorant armure et Endurance ; recommencer chaque Round restant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0038",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.35",
+    "question": "Implanter « Globe empoisonné : piège » ? Un fil tendu se remarque avec Perception +0 ; non repéré, le globe se brise au pied du déclencheur, centre du nuage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0039",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.35",
+    "question": "Implanter « Mortier empoisonné : équipe » ? Deux servants sont nécessaires : bombardier formé au tir et chargeur ; il tire les globes empoisonnés ou mortels.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0040",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Bombe fumigène » ? Créer un nuage opaque de rayon deux yards pour d10 Rounds, durée divisée par deux sous vent fort ; il bloque tirs, projectiles magiques et effets exigeant la vue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0041",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Filet à crochets : entrave double » ? Le filet inflige deux fois le nombre normal d’Entravé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0042",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Lance-feu : équipage » ? Deux servants : l’un porte le réservoir et l’autre dirige la lance ; sur maladresse, tirer la table d’incident du lance-feu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0043",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Incident lance-feu 1 : explosion » ? L’appareil explose : 2d10 + cinq dégâts à tous dans les cinq yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0044",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Incident lance-feu 2–9 : fuite » ? Dans les trois yards, équipage compris, deux Enflammé ; de trois à six yards, un Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0045",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Incident lance-feu 10 : panne » ? Le lance-feu ne part pas ; il peut tirer au Round suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0046",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Foreuse de malepierre : Corruption » ? La foreuse constitue une influence corruptrice majeure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0047",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Foreuse : tunnel et servants » ? Deux servants ; tunnel de cinq pieds de diamètre à Mouvement deux dans la plupart des roches ; seul le porteur de la lance attaque avec la foreuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0048",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Jezzail : poudre ordinaire » ? Avec poudre et balle ordinaires, portée soixante-douze et dégâts +5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0049",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Jezzail : soutien du canon » ? Un second Skaven soutient généralement le canon pour faciliter calage et visée ; une seule personne peut porter l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0050",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Jezzail : maladresse » ? Sur maladresse, d10 ; un détruit l’arme dans Explosion un, dégâts d’un tir réussi ; deux à dix renvoient à la table Oups ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0051",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Pistolet de malepierre : maladresse » ? Sur maladresse, d10 ; un détruit l’arme dans Explosion un, dégâts d’un tir réussi ; deux à dix renvoient à la table Oups ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0052",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Mousquet de malepierre : maladresse » ? Sur maladresse, d10 ; un détruit l’arme dans Explosion un, dégâts d’un tir réussi ; deux à dix renvoient à la table Oups ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0053",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.36",
+    "question": "Implanter « Mousquet : munitions » ? Le mousquet de malepierre peut charger balle de malepierre ou mitraille de malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0054",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Fouet électrique : profil L22 » ? Entravante ; encombrement zéro, portée six, BF + deux, ZZAP et Entravante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0055",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Filet à crochets : profil L22 » ? Entravante ; encombrement zéro, portée quatre, sans dégâts, Entravante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0056",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Fusée funeste : profil L22 » ? Ingénierie ; encombrement quatre, portée cinquante, +12 dégâts, Dangereuse et Percutante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0057",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Mortier empoisonné : profil L22 » ? Ingénierie ; encombrement trois pour l’opérateur, portée cent et minimum vingt, effets et qualités du globe chargé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0058",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Mitrailleuse ratling : profil L22 » ? Ingénierie ; encombrement trois pour l’opérateur, portée vingt, +9 dégâts, Dangereuse et Recharge quatre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0059",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Lance-feu de malepierre : profil L22 » ? Ingénierie ; encombrement deux pour l’opérateur, portée trente, +12 dégâts, Dangereuse et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0060",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Foreuse de malepierre : profil L22 » ? Ingénierie ; encombrement deux pour l’opérateur, portée cinq, +12 dégâts, Pénétrante, Lente, Fatigante et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0061",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Jezzail de malepierre : profil L22 » ? Poudre noire ; encombrement quatre, portée cent, +9 dégâts, Précise, Dangereuse, Pointue et Recharge quatre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0062",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Pistolet de malepierre : profil L22 » ? Poudre noire ; encombrement un, portée vingt, +8 dégâts, Dangereuse et Pistolet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0063",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Mousquet de malepierre : profil L22 » ? Poudre noire ; encombrement deux, portée quarante, +8 dégâts, Dangereuse et Recharge deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0064",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Globe mortel : profil L22 » ? Lancer ; encombrement un, portée BF × deux, dégâts spéciaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0065",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Bombe infernale : profil L22 » ? Lancer ; encombrement zéro, portée BF, +12 dégâts, Explosion cinq, Dangereuse, Percutante et Retardateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0066",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Globe empoisonné : profil L22 » ? Lancer ; encombrement zéro, portée BF × trois, dégâts spéciaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0067",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Bombe fumigène : profil L22 » ? Lancer ; encombrement zéro, portée BF × trois, aucun dégât.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0068",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.38",
+    "question": "Implanter « Étoile de malepierre : profil L22 » ? Lancer ; encombrement zéro, portée BF × deux, BF + trois dégâts, Dévastatrice et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0069",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Balle de jezzail » ? Douze balles et poudre, encombrement zéro : portée +20, dégâts +2, Empaleuse, Pénétrante et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0070",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Balle de malepierre » ? Balle et poudre, encombrement zéro : portée +10, Dévastatrice, Pénétrante et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0071",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Mitraille de malepierre » ? Encombrement zéro ; Explosion + un et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0072",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Fusée, munition » ? Une fusée, encombrement un ; Explosion cinq.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0073",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Réservoir de lance-feu » ? Un réservoir, encombrement deux ; Explosion deux et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0074",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Bande de ratling » ? Bande de quatre, encombrement deux ; Répétition d10 et Malepierre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0075",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Lance-feu : Enflammé » ? Une cible touchée par le lance-feu fait Résistance +0 ou gagne un Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0076",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Ratling : Répétition variable » ? Tirer le d10 de Répétition au premier tir après chaque rechargement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0077",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Masque à gaz skaven » ? Masque conçu pour Skaven : Résistance +4 DR contre poisons ou gaz inhalés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0079",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Liber Bubonicus : lecture de sorts » ? Un prêtre ou seigneur de la Peste peut lire chaque sort du Domaine de la Peste une fois par jour sans Test d’incantation, incident ou critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0080",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.39",
+    "question": "Implanter « Skalm : soin » ? Chaque application guérit immédiatement d10 + un Blessures perdues et expose à la Corruption modérée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0081",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.40",
+    "question": "Implanter « Parchemin de peste » ? Lire à voix haute son unique sort de Peste le lance une fois, sans Test d’incantation, incident ou critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0082",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.40",
+    "question": "Implanter « Optique de technomage » ? Montée sur une arme à distance, l’optique annule tous les modificateurs de difficulté dus au couvert de la cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0083",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.40",
+    "question": "Implanter « Condensateur : lame » ? Le condensateur associé à une lame de malepierre ajoute un dégât supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0084",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.40",
+    "question": "Implanter « Accumulateur : Éclair de malepierre » ? Le technomage peut inverser les dés du Test d’incantation d’Éclair de malepierre si cela améliore le résultat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0085",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.40",
+    "question": "Implanter « Accumulateur : surcharge » ? Un incident d’Éclair surcharge l’accumulateur en plus des conséquences ordinaires ; au Tour suivant, Dextérité −3 DR pour l’arrêter, sinon explosion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0086",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.40",
+    "question": "Implanter « Accumulateur : explosion » ? Explosion : 3d10 dégâts réduits par BE et armure à trois yards ; exposition modérée à la Corruption à cinq yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0089",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.41",
+    "question": "Implanter « Domaines skavens : accès » ? Non-Skavens ne peuvent apprendre Peste, Furtivité ou Ruine ; accès skaven aux sorts du socle laissé au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0090",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.41",
+    "question": "Implanter « Carrières de mages skavens » ? Prophète gris, annonciateur Moulder et sorcier Eshin suivent Sorcier ; technomage exige au moins un rang préalable d’Ingénieur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0091",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.41",
+    "question": "Implanter « Domaines par fonction skaven » ? Prophète gris : les trois Domaines ; sorcier Eshin : Furtivité ; technomage : Ruine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0092",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.42",
+    "question": "Implanter « Prêtre de la Peste : carrière » ? Sur Prêtre-guerrier, remplacer Béni par Magie mineure et Invocation par Magie des Arcanes (Peste), ajouter Langue (Magick) au premier rang et Focalisation (Peste) au second.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0093",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.42",
+    "question": "Implanter « Magie mineure skaven : accès » ? Les sorts mineurs skavens exigent d’être Skaven ; les sorts mineurs ordinaires restent au choix du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0095",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.43",
+    "question": "Implanter « Sorts communs skavens : transmission » ? Les sorts d’Arcane skavens comptent comme sorts de Domaine et ne s’apprennent qu’entre porteurs du même talent de Magie des Arcanes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0136",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.51",
+    "question": "Implanter « Horreur des couvées : fouisseuse » ? Peut creuser dans la terre et la roche solide au quart de son Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0137",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.51",
+    "question": "Implanter « Horreur des couvées : explosion mortelle » ? À sa mort, à quatre yards : Esquive +0 ou 2d10 dégâts réduits par BE et armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0138",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.51",
+    "question": "Implanter « Horreur des couvées : ichor toxique » ? Une victime frappée par l’explosion fait Résistance +0 ou gagne deux Empoisonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0139",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.52",
+    "question": "Implanter « Brise-os : éclat de malepierre » ? L’arme d’éclat greffée porte Malepierre et Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0140",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.73",
+    "question": "Implanter « Araignée de falaise : proie » ? L’araignée détecte par vision et vibrations les proies de taille au moins lapin dans les quarante yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0141",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.73",
+    "question": "Implanter « Araignée de falaise : lasso » ? Si le tir de soie est vu, Esquive +0 ; échec, un Entravé par DR négatif. L’araignée ramène la victime en un Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0142",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.73",
+    "question": "Implanter « Araignée de falaise : couper la soie » ? Un coup tranchant de plus de cinq dégâts coupe la soie et fait battre l’araignée en retraite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0143",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Roi de peste : changement d’armes » ? Une fois sur son Tour, peut changer librement entre grande hache, épée et bouclier, ou deux épées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0145",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.76",
+    "question": "Implanter « Brass Keep : sol pestiféré » ? Vivant sans protection divine sur les étages centraux : Résistance −1 DR chaque Round ou Pourriture de Nurgle ; chaque heure, autre maladie au choix du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0146",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture de Nurgle : exposition » ? Après contact infectieux, faire Résistance à la fin de chaque journée exposée ; la difficulté dépend de la source et l’échec transmet la maladie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0147",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : mortel malade » ? Contact d’un mortel ayant au moins deux symptômes : Résistance +4 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0148",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : Nurgling ou bile » ? Nurgling ou bassin de bile démoniaque : Résistance +2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0149",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : portepeste ou roi de peste » ? Portepeste ou roi de peste : Résistance +0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0150",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : Grand Immonde » ? Grand Immonde : Résistance −1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0151",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : incubation » ? Incubation d10 − cinq jours, minimum un ; durée jusqu’à la mort. Jaunisse initiale sans pénalité chiffrée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0152",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : progression » ? Une semaine après les premiers signes, puis chaque semaine, Résistance +0 ; chaque échec ajoute le symptôme suivant, choix du MJ si deux options.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0153",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : échec numéro 1 » ? Toux et éternuements ou Fièvre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0154",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : échec numéro 2 » ? Vérole ou Malaise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0155",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : échec numéro 3 » ? Flux ou Nausée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0156",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : échec numéro 4 » ? Bubons ou Gangrène.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0157",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : échec numéro 5 » ? Convulsions ou Blessé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0158",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : échec numéro 6 » ? Flétrissement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0159",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : échec numéro 7 » ? Mort ; naissance d’un portepeste.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0160",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : Destin avant infection » ? Dépenser un Point de Destin peut éviter de contracter la maladie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0161",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : Destin après infection » ? Après infection, le Destin retarde les nouveaux symptômes d’un mois ; il ne guérit pas la maladie, dite incurable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0162",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Pourriture : naissance démoniaque » ? La mort due à la maladie crée un portepeste dans le Royaume du Chaos ; le MJ peut choisir qu’il surgisse du corps.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0163",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Tour de Morath : drain » ? Après BE minutes dans la tour, perdre une Blessure par Tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0164",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Tour : détection du drain » ? Seconde vue révèle aussitôt les filaments de Dhar ; sinon Calme +0 pour comprendre le drain.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0165",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.77",
+    "question": "Implanter « Tour : mort et zombie » ? À zéro Blessure dans la tour, mort immédiate et retour en zombie après d10 minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0167",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.82",
+    "question": "Implanter « Gromril : protection de plates » ? Les plates de Gromril donnent trois PA et gardent le fonctionnement ordinaire de plates.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0168",
+    "phase": "Équipement et artisanat",
+    "lot": "L22",
+    "source": "L22 p.82",
+    "question": "Implanter « Bouclier de Gudii : critiques » ? Les attaques opposées avec ce bouclier de Gromril ne peuvent infliger de Critique, sauf si le porteur est déjà à zéro Blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0171",
+    "phase": "Magie générale et objets",
+    "lot": "L22",
+    "source": "L22 p.93",
+    "question": "Implanter « Anneau de subduction » ? À trois yards d’un objet/créature magique ou lanceur de sorts, le porteur ressent un picotement ; il sait qu’une magie est proche sans identifier sa source.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0172",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.86",
+    "question": "Implanter « Surveillance urbaine : jour » ? Personne suspecte : Perception +2 DR du garde opposée à Discrétion (Urbaine) +0 ; déguisement approprié peut aider au choix du MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0173",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.86",
+    "question": "Implanter « Surveillance urbaine : nuit » ? Contre PNJ endormi, ivre ou inattentif, Perception +0 opposée à Discrétion +2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0174",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.86",
+    "question": "Implanter « Crochetage : fenêtre à volet » ? Dans cette maison, Crochetage +2 DR avec seuil 0 DR pour fenêtre à volet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0175",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.86",
+    "question": "Implanter « Crochetage : porte intérieure » ? Dans cette maison, Crochetage +0 DR avec seuil 2 DR pour porte intérieure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0176",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.86",
+    "question": "Implanter « Crochetage : porte extérieure » ? Dans cette maison, Crochetage −1 DR avec seuil 2 DR pour porte extérieure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0177",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.87",
+    "question": "Implanter « Toits urbains : escalade » ? Maison à deux étages de six yards : Escalade −1 DR ; trois étages de neuf yards : −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0178",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.87",
+    "question": "Implanter « Toits : paroi lisse » ? Sur face plane de ces bâtiments, Escalade de surface est requise pour tenter aux difficultés indiquées ; aux angles, les descentes d’eau peuvent servir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0179",
+    "phase": "Compétences et Tests",
+    "lot": "L22",
+    "source": "L22 p.87",
+    "question": "Implanter « Cours : franchir une clôture » ? Escalade +0 pour franchir les clôtures des cours ; les habitants peuvent entendre les pas sur les toits même si le grimpeur cherche à rester discret.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0180",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Mine : détecter le gaz » ? Perception −1 DR permet de sentir la poche de gaz, qui occupe toute la largeur du passage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0181",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Mine : inflammation » ? Avec une flamme nue, le risque d’explosion cumule cinq pour cent par yard parcouru dans la poche de gaz.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0182",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Mine : explosion de gaz » ? Perdre d10 Blessures réduites par BE et armure ; Résistance +0 ou À Terre ; ajouter BE − DR Assourdi et Sonné, ainsi qu’un Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0183",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Mine : exposition prolongée au gaz » ? Après huit heures dans la mine, −1 DR aux Tests basés sur l’Agilité ; le malus disparaît normalement après deux heures d’air frais, un soin retirant Empoisonné peut aider.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0184",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Mine : fréquence d’effondrement » ? Dans la mine mal entretenue, dix pour cent de risque d’éboulement par douze heures ; emplacement aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0185",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Éboulement de paroi » ? Athlétisme +0 ou cinq dégâts à la tête, réduits par BE et protection de tête.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0186",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Éboulement : déblayer » ? Trois yards carrés de débris ; d10 heures de travail, moins une heure par travailleur supplémentaire, minimum une heure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0187",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.100",
+    "question": "Implanter « Effondrement du plafond » ? Sur 2d10 yards : Athlétisme +0 ou sept dégâts réduits par BE/armure de tête ; Force +2 DR, un essai par Round, pour sortir des débris.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0188",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.101",
+    "question": "Implanter « Tunnels irréguliers : course » ? Courir dans les tunnels exige Navigation −1 DR pour ne pas se perdre et Agilité +2 DR chaque Round ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0189",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.102",
+    "question": "Implanter « Débris : déplacement » ? Traverser les débris prend deux fois le temps normal ; courir exige Agilité +2 DR ou À Terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0190",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.111",
+    "question": "Implanter « Tempête : perception et orientation » ? Sous cette forte pluie, Perception et Navigation −2 DR ; les éclairs donnent un Aveuglé qui se dissipe après deux Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0191",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.111",
+    "question": "Implanter « Après l’orage : apparence » ? Trempé et couvert de boue, −2 DR aux Tests de Sociabilité envers une personne de statut Argent deux ou plus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0193",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.117",
+    "question": "Implanter « Ballon : grimper sur l’enveloppe » ? Sur l’extérieur, Escalade chaque Round ; réussite : déplacement jusqu’à Mouvement yards ce Round ; de −0 à −1 DR, attaque possible sans déplacement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0194",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.117",
+    "question": "Implanter « Ballon : agrippé ou chute » ? À −2/−3 DR, ni Action ni Mouvement ; à −4 DR ou pire, chute. Un Point de Chance permet de tomber sur le pont plutôt que dans le vide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0195",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.117",
+    "question": "Implanter « Ballon : retenir un compagnon » ? Un proche peut saisir le personnage qui tombe avec Initiative +0 ; sur son Tour, Force +0 le remonte ; à −4 DR ou pire, les deux tombent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0196",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.117",
+    "question": "Implanter « Ballon : combattre en grimpant » ? Sur l’enveloppe, deux pieds et une main servent à se tenir ; −1 DR aux attaques dans cette posture.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0197",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.117",
+    "question": "Implanter « Ballon : perdre prise » ? Attaque ratée d’au moins quatre DR ou coup blessant reçu : Athlétisme +4 DR ou glisser ; même en réussite, Dextérité −2 DR ou lâcher l’objet tenu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0198",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.117",
+    "question": "Implanter « Ballon : remonter » ? Après glissade, deux Rounds d’escalade pour revenir au combat ; après destruction d’un adversaire fixé, deux Rounds pour atteindre le suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0199",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.117",
+    "question": "Implanter « Ballon : enveloppe perforée » ? Cette enveloppe commence à perdre de la hauteur après deux cents dégâts ; un squelette qui la lacère inflige quatre dégâts par Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0200",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.118",
+    "question": "Implanter « Ballon : descente forcée » ? À deux cents dégâts, il atteint le sol en cinq Rounds ; les occupants subissent une chute de trois yards à l’atterrissage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0201",
+    "phase": "Voyage et environnement",
+    "lot": "L22",
+    "source": "L22 p.118",
+    "question": "Implanter « Ballon : tir de soutien » ? Dans ce combat, une créature recevant une touche blessante ne peut plus attaquer avant le Round suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0205",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.26",
+    "question": "Implanter « Pourriture oculaire sanglante : contraction » ? Boire l’eau infectée : Endurance +4 DR ; échec, maladie contractée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0206",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.26",
+    "question": "Implanter « Pourriture oculaire : durée » ? Incubation 3d10 + cinq jours ; durée 3d10 + huit jours ; Persistant à +0, défaillance des yeux et Blessé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0207",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.26",
+    "question": "Implanter « Défaillance des yeux : vision » ? Pendant la maladie, les Tests de Perception visuelle subissent −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0208",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.26",
+    "question": "Implanter « Défaillance des yeux : onguent » ? Une dose d’onguent soulage le symptôme pendant d10 heures ; dix doses valent un shilling.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0209",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.54",
+    "question": "Implanter « Faiseur de sots : poison » ? Blessé par un carreau enduit : Résistance −2 DR ou tirer l’effet d’ivresse ; à chaque question, Volonté −1 DR ou répondre honnêtement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0210",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.54",
+    "question": "Implanter « Faiseur de sots : durée et doses » ? Les deux effets durent dix − BE Rounds ; une nouvelle dose fait retirer sur la table et prolonge la durée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0211",
+    "phase": "Maladies et poisons",
+    "lot": "L22",
+    "source": "L22 p.54",
+    "question": "Implanter « Baiser sombre : poison » ? Blessé par un carreau enduit : Résistance −1 DR ou trois Blessures supplémentaires ignorant armure et Endurance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L22-0212",
+    "phase": "Combat et capacités",
+    "lot": "L22",
+    "source": "L22 p.101",
+    "question": "Implanter « Horreur : tunnel ascendant » ? Entre niveaux de cette mine, l’Horreur creuse en vingt Rounds et ressort à d10 yards du point de départ, sans tunnel vertical droit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
