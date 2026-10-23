@@ -15,7 +15,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q8 | FAIT | (voir `git log`, « Q8 ») |
 | Q9 | FAIT | (voir `git log`, « Q9 ») |
 | Q10 | BLOCKED (question au MJ, `QE-Q10-1`) | aucun (rien modifié) |
-| R | à faire | — |
+| R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
 
@@ -150,3 +150,10 @@ Branché / non appelé (grep dans `js/`) :
 - Essai : Talent ajouté au résolveur sans toucher au snapshot (id `talent-master-and-commander`, L25 p.63). Il était reconnu par son id et sa limite suivait le Bonus de Sociabilité, mais 4 tests figeant la feuille source échouaient (206 identités ×2, contrat « verified » par identité, liste de cache de sw.js). Les satisfaire reviendrait à assouplir ces contrôles : retour en arrière complet, aucun code ni test conservé.
 - Question au MJ consignée dans `QE-Q10-1` : ajouter le Talent à la feuille Drive, ou autoriser un supplément local (comptes à 207 et contrat local).
 - Aucune fonction ajoutée. `v5-effects.js` reste inchangé (rang saisi, id `talent-master-and-commander`).
+
+## R — clôture (FAIT, avec réserve)
+
+- **Contrôle Q0, 23 livres** : 0 écart de valeurs, 0 ligne non retrouvée ; 8 avertissements de compétence (textes à colonnes imbriquées). Complétude restante (profils / talents / compétences manquants) : L01 6/36/53 · L02 6/15/52 · L03 1/5/12 · L04 4/62/55 · L07 5/54/3 · L11 8/8/7 · L12 6/41/38 · L13 1/0/2 · L14 4/22/25 · L16 6/8/19 · L17 1/1/0 · L18 2/1/1 · L19 3/12/0 · L20 5/3/2 · L21 4/3/15 · L22 3/1/2 · L23 2/7/0 · L24 5/14/34 · L25 4/0/5 · L26 2/2/0 ; L06, L09, L10 à 0. **Non justifiés un par un** : même cause (colonne de droite imbriquée dans la prose de gauche, blocs à cheval sur deux pages, formats V5), voir `QE-Q1-2`, `QE-Q2-2`, `QE-Q5-4` ; lot Q11 proposé, à arbitrer.
+- **12 valeurs inchangées** : comparaison des 23 livres avec `9c12613` (caractéristiques et Blessures de chaque profil) : 0 écart, 0 profil ajouté ou retiré.
+- **Recette** : `node tools/run-divine-recipe.mjs` : « RECETTE DIVINE VERTE — 26 commandes » (dont la suite complète `node`, sans échec ; le reçu `recipe-receipt.json` existe désormais). `tmp/divin/base-manifest.json` recréé depuis les 4 sources protégées de `9c12613`.
+- **Tableau branché / non appelé** : Q0-Q3, Q5 : outils et données de livre (aucune fonction de jeu ; `trappings`, `notes`, `conditional`, `spells` : code testé, non appelé). Q4 : attaques branchées via `buildParticipantFromBestiary` ; Immunité : code testé, non appelé. Q6 : branché (`buildParticipantFromBestiary`, appelants dans `bestiary-library.js`, `bestiary-templates.js`, `v5-spell-contracts.js`) ; affichage du champ `notes` non vérifié. Q7 : branché (`removeExpiredSummons` ← `store.js`). Q8 : `attacksAreMagical` et `planNaturalAttack` branchés ; `planSwarm`, `planPsychology`, `planCreatureMagic` : code testé, non appelé. Q9 : `validateFamiliarLink` et la libération branchés via le store ; `linkFamiliar` sans appelant dans l'interface. Q10 : BLOCKED (`QE-Q10-1`).
