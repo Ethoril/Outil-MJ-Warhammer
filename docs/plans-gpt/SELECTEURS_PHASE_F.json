@@ -23840,5 +23840,1825 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0001",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.25",
+    "question": "Implanter « Rejoindre une guilde ouvrière » ? Un candidat apte au travail peut rejoindre une guilde ouvrière pour 5 CO, ou dix pistoles par mois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0002",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.25",
+    "question": "Implanter « Salaire garanti par la guilde » ? La guilde ouvrière veille au paiement de sept pistoles par jour à ses membres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0003",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.25",
+    "question": "Implanter « Admission artisanale ou professionnelle » ? Prouver sa compétence par un Test pertinent à −2 DR pour être admis dans une guilde artisanale ou professionnelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0004",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.25",
+    "question": "Implanter « Vacance et priorité d’admission » ? L’effectif est plafonné ; une place libérée va d’abord aux enfants de membres, puis apprentis, candidats recommandés par un membre, puis par une autre guilde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0005",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.25",
+    "question": "Implanter « Cotisations et service gratuit » ? Les cotisations vont de trois à deux cents CO par an selon la guilde et le rang ; chaque membre doit aussi effectuer au moins un travail gratuit pour sa guilde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0006",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.25",
+    "question": "Implanter « Apprentissage et exercice de métier » ? Sans compétence préalable, accéder à une carrière artisanale ou professionnelle exige un maître acceptant l’apprentissage ; exercer à son compte exige ensuite l’adhésion à la guilde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0007",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.31",
+    "question": "Implanter « Préparer son revenu à Middenheim » ? Lettrés, Citadins, Courtisans et Ruraux consacrent une activité à rencontrer leur guilde, payer les cotisations et passer ses Tests avant l’activité de revenu ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0008",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.31",
+    "question": "Implanter « Revenu sans adhésion » ? Sans adhésion, Charme −1 DR évite la dénonciation ; échec, appliquer immédiatement les événements Vieilles dettes et Sous surveillance du livre de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0009",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.31",
+    "question": "Implanter « Revenus : exceptions de classe » ? Guerriers, Itinérants et Citadins mendiants sont dispensés de guilde ; Filous et Contrebandiers peuvent passer par un Roi du dessous ; les Débardeurs rejoignent les charretiers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0010",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.31",
+    "question": "Implanter « Entrée des caravanes : droit marchand » ? Une caravane contrôlée doit prouver son affiliation à une guilde ou payer dix pour cent de la valeur de ses marchandises.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0011",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.31",
+    "question": "Implanter « Entrée en ville : armes et armures » ? Pour entrer, transporter plutôt que porter les plates ; déposer ou remiser les armes dépassant une épée courte ou une rapière. Refus de ces règles : entrée interdite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0012",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.44",
+    "question": "Implanter « Parlementer avec les bedeaux » ? Les Tests de Sociabilité auprès des bedeaux du Collegium subissent −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0013",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.46",
+    "question": "Implanter « Focalisation : acclimatation à Middenheim » ? Focaliser dans Middenheim subit −1 DR durant 10 − BInt semaines ; ensuite le magicien s’acclimate.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0014",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.46",
+    "question": "Implanter « Focalisation du Ghur à Middenheim » ? La spécialisation Ghur dispense du malus d’acclimatation et accorde à sa place +1 DR à Focalisation, même après acclimatation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0015",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.46",
+    "question": "Implanter « Sens de la magie à Middenheim » ? Les Tests de Sens de la magie ne sont jamais plus faciles que −1 DR dans Middenheim ; ils sont souvent à −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0016",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.66",
+    "question": "Implanter « Menhirs : Ghur à pleine force » ? Avec Magie des arcanes (Bêtes), les Vents tourbillonnants sont réputés donner +3 DR aux Tests d’incantation et de Focalisation effectués près des menhirs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0017",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.48",
+    "question": "Implanter « Herbes et préparations de Stiefel » ? Chez Stiefel, herbes et préparations médicinales sont un degré plus courantes ; exotique devient rare et rareté intermédiaire descend de même.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0020",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.71",
+    "question": "Implanter « Anneau des langues » ? Une formule active l’anneau une fois par jour ; durant une heure, comprendre comme un natif classique, bretonnien, tiléen, elthárin, gospodarinyi et khazalid.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0022",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.71",
+    "question": "Implanter « Épée de Peur : arme » ? L’épée blesse les créatures immunisées aux attaques non magiques ; elle possède Raffinée et Solide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0023",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.71",
+    "question": "Implanter « Dague magique du prêteur » ? La dague blesse les créatures immunisées aux attaques non magiques et possède Raffinée et Solide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0024",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.71",
+    "question": "Implanter « Bottes de Gucci » ? Une formule accorde Savoir-vivre parmi Nobles, Guildes ou Serviteurs tant que les bottes sont portées ; répéter la formule permet de changer de groupe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0025",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.71",
+    "question": "Implanter « Heaume de gromril du prêteur » ? Ce heaume de plates adapté à un Nain donne trois PA et possède Raffiné et Incassable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0026",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.71",
+    "question": "Implanter « Armure Incassable : critiques » ? Une localisation protégée par une armure Incassable est immunisée aux Coups Critiques si cette armure protège de la source ; un dépassement des Blessures restantes peut toujours infliger une Blessure Critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0027",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.71",
+    "question": "Implanter « Cabinet démoniaque : identification » ? Le cabinet identifie un objet par Savoir (Objets magiques) à 96 ; l’utiliser expose à une source mineure de Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0028",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.97",
+    "question": "Implanter « Bénir une arme dans la Flamme » ? Un prêtre notable doit accepter les motifs du demandeur ; déposer l’arme dix heures dans la Flamme lors d’une période calme permet de la bénir.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0029",
+    "phase": "Magie générale et objets",
+    "lot": "L19",
+    "source": "L19 p.97",
+    "question": "Implanter « Flamme éternelle : enchantement » ? L’arme devient magique et gagne un dégât pendant 1d10 + 10 jours ; prolongation possible si elle sert une tâche importante pour Ulric.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0030",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.83",
+    "question": "Implanter « Poudre améliorée : rechargement » ? La poudre d’Al-Azir réduit le temps de rechargement de un, avec un minimum de un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0031",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.83",
+    "question": "Implanter « Poudre améliorée : incident évité » ? Sur un incident de tir, un Test à +0 de Tir (Poudre noire ou Ingénierie) réussi permet d’en ignorer les effets.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0032",
+    "phase": "Blessures et soins",
+    "lot": "L19",
+    "source": "L19 p.82",
+    "question": "Implanter « Clinique d’Erich : risque des soins » ? Avant Soins à 65, Erich passe trois Tests de Résistance à l’alcool à 40 ; chaque échec aggrave Soins d’un cran, en plus des autres effets.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0033",
+    "phase": "Maladies et poisons",
+    "lot": "L19",
+    "source": "L19 p.128",
+    "question": "Implanter « Variole verte : contamination » ? Après un combat où un porteur vous a blessé, Résistance +3 DR ; échec, contracter la variole cérébrale verte tachetée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0034",
+    "phase": "Maladies et poisons",
+    "lot": "L19",
+    "source": "L19 p.128",
+    "question": "Implanter « Variole verte : incubation » ? La maladie incube pendant 3d10 + 5 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0035",
+    "phase": "Maladies et poisons",
+    "lot": "L19",
+    "source": "L19 p.128",
+    "question": "Implanter « Variole verte : durée » ? La maladie dure 3d10 + 10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0036",
+    "phase": "Maladies et poisons",
+    "lot": "L19",
+    "source": "L19 p.128",
+    "question": "Implanter « Variole verte : symptômes » ? Appliquer Bubons, Convulsions, Rage homicide, Persistance (Intermédiaire) et Vérole.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0038",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.132",
+    "question": "Implanter « Crime non autorisé : être repéré » ? Sans précautions suffisantes, Discrétion opposée à Perception de l’indicateur, généralement 40 ; perdre révèle le crime aux agents du Roi du dessous.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0039",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.133",
+    "question": "Implanter « Contacter un Roi du dessous » ? Dans une taverne des quartiers concernés, Ragot +3 DR permet de trouver un agent du Roi local pour s’inscrire à ses quotas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0040",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.133",
+    "question": "Implanter « Quota criminel hebdomadaire » ? Le quota vaut le rang de Statut dans sa monnaie par semaine, généralement collecté chaque mois : Bronze 3 donne trois sous par semaine ; Argent 2, deux pistoles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0041",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.133",
+    "question": "Implanter « Quota : régularisation et amende » ? Le criminel indépendant accepté au registre paie un supplément de cinquante pour cent pendant une période estimée égale à son activité antérieure non autorisée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0042",
+    "phase": "Compétences et société",
+    "lot": "L19",
+    "source": "L19 p.133",
+    "question": "Implanter « Quota : dette remboursée par service » ? Une dette de quotas peut être acquittée par du racket de faible niveau au service du Roi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0043",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball : équipes » ? Deux équipes de onze jouent ; deux remplaçants peuvent remplacer des joueurs retirés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0044",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball : terrain » ? Terrain de 200 sur 85 pieds, buts de onze sur sept pieds ; surface du gardien onze pieds sur quatre, un seul défenseur à la fois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0045",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball : remise en jeu » ? Au début de chaque mi-temps et après chaque but, chacun rejoint sa moitié ; le ballon est placé au centre pour le coup d’envoi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0046",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball : durée officielle » ? Deux mi-temps de trente minutes, pause de quinze minutes ; égalité, deux périodes supplémentaires de dix minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0047",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball : équipement et magie » ? Armes interdites ; seule la coiffe de mailles est une armure métallique autorisée. Aucun sort ou bénédiction ne doit affecter le jeu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0048",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball : joueur à terre » ? Un joueur à terre doit être épargné par les attaques suivantes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0049",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball : validité du but » ? Un but est annulé si une partie du corps d’un attaquant touche le ballon au franchissement de la ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0050",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball rapide : Tests d’équipe » ? Chaque Round, tous font Bagarre +2 DR ou Athlétisme +0 ; sommer les DR par équipe, la plus forte gagne un Avantage pour le Round suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0051",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball rapide : but » ? L’équipe gagnant la comparaison marque si son total atteint au moins +25 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0052",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.143",
+    "question": "Implanter « Middenball rapide : horloge » ? Deux mi-temps de trois Rounds ; chacun de ces Rounds abstraits représente dix minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0053",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball avancé : séquence » ? Chaque mi-temps a dix tours d’environ trois minutes : équipe, mouvement, action puis événement aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0054",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball avancé : bandes » ? Six bandes successives : arrière, demi-arrière, milieu domicile, milieu extérieur, demi-avant et avant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0055",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball : indices d’équipe » ? Athlète vaut deux en A et un en B ; Brute ou Nain vaut un en A et deux en B. Sommer les contributions pour chaque équipe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0056",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball : remplacer un joueur » ? À Bagarre 50+, choisir Brute ; à Athlétisme 50+, choisir Athlète. Un seul rôle ; sans ces seuils, contribuer un en A et en B.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0057",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball : jets d’équipe » ? Pendant la phase d’équipe, résoudre Athlétisme puis Brutalité au d100 corrigé par indice domicile moins indice extérieur ; attribuer les résultats sans contradiction si possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0058",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball : distances de lancer » ? Test de CT : même bande +2 DR, bande adjacente +0, une bande intermédiaire −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0059",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball : distances de frappe » ? Test de CT : même bande +0, adjacente −1 DR, une bande intermédiaire −3 DR, deux bandes intermédiaires −4 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0060",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.144",
+    "question": "Implanter « Middenball : avance en poursuite » ? L’avance initiale vaut un dans la même bande, quatre en bande adjacente et six avec une bande entre les joueurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0061",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 01–02 » ? Table A, 01–02 : un joueur extérieur se place dans la bande arrière ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0062",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 03–10 » ? Table A, 03–10 : un joueur extérieur se place dans la bande demi-arrière ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0063",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 11–20 » ? Table A, 11–20 : un joueur extérieur se place dans la bande milieu domicile ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0064",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 21–35 » ? Table A, 21–35 : un joueur extérieur se place dans la bande milieu extérieur ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0065",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 66–80 » ? Table A, 66–80 : un joueur domicile se place dans la bande milieu domicile ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0066",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 81–90 » ? Table A, 81–90 : un joueur domicile se place dans la bande milieu extérieur ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0067",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 91–98 » ? Table A, 91–98 : un joueur domicile se place dans la bande demi-avant ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0068",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement favorable 99–00 » ? Table A, 99–00 : un joueur domicile se place dans la bande avant ; s’il reçoit une passe ce tour, il peut tirer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0069",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Domination athlétique 36–46 » ? Table A, 36–46 : l’équipe extérieur gagne cinq points A au tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0070",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Domination athlétique 55–65 » ? Table A, 55–65 : l’équipe domicile gagne cinq points A au tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0071",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Placement neutre 47–54 » ? Table A, 47–54 : aucun effet ce tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0072",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Blessure critique sportive 01–02 » ? Table B, 01–02 : un joueur domicile quitte le jeu sur blessure critique ; retirer ses A/B. Sans remplaçant, un joueur extérieur devient libre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0073",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Blessure critique sportive 99–00 » ? Table B, 99–00 : un joueur extérieur quitte le jeu sur blessure critique ; retirer ses A/B. Sans remplaçant, un joueur domicile devient libre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0074",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : affaiblissement 03–10 » ? Table B, 03–10 : retirer un aux indices A et B de l’équipe domicile pour la suite du match.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0075",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : affaiblissement 11–20 » ? Table B, 11–20 : retirer un aux indices A et B de l’équipe domicile pendant un tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0076",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : affaiblissement 81–90 » ? Table B, 81–90 : retirer un aux indices A et B de l’équipe extérieur pendant un tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0077",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : affaiblissement 91–98 » ? Table B, 91–98 : retirer un aux indices A et B de l’équipe extérieur pour la suite du match.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0078",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : opportunité 21–35 » ? Table B, 21–35 : un joueur extérieur garde la ligne entre ballon et but, ou annule une garde existante selon l’option la plus avantageuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0079",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : opportunité 36–46 » ? Table B, 36–46 : l’équipe extérieur gagne cinq points B au tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0080",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : opportunité 55–65 » ? Table B, 55–65 : l’équipe domicile gagne cinq points B au tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0081",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité : opportunité 66–80 » ? Table B, 66–80 : un joueur domicile garde la ligne entre ballon et but, ou annule une garde existante selon l’option la plus avantageuse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0082",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Brutalité neutre 47–54 » ? Table B, 47–54 : aucun effet ce tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0083",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Choisir le joueur concerné » ? Au d10, chercher le premier rôle disponible : 1–6 Athlète/Brute/Nain ; 7–9 Brute/Nain/Athlète ; 10 Nain/Athlète/Brute.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0084",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.145",
+    "question": "Implanter « Middenball : joueurs protégés des tables » ? Les PJ et le porteur du ballon ne subissent pas immédiatement les résultats des tables A et B.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0085",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : suivi individuel » ? Suivre au minimum les PJ, le porteur, un adversaire pour chacun d’eux et les joueurs libres issus de la phase d’équipe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0086",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : coup d’envoi » ? Un joueur de chaque équipe fait Athlétisme opposé ; le vainqueur prend le ballon dans sa bande de milieu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0087",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : ordre des mouvements » ? Résoudre marquer, changer de place, garder, récupérer puis rester ; à même choix, ordre d’Initiative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0088",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : marquer un adversaire » ? Marquer un adversaire à deux bandes au plus ; s’il tente d’esquiver, jouer trois Rounds de poursuite selon l’avance du diagramme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0089",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : issue de poursuite » ? Échappée : le fuyard choisit une bande adjacente à son départ ; rapprochement sans capture : le poursuivant choisit. Capture ou immobilité : marquage mutuel au lieu du fuyard, mouvement fini pour les deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0090",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : dribbler » ? Dribbler permet de garder le ballon prêt à frapper en se déplaçant mais impose −1 DR aux Tests d’Athlétisme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0091",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : changer de position » ? Athlétisme +0 : parcourir une bande par DR, dans la limite du Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0092",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : se placer en garde » ? Se déplacer jusqu’à deux bandes pour s’interposer entre le porteur et un but ou un autre joueur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0093",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : récupérer le ballon » ? Un ballon libre sur le terrain à deux bandes au plus peut être rejoint et pris en possession.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0094",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : rester en place » ? Ne pas bouger donne +1 DR aux Tests de CT de ce tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0095",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : deuxième marqueur » ? Un joueur libre choisit généralement marquage ou garde ; esquiver un second marqueur après le premier exige Résistance +0, sinon un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0096",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : ordre des actions » ? Résoudre lancer, attaquer, frapper puis tirer ; les choix identiques se résolvent par Initiative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0097",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : lancer » ? Le porteur lance au but ou à un joueur par CT selon la distance ; un receveur doit réussir Athlétisme pour prendre possession.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0098",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : prendre le ballon en lutte » ? Jouer un Round de combat sans arme ; infliger Enchevêtré au porteur permet de le relâcher, retirer cet Enchevêtré et prendre le ballon.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0099",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : frapper le ballon » ? Seul un joueur resté immobile ou ayant dribblé peut frapper ; CT selon distance, puis Athlétisme réussi du receveur pour posséder.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0100",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.146",
+    "question": "Implanter « Middenball : tir immédiat » ? Un receveur placé favorablement par la table A peut immédiatement tirer, avec la résolution de frappe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0101",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : viser le but » ? Les Tests de CT pour marquer gagnent +1 DR pour la grande cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0102",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : arrêt du gardien » ? Si le gardien est au but, CT opposée à Athlétisme ; au moins un DR de victoire du gardien lui donne le ballon, au moins un du tireur marque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0103",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : ballon perdu » ? Une passe ou un tir à résultat ambigu ou indécis laisse le ballon libre à mi-chemin entre le tireur et sa cible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0104",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : gêne des gardes » ? Chaque joueur gardant la cible impose −1 DR au Test de CT du porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0105",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : interception » ? Si le porteur rate la CT vers une cible gardée, chaque garde peut prendre le ballon avec Athlétisme +0 contre lancer, −1 DR contre frappe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0106",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : pause et reprise » ? Après dix tours, quinze minutes pour soigner les blessés ; jouer ensuite dix nouveaux tours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0107",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : prolongation et départage » ? Égalité après vingt tours : six tours supplémentaires possibles ; encore égalité, d100 corrigé par la différence A : 01–50 extérieur vainqueur, 51–00 domicile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0108",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Middenball : défaite par blessures » ? Si tous les joueurs d’une équipe sont blessés à un moment quelconque, l’autre gagne immédiatement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0109",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 01–33 : aucun incident » ? 01–33 : Aucun événement inhabituel ce tour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0110",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 34 : ballon détruit » ? 34 : Le ballon crève ou le Snotling s’échappe ; pause pour trouver un remplaçant, avec attaque ou fuite de la créature au choix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0111",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 35–40 : supporteur bagarreur » ? 35–40 : Un joueur aléatoire affronte un humain ordinaire pendant trois Rounds de combat sans arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0112",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 41–60 : intempéries » ? 41–60 : Le froid ou la pluie impose −1 DR à tous les Tests d’Athlétisme et de CT au tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0113",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 61–75 : gardien sorti » ? 61–75 : Si les équipes sont en nombre inégal, le gardien de l’équipe la moins nombreuse quitte son but.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0114",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 76–79 : projectile de supporteur » ? 76–79 : Un joueur aléatoire fait Résistance +4 DR, sinon devient Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0115",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 80–83 : entorse » ? 80–83 : Un joueur aléatoire, hors PJ ou porteur, se tord la cheville et doit se retirer du match.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0116",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 84–86 : flasque » ? 84–86 : Un joueur aléatoire, hors PJ ou porteur, passe Résistance à l’alcool −2 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0117",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 90–95 : chants du domicile » ? 90–95 : Les chants donnent cinq points B à l’équipe domicile au tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0118",
+    "phase": "Jeux et compétitions",
+    "lot": "L19",
+    "source": "L19 p.147",
+    "question": "Implanter « Événement 96–00 : chants de l’extérieur » ? 96–00 : Les chants donnent cinq points B à l’équipe extérieure au tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0120",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.148",
+    "question": "Implanter « Création du Nord : compétences » ? Choisir trois compétences régionales à cinq avances et trois autres à trois avances.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0121",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.148",
+    "question": "Implanter « Création du Nord : talents » ? Dans chaque alternative choisir un talent ; tirer les talents aléatoires sur la table du socle, en relançant si un talent est déjà acquis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0122",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.148",
+    "question": "Implanter « Carrières aléatoires : Middenheim » ? Tirer la carrière au d100 dans la colonne Middenheim des pages 148–149, avec les probabilités régionales et absences de carrières imprimées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0123",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.148",
+    "question": "Implanter « Carrières aléatoires : Middenland » ? Tirer la carrière au d100 dans la colonne Middenland des pages 148–149, avec les probabilités régionales et absences de carrières imprimées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0124",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.148",
+    "question": "Implanter « Carrières aléatoires : Nordland » ? Tirer la carrière au d100 dans la colonne Nordland des pages 148–149, avec les probabilités régionales et absences de carrières imprimées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0125",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.148",
+    "question": "Implanter « Création : devenir Enfant d’Ulric » ? Au choix du MJ, obtenir aléatoirement Wolf Kin et Sang noble permet de renoncer au talent pour devenir Enfant d’Ulric.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0126",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.149",
+    "question": "Implanter « Création : guilde déjà payée » ? Un Middenheimer dont la carrière exige une guilde pour exercer dans la ville commence déjà membre à jour de cotisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0127",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.149",
+    "question": "Implanter « Création : affiliation criminelle » ? Un Middenheimer de carrière criminelle choisit un Roi du dessous et ses quotas, ou reste indépendant avec le risque de découverte.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0128",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.149",
+    "question": "Implanter « Carrière : Wolf Kin ou Flagellant » ? Un personnage obtenant Wolf Kin peut choisir Flagellant à sa place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0129",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.149",
+    "question": "Implanter « Mineur de Middenheim : talent alternatif » ? Le Mineur de Middenheim peut remplacer Rover par Criminel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0130",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.149",
+    "question": "Implanter « Carrières élargies : achèvement » ? Au premier niveau offrant plus de huit compétences, huit suffisent pour avancer ; l’une doit être celle servant aux revenus de la carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0131",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.150",
+    "question": "Implanter « Destinée prophétisée dans le Nord » ? Middenlanders et Nordlanders peuvent remplacer Destinée par un talent aléatoire ; les Middenheimers gardent Destinée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0132",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.151",
+    "question": "Implanter « Création : dotation du Middenheim » ? Choisir dans les douze compétences de la ville ; Destinée, Savoir-vivre ou Costaud et trois talents aléatoires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0133",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.152",
+    "question": "Implanter « Création : dotation du Middenland » ? Choisir dans les douze compétences rurales ; Destinée ou talent aléatoire, Menaçant ou Guerrier né et trois talents aléatoires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0134",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.153",
+    "question": "Implanter « Création : dotation du Nordland » ? Choisir dans les douze compétences régionales ; Destinée ou talent aléatoire, Pêcheur ou Rover, Cœur vaillant ou Très résistant et deux talents aléatoires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0135",
+    "phase": "Création et progression",
+    "lot": "L19",
+    "source": "L19 p.154",
+    "question": "Implanter « Wolf Kin : progression de carrière » ? La carrière humaine offre quatre rangs, dix compétences initiales et les progressions indiquées ; le Statut reste Bronze 1 aux trois premiers rangs puis Bronze 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0136",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.68",
+    "question": "Implanter « Cuir : ouvrage décoré » ? L’ouvrage décoré sur commande chez Greendale coûte généralement cent vingt-cinq pour cent du prix normal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0137",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.68",
+    "question": "Implanter « Cuir : remise habituelle » ? Halflings, amis et habitués de Greendale reçoivent normalement dix pour cent de réduction.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0138",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.68",
+    "question": "Implanter « Vêtement de cuir : fabrication » ? Fabriquer un vêtement prend dix heures par CO de son coût ; l’atelier travaille douze heures par jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0139",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.68",
+    "question": "Implanter « Vêtement de cuir : coût et encombrement » ? Le cuir coûte et encombre deux fois son équivalent en tissu ; les produits de Greendale possèdent Raffiné et Léger.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0140",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.69",
+    "question": "Implanter « Forge : délai de fabrication » ? Le délai minimal vaut la moitié du prix en pistoles ; la petite monnaie est arrondie à la pistole supérieure. Exemples imprimés : rapière cinquante heures, brise-épée douze.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0141",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.69",
+    "question": "Implanter « Forge : temps des qualités » ? Chaque qualité demandée ajoute cinquante pour cent au délai minimal de fabrication.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0142",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.69",
+    "question": "Implanter « Forge : cadence et attente » ? L’atelier produit vingt heures de travail par jour, huit jours par semaine ; quarante pour cent de risque de devoir d’abord finir 2d10 heures d’une autre commande.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0143",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.69",
+    "question": "Implanter « Forge : tarif et remise » ? Tarif demandé : trois pistoles par heure ; négociable au prix du catalogue, avec dix pour cent possibles aux clients importants ou réguliers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0144",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.74",
+    "question": "Implanter « Luigi et Salvatore : Raffiné » ? Les marchandises possèdent Raffiné pour une fois et demie le prix ordinaire, au lieu du double habituel.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L19-0145",
+    "phase": "Équipement et artisanat",
+    "lot": "L19",
+    "source": "L19 p.74",
+    "question": "Implanter « Luigi et Salvatore : Raffiné et Solide » ? Les articles concernés possèdent Raffiné et Solide pour trois fois le prix ordinaire, au lieu de quatre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
