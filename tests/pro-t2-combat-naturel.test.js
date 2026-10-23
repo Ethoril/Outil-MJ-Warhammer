@@ -42,7 +42,10 @@ test('T2 Piétinement et Langue — la cible doit être plus petite, Tailles à 
   const ok = planNaturalAttack(stomper, 'stomp', { actorSize: 4, targetSize: 2 });
   assert.equal(ok.available, true);
   assert.equal(ok.damageFormula, '5');
-  assert.equal(planNaturalAttack(synthetic(['Tongue']), 'tongue', { actorSize: 2, targetSize: 3 }).available, false);
+  // Q18 (livre de base p.362) : la Taille ne décide que de l'attirance de la cible, pas de l'Enchevêtré.
+  const tongue = planNaturalAttack(synthetic(['Tongue']), 'tongue', { actorSize: 2, targetSize: 3 });
+  assert.equal(tongue.available, true);
+  assert.ok(tongue.effects.some(effect => effect.state === 'Enchevêtré'));
 });
 
 test('T2 Tentacules (4) — quatre attaques gratuites par Tour, sans Élan', () => {

@@ -19,6 +19,7 @@ import {
 import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionHasDamage, actionWeaponDamage, computeDamage, evaluateWeaponDamage, formatDamageFormula, formatWeaponDamage, strengthBonusOf } from './damage.js';
 import { normalizeQualities } from './quality-normalization.js';
+import { planNaturalAttack } from './creature-combat.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
@@ -218,10 +219,22 @@ export function defaultResolutionId(actor, action, target, baseRevision, roll) {
 }
 
 /** Canonicalize inputs without drawing a random value. */
+/** Plan de l'attaque naturelle déclarée dans `v5.context.naturalAttack` (mêmes options que le calcul des coûts du Store) ; `null` sans déclaration. */
+export function naturalPlanOf(actor, v5) {
+  const context = v5?.context;
+  if (!actor || !context?.naturalAttack) return null;
+  return planNaturalAttack(actor, context.naturalAttack, { used: context.naturalUsed, charged: context.charged ?? v5.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
+}
+// Les Tailles viennent du champ de l'interface (`v5.actorSize`) ou, pour le Store, du contexte.
+const naturalSizes = v5 => ({ actorSize: v5?.context?.actorSize ?? v5?.actorSize, targetSize: v5?.context?.targetSize ?? v5?.targetSize });
+const foldKey = text => String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;
   const action = isRecord(input.action) ? clone(input.action) : {};
+  // Attaque naturelle choisie (Trait de créature) : ses dégâts calculés remplacent ceux de l'action (« imprimé » : l'action garde les siens).
+  const natural = naturalPlanOf(actor, input.v5);
+  if (natural && /^\d+$/.test(String(natural.damageFormula))) { action.damage = Number(natural.damageFormula); delete action.damageFormula; }
   if (action.extensions?.fiche?.requiresLink) throw new ResolutionError('Lier une compétence à cette arme avant de résoudre son attaque', 'SKILL_LINK_REQUIRED');
   const target = isRecord(input.target) ? clone(input.target) : null;
   const entered=input.roll??input.dieRoll??input.enteredRoll;
@@ -715,7 +728,20 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   unresolved.push(...criticalReady);
   const magicHitStates = hit && attackType(action.type) && target && !replacement ? magicWeaponHitConditions(actor, action, nature.ranged, damage?.finalDamage || 0).map(row => ({ id: `${normalized.resolutionId}:magic-weapon:${row.name}`, key: row.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(), name: row.name, level: 1, source: { kind: 'magic-weapon', spellName: row.spellName } })) : [];
-  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...magicHitStates,...special.states];
+  // Attaque naturelle : états de la touche (Langue, Constricteur, Toile, Souffle) selon le plan du Trait ; rappels du plan joints au détail.
+  const naturalPlan = naturalPlanOf(actor, normalized.v5), naturalReminders = [], { actorSize: naturalActorSize, targetSize: naturalTargetSize } = naturalSizes(normalized.v5);
+  const naturalHitStates = [];
+  if (naturalPlan) {
+    naturalReminders.push(...naturalPlan.reminders);
+    unresolved.push(...naturalPlan.unresolved.filter(text => !/Trait absent|déjà/.test(text)));
+    const dealt = damage?.finalDamage > 0, smaller = Number.isInteger(naturalActorSize) && Number.isInteger(naturalTargetSize) && naturalActorSize > naturalTargetSize;
+    for (const effect of naturalPlan.effects) {
+      if (!effect.state || !hit || !attackType(action.type) || !target || replacement) continue;
+      const applies = effect.trigger === 'touche' || effect.trigger === 'cible perdante' || (effect.trigger === 'dégâts' && dealt) || (effect.trigger === 'cible plus petite blessée' && dealt && smaller);
+      if (applies) naturalHitStates.push({ id: `${normalized.resolutionId}:natural:${naturalPlan.key}:${foldKey(effect.state)}`, key: foldKey(effect.state), name: effect.state, level: 1, source: { kind: 'creature', trait: naturalPlan.key, ...(Number.isInteger(effect.strength) ? { strength: effect.strength } : {}) } });
+    }
+  }
+  const targetConditionApplication = [...(criticalBlock?.application?.states || []).map(row => ({ ...clone(row), source: { ...(row.source || {}), kind: 'critical' } })), ...weaponConditions.proposed,...magicHitStates,...naturalHitStates,...special.states];
   const conditionChanges = {}, talentUsageRequests = [], conditionTalentPlans = [];
   const conditionPlan = (participant, states, role, authorId) => {
     if (!participant || !states?.length) return;
@@ -830,7 +856,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     talentSLChoices: { actor: actorPlan.talentSLChoices || [], defender: defenderPlan?.talentSLChoices || [] },
     weaponConditions,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,
-    reminders: [...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    reminders: [...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved,

@@ -66,7 +66,7 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
   // Combat naturel (T2) : l'attaque gratuite d'un Trait de créature coûte l'Élan qu'il indique ; le Trait est exigé.
   if(context.naturalAttack){
-    const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,charged:context.charged,actorSize:context.actorSize,targetSize:context.targetSize});
+    const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,charged:context.charged??v5.charging,actorSize:context.actorSize??v5.actorSize,targetSize:context.targetSize??v5.targetSize});
     if(natural.unresolved.some(r=>/Trait absent|déjà/.test(r)))throw new TypeError(natural.unresolved.join(' '));
     for(const cost of natural.costs)if(!costs.some(c=>c.resource===cost.resource))costs.push({id:'creature:'+context.naturalAttack+':'+cost.resource,...cost});
     if(natural.quota)quotas.push(natural.quota);

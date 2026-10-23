@@ -155,10 +155,10 @@ export function planCreatureMagic(participant, key, options = {}) {
     plan.effects.push({ table: 'corruption physique', drawnBy: 'MJ' });
   } else if (key === 'trained') {
     const wanted = options.skill ? trainedSkill(options.skill) : null;
-    const skill = trainedSkill(owned.detail) ?? (owned.detail ? owned.detail : null);
-    if (!skill && !wanted) plan.unresolved.push('Dressé : compétence non imprimée, à saisir.');
-    const chosen = wanted ?? skill;
-    if (chosen) {
+    // « Trained (Drive, Fetch) » : une compétence par élément, chacune avec son effet.
+    const printed = String(owned.detail ?? '').split(/\s*(?:,|;|\band\b|\bet\b)\s*/i).map(part => part.trim()).filter(Boolean).map(part => trainedSkill(part) ?? part);
+    if (!printed.length && !wanted) plan.unresolved.push('Dressé : compétence non imprimée, à saisir.');
+    for (const chosen of wanted ? [wanted] : [...new Set(printed)]) {
       plan.effects.push({ trainedSkill: chosen });
       if (TRAINED_EFFECTS[chosen]) plan.effects.push({ trainedEffect: { skill: chosen, ...TRAINED_EFFECTS[chosen] } });
       if (chosen in TRAINED_DR) plan.tests.push({ skill: 'Dressage', attr: 'maître', base: null, bonus: TRAINED_DR[chosen], reason: `ordre « ${chosen} » du maître (valeur du maître saisie)` });

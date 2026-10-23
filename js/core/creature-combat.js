@@ -16,7 +16,7 @@ const RULES = {
   tail: { fr: 'Attaque caudale', names: ['tail', 'attaque caudale'], cost: MOMENTUM, bf: 2, test: 'CC', smallerEffect: 'À terre', note: 'Une cible plus petite blessée devient À terre.' },
   stomp: { fr: 'Piétinement', names: ['stomp', 'pietinement'], cost: MOMENTUM, bf: 0, test: 'CC', skill: 'Corps à corps (Bagarre)', smallerOnly: true, note: 'Attaque de Bagarre contre une créature plus petite.' },
   tentacles: { fr: 'Tentacules', names: ['tentacles', 'tentacules'], bf: 0, test: 'CC', perDetail: true, effect: 'Enchevêtré', note: 'Une attaque gratuite par tentacule ; les dégâts peuvent donner Enchevêtré puis une empoignade.' },
-  tongue: { fr: 'Langue préhensile', names: ['tongue', 'langue', 'langue prehensile'], cost: MOMENTUM, bf: 0, test: 'CT', ranged: true, smallerOnly: true, onHit: 'Enchevêtré', note: 'Si l\'attaque touche : un Enchevêtré, et la cible plus petite est attirée au contact ; choix : libérer, attaque supplémentaire ou empoignade.' },
+  tongue: { fr: 'Langue préhensile', names: ['tongue', 'langue', 'langue prehensile'], cost: MOMENTUM, bf: 0, test: 'CT', ranged: true, pullsSmaller: true, onHit: 'Enchevêtré', note: 'Si l\'attaque touche : un Enchevêtré, et la cible plus petite est attirée au contact ; choix : libérer, attaque supplémentaire ou empoignade.' },
   constrictor: { fr: 'Constricteur', names: ['constrictor', 'constricteur'], onHit: 'Enchevêtré', note: 'Toute touche donne Enchevêtré, puis une empoignade est possible.' },
   web: { fr: 'Toile', names: ['web', 'toile'], onHit: 'Enchevêtré', entangleFromDetail: true, note: 'Une touche donne un Enchevêtré dont la Force est la valeur du Trait.' },
   chill: { fr: 'Étreinte glaciale', names: ['chill grasp', 'etreinte glaciale'], cost: MOMENTUM, test: 'CC', opposed: 'Esquive ou Corps à corps', direct: '1d10+DR', magical: true, note: 'CC opposée ; 1d10 + DR Blessures directes ; attaque magique.' },
@@ -87,7 +87,10 @@ export function planNaturalAttack(participant, key, options = {}) {
     else plan.damageFormula = `${bonus + rule.bf}`;
   }
   if (key === 'breath') {
-    const type = BREATH_TYPES[BREATH_BY_NAME.get(fold(owned.detail))];
+    const printedType = fold(owned.detail);
+    const type = BREATH_TYPES[BREATH_BY_NAME.get(printedType) ?? BREATH_BY_NAME.get(printedType.split(/[\s-]+/)[0])];
+    if (!type) plan.unresolved.push(`Souffle${owned.detail ? ` (${owned.detail})` : ''} : type absent des cas du livre de base (p.357), dégâts et états à arbitrer à la main.`);
+    else if (!type.names.includes(printedType)) plan.reminders.push(`Précision du profil : ${owned.detail}.`);
     plan.reminders.push('Zone : la cible vue à 20 + BE yards et toutes les créatures à BF yards autour d\'elle ; un seul jet de l\'attaquant, opposé à chaque cible.');
     if (type) {
       plan.reminders.push(`Souffle de ${type.fr}${type.add === undefined ? '' : ` : dégâts B${type.stat === 'F' ? 'F' : 'E'}+${type.add}`}.`);
@@ -103,6 +106,12 @@ export function planNaturalAttack(participant, key, options = {}) {
   if (rule.cost) plan.costs.push({ ...rule.cost });
   if (rule.costs) plan.costs.push(...rule.costs);
   if (rule.requires === 'charge' && options.charged !== true) plan.unresolved.push(`${rule.fr} : une Charge est requise.`);
+  if (rule.pullsSmaller) {
+    // Livre de base p.362 : l'Enchevêtré s'applique quelle que soit la Taille ; seule une cible plus petite est attirée au contact.
+    const { actorSize, targetSize } = options;
+    if (Number.isInteger(actorSize) && Number.isInteger(targetSize)) plan.reminders.push(actorSize > targetSize ? 'Langue : la cible, plus petite, est attirée au contact.' : 'Langue : la cible n\'est pas plus petite, elle n\'est pas attirée.');
+    else plan.reminders.push('Langue : seule une cible plus petite est attirée au contact (Tailles non précisées).');
+  }
   if (rule.smallerOnly) {
     const { actorSize, targetSize } = options;
     if (!Number.isInteger(actorSize) || !Number.isInteger(targetSize)) plan.unresolved.push(`${rule.fr} : Tailles de l'auteur et de la cible à préciser.`);

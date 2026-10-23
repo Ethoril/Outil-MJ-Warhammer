@@ -9,6 +9,7 @@ import {renderSituationFields,renderSupportFields} from './v5-talent-situations.
 import { renderV5TalentMeasures } from './v5-talent-measures.js';
 import { V5_ACTIVATED_TALENTS,knownV5MartialQualities,noTestV5TalentAction }  from '../core/v5-talent-actions.js';
 import { inferV5Kind, hasMomentum } from '../core/v5-combat-rules.js';
+import { naturalCombatTraits } from '../core/creature-combat.js';
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../core/talent-contracts.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext } from '../core/equipment.js';
@@ -1200,6 +1201,16 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if (action.mod && draft.v5SlModifier == null && action.extensions?.v5?.slModifier == null) v5.appendChild(node('p','workspace-field-error',`Ancien modificateur de seuil ${signed(action.mod)} : saisissez les DR V5 retenus.`));
   numberField('v5Advantages','Sources supplémentaires d’Avantage',draft.v5Advantages || 0,0);
   numberField('v5Disadvantages','Sources de Désavantage',draft.v5Disadvantages || 0,0);
+  // Attaque naturelle d'un Trait de créature (Langue, Souffle, Cornes…) : posée dans le contexte, lue par la résolution et le Store.
+  const naturalTraits = type === 'attack' ? naturalCombatTraits(actor).filter(trait => trait.key !== 'v4-weapon') : [];
+  if (naturalTraits.length) {
+    const label = node('label','workspace-type','Attaque naturelle (Trait de créature)'), select = document.createElement('select');
+    select.setAttribute('aria-label','Attaque naturelle'); select.append(new Option('Attaque ordinaire de l’action',''));
+    for (const trait of naturalTraits) select.append(new Option(`${trait.name}${trait.detail ? ` (${trait.detail})` : ''}`, trait.key));
+    select.value = draft.v5Context?.naturalAttack || '';
+    select.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), naturalAttack: select.value || undefined } }));
+    label.append(select); v5.appendChild(label);
+  }
   if (kind.value === 'melee' && type === 'attack') {
     const charge = node('label','workspace-type'); const check = document.createElement('input'); check.type='checkbox'; check.checked=draft.charging === true;
     check.addEventListener('change',()=>handlers.select({charging:check.checked})); charge.append(check,'Charge donnant Élan (distance et conditions vérifiées)'); v5.appendChild(charge);
@@ -1324,7 +1335,7 @@ export function renderResolutionPanel({ draft, actor, participants=[], actions, 
   if(type==='attack'&&target&&draft.charging&&hasV5Talent(target,'talent-slayer')&&!draft.beatBlade){for(const[key,text]of[['actorSize','Taille du chargeur'],['targetSize','Taille de la cible chargée']]){const label=node('label','workspace-type',text);const choice=document.createElement('select');choice.setAttribute('aria-label',text);choice.append(new Option('À préciser',''));['Minuscule','Très petite','Petite','Moyenne','Grande','Énorme','Monstrueuse'].forEach((name,index)=>choice.append(new Option(name,String(index))));choice.value=draft[key]==null?'':String(draft[key]);choice.addEventListener('change',()=>handlers.select({[key]:choice.value===''?null:Number(choice.value)}));label.append(choice);v5.append(label);}}
   if(type==='attack'&&target){const guards=participants.filter(p=>p.id!==actor.id&&p.id!==target.id&&p.camp===target.camp&&hasV5Talent(p,'talent-kingsguard'));for(const guard of guards){const label=node('label','workspace-type');const check=document.createElement('input');check.type='checkbox';check.checked=(draft.v5Context?.nearbyGuardIds||[]).includes(guard.id);check.setAttribute('aria-label','Garde royal à deux yards : '+guard.name);check.addEventListener('change',()=>{const ids=(draft.v5Context?.nearbyGuardIds||[]).filter(id=>id!==guard.id);if(check.checked)ids.push(guard.id);handlers.select({v5Context:{...draft.v5Context,nearbyGuardIds:ids}});});label.append(check,'Garde royal à deux yards : '+guard.name);v5.append(label);}}
   const current={...(action.extensions?.v5?.initialContext||{}),...(draft.v5Context||{})};
-  if(['frightening','large-fear','stomp','large-disengage'].includes(current.talentAction)||['disarm'].includes(current.specialAttack)||hasV5Talent(actor,'talent-large')||hasV5Talent(target,'talent-large')||hasV5Talent(actor,'talent-small')||hasV5Talent(target,'talent-small')||current.specialAttack==='whirlwind-of-death'&&participants.some(p=>(current.engagedIds||[]).includes(p.id)&&hasV5Talent(p,'talent-small'))){for(const[key,text]of[['actorSize','Taille de l’auteur'],['targetSize','Taille de la cible']]){const label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('À préciser',''));['Minuscule','Très petite','Petite','Moyenne','Grande','Énorme','Monstrueuse'].forEach((name,index)=>select.append(new Option(name,String(index))));select.value=draft[key]==null?'':String(draft[key]);select.addEventListener('change',()=>handlers.select({[key]:select.value===''?null:Number(select.value)}));label.append(select);v5.append(label);}}
+  if(['frightening','large-fear','stomp','large-disengage'].includes(current.talentAction)||['tongue','stomp'].includes(current.naturalAttack)||['disarm'].includes(current.specialAttack)||hasV5Talent(actor,'talent-large')||hasV5Talent(target,'talent-large')||hasV5Talent(actor,'talent-small')||hasV5Talent(target,'talent-small')||current.specialAttack==='whirlwind-of-death'&&participants.some(p=>(current.engagedIds||[]).includes(p.id)&&hasV5Talent(p,'talent-small'))){for(const[key,text]of[['actorSize','Taille de l’auteur'],['targetSize','Taille de la cible']]){const label=node('label','workspace-type',text),select=document.createElement('select');select.setAttribute('aria-label',text);select.append(new Option('À préciser',''));['Minuscule','Très petite','Petite','Moyenne','Grande','Énorme','Monstrueuse'].forEach((name,index)=>select.append(new Option(name,String(index))));select.value=draft[key]==null?'':String(draft[key]);select.addEventListener('change',()=>handlers.select({[key]:select.value===''?null:Number(select.value)}));label.append(select);v5.append(label);}}
   if(current.talentAction==='frenzy' && magicTalentRank(actor,'suffuse-with','Aqshy')){
     const label=node('label','workspace-type','Compétence du Test de Frénésie'),select=document.createElement('select');
     select.setAttribute('aria-label',label.textContent);select.append(new Option('Force Mentale','FM'),new Option('Focalisation (Aqshy)','Aqshy'));select.value=current.magicSuffusedWind==='Aqshy'?'Aqshy':'FM';
