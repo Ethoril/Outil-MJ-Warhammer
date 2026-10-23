@@ -41,8 +41,13 @@ export function removeExpiredSummons(envelope,{deferCurrent=true}={}) {
     const {summonCastExecutionId,summonOwnerId,hostileOnExpiry,...rest}=data;
     const owner=combat.participants.find(x=>x.id===summonOwnerId);
     const casterCamp=data.summonCasterCamp || owner?.camp;
-    const reminder='Ordre accompli : retirez le démon (hostile au lanceur, il reste en jeu tant que le MJ ne le retire pas).';
-    return {...p,camp:oppositeCamp(casterCamp),notes:p.notes?`${p.notes} ${reminder}`:reminder,extensions:{...p.extensions,v5:{...rest,hostileAfterExpiry:true}}};
+    // « Le démon l'emporte » : il attaquait déjà, aucun ordre n'a été accompli.
+    const reminder=data.summonOutcome==='attacks'
+      ?'La durée est écoulée : le démon, hostile au lanceur, reste en jeu tant que le MJ ne le retire pas.'
+      :'Ordre accompli : retirez le démon (hostile au lanceur, il reste en jeu tant que le MJ ne le retire pas).';
+    // `extensions.v5.reminders` est lu par deriveReminders (affichage en combat) ; `notes` garde le texte pour la fiche.
+    const reminders=[...(rest.reminders || []).filter(r=>r.id!=='demon-expired'),{id:'demon-expired',text:reminder}];
+    return {...p,camp:oppositeCamp(casterCamp),notes:p.notes?`${p.notes} ${reminder}`:reminder,extensions:{...p.extensions,v5:{...rest,reminders,hostileAfterExpiry:true}}};
   });
   const participants=candidates.filter(p=>{
     const data=p.extensions?.v5;

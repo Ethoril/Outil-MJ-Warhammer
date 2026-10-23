@@ -696,7 +696,7 @@ export function resolveAuxiliarySummons({ contract, caster, options = {} } = {})
       const built=buildParticipantFromBestiary(profileId,{library:summonProfileLibrary(),camp,zone:'active',idFactory:()=>'aux-'+contract.id+'-'+uid()+'-'+(i+1)});
       auxiliaries.push({...built,name:total>1?label+' '+(i+1):label,traits:[...built.traits,...(spec.traits || []).filter(t=>!built.traits.includes(t))],
         states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1})),isAuxiliary:true,casterId:caster.id,noMomentum:false,
-        extensions:{v5:{...built.extensions.v5,summonedBySpellId:contract.id,...(spec.hostileOnExpiry?{hostileOnExpiry:true,summonCasterCamp:caster.camp}:{})}}});
+        extensions:{v5:{...built.extensions.v5,summonedBySpellId:contract.id,...(spec.hostileOnExpiry?{hostileOnExpiry:true,summonCasterCamp:caster.camp,summonOutcome:facts[spec.outcomeFact]==='attacks'?'attacks':'obeys'}:{})}}});
     }
   } else if (contract.effects?.summon?.indestructible) {
     const spec={...contract.effects.summon},sl=options.castingSl || 0;if(spec.wsFormula)spec.ws=spellFormulaValue(spec.wsFormula,caster);

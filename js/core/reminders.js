@@ -80,10 +80,23 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
       candidates.push({ kind: 'reinforcement', effectId: item.id, text: item.text || 'Renfort attendu', mode: 'reminder', payload: clone(item) });
     }
   }
+  // Rappels portés par un participant (`extensions.v5.reminders` : armure non déterminée du bestiaire, démon expiré).
+  for (const person of Array.isArray(snapshot.participants) ? snapshot.participants : []) {
+    if (!person?.id || person.zone === 'bench') continue;
+    for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {
+      if (!note?.id || typeof note.text !== 'string') continue;
+      candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:${note.id}`, text: `${person.name || 'Participant'} : ${note.text}`, mode: 'reminder' });
+    }
+  }
   const selected = [];
   const seen = new Set();
   const priorChoices = new Map((Array.isArray(choices) ? choices : []).map(choice => [choice.id, choice]));
+  // Un rappel de participant résolu ou ignoré ne revient pas aux transitions suivantes (son id dépend du Round).
+  const settledParticipantReminders = new Set((Array.isArray(choices) ? choices : [])
+    .filter(choice => [REMINDER_DECISIONS.RESOLVE, REMINDER_DECISIONS.IGNORE].includes(choice?.decision || choice?.choice?.decision))
+    .map(choice => String(choice.id)).filter(id => id.includes(':participant-reminder:')).map(id => id.slice(id.indexOf(':participant-reminder:'))));
   for (const candidate of candidates) {
+    if (candidate.kind === 'participant-reminder' && settledParticipantReminders.has(`:participant-reminder:${candidate.effectId}`)) continue;
     const item = reminder(candidate, sceneId, transitionId);
     if (seen.has(item.id)) continue;
     seen.add(item.id);

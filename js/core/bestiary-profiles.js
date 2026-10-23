@@ -106,6 +106,8 @@ const CATALOGUE_PIECES = Object.freeze({ 'mail coat': 'Cotte de mailles', 'mail 
 const CATALOGUE_ZONE = Object.freeze({ head: 'head', body: 'body', rightArm: 'arms', leftArm: 'arms', rightLeg: 'legs', leftLeg: 'legs' });
 
 const namedZones = text => Object.keys(DETAIL_ZONES).filter(key => DETAIL_ZONES[key].test(text || ''));
+/** Vrai quand le `detail` d'armure nomme des zones du corps (sinon c'est une pièce ou un texte libre). */
+export const armourDetailNamesZones = detail => namedZones(detail).length > 0;
 
 function cataloguePieceZones(name) {
   const french = CATALOGUE_PIECES[name.toLowerCase().replace(/\s+/g, ' ').trim()];
@@ -202,7 +204,8 @@ export function buildParticipantFromBestiary(id, options = {}) {
     actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).flatMap(attackActions),
     skills: (record.skills || []).map(skill => ({ name: skill.nameFr || skill.name, total: skill.value })),
     traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: armourReminder,
-    extensions: { v5: { bestiary: {
+    // `extensions.v5.reminders` : rappels affichés en combat par `deriveReminders` (js/core/reminders.js) ; `notes` n'est lu par aucune carte.
+    extensions: { v5: { ...(armourReminder ? { reminders: [{ id: 'armour-unresolved', text: armourReminder }] } : {}), bestiary: {
       id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
       armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
       optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {}),

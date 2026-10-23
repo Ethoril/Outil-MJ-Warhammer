@@ -24,6 +24,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q14 | FAIT (sorts lus, fiche et participant ; manques restants justifiés `QE-Q14-4`) | (voir `git log`, « Q14 ») |
 | Q15 | FAIT (zéro U+FFFD dans les 23 livres ; noms de talents rattachés, `QE-Q15-1` à `QE-Q15-4`) | (voir `git log`, « Q15 ») |
 | Q16 | FAIT (`QE-Q16-1`, `QE-Q16-2`) | (voir `git log`, « Q16 ») |
+| Q17 | FAIT (`QE-Q17-1` à `QE-Q17-4`) | (voir `git log`, « Q17 ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -234,3 +235,9 @@ Branché / non appelé (grep dans `js/`) :
 - `js/core/bestiary-profiles.js` (`attackActions`) : une attaque à `count` ≥ 2 donne autant d’actions (« Claws 1 », « Claws 2 » ; Kraken : 8 Tentacles), chacune marquée `multiAttack` et attaque gratuite `all` par défaut ; `validateBestiaryRecord` refuse un multiplicateur invalide ; la fiche de la bibliothèque affiche « 2 × Claws ». Source : L06 p. 362 (Bog Octopus). Choix : `QE-Q16-1`.
 - Test : `tests/pro-q16-attaques-multiples.test.js` (4 tests, sur le **participant** et la copie de Réserve). Assertion mise à jour : `pro-b1-participant` (`QE-Q16-2`). Suite complète lancée une fois : 4368 réussis, 1 échec (cette assertion), corrigé et relancé en vert.
 - **Branché** : `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`, `js/core/v5-spell-contracts.js`) produit les actions ; chemin d’interface : bibliothèque du bestiaire → « Ajouter au combat ». `multiAttack` et `freeAttack` ne sont lus par aucun module de `js/` (code testé, non appelé pour ces deux marques : informatives).
+
+## Q17 — rappels réellement visibles (FAIT)
+
+- `js/core/reminders.js` (`deriveReminders`) : chaque entrée de `participant.extensions.v5.reminders` (participants hors banc) devient un rappel `participant-reminder` « Nom : texte » ; une décision Résoudre/Ignorer vaut pour les Rounds suivants. `buildParticipantFromBestiary` pose `armour-unresolved` (armure inconnue, Q6) ; `removeExpiredSummons` pose `demon-expired` (Q7) avec un texte selon l'issue (`summonOutcome`, posé par `v5-spell-contracts.js`) : le démon qui l'emporte n'a plus « ordre accompli ». La copie de Réserve garde le rappel (via `extensions`). Fiche de la bibliothèque : « zones : » seulement si `detail` nomme une zone, sinon « détail : ». Choix : `QE-Q17-1` à `QE-Q17-4`.
+- Test : `tests/pro-q17-rappels-visibles.test.js` (7 tests : rappel par `deriveReminders` sur le participant, Réserve, résolution persistante, démon des deux issues via le Store). Suite complète lancée une fois : 4376 réussis, 0 échec.
+- **Branché (appelant + chemin d'interface)** : `deriveReminders` ← `Store.getReminders` (js/core/store.js) ← `openRemindersView` et `renderWorkspaceOverview` (js/main.js, « Rappels de séance » et « À traiter » de Jouer) ; `getReminders` lit `activeScene.participants`, recopié des participants du combat (store.js l. 487). Je n'ai pas lancé l'interface dans un navigateur : le rendu est établi par lecture du code et par test de `deriveReminders`, pas par capture. `armourDetailNamesZones` ← `js/ui/bestiary-library.js`.
