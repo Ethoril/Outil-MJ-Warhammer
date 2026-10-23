@@ -3,6 +3,7 @@ import {randomVortexStep} from './v5-magic-turn.js';
 import {buildParticipantFromBestiary,summonProfileLibrary} from './bestiary-profiles.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
 import {spellAttackNature,previewMagicProtection} from './v5-magic-combat.js';
+import {magicResistanceReduction} from './creature-magic.js';
 import {getV5Fortune} from './v5-resources.js';
 import { consumeDivineLayers } from './v5-divine-effects-gear.js';
 const spellCriticalSeverityReminder = actor => {
@@ -1729,7 +1730,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       if(answer?.nearest!==true || !Number.isFinite(answer.distance) || answer.distance<0 || answer.distance>bfm)return {ready:false,valid:false,status:'mj-fact-required',error:'Rebond : confirmer la cible la plus proche et sa distance dans BFM mètres.',contract};
     }
     if(effects.durationMode?.willingOnly && domainFacts[effects.durationMode.fact]===effects.durationMode.longMode && options.targetTests?.[target.id]?.unwilling===true)return {ready:false,valid:false,status:'invalid-target',error:'Hibernation : cible consentante requise (WoM p. 146).',contract};
-    const resistanceReduction = magicTalentRank(target,'magic-resistance') ? 3 : 0;
+    const resistanceReduction = Math.max(magicTalentRank(target,'magic-resistance') ? 3 : 0, magicResistanceReduction(target));
     const sl = (castingPreview?.totalCastingSl ?? ((explicitSl ?? castingPreview?.testSl ?? 0)+matchingReserveSl)) - resistanceReduction;
     const targetTotalCastingSl = (castingPreview?.totalCastingSl ?? options.totalCastingSl ?? ((explicitSl ?? castingPreview?.testSl ?? 0)+matchingReserveSl)) - resistanceReduction;
     const targetReceipt = {
