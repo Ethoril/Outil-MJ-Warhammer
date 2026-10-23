@@ -26310,5 +26310,681 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0002",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.7",
+    "question": "Implanter « Aura de sainteté : autres dons » ? Une relique peut accorder au fidèle du même dieu qui la tient Béni, Invocation, Visions sacrées, Âme pure ou un autre talent approprié décidé par le MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0004",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.7",
+    "question": "Implanter « Relique : signes de faveur » ? Après une Prière de miracle réussie, recevoir en plus une Bénédiction du dieu choisie par le MJ ; une réussite critique en donne deux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0005",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.7",
+    "question": "Implanter « Crâne d’Englebrecht : Enflammé » ? Posséder le crâne d’Englebrecht rend immunisé à l’état Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0006",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.7",
+    "question": "Implanter « Fer de hache de Margritte » ? Porter même un fragment de cette relique ajoute un dégât aux haches maniées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0009",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.18",
+    "question": "Implanter « Magie sauvage : remplacer les incidents » ? À Altdorf ou dans les neuf autres lieux sous le regard de Tzeentch après récupération de Ghal Maraz, le MJ peut remplacer la table d’incidents par la table de magie sauvage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0014",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 36–45 : reflux chaotique » ? Les créatures Démoniaques à 2d10 yards réduisent leur Target number de d10 pour ce Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0015",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 46–55 : feu rose » ? Toute tentative de sort à 2d10 yards produit à la place un projectile magique à +6 dégâts ignorant l’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0016",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 56–65 : équilibre précaire » ? Résoudre les tables d’Incantations imparfaites ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0017",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 66–75 : œil de la tempête » ? Aucun effet ne se produit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0018",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 76–85 : afflux magique » ? Effectuer deux jets sur les tables d’Incantations imparfaites ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0019",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 86–90 : crise rose » ? Les créatures Démoniaques à d10 yards ne peuvent ni bouger ni agir ce Round ; à sa fin, chacune produit une Horreur rose à côté d’elle sans être blessée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0020",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 91–94 : poussée chaotique » ? Les créatures Démoniaques à d10 yards gagnent +1 à leur Target number pour ce Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0021",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 95–99 : possession » ? Un lanceur ennemi PNJ ou monstre à 2d10 yards : Volonté −1 DR ou agoniser ce Round puis mourir en libérant un démon ; sans cible, aucun effet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0022",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.19",
+    "question": "Implanter « Magie sauvage 100 : appel de l’au-delà » ? d10 entités démoniaques appropriées apparaissent près du lanceur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0024",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.20",
+    "question": "Implanter « Frénésie induite : Action et cible » ? Marsie touche et consacre une Action pour activer le pouvoir ; elle choisit la première victime à quatre yards, sans contrôle sur la suite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0025",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.20",
+    "question": "Implanter « Possession : examen du corps » ? Examiner le corps qui se débat impose −2 DR aux Tests concernés ; le démon commence à émerger après d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0026",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.20",
+    "question": "Implanter « Possession : libération du démon » ? Le démon fait Agilité étendue, cinq DR ; chaque DR restant représente un Entravé. Libéré, il attaque le mortel le plus proche.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0028",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.21",
+    "question": "Implanter « Feu du Warp : échec de Résistance » ? Échec de Résistance : dégâts ordinaires du Souffle et un Enflammé ; tant que cet état dure, exposition mineure à la Corruption à chaque Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0029",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.21",
+    "question": "Implanter « Feu du Warp : Résistance réussie » ? Réussir Résistance annule les dégâts du Souffle et donne Régénération pendant d10 Rounds ; les différences de chair guérie n’ont aucun effet chiffré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0032",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.24",
+    "question": "Implanter « Coche animé : arrêt » ? Arrêter ce coche exige Force −3 DR et cinq DR en un seul Round ; six participants au plus peuvent aider.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0033",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.24",
+    "question": "Implanter « Coche animé : timons » ? Ses deux timons servent de gourdins à allonge Longue et dégâts BF + six, en plus du Piétinement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0034",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.25",
+    "question": "Implanter « Demi-carcasse : localisations absentes » ? Contre la carcasse de porc coupée en deux et sans tête, les touches au bras gauche, à la jambe gauche ou à la tête ratent automatiquement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0035",
+    "phase": "Voyage et environnement",
+    "lot": "L21",
+    "source": "L21 p.26",
+    "question": "Implanter « Brouillard chaotique : gaz somnifère » ? Le gaz somnifère impose Résistance +0 ou Inconscient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0036",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.32",
+    "question": "Implanter « Vacarme gobelin : Assourdi » ? À dix yards du groupe de musiciens gobelins, Endurance −1 DR ou un Assourdi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0037",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.34",
+    "question": "Implanter « Plongeur de la mort : approche » ? Le plongeur atteint sa cible en deux Tours ; à chaque Tour, Athlétisme +2 DR ou chute, collision ou ailes rompues le retire de l’attaque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0038",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.34",
+    "question": "Implanter « Plongeur de la mort : impact » ? Après les deux Tours, une cible tirée au hasard reçoit +12 dégâts, sauf Athlétisme −1 DR réussi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0039",
+    "phase": "Équipement et artisanat",
+    "lot": "L21",
+    "source": "L21 p.33",
+    "question": "Implanter « Bombe acide : profil » ? La bombe acide a encombrement zéro, portée BF, Explosion deux, Dangereuse et Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0040",
+    "phase": "Équipement et artisanat",
+    "lot": "L21",
+    "source": "L21 p.33",
+    "question": "Implanter « Bombe acide : dégâts » ? Toute cible frappée perd d10 Blessures, réduites par le BE et l’armure selon la clause imprimée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0041",
+    "phase": "Équipement et artisanat",
+    "lot": "L21",
+    "source": "L21 p.33",
+    "question": "Implanter « Sauce de Gitface » ? L’acide peut dissoudre les chaînes ; sa sauce rend ce qu’elle enduit irrésistible au Squig de la scène.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0042",
+    "phase": "Équipement et artisanat",
+    "lot": "L21",
+    "source": "L21 p.53",
+    "question": "Implanter « Amulette de jade » ? Le porteur de l’amulette de jade gagne Régénération.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0043",
+    "phase": "Équipement et artisanat",
+    "lot": "L21",
+    "source": "L21 p.53",
+    "question": "Implanter « Lame de Corruption » ? Une cible blessée par cette arme doit résoudre une exposition modérée à la Corruption.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0044",
+    "phase": "Équipement et artisanat",
+    "lot": "L21",
+    "source": "L21 p.58",
+    "question": "Implanter « Médaillon : Focalisation » ? Le médaillon ajoute un DR aux Tests de Focalisation déjà réussis de son porteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0045",
+    "phase": "Équipement et artisanat",
+    "lot": "L21",
+    "source": "L21 p.58",
+    "question": "Implanter « Spirale mystique : Chance » ? Le porteur de la pierre reçoit un Point de Chance supplémentaire par séance, jusqu’à la manifestation de Sheerargetru.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0051",
+    "phase": "Maladies et poisons",
+    "lot": "L21",
+    "source": "L21 p.74",
+    "question": "Implanter « Poison : résister à la cuisson » ? Pour qu’un poison cru résiste à la cuisson prolongée décrite, Métier (Apothicaire) −3 DR ou Métier (Empoisonneur) +0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0052",
+    "phase": "Maladies et poisons",
+    "lot": "L21",
+    "source": "L21 p.75",
+    "question": "Implanter « Purge de Taal : récolte » ? Survie ou Savoir (Plantes) +0 permet de trouver les herbes et champignons nécessaires à la purge de Taal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0053",
+    "phase": "Maladies et poisons",
+    "lot": "L21",
+    "source": "L21 p.75",
+    "question": "Implanter « Purge de Taal : préparation » ? Métier (Poisons) +2 DR permet de mélanger la purge ; Métier (Cuisine) +0 peut en masquer quelque peu goût et odeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0054",
+    "phase": "Maladies et poisons",
+    "lot": "L21",
+    "source": "L21 p.75",
+    "question": "Implanter « Purge de Taal : ingestion » ? Résistance −2 DR ou un Empoisonné et besoin de déféquer au moins toutes les dix minutes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0055",
+    "phase": "Voyage et environnement",
+    "lot": "L21",
+    "source": "L21 p.76",
+    "question": "Implanter « Fumée de grange : épuisement » ? Dans la grange en feu, après trois Rounds, Résistance à chaque Round ou un Exténué ; premier Test +4 DR puis difficulté croissante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0056",
+    "phase": "Voyage et environnement",
+    "lot": "L21",
+    "source": "L21 p.76",
+    "question": "Implanter « Fumée de paille : délai » ? Si la paille intérieure est incendiée, les Tests de Résistance contre l’Exténué commencent après deux Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0057",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.83",
+    "question": "Implanter « Red : influence initiale » ? Hors protection du temple, un humain à moins de vingt pieds pendant plus de douze heures fait Volonté +6 DR ; échec, Red peut contrôler une personne à la fois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0058",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.83",
+    "question": "Implanter « Red : commander » ? Une fois par heure, Red peut imposer une tâche ; la victime refait Volonté avec difficulté choisie par le MJ selon la demande.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0059",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.83",
+    "question": "Implanter « Red : se blesser » ? Volonté +6 DR pour résister à une demande de se blesser.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0060",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.83",
+    "question": "Implanter « Red : attaquer sans habitude » ? Volonté +4 DR pour résister à attaquer quelqu’un si la victime n’y est pas habituée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0061",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.83",
+    "question": "Implanter « Red : attaque de soldat » ? Volonté +2 DR pour résister à attaquer quelqu’un si la victime est un soldat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0062",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.83",
+    "question": "Implanter « Red : sabotage sans grand risque » ? Volonté +0 pour résister à un sabotage peu risqué pour la victime.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0063",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.83",
+    "question": "Implanter « Red : fin de contrôle » ? Après la tâche ou une résistance réussie, le contrôle cesse ; la source impose ensuite Rattled.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0064",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.111",
+    "question": "Implanter « Huile de Morr : arme contre les esprits » ? Une arme enduite peut blesser les morts-vivants éthérés normalement vulnérables aux seules armes magiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0065",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.111",
+    "question": "Implanter « Huile de Morr : fin d’effet » ? Une application dure une heure dans de bonnes conditions ; pluie forte ou immersion peut l’ôter plus tôt ; blesser un vivant l’inactive aussitôt.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0066",
+    "phase": "Magie générale et objets",
+    "lot": "L21",
+    "source": "L21 p.111",
+    "question": "Implanter « Huile de Morr : création et conservation » ? Un prêtre dévot de Morr la prépare au besoin durant une nuit de prières ; elle reste efficace une année en réserve.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0067",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.112",
+    "question": "Implanter « Grande bibliothèque : renverser un rayonnage » ? Pour renverser ce lourd rayonnage, Force −3 DR ; huit participants au plus peuvent aider.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0068",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.112",
+    "question": "Implanter « Rayonnage : pluie de livres » ? Une créature sous les livres fait Esquive −1 DR ou reçoit une touche de dégâts 3d10 ; les créatures éthérées sont immunisées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L21-0069",
+    "phase": "Combat et capacités",
+    "lot": "L21",
+    "source": "L21 p.112",
+    "question": "Implanter « Rayonnage : effet domino » ? Une réussite critique en Force fait basculer les rayonnages voisins en chaîne, jusqu’à un mur ou un espace vide.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

@@ -28,7 +28,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | L18 — WFRP_Power_Behind_the_Throne_Companion.pdf | 100 | 0 | 0 | 0 | 96 | 4 |
 | L19 — WFRP-Middenheim-City-of-the-White-Wolf_18.01.2021.pdf | 155 | 0 | 0 | 0 | 152 | 3 |
 | L20 — WFRP_Altdorf_Crown_of_the_Empire.pdf | 62 | 0 | 0 | 0 | 58 | 4 |
-| L21 — WFRP_Empire_in_Ruins_Companion.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
+| L21 — WFRP_Empire_in_Ruins_Companion.pdf | 75 | 0 | 0 | 0 | 74 | 1 |
 | L22 — WFRP_The_Horned_Rat_Enemy_Within_Campaign_Director_s_Cut_Volume_4_Companion1.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L23 — Warhammer_Fantasy_Roleplay_Enemy_in_Shadows_Companion.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L24 — Warhammer_Fantasy_Roleplay_Rough_Nights__Hard_Days_PDF.pdf.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -56,6 +56,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Blessures et soins | 177 | 15 | 1 | 66 | 95 | 0 |
 | Carrières | 3 | 0 | 0 | 0 | 3 | 0 |
 | Combat | 118 | 18 | 11 | 0 | 89 | 0 |
+| Combat et capacités | 34 | 0 | 0 | 0 | 34 | 0 |
 | Combat et terrain | 38 | 0 | 1 | 0 | 37 | 0 |
 | Combat et équipement | 18 | 0 | 0 | 0 | 18 | 0 |
 | Combat — variantes V4 | 17 | 0 | 0 | 0 | 17 | 0 |
@@ -80,7 +81,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Environnement magique | 45 | 0 | 0 | 0 | 45 | 0 |
 | Familiers | 30 | 0 | 10 | 0 | 20 | 0 |
 | Grimoires | 18 | 0 | 0 | 0 | 18 | 0 |
-| Hors granularité | 11 | 0 | 0 | 0 | 0 | 11 |
+| Hors granularité | 13 | 0 | 0 | 0 | 1 | 12 |
 | Incidents magiques | 18 | 0 | 0 | 0 | 18 | 0 |
 | Intrigues et société | 5 | 0 | 0 | 0 | 5 | 0 |
 | Jeux et compétitions | 77 | 0 | 0 | 0 | 76 | 1 |
@@ -88,9 +89,9 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Magie : sorts existants | 32 | 0 | 0 | 0 | 32 | 0 |
 | Magie et traditions | 1 | 0 | 0 | 0 | 1 | 0 |
 | Magie générale | 59 | 14 | 18 | 0 | 26 | 1 |
-| Magie générale et objets | 34 | 0 | 0 | 0 | 32 | 2 |
+| Magie générale et objets | 59 | 0 | 0 | 0 | 57 | 2 |
 | Magie — incidents | 43 | 16 | 4 | 23 | 0 | 0 |
-| Maladies et poisons | 63 | 0 | 0 | 0 | 62 | 1 |
+| Maladies et poisons | 67 | 0 | 0 | 0 | 66 | 1 |
 | Montures | 27 | 0 | 1 | 0 | 26 | 0 |
 | Objets magiques | 89 | 0 | 0 | 2 | 87 | 0 |
 | PNJ — procédures | 14 | 0 | 0 | 0 | 12 | 2 |
@@ -110,12 +111,12 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Tests | 35 | 16 | 2 | 0 | 17 | 0 |
 | Transformations | 5 | 0 | 0 | 0 | 5 | 0 |
 | Vents de magie | 79 | 0 | 0 | 0 | 79 | 0 |
-| Voyage et environnement | 78 | 0 | 0 | 0 | 78 | 0 |
+| Voyage et environnement | 81 | 0 | 0 | 0 | 81 | 0 |
 | Voyage et navigation | 11 | 0 | 0 | 0 | 11 | 0 |
 | Véhicules et combat naval | 59 | 0 | 1 | 0 | 58 | 0 |
 | Véhicules et navigation | 5 | 0 | 0 | 0 | 5 | 0 |
 | Équipement | 5 | 0 | 0 | 0 | 5 | 0 |
-| Équipement et artisanat | 20 | 0 | 0 | 0 | 20 | 0 |
+| Équipement et artisanat | 27 | 0 | 0 | 0 | 27 | 0 |
 | Équipement spécialisé | 20 | 0 | 1 | 0 | 19 | 0 |
 | États | 29 | 12 | 15 | 1 | 1 | 0 |
 
@@ -746,6 +747,43 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L06-0162 — Transférer Élan à un allié** (L06 p.169, absent) : En Action gratuite, perdre Élan et réussir Commandement permet de donner Élan à un allié choisi. Recherche statique dans js/core, js/ui et js/data ; aucun flux complet de cette clause repéré.
 - **F-L06-0163 — Intimider en combat** (L06 p.169, absent) : Voir l’inventaire Brisé pour Intimidation opposée à Calme, Peur produite et variantes contre un groupe. Fonctions spécialisées présentes, mais aucun appel runtime de previewCombatIntimidation hors définition repéré. Égalité = échec de l’intimidateur selon décision MJ du 22/10. Déjà porté par l’inventaire référencé : Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1.
 - **F-L06-0171 — Attribuer Inoffensive aux attaques à mains nues** (L06 p.167, absent) : Sans griffes, crocs ou autre arme naturelle, une attaque à mains nues reçoit Inoffensive. La qualité est exécutée quand l’action la porte ; attribution générale selon arme naturelle non repérée. Son calcul et son attribution sont deux clauses distinctes. Nom/termes FR : Inoffensive (L05 p.299).
+
+### Combat et capacités
+
+- **F-L21-0023 — Mutation : Frénésie induite** (L21 p.20, absent) : Une cible touchée résiste par Volonté −2 DR ; sinon Frénésie jusqu’à une Blessure ou moins. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0024 — Frénésie induite : Action et cible** (L21 p.20, absent) : Marsie touche et consacre une Action pour activer le pouvoir ; elle choisit la première victime à quatre yards, sans contrôle sur la suite. Complément manquant du résumé C0-L21-003, limité à Marsie ; pas choix à chaque attaque ni portée de contact quatre yards.
+- **F-L21-0025 — Possession : examen du corps** (L21 p.20, absent) : Examiner le corps qui se débat impose −2 DR aux Tests concernés ; le démon commence à émerger après d10 Rounds. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0026 — Possession : libération du démon** (L21 p.20, absent) : Le démon fait Agilité étendue, cinq DR ; chaque DR restant représente un Entravé. Libéré, il attaque le mortel le plus proche. Peur des témoins déjà C0-L21-003 ; tirage du type de démon propre à la scène, aucun nouveau profil.
+- **F-L21-0027 — Souffle de feu du Warp : exposition** (L21 p.21, absent) : Après Esquive ratée, Résistance +0 ; réussite ou échec, exposition modérée à la Corruption. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0028 — Feu du Warp : échec de Résistance** (L21 p.21, absent) : Échec de Résistance : dégâts ordinaires du Souffle et un Enflammé ; tant que cet état dure, exposition mineure à la Corruption à chaque Round. E0-T-250 décrit seulement le Test initial et l’exposition modérée ; cette conséquence manque à son résumé. Pas point de Corruption automatique.
+- **F-L21-0029 — Feu du Warp : Résistance réussie** (L21 p.21, absent) : Réussir Résistance annule les dégâts du Souffle et donne Régénération pendant d10 Rounds ; les différences de chair guérie n’ont aucun effet chiffré. Don temporaire distinct du Trait générique ; ni mutation chiffrée ni séquelle psychologique ajoutées.
+- **F-L21-0030 — Incendiaire : source de flammes** (L21 p.21, absent) : Au début de son Tour sans assez d’Avantage pour souffler, d10 ; sur huit ou plus, peut quand même utiliser Souffle. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0031 — Faille et enseignes animées** (L21 p.23, absent) : Regarder la faille impose Terreur quatre ; les enseignes animées sont immunisées à la Psychologie. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0032 — Coche animé : arrêt** (L21 p.24, absent) : Arrêter ce coche exige Force −3 DR et cinq DR en un seul Round ; six participants au plus peuvent aider. Capacité contextuelle autonome, pas reprise du bloc de profil E0. Le socle V5 prime pour l’Assistance ; pas accumulation sur plusieurs Rounds.
+- **F-L21-0033 — Coche animé : timons** (L21 p.24, absent) : Ses deux timons servent de gourdins à allonge Longue et dégâts BF + six, en plus du Piétinement. Le +8 du profil est déjà calculé : pas second ajout de BF. Aucun nombre d’attaques gratuit inventé.
+- **F-L21-0034 — Demi-carcasse : localisations absentes** (L21 p.25, absent) : Contre la carcasse de porc coupée en deux et sans tête, les touches au bras gauche, à la jambe gauche ou à la tête ratent automatiquement. E0-P du profil ne suffit pas à cette clause ; pas relocalisation automatique d’un coup manqué.
+- **F-L21-0036 — Vacarme gobelin : Assourdi** (L21 p.32, absent) : À dix yards du groupe de musiciens gobelins, Endurance −1 DR ou un Assourdi. Toughness est la caractéristique Endurance, pas compétence Résistance. Aucun rythme de nouveau Test ni durée d’Assourdi spécifique inventés.
+- **F-L21-0037 — Plongeur de la mort : approche** (L21 p.34, absent) : Le plongeur atteint sa cible en deux Tours ; à chaque Tour, Athlétisme +2 DR ou chute, collision ou ailes rompues le retire de l’attaque. Capacité de vol du plongeur, pas bonus générique de monture ni trajectoire calculée.
+- **F-L21-0038 — Plongeur de la mort : impact** (L21 p.34, absent) : Après les deux Tours, une cible tirée au hasard reçoit +12 dégâts, sauf Athlétisme −1 DR réussi. Pas jet de Tir, explosion ou coût d’Élan ajoutés. Tours imprimés, pas Rounds substitués.
+- **F-L21-0046 — Changelin : Horreur informe** (L21 p.56, absent) : Une fois par Round, copie d’espèce ou d’un individu étudié BInt heures ; Traits et caractéristiques disponibles, compétences mais pas souvenirs de l’individu. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0047 — Ettin : main marteau** (L21 p.62, absent) : Les Blessures Critiques infligées gagnent trente au jet de gravité. +30 est un jet de table, pas +3 DR ; aucune normalisation de la gravité V5 inventée. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0048 — Squig colossal : mort répugnante** (L21 p.63, absent) : À trois yards de sa mort, Esquive +0 ou 2d10 Blessures réduites par Endurance et armure, minimum une. La source dit toute personne dans les trois yards, sans condition Engagé ; le résumé E0 ajoute engagé. Écart signalé, inventaire hérité inchangé. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0049 — Colosse : saturé de Mort** (L21 p.64, absent) : À quatre-vingts yards, les incantations réussies Mort/Nécromancie gagnent un DR ; les sorts Ghyran/Hysh/Azyr subissent −1 DR. Succès préalable du bonus imprimé ; ne pas l’utiliser pour transformer un échec en réussite ni étendre à Focalisation. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0050 — Colosse : jardin de cadavres** (L21 p.64, absent) : Le colosse vaincu libère 3d10 zombies qui attaquent les vivants proches. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0057 — Red : influence initiale** (L21 p.83, absent) : Hors protection du temple, un humain à moins de vingt pieds pendant plus de douze heures fait Volonté +6 DR ; échec, Red peut contrôler une personne à la fois. Capacité propre à Red absente des entrées E0 dédiées consultées ; pas nouvelle mutation générique. Durée cumulée ou continue non précisée.
+- **F-L21-0058 — Red : commander** (L21 p.83, absent) : Une fois par heure, Red peut imposer une tâche ; la victime refait Volonté avec difficulté choisie par le MJ selon la demande. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0059 — Red : se blesser** (L21 p.83, absent) : Volonté +6 DR pour résister à une demande de se blesser. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0060 — Red : attaquer sans habitude** (L21 p.83, absent) : Volonté +4 DR pour résister à attaquer quelqu’un si la victime n’y est pas habituée. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0061 — Red : attaque de soldat** (L21 p.83, absent) : Volonté +2 DR pour résister à attaquer quelqu’un si la victime est un soldat. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0062 — Red : sabotage sans grand risque** (L21 p.83, absent) : Volonté +0 pour résister à un sabotage peu risqué pour la victime. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0063 — Red : fin de contrôle** (L21 p.83, absent) : Après la tâche ou une résistance réussie, le contrôle cesse ; la source impose ensuite Rattled. Rattled renvoie à Something Knocking p.11, source non présente dans le corpus. Définition indisponible : ne pas substituer Brisé, Sonné ou une séquelle Q18 ; effet à préciser avant implantation. Image83 vue.
+- **F-L21-0067 — Grande bibliothèque : renverser un rayonnage** (L21 p.112, absent) : Pour renverser ce lourd rayonnage, Force −3 DR ; huit participants au plus peuvent aider. Variante transportable de danger avec contexte conservé, pas tous les meubles. Dimensions huit pieds de haut/douze de long/deux de profondeur ; Assistance V5 prioritaire.
+- **F-L21-0068 — Rayonnage : pluie de livres** (L21 p.112, absent) : Une créature sous les livres fait Esquive −1 DR ou reçoit une touche de dégâts 3d10 ; les créatures éthérées sont immunisées. Pas ignorance du BE/armure publiée, pas 3d10 Blessures directes.
+- **F-L21-0069 — Rayonnage : effet domino** (L21 p.112, absent) : Une réussite critique en Force fait basculer les rayonnages voisins en chaîne, jusqu’à un mur ou un espace vide. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0070 — Marche spectrale** (L21 p.117, absent) : Le sort de Nécromancie donne Éthéré pour BFM Rounds. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0071 — Crâne volant : perception** (L21 p.118, absent) : Le maître voit par les orbites du crâne actif, sans entendre par lui. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0072 — Crâne volant : concentration** (L21 p.118, absent) : Une distraction du maître, par exemple une attaque subie, rompt le contrôle direct. L21 abrège le comportement après perte de contrôle ; L18 plus ancien le détaille, sans contradiction imprimée. Pas extinction automatique ajoutée à une distraction. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0073 — Crâne volant : zéro Blessure** (L21 p.118, absent) : À zéro Blessure, le crâne ne reste plus sous contrôle. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
 
 ### Combat et terrain
 
@@ -1497,6 +1535,10 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L17-0267 — Grimoire incomplet** (L17 p.166, absent) : Sur91-95, Recherche étendue +0, cible20 DR par sort pour le compléter. Recherche statique dans js/core, js/ui et js/data : aucun flux dédié à cette clause retrouvé. Une saisie générique de Test, modificateur ou État ne prouve pas sa procédure ni son déclencheur.
 - **F-L17-0268 — Grimoire piégé** (L17 p.166, absent) : Propriété2 sur91-95 : Perception −3 DR pour repérer le piège avant activation ; effet du piège laissé au MJ. Recherche statique dans js/core, js/ui et js/data : aucun flux dédié à cette clause retrouvé. Une saisie générique de Test, modificateur ou État ne prouve pas sa procédure ni son déclencheur.
 
+### Hors granularité
+
+- **F-L21-0075 — Bataille : ralliement des troupes** (L21 p.114, absent) : Le ralliement de masse peut accorder Haine des morts-vivants et Haine sacrée pour la bataille. Q18 : moral de masse exclu ; aucune automatisation ni nouveau sélecteur. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+
 ### Incidents magiques
 
 - **F-L17-0014 — Incidents mineurs V4 : probabilités** (L17 p.24, absent) : Vingt résultats par tranches de5% ; plusieurs effets V5 changent de seuil ou de gravité, et Soulwax apparaît. P24et25 vues avant succession ; cellules révisées comparées aux conséquences L06p238-239. Les divergences mécaniques sont séparées ci-dessous.
@@ -1716,6 +1758,31 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L20-0035 — Bouton brûlant : contact** (L20 p.216, absent) : Toucher une cible avec ce bouton d’argent inflige un Enflammé. Effet d’objet autonome, non porté par une capacité E0 dédiée trouvée. Le profil de Katarina ne prouve pas son activation. Aucun dégât additionnel inventé.
 - **F-L20-0036 — Bouton brûlant : attaque opposée** (L20 p.216, absent) : En combat ou contre une cible non consentante, le porteur doit réussir une opposition de Bagarre, généralement contre Corps à corps ou Esquive. Page216 vue : autorenvoi @@ non résolu, mais l’effet et le Test sont imprimés sous le profil. Aucune Action gratuite, dépense d’Élan ou répétition illimitée inventée.
 - **F-L20-0037 — Bouton brûlant : corruption** (L20 p.216, absent) : Le bouton est une source mineure de Corruption. Pas un point automatique à chaque toucher : conserver les règles d’exposition V5 et l’arbitrage MJ. Les cinq autres bijoux nommés n’ont pas d’effet chiffré ici.
+- **F-L21-0001 — Aura de sainteté : courage** (L21 p.7, absent) : Une relique peut accorder des talents de courage ou de psychologie à un fidèle du même dieu qui la tient. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0002 — Aura de sainteté : autres dons** (L21 p.7, absent) : Une relique peut accorder au fidèle du même dieu qui la tient Béni, Invocation, Visions sacrées, Âme pure ou un autre talent approprié décidé par le MJ. C0-L21-001 ne décrit que courage/psychologie : dons non psychologiques séparés, pas octroi universel de tous les talents cités. Aucun rang, cumul ou persistance hors portage inventés.
+- **F-L21-0003 — Relique : Prière et Courroux** (L21 p.7, absent) : La relique peut ajouter un à trois DR de Prière à son dieu et retrancher dix à trente au total du Courroux ; total nul ou négatif, Courroux évité. B-C50 : réduction appliquée au total, pas au seul d100 ; un Courroux évité ne décrémente pas les Péchés. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0004 — Relique : signes de faveur** (L21 p.7, absent) : Après une Prière de miracle réussie, recevoir en plus une Bénédiction du dieu choisie par le MJ ; une réussite critique en donne deux. Déclencheur d’objet distinct des contrats de Bénédiction ; le livre n’ajoute pas de durée universelle ni de sélection automatique.
+- **F-L21-0005 — Crâne d’Englebrecht : Enflammé** (L21 p.7, absent) : Posséder le crâne d’Englebrecht rend immunisé à l’état Enflammé. Immunité à cet état, pas à tous dégâts de feu ni protection chiffrée inventée.
+- **F-L21-0006 — Fer de hache de Margritte** (L21 p.7, absent) : Porter même un fragment de cette relique ajoute un dégât aux haches maniées. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0007 — Fragment de Roche brillante : restitution** (L21 p.7, absent) : Restituer le fragment comme dévot de Sigmar ou Ulric efface les Péchés présents ; sans Péché, ajouter Béni à sa carrière. Ajout à la carrière, pas acquisition gratuite automatique. Le fragment seul n’a pas de pouvoir ; ne pas inventer un bonus de portage. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0008 — Sanctuaire : profanation** (L21 p.13, absent) : Les profanations peuvent accumuler des Péchés et les prières exposer au Courroux. Identité et clause vérifiées ; le renvoi ne certifie pas une couverture runtime. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0009 — Magie sauvage : remplacer les incidents** (L21 p.18, absent) : À Altdorf ou dans les neuf autres lieux sous le regard de Tzeentch après récupération de Ghal Maraz, le MJ peut remplacer la table d’incidents par la table de magie sauvage. Autorenvoi page18 dans le texte, table réellement page19. Variante contextuelle V4, pas remplacement général du Fléau V5 ; aucun déclenchement à chaque sort inventé.
+- **F-L21-0010 — Scribes bleus : lanceur aléatoire** (L21 p.18, absent) : Attaqués, les Scribes tirent un domaine puis choisissent ou tirent un sort, une fois par Round. L17 plus récent porte cette capacité ; table L21 avec Tzeentch80–95 et choix MJ96–100, pas nouvelle recette ni accès aux sources ignorées. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0011 — Scribes bleus : siphon de sort** (L21 p.18, absent) : Après un sort ennemi réussi, Volonté opposée puis d10 : rien, siphon, miroir ou explosion de zone cinq et dégâts six. L21 dit d10 mais intitule la colonne1d100 ; 1–2 rien,3–7 siphon,8–9 miroir,10 explosion. L17 plus récent comporte des conséquences supplémentaires : ne pas les effacer ni les prétendre imprimées ici. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0012 — Magie sauvage 01–20 : reflux** (L21 p.19, absent) : À 2d10 yards, créatures Démoniaque et Instable : Commandement +0 ou dissolution. Table19 vue. Renvoi limité à cette clause ; ne pas étendre aux créatures n’ayant qu’un des deux Traits. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0013 — Magie sauvage 21–35 : caprice** (L21 p.19, absent) : Un PNJ ou monstre aléatoire à d10 yards : Commandement −1 DR ; échec, une Blessure par DR manquant, d10 par DR en maladresse critique, sans réduction. Table19 vue : les Blessures ne sont réduites par rien, même Talents ou sorts. Pas ciblage de PJ ajouté. Déjà porté par l’inventaire référencé : Clause déjà portée par cet inventaire ; pas de deuxième sélection F1.
+- **F-L21-0014 — Magie sauvage 36–45 : reflux chaotique** (L21 p.19, absent) : Les créatures Démoniaques à 2d10 yards réduisent leur Target number de d10 pour ce Round. Table p.19 vue. Target number imprimé sans définition supplémentaire dans cette table ; ni malus de caractéristique ni −d10 DR inventé.
+- **F-L21-0015 — Magie sauvage 46–55 : feu rose** (L21 p.19, absent) : Toute tentative de sort à 2d10 yards produit à la place un projectile magique à +6 dégâts ignorant l’armure. Table p.19 vue. Le BE n’est pas ignoré par cette clause ; aucune durée de zone ou cible automatique inventée.
+- **F-L21-0016 — Magie sauvage 56–65 : équilibre précaire** (L21 p.19, absent) : Résoudre les tables d’Incantations imparfaites ordinaires. Table p.19 vue. Socle V5 prioritaire ; pas deuxième jet de magie sauvage récursif.
+- **F-L21-0017 — Magie sauvage 66–75 : œil de la tempête** (L21 p.19, absent) : Aucun effet ne se produit. Table p.19 vue. Résultat sans conséquence, conservé pour rendre la table complète.
+- **F-L21-0018 — Magie sauvage 76–85 : afflux magique** (L21 p.19, absent) : Effectuer deux jets sur les tables d’Incantations imparfaites ordinaires. Table p.19 vue. Aucun choix du meilleur résultat ou annulation d’un des deux inventé.
+- **F-L21-0019 — Magie sauvage 86–90 : crise rose** (L21 p.19, absent) : Les créatures Démoniaques à d10 yards ne peuvent ni bouger ni agir ce Round ; à sa fin, chacune produit une Horreur rose à côté d’elle sans être blessée. Table p.19 vue. Pas perte de Blessures, durée prolongée ou action d’invocation ajoutée.
+- **F-L21-0020 — Magie sauvage 91–94 : poussée chaotique** (L21 p.19, absent) : Les créatures Démoniaques à d10 yards gagnent +1 à leur Target number pour ce Round. Table p.19 vue. +1 imprimé, pas +10 ou +1 DR ; cible et sens de Target number à conserver comme limite source.
+- **F-L21-0021 — Magie sauvage 95–99 : possession** (L21 p.19, absent) : Un lanceur ennemi PNJ ou monstre à 2d10 yards : Volonté −1 DR ou agoniser ce Round puis mourir en libérant un démon ; sans cible, aucun effet. Table p.19 vue. Aucun PJ admissible ajouté ; démon non chiffré à choisir par le MJ, pas profil inventé.
+- **F-L21-0022 — Magie sauvage 100 : appel de l’au-delà** (L21 p.19, absent) : d10 entités démoniaques appropriées apparaissent près du lanceur. Table p.19 vue. Pas allégeance, durée, profil ou contrôle du lanceur inventés.
+- **F-L21-0064 — Huile de Morr : arme contre les esprits** (L21 p.111, absent) : Une arme enduite peut blesser les morts-vivants éthérés normalement vulnérables aux seules armes magiques. Distinct du Trait Éthéré ; ne rend pas l’arme magique pour tous usages. Aucun flux d’enduction trouvé dans js/core, js/ui, js/data.
+- **F-L21-0065 — Huile de Morr : fin d’effet** (L21 p.111, absent) : Une application dure une heure dans de bonnes conditions ; pluie forte ou immersion peut l’ôter plus tôt ; blesser un vivant l’inactive aussitôt. Pas chance chiffrée de lavage ni durée par coup inventées.
+- **F-L21-0066 — Huile de Morr : création et conservation** (L21 p.111, absent) : Un prêtre dévot de Morr la prépare au besoin durant une nuit de prières ; elle reste efficace une année en réserve. Source : trois CO d’ingrédients. Exigence magique neutralisée par la règle maison ; coût source en rappel narratif, aucun débit obligatoire ou jet de fabrication inventé. Ni mise en vente ni miracle chiffré nouveau.
 
 ### Magie — incidents
 
@@ -1807,6 +1874,10 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L19-0037 — Variole verte : rage homicide** (L19 p.128, absent) : Haine des vivants et Frénésie restent simultanées ; contrôle tous les cinq Rounds, lucidité limitée à fuir ou avertir. Identité et clause vérifiées ; renvoi documentaire seulement, aucune qualification runtime déduite. Déjà porté par l’inventaire référencé : Clause déjà recensée individuellement dans cet inventaire ; aucun second sélecteur F1.
 - **F-L20-0020 — Dormir chez Miriam : risque sanitaire** (L20 p.50, absent) : Chaque nuit en dortoir chez Miriam expose avec cinq pour cent de risque à la vérole démangeante. Itching Pox, nom FR de travail. Le tirage d’exposition ne prouve pas la contraction automatique ; résoudre la maladie du socle.
 - **F-L20-0021 — Manger chez Miriam : risque sanitaire** (L20 p.50, absent) : Le repas de Miriam expose avec cinq pour cent de risque à la Courante galopante. Galloping Trots ; ne pas confondre avec la maladie de peau du couchage, ni cumuler les deux sur chaque achat.
+- **F-L21-0051 — Poison : résister à la cuisson** (L21 p.74, absent) : Pour qu’un poison cru résiste à la cuisson prolongée décrite, Métier (Apothicaire) −3 DR ou Métier (Empoisonneur) +0. Variante de préparation de ce contexte, pas destruction automatique de tous les poisons cuits ; Q18 drogues ne supprime pas les poisons.
+- **F-L21-0052 — Purge de Taal : récolte** (L21 p.75, absent) : Survie ou Savoir (Plantes) +0 permet de trouver les herbes et champignons nécessaires à la purge de Taal. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0053 — Purge de Taal : préparation** (L21 p.75, absent) : Métier (Poisons) +2 DR permet de mélanger la purge ; Métier (Cuisine) +0 peut en masquer quelque peu goût et odeur. L21 V4, folio = page physique ; nom FR proposé. Recherches statiques js/core, js/ui, js/data et inventaires : aucun flux dédié établi ; une étiquette de profil ou saisie générique ne prouve pas cette clause.
+- **F-L21-0054 — Purge de Taal : ingestion** (L21 p.75, absent) : Résistance −2 DR ou un Empoisonné et besoin de déféquer au moins toutes les dix minutes. Aucune durée du poison, pénalité de mouvement ou exemption de BE pour Ogre publiée. Poison distinct des champignons hallucinogènes Q18.
 
 ### Montures
 
@@ -2466,6 +2537,9 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L20-0005 — Brouillard 52–85 : brouillard** (L20 p.8, absent) : 52–85 : À plus de dix pieds, CT et Perception visuelle subissent −2 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
 - **F-L20-0006 — Brouillard 86–99 : purée de pois** (L20 p.8, absent) : 86–99 : À plus de cinq pieds, CT et Perception visuelle subissent −3 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
 - **F-L20-0007 — Brouillard 00 : brouet miasmatique** (L20 p.8, absent) : 00 : À plus de cinq pieds, CT et Perception visuelle subissent −3 DR ; les Tests pour éviter une maladie subissent −1 DR. Seuil strict more than conservé. Tables vues ; distances en pieds imprimés, aucun arrondi arbitraire en mètres ni durée de dissipation inventés.
+- **F-L21-0035 — Brouillard chaotique : gaz somnifère** (L21 p.26, absent) : Le gaz somnifère impose Résistance +0 ou Inconscient. Option météorologique locale ; durée, fréquence des Tests et réveil non chiffrés ici. Moonflower/Ranald’s Delight sont des drogues Q18 et ne sont pas ajoutés à ce gaz.
+- **F-L21-0055 — Fumée de grange : épuisement** (L21 p.76, absent) : Dans la grange en feu, après trois Rounds, Résistance à chaque Round ou un Exténué ; premier Test +4 DR puis difficulté croissante. Variante pour cette grange humide ; cran d’augmentation non chiffré, pas −1 DR par Round inventé. Ne remplace pas les règles V5 de fumée.
+- **F-L21-0056 — Fumée de paille : délai** (L21 p.76, absent) : Si la paille intérieure est incendiée, les Tests de Résistance contre l’Exténué commencent après deux Rounds. Alternative de départ du même danger, pas deux séries de Tests cumulées.
 
 ### Voyage et navigation
 
@@ -2580,6 +2654,13 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L20-0030 — Magnin : porteur non formé** (L20 p.94, absent) : Sans maîtrise, le lancer compte comme un couteau de lancer ordinaire ; il reçoit Imprécis et Lent si le porteur n’atteint pas à la fois Force 58 et Tir (Lancer) 83. Force58 et Tir83 correspondent aux seuils relatifs à Harald p.94 ; les deux conditions évitent les défauts mais la phrase Only by taking l’activité exige encore l’entraînement pour le plein effet. Pas assimilation automatique des seuils à la maîtrise.
 - **F-L20-0031 — Fusil de chasse de Kazran** (L20 p.149, absent) : Le fusil de chasse de Kazran a la moitié de la portée et du prix d’un long fusil du Hochland, et environ la moitié de sa longueur. Le texte rattache ces moitiés aux hunting rifles ; pas division automatique de la portée de tous ses pistolets. Aucun dégât inédit publié.
 - **F-L20-0032 — Armes à poudre de Kazran** (L20 p.149, absent) : Toutes les armes à poudre produites par Kazran possèdent Raffiné et Solide. L20 V4, folio = page physique ; nom français proposé. Recherche statique js/core, js/ui et js/data : aucun flux dédié établi. Les capacités génériques ou étiquettes ne prouvent pas cet objet ou sa procédure.
+- **F-L21-0039 — Bombe acide : profil** (L21 p.33, absent) : La bombe acide a encombrement zéro, portée BF, Explosion deux, Dangereuse et Pénétrante. Table p.33 vue ; conserver la portée imprimée, pas BF×10. Propriétés génériques ne prouvent pas cet objet.
+- **F-L21-0040 — Bombe acide : dégâts** (L21 p.33, absent) : Toute cible frappée perd d10 Blessures, réduites par le BE et l’armure selon la clause imprimée. La qualité Pénétrante reste au profil ; pas dégâts directs ignorant toute armure ni acidité persistante inventée.
+- **F-L21-0041 — Sauce de Gitface** (L21 p.33, absent) : L’acide peut dissoudre les chaînes ; sa sauce rend ce qu’elle enduit irrésistible au Squig de la scène. Fonction d’objet explicite ; pas dégâts aux structures, délai de corrosion ou contrôle universel de tous les Squigs publiés.
+- **F-L21-0042 — Amulette de jade** (L21 p.53, absent) : Le porteur de l’amulette de jade gagne Régénération. Objet transportable distinct du Trait Régénération et du profil de Wolfgang. Pas soin gratuit immédiat ou rang inventé.
+- **F-L21-0043 — Lame de Corruption** (L21 p.53, absent) : Une cible blessée par cette arme doit résoudre une exposition modérée à la Corruption. Pas point automatique ni exposition au seul contact ; dégâts du profil déjà calculés.
+- **F-L21-0044 — Médaillon : Focalisation** (L21 p.58, absent) : Le médaillon ajoute un DR aux Tests de Focalisation déjà réussis de son porteur. Le bonus ne transforme pas un échec en réussite. Points rituels de Sheerargetru hors F0 scénaristique.
+- **F-L21-0045 — Spirale mystique : Chance** (L21 p.58, absent) : Le porteur de la pierre reçoit un Point de Chance supplémentaire par séance, jusqu’à la manifestation de Sheerargetru. Échéance nommée conservée, pas durée générique. Aucun effet buvable de l’ichor ni propriétés des flèches non publiés inventés.
 
 ### Équipement spécialisé
 
