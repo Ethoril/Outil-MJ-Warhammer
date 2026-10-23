@@ -156,3 +156,18 @@ La référence à un symbole existant est une preuve de localisation, pas une pr
 | F-C88 | L24 folio90 | Accès de culte couvert par les commandements ? | Trois listes d’accès séparées ; commandements seul renvoi divin. | Chaque clause exige un renvoi exact. | Exclure toute la page via un résumé général, écarté. |
 | F-C89 | L24 folios91–95 | Unités et exceptions des jeux ? | Points, dés, Rounds sportifs, crans de difficulté et Critiques propres séparés ; Avantage en proposition Élan. | Ne pas convertir les scores en DR ni inventer progression ou arrondis. | Généraliser le Test de Jeu et perdre les clauses, écarté. |
 | F-C90 | L24 aventures ; Q18 | Scénario et poisons ? | Clauses transportables seules ; scènes et profils hors F0 ; alcool ordinaire et poudre émétique conservés. | Pas extension de Q18 à toute boisson ou poison. | Inventorier tous les indices ou exclure les jeux à boire, écarté. |
+
+## L25 — choix F-C91 à F-C100
+
+| Id | Source | Question | Choix | Raison | Alternative |
+| --- | --- | --- | --- | --- | --- |
+| F-C91 | L25 p2/93–107 | Foliotage et unités ? | Physique=folio ; tableaux vus, pourcentages de M/prix distincts des Tests. | Plusieurs cellules se décalent à l’extraction. | ±10vitesse en DR, écarté. |
+| F-C92 | L25 p98/107 | Remorquage et bâbord/tribord ? | Conserver −4/−3DR et inversion de prose source en notes. | Divergences explicites, aucune correction furtive. | Une variante normalisée arbitrairement, écartée. |
+| F-C93 | L25 p105/116/118–120 | Seuils et libellés contradictoires ? | Nombres source gardés et anomalies nommées ; pas plancher ni seuil manquant inventé. | Hard(−10), Difficult(−20), Average(+40) imprimés. | Adapter au nom seul, écarté. |
+| F-C94 | L25 p63/121–125 ; Q18 | Moral exclut tout équipage ? | Moral seul exclu ; Tests, vital doublé, pénuries/soins conservés. | Q18 vise le sous-système collectif, pas toute action de bord. | Écarter les soins et navires, écarté. |
+| F-C95 | L25 p87/91/130 ; B-C53 | Nouveau compteur d’humeur ? | Source recensée, mais proposition à faits/désMJ sans variable automatique. | Arbitrage B-C53 prioritaire. | Réintroduire un état persistant de navire, écarté. |
+| F-C96 | L25 p131–133 | Compléter les plages ? | Chevauchement−50à−53 et trous gardés ;1/21port autorisés par modification. | Images source font foi. | Lisser les tables pour un tirage complet, écarté. |
+| F-C97 | L25 p134–139 | Calendrier et commerce ? | Huitjours pour semaine134seulement ; offre>4ouverte, Salzenmund3/4signalé. | Source ne donne pas de formule d’extrapolation. | Convertir tous mois/semaines ou plafonner l’offre, écarté. |
+| F-C98 | L25 p140–157 ; E0/C0 | Profil ou clause autonome ? | Traits/leurres exacts renvoyés ; seules capacités manquantes ajoutées, pas deuxièmeBF. | Import de nom/Traits ne prouve pas capacité propre. | Déduire toute l’exécution du profil, écarté. |
+| F-C99 | L25 p14/87/91 | Renvoi global suffisant ? | Résumé système ne couvre pas chaque vent ; douze clauses de Miracles sans identité propre restent absentes. | Référence exacte exigée. | Déclarer toute la page déjà couverte, écarté. |
+| F-C100 | L25 p56/57/63/67 | Normaliser les carrières et chants ? | Trous07/68 gardés ; sept chants séparés, ignorer un État ne le retire pas. | Effets déterminés et ambiguïtés source. | Ajouter une table réparée ou retrait d’État définitif, écarté. |

@@ -33005,5 +33005,5517 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0001",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.9",
+    "question": "Implanter « Écueils de la Gueule du Dragon » ? Ces rochers ont un indice de collision de soixante ; subir au moins vingt Blessures lors du choc donne une voie d’eau d’indice un.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0002",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.10",
+    "question": "Implanter « Grand phare de L’Anguille » ? Voir ce phare exige Perception à +40 sous vingt miles, +0 entre vingt et quarante, −20 entre quarante et quatre-vingts ; les effets ordinaires des phares restent applicables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0003",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.11",
+    "question": "Implanter « Choix de route dans la baie » ? Route nord-est : conduite à +20 ; nord-ouest : +0 et un jour gagné, mais chaque DR négatif de l’échec impose de négocier un haut-fond.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0005",
+    "phase": "magie",
+    "lot": "L25",
+    "source": "L25 p.14",
+    "question": "Implanter « Ghur : Critiques et maladresses en mer » ? Pour les sorts des Bêtes en mer, les doubles et les multiples de dix déclenchent Critique ou maladresse selon la réussite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0006",
+    "phase": "magie",
+    "lot": "L25",
+    "source": "L25 p.14",
+    "question": "Implanter « Aqshy : focalisation en mer » ? En mer, Focalisation (Aqshy) subit −1 DR ; sur un navire en feu elle reçoit +1 DR, en plus des avantages ordinaires d’Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0007",
+    "phase": "magie",
+    "lot": "L25",
+    "source": "L25 p.14",
+    "question": "Implanter « Azyr : tempête ou calme plat » ? Incantation des Cieux : +1 DR en tempête, −1 DR en calme plat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0008",
+    "phase": "magie",
+    "lot": "L25",
+    "source": "L25 p.14",
+    "question": "Implanter « Ghyran : puissance et incident en mer » ? Les DR de Focalisation (Ghyran) doublent en mer ; un Critique donne un incident majeur, ou mineur avec Harmonie aethyrique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0015",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.23",
+    "question": "Implanter « Lanterne de Manann : brume ignorée » ? Les Tests de Perception pour voir ce phare ignorent le malus de visibilité dû au brouillard et à la brume.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0016",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.24",
+    "question": "Implanter « Figure de proue de Beyer » ? Une figure achetée chez Beyer a vingt pour cent de chances d’accorder un rang de Chanceux au capitaine tant qu’il est à bord.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0017",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.33",
+    "question": "Implanter « Cloche de plongée expérimentale » ? Chaque heure d’usage exige Métier (Ingénierie) à +0 ; un double sur échec provoque une panne ; après cinq pannes la cloche cesse de fonctionner.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0018",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.35",
+    "question": "Implanter « Fouille d’une mare de bile » ? Athlétisme −20, ou Agilité +0 avec des outils : un échec donne une touche de onze dégâts et un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0019",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.35",
+    "question": "Implanter « Trouvailles d’une mare de bile » ? Si le fouilleur n’est pas Sonné, Perception à +0 donne des trésors valant 2 d10 pistoles par DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0020",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.39",
+    "question": "Implanter « Couronne de Croc d’Hiver » ? Porter la couronne donne Soin aux animaux +20 et Dressage +30, ainsi que l’effet permanent d’Ami des animaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0021",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.39",
+    "question": "Implanter « Maillet de Throgg » ? Il faut au moins Force quatre-vingts pour le manier ; monté en bélier, il a allonge Longue et dégâts BF +12.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0022",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.39",
+    "question": "Implanter « Vomi de Throgg : mare persistante » ? Chaque vomissement de Throgg laisse une mare de bile suivant la procédure de fouille de ce livre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0028",
+    "phase": "corruption",
+    "lot": "L25",
+    "source": "L25 p.52",
+    "question": "Implanter « Bénédiction temporaire des Snaegr » ? Durant la Lune d’Urlf : Grand, Furie, Costaud, Affamé et Défenses +7 ; vingt pour cent en Vorgeheim/Vorhexen, huit sinon ; durée d10 jours, puis pas avant l’année suivante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0029",
+    "phase": "corruption",
+    "lot": "L25",
+    "source": "L25 p.55",
+    "question": "Implanter « Buveur de saumure : hydratation » ? La mutation permet de boire l’eau de mer sans dommage ; il faut une pinte d’eau de mer véritable par jour, sinon gagner un Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0030",
+    "phase": "corruption",
+    "lot": "L25",
+    "source": "L25 p.55",
+    "question": "Implanter « Buveur de saumure : vomissement » ? Le Vomissement remplace les dégâts par Résistance −10, sinon un Aveuglé ; l’armure métallique portée est divisée par deux, arrondie au supérieur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0031",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.56",
+    "question": "Implanter « Création norse : Bjornling » ? Trois compétences régionales à cinq avances et trois à trois avances, talents régionaux avec choix et deux aléatoires ; Norse comme langue maternelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0032",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.56",
+    "question": "Implanter « Création norse : Sarl » ? Trois compétences régionales à cinq avances et trois à trois avances, talents régionaux avec choix et deux aléatoires ; Norse comme langue maternelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0033",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.56",
+    "question": "Implanter « Création norse : Skaeling » ? Trois compétences régionales à cinq avances et trois à trois avances, talents régionaux avec choix et deux aléatoires ; Norse comme langue maternelle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0034",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.56",
+    "question": "Implanter « Skaeling : remplacement d’Âme pure » ? Un Skaeling tirant Âme pure peut choisir la Marque de Khorne à la place.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0036",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.57",
+    "question": "Implanter « Carrières initiales norses » ? La table norse restreint les carrières de départ ; les changements ultérieurs suivent l’accès humain, permettant notamment de devenir Sorcier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0037",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.57",
+    "question": "Implanter « Adaptations d’équipement et de compétences norses » ? Projectile (Lancer) remplace Poudre/Ingénierie/Arbalète ; Deux mains remplace Escrime, cotte de mailles suffit pour l’armure de plates ; nouvelle vie à l’étranger peut lever ces contraintes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0038",
+    "phase": "magie",
+    "lot": "L25",
+    "source": "L25 p.60",
+    "question": "Implanter « Vent acheté : procédure » ? Ouvrir le contenant à la poupe puis tirer séparément force, durée et direction sur la même table ; les trois tirages ne sont pas forcés identiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0039",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.62",
+    "question": "Implanter « Présages marins d’Urska » ? Avec Winds of Magic, Augure quatre-vingt-sept transmet les symboles obtenus, utilisables sous d10 jours seulement en mer ; la consultation expose à une Corruption mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0040",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.62",
+    "question": "Implanter « Urska : variante sans Winds of Magic » ? Sans ce supplément, quatre-vingt-sept pour cent de réussite donnent un point de Chance à dépenser sous d10 jours en mer ; pas cumul automatique avec les symboles.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0041",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.62",
+    "question": "Implanter « Veste de fourrure Jarl » ? Aucune pénalité des températures naturelles extrêmes pour le porteur ; le contact direct avec le feu reste dangereux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0042",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.63",
+    "question": "Implanter « Classe maritime : table et substitution » ? Choisir avant le tirage si la classe maritime remplace les Riverains ; Savoir (Océans) peut remplacer Savoir (Fleuves) des carrières riveraines.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0043",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.63",
+    "question": "Implanter « Chant de marin : acquisition » ? Chaque rang de Chant, au maximum BInt, apprend un nouveau chant ; Divertissement (Chant) réussi est requis et l’équipage doit entendre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0044",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.63",
+    "question": "Implanter « Chant de marin : durée et interruption » ? Trente secondes installent le chant, puis trois minutes plus DR ; seule Esquive en combat, autres actes au MJ ; dégâts ou opposition perdue interrompent. Un chant par quart.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0047",
+    "phase": "argent-statut",
+    "lot": "L25",
+    "source": "L25 p.65",
+    "question": "Implanter « Épaves déclarées : part du récupérateur » ? L’office impérial possède théoriquement les épaves et offre dix pour cent de la récupération déclarée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0048",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.67",
+    "question": "Implanter « Chant : coopération » ? Chaque membre reçoit +10 à ses Tests individuels participant à un Test d’équipage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0049",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.67",
+    "question": "Implanter « Chant : mêlée victorieuse » ? Chaque membre reçoit +1 DR seulement à ses Tests de mêlée réussis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0050",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.67",
+    "question": "Implanter « Chant : Calme » ? L’équipage reçoit +1 DR aux Tests de Calme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0051",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.67",
+    "question": "Implanter « Chant : camaraderie » ? Les Tests de Sociabilité pour amadouer ou se lier à un autre membre reçoivent +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0052",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.67",
+    "question": "Implanter « Chant : veille nocturne » ? Rester éveillé reçoit +20 aux Tests concernés ; Perception reçoit +10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0053",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.67",
+    "question": "Implanter « Chant : ignorer un État » ? Un membre qui rejoint ce chant peut ignorer un État ; aucun retrait permanent ni liste d’États exclus n’est publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0054",
+    "phase": "talents",
+    "lot": "L25",
+    "source": "L25 p.67",
+    "question": "Implanter « Chant : autorité » ? Le capitaine ou une autre autorité reçoit +20 aux Tests de Sociabilité visant l’équipage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0056",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.83",
+    "question": "Implanter « Sel sacré : préparation et chance » ? Sel marin récolté à marée haute de Mitterfruhl et prié deux heures ; chaque usage publié a cinquante pour cent de chances de fonctionner.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0057",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.83",
+    "question": "Implanter « Sel sacré : eau calmée » ? Jeté sur une eau agitée, le sel efficace la calme ; aucun bonus fixe de conduite ni durée n’est chiffré.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0058",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.83",
+    "question": "Implanter « Sel sacré : dissiper une brume » ? Le sel efficace réduit d’un cran la brume maritime ou fluviale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0059",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.83",
+    "question": "Implanter « Sel sacré : mains du marin » ? Sur les mains d’un fidèle de Manann, le sel efficace donne +1 DR aux Tests de conduite pour d10 heures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0060",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.83",
+    "question": "Implanter « Sel sacré : vivres gâtés » ? En haute mer, le sel efficace rend comestible une nourriture avariée ; aucun volume ni durée inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0069",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.92",
+    "question": "Implanter « Place de l’équipage » ? Les occupants consomment des places selon leur Taille ; ceux qui dépassent Crew prennent sur Carries. Objets usuels portés exclus, masses inhabituelles au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0070",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.92",
+    "question": "Implanter « Voile, rames et équipage minimal » ? Les scores Voile/Rames donnent Mouvement et équipage minimal ; quart indicatif de huit heures à la voile, deux aux rames.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0071",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.92",
+    "question": "Implanter « Manœuvre du navire » ? Man modifie les Tests de voile ou rames impliquant la maniabilité et les dangers ; ce bonus n’est pas universel à toute conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0072",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.93",
+    "question": "Implanter « Endurance et Blessures du navire » ? BE réduit les dégâts ; le Bonus de Blessures dépend du premier chiffre des Blessures courantes et varie pendant l’affrontement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0073",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.93",
+    "question": "Implanter « Modèles de navires » ? Dix-huit modèles donnent Voile/Rames, équipage, Manœuvre, taille, Endurance, Blessures et capacité ; ces valeurs ne sont pas toutes reproductibles par le constructeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0074",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.93",
+    "question": "Implanter « Surcharge : charge dépassée » ? Avec charge dépassée, le navire subit −1 M et −1 DR aux Manœuvres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0075",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.93",
+    "question": "Implanter « Surcharge : vingt pour cent en plus » ? Avec vingt pour cent en plus, le navire subit −2 M et −2 DR aux Manœuvres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0076",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.93",
+    "question": "Implanter « Surcharge : quarante pour cent en plus » ? Avec quarante pour cent en plus, le navire subit −3 M et −3 DR aux Manœuvres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0077",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.93",
+    "question": "Implanter « Surcharge : cinquante pour cent en plus » ? Avec cinquante pour cent en plus, le navire subit navire impropre à la mer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0078",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : coque Tiny » ? Coque de taille 1–10 : 10 CO, équipage 1, Voile 3(1), Rames 3(1), E 35, Blessures 10, charge 50.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0079",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : coque Little » ? Coque de taille 11–15 : 50 CO, équipage 2, Voile 4(2), Rames 4(2), E 40, Blessures 20, charge 100.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0080",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : coque Small » ? Coque de taille 16–20 : 200 CO, équipage 5, Voile 5(4), Rames 5(12), E 40, Blessures 60, charge 200.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0081",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : coque Average » ? Coque de taille 21–35 : 500 CO, équipage 20, Voile 6(8), Rames 5(20), E 40, Blessures 90, charge 400.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0082",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : coque Large » ? Coque de taille 36–50 : 1000 CO, équipage 30, Voile 7(15), Rames 4(30), E 50, Blessures 150, charge 1000.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0083",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : coque Enormous » ? Coque de taille 51–80 : 2500 CO, équipage 50, Voile 8(30), Rames aucune, E 50, Blessures 250, charge 2000.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0084",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : coque Monstrous » ? Coque de taille 81+ : 5000 CO, équipage 100, Voile 9(80), Rames aucune, E 50, Blessures 400, charge 4000.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0085",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Propulsion principale » ? Choisir voile ou rames comme propulsion principale ; réduire l’autre Mouvement de deux avec plancher trois ; les deux plus grandes catégories n’ont pas de rames.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0086",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Prix de la maniabilité » ? Une Manœuvre de −2 DR réduit le prix de quarante pour cent, −1 de vingt pour cent ; +1 DR augmente le prix de vingt pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0087",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : vitesse Slowest » ? M -3, charge doublée, Man -2 DR, prix +0 pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0088",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : vitesse Slower » ? M -2, charge augmentée de 50%, Man -1 DR, prix +0 pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0089",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : vitesse Slow » ? M -1, charge augmentée de 25%, Man 0 DR, prix +0 pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0090",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : vitesse Average » ? M +0, charge inchangée, Man 0 DR, prix +0 pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0091",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : vitesse Fast » ? M +1, charge réduite de 25%, Man 0 DR, prix +0 pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0092",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : vitesse Faster » ? M +2, charge réduite de 50%, Man 0 DR, prix +10 pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0093",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.96",
+    "question": "Implanter « Construction : vitesse Fastest » ? M +3, charge réduite de 75%, Man 0 DR, prix +10 pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0094",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Coque renforcée » ? Jusqu’à trois rangs : chacun ajoute dix en Endurance, retire dix pour cent de charge de base et ajoute dix pour cent au coût de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0095",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Robuste » ? +2 DR aux Tests d’équipage pour tout arrimer ; prix de base augmenté de dix pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0096",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Solide » ? Jusqu’à trois rangs, chacun augmente les Blessures de trente pour cent, retire dix pour cent de charge de base et ajoute vingt pour cent au coût de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0097",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Malhabile » ? Jusqu’à trois rangs, chacun impose −1 DR aux Tests de voile et rames et réduit de dix pour cent le coût de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0098",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Ancre : immobilisation » ? Ancre déployée à profondeur appropriée : vents et courants ne déplacent plus le navire. Sans ancre, il ne peut se fixer en mer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0099",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Ancre : levage urgent » ? Force prolongée, typiquement −10 pour Small/Average ou −20 au-delà ; seuil selon profondeur, quinze DR typiquement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0100",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Plaques de blindage » ? Bronze donne un PA de coque, fer deux ; ajouter BE pour les dégâts. Aucun sacrifice de blindage pour éviter un Critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0101",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Blindage de fer : rouille » ? Dès que le navire devient encrassé, les plaques de fer perdent toute valeur d’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0102",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.97",
+    "question": "Implanter « Blindage : chantier » ? Pose seulement dans un chantier spécialisé : deux semaines de Tiny à Average, un mois pour les plus grands ; coût et masse dépendent de matière et longueur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0103",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.98",
+    "question": "Implanter « Hune : observation » ? Perception visuelle depuis la hune reçoit +1 DR jusqu’à Average, +2 DR au-delà.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0105",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.98",
+    "question": "Implanter « Foc volant » ? Le bout-dehors augmente la longueur de dix pour cent ; la table spécifique des vents remplace la table ordinaire pour la voile.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0106",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.98",
+    "question": "Implanter « Sabords : couvert et Action » ? Un sabord fournit un couvert lourd ; l’ouvrir ou fermer prend une Action. Le pont sans sabord ne donne pas de couvert ; sabord ouvert peut aggraver une voie d’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0107",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.98",
+    "question": "Implanter « Cabine de luxe » ? Occupe deux cabines normales ; à discrétion du MJ, le propriétaire reçoit +10 aux Tests de Sociabilité faits dans cette cabine.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0108",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.98",
+    "question": "Implanter « Canot embarqué et remorquage » ? Un canot peut être transporté dans la charge disponible et remorquer le navire à M 1, avec Manœuvre −4 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0109",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Éperon » ? L’éperon apporte cinq PA contre les chocs ou attaques de face ; il ajoute cinq au BE utilisé pour l’indice de collision d’une charge frontale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0110",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Lissage de coque » ? M +1 ; pose une semaine jusqu’à Average, deux au-delà. Réparer coûte cinquante pour cent de plus, sinon le bénéfice de lissage est perdu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0111",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Freins aquatiques » ? Demi-ouverture : M −1 ; pleine : M −2. Dans un détroit ou tourbillon, les freins augmentent d’autant le Mouvement du courant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0112",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Moteur à vapeur » ? M 4 tant qu’il y a du combustible, indépendamment du vent ; un ingénieur qualifié effectue Métier (Ingénieur) pour la conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0113",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Vapeur : déclenchement d’incident » ? Un double sur échec d’Ingénierie, un échec cuisant ou un Critique de coque déclenche le d100 des incidents.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0114",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Incident vapeur 01–40 : Ratés » ? M −3 pour d10 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0115",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Incident vapeur 41–60 : Fuite » ? Le machiniste teste Initiative ou subit d10 −5 dégâts, minimum un, ignorant l’armure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0116",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Incident vapeur 61–70 : Perte de pression » ? M 0 ; Ingénierie +0 pour redémarrer, puis attendre cinq moins DR Rounds avant propulsion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0117",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Incident vapeur 71–90 : Feu éteint » ? M 0 ; Force prolongée +0 seuil dix pour changer le charbon, puis Ingénierie +0 et cinq moins DR Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0118",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Incident vapeur 91–95 : Réservoir rompu » ? M −3 ; enlever charbon, attendre vingt+d10 minutes ; Ingénierie −10 pour réparer, +0 pour redémarrer, puis cinq moins DR Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0119",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.99",
+    "question": "Implanter « Incident vapeur 96–00 : Explosion » ? Moteur détruit, un Critique de coque ; chaque occupant du compartiment subit douze dégâts Pénétrants.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0121",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.100",
+    "question": "Implanter « Artillerie navale : Ballista » ? Portée 100 yards, dégâts +12, Précise, Équipage 2, Recharge 3 ; seule sa munition adaptée convient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0122",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.100",
+    "question": "Implanter « Artillerie navale : Small cannon » ? Portée 50 yards, dégâts +10, Équipage 2, Dangereuse, Recharge 4 ; seule sa munition adaptée convient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0123",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.100",
+    "question": "Implanter « Artillerie navale : Medium cannon » ? Portée 75 yards, dégâts +14, Équipage 3, Dangereuse, Recharge 6 ; seule sa munition adaptée convient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0124",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.100",
+    "question": "Implanter « Artillerie navale : Large cannon » ? Portée 150 yards, dégâts +16, Équipage 4, Dangereuse, Recharge 8 ; seule sa munition adaptée convient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0125",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.100",
+    "question": "Implanter « Artillerie navale : Mortar » ? Portée 100 yards, dégâts +selon munition, Équipage 3, Recharge 4 ; seule sa munition adaptée convient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0126",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.100",
+    "question": "Implanter « Artillerie navale : Swivel gun » ? Portée 30 yards, dégâts +14, Dangereuse, Recharge 4 ; seule sa munition adaptée convient.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0127",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Munition : Ballista bolt » ? Portée de l’arme ; Empaleuse et Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0128",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Munition : Cannon ball » ? Portée de l’arme ; Explosion deux, sans bonus de dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0129",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Munition : Grapeshot » ? Quart de portée ; dégâts −5, Dispersion cinq.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0130",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Munition : Mortar bomb » ? Portée de l’arme ; dégâts +12, Explosion cinq, Dangereuse, Percutante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0131",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Munition : Incendiary » ? Demi-portée ; Explosion quatre, Dangereuse, un plus DR Enflammé aux cibles affectées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0132",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Munition : Swivel bullets » ? Portée de l’arme ; dégâts +1, Empaleuse, Pénétrante, Dispersion trois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0133",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Munition : Swivel shot » ? Portée de l’arme ; Dispersion six, sans bonus de dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0134",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Poids des canons sur une face : 25 pour cent » ? Au-delà de 25 pour cent de la charge sur une face, M et Man baissent de 1, et la conduite subit −1 DR ; un ballast peut rééquilibrer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0135",
+    "phase": "combat",
+    "lot": "L25",
+    "source": "L25 p.101",
+    "question": "Implanter « Poids des canons sur une face : 50 pour cent » ? Au-delà de 50 pour cent de la charge sur une face, M et Man baissent de 2, et la conduite subit −2 DR ; un ballast peut rééquilibrer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0142",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.103",
+    "question": "Implanter « Conduite à voile » ? Le pilote utilise Navigation à voile ; sans cette compétence, il ne peut piloter un voilier en mer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0143",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.103",
+    "question": "Implanter « Conduite à rames » ? Utiliser Canotage du meilleur rameur, avec assistance possible des autres rameurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0144",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.103",
+    "question": "Implanter « Savoir des Océans : bonus de conduite » ? En mer, le premier chiffre du score de Savoir (Océans) ajoute son bonus aux Tests de conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0145",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.103",
+    "question": "Implanter « Propulsions alternatives » ? Vapeur : Ingénierie ; bête captive : Dressage ; roue : Commandement si volontaires, Intimidation sinon ; magie : Langue (Magick).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0146",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.104",
+    "question": "Implanter « Allures navales » ? Mouvement tactique de deux yards par M et Round ; distances de voyage et nœuds suivent la table arrondie publiée, sans recalcul des incohérences d’arrondi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0147",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.104",
+    "question": "Implanter « Difficulté et fréquence de conduite » ? Le MJ fixe fréquence et difficulté : mer calme +20 par quart, agitée +0 par quart, vent/rochers −10 par heure, rochers avec brouillard −20 par heure, Gueule en tempête −30 par Round.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0148",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.104",
+    "question": "Implanter « Progression : ≥4 DR » ? Le Test de conduite produit M +2 pour la période ou distance correspondante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0149",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.104",
+    "question": "Implanter « Progression : 1 à3 DR » ? Le Test de conduite produit M +1 pour la période ou distance correspondante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0150",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.104",
+    "question": "Implanter « Progression : −2 à0 DR » ? Le Test de conduite produit M ordinaire pour la période ou distance correspondante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0151",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.104",
+    "question": "Implanter « Progression : −4 à−3 DR » ? Le Test de conduite produit M −1 pour la période ou distance correspondante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0152",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.104",
+    "question": "Implanter « Progression : ≤−5 DR » ? Le Test de conduite produit demi-M pour la période ou distance correspondante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0153",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Forcer la voile » ? Voile −30 réussie donne M +1 ; pas M +2 possible. Ce Test n’est pas de la conduite et n’utilise pas Savoir (Océans).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0154",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Forcer les rames » ? Canotage −20 pour M +1, −30 pour M +2 ; bonus jusqu’au prochain quart ou prochain Test de conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0155",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Fatigue des quarts » ? À la fin du quart, Résistance +20 ou un Exténué ; après effort forcé, Résistance −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0156",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Manœuvres : périmètre » ? Conduite modifiée par Man et contexte ; les bonus de Manœuvre ne s’appliquent pas aux autres usages de conduite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0157",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Survitesse : seuil sûr » ? Le navire peut atteindre M de base plus quatre sans jet de dégâts ; au-delà, tester sa caractéristique Endurance selon la table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0158",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Encrassement hebdomadaire » ? Chaque semaine sans entretien en mer, un échec au Test d’Endurance du navire ajoute un niveau d’encrassement ; dès Average, nettoyage en bassin spécialisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0159",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Survitesse : M+5 » ? À M +5, Endurance +20 chaque heure ; échec : 1 plus les DR négatifs en dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0160",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Survitesse : M+6 » ? À M +6, Endurance +0 chaque heure ; échec : 2 plus les DR négatifs en dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0161",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Survitesse : M+7 » ? À M +7, Endurance −10 chaque minute ; échec : 3 plus les DR négatifs en dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0162",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Survitesse : M+8 » ? À M +8, Endurance −20 chaque Round ; échec : 5 plus les DR négatifs en dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0163",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Survitesse : M+9 » ? À M +9 ou davantage, Endurance −30 chaque Round ; échec : 8 plus les DR négatifs en dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0164",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Encrassement niveau 1 » ? Man -1 DR, M 0, autres conduites 0 DR ; nettoyage coûte 5 pour cent du prix de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0165",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Encrassement niveau 2 » ? Man -1 DR, M -1, autres conduites 0 DR ; nettoyage coûte 10 pour cent du prix de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0166",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Encrassement niveau 3 » ? Man -2 DR, M -1, autres conduites 0 DR ; nettoyage coûte 15 pour cent du prix de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0167",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Encrassement niveau 4 » ? Man -2 DR, M -2, autres conduites 0 DR ; nettoyage coûte 20 pour cent du prix de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0168",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.105",
+    "question": "Implanter « Encrassement niveau 5 » ? Man -3 DR, M -2, autres conduites -1 DR ; nettoyage coûte 25 pour cent du prix de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0169",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Tirage des conditions en mer » ? Tirer quatre d10 séparés pour pluie, température, visibilité et vent ; printemps/automne +2, hiver +4 ; mer plus chaude −2 seulement température et visibilité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0170",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Pluie légère » ? Athlétisme, Escalade et tir à poudre subissent −10 sur le pont.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0171",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Pluie forte » ? Les trois usages précédents subissent −20 ; Commandement, Navigation, Perception, Canotage et Voile −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0172",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Pluie très forte » ? Athlétisme/Escalade/Poudre −30 ; Commandement/Navigation/Perception/Canotage/Voile −20 ; autres Tests −10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0173",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Chaleur accablante » ? Résistance +0 toutes les deux heures ou exposition à la chaleur ; deux gallons d’eau quotidiens requis.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0174",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Chaleur » ? Résistance +20 toutes les quatre heures ou exposition à la chaleur ; deux gallons d’eau par jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0175",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Temps frais » ? Résistance +20 toutes les quatre heures ou exposition au froid.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0176",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Froid mordant » ? Résistance +0 toutes les deux heures ou exposition au froid.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0177",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Visibilité : brume » ? Tir, Navigation et Perception visuelle subissent −1 DR si la cible est à plus de 20 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0178",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Visibilité : brouillard » ? Tir, Navigation et Perception visuelle subissent −2 DR si la cible est à plus de 10 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0179",
+    "phase": "environnement",
+    "lot": "L25",
+    "source": "L25 p.106",
+    "question": "Implanter « Visibilité : brouillard épais » ? Tir, Navigation et Perception visuelle subissent −3 DR si la cible est à plus de 5 yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0180",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.107",
+    "question": "Implanter « Direction du vent » ? d10 : un à six vent dominant, sept nord, huit sud, neuf ouest, dix est ; comparer au cap pour vent arrière, travers ou face.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0181",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.107",
+    "question": "Implanter « Évolution du vent » ? Au départ tirer la force ; aube, midi, crépuscule et minuit : sur un au d10, un cran plus fort ou faible à chance égale, extrêmes vers l’intérieur seulement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0182",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.107",
+    "question": "Implanter « Effet du vent sur les propulsions » ? La force et l’orientation modifient la vitesse avant les autres modificateurs ; chaque cellule distingue voile et autres propulsions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0183",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.107",
+    "question": "Implanter « Calme plat et dérive » ? Voile impossible ; dérive selon le courant, M 1 typiquement. Canot à rames remorque le navire à M 1 et Man −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0184",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.107",
+    "question": "Implanter « Virement de bord » ? Conduite +0 réussie permet le bonus de vitesse de la table ; échec conserve la vitesse sans bonus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0185",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.107",
+    "question": "Implanter « Tout arrimer » ? Conduite +0 pour abaisser les voiles à temps ; échec donne un Critique immédiat aux voiles. Ensuite ancrer ou dériver à vingt-cinq pour cent de la vitesse sous le vent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0186",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Orientation : ≥4 DR » ? cap connu et position sur carte avec cartes adéquates.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0187",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Orientation : 0 à3 DR » ? cap supposé correct.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0188",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Orientation : −2 à−1 DR » ? premier petit écart sans conséquence ; nouvelle occurrence tire un changement de cap.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0189",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Orientation : −4 à−3 DR » ? tirer un changement de cap.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0190",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Orientation : ≤−5 DR » ? tirer changement de cap avec +2 au d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0191",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Navigation : périodicité » ? Navigation est testée au moins une fois par jour de voyage comme base ; le MJ adapte selon circonstances.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0192",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Changement de cap » ? d10 :1–3 position perdue ;4–6 durée +10% ;7–9 durée +25% ;10–11 écart 90° ;12 demi-tour. Un second d10 choisit le côté :1–5 tribord,6–10 bâbord.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0193",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Phare : aide de Navigation » ? Voir le phare permet le bonus du premier chiffre de Savoir (Océans) aux Tests de Navigation ; un danger proche du phare reçoit +20 à son repérage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0194",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Repérer le phare » ? Perception +40 sous cinq miles ; +0 entre cinq et dix ; −20 entre dix et quinze ; visibilité peut pénaliser.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0195",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.108",
+    "question": "Implanter « Tour à cloche » ? La cloche donne +2 DR à Navigation, avec distances de repérage divisées par deux ; elle peut servir dans le brouillard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0196",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.109",
+    "question": "Implanter « Poursuite : pas de temps » ? Sans interaction entre équipages, tester tous les dix Rounds et multiplier les résultats par dix ; repasser au Round dès interaction possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0197",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.109",
+    "question": "Implanter « Poursuite : Distance et groupes » ? Un point de Distance vaut dix yards ; zéro signifie rattrapé ; groupes séparés si une proie devance une autre de plus de seize yards.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0198",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.109",
+    "question": "Implanter « Poursuite : seuil de fuite » ? Seuils indicatifs selon visibilité/obstacles : dix, trente, cinquante, soixante-dix ou cent Distance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0199",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.109",
+    "question": "Implanter « Poursuite : navires lents » ? M 3 impose −1 DR, M 2 −2 DR, M 1 −3 DR aux Tests de conduite de poursuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0200",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.109",
+    "question": "Implanter « Poursuite : mise à jour » ? Base = yards normalement parcourus divisés par dix, arrondi inférieur, minimum un ; DR≥4 ajoute 1,0–3 neutre, −1 à −3 retire 1,≤ −4 retire 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0201",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.111",
+    "question": "Implanter « Dangers : trois observations » ? À cent yards Perception −20/Manœuvre +40 ; cinquante : +0/ +20 ; dix : +20/ −10. Navigation doit être retestée après le danger.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0202",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.111",
+    "question": "Implanter « Indice de collision » ? Indice = BE plus Bonus des Blessures courantes ; chaque navire reçoit l’indice de l’autre plus le M de celui qui cause le choc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0203",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.111",
+    "question": "Implanter « Collision : victime s’éloignant » ? Si la victime se déplace directement à l’opposé de l’agresseur, retrancher son M aux dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0204",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.111",
+    "question": "Implanter « Collision : poupe » ? Une frappe à la poupe bénéficie de deux PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0205",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.111",
+    "question": "Implanter « Collision : flanc » ? Les dégâts infligés au navire frappé au milieu doublent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0206",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.111",
+    "question": "Implanter « Collision : manœuvrer pour modifier » ? Chaque pilote peut tester Manœuvre et ajouter ses DR aux deux indices pour aggraver ou les soustraire pour atténuer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0207",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.111",
+    "question": "Implanter « Collision : face à face » ? En choc frontal, utiliser la somme des M des deux navires plus l’indice adverse ; les chocs touchent normalement la coque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0208",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.112",
+    "question": "Implanter « Échouage » ? Le navire s’arrête jusqu’à être dégagé par Force, pénalisée de tout son encombrement et de la cargaison ; assistants sans limite si les cordes suffisent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0209",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.112",
+    "question": "Implanter « Iceberg » ? Un iceberg typique se déplace à M 1 et a indice de collision vingt-cinq.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0210",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.112",
+    "question": "Implanter « Débris flottants » ? M 1, indice trois ; vingt pour cent de chances de s’accrocher après collision ; Tiny–Small :Man −2 DR/M −1, Large :Man −1 DR, plus grands neutres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0211",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.112",
+    "question": "Implanter « Dégager les débris » ? Force prolongée +20, seuil dix DR, pour retirer les débris accrochés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0212",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.112",
+    "question": "Implanter « Rochers et hauts-fonds » ? Rocher typique :indice 47 et vingt pour cent d’échouage ; haut-fond :indice 10 et quarante pour cent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0213",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.112",
+    "question": "Implanter « Détroits et courants » ? Le courant déplace avant la progression du navire ; faible M 4/ −1 DR conduite, moyen M 8/ −2 DR, violent M 16/ −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0214",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.113",
+    "question": "Implanter « Tourbillon : zones et déplacement » ? Le courant attire chaque Round avant progression ; Manœuvre réussie requise pour avancer. Nager dans la zone exige Natation −10 ou début de noyade.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0215",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.113",
+    "question": "Implanter « Tourbillon : centre et sortie » ? Au centre, subir chaque Round les dégâts de l’indice ; une Manœuvre prolongée permet de repartir, mais sans quitter la zone le courant peut ramener au centre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0216",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.113",
+    "question": "Implanter « Courant : rotation douce » ? M 2, rayon 15 yards, trajet spiral 25 M ; Man 0 DR, indice 4 ; sortie prolongée +20, seuil 10 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0217",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.113",
+    "question": "Implanter « Courant : tourbillon » ? M 4, rayon 30 yards, trajet spiral 50 M ; Man-1 DR, indice 8 ; sortie prolongée +0, seuil 20 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0218",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.113",
+    "question": "Implanter « Courant : vortex » ? M 6, rayon 45 yards, trajet spiral 75 M ; Man-1 DR, indice 12 ; sortie prolongée −10, seuil 25 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0219",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.113",
+    "question": "Implanter « Courant : maelström » ? M 8, rayon 60 yards, trajet spiral 100 M ; Man-2 DR, indice 20 ; sortie prolongée −20, seuil 35 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0220",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.113",
+    "question": "Implanter « Courant : Le Maelström » ? M 10, rayon 100 yards, trajet spiral 150 M ; Man-2 DR, indice 50 ; sortie prolongée −30, seuil 45 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0221",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Localisation navale » ? Inverser le jet d’attaque ou tirer d100 puis utiliser la colonne rames, voiles ou mixte ; une touche d’équipage sans membre exposé atteint la coque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0222",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Incendie par localisation » ? Un navire perd une Blessure par Tour et par Enflammé de la localisation ; chaque fin de Tour, tirer l’évolution du feu hors équipage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0223",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Cargaison en feu » ? Chaque Enflammé du cargo détruit d10 Enc par Tour, sauf protection contre feu et fumée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0224",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Armes légères contre navires » ? Les armes à distance hors artillerie sont normalement sans effet contre la structure ; elles peuvent toutefois toucher un membre exposé par la localisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0225",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Feu 1 : diminution » ? Retirer d10 à l’intensité, applicable au Tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0226",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Feu 2–4 : stable » ? L’intensité reste inchangée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0227",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Feu 5–8 : intensification » ? Ajouter d10 à l’intensité pour le Tour suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0228",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.115",
+    "question": "Implanter « Feu 9–10 : propagation » ? Garder l’intensité et tirer une nouvelle localisation recevant d10 Enflammé ; équipage ou doublon devient une intensification.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0229",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.116",
+    "question": "Implanter « Mêlée contre structure » ? Une attaque de mêlée accessible contre la structure touche automatiquement et choisit sa localisation ; contre un membre, combat ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0230",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.116",
+    "question": "Implanter « Taille : protection contre mêlée » ? La matrice attaquant/navire remplace les bonus normaux de Taille ; les cases vides signifient normalement aucun dégât, les autres multiplient ou ajustent BE.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0231",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.116",
+    "question": "Implanter « Réparer durablement » ? Métier (Construction navale), ou Charpenterie avec −10, outils et matériaux ; coque sur cale ou bassin. Un succès prend d10 heures et rend d10 Blessures, prix une CO par Blessure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0232",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.116",
+    "question": "Implanter « Réparations par charpentiers norses » ? Ils réparent durablement les coques de tradition connue comme canots, knarrs et drakkars ; autres modèles seulement temporairement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0233",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.116",
+    "question": "Implanter « Réparation temporaire » ? Sans cale : Métier naval ou Charpenterie −10 à −30 selon conditions ; une heure et d10 Blessures par succès.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0234",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.116",
+    "question": "Implanter « Fragilité des réparations temporaires » ? Après chaque jour entier de voyage et à chaque Manœuvre, Endurance du navire ; échec :d10 −4 dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0235",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Critique naval : déclenchement » ? Double sur attaque réussie contre le navire, ou toute touche lorsqu’il est à zéro Blessure ; résultat inapplicable au modèle remplacé par le suivant plus grave.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0236",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Éclats » ? Un nombre de membres égal à l’indice d’Éclats subit une touche de neuf dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0237",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Voie d’eau : accumulation » ? Chaque Round l’indice s’ajoute au total ; à moitié Endurance, M −1 et conduite −1 DR ; cargo non étanche perd d10 pour cent de valeur par Tour ; sabords ouverts aggravent l’indice.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0238",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Voie d’eau : naufrage et écopage » ? À un total égal à l’Endurance, naufrage ; dix Rounds d’écopage par membre permettent Force +0, chaque DR positif retirant un au total.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0239",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Chutes de gréement » ? Tiny–Small :d10 yards/hune 12 ;Average–Large :2 d10/hune 25 ;Enormous–Monstrous :3 d10/hune 40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0240",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Réparer les effets critiques » ? En urgence employer les Tests publiés ; sinon, avec compétence et outils, le chiffre minimal de la plage d10 indique les heures nécessaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0241",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Critique cargo 1–2 : Jetsam » ? d100 Enc de cargo par-dessus bord, Éclats 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0242",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Critique cargo 3–4 : Feu » ? Un Enflammé au cargo.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0243",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Critique cargo 5–6 : Endommagé » ? d100 Enc détruits, Éclats 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0244",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Critique cargo 7–8 : Détruit » ? 2 d100 Enc détruits, Éclats 6.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0245",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.117",
+    "question": "Implanter « Critique cargo 9–10 : Soute à poudre » ? Trois Enflammé au cargo et d10 Critiques de coque ; sans poudre, seulement les trois Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0246",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 1 : Cordes fragiles » ? À l’escalade 25% de sollicitation, Athlétisme −10 ou chute. Repérage Perception −20 ; réparation Voile +40 seuil 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0247",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 2 : Voile percée » ? Voile M −1, Tests Voile −1 DR ; réparation Tailleur +40 seuil 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0248",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 3 : Vergue détachée » ? Demi-vitesse sous voile, Tests Voile −1 DR ; gréement Athlétisme +20 ou chute ; réparation Voile +20 seuil 30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0249",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 4 : Voile déchirée » ? Voile M −2 et Tests Voile −1 DR ; réparation Tailleur Average( +40) seuil 30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0250",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 5 : Bout-dehors brisé » ? Foc volant inutilisable ; Éclats 2 ; réparation Charpenterie +0 seuil 40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0251",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 6 : Gréement ruiné » ? Escalade/Voile −2 DR ; Athlétisme +0 ou chute ; réparation Voile +0 seuil 40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0252",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 7 : Voile ruinée » ? Voile impossible ; Athlétisme +20 ou chute ; Tailleur −10 seuil 40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0253",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 8 : Mât fendu » ? Éclats 6 ; Endurance navire Easy( +40) chaque Tour, échec=mâtbrisé ; réparation Charpenterie −10 seuil 40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0254",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 9 : Vergue cassée » ? Voile impossible, Éclats 8 ; Athlétisme +0 ou chute ; réparation Charpenterie −10 seuil 50.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0255",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.118",
+    "question": "Implanter « Critique gréement 10 : Mât brisé » ? Voile impossible, Éclats 10 ; Athlétisme −10 ou chute ; Entretienéquipage −20 seuil 80 pour voile de fortune à 25% ; réparation complète àterre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0256",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 1 : Coque scarifiée » ? Lissage perdu ; Charpenterie +40 seuil 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0257",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 2 : Barre douteuse » ? À la prochaine Manœuvre ratée de −3 DR ou pire, barre cassée et direction impossible ; Perception −20 pour repérer, Charpenterie +40 seuil 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0258",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 3 : Coque éclatée » ? Éclats 4 ; pont Athlétisme +20 ou À Terre ; Charpenterie +40 seuil 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0259",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 4 : Coque sous eau déchirée » ? Man −1 DR ; cale/bassin et Charpenterie +40 seuil 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0260",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 5 : Gouvernail abîmé » ? Man −1, Éclats 1 ; pont Athlétisme +20 ou À Terre ; Charpenterie +0 seuil 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0261",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 6 : Quille ruinée » ? Toute conduite −1 DR ; pont Athlétisme +20 ou À Terre ; cale et Charpenterie +0 seuil 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0262",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 7 : Gouvernail brisé » ? Man −3, Éclats 3 ; pont Athlétisme +20 ou À Terre ; Entretienéquipage −20 seuil 80 pour fortune laissant Man −1 ; complèteàterre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0263",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 8 : Trou au-dessus » ? Voie d’eau 1/Éclats 6 ; Charpenterie +0 seuil 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0264",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 9 : Trou sur ligne » ? Voie d’eau 2/Éclats 4 ; Charpenterie Hard( −10) seuil 30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0265",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.119",
+    "question": "Implanter « Critique coque 10 : Trou sous ligne » ? Voie d’eau 4/Éclats 2 ; Charpenterie Difficult( −20) seuil 30.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0266",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique rames 1–2 : Bancs déplacés » ? Rames impossibles ; rameurs Athlétisme +20 ou À Terre ; Force +40 prolongée seuil 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0267",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique rames 3–4 : Rames fendues » ? Rames M −1/Tests −1 DR/Éclats 2 ; Charpenterie +0 seuil 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0268",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique rames 5–6 : Tolets ruinés » ? Rames M −1/Tests −1 DR/Man −2 DR/Éclats 4 ; Charpenterie +0 seuil 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0269",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique rames 7–8 : Rames brisées » ? Rames M −2/Tests −2 DR/Éclats 5 ; Charpenterie −10 seuil 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0270",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique rames 9–10 : Bancs détruits » ? Rames impossibles, Éclats 6 ; Athlétisme Difficult( −20)ou À Terre ; Charpenterie −20 seuil 40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0271",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique équipement 1–2 : Cabestan » ? Ancre tombée,10%/Tour de blocage ; Ingénierie +40 seuil 10 pour réparer, ou Force −30 seuil 20 pour lever.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0272",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique équipement 3–4 : Canon libre » ? Servants Athlétisme +0 ou douze dégâts ; Force +20 prolongée pour replacer, seuil non publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0273",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique équipement 5–6 : Ancre perdue » ? Ancre indisponible, récupérer/remplacer ; fortune possible au MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0274",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique équipement 7–8 : Canon perdu » ? Grosse pièce ou pierrier par-dessus bord ; récupérer ou remplacer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0275",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.120",
+    "question": "Implanter « Critique équipement 9–10 : Canot perdu » ? Canot embarqué ou remorqué perdu ; récupérer ou remplacer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0276",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.121",
+    "question": "Implanter « Test d’équipage : somme » ? Attribuer des rôles ; chacun teste sa compétence et tous les DR s’additionnent. Un DR total positif réussit ; zéro peut réussir si le MJ l’autorise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0277",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.121",
+    "question": "Implanter « Rôle vital » ? Le rôle vital choisi par le MJ compte ses DR deux fois, y compris négatifs ; les italiques des exemples désignent ce rôle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0278",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.121",
+    "question": "Implanter « Rôles de bord » ? Capitaine Commandement ; timonier Voile ; vigie Perception ; matelot Voile/Canotage ; navigateur Navigation ; canonnier Poudre ; cuisinier Cuisine ; chirurgien Guérison ; chanteur Chant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0279",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.122",
+    "question": "Implanter « Représentation des rôles » ? Un PJ peut représenter tout son rôle ; plusieurs PJ au même rôle cumulent. Les PNJ ne complètent que rôles absents, acteurs notables ou remplaçants préférés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0280",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.122",
+    "question": "Implanter « Sabotage d’équipage » ? Un saboteur ne jette pas un Test d’équipage ; le MJ impose −1 à −5 DR selon l’effet décrit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0281",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.122",
+    "question": "Implanter « Cumuler des rôles » ? Une personne remplissant deux rôles teste les deux avec difficulté augmentée de deux crans.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0282",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.122",
+    "question": "Implanter « Équipage insuffisant » ? Sous le minimum, −2 DR et résultat plafonné à marginalement réussi ; sur grand navire, pénalité par dix pour cent d’équipage manquant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0283",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.122",
+    "question": "Implanter « Équipage : progression » ? Capitaine, chanteur, matelots, timonier et navigateur peuvent remplacer la conduite pour progresser ; capitaine vital.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0284",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.122",
+    "question": "Implanter « Équipage : poursuite » ? Même ensemble de rôles ; matelots vitaux pour maximiser la vitesse de poursuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0285",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Équipage : manœuvres » ? Capitaine, navigateur, matelots, timonier et chanteur ; timonier vital.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0286",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Équipage : observation » ? Vigie, navigateur, matelots, timonier et chanteur ; vigie vitale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0287",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Équipage : Navigation » ? Capitaine, matelots, timonier, vigie et navigateur ; navigateur vital.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0288",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Équipage : tout arrimer » ? Capitaine, vigie, matelots, timonier et chanteur ; matelots vitaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0289",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Dératisation : Test prolongé » ? Chaque Test prend d10 heures, seuil et difficulté selon infestation ; rats usuels +0 seuil 10. Ratier peut prendre rôle vital par Fronde ; chat ou petit chien ajoute +1 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0290",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Entretien par équipage » ? Remplace la compétence artisanale de réparation, mais impose −2 DR faute de spécialiste. Rôles : capitaine, chanteur, matelots, timonier, navigateur ; matelots vitaux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0291",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Tirer une bordée » ? Un Test d’équipage donne les mêmes DR à tous les canons orientés vers l’ennemi ; capitaine, chanteur, matelots, canonnier, timonier ; canonnier vital.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0292",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.123",
+    "question": "Implanter « Voyage pénible : coordination » ? Chanteur, cuisinier, navigateur, matelots et chirurgien coordonnent ce Test lors des circonstances pénibles ; seule la clause de moral est exclue par Q 18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0294",
+    "phase": "maladies-soins",
+    "lot": "L25",
+    "source": "L25 p.125",
+    "question": "Implanter « Contagion par toux à bord » ? Une maladie au symptôme Toux et éternuements expose tous les occupants du navire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0295",
+    "phase": "maladies-soins",
+    "lot": "L25",
+    "source": "L25 p.125",
+    "question": "Implanter « Contamination du tonneau » ? Un malade de peste noire, flux sanglant, courante ou variole urticante buvant au tonneau teste Résistance +0 ; échec contamine l’eau des suivants. Petite bière exemptée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0296",
+    "phase": "maladies-soins",
+    "lot": "L25",
+    "source": "L25 p.125",
+    "question": "Implanter « Scorbut : contraction » ? Chaque mois sans bonne nutrition : Résistance +0 ; bouillon de chou fermenté régulier donne +40. Échec : scorbut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0297",
+    "phase": "maladies-soins",
+    "lot": "L25",
+    "source": "L25 p.125",
+    "question": "Implanter « Scorbut : durée et symptômes » ? Persiste jusqu’à d10 jours après reprise régulière de fruits/légumes frais ; Flux, Malaise, Nausée, Blessé, avec un pour cent de perte de dent chaque jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0298",
+    "phase": "maladies-soins",
+    "lot": "L25",
+    "source": "L25 p.125",
+    "question": "Implanter « Premier mal de mer » ? Humains, Nains, Halflings et Ogres au premier voyage : Résistance −10 ou mal de mer ; retester +0 chaque jour, un succès immunise à cette forme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0299",
+    "phase": "maladies-soins",
+    "lot": "L25",
+    "source": "L25 p.125",
+    "question": "Implanter « Mal de mer de gros temps » ? Fort coup de vent ou tempête : Résistance +0 ou mal de mer ; retester chaque heure pour guérir. Malaise et Nausée restent symptômes, pas États de combat.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0300",
+    "phase": "maladies-soins",
+    "lot": "L25",
+    "source": "L25 p.125",
+    "question": "Implanter « Consommation d’eau à bord » ? Un tonneau contient trente-deux gallons ; chaque membre boit normalement un gallon quotidien. La chaleur peut doubler le besoin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0301",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.126",
+    "question": "Implanter « Petite bière et vivres » ? Eau avec un fût de bière produit un tonneau de petite bière hydratante ; le biscuit évite la faim sans prévenir le scorbut.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0302",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.126",
+    "question": "Implanter « Boussole » ? L’aide d’une boussole apporte +1 DR à Navigation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0303",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.126",
+    "question": "Implanter « Manteau de phoque » ? Un bon manteau donne +1 DR de Résistance au froid ; les surmoufles empêchent les gestes de dextérité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0304",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.126",
+    "question": "Implanter « Partage des prises » ? Cinquante pour cent au propriétaire/entretien, dix au capitaine, quarante répartis entre le reste ; officiers et non-combattants renoncent généralement à leur part.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0305",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.128",
+    "question": "Implanter « Voyage prolongé : cadence » ? Un événement après d10 jours réellement passés en mer, non forcément consécutifs ; escale après 2 d10 heures ; une activité par semaine entière de trajet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0306",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.128",
+    "question": "Implanter « Voyage expéditif : tirage » ? Calculer durée, humeur fournie par le MJ et Voyage pénible ; d10 moins semaines en mer, ajusté par dizaine d’humeur et DR du Test.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0307",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.128",
+    "question": "Implanter « Voyage expéditif : ≤0 » ? Perte de 50 pour cent de PNJ, 75 pour cent du cargo, 75 pour cent des Blessures du navire et 3 Critiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0308",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.128",
+    "question": "Implanter « Voyage expéditif : 1–2 » ? Perte de 20 pour cent de PNJ, 50 pour cent du cargo, 50 pour cent des Blessures du navire et 2 Critiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0309",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.128",
+    "question": "Implanter « Voyage expéditif : 3–5 » ? Perte de 10 pour cent de PNJ, 25 pour cent du cargo, 25 pour cent des Blessures du navire et 1 Critiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0310",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.128",
+    "question": "Implanter « Voyage expéditif : 6–9 » ? Perte de 0 pour cent de PNJ, 10 pour cent du cargo, 0 pour cent des Blessures du navire et 0 Critiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0311",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.128",
+    "question": "Implanter « Voyage expéditif : ≥10 » ? Perte de 0 pour cent de PNJ, 0 pour cent du cargo, 0 pour cent des Blessures du navire et 0 Critiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0312",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.129",
+    "question": "Implanter « Voyage expéditif : éviter doubles pertes » ? Ignorer les dégâts d’équipage et Éclats produits par les Critiques de ce voyage ; leurs pertes sont déjà comprises dans le pourcentage publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0313",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.129",
+    "question": "Implanter « Progression quotidienne de voyage » ? Distance quotidienne de dix-huit miles par point de M, moitié sans équipage et installations de nuit ; environ dix pour cent de progression par DR de conduite, positif ou négatif.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0314",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.129",
+    "question": "Implanter « Distances portuaires » ? La matrice de six ports donne les distances de voyage en miles, à au moins dix miles du rivage en haute mer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0315",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur de Manann : faits du navire » ? Source : revue quotidienne, chaque modificateur une seule fois et sacrifices non cumulatifs. L’arbitrage B-C 53 conserve des faits MJ et reçus, sans humeur persistante automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0316",
+    "phase": "navigation",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Événement portuaire : humeur » ? 2 d10 à l’arrivée, diminué d’un si humeur négative, augmenté d’un si positive ; aucune borne artificielle à deux ou vingt.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0317",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : VaincreStromfels » ? Ce fait produit +3 d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0318",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Grand sacrifice » ? Ce fait produit +5 +2 d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0319",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Coiffe de naissance » ? Ce fait produit +2 d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0320",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Sacrifice moyen » ? Ce fait produit +5+d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0321",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Prêtre sans Péché » ? Ce fait produit +5+d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0322",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Prière jouée par quart » ? Ce fait produit +d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0323",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Pleine Mannslieb » ? Ce fait produit +d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0324",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Chat bien traité » ? Ce fait produit +d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0325",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Petit sacrifice » ? Ce fait produit +5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0326",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Prière par quart » ? Ce fait produit +5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0327",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Prêtre un à trois Péchés » ? Ce fait produit +5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0328",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Né en mer » ? Ce fait produit +5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0329",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Ciel rouge » ? Ce fait produit −5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0330",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Mannslieb décroissante » ? Ce fait produit −5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0331",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Chapeau perdu » ? Ce fait produit −5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0332",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Mots tabous » ? Ce fait produit −5 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0333",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Départ Festag » ? Ce fait produit −d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0334",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Navire renommé » ? Ce fait produit −d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0335",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Chat maltraité » ? Ce fait produit −d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0336",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Bananes » ? Ce fait produit −d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0337",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Prêtre six Péchés ou plus » ? Ce fait produit −10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0338",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Autre dieu invoqué » ? Ce fait produit −5−d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0339",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Départ treizième jour » ? Ce fait produit −2 d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0340",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Juron contre mer » ? Ce fait produit −2 d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0341",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Albatros tué » ? Ce fait produit −5 −2 d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0342",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.130",
+    "question": "Implanter « Humeur : Stromfels ou Chaos invoqué » ? Ce fait produit −5 d10 points d’humeur dans la source ; le MJ fournit le fait et les dés, sans nouveau suivi automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0343",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin ≤−65 : Triton » ? Triton attaque ; s’il est vaincu, d10 :1–5 humeur +2 d10,6–10 humeur −2 d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0344",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −60 à−64 : Maelström » ? Entrer à la périphérie du Maelström selon le système de tourbillons.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0345",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −50 à−53 : Monstre puissant » ? d10 :1–3 hydre osseuse,4–5 ver-sangsue,6–9 Gargantuan,10 Léviathan noir ; réduit à moitié Blessures initiales, il peut être chassé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0346",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −50 à−53 : Ouragan » ? Tout arrimer par équipage −20, sinon trois Critiques de gréement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0347",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −46 à−49 : Vortex » ? Entrer à la périphérie d’un vortex puissant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0348",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −35 à−39 : Avarie » ? Un Critique dans une localisation aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0349",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −29 à−30 : Rats géants » ? Jusqu’à dératisation −10 seuil 25 :3 d10 Enc perdus par nuit,30% risquefièvre ; étape négative:d10 attaques CC 35,dégâts +5 et infection si blessé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0350",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −24 à−28 : Monstre marin » ? d10 :1–3 Karybdis,4–5 anguilles en nuée,6–9 trois Syreens,10 Merwyrm ; repoussé possible à moitié Blessures initiales.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0351",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −19 à−23 : Vivres perdus » ? La moitié des provisions est détruite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0352",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin −6 à−10 : Rats » ? Jusqu’à dératisation +0 seuil 10 :d10 Enc perdus par nuit,15% risque fièvre ; étape négative:d10 attaques CC 25,dégâts +4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0353",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin 00 à05 : Collision » ? Collision soudaine avec un rocher, selon les règles navales de collision.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0354",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin 06 à09 : Crabes » ? M −1 et Man −1 DR jusqu’au raclage de la coque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0355",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin 10 à18 : Calme plat » ? Absence de vent pour d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0356",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.131",
+    "question": "Implanter « Événement marin 19 à23 : Vaisseau fantôme » ? Changer de cap coûte M −2 pour un jour ; poursuivre normalement coûte du moral dans la source, clause Q 18 exclue.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0357",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 24 à27 : Navire pestiféré » ? Aborder expose à la peste ; butin 2 d10 caisses, d100 rations,2 d10 tonneaux d’eau et 3 d10 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0358",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 28 à30 : Vents inversés » ? Les vents dominants s’inversent pour d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0359",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 31 à37 : Présage défavorable » ? Sans Prière −10 réussie d’un prêtre ou religieux de Manann, humeur −2 d10 ; moral−d10 exclu par Q 18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0360",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 38 à43 : Bruine » ? d10 jours de visibilité brumeuse et pluie légère.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0361",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 44 à47 : Usure » ? Le navire perd d10 Blessures.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0362",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 81 à84 : Bouteille » ? Le marin secouru puis guéri sert gratuitement un an.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0363",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 89 à95 : Cargaison flottante » ? Récupération de d100 Enc d’un cargo aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0364",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 96 à98 : Ghyran » ? d10 jours de +2 DR à Focalisation Ghyran, Résistance et Guérison.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0365",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 99 à102 : Canot de rescapés » ? d10 :1–3 deuxmarins,4–6 unmarin,7 officier,8 pilote,9 médecin,10 chat ; service gratuit jusqu’au prochain port.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0366",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 103 à109 : Temps doux » ? Température confortable pendant d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0367",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 121 à125 : Épave sans équipage » ? Aborder donne 2 d100 Enc d’un cargo aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0368",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 126 à130 : Ciel dégagé » ? d10 jours sans pluie ni brume.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0369",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 131 à134 : Vent favorable » ? Mouvement du navire +1 ; aucune durée publiée à cette ligne.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0370",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 135 à140 : Marsouin » ? Pendant d10 jours, un marsouin évite les dangers et peut guider le navire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0371",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 141 à145 : Présage favorable » ? Prière −10 réussie d’un prêtre/religieux donne humeur +2 d10 ; moral+d10 exclu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0372",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin 146 à149 : Capitaine chanceux » ? Le capitaine gagne un rang de Chanceux pour d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0373",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.132",
+    "question": "Implanter « Événement marin ≥150 : Poissons » ? Assez de poissons pour nourrir tout l’équipage d10 jours ; moral +2 d10 exclu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0374",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 1 : Recrutement forcé » ? Sans permission de descendre cet événement est évité ; sinon 2 d10 membres perdus, récupérables Ragot +0 et 2 d10 CO ou Discrétion −10 ; échec perd encored 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0375",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 2 : Prêtre » ? Payer d10 CO plus tailledu navire en pistoles pour une bénédiction, ou humeur −4 d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0376",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 3 : Douane » ? Droits de dix pour cent du cargo visible ; non-paiement saisit le cargo ; Corruption −20 réussie permet pot-de-vin 2 d10 CO.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0377",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 4 : Tempête » ? Retard de d10 jours ; partir impose pluie forte, fort coup de vent et brouillard. Chaque matin, huit ou plus au d10 renforce le vent en tempête.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0378",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 6 : Vol » ? Décharger fait perdre 2 d10 Enc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0379",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 8 : Pénurie » ? Productions indisponibles ; surplus perd son statut et devient production ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0380",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 13 : Charpentier » ? Réparation ou amélioration par cet artisan prend d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0381",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 14 : Rabais suspect » ? Jusqu’à cinq cents Enc de cargo aléatoire à moitié prix, sans papiers officiels.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0382",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 15 : Beau temps » ? d10 jours sans pluie, température confortable, brise fraîche et visibilité claire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0383",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 16 : Passager clandestin » ? Perception −10 pour repérer avant départ, sinon découverte aprèsd 10 jours ; d10 détermine fonction :1–3 terrien,4–6 marin,7 mercenaire,8 pilote,9 médecin,10 officier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0384",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 17 : Rumeur commerciale » ? Ragot +20 réussi : cargo et port aléatoires, Demande +2 pendant dix +2 d10 jours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0385",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 18 : Fête » ? Permission de descendre et participation franche du capitaine : humeur +2 d10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0386",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 19 : Transport » ? Deux cents CO pour livrer un colis fermé ; volume et détails MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0387",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 20 : Pêche abondante » ? Rations journalières vendues trois deniers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0388",
+    "phase": "voyage",
+    "lot": "L25",
+    "source": "L25 p.133",
+    "question": "Implanter « Événement portuaire 21 : Surproduction » ? Productions deviennent surplus +1 ; tout surplus déjà présent double sa valeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0389",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Activités en mer : semaine de huit jours » ? Une activité par semaine de huit jours ; ni Argent à brûler, ni Avec grand pouvoir, ni perfectionnement elfique. Les activités listées exigent leurs installations et instructeurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0390",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Commerce opportuniste : investissement » ? Investir au plus la charge libre sans surcharge en CO ; Marchandage −10 prolongé seuil dix en trois essais maximum.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0391",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Commerce opportuniste : rendement » ? Échec de six DR : tout perdu ; échec ordinaire : moitié rendue ; succès :mise +10% ; succès de six DR :mise +20%.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0392",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Cartographie de trajet » ? Métier (Cartographe) −10 et deux ports nommés : une réussite produit une carte valant les DR en CO, donnant +2 DR de Navigation entre ces ports.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0393",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Carte au trésor : dépôt » ? Une cache peut être créée gratuitement lors de la cartographie. Si quelqu’un obtient la carte, il découvre le trésor sur cinquante ou moins au d100, au lieu de dix.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0394",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Former l’équipage » ? Réussir Commandement −20 puis la compétence −20 donne aux PNJ les DR du Commandement en avances, plafonnées aux avances du formateur ; deux pistoles par membre formé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0395",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Entretien : usure » ? Métier naval ou Charpenterie +0, −20 en mer, +20 en grand chantier. Réussir consomme la taille du navire en Enc de pièces et supprime les effets de l’événement Usure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0396",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Entretien : Blessures » ? Réparer cinq Blessures consomme deux Enc de pièces navales.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0397",
+    "phase": "entre-aventures",
+    "lot": "L25",
+    "source": "L25 p.134",
+    "question": "Implanter « Entretien : Critiques » ? Métier naval ou Charpenterie −20 réussi et la taille du navire en Enc de pièces et bois retirent un Critique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0398",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.135",
+    "question": "Implanter « Achat : types disponibles » ? Productions et surplus du port sont proposés ; Subsistance ne vend aucun cargo ; Commerce ajoute un cargo aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0399",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.135",
+    "question": "Implanter « Achat : volume » ? Volume en Enc : (taille du port + richesse + surplus) multiplié par d10 puis dix ; un au d10 signifie que ce produit est indisponible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0400",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.135",
+    "question": "Implanter « Achat : négociation » ? Prix de base ×Enc puis Marchandage opposé : variation dix pour cent, vingt avec Négociateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0401",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.135",
+    "question": "Implanter « Marchand aléatoire » ? Marchandage du vendeur : 3 d10 +40 ; au moins deux dés donnant dix lui accordent Négociateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0402",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.135",
+    "question": "Implanter « Fractionner le lot » ? Acheter une partie du lot donne +1 DR au vendeur à l’opposition.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0403",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.135",
+    "question": "Implanter « Achat de surplus » ? Acheter une marchandise en surplus donne +1 DR à l’acheteur pour négocier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0404",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.135",
+    "question": "Implanter « Marienburg et Lothern » ? Marienburg et Lothern : trois cargos tirés, chaque doublon donne surplus +1. Marchandage du vendeur : 3 d10 +55 ; un dix suffit à lui donner Négociateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0405",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.136",
+    "question": "Implanter « Vente : marchandise importée » ? Produit non local ou port Commerce : d100 inférieur ou égal à dix fois (taille + Demande), plus trente si Commerce. Un échec autorise un second essai à demi-volume, puis aucun acheteur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0406",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.136",
+    "question": "Implanter « Vente : produit déjà local » ? Après plus de cent miles de transport, Ragot −10 puis d100 inférieur ou égal à dix fois la taille du port ; sinon traiter le produit local comme un surplus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0407",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.136",
+    "question": "Implanter « Vente : produit en surplus » ? Ragot −30 réussi puis d100 inférieur ou égal à cinq fois la taille du port pour obtenir un acheteur de produit en surplus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0408",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.136",
+    "question": "Implanter « Offre de prix » ? Richesse + taille + Demande : total un donne prix de base −50 %, deux −25 %, trois −10 %, quatre le prix de base. Aucune ligne n’est publiée au-delà de quatre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0409",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.136",
+    "question": "Implanter « Vente : négociation selon production » ? Vendeur de produit non local ou en port Commerce : +1 DR, et encore +1 si Demande ; produit local : −2 DR ; surplus : −3 DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0410",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.136",
+    "question": "Implanter « Vente pressée » ? Un port Commerce ou ayant une Demande accepte toujours le cargo au quart du prix de base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0411",
+    "phase": "commerce",
+    "lot": "L25",
+    "source": "L25 p.137",
+    "question": "Implanter « Cargo saisonnier » ? Le d100 de cargaison utilise la colonne de saison parmi onze produits ; les prix par Enc en CO varient aussi selon la saison. Le prix du vin est tiré à l’achat et conservé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0417",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.141",
+    "question": "Implanter « Anguille : mucus et prise » ? Si agrippée, l’anguille peut tester Endurance pour gagner +4 DR aux libérations ultérieures. Son adversaire teste Athlétisme +0 ; échec : lâcher l’anguille ou subir l’asphyxie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0418",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.142",
+    "question": "Implanter « Élémentaire : immersion » ? Poser Enchevêtré par une prise immerge et asphyxie la victime ; sortie par Force opposée. L’élémentaire ne doit pas maintenir activement la prise et ne compte pas comme Engagé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0419",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.142",
+    "question": "Implanter « Élémentaire : Enflammé » ? L’élémentaire marin ne subit jamais Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0420",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.142",
+    "question": "Implanter « Élémentaire : magie par Force » ? L’élémentaire peut utiliser sa caractéristique Force pour Incantation et Focalisation.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0421",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.143",
+    "question": "Implanter « Gargantuan : broyer un navire » ? Le Gargantuan enserre un navire jusqu’à Large en un Tour par dix points de taille ; puis Force prolongée opposée à l’Endurance du navire. Atteindre ses Blessures brise la coque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0422",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.143",
+    "question": "Implanter « Gargantuan : desserrer » ? Force opposée : zéro à quatre DR empêchent le broyage ce Tour ; cinq ou plus forcent à lâcher. Plus de sept Blessures peuvent imposer au monstre Calme +20 pour garder sa prise.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0423",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.143",
+    "question": "Implanter « Gargantuan : choc électrique » ? Après une prise, au début d’un Tour ultérieur : dépenser un Avantage pour dix dégâts ignorant le métal non magique ; subir des Blessures impose Résistance −10 ou un Sonné.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0424",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.143",
+    "question": "Implanter « Gargantuan : épuisement électrique » ? Chaque choc impose Résistance +20 au Gargantuan, sinon un Exténué ; avec Exténué, les chocs ne font plus que six dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0425",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.143",
+    "question": "Implanter « Gargantuan : choc sur navire » ? Contre un navire agrippé, le choc n’endommage pas la structure ; tous les membres subissent six dégâts, trois si le Gargantuan est Exténué.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0426",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.145",
+    "question": "Implanter « Merwyrm : poison des crocs » ? Toutes les attaques de Gueule à crocs du Merwyrm reçoivent Venin (Difficile).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0427",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.147",
+    "question": "Implanter « Léviathan orbe : froid » ? Un Test de Résistance peut ignorer les effets nocifs du froid et de la glace ; aucune immunité automatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0428",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.147",
+    "question": "Implanter « Léviathan noir : collision » ? Charger un navire provoque une collision d’indice cinquante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0429",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.147",
+    "question": "Implanter « Léviathan noir : taille du feu » ? Le feu n’effraie le Léviathan noir qu’à la taille et à l’intensité d’un grand feu de camp ; les torches ne suffisent pas.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0433",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.149",
+    "question": "Implanter « Triton : créatures amphibies » ? Les créatures Amphibies ou Aquatiques sont soumises à l’autorité de Triton dans l’eau, mais peuvent l’ignorer sur terre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0434",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.149",
+    "question": "Implanter « Trident de Triton » ? Arme d’hast Massive : BF +6, Dévastatrice, Percutante, Empaleuse, Magique ; ne pas ajouter une seconde fois le BF au dégât du profil.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0435",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.149",
+    "question": "Implanter « Trident : perce-coque » ? Dégât contre la coque : Endurance −10, sinon Voie d’eau un. Dégât critique contre la coque : Endurance −20, sinon Voie d’eau trois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0436",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.149",
+    "question": "Implanter « Couronne de Triton » ? Porter la couronne de Triton donne Protection neuf.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0437",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.151",
+    "question": "Implanter « Prothèse de Roth » ? Avec sa prothèse, Roth ne subit aucune pénalité de main manquante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0438",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.151",
+    "question": "Implanter « Héritier du cartographe » ? Roth reçoit +2 DR à Navigation ; comme capitaine, il peut utiliser Navigation à la place de Commandement dans les Tests d’équipage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0439",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.151",
+    "question": "Implanter « Longue-vue enchantée de Roth » ? Cette longue-vue perce toute obscuration, brouillard naturel comme illusions magiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0440",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.153",
+    "question": "Implanter « Flancs de fer du Fair Fregar » ? Le Fair Fregar ignore les Éclats des Critiques ; un Critique de gréement ou de rames devient un incident de vapeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0441",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.153",
+    "question": "Implanter « Combustible du Fair Fregar » ? Une heure de marche utilise un Enc de charbon ou deux Enc de bois ; le MJ peut augmenter la consommation lors des efforts ou manœuvres soutenus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0442",
+    "phase": "construction",
+    "lot": "L25",
+    "source": "L25 p.154",
+    "question": "Implanter « Protection de Kotfotr » ? Toute attaque à distance contre Kotfotr est Difficile à −10, ou plus difficile si le contexte l’impose.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0443",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.155",
+    "question": "Implanter « Wulfrik : favori du Chaos » ? Wulfrik reçoit +10 en Charme, Intimidation et Commandement pour influencer un fidèle du Chaos.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0444",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.155",
+    "question": "Implanter « Wulfrik : preneur de têtes » ? Lorsque Wulfrik inflige une Blessure Critique, il peut choisir la table de Tête au lieu de la localisation ordinaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0445",
+    "phase": "bestiaire",
+    "lot": "L25",
+    "source": "L25 p.155",
+    "question": "Implanter « Wulfrik : duel de champions » ? Wulfrik gagne un Avantage lorsqu’il affronte un chef ou champion ennemi en combat singulier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0446",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.157",
+    "question": "Implanter « Vrisk : manque de malepierre » ? Après une semaine sans une once de malepierre raffinée, toutes les caractéristiques en centile de Vrisk baissent de vingt et Chanceux treize devient Chanceux trois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0447",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.157",
+    "question": "Implanter « Armure de malepierre » ? Toute personne engagée en mêlée avec le porteur de cette armure s’expose à une influence corruptrice mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0448",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.157",
+    "question": "Implanter « Pistolet à patte de canard » ? Portée dix, dégâts +7, Dangereuse, Imprécise, Recharge cinq, Dispersion cinq, Malepierre. Un Critique infligé expose à une Corruption mineure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0449",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.157",
+    "question": "Implanter « Roue : marche arrière » ? La conduite utilise Intimidation du capitaine. Inverser la marche exige Commandement ou Intimidation +0 ; le navire recule dès le Round suivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0450",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.157",
+    "question": "Implanter « Canon naval à malefoudre » ? Portée deux cents, dégâts +15, Poudre, Équipage quatre, Dangereuse, Recharge huit, Malepierre et ZZAP. ZZAP réduit les PA d’un et ignore les PA du métal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0451",
+    "phase": "objets",
+    "lot": "L25",
+    "source": "L25 p.28",
+    "question": "Implanter « Œil de verre espion » ? Cet œil de verre transmet ce qu’il voit à une portée maximale de dix miles. Aucun stockage, durée ni perception à travers les obstacles n’est publié.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0452",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.41",
+    "question": "Implanter « Création d’un Nain nordique » ? Les Nains nordiques remplacent leur liste de compétences et talents d’espèce par leur variante régionale.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0453",
+    "phase": "creation",
+    "lot": "L25",
+    "source": "L25 p.77",
+    "question": "Implanter « Canonnier haut elfe : arbalète » ? Dans cette carrière, les Hauts Elfes ont accès à Projectile (Arbalète) à la place de Projectile (Poudre).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0454",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.87",
+    "question": "Implanter « Bénédiction de l’albatros : protection » ? Au toucher d’un navire, un albatros attend une heure le départ puis reste BFM jours ; tant qu’il est présent, le navire ne peut couler malgré ses dégâts.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0455",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.87",
+    "question": "Implanter « Bénédiction de l’albatros : mort » ? Tuer l’albatros fait perdre 2 d10 points d’humeur ; la perte d10 de moral publiée est exclue par Q 18.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0456",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.87",
+    "question": "Implanter « Bénédiction du marin » ? Au toucher d’une cible, Canotage, Voile et Natation gagnent +1 DR pendant un jour.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0457",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.87",
+    "question": "Implanter « Respirer sous l’eau » ? Au toucher d’une cible pour BSoc minutes, ignorer l’asphyxie de noyade ; le prêtre ne peut invoquer ce miracle bouche sous l’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0458",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.87",
+    "question": "Implanter « Apaiser les eaux » ? À Sociabilité fois dix yards, un détroit ou tourbillon voit son Mouvement réduit à zéro pour BSoc Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0459",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.87",
+    "question": "Implanter « Malédiction marine » ? À Sociabilité fois dix yards, viser un navire indigne de Manann ; pendant BSoc Rounds, toutes les touches reçues par son équipage font deux dégâts supplémentaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0460",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.87",
+    "question": "Implanter « Courants déchirants » ? À Sociabilité fois dix yards, un navire visible subit M −1 et Manœuvre −1 DR pour BSoc Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0461",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.91",
+    "question": "Implanter « Piste de sang » ? Sur soi pendant une heure, suivre une personne blessée par ses traces de sang sur terre ou eau avec Pistage +40, même après tentative de nettoyage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0462",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.91",
+    "question": "Implanter « Mers déchaînées » ? À Force fois dix yards, une vague instantanée frappe la cible choisie comme une collision d’indice quinze.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0463",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.91",
+    "question": "Implanter « Mal de mer : miracle » ? À Force fois dix yards, une cible subit le mal de mer. Cartouche : BF heures ; prose : une heure. Divergence de durée conservée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0464",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.91",
+    "question": "Implanter « Envoyez-les à Stromfels » ? À Force fois dix yards, doubler instantanément l’indice de voie d’eau d’un navire déjà percé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L25-0465",
+    "phase": "divin",
+    "lot": "L25",
+    "source": "L25 p.91",
+    "question": "Implanter « Vents de tempête » ? À Force fois dix yards, augmenter d’un cran le vent sur un navire pendant Force minutes ; direction inchangée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
