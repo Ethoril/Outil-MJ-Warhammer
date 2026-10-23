@@ -68,6 +68,28 @@
    }
   },
   {
+   "book": "L09",
+   "file": "L09.json",
+   "title": "Temple of Spite",
+   "edition": "V4",
+   "counts": {
+    "profiles": 38,
+    "templates": 15,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L10",
+   "file": "L10.json",
+   "title": "Sylvania, The Cursed County",
+   "edition": "V4",
+   "counts": {
+    "profiles": 29,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L11",
    "file": "L11.json",
    "title": "The Imperial Zoo",
@@ -76,6 +98,160 @@
     "profiles": 62,
     "templates": 0,
     "pregenerated": 6
+   }
+  },
+  {
+   "book": "L12",
+   "file": "L12.json",
+   "title": "Tribes and Tribulations",
+   "edition": "V4",
+   "counts": {
+    "profiles": 49,
+    "templates": 15,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L13",
+   "file": "L13.json",
+   "title": "Up in Arms",
+   "edition": "V4",
+   "counts": {
+    "profiles": 9,
+    "templates": 6,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L14",
+   "file": "L14.json",
+   "title": "Sea Wardens of Cothique",
+   "edition": "V4",
+   "counts": {
+    "profiles": 20,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L16",
+   "file": "L16.json",
+   "title": "Lords of Stone and Steel",
+   "edition": "V4",
+   "counts": {
+    "profiles": 23,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L17",
+   "file": "L17.json",
+   "title": "Winds of Magic",
+   "edition": "V4",
+   "counts": {
+    "profiles": 21,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L18",
+   "file": "L18.json",
+   "title": "Power Behind the Throne Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 30,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L19",
+   "file": "L19.json",
+   "title": "Middenheim: City of the White Wolf",
+   "edition": "V4",
+   "counts": {
+    "profiles": 40,
+    "templates": 1,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L20",
+   "file": "L20.json",
+   "title": "Altdorf: Crown of the Empire",
+   "edition": "V4",
+   "counts": {
+    "profiles": 45,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L21",
+   "file": "L21.json",
+   "title": "Empire in Ruins Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 58,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L22",
+   "file": "L22.json",
+   "title": "The Horned Rat Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 43,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L23",
+   "file": "L23.json",
+   "title": "Enemy in Shadows Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 55,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L24",
+   "file": "L24.json",
+   "title": "Rough Nights & Hard Days",
+   "edition": "V4",
+   "counts": {
+    "profiles": 81,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L25",
+   "file": "L25.json",
+   "title": "Sea of Claws",
+   "edition": "V4",
+   "counts": {
+    "profiles": 28,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
+   "book": "L26",
+   "file": "L26.json",
+   "title": "Death on the Reik Companion",
+   "edition": "V4",
+   "counts": {
+    "profiles": 62,
+    "templates": 0,
+    "pregenerated": 0
    }
   }
  ]

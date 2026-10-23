@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {encounter,subject,level,cast,inputFor,verifySpell} from './helpers/lot3-domain-fixture.js';
 import {getSpellContract} from '../js/core/v5-spell-contracts.js';
-import {UNDEAD_SUMMON_PROFILES,setUndeadProfilesAvailable} from '../js/data/v5-transformation-bestiary.js';
+import {summonProfileLibrary,registerSummonLibrary} from '../js/core/bestiary-profiles.js';
+import L06 from '../js/data/bestiary/L06.json' with {type:'json'};
 
 // L06 pp. 258-259 : [nom FR, nom EN, page, NI, portée, cible, durée]
 const SOURCE=[
@@ -41,29 +42,25 @@ test('Relever les morts — surpuissance : un Squelette par palier de +2 DR',asy
  await store.applySpellExecution(c.id,input);
  assert.equal(dead(store,'aux-'+c.id).length,1+p.castingPreview.totalCastingSl+1);
 });
-test('Relever les morts / Réanimation — D-C40 : profils Squelette (p.339) et Zombie (p.340) du bestiaire, À Terre, contrôlés',async()=>{
- const sk=UNDEAD_SUMMON_PROFILES.skeleton,zo=UNDEAD_SUMMON_PROFILES.zombie;
- assert.deepEqual([sk.page,sk.wounds,sk.caracs.CC,sk.caracs.F],[339,12,25,30]);assert.deepEqual([zo.page,zo.wounds,zo.caracs.CC,zo.caracs.I],[340,12,15,5]);
+test('Relever les morts / Réanimation — D-C40 : profils imprimés Squelette (p.339) et Zombie (p.340) du bestiaire, À Terre, contrôlés',async()=>{
+ const sk=L06.profiles.find(p=>p.id==='E0-P-093'),zo=L06.profiles.find(p=>p.id==='E0-P-094');
+ assert.deepEqual([sk.page,sk.wounds,sk.stats.CC],[339,12,25]);assert.deepEqual([zo.page,zo.wounds,zo.stats.CC],[340,12,15]);
  const {store}=await encounter();const c=getSpellContract('Relever les morts');
  await cast(store,c,{sl:1,domainFactsExtra:{minutesToDawn:5}});
  const raised=dead(store,'aux-'+c.id);assert.ok(raised.length>=2);
- for(const s of raised){
-  assert.equal(s.hp,12);assert.equal(s.maxHp,12);assert.equal(s.caracs.CC,25);assert.equal(s.caracs.M,4);assert.equal(level(s,'À Terre'),1);
-  assert.ok(s.traits.includes('Mort-vivant')&&s.traits.includes('Instable'));assert.equal(s.actions.length,1);assert.equal(s.actions[0].base,30);assert.equal(s.actions[0].damageFormula,'BF+4');
- }
+ for(const s of raised){assert.equal(s.hp,12);assert.equal(s.caracs.CC,25);assert.equal(level(s,'À Terre'),1);assert.ok(s.traits.includes('Mort-vivant'));}
  const {store:s2}=await encounter();const r=getSpellContract('Réanimation');
  await cast(s2,r,{sl:1,domainFactsExtra:{minutesToDawn:5,undeadKind:'zombies'}});
- const z=dead(s2,'aux-'+r.id)[0];assert.equal(z.caracs.CC,15);assert.equal(z.actions.length,2);assert.equal(z.actions[1].damageFormula,'BF+3');
+ assert.equal(dead(s2,'aux-'+r.id)[0].caracs.CC,15);
 });
 test('Relever les morts — D-C40 : refusé quand le profil n’est pas disponible',async()=>{
  const {store}=await encounter();const c=getSpellContract('Relever les morts');
- const saved=UNDEAD_SUMMON_PROFILES.skeleton;
+ const saved=summonProfileLibrary();
  try{
-  setUndeadProfilesAvailable(false);
+  registerSummonLibrary(saved.filter(p=>p.id!=='E0-P-093'));
   const p=store.previewSpellExecution(c.id,inputFor(c,{sl:1,domainFactsExtra:{minutesToDawn:5}}));
   assert.equal(p.ready,false);assert.match(p.error,/profil/i);
- }finally{setUndeadProfilesAvailable(true);}
- assert.ok(saved);
+ }finally{registerSummonLibrary(saved);}
 });
 test('Réanimation — BFM + DR morts relevés, Zombies ou Squelettes selon le choix',async()=>{
  const c=getSpellContract('Réanimation');

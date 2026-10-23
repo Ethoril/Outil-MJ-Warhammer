@@ -4,6 +4,7 @@ import{situationPlan,activeSource}from'./v5-talent-situations.js';
 import{acquireV5Conditions,recoverV5Condition,previewDeliciousExcruciation}from'./v5-effects.js';
 import{withMomentum}from'./v5-combat-rules.js';
 import{resolveV5Opposition}from'./v5-roll.js';
+import{willpowerBase}from'./creature-natures.js';
 import{activeReferential,keywordMatches,participantKeywords,specializationMatches,traitTargetMatches}from'./creature-keywords.js';
 const calmId=()=>getReferenceCatalogue().skills.find(s=>s.nom==='Calme')?.id;
 export function genericPsychologyOrigin(sourceKind='trait',meta={}){
@@ -118,7 +119,7 @@ export function resolveGenericTerrorTest({actor,terrorEffectId,test,encounterId=
  return{ready:true,passed:test.success,brokenAdded,followUpFearRating:effect.rating,participant:nextParticipant};
 }
 export const PSYCHOLOGY_ACTIONS=[{id:'large-fear',owner:'large',name:'Grande taille : Peur',noTest:true},{id:'frightening',owner:'frightening',name:'Effrayant : rencontrer les adversaires',noTest:true},{id:'hatred',owner:'hatred',name:'Haine : se retenir',skill:'Calme',attr:'FM'},{id:'vice',owner:'vice',name:'Vice : résister ou mettre fin à l’excès',skill:'Calme',attr:'FM'},{id:'vice-exhausted',owner:'vice',name:'Vice : excès jusqu’à l’insensibilité',noTest:true},{id:'satisfy-vice',owner:'vice',name:'Vice : satisfaction confirmée',noTest:true}];
-export function fearAction(subject){return(subject.states||[]).some(s=>s.key==='fear-of-talent'&&activeSource(s))?{id:'activate:overcome-fear',note:'Effrayant : surmonter la Peur',type:'skill',attr:'FM',base:subject.skills?.find(s=>s.id===calmId()&&s.status==='resolved')?.total??subject.caracs?.FM,mod:0,qualities:[],extensions:{fiche:{skillId:calmId()},v5:{kind:'test',initialContext:{talentAction:'overcome-fear',psychologyKind:'fear'}}}}:null;}
+export function fearAction(subject){return(subject.states||[]).some(s=>s.key==='fear-of-talent'&&activeSource(s))?{id:'activate:overcome-fear',note:'Effrayant : surmonter la Peur',type:'skill',attr:'FM',base:subject.skills?.find(s=>s.id===calmId()&&s.status==='resolved')?.total??willpowerBase(subject).value,mod:0,qualities:[],extensions:{fiche:{skillId:calmId()},v5:{kind:'test',initialContext:{talentAction:'overcome-fear',psychologyKind:'fear'}}}}:null;}
 export function previewPsychologyActivation(n,test){
  const c=n.v5.context||{},id=c.talentAction,row=PSYCHOLOGY_ACTIONS.find(r=>r.id===id);if(!row&&id!=='overcome-fear')return null;
  const existing=(n.actor.states||[]).find(s=>s.key==='fear-of-talent'&&s.id===c.fearEffectId&&activeSource(s));

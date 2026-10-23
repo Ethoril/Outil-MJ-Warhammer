@@ -1,8 +1,10 @@
 import { uid } from './models.js';
 import {randomVortexStep} from './v5-magic-turn.js';
+import {buildParticipantFromBestiary,summonProfileLibrary} from './bestiary-profiles.js';
 import {spellObjectChoices,ARCANE_WEAPON_PROFILES} from './equipment.js';
 import {acquiredV5Talents} from './v5-talents.js';
 import {spellAttackNature,previewMagicProtection} from './v5-magic-combat.js';
+import {magicResistanceReduction} from './creature-magic.js';
 import {getV5Fortune} from './v5-resources.js';
 import { consumeDivineLayers } from './v5-divine-effects-gear.js';
 const spellCriticalSeverityReminder = actor => {
@@ -98,7 +100,6 @@ import { reminderFlagTexts } from './v5-magic-reminder-flags.js';
 import { resolveSpecificOvercast, specificOvercastReminder, raiseTraitRating, SPECIFIC_OVERCAST_KINDS } from './v5-magic-overcast-options.js';
 import { normalizeArcaneOptions, previewArcaneUnforgiving, applyArcaneArmorDamage } from './v5-magic-arcane-unforgiving.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
-import { undeadProfilesAvailable, undeadSummonParticipant } from '../data/v5-transformation-bestiary.js';
 
 export const V5_SPELL_CONTRACTS_VERSION = 'v5-spell-contracts-2026-10-10.3';
 
@@ -683,15 +684,20 @@ export function resolveAuxiliarySummons({ contract, caster, options = {} } = {})
       armor: {head:0,body:0,arms:0,legs:0}, isAuxiliary: true, casterId: caster.id, noMomentum: false,
       extensions: {v5: {summonedBySpellId:contract.id, summonedUntilRound: Number(options.round || 1) + options.domainFacts.minutesToDawn * 6}}
     });
-  } else if (contract.effects?.summon?.generic) {
-    // Créatures sans profil automatique (profils de bestiaire : phase E) : participants génériques sous le contrôle du lanceur.
-    const spec=contract.effects.summon,sl=Math.max(0,Number(options.castingSl) || 0);
+  } else if (contract.effects?.summon?.profile || contract.effects?.summon?.profiles) {
+    // Créatures invoquées d'après un profil imprimé du bestiaire (E-B3) : valeurs non recalculées, sous le contrôle du lanceur.
+    const spec=contract.effects.summon,sl=Math.max(0,Number(options.castingSl) || 0),facts=options.domainFacts || {};
     const total=(spec.baseFormula?spellFormulaValue(spec.baseFormula,caster):1)+Math.max(0,(Number(spec.count) || 1)-1)+(spec.addDr?sl:0);
-    const label=spec.names?.[options.domainFacts?.[spec.nameFact]] || spec.name;
-    const profileKind=spec.profileKinds?.[options.domainFacts?.[spec.nameFact]] || spec.profileKinds?.default;
-    for(let i=0;i<total;i++)auxiliaries.push(profileKind?{...undeadSummonParticipant(profileKind,{id:'aux-'+contract.id+'-'+uid()+'-'+(i+1),name:label+' '+(i+1),camp:caster.camp,casterId:caster.id,states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1}))}),extensions:{v5:{summonedBySpellId:contract.id,genericSummon:true,undeadProfile:profileKind}}}:{id:'aux-'+contract.id+'-'+uid()+'-'+(i+1),name:label+' '+(i+1),zone:'active',camp:caster.camp,hp:null,maxHp:null,caracs:{},traits:[...(spec.traits || [])],
-      states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1})),skills:[],actions:[],armor:{head:0,body:0,arms:0,legs:0},isAuxiliary:true,casterId:caster.id,noMomentum:false,
-      extensions:{v5:{summonedBySpellId:contract.id,genericSummon:true}}});
+    const profileId=spec.profiles?spec.profiles[facts[spec.nameFact]]:spec.profile;
+    if(!profileId)throw new Error('Choix de la créature invoquée manquant : '+(spec.nameFact || 'profil'));
+    const label=spec.names?.[facts[spec.nameFact]] || spec.name;
+    const camp=spec.outcomeFact && facts[spec.outcomeFact]==='attacks'?'ennemi':caster.camp;
+    for(let i=0;i<total;i++){
+      const built=buildParticipantFromBestiary(profileId,{library:summonProfileLibrary(),camp,zone:'active',idFactory:()=>'aux-'+contract.id+'-'+uid()+'-'+(i+1)});
+      auxiliaries.push({...built,name:total>1?label+' '+(i+1):label,traits:[...built.traits,...(spec.traits || []).filter(t=>!built.traits.includes(t))],
+        states:(spec.states || []).map(name=>({id:'st-'+uid(),name,level:1})),isAuxiliary:true,casterId:caster.id,noMomentum:false,
+        extensions:{v5:{...built.extensions.v5,summonedBySpellId:contract.id}}});
+    }
   } else if (contract.effects?.summon?.indestructible) {
     const spec={...contract.effects.summon},sl=options.castingSl || 0;if(spec.wsFormula)spec.ws=spellFormulaValue(spec.wsFormula,caster);
     const count=spec.count;
@@ -1269,9 +1275,12 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
   }
 
   // Invocations génériques : la couche (fin à l’aube, mort du lanceur) est portée par le lanceur, la zone n’est pas suivie.
-  if (effects.summon?.generic) effectiveTargets = [actor];
-  // D-C40 : sans les profils Squelette / Zombie du bestiaire, Relever les morts et Réanimation sont refusés.
-  if (effects.summon?.profileKinds && !undeadProfilesAvailable()) return { ready: false, valid: false, status: 'profile-missing', error: 'Profils Squelette / Zombie du bestiaire indisponibles : ce sort ne peut pas être lancé.', contract };
+  if (effects.summon?.profile || effects.summon?.profiles) effectiveTargets = [actor];
+  // D-C40 (MJ, 22/10) : sans le profil imprimé de la créature invoquée, le sort est refusé.
+  if (effects.summon?.profile || effects.summon?.profiles) {
+    const ids=effects.summon.profile?[effects.summon.profile]:Object.values(effects.summon.profiles);
+    if (!ids.every(id=>summonProfileLibrary().some(p=>p.id===id))) return { ready: false, valid: false, status: 'profile-missing', error: 'Profil de bestiaire de la créature invoquée indisponible : ce sort ne peut pas être lancé.', contract };
+  }
 
   const targetValidation = validateSpellTargets({...contract,effects}, actor, effectiveTargets, overcastTargetsBonus, options);
   if (!targetValidation.valid) {
@@ -1727,7 +1736,7 @@ export function previewSpellExecution(actor, contractOrId, targets = [], options
       if(answer?.nearest!==true || !Number.isFinite(answer.distance) || answer.distance<0 || answer.distance>bfm)return {ready:false,valid:false,status:'mj-fact-required',error:'Rebond : confirmer la cible la plus proche et sa distance dans BFM mètres.',contract};
     }
     if(effects.durationMode?.willingOnly && domainFacts[effects.durationMode.fact]===effects.durationMode.longMode && options.targetTests?.[target.id]?.unwilling===true)return {ready:false,valid:false,status:'invalid-target',error:'Hibernation : cible consentante requise (WoM p. 146).',contract};
-    const resistanceReduction = magicTalentRank(target,'magic-resistance') ? 3 : 0;
+    const resistanceReduction = Math.max(magicTalentRank(target,'magic-resistance') ? 3 : 0, magicResistanceReduction(target));
     const sl = (castingPreview?.totalCastingSl ?? ((explicitSl ?? castingPreview?.testSl ?? 0)+matchingReserveSl)) - resistanceReduction;
     const targetTotalCastingSl = (castingPreview?.totalCastingSl ?? options.totalCastingSl ?? ((explicitSl ?? castingPreview?.testSl ?? 0)+matchingReserveSl)) - resistanceReduction;
     const targetReceipt = {
@@ -3741,7 +3750,7 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
     for (const [index,aux] of preview.auxiliarySummon.auxiliaries.entries()) {
       participants.push({
         ...aux,
-        ...(contract.effects.summonProfile || contract.effects.summon?.indestructible || contract.effects.summon?.generic || contract.effects.special==='invisible-eye' ? {extensions:{...aux.extensions,v5:{...aux.extensions?.v5,summonCastExecutionId:opKey,summonOwnerId:preview.targetResults[index]?.targetId || actor.id}}} : {}),
+        ...(contract.effects.summonProfile || contract.effects.summon?.indestructible || contract.effects.summon?.profile || contract.effects.summon?.profiles || contract.effects.special==='invisible-eye' ? {extensions:{...aux.extensions,v5:{...aux.extensions?.v5,summonCastExecutionId:opKey,summonOwnerId:preview.targetResults[index]?.targetId || actor.id}}} : {}),
         appliedAtRound: currentRound
       });
     }

@@ -3,6 +3,7 @@
  * Les valeurs sont celles du livre, imprimées telles quelles : jamais recalculées (BF, Taille et armure compris).
  */
 import { activeReferential } from './creature-keywords.js';
+import { cloneValue, normalizeAction, uid } from './models.js';
 
 export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
@@ -29,7 +30,9 @@ export function validateBestiaryRecord(record, referential = activeReferential()
       if (value === undefined) errors.push(`caractéristique ${key} absente (null attendu pour une case vide)`);
       else if (value !== null && (!isInt(value) || value < 0)) errors.push(`caractéristique ${key} invalide`);
     }
-    if (record.kind === 'profile' && (!isInt(record.wounds) || record.wounds < 1)) errors.push('Blessures invalides');
+    // Un profil dont le livre n'imprime aucune Blessures (case W absente) le déclare par `woundsAbsent` : jamais 0 ni recalculé.
+    const absent = record.woundsAbsent === true && record.wounds === null;
+    if (record.kind === 'profile' && !absent && (!isInt(record.wounds) || record.wounds < 1)) errors.push('Blessures invalides');
   }
   for (const attack of record.attacks || []) {
     if (!isText(attack.name)) errors.push('attaque sans nom');
@@ -50,4 +53,116 @@ export function filterBestiary(profiles, { keyword = null, text = '', kinds = nu
   return profiles.filter(profile => (!kinds || kinds.includes(profile.kind))
     && (!keyword || matches?.(profile, keyword))
     && (!wanted || [profile.name, profile.nameFr, ...(profile.skills || []).map(skill => skill.name)].some(value => String(value || '').toLowerCase().includes(wanted))));
+}
+
+/**
+ * Chargement paresseux des données : l'index d'abord, un livre seulement à la demande (jamais deux fois). `fetchJson(chemin)` renvoie le
+ * JSON ; un échec n'est pas mémorisé, pour permettre une nouvelle tentative.
+ */
+export function createBestiaryLoader(fetchJson, base = './js/data/bestiary/') {
+  let indexPromise = null;
+  const books = new Map();
+  const once = (store, key, load) => {
+    if (!store.has(key)) store.set(key, load().catch(error => { store.delete(key); throw error; }));
+    return store.get(key);
+  };
+  const loader = {
+    async index() {
+      if (!indexPromise) indexPromise = Promise.resolve().then(() => fetchJson(`${base}index.json`)).catch(error => { indexPromise = null; throw error; });
+      return (await indexPromise).books;
+    },
+    book(book) {
+      return once(books, book, async () => {
+        const entry = (await loader.index()).find(item => item.book === book);
+        if (!entry) throw new Error(`livre de bestiaire inconnu : ${book}`);
+        return (await fetchJson(`${base}${entry.file}`)).profiles;
+      });
+    },
+    /** Profils des livres demandés, concaténés dans l'ordre demandé. */
+    async load(bookIds) { return (await Promise.all(bookIds.map(book => loader.book(book)))).flat(); },
+    loadedBooks() { return [...books.keys()]; }
+  };
+  return loader;
+}
+
+let summonLibrary = [];
+/**
+ * Profils disponibles aux sorts d'invocation (résolution synchrone) : l'application y inscrit le livre L06 au démarrage.
+ * Pas de pile ni d'historique : la bibliothèque n'est jamais copiée dans les opérations du Store.
+ */
+export function registerSummonLibrary(profiles) { summonLibrary = Array.isArray(profiles) ? profiles : []; }
+export function summonProfileLibrary() { return summonLibrary; }
+
+export const BESTIARY_FREE_ATTACK_KEY = 'freeAttack';
+
+const ARMOUR_ZONES = Object.freeze({ head: /\bhead\b/i, body: /\bbody\b/i, arms: /\barms?\b/i, legs: /\blegs?\b/i });
+
+/** Armure imprimée par zone : `ap` d'ensemble partout, sinon pièces non facultatives (zone nommée, ou partout). Aucun BE ajouté. */
+function printedArmour(armour, includeOptional) {
+  const zones = { head: 0, body: 0, arms: 0, legs: 0 };
+  if (!armour) return zones;
+  if (isInt(armour.ap)) { for (const key of Object.keys(zones)) zones[key] = armour.ap; return zones; }
+  for (const part of armour.parts || []) {
+    if ((part.optional && !includeOptional) || !isInt(part.ap)) continue;
+    const named = Object.keys(zones).filter(key => ARMOUR_ZONES[key].test(part.locations || ''));
+    for (const key of named.length ? named : Object.keys(zones)) zones[key] = Math.max(zones[key], part.ap);
+  }
+  return zones;
+}
+
+const traitText = trait => {
+  const detail = trait.param ?? trait.rating;
+  return detail === undefined || detail === null || detail === '' ? trait.name : `${trait.name} (${detail})`;
+};
+
+function attackAction(attack) {
+  const ranged = isInt(attack.rangeYards);
+  const v5 = { kind: ranged ? 'ranged' : 'melee', ...(attack.free ? { [BESTIARY_FREE_ATTACK_KEY]: attack.free } : {}) };
+  return normalizeAction({
+    name: attack.name, type: 'attack', attr: ranged ? 'CT' : 'CC', base: attack.value ?? '', damage: attack.damage,
+    qualities: cloneValue(attack.qualities || []), ...(ranged ? { rangeYards: attack.rangeYards } : {}),
+    ...(attack.detail ? { detail: attack.detail } : {}), extensions: { v5 }
+  });
+}
+
+/**
+ * Participant ordinaire d'un profil de bestiaire (valeurs imprimées, jamais recalculées : ni BF, ni Taille, ni armure ajoutés).
+ * `options.library` : profils chargés (un livre ou plusieurs) ; `index` : rang d'exemplaire (suffixe du nom) ; `nameFr` : nom français ;
+ * `includeOptional` : attaques et pièces d'armure facultatives. Les gabarits ne sont pas des créatures : refus.
+ */
+export function buildParticipantFromBestiary(id, options = {}) {
+  const { library, camp = 'neutre', zone = 'bench', index = null, nameFr = false, includeOptional = false, idFactory = uid } = options;
+  if (!Array.isArray(library)) throw new Error('bibliothèque de profils requise');
+  const record = library.find(profile => profile.id === id);
+  if (!record) throw new Error(`profil de bestiaire inconnu : ${id}`);
+  if (record.kind === 'template') throw new Error('un gabarit n’est pas une créature : l’appliquer à un profil');
+  const errors = validateBestiaryRecord(record);
+  if (errors.length) throw new Error(`profil de bestiaire incohérent (${id}) : ${errors.join(' ; ')}`);
+  const base = nameFr && record.nameFr ? record.nameFr : record.name;
+  const wounds = isInt(record.wounds) ? record.wounds : null;
+  const traits = (record.traits || []).filter(trait => isText(trait?.name));
+  return {
+    id: idFactory(), name: index === null ? base : `${base} ${index}`, kind: 'Créature', camp, zone,
+    initiative: record.stats.I ?? 0, hp: wounds, maxHp: wounds,
+    caracs: Object.fromEntries(Object.entries(record.stats).filter(([, value]) => value !== null)),
+    armor: printedArmour(record.armour, includeOptional),
+    actions: (record.attacks || []).filter(attack => includeOptional || !attack.optional).map(attackAction),
+    skills: (record.skills || []).map(skill => ({ name: skill.nameFr || skill.name, total: skill.value })),
+    traits: traits.map(traitText), keywords: [...(record.keywords || [])], tags: [], notes: '',
+    extensions: { v5: { bestiary: {
+      id: record.id, book: record.book, page: record.page, name: record.name, edition: record.edition ?? null,
+      armour: cloneValue(record.armour || {}), traitRefs: Object.fromEntries(traits.filter(trait => trait.ref).map(trait => [trait.name, trait.ref])),
+      optionalTraits: (record.optionalTraits || []).map(traitText), abilityRefs: [...(record.abilities || [])], ...(record.woundsAbsent ? { woundsAbsent: true } : {})
+    } } }
+  };
+}
+
+/** Champs d'un profil de Réserve (à passer à `new Profile`) copiés d'un profil de bestiaire : mêmes valeurs imprimées que le participant. */
+export function buildReserveProfileFromBestiary(id, options = {}) {
+  const participant = buildParticipantFromBestiary(id, options);
+  return {
+    name: participant.name, kind: 'Créature', initiative: participant.initiative, hp: participant.hp ?? 0, maxHp: participant.maxHp ?? 0,
+    caracs: participant.caracs, armor: participant.armor, diceLines: participant.actions, skills: participant.skills,
+    traits: participant.traits, keywords: participant.keywords, group: options.group ?? '', extensions: participant.extensions
+  };
 }

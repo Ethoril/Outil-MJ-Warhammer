@@ -1,0 +1,4184 @@
+{
+ "schemaVersion": 1,
+ "book": "L25",
+ "title": "Sea of Claws",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L25",
+  "sha256": "60f5b8856c94c3969e56b4747522bbb78030f5a067a5265a744c48cd8148b4dc"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-895",
+   "book": "L25",
+   "page": 22,
+   "physicalPage": 22,
+   "kind": "profile",
+   "blockKey": "L25:22:0",
+   "name": "Ludolf Köhler — Imperial Sea Lord (Gold 3)",
+   "nameFr": "Ludolf Köhler — Seigneur de la mer impérial (Or 3)",
+   "stats": {
+    "M": 4,
+    "CC": 59,
+    "CT": 34,
+    "F": 37,
+    "E": 40,
+    "I": 49,
+    "Ag": 48,
+    "Dex": 54,
+    "Int": 44,
+    "FM": 32,
+    "Soc": 51
+   },
+   "wounds": 12,
+   "armour": {
+    "ap": 5,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Pistol",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 63
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 54
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 47
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 42
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 58
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 49
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 61
+    },
+    {
+     "name": "Language (Norse)",
+     "nameFr": "Langue (Norse)",
+     "value": 49
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 66
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 49
+    },
+    {
+     "name": "Lore (Nordland)",
+     "nameFr": "Savoir (Nordland)",
+     "frUnverified": true,
+     "value": 54
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 74
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 64
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 39
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 52
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 52
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 63
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 42
+    }
+   ],
+   "talents": [
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Public Speaking"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Strider (Coastal)"
+    },
+    {
+     "name": "Strong Swimmer"
+    }
+   ],
+   "trappings": [
+    "Entourage of Naval Officers",
+    "Suit of Armour with Mer-lion Helmet Crest",
+    "Horse",
+    "Pistol",
+    "Sword"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-896",
+   "book": "L25",
+   "page": 39,
+   "physicalPage": 39,
+   "kind": "profile",
+   "blockKey": "L25:39:0",
+   "name": "Throgg Troll King",
+   "nameFr": "Throgg, roi troll",
+   "stats": {
+    "M": 6,
+    "CC": 70,
+    "CT": 45,
+    "F": 80,
+    "E": 75,
+    "I": 50,
+    "Ag": 40,
+    "Dex": 15,
+    "Int": 45,
+    "FM": 55,
+    "Soc": 20
+   },
+   "wounds": 216,
+   "size": "monstrous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    },
+    {
+     "name": "Maul",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 100
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 50
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 60
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 65
+    },
+    {
+     "name": "Melee",
+     "nameFr": "Corps à corps",
+     "value": 90
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Brute",
+     "ref": "E0-T-072"
+    },
+    {
+     "name": "Clever",
+     "ref": "E0-T-073"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Vomit",
+     "ref": "E0-T-065"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Throgg's Maul",
+    "Wintertooth Crown"
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-897",
+   "book": "L25",
+   "page": 47,
+   "physicalPage": 47,
+   "kind": "profile",
+   "blockKey": "L25:47:0",
+   "name": "Skaldor 'Reaver' Lotharksson — Dwarf Ship's Master (Gold 2)",
+   "nameFr": "Skaldor « Reaver » Lotharksson — Maître de navire nain (Or 2)",
+   "stats": {
+    "M": 3,
+    "CC": 68,
+    "CT": 37,
+    "F": 43,
+    "E": 46,
+    "I": 53,
+    "Ag": 37,
+    "Dex": 57,
+    "Int": 58,
+    "FM": 57,
+    "Soc": 24
+   },
+   "wounds": 27,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5,
+    "detail": "Leather Jerkin"
+   },
+   "attacks": [
+    {
+     "name": "Pistol",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Axe",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Dagger",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 72
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 52
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 56
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 34
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 63
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 58
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 59
+    },
+    {
+     "name": "Lore (Frozen Sea)",
+     "nameFr": "Savoir (Frozen Sea)",
+     "frUnverified": true,
+     "value": 63
+    },
+    {
+     "name": "Lore (Riverways)",
+     "nameFr": "Savoir (Voies fluviales)",
+     "value": 63
+    },
+    {
+     "name": "Lore (Sea of Claws)",
+     "nameFr": "Savoir (Sea of Claws)",
+     "frUnverified": true,
+     "value": 68
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 63
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 59
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 57
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 48
+    }
+   ],
+   "talents": [
+    {
+     "name": "Magic Resistant"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong-Minded"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Axe inscribed with Runes of Speed and Striking",
+    "Knife",
+    "Leather Jerkin",
+    "Grund A Dum Sailing Ship and Crew",
+    "Pistol with ammunition and powder for 10 shots",
+    "Sextant"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-898",
+   "book": "L25",
+   "page": 55,
+   "physicalPage": 55,
+   "kind": "profile",
+   "blockKey": "L25:55:0",
+   "name": "Olg Blöösalt — Skaeling Captain (Gold 2)",
+   "nameFr": "Olg Blöösalt — Capitaine skaeling (Or 2)",
+   "stats": {
+    "M": 4,
+    "CC": 57,
+    "CT": 30,
+    "F": 48,
+    "E": 38,
+    "I": 54,
+    "Ag": 56,
+    "Dex": 57,
+    "Int": 36,
+    "FM": 30,
+    "Soc": 42
+   },
+   "wounds": 12,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Axe",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 66
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 42
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 53
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 43
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 71
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 53
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 41
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 57
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 41
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 46
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 68
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Khorne)",
+     "nameFr": "Savoir (Khorne)",
+     "frUnverified": true,
+     "value": 46
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 72
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 64
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 69
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 42
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 66
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 42
+    },
+    {
+     "name": "Trade (Carpenter)",
+     "nameFr": "Métier (Charpentier)",
+     "value": 57
+    }
+   ],
+   "traits": [
+    {
+     "name": "Mark of Khorne",
+     "ref": "E0-T-267"
+    },
+    {
+     "name": "Mutation",
+     "param": "Brine Drinker",
+     "ref": "E0-T-040"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Berserk Charge"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Fisherman"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Public Speaking"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Strider (Coastal)"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong Legs"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Axe",
+    "Leather Jack",
+    "Leather Leggings",
+    "Rust Dagger",
+    "Rusty Mail Shirt",
+    "Rusty Shield"
+   ],
+   "abilities": [
+    "E0-T-267"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-899",
+   "book": "L25",
+   "page": 127,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L25:127:0",
+   "name": "Landsman — Silver 1",
+   "nameFr": "Novice — Argent 1",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 31,
+    "F": 31,
+    "E": 31,
+    "I": 31,
+    "Ag": 36,
+    "Dex": 36,
+    "Int": 31,
+    "FM": 31,
+    "Soc": 36
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 36
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 36
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 36
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 36
+    },
+    {
+     "name": "Lore (Foreign Lands)",
+     "nameFr": "Savoir (Foreign Lands)",
+     "frUnverified": true,
+     "value": 36
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 36
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 36
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 42
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 36
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Fisherman"
+    },
+    {
+     "name": "Stout-Hearted"
+    },
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "trappings": [
+    "Brush",
+    "Bucket",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Mop",
+    "Pouch",
+    "Sling Bag containing Flask of Spirits"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-900",
+   "book": "L25",
+   "page": 127,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L25:127:1",
+   "name": "Officer — Silver 5",
+   "nameFr": "Officier — Argent 5",
+   "stats": {
+    "M": 4,
+    "CC": 41,
+    "CT": 36,
+    "F": 31,
+    "E": 31,
+    "I": 31,
+    "Ag": 31,
+    "Dex": 31,
+    "Int": 41,
+    "FM": 31,
+    "Soc": 46
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 41
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 51
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 41
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 36
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 56
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 49
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 36
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 56
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 51
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 36
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 51
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 41
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 41
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 41
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 41
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Crew)"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Stout-Hearted"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Pouch",
+    "Quality Uniform",
+    "Ship's Chest",
+    "Sling Bag containing Flask of Spirits",
+    "Sword"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-901",
+   "book": "L25",
+   "page": 127,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L25:127:2",
+   "name": "Sailor — Silver 3",
+   "nameFr": "Marin — Argent 3",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 31,
+    "F": 36,
+    "E": 31,
+    "I": 36,
+    "Ag": 41,
+    "Dex": 41,
+    "Int": 31,
+    "FM": 41,
+    "Soc": 36
+   },
+   "wounds": 13,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Boat Hook",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 46
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 41
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 46
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 36
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 41
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 41
+    },
+    {
+     "name": "Lore (Foreign Lands)",
+     "nameFr": "Savoir (Foreign Lands)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 41
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 41
+    },
+    {
+     "name": "Play (Pennywhistle)",
+     "nameFr": "Musicien (Pennywhistle)",
+     "frUnverified": true,
+     "value": 51
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 46
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 51
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 46
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Fisherman"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Stout- Hearted"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Boat Hook",
+    "Brush",
+    "Bucket",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Leather Jerkin",
+    "Mop",
+    "Pouch",
+    "Sling Bag containing Flask of Spirits"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-902",
+   "book": "L25",
+   "page": 127,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L25:127:3",
+   "name": "Huffer — Silver 1",
+   "nameFr": "Huffer — Argent 1",
+   "stats": {
+    "M": 4,
+    "CC": 41,
+    "CT": 31,
+    "F": 31,
+    "E": 41,
+    "I": 41,
+    "Ag": 31,
+    "Dex": 31,
+    "Int": 31,
+    "FM": 36,
+    "Soc": 36
+   },
+   "wounds": 14,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Boat Hook",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 36
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 51
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 41
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 51
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 36
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 41
+    },
+    {
+     "name": "Lore (Oceans)",
+     "nameFr": "Savoir (Oceans)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 51
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 51
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 51
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 41
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 41
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Stout- Hearted"
+    },
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "trappings": [
+    "Boat Hook",
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Leather Jerkin",
+    "Pouch",
+    "Rope",
+    "Rowboat",
+    "Sling Bag containing Flask of Spirits",
+    "Storm Lantern and Oil"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-903",
+   "book": "L25",
+   "page": 127,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L25:127:4",
+   "name": "Seasoned Mercenary — Silver 3",
+   "nameFr": "Mercenaire aguerri — Argent 3",
+   "stats": {
+    "M": 4,
+    "CC": 46,
+    "CT": 41,
+    "F": 36,
+    "E": 41,
+    "I": 36,
+    "Ag": 31,
+    "Dex": 31,
+    "Int": 31,
+    "FM": 41,
+    "Soc": 36
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Crossbow",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 41
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 41
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 46
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 46
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 34
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 36
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 41
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 39
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 41
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 41
+    },
+    {
+     "name": "Play (Drum)",
+     "nameFr": "Musicien (Tambour)",
+     "value": 41
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 46
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 36
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Breastplate",
+    "Clothing",
+    "Dagger",
+    "either a Halberd or a Crossbow and 10 Bolts",
+    "Helmet",
+    "Pouch",
+    "Sword",
+    "Uniform"
+   ],
+   "keywords": [
+    "mercenaire"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-904",
+   "book": "L25",
+   "page": 127,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L25:127:5",
+   "name": "Doktor — Silver 5",
+   "nameFr": "Doktor — Argent 5",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 31,
+    "F": 31,
+    "E": 31,
+    "I": 31,
+    "Ag": 36,
+    "Dex": 41,
+    "Int": 41,
+    "FM": 46,
+    "Soc": 36
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 46
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 46
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 59
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 46
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 41
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 44
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 46
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 44
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 51
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 46
+    },
+    {
+     "name": "Lore (Anatomy)",
+     "nameFr": "Savoir (Anatomie)",
+     "value": 46
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 41
+    },
+    {
+     "name": "Trade (Barber)",
+     "nameFr": "Métier (Barbier)",
+     "value": 46
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistance (Disease)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Surgery"
+    }
+   ],
+   "trappings": [
+    "Bandages",
+    "Book (Medicine)",
+    "Clothing",
+    "Dagger",
+    "Guild License",
+    "Healing Draught",
+    "Pouch",
+    "Sling Bag containing Trade Tools (Medicine)",
+    "Writing Kit and 5 Pieces of Parchment"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-905",
+   "book": "L25",
+   "page": 140,
+   "physicalPage": 140,
+   "kind": "profile",
+   "blockKey": "L25:140:0",
+   "name": "Lurkerfish",
+   "nameFr": "Lurkerfish",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": null,
+    "F": 45,
+    "E": 35,
+    "I": 30,
+    "Ag": 20,
+    "Dex": null,
+    "Int": 5,
+    "FM": 40,
+    "Soc": null
+   },
+   "wounds": 3,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Horrific Fangs",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Small to Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Berserk Charge",
+     "rank": 3
+    },
+    {
+     "name": "Furious Assault",
+     "rank": 2
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-906",
+   "book": "L25",
+   "page": 141,
+   "physicalPage": 141,
+   "kind": "profile",
+   "blockKey": "L25:141:0",
+   "name": "Gymmcrabs",
+   "nameFr": "Gymmcrabs",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": null,
+    "F": 35,
+    "E": 25,
+    "I": 10,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 5,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 7,
+   "size": "small",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Pincer",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Master"
+    },
+    {
+     "name": "Disarm"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-907",
+   "book": "L25",
+   "page": 141,
+   "physicalPage": 141,
+   "kind": "profile",
+   "blockKey": "L25:141:1",
+   "name": "Daggerfish",
+   "nameFr": "Daggerfish",
+   "stats": {
+    "M": 10,
+    "CC": 32,
+    "CT": 35,
+    "F": 35,
+    "E": 36,
+    "I": 30,
+    "Ag": 48,
+    "Dex": null,
+    "Int": 4,
+    "FM": 18,
+    "Soc": null
+   },
+   "wounds": 3,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Own Body",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Slashing Fins",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bounce",
+     "ref": "E0-T-008"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-908",
+   "book": "L25",
+   "page": 141,
+   "physicalPage": 141,
+   "kind": "profile",
+   "blockKey": "L25:141:2",
+   "name": "Latch Eel",
+   "nameFr": "Latch Eel",
+   "stats": {
+    "M": 6,
+    "CC": 45,
+    "CT": null,
+    "F": 40,
+    "E": 35,
+    "I": 30,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 5,
+    "FM": 35,
+    "Soc": null
+   },
+   "wounds": 13,
+   "size": "small",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    },
+    {
+     "name": "Fangs",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-909",
+   "book": "L25",
+   "page": 142,
+   "physicalPage": 142,
+   "kind": "profile",
+   "blockKey": "L25:142:0",
+   "name": "Sea Elemental",
+   "nameFr": "Élémentaire de mer",
+   "stats": {
+    "M": 12,
+    "CC": 55,
+    "CT": null,
+    "F": 59,
+    "E": 59,
+    "I": 55,
+    "Ag": 55,
+    "Dex": 21,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 80,
+   "size": "enormous",
+   "attacks": [
+    {
+     "name": "Fists",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Grim",
+     "rating": "3",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Rear",
+     "ref": "E0-T-083"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Lore of Life",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Ward",
+     "rating": "8",
+     "ref": "E0-T-066"
+    }
+   ],
+   "spells": {
+    "spells": [
+     "Living Mire",
+     "Whirlpool"
+    ]
+   },
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "elementaire"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-910",
+   "book": "L25",
+   "page": 143,
+   "physicalPage": 143,
+   "kind": "profile",
+   "blockKey": "L25:143:0",
+   "name": "Gargantuan",
+   "nameFr": "Gargantuan",
+   "stats": {
+    "M": 12,
+    "CC": 60,
+    "CT": null,
+    "F": 75,
+    "E": 75,
+    "I": 30,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 7,
+    "FM": 55,
+    "Soc": null
+   },
+   "wounds": 104,
+   "size": "monstrous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Razor-sharp Teeth",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Grim",
+     "rating": "3",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Rear",
+     "ref": "E0-T-083"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "monstre-marin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-911",
+   "book": "L25",
+   "page": 144,
+   "physicalPage": 144,
+   "kind": "profile",
+   "blockKey": "L25:144:0",
+   "name": "Kharibdyss",
+   "nameFr": "Kharibdyss",
+   "stats": {
+    "M": 6,
+    "CC": 55,
+    "CT": null,
+    "F": 65,
+    "E": 55,
+    "I": 40,
+    "Ag": 15,
+    "Dex": null,
+    "Int": 5,
+    "FM": 25,
+    "Soc": null
+   },
+   "wounds": 68,
+   "size": "enormous",
+   "armour": {
+    "ap": 3,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 9,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 8,
+     "trait": "Tail"
+    },
+    {
+     "name": "Fangs and Claws",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Distracting",
+     "param": "Howling",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Bite",
+     "rating": "+9",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+8",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-912",
+   "book": "L25",
+   "page": 145,
+   "physicalPage": 145,
+   "kind": "profile",
+   "blockKey": "L25:145:0",
+   "name": "Syreen",
+   "nameFr": "Syreen",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": null,
+    "F": 30,
+    "E": 30,
+    "I": 20,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 20,
+    "Soc": 20
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Ghostly Blade",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-913",
+   "book": "L25",
+   "page": 145,
+   "physicalPage": 145,
+   "kind": "profile",
+   "blockKey": "L25:145:1",
+   "name": "Merwyrm",
+   "nameFr": "Merwyrm",
+   "stats": {
+    "M": 6,
+    "CC": 62,
+    "CT": null,
+    "F": 65,
+    "E": 60,
+    "I": 45,
+    "Ag": 26,
+    "Dex": null,
+    "Int": 15,
+    "FM": 38,
+    "Soc": 10
+   },
+   "wounds": 76,
+   "size": "enormous",
+   "armour": {
+    "ap": 3,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Fanged Maw",
+     "damage": 11,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 13,
+     "trait": "Tail"
+    },
+    {
+     "name": "Fanged Maw",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Bite",
+     "rating": "+11",
+     "param": "Fanged Maw",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+13",
+     "ref": "E0-T-054"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "monstre-marin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-914",
+   "book": "L25",
+   "page": 146,
+   "physicalPage": 146,
+   "kind": "profile",
+   "blockKey": "L25:146:0",
+   "name": "Bone Hydra",
+   "nameFr": "Bone Hydra",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": 30,
+    "F": 75,
+    "E": 75,
+    "I": 15,
+    "Ag": 15,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 224,
+   "size": "monstrous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    },
+    {
+     "name": "Snapping Jaws",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Corruption",
+     "param": "Moderate",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Breath",
+     "rating": "+10",
+     "param": "Poison -- Hard (-20) Difficulty",
+     "ref": "E0-T-009"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "hydre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-915",
+   "book": "L25",
+   "page": 146,
+   "physicalPage": 146,
+   "kind": "profile",
+   "blockKey": "L25:146:1",
+   "name": "Leech Wyrm",
+   "nameFr": "Leech Wyrm",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": null,
+    "F": 80,
+    "E": 80,
+    "I": 5,
+    "Ag": 5,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 256,
+   "size": "monstrous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 11,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 11,
+     "trait": "Tail"
+    },
+    {
+     "name": "Snapping Jaws",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Corruption",
+     "param": "Moderate",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Bite",
+     "rating": "+11",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+11",
+     "ref": "E0-T-054"
+    },
+    {
+     "name": "Vomit",
+     "ref": "E0-T-065"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-916",
+   "book": "L25",
+   "page": 147,
+   "physicalPage": 147,
+   "kind": "profile",
+   "blockKey": "L25:147:0",
+   "name": "Black Leviathan",
+   "nameFr": "Léviathan noir",
+   "stats": {
+    "M": 10,
+    "CC": 55,
+    "CT": null,
+    "F": 125,
+    "E": 145,
+    "I": 25,
+    "Ag": 10,
+    "Dex": null,
+    "Int": 5,
+    "FM": 45,
+    "Soc": null
+   },
+   "wounds": 360,
+   "size": "monstrous",
+   "armour": {
+    "ap": 6,
+    "printedTotal": 18
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 14,
+     "trait": "Bite"
+    },
+    {
+     "name": "Tail",
+     "damage": 14,
+     "trait": "Tail"
+    },
+    {
+     "name": "Vast Fangs",
+     "damage": 16,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Grim",
+     "rating": "5",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Bite",
+     "rating": "+14",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Tail",
+     "rating": "+14",
+     "ref": "E0-T-054"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-917",
+   "book": "L25",
+   "page": 147,
+   "physicalPage": 147,
+   "kind": "profile",
+   "blockKey": "L25:147:1",
+   "name": "Orb Leviathan",
+   "nameFr": "Léviathan à orbes",
+   "stats": {
+    "M": 3,
+    "CC": 40,
+    "CT": null,
+    "F": 65,
+    "E": 65,
+    "I": 15,
+    "Ag": 10,
+    "Dex": null,
+    "Int": 5,
+    "FM": 30,
+    "Soc": null
+   },
+   "wounds": 168,
+   "size": "monstrous",
+   "armour": {
+    "ap": 3,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Vast Fangs",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Grim",
+     "rating": "2",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "abilities": [
+    "E0-T-272"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-918",
+   "book": "L25",
+   "page": 149,
+   "physicalPage": 149,
+   "kind": "profile",
+   "blockKey": "L25:149:0",
+   "name": "Triton",
+   "nameFr": "Triton",
+   "stats": {
+    "M": 10,
+    "CC": 63,
+    "CT": 45,
+    "F": 79,
+    "E": 69,
+    "I": 53,
+    "Ag": 45,
+    "Dex": 32,
+    "Int": 39,
+    "FM": 54,
+    "Soc": 44
+   },
+   "wounds": 232,
+   "size": "monstrous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Tail",
+     "damage": 10,
+     "trait": "Tail"
+    },
+    {
+     "name": "Triton's Trident",
+     "damage": 16,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Channelling (Triton's Sea Magic)",
+     "nameFr": "Focalisation (Triton's Sea Magic)",
+     "frUnverified": true,
+     "value": 74
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 74
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 94
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 69
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 69
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 64
+    },
+    {
+     "name": "Lore (Elves)",
+     "nameFr": "Savoir (Elves)",
+     "frUnverified": true,
+     "value": 59
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 83
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 89
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 78
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Dark Elves",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Blessed",
+     "param": "Manann",
+     "ref": "E0-T-007"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Grim",
+     "rating": "3",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Magic Resistance",
+     "rating": "4",
+     "ref": "E0-T-037"
+    },
+    {
+     "name": "Magical",
+     "ref": "E0-T-036"
+    },
+    {
+     "name": "Marine Creature",
+     "ref": "E0-T-272"
+    },
+    {
+     "name": "Rear",
+     "ref": "E0-T-083"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Terror",
+     "rating": "3",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Ward",
+     "rating": "9",
+     "ref": "E0-T-066"
+    },
+    {
+     "name": "Tail",
+     "rating": "+10",
+     "ref": "E0-T-054"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Hearing, Sight)"
+    },
+    {
+     "name": "Aethyric Attunement",
+     "rank": 3
+    },
+    {
+     "name": "Animal Affinity",
+     "rank": 4
+    },
+    {
+     "name": "Berserk Charge",
+     "rank": 4
+    },
+    {
+     "name": "Careful Strike",
+     "rank": 3
+    },
+    {
+     "name": "Combat Aware",
+     "rank": 3
+    },
+    {
+     "name": "Combat Master",
+     "rank": 4
+    },
+    {
+     "name": "Combat Reflexes",
+     "rank": 4
+    },
+    {
+     "name": "Contortionist"
+    },
+    {
+     "name": "Disarm",
+     "rank": 3
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Implacable",
+     "rank": 4
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 3
+    },
+    {
+     "name": "Iron Jaw"
+    },
+    {
+     "name": "Luck",
+     "rank": 2
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Perfect Pitch",
+     "rank": 2
+    },
+    {
+     "name": "Reaction Strike"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 3
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Unshakable",
+     "rank": 3
+    },
+    {
+     "name": "War Wizard"
+    }
+   ],
+   "trappings": [
+    "Triton's Crown (grants Ward 9)",
+    "Triton's Trident Magics (see page 15): Living Mire",
+    "Whirlpool",
+    "Fair Winds",
+    "Sea Curse",
+    "if Triton is disrespected",
+    "Manann's Mood may decrease",
+    "and if he is pleased",
+    "territorial",
+    "trained"
+   ],
+   "abilities": [
+    "E0-T-272",
+    "E0-T-283",
+    "E0-T-284",
+    "E0-T-285"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-919",
+   "book": "L25",
+   "page": 151,
+   "physicalPage": 151,
+   "kind": "profile",
+   "blockKey": "L25:151:0",
+   "name": "Jaego Roth Privateer Captain",
+   "nameFr": "Jaego Roth — Capitaine corsaire",
+   "stats": {
+    "M": 4,
+    "CC": 83,
+    "CT": 43,
+    "F": 45,
+    "E": 51,
+    "I": 78,
+    "Ag": 67,
+    "Dex": 65,
+    "Int": 76,
+    "FM": 74,
+    "Soc": 87
+   },
+   "wounds": 20,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Pistol +8 (20), Weapon (Rapier) +8, Weapon (Hook",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 75
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 52
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 60
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 86
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 73
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 78
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 94
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 95
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 84
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 63
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 85
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 68
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 93
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 102
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 78
+    },
+    {
+     "name": "Lore (Seafaring)",
+     "nameFr": "Savoir (Seafaring)",
+     "frUnverified": true,
+     "value": 103
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 97
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 87
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 90
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 98
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 83
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 92
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 58
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 67
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 92
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 58
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "Undead",
+     "ref": "E0-T-027"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Beat Blow"
+    },
+    {
+     "name": "Briber",
+     "rank": 3
+    },
+    {
+     "name": "Careful Strike"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Master",
+     "rank": 3
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette (Nobles, Pirates, Sailors)"
+    },
+    {
+     "name": "Impassioned Zeal"
+    },
+    {
+     "name": "Inspiring",
+     "rank": 5
+    },
+    {
+     "name": "Menacing",
+     "rank": 3
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Reaction Strike"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Riposte"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Waterman"
+    }
+   ],
+   "trappings": [
+    "Breastplate",
+    "Cartographer's Tools",
+    "Enchanted Moondial and Spyglass",
+    "Hook Hand",
+    "Pistol",
+    "Rapier",
+    "Turtle Shell Map"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-920",
+   "book": "L25",
+   "page": 152,
+   "physicalPage": 152,
+   "kind": "profile",
+   "blockKey": "L25:152:0",
+   "name": "Long Drong Slayer Captain of the Slayer Pirates",
+   "nameFr": "Long Drong — Capitaine tueur, chef des pirates tueurs",
+   "stats": {
+    "M": 3,
+    "CC": 72,
+    "CT": 62,
+    "F": 56,
+    "E": 69,
+    "I": 40,
+    "Ag": 29,
+    "Dex": 32,
+    "Int": 40,
+    "FM": 71,
+    "Soc": 52
+   },
+   "wounds": 30,
+   "attacks": [
+    {
+     "name": "Pistols",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Hook",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Training (Parrot)",
+     "nameFr": "Dressage (Parrot)",
+     "frUnverified": true,
+     "value": 54
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 57
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 65
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 90
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 83
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 77
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 62
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 57
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 64
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 52
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 81
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 67
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 80
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 70
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 70
+    },
+    {
+     "name": "Lore (Engineering)",
+     "nameFr": "Savoir (Ingénierie)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Seafaring)",
+     "nameFr": "Savoir (Seafaring)",
+     "frUnverified": true,
+     "value": 93
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 68
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 87
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 80
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 73
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 76
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 65
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 77
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 62
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 81
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 69
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Battle Rage"
+    },
+    {
+     "name": "Berserk Charge"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Combat Master",
+     "rank": 3
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Fast Shot"
+    },
+    {
+     "name": "Fearless (Everything)"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Implacable"
+    },
+    {
+     "name": "Iron Jaw"
+    },
+    {
+     "name": "Luck",
+     "rank": 5
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Robust",
+     "rank": 3
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Slayer"
+    },
+    {
+     "name": "Stout-hearted"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strong Back",
+     "rank": 2
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "Very Resilient"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Waterman"
+    }
+   ],
+   "trappings": [
+    "Bandoleer with 12 Loaded Pistols",
+    "Eye Patch",
+    "Hook",
+    "Parrot (Bitsy)",
+    "Peg leg",
+    "Powder and Shot for 24 shots",
+    "Rotgut Rum",
+    "Sword"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-921",
+   "book": "L25",
+   "page": 155,
+   "physicalPage": 155,
+   "kind": "profile",
+   "blockKey": "L25:155:0",
+   "name": "Wulfrik Sarl Champion",
+   "nameFr": "Wulfrik — Champion sarl",
+   "stats": {
+    "M": 4,
+    "CC": 83,
+    "CT": 34,
+    "F": 62,
+    "E": 51,
+    "I": 48,
+    "Ag": 62,
+    "Dex": 64,
+    "Int": 39,
+    "FM": 78,
+    "Soc": 53
+   },
+   "wounds": 28,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Bastard Sword",
+     "damage": 11,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Shield",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 70
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 82
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 83
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 84
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 78
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 67
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 91
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 69
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 57
+    },
+    {
+     "name": "Lore (Religion)",
+     "nameFr": "Savoir (Religion)",
+     "frUnverified": true,
+     "value": 48
+    },
+    {
+     "name": "Lore (Seafaring)",
+     "nameFr": "Savoir (Seafaring)",
+     "frUnverified": true,
+     "value": 87
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 90
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 92
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 79
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 66
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 61
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 56
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 80
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 80
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 74
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 73
+    }
+   ],
+   "traits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Beat Blade"
+    },
+    {
+     "name": "Berserk Charge"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Master",
+     "rank": 4
+    },
+    {
+     "name": "Combat Reflexes",
+     "rank": 2
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Dirty Fighting",
+     "rank": 3
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Fearless (Everything)"
+    },
+    {
+     "name": "Frightening",
+     "rank": 2
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Implacable"
+    },
+    {
+     "name": "In-fighter"
+    },
+    {
+     "name": "Luck",
+     "rank": 2
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Robust",
+     "rank": 3
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strong Legs"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Waterman"
+    }
+   ],
+   "trappings": [
+    "Bastard Sword",
+    "Heavy Armour",
+    "Shield",
+    "Skull Trophies"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-922",
+   "book": "L25",
+   "page": 156,
+   "physicalPage": 156,
+   "kind": "profile",
+   "blockKey": "L25:156:0",
+   "name": "Vrisk Ironscratch Arch-Sealord of Clan Skurvy",
+   "nameFr": "Vrisk Ironscratch — Archi-seigneur des mers du clan Skurvy",
+   "stats": {
+    "M": 5,
+    "CC": 74,
+    "CT": 70,
+    "F": 73,
+    "E": 73,
+    "I": 78,
+    "Ag": 66,
+    "Dex": 60,
+    "Int": 85,
+    "FM": 70,
+    "Soc": 30
+   },
+   "wounds": 24,
+   "armour": {
+    "ap": 4,
+    "printedTotal": 11
+   },
+   "attacks": [
+    {
+     "name": "Pistol",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Halberd",
+     "damage": 11,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 96
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 98
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 85
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 96
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 83
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 105
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 50
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 98
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 98
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 88
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 90
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 55
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 95
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 105
+    },
+    {
+     "name": "Lore (Seafaring)",
+     "nameFr": "Savoir (Seafaring)",
+     "frUnverified": true,
+     "value": 105
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 95
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 94
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 99
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 105
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 105
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 98
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 98
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 86
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 98
+    },
+    {
+     "name": "Trade (Carpenter)",
+     "nameFr": "Métier (Charpentier)",
+     "value": 80
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Acute Sense (Smell)"
+    },
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Beat Blade"
+    },
+    {
+     "name": "Careful Strike"
+    },
+    {
+     "name": "Combat Master",
+     "rank": 3
+    },
+    {
+     "name": "Combat Reflexes",
+     "rank": 3
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Fast Shot"
+    },
+    {
+     "name": "Feint"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Luck",
+     "rank": 13
+    },
+    {
+     "name": "Menacing",
+     "rank": 3
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Scale Sheer Surface"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong Legs"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Tunnel Rat"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "Very Resilient"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Waterman"
+    }
+   ],
+   "trappings": [
+    "Halberd",
+    "Pouch containing 15 ounces of Refined Warpstone",
+    "Suit of Warpstone Armour",
+    "Sword"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

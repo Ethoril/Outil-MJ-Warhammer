@@ -73,6 +73,8 @@ import { momentumAfterChange, withMomentum } from './v5-combat-rules.js';
 import { advanceGameClock, campaignDurationSeconds, createGameClock, deriveTurnPhasePlan, readCombatPosition, reconcileGameClockPosition } from './v5-game-time.js';
 import { advanceCampaignSnapshot } from './v5-campaign-time.js';
 import { proposeNewKeyword, referentialFromExtensions, setActiveReferential } from './creature-keywords.js';
+import { validateFamiliarLink, buildFamiliarLink, familiarBackLink, familiarLinksOf } from './familiars.js';
+const withV5 = (participant, change) => ({ ...participant, extensions: { ...(participant.extensions || {}), v5: change(participant.extensions?.v5 || {}) } });
 import { validatePrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { previewV5BrokenEscape, isV5BrokenEscapeActionBlocked, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from './v5-broken-escape.js';
 
@@ -2232,6 +2234,37 @@ export function createStore({ storage = typeof localStorage !== 'undefined' ? lo
         return { ...draft, extensions: { ...(draft.extensions || {}), v5: { ...v5, keywordReferential: { terms: [...(v5.keywordReferential?.terms || []), proposal.term] } } } };
       });
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, term: proposal.term })) : { ...result, term: proposal.term };
+    },
+    /** Lien maître-familier (F2) : les deux côtés sont posés par une seule commande annulable ; refus sans révision ni historique. */
+    linkFamiliar(masterId, familiarId, input = {}) {
+      const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
+      const check = validateFamiliarLink(master, familiar, input);
+      if (!check.ok) return check;
+      const link = buildFamiliarLink(familiar, input, { id: uid(), createdAt: Date.now() });
+      const result = api.executeCommand('link-familiar', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
+        if (item.id === masterId) return withV5(item, v5 => ({ ...v5, familiarLinks: [...(v5.familiarLinks || []), link] }));
+        if (item.id === familiarId) return withV5(item, v5 => ({ ...v5, familiarOf: familiarBackLink(master, link) }));
+        return item;
+      }) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true, link })) : { ...result, ok: true, link };
+    },
+    unlinkFamiliar(masterId, linkId) {
+      const master = combat.participants.get(masterId), link = familiarLinksOf(master).find(row => row.id === linkId);
+      if (!link) return { ok: false, reason: 'unknown-link', message: 'Lien introuvable.' };
+      const result = api.executeCommand('unlink-familiar', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
+        if (item.id === masterId) return withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).filter(row => row.id !== linkId) }));
+        if (item.id === link.familiarId && item.extensions?.v5?.familiarOf?.linkId === linkId) return withV5(item, v5 => { const { familiarOf, ...rest } = v5; return rest; });
+        return item;
+      }) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /** Portée d'un familier animal : booléen posé par le MJ, jamais calculé. */
+    setFamiliarRange(masterId, linkId, inRange) {
+      const master = combat.participants.get(masterId), link = familiarLinksOf(master).find(row => row.id === linkId);
+      if (!link || link.system !== 'animal') return { ok: false, reason: 'unknown-link', message: 'Lien d’animal introuvable.' };
+      const result = api.executeCommand('set-familiar-range', draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => item.id === masterId
+        ? withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).map(row => row.id === linkId ? { ...row, inRange: inRange === true } : row) })) : item) } }));
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
     },
     listPersistentCharacters() { return cloneValue(persistentCharacters); },
     savePersistentCharacter(input) {

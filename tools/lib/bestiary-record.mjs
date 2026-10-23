@@ -117,6 +117,8 @@ export function buildRecord(extracted, entry, context) {
     const value = extracted.stats[key];
     if (entry.kind === 'template') { if (value !== null) modifiers[key] = value; } else stats[key] = value;
   }
+  // Gabarit : le modificateur de Blessures imprimé (colonne W) est conservé (E-D25).
+  if (entry.kind === 'template' && extracted.stats.W !== null && extracted.stats.W !== undefined) modifiers.W = extracted.stats.W;
   const attackSources = traits.kept.filter(trait => !trait.unrecognized);
   const record = {
     id: entry.id, book: entry.book, page: entry.page, physicalPage: entry.physicalPage, kind: entry.kind, blockKey: extracted.key,
@@ -125,10 +127,11 @@ export function buildRecord(extracted, entry, context) {
   };
   const size = traits.kept.find(trait => trait.name === 'Size')?.param;
   if (size && SIZES.has(size.toLowerCase())) record.size = size.toLowerCase();
-  if (entry.kind !== 'template') {
+  {
     const armour = buildArmour(extracted, attackSources);
     if (armour) record.armour = armour;
-    const attacks = buildAttacks(extracted, attackSources);
+    // Gabarit : « Weapon (SB +4) » est un bonus de Force, pas un dégât fixe ; aucune attaque n'est émise (E-D25).
+    const attacks = entry.kind === 'template' ? [] : buildAttacks(extracted, attackSources);
     if (attacks.length) record.attacks = attacks;
   }
   if (skills.kept.length) record.skills = skills.kept;

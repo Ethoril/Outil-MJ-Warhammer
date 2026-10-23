@@ -1,4 +1,5 @@
 import { baseCharacteristicScore } from './v5-magic-talents.js';
+import { natureProtection } from './creature-natures.js';
 
 /**
  * Actions conférées par les sorts actifs (hallebarde Magique de la Faux de Shyish) : lues sur les couches d'effet, donc retirées
@@ -162,6 +163,9 @@ export function wardLayers(v5){
  if(Array.isArray(v5?.wards))return v5.wards;
  return v5?.ward==null?[]:[{threshold:Number(v5.ward),filter:null}];
 }
+/** Couches de la cible : celles posées par les effets, plus celles de ses Traits de nature (Éthéré, Démoniaque, Protection, Immunité). */
+const targetWards=target=>[...wardLayers(target?.extensions?.v5||{}),...natureProtection(target).wards];
+const targetDamageImmunities=target=>[...(target?.extensions?.v5?.immunities?.damage||[]),...natureProtection(target).immunities];
 export function reductionLayers(v5){
  if(Array.isArray(v5?.damageReductions))return v5.damageReductions;
  return Number(v5?.damageReduction)>0?[{amount:Number(v5.damageReduction),filter:null}]:[];
@@ -176,7 +180,7 @@ export function reductionLayers(v5){
 export function targetNatureTags(target,nature={}){
  const v5=target?.extensions?.v5||{};
  const tags=new Set();
- for(const layer of [...wardLayers(v5),...reductionLayers(v5),...(v5.conditionalAp||[]),...(v5.immunities?.damage||[]),...(v5.reflects||[])]){
+ for(const layer of [...targetWards(target),...reductionLayers(v5),...(v5.conditionalAp||[]),...targetDamageImmunities(target),...(v5.reflects||[])]){
   const filter=layer.filter;if(!filter)continue;
   const found=matchFilter(filter,nature);
   if(found.match==='unknown')found.unknown.forEach(tag=>tags.add(tag));
@@ -203,7 +207,7 @@ export function previewMagicProtection(target,amount,{wardRoll=null,nature={},ca
  const base={ready:true,amount:original,reduction:0,wardSaved:false};
  if(!original)return base;
  const missing=[];
- for(const immunity of v5.immunities?.damage||[]){
+ for(const immunity of targetDamageImmunities(target)){
   const found=matchFilter(immunity.filter,nature);
   if(found.match==='yes')return {...base,amount:0,immune:true,immunity:immunity.label||null};
   if(found.match==='unknown')missing.push(...found.unknown);
@@ -222,7 +226,7 @@ export function previewMagicProtection(target,amount,{wardRoll=null,nature={},ca
  }
  const afterReduction=Math.max(0,original-reduction);
  const applicable=[];
- for(const layer of wardLayers(v5)){
+ for(const layer of targetWards(target)){
   const found=matchFilter(layer.filter,nature);
   if(found.match==='unknown')missing.push(...found.unknown);else if(found.match==='yes')applicable.push(layer);
  }

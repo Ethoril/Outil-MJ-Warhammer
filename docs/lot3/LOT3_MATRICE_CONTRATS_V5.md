@@ -6,9 +6,9 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 
 ## Synthèse de couverture
 
-- **Contrat à effet calculable** : 147
-- **Contrat nécessitant des données MJ** : 49
-- **Rappel** : 81
+- **Contrat à effet calculable** : 190
+- **Contrat nécessitant des données MJ** : 64
+- **Rappel** : 146
 - **Contrat restant à réaliser** : 0
 
 | # | Nom FR | Nom Canonique V5 | Domaine / Famille | NI V5 | Portée | Cible | Durée | Statut Couverture | Typage Effet | Empreinte Source |
@@ -36,7 +36,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 22 | Epées Sanguines | Epées Sanguines | fire (Aqshy) | 6 | Force Mentale mètres | Vous | Bonus de Force Mentale minutes | Contrat à effet calculable + Rappel | summon | `sha256:5af31bda...` |
 | 23 | Goût de Feu | Goût de Feu | fire (Aqshy) | 2 | Bonus de Force Mentale mètres | 1 pot, cruche ou flacon | Instantané | Rappel | special | `sha256:9901c9f9...` |
 | 24 | Chaleur Desséchante | Chaleur Desséchante | fire (Aqshy) | 6 | ZdE Force Mentale mètres | Vous | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:49a6af71...` |
-| 25 | Blizzard enflammé de Ygethmor | Blizzard enflammé de Ygethmor | fire (Aqshy) | 12 | Force Mentale mètres | ZdE Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:7df770df...` |
+| 25 | Blizzard enflammé de Ygethmor | Blizzard enflammé de Ygethmor | fire (Aqshy) | 12 | Force Mentale mètres | ZdE Force Mentale mètres | Bonus de Force Mentale Rounds | Rappel | special | `sha256:7df770df...` |
 | 26 | Arc de T’Essla | Arc de T’Essla | heavens (Azyr) | 7 | Force Mentale mètres | 1 | Instantané | Contrat à effet calculable + Rappel | magic-missile | `sha256:bfc13214...` |
 | 27 | Bouclier céruléen | Cerulean Shield | heavens (Azyr) | 7 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable | armor | `sha256:92926077...` |
 | 28 | Ironie du Destin | Fate’s Fickle Fingers | heavens (Azyr) | 6 | Vous | ZdE (Bonus d’Initiative) mètres | (Bonus de Force Mentale) Rounds | Rappel | narrative | `sha256:1da939f6...` |
@@ -47,7 +47,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 33 | Polir et Exalter | Polir et Exalter | heavens (Azyr) | 1 | Contact | 1 objet | Bonus d’Initiative minutes | Rappel | special | `sha256:9d8bea9b...` |
 | 34 | Projection Spirituelle | Projection Spirituelle | heavens (Azyr) | 7 | Vous | Vous | Bonus d’Endurance heures | Contrat à effet calculable + Rappel | special | `sha256:189057dc...` |
 | 35 | Arche de Saphir | Arche de Saphir | heavens (Azyr) | 6 | Moitié de la Force Mentale mètres | Spécial | 1 Round | Rappel | special | `sha256:6afc9a75...` |
-| 36 | Comète de Cassandora | Comet of Casandora | heavens (Azyr) | 18 | (Initiative) mètres | ZdE (2 × Bonus de Force Mentale) mètres | Spécial | Contrat à effet calculable + Rappel | special | `sha256:9975cdd4...` |
+| 36 | Comète de Cassandora | Comet of Casandora | heavens (Azyr) | 18 | (Initiative) mètres | ZdE (2 × Bonus de Force Mentale) mètres | Spécial | Rappel | special | `sha256:9975cdd4...` |
 | 37 | Le Premier Signe d’Amul | The First Portent of Amul | heavens (Azyr) | 3 | Vous | Vous | (Bonus d’Initiative) Rounds | Contrat à effet calculable | special | `sha256:fcaa3df9...` |
 | 38 | Lames Azurées | Lames Azurées | heavens (Azyr) | 6 | Vous | Vous | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:c7e98888...` |
 | 39 | Malédiction du Destin | Malédiction du Destin | heavens (Azyr) | 8 | Moitié de la Force Mentale mètres | 1 | 1 jour | Contrat à effet calculable + Rappel (Suivi fiche) | test-modifiers | `sha256:803bbf92...` |
@@ -95,12 +95,12 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 81 | Convocation Ardente | Convocation Ardente | high (Qhaysh) | 10 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | magic-missile | `sha256:7e292e0d...` |
 | 82 | La Fortune est Capricieuse | La Fortune est Capricieuse | high (Qhaysh) | 6 | Sociabilité mètres | 1 | Bonus de Sociabilité Rounds | Contrat à effet calculable | special | `sha256:83b797cf...` |
 | 83 | Glamour de Teclis | Glamour de Teclis | high (Qhaysh) | 7 | Force Mentale mètres | ZdE Bonus d’Intelligence mètres | Bonus d’Intelligence Rounds | Contrat à effet calculable + Rappel | special | `sha256:da09e8f2...` |
-| 84 | Bannissement Majeur | Bannissement Majeur | high (Qhaysh) | 14 | Vous | ZdE Moitié de la Force Mentale mètres | 1 Round | Contrat à effet calculable + Rappel (Suivi fiche) | special | `sha256:07df2f6d...` |
+| 84 | Bannissement Majeur | Bannissement Majeur | high (Qhaysh) | 14 | Vous | ZdE Moitié de la Force Mentale mètres | 1 Round | Rappel (Suivi fiche) | special | `sha256:07df2f6d...` |
 | 85 | Main de Gloire | Main de Gloire | high (Qhaysh) | 4 | Vous | ZdE Bonus de Sociabilité mètres | 1 Round | Contrat à effet calculable + Rappel (Suivi fiche) | special | `sha256:54c1c67c...` |
 | 86 | Œil Invisible | Œil Invisible | high (Qhaysh) | 4 | Bonus d’Intelligence mètres | Spécial | Bonus d’Intelligence heures | Contrat à effet calculable + Rappel | summon | `sha256:6b161b9b...` |
 | 87 | Bouclier de Saphery | Bouclier de Saphery | high (Qhaysh) | 4 | Vous | ZdE Bonus de Force Mentale mètres | 1 Round | Contrat à effet calculable | ward | `sha256:93120516...` |
 | 88 | Extinction de l'Âme | Extinction de l'Âme | high (Qhaysh) | 7 | Moitié de la Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Instantané | Contrat à effet calculable + Rappel (Suivi fiche) | magic-missile | `sha256:3dd3eb21...` |
-| 89 | Tempête | Tempête | high (Qhaysh) | 8 | Force Mentale mètres | ZdE 2 × Bonus de Force Mentale mètres | 1 Round | Contrat à effet calculable + Rappel | special | `sha256:d26a4c88...` |
+| 89 | Tempête | Tempête | high (Qhaysh) | 8 | Force Mentale mètres | ZdE 2 × Bonus de Force Mentale mètres | 1 Round | Rappel | special | `sha256:d26a4c88...` |
 | 90 | Chemin entre les Mondes | Chemin entre les Mondes | high (Qhaysh) | 7 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | 1 Round | Contrat à effet calculable + Rappel | special | `sha256:a8574de8...` |
 | 91 | Forme bestiale | Beast Form | beasts (Ghur) | 5 | Vous | Vous | Endurance minutes | Contrat à effet calculable | transformation | `sha256:e2995c83...` |
 | 92 | Incarnation de Wyssan | Wyssan’s Wildform | beasts (Ghur) | 8 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable | stat-modifiers | `sha256:2794acdf...` |
@@ -154,7 +154,7 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 140 | Apothéose Verdoyante | Apothéose Verdoyante | life (Ghyran) | 16 | Ligne de vue | ZdE Bonus de Force Mentale mètres | Instantané | Contrat nécessitant des données MJ | resurrection | `sha256:6834628e...` |
 | 141 | Croissance Vitale | Croissance Vitale | life (Ghyran) | 7 | Bonus de Force Mentale mètres | 1 | Instantané | Rappel | narrative | `sha256:97587506...` |
 | 142 | Forme de Bois | Forme de Bois | life (Ghyran) | 8 | Contact | 1 | Bonus de Force Mentale heures | Contrat nécessitant des données MJ | special | `sha256:2b00aded...` |
-| 143 | Mains de Karkora | Mains de Karkora | light (Hysh) | 8 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:4ff45748...` |
+| 143 | Mains de Karkora | Mains de Karkora | light (Hysh) | 8 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Rappel | special | `sha256:4ff45748...` |
 | 144 | Protection de Phâ | Phâ’s Protection | light (Hysh) | 10 | Vous | ZdE (Bonus de Force Mentale) mètres | (Bonus de Force Mentale) Rounds | Contrat à effet calculable + Rappel | special | `sha256:caee6d60...` |
 | 145 | Crevasse | Crevasse | light (Hysh) | 8 | Force Mentale mètres | Spécial | Bonus de Force Mentale Rounds | Contrat nécessitant des données MJ | special | `sha256:0ba539fa...` |
 | 146 | Pensée rapide | Speed of Thought | light (Hysh) | 8 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable | stat-modifiers | `sha256:5a241117...` |
@@ -201,9 +201,9 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 187 | Caresse de Laniph | Caress of Laniph | death (Shyish) | 6 | Contact | 1 (maximum) | Instantané | Contrat à effet calculable + Rappel (Suivi fiche) | damage | `sha256:d98dcaed...` |
 | 188 | Contrainte des Esprits | Contrainte des Esprits | death (Shyish) | 6 | Bonus de Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Jusqu’au lever du soleil | Contrat nécessitant des données MJ | special | `sha256:9b8c3e66...` |
 | 189 | Labyrinthe de Cristal | Labyrinthe de Cristal | death (Shyish) | 13 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Instantané | Contrat à effet calculable + Rappel | special | `sha256:4308845e...` |
-| 190 | Délivrance de la Mort | Délivrance de la Mort | death (Shyish) | 5 | Moitié de l’Initiative mètres | 1 | 3 Rounds | Contrat à effet calculable + Rappel | special | `sha256:2253d87c...` |
+| 190 | Délivrance de la Mort | Délivrance de la Mort | death (Shyish) | 5 | Moitié de l’Initiative mètres | 1 | 3 Rounds | Rappel | special | `sha256:2253d87c...` |
 | 191 | Derniers Mots | Dying Words | death (Shyish) | 2 | Contact | 1 | (Bonus de Force Mentale) Rounds | Rappel | narrative | `sha256:74a8f9d2...` |
-| 192 | Destin de Bjuna | Destin de Bjuna | death (Shyish) | 8 | Moitié de la Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Sociabilité Rounds | Contrat à effet calculable + Rappel | special | `sha256:c57c8e52...` |
+| 192 | Destin de Bjuna | Destin de Bjuna | death (Shyish) | 8 | Moitié de la Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Sociabilité Rounds | Rappel | special | `sha256:c57c8e52...` |
 | 193 | L’Étreinte d’Iyrtu | L’Étreinte d’Iyrtu | death (Shyish) | 4 | Vous | Vous | Bonus de Force Mentale Rounds | Contrat à effet calculable | special | `sha256:eb51dab9...` |
 | 194 | Flétrissement des Membres | Flétrissement des Membres | death (Shyish) | 5 | Force Mentale mètres | 1 | Bonus de Force Mentale minutes ou jours | Contrat à effet calculable + Rappel (Suivi fiche) | special | `sha256:6c276b42...` |
 | 195 | Voile Pourpre de Shyish | Purple Pall of Shyish | death (Shyish) | 9 | Vous | Vous | (Bonus de Force Mentale) Rounds | Contrat à effet calculable | armor | `sha256:1edb8a99...` |
@@ -290,10 +290,133 @@ Date : 14 octobre 2026. Référence : `docs/lot3/LOT3_AUDIT_SORTS.json`, `docs/l
 | 276 | Substance d’Ombre | Substance d’Ombre | shadow (Ulgu) | 9 | Contact | 1 | Spécial | Contrat à effet calculable + Rappel | special | `sha256:f6efe6fb...` |
 | 277 | Traître de Tarn | Traître de Tarn | shadow (Ulgu) | 12 | Force Mentale mètres | 1 | Force Mentale minutes | Contrat nécessitant des données MJ | special | `sha256:387f49c6...` |
 | 278 | Ombre Vagabonde | Ombre Vagabonde | shadow (Ulgu) | 4 | Vous | Vous | Bonus de Force Mentale minutes | Rappel | narrative | `sha256:8b0146ea...` |
+| T | Bonne Volonté | Goodwill | hedgecraft | 0 | Vous | ZdE Bonus de Sociabilité mètres | Bonus de Force Mentale minutes | Contrat à effet calculable + Rappel | test-modifiers | `sha256:0798270b...` |
+| T | Joie de Halãtha | Halãtha’s Joy | hedgecraft | 0 | Toucher | 1 | Bonus de Sociabilité heures | Rappel | narrative | `sha256:7101515c...` |
+| T | Chevaucher l’Obscurité | Mirkride | hedgecraft | 0 | Vous | Vous | Bonus de Force Mentale minutes | Contrat à effet calculable + Rappel | traits | `sha256:a65cf45b...` |
+| T | Nepenthés | Nepenthe | hedgecraft | 0 | Toucher | Spécial | Bonus de Force Mentale heures | Rappel | narrative | `sha256:e6ddc5e3...` |
+| T | Panacée | Nostrum | hedgecraft | 0 | Toucher | Spécial | Bonus de Dextérité heures | Contrat à effet calculable + Rappel | healing | `sha256:a84c2a41...` |
+| T | Séparer les branches | Part the Branches | hedgecraft | 0 | Vous | Vous | Initiative minutes | Rappel | narrative | `sha256:acb9506c...` |
+| T | Charme protecteur | Protective Charm | hedgecraft | 0 | Toucher | Spécial | Bonus de Force Mentale jours | Rappel | special | `sha256:e0e55eac...` |
+| T | Œil du berger | Shepherd’s Eye | hedgecraft | 0 | Spécial | Spécial | Instantané | Rappel | narrative | `sha256:81f21997...` |
+| T | Dague de l’Art | Dagger of the Art | hedgecraft | 4 | Vous | Vous | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:c1385261...` |
+| T | Borne sinistre | Fellstave | hedgecraft | 9 | Spécial | Spécial | 1 mois | Rappel | narrative | `sha256:196bffd5...` |
+| T | Revigorer | Invigorate | hedgecraft | 2 | Toucher | 1 | Bonus de Force Mentale Rounds | Rappel | special | `sha256:94eb07d3...` |
+| T | Philtre d’amour | Lovelock | hedgecraft | 10 | Toucher | Spécial | Jusqu’à minuit | Contrat nécessitant des données MJ | narrative | `sha256:4a5262e6...` |
+| T | Sachet de protection | Protection Pouch | hedgecraft | 5 | Toucher | Spécial | 1 semaine + 1 semaine par DR | Contrat nécessitant des données MJ | special | `sha256:614bb50e...` |
+| T | Pas imperceptible | Sightstep | hedgecraft | 7 | Vous | Vous | Bonus de Force Mentale minutes | Contrat à effet calculable + Rappel | special | `sha256:eb2ec1b9...` |
+| T | Marée d’argent | Silvertide | hedgecraft | 4 | Vous | Vous | 1d10 heures | Rappel | narrative | `sha256:fb84035f...` |
+| T | L’Expulsion | The Ousting | hedgecraft | 8 | Bonus de Force Mentale mètres | 1 | 1d10 ans | Contrat nécessitant des données MJ | damage | `sha256:5fac26e7...` |
+| T | Protection contre le wyrd | Wyrd Ward | hedgecraft | 4 | Toucher | 1 | Bonus de Force Mentale heures | Contrat nécessitant des données MJ | special | `sha256:cd71c55a...` |
+| T | Dégradation | Blight | witchcraft | 14 | Bonus de Force Mentale mètres | Spécial | Instantané | Rappel | narrative | `sha256:40461767...` |
+| T | Menace rampante | Creeping Menace | witchcraft | 6 | Force Mentale mètres | 1 | Bonus de Force Mentale Rounds | Rappel | special | `sha256:4c14ba14...` |
+| T | Malédiction de douleur paralysante | Curse of Crippling Pain | witchcraft | 10 | Force Mentale mètres | 1 | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | condition | `sha256:a2bc664d...` |
+| T | Malédiction de malchance | Curse of Ill Fortune | witchcraft | 8 | Force Mentale mètres | 1 | Bonus de Force Mentale minutes | Contrat à effet calculable + Rappel | test-modifiers | `sha256:e8f1ba36...` |
+| T | Glamour | Glamour | witchcraft | 4 | Toucher | 1 adulte | Bonus de Force Mentale heures | Rappel | narrative | `sha256:f02bc6f2...` |
+| T | Horreur hantante | Haunting Horror | witchcraft | 8 | Toucher | Spécial | Force Mentale jours | Contrat à effet calculable + Rappel | special | `sha256:330e72de...` |
+| T | Bonne santé | Make Hale | witchcraft | 4 | Toucher | 1 | Instantané | Contrat à effet calculable + Rappel | healing | `sha256:e6d41bb9...` |
+| T | Mauvais œil | The Evil Eye | witchcraft | 6 | 10 mètres maximum | 1 maximum | Instantané | Contrat à effet calculable + Rappel | special | `sha256:145a8cb4...` |
+| T | Destruction de Démon Mineur | Destroy Lesser Daemon | daemonology | 6 | Bonus de Force Mentale mètres | 1 Démon de taille Moyenne ou inférieure | Bonus de Force Mentale Rounds | Contrat nécessitant des données MJ | special | `sha256:9f9b926d...` |
+| T | Détection de démon | Detect Daemon | daemonology | 4 | Force Mentale mètres | Spécial | Instantané | Rappel | narrative | `sha256:b9e5d9c0...` |
+| T | Manifestation de Démon Mineur | Manifest Lesser Daemon | daemonology | 8 | Bonus de Force Mentale mètres | Spécial | Bonus de Force Mentale Rounds | Contrat nécessitant des données MJ | summon | `sha256:1b58a01b...` |
+| T | Octogramme | Octagram | daemonology | 10 | Toucher | ZdE Bonus d’Intelligence mètres | Force Mentale minutes | Rappel | special | `sha256:a4507a4b...` |
+| T | Relever les morts | Raise Dead | necromancy | 7 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Jusqu’au lever du soleil | Contrat nécessitant des données MJ | summon | `sha256:70bd718f...` |
+| T | Réanimation | Reanimate | necromancy | 8 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Jusqu’au lever du soleil | Contrat nécessitant des données MJ | summon | `sha256:884123be...` |
+| T | Crâne hurlant | Screaming Skull | necromancy | 8 | Force Mentale mètres | Spécial | Instantané | Contrat à effet calculable + Rappel | magic-missile | `sha256:5adcf48d...` |
+| T | L’appel de Vanhel | Vanhel’s Call | necromancy | 6 | Force Mentale mètres | Spécial | Instantané | Rappel | special | `sha256:ca36f533...` |
+| T | Inflammation suppurée | Festering Inflammation | nurgle | 5 | Bonus de Force Mentale mètres | 1 | Instantané | Rappel | narrative | `sha256:0d6213ee...` |
+| T | Miasme de pestilence | Miasma of Pestilence | nurgle | 6 | Vous | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Rappel | special | `sha256:1f5d14ad...` |
+| T | Flot de Corruption | Stream of Corruption | nurgle | 9 | Spécial | Spécial | Instantané | Contrat à effet calculable + Rappel | damage | `sha256:bd29f15a...` |
+| T | Consentement | Acquiescence | slaanesh | 5 | Toucher | 1 | Bonus de Force Mentale Rounds | Rappel | special | `sha256:01cdb8f0...` |
+| T | De la douleur le plaisir | From Pain, Pleasure | slaanesh | 6 | Toucher | 1 | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | traits | `sha256:ff49c977...` |
+| T | Fantasmagorie | Phantasmagoria | slaanesh | 8 | Vous | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | traits | `sha256:40b25672...` |
+| T | Don de Tzeentch | Boon of Tzeentch | tzeentch | 9 | Vous | Vous | Bonus d’Intelligence jours | Contrat nécessitant des données MJ | special | `sha256:94125571...` |
+| T | Transformation de Tzeentch | Transformation of Tzeentch | tzeentch | 12 | Bonus de Force Mentale mètres | 1 | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | condition | `sha256:8255fb0a...` |
+| T | Trahison de Tzeentch | Treason of Tzeentch | tzeentch | 6 | Force Mentale mètres | ZdE Bonus d’Initiative mètres | Bonus d’Intelligence Rounds | Contrat à effet calculable + Rappel | traits | `sha256:e9afe583...` |
+| T | Brise-os | Bonecrusher | maw | 5 | Force Mentale mètres | 1 | Instantané | Contrat à effet calculable + Rappel | magic-missile | `sha256:f658248c...` |
+| T | Gloutonneur | Bullgorger | maw | 5 | Bonus de Force Mentale mètres | 1 | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:0fd58c7d...` |
+| T | Dévore-cervelle | Braingobbler | maw | 5 | Vous | Vous | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | traits | `sha256:d0590d72...` |
+| T | Saveur de la mort | Taste Death | maw | 2 | Vous | Vous | Instantané | Rappel | narrative | `sha256:81962368...` |
+| T | Tripes de troll | Trollguts | maw | 6 | Bonus d’Endurance mètres | 1 | Bonus d’Endurance Rounds | Contrat à effet calculable + Rappel | traits | `sha256:041124e1...` |
+| T | La Gueule | The Maw | maw | 11 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | damage | `sha256:576b842d...` |
+| T | Festin des tombés | Feast of the Fallen | maw | 9 | Vous | Spécial | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | traits | `sha256:95e4abb5...` |
+| T | Brasse-bile | Bilebrew | maw | 6 | Vous | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat nécessitant des données MJ | traits | `sha256:c543715a...` |
+| T | Bouillie de sang | Bloodgruel | maw | 5 | Vous | Vous | Instantané | Contrat nécessitant des données MJ | healing | `sha256:1c43cd8d...` |
+| T | Du cœur au ventre | Get Some Guts | maw | 6 | Vous | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Rappel | special | `sha256:e2aca3a2...` |
+| T | Brise-dents | Toothcracker | maw | 8 | Vous | ZdE Force Mentale mètres | Bonus de Force Mentale Rounds | Rappel | test-modifiers | `sha256:9966f967...` |
+| T | Du calme ! | Behave! | little-waaagh | 2 | Force Mentale mètres | 1 (maximum) | Bonus de Force Mentale minutes | Rappel | narrative | `sha256:6b50d0ec...` |
+| T | Mots malins | Cunnin’ Words | little-waaagh | 0 | Force Mentale mètres | 1 | Bonus de Force Mentale minutes | Rappel | narrative | `sha256:54f7a597...` |
+| T | Malédiction de la Mauvaise Lune | Curse of Da Bad Moon | little-waaagh | 9 | Bonus de Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | condition | `sha256:7ad7b6a3...` |
+| T | Don du Dieu-Araignée | Gift of the Spider-God | little-waaagh | 3 | Vous | ZdE Bonus de Force Mentale mètres (Gobelins des forêts) | Bonus de Force Mentale Rounds | Rappel | traits | `sha256:b6505bf4...` |
+| T | Gork va arranger ça | Gork’ll Fix It | little-waaagh | 5 | Force Mentale mètres | 1 | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | condition | `sha256:85522b1d...` |
+| T | La Grande Rancune verte | The Great Green Spite | little-waaagh | 20 | Bonus de Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Rappel | special | `sha256:0bd5d99b...` |
+| T | Démangeaison | Itchy Nuisance | little-waaagh | 4 | Bonus de Force Mentale mètres | 1 | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | test-modifiers | `sha256:f55a74b9...` |
+| T | Mork te veut ! | Mork Wants Ya! | little-waaagh | 9 | Bonus de Force Mentale mètres | 1 | Instantané | Contrat nécessitant des données MJ | damage | `sha256:e04bc269...` |
+| T | Voile de la nuit | Night Shroud | little-waaagh | 5 | Bonus de Force mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | condition | `sha256:0dd838ee...` |
+| T | Chapardeur | Nikkit! | little-waaagh | 3 | Force Mentale mètres | 1 | Instantané | Rappel | narrative | `sha256:15717f16...` |
+| T | Coups en traître | Sneaky Stabbin’ | little-waaagh | 8 | Vous | ZdE Bonus de Force Mentale mètres (Orques et Gobelins) | Bonus de Force Mentale Rounds | Rappel | special | `sha256:6b41c389...` |
+| T | Regard vengeur | Vindictive Glare | little-waaagh | 7 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Instantané | Contrat à effet calculable + Rappel | magic-missile | `sha256:1b13cac0...` |
+| T | Dur comme le roc | ‘Ard as Nails | big-waaagh | 3 | Bonus de Force Mentale mètres | 1 | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:e53aaab7...` |
+| T | Frappez-les, les gars ! | Bash ‘Em Lads! | big-waaagh | 6 | Bonus de Force Mentale mètres | Spécial | Instantané | Rappel | special | `sha256:231deefc...` |
+| T | Éclate-cervelle | Brainbursta | big-waaagh | 5 | Bonus de Force Mentale mètres | 1 | Instantané | Contrat à effet calculable + Rappel | condition | `sha256:71e28f58...` |
+| T | Coup de boule | ‘Eadbutt | big-waaagh | 6 | Bonus de Force Mentale mètres | 1 | Instantané | Contrat à effet calculable + Rappel | magic-missile | `sha256:ca5dfde1...` |
+| T | Allons-y ! | ‘Ere We Go! | big-waaagh | 7 | Vous | ZdE Bonus de Force Mentale mètres (Orques) | Bonus de Force Mentale Rounds | Rappel | special | `sha256:8383a3c1...` |
+| T | Le Soleil mauvais | The Evil Sun | big-waaagh | 12 | Bonus de Force Mentale mètres | ZdE Force Mentale mètres | Bonus de Force Mentale Rounds | Rappel | special | `sha256:33db67a3...` |
+| T | Poings de Gork | Fists of Gork | big-waaagh | 2 | Vous | Vous | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | special | `sha256:42718981...` |
+| T | Pied de Gork | Foot of Gork | big-waaagh | 10 | Bonus de Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Instantané | Contrat à effet calculable + Rappel | damage | `sha256:547a99ed...` |
+| T | Regard de Mork | Gaze of Mork | big-waaagh | 5 | Force Mentale mètres | Spécial | Instantané | Contrat à effet calculable + Rappel | magic-missile | `sha256:51b0e783...` |
+| T | La Main de Gork | The Hand of Gork | big-waaagh | 9 | Force Mentale mètres | Spécial | Bonus de Force Mentale Rounds | Rappel | narrative | `sha256:bd49d729...` |
+| T | Mork nous protège ! | Mork Save Us! | big-waaagh | 8 | Bonus de Force Mentale mètres | Spécial | Bonus de Force Mentale Rounds | Rappel | special | `sha256:3ee73e2b...` |
+| T | WAAAGH ! | WAAAGH! | big-waaagh | 12 | Vous | ZdE Force Mentale mètres (tous les Orques, Gobelins et assimilés, alliés ou non) | Bonus de Force Mentale Rounds | Rappel | special | `sha256:215590f5...` |
+| T | Déracinement des montagnes | Uproot the Mountains | high | 8 | Ligne de vue | 1 | 1 Round | Contrat à effet calculable + Rappel | special | `sha256:4be723cb...` |
+| T | Ligne de terre | Earth Line | high | 10 | Ligne de vue | Spécial | Instantané | Contrat nécessitant des données MJ | damage | `sha256:10cc906a...` |
+| T | Ruine des cités | Ruination of Cities | high | 12 | Ligne de vue | 1 bâtiment | Instantané | Contrat à effet calculable + Rappel | damage | `sha256:52fab9ed...` |
+| T | Déflagration mentale | Mental Blast | high | 7 | Ligne de vue | ZdE Bonus de Force Mentale mètres | Instantané | Contrat à effet calculable + Rappel | damage | `sha256:08746f6e...` |
+| T | Apothéose (Slann) | Apotheosis (Slann) | high (Qhaysh) | 4 | Moitié de la Force Mentale mètres | 1 | 1 Round | Contrat à effet calculable + Rappel (Suivi fiche) | healing | `sha256:35524476...` |
+| T | Destruction des Arcanes (Slann) | Arcane Unforging (Slann) | high (Qhaysh) | 9 | Force Mentale mètres | 1 | Instantané | Contrat à effet calculable + Rappel (Suivi fiche) | special | `sha256:f6acf215...` |
+| T | Drain de Magie (Slann) | Drain Magic (Slann) | high (Qhaysh) | 6 | Moitié de la Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Instantané | Contrat à effet calculable + Rappel (Suivi fiche) | special | `sha256:28f461d6...` |
+| T | Chemin entre les Mondes (Slann) | Walk Between Worlds (Slann) | high (Qhaysh) | 7 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | 1 Round | Contrat à effet calculable + Rappel | special | `sha256:7bf0095e...` |
+| T | Toucher de l’artiste | Artist’s Touch | vaul | 0 | Toucher | 1 objet | Instantané | Rappel | narrative | `sha256:3d77f5c4...` |
+| T | Patience de Vaul | Patience of Vaul | vaul | 0 | Toucher | 1 objet | Instantané | Rappel | narrative | `sha256:9e3963c6...` |
+| T | Grâce de Vaul | Vaul’s Grace | vaul | 7 | Toucher | 1 objet | Instantané | Rappel | narrative | `sha256:e7ef9da0...` |
+| T | Rage de Vaul | Vaul’s Rage | vaul | 5 | Bonus de Force Mentale mètres | 1 forge ou feu de camp (maximum) | Instantané | Contrat à effet calculable + Rappel | magic-missile | `sha256:bf7d468a...` |
+| T | Divination des flammes | Divination of Flames | vaul | 4 | Bonus d’Initiative mètres (maximum) | 1 forge ou feu de camp (maximum) | Bonus d’Intelligence heures | Rappel | narrative | `sha256:17d21d49...` |
+| T | Divination des pierres | Divination of Stones | vaul | 6 | Bonus d’Intelligence miles | Spécial | Bonus d’Intelligence heures | Rappel | narrative | `sha256:43c675b1...` |
+| T | Feux de la perfection | Fires of Perfection | vaul | 9 | Toucher | 1 objet | Instantané | Rappel | narrative | `sha256:8a12360d...` |
+| T | Sagesse de l’acier du ciel | Wisdom of the Skysteel | vaul | 11 | Toucher | 1 objet | 1 Entreprise | Rappel | narrative | `sha256:aa960078...` |
+| T | Forteresse de Hotek | Fortress of Hotek | vaul | 14 | Bonus de Force Mentale mètres | 1 salle de forge ou bâtiment (maximum) | Bonus de Force Mentale heures | Rappel | narrative | `sha256:d4605898...` |
+| T | Lien aux poissons | Fishbonding | mathlann | 0 | Force Mentale mètres | 1 | Force Mentale minutes | Rappel | narrative | `sha256:59ced06b...` |
+| T | Sens de la tempête | Stormsense | mathlann | 0 | Initiative miles | Spécial | Instantané | Rappel | narrative | `sha256:9957cc2b...` |
+| T | Furie de l’océan | Ocean’s Fury | mathlann | 8 | Vous | ZdE Bonus de Force Mentale miles | 3 × Bonus de Force Mentale minutes | Rappel | narrative | `sha256:3a48e8fc...` |
+| T | Esprits des vagues | Spirits of the Waves | mathlann | 5 | 2 × Sociabilité mètres | ZdE 2 × Bonus de Sociabilité mètres | Bonus de Sociabilité minutes | Rappel | narrative | `sha256:4805c9ef...` |
+| T | Armure de Mathlann | Armour of Mathlann | mathlann | 10 | Force Mentale mètres | 1 bateau ou navire | Force Mentale minutes | Contrat à effet calculable + Rappel | narrative | `sha256:4df4bf91...` |
+| T | Appel des mers | Call of the Seas | mathlann | 14 | Force Mentale mètres | Spécial | Bonus de Force Mentale Rounds | Contrat à effet calculable + Rappel | narrative | `sha256:aed9dbf4...` |
+| T | Manteau de Mathlann | Cloak of Mathlann | mathlann | 11 | Force Mentale mètres | 1 bateau ou navire | Force Mentale minutes | Contrat à effet calculable + Rappel | narrative | `sha256:76783bf7...` |
+| T | Maîtresse des profondeurs | Mistress of the Deep | mathlann | 9 | Sociabilité mètres | Spécial | Bonus de Sociabilité Rounds | Contrat à effet calculable + Rappel | narrative | `sha256:eb9cecf4...` |
+| T | Poumons d’eau | Waterlungs | mathlann | 7 | Force Mentale mètres | 1 | Bonus de Force Mentale heures | Contrat à effet calculable + Rappel | special | `sha256:5171a35d...` |
+| T | Brumes grouillantes | Writhing Mists | mathlann | 6 | Force Mentale mètres | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale minutes | Contrat à effet calculable + Rappel | test-modifiers | `sha256:34b3c8f6...` |
+| T | Calame divin | Divine Stylus | hoeth | 0 | Vous | Vous | Bonus de Force Mentale minutes | Rappel | narrative | `sha256:2e9216cf...` |
+| T | Illumination | Enlightenment | hoeth | 0 | Bonus de Force Mentale mètres | 1 animal | Bonus d’Intelligence minutes | Contrat à effet calculable + Rappel | special | `sha256:0ceee05d...` |
+| T | Aperçu arcanique | Arcane Insight | hoeth | 8 | Toucher | 1 objet | Instantané | Rappel | narrative | `sha256:42bea8c4...` |
+| T | Grand lien spirituel | Greater Spirit Bond | hoeth | 4 | Vous | Spécial | Bonus de Force Mentale minutes | Rappel | narrative | `sha256:eb518465...` |
+| T | Creuset de lumière | Crucible of Light | hoeth | 6 | Toucher | 1 épée | Bonus d’Intelligence minutes | Rappel | narrative | `sha256:f2f0262e...` |
+| T | Maîtrise mnémonique | Mnemonic Control | hoeth | 6 | Bonus de Force Mentale mètres | 1 | Instantané | Rappel | narrative | `sha256:13bf9cab...` |
+| T | Envoi psychique | Psychic Sending | hoeth | 7 | Force Mentale miles | 1 | Instantané | Rappel | narrative | `sha256:8ea13f02...` |
+| T | Façonnage d’âme | Soulcraft | hoeth | 10 | Bonus de Force Mentale mètres | 1 Fantôme | Instantané | Rappel | narrative | `sha256:bd8b5521...` |
+| T | Sceaux sacrés | Sacred Wards | hoeth | 11 | Toucher | ZdE Bonus d’Intelligence mètres | Bonus d’Intelligence heures | Rappel | special | `sha256:14a6b52e...` |
+| T | Les Mots premiers | The Primary Words | hoeth | 15 | Vous | Vous | Bonus d’Intelligence heures | Rappel | narrative | `sha256:f5c37787...` |
+| T | Belligérance du Marais de sang | Belligerence of the Bloodmarsh | arcane | 2 | Bonus de Force Mentale mètres | 1 Bête des fens (n’importe laquelle) | Instantané | Rappel | traits | `sha256:83e131bb...` |
+| T | Effondrement d’un construit | Collapse Construct | arcane | 6 | Bonus de Force Mentale mètres | 1 Construit (n’importe lequel) | Instantané | Contrat nécessitant des données MJ | special | `sha256:d9f715a8...` |
+| T | Déchiffrer la malédiction | Decipher Curse | arcane | 4 | Force Mentale mètres | Tout objet | Instantané | Rappel | narrative | `sha256:630a222e...` |
+| T | Perturber la magie | Disrupt Magic | arcane | 8 | Force Mentale mètres | 1 | Instantané | Contrat nécessitant des données MJ | special | `sha256:6edc90f9...` |
+| T | Pourriture grouillante de mouches | Fly-Infested Rotweed | arcane | 4 | Bonus de Force Mentale mètres | 1 Bête des fens (n’importe laquelle) | Bonus de Force Mentale minutes | Rappel | traits | `sha256:8c2cd732...` |
+| T | Limon de vie | Lifebloom Silt | arcane | 4 | Bonus de Force Mentale mètres | 1 Bête des fens (n’importe laquelle) | Bonus de Force Mentale minutes | Rappel | special | `sha256:e67227db...` |
+| T | Silence (Arcane) | Silence (Arcane) | arcane | 4 | Vous | ZdE Bonus de Force Mentale mètres | Bonus de Force Mentale minutes | Contrat à effet calculable + Rappel | test-modifiers | `sha256:29a6c490...` |
+| T | Secours au serviteur magique | Succour Magical Servant | arcane | 2 | Bonus de Force Mentale mètres | Un de vos Constructs ou Familiers | Instantané | Contrat à effet calculable + Rappel | healing | `sha256:335c6a18...` |
+| T | Voile de brouillard | Shroud of Fog | arcane | 8 | Vous | ZdE Bonus de Force Mentale miles | Force Mentale minutes | Rappel | narrative | `sha256:982d0796...` |
 
 ## Options de surpuissance propres aux sorts
 
-Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « Spells may have additional options in their descriptions »). 44 calculées, 50 rappelées au MJ avec leur valeur chiffrée ; aucune n'est « calculée » sans exécution.
+Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « Spells may have additional options in their descriptions »). 46 calculées, 100 rappelées au MJ avec leur valeur chiffrée ; aucune n'est « calculée » sans exécution.
 
 | Sort | Option | Coût | Statut |
 |---|---|---|---|
@@ -391,10 +514,62 @@ Options « +N DR » et « pour chaque +N DR » des descriptions (V5 p. 236 : « 
 | Horreurs Noires | Peur de l’ombre +1, maximum 4 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Poches Profondes | Encombrement +1 | 2 DR par palier | Rappel chiffré (non calculée) |
 | Ailes Grises | Téléportation +100 m | 2 DR par palier | Rappel chiffré (non calculée) |
+| Panacée | Une maladie guérie de plus | 2 DR par palier | Rappel chiffré (non calculée) |
+| Bonne santé | Portée Bonus de Force Mentale mètres | 3 DR | Rappel chiffré (non calculée) |
+| Relever les morts | +2 DR : un Squelette supplémentaire | 2 DR par palier | Rappel chiffré (non calculée) |
+| Réanimation | +2 DR : un mort-vivant supplémentaire | 2 DR par palier | Rappel chiffré (non calculée) |
+| L’appel de Vanhel | +2 DR : Bonus d’Intelligence cibles de plus | 2 DR par palier | Rappel chiffré (non calculée) |
+| Déracinement des montagnes | +5 DR : avalanche | 5 DR | Rappel chiffré (non calculée) |
+| Ligne de terre | +4 DR : pont sur l’eau | 4 DR | Rappel chiffré (non calculée) |
+| Ligne de terre | +6 DR : chemin dans la jungle | 6 DR | Rappel chiffré (non calculée) |
+| Ruine des cités | +6 DR : structure fortifiée | 6 DR | Rappel chiffré (non calculée) |
+| Déflagration mentale | +6 DR : « La Délivrance d’Itza » | 6 DR | Rappel chiffré (non calculée) |
+| Déflagration mentale | +9 DR : « Le Grand Niveleur » | 9 DR | Rappel chiffré (non calculée) |
+| Apothéose (Slann) | Slann, +2 DR : Peur +1 | 2 DR par palier | Rappel chiffré (non calculée) |
+| Destruction des Arcanes (Slann) | Slann, +5 DR : une destruction de plus | 5 DR par palier | Rappel chiffré (non calculée) |
+| Drain de Magie (Slann) | +5 DR : zone portée à la Volonté en yards, alliés exemptés (Test d’Intelligence Difficile −1 DR) | 5 DR | Calculée (exécutée par la sonde) |
+| Drain de Magie (Slann) | +7 DR : Bénédictions et Miracles persistants dissipés, Yenlui lumineux | 7 DR | Rappel chiffré (non calculée) |
+| Drain de Magie (Slann) | +10 DR : objets magiques et Protections inertes, lanceurs privés de magie 24 h | 10 DR | Rappel chiffré (non calculée) |
+| Drain de Magie (Slann) | Slann, +4 DR : drainer la magie environnementale | 4 DR par palier | Rappel chiffré (non calculée) |
+| Chemin entre les Mondes (Slann) | +5 DR : durée portée à BI minutes (Test de Force Mentale Difficile −2 DR) | 5 DR | Calculée (exécutée par la sonde) |
+| Chemin entre les Mondes (Slann) | +8 DR : traversée des Voies des Anciens d’un nexus à un autre | 8 DR | Rappel chiffré (non calculée) |
+| Chemin entre les Mondes (Slann) | Slann, +4 DR : Voies des Anciens | 4 DR | Rappel chiffré (non calculée) |
+| Divination des flammes | +2 DR : créatures invisibles détectées | 2 DR | Rappel chiffré (non calculée) |
+| Divination des flammes | +3 DR : cibler les créatures détectées | 3 DR | Rappel chiffré (non calculée) |
+| Divination des pierres | +3 DR : détecter l’ithilmar | 3 DR | Rappel chiffré (non calculée) |
+| Feux de la perfection | +5 DR : un autre sort de Vaul sur l’objet | 5 DR | Rappel chiffré (non calculée) |
+| Sagesse de l’acier du ciel | +4 DR : fragiliser un objet d’ithilmar | 4 DR | Rappel chiffré (non calculée) |
+| Sagesse de l’acier du ciel | +6 DR : objet magique d’ithilmar | 6 DR | Rappel chiffré (non calculée) |
+| Forteresse de Hotek | +2 DR : une défense supplémentaire | 2 DR par palier | Rappel chiffré (non calculée) |
+| Esprits des vagues | +3 DR : un élémentaire de plus | 3 DR par palier | Rappel chiffré (non calculée) |
+| Armure de Mathlann | +2 DR : un navire plus grand | 2 DR par palier | Rappel chiffré (non calculée) |
+| Armure de Mathlann | +4 DR : Armure 3 | 4 DR | Rappel chiffré (non calculée) |
+| Armure de Mathlann | +6 DR : gréement et équipage protégés | 6 DR | Rappel chiffré (non calculée) |
+| Appel des mers | +5 DR : Merwyrm amical | 5 DR | Rappel chiffré (non calculée) |
+| Appel des mers | +8 DR : le Merwyrm reste | 8 DR | Rappel chiffré (non calculée) |
+| Manteau de Mathlann | +2 DR : un navire plus grand | 2 DR par palier | Rappel chiffré (non calculée) |
+| Manteau de Mathlann | +8 DR : arches noires et monstres marins | 8 DR | Rappel chiffré (non calculée) |
+| Maîtresse des profondeurs | +5 DR : insensible à l’appel | 5 DR | Rappel chiffré (non calculée) |
+| Maîtresse des profondeurs | +3 DR : Océanide mobile | 3 DR | Rappel chiffré (non calculée) |
+| Poumons d’eau | +4 DR : sens sous l’eau | 4 DR | Rappel chiffré (non calculée) |
+| Poumons d’eau | +4 DR : cible attirée par l’eau | 4 DR | Rappel chiffré (non calculée) |
+| Brumes grouillantes | +3 DR : brume mobile | 3 DR | Rappel chiffré (non calculée) |
+| Brumes grouillantes | +3 DR : Peur 1 pour les alliés | 3 DR | Rappel chiffré (non calculée) |
+| Creuset de lumière | +3 DR : Défensive ou Précise | 3 DR | Rappel chiffré (non calculée) |
+| Creuset de lumière | +5 DR : épée pensante | 5 DR | Rappel chiffré (non calculée) |
+| Creuset de lumière | +7 DR : Qualités permanentes | 7 DR | Rappel chiffré (non calculée) |
+| Maîtrise mnémonique | +2 DR : réussite automatique à l’incantation | 2 DR | Rappel chiffré (non calculée) |
+| Maîtrise mnémonique | +3 DR : effacer un souvenir | 3 DR | Rappel chiffré (non calculée) |
+| Envoi psychique | +3 DR : image mentale | 3 DR | Rappel chiffré (non calculée) |
+| Envoi psychique | +4 DR : un inconnu | 4 DR | Rappel chiffré (non calculée) |
+| Sceaux sacrés | +6 DR : durée en semaines | 6 DR | Rappel chiffré (non calculée) |
+| Les Mots premiers | +2 DR : espèces antérieures aux Anciens | 2 DR | Rappel chiffré (non calculée) |
+| Les Mots premiers | +4 DR : esprits, élémentaires, démons | 4 DR | Rappel chiffré (non calculée) |
+| Secours au serviteur magique | +3 DR : soin doublé | 3 DR | Rappel chiffré (non calculée) |
 
 ## Clauses rappelées à l'exécution
 
-Drapeaux d'effet que le moteur ne calcule pas : le rappel est joint à l'aperçu du sort (9 drapeaux, 25 contrats). Un drapeau qui n'est ni lu ni listé ici fait échouer le test « tout drapeau écrit est lu ».
+Drapeaux d'effet que le moteur ne calcule pas : le rappel est joint à l'aperçu du sort (9 drapeaux, 30 contrats). Un drapeau qui n'est ni lu ni listé ici fait échouer le test « tout drapeau écrit est lu ».
 
 | Sort | Rappel |
 |---|---|
@@ -423,3 +598,8 @@ Drapeaux d'effet que le moteur ne calcule pas : le rappel est joint à l'aperçu
 | Bouclier magique | +6 DR aux seuls Tests de dissipation du lanceur (Bonus de Force Mentale), jamais à l’incantation. |
 | Visage mutable | Test opposé de Force Mentale : deux dés explicites, égalité au lanceur. |
 | Traître de Tarn | Test opposé de Force Mentale : deux dés explicites, égalité au lanceur. |
+| Protection contre le wyrd | Test opposé de Force Mentale : deux dés explicites, égalité au lanceur. |
+| Destruction de Démon Mineur | Test opposé de Force Mentale : deux dés explicites, égalité au lanceur. |
+| Mork te veut ! | Test opposé de Force Mentale : deux dés explicites, égalité au lanceur. |
+| Effondrement d’un construit | Test opposé de Force Mentale : deux dés explicites, égalité au lanceur. |
+| Perturber la magie | Test opposé de Force Mentale : deux dés explicites, égalité au lanceur. |

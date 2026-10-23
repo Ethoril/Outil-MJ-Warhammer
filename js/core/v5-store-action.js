@@ -8,6 +8,7 @@ import { validateV5ReactionInput, registerV5ReactionOpportunities } from './v5-r
 import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from './v5-action-costs.js';
 import { projectV5Resources, commitV5Resources } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
+import { planNaturalAttack } from './creature-combat.js';
 import { defaultResolutionId, previewResolution } from './resolution.js';
 import { FREE_REROLL_SOURCE, freeRerollLayers, consumeFreeReroll, reverseDiceLayers, consumeReverseDice } from './v5-divine-effects-conditions.js';
 import { slExtremeLayers, consumeSlExtreme } from './v5-divine-effects-tests.js';
@@ -63,6 +64,13 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
   const costs = [...(v5.costs || [])];
   if (v5.extraAttack === true && !costs.some(cost => cost.resource === 'momentum')) costs.push({ id: 'system:extra-attack-momentum', resource: 'momentum', amount: 1 });
   const quotas=[...(v5.quotas||[])],exemptions=[...(v5.exemptions||[])],actor=state.participants.find(p=>p.id===actorId),context=v5.context||{};
+  // Combat naturel (T2) : l'attaque gratuite d'un Trait de créature coûte l'Élan qu'il indique ; le Trait est exigé.
+  if(context.naturalAttack){
+    const natural=planNaturalAttack(actor,context.naturalAttack,{used:context.naturalUsed,charged:context.charged,actorSize:context.actorSize,targetSize:context.targetSize});
+    if(natural.unresolved.some(r=>/Trait absent|déjà/.test(r)))throw new TypeError(natural.unresolved.join(' '));
+    for(const cost of natural.costs)if(!costs.some(c=>c.resource===cost.resource))costs.push({id:'creature:'+context.naturalAttack+':'+cost.resource,...cost});
+    if(natural.quota)quotas.push(natural.quota);
+  }
   let quotaActorId;
   const selected=context.preRollTalent;
   if(selected&&selected!=='none'){

@@ -18534,8 +18534,23 @@
       ]
     },
     "effects": {
-      "type": "special",
-      "assistedSummon": true,
+      "type": "summon",
+      "summon": {
+        "name": "Démon mineur",
+        "nameFact": "daemonKind",
+        "names": {
+          "bloodletter": "Sanguinaire de Khorne",
+          "daemonette": "Démonette de Slaanesh"
+        },
+        "profiles": {
+          "bloodletter": "E0-P-107",
+          "daemonette": "E0-P-108"
+        },
+        "outcomeFact": "commandOutcome",
+        "count": 1,
+        "max": 1,
+        "traits": []
+      },
       "facts": [
         {
           "key": "daemonKind",
@@ -18571,9 +18586,9 @@
         }
       ]
     },
-    "reminders": "Vous déchirez le voile : un Démon mineur (Sanguinaire ou Démonette) surgit ; une opposition Focalisation (Dhar) contre Calme décide s’il obéit à un ordre, après quoi il disparaît, sinon il attaque. Profil du démon (L06 p. 349) : participant à créer par le MJ (profils de bestiaire : phase E). Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon reste et devient hostile (décision du MJ du 22/10) ; un ordre accompli le fait disparaître. Échec : il attaque immédiatement.",
+    "reminders": "Vous déchirez le voile : un Démon mineur (Sanguinaire ou Démonette) surgit ; une opposition Focalisation (Dhar) contre Calme décide s’il obéit à un ordre, après quoi il disparaît, sinon il attaque. Profil du démon : profil imprimé du bestiaire (Sanguinaire de Khorne L06 p. 349, Démonette de Slaanesh p. 350), participant créé à l’incantation ; « le démon l’emporte » le place dans le camp ennemi. Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon reste et devient hostile (décision du MJ du 22/10) ; un ordre accompli le fait disparaître. Échec : il attaque immédiatement.",
     "assistedClauses": [
-      "Profil du démon (L06 p. 349) : participant à créer par le MJ (profils de bestiaire : phase E). Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon reste et devient hostile (décision du MJ du 22/10) ; un ordre accompli le fait disparaître. Échec : il attaque immédiatement."
+      "Profil du démon : profil imprimé du bestiaire (Sanguinaire de Khorne L06 p. 349, Démonette de Slaanesh p. 350), participant créé à l’incantation ; « le démon l’emporte » le place dans le camp ennemi. Opposition Focalisation (Dhar) du lanceur contre Calme du démon, jouée par le MJ. Victoire : le démon exécute un seul ordre, pris au pied de la lettre, puis disparaît ; si l’ordre n’est pas accompli à la fin de la durée, le démon reste et devient hostile (décision du MJ du 22/10) ; un ordre accompli le fait disparaître. Échec : il attaque immédiatement."
     ],
     "sharedWith": null,
     "sourceBook": "L06",
@@ -18586,7 +18601,7 @@
     "isTradition": true,
     "ficheFollowUp": false,
     "isVortex": false,
-    "isAuxiliary": false
+    "isAuxiliary": true
   },
   {
     "id": "spell-tradition-octogramme",
@@ -18670,10 +18685,7 @@
     "effects": {
       "type": "summon",
       "summon": {
-        "generic": true,
-        "profileKinds": {
-          "default": "skeleton"
-        },
+        "profile": "E0-P-093",
         "name": "Squelette",
         "addDr": true,
         "count": 1,
@@ -18711,9 +18723,9 @@
         "unit": "minutes"
       }
     },
-    "reminders": "Un flot de Dhar sur la terre nue fait surgir 1 + DR Squelettes, À Terre, à la fin du Round ; ils obéissent à des ordres simples. Un squelette de plus par +2 DR. Profil des Squelettes : celui du bestiaire (V5 Livre de base p. 339), armure facultative non comptée ; le sort est refusé si le profil manque (décision du MJ du 22/10). Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus.",
+    "reminders": "Un flot de Dhar sur la terre nue fait surgir 1 + DR Squelettes, À Terre, à la fin du Round ; ils obéissent à des ordres simples. Un squelette de plus par +2 DR. Profil des Squelettes : profil imprimé du bestiaire (L06 p. 339), valeurs non recalculées ; sort refusé si le profil manque (décision du MJ du 22/10). Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus.",
     "assistedClauses": [
-      "Profil des Squelettes : celui du bestiaire (V5 Livre de base p. 339), armure facultative non comptée ; le sort est refusé si le profil manque (décision du MJ du 22/10). Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus."
+      "Profil des Squelettes : profil imprimé du bestiaire (L06 p. 339), valeurs non recalculées ; sort refusé si le profil manque (décision du MJ du 22/10). Terre nue : rappel narratif, aucun refus. +2 DR : un Squelette de plus."
     ],
     "sharedWith": null,
     "sourceBook": "L06",
@@ -18764,16 +18776,15 @@
     "effects": {
       "type": "summon",
       "summon": {
-        "generic": true,
         "name": "Mort réanimé",
         "nameFact": "undeadKind",
         "names": {
           "zombies": "Zombie",
           "skeletons": "Squelette"
         },
-        "profileKinds": {
-          "zombies": "zombie",
-          "skeletons": "skeleton"
+        "profiles": {
+          "zombies": "E0-P-094",
+          "skeletons": "E0-P-093"
         },
         "baseFormula": "BFM",
         "addDr": true,
@@ -18828,9 +18839,9 @@
         "unit": "minutes"
       }
     },
-    "reminders": "Un Dhar visqueux s’enfonce dans des cadavres : BFM + DR corps se relèvent en Zombies ou en Squelettes, À Terre, sous votre contrôle. Un mort de plus par +2 DR. Cadavres présents : à déclarer par le MJ. Profils des Zombies (p. 340) et des Squelettes (p. 339) pris dans le bestiaire ; sort refusé si le profil manque (décision du MJ du 22/10). +2 DR : un mort de plus.",
+    "reminders": "Un Dhar visqueux s’enfonce dans des cadavres : BFM + DR corps se relèvent en Zombies ou en Squelettes, À Terre, sous votre contrôle. Un mort de plus par +2 DR. Cadavres présents : à déclarer par le MJ. Profils des Zombies et des Squelettes : profils imprimés du bestiaire (L06), valeurs non recalculées ; sort refusé si un profil manque (décision du MJ du 22/10). +2 DR : un mort de plus.",
     "assistedClauses": [
-      "Cadavres présents : à déclarer par le MJ. Profils des Zombies (p. 340) et des Squelettes (p. 339) pris dans le bestiaire ; sort refusé si le profil manque (décision du MJ du 22/10). +2 DR : un mort de plus."
+      "Cadavres présents : à déclarer par le MJ. Profils des Zombies et des Squelettes : profils imprimés du bestiaire (L06), valeurs non recalculées ; sort refusé si un profil manque (décision du MJ du 22/10). +2 DR : un mort de plus."
     ],
     "sharedWith": null,
     "sourceBook": "L06",

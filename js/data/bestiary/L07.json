@@ -544,7 +544,9 @@
    },
    "wounds": 17,
    "armour": {
-    "detail": "Scales) 3 (8"
+    "ap": 3,
+    "printedTotal": 8,
+    "detail": "Scales"
    },
    "attacks": [
     {
@@ -1114,7 +1116,7 @@
      "trait": "Bite"
     },
     {
-     "name": "Pistol) (20",
+     "name": "Pistol",
      "damage": 8,
      "trait": "Ranged",
      "ranged": true

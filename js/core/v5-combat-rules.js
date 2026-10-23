@@ -2,6 +2,7 @@ import {enforceMagicTestRestrictions,activeMagicTalent} from './v5-magic-talents
 import {applyScytheOfShyishRules} from './v5-magic-arbitrations.js';
 import {transformationRestrictions} from './v5-magic-combat.js';
 import {getReferenceCatalogue} from './reference-catalog.js';
+import {familiarSupport} from './familiars.js';
 import {magicSkillModifiers,magicAdverseModifiers,effectiveSkillScore,magicSkillReplacement,familiarSkillSupport,magicTalentRank} from './v5-magic-talents.js';
 /** Common V5 combat context; session resources live in extensions.v5. */
 import {situationPlan} from './v5-talent-situations.js';
@@ -113,7 +114,8 @@ export function buildCombatTest(normalized, role = 'actor') {
   restrictions.push(...transformationRestrictions(actor,action,{defending,charging:settings.charging===true,momentum:hasMomentum(actor)}));
   const skill=getReferenceCatalogue().skills.find(s=>s.id===(action.extensions?.fiche?.skillId || settings.context?.skillId));
   const familiar=(normalized.v5State?.participants || []).find(p=>p.id===settings.context?.magicAssistantId);
-  const support=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
+  const manualSupport=familiarSkillSupport(actor,familiar,skill?.nom || action.label || action.note || '',settings.context);
+  const support=manualSupport.modifiers.length||manualSupport.advantages.length?manualSupport:familiarSupport(actor,normalized.v5State?.participants || [],skill?.nom || action.label || action.note || '',settings.context);
   const skillLabel=skill?.nom || action.label || action.note || '';
   const modifiers = [...support.modifiers,...magicSkillModifiers(actor,skillLabel,{...settings.context,carac:settings.context?.carac||skill?.carac||action.attr}),
     // Clés « … adverse » du porteur opposé, et « Défense contre Tir » du défenseur visé par un tir.

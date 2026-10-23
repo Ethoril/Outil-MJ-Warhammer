@@ -1,0 +1,5371 @@
+{
+ "schemaVersion": 1,
+ "book": "L12",
+ "title": "Tribes and Tribulations",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L12",
+  "sha256": "008c2e08337b15dd6776ae108acae4749d5276fbcff63eb7db74e3b9daf8dc6e"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-393",
+   "book": "L12",
+   "page": 9,
+   "physicalPage": 9,
+   "kind": "profile",
+   "blockKey": "L12:9:1",
+   "name": "Basic Gnoblar",
+   "nameFr": "De base Gnoblar",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 35,
+    "F": 25,
+    "E": 30,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 18,
+    "Soc": 15
+   },
+   "wounds": 9,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-394",
+   "book": "L12",
+   "page": 9,
+   "physicalPage": 9,
+   "kind": "profile",
+   "blockKey": "L12:9:3",
+   "name": "Basic Night Goblin",
+   "nameFr": "De base gobelin nocturne",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 35,
+    "F": 30,
+    "E": 30,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 18,
+    "Soc": 20
+   },
+   "wounds": 10,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    }
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-395",
+   "book": "L12",
+   "page": 9,
+   "physicalPage": 9,
+   "kind": "profile",
+   "blockKey": "L12:9:2",
+   "name": "Basic Forest Goblin",
+   "nameFr": "De base gobelin des forêts",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 35,
+    "F": 30,
+    "E": 30,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 20,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-396",
+   "book": "L12",
+   "page": 9,
+   "physicalPage": 9,
+   "kind": "profile",
+   "blockKey": "L12:9:0",
+   "name": "Basic Goblin",
+   "nameFr": "De base Goblin",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 35,
+    "F": 30,
+    "E": 30,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 20,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-397",
+   "book": "L12",
+   "page": 10,
+   "physicalPage": 10,
+   "kind": "profile",
+   "blockKey": "L12:10:0",
+   "name": "Basic Orc",
+   "nameFr": "De base Orc",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 35,
+    "Soc": 20
+   },
+   "wounds": 14,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Choppa",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-398",
+   "book": "L12",
+   "page": 10,
+   "physicalPage": 10,
+   "kind": "profile",
+   "blockKey": "L12:10:1",
+   "name": "Basic Savage Orc",
+   "nameFr": "De base sauvage Orc",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 35,
+    "Soc": 20
+   },
+   "wounds": 14,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Stone Axe",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-399",
+   "book": "L12",
+   "page": 11,
+   "physicalPage": 11,
+   "kind": "profile",
+   "blockKey": "L12:11:0",
+   "name": "Basic Black Orc",
+   "nameFr": "De base noir Orc",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 30,
+    "F": 45,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 45,
+    "Soc": 20
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 5,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Choppa",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-400",
+   "book": "L12",
+   "page": 12,
+   "physicalPage": 12,
+   "kind": "profile",
+   "blockKey": "L12:12:0",
+   "name": "Basic Hobgoblin",
+   "nameFr": "De base hobgobelin",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 35,
+    "F": 30,
+    "E": 35,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 25,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-401",
+   "book": "L12",
+   "page": 13,
+   "physicalPage": 13,
+   "kind": "profile",
+   "blockKey": "L12:13:0",
+   "name": "Basic Snotling",
+   "nameFr": "De base Snotling",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 15,
+    "F": 25,
+    "E": 20,
+    "I": 20,
+    "Ag": 30,
+    "Dex": 15,
+    "Int": 15,
+    "FM": 30,
+    "Soc": 15
+   },
+   "wounds": 7,
+   "size": "small",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Immunity",
+     "param": "Poison",
+     "ref": "E0-T-031"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Fetch, Guard",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "snotling",
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-402",
+   "book": "L12",
+   "page": 14,
+   "physicalPage": 14,
+   "kind": "profile",
+   "blockKey": "L12:14:0",
+   "name": "Basic Ogre",
+   "nameFr": "De base Ogre",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 20,
+    "F": 45,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 30,
+    "Soc": 20
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Thin People",
+     "ref": "E0-T-081"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-403",
+   "book": "L12",
+   "page": 15,
+   "physicalPage": 15,
+   "kind": "profile",
+   "blockKey": "L12:15:0",
+   "name": "Basic Common Troll",
+   "nameFr": "De base commun troll",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 15,
+    "F": 55,
+    "E": 45,
+    "I": 10,
+    "Ag": 15,
+    "Dex": 15,
+    "Int": 10,
+    "FM": 20,
+    "Soc": 5
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Vomit",
+     "ref": "E0-T-065"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-404",
+   "book": "L12",
+   "page": 16,
+   "physicalPage": 16,
+   "kind": "template",
+   "blockKey": "L12:16:0",
+   "name": "Soldier",
+   "nameFr": "Soldat",
+   "modifiers": {
+    "CC": 5,
+    "F": 5,
+    "E": 5,
+    "I": 10,
+    "FM": 5
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "keywords": [
+    "soldat"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-405",
+   "book": "L12",
+   "page": 16,
+   "physicalPage": 16,
+   "kind": "template",
+   "blockKey": "L12:16:1",
+   "name": "Skirmisher",
+   "nameFr": "Tirailleur",
+   "modifiers": {
+    "CT": 5,
+    "I": 10,
+    "Ag": 10,
+    "FM": 5
+   },
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Ranged (Bow, Sling, or Throwing)",
+     "nameFr": "Projectiles (Bow, Sling, or Throwing)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Rural or Underground)",
+     "nameFr": "Discrétion (Rural or Underground)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "Bow",
+    "Short Bow",
+    "or Sling with ammunition for 12 shots",
+    "or Throwing Weapons",
+    "Hand Weapon"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-406",
+   "book": "L12",
+   "page": 16,
+   "physicalPage": 16,
+   "kind": "template",
+   "blockKey": "L12:16:3",
+   "name": "Elite",
+   "nameFr": "Élite",
+   "modifiers": {
+    "CC": 10,
+    "F": 10,
+    "E": 10,
+    "I": 20,
+    "Ag": 10,
+    "FM": 15
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 5,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Choice of appropriate Polearm or Two- Handed Weapon",
+    "Hand Weapon",
+    "Mail Armour",
+    "Shield"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-407",
+   "book": "L12",
+   "page": 16,
+   "physicalPage": 16,
+   "kind": "profile",
+   "blockKey": "L12:16:2",
+   "name": "Night Goblin Chief",
+   "nameFr": "Gobelin nocturne chef",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 45,
+    "F": 45,
+    "E": 45,
+    "I": 55,
+    "Ag": 55,
+    "Dex": 30,
+    "Int": 35,
+    "FM": 33,
+    "Soc": 30
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Spear",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 48
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 70
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 65
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Leather and Mail Armour",
+    "Shield",
+    "Spear",
+    "Sword"
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-408",
+   "book": "L12",
+   "page": 17,
+   "physicalPage": 17,
+   "kind": "template",
+   "blockKey": "L12:17:0",
+   "name": "Chief",
+   "nameFr": "Chef",
+   "modifiers": {
+    "CC": 25,
+    "CT": 10,
+    "F": 15,
+    "E": 15,
+    "I": 25,
+    "Ag": 20,
+    "Int": 10,
+    "FM": 25,
+    "Soc": 10
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (any two)",
+     "nameFr": "Corps à corps (any two)",
+     "frUnverified": true,
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Choice of appropriate Polearm or Two- Handed Weapon",
+    "Hand Weapon",
+    "Mail or Leather and Mail or Plate Armour",
+    "they can also take the Ranged (Bow) +10 Skill"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-409",
+   "book": "L12",
+   "page": 17,
+   "physicalPage": 17,
+   "kind": "template",
+   "blockKey": "L12:17:3",
+   "name": "Warlord",
+   "nameFr": "Seigneur de guerre",
+   "modifiers": {
+    "CC": 35,
+    "CT": 10,
+    "F": 25,
+    "E": 30,
+    "I": 30,
+    "Ag": 25,
+    "Int": 15,
+    "FM": 35,
+    "Soc": 15
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 25,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 25,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 25,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 30,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Melee (any two)",
+     "nameFr": "Corps à corps (any two)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Choice of appropriate Polearm or Two- Handed Weapon",
+    "Hand Weapon",
+    "Mail or Leather and Mail or Plate Armour",
+    "they can also take the Ranged (Bow) +15 Skill."
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-410",
+   "book": "L12",
+   "page": 17,
+   "physicalPage": 17,
+   "kind": "template",
+   "blockKey": "L12:17:1",
+   "name": "Shaman",
+   "nameFr": "Chamane",
+   "modifiers": {
+    "E": 5,
+    "I": 15,
+    "Dex": 10,
+    "Int": 15,
+    "FM": 15
+   },
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 5,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon",
+    "Ritual Dress incorporating many ingredients and fetishes",
+    "Staff"
+   ],
+   "spells": {
+    "spells": [
+     "Choose up to 3 spells from the Petty Magic list and up to 3 from a suitable magical lore."
+    ]
+   },
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-411",
+   "book": "L12",
+   "page": 17,
+   "physicalPage": 17,
+   "kind": "template",
+   "blockKey": "L12:17:2",
+   "name": "Shaman Lord",
+   "nameFr": "Chamane seigneur",
+   "modifiers": {
+    "CC": 10,
+    "F": 5,
+    "E": 15,
+    "I": 20,
+    "Ag": 15,
+    "Dex": 20,
+    "Int": 35,
+    "FM": 30,
+    "Soc": 10
+   },
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 25,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 25,
+     "modifier": true
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 30,
+     "modifier": true
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 25,
+     "modifier": true
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 15,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 20,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 30,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 2
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon",
+    "Ritual Dress incorporating many ingredients and fetishes",
+    "Staff"
+   ],
+   "spells": {
+    "spells": [
+     "Choose up to 6 spells from the Petty Magic list and up to 9 from a suitable magical lore."
+    ]
+   },
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-412",
+   "book": "L12",
+   "page": 19,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L12:19:0",
+   "name": "War Boar",
+   "nameFr": "Guerre Boar",
+   "stats": {
+    "M": 7,
+    "CC": 45,
+    "CT": null,
+    "F": 33,
+    "E": 35,
+    "I": 33,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 10,
+    "FM": 35,
+    "Soc": 10
+   },
+   "wounds": 24,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Tusks",
+     "damage": 7,
+     "trait": "Horns"
+    },
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Horns",
+     "rating": "+7",
+     "param": "Tusks",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "sanglier"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-413",
+   "book": "L12",
+   "page": 19,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L12:19:2",
+   "name": "Giant Spider",
+   "nameFr": "Araignée géante",
+   "stats": {
+    "M": 7,
+    "CC": 35,
+    "CT": null,
+    "F": 35,
+    "E": 29,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 14,
+    "FM": 35,
+    "Soc": 10
+   },
+   "wounds": 20,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 3
+   },
+   "attacks": [
+    {
+     "name": "Fangs",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic, Mount",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    },
+    {
+     "name": "Web",
+     "rating": "40",
+     "ref": "E0-T-068"
+    }
+   ],
+   "keywords": [
+    "araignee"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-414",
+   "book": "L12",
+   "page": 19,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L12:19:3",
+   "name": "Hopping Squig",
+   "nameFr": "Hopping Squig",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": null,
+    "F": 50,
+    "E": 30,
+    "I": 10,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 5,
+    "FM": 15,
+    "Soc": 10
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bounce",
+     "ref": "E0-T-008"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "squig"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-415",
+   "book": "L12",
+   "page": 19,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L12:19:5",
+   "name": "Mournfang",
+   "nameFr": "Mournfang",
+   "stats": {
+    "M": 8,
+    "CC": 50,
+    "CT": null,
+    "F": 55,
+    "E": 45,
+    "I": 25,
+    "Ag": 35,
+    "Dex": null,
+    "Int": 15,
+    "FM": 35,
+    "Soc": 10
+   },
+   "wounds": 64,
+   "size": "enormous",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Tusks",
+     "damage": 9,
+     "trait": "Horns"
+    },
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Horns",
+     "rating": "+9",
+     "param": "Tusks",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-416",
+   "book": "L12",
+   "page": 19,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L12:19:4",
+   "name": "Giant Squig",
+   "nameFr": "Géant Squig",
+   "stats": {
+    "M": 4,
+    "CC": 55,
+    "CT": null,
+    "F": 58,
+    "E": 38,
+    "I": 10,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 5,
+    "FM": 15,
+    "Soc": 10
+   },
+   "wounds": 24,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bounce",
+     "ref": "E0-T-008"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "geant",
+    "squig"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-417",
+   "book": "L12",
+   "page": 19,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L12:19:1",
+   "name": "Giant Wolf",
+   "nameFr": "Géant loup",
+   "stats": {
+    "M": 9,
+    "CC": 45,
+    "CT": null,
+    "F": 35,
+    "E": 30,
+    "I": 35,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 15,
+    "Soc": 10
+   },
+   "wounds": 20,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 4
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "geant",
+    "loup"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-418",
+   "book": "L12",
+   "page": 26,
+   "physicalPage": 26,
+   "kind": "profile",
+   "blockKey": "L12:26:0",
+   "name": "Vish Venombarb – Forest Goblin Chief",
+   "nameFr": "Vish Venombarb – gobelin des forêts Chief",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 45,
+    "F": 45,
+    "E": 45,
+    "I": 45,
+    "Ag": 55,
+    "Dex": 30,
+    "Int": 35,
+    "FM": 45,
+    "Soc": 30
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Spear",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 55
+    },
+    {
+     "name": "Ride (Spider)",
+     "nameFr": "Chevaucher (Araignée)",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Bow and 12 Arrows dipped in Spider Venom",
+    "Hand Weapon (Sword)",
+    "Shield",
+    "Spear",
+    "Spider Carapace Armour"
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-419",
+   "book": "L12",
+   "page": 27,
+   "physicalPage": 27,
+   "kind": "profile",
+   "blockKey": "L12:27:0",
+   "name": "Bograt the Blasted – Forest Goblin Shaman",
+   "nameFr": "Bograt Blasted – gobelin des forêts Shaman",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 35,
+    "F": 30,
+    "E": 35,
+    "I": 35,
+    "Ag": 35,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 35,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "attacks": [
+    {
+     "name": "Skull- Stick",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 40
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 30
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 55
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Ride (Spider)",
+     "nameFr": "Chevaucher (Araignée)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon",
+    "Ritual Dress incorporating many ingredients and fetishes",
+    "Staff"
+   ],
+   "spells": {
+    "Petty Magic": [
+     "Dart",
+     "Rot"
+    ],
+    "Shock Arcane Magic": [
+     "Bridge",
+     "Corrosive Blood",
+     "Entangle Little Waaagh!: Gift of the Spider God",
+     "Itchy"
+    ]
+   },
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-420",
+   "book": "L12",
+   "page": 28,
+   "physicalPage": 28,
+   "kind": "profile",
+   "blockKey": "L12:28:0",
+   "name": "Blackhearted Nurd – Forest Goblin Elite",
+   "nameFr": "Blackhearted Nurd – gobelin des forêts Elite",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 35,
+    "F": 40,
+    "E": 40,
+    "I": 40,
+    "Ag": 45,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 35,
+    "Soc": 20
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 2,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Spear",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 50
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 25
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 55
+    },
+    {
+     "name": "Ride (Spider)",
+     "nameFr": "Chevaucher (Araignée)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Spider Carapace (counts as Mail)",
+    "Hand Weapon",
+    "Shield",
+    "Spear"
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-421",
+   "book": "L12",
+   "page": 29,
+   "physicalPage": 29,
+   "kind": "profile",
+   "blockKey": "L12:29:0",
+   "name": "Bugshot – Forest Goblin Skirmisher",
+   "nameFr": "Bugshot – gobelin des forêts Skirmisher",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 40,
+    "F": 30,
+    "E": 30,
+    "I": 30,
+    "Ag": 45,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 25,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Bow",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 50
+    },
+    {
+     "name": "Ride (Spider)",
+     "nameFr": "Chevaucher (Araignée)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "Bow with 12 arrow dipped in Spider Venom",
+    "Hand Weapon"
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-422",
+   "book": "L12",
+   "page": 36,
+   "physicalPage": 36,
+   "kind": "profile",
+   "blockKey": "L12:36:0",
+   "name": "Boggrub Legbiter – Goblin Warlord",
+   "nameFr": "Boggrub Legbiter – Goblin Warlord",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 45,
+    "F": 55,
+    "E": 60,
+    "I": 50,
+    "Ag": 60,
+    "Dex": 30,
+    "Int": 40,
+    "FM": 55,
+    "Soc": 35
+   },
+   "wounds": 22,
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-423",
+   "book": "L12",
+   "page": 37,
+   "physicalPage": 37,
+   "kind": "profile",
+   "blockKey": "L12:37:0",
+   "name": "Gutbug – Goblin Chief",
+   "nameFr": "Gutbug – Goblin Chief",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 45,
+    "F": 45,
+    "E": 45,
+    "I": 45,
+    "Ag": 55,
+    "Dex": 30,
+    "Int": 35,
+    "FM": 45,
+    "Soc": 30
+   },
+   "wounds": 16,
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-424",
+   "book": "L12",
+   "page": 38,
+   "physicalPage": 38,
+   "kind": "profile",
+   "blockKey": "L12:38:0",
+   "name": "Ratlicker – Goblin Soldier",
+   "nameFr": "Ratlicker – Goblin Soldier",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 35,
+    "F": 35,
+    "E": 35,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 25,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "keywords": [
+    "gobelin",
+    "soldat"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-425",
+   "book": "L12",
+   "page": 39,
+   "physicalPage": 39,
+   "kind": "profile",
+   "blockKey": "L12:39:0",
+   "name": "Kargun Grimbarden – Dwarf Artillerist",
+   "nameFr": "Kargun Grimbarden – Dwarf Artillerist",
+   "stats": {
+    "M": 3,
+    "CC": 54,
+    "CT": 42,
+    "F": 33,
+    "E": 44,
+    "I": 28,
+    "Ag": 22,
+    "Dex": 43,
+    "Int": 35,
+    "FM": 51,
+    "Soc": 25
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 55
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 27
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 52
+    },
+    {
+     "name": "Language (Goblin Tongue)",
+     "nameFr": "Langue (Goblin Tongue)",
+     "frUnverified": true,
+     "value": 56
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 59
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 33
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 48
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 50
+    },
+    {
+     "name": "Ranged (Catapult)",
+     "nameFr": "Projectiles (Catapult)",
+     "frUnverified": true,
+     "value": 47
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Boggrub",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Mental Corruption",
+     "param": "Shaky Morale",
+     "ref": "E0-T-038"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    }
+   ],
+   "trappings": [
+    "Ragged Leather Jerkin"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-426",
+   "book": "L12",
+   "page": 48,
+   "physicalPage": 48,
+   "kind": "profile",
+   "blockKey": "L12:48:0",
+   "name": "Harboth Skullrenda – Orc Warlord",
+   "nameFr": "Harboth Skullrenda – Orc Warlord",
+   "stats": {
+    "M": 4,
+    "CC": 70,
+    "CT": 40,
+    "F": 60,
+    "E": 75,
+    "I": 50,
+    "Ag": 50,
+    "Dex": 20,
+    "Int": 40,
+    "FM": 70,
+    "Soc": 35
+   },
+   "wounds": 27,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Choppa",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 95
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-427",
+   "book": "L12",
+   "page": 49,
+   "physicalPage": 49,
+   "kind": "profile",
+   "blockKey": "L12:49:0",
+   "name": "Yaskin Forit – Orc Chief",
+   "nameFr": "Yaskin Forit – Orc Chief",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 40,
+    "F": 50,
+    "E": 60,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 20,
+    "Int": 35,
+    "FM": 60,
+    "Soc": 30
+   },
+   "wounds": 23,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 9
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Two-Handed Choppa",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 65
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Bow and 12 Arrows",
+    "Helmet",
+    "Mail Coat",
+    "Shield",
+    "String of Dwarf Ears",
+    "Two-Handed Choppa"
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-428",
+   "book": "L12",
+   "page": 50,
+   "physicalPage": 50,
+   "kind": "profile",
+   "blockKey": "L12:50:0",
+   "name": "Hagblad – Orc Soldier",
+   "nameFr": "Hagblad – Orc Soldier",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 30,
+    "F": 40,
+    "E": 50,
+    "I": 30,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 25,
+    "FM": 40,
+    "Soc": 20
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Choppa",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Choppa",
+    "Leather Armour",
+    "Shield"
+   ],
+   "keywords": [
+    "orque",
+    "soldat"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-429",
+   "book": "L12",
+   "page": 51,
+   "physicalPage": 51,
+   "kind": "profile",
+   "blockKey": "L12:51:0",
+   "name": "Holg Stuntysticker – Orc Skirmisher",
+   "nameFr": "Holg Stuntysticker – Orc Skirmisher",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 35,
+    "F": 35,
+    "E": 45,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 25,
+    "FM": 40,
+    "Soc": 20
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Choppa",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "Bow and 12 Arrows",
+    "Choppa",
+    "Helmet",
+    "Mail Shirt",
+    "Shield"
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-430",
+   "book": "L12",
+   "page": 58,
+   "physicalPage": 58,
+   "kind": "profile",
+   "blockKey": "L12:58:0",
+   "name": "Hizsss Snakeskin – Savage Orc Shaman Lord",
+   "nameFr": "Hizsss Snakeskin – sauvage Orc Shaman Lord",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 30,
+    "F": 40,
+    "E": 60,
+    "I": 40,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 60,
+    "FM": 65,
+    "Soc": 30
+   },
+   "wounds": 22,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Staff",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 85
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 90
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 70
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 85
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 2
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "trappings": [
+    "Ritual Dress incorporating many ingredients and fetishes",
+    "Staff",
+    "Warpaint"
+   ],
+   "spells": {
+    "Petty Magic": [
+     "Animal Friend",
+     "Dazzle",
+     "Drain",
+     "Open Lock",
+     "Twitch Lore of the Big Waaagh!:`Ard as Nails",
+     "Bash `Em Lads!",
+     "`Eadbutt",
+     "Gaze of Mork",
+     "Mork Save Us",
+     "Waaagh!"
+    ]
+   },
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-431",
+   "book": "L12",
+   "page": 59,
+   "physicalPage": 59,
+   "kind": "profile",
+   "blockKey": "L12:59:0",
+   "name": "Slith Snake-Wrangla – Savage Orc Warlord",
+   "nameFr": "Slith Snake-Wrangla – sauvage Orc Warlord",
+   "stats": {
+    "M": 4,
+    "CC": 70,
+    "CT": 40,
+    "F": 60,
+    "E": 75,
+    "I": 50,
+    "Ag": 50,
+    "Dex": 20,
+    "Int": 40,
+    "FM": 70,
+    "Soc": 35
+   },
+   "wounds": 27,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Two-Handed Stone Axe",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 95
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 85
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Unshakable"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Shield",
+    "Stone Axe",
+    "Two-Handed Stone Axe",
+    "Warpaint"
+   ],
+   "keywords": [
+    "serpent",
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-432",
+   "book": "L12",
+   "page": 60,
+   "physicalPage": 60,
+   "kind": "profile",
+   "blockKey": "L12:60:0",
+   "name": "Bruug – Savage Orc Skirmisher",
+   "nameFr": "Bruug – sauvage Orc Skirmisher",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 35,
+    "F": 35,
+    "E": 45,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 25,
+    "FM": 40,
+    "Soc": 20
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Ranged",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Stone Axe",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "Bow and 12 Arrows",
+    "Stone Axe",
+    "Warpaint"
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-433",
+   "book": "L12",
+   "page": 61,
+   "physicalPage": 61,
+   "kind": "profile",
+   "blockKey": "L12:61:0",
+   "name": "Garn – Savage Orc Skirmisher",
+   "nameFr": "Garn – sauvage Orc Skirmisher",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 35,
+    "F": 35,
+    "E": 45,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 25,
+    "FM": 40,
+    "Soc": 20
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Knives",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Sling",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Stone Axe",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Sling)",
+     "nameFr": "Projectiles (Fronde)",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Throwing)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Ward",
+     "rating": "10",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "Six Flint Throwing Knives",
+    "Sling and Twelve Bullets",
+    "Stone Axe",
+    "Warpaint"
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-434",
+   "book": "L12",
+   "page": 68,
+   "physicalPage": 68,
+   "kind": "profile",
+   "blockKey": "L12:68:0",
+   "name": "Oglah Khan – Hobgoblin Chief",
+   "nameFr": "Oglah Khan – hobgobelin Chief",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 45,
+    "F": 45,
+    "E": 50,
+    "I": 45,
+    "Ag": 55,
+    "Dex": 30,
+    "Int": 40,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 19,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Scimitar",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Spear",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 80
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 80
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 55
+    },
+    {
+     "name": "Ride (Wolf)",
+     "nameFr": "Chevaucher (Loup géant)",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Roughrider"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon (Scimitar)",
+    "Mail Armour",
+    "Shield",
+    "Short Bow with 12 Arrows",
+    "Spear",
+    "Pelt of Wulfang",
+    "Pouchful of Coins",
+    "Wolf Steed"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-435",
+   "book": "L12",
+   "page": 69,
+   "physicalPage": 69,
+   "kind": "profile",
+   "blockKey": "L12:69:0",
+   "name": "“zschokke” Glahh – Hobgoblin Soldier",
+   "nameFr": "“zschokke” Glahh – hobgobelin Soldier",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 35,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 30,
+    "Soc": 20
+   },
+   "wounds": 14,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Scimitar",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Spear",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 50
+    },
+    {
+     "name": "Ride (Wolf)",
+     "nameFr": "Chevaucher (Loup géant)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon (Scimitar)",
+    "Mail Armour",
+    "Shield",
+    "Spear",
+    "Wolf Steed"
+   ],
+   "keywords": [
+    "soldat"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-436",
+   "book": "L12",
+   "page": 70,
+   "physicalPage": 70,
+   "kind": "profile",
+   "blockKey": "L12:70:0",
+   "name": "Gaglah Ghran – Hobgoblin Elite",
+   "nameFr": "Gaglah Ghran – hobgobelin Elite",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 35,
+    "F": 40,
+    "E": 45,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 40,
+    "Soc": 20
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 55
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 50
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 25
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 65
+    },
+    {
+     "name": "Ride (Wolf)",
+     "nameFr": "Chevaucher (Loup géant)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon (Scimitar)",
+    "Mail Armour",
+    "Shield",
+    "Spear",
+    "Wolf Steed"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-437",
+   "book": "L12",
+   "page": 71,
+   "physicalPage": 71,
+   "kind": "profile",
+   "blockKey": "L12:71:0",
+   "name": "Hhrag Wolf-Wispra – Hobgoblin Skirmisher",
+   "nameFr": "Hhrag Wolf-Wispra – hobgobelin Skirmisher",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 40,
+    "F": 30,
+    "E": 35,
+    "I": 30,
+    "Ag": 45,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 30,
+    "Soc": 20
+   },
+   "wounds": 12,
+   "armour": {
+    "ap": 3,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Ranged",
+     "damage": 7,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 50
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 55
+    },
+    {
+     "name": "Ride (Wolf)",
+     "nameFr": "Chevaucher (Loup géant)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "Bow with 12 Arrows",
+    "Hand Weapon (Scimitar)",
+    "Mail Armour",
+    "Shield",
+    "Spear",
+    "Wolf Steed"
+   ],
+   "keywords": [
+    "loup"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-438",
+   "book": "L12",
+   "page": 78,
+   "physicalPage": 78,
+   "kind": "profile",
+   "blockKey": "L12:78:0",
+   "name": "Matthogg — Ogre Bruiser",
+   "nameFr": "Matthogg — Brute ogre",
+   "stats": {
+    "M": 6,
+    "CC": 55,
+    "CT": 30,
+    "F": 60,
+    "E": 60,
+    "I": 45,
+    "Ag": 45,
+    "Dex": 20,
+    "Int": 30,
+    "FM": 55,
+    "Soc": 30
+   },
+   "wounds": 46,
+   "size": "large",
+   "armour": {
+    "ap": 5,
+    "printedTotal": 11
+   },
+   "attacks": [
+    {
+     "name": "Two- Handed Warhammer",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Thin People",
+     "ref": "E0-T-081"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Gutplate",
+    "Ironfist",
+    "Mail Armour",
+    "Sword",
+    "Two-Handed Warhammer"
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-439",
+   "book": "L12",
+   "page": 79,
+   "physicalPage": 79,
+   "kind": "profile",
+   "blockKey": "L12:79:0",
+   "name": "Rulg Deathcheater – Ogre Butcher",
+   "nameFr": "Rulg Deathcheater – Ogre Butcher",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 20,
+    "F": 45,
+    "E": 50,
+    "I": 35,
+    "Ag": 25,
+    "Dex": 30,
+    "Int": 35,
+    "FM": 45,
+    "Soc": 20
+   },
+   "wounds": 36,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 6
+   },
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 30
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 60
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Thin People",
+     "ref": "E0-T-081"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Arcane Magic (Lore of the Great Maw)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon",
+    "Ritual Dress incorporating many ingredients and fetishes",
+    "Staff",
+    "two potions of spleen and gall (for casting Bilebrew)",
+    "six disembodied limbs (for casting Bloodgruel)."
+   ],
+   "spells": {
+    "spells": [
+     "Bilebrew",
+     "Bloodgruel",
+     "Toothcracker."
+    ]
+   },
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-440",
+   "book": "L12",
+   "page": 80,
+   "physicalPage": 80,
+   "kind": "profile",
+   "blockKey": "L12:80:0",
+   "name": "Yrg Beastkiller — Ogre Hunter",
+   "nameFr": "Yrg Beastkiller — Chasseur ogre",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 25,
+    "F": 45,
+    "E": 45,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 35,
+    "Soc": 20
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "printedTotal": 5
+   },
+   "attacks": [
+    {
+     "name": "Javelins",
+     "damage": 8,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Throwing)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 35
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Thin People",
+     "ref": "E0-T-081"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "Club",
+    "Leather and Hide Armour",
+    "Three Javelins"
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-441",
+   "book": "L12",
+   "page": 81,
+   "physicalPage": 81,
+   "kind": "profile",
+   "blockKey": "L12:81:0",
+   "name": "Skel Longstrider – Ogre Irongut",
+   "nameFr": "Skel Longstrider – Ogre Irongut",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": 20,
+    "F": 55,
+    "E": 55,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 45,
+    "Soc": 20
+   },
+   "wounds": 38,
+   "size": "large",
+   "armour": {
+    "ap": 5,
+    "printedTotal": 10
+   },
+   "attacks": [
+    {
+     "name": "Zweih�nder",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 25
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Thin People",
+     "ref": "E0-T-081"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Resolute"
+    }
+   ],
+   "trappings": [
+    "Club",
+    "Gutplate",
+    "Mix of Chain and Plate Mail",
+    "Two-Handed Scimitar (counts as Zweih�nder)"
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-442",
+   "book": "L12",
+   "page": 88,
+   "physicalPage": 88,
+   "kind": "template",
+   "blockKey": "L12:88:3",
+   "name": "Stone Troll",
+   "nameFr": "Pierre troll",
+   "modifiers": {
+    "E": 5
+   },
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-443",
+   "book": "L12",
+   "page": 88,
+   "physicalPage": 88,
+   "kind": "template",
+   "blockKey": "L12:88:0",
+   "name": "River Troll",
+   "nameFr": "Troll des rivières",
+   "modifiers": {
+    "I": 5
+   },
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-444",
+   "book": "L12",
+   "page": 88,
+   "physicalPage": 88,
+   "kind": "template",
+   "blockKey": "L12:88:1",
+   "name": "Chaos Troll",
+   "nameFr": "Chaos troll",
+   "modifiers": {
+    "CC": 10,
+    "F": 5,
+    "I": 5,
+    "FM": 10
+   },
+   "traits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    }
+   ],
+   "keywords": [
+    "chaos",
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-445",
+   "book": "L12",
+   "page": 88,
+   "physicalPage": 88,
+   "kind": "template",
+   "blockKey": "L12:88:2",
+   "name": "Bile Troll",
+   "nameFr": "Bile troll",
+   "modifiers": {
+    "CC": -10,
+    "E": 10,
+    "I": 5,
+    "FM": 10
+   },
+   "traits": [
+    {
+     "name": "Corrosive Blood",
+     "ref": "E0-T-015"
+    },
+    {
+     "name": "Corruption",
+     "param": "Moderate",
+     "ref": "E0-T-016"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-446",
+   "book": "L12",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "template",
+   "blockKey": "L12:89:0",
+   "name": "Old Troll",
+   "nameFr": "Vieux troll",
+   "modifiers": {
+    "M": -1,
+    "CC": 10,
+    "F": 10,
+    "E": 10,
+    "I": -5,
+    "FM": 5
+   },
+   "size": "enormous",
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-447",
+   "book": "L12",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "template",
+   "blockKey": "L12:89:1",
+   "name": "Hungry Troll",
+   "nameFr": "Affamé troll",
+   "modifiers": {
+    "M": 1,
+    "CC": 10,
+    "I": 10,
+    "Ag": 5,
+    "Int": -5,
+    "FM": -10
+   },
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-448",
+   "book": "L12",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "template",
+   "blockKey": "L12:89:3",
+   "name": "Hulking Troll",
+   "nameFr": "Massif troll",
+   "modifiers": {
+    "M": -1,
+    "F": 5,
+    "E": 5,
+    "I": -3,
+    "Ag": -5
+   },
+   "size": "enormous",
+   "traits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-449",
+   "book": "L12",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "template",
+   "blockKey": "L12:89:2",
+   "name": "River Troll Hag",
+   "nameFr": "Troll des rivières mégère",
+   "modifiers": {
+    "F": 10,
+    "E": 10,
+    "I": 5,
+    "Int": 30,
+    "FM": 20
+   },
+   "size": "enormous",
+   "skills": [
+    {
+     "name": "Channelling (Shyish)",
+     "nameFr": "Focalisation (Shyish)",
+     "frUnverified": true,
+     "value": 20,
+     "modifier": true
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "inventoryKind": "profile",
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-450",
+   "book": "L12",
+   "page": 92,
+   "physicalPage": 92,
+   "kind": "profile",
+   "blockKey": "L12:92:0",
+   "name": "Cragtooth – Old Stone Troll",
+   "nameFr": "Cragtooth – vieux Stone Troll",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 15,
+    "F": 65,
+    "E": 60,
+    "I": 5,
+    "Ag": 15,
+    "Dex": 15,
+    "Int": 15,
+    "FM": 25,
+    "Soc": 5
+   },
+   "wounds": 80,
+   "size": "enormous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 8
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 9,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 75
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+9",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Magic Resistance",
+     "rating": "2",
+     "ref": "E0-T-037"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Vomit",
+     "ref": "E0-T-065"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Strider (Rocky)"
+    }
+   ],
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-451",
+   "book": "L12",
+   "page": 93,
+   "physicalPage": 93,
+   "kind": "profile",
+   "blockKey": "L12:93:0",
+   "name": "Grua Gribbleback – River Troll Hag",
+   "nameFr": "Grua Gribbleback – troll des rivières Hag",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 15,
+    "F": 65,
+    "E": 55,
+    "I": 20,
+    "Ag": 15,
+    "Dex": 15,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 5
+   },
+   "wounds": 80,
+   "size": "enormous",
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Channelling (Shyish)",
+     "nameFr": "Focalisation (Shyish)",
+     "frUnverified": true,
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    },
+    {
+     "name": "Vomit",
+     "ref": "E0-T-065"
+    }
+   ],
+   "spells": {
+    "spells": [
+     "Bearings",
+     "Careful Step",
+     "Drain",
+     "Marsh Lights Arcane Terrifying",
+     "Ward Lore of Death Caress of Laniph",
+     "Soul Vortex",
+     "Steal Life"
+    ]
+   },
+   "keywords": [
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-452",
+   "book": "L12",
+   "page": 99,
+   "physicalPage": 99,
+   "kind": "profile",
+   "blockKey": "L12:99:0",
+   "name": "Purple Skullback Spider",
+   "nameFr": "Purple Skullback araignée",
+   "stats": {
+    "M": 3,
+    "CC": 35,
+    "CT": null,
+    "F": 5,
+    "E": 5,
+    "I": 20,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 5,
+    "FM": 5,
+    "Soc": null
+   },
+   "wounds": 1,
+   "size": "tiny",
+   "attacks": [
+    {
+     "name": "Fangs",
+     "damage": 2,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Tiny",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "keywords": [
+    "araignee"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-453",
+   "book": "L12",
+   "page": 105,
+   "physicalPage": 105,
+   "kind": "profile",
+   "blockKey": "L12:105:0",
+   "name": "Orc and Goblin Nemeses — Skarsnik, Warlord of Eight Peaks",
+   "nameFr": "Et Goblin Nemeses orque — Skarsnik, Warlord de Eight Peaks",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 45,
+    "F": 55,
+    "E": 60,
+    "I": 55,
+    "Ag": 60,
+    "Dex": 30,
+    "Int": 75,
+    "FM": 65,
+    "Soc": 35
+   },
+   "wounds": 23,
+   "keywords": [
+    "peaux-vertes"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-454",
+   "book": "L12",
+   "page": 105,
+   "physicalPage": 105,
+   "kind": "profile",
+   "blockKey": "L12:105:1",
+   "name": "Gobbla, Bloated Cave Squig",
+   "nameFr": "Gobbla, Bloated squig des cavernes",
+   "stats": {
+    "M": 4,
+    "CC": 55,
+    "CT": null,
+    "F": 60,
+    "E": 30,
+    "I": 10,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 5,
+    "FM": 15,
+    "Soc": 10
+   },
+   "wounds": 26,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 10,
+     "trait": "Bite"
+    },
+    {
+     "name": "Jaws and Claws",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+10",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Grim",
+     "rating": "1",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "squig"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-455",
+   "book": "L12",
+   "page": 107,
+   "physicalPage": 107,
+   "kind": "profile",
+   "blockKey": "L12:107:0",
+   "name": "Gorfang, Chief of the Red Fangs",
+   "nameFr": "Gorfang, Chief de rouge Fangs",
+   "stats": {
+    "M": 4,
+    "CC": 65,
+    "CT": 40,
+    "F": 65,
+    "E": 65,
+    "I": 45,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 40,
+    "FM": 60,
+    "Soc": 30
+   },
+   "wounds": 30,
+   "armour": {
+    "ap": 5,
+    "printedTotal": 11
+   },
+   "attacks": [
+    {
+     "name": "The Red Fang",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 80
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Greenskins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Feint"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Warleader"
+    }
+   ],
+   "trappings": [
+    "Ramshackle armour incorporating plate",
+    "mail",
+    "and scale",
+    "The Red Fang",
+    "Shield"
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-456",
+   "book": "L12",
+   "page": 108,
+   "physicalPage": 108,
+   "kind": "profile",
+   "blockKey": "L12:108:0",
+   "name": "Sog’Kog — Hulking Chaos Troll",
+   "nameFr": "Sog’Kog — Massif Chaos troll",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": 15,
+    "F": 65,
+    "E": 50,
+    "I": 12,
+    "Ag": 10,
+    "Dex": 15,
+    "Int": 10,
+    "FM": 30,
+    "Soc": 5
+   },
+   "wounds": 76,
+   "size": "enormous",
+   "armour": {
+    "ap": 2,
+    "printedTotal": 7
+   },
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 8,
+     "trait": "Bite"
+    },
+    {
+     "name": "Horns",
+     "damage": 8,
+     "trait": "Horns"
+    },
+    {
+     "name": "Two-Handed Stone Axe",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+8",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Corrosive Blood",
+     "ref": "E0-T-015"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Horns",
+     "rating": "+8",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Vomit",
+     "ref": "E0-T-065"
+    }
+   ],
+   "keywords": [
+    "chaos",
+    "troll"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

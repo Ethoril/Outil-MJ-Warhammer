@@ -24,7 +24,7 @@ for (const item of index.books) {
     assert.deepEqual(data.profiles.map(profile => profile.id).sort(), expected.map(entry => entry.id).sort(), 'identifiants = inventaire');
     for (const profile of data.profiles) {
       const entry = expected.find(row => row.id === profile.id);
-      assert.equal(profile.kind, entry.kind, profile.id);
+      assert.equal(profile.inventoryKind ?? profile.kind, entry.kind, profile.id);
       assert.equal(profile.page, entry.page, profile.id);
       assert.deepEqual(validateBestiaryRecord(profile), [], `${profile.id} ${profile.name}`);
       for (const ability of profile.abilities || []) assert.ok(inventory.traits.some(trait => trait.id === ability), `${profile.id} → ${ability}`);
@@ -32,7 +32,7 @@ for (const item of index.books) {
       assert.ok(!('_dropped' in profile), 'aucun résidu de génération');
     }
     const counts = { profile: 0, template: 0, 'pregenerated-character': 0 };
-    for (const entry of expected) counts[entry.kind] += 1;
+    for (const profile of data.profiles) counts[profile.kind] += 1;
     assert.deepEqual([item.counts.profiles, item.counts.templates, item.counts.pregenerated], [counts.profile, counts.template, counts['pregenerated-character']]);
   });
 }

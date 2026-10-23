@@ -1,0 +1,2502 @@
+{
+ "schemaVersion": 1,
+ "book": "L10",
+ "title": "Sylvania, The Cursed County",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L10",
+  "sha256": "445ca4421ec9323e34bc7e60a0f73c68df02f732da365d5f269341054c41dfa5"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-364",
+   "book": "L10",
+   "page": 9,
+   "physicalPage": 9,
+   "kind": "profile",
+   "blockKey": "L10:9:0",
+   "name": "Count Alberich V Haupt-Anderssen — Imperial Elector, Noble Magnate",
+   "nameFr": "Comte Alberich V Haupt-Anderssen — Électeur impérial, magnat noble",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 30,
+    "F": 27,
+    "E": 29,
+    "I": 45,
+    "Ag": 36,
+    "Dex": 39,
+    "Int": 33,
+    "FM": 35,
+    "Soc": 39
+   },
+   "wounds": 9,
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "skills": [
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 48
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 43
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 46
+    },
+    {
+     "name": "Play (Lute)",
+     "nameFr": "Musicien (Luth)",
+     "value": 48
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 47
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 40
+    },
+    {
+     "name": "Lore (Stirland)",
+     "nameFr": "Savoir (Stirland)",
+     "frUnverified": true,
+     "value": 39
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 46
+    },
+    {
+     "name": "Language (Elth�rin)",
+     "nameFr": "Langue (Elth�rin)",
+     "frUnverified": true,
+     "value": 37
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 43
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 52
+    }
+   ],
+   "trappings": [
+    "The Stirland Runefang",
+    "Orc Hewer",
+    "Full Plate (Best Quality)",
+    "Grand County of Stirland",
+    "Wardenship of the"
+   ],
+   "keywords": [
+    "noble"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-365",
+   "book": "L10",
+   "page": 12,
+   "physicalPage": 12,
+   "kind": "profile",
+   "blockKey": "L10:12:0",
+   "name": "Fargal Kraggzin — Dwarf Ranger Captain",
+   "nameFr": "Fargal Kraggzin — Capitaine rôdeur nain",
+   "stats": {
+    "M": 3,
+    "CC": 62,
+    "CT": 45,
+    "F": 31,
+    "E": 58,
+    "I": 46,
+    "Ag": 32,
+    "Dex": 44,
+    "Int": 45,
+    "FM": 49,
+    "Soc": 20
+   },
+   "wounds": 17,
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 37
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 46
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 73
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 64
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 68
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 61
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 32
+    },
+    {
+     "name": "Lore (Dwarfs)",
+     "nameFr": "Savoir (Nains)",
+     "value": 69
+    },
+    {
+     "name": "Lore (Geology)",
+     "nameFr": "Savoir (Géologie)",
+     "value": 50
+    },
+    {
+     "name": "Lore (Sylvania)",
+     "nameFr": "Savoir (Sylvania)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 77
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 68
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 50
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 56
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 60
+    },
+    {
+     "name": "Secret Signs (Ranger)",
+     "nameFr": "Signes secrets (Ranger)",
+     "frUnverified": true,
+     "value": 51
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 48
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 42
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 50
+    },
+    {
+     "name": "Trade (Cartographer)",
+     "nameFr": "Métier (Cartographer)",
+     "frUnverified": true,
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Breastplate",
+    "Dwarf Axe",
+    "Dwarf Greataxe",
+    "Dwarf Crossbow and Ammunition",
+    "Mail Coat",
+    "Map of Drakenh�henzug",
+    "Plate Helm (Open)",
+    "Sturdy Boots",
+    "Rope",
+    "Shield"
+   ],
+   "keywords": [
+    "nain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-366",
+   "book": "L10",
+   "page": 13,
+   "physicalPage": 13,
+   "kind": "profile",
+   "blockKey": "L10:13:0",
+   "name": "Werther von Hornau — Human Chancellor",
+   "nameFr": "Werther von Hornau — Chancelier humain",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 27,
+    "F": 29,
+    "E": 28,
+    "I": 49,
+    "Ag": 46,
+    "Dex": 28,
+    "Int": 48,
+    "FM": 24,
+    "Soc": 48
+   },
+   "wounds": 8,
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Leather Jack",
+      "ap": 1,
+      "locations": "the Body and Arms Locations"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 31,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 53
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 54
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 43
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 34
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 63
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 58
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 56
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 49
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 50
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 60
+    },
+    {
+     "name": "Lore (Stirland)",
+     "nameFr": "Savoir (Stirland)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 34
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 59
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 52
+    }
+   ],
+   "trappings": [
+    "Clerks and Tax Collectors",
+    "Hand Weapon",
+    "Leather Jack",
+    "Quality Robes",
+    "Seal of Office",
+    "Small Lock Box"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-367",
+   "book": "L10",
+   "page": 14,
+   "physicalPage": 14,
+   "kind": "profile",
+   "blockKey": "L10:14:0",
+   "name": "Giancarlo Cacciatore — Human Master Hunter",
+   "nameFr": "Giancarlo Cacciatore — Maître chasseur humain",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 50,
+    "F": 30,
+    "E": 50,
+    "I": 30,
+    "Ag": 50,
+    "Dex": 30,
+    "Int": 50,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 5,
+    "parts": [
+     {
+      "name": "Leather Jacket",
+      "ap": 1,
+      "locations": "the Body and Arms Locations"
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 35
+    },
+    {
+     "name": "Lore (Vampires)",
+     "nameFr": "Savoir (Vampires)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Melee (Brawl)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 55
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 35
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 55
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 55
+    },
+    {
+     "name": "Secret Signs (Vampires)",
+     "nameFr": "Signes secrets (Vampires)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Stealth (Rural and Urban)",
+     "nameFr": "Discrétion (Rural and Urban)",
+     "frUnverified": true,
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "Vampires",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Apprentice Vampire Hunters",
+    "Crossbow Pistol with 10 Bolts",
+    "Hat",
+    "Riding Horse",
+    "Rope",
+    "Silvered Sword",
+    "Stake and Mallet",
+    "Warding Herbs"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-368",
+   "book": "L10",
+   "page": 15,
+   "physicalPage": 15,
+   "kind": "profile",
+   "blockKey": "L10:15:0",
+   "name": "Elsbeth Blattner — Human Wizard",
+   "nameFr": "Elsbeth Blattner — Sorcière humaine",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 40,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 30
+   },
+   "wounds": 13,
+   "skills": [
+    {
+     "name": "Channelling (Shyish)",
+     "nameFr": "Focalisation (Shyish)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 50
+    },
+    {
+     "name": "Language (Sylvanian)",
+     "nameFr": "Langue (Sylvanian)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Lore (Sylvania)",
+     "nameFr": "Savoir (Sylvania)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 50
+    }
+   ],
+   "trappings": [
+    "Enchanted Staff",
+    "Grimoire",
+    "Magical Licence",
+    "Practical Robes"
+   ],
+   "spells": {
+    "Petty Magic": [
+     "Drain",
+     "Marsh Lights",
+     "Open Lock"
+    ],
+    "Rot Lore of Death Magic": [
+     "Dying Words",
+     "Sanctify"
+    ]
+   },
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-369",
+   "book": "L10",
+   "page": 38,
+   "physicalPage": 38,
+   "kind": "profile",
+   "blockKey": "L10:38:0",
+   "name": "Sylvanian Drakenhund",
+   "nameFr": "Drakenhund sylvanien",
+   "stats": {
+    "M": 5,
+    "CC": 40,
+    "CT": null,
+    "F": 30,
+    "E": 35,
+    "I": 35,
+    "Ag": 15,
+    "Dex": null,
+    "Int": 15,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 10,
+   "size": "average",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Sprinter",
+     "ref": "E0-T-049"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-370",
+   "book": "L10",
+   "page": 50,
+   "physicalPage": 50,
+   "kind": "profile",
+   "blockKey": "L10:50:0",
+   "name": "Frederick van Hal",
+   "nameFr": "Frederick van Hal",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 20,
+    "F": 45,
+    "E": 40,
+    "I": 30,
+    "Ag": 20,
+    "Dex": 20,
+    "Int": 50,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 30,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 10,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "The Living",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Cold-blooded",
+     "ref": "E0-T-012"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Die Hard",
+     "ref": "E0-T-075"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Ghostly Howl",
+     "ref": "E0-T-025"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Terror",
+     "rating": "1",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Necromancy",
+     "ref": "E0-T-048"
+    }
+   ],
+   "keywords": [
+    "fantome"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-371",
+   "book": "L10",
+   "page": 51,
+   "physicalPage": 51,
+   "kind": "profile",
+   "blockKey": "L10:51:0",
+   "name": "Skeletal Witch",
+   "nameFr": "Sorcière squelette",
+   "stats": {
+    "M": 6,
+    "CC": 45,
+    "CT": 20,
+    "F": 45,
+    "E": 40,
+    "I": 30,
+    "Ag": 20,
+    "Dex": 20,
+    "Int": 50,
+    "FM": 50,
+    "Soc": 30
+   },
+   "wounds": 30,
+   "keywords": [
+    "sorciere",
+    "squelette"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-372",
+   "book": "L10",
+   "page": 51,
+   "physicalPage": 51,
+   "kind": "profile",
+   "blockKey": "L10:51:1",
+   "name": "Graug the Terrible",
+   "nameFr": "Graug le Terrible",
+   "stats": {
+    "M": 6,
+    "CC": 70,
+    "CT": null,
+    "F": 65,
+    "E": 80,
+    "I": 60,
+    "Ag": 30,
+    "Dex": 10,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 88,
+   "keywords": [
+    "dragon",
+    "zombie"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-373",
+   "book": "L10",
+   "page": 68,
+   "physicalPage": 68,
+   "kind": "profile",
+   "blockKey": "L10:68:0",
+   "name": "Crypt Ghast",
+   "nameFr": "Ghast des cryptes",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": null,
+    "F": 55,
+    "E": 40,
+    "I": 50,
+    "Ag": 45,
+    "Dex": 25,
+    "Int": 20,
+    "FM": 35,
+    "Soc": 5
+   },
+   "wounds": 16,
+   "keywords": [
+    "goule"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-374",
+   "book": "L10",
+   "page": 68,
+   "physicalPage": 68,
+   "kind": "profile",
+   "blockKey": "L10:68:1",
+   "name": "Crypt Horror",
+   "nameFr": "Horreur des cryptes",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": null,
+    "F": 45,
+    "E": 40,
+    "I": 20,
+    "Ag": 30,
+    "Dex": 25,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 5
+   },
+   "wounds": 28,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 7,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+7",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fear",
+     "rating": "1",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "goule"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-375",
+   "book": "L10",
+   "page": 74,
+   "physicalPage": 74,
+   "kind": "profile",
+   "blockKey": "L10:74:0",
+   "name": "Patchwork Man",
+   "nameFr": "Homme rapiécé",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": 40,
+    "F": 40,
+    "E": 40,
+    "I": 40,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 40,
+    "FM": 40,
+    "Soc": 20
+   },
+   "wounds": 20,
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-376",
+   "book": "L10",
+   "page": 79,
+   "physicalPage": 79,
+   "kind": "profile",
+   "blockKey": "L10:79:0",
+   "name": "Arlo Dunne — Human Peasant",
+   "nameFr": "Arlo Dunne — Paysan humain",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 39,
+    "F": 28,
+    "E": 35,
+    "I": 31,
+    "Ag": 33,
+    "Dex": 33,
+    "Int": 30,
+    "FM": 31,
+    "Soc": 27
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 35
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 38
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 33
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 36
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 32
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 60
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 39
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 35
+    }
+   ],
+   "talents": [
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Sea Legs"
+    },
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "trappings": [
+    "Peat Cutter",
+    "Peat Basket",
+    "Stained Clothes"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-377",
+   "book": "L10",
+   "page": 80,
+   "physicalPage": 80,
+   "kind": "profile",
+   "blockKey": "L10:80:0",
+   "name": "Jimmi Greenleaf — Halfling Artisan",
+   "nameFr": "Jimmi Greenleaf — Artisan halfling",
+   "stats": {
+    "M": 3,
+    "CC": 21,
+    "CT": 37,
+    "F": 30,
+    "E": 27,
+    "I": 59,
+    "Ag": 35,
+    "Dex": 46,
+    "Int": 35,
+    "FM": 42,
+    "Soc": 40
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 32
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 47
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 32
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 40
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 50
+    },
+    {
+     "name": "Language (Hattennaff)",
+     "nameFr": "Langue (Hattennaff)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 51
+    },
+    {
+     "name": "Trade (Cook)",
+     "nameFr": "Métier (Cuisinier)",
+     "value": 51
+    }
+   ],
+   "trappings": [
+    "Travelling Cloak",
+    "Pickled Invertebrates",
+    "Foul-Smelling Mushrooms",
+    "Walking Stick"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-378",
+   "book": "L10",
+   "page": 81,
+   "physicalPage": 81,
+   "kind": "profile",
+   "blockKey": "L10:81:0",
+   "name": "Niels Vorberren — Human Roadwarden",
+   "nameFr": "Niels Vorberren — Patrouilleur routier humain",
+   "stats": {
+    "M": 4,
+    "CC": 37,
+    "CT": 42,
+    "F": 29,
+    "E": 36,
+    "I": 34,
+    "Ag": 25,
+    "Dex": 26,
+    "Int": 25,
+    "FM": 36,
+    "Soc": 35
+   },
+   "wounds": 11,
+   "keywords": [
+    "humain",
+    "patrouilleur-routier"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-379",
+   "book": "L10",
+   "page": 82,
+   "physicalPage": 82,
+   "kind": "profile",
+   "blockKey": "L10:82:0",
+   "name": "Sihastrul — Human Mystic",
+   "nameFr": "Sihastrul — Mystique humain",
+   "stats": {
+    "M": 4,
+    "CC": 36,
+    "CT": 34,
+    "F": 32,
+    "E": 28,
+    "I": 44,
+    "Ag": 29,
+    "Dex": 32,
+    "Int": 40,
+    "FM": 33,
+    "Soc": 40
+   },
+   "wounds": 10,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 45
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 34
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 45
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 49
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 70
+    },
+    {
+     "name": "Lore (Bogs and Marshes)",
+     "nameFr": "Savoir (Bogs and Marshes)",
+     "frUnverified": true,
+     "value": 45
+    },
+    {
+     "name": "Lore (Herbs)",
+     "nameFr": "Savoir (Herbes)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 41
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 49
+    },
+    {
+     "name": "Secret Signs (Vagabond)",
+     "nameFr": "Signes secrets (Vagabond)",
+     "frUnverified": true,
+     "value": 45
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 37
+    }
+   ],
+   "trappings": [
+    "Smelly Robes",
+    "Herbs and Draughts",
+    "Amulets",
+    "Shepherd's Crook"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-380",
+   "book": "L10",
+   "page": 83,
+   "physicalPage": 83,
+   "kind": "profile",
+   "blockKey": "L10:83:0",
+   "name": "Gretchen Beirne — Human Hedge Witch",
+   "nameFr": "Gretchen Beirne — Sorcière de haie humaine",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 23,
+    "F": 23,
+    "E": 28,
+    "I": 35,
+    "Ag": 32,
+    "Dex": 31,
+    "Int": 42,
+    "FM": 38,
+    "Soc": 33
+   },
+   "wounds": 9,
+   "keywords": [
+    "humain",
+    "sorciere"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-381",
+   "book": "L10",
+   "page": 84,
+   "physicalPage": 84,
+   "kind": "profile",
+   "blockKey": "L10:84:0",
+   "name": "Trevna Fane — Human Servant",
+   "nameFr": "Trevna Fane — Serviteur humain",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 26,
+    "F": 41,
+    "E": 32,
+    "I": 30,
+    "Ag": 34,
+    "Dex": 34,
+    "Int": 26,
+    "FM": 26,
+    "Soc": 40
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 39
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 46
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 31
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 39
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 39
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 37
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 48
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 35
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 56
+    },
+    {
+     "name": "Lore (Drakenhof)",
+     "nameFr": "Savoir (Drakenhof)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Floor Brush",
+    "Livery",
+    "Ledger"
+   ],
+   "keywords": [
+    "humain",
+    "serviteur"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-382",
+   "book": "L10",
+   "page": 85,
+   "physicalPage": 85,
+   "kind": "profile",
+   "blockKey": "L10:85:0",
+   "name": "Count Petr von Stolpe — Noble",
+   "nameFr": "Comte Petr von Stolpe — Noble",
+   "stats": {
+    "M": 4,
+    "CC": 37,
+    "CT": 23,
+    "F": 34,
+    "E": 24,
+    "I": 31,
+    "Ag": 33,
+    "Dex": 34,
+    "Int": 35,
+    "FM": 25,
+    "Soc": 25
+   },
+   "wounds": 9,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 32
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 30
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 29
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 31
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 40
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 40
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 30
+    },
+    {
+     "name": "Lore (Heraldry and Politics)",
+     "nameFr": "Savoir (Heraldry and Politics)",
+     "frUnverified": true,
+     "value": 40
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 43
+    },
+    {
+     "name": "Perform (Dancing)",
+     "nameFr": "Représentation (Danse)",
+     "value": 36
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 39
+    }
+   ],
+   "trappings": [
+    "Coach and Horses",
+    "Quality Courtly Garb",
+    "Foil",
+    "Green Velvet Cloak",
+    "Jewellery worth 3d10 GC",
+    "Personal Servant",
+    "Household Servants"
+   ],
+   "keywords": [
+    "noble"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-383",
+   "book": "L10",
+   "page": 86,
+   "physicalPage": 86,
+   "kind": "profile",
+   "blockKey": "L10:86:0",
+   "name": "Gabriella von Bundebad — Vampire Grandee",
+   "nameFr": "Gabriella von Bundebad — Grande vampire",
+   "stats": {
+    "M": 6,
+    "CC": 55,
+    "CT": 40,
+    "F": 50,
+    "E": 40,
+    "I": 40,
+    "Ag": 65,
+    "Dex": 40,
+    "Int": 45,
+    "FM": 45,
+    "Soc": 45
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "skills": [
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 60
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 60
+    },
+    {
+     "name": "Lore (Genealogy, Heraldry, Sylvania, Vampires)",
+     "nameFr": "Savoir (Genealogy, Heraldry, Sylvania, Vampires)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 75
+    },
+    {
+     "name": "Perform (Dancing)",
+     "nameFr": "Représentation (Danse)",
+     "value": 70
+    },
+    {
+     "name": "Play (harpsichord)",
+     "nameFr": "Musicien (harpsichord)",
+     "frUnverified": true,
+     "value": 70
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 80
+    }
+   ],
+   "traits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fly",
+     "rating": "40",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Vampiric",
+     "ref": "E0-T-063"
+    }
+   ],
+   "trappings": [
+    "Hand Mirror",
+    "Jewellery worth 200GC",
+    "Fiefdom",
+    "Foil",
+    "Quality Courtly Garb",
+    "Servants",
+    "Signet Ring"
+   ],
+   "keywords": [
+    "vampire"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-384",
+   "book": "L10",
+   "page": 87,
+   "physicalPage": 87,
+   "kind": "profile",
+   "blockKey": "L10:87:0",
+   "name": "Matthias Primvik — Human Tax Collector",
+   "nameFr": "Matthias Primvik — Percepteur humain",
+   "stats": {
+    "M": 4,
+    "CC": 42,
+    "CT": 36,
+    "F": 33,
+    "E": 25,
+    "I": 37,
+    "Ag": 37,
+    "Dex": 36,
+    "Int": 35,
+    "FM": 35,
+    "Soc": 33
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 39
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 29
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 38
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 40
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 48
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 42
+    }
+   ],
+   "trappings": [
+    "Small Lock Box",
+    "Ledger",
+    "Coach and Horses",
+    "Mercenary Guards ing"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-385",
+   "book": "L10",
+   "page": 88,
+   "physicalPage": 88,
+   "kind": "profile",
+   "blockKey": "L10:88:0",
+   "name": "Father Tantlus Radu — Human Priest",
+   "nameFr": "Père Tantlus Radu — Prêtre humain",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 5,
+    "F": 27,
+    "E": 28,
+    "I": 28,
+    "Ag": 39,
+    "Dex": 34,
+    "Int": 36,
+    "FM": 42,
+    "Soc": 41
+   },
+   "wounds": 10,
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 45
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 47
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 23
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 49
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 40
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 40
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 22
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 40
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 66
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 46
+    },
+    {
+     "name": "Lore (Bylorak and Theology)",
+     "nameFr": "Savoir (Bylorak and Theology)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 39
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 47
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 38
+    }
+   ],
+   "trappings": [
+    "Book (Psalms of the Marshes)",
+    "Ceremonial Robes",
+    "Icon of Bylorak"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-386",
+   "book": "L10",
+   "page": 89,
+   "physicalPage": 89,
+   "kind": "profile",
+   "blockKey": "L10:89:0",
+   "name": "Ranolf Quickfingers — Human Prowler",
+   "nameFr": "Ranolf Quickfingers — Rôdeur humain",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 33,
+    "F": 37,
+    "E": 28,
+    "I": 35,
+    "Ag": 32,
+    "Dex": 53,
+    "Int": 30,
+    "FM": 29,
+    "Soc": 33
+   },
+   "wounds": 9,
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-387",
+   "book": "L10",
+   "page": 90,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L10:90:0",
+   "name": "Otto and Hendrik Vogel — Human Clerk",
+   "nameFr": "Otto et Hendrik Vogel — Clercs humains",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 38,
+    "F": 33,
+    "E": 33,
+    "I": 31,
+    "Ag": 32,
+    "Dex": 32,
+    "Int": 35,
+    "FM": 30,
+    "Soc": 36
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Unarmed",
+     "value": 36,
+     "damage": 3
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 35
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 39
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 37
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 39
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 39
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 32
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 37
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    }
+   ],
+   "trappings": [
+    "Lodgings",
+    "Two Sets of Clothes",
+    "Ledger"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-388",
+   "book": "L10",
+   "page": 91,
+   "physicalPage": 91,
+   "kind": "profile",
+   "blockKey": "L10:91:0",
+   "name": "Erich Frohlich — Human Villager",
+   "nameFr": "Erich Frohlich — Villageois humain",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 24,
+    "F": 38,
+    "E": 37,
+    "I": 32,
+    "Ag": 37,
+    "Dex": 26,
+    "Int": 38,
+    "FM": 31,
+    "Soc": 32
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 45
+    },
+    {
+     "name": "Animal Training (Hounds)",
+     "nameFr": "Dressage (Hounds)",
+     "frUnverified": true,
+     "value": 47
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 42
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 42
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 68
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 45
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    }
+   ],
+   "trappings": [
+    "Great Weapon (Woodsman's Axe)",
+    "Leather Jerkin",
+    "Drakenhund"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-389",
+   "book": "L10",
+   "page": 92,
+   "physicalPage": 92,
+   "kind": "profile",
+   "blockKey": "L10:92:0",
+   "name": "Seiren Walburg — Human Priest",
+   "nameFr": "Seiren Walburg — Prêtre humain",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 30,
+    "F": 30,
+    "E": 28,
+    "I": 31,
+    "Ag": 28,
+    "Dex": 24,
+    "Int": 42,
+    "FM": 38,
+    "Soc": 40
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 42
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 30
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 47
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 35
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 47
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Theology and Sylvania)",
+     "nameFr": "Savoir (Theology and Sylvania)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 48
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Miracles",
+     "ref": "E0-T-039"
+    }
+   ],
+   "trappings": [
+    "Ceremonial Robes",
+    "Hourglass",
+    "The Book of Doorways"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-390",
+   "book": "L10",
+   "page": 93,
+   "physicalPage": 93,
+   "kind": "profile",
+   "blockKey": "L10:93:0",
+   "name": "Emil Hartwig — Human Foreman",
+   "nameFr": "Emil Hartwig — Contremaître humain",
+   "stats": {
+    "M": 4,
+    "CC": 46,
+    "CT": 22,
+    "F": 46,
+    "E": 47,
+    "I": 36,
+    "Ag": 36,
+    "Dex": 32,
+    "Int": 27,
+    "FM": 26,
+    "Soc": 40
+   },
+   "wounds": 16,
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 46
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 50
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 50
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 57
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 46
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 57
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 50
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 50
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 56
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 45
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 49
+    },
+    {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 37
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 59
+    }
+   ],
+   "trappings": [
+    "Gang of Stevedores",
+    "Guild Licence",
+    "Hand Weapon (Boat Hook)",
+    "Leather Gloves",
+    "Pipe and Tobacco",
+    "Porter Cap",
+    "Whistle"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-391",
+   "book": "L10",
+   "page": 94,
+   "physicalPage": 94,
+   "kind": "profile",
+   "blockKey": "L10:94:0",
+   "name": "Andrei van Hal — Human Sentry",
+   "nameFr": "Andrei van Hal — Sentinelle humaine",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 36,
+    "F": 33,
+    "E": 25,
+    "I": 40,
+    "Ag": 31,
+    "Dex": 29,
+    "Int": 32,
+    "FM": 23,
+    "Soc": 32
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 2,
+    "parts": [
+     {
+      "name": "Leather Jerkin",
+      "ap": 1
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 26
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 33
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 36
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 44
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 62
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 37
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 44
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "Buckler",
+    "Leather Jerkin",
+    "Storm Lantern with Oil"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-392",
+   "book": "L10",
+   "page": 95,
+   "physicalPage": 95,
+   "kind": "profile",
+   "blockKey": "L10:95:0",
+   "name": "Grimes — Human Gang Boss",
+   "nameFr": "Grimes — Chef de bande humain",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": 25,
+    "F": 45,
+    "E": 37,
+    "I": 44,
+    "Ag": 35,
+    "Dex": 28,
+    "Int": 36,
+    "FM": 37,
+    "Soc": 36
+   },
+   "wounds": 13,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Mail Shirt",
+      "ap": 2
+     }
+    ]
+   },
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 46
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 47
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 48
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 50
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 66
+    },
+    {
+     "name": "Language (Thieves Tongue)",
+     "nameFr": "Langue (Thieves Tongue)",
+     "frUnverified": true,
+     "value": 46
+    },
+    {
+     "name": "Lore (Drakenhof)",
+     "nameFr": "Savoir (Drakenhof)",
+     "frUnverified": true,
+     "value": 48
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fearless",
+     "param": "Watchmen",
+     "ref": "E0-T-227"
+    }
+   ],
+   "trappings": [
+    "Hand Weapon",
+    "Knuckledusters",
+    "Leather Jack",
+    "Hat",
+    "Mail Shirt",
+    "Gang of Thugs and Racketeers",
+    "Lair"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition"
+  }
+ ]
+}

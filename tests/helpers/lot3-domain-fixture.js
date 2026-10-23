@@ -2,6 +2,9 @@ import assert from 'node:assert/strict';
 import { createStore } from '../../js/core/store.js';
 import { createCombatEngine } from '../../js/core/combat.js';
 import SPELL_CONTRACTS from '../../js/data/v5-spell-contracts.json' with { type: 'json' };
+import L06 from '../../js/data/bestiary/L06.json' with { type: 'json' };
+import { registerSummonLibrary } from '../../js/core/bestiary-profiles.js';
+registerSummonLibrary(L06.profiles);
 
 export const contracts = SPELL_CONTRACTS.filter(c => c.isBookV5 && ['beasts','heavens','fire','light','metal','death','shadow','life'].includes(c.domain));
 export const subject = (store, id) => store.listParticipants().find(p => p.id === id);

@@ -1,0 +1,1404 @@
+{
+ "schemaVersion": 1,
+ "book": "L13",
+ "title": "Up in Arms",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L13",
+  "sha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-457",
+   "book": "L13",
+   "page": 29,
+   "physicalPage": 29,
+   "kind": "profile",
+   "blockKey": "L13:29:1",
+   "name": "Knights of the Empire — Destrier — Heavy Warhorse",
+   "nameFr": "Chevaliers de l’Empire — Destrier — Lourd cheval de guerre",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": null,
+    "F": 50,
+    "E": 50,
+    "I": 20,
+    "Ag": 20,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 30
+   },
+   "wounds": 32,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Big",
+     "ref": "E0-T-071"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Mount, War",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Clever",
+     "ref": "E0-T-073"
+    },
+    {
+     "name": "Elite",
+     "ref": "E0-T-076"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Rear",
+     "ref": "E0-T-083"
+    },
+    {
+     "name": "Tough",
+     "ref": "E0-T-086"
+    }
+   ],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-458",
+   "book": "L13",
+   "page": 29,
+   "physicalPage": 29,
+   "kind": "profile",
+   "blockKey": "L13:29:0",
+   "name": "Riding Horse",
+   "nameFr": "Cheval de selle",
+   "stats": {
+    "M": 7,
+    "CC": 25,
+    "CT": null,
+    "F": 30,
+    "E": 45,
+    "I": 20,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 20
+   },
+   "wounds": 24,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Mount",
+     "ref": "E0-T-060"
+    }
+   ],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-459",
+   "book": "L13",
+   "page": 109,
+   "physicalPage": 109,
+   "kind": "profile",
+   "blockKey": "L13:109:0",
+   "name": "Demigryph Mount",
+   "nameFr": "Monture demigriffon",
+   "stats": {
+    "M": 7,
+    "CC": 55,
+    "CT": null,
+    "F": 55,
+    "E": 45,
+    "I": 40,
+    "Ag": 55,
+    "Dex": null,
+    "Int": 15,
+    "FM": 45,
+    "Soc": 15
+   },
+   "wounds": 34,
+   "size": "large",
+   "armour": {
+    "ap": 1,
+    "detail": "Rear Legs"
+   },
+   "attacks": [
+    {
+     "name": "Talons",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    }
+   ],
+   "trappings": [
+    "Barding (2 AP to Body, Head, Forelegs)"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-460",
+   "book": "L13",
+   "page": 113,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L13:113:1",
+   "name": "Local Scout — Silver 1",
+   "nameFr": "Éclaireur local (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 41,
+    "F": 31,
+    "E": 41,
+    "I": 46,
+    "Ag": 46,
+    "Dex": 31,
+    "Int": 36,
+    "FM": 31,
+    "Soc": 31
+   },
+   "wounds": 14,
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 41
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 51
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 36
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 41
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 41
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 34
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 39
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 41
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 34
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 46
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 41
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 46
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 56
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 46
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 51
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 51
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 51
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sharp"
+    }
+   ],
+   "trappings": [
+    "Cloak",
+    "Clothing",
+    "Dagger",
+    "Sword",
+    "Bow and 10 Arrows",
+    "Mail Shirt",
+    "Map",
+    "Pouch",
+    "Riding Horse with Saddle and Tack",
+    "Saddlebags with 2 weeks' Rations",
+    "Sling Bag containing Tinderbox and Blanket"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-461",
+   "book": "L13",
+   "page": 113,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L13:113:0",
+   "name": "Seasoned Mercenary — Silver 3",
+   "nameFr": "Mercenaire aguerri (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 46,
+    "CT": 41,
+    "F": 36,
+    "E": 41,
+    "I": 36,
+    "Ag": 31,
+    "Dex": 31,
+    "Int": 31,
+    "FM": 41,
+    "Soc": 36
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Crossbow",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 41
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 41
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 46
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 46
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 34
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 36
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 41
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 39
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 41
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 41
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 61
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 51
+    },
+    {
+     "name": "Play (Drum)",
+     "nameFr": "Musicien (Tambour)",
+     "value": 41
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 46
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 36
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Clothing",
+    "Sword",
+    "Dagger",
+    "Pouch",
+    "Uniform",
+    "Breastplate",
+    "Helmet",
+    "either a Halberd or a Crossbow and 10 Bolts"
+   ],
+   "keywords": [
+    "mercenaire"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-462",
+   "book": "L13",
+   "page": 114,
+   "physicalPage": 114,
+   "kind": "profile",
+   "blockKey": "L13:114:0",
+   "name": "Up in Arms — Lawyer — Silver 3",
+   "nameFr": "Up in Arms — Avocat (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 31,
+    "F": 31,
+    "E": 36,
+    "I": 41,
+    "Ag": 31,
+    "Dex": 41,
+    "Int": 46,
+    "FM": 36,
+    "Soc": 36
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 41
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 46
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 46
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 39
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 46
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 51
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 46
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 49
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 34
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 56
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 51
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 56
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 56
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 51
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 56
+    },
+    {
+     "name": "Secret Signs",
+     "nameFr": "Signes secrets",
+     "value": 49
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Book (Law)",
+    "Clothing",
+    "Court Robes",
+    "Dagger",
+    "Guild License",
+    "Magnifying Glass",
+    "Pouch",
+    "Sling Bag containing Writing Kit and 5 Pieces of Parchment"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-463",
+   "book": "L13",
+   "page": 114,
+   "physicalPage": 114,
+   "kind": "profile",
+   "blockKey": "L13:114:3",
+   "name": "Scribe — Silver 2",
+   "nameFr": "Scribe (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 31,
+    "F": 31,
+    "E": 41,
+    "I": 31,
+    "Ag": 31,
+    "Dex": 36,
+    "Int": 46,
+    "FM": 41,
+    "Soc": 36
+   },
+   "wounds": 15,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 51
+    },
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 41
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 41
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 51
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 44
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 46
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 49
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 56
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 46
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 49
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 36
+    },
+    {
+     "name": "Language (GM's Choice)",
+     "nameFr": "Langue (GM's Choice)",
+     "frUnverified": true,
+     "value": 51
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 56
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 56
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 51
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 36
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 56
+    },
+    {
+     "name": "Trade (Scribe)",
+     "nameFr": "Métier (Scribe)",
+     "frUnverified": true,
+     "value": 41
+    }
+   ],
+   "talents": [
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Read/ Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Book",
+    "Clothing",
+    "Dagger",
+    "Pouch",
+    "Sling Bag containing Writing Kit and 5 Pieces of Parchment"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-464",
+   "book": "L13",
+   "page": 114,
+   "physicalPage": 114,
+   "kind": "profile",
+   "blockKey": "L13:114:2",
+   "name": "Porter — Silver 1",
+   "nameFr": "Porteur (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 41,
+    "CT": 31,
+    "F": 41,
+    "E": 46,
+    "I": 41,
+    "Ag": 31,
+    "Dex": 31,
+    "Int": 31,
+    "FM": 31,
+    "Soc": 36
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 1
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 41
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 41
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 41
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 51
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 56
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 34
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 56
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 36
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 34
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 39
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 56
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 46
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 36
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 51
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Very Resilient"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "Sword",
+    "Leather Gloves",
+    "Guild License",
+    "Leather Jerkin",
+    "Pipe and Tobacco",
+    "Porter's Cap. Cloak",
+    "Clothing",
+    "Dagger",
+    "Pouch",
+    "Sling Bag containing a Flask of Spirits"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-465",
+   "book": "L13",
+   "page": 114,
+   "physicalPage": 114,
+   "kind": "profile",
+   "blockKey": "L13:114:1",
+   "name": "Doktor — Silver 5",
+   "nameFr": "Docteur (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 31,
+    "F": 31,
+    "E": 31,
+    "I": 31,
+    "Ag": 36,
+    "Dex": 41,
+    "Int": 41,
+    "FM": 46,
+    "Soc": 36
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 46
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 46
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 59
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 46
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 41
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 44
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 46
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 44
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 51
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 46
+    },
+    {
+     "name": "Lore (Anatomy)",
+     "nameFr": "Savoir (Anatomie)",
+     "value": 46
+    },
+    {
+     "name": "Lore (Medicine)",
+     "nameFr": "Savoir (Médecine)",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 41
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 51
+    },
+    {
+     "name": "Trade (Barber)",
+     "nameFr": "Métier (Barbier)",
+     "value": 46
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistance (Disease)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Surgery"
+    }
+   ],
+   "trappings": [
+    "Bandages",
+    "Book (Medicine)",
+    "Clothing",
+    "Dagger",
+    "Healing Draught",
+    "Guild License",
+    "Pouch",
+    "Sling Bag containing Trade Tools (Medicine)",
+    "Writing Kit and 5 Pieces of Parchment"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-466",
+   "book": "L13",
+   "page": 115,
+   "physicalPage": 115,
+   "kind": "template",
+   "blockKey": "L13:115:0",
+   "name": "Veteran of Adventures",
+   "nameFr": "Vétéran d’aventures",
+   "modifiers": {
+    "CC": 5,
+    "F": 5,
+    "E": 5,
+    "I": 10
+   },
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Melee (Basic or Polearm)",
+     "nameFr": "Corps à corps (Basic or Polearm)",
+     "frUnverified": true,
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    }
+   ],
+   "trappings": [
+    "Leather Armour",
+    "Hand Weapon or Spear",
+    "Shield"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-467",
+   "book": "L13",
+   "page": 115,
+   "physicalPage": 115,
+   "kind": "template",
+   "blockKey": "L13:115:3",
+   "name": "Infirm",
+   "nameFr": "Infirme",
+   "modifiers": {
+    "M": -1,
+    "CC": -10,
+    "CT": -10,
+    "F": -5,
+    "E": -5,
+    "I": -10,
+    "Ag": -10,
+    "Dex": -10
+   },
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-468",
+   "book": "L13",
+   "page": 115,
+   "physicalPage": 115,
+   "kind": "template",
+   "blockKey": "L13:115:manual",
+   "name": "Bright Spark",
+   "nameFr": "Esprit vif",
+   "modifiers": {
+    "I": 10,
+    "Int": 10,
+    "FM": 5,
+    "Soc": 5
+   },
+   "skills": [
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "trappings": [
+    "Mail Armour",
+    "Hand Weapon"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-469",
+   "book": "L13",
+   "page": 115,
+   "physicalPage": 115,
+   "kind": "template",
+   "blockKey": "L13:115:1",
+   "name": "Reformed Rogue",
+   "nameFr": "Voyou repenti",
+   "modifiers": {
+    "CC": 5,
+    "Ag": 10,
+    "Dex": 10,
+    "Soc": 5
+   },
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "talents": [
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    }
+   ],
+   "trappings": [
+    "10 yards of Rope",
+    "Set of Lockpicks",
+    "Mask"
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-470",
+   "book": "L13",
+   "page": 115,
+   "physicalPage": 115,
+   "kind": "template",
+   "blockKey": "L13:115:2",
+   "name": "Old Salt",
+   "nameFr": "Vieux loup de mer",
+   "modifiers": {
+    "F": 10,
+    "E": 10,
+    "Ag": 10
+   },
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 10,
+     "modifier": true
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "nameFrSource": "proposition"
+  },
+  {
+   "id": "E0-P-471",
+   "book": "L13",
+   "page": 115,
+   "physicalPage": 115,
+   "kind": "template",
+   "blockKey": "L13:115:4",
+   "name": "Diamond in the Rough",
+   "nameFr": "Diamant brut",
+   "modifiers": {
+    "CC": 5,
+    "CT": 5,
+    "F": 5,
+    "I": 5,
+    "Ag": 5,
+    "Dex": 5,
+    "FM": 5,
+    "Soc": 5
+   },
+   "talents": [],
+   "nameFrSource": "proposition"
+  }
+ ]
+}
