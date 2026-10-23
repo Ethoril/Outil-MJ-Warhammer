@@ -20,6 +20,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q12a | FAIT (L01-L04 ; Q12b et Q12c à faire) | (voir `git log`, « Q12a »)  |
 | Q12b | FAIT (L07-L12 ; Q12c à faire) | (voir `git log`, « Q12b »)  |
 | Q12c | FAIT en partie (L13-L26 : causes d'outil réparées, manques restants non justifiés un par un, `QE-Q12c-4`) | (voir `git log`, « Q12c ») |
+| Q13 | FAIT (cas nommés L04, L09, L11, L14, L17, L18 ; écarts justifiés `QE-Q13-1`) | (voir `git log`, « Q13 ») |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -198,3 +199,11 @@ Branché / non appelé (grep dans `js/`) :
 - **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125 et E0-P-126 diffèrent (`QE-Q12a-1`) ; aucun profil retiré ; aucune entrée perdue par rapport à `HEAD`.
 - Test : `tests/pro-q12c-profils-l13-l26.test.js` (7 tests).
 - **Branché / non appelé** : outil et données de livre seulement (aucune fonction de jeu ajoutée). Les attaques gagnées (Great Eagle, Josef Aufwiegler) deviennent des actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; `talents`, `spells`, `trappings` : code testé, non appelé.
+
+## Q13 — cas résiduels nommés (FAIT)
+
+- **Causes d'outil réparées** (`tools/lib/bestiary-blocks.mjs`, `bestiary-profile.mjs`, `bestiary-record.mjs`, `bestiary-overrides.mjs`, `bestiary-complement-data.mjs`, `bestiary-extract.mjs`) : Traits décrits en paragraphes (Kharibdyss) ; « Tentacles » = attaque (Kraken 8 ×, Amoebae 2 ×) ; « Name: (90/+6) » jamais découpé et qualités nommées (Duriath Helbane, relu en `BODY_OVERRIDES`) ; « Possessions » = équipement (Zombie) ; titre de profil voisin et description d'objet retirés de l'équipement (Combat Familiar, Nastassia) ; listes « Petty Spells », « Witchcraft Spells » (Ceyluii, Fialthra, Litharys) ; liste de spécialisations d'Arcane Magic gardée ; « Language (Magick 74, Reikspiel) 48 » (Grey Seer). Détail et écarts justifiés : `QE-Q13-1`, `QE-Q13-2`.
+- **Livres régénérés** : L09, L11, L14, L17, L18 (L04 relu, inchangé). Comparaison à `HEAD` : plus aucune entrée perdue hors parasites.
+- **Valeurs imprimées** : 23 livres comparés à `9c12613` : seuls E0-P-125 et E0-P-126 diffèrent (`QE-Q12a-1`) ; 0 profil retiré. Contrôle des valeurs : toutes les lignes retrouvées sur L04, L09, L11, L14, L17, L18.
+- Test : `tests/pro-q13-cas-nommes.test.js` (9 tests) ; suite complète lancée une fois, sans échec.
+- **Branché / non appelé** : outil et données de livre seulement, aucune fonction de jeu ajoutée ; `attacks` gagnées → actions via `buildParticipantFromBestiary` (appelants : `js/ui/bestiary-library.js`, `js/core/bestiary-templates.js`) ; `spells`, `trappings`, `talents` : code testé, non appelé.

@@ -147,7 +147,11 @@ export const ARMOUR_DETAIL = Object.freeze({
 
 /** Équipement dont le nom imprimé contient des virgules (Helena Bastiat-Hatzburg, Altdorf L20 p. 72) : recollé après le découpage à virgules. */
 export const TRAPPING_JOINS = Object.freeze({
-  'E0-P-625': ['Notebook of Plans, Schemes, and Dirty Secrets']
+  'E0-P-625': ['Notebook of Plans, Schemes, and Dirty Secrets'],
+  // Sea Wardens of Cothique (L14) p. 27 : Prince Dalloran, la dernière puce de la liste est une seule phrase à virgules.
+  // Power Behind the Throne Companion (L18) p. 60 : Nastassia, « 3 GCs in assorted denominations, but can can lay her hands on 100 GCs within an hour » est un seul objet.
+  'E0-P-545': ['3 GCs in assorted denominations, but can can lay her hands on 100 GCs within an hour'],
+  'E0-P-472': ['Vaults containing vast wealth of coin, rare minerals, and magical items']
 });
 
 /**
@@ -155,6 +159,43 @@ export const TRAPPING_JOINS = Object.freeze({
  * Le texte est celui du livre, recopié ligne à ligne.
  */
 export const BODY_OVERRIDES = Object.freeze({
+  // Temple of Spite (L09) p. 122 : Duriath Helbane, la prose de la colonne voisine mange le début de plusieurs lignes (« dium Armour », « gon Cloak », « Old ation », « er's Crown ») : relu sur la page.
+  'L09:122:0': [
+    'Attacks',
+    'Sword (90/+8)',
+    'Repeater Handbow and Bolts: (90/+6) range of 10 yards with the Impale, Pistol, and Repeater 3 Qualities, and the Reload 9 Flaw',
+    'Armour',
+    'Toughness Bonus: 3',
+    'Medium Armour: +3 AP',
+    'Sea Dragon Cloak: +2 AP to Body with the Partial Flaw',
+    'Skills',
+    'Athletics 85, Charm 85, Climb 65, Consume Alcohol 50, Cool 90, Dodge 80, Endurance 45, Gossip 80, Intimidate 65, Intuition 90, Language (Bretonnian 75, Grand Cathayan 70, Reikspiel 85, Norse 75), Leadership 95, Lore (Heraldry 75, Naggaroth 90, Oceans 85, Politics 90), Melee (Basic 90, Fencing 85, Parry 85), Navigation 85, Perception 85, Ranged (Crossbow) 90, Ride (Horse 85, Manticore 75), Row 65, Sail 85, Swim 65',
+    'Traits and Talents',
+    'Hatred (High Elves): See Hatred in the WFRP Core Rulebook.',
+    'Night Vision: See clearly for 20 yards and extend the illumination distance of light sources by 20 yards.',
+    'Briber, Carouser, Catfall, Combat Reflexes, Commanding Presence, Coolheaded, Dealmaker, Dual Wielder, Etiquette (Corsairs, Nobles), Furious Assault, In-fighter, Inspiring, Iron Will, Luck, Menacing, Noble Blood, Old Salt, Orientation, Pilot, Public Speaking, Read/Write, Schemer, Seasoned Traveller, Stout-hearted, Strong Swimmer, Suave, War Leader',
+    'Trappings',
+    'Fleetmaster\'s Crown, Medium Armour, Repeater Handbow with 21 Bolts, Sea Dragon Cloak, Two Swords'
+  ],
+  // Sea Wardens of Cothique (L14) p. 55 : Fialthra Swiftprow, la liste « Petty Spells » (colonne de droite) commence sur la ligne de l'en-tête :
+  // l'extraction en perdait le début et collait « Dirt, Reveal Magic » à la fin des Talents (talent parasite « War Wizard Dirt »).
+  'L14:55:0': [
+    'Traits: Ranged (Elf Bow) +8 (150) (Accurate, Damaging, Impale, Penetrating, Precise), Weapon (Sword) +7',
+    'Skills: Animal Care 86, Athletics 73, Art (Calligraphy 86, Writing 76), Bribery 72, Channelling (Aqshy 101, Azyr 96, Chamon 91, Hysh 91, Ghur 96, Ghyran 106, Qhaysh 86, Shyish 91, Ulgu 96), Charm 82, Cool 91, Dodge 68, Entertain (Singing 77, Speeches 72), Evaluate 88, Gossip 77, Haggle 77, Heal 88, Intimidate 47, Intuition 88, Language (Arabyan 88, Bretonnian 88, Classical 98, Eltharin, Estalian 88, Grumbarth 88, Khazalid 93, Magick 103, Norse 88, Reikspiel 93, Tilean 88, Wastelander 93), Lore (Astrology 98, Bretonnia 88, Cothique 103, Estalia 88, Geography 93, Heraldry 93, History 98, Law 103, Magic 103, Marienburg 93, The Empire 88, Theology 103), Melee (Basic) 71, Navigation 88, Perception 93, Play (Lyre) 81, Pray 77, Ranged (Bow) 47, Research 98, Ride (Horse) 78, Sail (Hawkship) 78, Swim 37',
+    'Talents: Acute Sense (Sight), Aethyric Attunement, Arcane Magic (Beasts, Death, Fire, Heavens, Light, Life, Metal, Shadow), Blather, Blessed by Isha, Bookish, Cadai Meditation, Commanding Presence, Coolheaded, Detect Artefact, Etiquette (Nobles), Fast Hands, Hardy, Lileath\'s Blessing 3, High Magic, Iron Will, Magical Sense, Night Vision, Petty Magic, Read/Write, Savant (Law, Magic), Savvy, Second Sight, Sixth Sense, Speedreader, Strong Swimmer, Suave, War Wizard',
+    'Petty Spells: Bless Arrow, Calm, Green Finger, Identify Disease, Protection from Rain, Purify Water, Remove Dirt, Reveal Magic',
+    'Lore of Beasts: Amber Talons, Beast Master, Beast Tongue, Flock of Doom',
+    'Lore of Death: Sanctify, Scythe of Shyish, Soul Vortex, Steal Life',
+    'Lore of Fire: Aqshy\'s Aegis, Blast (Fire), Cauterise, Crown of Flame, Firewall, Flaming Sword of Rhuin, Purge',
+    'Lore of Heavens: Blast (Heavens), Bolt (Heavens), Cerulean Shield, Comet of Casandora, Starcrossed, The First Portent of Amul',
+    'Lore of Metal: Aethyric Armour (Metal), Aethyric Arms (Metal), Enchant Weapon, Fool\'s Gold, Glittering Robe',
+    'Lore of Life: Barkskin, Bridge (Life), Earthblood, Earthpool, Flight (Life), Forest of Thorns, Lie of the Land, Lifebloom, Regenerate',
+    'Lore of Light: Banishment, Blinding Light, Clarity of Thought, Healing Light, Speed of Thought',
+    'Lore of Shadows: Doppelganger, Illusion, Mindslip, Shadowsteed, Shadowstep',
+    'High Magic: Coruscation of Finreir, Curse of Arrow Attraction, Deadlock, Drain Magic, Glamour of Teclis, Soul Quench, Tempest',
+    'Magic of Hoeth: Arcane Insight, Divine Stylus, Enlightenment, Psychic Sending, The Primary Words',
+    'Trappings: Elaborate Staff, Imposing Ledger, Robes of Office'
+  ],
   // Archives of the Empire (L01) p. 77 : Erzbet Wegener, les rubriques « Skills » et « Talents » sont de la prose (aucune Compétence ni aucun Talent utilisable
   // dans son état actuel) ; seules les rubriques réelles sont gardées. La première ligne de caractéristiques est son état actuel.
   'L01:77:0': [

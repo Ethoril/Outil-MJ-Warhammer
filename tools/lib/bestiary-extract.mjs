@@ -15,7 +15,8 @@ export const corpusBooks = () => [...read('docs/divin/DIVIN_CORPUS_LIVRES.json')
 export function dictionaries() {
   const inventory = read('docs/BESTIAIRE_INVENTAIRE.json');
   return {
-    traitDictionary: new Set(inventory.traits.filter(t => t.kind === 'trait').map(t => t.name.replace(/\s*\(.*\)\s*$/, '').trim())),
+    // « Regenerate: » (V4, L09 p. 46) est la Régénération de l'inventaire.
+    traitDictionary: new Set([...inventory.traits.filter(t => t.kind === 'trait').map(t => t.name.replace(/\s*\(.*\)\s*$/, '').trim()), 'Regenerate']),
     talentDictionary: new Set(read('js/data/reference-snapshot.json').talents.entries.map(t => t.englishName).filter(Boolean))
   };
 }

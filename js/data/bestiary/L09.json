@@ -38,10 +38,15 @@
      "damage": 7
     },
     {
-     "name": "Crossbow and Bolts",
+     "name": "Repeater Crossbow and Bolts",
      "value": 40,
      "damage": 8,
-     "rangeYards": 45
+     "rangeYards": 45,
+     "qualities": [
+      "Impale",
+      "Repeater 3",
+      "Reload 9"
+     ]
     }
    ],
    "traits": [
@@ -100,10 +105,15 @@
      "damage": 7
     },
     {
-     "name": "Crossbow and Bolts",
+     "name": "Repeater Crossbow and Bolts",
      "value": 40,
      "damage": 8,
-     "rangeYards": 45
+     "rangeYards": 45,
+     "qualities": [
+      "Impale",
+      "Repeater 3",
+      "Reload 9"
+     ]
     }
    ],
    "traits": [
@@ -167,12 +177,15 @@
      "damage": 7
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 40,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -232,10 +245,15 @@
      "damage": 7
     },
     {
-     "name": "Crossbow and Bolts",
+     "name": "Repeater Crossbow and Bolts",
      "value": 45,
      "damage": 8,
-     "rangeYards": 45
+     "rangeYards": 45,
+     "qualities": [
+      "Impale",
+      "Repeater 3",
+      "Reload 9"
+     ]
     }
    ],
    "traits": [
@@ -314,7 +332,10 @@
     {
      "name": "Hooves",
      "value": 25,
-     "damage": 12
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
     }
    ],
    "keywords": [
@@ -353,14 +374,21 @@
     {
      "name": "Hooves",
      "value": 45,
-     "damage": 12
+     "damage": 12,
+     "qualities": [
+      "Pummel"
+     ]
     },
     {
      "name": "Horns",
      "value": 45,
      "damage": 8,
      "detail": "Tusks",
-     "free": "charge"
+     "free": "charge",
+     "qualities": [
+      "Impale",
+      "Penetrating"
+     ]
     }
    ],
    "traits": [
@@ -512,6 +540,7 @@
     "Soc": null
    },
    "wounds": 68,
+   "size": "enormous",
    "armour": {
     "toughnessBonus": 5,
     "parts": [
@@ -556,9 +585,60 @@
     {
      "name": "Amphibious",
      "ref": "E0-T-002"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Constrictor",
+     "ref": "E0-T-013"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Many Heads",
+     "rating": "5",
+     "ref": "E0-T-034"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Broken, War",
+     "ref": "E0-T-060"
     }
    ],
    "keywords": [
+    "bete",
     "monstre"
    ],
    "nameFrSource": "proposition"
@@ -644,9 +724,35 @@
     {
      "name": "Belligerent",
      "ref": "E0-T-004"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Fly",
+     "rating": "60",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
     }
    ],
    "keywords": [
+    "bete",
     "monstre"
    ],
    "nameFrSource": "proposition"
@@ -909,6 +1015,44 @@
      "name": "Animosity",
      "param": "Followers of Khaine and Khorne",
      "ref": "E0-T-003"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Lore of Slaanesh",
+     "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Night Vision"
     }
    ],
    "keywords": [
@@ -2751,18 +2895,18 @@
     {
      "name": "Sword",
      "value": 85,
-     "damage": 8,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 8
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 70,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -2813,6 +2957,14 @@
      "name": "Night Vision",
      "ref": "E0-T-041"
     }
+   ],
+   "trappings": [
+    "Dagger",
+    "Fine Black Cloak",
+    "Medium Armour",
+    "Repeater Handbow with 21 Bolts",
+    "Shield",
+    "Temendros Family Sword"
    ],
    "keywords": [
     "elfe-noir"
@@ -2866,7 +3018,10 @@
      "damage": 7,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -3129,6 +3284,14 @@
      "ref": "E0-T-041"
     }
    ],
+   "trappings": [
+    "Dagger",
+    "High Quality Cloak",
+    "Fine Clothes",
+    "Medium Armour",
+    "Shield",
+    "Sword"
+   ],
    "keywords": [
     "elfe-noir"
    ],
@@ -3175,18 +3338,18 @@
     {
      "name": "Sword",
      "value": 75,
-     "damage": 8,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 8
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 75,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -3283,6 +3446,12 @@
      "ref": "E0-T-041"
     }
    ],
+   "trappings": [
+    "Medium Armour",
+    "Pair of Swords",
+    "Repeater Handbow with 21 Bolts",
+    "Sea Dragon Cloak"
+   ],
    "keywords": [
     "elfe-noir"
    ],
@@ -3329,18 +3498,18 @@
     {
      "name": "Hand Weapon",
      "value": 60,
-     "damage": 7,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 7
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 75,
      "damage": 7,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -3406,6 +3575,12 @@
      "name": "Night Vision",
      "ref": "E0-T-041"
     }
+   ],
+   "trappings": [
+    "Medium Armour",
+    "Pair of Swords",
+    "Repeater Handbow with 21 Bolts",
+    "Sea Dragon Cloak"
    ],
    "keywords": [
     "elfe-noir"
@@ -3592,18 +3767,18 @@
     {
      "name": "Dagger",
      "value": 75,
-     "damage": 5,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 5
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 55,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -3843,7 +4018,10 @@
      "name": "Longbow and Elf Arrows",
      "value": 65,
      "damage": 7,
-     "rangeYards": 70
+     "rangeYards": 70,
+     "qualities": [
+      "Impale"
+     ]
     }
    ],
    "skills": [
@@ -4101,18 +4279,18 @@
     {
      "name": "Sword",
      "value": 100,
-     "damage": 8,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 8
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 70,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -4384,13 +4562,21 @@
     {
      "name": "Dagger",
      "value": 70,
-     "damage": 6
+     "damage": 6,
+     "qualities": [
+      "Fast"
+     ]
     },
     {
-     "name": "Crossbow and Bolts",
+     "name": "Repeater Crossbow and Bolts",
      "value": 80,
      "damage": 8,
-     "rangeYards": 45
+     "rangeYards": 45,
+     "qualities": [
+      "Impale",
+      "Repeater 3",
+      "Reload 9"
+     ]
     }
    ],
    "skills": [
@@ -4565,16 +4751,18 @@
     {
      "name": "Sword",
      "value": 50,
-     "damage": 7,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 7
     },
     {
-     "name": "Crossbow and Bolts",
+     "name": "Repeater Crossbow and Bolts",
      "value": 60,
      "damage": 8,
-     "rangeYards": 45
+     "rangeYards": 45,
+     "qualities": [
+      "Impale",
+      "Repeater 3",
+      "Reload 6"
+     ]
     }
    ],
    "skills": [
@@ -4654,6 +4842,13 @@
      "name": "Night Vision",
      "ref": "E0-T-041"
     }
+   ],
+   "trappings": [
+    "Dark Steed (Bloodwind)",
+    "Medium Armour",
+    "Raven Feather Cloak",
+    "Repeater Crossbow with 21 Bolts",
+    "Sword"
    ],
    "keywords": [
     "elfe-noir"
@@ -4760,6 +4955,30 @@
      "ref": "E0-T-041"
     }
    ],
+   "trappings": [
+    "Dagger",
+    "Dark Steed (Ebonswift)",
+    "Diadem",
+    "Power Familiar (Lior)",
+    "Robes"
+   ],
+   "spells": {
+    "Petty Magic": [
+     "Careful Step",
+     "Drain",
+     "Eavesdrop",
+     "Light",
+     "Purify Water"
+    ],
+    "Warning Lore of Dark Magic": [
+     "Arnzipal's Black Horror",
+     "Bladewind",
+     "Chillwind",
+     "Grasping Darkness",
+     "Witch Flight",
+     "Word of Pain"
+    ]
+   },
    "keywords": [
     "elfe-noir"
    ],
@@ -5169,6 +5388,9 @@
    ],
    "talents": [
     {
+     "name": "Animal Affinity"
+    },
+    {
      "name": "Careful Strike"
     },
     {
@@ -5202,6 +5424,12 @@
      "name": "Surgery"
     }
    ],
+   "trappings": [
+    "Book (Personal Notes)",
+    "Leather Apron",
+    "Magnifying Glass",
+    "Surgeon's Tools (Needles, Poultices, Scalpels, Thread)"
+   ],
    "spells": {
     "Petty Magic": [
      "Animal Friend",
@@ -5209,6 +5437,13 @@
      "Murmured Whisper",
      "Produce Small Animal",
      "Warning"
+    ],
+    "Lore of Beasts": [
+     "Amber Talons",
+     "Beast Master",
+     "Beast Tongue",
+     "Follow Scent",
+     "Musk Spray"
     ]
    },
    "keywords": [
@@ -5257,18 +5492,18 @@
     {
      "name": "Sword",
      "value": 75,
-     "damage": 8,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 8
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 75,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -5366,6 +5601,12 @@
      "ref": "E0-T-041"
     }
    ],
+   "trappings": [
+    "Medium Armour",
+    "Pair of Swords",
+    "Repeater Handbow with 21 Bolts",
+    "Sea Dragon Cloak"
+   ],
    "keywords": [
     "elfe-noir"
    ],
@@ -5408,18 +5649,18 @@
     {
      "name": "Sword",
      "value": 49,
-     "damage": 8,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 8
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 55,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -5530,6 +5771,11 @@
      "ref": "E0-T-041"
     }
    ],
+   "trappings": [
+    "Dagger",
+    "Mail Shirt",
+    "Sword"
+   ],
    "keywords": [
     "elfe-noir"
    ],
@@ -5619,7 +5865,9 @@
    "trappings": [
     "Blood-stained Robes",
     "Four Sacred Daggers",
-    "Two"
+    "Two Swords",
+    "Vial of Black Lotus Blade Venom",
+    "Vial of Zha'Kheril (see page 59)"
    ],
    "keywords": [
     "elfe-noir"
@@ -5711,6 +5959,38 @@
      "nameFr": "Métier (Apothicaire)",
      "value": 60
     }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    }
+   ],
+   "trappings": [
+    "Blood-stained Robes",
+    "Three Potions of Frenzy",
+    "Two Swords",
+    "Sacred Dagger",
+    "Vial of Valikh Blade Venom (see page 59)",
+    "Vial of Zha'Kheril (see page 59)"
    ],
    "keywords": [
     "elfe-noir"
@@ -5846,6 +6126,9 @@
    ],
    "talents": [
     {
+     "name": "Ambidextrous"
+    },
+    {
      "name": "Attractive"
     },
     {
@@ -5933,7 +6216,11 @@
     "toughnessBonus": 3,
     "parts": [
      {
-      "name": "AP gon Cloak",
+      "name": "Medium Armour",
+      "ap": 3
+     },
+     {
+      "name": "Sea Dragon Cloak",
       "ap": 2,
       "locations": "Body with the Partial Flaw"
      }
@@ -5943,18 +6230,18 @@
     {
      "name": "Sword",
      "value": 90,
-     "damage": 8,
-     "qualities": [
-      "Repeater"
-     ]
+     "damage": 8
     },
     {
-     "name": "Handbow and Bolts",
+     "name": "Repeater Handbow and Bolts",
      "value": 90,
      "damage": 6,
      "rangeYards": 10,
      "qualities": [
-      "Pistol"
+      "Impale",
+      "Pistol",
+      "Repeater 3",
+      "Reload 9"
      ]
     }
    ],
@@ -6123,6 +6410,93 @@
      "name": "Night Vision",
      "ref": "E0-T-041"
     }
+   ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Catfall"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Etiquette (Corsairs, Nobles)"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "In-fighter"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Iron Will"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Old Salt"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Pilot"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Stout-hearted"
+    },
+    {
+     "name": "Strong Swimmer"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "War Leader"
+    }
+   ],
+   "trappings": [
+    "Fleetmaster's Crown",
+    "Medium Armour",
+    "Repeater Handbow with 21 Bolts",
+    "Sea Dragon Cloak",
+    "Two Swords"
    ],
    "keywords": [
     "elfe-noir"
@@ -6356,6 +6730,9 @@
    ],
    "talents": [
     {
+     "name": "Acute Sense (Sight)"
+    },
+    {
      "name": "Battle Rage"
     },
     {
@@ -6495,12 +6872,19 @@
     {
      "name": "Dagger",
      "value": 62,
-     "damage": 5
+     "damage": 5,
+     "qualities": [
+      "Fast"
+     ]
     },
     {
      "name": "Rapier",
      "value": 70,
-     "damage": 7
+     "damage": 7,
+     "qualities": [
+      "Fast",
+      "Impale"
+     ]
     }
    ],
    "skills": [

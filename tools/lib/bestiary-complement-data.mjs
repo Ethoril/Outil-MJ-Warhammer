@@ -11,6 +11,7 @@ export const TRAIT_ALIASES = Object.freeze({
   hallucinogenic: 'Hallucinogen', 'anticoagulant': 'Anticoagulant Saliva', 'mark of khorne': 'Mark of Khorne', 'the mark of khorne': 'Mark of Khorne',
   claws: 'Creature Weapons (Claws, Beak, Slam, Tongue)', claw: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
   '2 claws': 'Creature Weapons (Claws, Beak, Slam, Tongue)', beak: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
+  tentacles: 'Creature Weapons (Claws, Beak, Slam, Tongue)', tentacle: 'Creature Weapons (Claws, Beak, Slam, Tongue)',
   slam: 'Creature Weapons (Claws, Beak, Slam, Tongue)', 'tongue attack': 'Creature Weapons (Claws, Beak, Slam, Tongue)',
   weapons: 'Weapon', 'weapon+8': 'Weapon','weapon+11': 'Weapon', 'weapon +6': 'Weapon', 'weapon +8': 'Weapon', 'immunity to psychology*': 'Immune to Psychology'
 });

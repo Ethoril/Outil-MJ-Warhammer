@@ -2503,10 +2503,7 @@
    ],
    "trappings": [
     "Zweihander",
-    "Skills",
-    "or Talents",
-    "or they use it to improve their familiar's Characteristics",
-    "Skills"
+    "Dagger"
    ],
    "nameFrSource": "proposition"
   },
@@ -3074,8 +3071,7 @@
     "Chaos Runeblade (+SB+5, Damaging, Hack, Magical, Penetrating, Unbreakable)",
     "The Cloak of Golden Glamour",
     "Grimoire of Dark Magicks",
-    "Skull of Katam",
-    "Talisman of Tzeentch Mental Corruption: Hollow Heart"
+    "Skull of Katam"
    ],
    "spells": {
     "spells": [
@@ -3093,9 +3089,15 @@
      "Manifest Lesser Daemon",
      "Octagram",
      "Teleport",
-     "Ward Lore of Daemonology Detect Daemon",
+     "Ward"
+    ],
+    "Lore of Daemonology Spells": [
+     "Detect Daemon",
      "Manifest Lesser Daemon",
-     "Octagram Lore of Light Abulla's Snare",
+     "Octagram"
+    ],
+    "Lore of Light Spells": [
+     "Abulla's Snare",
      "Assault of Stone",
      "Banishment",
      "Blinding Light",
@@ -3104,7 +3106,10 @@
      "Hands of Karkora",
      "Net of Amyntok",
      "Speed of Thought",
-     "Time Amok Lore of Tzeentch Bolt of Change",
+     "Time Amok"
+    ],
+    "Lore of Tzeentch Spells": [
+     "Bolt of Change",
      "Boon of Tzeentch",
      "Blue Fire of Tzeentch",
      "Curse of Tzeentch",

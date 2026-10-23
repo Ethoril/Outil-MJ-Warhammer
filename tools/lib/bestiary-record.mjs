@@ -8,7 +8,7 @@ import { BASE_REFERENTIAL, keywordAncestors, normalizeKeywordText, resolveKeywor
 import { TRAPPING_JOINS } from './bestiary-overrides.mjs';
 
 const CARACS = ['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
-const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Ranged', 'Creature Weapons']);
+const ATTACK_TRAITS = new Set(['Weapon', 'Bite', 'Horns', 'Tail', 'Tail Attack', 'Claws', 'Claw', '2 Claws', 'Beak', 'Slam', 'Tongue Attack', 'Tentacles', 'Ranged', 'Creature Weapons']);
 const SIZES = new Set(['tiny', 'little', 'small', 'average', 'large', 'enormous', 'monstrous']);
 
 const CATALOGUE_TALENTS = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(entry => String(entry.englishName || '').toLowerCase()).filter(Boolean));
@@ -64,7 +64,11 @@ export function buildAttacks(extracted, traitList) {
     if (/free attack only when charging/i.test(tail)) entry.free = 'charge';
     else if (/lose momentum to make this free attack/i.test(tail)) entry.free = 'momentum';
     const flags = tail.replace(/free attack only when charging|lose momentum to make this free attack/ig, '').replace(/\d+\s*yards?/i, '').split(',').map(part => part.trim()).filter(part => part && part.split(/\s+/).length <= 3 && !/[.:;]/.test(part));
-    if (flags.length) entry.qualities = flags;
+    // « with the Impale, Pistol, and Repeater 3 Qualities, and the Reload 9 Flaw » (L09 p. 122) : qualités et défauts nommés, un par un.
+    const listed = /\bwith the (.+?) Qualit(?:y|ies)\b(?:,? and the (.+?) Flaws?\b)?/i.exec(tail);
+    const named = listed ? [listed[1], listed[2]].filter(Boolean).flatMap(part => part.split(/,\s*(?:and\s+)?|\s+and\s+/)).map(part => part.trim()).filter(Boolean) : [];
+    if (named.length) entry.qualities = [...new Set([...named, ...flags])];
+    else if (flags.length) entry.qualities = flags;
     attacks.push(entry);
   }
   for (const trait of traitList) {
@@ -181,7 +185,7 @@ export function buildRecord(extracted, entry, context) {
   const traitTalents = trimmed.filter(trait => !canonical(trait.name) && trait.param && isCatalogueTalent(trait.name) && !listedTalents.has(baseName(trait.name))).map(trait => ({ name: `${trait.name}${trait.param ? ` (${trait.param})` : ''}` }));
   const talents = [...(extracted.talents || []).filter(talent => talent.name && !isNoise(talent.name.replace(/\(.*\)/, ''))).map(talent => ({ name: talent.name, ...(talent.rank ? { rank: talent.rank } : {}) })), ...traitTalents];
   if (extracted.talents?.length || traitTalents.length) record.talents = talents;
-  if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).filter(isTrappingName);
+  if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
   if (extracted.notes?.length) record.notes = extracted.notes;
   if (extracted.mutations?.length) record.mutations = extracted.mutations;
   if (extracted.spells) record.spells = extracted.spells;

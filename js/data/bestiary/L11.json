@@ -2625,6 +2625,12 @@
    "wounds": 16,
    "attacks": [
     {
+     "name": "Tentacles",
+     "damage": 6,
+     "trait": "Tentacles",
+     "count": 2
+    },
+    {
      "name": "Pseudopod Lash",
      "damage": 6,
      "trait": "Weapon"
@@ -2650,6 +2656,12 @@
     {
      "name": "Engulf",
      "ref": "E0-T-119"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+6",
+     "count": 2,
+     "ref": "E0-T-055"
     }
    ],
    "optionalTraits": [
@@ -2694,6 +2706,12 @@
    "wounds": 34,
    "size": "large",
    "attacks": [
+    {
+     "name": "Tentacles",
+     "damage": 7,
+     "trait": "Tentacles",
+     "count": 2
+    },
     {
      "name": "Pseudopod Lash",
      "damage": 7,
@@ -2771,6 +2789,12 @@
     {
      "name": "Engulf",
      "ref": "E0-T-119"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+7",
+     "count": 2,
+     "ref": "E0-T-055"
     }
    ],
    "talents": [
@@ -3323,6 +3347,12 @@
      "name": "Size",
      "param": "Monstrous",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+10",
+     "count": 4,
+     "ref": "E0-T-055"
     },
     {
      "name": "Terror",
@@ -5710,6 +5740,12 @@
     {
      "name": "Painless",
      "ref": "E0-T-042"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+5",
+     "count": 2,
+     "ref": "E0-T-055"
     }
    ],
    "abilities": [

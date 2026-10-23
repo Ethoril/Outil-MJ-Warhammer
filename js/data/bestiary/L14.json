@@ -314,9 +314,7 @@
     "Shield",
     "Mines near Tor Koruali",
     "Nautilus Palace",
-    "Vaults containing vast wealth of coin",
-    "rare minerals",
-    "and magical items"
+    "Vaults containing vast wealth of coin, rare minerals, and magical items"
    ],
    "keywords": [
     "noble",
@@ -1077,6 +1075,43 @@
      "rank": 18
     }
    ],
+   "trappings": [
+    "Courtly Garb",
+    "Elf Bow with 12 Elf Arrows",
+    "Incandescent Spear",
+    "Jewellery worth 550 GC",
+    "Mansion in Tor Koruali",
+    "Palace in Elisia",
+    "Shield",
+    "Suit of Ithilmar Plate Armour (Durable 2, Fine 2, Impenetrable, Weakpoints)",
+    "Sword"
+   ],
+   "spells": {
+    "Lore of Heavens": [
+     "Blessings of Bel Shanaar",
+     "Divination",
+     "Drop",
+     "Enemy Foreseen",
+     "Entangle",
+     "Lens on the Sky",
+     "Let the Four Winds Blow!",
+     "Magic Shield",
+     "Sea of Glass",
+     "The First Portent of Amul",
+     "The Second Portent of Amul",
+     "The Third Portent of Amul"
+    ],
+    "Petty Spells": [
+     "Bearings",
+     "Bless Arrow",
+     "Dazzle",
+     "Gust",
+     "Identify Disease",
+     "Protection from Rain",
+     "Purify Water",
+     "Reveal Magic"
+    ]
+   },
    "keywords": [
     "haut-elfe"
    ],
@@ -2419,7 +2454,7 @@
      "name": "Aethyric Attunement"
     },
     {
-     "name": "Arcane Magic"
+     "name": "Arcane Magic (Beasts, Death, Fire, Heavens, Light, Life, Metal, Shadow)"
     },
     {
      "name": "Blather"
@@ -2471,7 +2506,7 @@
      "name": "Petty Magic"
     },
     {
-     "name": "Read/ Write"
+     "name": "Read/Write"
     },
     {
      "name": "Savant (Law, Magic)"
@@ -2495,10 +2530,7 @@
      "name": "Suave"
     },
     {
-     "name": "War Wizard Dirt"
-    },
-    {
-     "name": "Reveal Magic"
+     "name": "War Wizard"
     }
    ],
    "trappings": [
@@ -2583,6 +2615,16 @@
      "Enlightenment",
      "Psychic Sending",
      "The Primary Words"
+    ],
+    "Petty Spells": [
+     "Bless Arrow",
+     "Calm",
+     "Green Finger",
+     "Identify Disease",
+     "Protection from Rain",
+     "Purify Water",
+     "Remove Dirt",
+     "Reveal Magic"
     ]
    },
    "keywords": [
@@ -3076,6 +3118,28 @@
      "name": "Strike to Injure"
     }
    ],
+   "trappings": [
+    "Twig Spear"
+   ],
+   "spells": {
+    "Lore of Life Spells": [
+     "Barkskin",
+     "Dwellers Below",
+     "Earthblood",
+     "Earthpool",
+     "Forest of Thorns",
+     "Gardener's Warcry",
+     "Nature's Whisper",
+     "Vital Growth"
+    ],
+    "Witchcraft Spells": [
+     "Creeping Menace (Giant Rats, Seagulls)",
+     "Curse of Ill Fortune",
+     "Curse of Crippling Pain",
+     "Haunting Horror",
+     "The Evil Eye"
+    ]
+   },
    "nameFrSource": "proposition"
   },
   {
@@ -3995,6 +4059,12 @@
    "size": "monstrous",
    "attacks": [
     {
+     "name": "Tentacles",
+     "damage": 9,
+     "trait": "Tentacles",
+     "count": 8
+    },
+    {
      "name": "Beak",
      "damage": 12,
      "trait": "Weapon"
@@ -4034,6 +4104,12 @@
     {
      "name": "Stealthy",
      "ref": "E0-T-050"
+    },
+    {
+     "name": "Tentacles",
+     "rating": "+9",
+     "count": 8,
+     "ref": "E0-T-055"
     }
    ],
    "keywords": [
