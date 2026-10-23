@@ -12,7 +12,8 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q5 | FAIT | (voir `git log`, « Q5 ») |
 | Q6 | FAIT | (voir `git log`, « Q6 ») |
 | Q7 | FAIT | (voir `git log`, « Q7 ») |
-| Q8 à Q10, R | à faire | — |
+| Q8 | FAIT | (voir `git log`, « Q8 ») |
+| Q9, Q10, R | à faire | — |
 
 ## Q0 — contrôle de complétude
 
@@ -116,3 +117,21 @@ Les compétences manquantes restantes ne viennent plus de `readSkills` : ce sont
 - Test : `tests/pro-q7-demon-expiration.test.js` (4 tests de comportement : expiration → démon présent, hostile ; Annuler ; lanceur ennemi → allié ; camp du démon qui l'emporte).
 - Branché dans l'outil : `removeExpiredSummons` est appelé par `js/core/store.js` (chaque commande) ; `oppositeCamp` par `v5-spell-contracts.js`. L'affichage du champ `notes` d'un participant en combat n'a pas été vérifié (le rappel est dans les données du participant).
 - Suite complète : 4288 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).
+
+## Q8 — Traits de créature, écarts au livre de base (FAIT)
+
+Source : `Livre de base V5 EN v2.pdf` (L06) pp.356-363. Test : `tests/pro-q8-traits-creature.test.js` (7 tests, un par écart). Choix : `QE-Q8-1` à `QE-Q8-6`.
+
+- Langue (`creature-combat.js`) : la touche donne Enchevêtré (avant : Entravé « aux dégâts »).
+- Souffle (`creature-combat.js`) : par type, Feu BF+3 + Enflammé, Acide BE+4, Froid BF+2 + Fatigué, Électricité BF+2 + Sonné, Poison BE+2 + Empoisonné, Fumée sans dégâts ; rappel de zone (cible à 20+BE yards, BF yards autour).
+- Nuée (`creature-states.js`) : 1 Blessure par Round à chaque engagé, plus de saisie à faire.
+- Bestial (`creature-psychology.js`) : sous la moitié des Blessures, Frénésie si Territorial (ou `protecting`), sinon fuite ; plus de question bloquante.
+- Dressé (`creature-magic.js`) : liste V5 (Brisé, Conduite, Divertissement, Rapporter, Garde, Retour, Magie, Monture, Guerre) avec effets ; liste V4 inchangée.
+- Artificiel (`creature-natures.js`) : `attacksAreMagical` (Artificiel, Démoniaque, Magique) ; rappel complété.
+- Effrayé (`creature-psychology.js`) : l'indice est celui de la Peur de la créature redoutée (avant : 0, aussitôt surmonté).
+- Tests T3 (Nuée) et T6 (Effrayé, Bestial) mis à jour : ils figeaient l'ancien comportement.
+
+Branché / non appelé (grep dans `js/`) :
+- **Branché** : `attacksAreMagical` → `weaponAttackNature` (`js/core/v5-magic-combat.js`), appelé par `js/core/resolution.js:603` (une attaque d'Artificiel, Démoniaque ou Magique est magique pour les Protections de la cible, sauf déclaration contraire du MJ). `planNaturalAttack` (Langue, Souffle) est appelé par `js/core/v5-store-action.js:69`.
+- **Code testé, non appelé** : `planSwarm`, `planPsychology` (Bestial, Effrayé), `planCreatureMagic` (Dressé) n'ont aucun appelant dans `js/` hors de leurs modules (chantier suivant du plan).
+- Suite complète : 4295 réussis, 1 échec étranger au lot (`divin-v5-e0-independent`, reçu de recette produit au lot R).

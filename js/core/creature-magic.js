@@ -32,7 +32,22 @@ const TRAINED_SKILLS = {
   dig: 'Creuser', creuser: 'Creuser', heel: 'Au pied', 'au pied': 'Au pied', hunt: 'Chasser', chasser: 'Chasser', point: 'Marquer', marquer: 'Marquer',
   round: 'Rabattre', rabattre: 'Rabattre', track: 'Pister', pister: 'Pister', circle: 'Cercler', cercler: 'Cercler', return: 'Revenir', revenir: 'Revenir',
   perform: 'Divertir', divertir: 'Divertir', fetch: 'Rapporter', rapporter: 'Rapporter', guard: 'Garder', garde: 'Garder', garder: 'Garder',
-  magic: 'Magie', magie: 'Magie', mount: 'Monture', monture: 'Monture', war: 'Guerre', guerre: 'Guerre', tame: 'Dompté', dompte: 'Dompté', trick: 'Truc', truc: 'Truc'
+  magic: 'Magie', magie: 'Magie', mount: 'Monture', monture: 'Monture', war: 'Guerre', guerre: 'Guerre', tame: 'Dompté', dompte: 'Dompté', trick: 'Truc', truc: 'Truc',
+  // Liste du livre de base V5 (Trained, p.363) : Brisé, Conduite, Divertissement, Rapporter, Garde, Retour, Magie, Monture, Guerre.
+  broken: 'Brisé', brise: 'Brisé', drive: 'Conduite', conduite: 'Conduite', entertain: 'Divertissement', divertissement: 'Divertissement',
+  home: 'Retour', retour: 'Retour'
+};
+// Effets des compétences de la liste V5 (la liste V4 ci-dessus garde son texte propre).
+const TRAINED_EFFECTS = {
+  Brisé: { ignoresBestial: true, fellowshipBonus: '+2d10' },
+  Conduite: { pullsVehicles: true },
+  Divertissement: { skills: ['Entertain', 'Perform', 'Play'], bonus: 10 },
+  Rapporter: { fetches: true },
+  Garder: { grantsTrait: 'Territorial' },
+  Retour: { returnsHome: true },
+  Magie: { ignoresSkittish: 'magie' },
+  Monture: { acceptsRider: true, requiresRideSkill: true },
+  Guerre: { weaponSkillBonus: 10, ignoresSkittish: 'bruits forts', onlyMountForCombat: true }
 };
 const TRAINED_DR = { Creuser: 20, 'Au pied': 20, Chasser: 20, Rabattre: 0 };
 
@@ -145,6 +160,7 @@ export function planCreatureMagic(participant, key, options = {}) {
     const chosen = wanted ?? skill;
     if (chosen) {
       plan.effects.push({ trainedSkill: chosen });
+      if (TRAINED_EFFECTS[chosen]) plan.effects.push({ trainedEffect: { skill: chosen, ...TRAINED_EFFECTS[chosen] } });
       if (chosen in TRAINED_DR) plan.tests.push({ skill: 'Dressage', attr: 'maître', base: null, bonus: TRAINED_DR[chosen], reason: `ordre « ${chosen} » du maître (valeur du maître saisie)` });
     }
   }

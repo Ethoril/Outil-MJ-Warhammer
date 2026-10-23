@@ -56,6 +56,12 @@ const ratingOf = detail => {
   const value = Number.parseInt(String(detail), 10);
   return Number.isSafeInteger(value) && value >= 1 ? value : null;
 };
+/** Indice de Peur d'une créature redoutée : saisi par le MJ, sinon celui de son Trait Peur (un si omis) ; `null` sans Peur. */
+function fearRatingOf(source, entered) {
+  if (Number.isSafeInteger(entered) && entered >= 1) return entered;
+  const fear = traitsOf(source).find(trait => trait.key === 'fear');
+  return fear ? ratingOf(fear.detail) ?? 1 : null;
+}
 const bookOf = participant => participant?.extensions?.v5?.bestiary?.book ?? null;
 const hasMomentum = participant => participant?.extensions?.v5?.hasMomentum === true;
 const NAMES = { hatred: ['hatred', 'haine'], animosity: ['animosity', 'animosite'], prejudice: ['prejudice', 'prejuge'], afraid: ['afraid', 'effraye'] };
@@ -89,8 +95,11 @@ export function planPsychology(participant, key, options = {}) {
   } else if (key === 'afraid') {
     const source = options.source;
     if (!source) plan.unresolved.push('Effrayé : créature redoutée à désigner.');
+    else if (!fearRatingOf(source, options.rating)) plan.unresolved.push('Effrayé : la créature redoutée n\'a pas de Peur imprimée, indice à saisir.');
     else {
-      const preview = previewGenericFearEncounter({ author: source, target: participant, rating: 0, sourceKind: 'afraid', sourceLabel: `Effrayé (${source.name ?? source.id})`, encounterId, resolutionId: `afraid:${source.id}:${participant.id}` });
+      // Livre de base, Afraid : Peur de la cible, tant que les DR ne valent pas son indice de Peur.
+      const rating = fearRatingOf(source, options.rating);
+      const preview = previewGenericFearEncounter({ author: source, target: participant, rating, sourceKind: 'afraid', sourceLabel: `Effrayé (${source.name ?? source.id})`, encounterId, resolutionId: `afraid:${source.id}:${participant.id}` });
       plan.states.push(...preview.addedStates);
       plan.unresolved.push(...preview.unresolved);
     }
@@ -120,8 +129,10 @@ export function planPsychology(participant, key, options = {}) {
     const maxHp = Number(participant?.maxHp);
     const hp = Number(participant?.hp);
     if (Number.isFinite(maxHp) && maxHp > 0 && Number.isFinite(hp) && hp < maxHp / 2) {
-      if (typeof options.protecting !== 'boolean') plan.unresolved.push('Bestial : sous la moitié des Blessures, protège-t-il ses petits ou son territoire ? (Frénésie, sinon fuite)');
-      else plan.effects.push({ reaction: options.protecting ? 'frenzy' : 'flee' });
+      // Livre de base, Bestial : fuite, sauf s'il protège ses petits, est acculé ou a le Trait Territorial : alors Frénésie.
+      const territorial = traitsOf(participant).some(trait => trait.key === 'territorial');
+      plan.effects.push({ reaction: territorial || options.protecting === true ? 'frenzy' : 'flee' });
+      if (!territorial) plan.reminders.push('Bestial : la fuite devient Frénésie s\'il protège ses petits ou s\'il est acculé.');
     }
   } else if (key === 'coldBlooded') {
     if (book === 'L09') plan.unresolved.push('À Sang-froid (Temple of Spite) : inversion des Calme ratés, lecture à trancher par le MJ.');

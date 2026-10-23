@@ -39,8 +39,9 @@ test('T6 Terreur — indice obligatoire, état proposé', () => {
 });
 
 test('T6 Effrayé — Peur de la source désignée', () => {
-  const plan = planPsychology(hero({ traits: ['Afraid (Orcs)'] }), 'afraid', { source: make([]) });
+  const plan = planPsychology(hero({ traits: ['Afraid (Orcs)'] }), 'afraid', { source: make(['Fear (2)']) });
   assert.equal(plan.states.length, 1);
+  assert.equal(plan.states[0].rating, 2);
   assert.equal(plan.states[0].authorId, 'x');
   assert.equal(planPsychology(hero({ traits: ['Afraid (Orcs)'] }), 'afraid').available, false);
 });
@@ -79,7 +80,7 @@ test('T6 Belliqueux — immunité tant qu\'il a de l\'Élan ; variante Temple of
 test('T6 Bestial — fuite ou Frénésie sous la moitié des Blessures', () => {
   assert.deepEqual(planPsychology(make(['Bestial']), 'bestial').effects, [{ defenceSkill: 'Esquive', noRationalLanguage: true }]);
   const hurt = make(['Bestial'], { hp: 4 });
-  assert.equal(planPsychology(hurt, 'bestial').available, false);
+  assert.deepEqual(planPsychology(hurt, 'bestial').effects.at(-1), { reaction: 'flee' }); // Q8 : fuite par défaut
   assert.deepEqual(planPsychology(hurt, 'bestial', { protecting: true }).effects.at(-1), { reaction: 'frenzy' });
   assert.deepEqual(planPsychology(hurt, 'bestial', { protecting: false }).effects.at(-1), { reaction: 'flee' });
 });

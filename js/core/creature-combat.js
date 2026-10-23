@@ -16,7 +16,7 @@ const RULES = {
   tail: { fr: 'Attaque caudale', names: ['tail', 'attaque caudale'], cost: MOMENTUM, bf: 2, test: 'CC', smallerEffect: 'À terre', note: 'Une cible plus petite blessée devient À terre.' },
   stomp: { fr: 'Piétinement', names: ['stomp', 'pietinement'], cost: MOMENTUM, bf: 0, test: 'CC', skill: 'Corps à corps (Bagarre)', smallerOnly: true, note: 'Attaque de Bagarre contre une créature plus petite.' },
   tentacles: { fr: 'Tentacules', names: ['tentacles', 'tentacules'], bf: 0, test: 'CC', perDetail: true, effect: 'Enchevêtré', note: 'Une attaque gratuite par tentacule ; les dégâts peuvent donner Enchevêtré puis une empoignade.' },
-  tongue: { fr: 'Langue préhensile', names: ['tongue', 'langue', 'langue prehensile'], cost: MOMENTUM, bf: 0, test: 'CT', ranged: true, smallerOnly: true, effect: 'Entravé', note: 'Entrave et attire une cible plus petite ; choix : libérer, attaque supplémentaire ou empoignade.' },
+  tongue: { fr: 'Langue préhensile', names: ['tongue', 'langue', 'langue prehensile'], cost: MOMENTUM, bf: 0, test: 'CT', ranged: true, smallerOnly: true, onHit: 'Enchevêtré', note: 'Si l\'attaque touche : un Enchevêtré, et la cible plus petite est attirée au contact ; choix : libérer, attaque supplémentaire ou empoignade.' },
   constrictor: { fr: 'Constricteur', names: ['constrictor', 'constricteur'], onHit: 'Enchevêtré', note: 'Toute touche donne Enchevêtré, puis une empoignade est possible.' },
   web: { fr: 'Toile', names: ['web', 'toile'], onHit: 'Enchevêtré', entangleFromDetail: true, note: 'Une touche donne un Enchevêtré dont la Force est la valeur du Trait.' },
   chill: { fr: 'Étreinte glaciale', names: ['chill grasp', 'etreinte glaciale'], cost: MOMENTUM, test: 'CC', opposed: 'Esquive ou Corps à corps', direct: '1d10+DR', magical: true, note: 'CC opposée ; 1d10 + DR Blessures directes ; attaque magique.' },
@@ -25,6 +25,18 @@ const RULES = {
   howl: { fr: 'Hurlement fantomatique', names: ['ghostly howl', 'hurlement fantomatique'], cost: MOMENTUM, oncePerTurn: true, area: true, note: 'Vivants à portée : trois Assourdi, d10 Blessures directes, Calme +2 DR ou Brisé ; critiques à la tête.' },
   gaze: { fr: 'Regard pétrifiant', names: ['petrifying gaze', 'regard petrifiant'], cost: MOMENTUM, test: 'CT', opposed: 'Initiative', note: 'CT opposée à l\'Initiative (ou Langue Magique du mage) ; Sonné selon la marge, pétrification à six DR.' }
 };
+
+// Souffle par type (livre de base p.357) : dégâts = Bonus de Force (F) ou d'Endurance (E) + `add`, état donné aux cibles perdantes.
+const BREATH_TYPES = {
+  acid: { fr: 'Acide', names: ['acid', 'acide'], stat: 'E', add: 4, reminder: 'Armes et armures portées par les cibles perdantes : 1 dégât.' },
+  cold: { fr: 'Froid', names: ['cold', 'froid'], stat: 'F', add: 2, state: 'Fatigué', reminder: 'Fatigué : les cibles frappent en dernier au Round, et leurs adversaires ont +1 DR pour se défendre contre elles.' },
+  electricity: { fr: 'Électricité', names: ['electricity', 'electricite', 'foudre'], stat: 'F', add: 2, state: 'Sonné', reminder: 'Les dégâts ignorent l\'armure de métal.' },
+  fire: { fr: 'Feu', names: ['fire', 'feu'], stat: 'F', add: 3, state: 'Enflammé' },
+  poison: { fr: 'Poison', names: ['poison'], stat: 'E', add: 2, state: 'Empoisonné' },
+  smoke: { fr: 'Fumée', names: ['smoke', 'fumee'], reminder: 'Pas de dégâts : la zone se remplit de fumée, bloque la ligne de vue et cause l\'Asphyxie pendant BE Rounds.' }
+};
+const BREATH_BY_NAME = new Map(Object.entries(BREATH_TYPES).flatMap(([key, type]) => type.names.map(name => [name, key])));
+const bonusOf = value => (Number.isFinite(Number(value)) && value !== null && value !== '' ? Math.floor(Number(value) / 10) : null);
 
 const BY_NAME = new Map(Object.entries(RULES).flatMap(([key, rule]) => rule.names.map(name => [name, key])));
 
@@ -73,6 +85,20 @@ export function planNaturalAttack(participant, key, options = {}) {
   else if (Number.isInteger(rule.bf)) {
     if (bonus === null) plan.unresolved.push(`${rule.fr} : Force du participant inconnue, dégâts BF${rule.bf ? `+${rule.bf}` : ''} à saisir.`);
     else plan.damageFormula = `${bonus + rule.bf}`;
+  }
+  if (key === 'breath') {
+    const type = BREATH_TYPES[BREATH_BY_NAME.get(fold(owned.detail))];
+    plan.reminders.push('Zone : la cible vue à 20 + BE yards et toutes les créatures à BF yards autour d\'elle ; un seul jet de l\'attaquant, opposé à chaque cible.');
+    if (type) {
+      plan.reminders.push(`Souffle de ${type.fr}${type.add === undefined ? '' : ` : dégâts B${type.stat === 'F' ? 'F' : 'E'}+${type.add}`}.`);
+      if (type.reminder) plan.reminders.push(type.reminder);
+      if (type.stat) {
+        const base = type.stat === 'F' ? bonus : bonusOf(participant?.caracs?.E);
+        if (base === null) plan.unresolved.push(`Souffle de ${type.fr} : ${type.stat === 'F' ? 'Force' : 'Endurance'} du participant inconnue, dégâts à saisir.`);
+        else plan.damageFormula = `${base + type.add}`;
+      }
+      if (type.state) plan.effects.push({ state: type.state, trigger: 'cible perdante' });
+    }
   }
   if (rule.cost) plan.costs.push({ ...rule.cost });
   if (rule.costs) plan.costs.push(...rule.costs);
