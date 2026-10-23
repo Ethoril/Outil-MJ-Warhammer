@@ -10,7 +10,7 @@ L’audit de couverture est statique : une référence moteur ne vaut pas recett
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | L01 — Archives of the Empire 2.pdf | 425 | 0 | 8 | 0 | 396 | 21 |
 | L02 — Archives of the Empire 3.pdf | 333 | 3 | 0 | 0 | 329 | 1 |
-| L03 — Archives of the Empire Volume 1.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
+| L03 — Archives of the Empire Volume 1.pdf | 61 | 0 | 1 | 4 | 55 | 1 |
 | L04 — Deft Steps Light Fingers.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L05 — Livre de base FR.pdf | 0 | 0 | 0 | 0 | 0 | 0 |
 | L06 — Livre de base V5 EN v2.pdf | 1141 | 185 | 109 | 228 | 617 | 2 |
@@ -52,6 +52,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Artisanat et remèdes | 17 | 0 | 0 | 0 | 17 | 0 |
 | Artisanat magique | 4 | 0 | 0 | 0 | 3 | 1 |
 | Bataille de masse | 44 | 0 | 0 | 0 | 36 | 8 |
+| Bestiaire | 13 | 0 | 0 | 0 | 13 | 0 |
 | Bestiaire — clauses manquantes | 8 | 0 | 0 | 0 | 8 | 0 |
 | Bestiaire — renvois | 75 | 0 | 0 | 0 | 75 | 0 |
 | Blessures et soins | 177 | 15 | 1 | 66 | 95 | 0 |
@@ -70,7 +71,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Compétences et usages | 73 | 0 | 1 | 1 | 71 | 0 |
 | Corruption et mutations | 135 | 0 | 0 | 13 | 119 | 3 |
 | Création de personnage | 1 | 0 | 0 | 0 | 1 | 0 |
-| Création et carrières | 122 | 0 | 1 | 0 | 121 | 0 |
+| Création et carrières | 150 | 0 | 2 | 2 | 146 | 0 |
 | Création et progression | 21 | 0 | 0 | 0 | 21 | 0 |
 | Créatures et capacités | 37 | 0 | 0 | 0 | 37 | 0 |
 | Destin et Chance | 12 | 0 | 3 | 0 | 9 | 0 |
@@ -105,8 +106,9 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Psychologie | 15 | 0 | 0 | 15 | 0 | 0 |
 | Religion | 5 | 0 | 0 | 0 | 5 | 0 |
 | Religion — renvois | 4 | 0 | 0 | 0 | 4 | 0 |
-| Runes | 28 | 0 | 0 | 0 | 28 | 0 |
+| Runes | 32 | 0 | 0 | 0 | 32 | 0 |
 | Récolte et commerce | 13 | 0 | 0 | 0 | 13 | 0 |
+| Santé | 1 | 0 | 0 | 0 | 0 | 1 |
 | Signes astraux | 29 | 0 | 0 | 0 | 29 | 0 |
 | Soins et remèdes | 10 | 0 | 0 | 0 | 10 | 0 |
 | Talents | 246 | 80 | 60 | 83 | 23 | 0 |
@@ -116,7 +118,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | Traits et créatures | 24 | 0 | 0 | 0 | 24 | 0 |
 | Transformations | 5 | 0 | 0 | 0 | 5 | 0 |
 | Vents de magie | 79 | 0 | 0 | 0 | 79 | 0 |
-| Voyage et environnement | 246 | 0 | 0 | 0 | 245 | 1 |
+| Voyage et environnement | 255 | 0 | 0 | 0 | 254 | 1 |
 | Voyage et navigation | 11 | 0 | 0 | 0 | 11 | 0 |
 | Véhicules et combat naval | 59 | 0 | 1 | 0 | 58 | 0 |
 | Véhicules et navigation | 5 | 0 | 0 | 0 | 5 | 0 |
@@ -142,7 +144,7 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 | objets | 28 | 0 | 0 | 0 | 28 | 0 |
 | talents | 19 | 0 | 1 | 0 | 18 | 0 |
 | voyage | 46 | 0 | 0 | 0 | 46 | 0 |
-| Équipement | 41 | 3 | 0 | 0 | 38 | 0 |
+| Équipement | 47 | 3 | 0 | 2 | 42 | 0 |
 | Équipement et artisanat | 113 | 0 | 0 | 0 | 112 | 1 |
 | Équipement spécialisé | 20 | 0 | 1 | 0 | 19 | 0 |
 | États | 29 | 12 | 15 | 1 | 1 | 0 |
@@ -516,6 +518,22 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L01-0375 — Grimper une créature monstrueuse** (L01 p.88, absent) : Secouer les grimpeurs emploie son Action avec opposition Bagarre/Escalade ; la proposition « if successful » permet une attaque comme sur cible sans défense sans préciser clairement le bénéficiaire. Ambiguïté de pronom conservée ; aucun succès automatique du grimpeur ni impossibilité d’action de la créature inventé.
 - **F-L01-0376 — Survol : approche et frappe** (L01 p.88, absent) : Monture volante : Équitation +0 ; attaque/autre Action à 15−DR yards ; à +6 accès mêlée/bout portant. Touche −5 Puissance, général neutralisé −15 de plus. Pas de plancher de distance imprimé ; conserver le signe. Monture et contexte MJ nécessaires.
 - **F-L01-0377 — Survol : atterrissage raté** (L01 p.88, absent) : À −6 en Équitation, chute de 5 yards et, au Round de bataille suivant, scène de Charge où seul l’ennemi charge. Lecture F0 ciblée ; folio = page physique. Nom français proposé. Couverture statique non démontrée.
+
+### Bestiaire
+
+- **F-L03-0001 — MISODOCTAKLEIDIST ‘DOC’ ASHFIELD — SOLDIER (SILVER 3)** (L03 p.23, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0002 — THOMASINA ‘TINA’ BRAMBLEDOWN — BARGESWAIN (SILVER 3)** (L03 p.24, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0003 — LUITPOLDSTRASSE ‘LOUIS’ LOSTPOCKETS — MASTER BEGGAR (BRASS 4)** (L03 p.27, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0004 — BELLIQUOTIOUS ‘BELLA’ LOWHAVEN IV — RACKETEER (BRASS 5)** (L03 p.28, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0005 — SUFFONSIFICATION ‘SUFFY’ RUMSTER LVI — APPRENTICE ARTISAN (BRASS 2)** (L03 p.29, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0006 — SPOONDRIFT ‘SPOONY’ SKELFSIDER – GRAVE — ROBBER (BRASS 3)** (L03 p.30, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0008 — THELONIUS HARDCASTLE MONKENBRIDGE — THORNCOBBLE XII – SCION (GOLD 1)** (L03 p.31, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0022 — ALRIK SKAGSSON – INQUISITOR (SILVER 5)** (L03 p.56, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0023 — KARSTIN LARGSDOTTIR – AGENT (GOLD 1)** (L03 p.56, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0024 — THYK HURGARSSON – FELLOW (SILVER 5)** (L03 p.57, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0025 — VOLUND SLIVERSCAR — CHARTERED ENGINEER (GOLD 2)** (L03 p.62, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0026 — GURNIKSSON HAMMERBACK – MINER FOREMAN** (L03 p.63, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0027 — RAGNI THORISSON – OFFICER (GOLD 1)** (L03 p.63, absent) : Profil PNJ renvoyé à E0 ; aucune valeur de profil ni couverture d’une capacité annexe recopiée. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
 
 ### Bestiaire — clauses manquantes
 
@@ -1420,6 +1438,33 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L02-0288 — Origine — quartier des Collèges** (L02 p.84, absent) : Humain Hexxerbezrik : liste propre, Seconde vue ou Sixième sens et un talent aléatoire. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L02-0289 — Origine — docks** (L02 p.84, absent) : Humain Docklands : liste propre, Criminel ou Étiquette(Marchands), Négociateur ou Menaçant, un talent aléatoire. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L02-0327 — Adalbert — prothèse et Esquive** (L02 p.90, absent) : Adalbert ne peut pas esquiver tant qu’il ne s’est pas habitué à sa jambe artificielle ; aucun délai chiffré. Restriction annexe de scénario, pas attestée par la seule présence du profil E0.
+- **F-L03-0007 — Thorncobble noble** (L03 p.31, absent) : Un Halfling Thorncobble ayant Sang noble peut choisir la carrière Noble à la création. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0009 — Création halfling — clans** (L03 p.32, absent) : Option remplaçant la liste raciale : sept compétences communes et quatre de clan ; talents raciaux, un talent de clan et un aléatoire. Les talents conservent Sens aiguisé(Goût), Vision nocturne, Résistance(Chaos), Petit maison ; liste commune Charme, Alcool, Savoir(Reikland), Perception, Escamotage, Discrétion et Cuisine.
+- **F-L03-0010 — Clan Ashfield** (L03 p.32, absent) : Compétences : Calme, Intuition, Mootish, Tir au choix ; talent Sens aiguisé(Vue) ou Étiquette(Soldats). Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0011 — Clan Brambledown** (L03 p.32, absent) : Compétences : Mootish, Navigation, Survie, Natation ; talent Sociable ou Voyageur aguerri. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0012 — Clan Brandysnap** (L03 p.32, absent) : Compétences : Soin aux animaux, Jeu, Mootish, Herbes ; talent Artisan(Fermier) ou Costaud. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0013 — Clan Hayfoot** (L03 p.32, absent) : Compétences : Jeu, Marchandage, Évaluation, Mootish ; talent Négociateur ou Étiquette(Guildes). Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0014 — Clan Hollyfoot** (L03 p.32, absent) : Compétences : Évaluation, Marchandage, Mootish, Métier au choix ; talent Artisan au choix ou Doigts de fée. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0015 — Clan Hayfoot-Hollyfoot** (L03 p.32, absent) : Compétences : Corruption, Marchandage, Ragot, Mootish ; talent Ergoteur ou Numismatique. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0016 — Clan Lostpockets** (L03 p.32, absent) : Compétences : Résistance, Jeu, Ragot, Intuition ; talent Dur à cuire ou Soupe de cailloux. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0017 — Clan Lowhaven** (L03 p.32, absent) : Compétences : Corruption, Marchandage, Intimidation, Mootish ; talent Criminel ou Étiquette(Criminels ou Guildes). Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0018 — Clan Rumster** (L03 p.32, absent) : Compétences : Résistance, Ragot, Marchandage, Mootish ; talent Artisan(Cuisinier) ou Négociateur. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0019 — Clan Skelfsider** (L03 p.32, absent) : Compétences : Résistance, Jeu, Ragot, Mootish ; talent Insignifiant ou Étiquette(Serviteurs). Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0020 — Clan Thorncobble** (L03 p.32, absent) : Compétences : Ragot, Commandement, Héraldique, Mootish ; talent Étiquette(Nobles ou Érudits) ou Lire/Écrire. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0021 — Clan Tumbleberry** (L03 p.32, absent) : Compétences : Ragot, Marchandage, Savoir au choix, Mootish ; talent Étiquette(Bourgeois ou Guildes) ou Lire/Écrire. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0032 — Eonir — lignées** (L03 p.78, absent) : Faniour : carrières elfes sylvains ; option MJ Toriour : carrières hauts elfes même en progression, espèce reste Elfe sylvain(Eonir). Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0033 — Eonir — Harioth** (L03 p.78, absent) : Utiliser les carrières elfes sylvains et donner Jeune sang à un personnage Harioth. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0034 — Jeune sang — statut** (L03 p.78, rappel) : Toujours de statut inférieur aux autres Eonir, sauf s’ils ont aussi Jeune sang ; rang maximal1. Description du talent consultable ; aucun lecteur de statut relatif ou parcours d’épreuve établi.
+- **F-L03-0035 — Jeune sang — épreuve** (L03 p.78, rappel) : La deuxième génération peut perdre Jeune sang en réussissant l’épreuve d’admission Faniour ; procédure et seuil non détaillés. Description du talent consultable ; aucun lecteur de statut relatif ou parcours d’épreuve établi.
+- **F-L03-0047 — Accès — Arpenteur fantôme** (L03 p.87, absent) : Elfe sylvain : choix direct ou substitution au Chasseur de primes tiré aléatoirement ; classe Éclaireur. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0048 — Accès — Garde champêtre** (L03 p.87, absent) : Halfling du Moot : choix direct ou substitution au Patrouilleur tiré ; classe Éclaireur. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0049 — Accès — Ranger des Karaks** (L03 p.87, absent) : Nain : choix direct ou substitution au Messager tiré ; classe Éclaireur. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0050 — Accès — Cavalier sur blaireau** (L03 p.87, absent) : Halfling du Moot : convaincre le MJ et imiter le cri ; choix direct ou substitution au Soldat tiré ; classe Guerrier. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0051 — Arpenteur fantôme — progression** (L03 p.88, absent) : Quatre niveaux Bronze3/Bronze5/Argent1/Argent3, listes de compétences/talents/équipements propres ; CT/Ag/Int puis Dex, CC et F. Schéma vu : CT/Ag/Int rang1, Dex rang2, CC rang3, F rang4. Arc elfe fabriqué personnellement au rang2 ; arc et cuir de qualité au rang3.
+- **F-L03-0052 — Garde champêtre — progression** (L03 p.89, absent) : Quatre niveaux Bronze4/Argent1/Argent3/Argent5 avec listes propres ; CT/Ag/FM puis Int, CC et E. Schéma vu. Dernier rang propose cinq talents, dont Sans peur sans spécialité imprimée : pas de correction ni ennemi par défaut.
+- **F-L03-0053 — Garde champêtre — rotation sylvanienne** (L03 p.89, absent) : Patrouilles de frontière sylvanienne au plus une semaine par mois ; usage d’affectation, aucun état psychologique automatique inventé. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0054 — Ranger des Karaks — progression** (L03 p.90, absent) : Quatre niveaux Bronze3/Argent1/Argent2/Argent4, listes propres ; CC/F/E puis CT, Ag et Int ; Guide fluvial OU Artilleur au troisième rang. Schéma vu, listes irrégulières conservées : pas ajout de compétences manquantes par déduction.
+- **F-L03-0055 — Cavalier sur blaireau — progression** (L03 p.91, absent) : Quatre niveaux Argent1/Argent3/Argent5/Or1, listes propres ; CT/Ag/Int puis CC, F et Soc. Schéma vu. Barde du rang3 protège tête et corps pour2PA ; grand blaireau, écuyer et plates au rang4, sans profil de monture inventé.
 
 ### Création et progression
 
@@ -3105,6 +3150,10 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L16-0208 — Tranchant** (L16 p.79, absent) : Deux runes donnent +2 dégâts à la hache de Gotrek. Renvoi individuel vérifié, sans nouvelle qualification runtime ni recette du domaine. Déjà porté par l’inventaire référencé : Clause exacte déjà portée par cet inventaire ; éviter un second choix F1.
 - **F-L16-0209 — Coupure** (L16 p.79, absent) : La hache ignore deux PA. Renvoi individuel vérifié, sans nouvelle qualification runtime ni recette du domaine. Déjà porté par l’inventaire référencé : Clause exacte déjà portée par cet inventaire ; éviter un second choix F1.
 - **F-L20-0060 — Rune de Lumière : éclairage** (L20 p.200, absent) : La rune éclaire l’installation souterraine comme une lanterne. Identité et clause déjà inventoriées ; aucun statut runtime déduit du renvoi. Déjà porté par l’inventaire référencé : Clause déjà recensée dans l’inventaire référencé ; aucun second sélecteur F1.
+- **F-L03-0028 — Rune de lumière — cristaux du hall** (L03 p.66, absent) : Les cristaux runiques éclairent comme des lanternes ; pas de nouveau coût ni seuil de gravure. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0029 — Runes de protection du karak** (L03 p.68, absent) : Rongeurs repoussés des réserves : renvoi à la rune, sans reproduire une nouvelle table. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0030 — Runes de verrouillage du karak** (L03 p.68, absent) : Tombes et serrures gardées par runes de verrouillage déjà inventoriées. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
+- **F-L03-0031 — Rune de vision lointaine — lentille** (L03 p.69, absent) : Lentille utilisée comme télescope ; aucun mile ni portée non donnée par L03 ajoutés. Renvoi exact, sans réinventaire ni certification de couverture moteur. Déjà porté par l’inventaire référencé : Clause déjà portée par l’inventaire désigné ; pas de nouveau sélecteur F0.
 
 ### Récolte et commerce
 
@@ -3675,6 +3724,15 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L01-0418 — Rivière : courant** (L01 p.90, absent) : 7 : finir son Tour dans l’eau impose Force +0 ou être emporté ; contrôler un pont peut forcer seulement l’ennemi à traverser. Table vue : Tous les chiffres de Tests et Round/Tour conservés. Résistance utilisant la Volonté du groupe p.90 non corrigée ; pas règle universelle ni conversion d’un gain de Puissance en DR.
 - **F-L01-0419 — Incendie du champ de bataille** (L01 p.90, absent) : 8 : déplacement impose Athlétisme +0 ou 1 Enflammé ; neutraliser la source éteint le feu après 1 Round de bataille. Table vue : Tous les chiffres de Tests et Round/Tour conservés. Résistance utilisant la Volonté du groupe p.90 non corrigée ; pas règle universelle ni conversion d’un gain de Puissance en DR.
 - **F-L01-0420 — Résurrection des pertes** (L01 p.90, absent) : 9 : chaque Puissance perdue par l’armée en donne une à l’ennemi ; vaincre le nécromancien annule l’effet et retire tous les points ainsi gagnés. Table vue : Tous les chiffres de Tests et Round/Tour conservés. Résistance utilisant la Volonté du groupe p.90 non corrigée ; pas règle universelle ni conversion d’un gain de Puissance en DR.
+- **F-L03-0037 — Routes de la Laurelorn** (L03 p.79, absent) : Routes anciennes : cheval et marche au Mouvement normal, chariots impossibles ; route nord de Se-Athil uniquement à pied à demi-Mouvement. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0038 — Racines du monde** (L03 p.79, absent) : Parcours de cent miles en une heure via les racines, après négociation avec les esprits par médiateurs Eonir ; passage sûr contre magie ou sang, coût non fixé. Déplacement spécial de lieu, pas ingrédient de lancement obligatoire ajouté.
+- **F-L03-0039 — Moonflower — peste noire** (L03 p.79, absent) : Mousse bouillie en inhalation : peut guérir la Peste noire chez les elfes ; pas de dose, délai ou jet inventé. Médecine conservée, ne pas étendre Q18 à tous remèdes ; préparation sans lancement de magie.
+- **F-L03-0041 — Bois des souhaits — vision** (L03 p.81, absent) : Offrande liée au souhait, sommeil puis Prière ou Divertissement(Chant/Récit), +10 avec Seconde vue ; un détail pertinent du rêve par DR. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0042 — Bois des souhaits — cauchemar** (L03 p.81, absent) : Échec de la vision : cauchemar durant autant d’heures que de DR négatifs ; aucune règle d’arrondi ou durée minimale ajoutée. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0043 — Bois des souhaits — réveil forcé** (L03 p.81, absent) : Réveiller un dormeur du cauchemar : Calme ou 1 Corruption ; pas de séquelle durable imposée. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0044 — Bois des souhaits — intrus au repos** (L03 p.81, absent) : Un intrus qui se repose fait Résistance ou tombe dans le sommeil cauchemardesque, soumis aux règles d’échec précédentes. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0045 — Coupe des rêves** (L03 p.82, absent) : Eau magique bue : voir et communiquer avec les esprits pendant plusieurs heures ; durée précise et test non fixés. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0046 — Fontaine de Lebin** (L03 p.84, absent) : Le bassin purifie l’eau souillée de la rivière ; légendes de jeunesse et de lame enchantée ne donnent pas de rajeunissement jouable. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 
 ### Voyage et navigation
 
@@ -4694,6 +4752,12 @@ L05 — noms français seulement : 219 entrées avec nom sourcé et 100 avec ter
 - **F-L02-0180 — Armet — dommage 6–9** (L02 p.38, absent) : d10 : 6–9, le casque ne subit pas la dégradation. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L02-0181 — Armet — dommage 10** (L02 p.38, absent) : Pas de perte de PA mais mécanisme bloqué ; casque impossible à retirer sans le briser ou Métier(Forgeron) −20. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 - **F-L02-0182 — Salade — critique crânien** (L02 p.38, absent) : Réduit de 1 les Blessures du critique à la tête ; ne réduit pas la gravité ni tous les dégâts ordinaires. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0056 — Armes raciales — usage et disponibilité** (L03 p.92, absent) : Toute espèce correctement formée peut les utiliser ; disponibilités des tables supposent une forte présence de l’espèce productrice ; certaines armes ne se vendent pas aux étrangers. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0057 — Drakefire — critique incendiaire** (L03 p.93, rappel) : Un critique du pistolet ajoute un Enflammé à la cible ; aucune ignition sur toutes les touches ordinaires. Effet en notes de l’équipement, affiché par fiche-details ; aucun lecteur du déclencheur spécial dans la résolution. Qualités génériques ne prouvent pas cet effet.
+- **F-L03-0058 — Blackbriar — poison vivant** (L03 p.93, rappel) : Repos nocturne en terre fertile nécessaire ; si la cible perd au moins1 Blessure, Résistance +0 ou Empoisonné1. Effet en notes de l’équipement, affiché par fiche-details ; aucun lecteur du déclencheur spécial dans la résolution. Qualités génériques ne prouvent pas cet effet.
+- **F-L03-0059 — Starfire — critique incendiaire** (L03 p.93, absent) : Un critique avec cette flèche ajoute Enflammé ; sa portée imprimée gagne50, pas50 %. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0060 — Swiftshiver — salve payée** (L03 p.93, absent) : Pour employer Explosion1, dépenser avant le Test une flèche supplémentaire pour chaque cible qui serait touchée ; formulation et coût non réinterprétés. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
+- **F-L03-0061 — Drakefire — arme inadaptée** (L03 p.94, absent) : Charger sa munition dans une autre arme à poudre noire : fonctionnement une seule fois puis explosion dans les mains ; chaque tir se résout comme une maladresse. Lecture F0 ; aucun flux dédié établi par les recherches statiques du lot.
 
 ### Équipement et artisanat
 

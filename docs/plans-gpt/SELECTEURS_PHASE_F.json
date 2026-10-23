@@ -49957,5 +49957,551 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0007",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.31",
+    "question": "Implanter « Thorncobble noble » ? Un Halfling Thorncobble ayant Sang noble peut choisir la carrière Noble à la création.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0009",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Création halfling — clans » ? Option remplaçant la liste raciale : sept compétences communes et quatre de clan ; talents raciaux, un talent de clan et un aléatoire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0010",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Ashfield » ? Compétences : Calme, Intuition, Mootish, Tir au choix ; talent Sens aiguisé(Vue) ou Étiquette(Soldats).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0011",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Brambledown » ? Compétences : Mootish, Navigation, Survie, Natation ; talent Sociable ou Voyageur aguerri.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0012",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Brandysnap » ? Compétences : Soin aux animaux, Jeu, Mootish, Herbes ; talent Artisan(Fermier) ou Costaud.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0013",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Hayfoot » ? Compétences : Jeu, Marchandage, Évaluation, Mootish ; talent Négociateur ou Étiquette(Guildes).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0014",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Hollyfoot » ? Compétences : Évaluation, Marchandage, Mootish, Métier au choix ; talent Artisan au choix ou Doigts de fée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0015",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Hayfoot-Hollyfoot » ? Compétences : Corruption, Marchandage, Ragot, Mootish ; talent Ergoteur ou Numismatique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0016",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Lostpockets » ? Compétences : Résistance, Jeu, Ragot, Intuition ; talent Dur à cuire ou Soupe de cailloux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0017",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Lowhaven » ? Compétences : Corruption, Marchandage, Intimidation, Mootish ; talent Criminel ou Étiquette(Criminels ou Guildes).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0018",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Rumster » ? Compétences : Résistance, Ragot, Marchandage, Mootish ; talent Artisan(Cuisinier) ou Négociateur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0019",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Skelfsider » ? Compétences : Résistance, Jeu, Ragot, Mootish ; talent Insignifiant ou Étiquette(Serviteurs).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0020",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Thorncobble » ? Compétences : Ragot, Commandement, Héraldique, Mootish ; talent Étiquette(Nobles ou Érudits) ou Lire/Écrire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0021",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.32",
+    "question": "Implanter « Clan Tumbleberry » ? Compétences : Ragot, Marchandage, Savoir au choix, Mootish ; talent Étiquette(Bourgeois ou Guildes) ou Lire/Écrire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0032",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.78",
+    "question": "Implanter « Eonir — lignées » ? Faniour : carrières elfes sylvains ; option MJ Toriour : carrières hauts elfes même en progression, espèce reste Elfe sylvain(Eonir).",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0033",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.78",
+    "question": "Implanter « Eonir — Harioth » ? Utiliser les carrières elfes sylvains et donner Jeune sang à un personnage Harioth.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0034",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.78",
+    "question": "Implanter « Jeune sang — statut » ? Toujours de statut inférieur aux autres Eonir, sauf s’ils ont aussi Jeune sang ; rang maximal1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0035",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.78",
+    "question": "Implanter « Jeune sang — épreuve » ? La deuxième génération peut perdre Jeune sang en réussissant l’épreuve d’admission Faniour ; procédure et seuil non détaillés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0037",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.79",
+    "question": "Implanter « Routes de la Laurelorn » ? Routes anciennes : cheval et marche au Mouvement normal, chariots impossibles ; route nord de Se-Athil uniquement à pied à demi-Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0038",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.79",
+    "question": "Implanter « Racines du monde » ? Parcours de cent miles en une heure via les racines, après négociation avec les esprits par médiateurs Eonir ; passage sûr contre magie ou sang, coût non fixé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0039",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.79",
+    "question": "Implanter « Moonflower — peste noire » ? Mousse bouillie en inhalation : peut guérir la Peste noire chez les elfes ; pas de dose, délai ou jet inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0041",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.81",
+    "question": "Implanter « Bois des souhaits — vision » ? Offrande liée au souhait, sommeil puis Prière ou Divertissement(Chant/Récit), +10 avec Seconde vue ; un détail pertinent du rêve par DR.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0042",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.81",
+    "question": "Implanter « Bois des souhaits — cauchemar » ? Échec de la vision : cauchemar durant autant d’heures que de DR négatifs ; aucune règle d’arrondi ou durée minimale ajoutée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0043",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.81",
+    "question": "Implanter « Bois des souhaits — réveil forcé » ? Réveiller un dormeur du cauchemar : Calme ou 1 Corruption ; pas de séquelle durable imposée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0044",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.81",
+    "question": "Implanter « Bois des souhaits — intrus au repos » ? Un intrus qui se repose fait Résistance ou tombe dans le sommeil cauchemardesque, soumis aux règles d’échec précédentes.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0045",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.82",
+    "question": "Implanter « Coupe des rêves » ? Eau magique bue : voir et communiquer avec les esprits pendant plusieurs heures ; durée précise et test non fixés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0046",
+    "phase": "Voyage et environnement",
+    "lot": "L03",
+    "source": "L03 p.84",
+    "question": "Implanter « Fontaine de Lebin » ? Le bassin purifie l’eau souillée de la rivière ; légendes de jeunesse et de lame enchantée ne donnent pas de rajeunissement jouable.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0047",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.87",
+    "question": "Implanter « Accès — Arpenteur fantôme » ? Elfe sylvain : choix direct ou substitution au Chasseur de primes tiré aléatoirement ; classe Éclaireur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0048",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.87",
+    "question": "Implanter « Accès — Garde champêtre » ? Halfling du Moot : choix direct ou substitution au Patrouilleur tiré ; classe Éclaireur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0049",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.87",
+    "question": "Implanter « Accès — Ranger des Karaks » ? Nain : choix direct ou substitution au Messager tiré ; classe Éclaireur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0050",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.87",
+    "question": "Implanter « Accès — Cavalier sur blaireau » ? Halfling du Moot : convaincre le MJ et imiter le cri ; choix direct ou substitution au Soldat tiré ; classe Guerrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0051",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.88",
+    "question": "Implanter « Arpenteur fantôme — progression » ? Quatre niveaux Bronze3/Bronze5/Argent1/Argent3, listes de compétences/talents/équipements propres ; CT/Ag/Int puis Dex, CC et F.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0052",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.89",
+    "question": "Implanter « Garde champêtre — progression » ? Quatre niveaux Bronze4/Argent1/Argent3/Argent5 avec listes propres ; CT/Ag/FM puis Int, CC et E.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0053",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.89",
+    "question": "Implanter « Garde champêtre — rotation sylvanienne » ? Patrouilles de frontière sylvanienne au plus une semaine par mois ; usage d’affectation, aucun état psychologique automatique inventé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0054",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.90",
+    "question": "Implanter « Ranger des Karaks — progression » ? Quatre niveaux Bronze3/Argent1/Argent2/Argent4, listes propres ; CC/F/E puis CT, Ag et Int ; Guide fluvial OU Artilleur au troisième rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0055",
+    "phase": "Création et carrières",
+    "lot": "L03",
+    "source": "L03 p.91",
+    "question": "Implanter « Cavalier sur blaireau — progression » ? Quatre niveaux Argent1/Argent3/Argent5/Or1, listes propres ; CT/Ag/Int puis CC, F et Soc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0056",
+    "phase": "Équipement",
+    "lot": "L03",
+    "source": "L03 p.92",
+    "question": "Implanter « Armes raciales — usage et disponibilité » ? Toute espèce correctement formée peut les utiliser ; disponibilités des tables supposent une forte présence de l’espèce productrice ; certaines armes ne se vendent pas aux étrangers.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0057",
+    "phase": "Équipement",
+    "lot": "L03",
+    "source": "L03 p.93",
+    "question": "Implanter « Drakefire — critique incendiaire » ? Un critique du pistolet ajoute un Enflammé à la cible ; aucune ignition sur toutes les touches ordinaires.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0058",
+    "phase": "Équipement",
+    "lot": "L03",
+    "source": "L03 p.93",
+    "question": "Implanter « Blackbriar — poison vivant » ? Repos nocturne en terre fertile nécessaire ; si la cible perd au moins1 Blessure, Résistance +0 ou Empoisonné1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0059",
+    "phase": "Équipement",
+    "lot": "L03",
+    "source": "L03 p.93",
+    "question": "Implanter « Starfire — critique incendiaire » ? Un critique avec cette flèche ajoute Enflammé ; sa portée imprimée gagne50, pas50 %.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0060",
+    "phase": "Équipement",
+    "lot": "L03",
+    "source": "L03 p.93",
+    "question": "Implanter « Swiftshiver — salve payée » ? Pour employer Explosion1, dépenser avant le Test une flèche supplémentaire pour chaque cible qui serait touchée ; formulation et coût non réinterprétés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L03-0061",
+    "phase": "Équipement",
+    "lot": "L03",
+    "source": "L03 p.94",
+    "question": "Implanter « Drakefire — arme inadaptée » ? Charger sa munition dans une autre arme à poudre noire : fonctionnement une seule fois puis explosion dans les mains ; chaque tir se résout comme une maladresse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]
