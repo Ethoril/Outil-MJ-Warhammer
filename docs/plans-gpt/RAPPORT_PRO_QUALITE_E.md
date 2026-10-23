@@ -17,6 +17,7 @@ Plan : `PLAN_PRO_QUALITE_E.md`. Branche `pro/qualite-e`, départ `9c12613`. Choi
 | Q10 | BLOCKED (question au MJ, `QE-Q10-1`) | aucun (rien modifié) |
 | Q10b | FAIT | (voir `git log`, « Q10b ») |
 | Q11 | FAIT | (voir `git log`, « Q11 ») |
+| Q12a | FAIT (L01-L04 ; Q12b et Q12c à faire) | (voir `git log`, « Q12a »)  |
 | R | FAIT (avec réserve : manques de complétude non justifiés un par un) | (voir `git log`, « R ») |
 
 ## Q0 — contrôle de complétude
@@ -169,3 +170,12 @@ Branché / non appelé (grep dans `js/`) :
 - Comptes 206 → 207 mis à jour dans 4 tests ; nouveau test `tests/pro-q10b-master-and-commander.test.js` (4 tests : catalogue et id, contrat verified, +1 DR par niveau à bord, repli par nom retiré).
 - Branché / non appelé : `leadershipRallySlModifiers` n'a aucun appelant dans `js/` hors de `v5-effects.js` : **code testé, non appelé** (le bonus de Commandement n'est pas appliqué depuis l'interface). Le talent lui-même est dans le catalogue (`getReferenceCatalogue`, `resolveTalent`) donc sélectionnable sur une fiche.
 - Suite complète : verte, aucun échec. **Réserve pour R2** : la recette divine compare snapshot et `Talents.csv` à `tmp/divin/base-manifest.json` ; ce manifeste est à régénérer (`QE-Q10b-4`).
+
+## Q12a — profils vides et colonnes imbriquées, L01-L04 (FAIT)
+
+- **Causes trouvées dans l'outil** (`tools/lib/bestiary-blocks.mjs`, `bestiary-profile.mjs`) : (1) les lignes vides laissées par le titre du profil voisin avant le premier mot du corps le fermaient (Ugrik, L01 p. 14) ; (2) étiquettes Base / Adv. / Total à gauche de l'en-tête : hors fenêtre, donc ligne Total non cherchée et corps coupé (L01 p. 26) ; (3) étiquette de section décalée à gauche de l'en-tête (« Skills: » → « kills: », L03 p. 23, L04 p. 34) ; (4) « Traits*: » et sa note à astérisque (Isabella) ; (5) « Fate Points », « Armour by Location », « Miracles », « Special Rules » non reconnus comme rubriques (Brunner, Slann) ; (6) un « Doomed: « … » » faisait lire la liste de talents comme liste décrite V5 (Albrecht, Gunna) ; (7) Erzbet : prose à la place des rubriques, correction ciblée dans `BODY_OVERRIDES`.
+- **État après** (contrôle Q11, L01-L04) : profils incomplets L01 7 → 4, L02 3 → 2, L03 1 → 0, L04 6 → 2 ; talents manquants L01 36 → 9, L04 62 → 1 ; compétences L01 53 → 20, L03 12 → 0, L04 55 → 0. Profils sans aucune donnée hors caractéristiques : L01-L04 7 → 0. Les manques restants sont justifiés un par un dans `QE-Q12a-3`.
+- **Valeurs imprimées** : les 23 livres hors ces 2 profils : 0 écart avec `9c12613`. **Deux profils changent** (Nazzaalta E0-P-125, Artur Hammerfoot E0-P-126, tableau Base/Adv./Total : la ligne Total est maintenant lue) : question au MJ `QE-Q12a-1`.
+- Les autres livres, régénérés par le même outil, n'ont gagné que des lignes (aucun profil retiré) : `QE-Q12a-4`. État de départ de Q12b/Q12c (mesuré, manques restants par livre) dans le contrôle : `node tools/verify-bestiary-stats.mjs L01 … L26`.
+- Tests : `tests/pro-q12a-colonnes-imbriquees.test.js` (7 tests).
+- **Branché / non appelé** : outil et données de livre seulement (aucune fonction de jeu ajoutée).

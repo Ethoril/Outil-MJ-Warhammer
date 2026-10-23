@@ -2490,6 +2490,20 @@
      "ref": "E0-T-054"
     }
    ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Warleader Stinging Tail"
+    }
+   ],
    "trappings": [
     "Heavy Armour",
     "Sword."
@@ -3305,6 +3319,35 @@
      "name": "Trade (Carpenter)",
      "nameFr": "Métier (Charpentier)",
      "value": 44
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Supportive Injuries"
     }
    ],
    "nameFrSource": "proposition"

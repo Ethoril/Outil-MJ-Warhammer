@@ -31,6 +31,109 @@
     "Soc": 40
    },
    "wounds": 11,
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 5,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 33
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 26
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 63
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 38
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 41
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 32
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 30
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 38
+    },
+    {
+     "name": "Play (Drum)",
+     "nameFr": "Musicien (Tambour)",
+     "value": 49
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 59
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 31
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Taste)"
+    },
+    {
+     "name": "Deadeye Shot"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Resistance (Chaos)"
+    },
+    {
+     "name": "Small"
+    }
+   ],
+   "trappings": [
+    "Bow (with 10 Arrows)",
+    "Breastplate",
+    "Dagger",
+    "Leather Jack",
+    "Helmet with impressive feather",
+    "Uniform"
+   ],
    "keywords": [
     "soldat",
     "halfling"

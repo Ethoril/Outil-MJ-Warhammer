@@ -5,7 +5,7 @@
 import { SKILL_GROUP_ALIASES } from './bestiary-glossary.mjs';
 import { TRAIT_ALIASES } from './bestiary-complement-data.mjs';
 
-const LABEL = /\b(?:Traits|Skills|Talents|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour|Weapons|Equipment|Notes)\s*:/;
+const LABEL = /\b(?:Traits|Skills|Talents|Trappings|Spells|Mutations|Special Rules|Optional Traits|Optional|Armour by Location|Armour|Weapons|Equipment|Notes|Fate Points?|Miracles)\s*:/;
 const HEADER = / M WS BS S T I Ag[i]? Dex Int WP Fel(?: W)?/;
 
 /** Texte brut normalisé : tirets typographiques, césures « Two- handed » recollées, espaces simples. */

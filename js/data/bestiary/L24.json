@@ -1140,6 +1140,13 @@
     "Soc": 43
    },
    "wounds": 17,
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Warriors",
+     "ref": "E0-T-081"
+    }
+   ],
    "keywords": [
     "slaanesh",
     "cultiste"
@@ -4510,6 +4517,13 @@
     "Soc": 12
    },
    "wounds": 19,
+   "attacks": [
+    {
+     "name": "Claws",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Chill Grasp",
@@ -4549,9 +4563,6 @@
      "conditional": true,
      "ref": "E0-T-062"
     }
-   ],
-   "specialRules": [
-    "Weapon (Claws) +7 *Note"
    ],
    "abilities": [
     "E0-T-286"
@@ -4666,6 +4677,13 @@
     "Soc": 43
    },
    "wounds": 10,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
    "traits": [
     {
      "name": "Corruption",
@@ -4689,9 +4707,6 @@
     {
      "name": "Wealthy"
     }
-   ],
-   "specialRules": [
-    "Weapon (Dagger) +5 *Note"
    ],
    "keywords": [
     "cultiste"

@@ -1020,6 +1020,9 @@
      "name": "Marksman"
     },
     {
+     "name": "Master and Commander"
+    },
+    {
      "name": "Night Vision"
     },
     {
@@ -2831,6 +2834,141 @@
    },
    "wounds": 1,
    "size": "tiny",
+   "skills": [
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 93
+    },
+    {
+     "name": "Channelling (Dhar)",
+     "nameFr": "Focalisation (Dhar)",
+     "frUnverified": true,
+     "value": 98
+    },
+    {
+     "name": "Channelling (Ghyran)",
+     "nameFr": "Focalisation (Ghyran)",
+     "frUnverified": true,
+     "value": 108
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 103
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 108
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Entertain (Fortune-telling)",
+     "nameFr": "Divertissement (Fortune-telling)",
+     "frUnverified": true,
+     "value": 71
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 39
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 75
+    },
+    {
+     "name": "Language (Eltharin)",
+     "nameFr": "Langue (Eltharin)",
+     "value": 60
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 75
+    },
+    {
+     "name": "Language (Reikspeil)",
+     "nameFr": "Langue (Reikspeil)",
+     "frUnverified": true,
+     "value": 60
+    },
+    {
+     "name": "Lore (Athel Loren)",
+     "nameFr": "Savoir (Athel Loren)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Lore (Cothique)",
+     "nameFr": "Savoir (Cothique)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Lore (Dark Magic)",
+     "nameFr": "Savoir (Magie noire)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Elves)",
+     "nameFr": "Savoir (Elves)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 55
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 75
+    },
+    {
+     "name": "Lore (Nature)",
+     "nameFr": "Savoir (Nature)",
+     "frUnverified": true,
+     "value": 65
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 63
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 80
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 76
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 98
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 93
+    }
+   ],
    "traits": [
     {
      "name": "Animosity",
@@ -2875,6 +3013,67 @@
     {
      "name": "Wallcrawler",
      "ref": "E0-T-067"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Lore of Life, Witchcraft)"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Berserk Charge"
+    },
+    {
+     "name": "Careful Strike"
+    },
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Frightening"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 3
+    },
+    {
+     "name": "Iron Will"
+    },
+    {
+     "name": "Luck",
+     "rank": 3
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strike to Injure"
     }
    ],
    "nameFrSource": "proposition"

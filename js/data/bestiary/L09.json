@@ -88,6 +88,40 @@
     "Soc": 45
    },
    "wounds": 13,
+   "attacks": [
+    {
+     "name": "Crossbow and Bolts",
+     "value": 40,
+     "damage": 8,
+     "rangeYards": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hatred",
+     "param": "High Elves",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Ward",
+     "rating": "9",
+     "ref": "E0-T-066"
+    }
+   ],
    "keywords": [
     "elfe-noir"
    ],
@@ -903,6 +937,32 @@
      "modifier": true
     }
    ],
+   "talents": [
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Read/ Write"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "Trick Rider"
+    }
+   ],
    "trappings": [
     "Fine Black Cloak",
     "Dagger",
@@ -1368,6 +1428,20 @@
      "modifier": true
     }
    ],
+   "talents": [
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Scale Sheer Surface"
+    },
+    {
+     "name": "Striding Gait (Any)"
+    }
+   ],
    "trappings": [
     "Dark Cloak",
     "Repeater Crossbow and 21 Bolts",
@@ -1641,7 +1715,40 @@
    ],
    "talents": [
     {
-     "name": "Gifts of Khaine"
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Careful Strike"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Disarm"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Enclosed Fighter"
+    },
+    {
+     "name": "Gifts of Khaine (Khainite-raised only)"
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Mimic"
+    },
+    {
+     "name": "Read/ Write"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Sixth Sense"
     }
    ],
    "trappings": [
@@ -2089,7 +2196,28 @@
    ],
    "talents": [
     {
+     "name": "Battle Rage"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Etiquette (Cult of Khaine)"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Furious Assault"
+    },
+    {
      "name": "Gifts of Khaine"
+    },
+    {
+     "name": "Pharmacist"
     }
    ],
    "trappings": [

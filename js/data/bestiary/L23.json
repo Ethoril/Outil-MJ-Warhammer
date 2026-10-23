@@ -3790,6 +3790,29 @@
     "Soc": 20
    },
    "wounds": 10,
+   "traits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
    "starred": [
     "Soc"
    ],
@@ -5053,6 +5076,43 @@
     "Soc": 10
    },
    "wounds": 13,
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 3,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+3",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Hatred",
+     "param": "Keepers",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Venom",
+     "param": "Challenging",
+     "ref": "E0-T-064"
+    }
+   ],
    "keywords": [
     "bete"
    ],

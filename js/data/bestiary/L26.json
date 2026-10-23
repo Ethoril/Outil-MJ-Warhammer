@@ -5454,6 +5454,20 @@
      "ref": "E0-T-081"
     }
    ],
+   "talents": [
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Public-Speaking"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Numismatics"
+    }
+   ],
    "trappings": [
     "Soap",
     "Oarsman's Uniform",

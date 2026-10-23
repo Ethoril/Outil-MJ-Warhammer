@@ -373,6 +373,132 @@
     "Soc": 15
    },
    "wounds": 3,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 2,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 30
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 20
+    },
+    {
+     "name": "Entertain (Any)",
+     "nameFr": "Divertissement (Any)",
+     "frUnverified": true,
+     "value": 20
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 45
+    },
+    {
+     "name": "Language (Barnyard)",
+     "nameFr": "Langue (Barnyard)",
+     "frUnverified": true,
+     "value": 23
+    },
+    {
+     "name": "Language (Wilds)",
+     "nameFr": "Langue (Wilds)",
+     "frUnverified": true,
+     "value": 25
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 40
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 38
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animal Telepathy",
+     "ref": "E0-T-169"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Companion Trait",
+     "param": "Transformation",
+     "ref": "E0-T-162"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Messenger",
+     "ref": "E0-T-170"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Assistant"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Super Numerate"
+    }
+   ],
    "keywords": [
     "bete"
    ],
@@ -401,6 +527,153 @@
     "Soc": 20
    },
    "wounds": 4,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 25
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Entertain (Any)",
+     "nameFr": "Divertissement (Any)",
+     "frUnverified": true,
+     "value": 25
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 45
+    },
+    {
+     "name": "Language (Wilds)",
+     "nameFr": "Langue (Wilds)",
+     "frUnverified": true,
+     "value": 25
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 45
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 38
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 38
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animal Telepathy",
+     "ref": "E0-T-169"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Companion Trait",
+     "param": "Deception",
+     "ref": "E0-T-162"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Messenger",
+     "ref": "E0-T-170"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Assistant"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Orientation"
+    }
+   ],
    "keywords": [
     "bete"
    ],
@@ -429,6 +702,139 @@
     "Soc": 20
    },
    "wounds": 3,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 48
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 50
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 25
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    },
+    {
+     "name": "Entertain (Any)",
+     "nameFr": "Divertissement (Any)",
+     "frUnverified": true,
+     "value": 25
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 45
+    },
+    {
+     "name": "Language (Wilds)",
+     "nameFr": "Langue (Wilds)",
+     "frUnverified": true,
+     "value": 20
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 48
+    },
+    {
+     "name": "Stealth (Rural and Urban)",
+     "nameFr": "Discrétion (Rural and Urban)",
+     "frUnverified": true,
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animal Telepathy",
+     "ref": "E0-T-169"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Companion Trait",
+     "param": "Stealth",
+     "ref": "E0-T-162"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Messenger",
+     "ref": "E0-T-170"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Assistant"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Scale Sheer Surface"
+    }
+   ],
    "keywords": [
     "bete"
    ],
@@ -457,6 +863,130 @@
     "Soc": 15
    },
    "wounds": 3,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 30
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Entertain (Any)",
+     "nameFr": "Divertissement (Any)",
+     "frUnverified": true,
+     "value": 20
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 43
+    },
+    {
+     "name": "Language (Wilds)",
+     "nameFr": "Langue (Wilds)",
+     "frUnverified": true,
+     "value": 20
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 38
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animal Telepathy",
+     "ref": "E0-T-169"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Companion Trait",
+     "param": "Divination",
+     "ref": "E0-T-162"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "60",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Messenger",
+     "ref": "E0-T-170"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Acute Sense (Sight)"
+    },
+    {
+     "name": "Animal Assistant"
+    },
+    {
+     "name": "Luck"
+    }
+   ],
    "keywords": [
     "bete"
    ],
@@ -485,6 +1015,143 @@
     "Soc": 15
    },
    "wounds": 2,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 2,
+     "trait": "Bite"
+    },
+    {
+     "name": "Weapon",
+     "damage": 2,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 20
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Entertain",
+     "nameFr": "Divertissement",
+     "value": 20
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Language (Wilds)",
+     "nameFr": "Langue (Wilds)",
+     "frUnverified": true,
+     "value": 20
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 53
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 53
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 45
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 45
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animal Telepathy",
+     "ref": "E0-T-169"
+    },
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Bite",
+     "rating": "+2",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Companion Trait",
+     "param": "Perception",
+     "ref": "E0-T-162"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Trained",
+     "param": "Broken, Magic",
+     "ref": "E0-T-060"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Arboreal",
+     "ref": "E0-T-069"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Messenger",
+     "ref": "E0-T-170"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Assistant"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Rover"
+    }
+   ],
    "keywords": [
     "bete"
    ],
@@ -840,6 +1507,14 @@
     {
      "name": "Suave"
     }
+   ],
+   "trappings": [
+    "Book",
+    "Clothing",
+    "Hand Weapon (Mace)",
+    "Pouch containing 19 Shillings",
+    "Religious Symbol",
+    "Robes"
    ],
    "keywords": [
     "humain"

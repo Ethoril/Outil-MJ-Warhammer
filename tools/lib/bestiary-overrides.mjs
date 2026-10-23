@@ -155,6 +155,12 @@ export const TRAPPING_JOINS = Object.freeze({
  * Le texte est celui du livre, recopié ligne à ligne.
  */
 export const BODY_OVERRIDES = Object.freeze({
+  // Archives of the Empire (L01) p. 77 : Erzbet Wegener, les rubriques « Skills » et « Talents » sont de la prose (aucune Compétence ni aucun Talent utilisable
+  // dans son état actuel) ; seules les rubriques réelles sont gardées. La première ligne de caractéristiques est son état actuel.
+  'L01:77:0': [
+    'Traits: Immunity to Psychology',
+    'Trappings: Ragged Clothing'
+  ],
   // Lords of Stone and Steel (L16) p. 28 : Zylra Kraggsdottir.
   'L16:28:0': [
     'Traits: Armour (Leather Apron) 1 (5), Ranged (Blunderbuss) (12) +8 (Blast 4, Dangerous, Reload 2), Weapon (Dwarf Warhammer) +7 (Pummel)',

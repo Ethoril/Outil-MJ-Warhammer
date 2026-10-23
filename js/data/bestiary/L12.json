@@ -4528,6 +4528,36 @@
    "modifiers": {
     "E": 5
    },
+   "armour": {
+    "ap": 3
+   },
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 10,
+     "modifier": true
+    }
+   ],
+   "traits": [
+    {
+     "name": "Magic Resistance",
+     "rating": "2",
+     "ref": "E0-T-037"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Strider (Rocky)"
+    }
+   ],
    "keywords": [
     "troll"
    ],
@@ -4545,6 +4575,28 @@
    "modifiers": {
     "I": 5
    },
+   "traits": [
+    {
+     "name": "Amphibious",
+     "ref": "E0-T-002"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Stealthy",
+     "ref": "E0-T-050"
+    },
+    {
+     "name": "Swamp-strider",
+     "ref": "E0-T-085"
+    }
+   ],
    "keywords": [
     "troll"
    ],
@@ -4949,6 +5001,29 @@
     {
      "name": "Vomit",
      "ref": "E0-T-065"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic (Lore of Death)"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "War Wizard Water Wise"
     }
    ],
    "spells": {

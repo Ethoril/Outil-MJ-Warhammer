@@ -1426,6 +1426,9 @@
      "name": "Iron Will"
     },
     {
+     "name": "Master and Commander"
+    },
+    {
      "name": "Old Salt"
     },
     {
@@ -2205,6 +2208,9 @@
      "rank": 2
     },
     {
+     "name": "Master and Commander"
+    },
+    {
      "name": "Night Vision"
     },
     {
@@ -2562,6 +2568,64 @@
     {
      "name": "Spellcaster",
      "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "High Magic"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 2
+    },
+    {
+     "name": "Luck",
+     "rank": 2
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/ Write"
+    },
+    {
+     "name": "Savant (Magic)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Tower of Memories"
+    },
+    {
+     "name": "War Wizard Slann"
     }
    ],
    "abilities": [
@@ -3065,6 +3129,71 @@
      "ref": "E0-T-048"
     }
    ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement",
+     "rank": 3
+    },
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Bookish",
+     "rank": 2
+    },
+    {
+     "name": "Detect Artefact",
+     "rank": 2
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "High Magic"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 5
+    },
+    {
+     "name": "Luck",
+     "rank": 6
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Chaos, History, Magic)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense",
+     "rank": 2
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Tower of Memories"
+    },
+    {
+     "name": "War Wizard Slann"
+    }
+   ],
    "abilities": [
     "E0-T-211",
     "E0-T-212",
@@ -3192,6 +3321,68 @@
     {
      "name": "Spellcaster",
      "ref": "E0-T-048"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Aethyric Attunement",
+     "rank": 3
+    },
+    {
+     "name": "Arcane Magic"
+    },
+    {
+     "name": "Bookish",
+     "rank": 2
+    },
+    {
+     "name": "Detect Artefact",
+     "rank": 2
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "High Magic"
+    },
+    {
+     "name": "Instinctive Diction",
+     "rank": 4
+    },
+    {
+     "name": "Luck",
+     "rank": 4
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savant (Chaos, History, Magic)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense",
+     "rank": 2
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Tower of Memories"
+    },
+    {
+     "name": "War Wizard Slann"
     }
    ],
    "abilities": [
@@ -4482,8 +4673,44 @@
     "Soc": null
    },
    "wounds": 9,
-   "specialRules": [
-    "Weapon (Spines) +4 ptional"
+   "size": "average",
+   "attacks": [
+    {
+     "name": "Spines",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Flammable",
+     "ref": "E0-T-208"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Stationary Attacker",
+     "ref": "E0-T-173"
+    },
+    {
+     "name": "Venom",
+     "param": "Difficult",
+     "ref": "E0-T-064"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Size",
+     "param": "Small or Large",
+     "ref": "E0-T-045"
+    }
    ],
    "nameFrSource": "proposition"
   },

@@ -94,7 +94,7 @@ export function readSkills(text) {
 /** Talents : noms (avec spécialisation entre parenthèses, rang entier final), sans clause. */
 export function readTalents(text) {
   return splitList(text).map(item => {
-    const base = clean(item.replace(/\s*\((?:[^()]*\s){7,}[^()]*\)\s*$/, ''));
+    const base = clean(item.replace(/\s*\((?:[^()]*\s){7,}[^()]*\)\s*$/, '').replace(/:.*$/, ''));
     const ranked = /^(.*?)\s+(\d+)$/.exec(base);
     return ranked ? { name: clean(ranked[1]), rank: Number(ranked[2]) } : { name: base };
   });
@@ -205,6 +205,8 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   if (sections.Attacks) profile.attacks = readAttacks(sections.Attacks);
   if (sections.Armour) profile.armour = readArmour(sections.Armour);
   if (sections.Traits !== undefined) Object.assign(profile, listTraits(sections.Traits, mode, traitDictionary, 'traits'));
+  // « Traits*: » : tous les Traits de la rubrique sont conditionnels (la note à astérisque dit à quelle condition).
+  if (profile.traits && /\bTraits\*\s*:/.test(block.body || '')) profile.traits = profile.traits.map(trait => ({ ...trait, conditional: true }));
   if (sections.Traits === undefined && mode === 'v5' && traitDictionary.size) {
     const scanned = readDescribedNames(block.body, traitDictionary).map(readTraitItem).filter(Boolean);
     if (scanned.length) profile.traits = scanned;
@@ -213,7 +215,9 @@ export function parseBlock(block, { traitDictionary = new Set(), talentDictionar
   const optional = sections['Optional Traits'] ?? sections.Optional;
   if (optional !== undefined) profile.optional = splitList(optional).map(readTraitItem).filter(Boolean);
   if (sections.Skills) profile.skills = readSkills(sections.Skills);
-  if (sections.Talents) profile.talents = /:/.test(sections.Talents) && talentDictionary.size ? readDescribedNames(sections.Talents, talentDictionary).map(name => ({ name })) : readTalents(sections.Talents);
+  // Liste décrite (V5) : le premier deux-points précède la première virgule. Liste simple avec une clause (« Criminal, …, Doomed: "…", … », L04 p. 64) : lue comme liste.
+  const describedTalents = sections.Talents && /:/.test(sections.Talents) && talentDictionary.size && !(sections.Talents.indexOf(',') >= 0 && sections.Talents.indexOf(',') < sections.Talents.indexOf(':'));
+  if (sections.Talents) profile.talents = describedTalents ? readDescribedNames(sections.Talents, talentDictionary).map(name => ({ name })) : readTalents(sections.Talents);
   if (sections.Trappings) {
     const { items, notes } = readTrappings(sections.Trappings);
     profile.trappings = items;

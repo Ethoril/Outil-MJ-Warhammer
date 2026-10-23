@@ -154,6 +154,15 @@
      "name": "Warrior Born"
     }
    ],
+   "trappings": [
+    "Clothing",
+    "Dagger",
+    "Mail Shirt",
+    "Plate Armour and Helm",
+    "Pouch containing 25 Shillings",
+    "Shield",
+    "Sword"
+   ],
    "nameFrSource": "proposition"
   },
   {
@@ -566,6 +575,18 @@
     {
      "name": "Suave"
     }
+   ],
+   "trappings": [
+    "Clothing",
+    "Dagger",
+    "Hat",
+    "Hood",
+    "Knuckledusters",
+    "Leather Jack",
+    "Mail Shirt",
+    "Pouch containing 25 Brass Pennies",
+    "Sling Bag containing two Candles and five Matches",
+    "Sword"
    ],
    "nameFrSource": "proposition"
   },
@@ -1361,7 +1382,73 @@
    ],
    "talents": [
     {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Dirty Fighting"
+    },
+    {
      "name": "Doomed"
+    },
+    {
+     "name": "Embezzle"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Iron Will"
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Resistance (Poison)"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Strider (Marshes)"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Strong Legs"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Warrior Born"
     }
    ],
    "trappings": [
@@ -1554,7 +1641,55 @@
    ],
    "talents": [
     {
+     "name": "Blather"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
      "name": "Doomed"
+    },
+    {
+     "name": "Embezzle"
+    },
+    {
+     "name": "Etiquette (Criminals)"
+    },
+    {
+     "name": "Etiquette (Guilder)"
+    },
+    {
+     "name": "Fearless (Riverwardens)"
+    },
+    {
+     "name": "Kingpin"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Strider (Coastal)"
+    },
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Super Numerate"
     }
    ],
    "trappings": [
@@ -1592,6 +1727,213 @@
     "Soc": 58
    },
    "wounds": 21,
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 5,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Quarterstaff",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 33
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 53
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 68
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 47
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 54
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 61
+    },
+    {
+     "name": "Entertain (Storytelling)",
+     "nameFr": "Divertissement (Contes)",
+     "value": 64
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 66
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 61
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 50
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 38
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 49
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Lore (Drakwald)",
+     "nameFr": "Savoir (Drakwald)",
+     "frUnverified": true,
+     "value": 58
+    },
+    {
+     "name": "Lore (Taal)",
+     "nameFr": "Savoir (Taal)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 48
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 44
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 44
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 46
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 48
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 49
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 68
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 44
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 46
+    },
+    {
+     "name": "Secret Signs (Hunter)",
+     "nameFr": "Signes secrets (Chasseur)",
+     "value": 42
+    }
+   ],
+   "traits": [
+    {
+     "name": "Ward",
+     "rating": "10+",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather Bless (Taal)"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Holy Visions"
+    },
+    {
+     "name": "Impassioned Zeal"
+    },
+    {
+     "name": "Invoke (Taal)"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Orientation"
+    },
+    {
+     "name": "Resistance (Poison)"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Strider (Woodland)"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Suave"
+    }
+   ],
+   "trappings": [
+    "Amber Periapt (a magical amulet that grants Ward 10+)",
+    "Bearskin Headdress and Cloak",
+    "Bow and 12 Arrows",
+    "Quarterstaff",
+    "Sleeping Roll"
+   ],
    "keywords": [
     "humain"
    ],
@@ -2500,6 +2842,231 @@
      "damage": 9,
      "trait": "Weapon"
     }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 55
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 50
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 46
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 46
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 58
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 72
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 43
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 46
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 63
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 81
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 50
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 55
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 55
+    },
+    {
+     "name": "Lore (Border Princes)",
+     "nameFr": "Savoir (Border Princes)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Lore (Tilea)",
+     "nameFr": "Savoir (Tilea)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 83
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 81
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 72
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 72
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 72
+    },
+    {
+     "name": "Ranged (Throwing)",
+     "nameFr": "Projectiles (Jet)",
+     "value": 67
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 45
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 58
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 76
+    }
+   ],
+   "talents": [
+    {
+     "name": "Accurate Shot",
+     "rank": 2
+    },
+    {
+     "name": "Careful Strike"
+    },
+    {
+     "name": "Break and Enter",
+     "rank": 2
+    },
+    {
+     "name": "Deadeye Shot"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Dual Wielder"
+    },
+    {
+     "name": "Fearless (Outlaws)"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Sharp"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Sure Shot",
+     "rank": 2
+    },
+    {
+     "name": "Warrior Born"
+    }
+   ],
+   "trappings": [
+    "Leather Jack",
+    "Gromril Breastplate",
+    "Plate Bracers & Leggings",
+    "Open Helm",
+    "Repeater Crossbow Pistol (Skaven design, mounted on plate bracer)",
+    "Bandolier of Knives",
+    "Hidden Throwing Knife (in plate bracer)",
+    "Pistol (Fine quality)",
+    "Hatchet",
+    "Dagger (`The Headsman', serrated for decapitations)",
+    "Sword (`Drakesmalice', see below)",
+    "Leather Boots (with steel toes)",
+    "Light Warhorse (`Fiend')",
+    "Draught Horse (`Paychest')",
+    "Bedroll",
+    "4 Pairs of Manacles",
+    "Rope",
+    "Tinderbox",
+    "Warrant Papers",
+    "5d10 gc"
    ],
    "keywords": [
     "humain"
