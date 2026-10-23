@@ -66740,5 +66740,2644 @@
       "Ne pas implanter"
     ],
     "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0001",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.39",
+    "question": "Implanter « Origine géographique naine » ? Tirage d100 par région/karak, ou choix du MJ avec le joueur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0002",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.40",
+    "question": "Implanter « Apparence régionale » ? Tables distinctes cheveux/yeux/particularité ; −5 aux deux premiers jets pour Norse, +5 pour sud/Vaults/Montagnes Noires/Tilea ; un seul détail distinctif sauf accord MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0003",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.46",
+    "question": "Implanter « Origine mineure — défaut » ? Pour un petit karak non listé, utiliser le profil culturel Nain impérial.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0004",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.46",
+    "question": "Implanter « Origine Karaz-a-Karak » ? Liste de 12 compétences et 5 groupes de Talents ; Rancune ancestrale/Résolu et Lire-écrire/Implacable notamment.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0005",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.46",
+    "question": "Implanter « Origine Barak Varr » ? Liste culturelle avec Navigation et Voile ; Négociateur/Esprit fort et Lire-écrire/Résolu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0006",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.46",
+    "question": "Implanter « Origine Karak Azul » ? Liste culturelle incluant Escalade et Intimidation ; Haine Orques/Gobelins ou Résolu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0007",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.47",
+    "question": "Implanter « Origine Karak Huit Pics » ? Liste culturelle avec Intuition, Savoir Guerre et Piégeage ; Esprit fort/Tenace.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0008",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.47",
+    "question": "Implanter « Origine Karak Kadrin » ? Liste culturelle incluant Jeu et Intimidation ; Mâchoire d’acier/Lire-écrire et Résolu/Esprit fort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0009",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.47",
+    "question": "Implanter « Origine Zhufbar » ? Liste culturelle avec Savoirs Ingénierie/Géologie/Métallurgie ; Esprit fort/Bricoleur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0010",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.47",
+    "question": "Implanter « Origine Karak Hirn » ? Liste culturelle avec Escalade et Musique Cor ; Escalade de surface/Esprit fort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0011",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.47",
+    "question": "Implanter « Origine Karak Izor » ? Liste culturelle avec Escalade et Survie ; Combattant confiné/Résolu.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0012",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.47",
+    "question": "Implanter « Origine Karak Norn » ? Liste culturelle avec Perception et Arbalète ; Résolu/Soupe de cailloux.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0013",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.48",
+    "question": "Implanter « Origine Norse » ? Liste culturelle avec Escalade, Norse et Voile ; Fêtard/Esprit fort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0014",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.48",
+    "question": "Implanter « Origine impériale » ? Liste culturelle avec Intimidation et Savoirs Géologie/Métallurgie ; Lire-écrire/Implacable et Résolu/Esprit fort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0015",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.48",
+    "question": "Implanter « Longue-barbe — création » ? À création, Destin et Chance −1 ; si Destin 0, Résilience et Détermination −1 à la place ; âge au moins 120 ans.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0016",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.48",
+    "question": "Implanter « Longue-barbe — statut » ? Face aux Nains, Bronze/Argent comptent Or 1, Or gagne 1 rang ; ne vaut pas pour les revenus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0017",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.48",
+    "question": "Implanter « Longue-barbe — États » ? +10 aux Tests pour éviter un État ou retirer un État présent.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0018",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.48",
+    "question": "Implanter « Longue-barbe — devenir en campagne » ? À âge approprié, renoncer au Destin offert en fin d’arc pour devenir Longue-barbe, accord MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0019",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.49",
+    "question": "Implanter « Carrières aléatoires selon origine » ? Tirage d100 dans la colonne du karak :11 distributions sur 49–50 ; carrières nouvelles et variantes naines intégrées à la table.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0020",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.51",
+    "question": "Implanter « Substitutions Lustria » ? Interprète remplace Avocat, Pionnier remplace Cocher, Survivaliste remplace Colporteur par exception.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0021",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.51",
+    "question": "Implanter « Substitutions maritimes » ? Remplacer Huffer/Wrecker par équivalents marins, Batelier par Officier, Riverwoman/Seaman par Marin, Contrebandier/Débardeur par Canonnier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0022",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.53",
+    "question": "Implanter « Dotation — arme de main » ? Une arme de main de carrière peut devenir Hache naine ou Marteau de guerre nain.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0023",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.53",
+    "question": "Implanter « Dotation — armes spécialisées » ? Arme Cavalerie/Escrime/Parade peut devenir Bouclier ou Pistolet avec munitions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0024",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.53",
+    "question": "Implanter « Dotation — arc » ? Arc et munitions peuvent devenir Arbalète naine ou Arquebuse naine avec munitions.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0025",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.53",
+    "question": "Implanter « Dotation — monture » ? Cheval de selle ou de guerre peut devenir armure de plates complète et casque.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0026",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.53",
+    "question": "Implanter « Spécialités assorties » ? Changer les spécialisations de compétence d’arme de carrière pour correspondre à la dotation substituée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0027",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.53",
+    "question": "Implanter « Criminel en territoire nain » ? À l’acquisition de Criminel, choisir s’il s’applique en localités naines ; si non, ni bonus de revenu ni suspicion supplémentaire.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0028",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.54",
+    "question": "Implanter « Ingénieur nain — variantes » ? Ingénieur de guilde remplace rang 2 Ingénieur/Artilleur ; Pilote aérien remplace rang 3 Ingénieur avec Ag ; Proscrit remplace rang 3 Ingénieur/Artilleur avec Soc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0029",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.55",
+    "question": "Implanter « Avocat nain — variantes » ? Reckoner remplace rang 2 Avocat, Grudgemaster rang 3 ; listes et rangs sociaux propres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0030",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.55",
+    "question": "Implanter « Artisan nain — Tailleur de pierre » ? Stoneshaper remplace rang 2 Artisan ; caractéristique correspondante remplacée par Initiative.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0031",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.56",
+    "question": "Implanter « Mineur nain — variantes » ? Mineur de karak remplace rang 2 Mineur ; Chercheur de filon remplace rang 3, listes et dotations propres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0032",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.56",
+    "question": "Implanter « Messager nain — Porteur de runes » ? Runebearer remplace rang 2 Messager, avec compétences, Talents et équipement spécifiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0033",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.57",
+    "question": "Implanter « Serment du Tueur — armure » ? Interdiction durable de porter ou transporter bouclier/armure protectrice, même après un changement de carrière.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0034",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.57",
+    "question": "Implanter « Activité — serment du Tueur » ? Une semaine ; entrer rang 1 Tueur gratuitement même hors classe ou carrière incomplète ; rang supérieur permis par le MJ coûte 100 XP.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0035",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.58",
+    "question": "Implanter « Tueur nain — variantes » ? Frère de Grimnir remplace rang 2, Chercheur de mort rang 3, Pleureur de guerre rang 4 ; dernier remplace sa caractéristique par Soc.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0036",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.59",
+    "question": "Implanter « Soldat nain — variantes » ? Guerrier à la hache remplace rang 2 Soldat avec F ; Arbalétrier remplace rang 2 Soldat ; Arquebusier remplace rang 2 Soldat ou Handgunner.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0037",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.60",
+    "question": "Implanter « Brasseur » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0038",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.62",
+    "question": "Implanter « Prêtre de la Fatalité » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0039",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.64",
+    "question": "Implanter « Prêtre de la Forge » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0040",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.65",
+    "question": "Implanter « Prêtre du Foyer » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0041",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.66",
+    "question": "Implanter « Martelier » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0042",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.68",
+    "question": "Implanter « Brise-fer » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0043",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.70",
+    "question": "Implanter « Ranger des karaks » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0044",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.72",
+    "question": "Implanter « Scribe runique » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0045",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.74",
+    "question": "Implanter « Forgeron runique » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0046",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.76",
+    "question": "Implanter « Thane » ? Option de progression naine et liste de compétences/Talents/dotation propre à cette carrière, distincte de la carrière générique du socle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0047",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.78",
+    "question": "Implanter « Nouveaux savoir-faire — accès » ? Compétences et Talents de ce chapitre réservés aux Nains sauf autorisation MJ.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0048",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.78",
+    "question": "Implanter « Savoir Runes — apprentissage » ? Savoir avancé Int : histoire, identification et secrets ; apprentissage oral auprès des forgerons, pas par livres.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0049",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.78",
+    "question": "Implanter « Maîtrise des runes — compétence » ? Compétence avancée Dex pour graver, réveiller ou désactiver des runes ; distincte du savoir théorique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0050",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.78",
+    "question": "Implanter « Voile aéronef — spécialité » ? Compétence avancée Ag ; sans augmentation spécifique aucun pilotage ; aéronef seul ne donne pas les autres spécialités de Voile en base.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0051",
+    "phase": "Création et progression",
+    "lot": "L15",
+    "source": "L15 p.78",
+    "question": "Implanter « Voile aéronef — départ et arrivée » ? Décollage et atterrissage demandent Voile aéronef +20 ; échec peut retarder ou endommager appareil, occupants ou zone.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0053",
+    "phase": "Talents",
+    "lot": "L15",
+    "source": "L15 p.79",
+    "question": "Implanter « Matraqueur — déclencheur » ? La source V 4 ajoute un Sonné par rang quand l’opposition de Force d’Assommante réussit.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0055",
+    "phase": "Talents",
+    "lot": "L15",
+    "source": "L15 p.79",
+    "question": "Implanter « Commandant d’équipage — Tests » ? Bonus de DR par rang aux Tests de Tir réussis avec arme à Équipage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0067",
+    "phase": "Talents",
+    "lot": "L15",
+    "source": "L15 p.80",
+    "question": "Implanter « Fortification liquide — caractéristiques » ? Après boisson alcoolique, +10 F/E dès le Test de consommation, même raté ; expire 1 heure après dernière boisson, cumul limité+10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0068",
+    "phase": "Talents",
+    "lot": "L15",
+    "source": "L15 p.80",
+    "question": "Implanter « Longue mémoire — souvenirs » ? Souvenir parfait des événements vécus dans la campagne ; avant campagne, Test Int selon ancienneté, de+40 pour des mois à−20 pour un siècle.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0069",
+    "phase": "Talents",
+    "lot": "L15",
+    "source": "L15 p.80",
+    "question": "Implanter « Défiance magique — inversion » ? Peut inverser les Tests imposés par les effets d’un sort.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0070",
+    "phase": "Talents",
+    "lot": "L15",
+    "source": "L15 p.80",
+    "question": "Implanter « Défiance magique — annulation » ? Une fois par aventure, dépenser 1 Chance pour nier les effets d’un sort réussi sur soi.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0073",
+    "phase": "Talents",
+    "lot": "L15",
+    "source": "L15 p.81",
+    "question": "Implanter « Mèche courte » ? Explosif avec Explosion : indice augmenté de 1 par rang.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0085",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.89",
+    "question": "Implanter « Gromril — résistance » ? Les objets résistent presque toujours à brisure, corrosion et émoussement ; armure possède Raffinée 1 et Durable 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0086",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.89",
+    "question": "Implanter « Gromril — critiques » ? Sur zone protégée, pas de critique dû au jet ; critiques de réduction à 0 Blessure conservés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0087",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.89",
+    "question": "Implanter « Gromril — armes » ? Durable 4 pour toute arme ; haches Dévastatrice et marteaux Impact.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0088",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.89",
+    "question": "Implanter « Gromril — prix » ? Doubler sept fois le prix de base, soit × 128, minimum théorique d’un objet arrivé sur le marché.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0089",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.90",
+    "question": "Implanter « Équipage — tir par Round » ? Un seul servant tire par Round ; les autres peuvent déplacer ou recharger pendant leurs Tours.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0090",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.90",
+    "question": "Implanter « Équipage — incident nain » ? Tous les servants subissent l’incident, à une localisation aléatoire au lieu du bras principal.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0091",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.90",
+    "question": "Implanter « Salve — rechargement » ? Le seuil de Recharge rend 1 point de Salve, jamais au-delà de l’indice maximum de l’arme.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0092",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.90",
+    "question": "Implanter « Salve naine — incident 00 » ? Chaque servant subit autant de touches que de Salve restante, minimum 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0093",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.90",
+    "question": "Implanter « Armement nain — priorité » ? Les armes de ce chapitre remplacent celles d’Archives de l’Empire I.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0099",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Hache naine » ? Arme de base, allonge moyenne, BF+4, Taille ; 1 CO, encombrement 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0100",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Marteau de guerre nain » ? Arme de base, allonge moyenne, BF+4, Assommante ; 1 CO, encombrement 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0101",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Lames tournoyantes de mort » ? Fléau à allonge longue, BF+5 ; Distrayante, Taille, Impact, Épuisante, Enveloppante ; 5 CO, encombrement 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0102",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Grande hache naine » ? Deux mains, allonge longue, BF+6 ; Taille, Impact, Épuisante ; 4 CO, encombrement 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0103",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Grand marteau nain » ? Deux mains, allonge moyenne, BF+7 ; Dévastatrice, Assommante ; 4 CO, encombrement 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0104",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Pioche naine » ? Deux mains, allonge moyenne, BF+6 ; Dévastatrice, Empaleuse ; 1 CO, encombrement 3 ; bougies possibles comme éclairage improvisé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0105",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Foreuse à vapeur » ? Mêlée Ingénierie, deux mains, BF+6 ; Impact et Empaleuse ; 12 CO, encombrement 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0106",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Hache à rouages » ? Mêlée Ingénierie, allonge moyenne, BF+4 ; Taille, Pénétrante, Piège-lame ; 15 CO, encombrement 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0107",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Gantelet à vapeur » ? Mêlée Ingénierie, allonge personnelle, BF+7 ; Assommante, Bouclier 1 ; 40 CO, encombrement 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0108",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Munitions naines — profil combiné » ? Les portées/dégâts/Qualités des armes incluent déjà les munitions ; ne pas les ajouter une seconde fois.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0109",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.91",
+    "question": "Implanter « Munitions naines — achat » ? Douze balles/poudre pour 3/3, douze carreaux 5 shillings, douze tirs de drakefire 1 CO rare ou fabrication par Activité.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0110",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Arquebuse naine » ? Deux mains, portée 50, dégâts+10 ; Poudre, Dévastatrice, Empaleuse, Pénétrante, Recharge 3 ; 6 CO, enc 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0111",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Pistolet nain » ? Portée 20, dégâts+10 ; Poudre, Dévastatrice, Empaleuse, Pénétrante, Pistolet, Recharge 1 ; 12 CO, enc 0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0112",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Arbalète naine » ? Deux mains, portée 80, dégâts+10 ; Empaleuse, Précise, Dévastatrice, Recharge 1 ; 8 CO, enc 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0113",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Drakegun » ? Deux mains, portée 30, dégâts+12 ; Poudre, Explosion 6, Dévastatrice, Dangereuse, Pénétrante, Recharge 4 ; 20 CO, enc 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0114",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Torpille Trollhammer » ? Munition du Drakegun, portée 40, dégâts+14 ; Poudre, Dangereuse, Impact, Recharge 6 ; 5 CO, enc 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0115",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Pistolet drakefire » ? Portée 20, dégâts+11 ; Poudre, Explosion 3, Dévastatrice, Dangereuse, Pénétrante, Pistolet, Recharge 4 ; 25 CO, enc 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0116",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Arquebuse naine à répétition » ? Deux mains, portée 50, dégâts+10 ; Poudre, Dévastatrice, Dangereuse, Empaleuse, Pénétrante, Recharge 4, Répétition 3 ; 10 CO, enc 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0117",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Grudge-raker » ? Deux mains, portée 30, dégâts+10 ; Poudre, Dévastatrice, Dangereuse, Empaleuse, Pénétrante, Recharge 3, Salve 2, Dispersion 3 ; 15 CO, enc 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0118",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Charge explosive » ? Portée BF, dégâts+12 ; Explosion 2, Dangereuse, Impact, Pénétrante ; 2 CO, enc 0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0119",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Bombe cinderblast » ? Portée BF× 2, dégâts+10 ; Explosion 5, Dangereuse, Impact, Pénétrante ; 3 CO, enc 0.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0120",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Hache de jet naine » ? Portée BF× 2, dégâts BF+4 ; Taille ; 1 CO, enc 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0121",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Fiabilité de la poudre naine » ? Arquebuse et Pistolet nains marqués* n’ont d’incident que sur 00.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0122",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.92",
+    "question": "Implanter « Enflammé des armes marquées » ? Drakegun, Trollhammer, Pistolet drakefire et Charge explosive ajoutent Enflammé aux cibles affectées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0123",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.93",
+    "question": "Implanter « Armure de gromril » ? Plastron, casque ouvert, brassards, jambières et casque fermé donnent 3 PA ; Durable 4/Raffinée 1, défauts de plates ou Partielle selon pièce.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0124",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.93",
+    "question": "Implanter « Gromril — gêne des pièces » ? Casque ouvert−10 Perception, casque fermé−20 Perception, jambières−10 Discrétion ; autres pièces sans malus propre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0125",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.93",
+    "question": "Implanter « Jupe de mailles » ? 2 PA aux jambes, Flexible et Partielle, 1 CO et encombrement 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0126",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.93",
+    "question": "Implanter « Casque de mineur » ? 2 PA tête, Partielle et−10 Perception ; support de bougie ou lanterne directionnelle adaptée ; 2 CO, enc 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0127",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.93",
+    "question": "Implanter « Éclairage — portées » ? Bougie 10 yards, candélabre 15, lanterne/torche 20, lanterne-tempête 20 ou 30dans arc 90°, brasero 40.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0128",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.94",
+    "question": "Implanter « Étendard runique » ? Étendard de combat étend à 12 yards les runes de Protection portées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0129",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.94",
+    "question": "Implanter « Livre de comptes en parchemin » ? Remplace les tablettes de pierre et réduit encombrement du registre à 1.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0130",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.94",
+    "question": "Implanter « Plateforme — porteurs » ? Deux porteurs et un passager ; les porteurs se partagent l’encombrement passager/dotation/plateforme 4, en plus de leur charge propre.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0131",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.94",
+    "question": "Implanter « Plateforme — combat monté » ? Porteurs considérés monture de Grande Taille ; Équitation peut servir à équilibre, jamais à les faire courir ou sauter plus vite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0132",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.94",
+    "question": "Implanter « Plateforme — runes partagées » ? Peut porter runes d’Armure/Talisman/Protection ; en unité, trois Nains en bénéficient comme porteurs.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0133",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.94",
+    "question": "Implanter « Plateforme — commandement » ? Le MJ peut donner bonus Perception/Commandement/autres Tests depuis la plateforme ; aucun montant fixe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0134",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.95",
+    "question": "Implanter « Pierre du serment — placement » ? Sacrifier le Mouvement du Tour pour placer la pierre et se tenir dessus.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0135",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.95",
+    "question": "Implanter « Pierre du serment — positions » ? Debout sur la pierre : aucun bonus ennemi de surnombre, flanc ou arrière ; Esquive−20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0136",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.95",
+    "question": "Implanter « Pierre du serment — supports » ? Peut porter les runes Talisman et Protection.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0137",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.95",
+    "question": "Implanter « Enclume — forge » ? +20 aux Testsétendus de Maîtrise desrunes ; support unique des Runesdu Destin.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0138",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.95",
+    "question": "Implanter « Enclume — abri » ? Couvert dur derrière l’enclume, fonctionnellement Incassable ; aucune rune additionnelle possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0140",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.96",
+    "question": "Implanter « Artillerie — spécialisation » ? Arme utilisable seulement avec la spécialité appropriée ; Catapulte impose sa spécialité ; Poudre/Dévastatrice seulement si listées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0141",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.96",
+    "question": "Implanter « Artillerie — équipe générique » ? La prose demande 3 servants et Tir Ingénierie ;−10 par servant manquant ou non formé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0142",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.96",
+    "question": "Implanter « Incident 01–45 — nettoyage » ? Arme ne tire pas ; déblayer et recharger en 1d3 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0143",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.96",
+    "question": "Implanter « Incident 46–85 — retard » ? Arme ne tire pas, nettoyage comme 01–45 ; 50%de tir au Roundsuivant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0144",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.96",
+    "question": "Implanter « Incident 86–00 — explosion » ? Arme explose, dégâts maximum àl’équipe.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0145",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Tir indirect » ? Mortier/Mangonneau peuvent viser sans vue à−30 ; observateurs bien placés peuvent aider à distance.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0146",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Feu d’artillerie » ? Lance-feu et Canonàflammes ajoutent 1+DR Enflammé.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0147",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Canonàflammes — surchauffe » ? Tir à longue/extrême portée exige surcharge ; toute maladresse de ce tir provoque incident.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0148",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Pierrier » ? Portée/dégâts 30/+15 ; Poudre, Dévastatrice, Dangereuse, Empaleuse, Pénétrante, Recharge 4, Dispersion 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0149",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Bombarde » ? Portée/dégâts 50/+10 ; Poudre, Explosion 2, Équipage 2, Dévastatrice, Dangereuse, Recharge 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0150",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Mortier nain » ? Portée/dégâts 75/+10 ; Poudre, Explosion 2, Équipage 2, Dévastatrice, Dangereuse, Recharge 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0151",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Canon nain » ? Portée/dégâts 75/+14 ; Poudre, Explosion 2, Équipage 3, Dévastatrice, Dangereuse, Recharge 6.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0152",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Mangonneau des rancunes » ? Portée/dégâts 50/+15 ; Équipage 3, Dévastatrice, Imprécise, Recharge 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0153",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Baliste naine » ? Portée/dégâts 100/+13 ; Précise, Équipage 3, Empaleuse, Pénétrante, Recharge 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0154",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Lance-feu » ? Portée/dégâts 15/+9 ; Équipage 2, Dangereuse, Recharge 4, Dispersion 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0155",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Canon à flammes » ? Portée/dégâts 30/+11 ; Équipage 3, Dangereuse, Recharge 6, Dispersion 6.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0156",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Arquebuse à salve naine » ? Portée/dégâts 30/+10 ; Poudre, Équipage 2, Dévastatrice, Dangereuse, Empaleuse, Pénétrante, Recharge 4, Salve 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0157",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Canon orgue » ? Portée/dégâts 50/+13 ; Poudre, Explosion 1, Équipage 3, Dévastatrice, Dangereuse, Recharge 4, Salve 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0158",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.97",
+    "question": "Implanter « Table d’armement — Faucheur de gobelins » ? Portée/dégâts 50/+10 ; Équipage 3, Taille, Recharge 2, Salve 8.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0159",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.98",
+    "question": "Implanter « Pierrier — projectiles multiples » ? La prose donne Explosion 2 aux multiples projectiles, équipe 2 et Tir Pierrier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0160",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.98",
+    "question": "Implanter « Bombarde — installation » ? Deuxservants déplacent/installent en 1d3 Rounds, tir possible au Roundsuivant ; servantseul ne déplacepas et Recharge × 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0161",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.98",
+    "question": "Implanter « Mortier — précision » ? Tirs à−20 sauf observateur donnant positionprécise ; deuxservants Tir Mortier.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0162",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.98",
+    "question": "Implanter « Canon — fiabilité » ? Incidents seulement sur doublepair qui est aussiéchec.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0163",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.99",
+    "question": "Implanter « Arquebuseàsalve — servantseul » ? Peut tirer sans malus avec un seulservant, mais Recharge × 2 et aucun déplacement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0164",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.100",
+    "question": "Implanter « Armes installées » ? Armesdespositions/vehicules normalement inutilisables ailleurs ; prix de table servent aux échanges de montage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0165",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Bombes aériennes — mouvement » ? Cible uniquement sous le véhicule, portéeverticale ; largage àtout point du Mouvement puis poursuite du trajet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0166",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Grudgebuster — rebond » ? Après premierimpact, dévier comme un raté et infliger une secondeexplosion 3 ; 9 ou 10 au dé de dispersion annule le rebond.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0167",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Clattergun » ? Portée/dégâts 50/+10 ; Poudre, Dévastatrice, Dangereuse, Empaleuse, Pénétrante, Recharge 4, Dispersion 2.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0168",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Canon briseur » ? Portée/dégâts 60/+12 ; Poudre, Explosion 2, Équipage 2, Dévastatrice, Dangereuse, Recharge 4.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0169",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Canon tempête » ? Portée/dégâts 120/+16 ; Poudre, Explosion 2, Équipage 3, Dévastatrice, Dangereuse, Recharge 6.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0170",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Canon tonnerre » ? Portée/dégâts 200/+20 ; Poudre, Explosion 2, Équipage 5, Dévastatrice, Dangereuse, Recharge 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0171",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Canon à vapeur » ? Portée/dégâts 5/+8 ; Dangereuse, Pénétrante, Recharge 3, Dispersion 5.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0172",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Canon soufre » ? Portée/dégâts 30/+12 et Enflammé ; Poudre, Dévastatrice, Dangereuse, Pénétrante, Recharge 4, Répétition 3.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0173",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Tube de torpille Nautilus » ? Portée/dégâts 100/+14 ; Poudre, Explosion 4, Équipage 2, Dévastatrice, Dangereuse, Recharge 8.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0174",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Bombe aérienne » ? Portée/dégâts 50/+10 ; Explosion 3, Dangereuse, Impact, Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0175",
+    "phase": "Équipement",
+    "lot": "L15",
+    "source": "L15 p.101",
+    "question": "Implanter « Table d’armement — Bombe Grudgebuster » ? Portée/dégâts 50/+10 ; Explosion 6, Dangereuse, Impact, Pénétrante.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0176",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.102",
+    "question": "Implanter « Canon Tonnerre — visée » ? Métier Ingénierie+0 pour réglages ; chaque DR négatif impose −10 au Tir Ingénierie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0177",
+    "phase": "Combat",
+    "lot": "L15",
+    "source": "L15 p.102",
+    "question": "Implanter « Canon Tempête — variante de prose » ? 50%deportéesupplémentaire et+2dégâts par rapport au canon standard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0178",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Véhicules — surcharge » ? Tests de conduite : pénalité−1 par tranche 10%au-dessus de la capacité de charge.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0179",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Véhicules — mouvement » ? Mouvement mesure yards par Tour en combat et miles par heure au voyage ; Drive/Ramer/Voile normalement sans Test, sauf accélération/terrain/manœuvre/poursuite.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0180",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Véhicules — dégâts » ? BE réduit les dégâts, Blessures déterminent la destruction ; défense de mêlée par conduite ; véhicule immobile ou attaqué de bord compte−10 DR sansjet.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0181",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Véhicules — critiques » ? Critiques et coups visés improvisés selon les composants ; blessures aux occupants pas automatiquement déduites des PV du véhicule.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0182",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Réparation temporaire » ? Outils et Métier Ingénierie−10 : rendre 1d10+DR Blessures ou annuler un critique ; les problèmes reviennent en fin d’aventure.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0183",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Véhicule — Foreuse » ? Base du véhicule : équipe 4, M 3, E 50, B 50, charge 120.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0184",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Véhicule — Foret » ? Base du véhicule : E 80, B 10, enc 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0185",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.103",
+    "question": "Implanter « Véhicule — Wagon minier » ? Base du véhicule : équipe 1, M 6, E 55, B 60, charge 200.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0186",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.104",
+    "question": "Implanter « Foreuse — roche » ? Avec foret, traverser la roche à Mouvement 1 ; un critique bloque le foret, immobilise et menace la chaudière si le nettoyage tarde.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0187",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.105",
+    "question": "Implanter « Wagon minier — rail » ? Circulation sur rail ; critique fait dérailler et immobilise jusqu’à remise sur voie.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0188",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.105",
+    "question": "Implanter « Wagon minier — remorque » ? Chaque wagon ajouté donne+100 capacité et−1 Mouvement.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0189",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.105",
+    "question": "Implanter « Wagon minier — rencontre » ? Lors d’un segment d’exploration accessible, Conduite+0 peut ignorer une rencontre en la dépassant ou la contournant.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0190",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.106",
+    "question": "Implanter « Aéronef — critique » ? Un critique cause une perte soudaine d’altitude, éventuellement nausée ou collision selon le terrain.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0191",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.106",
+    "question": "Implanter « Véhicule — Gyrocoptère » ? Base du véhicule : équipe 1, M 20, E 40, B 10, charge 10.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0192",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.106",
+    "question": "Implanter « Véhicule — Gyrobombardier » ? Base du véhicule : équipe 1, M 15, E 45, B 10, charge 20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0193",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.106",
+    "question": "Implanter « Véhicule — Ballon » ? Base du véhicule : équipe 2, M 4, E 45, B 15, charge 60.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0194",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.106",
+    "question": "Implanter « Véhicule — Dirigeable petit » ? Base du véhicule : équipe 2, M 6, E 35, B 15, charge 60.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0195",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.106",
+    "question": "Implanter « Véhicule — Dirigeable moyen » ? Base du véhicule : équipe 3, M 6, E 40, B 20, charge 120.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0196",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.106",
+    "question": "Implanter « Véhicule — Dirigeable grand » ? Base du véhicule : équipe 10, M 6, E 50, B 30, charge 180.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0197",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.107",
+    "question": "Implanter « Gyrocoptère — autonomie » ? Charbon pour 8 heures, 4 heures avec usage répété du canon à vapeur.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0198",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.107",
+    "question": "Implanter « Gyrocoptère — désarmé » ? Retirer l’armement principal augmente Mouvement à 25.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0199",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.107",
+    "question": "Implanter « Gyrobombardier — secours » ? Retirer les râteliers à bombes porte la capacité de cargaison à 60.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0200",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.108",
+    "question": "Implanter « Gyrocoptère — accélération » ? Voile aéronef+0 permet jusqu’à 5 fois Mouvement ; échec :accélération réduite ou perte d’altitude.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0201",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.108",
+    "question": "Implanter « Gyrocoptère — décoller en combat » ? Décoller et atterrir exigent de dépenser un Mouvement ; vol stationnaire possible.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0202",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.108",
+    "question": "Implanter « Gyrocoptère rapide » ? Sans canon ni bombes, Mouvement 35 et Endurance 25.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0203",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.108",
+    "question": "Implanter « Gyrocoptère mulet » ? Charge 300, ou 250 armé ; vitesse 25%inférieure au modèle standard.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0204",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.108",
+    "question": "Implanter « Ballon — autonomie » ? Charbon pour unesemaine ; vents et propulsion combinés.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0205",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.108",
+    "question": "Implanter « Ballon — camouflage » ? −20 aux Tests de Perception ennemis pour le repérer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0206",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Navires nains — vent » ? Propulsion vapeur indépendante du vent ; coques fermées et écoutilles étanches gênent l’abordage.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0207",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Navires nains — pilotage » ? Chaque navire a sa spécialité Voile ; augmentation dans une spécialité rend les autres basiques, excepté aéronef seul 78.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0208",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Navires nains — critique » ? Selon le MJ, malus de Voile, 9dégâtsaux occupants par éclats, ou prise d’eau.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0209",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Véhicule — Drakkar » ? Base du véhicule : équipe 32, M 4, E 50, B 60, charge 100.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0210",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Véhicule — Barge vapeur » ? Base du véhicule : équipe 4, M 3, E 55, B 90, charge 600.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0211",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Véhicule — Canonnière » ? Base du véhicule : équipe 8, M 4, E 60, B 120, charge 80.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0212",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Véhicule — Monitor » ? Base du véhicule : équipe 20, M 6, E 65, B 150, charge 150.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0213",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Véhicule — Ironclad » ? Base du véhicule : équipe 75, M 6, E 70, B 200, charge 500.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0214",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Véhicule — Dreadnought » ? Base du véhicule : équipe 120, M 6, E 80, B 300, charge 1500.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0215",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.110",
+    "question": "Implanter « Véhicule — Nautilus » ? Base du véhicule : équipe 20, M 4, E 60, B 120, charge 150.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0216",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.111",
+    "question": "Implanter « Drakkar nain — rames » ? Mouvement 6 quand au moins 8 rameurs actionnent les rames.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0217",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.111",
+    "question": "Implanter « Canonnière — blindage » ? Éperon 5 PA, autres parties 2 PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0218",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.111",
+    "question": "Implanter « Canonnière — postes » ? Deux armes ; avantarc 180°et couvert dur−30, arrièrearc 360°et couvert moyen−20.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0219",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.111",
+    "question": "Implanter « Barge — cargaison » ? Table 110 capacité 600, prose 111 capacité 800 ; deux valeurs gardées à arbitrer.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0220",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.112",
+    "question": "Implanter « Monitor — armement » ? Tourelle arc 270°, angle mort arrière ; deux Briseurs etjusqu’à cinqparbord ; éperon et 2 PA.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0221",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.112",
+    "question": "Implanter « Ironclad — armement » ? 2 PApartout ; tourellesavant/arrière, chaque paire de Tempête surmontée d’un Briseur ; quatre Briseurs par bord.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0222",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.112",
+    "question": "Implanter « Dreadnought — armement » ? 2 PApartout ; huit Tonnerre, deux Tempête, cinq Briseurs par bord ; variantes de montage admises.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0223",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.113",
+    "question": "Implanter « Nautilus — plongée » ? Équipage formé : immersion en moins d’une minute ; 30 yards et 1 heure en régime sûr, Mouvement 2 en plongée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0224",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.113",
+    "question": "Implanter « Nautilus — armement immergé » ? Canons Briseurs indisponibles en plongée, torpilles possibles ; tirs ennemis ordinaires inefficaces sans attaque sous-marine ou remontée forcée.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0225",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.113",
+    "question": "Implanter « Nautilus — air » ? Après 1 heure, l’équipage commence à suffoquer ; remontée d’au moins 3 heures pour renouveler l’air.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0226",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.113",
+    "question": "Implanter « Nautilus — pression » ? Grande profondeur : Test d’Endurance+0 toutes les 10 minutes environ, échec 30 Blessures ; Voile Nautilus/Métier Ingénierie anticipent les limites.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0227",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.114",
+    "question": "Implanter « Torpille — engin » ? Portée 1000, dégâts+14, Dévastatrice, Dangereuse, Recharge 5 ; prix 500, enc 100 ; quatre embarquées.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0228",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.114",
+    "question": "Implanter « Torpille — tir » ? Tir Ingénierie+0 : échec simple rate, double échoué tire l’incident.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0229",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.114",
+    "question": "Implanter « Torpille 01–45 — moteur » ? Ne part pas ; nouvel essai après 1d3 Rounds.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0230",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.114",
+    "question": "Implanter « Torpille 46–85 — charge » ? Ogive défectueuse, aucune explosion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0231",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.114",
+    "question": "Implanter « Torpille 86–00 — tube » ? Bloquée, minuterie en cours ; 2d3 Rounds pour éjecter ou arrêter avant explosion.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0232",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.115",
+    "question": "Implanter « Barrakul — protection traversée » ? L’épée runique traverse les boucliers et armures non magiques.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0233",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.116",
+    "question": "Implanter « Marteau impérial de substitution » ? Puissance accrue, vitalité renouvelée et attaques traversant l’armure non magique.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0234",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.117",
+    "question": "Implanter « Gnoldron — foudre » ? Peut projeter la foudre à distance, tonnerre à l’impact et protection contre les magies semblables.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
+  },
+  {
+    "id": "F-L15-0235",
+    "phase": "Voyage et environnement",
+    "lot": "L15",
+    "source": "L15 p.117",
+    "question": "Implanter « Grimmaz — vitesse » ? Augmente la vitesse et la fureur des attaques ; peut détruire une arme magique adverse.",
+    "choix": "Implanter, version complète",
+    "alternatives": [
+      "Implanter, version adaptée (préciser)",
+      "Ne pas implanter"
+    ],
+    "statut": "ouvert"
   }
 ]

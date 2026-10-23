@@ -1,6 +1,6 @@
 # Rapport GPT — Phase F0 : audit des règles
 
-État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03, L04, L07, L08 et L09 ont reçu les revues décrites ci-dessous. 25 livres sur vingt-six sont traités dans les portées documentaires précisées ci-dessous (L05 : noms seuls). Restent L15.
+État au 23 octobre 2026 : **audit du corpus en cours**. L06 a reçu sa revue F0, hors domaines explicitement renvoyés aux inventaires existants ; L05 a reçu le rattachement des noms ; L17, L11, L13, L14, L16, L18, L19, L20, L21, L22 et L23 ont reçu leur revue des mécaniques F0. L24 a reçu la revue décrite ci-dessous ; L25 a reçu sa revue dans la portée ci-dessous ; L26, L01, L02, L03, L04, L07, L08 et L09 ont reçu les revues décrites ci-dessous. 26 livres sur vingt-six sont traités dans les portées documentaires précisées ci-dessous (L05 : noms seuls). La revue du périmètre documentaire F0 est terminée ; les contrôles de clôture et les limites sont consignés en fin de rapport.
 
 ## Travail local et sources
 
@@ -517,3 +517,13 @@ Repérage de112pages,24pages contrôlées en image, clauses ciblées des espèce
 Registre : 217 entrées, 116 sélecteurs nouveaux, 98 purs renvois exclus ; statuts {"absent":214,"hors-granularite":3}. Les 6482 entrées héritées sont identiques ; total 6699 entrées / 5134 sélecteurs. Lecture : tmp/audit/L12-finish-reading.json ; les reçus bruts restent read:false. Audit statique, aucune recette à la table revendiquée.
 
 Contrôles : deux générations identiques et --check ; suite complète 4054/4054, zéro échec, annulé ou ignoré, 100152.612 ms, tmp/audit/L12-finish-full.log. Intégrité, LF et diff--check vérifiés avant commit ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local relevé dans la succession. Restent : L15.
+
+## L15 — WFRP_Dwarf_Players_Guide_Book_250714.pdf
+
+Source : 144 pages physiques, SHA-256 `f9ffbe960aae459ff53d1ecc832298908f1f22cd7a223aab863d4ca14bea7e50`. V4 explicite, copyright2025, mise à jour14juillet2025, crédits2 vus. Folio=physique.
+
+Repérage144pages et42pages vues en image : création, carrières, Talents, rancunesQ18, gromril, équipement, artillerie, véhicules, artefacts, runes et accès des cultes. IdentitéV4 juillet2025 confirmée. Les tables39/49/50/91/92/93/97/101/103/106/110/114 sont lues visuellement, les colonnes ne sont pas attribuées depuis le texte désaligné. Anomalies conservées :13 partagé/25 absent en39 ; équipage3 générique contre profils2 ; PierrierExplosion2/Dispersion3 ; Mortier−20/−30 ; CanonTempête50% contre120/75 ; Barge600/800 ; Nautilusprofondeur30/30 ; Tube100/Recharge8 distinct de Torpille1000/Recharge5. Les valeurs de caractéristique, prix, dégâts, recharge et score de table conservent leurs unités. Les statuts positifs de Talents reposent sur UI, prévisualisation et résolution réellement lus ; rappels conservateurs pour clauses complètes non démontrées et couverture partielle documentée. Aucun parcours UI propre aux nouvelles entrées n’est revendiqué. Runes et capacités déjà inventoriées reçoivent des liens exacts ; le résultat de gravure reste saisi selon RUN-ARTISANAT. Rancunes explicitement exclues, pas médecine/alcool génériques. Aucun changement de code de jeu, d’inventaire hérité ou d’arbitrage.
+
+Registre : 320 entrées, 203 sélecteurs nouveaux, 93 purs renvois exclus ; statuts {"absent":291,"hors-granularite":7,"assiste":17,"rappel":5}. Les 6699 entrées héritées sont identiques ; total 7019 entrées / 5337 sélecteurs. Lecture : tmp/audit/L15-finish-reading.json ; les reçus bruts restent read:false. Audit statique, aucune recette à la table revendiquée.
+
+Contrôles : deux générations identiques et --check ; suite complète 4054/4054, zéro échec, annulé ou ignoré, 96694.7124 ms, tmp/audit/L15-finish-full.log. Intégrité, LF et diff--check vérifiés avant commit ; cinq documents autorisés, aucun js/ ni test hérité modifié. Commit local relevé dans la succession. Restent : aucun livre F0.
